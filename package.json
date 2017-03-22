@@ -1,0 +1,24 @@
+{
+  "name": "explosivegaming-scenario",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/badgamernl/explosivegaming-main.git"
+  },
+  "author": "badgamernl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/badgamernl/explosivegaming-main/issues"
+  },
+  "homepage": "https://github.com/badgamernl/explosivegaming-main#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-luaminify": "0.0.1",
+    "gulp-rename": "^1.2.2"
+  }
+}
