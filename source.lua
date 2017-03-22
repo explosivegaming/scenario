@@ -149,11 +149,6 @@ script.on_event(defines.events.on_player_created, function(event)
   player.insert{name="firearm-magazine", count=10}
   player.insert{name="burner-mining-drill", count = 1}
   player.insert{name="stone-furnace", count = 1}
-  --developer items
-  if player.name == "badgamernl" or player.name == "BADgamerNL" then
-    player.insert{name="blueprint", count = 1}
-    player.insert{name="deconstruction-planner", count = 1}
-  end
   player.force.chart(player.surface, {{player.position.x - 200, player.position.y - 200}, {player.position.x + 200, player.position.y + 200}})
 end)
 
@@ -577,6 +572,7 @@ addButton('revive_dead_entitys_range',function(player,frame) if tonumber(frame.p
 addButton('remove_biters',function(player,frame) for key, entity in pairs(game.surfaces[1].find_entities_filtered({force='enemy'})) do entity.destroy() end end)
 addButton('tp_all',function(player,frame) for i,p in pairs(game.connected_players) do local pos = game.surfaces[player.surface.name].find_non_colliding_position("player", player.position, 32, 1) if p ~= player then p.teleport(pos) end end end)
 addButton('toggle_cheat',function(player,frame) player.cheat_mode = not player.cheat_mode end)
+addButton('add_dev_items',function(player,frame) player.insert{name="deconstruction-planner", count = 1} player.insert{name="blueprint-book", count = 1} player.insert{name="blueprint", count = 20} end)
 addButton("btn_Modifier_apply",
 	function(player,frame)
 		local forceModifiers = {
@@ -610,6 +606,7 @@ addButton("btn_Modifier_apply",
 addTab('Admin', 'Commands', 'Random useful commands', 
 	function(player, frame)
 		drawButton(frame,'btn_toolbar_automessage','Auto Message','Send the auto message to all online players')
+		drawButton(frame,'add_dev_items','Get Blueprints','Get all the blueprints')
 		drawButton(frame,'revive_dead_entitys','Revive All Entitys','Brings all dead machines back to life')
 		drawButton(frame,'revive_dead_entitys_range','Revive Entitys','Brings all dead machines back to life in a range')
 		frame.add{type='textfield',name='range',text='Range'}
