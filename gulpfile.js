@@ -6,7 +6,7 @@ gulp.task('minify', function () {
     return gulp.src(['source.lua'])
       .pipe(luaminify())
       .pipe(rename('control.lua'))
-      .pipe(gulp.dest('.'));
+      .pipe(gulp.dest('./map'));
 });
 
 gulp.task('watch', function() {
