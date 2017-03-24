@@ -360,7 +360,7 @@ function drawPlayerList()
 					player.tag = '[Jail]'
 				end
 			end
-      if player.admin == true then
+      if player.admin == true and player.tag ~= '[Jail]' then
         if player.name == "badgamernl" or player.name == "BADgamerNL" then
 					a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , " - OWNER"}}
 					a.gui.left.PlayerList.PlayerListScroll[player.name].style.font_color = {r=170,g=0,b=0}
@@ -385,25 +385,23 @@ function drawPlayerList()
 			end
 		end
 		for i, player in pairs(game.connected_players) do
-			if player.tag ~= '[Jail]' then
-				if player.admin == false then
-					if ticktominutes(player.online_time) >= timeForRegular then
-						a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name}}
-						a.gui.left.PlayerList.PlayerListScroll[player.name].style.font_color = {r=24,g=172,b=188}
-						player.tag = "[Regular]"
-					elseif player.name == "explosivegaming" then
-						for i=10,1,-1 do 
-							a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name .. i, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , i}}
-							a.gui.left.PlayerList.PlayerListScroll[player.name .. i].style.font_color = {r=24,g=172,b=188}
-							player.tag = "[TEST]"
-						end
-					else
-						a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name}}
-						a.gui.left.PlayerList.PlayerListScroll[player.name].style.font_color = {r=255,g=159,b=27}
-						player.tag = "[Guest]"
+			if player.admin == false and player.tag ~= '[Jail]' then
+				if ticktominutes(player.online_time) >= timeForRegular then
+					a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name}}
+					a.gui.left.PlayerList.PlayerListScroll[player.name].style.font_color = {r=24,g=172,b=188}
+					player.tag = "[Regular]"
+				elseif player.name == "explosivegaming" then
+					for i=10,1,-1 do 
+						a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name .. i, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , i}}
+						a.gui.left.PlayerList.PlayerListScroll[player.name .. i].style.font_color = {r=24,g=172,b=188}
+						player.tag = "[TEST]"
 					end
+				else
+					a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name}}
+					a.gui.left.PlayerList.PlayerListScroll[player.name].style.font_color = {r=255,g=159,b=27}
+					player.tag = "[Guest]"
 				end
-      end
+			end
     end
   end
 end
