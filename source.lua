@@ -41,12 +41,12 @@ end)
 ---------------------------Common use functions---------------------------------------
 ----------------------------------------------------------------------------------------
 function ticktohour (tick)
-    local hour = tostring(math.floor(tick * (1 /(60*game.speed)) / 3600))
+    local hour = tostring(math.floor(tick/(216000*game.speed)))
     return hour
 end
 
 function ticktominutes (tick)
-  	local minutes = math.floor((tick * (1 /(60*game.speed))) / 60)
+  	local minutes = math.floor(tick/(3600*game.speed))
     return minutes
 end
 
@@ -281,7 +281,7 @@ script.on_event(defines.events.on_rocket_launched, function(event)
   end 
 end)
 
-script.on_event(defines.events.on_tick, function(event) if (game.tick*(1/(60*game.speed))/60) % 30 == 0 then autoMessage() end end)
+script.on_event(defines.events.on_tick, function(event) if (game.tick/(3600*game.speed)) % 2 == 0 then autoMessage() end end)
 ----------------------------------------------------------------------------------------
 ---------------------------IDK What There Do Functions----------------------------------
 ----------------------------------------------------------------------------------------
