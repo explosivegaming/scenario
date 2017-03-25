@@ -281,7 +281,7 @@ script.on_event(defines.events.on_rocket_launched, function(event)
   end 
 end)
 
-script.on_event(defines.events.on_tick, function(event) if (game.tick/(3600*game.speed)) % 30 == 0 then autoMessage() end end)
+script.on_event(defines.events.on_tick, function(event) if (game.tick/(3600*game.speed)) % 15 == 0 then autoMessage() end end)
 ----------------------------------------------------------------------------------------
 ---------------------------IDK What There Do Functions----------------------------------
 ----------------------------------------------------------------------------------------
