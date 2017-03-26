@@ -510,17 +510,12 @@ addTab('Readme','Rules','The rules of the server',
 	end)
 addTab('Readme','Server Info','Info about the server',
 	function(player,frame)
-		local serverInfo = {
-			"Discord voice and chat server:",
-			"https://discord.gg/RPCxzgt",
-			"Our forum:",
-			"explosivegaming.nl",
-			"Steam:",
-			"http://steamcommunity.com/groups/tntexplosivegaming"
-    }
-		for i, line in pairs(serverInfo) do
-			frame.add{name=i, type="label", caption={"", line}}
-		end
+		frame.add{name=1, type="label", caption={"", "Discord voice and chat server:"}}
+		frame.add{name=2, type='textfield', text='https://discord.gg/RPCxzgt'}.style.minimal_width = 450
+		frame.add{name=3, type="label", caption={"", "Our forum:"}}
+		frame.add{name=4, type='textfield', text='explosivegaming.nl'}.style.minimal_width = 450
+		frame.add{name=5, type="label", caption={"", "Steam:"}}
+		frame.add{name=6, type='textfield', text='http://steamcommunity.com/groups/tntexplosivegaming'}.style.minimal_width = 450
 	end)
 addTab('Readme','How to chat','Just in case you dont know how to chat',
 	function(player,frame)
