@@ -494,13 +494,16 @@ addTab('Readme','Rules','The rules of the server',
 			"Hacking/cheating, exploiting and abusing bugs is not allowed.",
 			"Do not disrespect any player in the server (This includes staff).",
 			"Do not spam, this includes stuff such as chat spam, item spam, chest spam etc.",
-			"Do not laydown concrete with bots when you dont have permission to.",
+			"Do not laydown concrete with bots without permission.",
+			"Do not use active provider chests without permission.",
+			"Do not remove/move major parts of the factory without permission.",
 			"Do not walk in a random direction for no reason(to save map size).",
+			"Do not remove stuff just because you don't like it, tell people first.",
 			"Do not make train roundabouts.",
+			"Trains are Left Hand Drive (LHD) only.",
 			"Do not complain about lag, low fps and low ups or other things like that.",
 			"Do not ask for rank.",
-			"Left Hand Drive (LHD) only.",
-			"Use common sense."}
+			"Use common sense and what an admin says goes."}
 		for i, rule in pairs(rules) do
 			frame.add{name=i, type="label", caption={"", i ,". ", rule}}
 		end
