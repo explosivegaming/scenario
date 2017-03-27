@@ -174,7 +174,7 @@ script.on_event(defines.events.on_player_joined_game, function(event)
 	drawPlayerList()
   drawToolbar()
   local playerStringTable = encode(game.players, "players", {"name", "admin", "online_time", "connected", "index"})
-  game.write_file("players.json", playerStringTable, false)
+  game.write_file("players.json", playerStringTable, false, 0)
   if not player.admin and ticktominutes(player.online_time) < 1 then
     drawFrame(player,'Readme','Rules')
   end
