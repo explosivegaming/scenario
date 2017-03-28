@@ -227,7 +227,7 @@ script.on_event(defines.events.on_marked_for_deconstruction, function(event)
 	if not eplayer.admin and ticktominutes(eplayer.online_time) < timeForRegular then
     if event.entity.type ~= "tree" and event.entity.type ~= "simple-entity" then
       event.entity.cancel_deconstruction("player")
-      eplayer.print("You are not allowed to do this yet, player for a bit longer. Try again in about: " .. math.floor((timeForRegular - ticktominutes(eplayer.online_time))) .. " minutes")
+      eplayer.print("You are not allowed to do this yet, play for a bit longer. Try again in about: " .. math.floor((timeForRegular - ticktominutes(eplayer.online_time))) .. " minutes")
       callAdmin(eplayer.name .. " tryed to deconstruced something")
     end
   elseif event.entity.type == "tree" or event.entity.type == "simple-entity" then
@@ -241,7 +241,7 @@ script.on_event(defines.events.on_built_entity, function(event)
 	if not eplayer.admin and ticktominutes(eplayer.online_time) < timeForRegular then
 		if event.created_entity.type == "tile-ghost" then
 			event.created_entity.destroy()
-			eplayer.print("You are not allowed to do this yet, player for a bit longer. Try: " .. math.floor((timeForRegular - ticktominutes(eplayer.online_time))) .. " minutes")
+			eplayer.print("You are not allowed to do this yet, play for a bit longer. Try: " .. math.floor((timeForRegular - ticktominutes(eplayer.online_time))) .. " minutes")
 			callAdmin(eplayer.name .. " tryed to place concrete/stone with robots")
 		end
 	end
