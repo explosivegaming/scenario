@@ -335,7 +335,7 @@ function drawToolbar()
 		drawButton(frame,"btn_toolbar_playerList", "Playerlist", "Adds a player list to your game.")
 		drawButton(frame,"btn_toolbar_rocket_score", "Rocket score", "Show the satellite launched counter if a satellite has launched.")
     drawButton(frame,"btn_readme", "Readme", "Rules, Server info, How to chat, Playerlist, Adminlist.")
-    if a.tag == '[Owner]' or a.tag == '[Developer]' or a.tag == '[Com Mngr]' then
+    if a.tag == '[Owner]' or a.tag == '[Developer]' or a.tag == '[Com Mngr]' or a.tag == '[Admin]' then
 			drawButton(frame,"btn_admin", "Admin", "All admin fuctions are here")
     end
   end
