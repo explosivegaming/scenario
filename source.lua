@@ -113,12 +113,12 @@ function autoRank(player)
 	if autoRanks[player.name] then
 		if currentRank.power > stringToRank(autoRanks[player.name]).power then
 			player.tag=stringToRank(autoRanks[player.name]).tag
-			if getRank(player).power <= 3 and not player.admin then
-				callRank(player.name..' needs to be promoted.')
-			end
 		end
 	elseif ticktominutes(player.online_time) >= timeForRegular then
 		player.tag=stringToRank('Regular').tag
+	end
+	if getRank(player).power <= 3 and not player.admin then
+		callRank(player.name..' needs to be promoted.')
 	end
 end
 ----------------------------------------------------------------------------------------
@@ -192,9 +192,10 @@ end
 ----------------------------------------------------------------------------------------
 ---------------------------Gui Functions------------------------------------------------
 ----------------------------------------------------------------------------------------
-function addFrame(frame)
-	guis.frames[frame] = {}
+function addFrame(frame,rank,open,caption,tooltip)
+	guis.frames[frame] = {{require=rank,caption=caption,tooltip=tooltip}}
 	addButton('close', function(player,element) element.parent.parent.parent.destroy() end)
+	addButton('btn_'..frame, function(player,element) if player.gui.center[frame] then player.gui.center[frame].destroy() else drawFrame(player,frame,open) end end)
 end
 
 function addTab(frame, tabName, describtion, drawTab)
@@ -213,35 +214,39 @@ end
 function openTab(player, frameName, tab, tabName)
 	local tabBar = player.gui.center[frameName].tabBarScroll.tabBar
 	for _,t in pairs(guis.frames[frameName]) do
-		if t[1] == tabName then
-			tabBar[t[1]].style.font_color = {r = 255, g = 255, b = 255, player = 255}
-			clearElement(tab)
-			t[3](player, tab)
-		else
-			tabBar[t[1]].style.font_color = {r = 100, g = 100, b = 100, player = 255}
+		if _ ~= 1 then
+			if t[1] == tabName then
+				tabBar[t[1]].style.font_color = {r = 255, g = 255, b = 255, player = 255}
+				clearElement(tab)
+				t[3](player, tab)
+			else
+				tabBar[t[1]].style.font_color = {r = 100, g = 100, b = 100, player = 255}
+			end
 		end
 	end
 end
 
 function drawFrame(player, frameName, tabName)
-	if player.gui.center[frameName] then player.gui.center[frameName].destroy() end
-	local frame = player.gui.center.add{name=frameName,type='frame',caption=frameName,direction='vertical'}
-	local tabBarScroll = frame.add{type = "scroll-pane", name= "tabBarScroll", vertical_scroll_policy="never", horizontal_scroll_policy="always"}
-	local tabBar = tabBarScroll.add{type='flow',direction='horizontal',name='tabBar'}
-	local tab = frame.add{type = "scroll-pane", name= "tab", vertical_scroll_policy="auto", horizontal_scroll_policy="never"}
-	for _,t in pairs(guis.frames[frameName]) do
-		drawButton(tabBar, t[1], t[1], t[2])
+	if getRank(player).power <= guis.frames[frameName][1].require then
+		if player.gui.center[frameName] then player.gui.center[frameName].destroy() end
+		local frame = player.gui.center.add{name=frameName,type='frame',caption=frameName,direction='vertical'}
+		local tabBarScroll = frame.add{type = "scroll-pane", name= "tabBarScroll", vertical_scroll_policy="never", horizontal_scroll_policy="always"}
+		local tabBar = tabBarScroll.add{type='flow',direction='horizontal',name='tabBar'}
+		local tab = frame.add{type = "scroll-pane", name= "tab", vertical_scroll_policy="auto", horizontal_scroll_policy="never"}
+		for _,t in pairs(guis.frames[frameName]) do
+			if _ ~= 1 then drawButton(tabBar, t[1], t[1], t[2]) end
+		end
+		openTab(player, frameName, tab, tabName)
+		drawButton(tabBar, 'close', 'Close', 'Close this window')
+		tab.style.minimal_height = 300
+		tab.style.maximal_height = 300
+		tab.style.minimal_width = 500
+		tab.style.maximal_width = 500
+		tabBarScroll.style.minimal_height = 60
+		tabBarScroll.style.maximal_height = 60
+		tabBarScroll.style.minimal_width = 500
+		tabBarScroll.style.maximal_width = 500
 	end
-	openTab(player, frameName, tab, tabName)
-	drawButton(tabBar, 'close', 'Close', 'Close this window')
-	tab.style.minimal_height = 300
-	tab.style.maximal_height = 300
-	tab.style.minimal_width = 500
-	tab.style.maximal_width = 500
-	tabBarScroll.style.minimal_height = 60
-	tabBarScroll.style.maximal_height = 60
-	tabBarScroll.style.minimal_width = 500
-	tabBarScroll.style.maximal_width = 500
 end
 
 function toggleVisable(frame)
@@ -450,17 +455,14 @@ end
 ----------------------------------------------------------------------------------------
 addButton("btn_toolbar_playerList", function(player) toggleVisable(player.gui.left.PlayerList) end)
 addButton("btn_toolbar_rocket_score",function(player) toggleVisable(player.gui.left.rocket_score) end)
-addButton("btn_readme",function(player) if player.gui.center.Readme then player.gui.center.Readme.destroy() else drawFrame(player,'Readme','Rules') end end)
-addButton("btn_admin",function(player) if player.gui.center.Admin then player.gui.center.Admin.destroy() else drawFrame(player,'Admin','Modifiers') end end)
 function drawToolbar(player)
   local frame = player.gui.top
   clearElement(frame)
 	drawButton(frame,"btn_toolbar_playerList", "Playerlist", "Adds player player list to your game.")
 	drawButton(frame,"btn_toolbar_rocket_score", "Rocket score", "Show the satellite launched counter if player satellite has launched.")
-  drawButton(frame,"btn_readme", "Readme", "Rules, Server info, How to chat, Playerlist, Adminlist.")
-  if player.tag == '[Owner]' or player.tag == '[Dev]' or player.tag == '[Com Mngr]' or player.tag == '[Admin]' then
-		drawButton(frame,"btn_admin", "Admin", "All admin fuctions are here")
-   end
+	for _,f in pairs(guis.frames) do
+		if getRank(player).power <= f[1].require then drawButton(frame,"btn_".._, f[1].caption, f[1].tooltip) end
+  end
 end
 ----------------------------------------------------------------------------------------
 ---------------------------Player List--------------------------------------------------
@@ -489,6 +491,7 @@ function drawPlayerList()
 			end
     end
 		for i, player in pairs(game.connected_players) do
+			playerRank = getRank(player)
 			if playerRank.power > 3 then
 				Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand}}
 				Plist[player.name].style.font_color = playerRank.colour
@@ -578,7 +581,7 @@ end
 ----------------------------------------------------------------------------------------
 ---------------------------Read Me Gui--------------------------------------------------
 ----------------------------------------------------------------------------------------
-addFrame('Readme')
+addFrame('Readme',6, 'Rules','Readme', 'Rules, Server info, How to chat, Playerlist, Adminlist.')
 		
 addTab('Readme','Rules','The rules of the server',
 	function(player,frame)
@@ -652,7 +655,7 @@ addTab('Readme','Players','List of all the people who have been on the server',
 ----------------------------------------------------------------------------------------
 ---------------------------Modifier Gui-------------------------------------------------
 ----------------------------------------------------------------------------------------
-addFrame('Admin')
+addFrame('Admin',2,'Modifiers','Admin',"All admin fuctions are here")
 
 addButton('btn_toolbar_automessage',function() autoMessage() end)
 addButton('revive_dead_entitys',function(player,frame) for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() end end)
