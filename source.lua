@@ -5,7 +5,26 @@ guis = {frames={},buttons={}}
 --functions can not be included in the default list or be added by code
 defaults = {
 	itemRotated = {},
-	test = 0
+	test = 0,
+	ranks={
+	{name='Owner',shortHand='Owner',tag='[Owner]',power=0,colour={r=170,g=0,b=0}},
+	{name='Community Manager',shortHand='CM',tag='[Com Mngr]',power=1,colour={r=150,g=68,b=161}},
+	{name='Developer',shortHand='Dev',tag='[Dev]',power=1,colour={r=179,g=125,b=46}},
+	{name='Admin',shortHand='Admin',tag='[Admin]',power=2,colour={r=170,g=41,b=170}},
+	{name='Mod',shortHand='Mod',tag='[Mod]',power=3,colour={r=233,g=63,b=233}},
+	{name='Donner',shortHand='P2W',tag='[P2W]',power=4,colour={r=233,g=63,b=233}},
+	{name='Member',shortHand='Mem',tag='[Member]',power=5,colour={r=24,g=172,b=188}},
+	{name='Regular',shortHand='Reg',tag='[Regukar]',power=5,colour={r=24,g=172,b=188}},
+	{name='Guest',shortHand='',tag='[Guest]',power=6,colour={r=255,g=159,b=27}},
+	{name='Jail',shortHand='Owner',tag='[Owner]',power=7,colour={r=170,g=0,b=0}}
+	},
+	autoRank={
+	badgamernl='Owner',
+	arty714='Community Manager',
+	Cooldude2606='Developer',
+	eissturm='Admin',PropangasEddy='Admin'
+	--insert other player ranks here
+	}
 }
 
 warningAllowed = nil
@@ -27,11 +46,15 @@ function loadVar(t)
 	else gTable = t end
 	itemRotated = gTable.itemRotated
 	test = gTable.test
+	ranks= gTable.ranks
+	autoRank= gTable.autoRank
 end
 
 function saveVar()
 	gTable.itemRotated = itemRotated
 	gTable.test = test
+	gTable.ranks = ranks
+	gTable.autoRank = autoRank
 	game.print('save '..table.tostring(gTable))
 	game.players[1].gui.left.hidden.caption = table.tostring(gTable)
 end
@@ -57,15 +80,40 @@ local function clearDecorations()
 	for chunk in surface.get_chunks() do
 		removeDecorations(surface, chunk.x * CHUNK_SIZE, chunk.y * CHUNK_SIZE, CHUNK_SIZE - 1, CHUNK_SIZE - 1)
 	end
-    callAdmin("Decoratives have been removed")
+    callRank("Decoratives have been removed")
 end
 
 script.on_event(defines.events.on_chunk_generated, function(event)
 	removeDecorationsArea( event.surface, event.area )
 end)
-
 ----------------------------------------------------------------------------------------
----------------------------Common use functions---------------------------------------
+---------------------------Rank functions-----------------------------------------------
+----------------------------------------------------------------------------------------
+function getRank(player)
+	if player then
+		for _,rank in pairs(ranks) do
+			if player.tag == rank.tag then return rank end
+		end
+	end
+end
+
+function stringToRank(string)
+	if type(string) == 'string' then
+		for _,rank in pairs(ranks) do 
+			if rank.name == string then return rank end
+		end
+	end
+end
+
+function callRank(msg, rank)
+	if rank == nil then rank = 3 else rank = rank.power end -- default mod or higher
+	for _, player in pairs(game.players) do 
+		rankPower = getRank(player).power
+		if rankPower <= rank then player.print(msg) end
+	end
+end
+----------------------------------------------------------------------------------------
+---------------------------Common use functions-----------------------------------------
 ----------------------------------------------------------------------------------------
 function ticktohour (tick)
     local hour = tostring(math.floor(tick/(216000*game.speed)))
@@ -77,7 +125,7 @@ function ticktominutes (tick)
     return minutes
 end
 
-function callAdmin(msg)
+function callRank(msg)
 	for _, player in pairs(game.connected_players) do 
 		if player.admin then
 			player.print(msg)
@@ -300,7 +348,7 @@ script.on_event(defines.events.on_marked_for_deconstruction, function(event)
     if event.entity.type ~= "tree" and event.entity.type ~= "simple-entity" then
       event.entity.cancel_deconstruction("player")
       eplayer.print("You are not allowed to do this yet, play for a bit longer. Try again in about: " .. math.floor((timeForRegular - ticktominutes(eplayer.online_time))) .. " minutes")
-      callAdmin(eplayer.name .. " tryed to deconstruced something")
+      callRank(eplayer.name .. " tryed to deconstruced something")
     end
   elseif event.entity.type == "tree" or event.entity.type == "simple-entity" then
     event.entity.destroy()
@@ -314,7 +362,7 @@ script.on_event(defines.events.on_built_entity, function(event)
 		if event.created_entity.type == "tile-ghost" then
 			event.created_entity.destroy()
 			eplayer.print("You are not allowed to do this yet, play for a bit longer. Try: " .. math.floor((timeForRegular - ticktominutes(eplayer.online_time))) .. " minutes")
-			callAdmin(eplayer.name .. " tryed to place concrete/stone with robots")
+			callRank(eplayer.name .. " tryed to place concrete/stone with robots")
 		end
 	end
 end)
