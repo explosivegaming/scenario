@@ -1,14 +1,40 @@
 
-itemRotated = {}
 entityRemoved = {}
 entityCache = {}
 guis = {frames={},buttons={}}
-defaults = {test={1,2,3},test2='test',test3=5}
+--functions can not be included in the default list or be added by code
+defaults = {
+	itemRotated = {},
+	test = 0
+}
 
 warningAllowed = nil
 timeForRegular = 180
 CHUNK_SIZE = 32
 
+function loadVar(t)
+	game.print('load')
+	if t == nil then
+		local g = nil
+		if game.players[1].gui.left.hidden then 
+			g = game.players[1].gui.left.hidden.caption 
+		else 
+			g = game.players[1].gui.left.add{type='frame',name='hidden',caption=table.tostring(defaults)}.caption
+			game.players[1].gui.left.hidden.style.visible = false
+		end
+		gTable = loadstring('return '..g)()
+		game.print(g)
+	else gTable = t end
+	itemRotated = gTable.itemRotated
+	test = gTable.test
+end
+
+function saveVar()
+	gTable.itemRotated = itemRotated
+	gTable.test = test
+	game.print('save '..table.tostring(gTable))
+	game.players[1].gui.left.hidden.caption = table.tostring(gTable)
+end
 ----------------------------------------------------------------------------------------
 ---------------------------Remove decorations-------------------------------------------
 ----------------------------------------------------------------------------------------
@@ -57,14 +83,6 @@ function callAdmin(msg)
 			player.print(msg)
 		end
 	end
-end
-
-function initVar()
-	local g = nil
-	if game.players[1].gui.left.hidden then g = game.players[1].gui.left.hidden.caption else g = game.players[1].gui.left.add{type='frame',name='hidden',caption=table.tostring(defaults)}.caption end
-	gTable = loadstring('return '..g)()
-	game.print(g)
-	game.print(gTable.test[1])
 end
 
 function autoMessage()
@@ -207,7 +225,10 @@ script.on_event(defines.events.on_player_respawned, function(event)
 end)
 
 script.on_event(defines.events.on_player_joined_game, function(event)
-	initVar()
+	loadVar()
+	test = test + 1
+	saveVar()
+	game.print(test)
   local player = game.players[event.player_index]
   player.print({"", "Welcome"})
   if player.gui.left.PlayerList ~= nil then
@@ -243,6 +264,9 @@ script.on_event(defines.events.on_gui_click, function(event)
 			break
 		end
 	end
+	test = test + 1
+	saveVar()
+	game.print(test)
 end)
 
 script.on_event(defines.events.on_gui_text_changed, function(event)
