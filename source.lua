@@ -18,11 +18,16 @@ defaults = {
 	{name='Jail',shortHand='Owner',tag='[Owner]',power=7,colour={r=170,g=0,b=0}}
 	},
 	autoRanks={
-	badgamernl='Owner',
-	arty714='Community Manager',
-	Cooldude2606='Developer',
-	eissturm='Admin',PropangasEddy='Admin'
-	--insert other player ranks here
+	Owner={'badgamernl'},
+	['Community Manager']={'arty714'},
+	Developer={'Cooldude2606'},
+	Admin={'eissturm','PropangasEddy'},
+	Mod={'Alanore','Aquaday','cafeslacker','CrashKonijn','Drahc_pro','Flip','freek18','Hobbitkicker','hud','Matthias','MeDDish','Mindxt20','MottledPetrel','Mr_Happy_212','Phoenix27833','Sand3r205','ScarbVis','Smou','steentje77','TopHatGaming123'},
+	Donner={},
+	Member={},
+	Regular={},
+	Guest={},
+	Jail={}
 	}
 }
 
@@ -109,10 +114,18 @@ function callRank(msg, rank)
 end
 
 function autoRank(player)
-	currentRank = getRank(player)
-	if autoRanks[player.name] then
-		if currentRank.power > stringToRank(autoRanks[player.name]).power then
-			player.tag=stringToRank(autoRanks[player.name]).tag
+	local currentRank = getRank(player)
+	local playerAutoRank = nil
+	for rank,players in pairs(autoRanks) do
+		local Break = false
+		for _,p in pairs(players) do
+			if player.name == p then playerAutoRank = stringToRank(rank) Break = true break end
+		end
+		if Break then break end
+	end
+	if playerAutoRank then
+		if currentRank.power > playerAutoRank.power then
+			player.tag=playerAutoRank.tag
 		end
 	elseif ticktominutes(player.online_time) >= timeForRegular then
 		player.tag=stringToRank('Regular').tag
@@ -485,7 +498,8 @@ function drawPlayerList()
 			end
 			playerRank = getRank(player)
 			if playerRank.power <= 3 then
-				Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand}}
+				if playerRank.shortHand ~= '' then Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand}}
+				else Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name}} end				
 				Plist[player.name].style.font_color = playerRank.colour
 				player.tag = playerRank.tag
 			end
@@ -493,7 +507,8 @@ function drawPlayerList()
 		for i, player in pairs(game.connected_players) do
 			playerRank = getRank(player)
 			if playerRank.power > 3 then
-				Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand}}
+				if playerRank.shortHand ~= '' then Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand}}
+				else Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name}} end
 				Plist[player.name].style.font_color = playerRank.colour
 				player.tag = playerRank.tag
 			end
