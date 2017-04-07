@@ -1,13 +1,40 @@
 
-itemRotated = {}
 entityRemoved = {}
 entityCache = {}
 guis = {frames={},buttons={}}
+--functions can not be included in the default list or be added by code
+defaults = {
+	itemRotated = {},
+	test = 0
+}
 
 warningAllowed = nil
 timeForRegular = 180
 CHUNK_SIZE = 32
 
+function loadVar(t)
+	game.print('load')
+	if t == nil then
+		local g = nil
+		if game.players[1].gui.left.hidden then 
+			g = game.players[1].gui.left.hidden.caption 
+		else 
+			g = game.players[1].gui.left.add{type='frame',name='hidden',caption=table.tostring(defaults)}.caption
+			game.players[1].gui.left.hidden.style.visible = false
+		end
+		gTable = loadstring('return '..g)()
+		game.print(g)
+	else gTable = t end
+	itemRotated = gTable.itemRotated
+	test = gTable.test
+end
+
+function saveVar()
+	gTable.itemRotated = itemRotated
+	gTable.test = test
+	game.print('save '..table.tostring(gTable))
+	game.players[1].gui.left.hidden.caption = table.tostring(gTable)
+end
 ----------------------------------------------------------------------------------------
 ---------------------------Remove decorations-------------------------------------------
 ----------------------------------------------------------------------------------------
@@ -66,6 +93,44 @@ function autoMessage()
 	game.print('Forum: explosivegaming.nl')
 	game.print('Steam: http://steamcommunity.com/groups/tntexplosivegaming')
 	game.print('To see these links again goto: Readme > Server Info')
+end
+----------------------------------------------------------------------------------------
+---------------------------Table Functions----------------------------------------------
+----------------------------------------------------------------------------------------
+function table.val_to_str ( v )
+  if "string" == type( v ) then
+    v = string.gsub( v, "\n", "\\n" )
+    if string.match( string.gsub(v,"[^'\"]",""), '^"+$' ) then
+      return "'" .. v .. "'"
+    end
+    return '"' .. string.gsub(v,'"', '\\"' ) .. '"'
+  else
+    return "table" == type( v ) and table.tostring( v ) or
+      tostring( v )
+  end
+end
+
+function table.key_to_str ( k )
+  if "string" == type( k ) and string.match( k, "^[_%a][_%a%d]*$" ) then
+    return k
+  else
+    return "[" .. table.val_to_str( k ) .. "]"
+  end
+end
+
+function table.tostring( tbl )
+  local result, done = {}, {}
+  for k, v in ipairs( tbl ) do
+    table.insert( result, table.val_to_str( v ) )
+    done[ k ] = true
+  end
+  for k, v in pairs( tbl ) do
+    if not done[ k ] then
+      table.insert( result,
+        table.key_to_str( k ) .. "=" .. table.val_to_str( v ) )
+    end
+  end
+  return "{" .. table.concat( result, "," ) .. "}"
 end
 ----------------------------------------------------------------------------------------
 ---------------------------Gui Functions------------------------------------------------
@@ -160,6 +225,10 @@ script.on_event(defines.events.on_player_respawned, function(event)
 end)
 
 script.on_event(defines.events.on_player_joined_game, function(event)
+	loadVar()
+	test = test + 1
+	saveVar()
+	game.print(test)
   local player = game.players[event.player_index]
   player.print({"", "Welcome"})
   if player.gui.left.PlayerList ~= nil then
@@ -195,6 +264,9 @@ script.on_event(defines.events.on_gui_click, function(event)
 			break
 		end
 	end
+	test = test + 1
+	saveVar()
+	game.print(test)
 end)
 
 script.on_event(defines.events.on_gui_text_changed, function(event)
