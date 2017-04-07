@@ -5,7 +5,6 @@ guis = {frames={},buttons={}}
 --functions can not be included in the default list or be added by code
 defaults = {
 	itemRotated = {},
-	test = 0,
 	ranks={
 	{name='Owner',shortHand='Owner',tag='[Owner]',power=0,colour={r=170,g=0,b=0}},
 	{name='Community Manager',shortHand='CM',tag='[Com Mngr]',power=1,colour={r=150,g=68,b=161}},
@@ -18,7 +17,7 @@ defaults = {
 	{name='Guest',shortHand='',tag='[Guest]',power=6,colour={r=255,g=159,b=27}},
 	{name='Jail',shortHand='Owner',tag='[Owner]',power=7,colour={r=170,g=0,b=0}}
 	},
-	autoRank={
+	autoRanks={
 	badgamernl='Owner',
 	arty714='Community Manager',
 	Cooldude2606='Developer',
@@ -32,7 +31,6 @@ timeForRegular = 180
 CHUNK_SIZE = 32
 
 function loadVar(t)
-	game.print('load')
 	if t == nil then
 		local g = nil
 		if game.players[1].gui.left.hidden then 
@@ -42,20 +40,16 @@ function loadVar(t)
 			game.players[1].gui.left.hidden.style.visible = false
 		end
 		gTable = loadstring('return '..g)()
-		game.print(g)
 	else gTable = t end
 	itemRotated = gTable.itemRotated
-	test = gTable.test
 	ranks= gTable.ranks
-	autoRank= gTable.autoRank
+	autoRanks= gTable.autoRanks
 end
 
 function saveVar()
 	gTable.itemRotated = itemRotated
-	gTable.test = test
 	gTable.ranks = ranks
-	gTable.autoRank = autoRank
-	game.print('save '..table.tostring(gTable))
+	gTable.autoRanks = autoRanks
 	game.players[1].gui.left.hidden.caption = table.tostring(gTable)
 end
 ----------------------------------------------------------------------------------------
@@ -94,6 +88,7 @@ function getRank(player)
 		for _,rank in pairs(ranks) do
 			if player.tag == rank.tag then return rank end
 		end
+		return stringToRank('Guest')
 	end
 end
 
@@ -106,10 +101,24 @@ function stringToRank(string)
 end
 
 function callRank(msg, rank)
-	if rank == nil then rank = 3 else rank = rank.power end -- default mod or higher
+	if rank == nil then rank = stringToRank('Mod') else rank = stringToRank(rank) end -- default mod or higher
 	for _, player in pairs(game.players) do 
 		rankPower = getRank(player).power
-		if rankPower <= rank then player.print(msg) end
+		if rankPower <= rank.power then player.print('['..rank.shortHand..']: '..msg) end
+	end
+end
+
+function autoRank(player)
+	currentRank = getRank(player)
+	if autoRanks[player.name] then
+		if currentRank.power > stringToRank(autoRanks[player.name]).power then
+			player.tag=stringToRank(autoRanks[player.name]).tag
+			if getRank(player).power <= 3 and not player.admin then
+				callRank(player.name..' needs to be promoted.')
+			end
+		end
+	elseif ticktominutes(player.online_time) >= timeForRegular then
+		player.tag=stringToRank('Regular').tag
 	end
 end
 ----------------------------------------------------------------------------------------
@@ -159,7 +168,7 @@ function table.val_to_str ( v )
 end
 
 function table.key_to_str ( k )
-  if "string" == type( k ) and string.match( k, "^[_%a][_%a%d]*$" ) then
+  if "string" == type( k ) and string.match( k, "^[_%player][_%player%d]*$" ) then
     return k
   else
     return "[" .. table.val_to_str( k ) .. "]"
@@ -205,11 +214,11 @@ function openTab(player, frameName, tab, tabName)
 	local tabBar = player.gui.center[frameName].tabBarScroll.tabBar
 	for _,t in pairs(guis.frames[frameName]) do
 		if t[1] == tabName then
-			tabBar[t[1]].style.font_color = {r = 255, g = 255, b = 255, a = 255}
+			tabBar[t[1]].style.font_color = {r = 255, g = 255, b = 255, player = 255}
 			clearElement(tab)
 			t[3](player, tab)
 		else
-			tabBar[t[1]].style.font_color = {r = 100, g = 100, b = 100, a = 255}
+			tabBar[t[1]].style.font_color = {r = 100, g = 100, b = 100, player = 255}
 		end
 	end
 end
@@ -274,10 +283,8 @@ end)
 
 script.on_event(defines.events.on_player_joined_game, function(event)
 	loadVar()
-	test = test + 1
-	saveVar()
-	game.print(test)
   local player = game.players[event.player_index]
+	autoRank(player)
   player.print({"", "Welcome"})
   if player.gui.left.PlayerList ~= nil then
     player.gui.left.PlayerList.destroy()
@@ -289,7 +296,7 @@ script.on_event(defines.events.on_player_joined_game, function(event)
     player.gui.top.PlayerList.destroy()
   end
 	drawPlayerList()
-  drawToolbar()
+  drawToolbar(player)
   local playerStringTable = encode(game.players, "players", {"name", "admin", "online_time", "connected", "index"})
   game.write_file("players.json", playerStringTable, false, 0)
   if not player.admin and ticktominutes(player.online_time) < 1 then
@@ -312,9 +319,6 @@ script.on_event(defines.events.on_gui_click, function(event)
 			break
 		end
 	end
-	test = test + 1
-	saveVar()
-	game.print(test)
 end)
 
 script.on_event(defines.events.on_gui_text_changed, function(event)
@@ -347,7 +351,7 @@ script.on_event(defines.events.on_marked_for_deconstruction, function(event)
 	if not eplayer.admin and ticktominutes(eplayer.online_time) < timeForRegular then
     if event.entity.type ~= "tree" and event.entity.type ~= "simple-entity" then
       event.entity.cancel_deconstruction("player")
-      eplayer.print("You are not allowed to do this yet, play for a bit longer. Try again in about: " .. math.floor((timeForRegular - ticktominutes(eplayer.online_time))) .. " minutes")
+      eplayer.print("You are not allowed to do this yet, play for player bit longer. Try again in about: " .. math.floor((timeForRegular - ticktominutes(eplayer.online_time))) .. " minutes")
       callRank(eplayer.name .. " tryed to deconstruced something")
     end
   elseif event.entity.type == "tree" or event.entity.type == "simple-entity" then
@@ -361,7 +365,7 @@ script.on_event(defines.events.on_built_entity, function(event)
 	if not eplayer.admin and ticktominutes(eplayer.online_time) < timeForRegular then
 		if event.created_entity.type == "tile-ghost" then
 			event.created_entity.destroy()
-			eplayer.print("You are not allowed to do this yet, play for a bit longer. Try: " .. math.floor((timeForRegular - ticktominutes(eplayer.online_time))) .. " minutes")
+			eplayer.print("You are not allowed to do this yet, play for player bit longer. Try: " .. math.floor((timeForRegular - ticktominutes(eplayer.online_time))) .. " minutes")
 			callRank(eplayer.name .. " tryed to place concrete/stone with robots")
 		end
 	end
@@ -448,81 +452,49 @@ addButton("btn_toolbar_playerList", function(player) toggleVisable(player.gui.le
 addButton("btn_toolbar_rocket_score",function(player) toggleVisable(player.gui.left.rocket_score) end)
 addButton("btn_readme",function(player) if player.gui.center.Readme then player.gui.center.Readme.destroy() else drawFrame(player,'Readme','Rules') end end)
 addButton("btn_admin",function(player) if player.gui.center.Admin then player.gui.center.Admin.destroy() else drawFrame(player,'Admin','Modifiers') end end)
-function drawToolbar()
-  for i, a in pairs(game.connected_players) do
-    local frame = a.gui.top
-    clearElement(frame)
-		drawButton(frame,"btn_toolbar_playerList", "Playerlist", "Adds a player list to your game.")
-		drawButton(frame,"btn_toolbar_rocket_score", "Rocket score", "Show the satellite launched counter if a satellite has launched.")
-    drawButton(frame,"btn_readme", "Readme", "Rules, Server info, How to chat, Playerlist, Adminlist.")
-    if a.tag == '[Owner]' or a.tag == '[Developer]' or a.tag == '[Com Mngr]' or a.tag == '[Admin]' then
-			drawButton(frame,"btn_admin", "Admin", "All admin fuctions are here")
-    end
-  end
+function drawToolbar(player)
+  local frame = player.gui.top
+  clearElement(frame)
+	drawButton(frame,"btn_toolbar_playerList", "Playerlist", "Adds player player list to your game.")
+	drawButton(frame,"btn_toolbar_rocket_score", "Rocket score", "Show the satellite launched counter if player satellite has launched.")
+  drawButton(frame,"btn_readme", "Readme", "Rules, Server info, How to chat, Playerlist, Adminlist.")
+  if player.tag == '[Owner]' or player.tag == '[Dev]' or player.tag == '[Com Mngr]' or player.tag == '[Admin]' then
+		drawButton(frame,"btn_admin", "Admin", "All admin fuctions are here")
+   end
 end
 ----------------------------------------------------------------------------------------
 ---------------------------Player List--------------------------------------------------
 ----------------------------------------------------------------------------------------
 function drawPlayerList()
-  for i, a in pairs(game.connected_players) do
-    if  a.gui.left.PlayerList == nil then
-      a.gui.left.add{type = "frame", name= "PlayerList", direction = "vertical"}
+  for i, player in pairs(game.connected_players) do
+    if  player.gui.left.PlayerList == nil then
+      player.gui.left.add{type = "frame", name= "PlayerList", direction = "vertical"}
                 .add{type = "scroll-pane", name= "PlayerListScroll", direction = "vertical", vertical_scroll_policy="always", horizontal_scroll_policy="never"}
     end
-    clearElement(a.gui.left.PlayerList.PlayerListScroll)
-    a.gui.left.PlayerList.PlayerListScroll.style.maximal_height = 200
+		Plist= player.gui.left.PlayerList.PlayerListScroll
+    clearElement(Plist)
+    Plist.style.maximal_height = 200
     for i, player in pairs(game.connected_players) do
 			if player.character then
 				if player.tag == '[Jail]' or player.character.active == false then
-					a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , " - Jail"}}
-					a.gui.left.PlayerList.PlayerListScroll[player.name].style.font_color = {r=50,g=50,b=50}
 					player.character.active = false
 					player.tag = '[Jail]'
 				end
 			end
-      if player.admin == true and player.tag ~= '[Jail]' then
-        if player.name == "badgamernl" or player.name == "BADgamerNL" then
-					a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , " - OWNER"}}
-					a.gui.left.PlayerList.PlayerListScroll[player.name].style.font_color = {r=170,g=0,b=0}
-					player.tag = "[Owner]"
-        elseif player.name == "eissturm" or player.name == "PropangasEddy" then
-					a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , " - ADMIN"}}
-					a.gui.left.PlayerList.PlayerListScroll[player.name].style.font_color = {r=170,g=41,b=170}
-					player.tag = "[Admin]"
-        elseif player.name == "Cooldude2606" then
-					a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , " - DEV"}}
-					a.gui.left.PlayerList.PlayerListScroll[player.name].style.font_color = {r=179,g=125,b=46}
-					player.tag = "[Developer]"
-        elseif player.name == "arty714" then
-					a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , " - CM"}}
-					a.gui.left.PlayerList.PlayerListScroll[player.name].style.font_color = {r=150,g=68,b=161}
-					player.tag = "[Com Mngr]"
-        else
-					a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , " - MOD"}}
-					a.gui.left.PlayerList.PlayerListScroll[player.name].style.font_color = {r=233,g=63,b=233}
-					player.tag = "[Moderator]"
-        end
-			end
-		end
-		for i, player in pairs(game.connected_players) do
-			if player.admin == false and player.tag ~= '[Jail]' then
-				if ticktominutes(player.online_time) >= timeForRegular then
-					a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name}}
-					a.gui.left.PlayerList.PlayerListScroll[player.name].style.font_color = {r=24,g=172,b=188}
-					player.tag = "[Regular]"
-				elseif player.name == "explosivegaming" then
-					for i=10,1,-1 do 
-						a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name .. i, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , i}}
-						a.gui.left.PlayerList.PlayerListScroll[player.name .. i].style.font_color = {r=24,g=172,b=188}
-						player.tag = "[TEST]"
-					end
-				else
-					a.gui.left.PlayerList.PlayerListScroll.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name}}
-					a.gui.left.PlayerList.PlayerListScroll[player.name].style.font_color = {r=255,g=159,b=27}
-					player.tag = "[Guest]"
-				end
+			playerRank = getRank(player)
+			if playerRank.power <= 3 then
+				Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand}}
+				Plist[player.name].style.font_color = playerRank.colour
+				player.tag = playerRank.tag
 			end
     end
+		for i, player in pairs(game.connected_players) do
+			if playerRank.power > 3 then
+				Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand}}
+				Plist[player.name].style.font_color = playerRank.colour
+				player.tag = playerRank.tag
+			end
+		end
   end
 end
 
@@ -593,9 +565,9 @@ function drawPlayerTable(player, frame, commands, filters)
 				if commands then
 					frame.playerTable.add{name=p.name, type="flow"}
 					drawButton(frame.playerTable[p.name],'goto','Tp','Goto to the players location')
-					drawButton(frame.playerTable[p.name],'bring','Br','Bring a player to your location')
+					drawButton(frame.playerTable[p.name],'bring','Br','Bring player player to your location')
 					if p.tag == '[Owner]' or p.tag == '[Developer]' or p.tag == '[Com Mngr]' then else
-						drawButton(frame.playerTable[p.name],'jail','Ja','Jail/Unjail a player')
+						drawButton(frame.playerTable[p.name],'jail','Ja','Jail/Unjail player player')
 						drawButton(frame.playerTable[p.name],'kill','Ki','Kill this player')
 					end
 				end
@@ -617,7 +589,7 @@ addTab('Readme','Rules','The rules of the server',
 			"Do not laydown concrete with bots without permission.",
 			"Do not use active provider chests without permission.",
 			"Do not remove/move major parts of the factory without permission.",
-			"Do not walk in a random direction for no reason(to save map size).",
+			"Do not walk in player random direction for no reason(to save map size).",
 			"Do not remove stuff just because you don't like it, tell people first.",
 			"Do not make train roundabouts.",
 			"Trains are Left Hand Drive (LHD) only.",
@@ -713,7 +685,7 @@ addButton("btn_Modifier_apply",
 				elseif number == player.force[modifier] then
 					player.print(modifier .. " Did not change")
 				else
-					player.print(modifier .. " needs to be a higher number or it contains an letter")
+					player.print(modifier .. " needs to be player higher number or it contains an letter")
 				end
 			end
 		end
@@ -724,7 +696,7 @@ addTab('Admin', 'Commands', 'Random useful commands',
 		drawButton(frame,'btn_toolbar_automessage','Auto Message','Send the auto message to all online players')
 		drawButton(frame,'add_dev_items','Get Blueprints','Get all the blueprints')
 		drawButton(frame,'revive_dead_entitys','Revive All Entitys','Brings all dead machines back to life')
-		drawButton(frame,'revive_dead_entitys_range','Revive Entitys','Brings all dead machines back to life in a range')
+		drawButton(frame,'revive_dead_entitys_range','Revive Entitys','Brings all dead machines back to life in player range')
 		frame.add{type='textfield',name='range',text='Range'}
 		drawButton(frame,'remove_biters','Kill Biters','Removes all biters in map')
 		drawButton(frame,'tp_all','TP All Here','Brings all players to you')
@@ -757,7 +729,7 @@ addTab('Admin', 'Modifiers', 'Edit in game modifiers',
     end
     drawButton(frame.flowNavigation,"btn_Modifier_apply","Apply","Apply the new values to the game")
 end)
-addTab('Admin', 'Player List', 'Send a message to all players', 
+addTab('Admin', 'Player List', 'Send player message to all players', 
 	function(player, frame)
 		frame.add{name='filterTable',type='table',colspan=2}
 		frame.filterTable.add{name='name_label',type='label',caption='Name'}
