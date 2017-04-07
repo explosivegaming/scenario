@@ -15,7 +15,7 @@ defaults = {
 	{name='Member',shortHand='Mem',tag='[Member]',power=5,colour={r=24,g=172,b=188}},
 	{name='Regular',shortHand='Reg',tag='[Regukar]',power=5,colour={r=24,g=172,b=188}},
 	{name='Guest',shortHand='',tag='[Guest]',power=6,colour={r=255,g=159,b=27}},
-	{name='Jail',shortHand='Owner',tag='[Owner]',power=7,colour={r=170,g=0,b=0}}
+	{name='Jail',shortHand='Jail',tag='[Jail]',power=7,colour={r=170,g=0,b=0}}
 	},
 	autoRanks={
 	Owner={'badgamernl'},
@@ -109,11 +109,17 @@ function stringToRank(string)
 end
 
 function callRank(msg, rank, inv)
-	if rank == nil then rank = stringToRank('Mod') else rank = stringToRank(rank) end -- default mod or higher
+	local rank = stringToRank(rank) or stringToRank('Mod') -- default mod or higher
+	local inv = inv or false
 	for _, player in pairs(game.players) do 
 		rankPower = getRank(player).power
-		if inv then if rankPower >= rank.power then player.print('['..rank.shortHand..']: '..msg) end else
-			if rankPower <= rank.power then player.print('['..rank.shortHand..']: '..msg) end
+		if inv then if rankPower >= rank.power then player.print(msg) end else
+			if rankPower <= rank.power then 
+				if rank.shortHand then 
+					player.print(('['..(rank.shortHand)..']: '..msg))
+				else
+					player.print(('[Everyone]: '..msg))
+				end
 		end
 	end
 end
@@ -123,7 +129,7 @@ function giveRank(player,rank,byPlayer)
 	oldRank = getRank(player)
 	local message = 'demoted'
 	if rank.power <= oldRank.power then message = 'promoted' end
-	callRank(player.name..' was '..message..' to '..rank.name..' by '..byplayer,oldRank)
+	callRank(player.name..' was '..message..' to '..rank.name..' by '..byPlayer.name,oldRank.name)
 	player.tag = rank.tag
 	drawToolbar(player)
 	drawPlayerList()
@@ -161,14 +167,6 @@ end
 function ticktominutes (tick)
   	local minutes = math.floor(tick/(3600*game.speed))
     return minutes
-end
-
-function callRank(msg)
-	for _, player in pairs(game.connected_players) do 
-		if player.admin then
-			player.print(msg)
-		end
-	end
 end
 
 function clearSelection(player)
@@ -376,13 +374,13 @@ end)
 
 script.on_event(defines.events.on_gui_text_changed, function(event)
 	local player = game.players[event.player_index]
-	if event.element.parent.parent.filterTable then
+	if event.element.parent.name == 'filterTable' then
 		local frame = event.element
 		local filters = {}
 		local commands = false
 		local select = false
-		if frame.parent.parent.parent.name == 'Admin' then commands = true filters[#filters+1] = 'online' end
-		if frame.parent.parent.parent.name == 'Admin+' then select = true filters[#filters+1] = 'lower' end
+		if frame.parent.parent.parent.name == 'Admin' and not frame.parent.sel_input then commands = true filters[#filters+1] = 'online' end
+		if frame.parent.parent.parent.name == 'Admin' and frame.parent.sel_input then select = true filters[#filters+1] = 'lower' end
 		if frame.parent.parent.filterTable.status_input and not commands then 
 			local status_input = frame.parent.parent.filterTable.status_input.text
 			if status_input == 'yes' or status_input == 'online' or status_input == 'true' or status_input == 'y' then filters[#filters+1] = 'online'
@@ -394,7 +392,7 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
 			local name_input =  frame.parent.parent.filterTable.name_input.text
 			if name_input then filters[#filters+1] = name_input end
 		end if frame.parent.parent.filterTable.sel_input then
-			local sel_input =  frame.parent.parent.filterTable.name_input.text
+			local sel_input =  frame.parent.parent.filterTable.sel_input.text
 			if sel_input == 'yes' or sel_input == 'online' or sel_input == 'true' or sel_input == 'y' then filters[#filters+1] = 'selected' end
 		end
 		if frame.parent.parent.playerTable then frame.parent.parent.playerTable.destroy() end
@@ -587,6 +585,7 @@ addButton('kill',
 	if p.character then p.character.die() end
 end)
 function drawPlayerTable(player, frame, commands, select,filters)
+	if frame.playerTable then frame.playerTable.destroy() end
 	frame.add{name='playerTable', type="table", colspan=5}
   frame.playerTable.style.minimal_width = 500
   frame.playerTable.style.maximal_width = 500
@@ -597,15 +596,15 @@ function drawPlayerTable(player, frame, commands, select,filters)
   frame.playerTable.add{name="online_time", type="label", caption="Online Time	"}
   frame.playerTable.add{name="rank", type="label", caption="Rank	"}
 	if commands then frame.playerTable.add{name="commands", type="label", caption="Commands"} end
-	if select then frame.playerTable.add{name="select", type="label", caption="Selection"} end
+	if select then frame.playerTable.add{name="select_label", type="label", caption="Selection"} end
   for i, p in pairs(game.players) do
     local addPlayer = true
     for _,filter in pairs(filters) do
       if filter == 'admin' then if p.admin == false then addPlayer = false break end
 			elseif filter == 'online' then if p.connected == false then addPlayer = false break end
 			elseif filter == 'offline' then if p.connected == true then addPlayer = false break end
-			elseif filter == 'lower' then if getRank(p).power <= getRank(player.power) then addPlayer = false break end
-			elseif filter == 'selected' then if frame.playerTable[p.name].state == false then addPlayer = false break end
+			elseif filter == 'lower' then if getRank(p).power <= getRank(player).power then addPlayer = false break end
+			elseif filter == 'selected' then local Break = nil for _,name in pairs(selected[player.index]) do if name == p.name then Break = true break end end if not Break then addPlayer = false break end
 			elseif type(filter)=='number' then if filter > ticktominutes(p.online_time) then addPlayer = false break end
 			elseif type(filter)=='string' then if p.name:lower():find(filter:lower()) == nil then addPlayer = false break end
 		end
@@ -614,7 +613,7 @@ function drawPlayerTable(player, frame, commands, select,filters)
       if frame.playerTable[p.name] == nil then
         frame.playerTable.add{name=i .. "id", type="label", caption=i}
         frame.playerTable.add{name=p.name..'_name', type="label", caption=p.name}
-				if not commands then 
+				if not commands and not select then 
 					if p.connected == true then
 						frame.playerTable.add{name=p.name .. "Status", type="label", caption="ONLINE"}
 					else
@@ -627,7 +626,7 @@ function drawPlayerTable(player, frame, commands, select,filters)
 					frame.playerTable.add{name=p.name, type="flow"}
 					drawButton(frame.playerTable[p.name],'goto','Tp','Goto to the players location')
 					drawButton(frame.playerTable[p.name],'bring','Br','Bring player player to your location')
-					if getRank(p).power >= getRank(player).power then else
+					if getRank(p).power >= getRank(player).power then
 						drawButton(frame.playerTable[p.name],'jail','Ja','Jail/Unjail player player')
 						drawButton(frame.playerTable[p.name],'kill','Ki','Kill this player')
 					end
@@ -635,7 +634,7 @@ function drawPlayerTable(player, frame, commands, select,filters)
 					frame.playerTable.add{name=p.name, type="flow"}
 					local state = false
 					for _,name in pairs(selected[player.index]) do if name == p.name then state = true break end end
-					frame.playerTable.add{name='select', type="checkbox",state=state}
+					frame.playerTable[p.name].add{name='select', type="checkbox",state=state}
 				end
       end
     end
@@ -724,21 +723,24 @@ addButton('btn_toolbar_automessage',function() autoMessage() end)
 addButton('tp_all',function(player,frame) for i,p in pairs(game.connected_players) do local pos = game.surfaces[player.surface.name].find_non_colliding_position("player", player.position, 32, 1) if p ~= player then p.teleport(pos) end end end)
 addButton('revive_dead_entitys_range',function(player,frame) if tonumber(frame.parent.range.text) then local range = tonumber(frame.parent.range.text) for key, entity in pairs(game.surfaces[1].find_entities_filtered({area={{player.position.x-range,player.position.y-range},{player.position.x+range,player.position.y+range}},type = "entity-ghost"})) do entity.revive() end end end)
 addButton('add_dev_items',function(player,frame) player.insert{name="deconstruction-planner", count = 1} player.insert{name="blueprint-book", count = 1} player.insert{name="blueprint", count = 20} end)
-addButton('setRanks',
+addButton('sendMessage',function(player,frame) local rank = stringToRank(frame.parent.message.rank.text) if rank then callRank(frame.parent.message.message.text,rank.name) else for _,rank in pairs(ranks) do player.print(rank.name) end  end)
+addButton('setRanks',player.print(frame.parent.rank_input.text..' is not a Rank, Ranks are:') 
 	function(player,frame) 
-		rank = stringToRank(frame.parent.rank.rank_input.text) 
+		rank = stringToRank(frame.parent.rank_input.text) 
 		if rank then 
 			for _,playerName in pairs(selected[player.index]) do 
 				p=game.players[playerName] 
-				if getRank(player).power < getRank(p).power and rank.power > getRank(p) then 
+				if getRank(player).power < getRank(p).power and rank.power > getRank(player).power then 
 					giveRank(p,rank,player) 
 				else 
-					player.print('You can not edit '..p.name..' rank there rank or the rank you have slected is too high') 
+					player.print('You can not edit '..p.name.."'s rank there rank is too high (or the rank you have slected is above you)") 
 				end 
 			end 
-		end 
+		else 
+			player.print(frame.parent.rank_input.text..' is not a Rank, Ranks are:') for _,rank in pairs(ranks) do if rank.power > getRank(player).power then player.print(rank.name) end end 
+		end
 	end)
-addButton('clearSelection',function(player,fram) clearSelection(player) end)
+addButton('clearSelection',function(player,frame) clearSelection(player) drawPlayerTable(player, frame.parent.parent, false, true, {}) end)
 
 addTab('Admin', 'Commands', 'Random useful commands', 
 	function(player, frame)
@@ -746,6 +748,10 @@ addTab('Admin', 'Commands', 'Random useful commands',
 		drawButton(frame,'add_dev_items','Get Blueprints','Get all the blueprints')
 		drawButton(frame,'revive_dead_entitys_range','Revive Entitys','Brings all dead machines back to life in player range')
 		frame.add{type='textfield',name='range',text='Range'}
+		frame.add{type='flow',name='message'}
+		frame.message.add{type='textfield',name='message',text='Enter message'}
+		frame.message.add{type='textfield',name='rank',text='Endter rank'}
+		drawButton(frame,'sendMessage','Send Message','Send a message to all ranks higher than the slected')
 		drawButton(frame,'tp_all','TP All Here','Brings all players to you')
 	end)
 addTab('Admin','Edit Ranks', 'Edit the ranks of players below you',
@@ -761,7 +767,7 @@ addTab('Admin','Edit Ranks', 'Edit the ranks of players below you',
 		frame.rank.add{name='rank_input',type='textfield'}
 		drawButton(frame.rank,'setRanks','Set Ranks','Sets the rank of all selected players')
 		drawButton(frame.rank,'clearSelection','Clear Selection','Clears all currently selected players')
-		drawPlayerTable(player, frame, false, true, {})
+		drawPlayerTable(player, frame, false, true, {'lower'})
 	end)
 addTab('Admin', 'Player List', 'Send player message to all players', 
 	function(player, frame)
