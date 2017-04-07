@@ -120,6 +120,7 @@ function callRank(msg, rank, inv)
 				else
 					player.print(('[Everyone]: '..msg))
 				end
+			end
 		end
 	end
 end
@@ -723,8 +724,8 @@ addButton('btn_toolbar_automessage',function() autoMessage() end)
 addButton('tp_all',function(player,frame) for i,p in pairs(game.connected_players) do local pos = game.surfaces[player.surface.name].find_non_colliding_position("player", player.position, 32, 1) if p ~= player then p.teleport(pos) end end end)
 addButton('revive_dead_entitys_range',function(player,frame) if tonumber(frame.parent.range.text) then local range = tonumber(frame.parent.range.text) for key, entity in pairs(game.surfaces[1].find_entities_filtered({area={{player.position.x-range,player.position.y-range},{player.position.x+range,player.position.y+range}},type = "entity-ghost"})) do entity.revive() end end end)
 addButton('add_dev_items',function(player,frame) player.insert{name="deconstruction-planner", count = 1} player.insert{name="blueprint-book", count = 1} player.insert{name="blueprint", count = 20} end)
-addButton('sendMessage',function(player,frame) local rank = stringToRank(frame.parent.message.rank.text) if rank then callRank(frame.parent.message.message.text,rank.name) else for _,rank in pairs(ranks) do player.print(rank.name) end  end)
-addButton('setRanks',player.print(frame.parent.rank_input.text..' is not a Rank, Ranks are:') 
+addButton('sendMessage',function(player,frame) local rank = stringToRank(frame.parent.message.rank.text) if rank then callRank(frame.parent.message.message.text,rank.name) else for _,rank in pairs(ranks) do player.print(rank.name) end end end)
+addButton('setRanks', 
 	function(player,frame) 
 		rank = stringToRank(frame.parent.rank_input.text) 
 		if rank then 
