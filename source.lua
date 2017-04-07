@@ -15,7 +15,7 @@ defaults = {
 	{name='Member',shortHand='Mem',tag='[Member]',power=5,colour={r=24,g=172,b=188}},
 	{name='Regular',shortHand='Reg',tag='[Regukar]',power=5,colour={r=24,g=172,b=188}},
 	{name='Guest',shortHand='',tag='[Guest]',power=6,colour={r=255,g=159,b=27}},
-	{name='Jail',shortHand='Jail',tag='[Jail]',power=7,colour={r=170,g=0,b=0}}
+	{name='Jail',shortHand='Jail',tag='[Jail]',power=7,colour={r=50,g=50,b=50}}
 	},
 	autoRanks={
 	Owner={'badgamernl'},
@@ -29,7 +29,8 @@ defaults = {
 	Guest={},
 	Jail={}
 	},
-	selected={}
+	selected={},
+	jail={}
 }
 
 warningAllowed = nil
@@ -51,13 +52,15 @@ function loadVar(t)
 	ranks= gTable.ranks
 	autoRanks= gTable.autoRanks
 	selected= gTable.selected
+	jail= gTable.jail
 end
 
 function saveVar()
 	gTable.itemRotated = itemRotated
 	gTable.ranks = ranks
 	gTable.autoRanks = autoRanks
-	selected= gTable.selected
+	gTable.selected= selected
+	gTable.jail= jail
 	game.players[1].gui.left.hidden.caption = table.tostring(gTable)
 end
 ----------------------------------------------------------------------------------------
@@ -102,9 +105,12 @@ end
 
 function stringToRank(string)
 	if type(string) == 'string' then
-		for _,rank in pairs(ranks) do 
-			if rank.name == string then return rank end
+		local Foundranks={}
+		for _,rank in pairs(ranks) do
+			if rank.name:lower() == string:lower() then return rank end
+			if rank.name:lower():find(string:lower()) then table.insert(Foundranks,rank) end
 		end
+		if #Foundranks == 1 then return Foundranks[1] end
 	end
 end
 
@@ -155,6 +161,22 @@ function autoRank(player)
 	end
 	if getRank(player).power <= 3 and not player.admin then
 		callRank(player.name..' needs to be promoted.')
+	end
+end
+
+function jail(player,byplayer)
+	if player.character then
+		if player.character.active then
+			jail[player.index][1]=true
+			jail[player.index][2]=getRank(player).name
+			giveRank(player,'Jail',byplayer)
+			player.character.active = false
+		else
+			jail[player.index][1]=false
+			local rank = stringToRank(jail[player.index][2]) or stringToRank('Guest')
+			giveRank(player,rank,byplayer)
+			player.character.active = true
+		end
 	end
 end
 ----------------------------------------------------------------------------------------
@@ -355,7 +377,7 @@ script.on_event(defines.events.on_gui_click, function(event)
 	if event.element.type == 'button' then
 		for _,btn in pairs(guis.buttons) do
 			if btn[1] == event.element.name then
-				if btn[2] then btn[2](player,event.element) else game.print('Invaid Button'..btn[1]) end
+				if btn[2] then btn[2](player,event.element) else callRank('Invaid Button'..btn[1],'Mod') end
 				break
 			end
 		end
@@ -370,6 +392,7 @@ script.on_event(defines.events.on_gui_click, function(event)
 				end
 			end
 		end
+		saveVar()
 	end
 end)
 
@@ -627,7 +650,7 @@ function drawPlayerTable(player, frame, commands, select,filters)
 					frame.playerTable.add{name=p.name, type="flow"}
 					drawButton(frame.playerTable[p.name],'goto','Tp','Goto to the players location')
 					drawButton(frame.playerTable[p.name],'bring','Br','Bring player player to your location')
-					if getRank(p).power >= getRank(player).power then
+					if getRank(p).power > getRank(player).power then
 						drawButton(frame.playerTable[p.name],'jail','Ja','Jail/Unjail player player')
 						drawButton(frame.playerTable[p.name],'kill','Ki','Kill this player')
 					end
@@ -751,7 +774,7 @@ addTab('Admin', 'Commands', 'Random useful commands',
 		frame.add{type='textfield',name='range',text='Range'}
 		frame.add{type='flow',name='message'}
 		frame.message.add{type='textfield',name='message',text='Enter message'}
-		frame.message.add{type='textfield',name='rank',text='Endter rank'}
+		frame.message.add{type='textfield',name='rank',text='Enter rank'}
 		drawButton(frame,'sendMessage','Send Message','Send a message to all ranks higher than the slected')
 		drawButton(frame,'tp_all','TP All Here','Brings all players to you')
 	end)
