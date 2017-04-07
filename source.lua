@@ -64,6 +64,7 @@ function initVar()
 	if game.players[1].gui.left.hidden then g = game.players[1].gui.left.hidden.caption else g = game.players[1].gui.left.add{type='frame',name='hidden',caption=table.tostring(defaults)}.caption end
 	gTable = loadstring('return '..g)()
 	game.print(g)
+	game.print(gTable.test[1])
 end
 
 function autoMessage()
