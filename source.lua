@@ -177,6 +177,7 @@ function jail(player,byplayer)
 			giveRank(player,rank,byplayer)
 			player.character.active = true
 		end
+		saveVar()
 	end
 end
 ----------------------------------------------------------------------------------------
