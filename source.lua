@@ -54,7 +54,7 @@ function loadVar(t)
 	selected= gTable.selected
 	jail= gTable.jail
 end
-
+loadVar(defaults)
 function saveVar()
 	gTable.itemRotated = itemRotated
 	gTable.ranks = ranks
