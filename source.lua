@@ -119,27 +119,44 @@ function callRank(msg, rank, inv)
 	local inv = inv or false
 	for _, player in pairs(game.players) do 
 		rankPower = getRank(player).power
-		if inv then if rankPower >= rank.power then player.print(msg) end else
-			if rankPower <= rank.power then 
-				if rank.shortHand then 
-					player.print(('['..(rank.shortHand)..']: '..msg))
-				else
-					player.print(('[Everyone]: '..msg))
-				end
+		if inv then 
+			if rankPower >= rank.power then 
+				player.print(('[Everyone]: '..msg)) 
+			end
+		else
+			if rankPower <= rank.power then
+				if rank.shortHand ~= '' then player.print(('['..(rank.shortHand)..']: '..msg)) else player.print(('[Everyone]: '..msg)) end 
 			end
 		end
 	end
 end
 
-function giveRank(player,rank,byPlayer)
+function giveRank(player,rank,byPlayer,sys)
 	local byPlayer = byPlayer or 'system'
-	oldRank = getRank(player)
+	local rank = stringToRank(rank) or rank
+	local oldRank = getRank(player)
 	local message = 'demoted'
 	if rank.power <= oldRank.power then message = 'promoted' end
-	callRank(player.name..' was '..message..' to '..rank.name..' by '..byPlayer.name,oldRank.name)
+	if byPlayer.name then 
+		callRank(player.name..' was '..message..' to '..rank.name..' by '..byPlayer.name,oldRank.name)
+	else
+		callRank(player.name..' was '..message..' to '..rank.name..' by <system>',oldRank.name)
+	end
 	player.tag = rank.tag
 	drawToolbar(player)
 	drawPlayerList()
+	if sys then else
+		game.print(jail[player.index][1])
+		game.print(rank.name)
+		game.print(jail[player.index][1] and rank.name ~= 'Jail')
+		if rank.name == 'Jail' and not jail[player.index][1] then
+			jailPlayer(player,byPlayer)
+		elseif jail[player.index][1] and rank.name ~= 'Jail' then
+			game.print('Unjail')
+			jail[player.index][1]=false
+			player.character.active = true
+		end
+	end
 end
 
 function autoRank(player)
@@ -162,19 +179,27 @@ function autoRank(player)
 	if getRank(player).power <= 3 and not player.admin then
 		callRank(player.name..' needs to be promoted.')
 	end
+	if jail[player.index] == nil then
+		jail[player.index]={false,getRank(player).name}
+	end
+	if jail[player.index][1] then 
+		player.tag=stringToRank('Jail').tag 
+		if player.character then player.character.active = false end
+	end
+	saveVar()
 end
 
-function jail(player,byplayer)
+function jailPlayer(player,byplayer)
 	if player.character then
 		if player.character.active then
 			jail[player.index][1]=true
 			jail[player.index][2]=getRank(player).name
-			giveRank(player,'Jail',byplayer)
+			giveRank(player,'Jail',byplayer,true)
 			player.character.active = false
 		else
 			jail[player.index][1]=false
-			local rank = stringToRank(jail[player.index][2]) or stringToRank('Guest')
-			giveRank(player,rank,byplayer)
+			local rank = jail[player.index][2] or 'Guest'
+			giveRank(player,rank,byplayer,true)
 			player.character.active = true
 		end
 		saveVar()
@@ -198,15 +223,15 @@ function clearSelection(player)
 end
 
 function autoMessage()
-	rank = stringToRank('Regular')
-	hrank = stringToRank('Mod')
+	local lrank = 'Regular'
+	local hrank = 'Mod'
 	callRank('There are '..#game.connected_players..' players online',hrank,true)
 	callRank('This map has been on for '..ticktohour(game.tick)..' Hours and '..(ticktominutes(game.tick)-60*ticktohour(game.tick))..' Minutes',hrank,true)
-	callRank('Please join us on:',rank,true)
-	callRank('Discord: https://discord.gg/RPCxzgt',rank,true)
-	callRank('Forum: explosivegaming.nl',rank,true)
-	callRank('Steam: http://steamcommunity.com/groups/tntexplosivegaming',rank,true)
-	callRank('To see these links again goto: Readme > Server Info',rank,true)
+	callRank('Please join us on:',lrank,true)
+	callRank('Discord: https://discord.gg/RPCxzgt',lrank,true)
+	callRank('Forum: explosivegaming.nl',lrank,true)
+	callRank('Steam: http://steamcommunity.com/groups/tntexplosivegaming',lrank,true)
+	callRank('To see these links again goto: Readme > Server Info',lrank,true)
 end
 ----------------------------------------------------------------------------------------
 ---------------------------Table Functions----------------------------------------------
@@ -553,12 +578,6 @@ function drawPlayerList()
     clearElement(Plist)
     Plist.style.maximal_height = 200
     for i, player in pairs(game.connected_players) do
-			if player.character then
-				if player.tag == '[Jail]' or player.character.active == false then
-					player.character.active = false
-					player.tag = '[Jail]'
-				end
-			end
 			playerRank = getRank(player)
 			if playerRank.power <= 3 then
 				if playerRank.shortHand ~= '' then Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand}}
@@ -589,21 +608,7 @@ addButton('bring',
 	local p = game.players[frame.parent.name]
 	p.teleport(game.surfaces[player.surface.name].find_non_colliding_position("player", player.position, 32, 1))
 end)
-addButton('jail',
-	function(player,frame)
-	local p = game.players[frame.parent.name]
-	if p.character then
-		if p.character.active then
-			p.character.active = false
-			p.tag = '[Jail]'
-			drawPlayerList()
-		else
-			p.character.active = true
-			p.tag = '[Guest]'
-			drawPlayerList()
-		end
-	end
-end)
+addButton('jail',function(player,frame) jailPlayer(game.players[frame.parent.name],player) end)
 addButton('kill',
 	function(player,frame)
 	local p = game.players[frame.parent.name]
@@ -652,7 +657,7 @@ function drawPlayerTable(player, frame, commands, select,filters)
 					drawButton(frame.playerTable[p.name],'goto','Tp','Goto to the players location')
 					drawButton(frame.playerTable[p.name],'bring','Br','Bring player player to your location')
 					if getRank(p).power > getRank(player).power then
-						drawButton(frame.playerTable[p.name],'jail','Ja','Jail/Unjail player player')
+						drawButton(frame.playerTable[p.name],'jail','Ja','Jail/Unjail player')
 						drawButton(frame.playerTable[p.name],'kill','Ki','Kill this player')
 					end
 				elseif select then
