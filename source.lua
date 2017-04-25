@@ -64,40 +64,12 @@ function saveVar()
 	game.players[1].gui.left.hidden.caption = table.tostring(gTable)
 end
 ----------------------------------------------------------------------------------------
----------------------------Remove decorations-------------------------------------------
-----------------------------------------------------------------------------------------
-local function removeDecorationsArea(surface, area )
-	if surface.find_entities_filtered{area = area, type="decorative"} then
-		for _, entity in pairs(surface.find_entities_filtered{area = area, type="decorative"}) do
-			if (entity.name ~= "red-bottleneck" and entity.name ~= "yellow-bottleneck" and entity.name ~= "green-bottleneck") then
-				entity.destroy()
-			end
-		end
-	end
-end
-
-local function removeDecorations(surface, x, y, width, height )
-	removeDecorationsArea(surface, {{x, y}, {x + width, y + height}})
-end
-
-local function clearDecorations()
-	local surface = game.surfaces["nauvis"]
-	for chunk in surface.get_chunks() do
-		removeDecorations(surface, chunk.x * CHUNK_SIZE, chunk.y * CHUNK_SIZE, CHUNK_SIZE - 1, CHUNK_SIZE - 1)
-	end
-    callRank("Decoratives have been removed")
-end
-
-script.on_event(defines.events.on_chunk_generated, function(event)
-	removeDecorationsArea( event.surface, event.area )
-end)
-----------------------------------------------------------------------------------------
 ---------------------------Rank functions-----------------------------------------------
 ----------------------------------------------------------------------------------------
 function getRank(player)
 	if player then
 		for _,rank in pairs(ranks) do
-			if player.tag == rank.tag then return rank end
+			if player.permission_group == game.permissions.get_group(rank.name) then return rank end
 		end
 		return stringToRank('Guest')
 	end
@@ -142,7 +114,7 @@ function giveRank(player,rank,byPlayer,sys)
 	else
 		callRank(player.name..' was '..message..' to '..rank.name..' by <system>',oldRank.name)
 	end
-	player.tag = rank.tag
+	player.permission_group = game.permissions.get_group(rank.name)
 	drawToolbar(player)
 	drawPlayerList()
 	if sys then else
@@ -171,10 +143,10 @@ function autoRank(player)
 	end
 	if playerAutoRank then
 		if currentRank.power > playerAutoRank.power then
-			player.tag=playerAutoRank.tag
+			player.permission_group=game.permissions.get_group(playerAutoRank.name)
 		end
 	elseif ticktominutes(player.online_time) >= timeForRegular then
-		player.tag=stringToRank('Regular').tag
+		player.permission_group=game.permissions.get_group('Regular')
 	end
 	if getRank(player).power <= 3 and not player.admin then
 		callRank(player.name..' needs to be promoted.')
@@ -183,7 +155,7 @@ function autoRank(player)
 		jail[player.index]={false,getRank(player).name}
 	end
 	if jail[player.index][1] then 
-		player.tag=stringToRank('Jail').tag 
+		player.permission_group=game.permissions.get_group('Jail')
 		if player.character then player.character.active = false end
 	end
 	saveVar()
@@ -299,7 +271,7 @@ function openTab(player, frameName, tab, tabName)
 		if _ ~= 1 then
 			if t[1] == tabName then
 				tabBar[t[1]].style.font_color = {r = 255, g = 255, b = 255, player = 255}
-				clearElement(tab)
+				tab.clear()
 				t[3](player, tab)
 			else
 				tabBar[t[1]].style.font_color = {r = 100, g = 100, b = 100, player = 255}
@@ -340,14 +312,6 @@ function toggleVisable(frame)
 		end
 	end
 end
-
-function clearElement (elementToClear)
-  if elementToClear ~= nil then
-    for i, element in pairs(elementToClear.children_names) do
-      elementToClear[element].destroy()
-    end
-  end
-end
 ----------------------------------------------------------------------------------------
 ---------------------------Player Events------------------------------------------------
 ----------------------------------------------------------------------------------------
@@ -358,7 +322,7 @@ script.on_event(defines.events.on_player_created, function(event)
   player.insert{name="firearm-magazine", count=10}
   player.insert{name="burner-mining-drill", count = 1}
   player.insert{name="stone-furnace", count = 1}
-  player.force.chart(player.surface, {{player.position.x - 200, player.position.y - 200}, {player.position.x + 200, player.position.y + 200}})
+	player.force.chart(player.surface, {{player.position.x - 200, player.position.y - 200}, {player.position.x + 200, player.position.y + 200}})
 end)
 
 script.on_event(defines.events.on_player_respawned, function(event)
@@ -370,6 +334,11 @@ end)
 
 script.on_event(defines.events.on_player_joined_game, function(event)
 	loadVar()
+	if #game.players == 1 then
+		for _,rank in pairs(ranks) do
+			game.permissions.create_group(rank.name)
+		end
+	end
   local player = game.players[event.player_index]
 	autoRank(player)
   player.print({"", "Welcome"})
@@ -555,12 +524,10 @@ end
 ---------------------------Tool Bar-----------------------------------------------------
 ----------------------------------------------------------------------------------------
 addButton("btn_toolbar_playerList", function(player) toggleVisable(player.gui.left.PlayerList) end)
-addButton("btn_toolbar_rocket_score",function(player) toggleVisable(player.gui.left.rocket_score) end)
 function drawToolbar(player)
   local frame = player.gui.top
-  clearElement(frame)
+  frame.clear()
 	drawButton(frame,"btn_toolbar_playerList", "Playerlist", "Adds player player list to your game.")
-	drawButton(frame,"btn_toolbar_rocket_score", "Rocket score", "Show the satellite launched counter if player satellite has launched.")
 	for _,f in pairs(guis.frames) do
 		if getRank(player).power <= f[1].require then drawButton(frame,"btn_".._, f[1].caption, f[1].tooltip) end
   end
@@ -575,7 +542,7 @@ function drawPlayerList()
                 .add{type = "scroll-pane", name= "PlayerListScroll", direction = "vertical", vertical_scroll_policy="always", horizontal_scroll_policy="never"}
     end
 		Plist= player.gui.left.PlayerList.PlayerListScroll
-    clearElement(Plist)
+    Plist.clear()
     Plist.style.maximal_height = 200
     for i, player in pairs(game.connected_players) do
 			playerRank = getRank(player)
@@ -621,7 +588,7 @@ function drawPlayerTable(player, frame, commands, select,filters)
   frame.playerTable.style.maximal_width = 500
 	frame.playerTable.style.horizontal_spacing = 10
   frame.playerTable.add{name="id", type="label", caption="Id		"}
-  frame.playerTable.add{name="name", type="label", caption="Name		"}
+  frame.playerTable.add{name="Pname", type="label", caption="Name		"}
   if commands==false and select ==false then frame.playerTable.add{name="status", type="label", caption="Status		"} end
   frame.playerTable.add{name="online_time", type="label", caption="Online Time	"}
   frame.playerTable.add{name="rank", type="label", caption="Rank	"}
@@ -875,7 +842,7 @@ addTab('Admin+', 'Modifiers', 'Edit in game modifiers',
 		}
     frame.add{type = "flow", name= "flowNavigation",direction = "horizontal"}
     frame.add{name="modifierTable", type="table", colspan=3}
-    frame.modifierTable.add{name="name", type="label", caption="name"}
+    frame.modifierTable.add{name="Mname", type="label", caption="name"}
     frame.modifierTable.add{name="input", type="label", caption="input"}
     frame.modifierTable.add{name="current", type="label", caption="current"}
     for i, modifier in pairs(forceModifiers) do
