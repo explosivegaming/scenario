@@ -5,17 +5,20 @@ guis = {frames={},buttons={}}
 --functions can not be included in the default list or be added by code
 defaults = {
 	itemRotated = {},
+	--for disallow add to the list the end part of the input action
+	--example: defines.input_action.drop_item -> 'drop_item'
+	--http://lua-api.factorio.com/latest/defines.html#defines.input_action
 	ranks={
-	{name='Owner',shortHand='Owner',tag='[Owner]',power=0,colour={r=170,g=0,b=0}},
-	{name='Community Manager',shortHand='CM',tag='[Com Mngr]',power=1,colour={r=150,g=68,b=161}},
-	{name='Developer',shortHand='Dev',tag='[Dev]',power=1,colour={r=179,g=125,b=46}},
-	{name='Admin',shortHand='Admin',tag='[Admin]',power=2,colour={r=170,g=41,b=170}},
-	{name='Mod',shortHand='Mod',tag='[Mod]',power=3,colour={r=233,g=63,b=233}},
-	{name='Donator',shortHand='P2W',tag='[P2W]',power=4,colour={r=233,g=63,b=233}},
-	{name='Member',shortHand='Mem',tag='[Member]',power=5,colour={r=24,g=172,b=188}},
-	{name='Regular',shortHand='Reg',tag='[Regukar]',power=5,colour={r=24,g=172,b=188}},
-	{name='Guest',shortHand='',tag='[Guest]',power=6,colour={r=255,g=159,b=27}},
-	{name='Jail',shortHand='Jail',tag='[Jail]',power=7,colour={r=50,g=50,b=50}}
+	{name='Owner',shortHand='Owner',tag='[Owner]',power=0,colour={r=170,g=0,b=0},disallow={}},
+	{name='Community Manager',shortHand='CM',tag='[Com Mngr]',power=1,colour={r=150,g=68,b=161},disallow={}},
+	{name='Developer',shortHand='Dev',tag='[Dev]',power=1,colour={r=179,g=125,b=46},disallow={}},
+	{name='Admin',shortHand='Admin',tag='[Admin]',power=2,colour={r=170,g=41,b=170},disallow={}},
+	{name='Mod',shortHand='Mod',tag='[Mod]',power=3,colour={r=233,g=63,b=233},disallow={}},
+	{name='Donator',shortHand='P2W',tag='[P2W]',power=4,colour={r=233,g=63,b=233},disallow={}},
+	{name='Member',shortHand='Mem',tag='[Member]',power=5,colour={r=24,g=172,b=188},disallow={}},
+	{name='Regular',shortHand='Reg',tag='[Regukar]',power=5,colour={r=24,g=172,b=188},disallow={}},
+	{name='Guest',shortHand='',tag='[Guest]',power=6,colour={r=255,g=159,b=27},disallow={}},
+	{name='Jail',shortHand='Jail',tag='[Jail]',power=7,colour={r=50,g=50,b=50},disallow={}}
 	},
 	autoRanks={
 	Owner={'badgamernl'},
@@ -64,40 +67,12 @@ function saveVar()
 	game.players[1].gui.left.hidden.caption = table.tostring(gTable)
 end
 ----------------------------------------------------------------------------------------
----------------------------Remove decorations-------------------------------------------
-----------------------------------------------------------------------------------------
-local function removeDecorationsArea(surface, area )
-	if surface.find_entities_filtered{area = area, type="decorative"} then
-		for _, entity in pairs(surface.find_entities_filtered{area = area, type="decorative"}) do
-			if (entity.name ~= "red-bottleneck" and entity.name ~= "yellow-bottleneck" and entity.name ~= "green-bottleneck") then
-				entity.destroy()
-			end
-		end
-	end
-end
-
-local function removeDecorations(surface, x, y, width, height )
-	removeDecorationsArea(surface, {{x, y}, {x + width, y + height}})
-end
-
-local function clearDecorations()
-	local surface = game.surfaces["nauvis"]
-	for chunk in surface.get_chunks() do
-		removeDecorations(surface, chunk.x * CHUNK_SIZE, chunk.y * CHUNK_SIZE, CHUNK_SIZE - 1, CHUNK_SIZE - 1)
-	end
-    callRank("Decoratives have been removed")
-end
-
-script.on_event(defines.events.on_chunk_generated, function(event)
-	removeDecorationsArea( event.surface, event.area )
-end)
-----------------------------------------------------------------------------------------
 ---------------------------Rank functions-----------------------------------------------
 ----------------------------------------------------------------------------------------
 function getRank(player)
 	if player then
 		for _,rank in pairs(ranks) do
-			if player.tag == rank.tag then return rank end
+			if player.permission_group == game.permissions.get_group(rank.name) then return rank end
 		end
 		return stringToRank('Guest')
 	end
@@ -142,7 +117,7 @@ function giveRank(player,rank,byPlayer,sys)
 	else
 		callRank(player.name..' was '..message..' to '..rank.name..' by <system>',oldRank.name)
 	end
-	player.tag = rank.tag
+	player.permission_group = game.permissions.get_group(rank.name)
 	drawToolbar(player)
 	drawPlayerList()
 	if sys then else
@@ -171,10 +146,10 @@ function autoRank(player)
 	end
 	if playerAutoRank then
 		if currentRank.power > playerAutoRank.power then
-			player.tag=playerAutoRank.tag
+			player.permission_group=game.permissions.get_group(playerAutoRank.name)
 		end
 	elseif ticktominutes(player.online_time) >= timeForRegular then
-		player.tag=stringToRank('Regular').tag
+		player.permission_group=game.permissions.get_group('Regular')
 	end
 	if getRank(player).power <= 3 and not player.admin then
 		callRank(player.name..' needs to be promoted.')
@@ -183,7 +158,7 @@ function autoRank(player)
 		jail[player.index]={false,getRank(player).name}
 	end
 	if jail[player.index][1] then 
-		player.tag=stringToRank('Jail').tag 
+		player.permission_group=game.permissions.get_group('Jail')
 		if player.character then player.character.active = false end
 	end
 	saveVar()
@@ -299,7 +274,7 @@ function openTab(player, frameName, tab, tabName)
 		if _ ~= 1 then
 			if t[1] == tabName then
 				tabBar[t[1]].style.font_color = {r = 255, g = 255, b = 255, player = 255}
-				clearElement(tab)
+				tab.clear()
 				t[3](player, tab)
 			else
 				tabBar[t[1]].style.font_color = {r = 100, g = 100, b = 100, player = 255}
@@ -340,14 +315,6 @@ function toggleVisable(frame)
 		end
 	end
 end
-
-function clearElement (elementToClear)
-  if elementToClear ~= nil then
-    for i, element in pairs(elementToClear.children_names) do
-      elementToClear[element].destroy()
-    end
-  end
-end
 ----------------------------------------------------------------------------------------
 ---------------------------Player Events------------------------------------------------
 ----------------------------------------------------------------------------------------
@@ -358,7 +325,7 @@ script.on_event(defines.events.on_player_created, function(event)
   player.insert{name="firearm-magazine", count=10}
   player.insert{name="burner-mining-drill", count = 1}
   player.insert{name="stone-furnace", count = 1}
-  player.force.chart(player.surface, {{player.position.x - 200, player.position.y - 200}, {player.position.x + 200, player.position.y + 200}})
+	player.force.chart(player.surface, {{player.position.x - 200, player.position.y - 200}, {player.position.x + 200, player.position.y + 200}})
 end)
 
 script.on_event(defines.events.on_player_respawned, function(event)
@@ -370,6 +337,14 @@ end)
 
 script.on_event(defines.events.on_player_joined_game, function(event)
 	loadVar()
+	if #game.players == 1 then
+		for _,rank in pairs(ranks) do
+			game.permissions.create_group(rank.name)
+			for _,toRemove in pairs(rank.disallow) do
+				game.permissions.get_group(rank.name).set_allows_action(defines.input_action[toRemove],false)
+			end
+		end
+	end
   local player = game.players[event.player_index]
 	autoRank(player)
   player.print({"", "Welcome"})
@@ -555,12 +530,10 @@ end
 ---------------------------Tool Bar-----------------------------------------------------
 ----------------------------------------------------------------------------------------
 addButton("btn_toolbar_playerList", function(player) toggleVisable(player.gui.left.PlayerList) end)
-addButton("btn_toolbar_rocket_score",function(player) toggleVisable(player.gui.left.rocket_score) end)
 function drawToolbar(player)
   local frame = player.gui.top
-  clearElement(frame)
+  frame.clear()
 	drawButton(frame,"btn_toolbar_playerList", "Playerlist", "Adds player player list to your game.")
-	drawButton(frame,"btn_toolbar_rocket_score", "Rocket score", "Show the satellite launched counter if player satellite has launched.")
 	for _,f in pairs(guis.frames) do
 		if getRank(player).power <= f[1].require then drawButton(frame,"btn_".._, f[1].caption, f[1].tooltip) end
   end
@@ -575,7 +548,7 @@ function drawPlayerList()
                 .add{type = "scroll-pane", name= "PlayerListScroll", direction = "vertical", vertical_scroll_policy="always", horizontal_scroll_policy="never"}
     end
 		Plist= player.gui.left.PlayerList.PlayerListScroll
-    clearElement(Plist)
+    Plist.clear()
     Plist.style.maximal_height = 200
     for i, player in pairs(game.connected_players) do
 			playerRank = getRank(player)
@@ -621,7 +594,7 @@ function drawPlayerTable(player, frame, commands, select,filters)
   frame.playerTable.style.maximal_width = 500
 	frame.playerTable.style.horizontal_spacing = 10
   frame.playerTable.add{name="id", type="label", caption="Id		"}
-  frame.playerTable.add{name="name", type="label", caption="Name		"}
+  frame.playerTable.add{name="Pname", type="label", caption="Name		"}
   if commands==false and select ==false then frame.playerTable.add{name="status", type="label", caption="Status		"} end
   frame.playerTable.add{name="online_time", type="label", caption="Online Time	"}
   frame.playerTable.add{name="rank", type="label", caption="Rank	"}
@@ -756,7 +729,7 @@ addButton('add_dev_items',function(player,frame) player.insert{name="deconstruct
 addButton('sendMessage',function(player,frame) local rank = stringToRank(frame.parent.message.rank.text) if rank then callRank(frame.parent.message.message.text,rank.name) else for _,rank in pairs(ranks) do player.print(rank.name) end end end)
 addButton('setRanks', 
 	function(player,frame) 
-		rank = stringToRank(frame.parent.rank_input.text) 
+		rank = stringToRank(frame.parent.rank_input.selected_index) 
 		if rank then 
 			for _,playerName in pairs(selected[player.index]) do 
 				p=game.players[playerName] 
@@ -766,8 +739,6 @@ addButton('setRanks',
 					player.print('You can not edit '..p.name.."'s rank there rank is too high (or the rank you have slected is above you)") 
 				end 
 			end 
-		else 
-			player.print(frame.parent.rank_input.text..' is not a Rank, Ranks are:') for _,rank in pairs(ranks) do if rank.power > getRank(player).power then player.print(rank.name) end end 
 		end
 	end)
 addButton('clearSelection',function(player,frame) clearSelection(player) drawPlayerTable(player, frame.parent.parent, false, true, {}) end)
@@ -794,7 +765,8 @@ addTab('Admin','Edit Ranks', 'Edit the ranks of players below you',
 		frame.filterTable.add{name='sel_input',type='textfield'}
 		frame.add{type='flow',name='rank',direction='horizontal'}
 		frame.rank.add{name='rank_label',type='label',caption='Rank'}
-		frame.rank.add{name='rank_input',type='textfield'}
+		frame.rank.add{name='rank_input',type='drop-down'}
+		for _,rank in pairs(ranks) do if rank.power > getRank(player).power then frame.rank.rank_input.add_item(rank.name) end end
 		drawButton(frame.rank,'setRanks','Set Ranks','Sets the rank of all selected players')
 		drawButton(frame.rank,'clearSelection','Clear Selection','Clears all currently selected players')
 		drawPlayerTable(player, frame, false, true, {'lower'})
@@ -875,7 +847,7 @@ addTab('Admin+', 'Modifiers', 'Edit in game modifiers',
 		}
     frame.add{type = "flow", name= "flowNavigation",direction = "horizontal"}
     frame.add{name="modifierTable", type="table", colspan=3}
-    frame.modifierTable.add{name="name", type="label", caption="name"}
+    frame.modifierTable.add{name="Mname", type="label", caption="name"}
     frame.modifierTable.add{name="input", type="label", caption="input"}
     frame.modifierTable.add{name="current", type="label", caption="current"}
     for i, modifier in pairs(forceModifiers) do
