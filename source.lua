@@ -5,17 +5,20 @@ guis = {frames={},buttons={}}
 --functions can not be included in the default list or be added by code
 defaults = {
 	itemRotated = {},
+	--for disallow add to the list the end part of the input action
+	--example: defines.input_action.drop_item -> 'drop_item'
+	--http://lua-api.factorio.com/latest/defines.html#defines.input_action
 	ranks={
-	{name='Owner',shortHand='Owner',tag='[Owner]',power=0,colour={r=170,g=0,b=0}},
-	{name='Community Manager',shortHand='CM',tag='[Com Mngr]',power=1,colour={r=150,g=68,b=161}},
-	{name='Developer',shortHand='Dev',tag='[Dev]',power=1,colour={r=179,g=125,b=46}},
-	{name='Admin',shortHand='Admin',tag='[Admin]',power=2,colour={r=170,g=41,b=170}},
-	{name='Mod',shortHand='Mod',tag='[Mod]',power=3,colour={r=233,g=63,b=233}},
-	{name='Donator',shortHand='P2W',tag='[P2W]',power=4,colour={r=233,g=63,b=233}},
-	{name='Member',shortHand='Mem',tag='[Member]',power=5,colour={r=24,g=172,b=188}},
-	{name='Regular',shortHand='Reg',tag='[Regukar]',power=5,colour={r=24,g=172,b=188}},
-	{name='Guest',shortHand='',tag='[Guest]',power=6,colour={r=255,g=159,b=27}},
-	{name='Jail',shortHand='Jail',tag='[Jail]',power=7,colour={r=50,g=50,b=50}}
+	{name='Owner',shortHand='Owner',tag='[Owner]',power=0,colour={r=170,g=0,b=0},disallow={}},
+	{name='Community Manager',shortHand='CM',tag='[Com Mngr]',power=1,colour={r=150,g=68,b=161},disallow={}},
+	{name='Developer',shortHand='Dev',tag='[Dev]',power=1,colour={r=179,g=125,b=46},disallow={}},
+	{name='Admin',shortHand='Admin',tag='[Admin]',power=2,colour={r=170,g=41,b=170},disallow={}},
+	{name='Mod',shortHand='Mod',tag='[Mod]',power=3,colour={r=233,g=63,b=233},disallow={}},
+	{name='Donator',shortHand='P2W',tag='[P2W]',power=4,colour={r=233,g=63,b=233},disallow={}},
+	{name='Member',shortHand='Mem',tag='[Member]',power=5,colour={r=24,g=172,b=188},disallow={}},
+	{name='Regular',shortHand='Reg',tag='[Regukar]',power=5,colour={r=24,g=172,b=188},disallow={}},
+	{name='Guest',shortHand='',tag='[Guest]',power=6,colour={r=255,g=159,b=27},disallow={}},
+	{name='Jail',shortHand='Jail',tag='[Jail]',power=7,colour={r=50,g=50,b=50},disallow={}}
 	},
 	autoRanks={
 	Owner={'badgamernl'},
@@ -337,6 +340,9 @@ script.on_event(defines.events.on_player_joined_game, function(event)
 	if #game.players == 1 then
 		for _,rank in pairs(ranks) do
 			game.permissions.create_group(rank.name)
+			for _,toRemove in pairs(rank.disallow) do
+				game.permissions.get_group(rank.name).set_allows_action(defines.input_action[toRemove],false)
+			end
 		end
 	end
   local player = game.players[event.player_index]
@@ -723,7 +729,7 @@ addButton('add_dev_items',function(player,frame) player.insert{name="deconstruct
 addButton('sendMessage',function(player,frame) local rank = stringToRank(frame.parent.message.rank.text) if rank then callRank(frame.parent.message.message.text,rank.name) else for _,rank in pairs(ranks) do player.print(rank.name) end end end)
 addButton('setRanks', 
 	function(player,frame) 
-		rank = stringToRank(frame.parent.rank_input.text) 
+		rank = stringToRank(frame.parent.rank_input.selected_index) 
 		if rank then 
 			for _,playerName in pairs(selected[player.index]) do 
 				p=game.players[playerName] 
@@ -733,8 +739,6 @@ addButton('setRanks',
 					player.print('You can not edit '..p.name.."'s rank there rank is too high (or the rank you have slected is above you)") 
 				end 
 			end 
-		else 
-			player.print(frame.parent.rank_input.text..' is not a Rank, Ranks are:') for _,rank in pairs(ranks) do if rank.power > getRank(player).power then player.print(rank.name) end end 
 		end
 	end)
 addButton('clearSelection',function(player,frame) clearSelection(player) drawPlayerTable(player, frame.parent.parent, false, true, {}) end)
@@ -761,7 +765,8 @@ addTab('Admin','Edit Ranks', 'Edit the ranks of players below you',
 		frame.filterTable.add{name='sel_input',type='textfield'}
 		frame.add{type='flow',name='rank',direction='horizontal'}
 		frame.rank.add{name='rank_label',type='label',caption='Rank'}
-		frame.rank.add{name='rank_input',type='textfield'}
+		frame.rank.add{name='rank_input',type='drop-down'}
+		for _,rank in pairs(ranks) do if rank.power > getRank(player).power then frame.rank.rank_input.add_item(rank.name) end end
 		drawButton(frame.rank,'setRanks','Set Ranks','Sets the rank of all selected players')
 		drawButton(frame.rank,'clearSelection','Clear Selection','Clears all currently selected players')
 		drawPlayerTable(player, frame, false, true, {'lower'})
