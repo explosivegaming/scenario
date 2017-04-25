@@ -12,13 +12,13 @@ defaults = {
 	{name='Owner',shortHand='Owner',tag='[Owner]',power=0,colour={r=170,g=0,b=0},disallow={}},
 	{name='Community Manager',shortHand='CM',tag='[Com Mngr]',power=1,colour={r=150,g=68,b=161},disallow={}},
 	{name='Developer',shortHand='Dev',tag='[Dev]',power=1,colour={r=179,g=125,b=46},disallow={}},
-	{name='Admin',shortHand='Admin',tag='[Admin]',power=2,colour={r=170,g=41,b=170},disallow={}},
-	{name='Mod',shortHand='Mod',tag='[Mod]',power=3,colour={r=233,g=63,b=233},disallow={}},
-	{name='Donator',shortHand='P2W',tag='[P2W]',power=4,colour={r=233,g=63,b=233},disallow={}},
-	{name='Member',shortHand='Mem',tag='[Member]',power=5,colour={r=24,g=172,b=188},disallow={}},
-	{name='Regular',shortHand='Reg',tag='[Regukar]',power=5,colour={r=24,g=172,b=188},disallow={}},
-	{name='Guest',shortHand='',tag='[Guest]',power=6,colour={r=255,g=159,b=27},disallow={}},
-	{name='Jail',shortHand='Jail',tag='[Jail]',power=7,colour={r=50,g=50,b=50},disallow={}}
+	{name='Admin',shortHand='Admin',tag='[Admin]',power=2,colour={r=170,g=41,b=170},disallow={'set_allow_commands','edit_permission_group','delete_permission_group','add_permission_group'}},
+	{name='Mod',shortHand='Mod',tag='[Mod]',power=3,colour={r=233,g=63,b=233},disallow={'set_allow_commands','server_command','edit_permission_group','delete_permission_group','add_permission_group'}},
+	{name='Donator',shortHand='P2W',tag='[P2W]',power=4,colour={r=233,g=63,b=233},disallow={'set_allow_commands','server_command','edit_permission_group','delete_permission_group','add_permission_group'}},
+	{name='Member',shortHand='Mem',tag='[Member]',power=5,colour={r=24,g=172,b=188},disallow={'set_allow_commands','server_command','edit_permission_group','delete_permission_group','add_permission_group'}},
+	{name='Regular',shortHand='Reg',tag='[Regukar]',power=5,colour={r=24,g=172,b=188},disallow={'set_auto_launch_rocket','change_programmable_speaker_alert_parameters','reset_assembling_machine','drop_item','set_allow_commands','server_command','edit_permission_group','delete_permission_group','add_permission_group'}},
+	{name='Guest',shortHand='',tag='[Guest]',power=6,colour={r=255,g=159,b=27},disallow={'build_terrain','remove_cables','launch_rocket','cancel_research','set_auto_launch_rocket','change_programmable_speaker_alert_parameters','reset_assembling_machine','drop_item','set_allow_commands','server_command','edit_permission_group','delete_permission_group','add_permission_group'}},
+	{name='Jail',shortHand='Jail',tag='[Jail]',power=7,colour={r=50,g=50,b=50},disallow={'player_leave_game','build_terrain','remove_cables','launch_rocket','cancel_research','set_auto_launch_rocket','change_programmable_speaker_alert_parameters','reset_assembling_machine','drop_item','set_allow_commands','server_command','edit_permission_group','delete_permission_group','add_permission_group'}}
 	},
 	autoRanks={
 	Owner={'badgamernl'},
