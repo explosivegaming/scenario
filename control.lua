@@ -136,9 +136,9 @@ function giveRank(player,rank,byPlayer)
 	local message = 'demoted'
 	if rank.power <= oldRank.power then message = 'promoted' end
 	if byPlayer.name then 
-		callRank(player.name..' was '..message..' to '..rank.name..' by '..byPlayer.name,oldRank.name)
+		callRank(player.name..' was '..message..' to '..rank.name..' by '..byPlayer.name,'Guest')
 	else
-		callRank(player.name..' was '..message..' to '..rank.name..' by <system>',oldRank.name)
+		callRank(player.name..' was '..message..' to '..rank.name..' by <system>','Guest')
 	end
 	player.permission_group = game.permissions.get_group(rank.name)
 	drawToolbar(player)
