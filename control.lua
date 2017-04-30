@@ -199,6 +199,7 @@ function autoMessage()
 	callRank('Forum: explosivegaming.nl',lrank,true)
 	callRank('Steam: http://steamcommunity.com/groups/tntexplosivegaming',lrank,true)
 	callRank('To see these links again goto: Readme > Server Info',lrank,true)
+	for _,player in pairs(game.connected_players) do autoRank(player) end
 end
 ----------------------------------------------------------------------------------------
 ---------------------------Table Functions----------------------------------------------
