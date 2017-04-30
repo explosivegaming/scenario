@@ -163,12 +163,17 @@ function autoRank(player)
 		end
 		if Break then break end
 	end
-	if playerAutoRank then
-		if currentRank.power > playerAutoRank.power then
+	if playerAutoRank == nil then
+		if ticktominutes(player.online_time) >= timeForRegular then playerAutoRank = stringToRank(player,'Regular')
+		else playerAutoRank = stringToRank('Guest') end
+	end
+	if currentRank.power > playerAutoRank.power and currentRank.name ~='Jail' then 
+		if playerAutoRank.name == 'Guest' then
 			player.permission_group=game.permissions.get_group(playerAutoRank.name)
+		else
+			giveRank(player,playerAutoRank)
 		end
-	elseif ticktominutes(player.online_time) >= timeForRegular then giveRank(player,'Regular')
-	else player.permission_group=game.permissions.get_group(stringToRank('Guest')) end
+	end
 	if getRank(player).power <= 3 and not player.admin then callRank(player.name..' needs to be promoted.') end
 	if oldRank.name ~= getRank(player).name then oldRanks[player.index]=oldRank.name end
 	saveVar()
