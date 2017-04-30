@@ -12,7 +12,7 @@ defaults = {
 	--http://lua-api.factorio.com/latest/defines.html#defines.input_action
 	ranks={
 	{name='Owner',shortHand='Owner',tag='[Owner]',power=0,colour={r=170,g=0,b=0},disallow={}},
-	{name='Community Manager',shortHand='CM',tag='[Com Mngr]',power=1,colour={r=150,g=68,b=161},disallow={}},
+	{name='Community Manager',shortHand='Com Mngr',tag='[Com Mngr]',power=1,colour={r=150,g=68,b=161},disallow={}},
 	{name='Developer',shortHand='Dev',tag='[Dev]',power=1,colour={r=179,g=125,b=46},disallow={}},
 	{name='Admin',shortHand='Admin',tag='[Admin]',power=2,colour={r=170,g=41,b=170},disallow={'set_allow_commands','edit_permission_group','delete_permission_group','add_permission_group'}},
 	{name='Mod',shortHand='Mod',tag='[Mod]',power=3,colour={r=233,g=63,b=233},disallow={'set_allow_commands','server_command','edit_permission_group','delete_permission_group','add_permission_group'}},
@@ -594,7 +594,7 @@ function drawPlayerTable(player, frame, commands, select,filters)
 				end
 				--time and rank
         pTable.add{name=p.name .. "Online_Time", type="label", caption=(ticktohour(p.online_time)..'H '..(ticktominutes(p.online_time)-60*ticktohour(p.online_time))..'M')}
-        pTable.add{name=p.name .. "Rank", type="label", caption=getRank(p).name}
+        pTable.add{name=p.name .. "Rank", type="label", caption=getRank(p).shortHand}
 				--commands
 				if commands then
 					pTable.add{name=p.name, type="flow"}
@@ -686,7 +686,7 @@ addTab('Readme','Players','List of all the people who have been on the server',
 ----------------------------------------------------------------------------------------
 ---------------------------Admin Gui----------------------------------------------------
 ----------------------------------------------------------------------------------------
-addFrame('Admin',2,'Player List','Admin',"All admin fuctions are here")
+addFrame('Admin',3,'Player List','Admin',"All admin fuctions are here")
 
 addButton('btn_toolbar_automessage',function() autoMessage() end)
 addButton('tp_all',function(player,frame) for i,p in pairs(game.connected_players) do local pos = game.surfaces[player.surface.name].find_non_colliding_position("player", player.position, 32, 1) if p ~= player then p.teleport(pos) end end end)
@@ -749,7 +749,7 @@ addTab('Admin', 'Player List', 'Send player message to all players',
 ----------------------------------------------------------------------------------------
 ---------------------------Admin+ Gui---------------------------------------------------
 ----------------------------------------------------------------------------------------
-addFrame('Admin+',1,'Modifiers','Admin+',"Because we are better")
+addFrame('Admin+',2,'Modifiers','Admin+',"Because we are better")
 
 addButton('remove_biters',function(player,frame) for key, entity in pairs(game.surfaces[1].find_entities_filtered({force='enemy'})) do entity.destroy() end end)
 addButton('toggle_cheat',function(player,frame) player.cheat_mode = not player.cheat_mode end)
