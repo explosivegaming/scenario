@@ -326,8 +326,6 @@ script.on_event(defines.events.on_player_joined_game, function(event)
   player.print({"", "Welcome"})
 	drawPlayerList()
   drawToolbar(player)
-  local playerStringTable = encode(game.players, "players", {"name", "admin", "online_time", "connected", "index"})
-  game.write_file("players.json", playerStringTable, false, 0)
   if not player.admin and ticktominutes(player.online_time) < 1 then drawFrame(player,'Readme','Rules') end
 end)
 
@@ -420,45 +418,6 @@ end)
 ---------------------------Other Events-------------------------------------------------
 ----------------------------------------------------------------------------------------
 script.on_event(defines.events.on_tick, function(event) if (game.tick/(3600*game.speed)) % 15 == 0 then autoMessage() end end)
-----------------------------------------------------------------------------------------
----------------------------IDK What There Do Functions----------------------------------
-----------------------------------------------------------------------------------------
-function encode ( table, name, items )
-  local encodeString
-  local encodeSubString
-  local encodeSubSubString
-  for i, keyTable in pairs(table) do
-    encodeSubSubString = nil
-    for i, keyItem in pairs(items) do
-      if type(keyTable[keyItem]) == "string" then
-        if encodeSubSubString ~= nil then
-          encodeSubSubString = encodeSubSubString .. ",\"" .. keyItem .. "\": \"" .. keyTable[keyItem] .. "\""
-        else
-          encodeSubSubString = "\"" .. keyItem .. "\": \"" .. keyTable[keyItem] .. "\""
-        end
-      elseif type(keyTable[keyItem]) == "number" then
-        if encodeSubSubString ~= nil then
-          encodeSubSubString = encodeSubSubString .. ",\"" .. keyItem .. "\": " .. tostring(keyTable[keyItem])
-        else
-          encodeSubSubString = "\"" .. keyItem .. "\": " .. tostring(keyTable[keyItem])
-        end
-      elseif type(keyTable[keyItem]) == "boolean" then
-        if encodeSubSubString ~= nil then
-          encodeSubSubString = encodeSubSubString .. ",\"" .. keyItem .. "\": " .. tostring(keyTable[keyItem])
-        else
-          encodeSubSubString = "\"" .. keyItem .. "\": " .. tostring(keyTable[keyItem])
-        end
-      end
-    end
-    if encodeSubSubString ~= nil and encodeSubString ~= nil then
-      encodeSubString = encodeSubString .. ", {" .. encodeSubSubString .. "}"
-    else
-      encodeSubString = "{" .. encodeSubSubString .. "}"
-    end
-  end
-  encodeString = "{" .. "\"" .. name .. "\": [" .. encodeSubString .. "]}"
-  return encodeString
-end
 ----------------------------------------------------------------------------------------
 ---------------------------Tool Bar-----------------------------------------------------
 ----------------------------------------------------------------------------------------
