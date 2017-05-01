@@ -707,7 +707,9 @@ addButton('setRanks',
 			for _,playerName in pairs(selected[player.index]) do 
 				p=game.players[playerName] 
 				if getRank(player).power < getRank(p).power and rank.power > getRank(player).power then 
-					giveRank(p,rank,player) 
+					giveRank(p,rank,player)
+					clearSelection(player) 
+					drawPlayerTable(player, frame.parent.parent, false, true, {})
 				else 
 					player.print('You can not edit '..p.name.."'s rank there rank is too high (or the rank you have slected is above you)") 
 				end 
