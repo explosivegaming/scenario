@@ -4,9 +4,8 @@ local version = 1
 entityRemoved = {}
 entityCache = {}
 guis = {frames={},buttons={}}
---functions can not be included in the default list or be added by code
+--this is a list of what will be put into the default list
 defaults = {
-	itemRotated = {},
 	--for disallow add to the list the end part of the input action
 	--example: defines.input_action.drop_item -> 'drop_item'
 	--http://lua-api.factorio.com/latest/defines.html#defines.input_action
@@ -23,11 +22,11 @@ defaults = {
 	{name='Jail',shortHand='Jail',tag='[Jail]',power=7,colour={r=50,g=50,b=50},disallow={'open_character_gui','begin_mining','start_walking','player_leave_game','build_terrain','remove_cables','launch_rocket','cancel_research','set_auto_launch_rocket','change_programmable_speaker_alert_parameters','reset_assembling_machine','drop_item','set_allow_commands','server_command','edit_permission_group','delete_permission_group','add_permission_group'}}
 	},
 	autoRanks={
-	Owner={'badgamernl','BADgamerNL'},
+	Owner={'badgamernl'},
 	['Community Manager']={'arty714'},
 	Developer={'Cooldude2606'},
 	Admin={'eissturm','PropangasEddy'},
-	Mod={'Alanore','Aquaday','cafeslacker','CrashKonijn','Drahc_pro','Flip','freek18','Hobbitkicker','hud','Matthias','MeDDish','Mindxt20','MottledPetrel','Mr_Happy_212','Phoenix27833','Sand3r205','ScarbVis','Smou','steentje77','TopHatGaming123'},
+	Mod={'Alanore','Aquaday','cafeslacker','CrashKonijn','Drahc_pro','FlipHalfing90','freek18','Hobbitkicker','hud','Matthias','MeDDish','Mindxt20','MottledPetrel','Mr_Happy_212','Phoenix27833','samy115','Sand3r205','scarbvis','Smou','steentje77','tophatgaming123'},
 	Donator={},
 	Member={},
 	Regular={},
@@ -41,33 +40,6 @@ defaults = {
 warningAllowed = nil
 timeForRegular = 180
 CHUNK_SIZE = 32
-
-function loadVar(t)
-	if t == nil then
-		local g = nil
-		if game.players[1].gui.left.hidden then 
-			g = game.players[1].gui.left.hidden.caption 
-		else 
-			g = game.players[1].gui.left.add{type='frame',name='hidden',caption=table.tostring(defaults)}.caption
-			game.players[1].gui.left.hidden.style.visible = false
-		end
-		gTable = loadstring('return '..g)()
-	else gTable = t end
-	itemRotated = gTable.itemRotated
-	ranks= gTable.ranks
-	autoRanks= gTable.autoRanks
-	selected= gTable.selected
-	oldRanks= gTable.oldRanks
-end
-loadVar(defaults)
-function saveVar()
-	gTable.itemRotated = itemRotated
-	gTable.ranks = ranks
-	gTable.autoRanks = autoRanks
-	gTable.selected= selected
-	gTable.oldRanks= oldRanks
-	game.players[1].gui.left.hidden.caption = table.tostring(gTable)
-end
 ----------------------------------------------------------------------------------------
 ---------------------------Factorio Code Do Not Remove----------------------------------
 ----------------------------------------------------------------------------------------
@@ -94,7 +66,7 @@ silo_script.add_remote_interface()
 ----------------------------------------------------------------------------------------
 function getRank(player)
 	if player then
-		for _,rank in pairs(ranks) do
+		for _,rank in pairs(global.ranks) do
 			if player.permission_group == game.permissions.get_group(rank.name) then return rank end
 		end
 		return stringToRank('Guest')
@@ -104,7 +76,7 @@ end
 function stringToRank(string)
 	if type(string) == 'string' then
 		local Foundranks={}
-		for _,rank in pairs(ranks) do
+		for _,rank in pairs(global.ranks) do
 			if rank.name:lower() == string:lower() then return rank end
 			if rank.name:lower():find(string:lower()) then table.insert(Foundranks,rank) end
 		end
@@ -143,12 +115,11 @@ function giveRank(player,rank,byPlayer)
 	player.permission_group = game.permissions.get_group(rank.name)
 	drawToolbar(player)
 	drawPlayerList()
-	oldRanks[player.index]=oldRank.name
-	saveVar()
+	global.oldRanks[player.index]=oldRank.name
 end
 
 function revertRank(player,byPlayer)
-	local rank = stringToRank(oldRanks[player.index])
+	local rank = stringToRank(global.oldRanks[player.index])
 	giveRank(player,rank,byPlayer)
 end
 
@@ -156,10 +127,10 @@ function autoRank(player)
 	local currentRank = getRank(player)
 	local playerAutoRank = nil
 	local oldRank = getRank(player)
-	for rank,players in pairs(autoRanks) do
+	for rank,players in pairs(global.autoRanks) do
 		local Break = false
 		for _,p in pairs(players) do
-			if player.name == p then playerAutoRank = stringToRank(rank) Break = true break end
+			if player.name:lower() == p:lower() then playerAutoRank = stringToRank(rank) Break = true break end
 		end
 		if Break then break end
 	end
@@ -169,14 +140,13 @@ function autoRank(player)
 	end
 	if currentRank.power > playerAutoRank.power and currentRank.name ~='Jail' then 
 		if playerAutoRank.name == 'Guest' then
-			player.permission_group=game.permissions.get_group(playerAutoRank.name)
+			player.permission_group=game.permissions.get_group('Guest')
 		else
 			giveRank(player,playerAutoRank)
 		end
 	end
 	if getRank(player).power <= 3 and not player.admin then callRank(player.name..' needs to be promoted.') end
-	if oldRank.name ~= getRank(player).name then oldRanks[player.index]=oldRank.name end
-	saveVar()
+	if oldRank.name ~= getRank(player).name then global.oldRanks[player.index]=oldRank.name end
 end
 ----------------------------------------------------------------------------------------
 ---------------------------Common use functions-----------------------------------------
@@ -192,7 +162,7 @@ function ticktominutes (tick)
 end
 
 function clearSelection(player)
-	selected[player.index] = {}
+	global.selected[player.index] = {}
 end
 
 function autoMessage()
@@ -340,10 +310,10 @@ script.on_event(defines.events.on_player_respawned, function(event)
 end)
 
 script.on_event(defines.events.on_player_joined_game, function(event)
-	loadVar()
 	--runs when the first player joins to make the permission groups
-	if #game.players == 1 then
-		for _,rank in pairs(ranks) do
+	if #game.players == 1 and global.ranks == nil then
+		for name,value in pairs(defaults) do global[name] = value end
+		for _,rank in pairs(global.ranks) do
 			game.permissions.create_group(rank.name)
 			for _,toRemove in pairs(rank.disallow) do
 				game.permissions.get_group(rank.name).set_allows_action(defines.input_action[toRemove],false)
@@ -380,16 +350,16 @@ script.on_event(defines.events.on_gui_click, function(event)
 		end
 	elseif event.element.type == 'checkbox' then
 		if event.element.name == 'select' then
-			if not selected[event.player_index] then selected[event.player_index] = {} end
+			global.selected[event.player_index] = global.selected[event.player_index] or {}
+			selected = global.selected[event.player_index]
 			if event.element.state then
-				table.insert(selected[event.player_index],event.element.parent.name)
+				table.insert(selected,event.element.parent.name)
 			else
-				for _,name in pairs(selected[event.player_index]) do
-					if name == event.element.parent.name then table.remove(selected[event.player_index],_) break end
+				for _,name in pairs(selected) do
+					if name == event.element.parent.name then table.remove(selected,_) break end
 				end
 			end
 		end
-		saveVar()
 	end
 end)
 
@@ -582,7 +552,7 @@ function drawPlayerTable(player, frame, commands, select,filters)
 			elseif filter == 'online' then if p.connected == false then addPlayer = false break end
 			elseif filter == 'offline' then if p.connected == true then addPlayer = false break end
 			elseif filter == 'lower' then if getRank(p).power <= getRank(player).power then addPlayer = false break end
-			elseif filter == 'selected' then local Break = nil for _,name in pairs(selected[player.index]) do if name == p.name then Break = true break end end if not Break then addPlayer = false break end
+			elseif filter == 'selected' then local Break = nil for _,name in pairs(global.selected[player.index]) do if name == p.name then Break = true break end end if not Break then addPlayer = false break end
 			elseif type(filter)=='number' then if filter > ticktominutes(p.online_time) then addPlayer = false break end
 			elseif type(filter)=='string' then if p.name:lower():find(filter:lower()) == nil then addPlayer = false break end
 			end
@@ -616,7 +586,7 @@ function drawPlayerTable(player, frame, commands, select,filters)
 				elseif select then
 					pTable.add{name=p.name, type="flow"}
 					local state = false
-					for _,name in pairs(selected[player.index]) do if name == p.name then state = true break end end
+					for _,name in pairs(global.selected[player.index]) do if name == p.name then state = true break end end
 					pTable[p.name].add{name='select', type="checkbox",state=state}
 				end
       end
@@ -699,12 +669,12 @@ addButton('btn_toolbar_automessage',function() autoMessage() end)
 addButton('tp_all',function(player,frame) for i,p in pairs(game.connected_players) do local pos = game.surfaces[player.surface.name].find_non_colliding_position("player", player.position, 32, 1) if p ~= player then p.teleport(pos) end end end)
 addButton('revive_dead_entitys_range',function(player,frame) if tonumber(frame.parent.range.text) then local range = tonumber(frame.parent.range.text) for key, entity in pairs(game.surfaces[1].find_entities_filtered({area={{player.position.x-range,player.position.y-range},{player.position.x+range,player.position.y+range}},type = "entity-ghost"})) do entity.revive() end end end)
 addButton('add_dev_items',function(player,frame) player.insert{name="deconstruction-planner", count = 1} player.insert{name="blueprint-book", count = 1} player.insert{name="blueprint", count = 20} end)
-addButton('sendMessage',function(player,frame) local rank = stringToRank(frame.parent.message.rank.text) if rank then callRank(frame.parent.message.message.text,rank.name) else for _,rank in pairs(ranks) do player.print(rank.name) end end end)
+addButton('sendMessage',function(player,frame) local rank = stringToRank(frame.parent.message.rank.items[frame.parent.message.rank.selected_index]) if rank then callRank(frame.parent.message.message.text,rank.name) end end)
 addButton('setRanks', 
 	function(player,frame) 
 		rank = stringToRank(frame.parent.rank_input.items[frame.parent.rank_input.selected_index]) 
 		if rank then 
-			for _,playerName in pairs(selected[player.index]) do 
+			for _,playerName in pairs(global.selected[player.index]) do 
 				p=game.players[playerName] 
 				if getRank(player).power < getRank(p).power and rank.power > getRank(player).power then 
 					giveRank(p,rank,player)
@@ -726,7 +696,9 @@ addTab('Admin', 'Commands', 'Random useful commands',
 		frame.add{type='textfield',name='range',text='Range'}
 		frame.add{type='flow',name='message'}
 		frame.message.add{type='textfield',name='message',text='Enter message'}
-		frame.message.add{type='textfield',name='rank',text='Enter rank'}
+		frame.message.add{type='drop-down',name='rank'}
+		for _,rank in pairs(global.ranks) do if rank.power >= getRank(player).power then frame.message.rank.add_item(rank.name) end end
+		frame.message.rank.selected_index = 1
 		drawButton(frame,'sendMessage','Send Message','Send a message to all ranks higher than the slected')
 		drawButton(frame,'tp_all','TP All Here','Brings all players to you')
 	end)
@@ -741,7 +713,8 @@ addTab('Admin','Edit Ranks', 'Edit the ranks of players below you',
 		frame.add{type='flow',name='rank',direction='horizontal'}
 		frame.rank.add{name='rank_label',type='label',caption='Rank'}
 		frame.rank.add{name='rank_input',type='drop-down'}
-		for _,rank in pairs(ranks) do if rank.power > getRank(player).power then frame.rank.rank_input.add_item(rank.name) end end
+		for _,rank in pairs(global.ranks) do if rank.power > getRank(player).power then frame.rank.rank_input.add_item(rank.name) end end
+		frame.rank.rank_input.selected_index = 1
 		drawButton(frame.rank,'setRanks','Set Ranks','Sets the rank of all selected players')
 		drawButton(frame.rank,'clearSelection','Clear Selection','Clears all currently selected players')
 		drawPlayerTable(player, frame, false, true, {'lower'})
