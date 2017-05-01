@@ -392,7 +392,7 @@ end)
 ----------------------------------------------------------------------------------------
 script.on_event(defines.events.on_marked_for_deconstruction, function(event)
 	local eplayer = game.players[event.player_index]
-	if getRank(eplayer).power < 6 then
+	if getRank(eplayer).power > 5 then
     if event.entity.type ~= "tree" and event.entity.type ~= "simple-entity" then
       event.entity.cancel_deconstruction("player")
       eplayer.print("You are not allowed to do this yet, play for player bit longer. Try again in about: " .. math.floor((timeForRegular - ticktominutes(eplayer.online_time))) .. " minutes")
@@ -406,7 +406,7 @@ end)
 script.on_event(defines.events.on_built_entity, function(event)
 	local eplayer = game.players[event.player_index]
 	local timeForRegular = 120
-	if getRank(eplayer).power < 6 then
+	if getRank(eplayer).power > 5 then
 		if event.created_entity.type == "tile-ghost" then
 			event.created_entity.destroy()
 			eplayer.print("You are not allowed to do this yet, play for player bit longer. Try: " .. math.floor((timeForRegular - ticktominutes(eplayer.online_time))) .. " minutes")
