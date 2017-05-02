@@ -138,7 +138,7 @@ function autoRank(player)
 		if ticktominutes(player.online_time) >= timeForRegular then playerAutoRank = stringToRank(player,'Regular')
 		else playerAutoRank = stringToRank('Guest') end
 	end
-	if currentRank.power > playerAutoRank.power and currentRank.name ~='Jail' then 
+	if currentRank.name ~='Jail' and currentRank.power > playerAutoRank.power or currentRank.name == 'Guest' then 
 		if playerAutoRank.name == 'Guest' then
 			player.permission_group=game.permissions.get_group('Guest')
 		else
