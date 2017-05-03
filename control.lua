@@ -26,7 +26,7 @@ defaults = {
 	['Community Manager']={'arty714'},
 	Developer={'Cooldude2606'},
 	Admin={'eissturm','PropangasEddy'},
-	Mod={'Alanore','Aquaday','cafeslacker','CrashKonijn','Drahc_pro','FlipHalfing90','freek18','Hobbitkicker','hud','Matthias','MeDDish','Mindxt20','MottledPetrel','Mr_Happy_212','Phoenix27833','samy115','Sand3r205','scarbvis','Smou','steentje77','tophatgaming123'},
+	Mod={'Alanore','Aquaday','Bronco','cafeslacker','CrashKonijn','Drahc_pro','FlipHalfing90','freek18','Hobbitkicker','hud','Matthias','MeDDish','Mindxt20','MottledPetrel','Mr_Happy_212','Phoenix27833','samy115','Sand3r205','scarbvis','Smou','steentje77','tophatgaming123'},
 	Donator={},
 	Member={},
 	Regular={},
@@ -135,7 +135,7 @@ function autoRank(player)
 		if Break then break end
 	end
 	if playerAutoRank == nil then
-		if ticktominutes(player.online_time) >= timeForRegular then playerAutoRank = stringToRank(player,'Regular')
+		if ticktominutes(player.online_time) >= timeForRegular then playerAutoRank = stringToRank('Regular')
 		else playerAutoRank = stringToRank('Guest') end
 	end
 	if currentRank.name ~='Jail' and currentRank.power > playerAutoRank.power or currentRank.name == 'Guest' then 
