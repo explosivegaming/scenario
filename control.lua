@@ -322,6 +322,7 @@ script.on_event(defines.events.on_player_joined_game, function(event)
 	end
 	--Standard start up
   local player = game.players[event.player_index]
+	silo_script.gui_init(player)
 	autoRank(player)
   player.print({"", "Welcome"})
 	drawPlayerList()
