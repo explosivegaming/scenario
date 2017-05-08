@@ -1,6 +1,6 @@
-require("silo-script")
-require "mod-gui"
-local version = 1
+require("silo-script") --do not remove part of factorio default control
+require "mod-gui" 
+local version = 1 --do not remove part of factorio default control
 entityRemoved = {}
 entityCache = {}
 guis = {frames={},buttons={}}
@@ -43,10 +43,10 @@ CHUNK_SIZE = 32
 ----------------------------------------------------------------------------------------
 ---------------------------Factorio Code Do Not Remove----------------------------------
 ----------------------------------------------------------------------------------------
-script.on_init(function()
-  global.version = version
-  silo_script.init()
-end)
+script.on_init(function() 
+  global.version = version 
+  silo_script.init() 
+end) 
 
 script.on_event(defines.events.on_rocket_launched, function(event)
   silo_script.on_rocket_launched(event)
@@ -178,44 +178,6 @@ function autoMessage()
 	for _,player in pairs(game.connected_players) do autoRank(player) end
 end
 ----------------------------------------------------------------------------------------
----------------------------Table Functions----------------------------------------------
-----------------------------------------------------------------------------------------
-function table.val_to_str ( v )
-  if "string" == type( v ) then
-    v = string.gsub( v, "\n", "\\n" )
-    if string.match( string.gsub(v,"[^'\"]",""), '^"+$' ) then
-      return "'" .. v .. "'"
-    end
-    return '"' .. string.gsub(v,'"', '\\"' ) .. '"'
-  else
-    return "table" == type( v ) and table.tostring( v ) or
-      tostring( v )
-  end
-end
-
-function table.key_to_str ( k )
-  if "string" == type( k ) and string.match( k, "^[_%player][_%player%d]*$" ) then
-    return k
-  else
-    return "[" .. table.val_to_str( k ) .. "]"
-  end
-end
-
-function table.tostring( tbl )
-  local result, done = {}, {}
-  for k, v in ipairs( tbl ) do
-    table.insert( result, table.val_to_str( v ) )
-    done[ k ] = true
-  end
-  for k, v in pairs( tbl ) do
-    if not done[ k ] then
-      table.insert( result,
-        table.key_to_str( k ) .. "=" .. table.val_to_str( v ) )
-    end
-  end
-  return "{" .. table.concat( result, "," ) .. "}"
-end
-----------------------------------------------------------------------------------------
 ---------------------------Gui Functions------------------------------------------------
 ----------------------------------------------------------------------------------------
 function addFrame(frame,rank,open,caption,tooltip,sprite)
@@ -258,7 +220,7 @@ end
 
 function drawFrame(player, frameName, tabName)
 	if getRank(player).power <= guis.frames[frameName][1].require then
-		if player.gui.center[frameName] then player.gui.center[frameName].destroy() end
+		player.gui.center.clear()
 		local frame = player.gui.center.add{name=frameName,type='frame',caption=frameName,direction='vertical',style=mod_gui.frame_style}
 		local tabBarScroll = frame.add{type = "scroll-pane", name= "tabBarScroll", vertical_scroll_policy="never", horizontal_scroll_policy="always"}
 		local tabBar = tabBarScroll.add{type='flow',direction='horizontal',name='tabBar'}
@@ -276,6 +238,7 @@ function drawFrame(player, frameName, tabName)
 		tabBarScroll.style.maximal_height = 60
 		tabBarScroll.style.minimal_width = 500
 		tabBarScroll.style.maximal_width = 500
+		player.gui.center.add{type='frame',name='temp'}.destroy()
 	end
 end
 
@@ -300,6 +263,7 @@ script.on_event(defines.events.on_player_created, function(event)
   player.insert{name="burner-mining-drill", count = 1}
   player.insert{name="stone-furnace", count = 1}
 	player.force.chart(player.surface, {{player.position.x - 200, player.position.y - 200}, {player.position.x + 200, player.position.y + 200}})
+	silo_script.gui_init(player) -- do not remove part of factorio default
 end)
 
 script.on_event(defines.events.on_player_respawned, function(event)
@@ -311,7 +275,7 @@ end)
 
 script.on_event(defines.events.on_player_joined_game, function(event)
 	--runs when the first player joins to make the permission groups
-	if #game.players == 1 and global.ranks == nil then
+	if global.ranks == nil then
 		for name,value in pairs(defaults) do global[name] = value end
 		for _,rank in pairs(global.ranks) do
 			game.permissions.create_group(rank.name)
@@ -322,7 +286,6 @@ script.on_event(defines.events.on_player_joined_game, function(event)
 	end
 	--Standard start up
   local player = game.players[event.player_index]
-	silo_script.gui_init(player)
 	autoRank(player)
   player.print({"", "Welcome"})
 	drawPlayerList()
@@ -338,7 +301,7 @@ end)
 ---------------------------Gui Events---------------------------------------------------
 ----------------------------------------------------------------------------------------
 script.on_event(defines.events.on_gui_click, function(event)
-	silo_script.on_gui_click(event)
+	silo_script.on_gui_click(event) -- do not remove part of factorio default
   local player = game.players[event.player_index]
 	if event.element.type == 'button' or event.element.type == 'sprite-button' then
 		for _,btn in pairs(guis.buttons) do
@@ -425,9 +388,9 @@ script.on_event(defines.events.on_tick, function(event) if (game.tick/(3600*game
 addButton("btn_toolbar_playerList", function(player) toggleVisable(mod_gui.get_frame_flow(player).PlayerList) end)
 function drawToolbar(player)
   local frame = mod_gui.get_button_flow(player)
-  frame.clear()
-	drawButton(frame,"btn_toolbar_playerList", "Playerlist", "Adds/removes the player list to/from your game.",'entity/player')
+	if not frame.btn_toolbar_playerList then drawButton(frame,"btn_toolbar_playerList", "Playerlist", "Adds/removes the player list to/from your game.",'entity/player') end
 	for _,f in pairs(guis.frames) do
+		if frame["btn_".._] then frame["btn_".._].destroy() end
 		if getRank(player).power <= f[1].require then drawButton(frame,"btn_".._, f[1].caption, f[1].tooltip, f[1].sprite) end
   end
 end
