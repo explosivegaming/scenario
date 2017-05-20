@@ -366,18 +366,6 @@ script.on_event(defines.events.on_marked_for_deconstruction, function(event)
     event.entity.destroy()
 	end
 end)
-
-script.on_event(defines.events.on_built_entity, function(event)
-	local eplayer = game.players[event.player_index]
-	local timeForRegular = 120
-	if getRank(eplayer).power > 5 then
-		if event.created_entity.type == "tile-ghost" then
-			event.created_entity.destroy()
-			eplayer.print("You are not allowed to do this yet, play for player bit longer. Try: " .. math.floor((timeForRegular - ticktominutes(eplayer.online_time))) .. " minutes")
-			callRank(eplayer.name .. " tryed to place concrete/stone with robots")
-		end
-	end
-end)
 ----------------------------------------------------------------------------------------
 ---------------------------Other Events-------------------------------------------------
 ----------------------------------------------------------------------------------------
