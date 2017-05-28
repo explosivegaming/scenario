@@ -549,6 +549,7 @@ end
 
 function commandInit()
 	commands.add_command('server_interface','Server use only, no players',function(event)
+		if event.parameter then else return end
 		local byPlayer = game.players[event.player_index]
 		if byPlayer then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials')
 		else 
@@ -558,12 +559,14 @@ function commandInit()
 	end)
 	commands.add_command('autoMessage','Sends the auto message to all players',function(event) autoMessage() end)
 	commands.add_command('onlineTime','<player_name> Get a players online time',function(event)
+		if event.parameter then else game.players[event.player_index].print('Invaild Input, /onlineTime <player_name>') return end
 		local byPlayer = game.players[event.player_index]
 		local player = game.players[event.parameter]
 		if player then byPlayer.print(ticktohour(player.online_time)..'H '..(ticktominutes(player.online_time)-60*ticktohour(player.online_time))..'M')
 		else byPlayer.print('Invaild Player Name, input is case senitive') end
 	end)
 	commands.add_command('reviveEntitys','<range> Reives all entitys in this range. Admins can use all as range',function(event)
+		if event.parameter then else game.players[event.player_index].print('Invaild Input, /reviveEntitys <range>') return end
 		local byPlayer = game.players[event.player_index]
 		local range = tonumber(event.parameter)
 		local pos = byPlayer.position
