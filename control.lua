@@ -27,7 +27,7 @@ defaults = {
 	Developer={'Cooldude2606'},
 	Admin={'eissturm','PropangasEddy','Smou'},
 	Mod={'Alanore','Aquaday','cafeslacker','CrashKonijn','Drahc_pro','FlipHalfling90','freek16','Hobbitkicker','hud','Koroto','Matthias','MeDDish','Mindxt20','MottledPetrel','Mr_Happy_212','NextIdea','Phoenix27833','samy115','Sand3r205','scarbvis','steentje77','tophatgaming123'},
-	Donator={'VR29','M74132'},
+	Donator={'VR29','M74132','Splicer'},
 	Member={},
 	Regular={},
 	Guest={},
@@ -358,11 +358,9 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
 	if event.element.parent.name == 'filterTable' then
 		local frame = event.element
 		filters = getPlayerTableFilters(frame)
-		local commands = false
 		local select = false
-		if frame.parent.parent.parent.name == 'Admin' and not frame.parent.sel_input then commands = true filters.online = true end
 		if frame.parent.parent.parent.name == 'Admin' and frame.parent.sel_input then select = true filters.powerOver = true end
-		drawPlayerTable(player, frame.parent.parent, commands, select, filters)
+		drawPlayerTable(player, frame.parent.parent, select, filters)
 	end
 end)
 ----------------------------------------------------------------------------------------
@@ -447,32 +445,7 @@ function getPlayerTableFilters(frame)
 	return filters
 end
 
-addButton('goto',
-	function(player,frame)
-		local p = game.players[frame.parent.name]
-		player.teleport(game.surfaces[p.surface.name].find_non_colliding_position("player", p.position, 32, 1))
-end)
-addButton('bring',
-	function(player,frame)
-	local p = game.players[frame.parent.name]
-	p.teleport(game.surfaces[player.surface.name].find_non_colliding_position("player", player.position, 32, 1))
-end)
-addButton('jail',function(player,frame) 
-	local p=game.players[frame.parent.name] 
-	if p.permission_group.name ~= 'Jail' then giveRank(p,'Jail',player) 
-	else revertRank(p,player) end 
-end)
-addButton('kill',
-	function(player,frame)
-	local p = game.players[frame.parent.name]
-	if p.character then p.character.die() end
-end)
-addButton('revert',
-	function(player,frame)
-	local p = game.players[frame.parent.name]
-	revertRank(p,player)
-end)
-function drawPlayerTable(player, frame, commands, select,filters)
+function drawPlayerTable(player, frame, select,filters)
 	--setup the table
 	if frame.playerTable then frame.playerTable.destroy() end
 	pTable = frame.add{name='playerTable', type="table", colspan=5}
@@ -481,10 +454,8 @@ function drawPlayerTable(player, frame, commands, select,filters)
 	pTable.style.horizontal_spacing = 10
   pTable.add{name="id", type="label", caption="Id"}
   pTable.add{name="Pname", type="label", caption="Name"}
-  if commands==false and select ==false then pTable.add{name="status", type="label", caption="Status"} end
   pTable.add{name="online_time", type="label", caption="Online Time"}
   pTable.add{name="rank", type="label", caption="Rank"}
-	if commands then pTable.add{name="commands", type="label", caption="Commands"} end
 	if select then pTable.add{name="select_label", type="label", caption="Selection"} end
 	--filter checking
   for i, p in pairs(game.players) do 
@@ -502,25 +473,15 @@ function drawPlayerTable(player, frame, commands, select,filters)
         pTable.add{name=i .. "id", type="label", caption=i}
         pTable.add{name=p.name..'_name', type="label", caption=p.name}
 				--status
-				if not commands and not select then 
+				if not select then 
 					if p.connected == true 
 					then pTable.add{name=p.name .. "Status", type="label", caption="ONLINE"}
 					else pTable.add{name=p.name .. "Status", type="label", caption="OFFLINE"} end end
 				--time and rank
         pTable.add{name=p.name .. "Online_Time", type="label", caption=(ticktohour(p.online_time)..'H '..(ticktominutes(p.online_time)-60*ticktohour(p.online_time))..'M')}
         pTable.add{name=p.name .. "Rank", type="label", caption=getRank(p).shortHand}
-				--commands
-				if commands then
-					pTable.add{name=p.name, type="flow"}
-					drawButton(pTable[p.name],'goto','Tp','Goto to the players location')
-					drawButton(pTable[p.name],'bring','Br','Bring player player to your location')
-					if getRank(p).power > getRank(player).power then
-						drawButton(pTable[p.name],'jail','Ja','Jail/Unjail player')
-						drawButton(pTable[p.name],'revert','Re','Set A players rank to their forma one')
-						drawButton(pTable[p.name],'kill','Ki','Kill this player')
-					end
 				--player slecction
-				elseif select then
+				if select then
 					pTable.add{name=p.name, type="flow"}
 					local state = false
 					for _,name in pairs(global.selected[player.index]) do if name == p.name then state = true break end end
@@ -559,28 +520,66 @@ function commandInit()
 	end)
 	commands.add_command('autoMessage','Sends the auto message to all players',function(event) autoMessage() end)
 	commands.add_command('onlineTime','<player_name> Get a players online time',function(event)
-		if event.parameter then else game.players[event.player_index].print('Invaild Input, /onlineTime <player_name>') return end
+		if event.parameter then else game.players[event.player_index].print('Invaild Input, /onlineTime <player>') return end
 		local byPlayer = game.players[event.player_index]
-		local player = game.players[event.parameter]
-		if player then byPlayer.print(ticktohour(player.online_time)..'H '..(ticktominutes(player.online_time)-60*ticktohour(player.online_time))..'M')
-		else byPlayer.print('Invaild Player Name, input is case senitive') end
+		if getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+		local args = {} for word in event.parameter:gmatch('%w+') do table.insert(args,word) end
+		if #args == 1 then else byPlayer.print('Invaild Input, /onlineTime <player> ') return end
+		local player = game.players[args[1]] if player then else byPlayer.print('Invaild Player Name,'..args[1]..', input is case senitive') return end
+		byPlayer.print(ticktohour(player.online_time)..'H '..(ticktominutes(player.online_time)-60*ticktohour(player.online_time))..'M')
 	end)
 	commands.add_command('reviveEntitys','<range> Reives all entitys in this range. Admins can use all as range',function(event)
-		if event.parameter then else game.players[event.player_index].print('Invaild Input, /reviveEntitys <range>') return end
+		if event.parameter then else game.players[event.player_index].print('Invaild Input, /onlineTime <player>') return end
 		local byPlayer = game.players[event.player_index]
-		local range = tonumber(event.parameter)
-		local pos = byPlayer.position
-		if type(range) == 'number' and range < 50 and range > 0 then
-			if getRank(byPlayer).power < 3 then
-				for key, entity in pairs(game.surfaces[1].find_entities_filtered({area={{pos.x-range,pos.y-range},{pos.x+range,pos.y+range}},type = "entity-ghost"})) do 
-					entity.revive() 
-				end
-			else byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') end
-		elseif event.parameter == 'all' then
-			if getRank(byPlayer).power < 2 then
-				for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() end
-			else byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') end
-		else byPlayer.print('Invaild Range, must be number below 50') end
+		local pos = byPlayer.position if pos then else byPlayer.print('Invaild Location, what did you do') return end
+		if getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+		local args = {} for word in event.parameter:gmatch('%w+') do table.insert(args,word) end
+		if #args == 1 then else byPlayer.print('Invaild Input, /onlineTime <player> ') return end
+		local range = tonumber(args[1]) if range or args[1] == 'all' then else byPlayer.print('Invaild Range, must be number below 50') return end
+		if args[1] == 'all' then 
+			if getRank(byPlayer).power > 1 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+			for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() return end
+		elseif range < 50 and range > 0 then else byPlayer.print('Invaild Range, must be number below 50') return end
+			for key, entity in pairs(game.surfaces[1].find_entities_filtered({area={{pos.x-range,pos.y-range},{pos.x+range,pos.y+range}},type = "entity-ghost"})) do entity.revive()
+		end
+	end)
+	commands.add_command('tp','<player> <to_player>, teleports one player to another',function(event)
+		if event.parameter then else game.players[event.player_index].print('Invaild Input, /tp <player> <to_player>') return end
+		local byPlayer = game.players[event.player_index]
+		if getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+		local args = {} for word in event.parameter:gmatch('%w+') do table.insert(args,word) end
+		if #args == 2 then else byPlayer.print('Invaild Input, /tp <player> <to_player>') return end
+		local p1 = game.players[args[1]] if p1 then else byPlayer.print('Invaild Player Name,'..args[1]..', input is case senitive') return end
+		local p2 = game.players[args[2]] if p2 then else byPlayer.print('Invaild Player Name,'..args[2]..', input is case senitive') return end
+		if p1 == p2 then  byPlayer.print('Invaild Players, must be two diffrent players') end
+		if p1.connected and p2.connected then else byPlayer.print('Invaild Player, player is not online') return end
+		if getRank(byPlayer).power > getRank(p1).power then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+		p1.teleport(game.surfaces[p2.surface.name].find_non_colliding_position("player", p2.position, 32, 1))
+	end)
+	commands.add_command('kill','<player>, if no player stated then you kill your self',function(event)
+		if event.parameter then
+			local byPlayer = game.players[event.player_index]
+			if getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+			local args = {} for word in event.parameter:gmatch('%w+') do table.insert(args,word) end
+			if #args == 1 then else byPlayer.print('Invaild Input, /kill <player> ') return end
+			local player = game.players[args[1]] if player then else byPlayer.print('Invaild Player Name,'..args[1]..', input is case senitive') return end
+			if player.connected then else byPlayer.print('Invaild Player, player is not online') return end
+			if player.character then player.character.die() else byPlayer.print('Invaild Player, their are already dead') return end
+		else
+			local byPlayer = game.players[event.player_index]
+			if byPlayer.character then byPlayer.character.die() else byPlayer.print('Invaild Player, you are already dead') return end
+		end
+	end)
+	commands.add_command('jail','<player>, jail the player disallowing them to move',function(event)
+		if event.parameter then else game.players[event.player_index].print('Invaild Input, /jail <player>') return end
+		local byPlayer = game.players[event.player_index]
+		if getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+		local args = {} for word in event.parameter:gmatch('%w+') do table.insert(args,word) end
+		if #args == 1 then else byPlayer.print('Invaild Input, /jail <player> ') return end
+		local player = game.players[args[1]] if player then else byPlayer.print('Invaild Player Name,'..args[1]..', input is case senitive') return end
+		if player.connected then else byPlayer.print('Invaild Player, player is not online') return end
+		if player == byPlayer then byPlayer.print('Invaild Player, you can\' jail yourself') return end
+		if player.permission_group.name ~= 'Jail' then giveRank(player,'Jail',byPlayer) else revertRank(player,byPlayer) end
 	end)
 end
 ----------------------------------------------------------------------------------------
@@ -632,7 +631,7 @@ addTab('Readme','Admins','List of all the people who can ban you :P',
 		for i, line in pairs(admins) do
 			frame.add{name=i, type="label", caption={"", line}, single_line=false}
 		end
-		drawPlayerTable(player, frame, false, false,{'admin'})
+		drawPlayerTable(player, frame, false,{'admin'})
 	end)
 addTab('Readme','Players','List of all the people who have been on the server',
 	function(player,frame)
@@ -649,7 +648,7 @@ addTab('Readme','Players','List of all the people who have been on the server',
 		frame.filterTable.add{name='name_input',type='textfield'}
 		frame.filterTable.add{name='status_input',type='textfield'}
 		frame.filterTable.add{name='hours_input',type='textfield'}
-		drawPlayerTable(player, frame, false, false, {})
+		drawPlayerTable(player, frame, false, {})
 	end)
 ----------------------------------------------------------------------------------------
 ---------------------------Admin Gui----------------------------------------------------
@@ -667,14 +666,14 @@ addButton('setRanks',
 				if getRank(player).power < getRank(p).power and rank.power > getRank(player).power then 
 					giveRank(p,rank,player)
 					clearSelection(player) 
-					drawPlayerTable(player, frame.parent.parent, false, true, {})
+					drawPlayerTable(player, frame.parent.parent, true, {})
 				else 
 					player.print('You can not edit '..p.name.."'s rank there rank is too high (or the rank you have slected is above you)") 
 				end 
 			end 
 		end
 	end)
-addButton('clearSelection',function(player,frame) clearSelection(player) drawPlayerTable(player, frame.parent.parent, false, true, {}) end)
+addButton('clearSelection',function(player,frame) clearSelection(player) drawPlayerTable(player, frame.parent.parent, true, {}) end)
 
 addTab('Admin', 'Commands', 'Random useful commands', 
 	function(player, frame)
@@ -699,16 +698,7 @@ addTab('Admin','Edit Ranks', 'Edit the ranks of players below you',
 		frame.rank.rank_input.selected_index = 1
 		drawButton(frame.rank,'setRanks','Set Ranks','Sets the rank of all selected players')
 		drawButton(frame.rank,'clearSelection','Clear Selection','Clears all currently selected players')
-		drawPlayerTable(player, frame, false, true, {'lower'})
-	end)
-addTab('Admin', 'Player List', 'Send player message to all players', 
-	function(player, frame)
-		frame.add{name='filterTable',type='table',colspan=2}
-		frame.filterTable.add{name='name_label',type='label',caption='Name'}
-		frame.filterTable.add{name='hours_label',type='label',caption='Online Time (minutes)'}
-		frame.filterTable.add{name='name_input',type='textfield'}
-		frame.filterTable.add{name='hours_input',type='textfield'}
-		drawPlayerTable(player, frame, true,false, {'online'})
+		drawPlayerTable(player, frame, true, {'lower'})
 	end)
 ----------------------------------------------------------------------------------------
 ---------------------------Admin+ Gui---------------------------------------------------
