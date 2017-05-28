@@ -310,9 +310,8 @@ end)
 
 script.on_event(defines.events.on_player_joined_game, function(event)
 	--runs when the first player joins to make the permission groups
-	if global.ranks == nil then
-		scriptInit()
-	end
+	if global.ranks == nil then scriptInit() end
+	if commands.game_commands.server_interface == nil then commandInit() end
 	--Standard start up
   local player = game.players[event.player_index]
 	autoRank(player)
@@ -535,7 +534,20 @@ end
 ---------------------------Init---------------------------------------------------------
 ----------------------------------------------------------------------------------------
 function scriptInit()
-	--commands
+	--global
+	for name,value in pairs(defaults) do global[name] = value end
+	--ranks
+	for _,rank in pairs(global.ranks) do
+		game.permissions.create_group(rank.name)
+		for _,toRemove in pairs(rank.disallow) do
+			game.permissions.get_group(rank.name).set_allows_action(defines.input_action[toRemove],false)
+		end
+	end
+	--end
+	game.print('Script Init Complete')
+end
+
+function commandInit()
 	commands.add_command('server_interface','Server use only, no players',function(event)
 		local byPlayer = game.players[event.player_index]
 		if byPlayer then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials')
@@ -567,17 +579,6 @@ function scriptInit()
 			else byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') end
 		else byPlayer.print('Invaild Range, must be number below 50') end
 	end)
-	--global
-	for name,value in pairs(defaults) do global[name] = value end
-	--ranks
-	for _,rank in pairs(global.ranks) do
-		game.permissions.create_group(rank.name)
-		for _,toRemove in pairs(rank.disallow) do
-			game.permissions.get_group(rank.name).set_allows_action(defines.input_action[toRemove],false)
-		end
-	end
-	--end
-	game.print('Script Init Complete')
 end
 ----------------------------------------------------------------------------------------
 ---------------------------Read Me Gui--------------------------------------------------
