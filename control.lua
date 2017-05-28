@@ -26,8 +26,8 @@ defaults = {
 	['Community Manager']={'arty714'},
 	Developer={'Cooldude2606'},
 	Admin={'eissturm','PropangasEddy','Smou'},
-	Mod={'Alanore','Aquaday','cafeslacker','CrashKonijn','Drahc_pro','FlipHalfling90','freek18','Hobbitkicker','hud','Koroto','Matthias','MeDDish','Mindxt20','MottledPetrel','Mr_Happy_212','NextIdea','Phoenix27833','samy115','Sand3r205','scarbvis','steentje77','tophatgaming123'},
-	Donator={'VR29'},
+	Mod={'Alanore','Aquaday','cafeslacker','CrashKonijn','Drahc_pro','FlipHalfling90','freek16','Hobbitkicker','hud','Koroto','Matthias','MeDDish','Mindxt20','MottledPetrel','Mr_Happy_212','NextIdea','Phoenix27833','samy115','Sand3r205','scarbvis','steentje77','tophatgaming123'},
+	Donator={'VR29','M74132'},
 	Member={},
 	Regular={},
 	Guest={},
@@ -60,7 +60,6 @@ script.on_configuration_changed(function(event)
 end)
 
 silo_script.add_remote_interface()
-----------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------
 ---------------------------Rank functions-----------------------------------------------
 ----------------------------------------------------------------------------------------
@@ -177,6 +176,42 @@ function autoMessage()
 	callRank('To see these links again goto: Readme > Server Info',lrank,true)
 	for _,player in pairs(game.connected_players) do autoRank(player) end
 end
+
+function table.val_to_str ( v )
+  if "string" == type( v ) then
+    v = string.gsub( v, "\n", "\\n" )
+    if string.match( string.gsub(v,"[^'\"]",""), '^"+$' ) then
+      return "'" .. v .. "'"
+    end
+    return '"' .. string.gsub(v,'"', '\\"' ) .. '"'
+  else
+    return "table" == type( v ) and table.tostring( v ) or
+      tostring( v )
+  end
+end
+
+function table.key_to_str ( k )
+  if "string" == type( k ) and string.match( k, "^[_%player][_%player%d]*$" ) then
+    return k
+  else
+    return "[" .. table.val_to_str( k ) .. "]"
+  end
+end
+
+function table.tostring( tbl )
+  local result, done = {}, {}
+  for k, v in ipairs( tbl ) do
+    table.insert( result, table.val_to_str( v ) )
+    done[ k ] = true
+  end
+  for k, v in pairs( tbl ) do
+    if not done[ k ] then
+      table.insert( result,
+        table.key_to_str( k ) .. "=" .. table.val_to_str( v ) )
+    end
+  end
+  return "{" .. table.concat( result, "," ) .. "}"
+end
 ----------------------------------------------------------------------------------------
 ---------------------------Gui Functions------------------------------------------------
 ----------------------------------------------------------------------------------------
@@ -276,13 +311,7 @@ end)
 script.on_event(defines.events.on_player_joined_game, function(event)
 	--runs when the first player joins to make the permission groups
 	if global.ranks == nil then
-		for name,value in pairs(defaults) do global[name] = value end
-		for _,rank in pairs(global.ranks) do
-			game.permissions.create_group(rank.name)
-			for _,toRemove in pairs(rank.disallow) do
-				game.permissions.get_group(rank.name).set_allows_action(defines.input_action[toRemove],false)
-			end
-		end
+		scriptInit()
 	end
 	--Standard start up
   local player = game.players[event.player_index]
@@ -329,25 +358,11 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
 	local player = game.players[event.player_index]
 	if event.element.parent.name == 'filterTable' then
 		local frame = event.element
-		local filters = {}
+		filters = getPlayerTableFilters(frame)
 		local commands = false
 		local select = false
-		if frame.parent.parent.parent.name == 'Admin' and not frame.parent.sel_input then commands = true filters[#filters+1] = 'online' end
-		if frame.parent.parent.parent.name == 'Admin' and frame.parent.sel_input then select = true filters[#filters+1] = 'lower' end
-		if frame.parent.parent.filterTable.status_input and not commands then 
-			local status_input = frame.parent.parent.filterTable.status_input.text
-			if status_input == 'yes' or status_input == 'online' or status_input == 'true' or status_input == 'y' then filters[#filters+1] = 'online'
-			elseif status_input ~= '' then filters[#filters+1] = 'offline' end
-		end if frame.parent.parent.filterTable.hours_input then
-			local hours_input =  frame.parent.parent.filterTable.hours_input.text
-			if tonumber(hours_input) and tonumber(hours_input) > 0 then filters[#filters+1] = tonumber(hours_input) end
-		end if frame.parent.parent.filterTable.name_input then
-			local name_input =  frame.parent.parent.filterTable.name_input.text
-			if name_input then filters[#filters+1] = name_input end
-		end if frame.parent.parent.filterTable.sel_input then
-			local sel_input =  frame.parent.parent.filterTable.sel_input.text
-			if sel_input == 'yes' or sel_input == 'online' or sel_input == 'true' or sel_input == 'y' then filters[#filters+1] = 'selected' end
-		end
+		if frame.parent.parent.parent.name == 'Admin' and not frame.parent.sel_input then commands = true filters.online = true end
+		if frame.parent.parent.parent.name == 'Admin' and frame.parent.sel_input then select = true filters.powerOver = true end
 		drawPlayerTable(player, frame.parent.parent, commands, select, filters)
 	end
 end)
@@ -416,6 +431,23 @@ function drawPlayerList()
   end
 end
 
+function getPlayerTableFilters(frame)
+	local filters = {online=nil,time=0,name=nil,selected=nil,powerOver=nil,admin=nil}
+	local filterTable = frame.parent.parent.filterTable
+	if filterTable.status_input then 
+			local status_input = filterTable.status_input.text
+			if status_input == 'yes' or status_input == 'online' or status_input == 'true' or status_input == 'y' then filters.online = true
+			elseif status_input ~= '' then filters.online = false end
+		end if filterTable.hours_input then
+			local hours_input = filterTable.hours_input.text
+			if tonumber(hours_input) and tonumber(hours_input) > 0 then filters.time = tonumber(hours_input) end
+		end if filterTable.name_input then
+			local name_input = filterTable.name_input.text
+			if name_input then filters.name = name_input end
+		end
+	return filters
+end
+
 addButton('goto',
 	function(player,frame)
 		local p = game.players[frame.parent.name]
@@ -456,19 +488,16 @@ function drawPlayerTable(player, frame, commands, select,filters)
 	if commands then pTable.add{name="commands", type="label", caption="Commands"} end
 	if select then pTable.add{name="select_label", type="label", caption="Selection"} end
 	--filter checking
-  for i, p in pairs(game.players) do
-    local addPlayer = true
-    for _,filter in pairs(filters) do
-      if filter == 'admin' then if p.admin == false then addPlayer = false break end
-			elseif filter == 'online' then if p.connected == false then addPlayer = false break end
-			elseif filter == 'offline' then if p.connected == true then addPlayer = false break end
-			elseif filter == 'lower' then if getRank(p).power <= getRank(player).power then addPlayer = false break end
-			elseif filter == 'selected' then local Break = nil for _,name in pairs(global.selected[player.index]) do if name == p.name then Break = true break end end if not Break then addPlayer = false break end
-			elseif type(filter)=='number' then if filter > ticktominutes(p.online_time) then addPlayer = false break end
-			elseif type(filter)=='string' then if p.name:lower():find(filter:lower()) == nil then addPlayer = false break end
-			end
-		end
+  for i, p in pairs(game.players) do 
+    local addPlayer = nil
+    if addPlayer ~= false and filters.admin then 						if p.admin ~= filters.admin then addPlayer = false end end
+		if addPlayer ~= false and filters.online == true then 	if p.connected == false then addPlayer = false end end
+		if addPlayer ~= false and filters.online == false then 	if p.connected == true then addPlayer = false end end
+		if addPlayer ~= false and filters.powerOver then 				if getRank(p).power <= getRank(player).power then addPlayer = false end end
+		if addPlayer ~= false and filters.time then 						if filters.time > ticktominutes(p.online_time) then addPlayer = false end end
+		if addPlayer ~= false and filters.name then 						if p.name:lower():find(filters.name:lower()) == nil then addPlayer = false end end
 		--addes the player to the list
+		if addPlayer == nil then addPlayer = true end
     if addPlayer == true and player.name ~= p.name then
       if pTable[p.name] == nil then
         pTable.add{name=i .. "id", type="label", caption=i}
@@ -477,9 +506,7 @@ function drawPlayerTable(player, frame, commands, select,filters)
 				if not commands and not select then 
 					if p.connected == true 
 					then pTable.add{name=p.name .. "Status", type="label", caption="ONLINE"}
-					else pTable.add{name=p.name .. "Status", type="label", caption="OFFLINE"} 
-					end
-				end
+					else pTable.add{name=p.name .. "Status", type="label", caption="OFFLINE"} end end
 				--time and rank
         pTable.add{name=p.name .. "Online_Time", type="label", caption=(ticktohour(p.online_time)..'H '..(ticktominutes(p.online_time)-60*ticktohour(p.online_time))..'M')}
         pTable.add{name=p.name .. "Rank", type="label", caption=getRank(p).shortHand}
@@ -503,6 +530,54 @@ function drawPlayerTable(player, frame, commands, select,filters)
       end
     end
   end
+end
+----------------------------------------------------------------------------------------
+---------------------------Init---------------------------------------------------------
+----------------------------------------------------------------------------------------
+function scriptInit()
+	--commands
+	commands.add_command('server_interface','Server use only, no players',function(event)
+		local byPlayer = game.players[event.player_index]
+		if byPlayer then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials')
+		else 
+			local returned,value = pcall(loadstring(event.parameter)) 
+			if type(value) == 'table' then game.write_file('log.txt', '\n $£$ '..table.tostring(value), true, 0) 
+			else game.write_file('log.txt', '\n '..tostring(value), true, 0) end end
+	end)
+	commands.add_command('autoMessage','Sends the auto message to all players',function(event) autoMessage() end)
+	commands.add_command('onlineTime','<player_name> Get a players online time',function(event)
+		local byPlayer = game.players[event.player_index]
+		local player = game.players[event.parameter]
+		if player then byPlayer.print(ticktohour(player.online_time)..'H '..(ticktominutes(player.online_time)-60*ticktohour(player.online_time))..'M')
+		else byPlayer.print('Invaild Player Name, input is case senitive') end
+	end)
+	commands.add_command('reviveEntitys','<range> Reives all entitys in this range. Admins can use all as range',function(event)
+		local byPlayer = game.players[event.player_index]
+		local range = tonumber(event.parameter)
+		local pos = byPlayer.position
+		if type(range) == 'number' and range < 50 and range > 0 then
+			if getRank(byPlayer).power < 3 then
+				for key, entity in pairs(game.surfaces[1].find_entities_filtered({area={{pos.x-range,pos.y-range},{pos.x+range,pos.y+range}},type = "entity-ghost"})) do 
+					entity.revive() 
+				end
+			else byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') end
+		elseif event.parameter == 'all' then
+			if getRank(byPlayer).power < 2 then
+				for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() end
+			else byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') end
+		else byPlayer.print('Invaild Range, must be number below 50') end
+	end)
+	--global
+	for name,value in pairs(defaults) do global[name] = value end
+	--ranks
+	for _,rank in pairs(global.ranks) do
+		game.permissions.create_group(rank.name)
+		for _,toRemove in pairs(rank.disallow) do
+			game.permissions.get_group(rank.name).set_allows_action(defines.input_action[toRemove],false)
+		end
+	end
+	--end
+	game.print('Script Init Complete')
 end
 ----------------------------------------------------------------------------------------
 ---------------------------Read Me Gui--------------------------------------------------
@@ -577,10 +652,7 @@ addTab('Readme','Players','List of all the people who have been on the server',
 ----------------------------------------------------------------------------------------
 addFrame('Admin',3,'Player List','Admin',"All admin fuctions are here")
 
-addButton('btn_toolbar_automessage',function() autoMessage() end)
 addButton('tp_all',function(player,frame) for i,p in pairs(game.connected_players) do local pos = game.surfaces[player.surface.name].find_non_colliding_position("player", player.position, 32, 1) if p ~= player then p.teleport(pos) end end end)
-addButton('revive_dead_entitys_range',function(player,frame) if tonumber(frame.parent.range.text) then local range = tonumber(frame.parent.range.text) for key, entity in pairs(game.surfaces[1].find_entities_filtered({area={{player.position.x-range,player.position.y-range},{player.position.x+range,player.position.y+range}},type = "entity-ghost"})) do entity.revive() end end end)
-addButton('add_dev_items',function(player,frame) player.insert{name="deconstruction-planner", count = 1} player.insert{name="blueprint-book", count = 1} player.insert{name="blueprint", count = 20} end)
 addButton('sendMessage',function(player,frame) local rank = stringToRank(frame.parent.message.rank.items[frame.parent.message.rank.selected_index]) if rank then callRank(frame.parent.message.message.text,rank.name) end end)
 addButton('setRanks', 
 	function(player,frame) 
@@ -602,10 +674,6 @@ addButton('clearSelection',function(player,frame) clearSelection(player) drawPla
 
 addTab('Admin', 'Commands', 'Random useful commands', 
 	function(player, frame)
-		drawButton(frame,'btn_toolbar_automessage','Auto Message','Send the auto message to all online players')
-		drawButton(frame,'add_dev_items','Get Blueprints','Get all the blueprints')
-		drawButton(frame,'revive_dead_entitys_range','Revive Entitys','Brings all dead machines back to life in player range')
-		frame.add{type='textfield',name='range',text='Range'}
 		frame.add{type='flow',name='message'}
 		frame.message.add{type='textfield',name='message',text='Enter message'}
 		frame.message.add{type='drop-down',name='rank'}
@@ -617,11 +685,9 @@ addTab('Admin', 'Commands', 'Random useful commands',
 addTab('Admin','Edit Ranks', 'Edit the ranks of players below you',
 	function(player,frame)
 		clearSelection(player)
-		frame.add{name='filterTable',type='table',colspan=2}
+		frame.add{name='filterTable',type='table',colspan=1}
 		frame.filterTable.add{name='name_label',type='label',caption='Name'}
-		frame.filterTable.add{name='sel_label',type='label',caption='Selected?'}
 		frame.filterTable.add{name='name_input',type='textfield'}
-		frame.filterTable.add{name='sel_input',type='textfield'}
 		frame.add{type='flow',name='rank',direction='horizontal'}
 		frame.rank.add{name='rank_label',type='label',caption='Rank'}
 		frame.rank.add{name='rank_input',type='drop-down'}
@@ -647,7 +713,6 @@ addFrame('Admin+',2,'Modifiers','Admin+',"Because we are better")
 
 addButton('remove_biters',function(player,frame) for key, entity in pairs(game.surfaces[1].find_entities_filtered({force='enemy'})) do entity.destroy() end end)
 addButton('toggle_cheat',function(player,frame) player.cheat_mode = not player.cheat_mode end)
-addButton('revive_dead_entitys',function(player,frame) for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() end end)
 addButton("btn_Modifier_apply",
 	function(player,frame)
 		local forceModifiers = {
@@ -680,11 +745,6 @@ addButton("btn_Modifier_apply",
 	
 addTab('Admin+', 'Commands', 'Random useful commands',
 	function(player, frame)
-		drawButton(frame,'btn_toolbar_automessage','Auto Message','Send the auto message to all online players')
-		drawButton(frame,'add_dev_items','Get Blueprints','Get all the blueprints')
-		drawButton(frame,'revive_dead_entitys','Revive All Entitys','Brings all dead machines back to life')
-		drawButton(frame,'revive_dead_entitys_range','Revive Entitys','Brings all dead machines back to life in player range')
-		frame.add{type='textfield',name='range',text='Range'}
 		drawButton(frame,'remove_biters','Kill Biters','Removes all biters in map')
 		drawButton(frame,'tp_all','TP All Here','Brings all players to you')
 		drawButton(frame,'toggle_cheat','Toggle Cheat Mode','Toggle your cheat mode')
