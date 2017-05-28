@@ -311,7 +311,7 @@ end)
 script.on_event(defines.events.on_player_joined_game, function(event)
 	--runs when the first player joins to make the permission groups
 	if global.ranks == nil then scriptInit() end
-	if commands.game_commands.server_interface == nil then commandInit() end
+	if commands.commands.server_interface == nil then commandInit() end
 	--Standard start up
   local player = game.players[event.player_index]
 	autoRank(player)
