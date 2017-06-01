@@ -410,8 +410,8 @@ function drawPlayerList()
     for i, player in pairs(game.connected_players) do
 			playerRank = getRank(player)
 			if playerRank.power <= 3 or playerRank.name == 'Jail' then
-				if playerRank.shortHand ~= '' then Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand..'		'}}
-				else Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name..'		'}} end				
+				if playerRank.shortHand ~= '' then Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand}}
+				else Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name}} end				
 				Plist[player.name].style.font_color = playerRank.colour
 				player.tag = playerRank.tag
 			end
@@ -419,8 +419,8 @@ function drawPlayerList()
 		for i, player in pairs(game.connected_players) do
 			playerRank = getRank(player)
 			if playerRank.power > 3 and playerRank.name ~= 'Jail' then
-				if playerRank.shortHand ~= '' then Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand..'		'}}
-				else Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name..'		'}} end
+				if playerRank.shortHand ~= '' then Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand}}
+				else Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name}} end
 				Plist[player.name].style.font_color = playerRank.colour
 				player.tag = playerRank.tag
 			end
