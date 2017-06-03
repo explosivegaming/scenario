@@ -654,9 +654,9 @@ function commandInit()
 		else
 			if event.parameter then else return end
 			local args = {} for word in event.parameter:gmatch('%w+') do table.insert(args,word) end
-			if #args == 2 then else return end 
+			if #args > 0 then else return end 
 			local player = game.players[args[1]] if player then else end
-			if tag then player.tag = '[cTag] - '..args[2]..' ' else player.tag = getRank(player).tag end
+			if args[2] then player.tag = '[cTag] - '..table.concat(args,' ',2)..' ' else player.tag = getRank(player).tag end
 		end
 	end)
 end
