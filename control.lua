@@ -413,7 +413,7 @@ function drawPlayerList()
 				if playerRank.shortHand ~= '' then Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand}}
 				else Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name}} end				
 				Plist[player.name].style.font_color = playerRank.colour
-				player.tag = playerRank.tag
+				if player.tag:find('[cTag]') then else player.tag = playerRank.tag end
 			end
     end
 		for i, player in pairs(game.connected_players) do
@@ -422,7 +422,7 @@ function drawPlayerList()
 				if playerRank.shortHand ~= '' then Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand}}
 				else Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name}} end
 				Plist[player.name].style.font_color = playerRank.colour
-				player.tag = playerRank.tag
+				if player.tag:find('[cTag]') then else player.tag = playerRank.tag end
 			end
 		end
   end
@@ -611,6 +611,7 @@ function commandInit()
 	commands.add_command('jail','<player>, jail the player disallowing them to move',function(event)
 		if event.player_index then
 			local byPlayer = game.players[event.player_index]
+			if event.parameter then else byPlayer.print('Invaild Input, /jail <player>') return end
 			local args = {} for word in event.parameter:gmatch('%w+') do table.insert(args,word) end
 			if #args == 1 then else byPlayer.print('Invaild Input, /jail <player> ') return end
 			local player = game.players[args[1]] if player then else byPlayer.print('Invaild Player Name,'..args[1]..', try using tab key to auto-coomplet the name') return end
@@ -629,6 +630,7 @@ function commandInit()
 	commands.add_command('unjail','<player>, jail the player disallowing them to move',function(event)
 		if event.player_index then
 			local byPlayer = game.players[event.player_index]
+			if event.parameter then else byPlayer.print('Invaild Input, /unjail <player>') return end
 			local args = {} for word in event.parameter:gmatch('%w+') do table.insert(args,word) end
 			if #args == 1 then else byPlayer.print('Invaild Input, /unjail <player> ') return end
 			local player = game.players[args[1]] if player then else byPlayer.print('Invaild Player Name,'..args[1]..', try using tab key to auto-coomplet the name') return end
@@ -640,6 +642,21 @@ function commandInit()
 			if #args == 1 then else return end 
 			local player = game.players[args[1]] if player then else end
 			if player.permission_group.name == 'Jail' then revertRank(player,byPlayer) end
+		end
+	end)
+	-- tag
+	commands.add_command('tag','<tag> Gives you your own tag',function(event)
+		if event.player_index then
+			local byPlayer = game.players[event.player_index]
+			local tag = nil
+			if event.parameter then tag = event.parameter end
+			if tag then byPlayer.tag = '[cTag] - '..tag..' ' else byPlayer.tag = getRank(byPlayer).tag end
+		else
+			if event.parameter then else return end
+			local args = {} for word in event.parameter:gmatch('%w+') do table.insert(args,word) end
+			if #args == 2 then else return end 
+			local player = game.players[args[1]] if player then else end
+			if tag then player.tag = '[cTag] - '..args[2]..' ' else player.tag = getRank(player).tag end
 		end
 	end)
 end
