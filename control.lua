@@ -576,8 +576,8 @@ function commandInit()
 			if getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
 			if #args == 2 then else byPlayer.print('Invaild Input, /tp <player> <to_player>') return end
-			local p1 = game.players[args[1]] if p1 then else byPlayer.print('Invaild Player Name,'..args[1]..', try using tab key to auto-coomplet the name') return end
-			local p2 = game.players[args[2]] if p2 then else byPlayer.print('Invaild Player Name,'..args[2]..', try using tab key to auto-coomplet the name') return end
+			local p1 = game.players[args[1]] if p1 then else byPlayer.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
+			local p2 = game.players[args[2]] if p2 then else byPlayer.print('Invaild Player Name,'..args[2]..', try using tab key to auto-complete the name') return end
 			if p1 == p2 then  byPlayer.print('Invaild Players, must be two diffrent players') return end
 			if p1.connected and p2.connected then else byPlayer.print('Invaild Player, player is not online') return end
 			if getRank(byPlayer).power > getRank(p1).power then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
@@ -600,8 +600,8 @@ function commandInit()
 			if event.parameter then
 				local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
 				if #args == 1 then else byPlayer.print('Invaild Input, /kill <player> ') return end
-				local player = game.players[args[1]] if player then else byPlayer.print('Invaild Player Name,'..args[1]..', try using tab key to auto-coomplet the name') return end
-				if getRank(byPlayer).power > getRank(player).power and getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+				local player = game.players[args[1]] if player then else byPlayer.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
+				if getRank(byPlayer).power > getRank(player).power or getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
 				if player.connected then else byPlayer.print('Invaild Player, player is not online') return end
 				if player.character then player.character.die() else byPlayer.print('Invaild Player, their are already dead') return end
 			else
@@ -623,8 +623,8 @@ function commandInit()
 			if event.parameter then else byPlayer.print('Invaild Input, /jail <player>') return end
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
 			if #args == 1 then else byPlayer.print('Invaild Input, /jail <player> ') return end
-			local player = game.players[args[1]] if player then else byPlayer.print('Invaild Player Name,'..args[1]..', try using tab key to auto-coomplet the name') return end
-			if getRank(byPlayer).power > getRank(player).power and getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+			local player = game.players[args[1]] if player then else byPlayer.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
+			if getRank(byPlayer).power > getRank(player).power or getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
 			if player.connected then else byPlayer.print('Invaild Player, player is not online') return end
 			if player == byPlayer then byPlayer.print('Invaild Player, you can\'t jail yourself') return end
 			if player.permission_group.name ~= 'Jail' then giveRank(player,'Jail',byPlayer) end
@@ -642,8 +642,8 @@ function commandInit()
 			if event.parameter then else byPlayer.print('Invaild Input, /unjail <player>') return end
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
 			if #args == 1 then else byPlayer.print('Invaild Input, /unjail <player> ') return end
-			local player = game.players[args[1]] if player then else byPlayer.print('Invaild Player Name,'..args[1]..', try using tab key to auto-coomplet the name') return end
-			if getRank(byPlayer).power > getRank(player).power and getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+			local player = game.players[args[1]] if player then else byPlayer.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
+			if getRank(byPlayer).power > getRank(player).power or getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
 			if player.permission_group.name == 'Jail' then revertRank(player,byPlayer) end
 		else
 			if event.parameter then else return end
