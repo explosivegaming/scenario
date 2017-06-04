@@ -520,15 +520,6 @@ function commandInit()
 		end
 	end)
 	commands.add_command('autoMessage','Sends the auto message to all players',function(event) autoMessage() end)
-	--debug
-	commands.add_command('debugPrint','just for testing',function(event)
-		if event.player_index then else return end
-		local byPlayer = game.players[event.player_index]
-		byPlayer.print(('Event = '..table.tostring(event)))
-		if event.parameter then else byPlayer.print('NIL') return end
-		local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
-		byPlayer.print(('Arguments = '..table.tostring(args)))
-	end)
 	--base layout for all commands
 	commands.add_command('onlineTime','<player_name> Get a players online time',function(event)
 		if event.player_index then --is it a player or the server
