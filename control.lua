@@ -640,7 +640,7 @@ function commandInit()
 			if event.parameter then else return end
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
 			if #args == 1 then else return end 
-			local player = game.players[args[1]] if player then else end
+			local player = game.players[args[1]] if player then else return end
 			if player.permission_group.name == 'Jail' then revertRank(player,byPlayer) end
 		end
 	end)
@@ -650,12 +650,13 @@ function commandInit()
 			local byPlayer = game.players[event.player_index]
 			local tag = nil
 			if event.parameter then tag = event.parameter end
+			if tag and tag:len() > 20 then byPlayer.print('Invaild Tag, must be less then 20 characters') return end
 			if tag then byPlayer.tag = '[cTag] - '..tag..' ' else byPlayer.tag = getRank(byPlayer).tag end
 		else
 			if event.parameter then else return end
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
 			if #args > 0 then else return end 
-			local player = game.players[args[1]] if player then else end
+			local player = game.players[args[1]] if player then else return end
 			if args[2] then player.tag = '[cTag] - '..table.concat(args,' ',2)..' ' else player.tag = getRank(player).tag end
 		end
 	end)
