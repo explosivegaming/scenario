@@ -34,7 +34,8 @@ defaults = {
 	Jail={}
 	},
 	selected={},
-	oldRanks={}
+	oldRanks={},
+	queue={}
 }
 
 warningAllowed = nil
@@ -112,6 +113,8 @@ function giveRank(player,rank,byPlayer)
 		callRank(player.name..' was '..message..' to '..rank.name..' by <system>','Guest')
 	end
 	player.permission_group = game.permissions.get_group(rank.name)
+	if player.tag:find('-') then player.print('Your Custom Tag Was Reset Due To A Rank Change') end
+	player.tag = getRank(player).tag
 	drawToolbar(player)
 	drawPlayerList()
 	if oldRank.name ~= 'Jail' then global.oldRanks[player.index]=oldRank.name end
@@ -162,6 +165,10 @@ end
 
 function clearSelection(player)
 	global.selected[player.index] = {}
+end
+
+function queueCommand(command,args)
+	table.insert(global.queue,{fun=command,var=args})
 end
 
 function autoMessage()
@@ -381,7 +388,16 @@ end)
 ----------------------------------------------------------------------------------------
 ---------------------------Other Events-------------------------------------------------
 ----------------------------------------------------------------------------------------
-script.on_event(defines.events.on_tick, function(event) if (game.tick/(3600*game.speed)) % 15 == 0 then autoMessage() end end)
+script.on_event(defines.events.on_tick, function(event) 
+	if game.tick % 60 == 0 then 
+		command=table.remove(global.queue)
+		if command and command.fun then
+			local args = command.var or {}
+			command.fun(args[1],args[2],args[3],args[4],args[5],args[6]) 
+		end
+	end
+	if (game.tick/(3600*game.speed)) % 15 == 0 then autoMessage() end 
+end)
 ----------------------------------------------------------------------------------------
 ---------------------------Tool Bar-----------------------------------------------------
 ----------------------------------------------------------------------------------------
@@ -413,7 +429,7 @@ function drawPlayerList()
 				if playerRank.shortHand ~= '' then Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand}}
 				else Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name}} end				
 				Plist[player.name].style.font_color = playerRank.colour
-				if player.tag:find('[cTag]') then else player.tag = playerRank.tag end
+				if player.tag:find('-') then else player.tag = playerRank.tag end
 			end
     end
 		for i, player in pairs(game.connected_players) do
@@ -422,7 +438,7 @@ function drawPlayerList()
 				if playerRank.shortHand ~= '' then Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name , ' - '..playerRank.shortHand}}
 				else Plist.add{type = "label",  name=player.name, style="caption_label_style", caption={"", ticktohour(player.online_time), " H - " , player.name}} end
 				Plist[player.name].style.font_color = playerRank.colour
-				if player.tag:find('[cTag]') then else player.tag = playerRank.tag end
+				if player.tag:find('-') then else player.tag = playerRank.tag end
 			end
 		end
   end
@@ -509,7 +525,7 @@ function scriptInit()
 end
 
 function commandInit()
-	commands.add_command('server_interface','Server use only, no players #1#',function(event)
+	commands.add_command('server-interface','Server use only, no players #1#',function(event)
 		if event.parameter then else return end
 		if event.player_index then
 			game.players[event.player_index].print('401 - Unauthorized: Access is denied due to invalid credentials') return
@@ -519,38 +535,38 @@ function commandInit()
 			else game.write_file('log.txt', '\n '..tostring(value), true, 0) print(value) end
 		end
 	end)
-	commands.add_command('autoMessage','Sends the auto message to all players #6#',function(event) autoMessage() end)
+	commands.add_command('auto-message','Sends the auto message to all players #6#',function(event) autoMessage() end)
 	--base layout for all commands
-	commands.add_command('onlineTime','<player_name> Get a players online time #6#',function(event)
+	commands.add_command('online-time','<player_name> Get a players online time #6#',function(event)
 		if event.player_index then --is it a player or the server
 			local byPlayer = game.players[event.player_index] -- it's a player so gets them
-			if event.parameter then else byPlayer.print('Invaild Input, /onlineTime <player>') return end -- are there any arguments
+			if event.parameter then else byPlayer.print('Invaild Input, /online-time <player>') return end -- are there any arguments
 			if getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end -- is the user have vaild rank to use command
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end -- gets all the arguments passed
-			if #args == 1 then else byPlayer.print('Invaild Input, /onlineTime <player> ') return end -- is enouth arguments passed to aloow the command to work
+			if #args == 1 then else byPlayer.print('Invaild Input, /online-time <player> ') return end -- is enouth arguments passed to aloow the command to work
 			local player = game.players[args[1]] if player then else byPlayer.print('Invaild Player Name,'..args[1]..', try using tab key to auto-coomplet the name') return end -- arguments vaildtion
 			byPlayer.print(ticktohour(player.online_time)..'H '..(ticktominutes(player.online_time)-60*ticktohour(player.online_time))..'M') -- finally the command is done
 		else -- when the server runs commands no output is given to any user, also server has no rank validation
-			if event.parameter then else print('Invaild Input, /onlineTime <player>') return end -- are there any arguments
+			if event.parameter then else print('Invaild Input, /online-time <player>') return end -- are there any arguments
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end -- gets all the arguments passed
-			if #args == 1 then else print('Invaild Input, /onlineTime <player>') return end -- is enouth arguments passed to aloow the command to work
+			if #args == 1 then else print('Invaild Input, /online-time <player>') return end -- is enouth arguments passed to aloow the command to work
 			local player = game.players[args[1]] if player then else print('Invaild Player Name,'..args[1]..', try using tab key to auto-coomplet the name') return end -- arguments vaildtion
 			print(ticktohour(player.online_time)..'H '..(ticktominutes(player.online_time)-60*ticktohour(player.online_time))..'M') -- finally the command is done
 			print('Command Complete')
 		end
 	end)
-	--reviveEntities
-	commands.add_command('reviveEntities','<range/all> Reives all entitys in this range. Admins can use all as range #4#',function(event)
+	--revive-entities
+	commands.add_command('revive-entities','<range/all> Reives all entitys in this range. Admins can use all as range #4#',function(event)
 		if event.player_index then
 			local byPlayer = game.players[event.player_index]
-			if event.parameter then else byPlayer.print('Invaild Input, /reviveEntities <range/all>') return end
+			if event.parameter then else byPlayer.print('Invaild Input, /revive-entities <range/all>') return end
 			local pos = byPlayer.position
 			if getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
-			if #args == 1 then else byPlayer.print('Invaild Input, /reviveEntities <range/all>') return end
+			if #args == 1 then else byPlayer.print('Invaild Input, /revive-entities <range/all>') return end
 			local range = tonumber(args[1]) if range or args[1] == 'all' then else byPlayer.print('Invaild Range, must be number below 50') return end
 			if args[1] == 'all' then 
-				if getRank(byPlayer).power > 1 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+				if getRank(byPlayer).power > 2 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
 				for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() end return
 			elseif range < 50 and range > 0 then else byPlayer.print('Invaild Range, must be number below 50') return end
 				for key, entity in pairs(game.surfaces[1].find_entities_filtered({area={{pos.x-range,pos.y-range},{pos.x+range,pos.y+range}},type = "entity-ghost"})) do entity.revive()
@@ -626,7 +642,7 @@ function commandInit()
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
 			if #args == 1 then else print('Invaild Input, /jail <player>') return end
 			local player = game.players[args[1]] if player then else print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
-			if player.permission_group.name ~= 'Jail' then giveRank(player,'Jail',byPlayer) end
+			if player.permission_group.name ~= 'Jail' then queueCommand(giveRank,{player,'Jail',byPlayer}) end
 			print('Command Complete')
 		end
 	end)
@@ -644,7 +660,7 @@ function commandInit()
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
 			if #args == 1 then else print('Invaild Input, /unjail <player>') return end 
 			local player = game.players[args[1]] if player then else print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
-			if player.permission_group.name == 'Jail' then revertRank(player,byPlayer) end
+			if player.permission_group.name == 'Jail' then queueCommand(revertRank,{player,byPlayer}) end
 			print('Command Complete')
 		end
 	end)
@@ -690,21 +706,21 @@ function commandInit()
 			print('Command Complete')
 		end
 	end)
-	-- call rank
-	commands.add_command('callRank','<rank> <message> sends a message to this rank and above #5#',function(event)
+	-- call-rank
+	commands.add_command('call-rank','<rank> <message> sends a message to this rank and above #5#',function(event)
 		if event.player_index then
 			local byPlayer = game.players[event.player_index]
 			if getRank(byPlayer).power > 5 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
-			if event.parameter then else byPlayer.print('Invaild Input, /callRank <rank> <message>') return end
+			if event.parameter then else byPlayer.print('Invaild Input, /call-rank <rank> <message>') return end
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
-			if #args > 1 then else byPlayer.print('Invaild Input, /callRank <rank> <message>') return end 
+			if #args > 1 then else byPlayer.print('Invaild Input, /call-rank <rank> <message>') return end 
 			local rank = stringToRank(args[1]) if rank then else byPlayer.print('Invaild Rank, ther is no rank by that name') return end
 			if rank.name ~= 'Mod' and getRank(byPlayer).power > rank.power then byPlayer.print('Invaild Rank, rank must not be a higher rank then your (mod is the only exception)') return end
 			callRank(table.concat(args,' ',2),rank.name)
 		else
-			if event.parameter then else print('Invaild Input, /callRank <rank> <message>') return end
+			if event.parameter then else print('Invaild Input, /call-rank <rank> <message>') return end
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
-			if #args > 1 then else print('Invaild Input, /callRank <rank> <message>') return end 
+			if #args > 1 then else print('Invaild Input, /call-rank <rank> <message>') return end 
 			local rank = stringToRank(args[1]) if rank then callRank(table.concat(args,' ',2),rank.name)
 			else print('Invaild Rank, try asking for help from an admin') return end
 			print('Command Complete')
