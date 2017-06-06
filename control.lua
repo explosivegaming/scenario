@@ -16,6 +16,7 @@ defaults = {
 	{name='Admin',shortHand='Admin',tag='[Admin]',power=2,colour={r=233,g=63,b=233},disallow={'set_allow_commands','edit_permission_group','delete_permission_group','add_permission_group'}},
 	{name='Mod',shortHand='Mod',tag='[Mod]',power=3,colour={r=0,g=170,b=0},disallow={'set_allow_commands','server_command','edit_permission_group','delete_permission_group','add_permission_group'}},
 	{name='Donator',shortHand='P2W',tag='[P2W]',power=4,colour={r=233,g=63,b=233},disallow={'set_allow_commands','server_command','edit_permission_group','delete_permission_group','add_permission_group'}},
+	{name='Veteran',shortHand='Vet',tag='[Veteran]',power=4,colour={r=140,g=120,b=200},disallow={'set_allow_commands','server_command','edit_permission_group','delete_permission_group','add_permission_group'}},
 	{name='Member',shortHand='Mem',tag='[Member]',power=5,colour={r=24,g=172,b=188},disallow={'set_allow_commands','server_command','edit_permission_group','delete_permission_group','add_permission_group'}},
 	{name='Regular',shortHand='Reg',tag='[Regular]',power=5,colour={r=24,g=172,b=188},disallow={'set_auto_launch_rocket','change_programmable_speaker_alert_parameters','reset_assembling_machine','drop_item','set_allow_commands','server_command','edit_permission_group','delete_permission_group','add_permission_group'}},
 	{name='Guest',shortHand='',tag='[Guest]',power=6,colour={r=255,g=159,b=27},disallow={'build_terrain','remove_cables','launch_rocket','cancel_research','set_auto_launch_rocket','change_programmable_speaker_alert_parameters','reset_assembling_machine','drop_item','set_allow_commands','server_command','edit_permission_group','delete_permission_group','add_permission_group'}},
@@ -40,6 +41,7 @@ defaults = {
 
 warningAllowed = nil
 timeForRegular = 180
+timeForVeteran = 600
 CHUNK_SIZE = 32
 ----------------------------------------------------------------------------------------
 ---------------------------Factorio Code Do Not Remove----------------------------------
@@ -138,6 +140,7 @@ function autoRank(player)
 	end
 	if playerAutoRank == nil then
 		if ticktominutes(player.online_time) >= timeForRegular then playerAutoRank = stringToRank('Regular')
+		if ticktominutes(player.online_time) >= timeForVeteran then playerAutoRank = stringToRank('Veteran')
 		else playerAutoRank = stringToRank('Guest') end
 	end
 	if currentRank.name ~='Jail' and currentRank.power > playerAutoRank.power or currentRank.name == 'Guest' then 
