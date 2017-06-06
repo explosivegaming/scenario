@@ -139,7 +139,7 @@ function autoRank(player)
 		if Break then break end
 	end
 	if playerAutoRank == nil then
-		if ticktominutes(player.online_time) >= timeForRegular then playerAutoRank = stringToRank('Regular')
+		if ticktominutes(player.online_time) >= timeForRegular then playerAutoRank = stringToRank('Regular') end
 		if ticktominutes(player.online_time) >= timeForVeteran then playerAutoRank = stringToRank('Veteran')
 		else playerAutoRank = stringToRank('Guest') end
 	end
@@ -170,7 +170,7 @@ function clearSelection(player)
 	global.selected[player.index] = {}
 end
 
-function queueCommand(command,args)
+function sudo(command,args)
 	table.insert(global.queue,{fun=command,var=args})
 end
 
@@ -394,7 +394,7 @@ end)
 script.on_event(defines.events.on_tick, function(event) 
 	if game.tick % 60 == 0 then 
 		command=table.remove(global.queue)
-		if command and command.fun then
+		if command and command.fun and type(command.fun) == 'function' then
 			local args = command.var or {}
 			command.fun(args[1],args[2],args[3],args[4],args[5],args[6]) 
 		end
@@ -528,14 +528,19 @@ function scriptInit()
 end
 
 function commandInit()
-	commands.add_command('server-interface','Server use only, no players #1#',function(event)
-		if event.parameter then else return end
+	commands.add_command('server-interface','<command>  #1#',function(event)
 		if event.player_index then
-			game.players[event.player_index].print('401 - Unauthorized: Access is denied due to invalid credentials') return
+			local byPlayer = game.players[event.player_index]
+			if getRank(byPlayer).power > 1 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+			if event.parameter then else byPlayer.print('Invaid Input, /server-interface <command>') return end
+			local returned,value = pcall(loadstring(event.parameter)) 
+			if type(value) == 'table' then game.write_file('log.txt', '\n Ran by: '..byPlayer.name..'\n $£$ '..table.tostring(value), true, 0) byPlayer.print(table.tostring(value))
+			else game.write_file('log.txt', '\n Ran by: '..byPlayer.name..'\n $£$ '..tostring(value), true, 0) byPlayer.print(value) end
 		else 
+			if event.parameter then else print('Invaid Input, /server-interface <command>') return end
 			local returned,value = pcall(loadstring(event.parameter)) 
 			if type(value) == 'table' then game.write_file('log.txt', '\n $£$ '..table.tostring(value), true, 0) print(table.tostring(value))
-			else game.write_file('log.txt', '\n '..tostring(value), true, 0) print(value) end
+			else game.write_file('log.txt', '\n $£$ '..tostring(value), true, 0) print(value) end
 		end
 	end)
 	commands.add_command('auto-message','Sends the auto message to all players #6#',function(event) autoMessage() end)
@@ -645,7 +650,7 @@ function commandInit()
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
 			if #args == 1 then else print('Invaild Input, /jail <player>') return end
 			local player = game.players[args[1]] if player then else print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
-			if player.permission_group.name ~= 'Jail' then queueCommand(giveRank,{player,'Jail',byPlayer}) end
+			if player.permission_group.name ~= 'Jail' then sudo(giveRank,{player,'Jail',byPlayer}) end
 			print('Command Complete')
 		end
 	end)
@@ -663,7 +668,7 @@ function commandInit()
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
 			if #args == 1 then else print('Invaild Input, /unjail <player>') return end 
 			local player = game.players[args[1]] if player then else print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
-			if player.permission_group.name == 'Jail' then queueCommand(revertRank,{player,byPlayer}) end
+			if player.permission_group.name == 'Jail' then sudo(revertRank,{player,byPlayer}) end
 			print('Command Complete')
 		end
 	end)
