@@ -321,7 +321,7 @@ end)
 script.on_event(defines.events.on_player_joined_game, function(event)
 	--runs when the first player joins to make the permission groups
 	if global.ranks == nil then scriptInit() end
-	if commands.commands.server_interface == nil then commandInit() end
+	if commands.commands['server-interface'] == nil then commandInit() end
 	--Standard start up
   local player = game.players[event.player_index]
 	autoRank(player)
@@ -392,8 +392,8 @@ end)
 ---------------------------Other Events-------------------------------------------------
 ----------------------------------------------------------------------------------------
 script.on_event(defines.events.on_tick, function(event) 
-	if game.tick % 60 == 0 then 
-		command=table.remove(global.queue)
+	if game.tick % 60 == 0 and game.tick > 300 then 
+		if global.queue ~= nil then command=table.remove(global.queue) end
 		if command and command.fun and type(command.fun) == 'function' then
 			local args = command.var or {}
 			command.fun(args[1],args[2],args[3],args[4],args[5],args[6]) 
@@ -528,10 +528,10 @@ function scriptInit()
 end
 
 function commandInit()
-	commands.add_command('server-interface','<command>  #1#',function(event)
+	commands.add_command('server-interface','<command>  #2#',function(event)
 		if event.player_index then
 			local byPlayer = game.players[event.player_index]
-			if getRank(byPlayer).power > 1 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+			if getRank(byPlayer).power > 2 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
 			if event.parameter then else byPlayer.print('Invaid Input, /server-interface <command>') return end
 			local returned,value = pcall(loadstring(event.parameter)) 
 			if type(value) == 'table' then game.write_file('log.txt', '\n Ran by: '..byPlayer.name..'\n $£$ '..table.tostring(value), true, 0) byPlayer.print(table.tostring(value))
