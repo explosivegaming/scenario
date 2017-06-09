@@ -644,13 +644,13 @@ function commandInit()
 			if getRank(byPlayer).power > getRank(player).power or getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
 			if player.connected then else byPlayer.print('Invaild Player, player is not online') return end
 			if player == byPlayer then byPlayer.print('Invaild Player, you can\'t jail yourself') return end
-			if player.permission_group.name ~= 'Jail' then giveRank(player,'Jail',byPlayer) end
+			if player.permission_group.name ~= 'Jail' then sudo(giveRank,{player,'Jail',byPlayer}) end
 		else
 			if event.parameter then else print('Invaild Input, /jail <player>') return end
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
 			if #args == 1 then else print('Invaild Input, /jail <player>') return end
 			local player = game.players[args[1]] if player then else print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
-			if player.permission_group.name ~= 'Jail' then sudo(giveRank,{player,'Jail',byPlayer}) end
+			if player.permission_group.name ~= 'Jail' then giveRank(player,'Jail') end
 			print('Command Complete')
 		end
 	end)
@@ -662,13 +662,13 @@ function commandInit()
 			if #args == 1 then else byPlayer.print('Invaild Input, /unjail <player> ') return end
 			local player = game.players[args[1]] if player then else byPlayer.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
 			if getRank(byPlayer).power > getRank(player).power or getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
-			if player.permission_group.name == 'Jail' then revertRank(player,byPlayer) end
+			if player.permission_group.name == 'Jail' then sudo(revertRank,{player,byPlayer}) end
 		else
 			if event.parameter then else print('Invaild Input, /unjail <player>') return end
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
 			if #args == 1 then else print('Invaild Input, /unjail <player>') return end 
 			local player = game.players[args[1]] if player then else print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
-			if player.permission_group.name == 'Jail' then sudo(revertRank,{player,byPlayer}) end
+			if player.permission_group.name == 'Jail' then revertRank(player) end
 			print('Command Complete')
 		end
 	end)
