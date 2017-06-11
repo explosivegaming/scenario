@@ -534,13 +534,13 @@ function commandInit()
 			if getRank(byPlayer).power > 2 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
 			if event.parameter then else byPlayer.print('Invaid Input, /server-interface <command>') return end
 			local returned,value = pcall(loadstring(event.parameter)) 
-			if type(value) == 'table' then game.write_file('log.txt', '\n Ran by: '..byPlayer.name..'\n $£$ '..table.tostring(value), true, 0) byPlayer.print(table.tostring(value))
-			else game.write_file('log.txt', '\n Ran by: '..byPlayer.name..'\n $£$ '..tostring(value), true, 0) byPlayer.print(value) end
+			if type(value) == 'table' then game.write_file('log.txt', '\n Ran by: '..byPlayer.name..'\n Code: '..event.parameter..'\n $£$ '..table.tostring(value), true, 0) byPlayer.print(table.tostring(value))
+			else game.write_file('log.txt', '\n Ran by: '..byPlayer.name..'\n Code: '..event.parameter..'\n $£$ '..tostring(value), true, 0) byPlayer.print(value) end
 		else 
 			if event.parameter then else print('Invaid Input, /server-interface <command>') return end
 			local returned,value = pcall(loadstring(event.parameter)) 
-			if type(value) == 'table' then game.write_file('log.txt', '\n $£$ '..table.tostring(value), true, 0) print(table.tostring(value))
-			else game.write_file('log.txt', '\n $£$ '..tostring(value), true, 0) print(value) end
+			if type(value) == 'table' then game.write_file('log.txt', '\n Ran by: <server> \n Code: '..event.parameter..'\n $£$ '..table.tostring(value), true, 0) print(table.tostring(value))
+			else game.write_file('log.txt', '\n Ran by: <server> \n Code: '..event.parameter..'\n $£$ '..tostring(value), true, 0) print(value) end
 		end
 	end)
 	commands.add_command('auto-message','Sends the auto message to all players #6#',function(event) autoMessage() end)
