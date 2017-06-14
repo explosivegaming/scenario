@@ -369,7 +369,7 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
 		local frame = event.element
 		filters = getPlayerTableFilters(frame)
 		local select = false
-		if frame.parent.parent.parent.name == 'Admin' and frame.parent.sel_input then select = true filters.powerOver = true end
+		if frame.parent.parent.parent.name == 'Admin' then select = true filters.powerOver = true end
 		drawPlayerTable(player, frame.parent.parent, select, filters)
 	end
 end)
