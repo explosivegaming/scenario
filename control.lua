@@ -139,9 +139,9 @@ function autoRank(player)
 		if Break then break end
 	end
 	if playerAutoRank == nil then
+		if ticktominutes(player.online_time) >= timeForVeteran then playerAutoRank = stringToRank('Veteran') end
 		if ticktominutes(player.online_time) >= timeForRegular then playerAutoRank = stringToRank('Regular') end
-		if ticktominutes(player.online_time) >= timeForVeteran then playerAutoRank = stringToRank('Veteran')
-		else playerAutoRank = stringToRank('Guest') end
+		playerAutoRank = playerAutoRank or stringToRank('Guest')
 	end
 	if currentRank.name ~='Jail' and currentRank.power > playerAutoRank.power or currentRank.name == 'Guest' then 
 		if playerAutoRank.name == 'Guest' then
