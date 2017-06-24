@@ -563,24 +563,28 @@ function commandInit()
 			print('Command Complete')
 		end
 	end)
-	--revive-entities
-	commands.add_command('revive-entities','<range/all> Reives all entitys in this range. Admins can use all as range #4#',function(event)
+	--repair
+	commands.add_command('repair','<range/all> Reives all entitys in this range. Admins can use all as range #4#',function(event)
 		if event.player_index then
 			local byPlayer = game.players[event.player_index]
-			if event.parameter then else byPlayer.print('Invaild Input, /revive-entities <range/all>') return end
+			if event.parameter then else byPlayer.print('Invaild Input, /repair <range/all>') return end
 			local pos = byPlayer.position
 			if getRank(byPlayer).power > 4 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
 			local args = {} for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
-			if #args == 1 then else byPlayer.print('Invaild Input, /revive-entities <range/all>') return end
+			if #args == 1 then else byPlayer.print('Invaild Input, /repair <range/all>') return end
 			local range = tonumber(args[1]) if range or args[1] == 'all' then else byPlayer.print('Invaild Range, must be number below 50') return end
 			if args[1] == 'all' then 
 				if getRank(byPlayer).power > 2 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
-				for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() end return
+				for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() end
+				for key, entity in pairs(game.surfaces[1].find_entities()) do if entity.health then entity.health = 10000 end return
 			elseif range < 50 and range > 0 then else byPlayer.print('Invaild Range, must be number below 50') return end
 				for key, entity in pairs(game.surfaces[1].find_entities_filtered({area={{pos.x-range,pos.y-range},{pos.x+range,pos.y+range}},type = "entity-ghost"})) do entity.revive()
+				for key, entity in pairs(game.surfaces[1].find_entities({{pos.x-range,pos.y-range},{pos.x+range,pos.y+range}})) do if entity.health then entity.health = 10000 end return
 			end
 		else
-			for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() end print('Command Complete')
+			for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() end
+			for key, entity in pairs(game.surfaces[1].find_entities()) do if entity.health then entity.health = 10000 end
+			print('Command Complete')
 		end
 	end)
 	-- tp 
