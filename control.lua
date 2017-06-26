@@ -564,7 +564,7 @@ function commandInit()
 		end
 	end)
 	--repair
-	commands.add_command('repair','<range/all> Reives all entitys in this range. Admins can use all as range #4#',function(event)
+	commands.add_command('repair','<range/all> Reives and heals all entitys in this range. Admins can use all as range #4#',function(event)
 		if event.player_index then
 			local byPlayer = game.players[event.player_index]
 			if event.parameter then else byPlayer.print('Invaild Input, /repair <range/all>') return end
