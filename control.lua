@@ -576,7 +576,7 @@ function commandInit()
 			if args[1] == 'all' then 
 				if getRank(byPlayer).power > 2 then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
 				for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() end
-				for key, entity in pairs(game.surfaces[1].find_entities()) do if entity.health then entity.health = 10000 end return
+				for key, entity in pairs(game.surfaces[1].find_entities()) do if entity.health then entity.health = 10000 end end return
 			elseif range < 50 and range > 0 then else byPlayer.print('Invaild Range, must be number below 50') return end
 				for key, entity in pairs(game.surfaces[1].find_entities_filtered({area={{pos.x-range,pos.y-range},{pos.x+range,pos.y+range}},type = "entity-ghost"})) do entity.revive()
 				for key, entity in pairs(game.surfaces[1].find_entities({{pos.x-range,pos.y-range},{pos.x+range,pos.y+range}})) do if entity.health then entity.health = 10000 end return
