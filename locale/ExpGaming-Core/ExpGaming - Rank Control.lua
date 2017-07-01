@@ -9,17 +9,15 @@ Discord: https://discord.gg/XSsBV6b
 The credit below may be used by another script do not remove.
 ]]
 local credits = {{
-	name='File Header - Stand-Alone',
+	name='ExpGaming - Rank Control Functions',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='Just A File Header To Organise Code',
+	description='The Core for the Rank Controls',
 	factorio_version='0.15.23',
-	show=false
+	show=true
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-credit_loop(require("GUI/file-header"))
-credit_loop(require("ExpGaming - Rank Table"))
-credit_loop(require("ExpGaming - Rank Control"))
+
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

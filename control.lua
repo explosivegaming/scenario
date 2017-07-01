@@ -18,12 +18,10 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
+credit_loop(require("locale/StdLib/event"))
 credit_loop(require("locale/file-header"))
 
-script.on_init(function() global.credits = credits end)
-
-
-
+Event.register(-1,function() global.credits = credits end)
 
 ----TEMP-------------------------------------------------------------------------------------
 function table.val_to_str ( v )
