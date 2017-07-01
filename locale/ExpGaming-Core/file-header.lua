@@ -24,5 +24,6 @@ credit_loop(require("ExpGaming - Rank Table"))
 credit_loop(require("ExpGaming - Rank Presets"))
 credit_loop(require("ExpGaming - Rank Control"))
 credit_loop(require("GUI/file-header"))
+credit_loop(require("ExpGaming - Server Interface"))
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
