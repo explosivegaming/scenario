@@ -38,6 +38,7 @@ local ranks = {
 	shortHand='Owner',
 	tag='[Owner]',
 	power=0,
+	time=nil,
 	colour={r=170,g=0,b=0},
 	disallow={}},
 	
@@ -45,6 +46,7 @@ local ranks = {
 	shortHand='Com Mngr',
 	tag='[Com Mngr]',
 	power=1,
+	time=nil,
 	colour={r=150,g=68,b=161},
 	disallow={}},
 	
@@ -52,6 +54,7 @@ local ranks = {
 	shortHand='Dev',
 	tag='[Dev]',
 	power=1,
+	time=nil,
 	colour={r=179,g=125,b=46},
 	disallow={}},
 	
@@ -59,6 +62,7 @@ local ranks = {
 	shortHand='Admin',
 	tag='[Admin]',
 	power=2,
+	time=nil,
 	colour={r=233,g=63,b=233},
 	disallow={
 		'set_allow_commands',
@@ -71,6 +75,7 @@ local ranks = {
 	shortHand='Mod',
 	tag='[Mod]',
 	power=3,
+	time=nil,
 	colour={r=0,g=170,b=0},
 	disallow={
 		'server_command'}
@@ -80,6 +85,7 @@ local ranks = {
 	shortHand='P2W',
 	tag='[P2W]',
 	power=4,
+	time=nil,
 	colour={r=233,g=63,b=233},
 	disallow={}},
 	
@@ -87,6 +93,7 @@ local ranks = {
 	shortHand='Vet',
 	tag='[Veteran]',
 	power=4,
+	time=600,
 	colour={r=140,g=120,b=200},
 	disallow={}},
 	
@@ -94,6 +101,7 @@ local ranks = {
 	shortHand='Mem',
 	tag='[Member]',
 	power=5,
+	time=nil,
 	colour={r=24,g=172,b=188},
 	disallow={}},
 	
@@ -101,6 +109,7 @@ local ranks = {
 	shortHand='Reg',
 	tag='[Regular]',
 	power=5,
+	time=180,
 	colour={r=24,g=172,b=188},
 	disallow={
 		'set_auto_launch_rocket',
@@ -113,6 +122,7 @@ local ranks = {
 	shortHand='',
 	tag='[Guest]',
 	power=6,
+	time=nil,
 	colour={r=255,g=159,b=27},
 	disallow={
 		'build_terrain',
@@ -125,6 +135,7 @@ local ranks = {
 	shortHand='Jail',
 	tag='[Jail]',
 	power=7,
+	time=nil,
 	colour={r=50,g=50,b=50},
 	disallow={
 		'open_character_gui',
