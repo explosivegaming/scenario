@@ -155,4 +155,4 @@ end
 -- Moves The Ranks to the global array
 Event.register(-1,function() global.ranks = ranks end)
 --Please Only Edit Above This Line-----------------------------------------------------------
-return credits, ranks
+return credits
