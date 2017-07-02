@@ -31,6 +31,7 @@ ExpGui = {
 	--draw_text
 	},
 	toolbar={
+	buttons={}
 	--draw
 	--add_button
 	},

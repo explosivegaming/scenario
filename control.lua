@@ -18,6 +18,7 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
+require("mod-gui")
 credit_loop(require("locale/StdLib/event"))
 credit_loop(require("locale/file-header"))
 

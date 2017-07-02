@@ -60,6 +60,7 @@ function give_rank(player,rank,by_player)
 	local by_player = by_player or 'system'
 	local rank = string_to_rank(rank) or rank or string_to_rank('Guest')
 	local old_rank = get_rank(player)
+	--messaging
 	local message = 'demoted'
 	if rank.power <= old_rank.power then message = 'promoted' end
 	if by_player.name then 
@@ -67,8 +68,11 @@ function give_rank(player,rank,by_player)
 	else
 		rank_print(player.name..' was '..message..' to '..rank.name..' by <system>','Guest')
 	end
+	player.print('You Have Been Given The '..rank.name..' Rank!')
+	--if for some reason the tag is diffrent to the deafult
+	if player.tag ~= old_rank.tag then player.print('Your Tag Was Reset Due To A Rank Change') end
+	--rank change
 	player.permission_group = game.permissions.get_group(rank.name)
-	if player.tag:find('-') then player.print('Your Custom Tag Was Reset Due To A Rank Change') end
 	player.tag = get_rank(player).tag
 	if old_rank.name ~= 'Jail' then global.old_ranks[player.index]=old_rank.name end
 	script.raise_event(Event.rank_change, {player=player, by_player=by_player, new_rank=rank, old_rank=old_rank})
