@@ -45,7 +45,7 @@ Event.register(defines.events.on_tick, function(event)
 		command=table.remove(global.sudo)
 		if command and command.fun and type(command.fun) == 'function' then
 			local args = command.var or {}
-			command.fun(args[1],args[2],args[3],args[4],args[5],args[6]) 
+			command.fun(unpack(args))
 		end
 	end
 end)
