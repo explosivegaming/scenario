@@ -21,6 +21,13 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 ExpGui = {
 	add_frame={
 	--center
+	--tab
+	--left
+	--popup
+	},
+	draw_frame={
+	--center
+	--tab
 	--left
 	--popup
 	},
@@ -42,9 +49,20 @@ ExpGui = {
 	},
 	frames={
 		center={},
+		tabs={},
 		left={},
 		popup={}
 	}
 }
+--simple function to toggle the visiblly of a frame
+function ExpGui.toggleVisable(frame)
+	if frame then
+		if frame.style.visible == nil then
+			frame.style.visible = false 
+		else
+			frame.style.visible = not frame.style.visible
+		end
+	end
+end
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
