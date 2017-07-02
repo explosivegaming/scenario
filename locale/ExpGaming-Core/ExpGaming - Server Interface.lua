@@ -9,12 +9,12 @@ Discord: https://discord.gg/XSsBV6b
 The credit below may be used by another script do not remove.
 ]]
 local credits = {{
-	name='ExpGaming - Server Interface',
+	name='Explosive Gaming Server Interface',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
 	description='A way of talking with the server with out breaking achevements',
 	factorio_version='0.15.23',
-	show=false
+	show=true
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------

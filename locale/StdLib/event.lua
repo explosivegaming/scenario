@@ -6,12 +6,12 @@
 -- @usage require('stdlib/event/event')
 
 local credits = {{
-	name='StdLib',
+	name='Factorio StdLib',
 	owner='Afforess',
 	dev='Afforess',
 	description='The Factorio StdLib used here for the event handler',
 	factorio_version='0.15.23',
-	show=false
+	show=true
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 

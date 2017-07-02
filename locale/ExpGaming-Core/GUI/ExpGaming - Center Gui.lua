@@ -9,10 +9,10 @@ Discord: https://discord.gg/XSsBV6b
 The credit below may be used by another script do not remove.
 ]]
 local credits = {{
-	name='File Header - ExpGaming-Core-GUI',
+	name='Center Gui',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='Just A File Header To Organise Code',
+	description='The main gui in the center',
 	factorio_version='0.15.23',
 	show=false
 	}}

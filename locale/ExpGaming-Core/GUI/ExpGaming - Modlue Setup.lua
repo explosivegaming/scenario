@@ -9,12 +9,12 @@ Discord: https://discord.gg/XSsBV6b
 The credit below may be used by another script do not remove.
 ]]
 local credits = {{
-	name='Setup for the Gui Object',
+	name='Explosive Gaming Gui System',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='The very fondation of the Gui System',
+	description='Without this it would not be the same',
 	factorio_version='0.15.23',
-	show=false
+	show=true
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------

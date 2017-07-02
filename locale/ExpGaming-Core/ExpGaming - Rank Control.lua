@@ -9,10 +9,10 @@ Discord: https://discord.gg/XSsBV6b
 The credit below may be used by another script do not remove.
 ]]
 local credits = {{
-	name='ExpGaming - Rank Control Functions',
+	name='Explosive Gaming Rank System',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='The Core for the Rank Controls',
+	description='The very core that all of the others are based on',
 	factorio_version='0.15.23',
 	show=true
 	}}
