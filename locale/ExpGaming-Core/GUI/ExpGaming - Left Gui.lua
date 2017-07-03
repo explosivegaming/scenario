@@ -23,19 +23,19 @@ local frames = ExpGui.frames
 local draw_frame = ExpGui.draw_frame
 --left guis are always present and only have their visabilty toggled
 --adds a frame to the left bar; event(player,frame) must be present for left guis as there is no default
-function add_frame.left(name,display,tooltip,restriction,event)
+function add_frame.left(name,default_display,default_tooltip,restriction,event)
 	if not name then error('Frame requires a name') end
 	if not event or type(event) ~= 'function' then error('Frame requires a draw function') end
-	table.insert(frames.left,{name,display,event})
-	ExpGui.toolbar.add_button(name,display,tooltip,restriction,draw_frame.left)
+	table.insert(frames.left,{name,default_display,event})
+	ExpGui.toolbar.add_button(name,default_display,default_tooltip,restriction,draw_frame.left)
 end
 --draw the left gui for the player; do not call manuley must use other functions to call
 function draw_frame.left(player,element)
 	local frame_data = nil
 	for _,frame in pairs(frames.left) do if element.name == frame[1] then frame_data = frame break end end
-	local left = player.gui.left
+	local left = mod_gui.get_frame_flow(player)
 	if left[frame_data[1]] then ExpGui.toggleVisable(left[frame_data[1]]) return end
-	local frame = left.add{name=frame_data[1],type='frame',capption=frame_data[2]}
+	local frame = left.add{name=frame_data[1],type='frame',capption=frame_data[2],direction='vertical'}
 	frame_data[3](player,frame)
 end
 --Please Only Edit Above This Line-----------------------------------------------------------

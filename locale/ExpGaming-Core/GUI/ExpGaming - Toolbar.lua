@@ -29,7 +29,7 @@ end
 --draw the toolbar to the player only showing buttons within their restriction
 function toolbar.draw(player)
 	if not player then error('Need a player to draw to') end
-	local toolbar_frame = player.gui.top
+	local toolbar_frame = mod_gui.get_button_flow(player)
 	toolbar_frame.clear()
 	for _,btn in pairs(toolbar.buttons) do
 		local rank = get_rank(player)

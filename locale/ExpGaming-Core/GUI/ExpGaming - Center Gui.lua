@@ -22,22 +22,22 @@ local add_frame = ExpGui.add_frame
 local frames = ExpGui.frames
 local draw_frame = ExpGui.draw_frame
 --adds a frame in the center; tabs is a list that can contain already defined tabs; event(player,element) is a option to have a custom gui in the center
-function add_frame.center(name,display,tooltip,restriction,tabs,event)
+function add_frame.center(name,default_display,default_tooltip,restriction,tabs,event)
 	if not name then error('Frame requires a name') end
 	local tabs = tabs or {}
-	table.insert(frames.center,{name,display,tabs,event})
-	ExpGui.toolbar.add_button(name,display,tooltip,restriction,draw_frame.center)
+	table.insert(frames.center,{name,default_display,tabs,event})
+	ExpGui.toolbar.add_button(name,default_display,default_tooltip,restriction,draw_frame.center)
 end
 --defines a tab; frame is need as every tab must be used once; event(player,tab) is the draw function
-function add_frame.tab(name,display,tooltip,restriction,frame,event)
+function add_frame.tab(name,default_display,default_tooltip,restriction,frame,event)
 	if not name then error('Tab requires a name') end
 	if not frame then error('Tab requires a frame') end
-	table.insert(frames.tabs,{name,display,frame,event})
+	table.insert(frames.tabs,{name,default_display,frame,event})
 	for _,f in pairs(frames.center) do if f[1] == frame then table.insert(f[3],{name,restriction}) end end
-	ExpGui.add_input.button(name,display,tooltip,draw_frame.tab)
+	ExpGui.add_input.button(name,default_display,default_tooltip,draw_frame.tab)
 end
 --draw the center gui for the player; do not call manuley must use other functions to call
-ExpGui.add_input.button('close_center','Close','Close This Gui',function(player,element) player.gui.center.clear() end)
+ExpGui.add_input.button('close_center','Close','Close This Gui',function(player,element) element.parent.parent.parent.destroy() end)
 function draw_frame.center(player,element)
 	local frame_data = nil
 	for _,frame in pairs(frames.center) do if element.name == frame[1] then frame_data = frame break end end
