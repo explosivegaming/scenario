@@ -25,21 +25,16 @@ local draw_frame = ExpGui.draw_frame
 ExpGui.add_input.button('close_popup','X','Close This Popup',function(player,element) element.parent.destroy() end)
 local function get_next_popup(popups,name)
 	if name then 
-		local flow = popups.add{type='flow',name=name..'_on_click',direction='horizontal'} 
-		local frame = flow.add{name='popup_frame',type='frame',direction='vertical'}
+		local flow = popups.add{type='frame',name=name..'_on_click',direction='horizontal',style=mod_gui.frame_style} 
+		local frame = flow.add{name='popup_frame',type='flow',direction='vertical'}
 		ExpGui.add_input.draw_button(flow,'close_popup') return frame
 	end
-	local current = #popups.children
-	for _,p in pairs(popups.children) do
-		if p.name == 'popup'..current then current = current+1 else
-		local flow = popups.add{type='flow',name='popup'..current,direction='horizontal'} 
-		local frame = flow.add{name='popup_frame',type='frame',direction='vertical'}
-		ExpGui.add_input.draw_button(flow,'close_popup') return frame end
-	end
-	if #popups.children == 0 then 
-		local flow = popups.add{type='flow',name='popup'..current,direction='horizontal'} 
-		local frame = flow.add{name='popup_frame',type='frame',direction='vertical'}
-		ExpGui.add_input.draw_button(flow,'close_popup') return frame end
+	local current = 0
+	while true do if popups['popup'..current] then current = current+1 else break end end
+	local flow = popups.add{type='frame',name='popup'..current,direction='horizontal',style=mod_gui.frame_style} 
+	local frame = flow.add{name='popup_frame',type='flow',direction='vertical'}
+	ExpGui.add_input.draw_button(flow,'close_popup') 
+	return frame
 end
 --adds a frame to the popup flow;restriction is the power need to use the on_click function
 --on_click(player,element) is what is called when button is clicked if nil no button is made
@@ -57,7 +52,7 @@ end
 function draw_frame.popup_button(player,element)
 	local frame_data = nil
 	for _,frame in pairs(frames.popup) do if element.name == frame[1] then frame_data = frame break end end
-	local popups = mod_gui.get_frame_flow(player).popups or mod_gui.get_frame_flow(player).add{name='popups',type='flow',direction='vertical'}
+	local popups = mod_gui.get_frame_flow(player).popups
 	if popups[frame_data[1]..'_on_click'] then popups[frame_data[1]..'_on_click'].destroy() return end
 	local frame = get_next_popup(popups,frame_data[1])
 	frame_data[3](player,frame)
@@ -68,10 +63,12 @@ function draw_frame.popup(style,args)
 	local frame_data = nil
 	for _,frame in pairs(frames.popup) do if style == frame[1] then frame_data = frame break end end
 	for _,player in pairs(game.connected_players) do
-		local popups = mod_gui.get_frame_flow(player).popups or mod_gui.get_frame_flow(player).add{name='popups',type='flow',direction='vertical'}
+		local popups = mod_gui.get_frame_flow(player).popups
 		local frame = get_next_popup(popups)
 		frame_data[4](player,frame,args)
 	end
 end
+--used to make the popup area
+Event.register(defines.events.on_player_joined_game,function(event) mod_gui.get_frame_flow(game.players[event.player_index]).add{name='popups',type='flow',direction='vertical'} end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

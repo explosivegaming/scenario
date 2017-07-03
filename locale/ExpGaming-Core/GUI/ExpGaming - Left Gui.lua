@@ -23,10 +23,12 @@ local frames = ExpGui.frames
 local draw_frame = ExpGui.draw_frame
 --left guis are always present and only have their visabilty toggled
 --adds a frame to the left bar; event(player,frame) must be present for left guis as there is no default
-function add_frame.left(name,default_display,default_tooltip,restriction,event)
+--vis must be true must be true or false based on the default stae of the gui
+function add_frame.left(name,default_display,default_tooltip,restriction,vis,event)
 	if not name then error('Frame requires a name') end
 	if not event or type(event) ~= 'function' then error('Frame requires a draw function') end
-	table.insert(frames.left,{name,default_display,event})
+	local vis = vis or false
+	table.insert(frames.left,{name,default_display,event,vis})
 	ExpGui.toolbar.add_button(name,default_display,default_tooltip,restriction,draw_frame.left)
 end
 --draw the left gui for the player; do not call manuley must use other functions to call
@@ -35,8 +37,19 @@ function draw_frame.left(player,element)
 	for _,frame in pairs(frames.left) do if element.name == frame[1] then frame_data = frame break end end
 	local left = mod_gui.get_frame_flow(player)
 	if left[frame_data[1]] then ExpGui.toggleVisable(left[frame_data[1]]) return end
-	local frame = left.add{name=frame_data[1],type='frame',capption=frame_data[2],direction='vertical'}
+	local frame = left.add{name=frame_data[1],type='frame',capption=frame_data[2],direction='vertical',style=mod_gui.frame_style}
 	frame_data[3](player,frame)
 end
+--used to load all left guis
+Event.register(defines.events.on_player_joined_game,function(event)
+	local player = game.players[event.player_index]
+	for _,frame_data in pairs(frames.left) do
+		local left = mod_gui.get_frame_flow(player)
+		if left[frame_data[1]] then ExpGui.toggleVisable(left[frame_data[1]]) return end
+		local frame = left.add{name=frame_data[1],type='frame',capption=frame_data[2],direction='vertical',style=mod_gui.frame_style}
+		frame_data[3](player,frame)
+		frame.style.visible = frame_data[4]
+	end
+end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
