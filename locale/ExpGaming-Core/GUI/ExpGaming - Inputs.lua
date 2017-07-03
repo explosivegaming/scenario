@@ -42,9 +42,10 @@ function add_input.draw_button(frame,name,display,tooltip)
 				frame.add{name=name, type = "sprite-button", sprite=display, tooltip=tooltip, style = mod_gui.button_style}
 			else
 				frame.add{name=name, type = "button", caption=display, tooltip=tooltip, style = mod_gui.button_style}
-			end break
+			end return
 		end
 	end
+	error('No Button By The Name Of '..name)
 end
 --draws the text into a gui;;frame  the frame to draw to;;name  name of button to draw;;display(opptinal) overides the default;;tooltip(opptinal) overides the default
 function add_input.draw_text(frame,name,display)

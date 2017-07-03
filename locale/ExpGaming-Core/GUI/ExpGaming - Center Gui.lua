@@ -9,7 +9,7 @@ Discord: https://discord.gg/XSsBV6b
 The credit below may be used by another script do not remove.
 ]]
 local credits = {{
-	name='Center Gui',
+	name='ExpGaming - Center Gui',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
 	description='The main gui in the center',
@@ -42,7 +42,7 @@ function draw_frame.center(player,element)
 	local frame_data = nil
 	for _,frame in pairs(frames.center) do if element.name == frame[1] then frame_data = frame break end end
 	if player.gui.is_valid_sprite_path(frame_data[2]) then frame_data[2] = frame_data[1] end
-	if player.gui.center[frame_data[1]] then player.gui.center.clear() return end
+	if player.gui.center[frame_data[1]] then player.gui.center.clear() return else player.gui.center.clear() end
 	if frame_data[4] and type(frame_data[4]) == 'function' then frame_data[4](player,element) return end
 	local frame = player.gui.center.add{name=frame_data[1],type='frame',caption=frame_data[2],direction='vertical',style=mod_gui.frame_style}
 	local tab_bar_scroll = frame.add{type = "scroll-pane", name= "tab_bar_scroll", vertical_scroll_policy="never", horizontal_scroll_policy="always"}
