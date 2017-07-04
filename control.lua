@@ -36,3 +36,7 @@ ExpGui.add_frame.popup('Message','Message','Just A ToolTip',5,
 	function(player,frame,args) 
 		frame.add{name='Message',type='label',caption=args[1]..' '..args[2]} 
 end)
+ExpGui.add_frame.tab('player_table','Player Table','Just Like any other',5,'Test',function(player,tab) 
+	ExpGui.player_table.draw_filters(player,tab,{'player_name','online_time','rank'})
+	ExpGui.player_table.draw(player,tab,{{'online',true}},tab)
+end)

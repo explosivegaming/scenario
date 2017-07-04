@@ -38,11 +38,17 @@ ExpGui = {
 	--draw_text
 	},
 	toolbar={
-	buttons={}
+		buttons={}
+		--draw
+		--add_button
+		},
+	player_table={
+		filters={}
 	--draw
-	--add_button
+	--draw_filters
+	--get_filters
+	--player_match
 	},
-	--add_player_table
 	inputs={
 		buttons={},
 		text={}
