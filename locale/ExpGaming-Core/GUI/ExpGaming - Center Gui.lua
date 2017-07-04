@@ -21,7 +21,7 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 local add_frame = ExpGui.add_frame
 local frames = ExpGui.frames
 local draw_frame = ExpGui.draw_frame
---adds a frame in the center; tabs is a list that can contain already defined tabs; event(player,element) is a option to have a custom gui in the center
+--adds a frame in the center; tabs {{name,restriction},{...}} is a list that can contain already defined tabs; event(player,element) is a option to have a custom gui in the center
 function add_frame.center(name,default_display,default_tooltip,restriction,tabs,event)
 	if not name then error('Frame requires a name') end
 	local tabs = tabs or {}

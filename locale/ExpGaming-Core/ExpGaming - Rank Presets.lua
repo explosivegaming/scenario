@@ -31,6 +31,7 @@ local preset_ranks = {
 	'Smou'},
 	
 	Mod={
+	'AcThPaU',
 	'Alanore',
 	'Aquaday',
 	'cafeslacker',

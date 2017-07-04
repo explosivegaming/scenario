@@ -31,13 +31,19 @@ function add_frame.left(name,default_display,default_tooltip,restriction,vis,eve
 	table.insert(frames.left,{name,default_display,event,vis})
 	ExpGui.toolbar.add_button(name,default_display,default_tooltip,restriction,draw_frame.left)
 end
---draw the left gui for the player; do not call manuley must use other functions to call
-function draw_frame.left(player,element)
+--draw the left gui for the player; called via script, only call manuley when update is true and element is the name of the gui
+function draw_frame.left(player,element,update)
+	local frame = nil
 	local frame_data = nil
-	for _,frame in pairs(frames.left) do if element.name == frame[1] then frame_data = frame break end end
 	local left = mod_gui.get_frame_flow(player)
-	if left[frame_data[1]] then ExpGui.toggleVisable(left[frame_data[1]]) return end
-	local frame = left.add{name=frame_data[1],type='frame',capption=frame_data[2],direction='vertical',style=mod_gui.frame_style}
+	if not update then
+		for _,frame in pairs(frames.left) do if element.name == frame[1] then frame_data = frame break end end
+		if left[frame_data[1]] then ExpGui.toggleVisable(left[frame_data[1]]) return end
+		local frame = left.add{name=frame_data[1],type='frame',capption=frame_data[2],direction='vertical',style=mod_gui.frame_style}
+	else
+		for _,frame in pairs(frames.left) do if element == frame[1] then frame_data = frame break end end
+		local frame = left[frame_data[1]] frame.clear()
+	end
 	frame_data[3](player,frame)
 end
 --used to load all left guis

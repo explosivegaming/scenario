@@ -92,10 +92,12 @@ function find_new_rank(player)
 	local current_rank = get_rank(player)
 	local old_rank = get_rank(player)
 	local possible_ranks = {current_rank}
-	--loops though preset ranks
-	for rank,players in pairs(global.preset_ranks) do
-		local found_rank = loop_preset_rank(players, rank)
-		if found_rank then table.insert(possible_ranks,string_to_rank(found_rank)) break end
+	--loops though preset ranks only if playtime is less than 5 minutes
+	if tick_to_min(player.online_time) < 5 then
+		for rank,players in pairs(global.preset_ranks) do
+			local found_rank = loop_preset_rank(players, rank)
+			if found_rank then table.insert(possible_ranks,string_to_rank(found_rank)) break end
+		end
 	end
 	--loops though rank times
 	for _,rank in pairs(global.ranks) do 
