@@ -42,7 +42,7 @@ function draw_frame.left(player,element,update)
 		frame = left.add{name=frame_data[1],type='frame',capption=frame_data[2],direction='vertical',style=mod_gui.frame_style}
 	else
 		for _,frame in pairs(frames.left) do if element == frame[1] then frame_data = frame break end end
-		frame = left[frame_data[1]]
+		frame = left[frame_data[1]] 
 	end
 	if frame then frame.clear() frame_data[3](player,frame) end
 end

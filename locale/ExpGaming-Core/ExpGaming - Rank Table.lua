@@ -35,7 +35,7 @@ http://lua-api.factorio.com/latest/defines.html#defines.input_action
 --]]
 local ranks = {
 	{name='Owner',
-	shortHand='Owner',
+	short_hand='Owner',
 	tag='[Owner]',
 	power=0,
 	time=nil,
@@ -43,7 +43,7 @@ local ranks = {
 	disallow={}},
 	
 	{name='Community Manager',
-	shortHand='Com Mngr',
+	short_hand='Com Mngr',
 	tag='[Com Mngr]',
 	power=1,
 	time=nil,
@@ -51,7 +51,7 @@ local ranks = {
 	disallow={}},
 	
 	{name='Developer',
-	shortHand='Dev',
+	short_hand='Dev',
 	tag='[Dev]',
 	power=1,
 	time=nil,
@@ -59,7 +59,7 @@ local ranks = {
 	disallow={}},
 	
 	{name='Admin',
-	shortHand='Admin',
+	short_hand='Admin',
 	tag='[Admin]',
 	power=2,
 	time=nil,
@@ -72,7 +72,7 @@ local ranks = {
 	},
 	
 	{name='Mod',
-	shortHand='Mod',
+	short_hand='Mod',
 	tag='[Mod]',
 	power=3,
 	time=nil,
@@ -82,7 +82,7 @@ local ranks = {
 	},
 	
 	{name='Donator',
-	shortHand='P2W',
+	short_hand='P2W',
 	tag='[P2W]',
 	power=4,
 	time=nil,
@@ -90,7 +90,7 @@ local ranks = {
 	disallow={}},
 	
 	{name='Veteran',
-	shortHand='Vet',
+	short_hand='Vet',
 	tag='[Veteran]',
 	power=4,
 	time=600,
@@ -98,7 +98,7 @@ local ranks = {
 	disallow={}},
 	
 	{name='Member',
-	shortHand='Mem',
+	short_hand='Mem',
 	tag='[Member]',
 	power=5,
 	time=nil,
@@ -106,7 +106,7 @@ local ranks = {
 	disallow={}},
 	
 	{name='Regular',
-	shortHand='Reg',
+	short_hand='Reg',
 	tag='[Regular]',
 	power=5,
 	time=180,
@@ -119,7 +119,7 @@ local ranks = {
 	},
 	
 	{name='Guest',
-	shortHand='',
+	short_hand='',
 	tag='[Guest]',
 	power=6,
 	time=nil,
@@ -132,7 +132,7 @@ local ranks = {
 	},
 	
 	{name='Jail',
-	shortHand='Jail',
+	short_hand='Jail',
 	tag='[Jail]',
 	power=7,
 	time=nil,

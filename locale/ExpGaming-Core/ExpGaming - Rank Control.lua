@@ -50,7 +50,7 @@ function rank_print(msg, rank, inv)
 			end
 		else
 			if rankPower <= rank.power then
-				if rank.shortHand ~= '' then player.print(('['..(rank.shortHand)..']: '..msg)) else player.print(('[Everyone]: '..msg)) end 
+				if rank.short_hand ~= '' then player.print(('['..(rank.short_hand)..']: '..msg)) else player.print(('[Everyone]: '..msg)) end 
 			end
 		end
 	end

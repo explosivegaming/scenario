@@ -18,6 +18,6 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-
+credit_loop(require("ExpGaming - PLayer List"))
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
