@@ -69,6 +69,6 @@ function draw_frame.popup(style,args)
 	end
 end
 --used to make the popup area
-Event.register(defines.events.on_player_joined_game,function(event) mod_gui.get_frame_flow(game.players[event.player_index]).add{name='popups',type='flow',direction='vertical'} end)
+Event.register(defines.events.on_player_joined_game,function(event) if not mod_gui.get_frame_flow(game.players[event.player_index]).popups then mod_gui.get_frame_flow(game.players[event.player_index]).add{name='popups',type='flow',direction='vertical'} end end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
