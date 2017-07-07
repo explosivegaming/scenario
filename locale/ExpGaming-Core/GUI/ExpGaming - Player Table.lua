@@ -29,7 +29,7 @@ player_table_functions.filters = {
 	{'online',false,function(player) return player.connected end},
 	{'offline',false,function(player) return not player.connected end},
 	{'online_time',true,function(player,input) if input and tonumber(input) and tonumber(input) < tick_to_min(player.online_time) then return true elseif not input or not tonumber(input) then return true end end},
-	{'rank',true,function(player,input) if input and string_to_rank(input) and get_rank(player).power <= string_to_rank(input).power then return true end end}
+	{'rank',true,function(player,input) if input and string_to_rank(input) and get_rank(player).power <= string_to_rank(input).power then return true elseif not input or not string_to_rank(input) then return true end end}
 }
 --set up all the text inputs
 for _,filter in pairs(player_table_functions.filters) do
@@ -53,7 +53,7 @@ function player_table_functions.get_filters(frame)
 	local filters = {}
 	for _,filter in pairs(player_table_functions.filters) do
 		if frame.input_bar[filter[1]] then
-			if frame.input_bar[filter[1]].text ~= 'Enter '..filter[1]:gsub('_',' ') or not frame.input_bar[filter[1]].text:find('%S') then
+			if frame.input_bar[filter[1]].text:find('%S') then
 				table.insert(filters,{filter[1],frame.input_bar[filter[1]].text})
 			end
 		end

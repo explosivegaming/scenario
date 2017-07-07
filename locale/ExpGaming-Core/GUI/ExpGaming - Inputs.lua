@@ -54,7 +54,8 @@ function add_input.draw_text(frame,name,display)
 	for _,text in pairs(inputs.text) do
 		if text[1] == name then
 			local display = display or text[2] or text[1]
-			frame.add{name=name, type='textfield', text=display}
+			frame.add{name=name, type='textfield'}
+			frame[name].caption=display
 			break
 		end
 	end
