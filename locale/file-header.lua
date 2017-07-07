@@ -18,8 +18,8 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
+credit_loop(require("ExpGaming-Core/file-header"))
 credit_loop(require("ExpGaming-Addons/file-header"))
 credit_loop(require("Stand-Alone/file-header"))
-credit_loop(require("ExpGaming-Core/file-header"))
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
