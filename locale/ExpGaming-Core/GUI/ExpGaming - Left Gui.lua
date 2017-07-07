@@ -39,10 +39,10 @@ function draw_frame.left(player,element,update)
 	if not update then
 		for _,frame in pairs(frames.left) do if element.name == frame[1] then frame_data = frame break end end
 		if left[frame_data[1]] then ExpGui.toggleVisable(left[frame_data[1]]) return end
-		local frame = left.add{name=frame_data[1],type='frame',capption=frame_data[2],direction='vertical',style=mod_gui.frame_style}
+		frame = left.add{name=frame_data[1],type='frame',capption=frame_data[2],direction='vertical',style=mod_gui.frame_style}
 	else
 		for _,frame in pairs(frames.left) do if element == frame[1] then frame_data = frame break end end
-		local frame = left[frame_data[1]]
+		frame = left[frame_data[1]]
 	end
 	if frame then frame.clear() frame_data[3](player,frame) end
 end
