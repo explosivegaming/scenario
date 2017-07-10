@@ -68,9 +68,8 @@ function give_rank(player,rank,by_player)
 	else
 		rank_print(player.name..' was '..message..' to '..rank.name..' by <system>','Guest')
 	end
-	player.print('You Have Been Given The '..rank.name..' Rank!')
-	--if for some reason the tag is diffrent to the deafult
-	if player.tag ~= old_rank.tag then player.print('Your Tag Was Reset Due To A Rank Change') end
+	if rank.name ~= 'Guest' then player.print('You Have Been Given The '..rank.name..' Rank!') end
+	if player.tag ~= old_rank.tag and player.tag ~= '' then player.print('Your Tag Was Reset Due To A Rank Change') end
 	--rank change
 	player.permission_group = game.permissions.get_group(rank.name)
 	player.tag = get_rank(player).tag
@@ -117,7 +116,7 @@ function find_new_rank(player)
 		end
 	end
 	--lose ends
-	if get_rank(player).power <= 3 and not player.admin then rank_print(player.name..' needs to be promoted.') end
+	if get_rank(player).power <= string_to_rank('mod').power and not player.admin then rank_print(player.name..' needs to be promoted.') end
 	if old_rank.name ~= get_rank(player).name then global.old_ranks[player.index]=old_rank.name end
 end
 --event handlers

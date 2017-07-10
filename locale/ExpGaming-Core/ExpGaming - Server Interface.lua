@@ -19,23 +19,16 @@ local credits = {{
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
 --this command is just a way or using loadstring from in game while keeping achevements
-Event.register(defines.events.on_player_joined_game,function()
-	if commands.commands['server-interface'] then return end
-	commands.add_command('server-interface','<command>  #2#',function(event)
-		if event.player_index then
-			local by_player = game.players[event.player_index]
-			if get_rank(by_player).power > 2 then by_player.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
-			if event.parameter then else by_player.print('Invaid Input, /server-interface <command>') return end
-			local returned,value = pcall(loadstring(event.parameter)) 
-			if type(value) == 'table' then game.write_file('log.txt', '\n Ran by: '..by_player.name..'\n Code: '..event.parameter..'\n $£$ '..table.to_string(value), true, 0) by_player.print(table.to_string(value))
-			else game.write_file('log.txt', '\n Ran by: '..by_player.name..'\n Code: '..event.parameter..'\n $£$ '..tostring(value), true, 0) by_player.print(value) end
-		else 
-			if event.parameter then else print('Invaid Input, /server-interface <command>') return end
-			local returned,value = pcall(loadstring(event.parameter)) 
-			if type(value) == 'table' then game.write_file('log.txt', '\n Ran by: <server> \n Code: '..event.parameter..'\n $£$ '..table.to_string(value), true, 0) print(table.to_string(value))
-			else game.write_file('log.txt', '\n Ran by: <server> \n Code: '..event.parameter..'\n $£$ '..tostring(value), true, 0) print(value) end
-		end
-	end)
+define_command('server-interface','For use of the highest staff only',{'command',true},'admin',function(player,event,args)
+	if player == '<server>' then
+		local returned,value = pcall(loadstring(event.parameter)) 
+		if type(value) == 'table' then game.write_file('log.txt', '\n Ran by: <server> \n Code: '..event.parameter..'\n $£$ '..table.to_string(value), true, 0) print(table.to_string(value))
+		else game.write_file('log.txt', '\n Ran by: <server> \n Code: '..event.parameter..'\n $£$ '..tostring(value), true, 0) print(value) end
+	else
+		local returned,value = pcall(loadstring(event.parameter)) 
+		if type(value) == 'table' then game.write_file('log.txt', '\n Ran by: '..player.name..'\n Code: '..event.parameter..'\n $£$ '..table.to_string(value), true, 0) player.print(table.to_string(value))
+		else game.write_file('log.txt', '\n Ran by: '..player.name..'\n Code: '..event.parameter..'\n $£$ '..tostring(value), true, 0) player.print(value) end
+	end
 end)
 --this is used when changing permsion groups when the person does not have permsion to
 function sudo(command,args) table.insert(global.sudo,{fun=command,var=args}) end
