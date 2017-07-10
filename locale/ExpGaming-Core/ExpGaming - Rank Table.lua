@@ -19,15 +19,13 @@ local credits = {{
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
 --[[
-Rank Powers:
-0: root
-1: no restrictions - management ranks
-2: unable to use scripting commands - must be with sudo()
-3: able to jail people - must use /promote to be able to ban
-4: highest user power
-5: people who are trusted
-6: default power level
-7: full restrictions
+Name is what will be used in the scripts and is offten the best chose for display in text.
+short_hand is what can be used when short on space but the rank still need to be displayed.
+tag is the tag the player will gain when moved to the rank, it can be nil.
+time is used for auto rank feature where you are moved to the rank after a certain play time in minutes.
+colour is the rgb value that can be used to emphaise gui elelemts based on rank.
+power is not in the list below as it is auto defined but allows compairison between ranks.
+disallow is a list containing input acttion that the user can not preform.
 
 For disallow add to the list the end part of the input action
 Example: defines.input_action.drop_item -> 'drop_item'
@@ -35,33 +33,29 @@ http://lua-api.factorio.com/latest/defines.html#defines.input_action
 --]]
 local ranks = {
 	{name='Owner',
-	shortHand='Owner',
+	short_hand='Owner',
 	tag='[Owner]',
-	power=0,
 	time=nil,
 	colour={r=170,g=0,b=0},
 	disallow={}},
 	
 	{name='Community Manager',
-	shortHand='Com Mngr',
+	short_hand='Com Mngr',
 	tag='[Com Mngr]',
-	power=1,
 	time=nil,
 	colour={r=150,g=68,b=161},
 	disallow={}},
 	
 	{name='Developer',
-	shortHand='Dev',
+	short_hand='Dev',
 	tag='[Dev]',
-	power=1,
 	time=nil,
 	colour={r=179,g=125,b=46},
 	disallow={}},
 	
 	{name='Admin',
-	shortHand='Admin',
+	short_hand='Admin',
 	tag='[Admin]',
-	power=2,
 	time=nil,
 	colour={r=233,g=63,b=233},
 	disallow={
@@ -72,9 +66,8 @@ local ranks = {
 	},
 	
 	{name='Mod',
-	shortHand='Mod',
+	short_hand='Mod',
 	tag='[Mod]',
-	power=3,
 	time=nil,
 	colour={r=0,g=170,b=0},
 	disallow={
@@ -82,33 +75,29 @@ local ranks = {
 	},
 	
 	{name='Donator',
-	shortHand='P2W',
+	short_hand='P2W',
 	tag='[P2W]',
-	power=4,
 	time=nil,
 	colour={r=233,g=63,b=233},
 	disallow={}},
 	
 	{name='Veteran',
-	shortHand='Vet',
+	short_hand='Vet',
 	tag='[Veteran]',
-	power=4,
 	time=600,
 	colour={r=140,g=120,b=200},
 	disallow={}},
 	
 	{name='Member',
-	shortHand='Mem',
+	short_hand='Mem',
 	tag='[Member]',
-	power=5,
 	time=nil,
 	colour={r=24,g=172,b=188},
 	disallow={}},
 	
 	{name='Regular',
-	shortHand='Reg',
+	short_hand='Reg',
 	tag='[Regular]',
-	power=5,
 	time=180,
 	colour={r=24,g=172,b=188},
 	disallow={
@@ -119,9 +108,8 @@ local ranks = {
 	},
 	
 	{name='Guest',
-	shortHand='',
+	short_hand='',
 	tag='[Guest]',
-	power=6,
 	time=nil,
 	colour={r=255,g=159,b=27},
 	disallow={
@@ -132,9 +120,8 @@ local ranks = {
 	},
 	
 	{name='Jail',
-	shortHand='Jail',
+	short_hand='Jail',
 	tag='[Jail]',
-	power=7,
 	time=nil,
 	colour={r=50,g=50,b=50},
 	disallow={
@@ -146,6 +133,7 @@ local ranks = {
 }
 -- This For Loop cauess the disallows of each rank to be feed into the one below its self
 for n,rank in pairs(ranks) do
+	rank.power = n
 	if ranks[n-1] then
 		for _,disallow in pairs(ranks[n-1].disallow) do
 			table.insert(rank.disallow,disallow)
