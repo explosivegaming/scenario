@@ -9,17 +9,25 @@ Discord: https://discord.gg/XSsBV6b
 The credit below may be used by another script do not remove.
 ]]
 local credits = {{
-	name='File Header - ExpGaming-Addons',
+	name='Rocket List',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='Just A File Header To Organise Code',
+	description='Shows a list with the curent number of rockets send',
 	factorio_version='0.15.23',
-	show=false
+	show=true
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-credit_loop(require("ExpGaming - Player List"))
-credit_loop(require("ExpGaming - Rocket List"))
-credit_loop(require("ExpGaming - Announcements"))
+ExpGui.add_frame.left('rocket_list','item/rocket-silo','Open a list with rocket milestones','Guest',false,function(player,frame)
+	frame.caption = 'Rockets'
+	local rockets_send = player.force.get_item_launched("satellite")
+	frame.add{name='time_per',type='label',caption='Time Per Rocket: '..''}
+	for milestone,time in pairs (global.rockets) do
+		local milestone = tonumber(milestone:sub(2))
+		
+	end
+end)
+
+Event.register(-1,function(event) global.rockets = {m1=nil,m2=nil,m5=nil,m10=nil,m20=nil,m50=nil,m100=nil,m200=nil,m500=nil} end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
