@@ -110,7 +110,7 @@ function player_table_functions.draw(player,frame,filters,input_location)
 			if p.connected == true 
 			then player_table.add{name=p.name.."status", type="label", caption="Online"}
 			else player_table.add{name=p.name.."s", type="label", caption="Offline"} end
-			player_table.add{name=p.name.."online_time", type="label", caption=(tick_to_hour(p.online_time)..'H '..(tick_to_min(p.online_time)-60*tick_to_hour(p.online_time))..'M')}
+			player_table.add{name=p.name.."online_time", type="label", caption=tick_to_display_format(p.online_time)}
       player_table.add{name=p.name.."rank", type="label", caption=get_rank(p).short_hand}
 		end
 	end
