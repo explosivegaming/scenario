@@ -22,5 +22,6 @@ require("mod-gui")
 credit_loop(require("locale/StdLib/event"))
 Event.gui_update = script.generate_event_name()
 credit_loop(require("locale/file-header"))
+--below 'game.tick/(3600*game.speed)) % 15 == 0' rasise the gui_update event every 15 minutes fell very to change the update time on that
 Event.register(defines.events.on_tick, function(event) if (game.tick/(3600*game.speed)) % 15 == 0 then script.raise_event(Event.gui_update,{tick=game.tick}) end end)
 Event.register(-1,function() global.credits = credits end)
