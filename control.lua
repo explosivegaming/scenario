@@ -20,6 +20,7 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 --Please Only Edit Below This Line-----------------------------------------------------------
 require("mod-gui")
 credit_loop(require("locale/StdLib/event"))
+Event.gui_update = script.generate_event_name()
 credit_loop(require("locale/file-header"))
-
+Event.register(defines.events.on_tick, function(event) if (game.tick/(3600*game.speed)) % 15 == 0 then script.raise_event(Event.gui_update,{tick=game.tick}) end end)
 Event.register(-1,function() global.credits = credits end)

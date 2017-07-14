@@ -26,7 +26,7 @@ ExpGui.add_frame.left('player_list','entity/player','Toggle Player List','Guest'
 	for _,p in pairs(game.connected_players) do table.insert(order[get_rank(p).name],p) end
 	for rank,players in pairs(order) do
 		for _,p in pairs(players) do
-			local play_time = tick_to_hour(p.online_time)..' H '..(tick_to_min(p.online_time)-60*tick_to_hour(p.online_time))..' M'
+			local play_time = tick_to_display_format(p.online_time)
 			local rank_short_hand = string_to_rank(rank).short_hand
 			if rank_short_hand ~= '' then player_list.add{type = "label",  name=p.name, style="caption_label_style", caption=play_time.." - "..p.name..' - '..rank_short_hand}
 			else player_list.add{type = "label",  name=p.name, style="caption_label_style", caption=play_time.." - "..p.name} end
@@ -38,5 +38,6 @@ end)
 Event.register(defines.events.on_player_joined_game,function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'player_list',true) end end)
 Event.register(defines.events.on_player_left_game,function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'player_list',true) end end)
 Event.register(Event.rank_change,function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'player_list',true) end end)
+Event.register(Event.gui_update,function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'player_list',true) end end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

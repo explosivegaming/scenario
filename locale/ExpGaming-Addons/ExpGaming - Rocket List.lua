@@ -18,16 +18,25 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-ExpGui.add_frame.left('rocket_list','item/rocket-silo','Open a list with rocket milestones','Guest',false,function(player,frame)
+ExpGui.add_frame.left('rocket_list','item/rocket-silo','Open a list with rocket milestones','Guest',nil,function(player,frame)
 	frame.caption = 'Rockets'
 	local rockets_send = player.force.get_item_launched("satellite")
-	frame.add{name='time_per',type='label',caption='Time Per Rocket: '..''}
-	for milestone,time in pairs (global.rockets) do
-		local milestone = tonumber(milestone:sub(2))
-		
+	local rocket_time = 'N/A'
+	if rockets_send > 1 then rocket_time = tick_to_display_format((game.tick-global.rockets.m1)/rockets_send) end
+	frame.add{name='rockets',type='label',caption='Rockets Send: '..rockets_send}
+	frame.add{name='time_per',type='label',caption='Time Per Rocket: '..rocket_time}
+	frame.add{name='milestones_title',type='label',caption='Rocket Milestones:',style="caption_label_style"}
+	local milestones = frame.add{name='milestones',type='flow',direction='vertical'}
+	for milestone,time in pairs(global.rockets) do
+		local milestone_number = tonumber(milestone:match('%d+'))
+		if time == 0 and rockets_send == milestone_number then global.rockets[milestone] = game.tick frame.style.visible = true end
+		local time_display = 'N/A' if time > 0 then time_display = tick_to_display_format(time) end
+		milestones.add{name=milestone,type='label',caption=milestone_number..': '..time_display}
 	end
 end)
 
-Event.register(-1,function(event) global.rockets = {m1=nil,m2=nil,m5=nil,m10=nil,m20=nil,m50=nil,m100=nil,m200=nil,m500=nil} end)
+Event.register(defines.events.on_rocket_launched, function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'rocket_list',true) end end)
+Event.register(Event.gui_update,function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'rocket_list',true) end end)
+Event.register(-1,function(event) global.rockets = {m1=0,m2=0,m5=0,m10=0,m20=0,m50=0,m100=0,m200=0,m500=0} end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
