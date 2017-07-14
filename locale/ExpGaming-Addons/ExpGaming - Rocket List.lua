@@ -29,7 +29,7 @@ ExpGui.add_frame.left('rocket_list','item/rocket-silo','Open a list with rocket 
 	local milestones = frame.add{name='milestones',type='flow',direction='vertical'}
 	for milestone,time in pairs(global.rockets) do
 		local milestone_number = tonumber(milestone:match('%d+'))
-		if time == 0 and rockets_send == milestone_number then global.rockets[milestone] = game.tick frame.style.visible = true end
+		if time == 0 and rockets_send == milestone_number then global.rockets[milestone] = game.tick time = game.tick frame.style.visible = true end
 		local time_display = 'N/A' if time > 0 then time_display = tick_to_display_format(time) end
 		milestones.add{name=milestone,type='label',caption=milestone_number..': '..time_display}
 	end
