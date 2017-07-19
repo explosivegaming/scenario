@@ -51,10 +51,19 @@ Event.register(defines.events.on_player_joined_game,function(event)
 	local player = game.players[event.player_index]
 	for _,frame_data in pairs(frames.left) do
 		local left = mod_gui.get_frame_flow(player)
-		if left[frame_data[1]] then ExpGui.toggleVisable(left[frame_data[1]]) return end
-		local frame = left.add{name=frame_data[1],type='frame',capption=frame_data[2],direction='vertical',style=mod_gui.frame_style}
-		frame_data[3](player,frame)
-		frame.style.visible = frame_data[4]
+		if left[frame_data[1]] then left[frame_data[1]].style.visible = frame_data[4]
+		else
+			local frame = left.add{name=frame_data[1],type='frame',capption=frame_data[2],direction='vertical',style=mod_gui.frame_style}
+			frame_data[3](player,frame)
+			frame.style.visible = frame_data[4]
+		end
+	end
+end)
+
+Event.register(Event.rank_change,function(event)
+	for _,frame_data in pairs(frames.left) do
+		local left = mod_gui.get_frame_flow(event.player)
+		if left[frame_data[1]] then left[frame_data[1]].style.visible = frame_data[4] end
 	end
 end)
 --Please Only Edit Above This Line-----------------------------------------------------------
