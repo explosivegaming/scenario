@@ -76,6 +76,7 @@ function load_command(command)
 	end)
 end
 
+Event.register(-1,function() global.commands = Exp_commands end)
 Event.register(defines.events.on_player_joined_game,function() for _,command in pairs(Exp_commands) do load_command(command) end end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
