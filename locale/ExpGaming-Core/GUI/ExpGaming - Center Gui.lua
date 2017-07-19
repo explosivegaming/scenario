@@ -48,7 +48,12 @@ function draw_frame.center(player,element)
 	local tab_bar_scroll = frame.add{type = "scroll-pane", name= "tab_bar_scroll", vertical_scroll_policy="never", horizontal_scroll_policy="always"}
 	local tab_bar = tab_bar_scroll.add{type='flow',direction='horizontal',name='tab_bar'}
 	local tab = frame.add{type = "scroll-pane", name= "tab", vertical_scroll_policy="auto", horizontal_scroll_policy="never"}
-	for n,t in pairs(frame_data[3]) do if t[2] >= get_rank(player).power then ExpGui.add_input.draw_button(tab_bar,t[1]) end end
+	for n,t in pairs(frame_data[3]) do
+		local temp_restriction = nil
+		if type(t[2]) == 'number' then temp_restriction = t[2] end
+		local restriction = temp_restriction or string_to_rank(t[2]).power or 0
+		if restriction >= get_rank(player).power then ExpGui.add_input.draw_button(tab_bar,t[1]) end 
+	end
 	draw_frame.tab(player,tab_bar[frame_data[3][1][1]])
 	ExpGui.add_input.draw_button(tab_bar,'close_center')
 	tab.style.minimal_height = 300
