@@ -75,7 +75,7 @@ end)
 ExpGui.add_frame.tab('players','Players','Players that have been on the server','Guest','readme',function(player,frame)
     local text = "These are the players who have supported us in the making of this factory. Without you the player we wouldn't have been as far as we are now."
     frame.add{name='intro', type="label", caption=text, single_line=false}.style.maximal_width=480
-    local table_area = frame.add{type='flow',name='flow'}
+    local table_area = frame.add{type='flow',name='flow',direction='vertical'}
     ExpGui.player_table.draw_filters(player,table_area,{'player_name','online_time','rank'})
     ExpGui.player_table.draw(player,table_area,{{'player_name'},{'online_time'},{'rank'}},table_area)
 end)
