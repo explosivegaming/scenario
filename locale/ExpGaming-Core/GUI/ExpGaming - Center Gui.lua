@@ -33,6 +33,9 @@ function add_frame.tab(name,default_display,default_tooltip,restriction,frame,ev
 	if not name then error('Tab requires a name') end
 	if not frame then error('Tab requires a frame') end
 	table.insert(frames.tabs,{name,default_display,frame,event})
+	local temp_restriction = nil
+	if type(restriction) == 'number' then temp_restriction = restriction end
+	local restriction = temp_restriction or string_to_rank(restriction).power or 0
 	for _,f in pairs(frames.center) do if f[1] == frame then table.insert(f[3],{name,restriction}) end end
 	ExpGui.add_input.button(name,default_display,default_tooltip,draw_frame.tab)
 end
