@@ -26,6 +26,8 @@ See code for more detail.
 * ExpGui.add_input.text(name,default_display,event)
     * event = on text change -> function(player,element)
 ### Drawing
+* ExpGui.toggleVisable(frame)
+    * Toggles the visability of a frame
 * ExpGui.player_table.draw_filters(player,frame,filters)
     * filters = {filter-name,...}
 * ExpGui.player_table.draw(player,frame,filters,input_location)

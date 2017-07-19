@@ -71,5 +71,7 @@ function draw_frame.tab(player,element)
 	element.parent.parent.parent.tab.clear()
 	for _,tab in pairs(frames.tabs) do if element.name == tab[1] then tab[4](player,element.parent.parent.parent.tab) break end end
 end
+
+Event.register(Event.rank_change,function(event) event.player.gui.center.clear() end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
