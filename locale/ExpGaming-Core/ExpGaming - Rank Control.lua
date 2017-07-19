@@ -111,6 +111,7 @@ function find_new_rank(player)
 		--gives player new rank if availble
 		if highest_rank.name == 'Guest' then
 			player.permission_group=game.permissions.get_group('Guest')
+			script.raise_event(Event.rank_change, {player=player, by_player='system', new_rank=string_to_rank('Guest'), old_rank=string_to_rank('Guest')})
 		else
 			give_rank(player,highest_rank)
 		end
