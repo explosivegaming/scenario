@@ -61,7 +61,7 @@ end)
 
 ExpGui.add_frame.tab('commands','Commands','Useful commands you can use','Guest','readme',function(player,frame)
     frame.add{name='commandTable',type='table',colspan=2}
-    for n,command in pairs(Exp_commands) do
+    for n,command in pairs(global.commands) do
         local temp_restriction = nil
 		if type(command[4]) == 'number' then temp_restriction = command[4] end
 		local restriction = temp_restriction or string_to_rank(command[4]).power or 0
