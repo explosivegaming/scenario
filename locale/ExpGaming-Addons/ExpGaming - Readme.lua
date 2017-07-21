@@ -60,7 +60,11 @@ ExpGui.add_frame.tab('chat','How To Chat','For the people who dont know how to c
 end)
 
 ExpGui.add_frame.tab('commands','Commands','Useful commands you can use','Guest','readme',function(player,frame)
-    frame.add{name='commandTable',type='table',colspan=2}
+    local text = "A List of all the commands that you are able to use, other commands may be permitted to higher ranks then yours."
+    frame.add{name='intro', type="label", caption=text, single_line=false}.style.maximal_width=480
+	frame.add{name='commandTable',type='table',colspan=2}
+	frame.commandTable.add{name='command_title',type='label',caption='Command'}
+	frame.commandTable.add{name='help_title',type='label',caption='Help Info'}
     for n,command in pairs(global.commands) do
         local temp_restriction = nil
 		if type(command[4]) == 'number' then temp_restriction = command[4] end
