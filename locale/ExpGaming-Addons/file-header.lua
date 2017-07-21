@@ -22,5 +22,6 @@ credit_loop(require("ExpGaming - Rocket List"))
 credit_loop(require("ExpGaming - Player List"))
 credit_loop(require("ExpGaming - Readme"))
 credit_loop(require("ExpGaming - Announcements"))
+credit_loop(require("ExpGaming - Auto Message"))
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
