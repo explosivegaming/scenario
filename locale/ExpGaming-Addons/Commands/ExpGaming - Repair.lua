@@ -18,7 +18,7 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-define_command('repair','Used toi repai large parts of the factory. Admin can use all as range.',{'range'},'Mod',function(player,event,args)
+define_command('repair','Used to repair large parts of the factory. Admin can use all as range.',{'range'},'Mod',function(player,event,args)
     if player == '<server>' then
         for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() end
 		for key, entity in pairs(game.surfaces[1].find_entities()) do if entity.health then entity.health = 10000 end end
