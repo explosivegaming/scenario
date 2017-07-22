@@ -9,10 +9,10 @@ Discord: https://discord.gg/XSsBV6b
 The credit below may be used by another script do not remove.
 ]]
 local credits = {{
-	name='Kill Command',
+	name='Tag Command',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='For when ever you need to kill some one',
+	description='Allows users to have custom tags',
 	factorio_version='0.15.23',
 	show=true
 	}}
