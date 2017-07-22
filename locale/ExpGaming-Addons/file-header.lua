@@ -24,6 +24,7 @@ credit_loop(require("ExpGaming - Announcements"))
 credit_loop(require("ExpGaming - Readme"))
 credit_loop(require("ExpGaming - Info"))
 credit_loop(require("ExpGaming - Auto Message"))
+credit_loop(require("ExpGaming - Temp Ban"))
 credit_loop(require("Commands/file-header"))
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
