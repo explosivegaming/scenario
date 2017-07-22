@@ -100,7 +100,7 @@ function find_new_rank(player)
 	end
 	--loops though rank times
 	for _,rank in pairs(global.ranks) do 
-		if rank.time and tick_to_min(player.online_time) >= rank.time then table.insert(possible_ranks,string_to_rank(rank)) end
+		if rank.time and tick_to_min(player.online_time) >= rank.time then table.insert(possible_ranks,rank) end
 	end
 	--loops though possible ranks
 	if current_rank.name ~='Jail' then 
