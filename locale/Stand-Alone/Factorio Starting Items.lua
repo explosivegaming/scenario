@@ -14,7 +14,7 @@ local credits = {{
 	dev='Factorio Team',
 	description='Items you get when you join the game',
 	factorio_version='0.15.23',
-	show=false
+	show=true
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
