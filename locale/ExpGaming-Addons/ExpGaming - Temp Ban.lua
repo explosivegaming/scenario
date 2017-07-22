@@ -9,10 +9,10 @@ Discord: https://discord.gg/XSsBV6b
 The credit below may be used by another script do not remove.
 ]]
 local credits = {{
-	name='Kill Command',
+	name='Temp Bans',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='For when ever you need to kill some one',
+	description='When a ban is too much',
 	factorio_version='0.15.23',
 	show=true
 	}}
@@ -28,7 +28,7 @@ define_command('temp-ban','Temp ban a player untill the next reset',{'player','r
     else
         local jail_player = game.players[args[1]]
         if not jail_player then player.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
-        if getRank(byPlayer).power > getRank(player).power or getRank(byPlayer).power > string_to_rank('Mod').power then byPlayer.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+        if get_rank(player).power > get_rank(player).power or get_rank(player).power > string_to_rank('Mod').power then player.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
         give_rank(jail_player,'Jail')
         global.temp_bans[jail_player.name] = {player,table.concat(args,' ',2)}
         ExpGui.draw_frame.popup('temp_ban',{player,table.concat(args,' ',2)})
