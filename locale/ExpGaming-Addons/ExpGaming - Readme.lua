@@ -39,21 +39,6 @@ ExpGui.add_frame.tab('rules','Rules','Rules on this server','Guest','readme',fun
 	for i, rule in pairs(rules) do frame.add{name=i, type="label", caption={"", i ,". ", rule}} end
 end)
 
-ExpGui.add_frame.tab('infor','Server Info','More ways to get in contact','Guest','readme',function(player,frame)
-    local function format(text_box)
-        text_box.style.minimal_width=400
-        text_box.read_only = true
-	    text_box.word_wrap = true
-	    text_box.selectable = true
-    end
-    frame.add{name=1, type="label", caption={"", "Discord voice and chat server:"}}
-	format(frame.add{name=2, type='text-box', text='https://discord.gg/RPCxzgt'})
-	frame.add{name=3, type="label", caption={"", "Our forum:"}}
-	format(frame.add{name=4, type='text-box', text='https://explosivegaming.nl'})
-	frame.add{name=5, type="label", caption={"", "Steam:"}}
-	format(frame.add{name=6, type='text-box', text='http://steamcommunity.com/groups/tntexplosivegaming'})
-end)
-
 ExpGui.add_frame.tab('chat','How To Chat','For the people who dont know how to chat','Guest','readme',function(player,frame)
     local chat = "Chatting for new players can be difficult because it’s different than other games! It’s very simple, the button you need to press is the “GRAVE/TILDE” key it’s located under the “ESC key”. If you would like to change the key go to your controls tab in options. The key you need to change is “Toggle Lua console” it’s located in the second column 2nd from bottom."
 	frame.add{name='chat', type="label", caption={"", chat}, single_line=false}.style.maximal_width=480
@@ -62,16 +47,16 @@ end)
 ExpGui.add_frame.tab('commands','Commands','Useful commands you can use','Guest','readme',function(player,frame)
     local text = "A List of all the commands that you are able to use, other commands may be permitted to higher ranks then yours."
     frame.add{name='intro', type="label", caption=text, single_line=false}.style.maximal_width=480
-	frame.add{name='commandTable',type='table',colspan=2}
-	frame.commandTable.add{name='command_title',type='label',caption='Command'}
-	frame.commandTable.add{name='help_title',type='label',caption='Help Info'}
+	frame.add{name='command_table',type='table',colspan=2}
+	frame.command_table.add{name='command_title',type='label',caption='Command'}
+	frame.command_table.add{name='help_title',type='label',caption='Help Info'}
     for n,command in pairs(global.commands) do
         local temp_restriction = nil
 		if type(command[4]) == 'number' then temp_restriction = command[4] end
 		local restriction = temp_restriction or string_to_rank(command[4]).power or 0
         if get_rank(player).power > restriction then else
-            frame.commandTable.add{name='command_'..n,type='label',caption='/'..command[1]}
-            frame.commandTable.add{name='help_'..n,type='label',caption=command[2],single_line=false}.style.maximal_width=480
+            frame.command_table.add{name='command_'..n,type='label',caption='/'..command[1]}
+            frame.command_table.add{name='help_'..n,type='label',caption=command[2],single_line=false}.style.maximal_width=480
         end
     end
 end)

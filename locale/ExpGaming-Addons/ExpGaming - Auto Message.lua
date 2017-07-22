@@ -23,7 +23,7 @@ local low_ranks_only={
     'Discord: https://discord.gg/RPCxzgt',
     'Forum: explosivegaming.nl',
     'Steam: http://steamcommunity.com/groups/tntexplosivegaming',
-    'To see these links again goto: Readme > Server Info'
+    'To see these links again goto: Info > Links'
 }
 
 function auto_message()
