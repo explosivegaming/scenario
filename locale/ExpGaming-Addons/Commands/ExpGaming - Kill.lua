@@ -22,7 +22,7 @@ define_command('kill','Used to kill a player, you can always kill your self!',{'
     if player == '<server>' then
         local kill_player = game.players[args[1]]
         if not kill_player then player.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
-        if kill_player == player or (get_rank(player) < get_rank(kill_player) and get_rank(player) =< string_to_rank('Mod').power) then
+        if kill_player == player or get_rank(player).power < get_rank(kill_player).power and get_rank(player).power <= string_to_rank('Mod').power then
             if kill_player.connected then else player.print('Invaild Player, player is not online') return end
             if kill_player.character then kill_player.character.die() else player.print('Invaild Player, their are already dead') return end
         else player.print('401 - Unauthorized: Access is denied due to invalid credentials') end
