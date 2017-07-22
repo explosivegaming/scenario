@@ -36,7 +36,7 @@ ExpGui.add_frame.tab('links','Links','More ways to get in contact','Guest','info
 end)
 
 ExpGui.add_frame.tab('credit','Script Credit','Who made all of the diffrent parts of the script','Guest','info',function(player,frame)
-    local text = "To give credit to all the people who help to make this soft mode and the compoents of it."
+    local text = "To give credit to all the people who helped to make this soft compoents"
     frame.add{name='intro', type="label", caption=text, single_line=false}.style.maximal_width=480
 	frame.add{name='credit_table',type='table',colspan=3}
 	frame.credit_table.add{name='name_title',type='label',caption='Script Name'}
@@ -49,6 +49,7 @@ ExpGui.add_frame.tab('credit','Script Credit','Who made all of the diffrent part
             frame.credit_table.add{name='des_'..n,type='label',caption=credit.description,single_line=false}.style.maximal_width=480
         end
     end
+    frame.horizontal_scroll_policy = 'always'
 end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
