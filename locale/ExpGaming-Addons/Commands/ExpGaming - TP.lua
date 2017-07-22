@@ -9,7 +9,7 @@ Discord: https://discord.gg/XSsBV6b
 The credit below may be used by another script do not remove.
 ]]
 local credits = {{
-	name='Tp',
+	name='Tp Command',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
 	description='Teleport players to each other, ON DUTIY ONLY!',
