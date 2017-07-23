@@ -30,15 +30,21 @@ define_command('server-interface','For use of the highest staff only',{'command'
 		else game.write_file('log.txt', '\n Ran by: '..player.name..'\n Code: '..event.parameter..'\n $£$ '..tostring(value), true, 0) player.print(value) end
 	end
 end)
---this is used when changing permsion groups when the person does not have permsion to
+--this is used when changing permsion groups when the person does not have permsion to, can also be used to split a large event accross mutilple ticks
+local commands_per_itteration = 50 --number of sudo commands ran every sudo itteration
+local ticks_per_itteration = 1 --the number of ticks break before the next sudo itteration
 function sudo(command,args) table.insert(global.sudo,{fun=command,var=args}) end
---runs one sudo command every second if one is present
+--runs at most five sudo commandd every five ticks if one is present
 Event.register(defines.events.on_tick, function(event) 
-	if game.tick % 60 == 0 and global.sudo and #global.sudo > 0 then 
-		command=table.remove(global.sudo)
-		if command and command.fun and type(command.fun) == 'function' then
-			local args = command.var or {}
-			command.fun(unpack(args))
+	if game.tick % ticks_per_itteration == 0 and global.sudo and #global.sudo > 0 then
+		local lenth = nil
+		if #global.sudo > commands_per_itteration then lenth = commands_per_itteration else lenth = #global.sudo end
+		for i = 1,lenth do
+			command=table.remove(global.sudo)
+			if command and command.fun and type(command.fun) == 'function' then
+				local args = command.var or {}
+				command.fun(unpack(args))
+			end
 		end
 	end
 end)
