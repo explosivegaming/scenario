@@ -23,9 +23,9 @@ Event.register(defines.events.on_marked_for_deconstruction, function(event)
 	local entity = event.entity
 	local last_user = entity.last_user
 	if last_user then
-    	if get_rank(last_user).power < get_rank(player).power then
-			event.entity.cancel_deconstruction('player')
-			player.print('You are not allowed to do this yet, The entity was plased by a higher rank.')
+    	if string_to_rank('reg').power < get_rank(player).power then
+			entity.cancel_deconstruction('player')
+			player.print('You are not allowed to do this yet, You require the Regular rank, you must play for at least 3 hours')
 			rank_print(player.name..' tryed to deconstruced something placed by '..last_user.name)
     	end
   	elseif get_rank(player).power <= string_to_rank('Donator').power then
