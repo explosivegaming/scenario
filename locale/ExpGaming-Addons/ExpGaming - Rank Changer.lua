@@ -21,14 +21,14 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 ExpGui.add_input.button('give_rank','Give Rank','Give the above player the above rank',function(player,element)
 	local p = game.players[element.parent.inputs.player_dropdown.items[element.parent.inputs.player_dropdown.selected_index]]
 	local rank = string_to_rank(element.parent.inputs.rank_dropdown.items[element.parent.inputs.rank_dropdown.selected_index])
-	if not rank or not p then player.print('Something Went Wrong With You Inputs')
+	if not rank or not p then player.print('Something Went Wrong With You Inputs') return end
 	give_rank(p,rank,player)
 	element.parent.destroy()
 end)
 
 ExpGui.add_frame.center('rank_changer','Edit Ranks','Allows you to edit players ranks','Mod',{},function(player,frame)
 	frame.add{name='label',type='label',caption='Edit Players Ranks Below You',style="caption_label_style"}
-	local inputs = frame.add(name='input_table',type='table',colspan=2)
+	local inputs = frame.add{name='input_table',type='table',colspan=2}
 	inputs.add{name='player_lable',type='label',caption='Player: '}
 	inputs.add{name='player_dropdown',type='drop-down'}
 	for _,p in pairs(game.connected_players) do 
