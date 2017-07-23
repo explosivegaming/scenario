@@ -21,7 +21,7 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 ExpGui.add_input.button('give_rank','Give Rank','Give the above player the above rank',function(player,element)
 	local p = game.players[element.parent.input_table.player_dropdown.items[element.parent.input_table.player_dropdown.selected_index]]
 	local rank = string_to_rank(element.parent.input_table.rank_dropdown.items[element.parent.input_table.rank_dropdown.selected_index])
-	if not rank or not p then player.print('Something Went Wrong With You Inputs') return end
+	if not rank or not p then player.print('Invalid Player') return end
 	give_rank(p,rank,player)
 	element.parent.destroy()
 end)
