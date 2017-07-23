@@ -18,8 +18,34 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
+ExpGui.add_input.button('give_rank','Give Rank','Give the above player the above rank',function(player,element)
+	local p = game.players[element.parent.inputs.player_dropdown.items[element.parent.inputs.player_dropdown.selected_index]]
+	local rank = string_to_rank(element.parent.inputs.rank_dropdown.items[element.parent.inputs.rank_dropdown.selected_index])
+	if not rank or not p then player.print('Something Went Wrong With You Inputs')
+	give_rank(p,rank,player)
+	element.parent.destroy()
+end)
+
 ExpGui.add_frame.center('rank_changer','Edit Ranks','Allows you to edit players ranks','Mod',{},function(player,frame)
-	
+	frame.add{name='label',type='label',caption='Edit Players Ranks Below You',style="caption_label_style"}
+	local inputs = frame.add(name='input_table',type='table',colspan=2)
+	inputs.add{name='player_lable',type='label',caption='Player: '}
+	inputs.add{name='player_dropdown',type='drop-down'}
+	for _,p in pairs(game.connected_players) do 
+		if get_rank(player).power < get_rank(p).power then
+			inputs.player_dropdown.add_item(p.name)
+		end
+	end
+	inputs.player_dropdown.selected_index = 1
+	inputs.add{name='rank_lable',type='label',caption='Rank: '}
+	inputs.add{name='rank_dropdown',type='drop-down'}
+	for _,rank in pairs(global.ranks) do 
+		if get_rank(player).power < rank.power then
+			inputs.rank_dropdown.add_item(rank.name)
+		end
+	end
+	inputs.rank_dropdown.selected_index = 1
+	ExpGui.add_input.draw_button(frame,'give_rank')
 end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
