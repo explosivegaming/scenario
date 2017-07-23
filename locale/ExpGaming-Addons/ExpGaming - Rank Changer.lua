@@ -19,8 +19,8 @@ local credits = {{
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
 ExpGui.add_input.button('give_rank','Give Rank','Give the above player the above rank',function(player,element)
-	local p = game.players[element.parent.inputs.player_dropdown.items[element.parent.inputs.player_dropdown.selected_index]]
-	local rank = string_to_rank(element.parent.inputs.rank_dropdown.items[element.parent.inputs.rank_dropdown.selected_index])
+	local p = game.players[element.parent.input_table.player_dropdown.items[element.parent.input_table.player_dropdown.selected_index]]
+	local rank = string_to_rank(element.parent.input_table.rank_dropdown.items[element.parent.input_table.rank_dropdown.selected_index])
 	if not rank or not p then player.print('Something Went Wrong With You Inputs') return end
 	give_rank(p,rank,player)
 	element.parent.destroy()
@@ -36,6 +36,7 @@ ExpGui.add_frame.center('rank_changer','Edit Ranks','Allows you to edit players 
 			inputs.player_dropdown.add_item(p.name)
 		end
 	end
+	if not inputs.player_dropdown.items[1] then inputs.player_dropdown.add_item('No Vaild Players Online') end
 	inputs.player_dropdown.selected_index = 1
 	inputs.add{name='rank_lable',type='label',caption='Rank: '}
 	inputs.add{name='rank_dropdown',type='drop-down'}
