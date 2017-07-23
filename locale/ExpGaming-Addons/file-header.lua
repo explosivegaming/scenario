@@ -27,6 +27,7 @@ credit_loop(require("ExpGaming - Rank Changer"))
 credit_loop(require("ExpGaming - Admin"))
 credit_loop(require("ExpGaming - Auto Message"))
 credit_loop(require("ExpGaming - Temp Ban"))
+credit_loop(require("ExpGaming - Tree Remover"))
 credit_loop(require("Commands/file-header"))
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
