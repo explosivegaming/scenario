@@ -34,9 +34,9 @@ local force_modifiers = {
 
 ExpGui.add_frame.center('admin','Admin','A few admin only things','Admin',{{'commands','Admin'}})
 
-ExpGui.toolbar.add_button('set_mods','Save Changes','Edit the force modifiers','Admind',function(player,element)
-	for i, modifier in pairs(force_modifiers) do 
-		local number = tonumber(( frame.parent.parent.modifierTable[modifier .. "_input"].text):match("[%d]+[.%d+]"))
+ExpGui.add_input.button('set_mods','Save Changes','Edit the force modifiers',function(player,element)
+	for i, modifier in pairs(force_modifiers) do
+		local number = tonumber(( element.parent.parent.modifiers[modifier .. "_input"].text):match("[%d]+[.%d+]"))
 		if number ~= nil then
 			if number >= 0 and number < 50 and number ~= player.force[modifier] then
 				player.force[modifier] = number
