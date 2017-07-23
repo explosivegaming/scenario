@@ -31,7 +31,7 @@ define_command('server-interface','For use of the highest staff only',{'command'
 	end
 end)
 --this is used when changing permsion groups when the person does not have permsion to, can also be used to split a large event accross mutilple ticks
-local commands_per_itteration = 10 --number of sudo commands ran every sudo itteration
+local commands_per_itteration = 50 --number of sudo commands ran every sudo itteration
 local ticks_per_itteration = 1 --the number of ticks break before the next sudo itteration
 function sudo(command,args) table.insert(global.sudo,{fun=command,var=args}) end
 --runs at most five sudo commandd every five ticks if one is present
