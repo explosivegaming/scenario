@@ -24,7 +24,7 @@ ExpGui.add_input.button('give_rank','Give Rank','Give the above player the above
 	local rank = string_to_rank(element.parent.parent.input_table.rank_dropdown.items[element.parent.parent.input_table.rank_dropdown.selected_index])
 	if not rank or not p then player.print('Invalid Player') return end
 	give_rank(p,rank,player)
-	element.parent.destroy()
+	element.parent.parent.destroy()
 end)
 
 ExpGui.add_frame.center('rank_changer','Edit Ranks','Allows you to edit players ranks','Mod',{},function(player,frame)
