@@ -18,12 +18,12 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-credit_loop(require("ExpGaming - Rank Changer"))
 credit_loop(require("ExpGaming - Rocket List"))
 credit_loop(require("ExpGaming - Player List"))
 credit_loop(require("ExpGaming - Announcements"))
 credit_loop(require("ExpGaming - Readme"))
 credit_loop(require("ExpGaming - Info"))
+credit_loop(require("ExpGaming - Rank Changer"))
 credit_loop(require("ExpGaming - Auto Message"))
 credit_loop(require("ExpGaming - Temp Ban"))
 credit_loop(require("Commands/file-header"))
