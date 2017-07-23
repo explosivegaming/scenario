@@ -20,13 +20,13 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 --Please Only Edit Below This Line-----------------------------------------------------------
 Event.register(defines.events.on_marked_for_deconstruction, function(event)
 	local player = game.players[event.player_index]
-	if get_rank(player).power > string_to_rank('reg') then
+	if get_rank(player).power > string_to_rank('reg').power then
     	if event.entity.type ~= 'tree' and event.entity.type ~= 'simple-entity' then
 			event.entity.cancel_deconstruction('player')
 			player.print('You are not allowed to do this yet, play for player bit longer.')
 			rank_print(player.name..' tryed to deconstruced something')
     	end
-  	elseif event.entity.type == 'tree' or event.entity.type == 'simple-entity' and get_rank(player).power <= string_to_rank('Donator') then
+  	elseif event.entity.type == 'tree' or event.entity.type == 'simple-entity' and get_rank(player).power <= string_to_rank('Donator').power then
     	event.entity.destroy()
 	end
 end)
