@@ -9,25 +9,28 @@ Discord: https://discord.gg/XSsBV6b
 The credit below may be used by another script do not remove.
 ]]
 local credits = {{
-	name='File Header - ExpGaming-Addons',
+	name='Tree Remover',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='Just A File Header To Organise Code',
+	description='Removes tress and stone with use of deconstruction planer',
 	factorio_version='0.15.23',
-	show=false
+	show=true
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-credit_loop(require("ExpGaming - Rocket List"))
-credit_loop(require("ExpGaming - Player List"))
-credit_loop(require("ExpGaming - Announcements"))
-credit_loop(require("ExpGaming - Readme"))
-credit_loop(require("ExpGaming - Info"))
-credit_loop(require("ExpGaming - Rank Changer"))
-credit_loop(require("ExpGaming - Admin"))
-credit_loop(require("ExpGaming - Auto Message"))
-credit_loop(require("ExpGaming - Temp Ban"))
-credit_loop(require("ExpGaming - Tree Remover"))
-credit_loop(require("Commands/file-header"))
+Event.register(defines.events.on_marked_for_deconstruction, function(event)
+	local player = game.players[event.player_index]
+	local entity = event.entity
+	local last_user = entity.last_user
+	if last_user then
+    	if string_to_rank('reg').power < get_rank(player).power then
+			entity.cancel_deconstruction('player')
+			player.print('You are not allowed to do this yet, You require the Regular rank, you must play for at least 3 hours')
+			rank_print(player.name..' tryed to deconstruced something.')
+    	end
+  	elseif get_rank(player).power <= string_to_rank('Donator').power then
+    	event.entity.destroy()
+	end
+end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
