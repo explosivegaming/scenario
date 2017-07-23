@@ -9,23 +9,17 @@ Discord: https://discord.gg/XSsBV6b
 The credit below may be used by another script do not remove.
 ]]
 local credits = {{
-	name='File Header - ExpGaming-Addons',
+	name='Rank Changer',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='Just A File Header To Organise Code',
+	description='Allows players to set the ranks of those below them.',
 	factorio_version='0.15.23',
-	show=false
+	show=true
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-credit_loop(require("ExpGaming - Rank Changer"))
-credit_loop(require("ExpGaming - Rocket List"))
-credit_loop(require("ExpGaming - Player List"))
-credit_loop(require("ExpGaming - Announcements"))
-credit_loop(require("ExpGaming - Readme"))
-credit_loop(require("ExpGaming - Info"))
-credit_loop(require("ExpGaming - Auto Message"))
-credit_loop(require("ExpGaming - Temp Ban"))
-credit_loop(require("Commands/file-header"))
+ExpGui.add_frame.center('rank_changer','Edit Ranks','Allows you to edit players ranks','Mod',{},function(player,frame)
+	
+end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
