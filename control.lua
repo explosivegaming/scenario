@@ -22,7 +22,7 @@ require("mod-gui")
 credit_loop(require("locale/StdLib/event"))
 Event.gui_update = script.generate_event_name()
 credit_loop(require("locale/file-header"))
---below 'game.tick/(3600*game.speed)) % 15 == 0' rasise the gui_update event every 15 minutes fell very to change the update time on that
+--below 'game.tick/(3600*game.speed)) % 15 == 0' raises the gui_update event every 15 minutes fell free to change the update time on that
 Event.register(defines.events.on_tick, function(event)
 	if (game.tick/(3600*game.speed)) % 15 == 0 then 
 		for _,player in pairs(game.connected_players) do find_new_rank(player) end

@@ -18,7 +18,7 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
---this converts ticks to 12H 34M format or 8.97M when less than 10
+--Convert ticks to 12H 34M format or 8.97M when less than 10
 function tick_to_display_format(tick)
 	if tick_to_min(tick) < 10 then
 		return string.format('%.2f M',tick/(3600*game.speed))
@@ -26,15 +26,15 @@ function tick_to_display_format(tick)
 		return string.format('%d H %d M',tick_to_hour(tick),tick_to_min(tick)-60*tick_to_hour(tick))
 	end
 end
---this will convert ticks into hours based on game speed
+--Convert ticks into hours based on game speed
 function tick_to_hour (tick)
     return math.floor(tick/(216000*game.speed))
 end
---this will convert ticks into minutes based on game speed
+--Convert ticks into minutes based on game speed
 function tick_to_min (tick)
   	return math.floor(tick/(3600*game.speed))
 end
---i stole this from somewhere a long time ago but this and the other two functions convert a table into a string
+--I stole this from somewhere a long time ago but this and the other two functions convert a table into a string
 function table.val_to_str ( v )
   if "string" == type( v ) then
     v = string.gsub( v, "\n", "\\n" )

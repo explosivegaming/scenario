@@ -12,7 +12,7 @@ local credits = {{
 	name='ExpGaming - Center Gui',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='The main gui in the center',
+	description='The main GUI in the center',
 	factorio_version='0.15.23',
 	show=false
 	}}
@@ -21,14 +21,16 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 local add_frame = ExpGui.add_frame
 local frames = ExpGui.frames
 local draw_frame = ExpGui.draw_frame
---adds a frame in the center; tabs {{name,restriction},{...}} is a list that can contain already defined tabs; event(player,element) is a option to have a custom gui in the center
+--Add a frame in the center
+--tabs {{name,restriction},{...}}	is a list that can contain already defined tabs
+--event(player,element)				is an option to have a custom GUI in the center
 function add_frame.center(name,default_display,default_tooltip,restriction,tabs,event)
 	if not name then error('Frame requires a name') end
 	local tabs = tabs or {}
 	table.insert(frames.center,{name,default_display,tabs,event})
 	ExpGui.toolbar.add_button(name,default_display,default_tooltip,restriction,draw_frame.center)
 end
---defines a tab; frame is need as every tab must be used once; event(player,tab) is the draw function
+--Define a tab; frame is needed as every tab must be used once; event(player,tab) is the draw function
 function add_frame.tab(name,default_display,default_tooltip,restriction,frame,event)
 	if not name then error('Tab requires a name') end
 	if not frame then error('Tab requires a frame') end
@@ -36,8 +38,8 @@ function add_frame.tab(name,default_display,default_tooltip,restriction,frame,ev
 	for _,f in pairs(frames.center) do if f[1] == frame then table.insert(f[3],{name,restriction}) end end
 	ExpGui.add_input.button(name,default_display,default_tooltip,draw_frame.tab)
 end
---draw the center gui for the player; do not call manuley must use other functions to call
-ExpGui.add_input.button('close_center','Close','Close This Gui',function(player,element) element.parent.parent.parent.destroy() end)
+--Draw the center GUI for the player; do not call manually, must use other functions to call
+ExpGui.add_input.button('close_center','Close','Close this GUI',function(player,element) element.parent.parent.parent.destroy() end)
 function draw_frame.center(player,element)
 	local frame_data = nil
 	for _,frame in pairs(frames.center) do if element.name == frame[1] then frame_data = frame break end end
@@ -64,9 +66,9 @@ function draw_frame.center(player,element)
 	tab_bar_scroll.style.maximal_height = 60
 	tab_bar_scroll.style.minimal_width = 500
 	tab_bar_scroll.style.maximal_width = 500
-	player.gui.center.add{type='frame',name='temp'}.destroy()--recenter the gui
+	player.gui.center.add{type='frame',name='temp'}.destroy()--recenter the GUI
 end
---draw the tab into the center gui for the player; do not call manuley must use other functions to call
+--Draw the tab into the center GUI for the player; do not call manually, must use other functions to call
 function draw_frame.tab(player,element)
 	for _,btn in pairs(element.parent.children) do if btn.name == 'close_center' or btn.name == element.name then
 		btn.style.font_color = {r = 255, g = 255, b = 255,a=255}

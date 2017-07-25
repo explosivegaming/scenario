@@ -18,7 +18,7 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
---as this is the core file the order in which the files are loaded does matter do not change
+--As this is the core file, the order in which the files are loaded does matter. Do not change!
 credit_loop(require("ExpGaming - Lib"))
 credit_loop(require("ExpGaming - Rank Table"))
 credit_loop(require("ExpGaming - Rank Presets"))

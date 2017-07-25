@@ -22,7 +22,7 @@ local add_frame = ExpGui.add_frame
 local frames = ExpGui.frames
 local draw_frame = ExpGui.draw_frame
 --used to draw the next popup frame
-ExpGui.add_input.button('close_popup','X','Close This Popup',function(player,element) element.parent.destroy() end)
+ExpGui.add_input.button('close_popup','X','Close this Popup',function(player,element) element.parent.destroy() end)
 local function get_next_popup(popups,name)
 	if name then 
 		local flow = popups.add{type='frame',name=name..'_on_click',direction='horizontal',style=mod_gui.frame_style} 
@@ -36,9 +36,11 @@ local function get_next_popup(popups,name)
 	ExpGui.add_input.draw_button(flow,'close_popup') 
 	return frame
 end
---adds a frame to the popup flow;restriction is the power need to use the on_click function
---on_click(player,element) is what is called when button is clicked if nil no button is made
---event(player,frame,args) frame is where it will be drawen to; args is any infor you want to pass in
+--adds a frame to the popup flow
+--restriction				is the power needed to use the on_click function
+--on_click(player,element)	is what is called when button is clicked if nil no button is made
+--event(player,frame,args)
+--frame						is where it will be drawn to; args is any info you want to pass in
 function add_frame.popup(style,default_display,default_tooltip,restriction,on_click,event)
 	if not style then error('Popup style requires a name') end
 	if not event or type(event) ~= 'function' then error('Popup style requires a draw function') end
@@ -48,7 +50,7 @@ function add_frame.popup(style,default_display,default_tooltip,restriction,on_cl
 		ExpGui.toolbar.add_button(style,default_display,default_tooltip,restriction,draw_frame.popup_button)
 	end
 end
---draw the popup on_click gui for the player; do not call manuley must use other functions to call
+--draw the popup on_click GUI for the player; do not call manually must use other functions to call
 function draw_frame.popup_button(player,element)
 	local frame_data = nil
 	for _,frame in pairs(frames.popup) do if element.name == frame[1] then frame_data = frame break end end
