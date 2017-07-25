@@ -12,7 +12,7 @@ local credits = {{
 	name='Explosive Gaming Gui System',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='Without this it would not be the same',
+	description='Without this, it would not be the same',
 	factorio_version='0.15.23',
 	show=true
 	}}
@@ -60,8 +60,8 @@ ExpGui = {
 		popup={}
 	}
 }
---simple function to toggle the visiblly of a frame
-function ExpGui.toggleVisable(frame)
+--simple function to toggle the visibility of a frame
+function ExpGui.toggle_visible(frame)
 	if frame then
 		if frame.style.visible == nil then
 			frame.style.visible = false 

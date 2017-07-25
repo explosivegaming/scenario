@@ -12,7 +12,7 @@ local credits = {{
 	name='Gui Input Handler',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='Handles all gui inputs',
+	description='Handles all GUI inputs',
 	factorio_version='0.15.23',
 	show=false
 	}}
@@ -20,17 +20,17 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 --Please Only Edit Below This Line-----------------------------------------------------------
 local add_input = ExpGui.add_input
 local inputs = ExpGui.inputs
---allows defining of new buttons;;name  how to call button;;default_display  what is showen on the button;;default_tooltip  the tooltip display;;event  function(player,element) that runs on click
+--allows defining of new buttons;;name  how to call button;;default_display  what is shown on the button;;default_tooltip  the tooltip display;;event  function(player,element) that runs on click
 function add_input.button(name,default_display,default_tooltip,event)
 	if not name then error('Button requires a name') end
 	table.insert(inputs.buttons,{name,default_display,default_tooltip,event})
 end
---allows defining of text box inputs;;name  how to call button;;default_display  what is showen on the button;;event  function(player,element) that runs on text change
+--allows defining of text box inputs;;name  how to call button;;default_display  what is shown on the button;;event  function(player,element) that runs on text change
 function add_input.text(name,default_display,event)
 	if not name then error('Text Filed requires a name') end
 	table.insert(inputs.text,{name,default_display,event})
 end
---draws the button into a gui;;frame  the frame to draw to;;name  name of button to draw;;display(opptinal) overides the default;;tooltip(opptinal) overides the default
+--draws the button into a gui;;frame  the frame to draw to;;name  name of button to draw;;display(opptinal) overrides the default;;tooltip(opptinal) overrides the default
 function add_input.draw_button(frame,name,display,tooltip)
 	if not frame or not frame.valid then error('No frame to draw to') end
 	if not name then error('No button to draw') end
@@ -45,9 +45,9 @@ function add_input.draw_button(frame,name,display,tooltip)
 			end return
 		end
 	end
-	error('No Button By The Name Of '..name)
+	error('No Button by the name of '..name)
 end
---draws the text into a gui;;frame  the frame to draw to;;name  name of button to draw;;display(opptinal) overides the default;;tooltip(opptinal) overides the default
+--draws the text into a gui;;frame  the frame to draw to;;name  name of button to draw;;display(opptinal) overrides the default;;tooltip(opptinal) overrides the default
 function add_input.draw_text(frame,name,display)
 	if not frame or not frame.valid then error('No frame to draw to') end
 	if not name then error('No text filed to draw') end
@@ -66,7 +66,7 @@ Event.register(defines.events.on_gui_click, function(event)
 	if event.element.type == 'button' or event.element.type == 'sprite-button' then
 		for _,btn in pairs(inputs.buttons) do
 			if btn[1] == event.element.name then
-				if btn[4] then btn[4](player,event.element) else rank_print('Button Without Function '..btn[1],'Mod') end break
+				if btn[4] then btn[4](player,event.element) else rank_print('Button without Function '..btn[1],'Mod') end break
 			end
 		end
 	end

@@ -21,7 +21,7 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 local player_table_functions = ExpGui.player_table
 local yes = {'yes','y','true','ye'}
 local no = {'no','false','nay'}
---filters that are used fell free to add more
+--filters that are used. Feel free to add more
 player_table_functions.filters = {
 	--{name,is_text,function(player,input) return true end}
 	{'is_admin',false,function(player) return player.admin end},
@@ -60,7 +60,7 @@ function player_table_functions.get_filters(frame)
 	end
 	return filters
 end
---used to test if a player matches filter critria
+--used to test if a player matches filter criteria
 function player_table_functions.player_match(player,filter,input)
 	for _,f in pairs(player_table_functions.filters) do
 		if filter == f or filter == f[1] then if filter == f[1] then filter = f break end end
@@ -74,7 +74,7 @@ function player_table_functions.redraw(player,element)
 	player_table_functions.draw(player,frame,filters,element.parent.parent)
 end
 --used to draw the player table with filter that you want
---filter = {{'is_admin',true},{'offline',true},{'player_name'}} ; if the leanth is 2 then it will not atemp to get a user input
+--filter = {{'is_admin',true},{'offline',true},{'player_name'}} ; if the length is 2 then it will not attempt to get a user input
 function player_table_functions.draw(player,frame,filters,input_location)
 	global.current_filters[player.index] = {filters,frame}
 	--setup the table

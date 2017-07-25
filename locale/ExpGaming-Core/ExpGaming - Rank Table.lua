@@ -20,14 +20,14 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 --Please Only Edit Below This Line-----------------------------------------------------------
 --[[
 How to add ranks:
-Name is what will be used in the scripts and is offten the best chose for display in text.
-short_hand is what can be used when short on space but the rank still need to be displayed.
-tag is the tag the player will gain when moved to the rank, it can be nil.
-time is used for auto rank feature where you are moved to the rank after a certain play time in minutes.
-colour is the rgb value that can be used to emphaise gui elelemts based on rank.
-power is not in the list below as it is auto defined by index but allows compairison between ranks.
-disallow is a list containing input acttion that the user can not preform.
-For disallow add to the list the end part of the input action
+Name		is what will be used in the scripts and is often the best choice for display in text.
+short_hand	is what can be used when short on space but the rank still need to be displayed.
+tag			is the tag the player will gain when moved to the rank, it can be nil.
+time		is used for auto-rank feature where you are moved to the rank after a certain play time in minutes.
+colour		is the RGB value that can be used to emphasise GUI elements based on rank.
+power		is not in the list below as it is auto-defined by index but allows comparison between ranks.
+disallow	is a list containing input actions that the user can not perform.
+For disallow, add to the list the end part of the input action
 Example: defines.input_action.drop_item -> 'drop_item'
 http://lua-api.factorio.com/latest/defines.html#defines.input_action
 --]]
@@ -131,7 +131,7 @@ local ranks = {
 		'player_leave_game'}
 	}
 }
--- This For Loop cauess the disallows of each rank to be feed into the one below its self
+-- Feed the disallows of each rank into the one below itself
 for n,rank in pairs(ranks) do
 	rank.power = n
 	if ranks[n-1] then
@@ -140,7 +140,7 @@ for n,rank in pairs(ranks) do
 		end
 	end
 end
--- Moves The Ranks to the global array
+-- Move the ranks to the global array
 Event.register(-1,function() global.ranks = ranks end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

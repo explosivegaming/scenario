@@ -12,7 +12,7 @@ local credits = {{
 	name='ExpGaming - Rank Preset Table',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='The Ranks that players are given apon joining',
+	description='The ranks that players are given upon joining',
 	factorio_version='0.15.23',
 	show=false
 	}}
@@ -50,6 +50,7 @@ local preset_ranks = {
 	'Mr_Happy_212',
 	'NextIdea',
 	'Phoenix27833',
+	'rezz',
 	'samy115',
 	'Sand3r205',
 	'scarbvis',
