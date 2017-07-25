@@ -41,7 +41,7 @@ function toolbar.draw(player)
 		end
 	end
 end
---auto redraw toolbar after new rank is given
+--auto-redraw toolbar after new rank is given
 Event.register(Event.rank_change,function(event) toolbar.draw(event.player) end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

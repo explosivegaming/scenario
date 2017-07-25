@@ -1,5 +1,5 @@
 # Functions added in core
-See code for more detail.
+See code for more details.
 ## GUI
 ### Defining
 * ExpGui.add_frame.center(name,default_display,default_tooltip,restriction,tabs,event)
@@ -26,13 +26,13 @@ See code for more detail.
 * ExpGui.add_input.text(name,default_display,event)
     * event = on text change -> function(player,element)
 ### Drawing
-* ExpGui.toggleVisable(frame)
-    * Toggles the visability of a frame
+* ExpGui.toggle_visible(frame)
+    * Toggles the visibility of a frame
 * ExpGui.player_table.draw_filters(player,frame,filters)
     * filters = {filter-name,...}
 * ExpGui.player_table.draw(player,frame,filters,input_location)
     * filters = {{'filter name',value},{'filter name'},{...},...}
-    * input_location = gui element -> draw_filters frame
+    * input_location = GUI element -> draw_filters frame
 * ExpGui.draw_frame.left(player,element,update)
     * element = 'frame name'
     * update = true
@@ -46,9 +46,9 @@ See code for more detail.
     * display (opt)
 ## Ranks
 * get_rank(player)
-    * Gets the players rank
+    * Get the players rank
 * string_to_rank(string)
-    * Converts a rank name to the rank object
+    * Convert a rank name to the rank object
 * rank_print(msg, rank, inv)
     * rank = 'rank name'
     * inv = lower ranks rather than higher -> true/false/nil
@@ -59,32 +59,32 @@ See code for more detail.
     * by_player = player or nil
 * find_new_rank(player)
     * Looks in presets if play time under 5 minutes
-    * Other wise looks at play time
+    * Otherwise looks at play time
 * Event.rank_change
-    * event is rasised upon rank change -> event = {player,by_player,new_rank,old_rank}
+    * event is raised upon rank change -> event = {player,by_player,new_rank,old_rank}
 ## Lib
 * Factorio StdLib game, event and core
 * tick_to_display_format(tick)
     * output -> 0H 0M or 0.00M when less than 10
 * tick_to_hour (tick)
-    * converts ticks to hours based on game speed
+    * Convert ticks to hours based on game speed
 * tick_to_min (tick)
-    * converts ticks to minutes based on game speed
+    * Convert ticks to minutes based on game speed
 * table.to_string(tbl)
-    * We stole this but we dont know where from, just google it
+    * We stole this but we don't know from where, just google it
     * output -> table as a string
 ## Other
 * define_command(name,help,inputs,restriction,event)
-    * This adds game commands in a way not to cause crashes
+    * Add game commands in a way it does not cause crashes
     * name  = 'test' -> /test
     * help = 'help message'
-    * inputs = {'input name',...,true/nil} last value being true means no cap on the leanth
+    * inputs = {'input name',...,true/nil} last value being true means no cap on the length
     * restriction = 'rank name'
     * event = on command -> function(player,event,args)
 * sudo(command,args)
-    * Asks server to run a script function for a user ie give_rank
+    * Ask server to run a script function for a user i.e. give_rank
     * command = function(...)
     * args = {...}
 * command: /server-interface
-    * runs loadstring on lua code given like /c but does not break achevements
+    * Run loadstring on lua code given like /c but does not break achievements
     * restriction = 'Admin'

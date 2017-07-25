@@ -12,13 +12,13 @@ local credits = {{
 	name='Explosive Gaming Rank System',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='The very core that all of the others are based on',
+	description='The very core upon which all of the others are based on',
 	factorio_version='0.15.23',
 	show=true
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
---this will return the rank of the player given
+--Return the rank of a given player
 function get_rank(player)
 	if player then
 		for _,rank in pairs(global.ranks) do
@@ -27,7 +27,7 @@ function get_rank(player)
 		return string_to_rank('Guest')
 	end
 end
---this will convert the name of a rank into the rank object
+--Convert the name of a rank into the rank object
 function string_to_rank(string)
 	if type(string) == 'string' then
 		local Foundranks={}
@@ -38,7 +38,7 @@ function string_to_rank(string)
 		if #Foundranks == 1 then return Foundranks[1] end
 	end
 end
---this will send a message to all members if this rank and above default is mod rank
+--Send a message to all members of this rank and above, if no rank given default is mod
 function rank_print(msg, rank, inv)
 	local rank = string_to_rank(rank) or string_to_rank('Mod') -- default mod or higher
 	local inv = inv or false
@@ -55,7 +55,7 @@ function rank_print(msg, rank, inv)
 		end
 	end
 end
---this will give the user their new rank and raise the Event.rank_change event
+--Give the user their new rank and raise the Event.rank_change event
 function give_rank(player,rank,by_player)
 	local by_player = by_player or 'system'
 	local rank = string_to_rank(rank) or rank or string_to_rank('Guest')
@@ -68,20 +68,20 @@ function give_rank(player,rank,by_player)
 	else
 		rank_print(player.name..' was '..message..' to '..rank.name..' by <system>','Guest')
 	end
-	if rank.name ~= 'Guest' then player.print('You Have Been Given The '..rank.name..' Rank!') end
-	if player.tag ~= old_rank.tag and player.tag ~= '' then player.print('Your Tag Was Reset Due To A Rank Change') end
+	if rank.name ~= 'Guest' then player.print('You have been given the '..rank.name..' Rank!') end
+	if player.tag ~= old_rank.tag and player.tag ~= '' then player.print('Your Tag was reset due to a Rank change') end
 	--rank change
 	player.permission_group = game.permissions.get_group(rank.name)
 	player.tag = get_rank(player).tag
 	if old_rank.name ~= 'Jail' then global.old_ranks[player.index]=old_rank.name end
 	script.raise_event(Event.rank_change, {player=player, by_player=by_player, new_rank=rank, old_rank=old_rank})
 end
---the user's rank is reverted to what it was before the lastest change
+--Revert the user's rank to what it was before the lastest change
 function revert_rank(player,by_player)
 	local rank = string_to_rank(global.old_ranks[player.index])
 	give_rank(player,rank,by_player)
 end
---the player is given a new rank based on playtime and/or preset ranks
+--Give the player a new rank based on playtime and/or preset ranks
 function find_new_rank(player)
 	local function loop_preset_rank(players,rank)
 		for _,p in pairs(players) do
@@ -91,24 +91,24 @@ function find_new_rank(player)
 	local current_rank = get_rank(player)
 	local old_rank = get_rank(player)
 	local possible_ranks = {current_rank}
-	--loops though preset ranks only if playtime is less than 5 minutes
+	--Loop through preset ranks only if playtime is less than 5 minutes
 	if tick_to_min(player.online_time) < 5 then
 		for rank,players in pairs(global.preset_ranks) do
 			local found_rank = loop_preset_rank(players, rank)
 			if found_rank then table.insert(possible_ranks,string_to_rank(found_rank)) break end
 		end
 	end
-	--loops though rank times
+	--Loop through rank times
 	for _,rank in pairs(global.ranks) do 
 		if rank.time and tick_to_min(player.online_time) >= rank.time then table.insert(possible_ranks,string_to_rank(rank)) end
 	end
-	--loops though possible ranks
+	--Loop through possible ranks
 	if current_rank.name ~='Jail' then 
 		local highest_rank = possible_ranks[1]
 		for _,rank in pairs(possible_ranks) do
 			if rank.power < highest_rank.power then highest_rank = rank end
 		end
-		--gives player new rank if availble
+		--Give player new rank if availble
 		if highest_rank.name == 'Guest' then
 			player.permission_group=game.permissions.get_group('Guest')
 			script.raise_event(Event.rank_change, {player=player, by_player='system', new_rank=string_to_rank('Guest'), old_rank=string_to_rank('Guest')})
@@ -116,11 +116,11 @@ function find_new_rank(player)
 			if highest_rank ~= current_rank then give_rank(player,highest_rank) end
 		end
 	end
-	--lose ends
+	--Lose ends
 	if get_rank(player).power <= string_to_rank('mod').power and not player.admin then rank_print(player.name..' needs to be promoted.') end
 	if old_rank.name ~= get_rank(player).name then global.old_ranks[player.index]=old_rank.name end
 end
---event handlers
+--Event handlers
 Event.rank_change = script.generate_event_name()
 Event.register(-1,function() 
 	global.old_ranks = {} 
