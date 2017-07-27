@@ -26,7 +26,6 @@ define_command('tp-all','Bring all players to one player',{'player'},'Admin',fun
 			local pos = game.surfaces[tp_player.surface.name].find_non_colliding_position("player", tp_player.position, 32, 1) 
 			if p ~= tp_player then p.teleport(pos) end
 		end
-		print('Command Complete')
     else
         local tp_player = game.players[args[1]]
         if not tp_player then player.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end

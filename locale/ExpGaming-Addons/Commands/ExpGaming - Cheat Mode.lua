@@ -23,7 +23,6 @@ define_command('cheat-mode','Toggle Cheat Mode',{'player'},'Dev',function(player
         local p = game.players[args[1]]
         if not p then print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
         p.cheat_mode = not p.cheat_mode
-        print('Command Complete')
     else
         local p = game.players[args[1]]
         if not p then player.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
