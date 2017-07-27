@@ -31,13 +31,13 @@ end
 --Can be used to ensure the right number of inputs are given
 function get_command_args(event,command)
 	local player = game.players[event.player_index]
-	if not event.parameter then player.print('Invalid Input, /'..command[1]..' '..command_inputs_to_string(command)) if #command[3] > 0 then return 'Invalid' else return end end
-	local args = {} 
+	if not event.parameter then if #command[3] > 0 then return 'Invalid' else return end end
+	local args = {}
 	for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
 	if command[3][#command[3]] == true then
-		if #args < #command[3]-1 then player.print('Invalid Input, /'..command[1]..' '..command_inputs_to_string(command)) return 'Invalid' end
+		if #args < #command[3]-1 then return 'Invalid' end
 	else 
-		if #args ~= #command[3] then player.print('Invalid Input, /'..command[1]..' '..command_inputs_to_string(command)) return 'Invalid' end 
+		if #args ~= #command[3] then return 'Invalid' end 
 	end return args
 end
 --name			is what is used in /command 
@@ -66,12 +66,14 @@ function load_command(command)
 			local restriction = temp_restriction or string_to_rank(command[4]).power or 0
 			if get_rank(player).power > restriction then player.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
 			local args = get_command_args(event,command)
-			if args == 'Invalid' then return end
+			if args == 'Invalid' then player.print('Invalid Input, /'..command[1]..' '..command_inputs_to_string(command)) return end
 			command[5](player,event,args)
+			player.print('Command Complete')
 		else
 			local args = get_command_args(event,command)
-			if args == 'Invalid' then return end
+			if args == 'Invalid' then print('Invalid Input, /'..command[1]..' '..command_inputs_to_string(command)) return end
 			command[5]('<server>',event)
+			print('Command Complete')
 		end
 	end)
 end

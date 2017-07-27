@@ -27,7 +27,6 @@ define_command('tag','Use to add a custom tag, use /tag clear to remove.',{'tag'
             else player.tag = get_rank(player).tag..' - '..tag..' '
             end
         else print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
-        print('Command Complete')
     else
         local tag = table.concat(args,' ',1)
         if args[1] == 'clear' then player.tag = get_rank(player).tag

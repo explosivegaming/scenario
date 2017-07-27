@@ -22,7 +22,6 @@ define_command('repair','Used to repair large parts of the factory. Admin can us
     if player == '<server>' then
         for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() end
 		for key, entity in pairs(game.surfaces[1].find_entities()) do if entity.health then entity.health = 10000 end end
-		print('Command Complete') return
     else
         if args[1] == 'all' then 
             if get_rank(player).power > string_to_rank('Admin').power then player.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
