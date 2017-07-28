@@ -23,7 +23,10 @@ local low_ranks_only={
     'Discord: https://discord.gg/RPCxzgt',
     'Forum: explosivegaming.nl',
     'Steam: http://steamcommunity.com/groups/tntexplosivegaming',
-    'To see these links again goto: Info > Links'
+    'To see these links again goto: Info > Links',
+    'We also have some custom commands which you can view in: Info > Commands',
+    'This includes the /tag command, this allows custom tags so you can tell people what you are working on',
+    'Do /help tag for more info'
 }
 
 function auto_message()
