@@ -22,21 +22,18 @@ ExpGui.add_frame.center('readme','README','Click To Open Readme','Guest')
 
 ExpGui.add_frame.tab('rules','Rules','Rules on this server','Guest','readme',function(player,frame)
     local rules = {
-		"Hacking/cheating, exploiting and abusing bugs is not allowed.",
-		"Do not disrespect any player in the server (This includes staff).",
-		"Do not spam, this includes stuff such as chat spam, item spam, chest spam etc.",
-		"Do not laydown concrete with bots without permission.",
-		"Do not use active provider chests without permission.",
-		"Do not use speakers on global without permission.",
-		"Do not remove/move major parts of the factory without permission.",
-		"Do not walk in player random direction for no reason(to save map size).",
-		"Do not remove stuff just because you don't like it, tell people first.",
-		"Do not make train roundabouts. Or any loops of any kind",
-		"Trains are Left Hand Drive (LHD) only.",
-		"Do not complain about lag, low fps and low ups or other things like that.",
-		"Do not ask for rank.",
-		"Use common sense and what an admin says goes."}
-	for i, rule in pairs(rules) do frame.add{name=i, type="label", caption={"", i ,". ", rule}} end
+		'Welcome to the ExplosiveGaming <Insert Server Name and purpose here, S1 Public Server for example>!',
+		'',
+		'Here are some guidelines to keep this Server fun for everyone:',
+		'- Hacking / cheating / abusing bugs will not be tolerated.',
+		'- Be polite and use common sense.',
+		'- Nobody likes spam. That includes: Chat, Bots and Concrete / Bricks',
+		'- Do not remove stuff without even trying to talk / ask about it.',
+		'- Trains: LHD (Left hand drive) and no Loops.',
+		'',
+		'Have Fun!'
+		}
+	for i, rule in pairs(rules) do frame.add{name=i, type="label", caption=rule, single_line=false}.style.maximal_width=480 end
 end)
 
 ExpGui.add_frame.tab('chat','How To Chat','For the people who dont know how to chat','Guest','readme',function(player,frame)
