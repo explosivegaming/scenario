@@ -35,6 +35,19 @@ ExpGui.add_frame.tab('links','Links','More ways to get in contact','Guest','info
 	format(frame.add{name=6, type='text-box', text='http://steamcommunity.com/groups/tntexplosivegaming'})
 end)
 
+ExpGui.add_frame.tab('servers','Other Servers','All the other server we have','Guest','info',function(player,frame)
+    local servers = {
+		{'Public','Any one is able to join, this map reset every 48H'},
+		{'Private','This is a pure mega base server, password is needed'},
+		{'Events','Some Times we hold events'}
+		}
+	frame.add{name=i, type="label", caption='Welcome to the Explosive Gaming Community!', single_line=false}.style.maximal_width=480
+	for i, server in pairs(servers) do 
+		frame.add{name=i, type="label", caption='S'..i..' - '..server[1], single_line=false}.style.maximal_width=480
+		frame.add{name=i..'description', type="label", caption=server[2], single_line=false}.style.maximal_width=480  
+	end
+end)
+
 ExpGui.add_frame.tab('credit','Script Credit','Who made all of the diffrent parts of the script','Guest','info',function(player,frame)
     local text = "To give credit to all the people who helped to make this soft compoents"
     frame.add{name='intro', type="label", caption=text, single_line=false}.style.maximal_width=480
