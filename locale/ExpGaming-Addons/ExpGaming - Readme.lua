@@ -22,16 +22,16 @@ ExpGui.add_frame.center('readme','README','Click To Open Readme','Guest')
 
 ExpGui.add_frame.tab('rules','Rules','Rules on this server','Guest','readme',function(player,frame)
     local rules = {
-		'Welcome to the ExplosiveGaming <Insert Server Name and purpose here, S1 Public Server for example>!',
+		'Welcome to the Explosive Gaming Community!',
 		'',
 		'Here are some guidelines to keep this Server fun for everyone:',
 		'- Hacking / cheating / abusing bugs will not be tolerated.',
 		'- Be polite and use common sense.',
-		'- Nobody likes spam. That includes: Chat, Bots and Concrete / Bricks',
+		'- Nobody likes spam. That includes: Chat, Bots, unlimited Chests and Concrete.',
 		'- Do not remove stuff without even trying to talk / ask about it.',
-		'- Trains: LHD (Left hand drive) and no Loops.',
+		'- Trains: LHD (Left hand drive), no Loops and use them for long distances.',
 		'',
-		'Have Fun!'
+		'If you have any questions about the rules, the server or the game in general, feel free to ask. Have Fun!'
 		}
 	for i, rule in pairs(rules) do frame.add{name=i, type="label", caption=rule, single_line=false}.style.maximal_width=480 end
 end)
