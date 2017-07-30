@@ -23,12 +23,15 @@ local low_ranks_only={
     'Discord: https://discord.gg/RPCxzgt',
     'Forum: explosivegaming.nl',
     'Steam: http://steamcommunity.com/groups/tntexplosivegaming',
-    'To see these links again goto: Info > Links'
+    'To see these links again goto: Info > Links',
+    'We also have some custom commands which you can view in: Info > Commands',
+    'This includes the /tag command, this allows custom tags so you can tell people what you are working on',
+    'Do /help tag for more info'
 }
 
 function auto_message()
     local low_rank = 'Regular'
-    local high_rank = 'Mod' -- Stops spam for the highest of the high ( i dont like spam ;) )
+    local high_rank = 'Owner'
     rank_print('There are '..#game.connected_players..' players online',high_rank,true)
     rank_print('This map has been on for '..tick_to_display_format(game.tick),high_rank,true)
     for _,message in pairs(low_ranks_only) do
