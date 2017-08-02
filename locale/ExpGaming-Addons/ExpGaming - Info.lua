@@ -26,13 +26,15 @@ ExpGui.add_frame.tab('links','Links','More ways to get in contact','Guest','info
         text_box.read_only = true
 	    text_box.word_wrap = true
 	    text_box.selectable = true
-    end
+    end 
     frame.add{name=1, type="label", caption={"", "Discord voice and chat server:"}}
 	format(frame.add{name=2, type='text-box', text='https://discord.gg/RPCxzgt'})
 	frame.add{name=3, type="label", caption={"", "Our forum:"}}
 	format(frame.add{name=4, type='text-box', text='https://explosivegaming.nl'})
 	frame.add{name=5, type="label", caption={"", "Steam:"}}
 	format(frame.add{name=6, type='text-box', text='http://steamcommunity.com/groups/tntexplosivegaming'})
+	frame.add{name=7, type="label", caption={"", "Patreon:"}}
+	format(frame.add{name=8, type='text-box', text='https://www.patreon.com/badgamernl'})
 end)
 
 ExpGui.add_frame.tab('servers','Other Servers','All the other server we have','Guest','info',function(player,frame)
