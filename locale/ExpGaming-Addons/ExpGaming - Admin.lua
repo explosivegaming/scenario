@@ -111,38 +111,20 @@ Event.register(defines.events.on_gui_click, function(event)
 			break end end
 		end
 		-- setting the new value
-		game.print(modifier_name..' '..slected..' '..old_slected..' '..tostring(is_player))
 		for n,effect in pairs(modifier[1]) do
 			local base = nil
 			local temp_slected = nil
 			if modifier[3] and modifier[3][n] then
-				game.print(n..' '..modifier[3][n])
-				if global.modifiers.base[modifier[3][n]] == 'Set 0' then
-					base = 1 
-					temp_slected=slected-1
-				else
-					base = global.modifiers.base[modifier[3][n]]
-					game.print(global.modifiers.base[modifier[3][n]])
-				end
+				if global.modifiers.base[modifier[3][n]] == 'Set 0' then base = 1 temp_slected=slected-1
+				else base = global.modifiers.base[modifier[3][n]] end
 			else 
-				if is_player then 
-					base = player[effect]/old_slected 
-				else 
-					base = force[effect]/old_slected 
-				end
-				if base == 0 then 
-					modifier[3] = {effect} 
-					global.modifiers.base[effect] = 'Set 0'
-					base = 1
-					temp_slected=slected-1
-				end
+				if is_player then base = player[effect]/old_slected 
+				else base = force[effect]/old_slected end
+				if base == 0 then modifier[3] = {effect} global.modifiers.base[effect] = 'Set 0' base = 1 temp_slected=slected-1 end
 			end
 			base = base or 0
 			temp_slected = temp_slected or slected
 			local new_value = base*temp_slected
-			game.print('base: '..tostring(base))
-			game.print(base..' '..temp_slected)
-			game.print(new_value)
 			if is_player then player[effect] = new_value else force[effect] = new_value end
 		end
 		-- re drawing the tab
