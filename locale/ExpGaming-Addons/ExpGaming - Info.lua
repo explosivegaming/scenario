@@ -26,13 +26,28 @@ ExpGui.add_frame.tab('links','Links','More ways to get in contact','Guest','info
         text_box.read_only = true
 	    text_box.word_wrap = true
 	    text_box.selectable = true
-    end
+    end 
     frame.add{name=1, type="label", caption={"", "Discord voice and chat server:"}}
 	format(frame.add{name=2, type='text-box', text='https://discord.gg/RPCxzgt'})
 	frame.add{name=3, type="label", caption={"", "Our forum:"}}
 	format(frame.add{name=4, type='text-box', text='https://explosivegaming.nl'})
 	frame.add{name=5, type="label", caption={"", "Steam:"}}
 	format(frame.add{name=6, type='text-box', text='http://steamcommunity.com/groups/tntexplosivegaming'})
+	frame.add{name=7, type="label", caption={"", "Patreon:"}}
+	format(frame.add{name=8, type='text-box', text='https://www.patreon.com/badgamernl'})
+end)
+
+ExpGui.add_frame.tab('servers','Other Servers','All the other server we have','Guest','info',function(player,frame)
+    local servers = {
+		{'Public','Any one is able to join, this map reset every 48H'},
+		{'Private','This is a pure mega base server, password is needed'},
+		{'Events','Some Times we hold events'}
+		}
+	frame.add{name=i, type="label", caption='Welcome to the Explosive Gaming Community!', single_line=false}.style.maximal_width=480
+	for i, server in pairs(servers) do 
+		frame.add{name=i, type="label", caption='S'..i..' - '..server[1], single_line=false}.style.maximal_width=480
+		frame.add{name=i..'description', type="label", caption=server[2], single_line=false}.style.maximal_width=480  
+	end
 end)
 
 ExpGui.add_frame.tab('credit','Script Credit','Who made all of the diffrent parts of the script','Guest','info',function(player,frame)
