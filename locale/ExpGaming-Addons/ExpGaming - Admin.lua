@@ -56,29 +56,32 @@ local function add_moddifier(table,name,player,is_player) --player can be a forc
 	table.add{name=name..'__x2', type='radiobutton',state=get_state(name,player,is_player,2)}
 	table.add{name=name..'__x3', type='radiobutton',state=get_state(name,player,is_player,3)}
 	table.add{name=name..'__x5', type='radiobutton',state=get_state(name,player,is_player,5)}
+	table.add{name=name..'__x10', type='radiobutton',state=get_state(name,player,is_player,10)}
 end
 
 ExpGui.add_frame.tab('force_modifiers','Force Modifiers','Some Force Modifiers','Admin','admin',function(player,frame)
     frame.add{type = 'flow', name= 'flow',direction = 'horizontal'}
-    local table = frame.add{name='modifiers_table', type='table', colspan=6}
+    local table = frame.add{name='modifiers_table', type='table', colspan=7}
     table.add{name='force_modifier_name', type='label', caption='Name'}
     table.add{name='x1', type='label', caption='x1'}
     table.add{name='x1.5', type='label', caption='x1.5'}
 	table.add{name='x2', type='label', caption='x2'}
 	table.add{name='x3', type='label', caption='x3'}
 	table.add{name='x5', type='label', caption='x5'}
+	table.add{name='x10', type='label', caption='x10'}
     for _,modifier in pairs(force_modifiers) do add_moddifier(table,modifier[2],player.force,false) end
 end)
 
 ExpGui.add_frame.tab('player_modifiers','Player Modifiers','Some Player Modifiers','Admin','admin',function(player,frame)
     frame.add{type = 'flow', name= 'flow',direction = 'horizontal'}
-    local table = frame.add{name='modifiers_table', type='table', colspan=6}
+    local table = frame.add{name='modifiers_table', type='table', colspan=7}
     table.add{name='player_modifier_name', type='label', caption='Name'}
     table.add{name='x1', type='label', caption='x1'}
     table.add{name='x1.5', type='label', caption='x1.5'}
 	table.add{name='x2', type='label', caption='x2'}
 	table.add{name='x3', type='label', caption='x3'}
 	table.add{name='x5', type='label', caption='x5'}
+	table.add{name='x10', type='label', caption='x10'}
     for _,modifier in pairs(player_modifiers) do add_moddifier(table,modifier[2],player,true) end
 end)
 
