@@ -24,7 +24,7 @@ local force_modifiers = {
 	{{'manual_crafting_speed_modifier'},'Crafting Speed'},
 	{{'character_running_speed_modifier'},'Running Speed'},
 	{{'character_build_distance_bonus','character_reach_distance_bonus'},'Player Reach'},
-	{{'worker_robots_speed_modifier','worker_robots_storage_bonus'},'Bot Boost',{'worker-robot-speed','worker_robot_storage'}}
+	{{'worker_robots_speed_modifier','worker_robots_storage_bonus'},'Bot Boost',{'worker-robot-speed','worker-robot-storage'}}
 }
 
 local player_modifiers = {
@@ -113,11 +113,13 @@ Event.register(defines.events.on_gui_click, function(event)
 			local base = nil
 			local temp_slected = nil
 			if modifier[3] and modifier[3][n] then
+				game.print(n..' '..modifier[3][n])
 				if global.modifiers.base[modifier[3][n]] == 'Set 0' then
 					base = 1 
 					temp_slected=slected-1
 				else
 					base = global.modifiers.base[modifier[3][n]]
+					game.print(global.modifiers.base[modifier[3][n]])
 				end
 			else 
 				if is_player then 
