@@ -33,7 +33,7 @@ local player_modifiers = {
 	{'Crafting Speed',{{'character_crafting_speed_modifier',1,-1}}},
 	{'Running Speed',{{'character_running_speed_modifier',1,-1}}},
 	{'Reach',{{'character_build_distance_bonus',6,-1},{'character_reach_distance_bonus',6,-1}}},
-	{'Health',{'character_health_bonus',250,-1}}
+	{'Health',{{'character_health_bonus',250,-1}}}
 }
 
 local states={1,1.25,1.5,2,3,5,7.5,10}
