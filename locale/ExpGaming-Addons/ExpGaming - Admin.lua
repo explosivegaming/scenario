@@ -36,7 +36,7 @@ local player_modifiers = {
 	{'Health',{'character_health_bonus',250,-1}}
 }
 
-local states={1,1.5,2,3,5,10}
+local states={1,1.25,1.5,2,3,5,7.5,10}
 
 ExpGui.add_frame.center('admin','Admin','A few admin only things','Admin',{{'commands','Admin'}})
 
