@@ -21,6 +21,7 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 credit_loop(require("ExpGaming - Science List"))
 credit_loop(require("ExpGaming - Rocket List"))
 credit_loop(require("ExpGaming - PLayer List"))
+credit_loop(require("ExpGaming - Task List"))
 credit_loop(require("ExpGaming - Announcements"))
 credit_loop(require("ExpGaming - Readme"))
 credit_loop(require("ExpGaming - Info"))
