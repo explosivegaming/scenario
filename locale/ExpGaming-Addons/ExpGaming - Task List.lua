@@ -81,6 +81,6 @@ ExpGui.add_frame.left('task_list','item/inserter','Toggle Task List','Guest',tru
 end)
 
 Event.register(Event.rank_change,function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'task_list',true) end end)
-Event.register(-1,function() global.tasks = {server={'test','test2','test3'},players={}} end)
+Event.register(-1,function() global.tasks = {server={'Power','Starter base for red science','Plans for main base','Work on building main smelters','Green science in starter base'},players={}} end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
