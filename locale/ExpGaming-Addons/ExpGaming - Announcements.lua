@@ -21,7 +21,7 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 --this function can be called at any time to make an announcement
 function announcement(message,rank,player)
 	if not message then return end
-	local rank = rank or string_to_rank(rank) or string_to_rank('Guest')
+	local rank = string_to_rank(rank) or string_to_rank('Guest')
 	local player = player or '<server>'
 	ExpGui.draw_frame.popup('announcement',{player,rank,message})
 end
