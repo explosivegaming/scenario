@@ -39,9 +39,11 @@ end)
 
 ExpGui.add_frame.tab('servers','Other Servers','All the other server we have','Guest','info',function(player,frame)
     local servers = {
-		{'Public','Any one is able to join, this map reset every 48H'},
-		{'Private','This is a pure mega base server, password is needed'},
-		{'Events','Some Times we hold events'}
+		{'Public','A place for all players, this map reset every 24H'},
+		{'Standard','Before you play make sure you understand the game, reset every 48H'},
+		{'Pro','A pure mega base server, reset every 7 days and a password is needed to join'},
+		{'Modded','A modded server not much to say, just down load the mods to play'},
+		{'Events','Some Times we hold events, may require a password'}
 		}
 	frame.add{name=i, type="label", caption='Welcome to the Explosive Gaming Community!', single_line=false}.style.maximal_width=480
 	for i, server in pairs(servers) do 
