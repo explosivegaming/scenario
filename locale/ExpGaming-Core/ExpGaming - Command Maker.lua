@@ -71,7 +71,7 @@ function load_command(command)
 		else
 			local args = get_command_args(event,command)
 			if args == 'Invalid' then print('Invalid Input, /'..command[1]..' '..command_inputs_to_string(command)) return end
-			command[5]('<server>',event)
+			command[5]('<server>',event,args)
 			print('Command Complete')
 		end
 	end)
