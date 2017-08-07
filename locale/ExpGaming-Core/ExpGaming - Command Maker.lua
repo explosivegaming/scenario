@@ -30,7 +30,6 @@ function command_inputs_to_string(command)
 end
 --Can be used to ensure the right number of inputs are given
 function get_command_args(event,command)
-	local player = game.players[event.player_index]
 	if not event.parameter then if #command[3] > 0 then return 'Invalid' else return end end
 	local args = {}
 	for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
