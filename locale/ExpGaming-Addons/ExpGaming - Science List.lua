@@ -42,7 +42,7 @@ ExpGui.add_frame.left('science_list','item/lab','Open a list with the amount of 
 	frame.add{name='total_flow',type='flow',direction='vertical'}
 	frame.add{name='minute_title',type='label',caption='Packs Per Minute:',style="caption_label_style"}
 	frame.add{name='minute_flow',type='flow',direction='vertical'}
-	for n,pack in pairs(science_packs) do
+	for n,pack in pairs(global.science_packs) do
 		local ammount_made = player.force.item_production_statistics.get_input_count(pack[1])
 		frame.total_flow.add{name=pack[1],type='label',caption=pack[2]..': '..ammount_made}
 		if tick_to_min(game.tick) < 1 then frame.minute_flow.add{name=pack[1],type='label',caption=pack[2]..': N/A'}
