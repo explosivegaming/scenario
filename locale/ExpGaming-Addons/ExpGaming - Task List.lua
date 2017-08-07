@@ -67,7 +67,7 @@ ExpGui.add_input.button('save','Save','Press to save any changes (will update fo
 		if global.tasks.players[player.index][n]:match('%S') then table.insert(temp_list,global.tasks.players[player.index][n]) end
 	end
 	global.tasks.server = {table.unpack(temp_list)}
-	for _,p in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'task_list',true) end
+	for _,p in pairs(game.connected_players) do ExpGui.draw_frame.left(p,'task_list',true) end
 end)
 
 ExpGui.add_input.button('enter_edit','Press To Edit','Press to edit the current tasks',function(player,element)
@@ -81,6 +81,6 @@ ExpGui.add_frame.left('task_list','item/inserter','Toggle Task List','Guest',tru
 end)
 
 Event.register(Event.rank_change,function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'task_list',true) end end)
-Event.register(-1,function() global.tasks = {server={'test','test2','test3'},players={}} end)
+Event.register(-1,function() global.tasks = {server={'Power','Starter base for red science','Plans for main base','Work on building main smelters','Green science in starter base'},players={}} end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
