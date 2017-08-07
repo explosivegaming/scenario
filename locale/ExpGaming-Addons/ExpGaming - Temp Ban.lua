@@ -26,6 +26,7 @@ define_command('temp-ban','Temp ban a player untill the next reset, can not be u
         table.insert(global.temp_bans,{jail_player.name,player,table.concat(args,' ',2),jail_player})
         ExpGui.draw_frame.popup('temp_ban',{player,table.concat(args,' ',2)})
         rank_print(jail_player.name..' has been temp banned by '..player..' reason: '..table.concat(args,' ',2),'Guest')
+        game.write_file('log.txt','\n '..jail_player.name..' was temp baned by <server> \n Reason: '..table.concat(args,' ',2))
     else
         local jail_player = game.players[args[1]]
         if not jail_player then player.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
@@ -34,6 +35,7 @@ define_command('temp-ban','Temp ban a player untill the next reset, can not be u
             global.temp_bans[jail_player.name] = {player.name,table.concat(args,' ',2)}
             ExpGui.draw_frame.popup('temp_ban',{player.name,table.concat(args,' ',2),jail_player})
             rank_print(jail_player.name..' has been temp banned by '..player.name..' reason: '..table.concat(args,' ',2),'Guest')
+            game.write_file('log.txt','\n '..jail_player.name..' was temp baned by '..player.name..' \n Reason: '..table.concat(args,' ',2))
         else player.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
     end
 end)
