@@ -8,32 +8,14 @@ Discord: https://discord.gg/XSsBV6b
 
 The credit below may be used by another script do not remove.
 ]]
-local credits = {
-	{
+local credits = {{
 	name='Control',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
 	description='Core Factorio File',
 	factorio_version='0.15.23',
 	show=false
-	},
-	{-- this is only on our server so can't be found in any of this code , remove when copying code
-	name='Factorio to Discord Bot',
-	owner='Explosive Gaming',
-	dev='ayahuasca23',
-	description='Sends all chat from the server into discord',
-	factorio_version='0.15.23',
-	show=true
-	},
-	{-- this is only on our server so can't be found in any of this code , remove when copying code
-	name='Discord to Factorio Bot',
-	owner='Explosive Gaming',
-	dev='badgamernl',
-	description='Factorio To discord bot',
-	factorio_version='0.15.23',
-	show=true
-	}
-	}
+	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
 require("mod-gui")
