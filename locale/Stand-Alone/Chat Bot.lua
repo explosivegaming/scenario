@@ -8,7 +8,7 @@ Discord: https://discord.gg/XSsBV6b
 
 The credit below may be used by another script do not remove.
 ]]
-local credits = {{
+local credits = {
 	{
 	name='Factorio to Discord Bot',
 	owner='Explosive Gaming',

@@ -33,7 +33,7 @@ ExpGui.add_frame.center('rank_changer','Edit Ranks','Allows you to edit players 
 	inputs.add{name='player_lable',type='label',caption='Player: '}
 	inputs.add{name='player_dropdown',type='drop-down'}
 	for _,p in pairs(game.connected_players) do 
-		if get_rank(player).power < get_rank(p).power then
+		if get_rank(player).power < get_rank(p).power and not global.temp_bans[p.name] then
 			inputs.player_dropdown.add_item(p.name)
 		end
 	end
