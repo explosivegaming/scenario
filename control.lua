@@ -20,6 +20,7 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 --Please Only Edit Below This Line-----------------------------------------------------------
 require("mod-gui")
 credit_loop(require("locale/StdLib/event"))
+Event.register(defines.events.on_player_joined_game,function() if not global.credits then Event.dispatch({name = Event.core_events.init, tick = 0}) end end)
 Event.gui_update = script.generate_event_name()
 credit_loop(require("locale/file-header"))
 --below 'game.tick/(3600*game.speed)) % 15 == 0' raises the gui_update event every 15 minutes fell free to change the update time on that
