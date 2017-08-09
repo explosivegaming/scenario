@@ -44,7 +44,7 @@ ExpGui.add_frame.left('science_list','item/lab','Open a list with the amount of 
 	for n,pack in pairs(global.science_packs) do
 		local ammount_made = player.force.item_production_statistics.get_input_count(pack[1])
 		frame.total_flow.add{name=pack[1],type='label',caption=pack[2]..': '..ammount_made}
-		if game.tick < 10 then frame.minute_flow.add{name=pack[1],type='label',caption=pack[2]..': 0.00'} update_science_packs()
+		if not pack[3][player.force.name] then frame.minute_flow.add{name=pack[1],type='label',caption=pack[2]..': 0.00'} update_science_packs()
 		else frame.minute_flow.add{name=pack[1],type='label',caption=pack[2]..': '..string.format('%.2f',(ammount_made-pack[3][player.force.name])/((game.tick-pack[4])/(3600*game.speed)))} end
 	end
 end)
