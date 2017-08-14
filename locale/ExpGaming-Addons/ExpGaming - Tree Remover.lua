@@ -21,8 +21,8 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 Event.register(defines.events.on_marked_for_deconstruction, function(event)
 	sudo(function(event)
 		local player = game.players[event.player_index]
-		if not event.entity.vaild then return end
 		local entity = event.entity
+		if not entity.vaild then return end
 		local last_user = entity.last_user
 		if last_user then
 			if string_to_rank('reg').power < get_rank(player).power then
