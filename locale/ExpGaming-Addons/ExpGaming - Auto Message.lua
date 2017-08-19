@@ -30,13 +30,15 @@ local low_ranks_only={
 }
 
 function auto_message()
-    local low_rank = 'Regular'
-    local high_rank = 'Owner'
-    rank_print('There are '..#game.connected_players..' players online',high_rank,true)
-    rank_print('This map has been on for '..tick_to_display_format(game.tick),high_rank,true)
-    for _,message in pairs(low_ranks_only) do
-        rank_print(message,low_rank,true)
-    end
+	sudo(function(event)
+		local low_rank = 'Regular'
+		local high_rank = 'Owner'
+		rank_print('There are '..#game.connected_players..' players online',high_rank,true)
+		rank_print('This map has been on for '..tick_to_display_format(game.tick),high_rank,true)
+		for _,message in pairs(low_ranks_only) do
+			rank_print(message,low_rank,true)
+		end
+	end)
 end
 
 Event.register(Event.gui_update,auto_message)
