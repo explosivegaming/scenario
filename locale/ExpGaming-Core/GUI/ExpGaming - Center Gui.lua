@@ -35,7 +35,7 @@ function add_frame.tab(name,default_display,default_tooltip,restriction,frame,ev
 	if not name then error('Tab requires a name') end
 	if not frame then error('Tab requires a frame') end
 	table.insert(frames.tabs,{name=name,display=default_display,frame=frame,event=event})
-	for _,f in pairs(frames.center) do if f.name == frame then table.insert(f.tabs,{name,restriction}) end end
+	for _,f in pairs(frames.center) do if f.name == frame then table.insert(f.tabs,{name=name,restriction=restriction}) end end
 	ExpGui.add_input.button(name,default_display,default_tooltip,draw_frame.tab)
 end
 --Draw the center GUI for the player; do not call manually, must use other functions to call
