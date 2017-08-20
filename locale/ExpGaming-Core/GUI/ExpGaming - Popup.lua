@@ -45,7 +45,7 @@ function add_frame.popup(style,default_display,default_tooltip,restriction,on_cl
 	if not style then error('Popup style requires a name') end
 	if not event or type(event) ~= 'function' then error('Popup style requires a draw function') end
 	local restriction = restriction or 0
-	table.insert(frames.popup,{style=style,display=default_display,on_click=on_click,event=event})
+	table.insert(frames.popup,{name=style,display=default_display,on_click=on_click,event=event})
 	if on_click and type(on_click) == 'function' then
 		ExpGui.toolbar.add_button(style,default_display,default_tooltip,restriction,draw_frame.popup_button)
 	end
