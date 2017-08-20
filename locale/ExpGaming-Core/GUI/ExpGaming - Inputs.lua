@@ -23,21 +23,21 @@ local inputs = ExpGui.inputs
 --allows defining of new buttons;;name  how to call button;;default_display  what is shown on the button;;default_tooltip  the tooltip display;;event  function(player,element) that runs on click
 function add_input.button(name,default_display,default_tooltip,event)
 	if not name then error('Button requires a name') end
-	table.insert(inputs.buttons,{name,default_display,default_tooltip,event})
+	table.insert(inputs.buttons,{name=name,display=default_display,tooltip=default_tooltip,event=event})
 end
 --allows defining of text box inputs;;name  how to call button;;default_display  what is shown on the button;;event  function(player,element) that runs on text change
 function add_input.text(name,default_display,event)
 	if not name then error('Text Filed requires a name') end
-	table.insert(inputs.text,{name,default_display,event})
+	table.insert(inputs.text,{name=name,display=default_display,event=event})
 end
 --draws the button into a gui;;frame  the frame to draw to;;name  name of button to draw;;display(opptinal) overrides the default;;tooltip(opptinal) overrides the default
 function add_input.draw_button(frame,name,display,tooltip)
 	if not frame or not frame.valid then error('No frame to draw to') end
 	if not name then error('No button to draw') end
-	for _,btn in pairs(inputs.buttons) do
-		if btn[1] == name then
-			local display = display or btn[2] or btn[1]
-			local tooltip = tooltip or btn[3]
+	for _,button in pairs(inputs.buttons) do
+		if button.name == name then
+			local display = display or button.display or button.name
+			local tooltip = tooltip or button.tooltip
 			if frame.gui.is_valid_sprite_path(display) then
 				frame.add{name=name, type = "sprite-button", sprite=display, tooltip=tooltip, style = mod_gui.button_style}
 			else
@@ -52,8 +52,8 @@ function add_input.draw_text(frame,name,display)
 	if not frame or not frame.valid then error('No frame to draw to') end
 	if not name then error('No text filed to draw') end
 	for _,text in pairs(inputs.text) do
-		if text[1] == name then
-			local display = display or text[2] or text[1]
+		if text.name == name then
+			local display = display or text.display or text.name
 			frame.add{name=name, type='textfield'}
 			frame[name].caption=display
 			break
@@ -64,9 +64,9 @@ end
 Event.register(defines.events.on_gui_click, function(event)
   local player = game.players[event.player_index]
 	if event.element.type == 'button' or event.element.type == 'sprite-button' then
-		for _,btn in pairs(inputs.buttons) do
-			if btn[1] == event.element.name then
-				if btn[4] then btn[4](player,event.element) else rank_print('Button without Function '..btn[1],'Mod') end break
+		for _,button in pairs(inputs.buttons) do
+			if button.name == event.element.name then
+				if button.event then button.event(player,event.element) else rank_print('Button without Function '..button.name,'Mod') end break
 			end
 		end
 	end
@@ -75,8 +75,8 @@ end)
 Event.register(defines.events.on_gui_text_changed, function(event)
   local player = game.players[event.player_index]
 	for _,text in pairs(inputs.text) do
-		if text[1] == event.element.name then
-			if text[3] then text[3](player,event.element) end break
+		if text.name == event.element.name then
+			if text.event then text.event(player,event.element) end break
 		end
 	end
 end)

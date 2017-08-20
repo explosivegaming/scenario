@@ -22,7 +22,7 @@ local Exp_commands = {}
 --Used mainly by the code to convert the inputs into a string
 function command_inputs_to_string(command)
 	local str_inputs = ''
-	for _,input in pairs(command[3]) do
+	for _,input in pairs(command.inputs) do
 		if input == true then break end
 		str_inputs = str_inputs..'<'..input..'> '
 	end
@@ -30,13 +30,13 @@ function command_inputs_to_string(command)
 end
 --Can be used to ensure the right number of inputs are given
 function get_command_args(event,command)
-	if not event.parameter then if #command[3] > 0 then return 'Invalid' else return end end
+	if not event.parameter then if #command.inputs > 0 then return 'Invalid' else return end end
 	local args = {}
 	for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
-	if command[3][#command[3]] == true then
-		if #args < #command[3]-1 then return 'Invalid' end
+	if command.inputs[#command.inputs] == true then
+		if #args < #command.inputs-1 then return 'Invalid' end
 	else 
-		if #args ~= #command[3] then return 'Invalid' end 
+		if #args ~= #command.inputs then return 'Invalid' end 
 	end return args
 end
 --name			is what is used in /command 
@@ -50,33 +50,44 @@ function define_command(name,help,inputs,restriction,event)
 	local inputs = inputs or {true}
 	local restriction = restriction or 0
 	if not event or type(event) ~= 'function' then error('Command requires a function') end
-	table.insert(Exp_commands,{name,help,inputs,restriction,event})
+	table.insert(Exp_commands,{name=name,help=help,inputs=inputs,restriction=restriction,event=event})
 end
 --The magic for the commands. It is a hard bit of code so GL; but it will call the command event have some sanitisaion of the input
 function load_command(command)
-	if commands.commands[command[1]] then return end
-	commands.add_command(command[1],command_inputs_to_string(command)..command[2],function(event)
+	if commands.commands[command.name] then return end
+	commands.add_command(command.name,command_inputs_to_string(command)..command.help,function(event)
 		local command_data = nil
 		for _,command_d in pairs(Exp_commands) do if event.name == command_d[1] then command_data = command_d break end end
 		if event.player_index then
 			local player = game.players[event.player_index]
 			local temp_restriction = nil
-			if type(command[4]) == 'number' then temp_restriction = command[4] end
-			local restriction = temp_restriction or string_to_rank(command[4]).power or 0
+			if type(command.restriction) == 'number' then temp_restriction = command.restriction end
+			local restriction = temp_restriction or string_to_rank(command.restriction).power or 0
 			if get_rank(player).power > restriction then player.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
 			local args = get_command_args(event,command)
-			if args == 'Invalid' then player.print('Invalid Input, /'..command[1]..' '..command_inputs_to_string(command)) return end
-			command[5](player,event,args)
+			if args == 'Invalid' then player.print('Invalid Input, /'..command.name..' '..command_inputs_to_string(command)) return end
+			command.event(player,event,args)
 			player.print('Command Complete')
 		else
 			local args = get_command_args(event,command)
-			if args == 'Invalid' then print('Invalid Input, /'..command[1]..' '..command_inputs_to_string(command)) return end
-			command[5]('<server>',event,args)
+			if args == 'Invalid' then print('Invalid Input, /'..command.name..' '..command_inputs_to_string(command)) return end
+			command.event('<server>',event,args)
 			print('Command Complete')
 		end
 	end)
 end
-
+-- returns all the commands in a certain rank restriction
+function get_commands(rank)
+	local rank = rank or 'Owner'
+	local to_return = {}
+	for _,command in pairs(global.commands) do
+		local temp_restriction = nil
+		if type(command.restriction) == 'number' then temp_restriction = command.restriction end
+		local restriction = temp_restriction or string_to_rank(command.restriction).power or 0
+		if restriction > string_to_rank(rank).power then table.insert(to_return,command) end
+	end
+	return to_return
+end
 Event.register(-1,function() global.commands = Exp_commands end)
 Event.register(defines.events.on_player_joined_game,function() for _,command in pairs(Exp_commands) do load_command(command) end end)
 --Please Only Edit Above This Line-----------------------------------------------------------

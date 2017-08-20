@@ -120,6 +120,16 @@ function find_new_rank(player)
 	if get_rank(player).power <= string_to_rank('mod').power and not player.admin then rank_print(player.name..' needs to be promoted.') end
 	if old_rank.name ~= get_rank(player).name then global.old_ranks[player.index]=old_rank.name end
 end
+-- returns a list with every players current rank, or just the players of the rank given, includes online time
+function get_ranked_players(rank)
+	local to_return = {}
+	for _,player in pairs(game.players) do 
+		if not rank or rank == get_rank(player).name then 
+			table.insert(to_return,{player.name,tick_to_display_format(player.online_time),get_rank(player).name})
+		end
+	end
+	return to_return
+end
 --Event handlers
 Event.rank_change = script.generate_event_name()
 Event.register(-1,function() 

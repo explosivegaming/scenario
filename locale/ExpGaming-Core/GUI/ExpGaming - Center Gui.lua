@@ -27,36 +27,36 @@ local draw_frame = ExpGui.draw_frame
 function add_frame.center(name,default_display,default_tooltip,restriction,tabs,event)
 	if not name then error('Frame requires a name') end
 	local tabs = tabs or {}
-	table.insert(frames.center,{name,default_display,tabs,event})
+	table.insert(frames.center,{name=name,display=default_display,tabs=tabs,event=event})
 	ExpGui.toolbar.add_button(name,default_display,default_tooltip,restriction,draw_frame.center)
 end
 --Define a tab; frame is needed as every tab must be used once; event(player,tab) is the draw function
 function add_frame.tab(name,default_display,default_tooltip,restriction,frame,event)
 	if not name then error('Tab requires a name') end
 	if not frame then error('Tab requires a frame') end
-	table.insert(frames.tabs,{name,default_display,frame,event})
-	for _,f in pairs(frames.center) do if f[1] == frame then table.insert(f[3],{name,restriction}) end end
+	table.insert(frames.tabs,{name=name,display=default_display,frame=frame,event=event})
+	for _,f in pairs(frames.center) do if f.name == frame then table.insert(f.tabs,{name=name,restriction=restriction}) end end
 	ExpGui.add_input.button(name,default_display,default_tooltip,draw_frame.tab)
 end
 --Draw the center GUI for the player; do not call manually, must use other functions to call
 ExpGui.add_input.button('close_center','Close','Close this GUI',function(player,element) element.parent.parent.parent.destroy() end)
 function draw_frame.center(player,element)
 	local frame_data = nil
-	for _,frame in pairs(frames.center) do if element.name == frame[1] then frame_data = frame break end end
-	if player.gui.is_valid_sprite_path(frame_data[2]) then frame_data[2] = frame_data[1] end
-	if player.gui.center[frame_data[1]] then player.gui.center.clear() return else player.gui.center.clear() end
-	local frame = player.gui.center.add{name=frame_data[1],type='frame',caption=frame_data[2],direction='vertical',style=mod_gui.frame_style}
-	if frame_data[4] and type(frame_data[4]) == 'function' then frame_data[4](player,frame) return end
+	for _,frame in pairs(frames.center) do if element.name == frame.name then frame_data = frame break end end
+	if player.gui.is_valid_sprite_path(frame_data.display) then frame_data.display = frame_data.name end
+	if player.gui.center[frame_data.name] then player.gui.center.clear() return else player.gui.center.clear() end
+	local frame = player.gui.center.add{name=frame_data.name,type='frame',caption=frame_data.display,direction='vertical',style=mod_gui.frame_style}
+	if frame_data.event and type(frame_data.event) == 'function' then frame_data.event(player,frame) return end
 	local tab_bar_scroll = frame.add{type = "scroll-pane", name= "tab_bar_scroll", vertical_scroll_policy="never", horizontal_scroll_policy="always"}
 	local tab_bar = tab_bar_scroll.add{type='flow',direction='horizontal',name='tab_bar'}
 	local tab = frame.add{type = "scroll-pane", name= "tab", vertical_scroll_policy="auto", horizontal_scroll_policy="never"}
-	for n,t in pairs(frame_data[3]) do
+	for n,t in pairs(frame_data.tabs) do
 		local temp_restriction = nil
-		if type(t[2]) == 'number' then temp_restriction = t[2] end
-		local restriction = temp_restriction or string_to_rank(t[2]).power or 0
-		if restriction >= get_rank(player).power then ExpGui.add_input.draw_button(tab_bar,t[1]) end 
+		if type(t.restriction) == 'number' then temp_restriction = t.restriction end
+		local restriction = temp_restriction or string_to_rank(t.restriction).power
+		if restriction >= get_rank(player).power then ExpGui.add_input.draw_button(tab_bar,t.name) end 
 	end
-	draw_frame.tab(player,tab_bar[frame_data[3][1][1]])
+	draw_frame.tab(player,tab_bar[frame_data.tabs[1].name])
 	ExpGui.add_input.draw_button(tab_bar,'close_center')
 	tab.style.minimal_height = 300
 	tab.style.maximal_height = 300
@@ -76,7 +76,7 @@ function draw_frame.tab(player,element)
 		btn.style.font_color = {r = 100, g = 100, b = 100,a=255}
 	end end
 	element.parent.parent.parent.tab.clear()
-	for _,tab in pairs(frames.tabs) do if element.name == tab[1] then tab[4](player,element.parent.parent.parent.tab) break end end
+	for _,tab in pairs(frames.tabs) do if element.name == tab.name then tab.event(player,element.parent.parent.parent.tab) break end end
 end
 
 Event.register(Event.rank_change,function(event) event.player.gui.center.clear() end)

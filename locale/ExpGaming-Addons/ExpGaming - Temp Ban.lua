@@ -66,6 +66,7 @@ Event.register(defines.events.on_player_joined_game,function(event)
     end
 end)
 
+function get_temp_bans() return global.temp_bans end
 Event.register(-1,function() global.temp_bans = {} end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
