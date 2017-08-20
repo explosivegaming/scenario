@@ -18,6 +18,7 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
+-- Mainly used as a plan for how the gui is stored also as a header for the credit
 ExpGui = {
 	add_frame={
 	--center

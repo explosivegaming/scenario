@@ -8,17 +8,25 @@ Discord: https://discord.gg/XSsBV6b
 
 The credit below may be used by another script do not remove.
 ]]
-local credits = {{
-	name='File Header - Scripts',
+local credits = {
+	{
+	name='Factorio to Discord Bot',
 	owner='Explosive Gaming',
-	dev='Cooldude2606',
-	description='Just A File Header To Organise Code',
+	dev='ayahuasca23',
+	description='Sends all chat from the server into discord',
 	factorio_version='0.15.23',
-	show=false
+	show=true
+	},
+	{
+	name='Discord to Factorio Bot',
+	owner='Explosive Gaming',
+	dev='badgamernl',
+	description='Factorio To discord bot',
+	factorio_version='0.15.23',
+	show=true
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-credit_loop(require("Factorio Starting Items"))
-credit_loop(require("Chat Bot"))
+--no code here this is only on our server so can't be found in any of this code , remove when copying code
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

@@ -12,7 +12,7 @@ local credits = {{
 	name='Tree Remover',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='Removes tress and stone with use of deconstruction planer',
+	description='Removes trees and stone with use of deconstruction planer',
 	factorio_version='0.15.23',
 	show=true
 	}}
@@ -21,6 +21,7 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 Event.register(defines.events.on_marked_for_deconstruction, function(event)
 	sudo(function(event)
 		local player = game.players[event.player_index]
+		if not event.entity.valid then return end
 		local entity = event.entity
 		local last_user = entity.last_user
 		if last_user then

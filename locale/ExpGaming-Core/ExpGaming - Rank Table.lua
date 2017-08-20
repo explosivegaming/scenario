@@ -140,6 +140,14 @@ for n,rank in pairs(ranks) do
 		end
 	end
 end
+-- returns a list off all the ranks, return only one part if given
+function get_ranks(part)
+	local to_return = {}
+	if part then 
+		for _,rank in pairs(global.ranks) do table.insert(to_return,rank[part]) end
+	else to_return = global.ranks end
+	return to_return
+end
 -- Move the ranks to the global array
 Event.register(-1,function() global.ranks = ranks end)
 --Please Only Edit Above This Line-----------------------------------------------------------

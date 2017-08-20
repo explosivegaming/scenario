@@ -34,16 +34,19 @@ local preset_ranks = {
 	'AcThPaU',
 	'Alanore',
 	'Aquaday',
+	'ayahuasca23',
 	'cafeslacker',
 	'CrashKonijn',
 	'Drahc_pro',
+	'everLord',
 	'FlipHalfling90',
-	'freek16',
+	'facere',
+	'freek18',
 	'Hobbitkicker',
 	'hud',
 	'Koroto',
 	'mark9064',
-	'Matthias60',
+	'matthias60',
 	'MeDDish',
 	'Mindxt20',
 	'MottledPetrel',
@@ -55,13 +58,15 @@ local preset_ranks = {
 	'Sand3r205',
 	'scarbvis',
 	'steentje77',
+	'SuperWinner50',
 	'tophatgaming123',
 	'VR29',
 	'xenocyber'},
 	
 	Donator={
 	'M74132',
-	'Splicer'},
+	'Splicer',
+	'Nucklesamich'},
 	
 	Veteran={},
 	
@@ -73,7 +78,10 @@ local preset_ranks = {
 	
 	Jail={}
 }
-
+-- returns this list, or just one rank if given
+function get_rank_presets(rank)
+	if rank then return global.preset_ranks[rank] else return global.preset_ranks end
+end
 Event.register(-1,function() global.preset_ranks = preset_ranks end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
