@@ -51,10 +51,8 @@ function draw_frame.center(player,element)
 	local tab_bar = tab_bar_scroll.add{type='flow',direction='horizontal',name='tab_bar'}
 	local tab = frame.add{type = "scroll-pane", name= "tab", vertical_scroll_policy="auto", horizontal_scroll_policy="never"}
 	for n,t in pairs(frame_data.tabs) do
-		game.print(table.to_string(t))
 		local temp_restriction = nil
 		if type(t.restriction) == 'number' then temp_restriction = t.restriction end
-		game.print(temp_restriction)
 		local restriction = temp_restriction or string_to_rank(t.restriction).power
 		if restriction >= get_rank(player).power then ExpGui.add_input.draw_button(tab_bar,t.name) end 
 	end
