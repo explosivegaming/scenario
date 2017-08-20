@@ -18,7 +18,7 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-ExpGui.add_frame.center('info','Info','All useful information about the server is here','Guest',{{'commands','Guest'}})
+ExpGui.add_frame.center('info','Info','All useful information about the server is here','Guest',{{name='commands',restriction='Guest'}})
 
 ExpGui.add_frame.tab('links','Links','More ways to get in contact','Guest','info',function(player,frame)
     local function format(text_box)
