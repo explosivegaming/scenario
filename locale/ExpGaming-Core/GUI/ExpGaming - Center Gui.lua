@@ -42,7 +42,7 @@ end
 ExpGui.add_input.button('close_center','Close','Close this GUI',function(player,element) element.parent.parent.parent.destroy() end)
 function draw_frame.center(player,element)
 	local frame_data = nil
-	for _,frame in pairs(frames.center) do if element.name == frame[1] then frame_data = frame break end end
+	for _,frame in pairs(frames.center) do if element.name == frame.name then frame_data = frame break end end
 	if player.gui.is_valid_sprite_path(frame_data.display) then frame_data.display = frame_data.name end
 	if player.gui.center[frame_data.name] then player.gui.center.clear() return else player.gui.center.clear() end
 	local frame = player.gui.center.add{name=frame_data.name,type='frame',caption=frame_data.display,direction='vertical',style=mod_gui.frame_style}
