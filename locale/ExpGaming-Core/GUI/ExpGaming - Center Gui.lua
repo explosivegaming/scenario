@@ -53,7 +53,7 @@ function draw_frame.center(player,element)
 	for n,t in pairs(frame_data.tabs) do
 		local temp_restriction = nil
 		if type(t.restriction) == 'number' then temp_restriction = t.restriction end
-		local restriction = temp_restriction or string_to_rank(t.restriction).power or 0
+		local restriction = temp_restriction or string_to_rank(t.restriction).power
 		if restriction >= get_rank(player).power then ExpGui.add_input.draw_button(tab_bar,t.name) end 
 	end
 	draw_frame.tab(player,tab_bar[frame_data.tabs[1].name])

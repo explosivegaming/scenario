@@ -24,16 +24,19 @@ Event.register(defines.events.on_marked_for_deconstruction, function(event)
 		if not event.entity.valid then return end
 		local entity = event.entity
 		local last_user = entity.last_user
+		if get_temp_var_data(player.name..'_tree_remover') == 'Nope' then entity.cancel_deconstruction('player') return 'Nope' end
 		if last_user then
 			if string_to_rank('reg').power < get_rank(player).power then
 				entity.cancel_deconstruction('player')
 				player.print('You are not allowed to do this yet, You require the Regular rank, you must play for at least 3 hours')
 				rank_print(player.name..' tryed to deconstruced something.')
+				return 'Nope'
 			end
 		elseif get_rank(player).power <= string_to_rank('Donator').power then
 			event.entity.destroy()
+			return 'All Gone'
 		end
-	end,{event})
+	end,{event},game.players[event.player_index].name..'_tree_remover')
 end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

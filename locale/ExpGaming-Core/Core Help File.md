@@ -82,7 +82,7 @@ See code for more details.
 * get_ranks(part)
     * returns a list of all the ranks
     * part (opt) = part of the rank you want to return ie name
-* function get_rank_presets(rank)
+* get_rank_presets(rank)
     * returns the current rank presets
     * rank (opt) = rank name if only one rank is needed
 * get_ranked_players(rank)
