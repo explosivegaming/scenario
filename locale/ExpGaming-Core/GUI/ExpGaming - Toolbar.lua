@@ -31,13 +31,13 @@ function toolbar.draw(player)
 	if not player then error('Need a player to draw to') end
 	local toolbar_frame = mod_gui.get_button_flow(player)
 	toolbar_frame.clear()
-	for _,btn in pairs(toolbar.buttons) do
+	for _,button in pairs(toolbar.buttons) do
 		local rank = get_rank(player)
 		local temp_restriction = nil
-		if type(btn[2]) == 'number' then temp_restriction = btn[2] end
-		local restriction = temp_restriction or string_to_rank(btn[2]).power or 0
+		if type(button.restriction) == 'number' then temp_restriction = button.restriction end
+		local restriction = temp_restriction or string_to_rank(button.restriction).power or 0
 		if restriction >= rank.power then
-			ExpGui.add_input.draw_button(toolbar_frame,btn[1])
+			ExpGui.add_input.draw_button(toolbar_frame,button.name)
 		end
 	end
 end

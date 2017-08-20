@@ -78,7 +78,19 @@ See code for more details.
     * name = value retured by sudo
     * returens a list if the data returend by thefunction if any
 * get_sudo_info(string) 
-    * return either a list or string based on the string boliean 
+    * return either a list or string based on the string boliean
+* get_ranks(part)
+    * returns a list of all the ranks
+    * part (opt) = part of the rank you want to return ie name
+* function get_rank_presets(rank)
+    * returns the current rank presets
+    * rank (opt) = rank name if only one rank is needed
+* get_ranked_players(rank)
+    * returns the ranks and online time of every player
+    * rank (opt) = limits it to only this rank
+* get_commands(rank)
+    * returns all commands that are useable
+    * rank (opt) = rank name to limt it to what that rank can use
 ## Other
 * define_command(name,help,inputs,restriction,event)
     * Add game commands in a way it does not cause crashes

@@ -37,25 +37,25 @@ function draw_frame.left(player,element,update)
 	local frame_data = nil
 	local left = mod_gui.get_frame_flow(player)
 	if not update then
-		for _,frame in pairs(frames.left) do if element.name == frame[1] then frame_data = frame break end end
-		if left[frame_data[1]] then ExpGui.toggle_visible(left[frame_data[1]]) return end
-		frame = left.add{name=frame_data[1],type='frame',caption=frame_data[2],direction='vertical',style=mod_gui.frame_style}
+		for _,frame in pairs(frames.left) do if element.name == frame.name then frame_data = frame break end end
+		if left[frame_data.name] then ExpGui.toggle_visible(left[frame_data.name]) return end
+		frame = left.add{name=frame_data.name,type='frame',caption=frame_data.display,direction='vertical',style=mod_gui.frame_style}
 	else
-		for _,frame in pairs(frames.left) do if element == frame[1] then frame_data = frame break end end
-		frame = left[frame_data[1]] 
+		for _,frame in pairs(frames.left) do if element == frame.name then frame_data = frame break end end
+		frame = left[frame_data.name]
 	end
-	if frame then frame.clear() frame_data[3](player,frame) end
+	if frame then frame.clear() frame_data.event(player,frame) end
 end
 --used to load all left GUIs
 Event.register(defines.events.on_player_joined_game,function(event)
 	local player = game.players[event.player_index]
 	for _,frame_data in pairs(frames.left) do
 		local left = mod_gui.get_frame_flow(player)
-		if left[frame_data[1]] then left[frame_data[1]].style.visible = frame_data[4] ExpGui.draw_frame.left(player,frame_data[1],true)
+		if left[frame_data.name] then left[frame_data.name].style.visible = frame_data.vis ExpGui.draw_frame.left(player,frame_data.name,true)
 		else
-			local frame = left.add{name=frame_data[1],type='frame',caption=frame_data[2],direction='vertical',style=mod_gui.frame_style}
-			frame_data[3](player,frame)
-			frame.style.visible = frame_data[4]
+			local frame = left.add{name=frame_data.name,type='frame',caption=frame_data.display,direction='vertical',style=mod_gui.frame_style}
+			frame_data.event(player,frame)
+			frame.style.visible = frame_data.vis
 		end
 	end
 end)
@@ -63,7 +63,7 @@ end)
 Event.register(Event.rank_change,function(event)
 	for _,frame_data in pairs(frames.left) do
 		local left = mod_gui.get_frame_flow(event.player)
-		if left[frame_data[1]] then left[frame_data[1]].style.visible = frame_data[4] end
+		if left[frame_data.name] then left[frame_data.name].style.visible = frame_data.vis end
 	end
 end)
 --Please Only Edit Above This Line-----------------------------------------------------------
