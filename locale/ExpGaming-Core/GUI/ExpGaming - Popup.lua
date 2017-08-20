@@ -55,9 +55,9 @@ function draw_frame.popup_button(player,element)
 	local frame_data = nil
 	for _,frame in pairs(frames.popup) do if element.name == frame[1] then frame_data = frame break end end
 	local popups = mod_gui.get_frame_flow(player).popups
-	if popups[frame_data[1]..'_on_click'] then popups[frame_data[1]..'_on_click'].destroy() return end
-	local frame = get_next_popup(popups,frame_data[1])
-	frame_data[3](player,frame)
+	if popups[frame_data.name..'_on_click'] then popups[frame_data.name..'_on_click'].destroy() return end
+	local frame = get_next_popup(popups,frame_data.name)
+	frame_data.on_click(player,frame)
 end
 --used to draw a popup style can be called at any time; can not be called from a button directly
 function draw_frame.popup(style,args)
@@ -67,7 +67,7 @@ function draw_frame.popup(style,args)
 	for _,player in pairs(game.connected_players) do
 		local popups = mod_gui.get_frame_flow(player).popups
 		local frame = get_next_popup(popups)
-		frame_data[4](player,frame,args)
+		frame_data.event(player,frame,args)
 	end
 end
 --used to make the popup area

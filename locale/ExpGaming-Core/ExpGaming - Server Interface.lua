@@ -39,23 +39,23 @@ function sudo(command,args,custom_return_name)
 		local args = args or {}
 		local return_name = custom_return_name or tostring(game.tick)..tostring(command)..tostring(#global.sudo.commands)
 		table.insert(global.sudo.commands,{fun=command,args=args,return_name=return_name})	
-		return {'sudo-temp-var',return_name}
+		return {sudo='sudo-temp-var',name=return_name}
 	end 
 end
 --update the time on a temp var or add it as a new one
 function refresh_temp_var(name,value,offset)
 	local offset = offset or temp_var_time
 	if global.sudo.temp_varibles[name] then
-		global.sudo.temp_varibles[name][2] = game.tick+offset
+		global.sudo.temp_varibles[name].remove_time = game.tick+offset
 	else
 		global.sudo.temp_varibles[name] = {data=value,remove_time=game.tick+offset}
 	end
 end
 -- gets the data stored in a temp varible
-function get_temp_var_data(name) 
+function get_temp_var_data(var) 
 	local to_return = nil
-	if global.sudo.temp_varibles[name] then to_return = global.sudo.temp_varibles[name].data
-	elseif name[2] and global.sudo.temp_varibles[name[2]] then to_return = global.sudo.temp_varibles[name[2]].data end
+	if global.sudo.temp_varibles[var] then to_return = global.sudo.temp_varibles[var].data
+	elseif var.name and global.sudo.temp_varibles[var.name] then to_return = global.sudo.temp_varibles[var.name].data end
 	return to_return 
 end
 -- returns the lenth of the temp varible list and command queue, is string is true then it is retured as a string
@@ -78,7 +78,7 @@ Event.register(defines.events.on_tick, function(event)
 				local args = {}
 				-- retrives and temp varibles
 				for n,value in pairs(command.args) do
-					if type(value) == 'list' and value[1] == 'sudo-temp-var' then args[n] = global.sudo.temp_varibles[value[2]][1]
+					if type(value) == 'list' and value.sudo == 'sudo-temp-var' then args[n] = global.sudo.temp_varibles[value.name].data
 					else args[n] = value end
 				end
 				-- makes new temp value and runs command

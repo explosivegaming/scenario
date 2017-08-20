@@ -23,18 +23,18 @@ local yes = {'yes','y','true','ye'}
 local no = {'no','false','nay'}
 --filters that are used. Feel free to add more
 player_table_functions.filters = {
-	--{name,is_text,function(player,input) return true end}
-	{'is_admin',false,function(player) return player.admin end},
-	{'player_name',true,function(player,input) if input and player.name:lower():find(input:lower()) then return true end end},
-	{'online',false,function(player) return player.connected end},
-	{'offline',false,function(player) return not player.connected end},
-	{'online_time',true,function(player,input) if input and tonumber(input) and tonumber(input) < tick_to_min(player.online_time) then return true elseif not input or not tonumber(input) then return true end end},
-	{'rank',true,function(player,input) if input and string_to_rank(input) and get_rank(player).power <= string_to_rank(input).power then return true elseif not input or not string_to_rank(input) then return true end end}
+	--{name,is_text,function(player,input) return true/false end}
+	{name='is_admin',is_text=false,test=function(player) return player.admin end},
+	{name='player_name',is_text=true,test=function(player,input) if input and player.name:lower():find(input:lower()) then return true end end},
+	{name='online',is_text=false,test=function(player) return player.connected end},
+	{name='offline',is_text=false,test=function(player) return not player.connected end},
+	{name='online_time',is_text=true,test=function(player,input) if input and tonumber(input) and tonumber(input) < tick_to_min(player.online_time) then return true elseif not input or not tonumber(input) then return true end end},
+	{name='rank',is_text=true,test=function(player,input) if input and string_to_rank(input) and get_rank(player).power <= string_to_rank(input).power then return true elseif not input or not string_to_rank(input) then return true end end}
 }
 --set up all the text inputs
 for _,filter in pairs(player_table_functions.filters) do
-	if filter[2] then
-		ExpGui.add_input.text(filter[1],'Enter '..filter[1]:gsub('_',' '),function(player,element) ExpGui.player_table.redraw(player,element) end)
+	if filter.is_text then
+		ExpGui.add_input.text(filter.name,'Enter '..filter.name:gsub('_',' '),function(player,element) ExpGui.player_table.redraw(player,element) end)
 	end
 end
 --used to draw filters from the list above
@@ -42,7 +42,7 @@ function player_table_functions.draw_filters(player,frame,filters)
 	local input_bar = frame.add{type='flow',name='input_bar',direction='horizontal'}
 	for _,name in pairs(filters) do
 		local filter_data = nil
-		for _,filter in pairs(player_table_functions.filters) do if filter[1] == name then filter_data = filter break end end
+		for _,filter in pairs(player_table_functions.filters) do if filter.name == name then filter_data = filter break end end
 		if filter_data and filter_data[2] then
 			ExpGui.add_input.draw_text(input_bar,name)
 		end
@@ -52,9 +52,9 @@ end
 function player_table_functions.get_filters(frame)
 	local filters = {}
 	for _,filter in pairs(player_table_functions.filters) do
-		if frame.input_bar[filter[1]] then
-			if frame.input_bar[filter[1]].text:find('%S') then
-				table.insert(filters,{filter[1],frame.input_bar[filter[1]].text})
+		if frame.input_bar[filter.name] then
+			if frame.input_bar[filter.name].text:find('%S') then
+				table.insert(filters,{filter.name,frame.input_bar[filter.name].text})
 			end
 		end
 	end
@@ -65,7 +65,7 @@ function player_table_functions.player_match(player,filter,input)
 	for _,f in pairs(player_table_functions.filters) do
 		if filter == f or filter == f[1] then if filter == f[1] then filter = f break end end
 	end
-	if filter[3] and type(filter[3]) == 'function' then return filter[3](player,input) end
+	if filter.test and type(filter.test) == 'function' then return filter.test(player,input) end
 end
 --used by script on filter texts
 function player_table_functions.redraw(player,element)
@@ -80,38 +80,38 @@ function player_table_functions.draw(player,frame,filters,input_location)
 	--setup the table
 	if frame.player_table then frame.player_table.destroy() end
 	player_table = frame.add{name='player_table', type="table", colspan=5}
-  player_table.style.minimal_width = 500
-  player_table.style.maximal_width = 500
+ 	player_table.style.minimal_width = 500
+  	player_table.style.maximal_width = 500
 	player_table.style.horizontal_spacing = 10
-  player_table.add{name="id", type="label", caption="Id"}
-  player_table.add{name="player_name", type="label", caption="Name"}
+  	player_table.add{name="id", type="label", caption="Id"}
+  	player_table.add{name="player_name", type="label", caption="Name"}
 	player_table.add{name="status", type="label", caption="Status"}
-  player_table.add{name="online_time", type="label", caption="Online Time"}
-  player_table.add{name="rank", type="label", caption="Rank"}
+  	player_table.add{name="online_time", type="label", caption="Online Time"}
+  	player_table.add{name="rank", type="label", caption="Rank"}
 	for i,p in pairs(game.players) do
 		--filter cheaking
 		local add=true
 		for _,filter in pairs(filters) do
 			if #filter == 2 and add then
-				local result = player_table_functions.player_match(p,filter[1],filter[2]) 
-				if not result and filter[2] == true then result = filter[2] end
+				local result = player_table_functions.player_match(p,filter.name,filter.is_text) 
+				if not result and filter.is_text == true then result = filter.is_text end
 				add = result or false
 			end
 		end
 		for _,filter in pairs(player_table_functions.get_filters(input_location)) do
 			if add then
-				add = player_table_functions.player_match(p,filter[1],filter[2]) or false
+				add = player_table_functions.player_match(p,filter.name,filter.is_text) or false
 			end
 		end
 		--add the player
 		if add then--and player.name ~= p.name then
 			player_table.add{name=p.name.."_id", type="label", caption=i}
-      player_table.add{name=p.name..'_name', type="label", caption=p.name}
+      		player_table.add{name=p.name..'_name', type="label", caption=p.name}
 			if p.connected == true 
 			then player_table.add{name=p.name.."status", type="label", caption="Online"}
 			else player_table.add{name=p.name.."s", type="label", caption="Offline"} end
 			player_table.add{name=p.name.."online_time", type="label", caption=tick_to_display_format(p.online_time)}
-      player_table.add{name=p.name.."rank", type="label", caption=get_rank(p).short_hand}
+      		player_table.add{name=p.name.."rank", type="label", caption=get_rank(p).short_hand}
 		end
 	end
 end
