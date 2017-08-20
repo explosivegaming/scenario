@@ -73,7 +73,10 @@ local preset_ranks = {
 	
 	Jail={}
 }
-
+-- returns this list, or just one rank if given
+function get_rank_presets(rank)
+	if rank then return global.preset_ranks[rank] else return global.preset_ranks end
+end
 Event.register(-1,function() global.preset_ranks = preset_ranks end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

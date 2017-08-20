@@ -76,7 +76,15 @@ function load_command(command)
 		end
 	end)
 end
-
+-- returns all the commands in a certain rank restriction
+function get_commands(rank)
+	local rank = rank or 'Owner'
+	local to_return = {}
+	for _,command in pairs(global.commands) do
+		if command.restriction <= string_to_rank(restriction).power then table.insert(to_return,command) end
+	end
+	return to_return
+end
 Event.register(-1,function() global.commands = Exp_commands end)
 Event.register(defines.events.on_player_joined_game,function() for _,command in pairs(Exp_commands) do load_command(command) end end)
 --Please Only Edit Above This Line-----------------------------------------------------------
