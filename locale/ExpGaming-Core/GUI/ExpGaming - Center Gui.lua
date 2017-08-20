@@ -56,7 +56,7 @@ function draw_frame.center(player,element)
 		local restriction = temp_restriction or string_to_rank(t.restriction).power or 0
 		if restriction >= get_rank(player).power then ExpGui.add_input.draw_button(tab_bar,t.name) end 
 	end
-	draw_frame.tab(player,tab_bar[frame_data.tabs[1]].name)
+	draw_frame.tab(player,tab_bar[frame_data.tabs[1].name])
 	ExpGui.add_input.draw_button(tab_bar,'close_center')
 	tab.style.minimal_height = 300
 	tab.style.maximal_height = 300
