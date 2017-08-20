@@ -35,6 +35,12 @@ ExpGui.add_frame.left('rocket_list','item/rocket-silo','Open a list with rocket 
 	end
 end)
 
+function get_milestones_times() 
+	local to_return = {}
+	for milestone,time in pairs(global.rockets) do table.insert(to_return,{tonumber(milestone:match('%d+')),tick_to_display_format(time)}) end
+	return to_return
+end
+
 Event.register(defines.events.on_rocket_launched, function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'rocket_list',true) end end)
 Event.register(-1,function(event) global.rockets = {m1=0,m2=0,m5=0,m10=0,m20=0,m50=0,m100=0,m200=0,m500=0} end)
 --Please Only Edit Above This Line-----------------------------------------------------------

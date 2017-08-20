@@ -41,7 +41,7 @@ ExpGui.add_frame.center('rank_changer','Edit Ranks','Allows you to edit players 
 	inputs.player_dropdown.selected_index = 1
 	inputs.add{name='rank_lable',type='label',caption='Rank: '}
 	inputs.add{name='rank_dropdown',type='drop-down'}
-	for _,rank in pairs(global.ranks) do 
+	for _,rank in pairs(get_ranks()) do 
 		if get_rank(player).power < rank.power then
 			inputs.rank_dropdown.add_item(rank.name)
 		end
