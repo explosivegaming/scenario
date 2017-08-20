@@ -47,14 +47,9 @@ ExpGui.add_frame.tab('commands','Commands','Useful commands you can use','Guest'
 	frame.add{name='command_table',type='table',colspan=2}
 	frame.command_table.add{name='command_title',type='label',caption='Command'}
 	frame.command_table.add{name='help_title',type='label',caption='Help Info'}
-    for n,command in pairs(global.commands) do
-        local temp_restriction = nil
-		if type(command[4]) == 'number' then temp_restriction = command[4] end
-		local restriction = temp_restriction or string_to_rank(command[4]).power or 0
-        if get_rank(player).power > restriction then else
-            frame.command_table.add{name='command_'..n,type='label',caption='/'..command[1]}
-            frame.command_table.add{name='help_'..n,type='label',caption=command[2],single_line=false}.style.maximal_width=480
-        end
+    for n,command in pairs(get_commands(get_rank(player).name)) do
+        frame.command_table.add{name='command_'..n,type='label',caption='/'..command.name}
+        frame.command_table.add{name='help_'..n,type='label',caption=command.help,single_line=false}.style.maximal_width=480
     end
 end)
 
