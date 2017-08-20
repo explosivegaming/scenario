@@ -38,7 +38,7 @@ local player_modifiers = {
 
 local states={1,1.25,1.5,2,3,5,7.5,10}
 
-ExpGui.add_frame.center('admin','Admin','A few admin only things','Admin',{{'commands','Admin'}})
+ExpGui.add_frame.center('admin','Admin','A few admin only things','Admin',{{name='commands',restriction='Admin'}})
 
 local function get_state(name,player,is_player,value)
 	if is_player then
