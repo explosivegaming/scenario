@@ -125,7 +125,7 @@ function get_ranked_players(rank)
 	local to_return = {}
 	for _,player in paris(game.players) do 
 		if not rank or rank == get_rank(player).name then 
-			table.insert(to_return,{player.name,tick_to_display_format(player.online_time),get_rank(player).name}) set_ending_screen_data
+			table.insert(to_return,{player.name,tick_to_display_format(player.online_time),get_rank(player).name})
 		end
 	end
 	return to_return

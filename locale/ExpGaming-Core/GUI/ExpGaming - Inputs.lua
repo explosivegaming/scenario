@@ -23,12 +23,12 @@ local inputs = ExpGui.inputs
 --allows defining of new buttons;;name  how to call button;;default_display  what is shown on the button;;default_tooltip  the tooltip display;;event  function(player,element) that runs on click
 function add_input.button(name,default_display,default_tooltip,event)
 	if not name then error('Button requires a name') end
-	table.insert(inputs.buttons,{name,default_display,default_tooltip,event})
+	table.insert(inputs.buttons,{name=name,display=default_display,tooltip=default_tooltip,event=event})
 end
 --allows defining of text box inputs;;name  how to call button;;default_display  what is shown on the button;;event  function(player,element) that runs on text change
 function add_input.text(name,default_display,event)
 	if not name then error('Text Filed requires a name') end
-	table.insert(inputs.text,{name,default_display,event})
+	table.insert(inputs.text,{name=name,display=default_display,event=event})
 end
 --draws the button into a gui;;frame  the frame to draw to;;name  name of button to draw;;display(opptinal) overrides the default;;tooltip(opptinal) overrides the default
 function add_input.draw_button(frame,name,display,tooltip)

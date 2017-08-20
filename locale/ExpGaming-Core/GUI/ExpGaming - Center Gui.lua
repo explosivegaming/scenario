@@ -27,14 +27,14 @@ local draw_frame = ExpGui.draw_frame
 function add_frame.center(name,default_display,default_tooltip,restriction,tabs,event)
 	if not name then error('Frame requires a name') end
 	local tabs = tabs or {}
-	table.insert(frames.center,{name,default_display,tabs,event})
+	table.insert(frames.center,{name=name,display=default_display,tabs=tabs,event=event})
 	ExpGui.toolbar.add_button(name,default_display,default_tooltip,restriction,draw_frame.center)
 end
 --Define a tab; frame is needed as every tab must be used once; event(player,tab) is the draw function
 function add_frame.tab(name,default_display,default_tooltip,restriction,frame,event)
 	if not name then error('Tab requires a name') end
 	if not frame then error('Tab requires a frame') end
-	table.insert(frames.tabs,{name,default_display,frame,event})
+	table.insert(frames.tabs,{name=name,display=default_display,frame=frame,event=event})
 	for _,f in pairs(frames.center) do if f.name == frame then table.insert(f.tabs,{name,restriction}) end end
 	ExpGui.add_input.button(name,default_display,default_tooltip,draw_frame.tab)
 end
@@ -56,7 +56,7 @@ function draw_frame.center(player,element)
 		local restriction = temp_restriction or string_to_rank(t.restriction).power or 0
 		if restriction >= get_rank(player).power then ExpGui.add_input.draw_button(tab_bar,t.name) end 
 	end
-	draw_frame.tab(player,tab_bar[frame_data.tabs[1].name)
+	draw_frame.tab(player,tab_bar[frame_data.tabs[1]].name)
 	ExpGui.add_input.draw_button(tab_bar,'close_center')
 	tab.style.minimal_height = 300
 	tab.style.maximal_height = 300
