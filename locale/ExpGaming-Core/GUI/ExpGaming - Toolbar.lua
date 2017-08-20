@@ -23,7 +23,7 @@ local toolbar = ExpGui.toolbar
 function toolbar.add_button(name,default_display,default_tooltip,restriction,event)
 	local restriction = restriction or 0
 	if not name then error('Button requires a name') end
-	table.insert(toolbar.buttons,{name,restriction})
+	table.insert(toolbar.buttons,{name=name,restriction=restriction})
 	ExpGui.add_input.button(name,default_display,default_tooltip,event)
 end
 --draw the toolbar to the player only showing buttons within their restriction

@@ -45,7 +45,7 @@ function add_frame.popup(style,default_display,default_tooltip,restriction,on_cl
 	if not style then error('Popup style requires a name') end
 	if not event or type(event) ~= 'function' then error('Popup style requires a draw function') end
 	local restriction = restriction or 0
-	table.insert(frames.popup,{style,default_display,on_click,event})
+	table.insert(frames.popup,{style=style,display=default_display,on_click=on_click,event=event})
 	if on_click and type(on_click) == 'function' then
 		ExpGui.toolbar.add_button(style,default_display,default_tooltip,restriction,draw_frame.popup_button)
 	end
@@ -53,7 +53,7 @@ end
 --draw the popup on_click GUI for the player; do not call manually must use other functions to call
 function draw_frame.popup_button(player,element)
 	local frame_data = nil
-	for _,frame in pairs(frames.popup) do if element.name == frame[1] then frame_data = frame break end end
+	for _,frame in pairs(frames.popup) do if element.name == frame.style then frame_data = frame break end end
 	local popups = mod_gui.get_frame_flow(player).popups
 	if popups[frame_data.name..'_on_click'] then popups[frame_data.name..'_on_click'].destroy() return end
 	local frame = get_next_popup(popups,frame_data.name)
@@ -63,7 +63,7 @@ end
 function draw_frame.popup(style,args)
 	local args = args or {}
 	local frame_data = nil
-	for _,frame in pairs(frames.popup) do if style == frame[1] then frame_data = frame break end end
+	for _,frame in pairs(frames.popup) do if style == frame.style then frame_data = frame break end end
 	for _,player in pairs(game.connected_players) do
 		local popups = mod_gui.get_frame_flow(player).popups
 		local frame = get_next_popup(popups)

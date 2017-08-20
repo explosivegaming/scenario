@@ -50,7 +50,7 @@ function define_command(name,help,inputs,restriction,event)
 	local inputs = inputs or {true}
 	local restriction = restriction or 0
 	if not event or type(event) ~= 'function' then error('Command requires a function') end
-	table.insert(Exp_commands,{name,help,inputs,restriction,event})
+	table.insert(Exp_commands,{name=name,help=help,inputs=inputs,restriction=restriction,event=event})
 end
 --The magic for the commands. It is a hard bit of code so GL; but it will call the command event have some sanitisaion of the input
 function load_command(command)

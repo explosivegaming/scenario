@@ -28,7 +28,7 @@ function add_frame.left(name,default_display,default_tooltip,restriction,vis,eve
 	if not name then error('Frame requires a name') end
 	if not event or type(event) ~= 'function' then error('Frame requires a draw function') end
 	local vis = vis or false
-	table.insert(frames.left,{name,default_display,event,vis})
+	table.insert(frames.left,{name=name,display=default_display,event=event,vis=vis})
 	ExpGui.toolbar.add_button(name,default_display,default_tooltip,restriction,draw_frame.left)
 end
 --draw the left GUI for the player; called via script, only call manually when update is true and element is the name of the GUI
