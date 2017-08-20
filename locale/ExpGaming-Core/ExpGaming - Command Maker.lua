@@ -81,7 +81,10 @@ function get_commands(rank)
 	local rank = rank or 'Owner'
 	local to_return = {}
 	for _,command in pairs(global.commands) do
-		if command.restriction <= string_to_rank(restriction).power then table.insert(to_return,command) end
+		local temp_restriction = nil
+		if type(command.restriction) == 'number' then temp_restriction = command.restriction end
+		local restriction = temp_restriction or string_to_rank(command.restriction).power or 0
+		if restriction > string_to_rank(rank).power then table.insert(to_return,command) end
 	end
 	return to_return
 end
