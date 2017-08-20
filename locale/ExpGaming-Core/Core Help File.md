@@ -73,6 +73,12 @@ See code for more details.
 * table.to_string(tbl)
     * We stole this but we don't know from where, just google it
     * output -> table as a string
+## Get Commands
+* get_temp_var_data(name)
+    * name = value retured by sudo
+    * returens a list if the data returend by thefunction if any
+* get_sudo_info(string) 
+    * return either a list or string based on the string boliean 
 ## Other
 * define_command(name,help,inputs,restriction,event)
     * Add game commands in a way it does not cause crashes
@@ -81,10 +87,16 @@ See code for more details.
     * inputs = {'input name',...,true/nil} last value being true means no cap on the length
     * restriction = 'rank name'
     * event = on command -> function(player,event,args)
-* sudo(command,args)
-    * Ask server to run a script function for a user i.e. give_rank
-    * command = function(...)
-    * args = {...}
+* sudo(command,args,custom_return_name)
+    * Ask server to run a script function at a diffrent time
+    * command = function or function name
+    * args (as function needs) = {...}
+    * custom_return_name (opt) = name of the value temp varible returned
+    * returns the name of its temp varible
+* refresh_temp_var(name,value,offset)
+    * name = value retured by sudo
+    * value (opt) = new value if making a new temp varible
+    * offset (opt) = if the base time is too short, for very big commands
 * command: /server-interface
     * Run loadstring on lua code given like /c but does not break achievements
     * restriction = 'Admin'
