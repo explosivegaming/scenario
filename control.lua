@@ -26,7 +26,7 @@ credit_loop(require("locale/file-header"))
 --below 'game.tick/(3600*game.speed)) % 15 == 0' raises the gui_update event every 15 minutes fell free to change the update time on that
 Event.register(defines.events.on_tick, function(event)
 	if (game.tick/(3600*game.speed)) % 15 == 0 then 
-		for _,player in pairs(game.connected_players) do find_new_rank(player) end
+		for _,player in pairs(game.connected_players) do sudo(find_new_rank,{player}) end
 		script.raise_event(Event.gui_update,{tick=game.tick}) 
 	end 
 end)
