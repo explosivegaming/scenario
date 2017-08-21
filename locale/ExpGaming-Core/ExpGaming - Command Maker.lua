@@ -55,6 +55,7 @@ end
 --The magic for the commands. It is a hard bit of code so GL; but it will call the command event have some sanitisaion of the input
 function load_command(command)
 	if commands.commands[command.name] then return end
+	game.write_file('commands.log','\n'..game.tick..' Loaded Command: '..command.name, true, 0)
 	commands.add_command(command.name,command_inputs_to_string(command)..command.help,function(event)
 		local command_data = nil
 		for _,command_d in pairs(Exp_commands) do if event.name == command_d[1] then command_data = command_d break end end
@@ -63,16 +64,22 @@ function load_command(command)
 			local temp_restriction = nil
 			if type(command.restriction) == 'number' then temp_restriction = command.restriction end
 			local restriction = temp_restriction or string_to_rank(command.restriction).power or 0
-			if get_rank(player).power > restriction then player.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+			if get_rank(player).power > restriction then 
+				player.print('401 - Unauthorized: Access is denied due to invalid credentials')
+				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command: '..command.name..' With args of: '..table.to_string(args), true, 0)
+				return 
+			end
 			local args = get_command_args(event,command)
 			if args == 'Invalid' then player.print('Invalid Input, /'..command.name..' '..command_inputs_to_string(command)) return end
 			command.event(player,event,args)
 			player.print('Command Complete')
+			game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Used command: '..command.name..' With args of: '..table.to_string(args), true, 0)
 		else
 			local args = get_command_args(event,command)
 			if args == 'Invalid' then print('Invalid Input, /'..command.name..' '..command_inputs_to_string(command)) return end
 			command.event('<server>',event,args)
 			print('Command Complete')
+			game.write_file('commands.log','\n'..game.tick..' Player: <server> Used command: '..command.name..' With args of: '..table.to_string(args), true, 0)
 		end
 	end)
 end
