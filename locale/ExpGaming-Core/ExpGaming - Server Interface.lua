@@ -84,7 +84,7 @@ Event.register(defines.events.on_tick, function(event)
 				local args = {}
 				-- retrives and temp varibles
 				for n,value in pairs(command.args) do
-					if type(value) == 'table' and not value.__self and value.sudo and value.sudo == 'sudo-temp-var' then args[n] = global.sudo.temp_varibles[value.name].data
+					if type(value) == 'table' and not value.__self and value.sudo and value.sudo == 'sudo-temp-var' then args[n] = {data=global.sudo.temp_varibles[value.name].data,temp_var_name=value.name}
 					else args[n] = value end
 				end
 				-- makes new temp value and runs command
