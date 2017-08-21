@@ -25,7 +25,6 @@ credit_loop(require("locale/StdLib/event"))
 local function init() if not global.credits then Event.dispatch({name = Event.core_events.init, tick = 0}) end end
 Event.register(defines.events.on_player_joined_game,init)
 Event.register(defines.events.on_tick,init)
-Event.register(-2,init) Event.register(-3,init)
 --loads all the other scripts
 Event.gui_update = script.generate_event_name()
 credit_loop(require("locale/file-header"))
