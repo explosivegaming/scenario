@@ -57,7 +57,7 @@ function rank_print(msg, rank, inv)
 end
 --Give the user their new rank and raise the Event.rank_change event
 function give_rank(player,rank,by_player)
-	local by_player = by_player or 'system'
+	local by_player = by_player or 'server'
 	local rank = string_to_rank(rank) or rank or string_to_rank('Guest')
 	local old_rank = get_rank(player)
 	--messaging
@@ -66,7 +66,7 @@ function give_rank(player,rank,by_player)
 	if by_player.name then 
 		rank_print(player.name..' was '..message..' to '..rank.name..' by '..by_player.name,'Guest')
 	else
-		rank_print(player.name..' was '..message..' to '..rank.name..' by <system>','Guest')
+		rank_print(player.name..' was '..message..' to '..rank.name..' by <server>','Guest')
 	end
 	if rank.name ~= 'Guest' then player.print('You have been given the '..rank.name..' Rank!') end
 	if player.tag ~= old_rank.tag and player.tag ~= '' then player.print('Your Tag was reset due to a Rank change') end
@@ -111,7 +111,7 @@ function find_new_rank(player)
 		--Give player new rank if availble
 		if highest_rank.name == 'Guest' then
 			player.permission_group=game.permissions.get_group('Guest')
-			script.raise_event(Event.rank_change, {player=player, by_player='system', new_rank=string_to_rank('Guest'), old_rank=string_to_rank('Guest')})
+			script.raise_event(Event.rank_change, {player=player, by_player='server', new_rank=string_to_rank('Guest'), old_rank=string_to_rank('Guest')})
 		else
 			if highest_rank ~= current_rank then give_rank(player,highest_rank) end
 		end
@@ -130,8 +130,15 @@ function get_ranked_players(rank)
 	end
 	return to_return
 end
---Event handlers
+--Event handlers  
 Event.rank_change = script.generate_event_name()
+Event.register(Event.rank_change,function(event)
+	if event.by_player == 'server' then
+		game.write_file('rank-change.log','\n'..game.tick..' Player: '..event.player.name..' Was given rank: '..event.new_rank.name..' By: <server> Their were rank: '..event.old_rank.name, true, 0)
+	else
+		game.write_file('rank-change.log','\n'..game.tick..' Player: '..event.player.name..' Was given rank: '..event.new_rank.name..' By: '..event.by_player.name..' Their were rank: '..event.old_rank.name, true, 0)	
+	end
+end)
 Event.register(-1,function() 
 	global.old_ranks = {} 
 	for _,rank in pairs(global.ranks) do
