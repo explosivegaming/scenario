@@ -42,6 +42,10 @@ function sudo(command,args,custom_return_name)
 		return {sudo='sudo-temp-var',name=return_name}
 	end 
 end
+--turns a string into the temp var format so that it can be used
+function format_as_temp_var(string)
+	return {sudo='sudo-temp-var',name=tostring(string)}
+end
 --update the time on a temp var or add it as a new one
 function refresh_temp_var(name,value,offset)
 	local offset = offset or temp_var_time
