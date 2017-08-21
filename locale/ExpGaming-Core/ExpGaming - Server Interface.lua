@@ -38,7 +38,8 @@ function sudo(command,args,custom_return_name)
 	if type(command) == 'function' then
 		local args = args or {}
 		local return_name = custom_return_name or tostring(game.tick)..tostring(command)..tostring(#global.sudo.commands)
-		table.insert(global.sudo.commands,{fun=command,args=args,return_name=return_name})	
+		table.insert(global.sudo.commands,{fun=command,args=args,return_name=return_name})
+		refresh_temp_var(return_name,'temp-var-temp-value')
 		return {sudo='sudo-temp-var',name=return_name}
 	end 
 end
@@ -50,7 +51,7 @@ end
 --update the time on a temp var or add it as a new one
 function refresh_temp_var(name,value,offset)
 	local offset = offset or temp_var_time
-	if global.sudo.temp_varibles[name] then
+	if global.sudo.temp_varibles[name] and not value then
 		global.sudo.temp_varibles[name].remove_time = game.tick+offset
 	else
 		global.sudo.temp_varibles[name] = {data=value,remove_time=game.tick+offset}
