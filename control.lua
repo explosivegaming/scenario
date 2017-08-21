@@ -22,7 +22,7 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 require("mod-gui")
 credit_loop(require("locale/StdLib/event"))
 --allows the code to be ran on a map where the code has just been added (ie init after init)
-local function init() if not global.credits then Event.dispatch({name = Event.core_events.init, tick = 0}) end
+local function init() if not global.credits then Event.dispatch({name = Event.core_events.init, tick = 0}) end end
 Event.register(defines.events.on_player_joined_game,init)
 Event.register(defines.events.on_tick,init)
 Event.register(-2,init) Event.register(-3,init)
