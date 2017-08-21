@@ -26,13 +26,10 @@ Event.register(defines.events.on_marked_for_deconstruction, function(event)
 	local tree_remover = nil
 	if not get_temp_var_data(player.name..'_tree_remover') then
 		tree_remover = sudo(function(player,entity)
-			if entity.last_user then
-				if string_to_rank('reg').power < get_rank(player).power then
-					player.print('You are not allowed to do this yet, You require the Regular rank, you must play for at least 3 hours')
-					rank_print(player.name..' tryed to deconstruced something.')
-					return 1 
-				end
-				return 0
+			if string_to_rank('reg').power < get_rank(player).power then
+				player.print('You are not allowed to do this yet, You require the Regular rank, you must play for at least 3 hours')
+				rank_print(player.name..' tryed to deconstruced something.')
+				return 1
 			elseif get_rank(player).power <= string_to_rank('Donator').power then return 2 end
 		end,{player,entity},player.name..'_tree_remover')
 	else tree_remover = format_as_temp_var(player.name..'_tree_remover') end
@@ -41,9 +38,9 @@ Event.register(defines.events.on_marked_for_deconstruction, function(event)
 		if not event.entity.valid then return end
 		local result = tree_remover.data[1]
 		refresh_temp_var(tree_remover.temp_var_name)
-		if result == 1 then
+		if result == 1 and entity.last_user then
 			entity.cancel_deconstruction('player')
-		elseif result == 2 then
+		elseif result == 2 and not entity.last_user then
 			entity.destroy()
 		end
 	end,{entity,tree_remover})
