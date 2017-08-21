@@ -19,24 +19,34 @@ local credits = {{
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
 Event.register(defines.events.on_marked_for_deconstruction, function(event)
-	sudo(function(event)
-		local player = game.players[event.player_index]
+	if not event.entity.valid then return end
+	local player = game.players[event.player_index]
+	local entity = event.entity
+	-- sets up the temp var value to be used in later sudo functions
+	local tree_remover = nil
+	if not get_temp_var_data(player.name..'_tree_remover') then
+		tree_remover = sudo(function(player,entity)
+			if entity.last_user then
+				if string_to_rank('reg').power < get_rank(player).power then
+					player.print('You are not allowed to do this yet, You require the Regular rank, you must play for at least 3 hours')
+					rank_print(player.name..' tryed to deconstruced something.')
+					return 1 
+				end
+				return 0
+			elseif get_rank(player).power <= string_to_rank('Donator').power then return 2 end
+		end,{player,entity},player.name..'_tree_remover')
+	else tree_remover = format_as_temp_var(player.name..'_tree_remover') end
+	-- using the temp var stored in tree_remover sudo will take diffrent effects while only running the test once
+	sudo(function(entity,tree_remover)
 		if not event.entity.valid then return end
-		local entity = event.entity
-		local last_user = entity.last_user
-		if get_temp_var_data(player.name..'_tree_remover') == 'Nope' then entity.cancel_deconstruction('player') return 'Nope' end
-		if last_user then
-			if string_to_rank('reg').power < get_rank(player).power then
-				entity.cancel_deconstruction('player')
-				player.print('You are not allowed to do this yet, You require the Regular rank, you must play for at least 3 hours')
-				rank_print(player.name..' tryed to deconstruced something.')
-				return 'Nope'
-			end
-		elseif get_rank(player).power <= string_to_rank('Donator').power then
-			event.entity.destroy()
-			return 'All Gone'
+		local result = tree_remover.data[1]
+		refresh_temp_var(tree_remover.temp_var_name)
+		if result == 1 then
+			entity.cancel_deconstruction('player')
+		elseif result == 2 then
+			entity.destroy()
 		end
-	end,{event},game.players[event.player_index].name..'_tree_remover')
+	end,{entity,tree_remover})
 end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
