@@ -110,7 +110,8 @@ See code for more details.
     * value (opt) = new value if making a new temp varible
     * offset (opt) = if the base time is too short, for very big commands
 * format_as_temp_var(string)
-    * returns the same value that sudo would with out running the function
+    * returns the same value that sudo would when given a custom return name
+    * note only works when there is a custom return name else temp var is nil
 * command: /server-interface
     * Run loadstring on lua code given like /c but does not break achievements
     * restriction = 'Admin'
