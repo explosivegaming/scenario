@@ -37,9 +37,10 @@ Event.register(defines.events.on_marked_for_deconstruction, function(event)
 		end,{player,entity},player.name..'_tree_remover')
 	else tree_remover = format_as_temp_var(player.name..'_tree_remover') end
 	-- using the temp var stored in tree_remover sudo will take diffrent effects while only running the test once
-	sudo(function(entity,tree_remover_data)
+	sudo(function(entity,tree_remover)
 		if not event.entity.valid then return end
-		local result = tree_remover_data[1]
+		local result = tree_remover.data[1]
+		refresh_temp_var(tree_remover.temp_var_name)
 		if result == 1 then
 			entity.cancel_deconstruction('player')
 		elseif result == 2 then
