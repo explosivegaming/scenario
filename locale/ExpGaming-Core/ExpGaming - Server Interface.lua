@@ -95,7 +95,7 @@ Event.register(defines.events.on_tick, function(event)
 	end
 	-- removes old temp varibles
 	for name,data in pairs(global.sudo.temp_varibles) do
-		if data.remove_time >= game.tick then global.sudo.temp_varibles[name] = nil end
+		if data.remove_time <= game.tick then global.sudo.temp_varibles[name] = nil end
 	end
 end)
 Event.register(-1,function() global.sudo = {commands={},temp_varibles={}} end)
