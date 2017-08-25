@@ -28,6 +28,7 @@ local preset_ranks = {
 	Admin={
 	'eissturm',
 	'PropangasEddy',
+	'mark9064',
 	'Smou'},
 	
 	Mod={
@@ -45,7 +46,6 @@ local preset_ranks = {
 	'Hobbitkicker',
 	'hud',
 	'Koroto',
-	'mark9064',
 	'matthias60',
 	'MeDDish',
 	'Mindxt20',
@@ -61,7 +61,8 @@ local preset_ranks = {
 	'SuperWinner50',
 	'tophatgaming123',
 	'VR29',
-	'xenocyber'},
+	'xenocyber',
+	'Ruuyji'},
 	
 	Donator={
 	'M74132',
