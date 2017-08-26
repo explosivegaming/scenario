@@ -103,7 +103,6 @@ local ranks = {
 	disallow={
 		'set_auto_launch_rocket',
 		'change_programmable_speaker_alert_parameters',
-		'reset_assembling_machine',
 		'drop_item'}
 	},
 	
@@ -116,6 +115,7 @@ local ranks = {
 		'build_terrain',
 		'remove_cables',
 		'launch_rocket',
+		'reset_assembling_machine',
 		'cancel_research'}
 	},
 	
