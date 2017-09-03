@@ -28,22 +28,25 @@ local preset_ranks = {
 	Admin={
 	'eissturm',
 	'PropangasEddy',
+	'mark9064',
 	'Smou'},
 	
 	Mod={
 	'AcThPaU',
 	'Alanore',
 	'Aquaday',
+	'ayahuasca23',
 	'cafeslacker',
 	'CrashKonijn',
 	'Drahc_pro',
+	'everLord',
 	'FlipHalfling90',
-	'freek16',
+	'facere',
+	'freek18',
 	'Hobbitkicker',
 	'hud',
 	'Koroto',
-	'mark9064',
-	'Matthias60',
+	'matthias60',
 	'MeDDish',
 	'Mindxt20',
 	'MottledPetrel',
@@ -55,13 +58,16 @@ local preset_ranks = {
 	'Sand3r205',
 	'scarbvis',
 	'steentje77',
+	'SuperWinner50',
 	'tophatgaming123',
 	'VR29',
-	'xenocyber'},
+	'xenocyber',
+	'Ruuyji'},
 	
 	Donator={
 	'M74132',
-	'Splicer'},
+	'Splicer',
+	'Nucklesamich'},
 	
 	Veteran={},
 	
