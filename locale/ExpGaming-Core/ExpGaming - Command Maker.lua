@@ -29,10 +29,11 @@ function command_inputs_to_string(command)
 	return str_inputs
 end
 --Can be used to ensure the right number of inputs are given
-function get_command_args(event,command)
-	if not event.parameter then if #command.inputs > 0 then return 'Invalid' else return end end
+function get_command_args(event,command,allow_invaild)
+	if not event.parameter then if #command.inputs > 0 then if not allow_invaild return 'Invalid' end else return end end
 	local args = {}
 	for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
+	if allow_invaild then return args end
 	if command.inputs[#command.inputs] == true then
 		if #args < #command.inputs-1 then return 'Invalid' end
 	else 
@@ -66,11 +67,14 @@ function load_command(command)
 			local restriction = temp_restriction or string_to_rank(command.restriction).power or 0
 			if get_rank(player).power > restriction then 
 				player.print('401 - Unauthorized: Access is denied due to invalid credentials')
-				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command: '..command.name..' With args of: '..table.to_string(args), true, 0)
+				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command (Unauthorized): '..command.name..' With args of: '..table.to_string(get_command_args(event,command,true)), true, 0)
 				return 
 			end
 			local args = get_command_args(event,command)
-			if args == 'Invalid' then player.print('Invalid Input, /'..command.name..' '..command_inputs_to_string(command)) return end
+			if args == 'Invalid' then 
+				player.print('Invalid Input, /'..command.name..' '..command_inputs_to_string(command)) return 
+				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command (Invalid Args): '..command.name..' With args of: '..table.to_string(get_command_args(event,command,true)), true, 0)
+			end
 			command.event(player,event,args)
 			player.print('Command Complete')
 			game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Used command: '..command.name..' With args of: '..table.to_string(args), true, 0)
