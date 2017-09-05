@@ -30,8 +30,14 @@ function command_inputs_to_string(command)
 end
 --Can be used to ensure the right number of inputs are given
 function get_command_args(event,command,allow_invaild)
-	if not event.parameter then if #command.inputs > 0 then if allow_invaild then return {nil} end return 'Invalid' else return end end
 	local args = {}
+	if not event.parameter then 
+		if #command.inputs > 0 then 
+			if allow_invaild then return args end
+			return 'Invalid'
+		end
+		return args
+	end
 	for word in event.parameter:gmatch('%S+') do table.insert(args,word) end
 	if allow_invaild then return args end
 	if command.inputs[#command.inputs] == true then
