@@ -62,7 +62,11 @@ local preset_ranks = {
 	'tophatgaming123',
 	'VR29',
 	'xenocyber',
-	'Ruuyji'},
+	'Ruuyji',
+	'mightycax',
+	'Gizan',
+	'mafisch3',
+	'cydes'},
 	
 	Donator={
 	'M74132',
