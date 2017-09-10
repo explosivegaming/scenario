@@ -66,7 +66,8 @@ local preset_ranks = {
 	'mightycax',
 	'Gizan',
 	'mafisch3',
-	'cydes'},
+	'cydes',
+	'Windbomb'},
 	
 	Donator={
 	'M74132',
