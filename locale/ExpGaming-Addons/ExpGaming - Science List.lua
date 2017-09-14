@@ -35,7 +35,7 @@ local function update_science_packs()
 	end
 end
 
-ExpGui.add_frame.left('science_list','item/lab','Open a list with the amount of science done','Guest',false,function(player,frame)
+ExpGui.add_frame.left('science_list','item/lab','Open a list with the amount of science done',false,function(player,frame)
 	frame.caption = 'Science'
 	frame.add{name='total_title',type='label',caption='Total Packs:',style="caption_label_style"}
 	frame.add{name='total_flow',type='flow',direction='vertical'}

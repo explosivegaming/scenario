@@ -18,9 +18,9 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-ExpGui.add_frame.center('readme','README','Click To Open Readme','Guest')
+ExpGui.add_frame.center('readme','README','Click To Open Readme')
 
-ExpGui.add_frame.tab('rules','Rules','Rules on this server','Guest','readme',function(player,frame)
+ExpGui.add_frame.tab('rules','Rules','Rules on this server','readme',function(player,frame)
     local rules = {
 		'Welcome to the Explosive Gaming Community!',
 		'',
@@ -36,12 +36,12 @@ ExpGui.add_frame.tab('rules','Rules','Rules on this server','Guest','readme',fun
 	for i, rule in pairs(rules) do frame.add{name=i, type="label", caption=rule, single_line=false}.style.maximal_width=480 end
 end)
 
-ExpGui.add_frame.tab('chat','How To Chat','For the people who dont know how to chat','Guest','readme',function(player,frame)
+ExpGui.add_frame.tab('chat','How To Chat','For the people who dont know how to chat','readme',function(player,frame)
     local chat = "Chatting can be difficult for new players because it’s different than other games! It’s very simple, the button you need to press is the “GRAVE/TILDE” key it’s located under the “ESC key”. If you would like to change the key go to your controls tab in options. The key you need to change is “Toggle Lua console” it’s located in the second column 2nd from bottom."
 	frame.add{name='chat', type="label", caption={"", chat}, single_line=false}.style.maximal_width=480
 end)
 
-ExpGui.add_frame.tab('commands','Commands','Useful commands you can use','Guest','readme',function(player,frame)
+ExpGui.add_frame.tab('commands','Commands','Useful commands you can use','readme',function(player,frame)
     local text = "A List of all the commands that you are able to use, other commands may be permitted to higher ranks then yours."
     frame.add{name='intro', type="label", caption=text, single_line=false}.style.maximal_width=480
 	frame.add{name='command_table',type='table',colspan=2}
@@ -53,7 +53,7 @@ ExpGui.add_frame.tab('commands','Commands','Useful commands you can use','Guest'
     end
 end)
 
-ExpGui.add_frame.tab('players','Players','Players that have been on the server','Guest','readme',function(player,frame)
+ExpGui.add_frame.tab('players','Players','Players that have been on the server','readme',function(player,frame)
     local text = "These are the players who have supported us in the making of this factory. Without you the player we wouldn't have been as far as we are now."
     frame.add{name='intro', type="label", caption=text, single_line=false}.style.maximal_width=480
     local table_area = frame.add{type='flow',name='flow',direction='vertical'}

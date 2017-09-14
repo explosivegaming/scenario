@@ -75,7 +75,7 @@ ExpGui.add_input.button('enter_edit','Press To Edit','Press to edit the current 
 	draw_edit_mode(player,element.parent)
 end)
 
-ExpGui.add_frame.left('task_list','item/inserter','Toggle Task List','Guest',true,function(player,frame)
+ExpGui.add_frame.left('task_list','item/inserter','Toggle Task List',true,function(player,frame)
 	frame.caption = 'Task List'
 	draw_standard(player,frame)
 end)
