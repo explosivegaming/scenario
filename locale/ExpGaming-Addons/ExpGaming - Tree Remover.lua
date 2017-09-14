@@ -26,7 +26,7 @@ Event.register(defines.events.on_marked_for_deconstruction, function(event)
 	local tree_remover = nil
 	if not get_temp_var_data(player.name..'_tree_remover') then
 		tree_remover = sudo(function(player,entity)
-			if rank_allowed(get_rank(player),'decon') then
+			if not rank_allowed(get_rank(player),'decon') then
 				player.print('You are not allowed to do this yet, You require the Regular rank, you must play for at least 3 hours')
 				rank_print(player.name..' tryed to deconstruced something.')
 				return 1
