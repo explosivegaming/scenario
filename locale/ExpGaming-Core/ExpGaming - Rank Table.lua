@@ -60,7 +60,8 @@ local ranks = {
 		time=nil,
 		colour={r=179,g=125,b=46},
 		disallow={},
-		allow={}},
+		allow={}
+		},
 		
 		{name='Admin',
 		short_hand='Admin',
@@ -72,7 +73,9 @@ local ranks = {
 			'edit_permission_group',
 			'delete_permission_group',
 			'add_permission_group'},
-		allow={}
+		allow={
+			'server-interface',
+			'tp-all'}
 		},
 		
 		{name='Mod',
@@ -82,7 +85,9 @@ local ranks = {
 		colour={r=0,g=170,b=0},
 		disallow={
 			'server_command'},
-		allow={}
+		allow={
+			'temp-ban'
+			}
 		},
 		
 		{name='Donator',
@@ -91,7 +96,10 @@ local ranks = {
 		time=nil,
 		colour={r=233,g=63,b=233},
 		disallow={},
-		allow={}},
+		allow={
+			'tp',
+			'repair'}
+		},
 		
 		{name='Veteran',
 		short_hand='Vet',
@@ -132,7 +140,9 @@ local ranks = {
 			'launch_rocket',
 			'reset_assembling_machine',
 			'cancel_research'},
-		allow={}
+		allow={
+			'kill',
+			'tag'}
 		},
 		
 		{name='Jail',
