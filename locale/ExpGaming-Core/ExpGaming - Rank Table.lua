@@ -27,6 +27,7 @@ time		is used for auto-rank feature where you are moved to the rank after a cert
 colour		is the RGB value that can be used to emphasise GUI elements based on rank.
 power		is not in the list below as it is auto-defined by index but allows comparison between ranks.
 disallow	is a list containing input actions that the user can not perform.
+allow		is a list of custom commands and effects that that rank can use, all defined in the sctips.
 For disallow, add to the list the end part of the input action
 Example: defines.input_action.drop_item -> 'drop_item'
 http://lua-api.factorio.com/latest/defines.html#defines.input_action
@@ -34,7 +35,7 @@ http://lua-api.factorio.com/latest/defines.html#defines.input_action
 local ranks = {
 	--these are asigned during the rank set up
 	highest_timed_rank=nil,
-	lowest_time_for_rank=nil,
+	lowest_timed_rank=nil,
 	number_of_ranks=0,
 	ranks={
 		{name='Owner',
@@ -163,7 +164,7 @@ for n,rank in pairs(ranks.ranks) do
 		end
 	end
 	if rank.time and not ranks.highest_timed_rank then ranks.highest_timed_rank=rank end
-	if rank.time then ranks.lowest_time_for_rank=rank end
+	if rank.time then ranks.lowest_timed_rank=rank end
 	ranks.number_of_ranks=ranks.number_of_ranks+1
 end
 -- surches the rank for a certain allow command
