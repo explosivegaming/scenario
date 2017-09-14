@@ -22,20 +22,20 @@ local add_frame = ExpGui.add_frame
 local frames = ExpGui.frames
 local draw_frame = ExpGui.draw_frame
 --Add a frame in the center
---tabs {{name,restriction},{...}}	is a list that can contain already defined tabs
+--tabs {{name},{...}}	is a list that can contain already defined tabs
 --event(player,element)				is an option to have a custom GUI in the center
-function add_frame.center(name,default_display,default_tooltip,restriction,tabs,event)
+function add_frame.center(name,default_display,default_tooltip,tabs,event)
 	if not name then error('Frame requires a name') end
 	local tabs = tabs or {}
 	table.insert(frames.center,{name=name,display=default_display,tabs=tabs,event=event})
-	ExpGui.toolbar.add_button(name,default_display,default_tooltip,restriction,draw_frame.center)
+	ExpGui.toolbar.add_button(name,default_display,default_tooltip,draw_frame.center)
 end
 --Define a tab; frame is needed as every tab must be used once; event(player,tab) is the draw function
-function add_frame.tab(name,default_display,default_tooltip,restriction,frame,event)
+function add_frame.tab(name,default_display,default_tooltip,frame,event)
 	if not name then error('Tab requires a name') end
 	if not frame then error('Tab requires a frame') end
 	table.insert(frames.tabs,{name=name,display=default_display,frame=frame,event=event})
-	for _,f in pairs(frames.center) do if f.name == frame then table.insert(f.tabs,{name=name,restriction=restriction}) end end
+	for _,f in pairs(frames.center) do if f.name == frame then table.insert(f.tabs,{name=name}) end end
 	ExpGui.add_input.button(name,default_display,default_tooltip,draw_frame.tab)
 end
 --Draw the center GUI for the player; do not call manually, must use other functions to call
@@ -50,12 +50,7 @@ function draw_frame.center(player,element)
 	local tab_bar_scroll = frame.add{type = "scroll-pane", name= "tab_bar_scroll", vertical_scroll_policy="never", horizontal_scroll_policy="always"}
 	local tab_bar = tab_bar_scroll.add{type='flow',direction='horizontal',name='tab_bar'}
 	local tab = frame.add{type = "scroll-pane", name= "tab", vertical_scroll_policy="auto", horizontal_scroll_policy="never"}
-	for n,t in pairs(frame_data.tabs) do
-		local temp_restriction = nil
-		if type(t.restriction) == 'number' then temp_restriction = t.restriction end
-		local restriction = temp_restriction or string_to_rank(t.restriction).power
-		if restriction >= get_rank(player).power then ExpGui.add_input.draw_button(tab_bar,t.name) end 
-	end
+	for n,t in pairs(frame_data.tabs) do if rank_allowed(get_rank(player),t.name..'_tab') then ExpGui.add_input.draw_button(tab_bar,t.name) end end
 	draw_frame.tab(player,tab_bar[frame_data.tabs[1].name])
 	ExpGui.add_input.draw_button(tab_bar,'close_center')
 	tab.style.minimal_height = 300
