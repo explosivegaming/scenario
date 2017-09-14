@@ -60,7 +60,8 @@ local ranks = {
 		time=nil,
 		colour={r=179,g=125,b=46},
 		disallow={},
-		allow={}},
+		allow={'cheat-mode'}
+		},
 		
 		{name='Admin',
 		short_hand='Admin',
@@ -72,7 +73,9 @@ local ranks = {
 			'edit_permission_group',
 			'delete_permission_group',
 			'add_permission_group'},
-		allow={}
+		allow={
+			'server-interface',
+			'tp-all'}
 		},
 		
 		{name='Mod',
@@ -82,7 +85,9 @@ local ranks = {
 		colour={r=0,g=170,b=0},
 		disallow={
 			'server_command'},
-		allow={}
+		allow={
+			'temp-ban'
+			}
 		},
 		
 		{name='Donator',
@@ -91,7 +96,11 @@ local ranks = {
 		time=nil,
 		colour={r=233,g=63,b=233},
 		disallow={},
-		allow={}},
+		allow={
+			'tp',
+			'repair',
+			'tree_remover'}
+		},
 		
 		{name='Veteran',
 		short_hand='Vet',
@@ -99,7 +108,7 @@ local ranks = {
 		time=600,
 		colour={r=140,g=120,b=200},
 		disallow={},
-		allow={}},
+		allow={'edit_tasks'}},
 		
 		{name='Member',
 		short_hand='Mem',
@@ -118,7 +127,7 @@ local ranks = {
 			'set_auto_launch_rocket',
 			'change_programmable_speaker_alert_parameters',
 			'drop_item'},
-		allow={}
+		allow={'decon'}
 		},
 		
 		{name='Guest',
@@ -132,7 +141,9 @@ local ranks = {
 			'launch_rocket',
 			'reset_assembling_machine',
 			'cancel_research'},
-		allow={}
+		allow={
+			'kill',
+			'tag'}
 		},
 		
 		{name='Jail',
@@ -151,21 +162,24 @@ local ranks = {
 }
 -- rank table setup
 for n,rank in pairs(ranks.ranks) do
-	local ranks_list = ranks.ranks
 	rank.power = n
-	if ranks_list[n-1] then
-		for _,disallow in pairs(ranks_list[n-1].disallow) do
+	if ranks.ranks[n-1] then
+		for _,disallow in pairs(ranks.ranks[n-1].disallow) do
 			table.insert(rank.disallow,disallow)
-		end
-	end
-	if ranks_list[n+1] then
-		for _,allow in pairs(ranks_list[n+1].allow) do
-			table.insert(rank.allow,allow)
 		end
 	end
 	if rank.time and not ranks.highest_timed_rank then ranks.highest_timed_rank=rank end
 	if rank.time then ranks.lowest_timed_rank=rank end
 	ranks.number_of_ranks=ranks.number_of_ranks+1
+end
+
+for n = #ranks.ranks, 1, -1 do
+    rank = ranks.ranks[n]
+    if ranks.ranks[n+1] then
+		for _,allow in pairs(ranks.ranks[n+1].allow) do
+			table.insert(rank.allow,allow)
+		end
+	end
 end
 -- returns a list off all the ranks, return only one part if given
 function get_ranks(part)

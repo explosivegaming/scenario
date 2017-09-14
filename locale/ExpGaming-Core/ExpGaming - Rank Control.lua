@@ -40,7 +40,7 @@ function string_to_rank(string)
 end
 -- surches the rank for a certain allow command
 function rank_allowed(rank,is_allowed)
-	for _,allow in rank.allow do
+	for _,allow in pairs(rank.allow) do
 		if allow == is_allowed then return true end
 	end
 	return false

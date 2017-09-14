@@ -19,7 +19,7 @@ local credits = {{
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
 --this command is just a way or using loadstring from in game while keeping achievements
-define_command('server-interface','For use of the highest staff only',{'command',true},'admin',function(player,event,args)
+define_command('server-interface','For use of the highest staff only',{'command',true},function(player,event,args)
 	if player == '<server>' then
 		local returned,value = pcall(loadstring(event.parameter)) 
 		if type(value) == 'table' then game.write_file('server-interface.log', '\n'..game.tick..' Ran by: <server>  Code: '..event.parameter..'\n Returned: '..table.to_string(value), true, 0) print(table.to_string(value))
