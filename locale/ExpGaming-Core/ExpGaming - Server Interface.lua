@@ -71,6 +71,10 @@ function get_sudo_info(string)
 	if string then return 'At game tick: '..game.tick..' Queue Lenth: '..#global.sudo.commands..' Number of temp vars: '..lenth
 	else return {tick=game.tick,commands=#global.sudo.commands,temp_varibles=#global.sudo.temp_varibles} end 
 end
+-- stops all sudo commands
+function clear_sudo()
+	global.sudo = {commands={},temp_varibles={}}
+end
 --sudo main loop
 Event.register(defines.events.on_tick, function(event)
 	-- runs the commands in sudo
