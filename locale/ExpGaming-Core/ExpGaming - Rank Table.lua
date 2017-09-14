@@ -149,7 +149,7 @@ local ranks = {
 		}
 	}
 }
--- Feed the disallows of each rank into the one below itself
+-- rank table setup
 for n,rank in pairs(ranks.ranks) do
 	local ranks_list = ranks.ranks
 	rank.power = n
@@ -166,13 +166,6 @@ for n,rank in pairs(ranks.ranks) do
 	if rank.time and not ranks.highest_timed_rank then ranks.highest_timed_rank=rank end
 	if rank.time then ranks.lowest_timed_rank=rank end
 	ranks.number_of_ranks=ranks.number_of_ranks+1
-end
--- surches the rank for a certain allow command
-function rank_allowed(rank,is_allowed)
-	for _,allow in rank.allow do
-		if allow == is_allowed then return true end
-	end
-	return false
 end
 -- returns a list off all the ranks, return only one part if given
 function get_ranks(part)

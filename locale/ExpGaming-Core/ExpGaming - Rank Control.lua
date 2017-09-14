@@ -38,6 +38,13 @@ function string_to_rank(string)
 		if #found_ranks == 1 then return found_ranks[1] end
 	end
 end
+-- surches the rank for a certain allow command
+function rank_allowed(rank,is_allowed)
+	for _,allow in rank.allow do
+		if allow == is_allowed then return true end
+	end
+	return false
+end
 --Send a message to all members of this rank and above, if no rank given default is mod
 --inv sends message to all lower ranks rather than higher
 function rank_print(msg, rank, inv)
