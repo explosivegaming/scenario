@@ -37,7 +37,7 @@ ExpGui.add_frame.tab('rules','Rules','Rules on this server','Guest','readme',fun
 end)
 
 ExpGui.add_frame.tab('chat','How To Chat','For the people who dont know how to chat','Guest','readme',function(player,frame)
-    local chat = "Chatting for new players can be difficult because it’s different than other games! It’s very simple, the button you need to press is the “GRAVE/TILDE” key it’s located under the “ESC key”. If you would like to change the key go to your controls tab in options. The key you need to change is “Toggle Lua console” it’s located in the second column 2nd from bottom."
+    local chat = "Chatting can be difficult for new players because it’s different than other games! It’s very simple, the button you need to press is the “GRAVE/TILDE” key it’s located under the “ESC key”. If you would like to change the key go to your controls tab in options. The key you need to change is “Toggle Lua console” it’s located in the second column 2nd from bottom."
 	frame.add{name='chat', type="label", caption={"", chat}, single_line=false}.style.maximal_width=480
 end)
 

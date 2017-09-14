@@ -23,11 +23,11 @@ define_command('server-interface','For use of the highest staff only',{'command'
 	if player == '<server>' then
 		local returned,value = pcall(loadstring(event.parameter)) 
 		if type(value) == 'table' then game.write_file('server-interface.log', '\n'..game.tick..' Ran by: <server>  Code: '..event.parameter..'\n Returned: '..table.to_string(value), true, 0) print(table.to_string(value))
-		else game.write_file('server-interface.log', '\n'..game.tick..' Ran by: <server> Code: '..event.parameter..'\n Returned: '..tostring(value), true, 0) print(value) end
+		else game.write_file('server-interface.log', '\n'..game.tick..' Ran by: <server> Code: '..event.parameter..'\nReturned: '..tostring(value), true, 0) print(value) end
 	else
 		local returned,value = pcall(loadstring(event.parameter)) 
 		if type(value) == 'table' then game.write_file('server-interface-players.log', '\n'..game.tick..' Ran by: '..player.name..' Code: '..event.parameter..'\n Returned: '..table.to_string(value), true, 0) player.print(table.to_string(value))
-		else game.write_file('server-interface-players.log', '\n'..game.tick..' Ran by: '..player.name..' Code: '..event.parameter..'\n Returned: '..tostring(value), true, 0) player.print(value) end
+		else game.write_file('server-interface-players.log', '\n'..game.tick..' Ran by: '..player.name..' Code: '..event.parameter..'\nReturned: '..tostring(value), true, 0) player.print(value) end
 	end
 end)
 --this is used when changing permission groups when the person does not have permsion to, can also be used to split a large event accross multiple ticks
@@ -70,6 +70,10 @@ function get_sudo_info(string)
 	for _,v in pairs(global.sudo.temp_varibles) do lenth = lenth + 1 end
 	if string then return 'At game tick: '..game.tick..' Queue Lenth: '..#global.sudo.commands..' Number of temp vars: '..lenth
 	else return {tick=game.tick,commands=#global.sudo.commands,temp_varibles=#global.sudo.temp_varibles} end 
+end
+-- stops all sudo commands
+function clear_sudo()
+	global.sudo = {commands={},temp_varibles={}}
 end
 --sudo main loop
 Event.register(defines.events.on_tick, function(event)
