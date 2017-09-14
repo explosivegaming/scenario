@@ -46,7 +46,7 @@ define_command('temp-ban','Temp ban a player untill the next reset, can not be u
     end
 end)
 
-ExpGui.add_frame.popup('temp_ban','Temp Ban','You have been baned till next reset',nil,nil,function(player,frame,args)
+ExpGui.add_frame.popup('temp_ban','Temp Ban','You have been baned till next reset',nil,function(player,frame,args)
     if player == args[3] then
         frame.add{name='title',type='label',caption='You Have Been Temp Banned',style="caption_label_style"}
         frame.add{name='info',type='label',caption='This can not be revert, you will be unbaned on the next map reset'}
