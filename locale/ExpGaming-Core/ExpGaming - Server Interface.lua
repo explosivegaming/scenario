@@ -22,12 +22,12 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 define_command('server-interface','For use of the highest staff only',{'command',true},'admin',function(player,event,args)
 	if player == '<server>' then
 		local returned,value = pcall(loadstring(event.parameter)) 
-		if type(value) == 'table' then game.write_file('log.txt', '\n Ran by: <server> \n Code: '..event.parameter..'\n $£$ '..table.to_string(value), true, 0) print(table.to_string(value))
-		else game.write_file('log.txt', '\n Ran by: <server> \n Code: '..event.parameter..'\n $£$ '..tostring(value), true, 0) print(value) end
+		if type(value) == 'table' then game.write_file('server-interface.log', '\n'..game.tick..' Ran by: <server>  Code: '..event.parameter..'\n Returned: '..table.to_string(value), true, 0) print(table.to_string(value))
+		else game.write_file('server-interface.log', '\n'..game.tick..' Ran by: <server> Code: '..event.parameter..'\nReturned: '..tostring(value), true, 0) print(value) end
 	else
 		local returned,value = pcall(loadstring(event.parameter)) 
-		if type(value) == 'table' then game.write_file('log.txt', '\n Ran by: '..player.name..'\n Code: '..event.parameter..'\n $£$ '..table.to_string(value), true, 0) player.print(table.to_string(value))
-		else game.write_file('log.txt', '\n Ran by: '..player.name..'\n Code: '..event.parameter..'\n $£$ '..tostring(value), true, 0) player.print(value) end
+		if type(value) == 'table' then game.write_file('server-interface-players.log', '\n'..game.tick..' Ran by: '..player.name..' Code: '..event.parameter..'\n Returned: '..table.to_string(value), true, 0) player.print(table.to_string(value))
+		else game.write_file('server-interface-players.log', '\n'..game.tick..' Ran by: '..player.name..' Code: '..event.parameter..'\nReturned: '..tostring(value), true, 0) player.print(value) end
 	end
 end)
 --this is used when changing permission groups when the person does not have permsion to, can also be used to split a large event accross multiple ticks
@@ -38,14 +38,20 @@ function sudo(command,args,custom_return_name)
 	if type(command) == 'function' then
 		local args = args or {}
 		local return_name = custom_return_name or tostring(game.tick)..tostring(command)..tostring(#global.sudo.commands)
-		table.insert(global.sudo.commands,{fun=command,args=args,return_name=return_name})	
+		table.insert(global.sudo.commands,{fun=command,args=args,return_name=return_name})
+		refresh_temp_var(return_name,'temp-var-temp-value')
 		return {sudo='sudo-temp-var',name=return_name}
 	end 
+end
+--turns a string into the temp var format so that it can be used
+function format_as_temp_var(string)
+	refresh_temp_var(string)
+	return {sudo='sudo-temp-var',name=tostring(string)}
 end
 --update the time on a temp var or add it as a new one
 function refresh_temp_var(name,value,offset)
 	local offset = offset or temp_var_time
-	if global.sudo.temp_varibles[name] then
+	if global.sudo.temp_varibles[name] and not value then
 		global.sudo.temp_varibles[name].remove_time = game.tick+offset
 	else
 		global.sudo.temp_varibles[name] = {data=value,remove_time=game.tick+offset}
@@ -78,7 +84,7 @@ Event.register(defines.events.on_tick, function(event)
 				local args = {}
 				-- retrives and temp varibles
 				for n,value in pairs(command.args) do
-					if type(value) == 'list' and value.sudo == 'sudo-temp-var' then args[n] = global.sudo.temp_varibles[value.name].data
+					if type(value) == 'table' and not value.__self and value.sudo and value.sudo == 'sudo-temp-var' then args[n] = {data=global.sudo.temp_varibles[value.name].data,temp_var_name=value.name}
 					else args[n] = value end
 				end
 				-- makes new temp value and runs command
@@ -89,7 +95,7 @@ Event.register(defines.events.on_tick, function(event)
 	end
 	-- removes old temp varibles
 	for name,data in pairs(global.sudo.temp_varibles) do
-		if data.remove_time >= game.tick then global.sudo.temp_varibles[name] = nil end
+		if data.remove_time <= game.tick then global.sudo.temp_varibles[name] = nil end
 	end
 end)
 Event.register(-1,function() global.sudo = {commands={},temp_varibles={}} end)
