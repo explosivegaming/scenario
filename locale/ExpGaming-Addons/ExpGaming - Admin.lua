@@ -38,7 +38,7 @@ local player_modifiers = {
 
 local states={1,1.25,1.5,2,3,5,7.5,10}
 
-ExpGui.add_frame.center('admin','Admin','A few admin only things','Admin',{{name='commands',restriction='Admin'}})
+ExpGui.add_frame.center('admin','Admin','A few admin only things',{{name='commands'}})
 
 local function get_state(name,player,is_player,value)
 	if is_player then
@@ -58,7 +58,7 @@ local function add_moddifier(table,name,player,is_player) --player can be a forc
     end
 end
 
-ExpGui.add_frame.tab('force_modifiers','Force Modifiers','Some Force Modifiers','Admin','admin',function(player,frame)
+ExpGui.add_frame.tab('force_modifiers','Force Modifiers','Some Force Modifiers','admin',function(player,frame)
     frame.add{type = 'flow', name= 'flow',direction = 'horizontal'}
     local table = frame.add{name='modifiers_table', type='table', colspan=#states+1}
     table.add{name='force_modifier_name', type='label', caption='Name'}
@@ -66,7 +66,7 @@ ExpGui.add_frame.tab('force_modifiers','Force Modifiers','Some Force Modifiers',
     for _,modifier in pairs(force_modifiers) do add_moddifier(table,modifier[1],player.force,false) end
 end)
 
-ExpGui.add_frame.tab('player_modifiers','Player Modifiers','Some Player Modifiers','Admin','admin',function(player,frame)
+ExpGui.add_frame.tab('player_modifiers','Player Modifiers','Some Player Modifiers','admin',function(player,frame)
     frame.add{type = 'flow', name= 'flow',direction = 'horizontal'}
     local table = frame.add{name='modifiers_table', type='table', colspan=#states+1}
     table.add{name='player_modifier_name', type='label', caption='Name'}

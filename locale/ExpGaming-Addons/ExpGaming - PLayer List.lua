@@ -18,7 +18,7 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-ExpGui.add_frame.left('player_list','entity/player','Toggle Player List','Guest',true,function(player,frame)
+ExpGui.add_frame.left('player_list','entity/player','Toggle Player List',true,function(player,frame)
 	frame.caption = ''
 	local player_list = frame.add{name="scroll",type = "scroll-pane", direction = "vertical", vertical_scroll_policy="always", horizontal_scroll_policy="never"}
   	player_list.style.maximal_height = 200

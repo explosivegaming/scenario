@@ -75,7 +75,11 @@ local ranks = {
 			'add_permission_group'},
 		allow={
 			'server-interface',
-			'tp-all'}
+			'tp-all',
+			'announcement',
+			'admin',
+			'force_modifiers_tab',
+			'player_modifiers_tab'}
 		},
 		
 		{name='Mod',
@@ -86,8 +90,8 @@ local ranks = {
 		disallow={
 			'server_command'},
 		allow={
-			'temp-ban'
-			}
+			'temp-ban',
+			'rank_changer'}
 		},
 		
 		{name='Donator',
@@ -143,7 +147,20 @@ local ranks = {
 			'cancel_research'},
 		allow={
 			'kill',
-			'tag'}
+			'tag',
+			'task_list',
+			'science_list',
+			'rocket_list',
+			'player_list',
+			'readme',
+			'rules_tab',
+			'chat_tab',
+			'commands_tab',
+			'players_tab',
+			'info',
+			'links_tab',
+			'servers_tab',
+			'credit_tab'}
 		},
 		
 		{name='Jail',

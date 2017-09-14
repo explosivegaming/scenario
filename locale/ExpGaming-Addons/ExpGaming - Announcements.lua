@@ -33,7 +33,7 @@ ExpGui.add_input.button('send_message','Send Message','Seads a message from the 
 	element.parent.parent.parent.destroy()
 end)
 
-ExpGui.add_frame.popup('announcement','item/programmable-speaker','Sends an announcement to players','Admin',
+ExpGui.add_frame.popup('announcement','item/programmable-speaker','Sends an announcement to players',
 function(player,frame)
 	frame.style.maximal_width = 600
 	local text_box = frame.add{name='input',type='text-box'}
