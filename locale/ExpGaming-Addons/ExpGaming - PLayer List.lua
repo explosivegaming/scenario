@@ -23,7 +23,7 @@ ExpGui.add_frame.left('player_list','entity/player','Toggle Player List','Guest'
 	local player_list = frame.add{name="scroll",type = "scroll-pane", direction = "vertical", vertical_scroll_policy="always", horizontal_scroll_policy="never"}
   	player_list.style.maximal_height = 200
 	local order = {}
-	for _,rank in pairs(global.ranks) do order[rank.name] = {} end
+	for _,rank_name in pairs(get_ranks('name')) do order[rank_name] = {} end
 	for _,p in pairs(game.connected_players) do table.insert(order[get_rank(p).name],p) end
 	for rank,players in pairs(order) do
 		for _,p in pairs(players) do
