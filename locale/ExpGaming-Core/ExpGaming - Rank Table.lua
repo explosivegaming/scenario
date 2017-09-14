@@ -60,7 +60,7 @@ local ranks = {
 		time=nil,
 		colour={r=179,g=125,b=46},
 		disallow={},
-		allow={}
+		allow={'cheat-mode'}
 		},
 		
 		{name='Admin',
@@ -98,7 +98,8 @@ local ranks = {
 		disallow={},
 		allow={
 			'tp',
-			'repair'}
+			'repair',
+			'tree_remover'}
 		},
 		
 		{name='Veteran',
@@ -107,7 +108,7 @@ local ranks = {
 		time=600,
 		colour={r=140,g=120,b=200},
 		disallow={},
-		allow={}},
+		allow={'edit_tasks'}},
 		
 		{name='Member',
 		short_hand='Mem',
@@ -126,7 +127,7 @@ local ranks = {
 			'set_auto_launch_rocket',
 			'change_programmable_speaker_alert_parameters',
 			'drop_item'},
-		allow={}
+		allow={'decon'}
 		},
 		
 		{name='Guest',
