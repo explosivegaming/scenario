@@ -21,7 +21,7 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 --Return the rank of a given player
 function get_rank(player)
 	if player then
-		for _,rank in pairs(global.ranks) do
+		for _,rank in pairs(get_ranks()) do
 			if player.permission_group == game.permissions.get_group(rank.name) then return rank end
 		end
 		return string_to_rank('Guest')
@@ -31,7 +31,7 @@ end
 function string_to_rank(string)
 	if type(string) == 'string' then
 		local Foundranks={}
-		for _,rank in pairs(global.ranks) do
+		for _,rank in pairs(get_ranks()) do
 			if rank.name:lower() == string:lower() then return rank end
 			if rank.name:lower():find(string:lower()) then table.insert(Foundranks,rank) end
 		end
@@ -99,7 +99,7 @@ function find_new_rank(player)
 		end
 	end
 	--Loop through rank times
-	for _,rank in pairs(global.ranks) do 
+	for _,rank in pairs(get_ranks()) do 
 		if rank.time and tick_to_min(player.online_time) >= rank.time then table.insert(possible_ranks,string_to_rank(rank)) end
 	end
 	--Loop through possible ranks
@@ -142,7 +142,7 @@ Event.register(Event.rank_change,function(event)
 end)
 Event.register(-1,function() 
 	global.old_ranks = {} 
-	for _,rank in pairs(global.ranks) do
+	for _,rank in pairs(get_ranks()) do
 		game.permissions.create_group(rank.name)
 		for _,toRemove in pairs(rank.disallow) do
 			game.permissions.get_group(rank.name).set_allows_action(defines.input_action[toRemove],false)
