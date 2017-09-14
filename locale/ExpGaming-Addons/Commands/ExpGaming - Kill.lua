@@ -18,7 +18,7 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-define_command('kill','Used to kill a player, you can always kill your self!',{'player'},'Guest',function(player,event,args)
+define_command('kill','Used to kill a player, you can always kill your self!',{'player'},function(player,event,args)
     if player == '<server>' then
         local kill_player = game.players[args[1]]
         if not kill_player then print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end

@@ -18,7 +18,7 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-define_command('tp','Teleport players to each other, ON DUTIY ONLY!',{'player','to_player'},'Mod',function(player,event,args)
+define_command('tp','Teleport players to each other, ON DUTIY ONLY!',{'player','to_player'},function(player,event,args)
     if player == '<server>' then
         local p1 = game.players[args[1]] if p1 then else print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
 	    local p2 = game.players[args[2]] if p2 then else print('Invaild Player Name,'..args[2]..', try using tab key to auto-complete the name') return end 

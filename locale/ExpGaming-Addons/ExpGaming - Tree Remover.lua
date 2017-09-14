@@ -26,11 +26,11 @@ Event.register(defines.events.on_marked_for_deconstruction, function(event)
 	local tree_remover = nil
 	if not get_temp_var_data(player.name..'_tree_remover') then
 		tree_remover = sudo(function(player,entity)
-			if string_to_rank('reg').power < get_rank(player).power then
+			if rank_allowed(get_rank(player),'decon') then
 				player.print('You are not allowed to do this yet, You require the Regular rank, you must play for at least 3 hours')
 				rank_print(player.name..' tryed to deconstruced something.')
 				return 1
-			elseif get_rank(player).power <= string_to_rank('Donator').power then return 2 else return 0 end
+			elseif rank_allowed(get_rank(player),'tree_remover') then return 2 else return 0 end
 		end,{player,entity},player.name..'_tree_remover')
 	else tree_remover = format_as_temp_var(player.name..'_tree_remover') end
 	-- using the temp var stored in tree_remover sudo will take diffrent effects while only running the test once
