@@ -66,7 +66,7 @@ function load_command(command)
 		for _,command_d in pairs(Exp_commands) do if event.name == command_d[1] then command_data = command_d break end end
 		if event.player_index then
 			local player = game.players[event.player_index]
-			if rank_allowed(get_rank(player),command.name) then
+			if not rank_allowed(get_rank(player),command.name) then
 				player.print('401 - Unauthorized: Access is denied due to invalid credentials')
 				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command (Unauthorized): '..command.name..' With args of: '..table.to_string(get_command_args(event,command,true)), true, 0)
 				return 

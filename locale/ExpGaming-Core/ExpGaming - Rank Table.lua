@@ -161,21 +161,24 @@ local ranks = {
 }
 -- rank table setup
 for n,rank in pairs(ranks.ranks) do
-	local ranks_list = ranks.ranks
 	rank.power = n
-	if ranks_list[n-1] then
-		for _,disallow in pairs(ranks_list[n-1].disallow) do
+	if ranks.ranks[n-1] then
+		for _,disallow in pairs(ranks.ranks[n-1].disallow) do
 			table.insert(rank.disallow,disallow)
-		end
-	end
-	if ranks_list[n+1] then
-		for _,allow in pairs(ranks_list[n+1].allow) do
-			table.insert(rank.allow,allow)
 		end
 	end
 	if rank.time and not ranks.highest_timed_rank then ranks.highest_timed_rank=rank end
 	if rank.time then ranks.lowest_timed_rank=rank end
 	ranks.number_of_ranks=ranks.number_of_ranks+1
+end
+
+for n = #ranks.ranks, 1, -1 do
+    rank = ranks.ranks[n]
+    if ranks.ranks[n+1] then
+		for _,allow in pairs(ranks.ranks[n+1].allow) do
+			table.insert(rank.allow,allow)
+		end
+	end
 end
 -- returns a list off all the ranks, return only one part if given
 function get_ranks(part)
