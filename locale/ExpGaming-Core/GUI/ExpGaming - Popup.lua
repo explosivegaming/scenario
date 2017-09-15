@@ -62,7 +62,7 @@ function draw_frame.popup(style,args)
 	local args = args or {}
 	local frame_data = nil
 	for _,frame in pairs(frames.popup) do if style == frame.style then frame_data = frame break end end
-	game.write_file('popups.log','\n'..game.tick..' Popup Style: '..style..' Was made with args of: '..table.to_string(args), true, 0)
+	game.write_file('popups.log','\n'..game.tick..' Popup Style: '..style..' Was made with args of: '..table.tostring(args), true, 0)
 	for _,player in pairs(game.connected_players) do
 		local popups = mod_gui.get_frame_flow(player).popups
 		local frame = get_next_popup(popups)
