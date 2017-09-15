@@ -66,22 +66,26 @@ end)
 define_command('remove-report','Clears the reports give to a user',{'player','reason',true},function(player,event,args)
 	if player == '<server>' then
 		local p = game.players[args[1]]
+		local reason = table.concat(args,' ',2)
 		if not p then print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
 		-- test if the player is reported
 		local index = nil; for i,report in pairs(global.reported_users) do if p.name == report.player.name then index = i break end end
 		if not index then print('This player has no reports') return end
 		-- reverts rank and clears report
 		rank_print(p.name..' has been cleared of they reports by: <server>','Owner',true)
+		game.write_file('user_reports.log','\n'..game.tick..' '..p.name..' has been cleared of they reports by: <server>'..' Reason: '..reason, true, 0)
 		global.reported_users[index] = nil
 		if get_rank(p).name == 'Jail' then sudo(revert_rank,{p}) end
 	else
 		local p = game.players[args[1]]
+		local reason = table.concat(args,' ',2)
 		if not p then player.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
 		-- test if the player is reported
 		local index = nil; for i,report in pairs(global.reported_users) do if p.name == report.player.name then index = i break end end
 		if not index then player.print('This player has no reports') return end
 		-- reverts rank and clears report
 		rank_print(p.name..' has been cleared of they reports by: <server>','Owner',true)
+		game.write_file('user_reports.log','\n'..game.tick..' '..p.name..' has been cleared of they reports by: '..player.name..' Reason: '..reason, true, 0)
 		global.reported_users[index] = nil
 		if get_rank(p).name == 'Jail' then sudo(revert_rank,{p,player}) end
 	end
