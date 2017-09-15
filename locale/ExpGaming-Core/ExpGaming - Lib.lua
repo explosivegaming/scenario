@@ -43,7 +43,7 @@ function table.val_to_str ( v )
     end
     return '"' .. string.gsub(v,'"', '\\"' ) .. '"'
   else
-    return "table" == type( v ) and table.to_string( v ) or
+    return "table" == type( v ) and table.tostring( v ) or
       tostring( v )
   end
 end
@@ -56,7 +56,7 @@ function table.key_to_str ( k )
   end
 end
 
-function table.to_string( tbl )
+function table.tostring( tbl )
   local result, done = {}, {}
   for k, v in ipairs( tbl ) do
     table.insert( result, table.val_to_str( v ) )
