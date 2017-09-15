@@ -49,15 +49,13 @@ end
 --name			is what is used in /command 
 --help			is the help info given
 --inputs		is a list i.e. {'name','message',true} the last value being true opposed to a string allows a variable number of words for the last input i.e. message can be multiple words long
---restriction	is the lowest rank that can use the command
 --event(player,event,args) if the function that will be ran on the command use
-function define_command(name,help,inputs,restriction,event)
+function define_command(name,help,inputs,event)
 	if not name then error('Command requires a name') end
 	local help = help or 'No Help Given'
 	local inputs = inputs or {true}
-	local restriction = restriction or 0
 	if not event or type(event) ~= 'function' then error('Command requires a function') end
-	table.insert(Exp_commands,{name=name,help=help,inputs=inputs,restriction=restriction,event=event})
+	table.insert(Exp_commands,{name=name,help=help,inputs=inputs,event=event})
 end
 --The magic for the commands. It is a hard bit of code so GL; but it will call the command event have some sanitisaion of the input
 function load_command(command)
@@ -68,10 +66,7 @@ function load_command(command)
 		for _,command_d in pairs(Exp_commands) do if event.name == command_d[1] then command_data = command_d break end end
 		if event.player_index then
 			local player = game.players[event.player_index]
-			local temp_restriction = nil
-			if type(command.restriction) == 'number' then temp_restriction = command.restriction end
-			local restriction = temp_restriction or string_to_rank(command.restriction).power or 0
-			if get_rank(player).power > restriction then 
+			if not rank_allowed(get_rank(player),command.name) then
 				player.print('401 - Unauthorized: Access is denied due to invalid credentials')
 				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command (Unauthorized): '..command.name..' With args of: '..table.to_string(get_command_args(event,command,true)), true, 0)
 				return 
@@ -98,10 +93,7 @@ function get_commands(rank)
 	local rank = rank or 'Owner'
 	local to_return = {}
 	for _,command in pairs(global.commands) do
-		local temp_restriction = nil
-		if type(command.restriction) == 'number' then temp_restriction = command.restriction end
-		local restriction = temp_restriction or string_to_rank(command.restriction).power or 0
-		if restriction > string_to_rank(rank).power then table.insert(to_return,command) end
+		if rank_allowed(string_to_rank(rank),command.name) then table.insert(to_return,command) end
 	end
 	return to_return
 end

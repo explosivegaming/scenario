@@ -20,10 +20,9 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 --Please Only Edit Below This Line-----------------------------------------------------------
 local toolbar = ExpGui.toolbar
 --similar to ExpGui.add_input.button but it also accepts a restriction and button is drawn to the toolbar
-function toolbar.add_button(name,default_display,default_tooltip,restriction,event)
-	local restriction = restriction or 0
+function toolbar.add_button(name,default_display,default_tooltip,event)
 	if not name then error('Button requires a name') end
-	table.insert(toolbar.buttons,{name=name,restriction=restriction})
+	table.insert(toolbar.buttons,{name=name})
 	ExpGui.add_input.button(name,default_display,default_tooltip,event)
 end
 --draw the toolbar to the player only showing buttons within their restriction
@@ -33,10 +32,7 @@ function toolbar.draw(player)
 	toolbar_frame.clear()
 	for _,button in pairs(toolbar.buttons) do
 		local rank = get_rank(player)
-		local temp_restriction = nil
-		if type(button.restriction) == 'number' then temp_restriction = button.restriction end
-		local restriction = temp_restriction or string_to_rank(button.restriction).power or 0
-		if restriction >= rank.power then
+		if rank_allowed(get_rank(player),button.name) then
 			ExpGui.add_input.draw_button(toolbar_frame,button.name)
 		end
 	end

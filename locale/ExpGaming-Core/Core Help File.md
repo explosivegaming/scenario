@@ -2,24 +2,19 @@
 See code for more details.
 ## GUI
 ### Defining
-* ExpGui.add_frame.center(name,default_display,default_tooltip,restriction,tabs,event)
-    * restriction = 'rank name'
-    * tabs (opt) = {{name,restriction},{...},...}
+* ExpGui.add_frame.center(name,default_display,default_tooltip,tabs,event)
+    * tabs (opt) = {{name},{...},...}
     * event (opt) = on draw -> function(player,frame)
-* ExpGui.add_frame.tab(name,default_display,default_tooltip,restriction,frame,event) 
-    * restriction = 'rank name'
+* ExpGui.add_frame.tab(name,default_display,default_tooltip,frame,event) 
     * frame = 'frame name'
     * event = on draw -> function(player,frame)
-* ExpGui.add_frame.left(name,default_display,default_tooltip,restriction,vis,event)
-    * restriction = 'rank name'
+* ExpGui.add_frame.left(name,default_display,default_tooltip,vis,event)
     * vis = player on join -> true/false
     * event = on draw -> function(player,frame)
-* ExpGui.add_frame.popup(style,default_display,default_tooltip,restriction,on_click,event)
-    * restriction = 'rank name'
+* ExpGui.add_frame.popup(style,default_display,default_tooltip,on_click,event)
     * on_click = on draw for toolbar -> function(player,element)
     * event = on draw for popup -> function(player,frame,args)
-* ExpGui.toolbar.add_button(name,default_display,default_tooltip,restriction,event)
-    * restriction = 'rank name'
+* ExpGui.toolbar.add_button(name,default_display,default_tooltip,event)
     * event = on click -> function(player,element)
 * ExpGui.add_input.button(name,default_display,default_tooltip,event)
     * event = on click -> function(player,element)
@@ -92,12 +87,11 @@ See code for more details.
     * returns all commands that are useable
     * rank (opt) = rank name to limt it to what that rank can use
 ## Other
-* define_command(name,help,inputs,restriction,event)
+* define_command(name,help,inputs,event)
     * Add game commands in a way it does not cause crashes
     * name  = 'test' -> /test
     * help = 'help message'
     * inputs = {'input name',...,true/nil} last value being true means no cap on the length
-    * restriction = 'rank name'
     * event = on command -> function(player,event,args)
 * sudo(command,args,custom_return_name)
     * Ask server to run a script function at a diffrent time
@@ -114,4 +108,3 @@ See code for more details.
     * note only works when there is a custom return name else temp var is nil
 * command: /server-interface
     * Run loadstring on lua code given like /c but does not break achievements
-    * restriction = 'Admin'
