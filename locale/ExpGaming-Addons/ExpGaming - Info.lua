@@ -18,9 +18,9 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-ExpGui.add_frame.center('info','Info','All useful information about the server is here','Guest',{{name='commands',restriction='Guest'}})
+ExpGui.add_frame.center('info','Info','All useful information about the server is here',{{name='commands'}})
 
-ExpGui.add_frame.tab('links','Links','More ways to get in contact','Guest','info',function(player,frame)
+ExpGui.add_frame.tab('links','Links','More ways to get in contact','info',function(player,frame)
     local function format(text_box)
         text_box.style.minimal_width=400
         text_box.read_only = true
@@ -37,7 +37,7 @@ ExpGui.add_frame.tab('links','Links','More ways to get in contact','Guest','info
 	format(frame.add{name=8, type='text-box', text='https://www.patreon.com/badgamernl'})
 end)
 
-ExpGui.add_frame.tab('servers','Other Servers','All the other server we have','Guest','info',function(player,frame)
+ExpGui.add_frame.tab('servers','Other Servers','All the other server we have','info',function(player,frame)
     local servers = {
 		{'Public','A place for all players, this map reset every 24H'},
 		{'Standard','Before you play make sure you understand the game, reset every 48H'},
@@ -52,7 +52,7 @@ ExpGui.add_frame.tab('servers','Other Servers','All the other server we have','G
 	end
 end)
 
-ExpGui.add_frame.tab('credit','Script Credit','Who made all of the diffrent parts of the script','Guest','info',function(player,frame)
+ExpGui.add_frame.tab('credit','Script Credit','Who made all of the diffrent parts of the script','info',function(player,frame)
     local text = "To give credit to all the people who helped to make this soft compoents"
     frame.add{name='intro', type="label", caption=text, single_line=false}.style.maximal_width=480
 	frame.add{name='credit_table',type='table',colspan=3}

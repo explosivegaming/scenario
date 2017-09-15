@@ -18,7 +18,7 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-ExpGui.add_frame.left('rocket_list','item/rocket-silo','Open a list with rocket milestones','Guest',nil,function(player,frame)
+ExpGui.add_frame.left('rocket_list','item/rocket-silo','Open a list with rocket milestones',nil,function(player,frame)
 	frame.caption = 'Rockets'
 	local rockets_send = player.force.get_item_launched("satellite")
 	local rocket_time = 'N/A'

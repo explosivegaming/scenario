@@ -33,7 +33,7 @@ ExpGui.add_input.button('send_message','Send Message','Seads a message from the 
 	element.parent.parent.parent.destroy()
 end)
 
-ExpGui.add_frame.popup('announcement','item/programmable-speaker','Sends an announcement to players','Admin',
+ExpGui.add_frame.popup('announcement','item/programmable-speaker','Sends an announcement to players',
 function(player,frame)
 	frame.style.maximal_width = 600
 	local text_box = frame.add{name='input',type='text-box'}
@@ -48,7 +48,7 @@ function(player,frame)
 	ExpGui.add_input.draw_button(flow,'send_message','Send')
 	flow.add{name='label',type='label',caption='to players above the rank of',style="caption_label_style"}
 	local drop_down = flow.add{name='drop_down',type='drop-down'}
-	for n,rank in pairs(global.ranks) do drop_down.add_item(rank.name) if rank.name == 'Guest' then drop_down.selected_index = n end end
+	for n,rank_name in pairs(get_ranks('name')) do drop_down.add_item(rank_name) if rank_name == 'Guest' then drop_down.selected_index = n end end
 end,
 function(player,frame,args)
 	frame.style.maximal_width = 600

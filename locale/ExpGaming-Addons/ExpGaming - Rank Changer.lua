@@ -27,7 +27,7 @@ ExpGui.add_input.button('give_rank','Give Rank','Give the above player the above
 	element.parent.parent.destroy()
 end)
 
-ExpGui.add_frame.center('rank_changer','Edit Ranks','Allows you to edit players ranks','Mod',{},function(player,frame)
+ExpGui.add_frame.center('rank_changer','Edit Ranks','Allows you to edit players ranks',{},function(player,frame)
 	frame.add{name='label',type='label',caption='Edit Players Ranks Below You',style="caption_label_style"}
 	local inputs = frame.add{name='input_table',type='table',colspan=2}
 	inputs.add{name='player_lable',type='label',caption='Player: '}
