@@ -19,7 +19,7 @@ local credits = {{
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
 --this command is just a way or using loadstring from in game while keeping achievements
-define_command('server-interface','For use of the highest staff only',{'command',true},'admin',function(player,event,args)
+define_command('server-interface','For use of the highest staff only',{'command',true},function(player,event,args)
 	if player == '<server>' then
 		local returned,value = pcall(loadstring(event.parameter)) 
 		if type(value) == 'table' then game.write_file('server-interface.log', '\n'..game.tick..' Ran by: <server>  Code: '..event.parameter..'\n Returned: '..table.to_string(value), true, 0) print(table.to_string(value))
@@ -70,6 +70,10 @@ function get_sudo_info(string)
 	for _,v in pairs(global.sudo.temp_varibles) do lenth = lenth + 1 end
 	if string then return 'At game tick: '..game.tick..' Queue Lenth: '..#global.sudo.commands..' Number of temp vars: '..lenth
 	else return {tick=game.tick,commands=#global.sudo.commands,temp_varibles=#global.sudo.temp_varibles} end 
+end
+-- stops all sudo commands
+function clear_sudo()
+	global.sudo = {commands={},temp_varibles={}}
 end
 --sudo main loop
 Event.register(defines.events.on_tick, function(event)

@@ -18,7 +18,7 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-define_command('tp-all','Bring all players to one player',{'player'},'Admin',function(player,event,args)
+define_command('tp-all','Bring all players to one player',{'player'},function(player,event,args)
     if player == '<server>' then
         local tp_player = game.players[args[1]]
         if not tp_player then print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end

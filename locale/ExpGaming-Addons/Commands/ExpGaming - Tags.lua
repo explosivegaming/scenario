@@ -18,7 +18,7 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-define_command('tag','Use to add a custom tag, use /tag clear to remove.',{'tag',true},'Guest',function(player,event,args)
+define_command('tag','Use to add a custom tag, use /tag clear to remove.',{'tag',true},function(player,event,args)
     if player == '<server>' then
         local player = game.players[args[1]]
         local tag = table.concat(args,' ',2)

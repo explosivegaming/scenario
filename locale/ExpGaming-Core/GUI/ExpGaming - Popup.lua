@@ -37,17 +37,15 @@ local function get_next_popup(popups,name)
 	return frame
 end
 --adds a frame to the popup flow
---restriction				is the power needed to use the on_click function
 --on_click(player,element)	is what is called when button is clicked if nil no button is made
 --event(player,frame,args)
 --frame						is where it will be drawn to; args is any info you want to pass in
-function add_frame.popup(style,default_display,default_tooltip,restriction,on_click,event)
+function add_frame.popup(style,default_display,default_tooltip,on_click,event)
 	if not style then error('Popup style requires a name') end
 	if not event or type(event) ~= 'function' then error('Popup style requires a draw function') end
-	local restriction = restriction or 0
 	table.insert(frames.popup,{style=style,display=default_display,on_click=on_click,event=event})
 	if on_click and type(on_click) == 'function' then
-		ExpGui.toolbar.add_button(style,default_display,default_tooltip,restriction,draw_frame.popup_button)
+		ExpGui.toolbar.add_button(style,default_display,default_tooltip,draw_frame.popup_button)
 	end
 end
 --draw the popup on_click GUI for the player; do not call manually must use other functions to call

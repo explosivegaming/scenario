@@ -25,7 +25,7 @@ local function draw_standard(player,frame)
 		table.add{type='label',name=n..'_number',caption=n..'.'}
 		table.add{type='label',name=n..'_task',caption=task}
 	end
-	if get_rank(player).power <= string_to_rank('vet').power then ExpGui.add_input.draw_button(frame,'enter_edit') end
+	if rank_allowed(get_rank(player),'edit_tasks') then ExpGui.add_input.draw_button(frame,'enter_edit') end
 end
 
 local function draw_edit_mode(player,frame)
@@ -75,7 +75,7 @@ ExpGui.add_input.button('enter_edit','Press To Edit','Press to edit the current 
 	draw_edit_mode(player,element.parent)
 end)
 
-ExpGui.add_frame.left('task_list','item/inserter','Toggle Task List','Guest',true,function(player,frame)
+ExpGui.add_frame.left('task_list','item/inserter','Toggle Task List',true,function(player,frame)
 	frame.caption = 'Task List'
 	draw_standard(player,frame)
 end)

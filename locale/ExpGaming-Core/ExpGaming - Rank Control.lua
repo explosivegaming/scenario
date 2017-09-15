@@ -21,7 +21,7 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 --Return the rank of a given player
 function get_rank(player)
 	if player then
-		for _,rank in pairs(global.ranks) do
+		for _,rank in pairs(get_ranks()) do
 			if player.permission_group == game.permissions.get_group(rank.name) then return rank end
 		end
 		return string_to_rank('Guest')
@@ -30,28 +30,39 @@ end
 --Convert the name of a rank into the rank object
 function string_to_rank(string)
 	if type(string) == 'string' then
-		local Foundranks={}
-		for _,rank in pairs(global.ranks) do
+		local found_ranks={}
+		for _,rank in pairs(get_ranks()) do
 			if rank.name:lower() == string:lower() then return rank end
-			if rank.name:lower():find(string:lower()) then table.insert(Foundranks,rank) end
+			if rank.name:lower():find(string:lower()) then table.insert(found_ranks,rank) end
 		end
-		if #Foundranks == 1 then return Foundranks[1] end
+		if #found_ranks == 1 then return found_ranks[1] end
 	end
 end
+-- surches the rank for a certain allow command
+function rank_allowed(rank,is_allowed)
+	for _,allow in pairs(rank.allow) do
+		if allow == is_allowed then return true end
+	end
+	return false
+end
 --Send a message to all members of this rank and above, if no rank given default is mod
+--inv sends message to all lower ranks rather than higher
 function rank_print(msg, rank, inv)
 	local rank = string_to_rank(rank) or string_to_rank('Mod') -- default mod or higher
 	local inv = inv or false
-	for _, player in pairs(game.players) do 
-		rankPower = get_rank(player).power
-		if inv then 
-			if rankPower >= rank.power then 
-				player.print(('[Everyone]: '..msg)) 
-			end
+	for _, player in pairs(game.players) do
+		--this part uses sudo to soread it other many ticks
+		player_rank_power = get_rank(player).power
+		if inv then
+			sudo(function(player_rank_power,rank)
+				if player_rank_power >= rank.power then player.print(('[Everyone]: '..msg)) end
+			end,{player_rank_power,rank})
 		else
-			if rankPower <= rank.power then
-				if rank.short_hand ~= '' then player.print(('['..(rank.short_hand)..']: '..msg)) else player.print(('[Everyone]: '..msg)) end 
-			end
+			sudo(function(player_rank_power,rank)
+				if player_rank_power <= rank.power then
+					if rank.short_hand ~= '' then player.print(('['..(rank.short_hand)..']: '..msg)) else player.print(('[Everyone]: '..msg)) end 
+				end
+			end,{player_rank_power,rank})
 		end
 	end
 end
@@ -60,6 +71,8 @@ function give_rank(player,rank,by_player)
 	local by_player = by_player or 'server'
 	local rank = string_to_rank(rank) or rank or string_to_rank('Guest')
 	local old_rank = get_rank(player)
+	-- to reducse lag if the ranks are all ready given it does not cheak
+	if old_rank == rank then return end
 	--messaging
 	local message = 'demoted'
 	if rank.power <= old_rank.power then message = 'promoted' end
@@ -98,9 +111,13 @@ function find_new_rank(player)
 			if found_rank then table.insert(possible_ranks,string_to_rank(found_rank)) break end
 		end
 	end
-	--Loop through rank times
-	for _,rank in pairs(global.ranks) do 
-		if rank.time and tick_to_min(player.online_time) >= rank.time then table.insert(possible_ranks,rank) end
+	-- to reduce lag if the player is already higher than any time rank then it does not cheak
+	-- also there play time must be higher than the lowest required for a rank
+	if current_rank.power > global.ranks.highest_timed_rank.power and player.online_time >= global.ranks.lowest_timed_rank.time then
+		--Loop through rank times
+		for _,rank in pairs(get_ranks()) do 
+			if rank.time and tick_to_min(player.online_time) >= rank.time then table.insert(possible_ranks,string_to_rank(rank)) end
+		end
 	end
 	--Loop through possible ranks
 	if current_rank.name ~='Jail' then 
@@ -110,6 +127,7 @@ function find_new_rank(player)
 		end
 		--Give player new rank if availble
 		if highest_rank.name == 'Guest' then
+			-- to avoid spam in chat
 			player.permission_group=game.permissions.get_group('Guest')
 			script.raise_event(Event.rank_change, {player=player, by_player='server', new_rank=string_to_rank('Guest'), old_rank=string_to_rank('Guest')})
 		else
@@ -142,7 +160,7 @@ Event.register(Event.rank_change,function(event)
 end)
 Event.register(-1,function() 
 	global.old_ranks = {} 
-	for _,rank in pairs(global.ranks) do
+	for _,rank in pairs(get_ranks()) do
 		game.permissions.create_group(rank.name)
 		for _,toRemove in pairs(rank.disallow) do
 			game.permissions.get_group(rank.name).set_allows_action(defines.input_action[toRemove],false)

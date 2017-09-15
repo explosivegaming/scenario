@@ -27,116 +27,177 @@ time		is used for auto-rank feature where you are moved to the rank after a cert
 colour		is the RGB value that can be used to emphasise GUI elements based on rank.
 power		is not in the list below as it is auto-defined by index but allows comparison between ranks.
 disallow	is a list containing input actions that the user can not perform.
+allow		is a list of custom commands and effects that that rank can use, all defined in the sctips.
 For disallow, add to the list the end part of the input action
 Example: defines.input_action.drop_item -> 'drop_item'
 http://lua-api.factorio.com/latest/defines.html#defines.input_action
 --]]
 local ranks = {
-	{name='Owner',
-	short_hand='Owner',
-	tag='[Owner]',
-	time=nil,
-	colour={r=170,g=0,b=0},
-	disallow={}},
-	
-	{name='Community Manager',
-	short_hand='Com Mngr',
-	tag='[Com Mngr]',
-	time=nil,
-	colour={r=150,g=68,b=161},
-	disallow={}},
-	
-	{name='Developer',
-	short_hand='Dev',
-	tag='[Dev]',
-	time=nil,
-	colour={r=179,g=125,b=46},
-	disallow={}},
-	
-	{name='Admin',
-	short_hand='Admin',
-	tag='[Admin]',
-	time=nil,
-	colour={r=233,g=63,b=233},
-	disallow={
-		'set_allow_commands',
-		'edit_permission_group',
-		'delete_permission_group',
-		'add_permission_group'}
-	},
-	
-	{name='Mod',
-	short_hand='Mod',
-	tag='[Mod]',
-	time=nil,
-	colour={r=0,g=170,b=0},
-	disallow={
-		'server_command'}
-	},
-	
-	{name='Donator',
-	short_hand='P2W',
-	tag='[P2W]',
-	time=nil,
-	colour={r=233,g=63,b=233},
-	disallow={}},
-	
-	{name='Veteran',
-	short_hand='Vet',
-	tag='[Veteran]',
-	time=600,
-	colour={r=140,g=120,b=200},
-	disallow={}},
-	
-	{name='Member',
-	short_hand='Mem',
-	tag='[Member]',
-	time=nil,
-	colour={r=24,g=172,b=188},
-	disallow={}},
-	
-	{name='Regular',
-	short_hand='Reg',
-	tag='[Regular]',
-	time=180,
-	colour={r=24,g=172,b=188},
-	disallow={
-		'set_auto_launch_rocket',
-		'change_programmable_speaker_alert_parameters',
-		'drop_item'}
-	},
-	
-	{name='Guest',
-	short_hand='',
-	tag='[Guest]',
-	time=nil,
-	colour={r=255,g=159,b=27},
-	disallow={
-		'build_terrain',
-		'remove_cables',
-		'launch_rocket',
-		'reset_assembling_machine',
-		'cancel_research'}
-	},
-	
-	{name='Jail',
-	short_hand='Jail',
-	tag='[Jail]',
-	time=nil,
-	colour={r=50,g=50,b=50},
-	disallow={
-		'open_character_gui',
-		'begin_mining',
-		'start_walking',
-		'player_leave_game'}
+	--these are asigned during the rank set up
+	highest_timed_rank=nil,
+	lowest_timed_rank=nil,
+	number_of_ranks=0,
+	ranks={
+		{name='Owner',
+		short_hand='Owner',
+		tag='[Owner]',
+		time=nil,
+		colour={r=170,g=0,b=0},
+		disallow={},
+		allow={}},
+		
+		{name='Community Manager',
+		short_hand='Com Mngr',
+		tag='[Com Mngr]',
+		time=nil,
+		colour={r=150,g=68,b=161},
+		disallow={},
+		allow={}},
+		
+		{name='Developer',
+		short_hand='Dev',
+		tag='[Dev]',
+		time=nil,
+		colour={r=179,g=125,b=46},
+		disallow={},
+		allow={'cheat-mode'}
+		},
+		
+		{name='Admin',
+		short_hand='Admin',
+		tag='[Admin]',
+		time=nil,
+		colour={r=233,g=63,b=233},
+		disallow={
+			'set_allow_commands',
+			'edit_permission_group',
+			'delete_permission_group',
+			'add_permission_group'},
+		allow={
+			'server-interface',
+			'tp-all',
+			'announcement',
+			'admin',
+			'force_modifiers_tab',
+			'player_modifiers_tab'}
+		},
+		
+		{name='Mod',
+		short_hand='Mod',
+		tag='[Mod]',
+		time=nil,
+		colour={r=0,g=170,b=0},
+		disallow={
+			'server_command'},
+		allow={
+			'temp-ban',
+			'rank_changer',
+			'remove-report'}
+		},
+		
+		{name='Donator',
+		short_hand='P2W',
+		tag='[P2W]',
+		time=nil,
+		colour={r=233,g=63,b=233},
+		disallow={},
+		allow={
+			'tp',
+			'repair',
+			'tree_remover',
+			'report_protection'}
+		},
+		
+		{name='Veteran',
+		short_hand='Vet',
+		tag='[Veteran]',
+		time=600,
+		colour={r=140,g=120,b=200},
+		disallow={},
+		allow={'edit_tasks'}},
+		
+		{name='Member',
+		short_hand='Mem',
+		tag='[Member]',
+		time=nil,
+		colour={r=24,g=172,b=188},
+		disallow={},
+		allow={'trusted_reporter'}},
+		
+		{name='Regular',
+		short_hand='Reg',
+		tag='[Regular]',
+		time=180,
+		colour={r=24,g=172,b=188},
+		disallow={
+			'set_auto_launch_rocket',
+			'change_programmable_speaker_alert_parameters',
+			'drop_item'},
+		allow={'decon'}
+		},
+		
+		{name='Guest',
+		short_hand='',
+		tag='[Guest]',
+		time=nil,
+		colour={r=255,g=159,b=27},
+		disallow={
+			'build_terrain',
+			'remove_cables',
+			'launch_rocket',
+			'reset_assembling_machine',
+			'cancel_research'},
+		allow={
+			'kill',
+			'tag',
+			'report',
+			'task_list',
+			'science_list',
+			'rocket_list',
+			'player_list',
+			'readme',
+			'rules_tab',
+			'chat_tab',
+			'commands_tab',
+			'players_tab',
+			'info',
+			'links_tab',
+			'servers_tab',
+			'credit_tab'}
+		},
+		
+		{name='Jail',
+		short_hand='Jail',
+		tag='[Jail]',
+		time=nil,
+		colour={r=50,g=50,b=50},
+		disallow={
+			'open_character_gui',
+			'begin_mining',
+			'start_walking',
+			'player_leave_game'},
+		allow={}
+		}
 	}
 }
--- Feed the disallows of each rank into the one below itself
-for n,rank in pairs(ranks) do
+-- rank table setup
+for n,rank in pairs(ranks.ranks) do
 	rank.power = n
-	if ranks[n-1] then
-		for _,disallow in pairs(ranks[n-1].disallow) do
+	if ranks.ranks[n-1] then
+		for _,disallow in pairs(ranks.ranks[n-1].disallow) do
 			table.insert(rank.disallow,disallow)
+		end
+	end
+	if rank.time and not ranks.highest_timed_rank then ranks.highest_timed_rank=rank end
+	if rank.time then ranks.lowest_timed_rank=rank end
+	ranks.number_of_ranks=ranks.number_of_ranks+1
+end
+
+for n = #ranks.ranks, 1, -1 do
+    rank = ranks.ranks[n]
+    if ranks.ranks[n+1] then
+		for _,allow in pairs(ranks.ranks[n+1].allow) do
+			table.insert(rank.allow,allow)
 		end
 	end
 end
@@ -144,8 +205,8 @@ end
 function get_ranks(part)
 	local to_return = {}
 	if part then 
-		for _,rank in pairs(global.ranks) do table.insert(to_return,rank[part]) end
-	else to_return = global.ranks end
+		for _,rank in pairs(global.ranks.ranks) do table.insert(to_return,rank[part]) end
+	else to_return = global.ranks.ranks end
 	return to_return
 end
 -- Move the ranks to the global array
