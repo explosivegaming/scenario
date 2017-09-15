@@ -84,7 +84,7 @@ define_command('remove-report','Clears the reports give to a user',{'player','re
 		local index = nil; for i,report in pairs(global.reported_users) do if p.name == report.player.name then index = i break end end
 		if not index then player.print('This player has no reports') return end
 		-- reverts rank and clears report
-		rank_print(p.name..' has been cleared of they reports by: <server>','Owner',true)
+		rank_print(p.name..' has been cleared of they reports by: '..player.name,'Owner',true)
 		game.write_file('user_reports.log','\n'..game.tick..' '..p.name..' has been cleared of they reports by: '..player.name..' Reason: '..reason, true, 0)
 		global.reported_users[index] = nil
 		if get_rank(p).name == 'Jail' then sudo(revert_rank,{p,player}) end
