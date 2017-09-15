@@ -43,6 +43,7 @@ define_command('report','Reports a user, this will be logged and you may be ask 
 		if rank_allowed(get_rank(player),'rank_changer') then player.print('You have no reason to report, please use rank changer to move player to jail') return end
 		local p = game.players[args[1]]
 		if not p then player.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
+		if rank_allowed(get_rank(p),'report_protection') then player.print('This player has report protection and cant be reported') return end
 		local reason = table.concat(args,' ',2)
 		local info = get_report_info(player,p,reason)
 		if not info then player.print('You have already reported this player, vist discord to complain more') return end
