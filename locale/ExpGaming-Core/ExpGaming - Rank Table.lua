@@ -91,7 +91,8 @@ local ranks = {
 			'server_command'},
 		allow={
 			'temp-ban',
-			'rank_changer'}
+			'rank_changer',
+			'remove-report'}
 		},
 		
 		{name='Donator',
