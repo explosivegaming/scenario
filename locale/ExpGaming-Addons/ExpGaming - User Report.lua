@@ -55,11 +55,35 @@ define_command('report','Reports a user, this will be logged and you may be ask 
 		else rank_print(p.name..' has been reported '..info.total_reports..' times, if reported by 70% of the server they will be jailed!','Owner',true) end
 		rank_print('To report use /report <player> <reason>','Owner',true)
 		-- logs to file
-		game.write_file('user_reports.log','\n'..game.tick..' '..info.player.name..' has been reported by: '..player.name..' Reason: '..reason)
+		game.write_file('user_reports.log','\n'..game.tick..' '..info.player.name..' has been reported by: '..player.name..' Reason: '..reason, true, 0)
 		-- logic to jail player
 		local percent_needed = 0.7; if info.trusted_reports > 0 then percent_needed = 0.4 end
 		local players_needed = math.floor(#game.connected_players * percent_needed)
 		if info.total_reports >= players_needed then sudo(give_rank,{p,'Jail'}) end
+	end
+end)
+
+define_command('remove-report','Clears the reports give to a user',{'player','reason',true},function(player,event,args)
+	if player == '<server>' then
+		local p = game.players[args[1]]
+		if not p then print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
+		-- test if the player is reported
+		local index = nil; for i,report in pairs(global.reported_users) do if p.name == report.player.name then index = i break end end
+		if not index then print('This player has no reports') return end
+		-- reverts rank and clears report
+		rank_print(p.name..' has been cleared of they reports by: <server>','Owner',true)
+		global.reported_users[index] = nil
+		if get_rank(p).name == 'Jail' then sudo(revert_rank,{p}) end
+	else
+		local p = game.players[args[1]]
+		if not p then player.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
+		-- test if the player is reported
+		local index = nil; for i,report in pairs(global.reported_users) do if p.name == report.player.name then index = i break end end
+		if not index then player.print('This player has no reports') return end
+		-- reverts rank and clears report
+		rank_print(p.name..' has been cleared of they reports by: <server>','Owner',true)
+		global.reported_users[index] = nil
+		if get_rank(p).name == 'Jail' then sudo(revert_rank,{p,player}) end
 	end
 end)
 function get_reported_users() return global.reported_users end
