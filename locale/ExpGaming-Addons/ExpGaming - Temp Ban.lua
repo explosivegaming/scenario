@@ -33,7 +33,7 @@ define_command('temp-ban','Temp ban a player untill the next reset, can not be u
     else
         local jail_player = game.players[args[1]]
         if not jail_player then player.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
-        if get_rank(player).power < get_rank(jail_player).power and get_rank(player).power <= string_to_rank('Mod').power then
+        if get_rank(player).power < get_rank(jail_player).power then
             sudo(give_rank,{jail_player,'Jail',player})
             global.temp_bans[jail_player.name] = {player.name,table.concat(args,' ',2)}
             ExpGui.draw_frame.popup('temp_ban',{player.name,table.concat(args,' ',2),jail_player})
