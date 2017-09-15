@@ -120,7 +120,7 @@ local ranks = {
 		time=nil,
 		colour={r=24,g=172,b=188},
 		disallow={},
-		allow={}},
+		allow={'trusted_reporter'}},
 		
 		{name='Regular',
 		short_hand='Reg',
@@ -148,6 +148,7 @@ local ranks = {
 		allow={
 			'kill',
 			'tag',
+			'report',
 			'task_list',
 			'science_list',
 			'rocket_list',
