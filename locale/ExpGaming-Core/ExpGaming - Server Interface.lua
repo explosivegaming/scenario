@@ -22,12 +22,12 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 define_command('server-interface','For use of the highest staff only',{'command',true},function(player,event,args)
 	if player == '<server>' then
 		local returned,value = pcall(loadstring(event.parameter)) 
-		if type(value) == 'table' then game.write_file('server-interface.log', '\n'..game.tick..' Ran by: <server>  Code: '..event.parameter..'\n Returned: '..table.to_string(value), true, 0) print(table.to_string(value))
+		if type(value) == 'table' then game.write_file('server-interface.log', '\n'..game.tick..' Ran by: <server>  Code: '..event.parameter..'\n Returned: '..table.tostring(value), true, 0) print(table.tostring(value))
 		else game.write_file('server-interface.log', '\n'..game.tick..' Ran by: <server> Code: '..event.parameter..'\nReturned: '..tostring(value), true, 0) print(value) end
 	else
 		local returned,value = pcall(loadstring(event.parameter)) 
-		if type(value) == 'table' then game.write_file('server-interface-players.log', '\n'..game.tick..' Ran by: '..player.name..' Code: '..event.parameter..'\n Returned: '..table.to_string(value), true, 0) player.print(table.to_string(value))
-		else game.write_file('server-interface-players.log', '\n'..game.tick..' Ran by: '..player.name..' Code: '..event.parameter..'\nReturned: '..tostring(value), true, 0) player.print(value) end
+		if type(value) == 'table' then game.write_file('server-interface-players.log', '\n'..game.tick..' Ran by: '..player.name..' Code: '..event.parameter..'\n Returned: '..table.tostring(value), true, 0) player.print(table.tostring(value))
+		else game.write_file('server-interface-players.log', '\n'..game.tick..' Ran by: '..player.name..' Code: '..event.parameter..'\nReturned: '..tostring(value), true, 0) player.print(tostring(value)) end
 	end
 end)
 --this is used when changing permission groups when the person does not have permsion to, can also be used to split a large event accross multiple ticks
