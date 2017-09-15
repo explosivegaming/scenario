@@ -103,7 +103,8 @@ local ranks = {
 		allow={
 			'tp',
 			'repair',
-			'tree_remover'}
+			'tree_remover',
+			'report_protection'}
 		},
 		
 		{name='Veteran',
