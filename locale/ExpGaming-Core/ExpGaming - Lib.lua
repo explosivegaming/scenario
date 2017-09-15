@@ -57,7 +57,6 @@ function table.key_to_str ( k )
 end
 
 function table.to_string( tbl )
-	if not type(tbl) == 'table' then return {tostring(tbl)} end
   local result, done = {}, {}
   for k, v in ipairs( tbl ) do
     table.insert( result, table.val_to_str( v ) )
