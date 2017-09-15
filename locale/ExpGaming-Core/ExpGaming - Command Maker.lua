@@ -68,23 +68,23 @@ function load_command(command)
 			local player = game.players[event.player_index]
 			if not rank_allowed(get_rank(player),command.name) then
 				player.print('401 - Unauthorized: Access is denied due to invalid credentials')
-				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command (Unauthorized): '..command.name..' With args of: '..table.to_string(get_command_args(event,command,true)), true, 0)
+				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command (Unauthorized): '..command.name..' With args of: '..table.tostring(get_command_args(event,command,true)), true, 0)
 				return 
 			end
 			local args = get_command_args(event,command)
 			if args == 'Invalid' then 
 				player.print('Invalid Input, /'..command.name..' '..command_inputs_to_string(command)) return 
-				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command (Invalid Args): '..command.name..' With args of: '..table.to_string(get_command_args(event,command,true)), true, 0)
+				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command (Invalid Args): '..command.name..' With args of: '..table.tostring(get_command_args(event,command,true)), true, 0)
 			end
 			command.event(player,event,args)
 			player.print('Command Complete')
-			game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Used command: '..command.name..' With args of: '..table.to_string(args), true, 0)
+			game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Used command: '..command.name..' With args of: '..table.tostring(args), true, 0)
 		else
 			local args = get_command_args(event,command)
 			if args == 'Invalid' then print('Invalid Input, /'..command.name..' '..command_inputs_to_string(command)) return end
 			command.event('<server>',event,args)
 			print('Command Complete')
-			game.write_file('commands.log','\n'..game.tick..' Player: <server> Used command: '..command.name..' With args of: '..table.to_string(args), true, 0)
+			game.write_file('commands.log','\n'..game.tick..' Player: <server> Used command: '..command.name..' With args of: '..table.tostring(args), true, 0)
 		end
 	end)
 end
