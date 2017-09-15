@@ -39,6 +39,6 @@ end)
 Event.register(defines.events.on_player_joined_game,function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'player_list',true) end end)
 Event.register(defines.events.on_player_left_game,function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'player_list',true) end end)
 Event.register(Event.rank_change,function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'player_list',true) end end)
-Event.register(Event.gui_update,function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'player_list',true) end end)
+Event.register(Event.gui_update,function(event) ExpGui.draw_frame.left(event.player,'player_list',true) end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

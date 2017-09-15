@@ -29,7 +29,8 @@ local low_ranks_only={
     'Do /help tag for more info'
 }
 
-function auto_message()
+function auto_message(event)
+	if event.player_loop_index < event.players_online then return end
 	local low_rank = 'Regular'
 	local high_rank = 'Owner'
 	sudo(rank_print,{'There are '..#game.connected_players..' players online',high_rank,true})
