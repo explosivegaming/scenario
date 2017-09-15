@@ -44,15 +44,16 @@ define_command('report','Reports a user, this will be logged and you may be ask 
 		local p = game.players[args[1]]
 		if not p then player.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
 		if rank_allowed(get_rank(p),'report_protection') then player.print('This player has report protection and cant be reported') return end
+		if p == player then player.print('You can not report yourself') return end
 		local reason = table.concat(args,' ',2)
 		local info = get_report_info(player,p,reason)
 		if not info then player.print('You have already reported this player, vist discord to complain more') return end
 		-- prints to players
 		if rank_allowed(get_rank(player),'trusted_reporter') then rank_print(p.name..' has just been reported by a trusted user.','Owner',true)
 		else rank_print(p.name..' has just been reported by a user.','Owner',true) end
-		if info.trusted_reports > 0 then rank_print(p.name..' has been reported '..info.total_reports..', if reported by 40% of the server they will be jailed!','Owner',true)
-		else rank_print(p.name..' has been reported '..info.total_reports..', if reported by 70% of the server they will be jailed!','Owner',true) end
-		rank_print('To report use /report <player> <reason>; this will be logged','Owner',true)
+		if info.trusted_reports > 0 then rank_print(p.name..' has been reported '..info.total_reports..' times, if reported by 40% of the server they will be jailed!','Owner',true)
+		else rank_print(p.name..' has been reported '..info.total_reports..' times, if reported by 70% of the server they will be jailed!','Owner',true) end
+		rank_print('To report use /report <player> <reason>','Owner',true)
 		-- logs to file
 		game.write_file('user_reports.log','\n'..game.tick..' '..info.player.name..' has been reported by: '..player.name..' Reason: '..reason)
 		-- logic to jail player
