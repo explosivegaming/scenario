@@ -18,11 +18,7 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-credit_loop(require("ExpGaming - Repair"))
 credit_loop(require("ExpGaming - TP"))
-credit_loop(require("ExpGaming - Tp All"))
-credit_loop(require("ExpGaming - Kill"))
 credit_loop(require("ExpGaming - Tags"))
-credit_loop(require("ExpGaming - Cheat Mode"))
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
