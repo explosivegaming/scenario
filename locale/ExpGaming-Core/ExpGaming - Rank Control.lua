@@ -116,7 +116,7 @@ function find_new_rank(player)
 	if current_rank.power > global.ranks.highest_timed_rank.power and player.online_time >= global.ranks.lowest_timed_rank.time then
 		--Loop through rank times
 		for _,rank in pairs(get_ranks()) do 
-			if rank.time and tick_to_min(player.online_time) >= rank.time then table.insert(possible_ranks,string_to_rank(rank)) end
+			if rank.time and tick_to_min(player.online_time) >= rank.time then table.insert(possible_ranks,rank) end
 		end
 	end
 	--Loop through possible ranks
