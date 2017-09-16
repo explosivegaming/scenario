@@ -38,6 +38,17 @@ function string_to_rank(string)
 		if #found_ranks == 1 then return found_ranks[1] end
 	end
 end
+--converts the name of a group to the group object
+function string_to_rank(string)
+	if type(string) == 'string' then
+		local found_groups={}
+		for _,group in pairs(get_rank_groups()) do
+			if group.name:lower() == string:lower() then return group end
+			if group.name:lower():find(string:lower()) then table.insert(found_groups,group) end
+		end
+		if #found_groups == 1 then return found_groups[1] end
+	end
+end
 -- surches the rank for a certain allow command
 function rank_allowed(rank,is_allowed)
 	for _,allow in pairs(rank.allow) do
