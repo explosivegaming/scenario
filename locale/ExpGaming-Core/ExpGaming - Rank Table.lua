@@ -126,7 +126,8 @@ local ranks = {
 			'announcement',
 			'admin',
 			'force_modifiers_tab',
-			'player_modifiers_tab'}
+			'player_modifiers_tab',
+			'adv_repair'}
 		},
 		
 		{name='Mod',
