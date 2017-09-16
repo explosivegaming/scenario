@@ -39,7 +39,7 @@ function string_to_rank(string)
 	end
 end
 --converts the name of a group to the group object
-function string_to_rank(string)
+function string_to_rank_group(string)
 	if type(string) == 'string' then
 		local found_groups={}
 		for _,group in pairs(get_rank_groups()) do
