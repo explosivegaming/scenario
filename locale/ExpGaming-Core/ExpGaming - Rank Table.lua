@@ -260,6 +260,14 @@ function get_ranks(part)
 	else to_return = global.ranks.ranks end
 	return to_return
 end
+-- returns a list off all the groups, return only one part if given
+function get_rank_groups(part)
+	local to_return = {}
+	if part then 
+		for _,group in pairs(global.ranks.groups) do table.insert(to_return,group[part]) end
+	else to_return = global.ranks.groups end
+	return to_return
+end
 -- Move the ranks to the global array
 Event.register(-1,function() global.ranks = ranks end)
 --Please Only Edit Above This Line-----------------------------------------------------------
