@@ -126,7 +126,8 @@ local ranks = {
 			'announcement',
 			'admin',
 			'force_modifiers_tab',
-			'player_modifiers_tab'}
+			'player_modifiers_tab',
+			'adv_repair'}
 		},
 		
 		{name='Mod',
@@ -258,6 +259,14 @@ function get_ranks(part)
 	if part then 
 		for _,rank in pairs(global.ranks.ranks) do table.insert(to_return,rank[part]) end
 	else to_return = global.ranks.ranks end
+	return to_return
+end
+-- returns a list off all the groups, return only one part if given
+function get_rank_groups(part)
+	local to_return = {}
+	if part then 
+		for _,group in pairs(global.ranks.groups) do table.insert(to_return,group[part]) end
+	else to_return = global.ranks.groups end
 	return to_return
 end
 -- Move the ranks to the global array

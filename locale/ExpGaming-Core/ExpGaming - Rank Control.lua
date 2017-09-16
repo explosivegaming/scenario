@@ -24,7 +24,7 @@ function get_rank(player)
 		for _,rank in pairs(get_ranks()) do
 			if player.permission_group == game.permissions.get_group(rank.name) then return rank end
 		end
-		return string_to_rank('Guest')
+		return string_to_rank_group('User').lowest_rank
 	end
 end
 --Convert the name of a rank into the rank object
@@ -38,6 +38,17 @@ function string_to_rank(string)
 		if #found_ranks == 1 then return found_ranks[1] end
 	end
 end
+--converts the name of a group to the group object
+function string_to_rank_group(string)
+	if type(string) == 'string' then
+		local found_groups={}
+		for _,group in pairs(get_rank_groups()) do
+			if group.name:lower() == string:lower() then return group end
+			if group.name:lower():find(string:lower()) then table.insert(found_groups,group) end
+		end
+		if #found_groups == 1 then return found_groups[1] end
+	end
+end
 -- surches the rank for a certain allow command
 function rank_allowed(rank,is_allowed)
 	for _,allow in pairs(rank.allow) do
@@ -48,7 +59,7 @@ end
 --Send a message to all members of this rank and above, if no rank given default is mod
 --inv sends message to all lower ranks rather than higher
 function rank_print(msg, rank, inv)
-	local rank = string_to_rank(rank) or string_to_rank('Mod') -- default mod or higher
+	local rank = string_to_rank(rank) or string_to_rank_group('Moderation').lowest_rank -- default mod or higher
 	local inv = inv or false
 	for _, player in pairs(game.players) do
 		--this part uses sudo to soread it other many ticks
@@ -69,7 +80,7 @@ end
 --Give the user their new rank and raise the Event.rank_change event
 function give_rank(player,rank,by_player)
 	local by_player = by_player or 'server'
-	local rank = string_to_rank(rank) or rank or string_to_rank('Guest')
+	local rank = string_to_rank(rank) or rank or string_to_rank_group('User').lowest_rank
 	local old_rank = get_rank(player)
 	-- to reducse lag if the ranks are all ready given it does not cheak
 	if old_rank == rank then return end
@@ -129,13 +140,13 @@ function find_new_rank(player)
 		if highest_rank.name == 'Guest' then
 			-- to avoid spam in chat
 			player.permission_group=game.permissions.get_group('Guest')
-			script.raise_event(Event.rank_change, {player=player, by_player='server', new_rank=string_to_rank('Guest'), old_rank=string_to_rank('Guest')})
+			script.raise_event(Event.rank_change, {player=player, by_player='server', new_rank=string_to_rank_group('User').lowest_rank, old_rank=string_to_rank_group('User').lowest_rank})
 		else
 			if highest_rank ~= current_rank then give_rank(player,highest_rank) end
 		end
 	end
 	--Lose ends
-	if get_rank(player).power <= string_to_rank('mod').power and not player.admin then rank_print(player.name..' needs to be promoted.') end
+	if get_rank(player).power <= string_to_rank_group('Moderation').lowest_rank.power and not player.admin then rank_print(player.name..' needs to be promoted.') end
 	if old_rank.name ~= get_rank(player).name then global.old_ranks[player.index]=old_rank.name end
 end
 -- returns a list with every players current rank, or just the players of the rank given, includes online time
