@@ -44,6 +44,8 @@ function table.val_to_str ( v )
     return '"' .. string.gsub(v,'"', '\\"' ) .. '"'
   else
     return "table" == type( v ) and table.tostring( v ) or
+      "function" == type( v ) and '"cant_display_function"' or
+      "userdata" == type( v ) and '"cant_display_userdata"' or
       tostring( v )
   end
 end
