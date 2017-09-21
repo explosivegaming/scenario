@@ -124,7 +124,7 @@ function find_new_rank(player)
 	end
 	-- to reduce lag if the player is already higher than any time rank then it does not cheak
 	-- also there play time must be higher than the lowest required for a rank
-	if current_rank.power > global.ranks.highest_timed_rank.power and player.online_time >= global.ranks.lowest_timed_rank.time then
+	if current_rank.power > global.ranks.highest_timed_rank.power and tick_to_min(player.online_time) >= global.ranks.lowest_timed_rank.time then
 		--Loop through rank times
 		for _,rank in pairs(get_ranks()) do 
 			if rank.time and tick_to_min(player.online_time) >= rank.time then table.insert(possible_ranks,rank) end
