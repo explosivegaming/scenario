@@ -39,6 +39,7 @@ for _,filter in pairs(player_table_functions.filters) do
 end
 --used to draw filters from the list above
 function player_table_functions.draw_filters(player,frame,filters)
+	debug_write({'GUI','PLAYER-TABLE','DRAW-FILTERS'},player.name)
 	local input_bar = frame.add{type='flow',name='input_bar',direction='horizontal'}
 	for _,name in pairs(filters) do
 		local filter_data = nil
@@ -76,6 +77,7 @@ end
 --used to draw the player table with filter that you want
 --filter = {{'is_admin',true},{'offline',true},{'player_name'}} ; if the length is 2 then it will not attempt to get a user input
 function player_table_functions.draw(player,frame,filters,input_location)
+	debug_write({'GUI','PLAYER-TABLE','START'},player.name)
 	global.current_filters[player.index] = {filters,frame}
 	--setup the table
 	if frame.player_table then frame.player_table.destroy() end
@@ -93,6 +95,7 @@ function player_table_functions.draw(player,frame,filters,input_location)
 		local add=true
 		for _,filter in pairs(filters) do
 			if #filter == 2 and add then
+				debug_write({'GUI','PLAYER-TABLE','CHEAK'},p.name..' '..fliter.name)
 				local result = player_table_functions.player_match(p,filter.name,filter.is_text) 
 				if not result and filter.is_text == true then result = filter.is_text end
 				add = result or false
@@ -100,11 +103,13 @@ function player_table_functions.draw(player,frame,filters,input_location)
 		end
 		for _,filter in pairs(player_table_functions.get_filters(input_location)) do
 			if add then
+				debug_write({'GUI','PLAYER-TABLE','CHEAK'},p.name..' '..fliter.name)
 				add = player_table_functions.player_match(p,filter.name,filter.is_text) or false
 			end
 		end
 		--add the player
 		if add then--and player.name ~= p.name then
+			debug_write({'GUI','PLAYER-TABLE','ADD'},p.name)
 			player_table.add{name=p.name.."_id", type="label", caption=i}
       		player_table.add{name=p.name..'_name', type="label", caption=p.name}
 			if p.connected == true 
