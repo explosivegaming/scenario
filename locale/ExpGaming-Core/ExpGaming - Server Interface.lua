@@ -32,12 +32,10 @@ define_command('server-interface','For use of the highest staff only',{'command'
 end)
 --runs a server interface command with debug on and does not return any values to the user
 define_command('debug','For use of the highest staff only, this will lag A LOT',{'command',true},function(player,event,args)
-	local before_debug = false; if global.debug then before_debug = true end
 	global.debug = true
 	debug_write({'START'},game.tick..' '..event.parameter)
-	pcall(loadstring(event.parameter))
-	debug_write({'END'},game.tick)
-	global.debug = before_debug
+	local returned,value = pcall(loadstring(event.parameter))
+	if #global.sudo.commands == 0 then debug_write({'END'},game.tick) global.debug = false end
 end)
 --this is used when changing permission groups when the person does not have permsion to, can also be used to split a large event accross multiple ticks
 local commands_per_iteration = 50 --number of sudo commands ran every sudo iteration
@@ -88,6 +86,7 @@ end
 --sudo main loop
 Event.register(defines.events.on_tick, function(event)
 	-- runs the commands in sudo
+	if #global.sudo.commands == 0 then debug_write({'END'},game.tick) global.debug = false end
 	debug_write({'SUDO'},get_sudo_info(true))
 	if game.tick % ticks_per_iteration == 0 and global.sudo.commands and #global.sudo.commands > 0 then
 		local length = nil

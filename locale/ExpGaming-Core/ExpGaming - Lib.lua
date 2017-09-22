@@ -76,10 +76,11 @@ end
 function debug_write(idenitys,string)
   if global.debug then
     if type(string) == 'table' then string = table.tostring(string)
-    elseif tpye(string) ~= 'string' then string = tostring(string) end
-    game.write_file('debug.log', '\n'..game.tick..' ['..table.concat(idenitys, " " )..'] '..string, true, 0)
+    elseif type(string) ~= 'string' then string = tostring(string) end
+    game.write_file('debug.log', '\n['..table.concat(idenitys, " " )..'] '..string, true, 0)
   end
 end
+Event.register(defines.events.on_tick,function() debug_write({'NEW TICK'},game.tick) end)
 Event.register(-1,function() global.debug = false end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
