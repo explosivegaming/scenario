@@ -86,7 +86,7 @@ end
 --sudo main loop
 Event.register(defines.events.on_tick, function(event)
 	-- runs the commands in sudo
-	if #global.sudo.commands == 0 then debug_write({'END'},game.tick) global.debug = false end
+	if global.debug and #global.sudo.commands == 0 then debug_write({'END'},game.tick) global.debug = global.force_debug end
 	debug_write({'SUDO'},get_sudo_info(true))
 	if game.tick % ticks_per_iteration == 0 and global.sudo.commands and #global.sudo.commands > 0 then
 		local length = nil
@@ -112,6 +112,6 @@ Event.register(defines.events.on_tick, function(event)
 		if data.remove_time <= game.tick then global.sudo.temp_varibles[name] = nil end
 	end
 end)
-Event.register(-1,function() global.sudo = {commands={},temp_varibles={}} end)
+Event.register(-1,function() global.sudo = {commands={},temp_varibles={}} global.force_debug = false end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
