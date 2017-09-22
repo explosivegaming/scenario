@@ -21,6 +21,7 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 --Return the rank of a given player
 function get_rank(player)
 	if player then
+		debug_write({'RANK','PLAYER-GET'},player.name)
 		for _,rank in pairs(get_ranks()) do
 			if player.permission_group == game.permissions.get_group(rank.name) then return rank end
 		end
@@ -61,6 +62,7 @@ end
 function rank_print(msg, rank, inv)
 	local rank = string_to_rank(rank) or string_to_rank_group('Moderation').lowest_rank -- default mod or higher
 	local inv = inv or false
+	debug_write({'RANK','PRINT'},rank.name..': '..msg)
 	for _, player in pairs(game.players) do
 		--this part uses sudo to soread it other many ticks
 		player_rank_power = get_rank(player).power
@@ -87,9 +89,11 @@ function give_rank(player,rank,by_player)
 	--messaging
 	local message = 'demoted'
 	if rank.power <= old_rank.power then message = 'promoted' end
-	if by_player.name then 
+	if by_player.name then
+		debug_write({'RANK','GIVE'},'player: '..player.name..' by player: '..by_player.name..' new rank: '..rank.name..' old rank: '..old_rank.name)
 		rank_print(player.name..' was '..message..' to '..rank.name..' by '..by_player.name,'Guest')
 	else
+		debug_write({'RANK','GIVE'},'player: '..player.name..' by player: <server> new rank: '..rank.name..' old rank: '..old_rank.name)
 		rank_print(player.name..' was '..message..' to '..rank.name..' by <server>','Guest')
 	end
 	if rank.name ~= 'Guest' then player.print('You have been given the '..rank.name..' Rank!') end
@@ -107,7 +111,9 @@ function revert_rank(player,by_player)
 end
 --Give the player a new rank based on playtime and/or preset ranks
 function find_new_rank(player)
+	debug_write({'RANK','NEW-RANK','START'},player.name)
 	local function loop_preset_rank(players,rank)
+		debug_write({'RANK','NEW-RANK','LOOP-PRESET'},rank)
 		for _,p in pairs(players) do
 			if player.name:lower() == p:lower() then return rank end
 		end
@@ -116,38 +122,51 @@ function find_new_rank(player)
 	local old_rank = get_rank(player)
 	local possible_ranks = {current_rank}
 	--Loop through preset ranks only if playtime is less than 5 minutes
+	debug_write({'RANK','NEW-RANK','PRESET-CHEAK'},tick_to_min(player.online_time))
 	if tick_to_min(player.online_time) < 5 then
+		debug_write({'RANK','NEW-RANK','PRESET-START'},player.name)
 		for rank,players in pairs(global.preset_ranks) do
 			local found_rank = loop_preset_rank(players, rank)
-			if found_rank then table.insert(possible_ranks,string_to_rank(found_rank)) break end
+			if found_rank then debug_write({'RANK','NEW-RANK','ADD'},found_rank) table.insert(possible_ranks,string_to_rank(found_rank)) break end
 		end
 	end
 	-- to reduce lag if the player is already higher than any time rank then it does not cheak
 	-- also there play time must be higher than the lowest required for a rank
+	debug_write({'RANK','NEW-RANK','TIME-CHEAK'},tick_to_min(player.online_time))
 	if current_rank.power > global.ranks.highest_timed_rank.power and tick_to_min(player.online_time) >= global.ranks.lowest_timed_rank.time then
+		debug_write({'RANK','NEW-RANK','TIME-START'},player.name)
 		--Loop through rank times
-		for _,rank in pairs(get_ranks()) do 
-			if rank.time and tick_to_min(player.online_time) >= rank.time then table.insert(possible_ranks,rank) end
+		for _,rank in pairs(get_ranks()) do
+			if rank.time then debug_write({'RANK','NEW-RANK','START'},rank.name..' '..rank.time) end
+			if rank.time and tick_to_min(player.online_time) >= rank.time then debug_write({'RANK','NEW-RANK','ADD'},rank.name) table.insert(possible_ranks,rank) end
 		end
 	end
 	--Loop through possible ranks
+	debug_write({'RANK','NEW-RANK','JAIL-CHEAK'},current_rank.name)
 	if current_rank.name ~='Jail' then 
+		debug_write({'RANK','NEW-RANK','GIVE','START'},possible_ranks)
 		local highest_rank = possible_ranks[1]
 		for _,rank in pairs(possible_ranks) do
+			debug_write({'RANK','NEW-RANK','GIVE','POSSIBLE-CHEAK'},rank.name)
 			if rank.power < highest_rank.power then highest_rank = rank end
 		end
+		debug_write({'RANK','NEW-RANK','GIVE','HIGHEST'},highest_rank.name)
 		--Give player new rank if availble
 		if highest_rank.name == 'Guest' then
 			-- to avoid spam in chat
+			debug_write({'RANK','NEW-RANK','GIVE','VIA-SERVER'},player.name..' '..highest_rank.name)
 			player.permission_group=game.permissions.get_group('Guest')
 			script.raise_event(Event.rank_change, {player=player, by_player='server', new_rank=string_to_rank_group('User').lowest_rank, old_rank=string_to_rank_group('User').lowest_rank})
 		else
+			debug_write({'RANK','NEW-RANK','GIVE','VIA-GIVE-RANK'},player.name..' '..highest_rank.name)
 			if highest_rank ~= current_rank then give_rank(player,highest_rank) end
 		end
+		debug_write({'RANK','NEW-RANK','GIVE','END'},player.name)
 	end
 	--Lose ends
 	if get_rank(player).power <= string_to_rank_group('Moderation').lowest_rank.power and not player.admin then rank_print(player.name..' needs to be promoted.') end
 	if old_rank.name ~= get_rank(player).name then global.old_ranks[player.index]=old_rank.name end
+	debug_write({'RANK','NEW-RANK','END'},player.name)
 end
 -- returns a list with every players current rank, or just the players of the rank given, includes online time
 function get_ranked_players(rank)
@@ -162,6 +181,7 @@ end
 --Event handlers  
 Event.rank_change = script.generate_event_name()
 Event.register(Event.rank_change,function(event)
+	debug_write({'RANK','EVENT'},event)
 	if event.new_rank == event.old_rank then return end
 	if event.by_player == 'server' then
 		game.write_file('rank-change.log','\n'..game.tick..' Player: '..event.player.name..' Was given rank: '..event.new_rank.name..' By: <server> Their rank was: '..event.old_rank.name, true, 0)
@@ -169,11 +189,14 @@ Event.register(Event.rank_change,function(event)
 		game.write_file('rank-change.log','\n'..game.tick..' Player: '..event.player.name..' Was given rank: '..event.new_rank.name..' By: '..event.by_player.name..' Their rank was: '..event.old_rank.name, true, 0)	
 	end
 end)
-Event.register(-1,function() 
+Event.register(-1,function()
+	debug_write({'RANK','SETUP'},'start')
 	global.old_ranks = {} 
 	for _,rank in pairs(get_ranks()) do
+		debug_write({'RANK','SETUP'},'added: '..rank.name)
 		game.permissions.create_group(rank.name)
 		for _,toRemove in pairs(rank.disallow) do
+			debug_write({'RANK','SETUP'},'blocked: '..toRemove)
 			game.permissions.get_group(rank.name).set_allows_action(defines.input_action[toRemove],false)
 		end
 	end

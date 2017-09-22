@@ -33,9 +33,11 @@ function add_frame.left(name,default_display,default_tooltip,vis,event)
 end
 --draw the left GUI for the player; called via script, only call manually when update is true and element is the name of the GUI
 function draw_frame.left(player,element,update)
+	debug_write({'GUI','LEFT'},player.name)
 	local frame = nil
 	local frame_data = nil
 	local left = mod_gui.get_frame_flow(player)
+	debug_write({'GUI','LEFT','UPDATE'},update)
 	if not update then
 		for _,frame in pairs(frames.left) do if element.name == frame.name then frame_data = frame break end end
 		if left[frame_data.name] then ExpGui.toggle_visible(left[frame_data.name]) return end

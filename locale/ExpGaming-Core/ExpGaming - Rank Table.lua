@@ -47,7 +47,7 @@ local ranks = {
 	number_of_ranks=0,
 	groups={
 		{name='Management',
-		allow={'cheat-mode'}
+		allow={'cheat-mode','debug'}
 		},
 
 		{name='Moderation',

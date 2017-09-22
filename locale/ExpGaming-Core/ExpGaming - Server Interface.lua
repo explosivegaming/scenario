@@ -30,6 +30,13 @@ define_command('server-interface','For use of the highest staff only',{'command'
 		else game.write_file('server-interface-players.log', '\n'..game.tick..' Ran by: '..player.name..' Code: '..event.parameter..'\nReturned: '..tostring(value), true, 0) player.print(tostring(value)) end
 	end
 end)
+--runs a server interface command with debug on and does not return any values to the user
+define_command('debug','For use of the highest staff only, this will lag A LOT',{'command',true},function(player,event,args)
+	global.debug = true
+	debug_write({'START'},game.tick..' '..event.parameter)
+	local returned,value = pcall(loadstring(event.parameter))
+	if #global.sudo.commands == 0 then debug_write({'END'},game.tick) global.debug = false end
+end)
 --this is used when changing permission groups when the person does not have permsion to, can also be used to split a large event accross multiple ticks
 local commands_per_iteration = 50 --number of sudo commands ran every sudo iteration
 local ticks_per_iteration = 1 --the number of ticks break before the next sudo iteration
@@ -38,6 +45,7 @@ function sudo(command,args,custom_return_name)
 	if type(command) == 'function' then
 		local args = args or {}
 		local return_name = custom_return_name or tostring(game.tick)..tostring(command)..tostring(#global.sudo.commands)
+		debug_write({'SUDO','ADD'},return_name)
 		table.insert(global.sudo.commands,{fun=command,args=args,return_name=return_name})
 		refresh_temp_var(return_name,'temp-var-temp-value')
 		return {sudo='sudo-temp-var',name=return_name}
@@ -58,10 +66,10 @@ function refresh_temp_var(name,value,offset)
 	end
 end
 -- gets the data stored in a temp varible
-function get_temp_var_data(var) 
+function get_temp_var_data(var)
 	local to_return = nil
-	if global.sudo.temp_varibles[var] then to_return = global.sudo.temp_varibles[var].data
-	elseif var.name and global.sudo.temp_varibles[var.name] then to_return = global.sudo.temp_varibles[var.name].data end
+	if global.sudo.temp_varibles[var] then to_return = global.sudo.temp_varibles[var].data debug_write({'SUDO','TEMP-VAR'},var)
+	elseif var.name and global.sudo.temp_varibles[var.name] then to_return = global.sudo.temp_varibles[var.name].data debug_write({'SUDO','TEMP-VAR'},var.name) end
 	return to_return 
 end
 -- returns the lenth of the temp varible list and command queue, is string is true then it is retured as a string
@@ -78,6 +86,8 @@ end
 --sudo main loop
 Event.register(defines.events.on_tick, function(event)
 	-- runs the commands in sudo
+	if #global.sudo.commands == 0 then debug_write({'END'},game.tick) global.debug = false end
+	debug_write({'SUDO'},get_sudo_info(true))
 	if game.tick % ticks_per_iteration == 0 and global.sudo.commands and #global.sudo.commands > 0 then
 		local length = nil
 		if #global.sudo.commands > commands_per_iteration then length = commands_per_iteration else length = #global.sudo.commands end
