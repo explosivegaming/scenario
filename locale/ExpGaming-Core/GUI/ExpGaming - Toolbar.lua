@@ -27,12 +27,14 @@ function toolbar.add_button(name,default_display,default_tooltip,event)
 end
 --draw the toolbar to the player only showing buttons within their restriction
 function toolbar.draw(player)
+	debug_write({'GUI','TOOLBAR'},player.name)
 	if not player then error('Need a player to draw to') end
 	local toolbar_frame = mod_gui.get_button_flow(player)
 	toolbar_frame.clear()
 	for _,button in pairs(toolbar.buttons) do
 		local rank = get_rank(player)
 		if rank_allowed(get_rank(player),button.name) then
+			debug_write({'GUI','TOOLBAR','ADD'},button.name)
 			ExpGui.add_input.draw_button(toolbar_frame,button.name)
 		end
 	end

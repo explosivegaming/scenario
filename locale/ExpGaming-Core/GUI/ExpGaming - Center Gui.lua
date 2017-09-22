@@ -43,6 +43,7 @@ ExpGui.add_input.button('close_center','Close','Close this GUI',function(player,
 function draw_frame.center(player,element)
 	local frame_data = nil
 	for _,frame in pairs(frames.center) do if element.name == frame.name then frame_data = frame break end end
+	debug_write({'GUI','CENTER'},player.name..' '..frame_data.name)
 	if player.gui.is_valid_sprite_path(frame_data.display) then frame_data.display = frame_data.name end
 	if player.gui.center[frame_data.name] then player.gui.center.clear() return else player.gui.center.clear() end
 	local frame = player.gui.center.add{name=frame_data.name,type='frame',caption=frame_data.display,direction='vertical',style=mod_gui.frame_style}
@@ -50,7 +51,7 @@ function draw_frame.center(player,element)
 	local tab_bar_scroll = frame.add{type = "scroll-pane", name= "tab_bar_scroll", vertical_scroll_policy="never", horizontal_scroll_policy="always"}
 	local tab_bar = tab_bar_scroll.add{type='flow',direction='horizontal',name='tab_bar'}
 	local tab = frame.add{type = "scroll-pane", name= "tab", vertical_scroll_policy="auto", horizontal_scroll_policy="never"}
-	for n,t in pairs(frame_data.tabs) do if rank_allowed(get_rank(player),t.name..'_tab') then ExpGui.add_input.draw_button(tab_bar,t.name) end end
+	for n,t in pairs(frame_data.tabs) do if rank_allowed(get_rank(player),t.name..'_tab') then debug_write({'GUI','CENTER','ADD'},t.name) ExpGui.add_input.draw_button(tab_bar,t.name) end end
 	draw_frame.tab(player,tab_bar[frame_data.tabs[1].name])
 	ExpGui.add_input.draw_button(tab_bar,'close_center')
 	tab.style.minimal_height = 300
@@ -65,6 +66,7 @@ function draw_frame.center(player,element)
 end
 --Draw the tab into the center GUI for the player; do not call manually, must use other functions to call
 function draw_frame.tab(player,element)
+	debug_write({'GUI','CENTER','OPEN-TAB'},element.name)
 	for _,btn in pairs(element.parent.children) do if btn.name == 'close_center' or btn.name == element.name then
 		btn.style.font_color = {r = 255, g = 255, b = 255,a=255}
 	else 
