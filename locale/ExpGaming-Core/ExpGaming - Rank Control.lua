@@ -183,9 +183,7 @@ Event.rank_change = script.generate_event_name()
 Event.register(Event.rank_change,function(event)
 	debug_write({'RANK','EVENT'},event)
 	if event.new_rank == event.old_rank then return end
-	if event.by_player == 'server' then
-		game.write_file('rank-change.log','\n'..game.tick..' Player: '..event.player.name..' Was given rank: '..event.new_rank.name..' By: <server> Their rank was: '..event.old_rank.name, true, 0)
-	else
+	if not event.by_player == 'server' then
 		game.write_file('rank-change.log','\n'..game.tick..' Player: '..event.player.name..' Was given rank: '..event.new_rank.name..' By: '..event.by_player.name..' Their rank was: '..event.old_rank.name, true, 0)	
 	end
 end)
