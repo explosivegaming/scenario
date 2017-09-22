@@ -75,6 +75,8 @@ end
 -- allows a simple way to debug code
 function debug_write(idenitys,string)
   if global.debug then
+    if type(string) == 'table' then string = table.tostring(string)
+    elseif tpye(string) ~= 'string' then string = tostring(string) end
     game.write_file('debug.log', '\n'..game.tick..' ['..table.concat(idenitys, " " )..'] '..string, true, 0)
   end
 end
