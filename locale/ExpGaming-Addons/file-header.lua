@@ -26,6 +26,7 @@ credit_loop(require("ExpGaming - Readme"))
 credit_loop(require("ExpGaming - Info"))
 credit_loop(require("ExpGaming - Rank Changer"))
 credit_loop(require("ExpGaming - Temp Ban"))
+credit_loop(require("ExpGaming - Tree Remover"))
 credit_loop(require("ExpGaming - User Report"))
 credit_loop(require("Commands/file-header"))
 --Please Only Edit Above This Line-----------------------------------------------------------
