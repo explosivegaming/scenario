@@ -72,5 +72,12 @@ function table.tostring( tbl )
   end
   return "{" .. table.concat( result, "," ) .. "}"
 end
+-- allows a simple way to debug code
+function debug_write(idenitys,string)
+  if global.debug then
+    game.write_file('debug.log', '\n'..game.tick..' ['..table.concat(idenitys, " " )..'] '..string, true, 0)
+  end
+end
+Event.register(-1,function() global.debug = false end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

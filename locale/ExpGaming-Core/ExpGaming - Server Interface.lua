@@ -30,6 +30,14 @@ define_command('server-interface','For use of the highest staff only',{'command'
 		else game.write_file('server-interface-players.log', '\n'..game.tick..' Ran by: '..player.name..' Code: '..event.parameter..'\nReturned: '..tostring(value), true, 0) player.print(tostring(value)) end
 	end
 end)
+--runs a server interface command with debug on and does not return any values to the user
+define_command('debug','For use of the highest staff only',{'command',true},function(player,event,args)
+	global.debug = true
+	debug_write({'START'},game.tick)
+	pcall(loadstring(event.parameter))
+	debug_write({'END'},game.tick)
+	global.debug = false
+end)
 --this is used when changing permission groups when the person does not have permsion to, can also be used to split a large event accross multiple ticks
 local commands_per_iteration = 50 --number of sudo commands ran every sudo iteration
 local ticks_per_iteration = 1 --the number of ticks break before the next sudo iteration
