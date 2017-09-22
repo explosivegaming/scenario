@@ -35,6 +35,7 @@ Event.register(defines.events.on_tick, function(event)
 		local online_players = #game.connected_players
 		for i,player in pairs(game.connected_players) do 
 			script.raise_event(Event.gui_update,{tick=game.tick,player=player,player_loop_index=i,players_online=online_players})
+			-- script.raise_event(Event.gui_update,{tick=game.tick,player=game.player,player_loop_index=1,players_online=#game.connected_players})
 		end
 	elseif (game.tick/(3600*game.speed))+(15/2) % 15 == 0 then
 		for i,player in pairs(game.connected_players) do
