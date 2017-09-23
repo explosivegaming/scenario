@@ -200,5 +200,6 @@ Event.register(-1,function()
 	end
 end)
 Event.register(defines.events.on_player_joined_game,function(event) find_new_rank(game.players[event.player_index]) end)
+Event.register(-1,function() global.preset_ranks = {} end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
