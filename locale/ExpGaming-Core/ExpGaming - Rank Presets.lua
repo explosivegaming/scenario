@@ -18,6 +18,7 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
+-- we run an exturnle script which syncs this table with discord, only top ranks are filled in case of error
 local preset_ranks = {
 	Owner={'badgamernl'},
 	
@@ -31,48 +32,9 @@ local preset_ranks = {
 	'mark9064',
 	'Smou'},
 	
-	Mod={
-	'AcThPaU',
-	'Alanore',
-	'Aquaday',
-	'ayahuasca23',
-	'cafeslacker',
-	'CrashKonijn',
-	'Drahc_pro',
-	'everLord',
-	'FlipHalfling90',
-	'facere',
-	'freek18',
-	'Hobbitkicker',
-	'hud',
-	'Koroto',
-	'matthias60',
-	'MeDDish',
-	'Mindxt20',
-	'MottledPetrel',
-	'Mr_Happy_212',
-	'NextIdea',
-	'Phoenix27833',
-	'rezz',
-	'samy115',
-	'Sand3r205',
-	'scarbvis',
-	'steentje77',
-	'SuperWinner50',
-	'tophatgaming123',
-	'VR29',
-	'xenocyber',
-	'Ruuyji',
-	'mightycax',
-	'Gizan',
-	'mafisch3',
-	'cydes',
-	'Windbomb'},
+	Mod={},
 	
-	Donator={
-	'M74132',
-	'Splicer',
-	'Nucklesamich'},
+	Donator={},
 	
 	Veteran={},
 	

@@ -96,7 +96,7 @@ function give_rank(player,rank,by_player)
 		debug_write({'RANK','GIVE'},'player: '..player.name..' by player: <server> new rank: '..rank.name..' old rank: '..old_rank.name)
 		rank_print(player.name..' was '..message..' to '..rank.name..' by <server>','Guest')
 	end
-	if rank.name ~= 'Guest' then player.print('You have been given the '..rank.name..' Rank!') end
+	if rank.name ~= string_to_rank_group('User').lowest_rank.name then player.print('You have been given the '..rank.name..' Rank!') end
 	if player.tag ~= old_rank.tag and player.tag ~= '' then player.print('Your Tag was reset due to a Rank change') end
 	--rank change
 	player.permission_group = game.permissions.get_group(rank.name)
@@ -152,7 +152,7 @@ function find_new_rank(player)
 		end
 		debug_write({'RANK','NEW-RANK','GIVE','HIGHEST'},highest_rank.name)
 		--Give player new rank if availble
-		if highest_rank.name == 'Guest' then
+		if highest_rank.name == string_to_rank_group('User').lowest_rank.name then
 			-- to avoid spam in chat
 			debug_write({'RANK','NEW-RANK','GIVE','VIA-SERVER'},player.name..' '..highest_rank.name)
 			player.permission_group=game.permissions.get_group('Guest')

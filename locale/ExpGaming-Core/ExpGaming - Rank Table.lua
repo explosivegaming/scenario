@@ -46,6 +46,8 @@ local ranks = {
 	lowest_timed_rank=nil,
 	number_of_ranks=0,
 	groups={
+		--note dont remove these groups but you may add more
+		--all but the management group is used to indentiy ranks by the script
 		{name='Management',
 		allow={'cheat-mode','debug'}
 		},

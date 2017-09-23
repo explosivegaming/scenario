@@ -95,7 +95,7 @@ function load_command(command)
 			print('Command Complete')
 			game.write_file('commands.log','\n'..game.tick..' Player: <server> Used command: '..command.name..' With args of: '..table.tostring(args), true, 0)
 		end
-		debug_write({'COMMAND','RUN','END'},command.name)
+		debug_write({'COMMAND','RUN','END'},command.name,true)
 	end)
 end
 -- returns all the commands in a certain rank restriction
