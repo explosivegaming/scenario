@@ -59,7 +59,7 @@ define_command('report','Reports a user, this will be logged and you may be ask 
 		-- logic to jail player
 		local percent_needed = 0.7; if info.trusted_reports > 0 then percent_needed = 0.4 end
 		local players_needed = math.floor(#game.connected_players * percent_needed)
-		if info.total_reports >= players_needed then sudo(give_rank,{p,'Jail'}) end
+		if info.total_reports >= players_needed then game.write_file('user_reports.log','\n'..game.tick..' '..p.name..' has been jailed', true, 0) sudo(give_rank,{p,'Jail'}) end
 	end
 end)
 
