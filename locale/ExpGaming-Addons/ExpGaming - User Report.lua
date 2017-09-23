@@ -52,12 +52,12 @@ define_command('report','Reports a user, this will be logged and you may be ask 
 		if rank_allowed(get_rank(player),'trusted_reporter') then rank_print(p.name..' has just been reported by a trusted user.','Owner',true)
 		else rank_print(p.name..' has just been reported by a user.','Owner',true) end
 		if info.trusted_reports > 0 then rank_print(p.name..' has been reported '..info.total_reports..' times, if reported by 40% of the server they will be jailed!','Owner',true)
-		else rank_print(p.name..' has been reported '..info.total_reports..' times, if reported by 70% of the server they will be jailed!','Owner',true) end
+		else rank_print(p.name..' has been reported '..info.total_reports..' times, if reported by 60% of the server they will be jailed!','Owner',true) end
 		rank_print('To report use /report <player> <reason>','Owner',true)
 		-- logs to file
 		game.write_file('user_reports.log','\n'..game.tick..' '..info.player.name..' has been reported by: '..player.name..' Reason: '..reason, true, 0)
 		-- logic to jail player
-		local percent_needed = 0.7; if info.trusted_reports > 0 then percent_needed = 0.4 end
+		local percent_needed = 0.6; if info.trusted_reports > 0 then percent_needed = 0.4 end
 		local players_needed = math.floor(#game.connected_players * percent_needed)
 		if info.total_reports >= players_needed then game.write_file('user_reports.log','\n'..game.tick..' '..p.name..' has been jailed', true, 0) sudo(give_rank,{p,'Jail'}) end
 	end
