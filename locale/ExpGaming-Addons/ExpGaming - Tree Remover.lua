@@ -25,25 +25,31 @@ Event.register(defines.events.on_marked_for_deconstruction, function(event)
 	-- sets up the temp var value to be used in later sudo functions
 	local tree_remover = nil
 	if not get_temp_var_data(player.name..'_tree_remover') then
-		tree_remover = sudo(function(player,entity)
-			if not rank_allowed(get_rank(player),'decon') then
-				player.print('You are not allowed to do this yet, You require the Regular rank, you must play for at least 3 hours')
-				rank_print(player.name..' tryed to deconstruced something.')
-				return 1
-			elseif rank_allowed(get_rank(player),'tree_remover') then return 2 else return 0 end
-		end,{player,entity},player.name..'_tree_remover')
+		tree_remover = sudo(function(player)
+			if not rank_allowed(get_rank(player),'decon') then return 1
+			elseif rank_allowed(get_rank(player),'tree_remover') then return 2 
+			else return 0 end
+		end,{player},player.name..'_tree_remover')
 	else tree_remover = format_as_temp_var(player.name..'_tree_remover') end
 	-- using the temp var stored in tree_remover sudo will take diffrent effects while only running the test once
 	sudo(function(entity,tree_remover)
 		if not event.entity.valid then return end
 		local result = tree_remover.data[1]
 		refresh_temp_var(tree_remover.temp_var_name)
+		local printed = nil; if type(get_temp_var_data(player.name..'_tree_remover_printed')) == 'table' then printed = get_temp_var_data(player.name..'_tree_remover_printed')[1] end
 		if result == 1 and entity.last_user then
 			entity.cancel_deconstruction('player')
+			if printed ~= true then
+				debug_write({'TREE-REMOVER'},printed)
+				player.print('You are not allowed to do this yet, You require the Regular rank, you must play for at least 3 hours')
+				rank_print(player.name..' tryed to deconstruced something.')
+			end return true
 		elseif result == 2 and not entity.last_user then
 			entity.destroy()
 		end
-	end,{entity,tree_remover})
+		if printed == true then return true end
+	end,{entity,tree_remover},player.name..'_tree_remover_printed')
+
 end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
