@@ -9,26 +9,48 @@ Discord: https://discord.gg/XSsBV6b
 The credit below may be used by another script do not remove.
 ]]
 local credits = {{
-	name='File Header - ExpGaming-Addons',
+	name='ExpGaming - Rank Preset Table',
 	owner='Explosive Gaming',
 	dev='Cooldude2606',
-	description='Just A File Header To Organise Code',
+	description='The ranks that players are given upon joining',
 	factorio_version='0.15.23',
 	show=false
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-credit_loop(require("ExpGaming - Rank Presets"))
-credit_loop(require("ExpGaming - Science List"))
-credit_loop(require("ExpGaming - Rocket List"))
-credit_loop(require("ExpGaming - Player List"))
-credit_loop(require("ExpGaming - Announcements"))
-credit_loop(require("ExpGaming - Readme"))
-credit_loop(require("ExpGaming - Info"))
-credit_loop(require("ExpGaming - Rank Changer"))
-credit_loop(require("ExpGaming - Temp Ban"))
-credit_loop(require("ExpGaming - Tree Remover"))
-credit_loop(require("ExpGaming - User Report"))
-credit_loop(require("Commands/file-header"))
+-- we run an exturnle script which syncs this table with discord, only top ranks are filled in case of error
+Event.register(-1,function()
+	global.preset_ranks = {
+	Owner={'badgamernl'},
+	
+	['Community Manager']={'arty714'},
+	
+	Developer={'Cooldude2606'},
+	
+	Admin={
+	'eissturm',
+	'PropangasEddy',
+	'mark9064',
+	'Smou'},
+	
+	Mod={},
+	
+	Donator={},
+	
+	Veteran={},
+	
+	Member={},
+	
+	Regular={},
+	
+	Guest={},
+	
+	Jail={}
+	}
+end)
+-- returns this list, or just one rank if given
+function get_preset_ranks(rank)
+	if rank then return global.preset_ranks[string_to_rank(rank).name] else return global.preset_ranks end
+end
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
