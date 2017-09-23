@@ -32,10 +32,11 @@ define_command('server-interface','For use of the highest staff only',{'command'
 end)
 --runs a server interface command with debug on and does not return any values to the user
 define_command('debug','For use of the highest staff only, this will lag A LOT',{'command',true},function(player,event,args)
-	global.debug = true
+	global.debug.state = true
 	debug_write({'START'},game.tick..' '..event.parameter)
+	global.debug.triggered = false
 	local returned,value = pcall(loadstring(event.parameter))
-	if #global.sudo.commands == 0 then debug_write({'END'},game.tick) global.debug = false end
+	if global.debug.triggered and #global.sudo.commands == 0 then debug_write({'END'},game.tick) global.debug.state = false end
 end)
 --this is used when changing permission groups when the person does not have permsion to, can also be used to split a large event accross multiple ticks
 local commands_per_iteration = 50 --number of sudo commands ran every sudo iteration
@@ -85,9 +86,10 @@ function clear_sudo()
 end
 --sudo main loop
 Event.register(defines.events.on_tick, function(event)
+	--used with debug command will stop debuging once atleast one message is send to file and there are no commands in sudo
+	if global.debug.state and global.debug.triggered and #global.sudo.commands == 0 then debug_write({'END'},game.tick) global.debug.state = global.debug.focre end
 	-- runs the commands in sudo
-	if global.debug and #global.sudo.commands == 0 then debug_write({'END'},game.tick) global.debug = global.force_debug end
-	debug_write({'SUDO'},get_sudo_info(true))
+	debug_write({'SUDO'},get_sudo_info(true),true)
 	if game.tick % ticks_per_iteration == 0 and global.sudo.commands and #global.sudo.commands > 0 then
 		local length = nil
 		if #global.sudo.commands > commands_per_iteration then length = commands_per_iteration else length = #global.sudo.commands end
@@ -112,6 +114,6 @@ Event.register(defines.events.on_tick, function(event)
 		if data.remove_time <= game.tick then global.sudo.temp_varibles[name] = nil end
 	end
 end)
-Event.register(-1,function() global.sudo = {commands={},temp_varibles={}} global.force_debug = false end)
+Event.register(-1,function() global.sudo = {commands={},temp_varibles={}} end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
