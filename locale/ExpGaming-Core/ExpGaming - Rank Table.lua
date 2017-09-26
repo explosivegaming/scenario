@@ -163,7 +163,7 @@ local ranks = {
 		colour={r=140,g=120,b=200},
 		group='User',
 		disallow={},
-		allow={'edit_tasks'}},
+		allow={}},
 		
 		{name='Member',
 		short_hand='Mem',
@@ -184,7 +184,7 @@ local ranks = {
 			'set_auto_launch_rocket',
 			'change_programmable_speaker_alert_parameters',
 			'drop_item'},
-		allow={'decon'}
+		allow={'decon','edit_tasks'}
 		},
 		
 		{name='Guest',
