@@ -155,6 +155,7 @@ function find_new_rank(player)
 		if highest_rank.name == string_to_rank_group('User').lowest_rank.name then
 			-- to avoid spam in chat
 			debug_write({'RANK','NEW-RANK','GIVE','VIA-SERVER'},player.name..' '..highest_rank.name)
+			player.tag = highest_rank.tag
 			player.permission_group=game.permissions.get_group('Guest')
 			script.raise_event(Event.rank_change, {player=player, by_player='server', new_rank=string_to_rank_group('User').lowest_rank, old_rank=string_to_rank_group('User').lowest_rank})
 		else
