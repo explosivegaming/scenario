@@ -189,7 +189,7 @@ local ranks = {
 		
 		{name='Guest',
 		short_hand='',
-		tag='[Guest]',
+		tag='',
 		time=nil,
 		colour={r=255,g=159,b=27},
 		group='User',
