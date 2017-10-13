@@ -74,7 +74,7 @@ define_command('remove-report','Clears the reports give to a user',{'player','re
 		-- reverts rank and clears report
 		rank_print(p.name..' has been cleared of they reports by: <server>','Owner',true)
 		game.write_file('user_reports.log','\n{"type":"USER_REPORT_CLEAR","tick":'..game.tick..',"username":"'..p.name..'","by":"<server>","reason":"'..reason..'"}', true, 0)
-		global.reported_users[index] = nil
+		global.reported_users[p.name] = nil
 		if get_rank(p).name == 'Jail' then sudo(revert_rank,{p}) end
 	else
 		local p = game.players[args[1]]
@@ -86,7 +86,7 @@ define_command('remove-report','Clears the reports give to a user',{'player','re
 		-- reverts rank and clears report
 		rank_print(p.name..' has been cleared of they reports by: '..player.name,'Owner',true)
 		game.write_file('user_reports.log','\n{"type":"USER_REPORT_CLEAR","tick":'..game.tick..',"username":"'..p.name..'","by":"'..player.name..'","reason":"'..reason..'"}', true, 0)
-		global.reported_users[index] = nil
+		global.reported_users[p.name] = nil
 		if get_rank(p).name == 'Jail' then sudo(revert_rank,{p,player}) end
 	end
 end)
