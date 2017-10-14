@@ -9,9 +9,9 @@ Discord: https://discord.gg/XSsBV6b
 --Please Only Edit Below This Line-----------------------------------------------------------
 --As this is the core file, the order in which the files are loaded does matter. Do not change!
 require("ExpGaming - Lib")
-ranking = require("ExpGaming - Rank Control")
-ExpGui = require("GUI/file-header")
+local ranking = require("ExpGaming - Rank Control")
+local ExpGui = require("GUI/file-header")
 require("ExpGaming - Command Maker")
-server = require("ExpGaming - Server Interface")
+local server = require("ExpGaming - Server Interface")
 --Please Only Edit Above This Line-----------------------------------------------------------
 return ranking,ExpGui,server
