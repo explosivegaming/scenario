@@ -55,7 +55,7 @@ define_command('report','Reports a user, this will be logged and you may be ask 
 		else rank_print(p.name..' has been reported '..info.total_reports..' times, if reported by 60% of the server they will be jailed!','Owner',true) end
 		rank_print('To report use /report <player> <reason>','Owner',true)
 		-- logs to file
-		game.write_file('multi.log','\n{"type": "USER_REPORT","tick":'..game.tick..',"username":"'..info.player.name..'","by":"'..player.name..'","reason":"'..reason..'"}', true, 0)
+		game.write_file('multi.log','{"type": "USER_REPORT","tick":'..game.tick..',"username":"'..info.player.name..'","by":"'..player.name..'","reason":"'..reason..'"}\n', true, 0)
 		-- logic to jail player
 		local percent_needed = 0.6; if info.trusted_reports > 0 then percent_needed = 0.4 end
 		local players_needed = math.floor(#game.connected_players * percent_needed)
@@ -73,7 +73,7 @@ define_command('remove-report','Clears the reports give to a user',{'player','re
 		if not index then print('This player has no reports') return end
 		-- reverts rank and clears report
 		rank_print(p.name..' has been cleared of they reports by: <server>','Owner',true)
-		game.write_file('user_reports.log','\n{"type":"USER_REPORT_CLEAR","tick":'..game.tick..',"username":"'..p.name..'","by":"<server>","reason":"'..reason..'"}', true, 0)
+		game.write_file('user_reports.log','\n{"type":"USER_REPORT_CLEAR","tick":'..game.tick..',"username":"'..p.name..'","by":"<server>","reason":"'..reason..'"}\n', true, 0)
 		global.reported_users[p.name] = nil
 		if get_rank(p).name == 'Jail' then sudo(revert_rank,{p}) end
 	else
@@ -85,7 +85,7 @@ define_command('remove-report','Clears the reports give to a user',{'player','re
 		if not index then player.print('This player has no reports') return end
 		-- reverts rank and clears report
 		rank_print(p.name..' has been cleared of they reports by: '..player.name,'Owner',true)
-		game.write_file('multi.log','\n{"type":"USER_REPORT_CLEAR","tick":'..game.tick..',"username":"'..p.name..'","by":"'..player.name..'","reason":"'..reason..'"}', true, 0)
+		game.write_file('multi.log','\n{"type":"USER_REPORT_CLEAR","tick":'..game.tick..',"username":"'..p.name..'","by":"'..player.name..'","reason":"'..reason..'"}\n', true, 0)
 		global.reported_users[p.name] = nil
 		if get_rank(p).name == 'Jail' then sudo(revert_rank,{p,player}) end
 	end
