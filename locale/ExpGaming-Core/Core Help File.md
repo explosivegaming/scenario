@@ -40,19 +40,19 @@ See code for more details.
 * ExpGui.add_input.draw_text(frame,name,display)
     * display (opt)
 ## Ranks
-* get_rank(player)
+* ranking.get_player_rank(player)
     * Get the players rank
-* string_to_rank(string)
+* ranking.string_to_rank(string)
     * Convert a rank name to the rank object
-* rank_print(msg, rank, inv)
+* ranking.rank_print(msg, rank, inv)
     * rank = 'rank name'
     * inv = lower ranks rather than higher -> true/false/nil
-* give_rank(player,rank,by_player)
+* ranking.give_rank(player,rank,by_player)
     * rank = 'rank name'
     * by_player = player or nil
-* revert_rank(player,by_player)
+* ranking.revert_rank(player,by_player)
     * by_player = player or nil
-* find_new_rank(player)
+* ranking.find_new_rank(player)
     * Looks in presets if play time under 5 minutes
     * Otherwise looks at play time
 * Event.rank_change
@@ -74,13 +74,13 @@ See code for more details.
     * returens a list if the data returend by thefunction if any
 * get_sudo_info(string) 
     * return either a list or string based on the string boliean
-* get_ranks(part)
+* ranking.get_ranks(part)
     * returns a list of all the ranks
     * part (opt) = part of the rank you want to return ie name
-* get_rank_presets(rank)
+* ranking.get_player_rank_presets(rank)
     * returns the current rank presets
     * rank (opt) = rank name if only one rank is needed
-* get_ranked_players(rank)
+* ranking.get_ranked_players(rank)
     * returns the ranks and online time of every player
     * rank (opt) = limits it to only this rank
 * get_commands(rank)

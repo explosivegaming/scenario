@@ -68,7 +68,7 @@ Event.register(defines.events.on_gui_click, function(event)
 	if event.element.type == 'button' or event.element.type == 'sprite-button' then
 		for _,button in pairs(inputs.buttons) do
 			if button.name == event.element.name then
-				if button.event then button.event(player,event.element) else rank_print('Button without Function '..button.name,'Mod') end break
+				if button.event then button.event(player,event.element) else ranking.rank_print('Button without Function '..button.name,'Mod') end break
 			end
 		end
 	end

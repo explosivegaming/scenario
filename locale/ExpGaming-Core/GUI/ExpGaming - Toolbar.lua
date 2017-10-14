@@ -32,8 +32,8 @@ function toolbar.draw(player)
 	local toolbar_frame = mod_gui.get_button_flow(player)
 	toolbar_frame.clear()
 	for _,button in pairs(toolbar.buttons) do
-		local rank = get_rank(player)
-		if rank_allowed(get_rank(player),button.name) then
+		local rank = ranking.get_player_rank(player)
+		if ranking.rank_allowed(ranking.get_player_rank(player),button.name) then
 			debug_write({'GUI','TOOLBAR','ADD'},button.name)
 			ExpGui.add_input.draw_button(toolbar_frame,button.name)
 		end

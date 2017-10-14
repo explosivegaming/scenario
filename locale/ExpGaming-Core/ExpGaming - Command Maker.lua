@@ -69,7 +69,7 @@ function load_command(command)
 		debug_write({'COMMAND','RUN','PLAYER-INDEX'},event.player_index)
 		if event.player_index then
 			local player = game.players[event.player_index]
-			if not rank_allowed(get_rank(player),command.name) then
+			if not ranking.rank_allowed(ranking.get_player_rank(player),command.name) then
 				debug_write({'COMMAND','RUN','ALLOWED'},false)
 				player.print('401 - Unauthorized: Access is denied due to invalid credentials')
 				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command (Unauthorized): '..command.name..' With args of: '..table.tostring(get_command_args(event,command,true)), true, 0)
@@ -102,12 +102,12 @@ end
 function get_commands(rank)
 	local rank = rank or 'Owner'
 	local to_return = {}
-	for _,command in pairs(global.commands) do
-		if rank_allowed(string_to_rank(rank),command.name) then table.insert(to_return,command) end
+	for _,command in pairs(global.exp_core.commands) do
+		if ranking.rank_allowed(ranking.string_to_rank(rank),command.name) then table.insert(to_return,command) end
 	end
 	return to_return
 end
-Event.register(-1,function() global.commands = Exp_commands for _,command in pairs(Exp_commands) do load_command(command) end end)
+Event.register(Event.soft_init,function() global.exp_core.commands = Exp_commands for _,command in pairs(Exp_commands) do load_command(command) end end)
 Event.register(defines.events.on_player_joined_game,function() for _,command in pairs(Exp_commands) do load_command(command) end end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

@@ -74,14 +74,14 @@ function table.tostring( tbl )
 end
 -- allows a simple way to debug code; idenitys = {'string1','string2'}; string will be writen to file; no_trigger dissables the trigger useful for on_tick events
 function debug_write(idenitys,string,no_trigger)
-  if global.debug.state then
+  if global.exp_core.debug.state then
     if type(string) == 'table' then string = table.tostring(string)
     elseif type(string) ~= 'string' then string = tostring(string) end
-    if not no_trigger or global.debug.triggered then game.write_file('debug.log', '\n['..table.concat(idenitys, " " )..'] '..string, true, 0) end
-    if not no_trigger then global.debug.triggered = true end
+    if not no_trigger or global.exp_core.debug.triggered then game.write_file('debug.log', '\n['..table.concat(idenitys, " " )..'] '..string, true, 0) end
+    if not no_trigger then global.exp_core.debug.triggered = true end
   end
 end
 Event.register(defines.events.on_tick,function() debug_write({'NEW TICK'},game.tick,true) end)
-Event.register(-1,function() global.debug={state=false,triggered=false,force=false} end)
+Event.register(Event.soft_init,function() global.exp_core.debug={state=false,triggered=false,force=false} end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

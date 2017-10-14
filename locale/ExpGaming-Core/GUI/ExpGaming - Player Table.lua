@@ -29,7 +29,7 @@ player_table_functions.filters = {
 	{name='online',is_text=false,test=function(player) return player.connected end},
 	{name='offline',is_text=false,test=function(player) return not player.connected end},
 	{name='online_time',is_text=true,test=function(player,input) if input and tonumber(input) and tonumber(input) < tick_to_min(player.online_time) then return true elseif not input or not tonumber(input) then return true end end},
-	{name='rank',is_text=true,test=function(player,input) if input and string_to_rank(input) and get_rank(player).power <= string_to_rank(input).power then return true elseif not input or not string_to_rank(input) then return true end end}
+	{name='rank',is_text=true,test=function(player,input) if input and ranking.string_to_rank(input) and ranking.get_player_rank(player).power <= ranking.string_to_rank(input).power then return true elseif not input or not ranking.string_to_rank(input) then return true end end}
 }
 --set up all the text inputs
 for _,filter in pairs(player_table_functions.filters) do
@@ -70,15 +70,15 @@ function player_table_functions.player_match(player,filter,input)
 end
 --used by script on filter texts
 function player_table_functions.redraw(player,element)
-	local frame = global.current_filters[player.index][2]
-	local filters = global.current_filters[player.index][1]
+	local frame = global.exp_core.current_filters[player.index][2]
+	local filters = global.exp_core.current_filters[player.index][1]
 	player_table_functions.draw(player,frame,filters,element.parent.parent)
 end
 --used to draw the player table with filter that you want
 --filter = {{'is_admin',true},{'offline',true},{'player_name'}} ; if the length is 2 then it will not attempt to get a user input
 function player_table_functions.draw(player,frame,filters,input_location)
 	debug_write({'GUI','PLAYER-TABLE','START'},player.name)
-	global.current_filters[player.index] = {filters,frame}
+	global.exp_core.current_filters[player.index] = {filters,frame}
 	--setup the table
 	if frame.player_table then frame.player_table.destroy() end
 	player_table = frame.add{name='player_table', type="table", colspan=5}
@@ -116,11 +116,11 @@ function player_table_functions.draw(player,frame,filters,input_location)
 			then player_table.add{name=p.name.."status", type="label", caption="Online"}
 			else player_table.add{name=p.name.."s", type="label", caption="Offline"} end
 			player_table.add{name=p.name.."online_time", type="label", caption=tick_to_display_format(p.online_time)}
-      		player_table.add{name=p.name.."rank", type="label", caption=get_rank(p).short_hand}
+      		player_table.add{name=p.name.."rank", type="label", caption=ranking.get_player_rank(p).short_hand}
 		end
 	end
 end
 
-Event.register(-1,function() global.current_filters = {} end)
+Event.register(Event.soft_init,function() global.exp_core.current_filters = {} end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

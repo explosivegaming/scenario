@@ -51,7 +51,7 @@ function draw_frame.center(player,element)
 	local tab_bar_scroll = frame.add{type = "scroll-pane", name= "tab_bar_scroll", vertical_scroll_policy="never", horizontal_scroll_policy="always"}
 	local tab_bar = tab_bar_scroll.add{type='flow',direction='horizontal',name='tab_bar'}
 	local tab = frame.add{type = "scroll-pane", name= "tab", vertical_scroll_policy="auto", horizontal_scroll_policy="never"}
-	for n,t in pairs(frame_data.tabs) do if rank_allowed(get_rank(player),t.name..'_tab') then debug_write({'GUI','CENTER','ADD'},t.name) ExpGui.add_input.draw_button(tab_bar,t.name) end end
+	for n,t in pairs(frame_data.tabs) do if ranking.rank_allowed(ranking.get_player_rank(player),t.name..'_tab') then debug_write({'GUI','CENTER','ADD'},t.name) ExpGui.add_input.draw_button(tab_bar,t.name) end end
 	draw_frame.tab(player,tab_bar[frame_data.tabs[1].name])
 	ExpGui.add_input.draw_button(tab_bar,'close_center')
 	tab.style.minimal_height = 300

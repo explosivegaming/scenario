@@ -32,11 +32,11 @@ define_command('server-interface','For use of the highest staff only',{'command'
 end)
 --runs a server interface command with debug on and does not return any values to the user
 define_command('debug','For use of the highest staff only, this will lag A LOT',{'command',true},function(player,event,args)
-	global.debug.state = true
+	global.exp_core.debug.state = true
 	debug_write({'START'},game.tick..' '..event.parameter)
-	global.debug.triggered = false
+	global.exp_core.debug.triggered = false
 	local returned,value = pcall(loadstring(event.parameter))
-	if global.debug.triggered and #global.sudo.commands == 0 then debug_write({'END'},game.tick) global.debug.state = false end
+	if global.exp_core.debug.triggered and #global.exp_core.sudo.commands == 0 then debug_write({'END'},game.tick) global.exp_core.debug.state = false end
 end)
 --this is used when changing permission groups when the person does not have permsion to, can also be used to split a large event accross multiple ticks
 local commands_per_iteration = 50 --number of sudo commands ran every sudo iteration
@@ -45,9 +45,9 @@ local temp_var_time = 1000/commands_per_iteration*ticks_per_iteration --temp var
 function sudo(command,args,custom_return_name)
 	if type(command) == 'function' then
 		local args = args or {}
-		local return_name = custom_return_name or tostring(game.tick)..tostring(command)..tostring(#global.sudo.commands)
+		local return_name = custom_return_name or tostring(game.tick)..tostring(command)..tostring(#global.exp_core.sudo.commands)
 		debug_write({'SUDO','ADD'},return_name)
-		table.insert(global.sudo.commands,{fun=command,args=args,return_name=return_name})
+		table.insert(global.exp_core.sudo.commands,{fun=command,args=args,return_name=return_name})
 		refresh_temp_var(return_name,'temp-var-temp-value')
 		return {sudo='sudo-temp-var',name=return_name}
 	end 
@@ -60,47 +60,47 @@ end
 --update the time on a temp var or add it as a new one
 function refresh_temp_var(name,value,offset)
 	local offset = offset or temp_var_time
-	if global.sudo.temp_varibles[name] and not value then
-		global.sudo.temp_varibles[name].remove_time = game.tick+offset
+	if global.exp_core.sudo.temp_varibles[name] and not value then
+		global.exp_core.sudo.temp_varibles[name].remove_time = game.tick+offset
 	else
-		global.sudo.temp_varibles[name] = {data=value,remove_time=game.tick+offset}
+		global.exp_core.sudo.temp_varibles[name] = {data=value,remove_time=game.tick+offset}
 	end
 end
 -- gets the data stored in a temp varible
 function get_temp_var_data(var)
 	local to_return = nil
-	if global.sudo.temp_varibles[var] then to_return = global.sudo.temp_varibles[var].data debug_write({'SUDO','TEMP-VAR'},var)
-	elseif var.name and global.sudo.temp_varibles[var.name] then to_return = global.sudo.temp_varibles[var.name].data debug_write({'SUDO','TEMP-VAR'},var.name) end
+	if global.exp_core.sudo.temp_varibles[var] then to_return = global.exp_core.sudo.temp_varibles[var].data debug_write({'SUDO','TEMP-VAR'},var)
+	elseif var.name and global.exp_core.sudo.temp_varibles[var.name] then to_return = global.exp_core.sudo.temp_varibles[var.name].data debug_write({'SUDO','TEMP-VAR'},var.name) end
 	return to_return 
 end
 -- returns the lenth of the temp varible list and command queue, is string is true then it is retured as a string
 function get_sudo_info(string) 
 	local lenth = 0
-	for _,v in pairs(global.sudo.temp_varibles) do lenth = lenth + 1 end
-	if string then return 'At game tick: '..game.tick..' Queue Lenth: '..#global.sudo.commands..' Number of temp vars: '..lenth
-	else return {tick=game.tick,commands=#global.sudo.commands,temp_varibles=#global.sudo.temp_varibles} end 
+	for _,v in pairs(global.exp_core.sudo.temp_varibles) do lenth = lenth + 1 end
+	if string then return 'At game tick: '..game.tick..' Queue Lenth: '..#global.exp_core.sudo.commands..' Number of temp vars: '..lenth
+	else return {tick=game.tick,commands=#global.exp_core.sudo.commands,temp_varibles=#global.exp_core.sudo.temp_varibles} end 
 end
 -- stops all sudo commands
 function clear_sudo()
-	global.sudo = {commands={},temp_varibles={}}
+	global.exp_core.sudo = {commands={},temp_varibles={}}
 end
 --sudo main loop
 Event.register(defines.events.on_tick, function(event)
 	--used with debug command will stop debuging once atleast one message is send to file and there are no commands in sudo
-	if global.debug.state and global.debug.triggered and #global.sudo.commands == 0 then debug_write({'END'},game.tick) global.debug.state = global.debug.focre end
+	if global.exp_core.debug.state and global.exp_core.debug.triggered and #global.exp_core.sudo.commands == 0 then debug_write({'END'},game.tick) global.exp_core.debug.state = global.exp_core.debug.focre end
 	-- runs the commands in sudo
 	debug_write({'SUDO'},get_sudo_info(true),true)
-	if game.tick % ticks_per_iteration == 0 and global.sudo.commands and #global.sudo.commands > 0 then
+	if game.tick % ticks_per_iteration == 0 and global.exp_core.sudo.commands and #global.exp_core.sudo.commands > 0 then
 		local length = nil
-		if #global.sudo.commands > commands_per_iteration then length = commands_per_iteration else length = #global.sudo.commands end
+		if #global.exp_core.sudo.commands > commands_per_iteration then length = commands_per_iteration else length = #global.exp_core.sudo.commands end
 		-- runs the right number of commands as set
 		for i = 1,length do
-			local command=table.remove(global.sudo.commands,1)
+			local command=table.remove(global.exp_core.sudo.commands,1)
 			if command and command.fun and type(command.fun) == 'function' then
 				local args = {}
 				-- retrives and temp varibles
 				for n,value in pairs(command.args) do
-					if type(value) == 'table' and not value.__self and value.sudo and value.sudo == 'sudo-temp-var' then args[n] = {data=global.sudo.temp_varibles[value.name].data,temp_var_name=value.name}
+					if type(value) == 'table' and not value.__self and value.sudo and value.sudo == 'sudo-temp-var' then args[n] = {data=global.exp_core.sudo.temp_varibles[value.name].data,temp_var_name=value.name}
 					else args[n] = value end
 				end
 				-- makes new temp value and runs command
@@ -110,10 +110,10 @@ Event.register(defines.events.on_tick, function(event)
 		end
 	end
 	-- removes old temp varibles
-	for name,data in pairs(global.sudo.temp_varibles) do
-		if data.remove_time <= game.tick then global.sudo.temp_varibles[name] = nil end
+	for name,data in pairs(global.exp_core.sudo.temp_varibles) do
+		if data.remove_time <= game.tick then global.exp_core.sudo.temp_varibles[name] = nil end
 	end
 end)
-Event.register(-1,function() global.sudo = {commands={},temp_varibles={}} end)
+Event.register(Event.soft_init,function() global.exp_core.sudo = {commands={},temp_varibles={}} end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
