@@ -21,26 +21,26 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 --set up to run other code and events
 require("mod-gui")
 credit_loop(require("locale/StdLib/event"))
---allows the code to be ran on a map where the code has just been added (ie init after init)
-local function init() if not global.credits then Event.dispatch({name = Event.core_events.init, tick = 0}) end end
+--this is the main code that starts the softmod
+Event.soft_init = script.generate_event_name()
+local function init() if not global.soft_init then script.raise_event(Event.soft_init,{tick=game.tick}) global.soft_init = true global.credits = credits end end
 Event.register(defines.events.on_player_joined_game,init)
 Event.register(defines.events.on_tick,init)
---loads all the other scripts
-Event.gui_update = script.generate_event_name()
-credit_loop(require("locale/file-header"))
 --below 'game.tick/(3600*game.speed)) % 15 == 0' raises the gui_update event every 15 minutes - feel free to change the update time
+Event.gui_update = script.generate_event_name()
 Event.register(defines.events.on_tick, function(event)
-	-- +(15/2) splits it into two events every 15 minutes
-	if (game.tick/(3600*game.speed)) % 15 == 0 then
+	if (event.tick/(3600*game.speed)) % 15 == 0 then
+		-- updates the guis for every player (if gui is linked to gui_update)
 		local online_players = #game.connected_players
 		for i,player in pairs(game.connected_players) do 
-			script.raise_event(Event.gui_update,{tick=game.tick,player=player,player_loop_index=i,players_online=online_players})
-			-- script.raise_event(Event.gui_update,{tick=game.tick,player=game.player,player_loop_index=1,players_online=#game.connected_players})
+			script.raise_event(Event.gui_update,{tick=event.tick,player=player,player_loop_index=i,players_online=online_players})
 		end
-	elseif ((game.tick/(3600*game.speed))+(15/2))% 15 == 0 then
+	elseif ((event.tick/(3600*game.speed))+(15/2))% 15 == 0 then
+		-- this is the system to auto rank players
 		for i,player in pairs(game.connected_players) do
-			sudo(find_new_rank,{player})
+			sudo(find_new_rank,{player,event.tick})
 		end
 	end
 end)
-Event.register(-1,function() global.credits = credits end)
+--loads all the other scripts
+credit_loop(require("locale/file-header"))

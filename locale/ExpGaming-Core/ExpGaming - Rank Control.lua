@@ -80,7 +80,8 @@ function rank_print(msg, rank, inv)
 	end
 end
 --Give the user their new rank and raise the Event.rank_change event
-function give_rank(player,rank,by_player)
+function give_rank(player,rank,by_player,group_tick)
+	local tick = group_tick or game.tick
 	local by_player = by_player or 'server'
 	local rank = string_to_rank(rank) or rank or string_to_rank_group('User').lowest_rank
 	local old_rank = get_rank(player)
@@ -102,7 +103,7 @@ function give_rank(player,rank,by_player)
 	player.permission_group = game.permissions.get_group(rank.name)
 	player.tag = get_rank(player).tag
 	if old_rank.name ~= 'Jail' then global.old_ranks[player.index]=old_rank.name end
-	script.raise_event(Event.rank_change, {player=player, by_player=by_player, new_rank=rank, old_rank=old_rank})
+	script.raise_event(Event.rank_change, {tick=tick, player=player, by_player=by_player, new_rank=rank, old_rank=old_rank})
 end
 --Revert the user's rank to what it was before the lastest change
 function revert_rank(player,by_player)
@@ -110,7 +111,7 @@ function revert_rank(player,by_player)
 	give_rank(player,rank,by_player)
 end
 --Give the player a new rank based on playtime and/or preset ranks
-function find_new_rank(player)
+function find_new_rank(player,group_tick)
 	debug_write({'RANK','NEW-RANK','START'},player.name)
 	local function loop_preset_rank(players,rank)
 		debug_write({'RANK','NEW-RANK','LOOP-PRESET'},rank)
@@ -118,6 +119,7 @@ function find_new_rank(player)
 			if player.name:lower() == p:lower() then return rank end
 		end
 	end
+	local tick = group_tick or game.tick
 	local current_rank = get_rank(player)
 	local old_rank = get_rank(player)
 	local possible_ranks = {current_rank}
@@ -157,10 +159,10 @@ function find_new_rank(player)
 			debug_write({'RANK','NEW-RANK','GIVE','VIA-SERVER'},player.name..' '..highest_rank.name)
 			player.tag = highest_rank.tag
 			player.permission_group=game.permissions.get_group('Guest')
-			script.raise_event(Event.rank_change, {player=player, by_player='server', new_rank=string_to_rank_group('User').lowest_rank, old_rank=string_to_rank_group('User').lowest_rank})
+			script.raise_event(Event.rank_change, {tick=tick, player=player, by_player='server', new_rank=string_to_rank_group('User').lowest_rank, old_rank=string_to_rank_group('User').lowest_rank})
 		else
 			debug_write({'RANK','NEW-RANK','GIVE','VIA-GIVE-RANK'},player.name..' '..highest_rank.name)
-			if highest_rank ~= current_rank then give_rank(player,highest_rank) end
+			if highest_rank ~= current_rank then give_rank(player,highest_rank,nil,tick) end
 		end
 		debug_write({'RANK','NEW-RANK','GIVE','END'},player.name)
 	end
