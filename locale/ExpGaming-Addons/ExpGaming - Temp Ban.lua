@@ -26,7 +26,7 @@ define_command('temp-ban','Temp ban a player untill the next reset, can not be u
         table.insert(global.temp_bans,{jail_player.name,player,table.concat(args,' ',2),jail_player})
         ExpGui.draw_frame.popup('temp_ban',{player,table.concat(args,' ',2)})
         rank_print(jail_player.name..' has been temp banned by '..player..' reason: '..table.concat(args,' ',2),'Guest')
-        game.write_file('multi.log','\n{"type":"TEMP_BAN","tick":'..game.tick..',"username":"'..jail_player.name..'","by":"<server>","reason":"'..table.concat(args,' ',2)..'"}', true, 0)
+        game.write_file('multi.log','\n{"type":"TEMP_BAN","tick":'..game.tick..',"username":"'..jail_player.name..'","by":"<server>","reason":"'..table.concat(args,' ',2)..'"}\n', true, 0)
         jail_player.gui.center.clear()
         for _,gui in pairs(mod_gui.get_frame_flow(jail_player).children) do gui.style.visible = false end
         mod_gui.get_frame_flow(jail_player).popups.style.visible = true
@@ -38,7 +38,7 @@ define_command('temp-ban','Temp ban a player untill the next reset, can not be u
             global.temp_bans[jail_player.name] = {player.name,table.concat(args,' ',2)}
             ExpGui.draw_frame.popup('temp_ban',{player.name,table.concat(args,' ',2),jail_player})
             rank_print(jail_player.name..' has been temp banned by '..player.name..' reason: '..table.concat(args,' ',2),'Guest')
-            game.write_file('multi.log','\n{"type":"TEMP_BAN","tick":'..game.tick..',"username":"'..jail_player.name..'","by":"'..player.name..'","reason":"'..table.concat(args,' ',2)..'"}', true, 0)
+            game.write_file('multi.log','\n{"type":"TEMP_BAN","tick":'..game.tick..',"username":"'..jail_player.name..'","by":"'..player.name..'","reason":"'..table.concat(args,' ',2)..'"}\n', true, 0)
             jail_player.gui.center.clear()
             for _,gui in pairs(mod_gui.get_frame_flow(jail_player).children) do gui.style.visible = false end
             mod_gui.get_frame_flow(jail_player).popups.style.visible = true
