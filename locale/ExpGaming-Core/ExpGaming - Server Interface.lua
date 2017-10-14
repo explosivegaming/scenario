@@ -5,21 +5,10 @@ This file can be used with permission but this and the credit below must remain 
 Contact a member of management on our discord to seek permission to use our code.
 Any changes that you may make to the code are yours but that does not make the script yours.
 Discord: https://discord.gg/XSsBV6b
-
-The credit below may be used by another script do not remove.
 ]]
-local credits = {{
-	name='Explosive Gaming Server Interface',
-	owner='Explosive Gaming',
-	dev='Cooldude2606',
-	description='A way of talking with the server with out breaking achievements',
-	factorio_version='0.15.23',
-	show=true
-	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
 --this command is just a way or using loadstring from in game while keeping achievements
-define_command('server-interface','For use of the highest staff only',{'command',true},function(player,event,args)
+define_command('server-interface',{'server-interface.command-help'},{'command',true},function(player,event,args)
 	if player == '<server>' then
 		local returned,value = pcall(loadstring(event.parameter)) 
 		if type(value) == 'table' then game.write_file('server-interface.log', '\n'..game.tick..' Ran by: <server>  Code: '..event.parameter..'\n Returned: '..table.tostring(value), true, 0) print(table.tostring(value))
@@ -31,7 +20,7 @@ define_command('server-interface','For use of the highest staff only',{'command'
 	end
 end)
 --runs a server interface command with debug on and does not return any values to the user
-define_command('debug','For use of the highest staff only, this will lag A LOT',{'command',true},function(player,event,args)
+define_command('debug',{'server-interface.debug-command-help'},{'command',true},function(player,event,args)
 	global.exp_core.debug.state = true
 	debug_write({'START'},game.tick..' '..event.parameter)
 	global.exp_core.debug.triggered = false
@@ -77,7 +66,7 @@ end
 function get_sudo_info(string) 
 	local lenth = 0
 	for _,v in pairs(global.exp_core.sudo.temp_varibles) do lenth = lenth + 1 end
-	if string then return 'At game tick: '..game.tick..' Queue Lenth: '..#global.exp_core.sudo.commands..' Number of temp vars: '..lenth
+	if string then return {'server-interface.sudo-info',game.tick,#global.exp_core.sudo.commands,lenth}
 	else return {tick=game.tick,commands=#global.exp_core.sudo.commands,temp_varibles=#global.exp_core.sudo.temp_varibles} end 
 end
 -- stops all sudo commands
@@ -115,5 +104,3 @@ Event.register(defines.events.on_tick, function(event)
 	end
 end)
 Event.register(Event.soft_init,function() global.exp_core.sudo = {commands={},temp_varibles={}} end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
