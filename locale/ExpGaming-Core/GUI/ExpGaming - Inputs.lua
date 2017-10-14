@@ -34,6 +34,7 @@ end
 function add_input.draw_button(frame,name,display,tooltip)
 	if not frame or not frame.valid then error('No frame to draw to') end
 	if not name then error('No button to draw') end
+	debug_write({'GUI','INPUT'},name)
 	for _,button in pairs(inputs.buttons) do
 		if button.name == name then
 			local display = display or button.display or button.name
@@ -51,6 +52,7 @@ end
 function add_input.draw_text(frame,name,display)
 	if not frame or not frame.valid then error('No frame to draw to') end
 	if not name then error('No text filed to draw') end
+	debug_write({'GUI','INPUT'},name)
 	for _,text in pairs(inputs.text) do
 		if text.name == name then
 			local display = display or text.display or text.name

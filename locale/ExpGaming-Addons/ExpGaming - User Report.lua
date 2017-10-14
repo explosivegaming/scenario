@@ -44,21 +44,50 @@ define_command('report','Reports a user, this will be logged and you may be ask 
 		local p = game.players[args[1]]
 		if not p then player.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
 		if rank_allowed(get_rank(p),'report_protection') then player.print('This player has report protection and cant be reported') return end
+		if p == player then player.print('You can not report yourself') return end
 		local reason = table.concat(args,' ',2)
 		local info = get_report_info(player,p,reason)
 		if not info then player.print('You have already reported this player, vist discord to complain more') return end
 		-- prints to players
 		if rank_allowed(get_rank(player),'trusted_reporter') then rank_print(p.name..' has just been reported by a trusted user.','Owner',true)
 		else rank_print(p.name..' has just been reported by a user.','Owner',true) end
-		if info.trusted_reports > 0 then rank_print(p.name..' has been reported '..info.total_reports..', if reported by 40% of the server they will be jailed!','Owner',true)
-		else rank_print(p.name..' has been reported '..info.total_reports..', if reported by 70% of the server they will be jailed!','Owner',true) end
-		rank_print('To report use /report <player> <reason>; this will be logged','Owner',true)
+		if info.trusted_reports > 0 then rank_print(p.name..' has been reported '..info.total_reports..' times, if reported by 40% of the server they will be jailed!','Owner',true)
+		else rank_print(p.name..' has been reported '..info.total_reports..' times, if reported by 60% of the server they will be jailed!','Owner',true) end
+		rank_print('To report use /report <player> <reason>','Owner',true)
 		-- logs to file
-		game.write_file('user_reports.log','\n'..game.tick..' '..info.player.name..' has been reported by: '..player.name..' Reason: '..reason)
+		game.write_file('multi.log','{"type": "USER_REPORT","tick":'..game.tick..',"username":"'..info.player.name..'","by":"'..player.name..'","reason":"'..reason..'"}\n', true, 0)
 		-- logic to jail player
-		local percent_needed = 0.7; if info.trusted_reports > 0 then percent_needed = 0.4 end
+		local percent_needed = 0.6; if info.trusted_reports > 0 then percent_needed = 0.4 end
 		local players_needed = math.floor(#game.connected_players * percent_needed)
-		if info.total_reports >= players_needed then sudo(give_rank,{p,'Jail'}) end
+		if info.total_reports >= players_needed then game.write_file('user_reports.log','\n'..game.tick..' '..p.name..' has been jailed', true, 0) sudo(give_rank,{p,'Jail'}) end
+	end
+end)
+
+define_command('remove-report','Clears the reports give to a user',{'player','reason',true},function(player,event,args)
+	if player == '<server>' then
+		local p = game.players[args[1]]
+		local reason = table.concat(args,' ',2)
+		if not p then print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
+		-- test if the player is reported
+		local index = nil; for i,report in pairs(global.reported_users) do if p.name == report.player.name then index = i break end end
+		if not index then print('This player has no reports') return end
+		-- reverts rank and clears report
+		rank_print(p.name..' has been cleared of they reports by: <server>','Owner',true)
+		game.write_file('user_reports.log','\n{"type":"USER_REPORT_CLEAR","tick":'..game.tick..',"username":"'..p.name..'","by":"<server>","reason":"'..reason..'"}\n', true, 0)
+		global.reported_users[p.name] = nil
+		if get_rank(p).name == 'Jail' then sudo(revert_rank,{p}) end
+	else
+		local p = game.players[args[1]]
+		local reason = table.concat(args,' ',2)
+		if not p then player.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
+		-- test if the player is reported
+		local index = nil; for i,report in pairs(global.reported_users) do if p.name == report.player.name then index = i break end end
+		if not index then player.print('This player has no reports') return end
+		-- reverts rank and clears report
+		rank_print(p.name..' has been cleared of they reports by: '..player.name,'Owner',true)
+		game.write_file('multi.log','\n{"type":"USER_REPORT_CLEAR","tick":'..game.tick..',"username":"'..p.name..'","by":"'..player.name..'","reason":"'..reason..'"}\n', true, 0)
+		global.reported_users[p.name] = nil
+		if get_rank(p).name == 'Jail' then sudo(revert_rank,{p,player}) end
 	end
 end)
 function get_reported_users() return global.reported_users end

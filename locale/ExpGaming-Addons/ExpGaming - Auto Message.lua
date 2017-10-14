@@ -25,11 +25,12 @@ local low_ranks_only={
     'Steam: http://steamcommunity.com/groups/tntexplosivegaming',
     'To see these links again goto: Info > Links',
     'We also have some custom commands which you can view in: Info > Commands',
-    'This includes the /tag command, this allows custom tags so you can tell people what you are working on',
-    'Do /help tag for more info'
+    'This includes useful commands such as /tag and /report',
+    'Do /help <command> for more info'
 }
 
-function auto_message()
+function auto_message(event)
+	if event.player_loop_index < event.players_online then return end
 	local low_rank = 'Regular'
 	local high_rank = 'Owner'
 	sudo(rank_print,{'There are '..#game.connected_players..' players online',high_rank,true})

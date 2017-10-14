@@ -60,32 +60,42 @@ end
 --The magic for the commands. It is a hard bit of code so GL; but it will call the command event have some sanitisaion of the input
 function load_command(command)
 	if commands.commands[command.name] then return end
+	debug_write({'COMMAND','LOAD'},command.name)
 	game.write_file('commands.log','\n'..game.tick..' Loaded Command: '..command.name, true, 0)
 	commands.add_command(command.name,command_inputs_to_string(command)..command.help,function(event)
 		local command_data = nil
 		for _,command_d in pairs(Exp_commands) do if event.name == command_d[1] then command_data = command_d break end end
+		debug_write({'COMMAND','RUN','START'},command.name)
+		debug_write({'COMMAND','RUN','PLAYER-INDEX'},event.player_index)
 		if event.player_index then
 			local player = game.players[event.player_index]
 			if not rank_allowed(get_rank(player),command.name) then
+				debug_write({'COMMAND','RUN','ALLOWED'},false)
 				player.print('401 - Unauthorized: Access is denied due to invalid credentials')
-				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command (Unauthorized): '..command.name..' With args of: '..table.to_string(get_command_args(event,command,true)), true, 0)
+				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command (Unauthorized): '..command.name..' With args of: '..table.tostring(get_command_args(event,command,true)), true, 0)
 				return 
 			end
+			debug_write({'COMMAND','RUN','ALLOWED'},true)
 			local args = get_command_args(event,command)
+			debug_write({'COMMAND','RUN','ARGS'},args)
 			if args == 'Invalid' then 
 				player.print('Invalid Input, /'..command.name..' '..command_inputs_to_string(command)) return 
-				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command (Invalid Args): '..command.name..' With args of: '..table.to_string(get_command_args(event,command,true)), true, 0)
+				game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Failed to use command (Invalid Args): '..command.name..' With args of: '..table.tostring(get_command_args(event,command,true)), true, 0)
 			end
+			debug_write({'COMMAND','RUN','FUNCTION'},command.name)
 			command.event(player,event,args)
 			player.print('Command Complete')
-			game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Used command: '..command.name..' With args of: '..table.to_string(args), true, 0)
+			game.write_file('commands.log','\n'..game.tick..' Player: '..player.name..' Used command: '..command.name..' With args of: '..table.tostring(args), true, 0)	
 		else
 			local args = get_command_args(event,command)
 			if args == 'Invalid' then print('Invalid Input, /'..command.name..' '..command_inputs_to_string(command)) return end
+			debug_write({'COMMAND','RUN','ARGS'},args)
+			debug_write({'COMMAND','RUN','FUNCTION'},command.name)
 			command.event('<server>',event,args)
 			print('Command Complete')
-			game.write_file('commands.log','\n'..game.tick..' Player: <server> Used command: '..command.name..' With args of: '..table.to_string(args), true, 0)
+			game.write_file('commands.log','\n'..game.tick..' Player: <server> Used command: '..command.name..' With args of: '..table.tostring(args), true, 0)
 		end
+		debug_write({'COMMAND','RUN','END'},command.name,true)
 	end)
 end
 -- returns all the commands in a certain rank restriction
@@ -97,7 +107,7 @@ function get_commands(rank)
 	end
 	return to_return
 end
-Event.register(-1,function() global.commands = Exp_commands end)
+Event.register(-1,function() global.commands = Exp_commands for _,command in pairs(Exp_commands) do load_command(command) end end)
 Event.register(defines.events.on_player_joined_game,function() for _,command in pairs(Exp_commands) do load_command(command) end end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

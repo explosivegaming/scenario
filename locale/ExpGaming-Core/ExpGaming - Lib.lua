@@ -43,7 +43,9 @@ function table.val_to_str ( v )
     end
     return '"' .. string.gsub(v,'"', '\\"' ) .. '"'
   else
-    return "table" == type( v ) and table.to_string( v ) or
+    return "table" == type( v ) and table.tostring( v ) or
+      "function" == type( v ) and '"cant_display_function"' or
+      "userdata" == type( v ) and '"cant_display_userdata"' or
       tostring( v )
   end
 end
@@ -56,8 +58,7 @@ function table.key_to_str ( k )
   end
 end
 
-function table.to_string( tbl )
-	if not type(tbl) == 'table' then return {tostring(tbl)} end
+function table.tostring( tbl )
   local result, done = {}, {}
   for k, v in ipairs( tbl ) do
     table.insert( result, table.val_to_str( v ) )
@@ -71,5 +72,16 @@ function table.to_string( tbl )
   end
   return "{" .. table.concat( result, "," ) .. "}"
 end
+-- allows a simple way to debug code; idenitys = {'string1','string2'}; string will be writen to file; no_trigger dissables the trigger useful for on_tick events
+function debug_write(idenitys,string,no_trigger)
+  if global.debug.state then
+    if type(string) == 'table' then string = table.tostring(string)
+    elseif type(string) ~= 'string' then string = tostring(string) end
+    if not no_trigger or global.debug.triggered then game.write_file('debug.log', '\n['..table.concat(idenitys, " " )..'] '..string, true, 0) end
+    if not no_trigger then global.debug.triggered = true end
+  end
+end
+Event.register(defines.events.on_tick,function() debug_write({'NEW TICK'},game.tick,true) end)
+Event.register(-1,function() global.debug={state=false,triggered=false,force=false} end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits

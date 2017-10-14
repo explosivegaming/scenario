@@ -65,7 +65,7 @@ See code for more details.
     * Convert ticks to hours based on game speed
 * tick_to_min (tick)
     * Convert ticks to minutes based on game speed
-* table.to_string(tbl)
+* table.tostring(tbl)
     * We stole this but we don't know from where, just google it
     * output -> table as a string
 ## Get Commands

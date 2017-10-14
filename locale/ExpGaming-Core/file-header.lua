@@ -21,7 +21,6 @@ local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits
 --As this is the core file, the order in which the files are loaded does matter. Do not change!
 credit_loop(require("ExpGaming - Lib"))
 credit_loop(require("ExpGaming - Rank Table"))
-credit_loop(require("ExpGaming - Rank Presets"))
 credit_loop(require("ExpGaming - Rank Control"))
 credit_loop(require("GUI/file-header"))
 credit_loop(require("ExpGaming - Command Maker"))

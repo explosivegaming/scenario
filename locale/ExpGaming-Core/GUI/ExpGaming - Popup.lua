@@ -50,6 +50,7 @@ function add_frame.popup(style,default_display,default_tooltip,on_click,event)
 end
 --draw the popup on_click GUI for the player; do not call manually must use other functions to call
 function draw_frame.popup_button(player,element)
+	debug_write({'GUI','POPUP-BUTTON'},player.name)
 	local frame_data = nil
 	for _,frame in pairs(frames.popup) do if element.name == frame.style then frame_data = frame break end end
 	local popups = mod_gui.get_frame_flow(player).popups
@@ -62,8 +63,11 @@ function draw_frame.popup(style,args)
 	local args = args or {}
 	local frame_data = nil
 	for _,frame in pairs(frames.popup) do if style == frame.style then frame_data = frame break end end
-	game.write_file('popups.log','\n'..game.tick..' Popup Style: '..style..' Was made with args of: '..table.to_string(args), true, 0)
+	debug_write({'GUI','POPUP','STYLE'},style)
+	debug_write({'GUI','POPUP','ARGS'},args)
+	game.write_file('popups.log','\n'..game.tick..' Popup Style: '..style..' Was made with args of: '..table.tostring(args), true, 0)
 	for _,player in pairs(game.connected_players) do
+		debug_write({'GUI','POPUP','PLAYERS'},player.name)
 		local popups = mod_gui.get_frame_flow(player).popups
 		local frame = get_next_popup(popups)
 		frame_data.event(player,frame,args)

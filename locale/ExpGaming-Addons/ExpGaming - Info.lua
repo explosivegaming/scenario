@@ -28,7 +28,7 @@ ExpGui.add_frame.tab('links','Links','More ways to get in contact','info',functi
 	    text_box.selectable = true
     end 
     frame.add{name=1, type="label", caption={"", "Discord voice and chat server:"}}
-	format(frame.add{name=2, type='text-box', text='https://discord.gg/RPCxzgt'})
+	format(frame.add{name=2, type='text-box', text='https://discord.me/explosivegaming'})
 	frame.add{name=3, type="label", caption={"", "Our forum:"}}
 	format(frame.add{name=4, type='text-box', text='https://explosivegaming.nl'})
 	frame.add{name=5, type="label", caption={"", "Steam:"}}

@@ -18,7 +18,9 @@ local credits = {{
 	}}
 local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
-local preset_ranks = {
+-- we run an exturnle script which syncs this table with discord, only top ranks are filled in case of error
+Event.register(-1,function()
+	global.preset_ranks = {
 	Owner={'badgamernl'},
 	
 	['Community Manager']={'arty714'},
@@ -31,48 +33,9 @@ local preset_ranks = {
 	'mark9064',
 	'Smou'},
 	
-	Mod={
-	'AcThPaU',
-	'Alanore',
-	'Aquaday',
-	'ayahuasca23',
-	'cafeslacker',
-	'CrashKonijn',
-	'Drahc_pro',
-	'everLord',
-	'FlipHalfling90',
-	'facere',
-	'freek18',
-	'Hobbitkicker',
-	'hud',
-	'Koroto',
-	'matthias60',
-	'MeDDish',
-	'Mindxt20',
-	'MottledPetrel',
-	'Mr_Happy_212',
-	'NextIdea',
-	'Phoenix27833',
-	'rezz',
-	'samy115',
-	'Sand3r205',
-	'scarbvis',
-	'steentje77',
-	'SuperWinner50',
-	'tophatgaming123',
-	'VR29',
-	'xenocyber',
-	'Ruuyji',
-	'mightycax',
-	'Gizan',
-	'mafisch3',
-	'cydes',
-	'Windbomb'},
+	Mod={},
 	
-	Donator={
-	'M74132',
-	'Splicer',
-	'Nucklesamich'},
+	Donator={},
 	
 	Veteran={},
 	
@@ -83,11 +46,11 @@ local preset_ranks = {
 	Guest={},
 	
 	Jail={}
-}
+	}
+end)
 -- returns this list, or just one rank if given
-function get_rank_presets(rank)
-	if rank then return global.preset_ranks[rank] else return global.preset_ranks end
+function get_preset_ranks(rank)
+	if rank then return global.preset_ranks[string_to_rank(rank).name] else return global.preset_ranks end
 end
-Event.register(-1,function() global.preset_ranks = preset_ranks end)
 --Please Only Edit Above This Line-----------------------------------------------------------
 return credits
