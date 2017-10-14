@@ -9,7 +9,7 @@ Discord: https://discord.gg/XSsBV6b
 --Please Only Edit Below This Line-----------------------------------------------------------
 --set up to run other code and events
 require("mod-gui")
-require("locale/StdLib/event")
+Event = require("locale/StdLib/event")
 --this is the main code that starts the softmod
 Event.soft_init = script.generate_event_name()
 local function init() if not global.soft_init then script.raise_event(Event.soft_init,{tick=game.tick}) global.soft_init = true end end
@@ -31,5 +31,8 @@ Event.register(defines.events.on_tick, function(event)
 		end
 	end
 end)
+--loads core files
+ranking,ExpGui,server = require("locale/ExpGaming-Core/file-header")
 --loads all the other scripts
-require("locale/file-header")
+require("locale/Stand-Alone/file-header")
+require("locale/ExpGaming-Addons/file-header")
