@@ -34,6 +34,12 @@ end
 function tick_to_min (tick)
   	return math.floor(tick/(3600*game.speed))
 end
+--used to make uuids but may be useful else where
+function string.tohex(str)
+    return (str:gsub('.', function (c)
+        return string.format('%02X', string.byte(c))
+    end))
+end
 --I stole this from somewhere a long time ago but this and the other two functions convert a table into a string
 function table.val_to_str ( v )
   if "string" == type( v ) then

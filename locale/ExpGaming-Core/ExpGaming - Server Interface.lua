@@ -7,6 +7,7 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/XSsBV6b
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
+local server = {}
 --this command is just a way or using loadstring from in game while keeping achievements
 define_command('server-interface',{'server-interface.command-help'},{'command',true},function(player,event,args)
 	if player == '<server>' then
@@ -25,82 +26,90 @@ define_command('debug',{'server-interface.debug-command-help'},{'command',true},
 	debug_write({'START'},game.tick..' '..event.parameter)
 	global.exp_core.debug.triggered = false
 	local returned,value = pcall(loadstring(event.parameter))
-	if global.exp_core.debug.triggered and #global.exp_core.sudo.commands == 0 then debug_write({'END'},game.tick) global.exp_core.debug.state = false end
+	if global.exp_core.debug.triggered and #global.exp_core.server.callbacks == 0 then debug_write({'END'},game.tick) global.exp_core.debug.state = false end
 end)
 --this is used when changing permission groups when the person does not have permsion to, can also be used to split a large event accross multiple ticks
 local commands_per_iteration = 50 --number of sudo commands ran every sudo iteration
 local ticks_per_iteration = 1 --the number of ticks break before the next sudo iteration
 local temp_var_time = 1000/commands_per_iteration*ticks_per_iteration --temp vars allow sudo funnctions to share data
-function sudo(command,args,custom_return_name)
+--adds a call back function to the queue uuid can be provided
+function server.queue_callback(callback,args,uuid)
 	if type(command) == 'function' then
 		local args = args or {}
-		local return_name = custom_return_name or tostring(game.tick)..tostring(command)..tostring(#global.exp_core.sudo.commands)
-		debug_write({'SUDO','ADD'},return_name)
-		table.insert(global.exp_core.sudo.commands,{fun=command,args=args,return_name=return_name})
-		refresh_temp_var(return_name,'temp-var-temp-value')
-		return {sudo='sudo-temp-var',name=return_name}
+		local uuid = uuid or server.get_uuid(callback)
+		debug_write({'sudo','ADD'},return_name)
+		table.insert(global.exp_core.server.callbacks,{fun=command,args=args,uuid=uuid})
+		server.refresh_uuid(uuid)
+		return uuid
 	end 
 end
---turns a string into the temp var format so that it can be used
-function format_as_temp_var(string)
-	refresh_temp_var(string)
-	return {sudo='sudo-temp-var',name=tostring(string)}
+-- clears all temp values and call backs in queue
+function server.clear_callbacks()
+	global.exp_core.server = {callbacks={},temp_varibles={}}
+end
+-- converts any value into the uuid the script will use
+function server.get_uuid(var)
+	if type(var) == 'string' then uuid = var
+	else uuid = tostring(var)..tostring(#global.exp_core.server.callbacks) end
+	server.refresh_uuid(uuid)
+	return string.tohex('uuid'..uuid)
 end
 --update the time on a temp var or add it as a new one
-function refresh_temp_var(name,value,offset)
+function server.refresh_uuid(uuid,data,offset)
 	local offset = offset or temp_var_time
-	if global.exp_core.sudo.temp_varibles[name] and not value then
-		global.exp_core.sudo.temp_varibles[name].remove_time = game.tick+offset
+	if global.exp_core.server.temp_varibles[uuid] and not data then
+		global.exp_core.server.temp_varibles[uuid].remove_time = game.tick+offset
 	else
-		global.exp_core.sudo.temp_varibles[name] = {data=value,remove_time=game.tick+offset}
+		local data = data or 'temp-var-temp-value'
+		global.exp_core.server.temp_varibles[uuid] = {data=data,remove_time=game.tick+offset}
 	end
 end
 -- gets the data stored in a temp varible
-function get_temp_var_data(var)
-	local to_return = nil
-	if global.exp_core.sudo.temp_varibles[var] then to_return = global.exp_core.sudo.temp_varibles[var].data debug_write({'SUDO','TEMP-VAR'},var)
-	elseif var.name and global.exp_core.sudo.temp_varibles[var.name] then to_return = global.exp_core.sudo.temp_varibles[var.name].data debug_write({'SUDO','TEMP-VAR'},var.name) end
-	return to_return 
+function server.get_uuid_data(uuid)
+	if global.exp_core.server.temp_varibles[uuid] then 
+		server.refresh_uuid(uuid)
+		debug_write({'sudo','TEMP-VAR'},uuid) 
+		return global.exp_core.server.temp_varibles[uuid].data
+	end return nil
 end
 -- returns the lenth of the temp varible list and command queue, is string is true then it is retured as a string
-function get_sudo_info(string) 
+function server.get_callback_queue_info(string) 
 	local lenth = 0
-	for _,v in pairs(global.exp_core.sudo.temp_varibles) do lenth = lenth + 1 end
-	if string then return {'server-interface.sudo-info',game.tick,#global.exp_core.sudo.commands,lenth}
-	else return {tick=game.tick,commands=#global.exp_core.sudo.commands,temp_varibles=#global.exp_core.sudo.temp_varibles} end 
-end
--- stops all sudo commands
-function clear_sudo()
-	global.exp_core.sudo = {commands={},temp_varibles={}}
+	for _,v in pairs(global.exp_core.server.temp_varibles) do lenth = lenth + 1 end
+	if string then return {'server-interface.sudo-info',game.tick,#global.exp_core.server.callbacks,lenth}
+	else return {tick=game.tick,commands=#global.exp_core.server.callbacks,temp_varibles=#global.exp_core.server.temp_varibles} end 
 end
 --sudo main loop
 Event.register(defines.events.on_tick, function(event)
 	--used with debug command will stop debuging once atleast one message is send to file and there are no commands in sudo
-	if global.exp_core.debug.state and global.exp_core.debug.triggered and #global.exp_core.sudo.commands == 0 then debug_write({'END'},game.tick) global.exp_core.debug.state = global.exp_core.debug.focre end
+	if global.exp_core.debug.state and global.exp_core.debug.triggered and #global.exp_core.server.callbacks == 0 then debug_write({'END'},game.tick) global.exp_core.debug.state = global.exp_core.debug.focre end
 	-- runs the commands in sudo
-	debug_write({'SUDO'},get_sudo_info(true),true)
-	if game.tick % ticks_per_iteration == 0 and global.exp_core.sudo.commands and #global.exp_core.sudo.commands > 0 then
+	debug_write({'sudo'},server.get_callback_queue_info(true),true)
+	if game.tick % ticks_per_iteration == 0 and global.exp_core.server.callbacks and #global.exp_core.server.callbacks > 0 then
+		-- gets the number of call backs to run
 		local length = nil
-		if #global.exp_core.sudo.commands > commands_per_iteration then length = commands_per_iteration else length = #global.exp_core.sudo.commands end
+		if #global.exp_core.server.callbacks > commands_per_iteration then length = commands_per_iteration else length = #global.exp_core.server.callbacks end
 		-- runs the right number of commands as set
 		for i = 1,length do
-			local command=table.remove(global.exp_core.sudo.commands,1)
-			if command and command.fun and type(command.fun) == 'function' then
+			local callback=table.remove(global.exp_core.server.callbacks,1)
+			if callback and callback.fun and type(callback.fun) == 'function' then
 				local args = {}
-				-- retrives and temp varibles
-				for n,value in pairs(command.args) do
-					if type(value) == 'table' and not value.__self and value.sudo and value.sudo == 'sudo-temp-var' then args[n] = {data=global.exp_core.sudo.temp_varibles[value.name].data,temp_var_name=value.name}
+				-- retrives any temp varibles
+				for n,value in pairs(callback.args) do
+					if type(value) == 'string' and global.exp_core.server.temp_varibles[value] 
+					then args[n] = server.get_uuid_data(value)
 					else args[n] = value end
 				end
 				-- makes new temp value and runs command
 				local returns = {command.fun(unpack(args))} or {}
-				refresh_temp_var(command.return_name,returns)
+				server.refresh_uuid(callback.uuid,returns)
 			end
 		end
 	end
 	-- removes old temp varibles
-	for name,data in pairs(global.exp_core.sudo.temp_varibles) do
-		if data.remove_time <= game.tick then global.exp_core.sudo.temp_varibles[name] = nil end
+	for uuid,data in pairs(global.exp_core.server.temp_varibles) do
+		if data.remove_time <= game.tick then global.exp_core.server.temp_varibles[uuid] = nil end
 	end
 end)
-Event.register(Event.soft_init,function() global.exp_core.sudo = {commands={},temp_varibles={}} end)
+Event.register(Event.soft_init,function() global.exp_core.server = {callbacks={},temp_varibles={}} end)
+return server
