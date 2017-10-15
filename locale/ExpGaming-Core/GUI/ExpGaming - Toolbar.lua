@@ -22,7 +22,7 @@ local toolbar = ExpGui.toolbar
 --similar to ExpGui.add_input.button but it also accepts a restriction and button is drawn to the toolbar
 function toolbar.add_button(name,default_display,default_tooltip,event)
 	if not name then error('Button requires a name') end
-	table.insert(toolbar.buttons,{name=name})
+	table.insert(toolbar.buttons,name)
 	ExpGui.add_input.button(name,default_display,default_tooltip,event)
 end
 --draw the toolbar to the player only showing buttons within their restriction
@@ -33,9 +33,9 @@ function toolbar.draw(player)
 	toolbar_frame.clear()
 	for _,button in pairs(toolbar.buttons) do
 		local rank = ranking.get_player_rank(player)
-		if ranking.rank_allowed(ranking.get_player_rank(player),button.name) then
-			debug_write({'GUI','TOOLBAR','ADD'},button.name)
-			ExpGui.add_input.draw_button(toolbar_frame,button.name)
+		if ranking.rank_allowed(ranking.get_player_rank(player),button) then
+			debug_write({'GUI','TOOLBAR','ADD'},button)
+			ExpGui.add_input.draw_button(toolbar_frame,button)
 		end
 	end
 end

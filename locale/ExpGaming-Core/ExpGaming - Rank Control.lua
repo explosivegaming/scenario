@@ -71,8 +71,8 @@ function ranking.rank_print(msg, rank, inv)
 	end
 end
 --Give the user their new rank and raise the Event.rank_change event
-function ranking.give_rank(player,rank,by_player,group_tick)
-	local tick = group_tick or game.tick
+function ranking.give_rank(player,rank,by_player,tick)
+	local tick = tick or game.tick
 	local by_player = by_player or 'server'
 	local rank = ranking.string_to_rank(rank) or rank or ranking.string_to_rank_group('User').lowest_rank
 	local old_rank = ranking.get_player_rank(player)
@@ -102,7 +102,7 @@ function ranking.revert_rank(player,by_player)
 	ranking.give_rank(player,rank,by_player)
 end
 --Give the player a new rank based on playtime and/or preset ranks
-function ranking.find_new_rank(player,group_tick)
+function ranking.find_new_rank(player,tick)
 	debug_write({'RANK','NEW-RANK','START'},player.name)
 	local function loop_preset_rank(players,rank)
 		debug_write({'RANK','NEW-RANK','LOOP-PRESET'},rank)
@@ -110,7 +110,7 @@ function ranking.find_new_rank(player,group_tick)
 			if player.name:lower() == p:lower() then return rank end
 		end
 	end
-	local tick = group_tick or game.tick
+	local tick = tick or game.tick
 	local current_rank = ranking.get_player_rank(player)
 	local old_rank = ranking.get_player_rank(player)
 	local possible_ranks = {current_rank}
