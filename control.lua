@@ -27,7 +27,7 @@ Event.register(defines.events.on_tick, function(event)
 	elseif ((event.tick/(3600*game.speed))+(15/2))% 15 == 0 then
 		-- this is the system to auto rank players
 		for i,player in pairs(game.connected_players) do
-			sudo(ranking.find_new_rank,{player,event.tick})
+			server.queue_callback(ranking.find_new_rank,{player,event.tick})
 		end
 	end
 end)

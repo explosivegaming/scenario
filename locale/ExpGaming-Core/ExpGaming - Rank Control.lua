@@ -58,11 +58,11 @@ function ranking.rank_print(msg, rank, inv)
 		--this part uses sudo to soread it other many ticks
 		player_rank_power = ranking.get_player_rank(player).power
 		if inv then
-			sudo(function(player_rank_power,rank)
+			server.queue_callback(function(player_rank_power,rank)
 				if player_rank_power >= rank.power then player.print({'ranking.all-rank-print',msg}) end
 			end,{player_rank_power,rank})
 		else
-			sudo(function(player_rank_power,rank)
+			server.queue_callback(function(player_rank_power,rank)
 				if player_rank_power <= rank.power then
 					if rank.short_hand ~= '' then player.print(('['..(rank.short_hand)..']: '..msg)) else player.print({'ranking.all-rank-print',msg}) end 
 				end
