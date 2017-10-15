@@ -26,31 +26,55 @@ define_command('debug',{'server-interface.debug-command-help'},{'command',true},
 	debug_write({'START'},game.tick..' '..event.parameter)
 	global.exp_core.debug.triggered = false
 	local returned,value = pcall(loadstring(event.parameter))
-	if global.exp_core.debug.triggered and #global.exp_core.server.callbacks == 0 then debug_write({'END'},game.tick) global.exp_core.debug.state = false end
+	if global.exp_core.debug.triggered and #global.exp_core.server.callbacks_queue == 0 then debug_write({'END'},game.tick) global.exp_core.debug.state = false end
+end)
+--runs the preset callback with the uuid
+define_command('socket',{'server-interface.socket-command-help'},{'uuid','args'},function(player,event,args)
+	if global.exp_core.server.callbacks[args[1]] then
+		server.queue_callback(global.exp_core.server.callbacks[args[1]],{unpack(args,2)},args[1])
+	end
 end)
 --this is used when changing permission groups when the person does not have permsion to, can also be used to split a large event accross multiple ticks
-local commands_per_iteration = 50 --number of sudo commands ran every sudo iteration
-local ticks_per_iteration = 1 --the number of ticks break before the next sudo iteration
-local temp_var_time = 1000/commands_per_iteration*ticks_per_iteration --temp vars allow sudo funnctions to share data
+local commands_per_iteration = 50 --number of callback commands ran every callback iteration
+local ticks_per_iteration = 1 --the number of ticks break before the next callback iteration
+local temp_var_time = 1000/commands_per_iteration*ticks_per_iteration --temp vars allow callback funnctions to share data
+--adds a callback and saves code to a file
+function server.emit(code, callback)
+	if type(callback) == 'function' then
+		local uuid = server.add_callback(callback)
+		game.write_file('socket.data','{ "type":  "JS", "id": "' .. uuid .. '", "code": "' .. code .. '" }\n', true, 0)
+	end
+end
+--adds a call back that can be ran with a command
+function server.add_callback(callback,uuid)
+	if type(command) == 'function' then
+		local args = args or {}
+		local uuid = uuid or server.get_uuid(callback)
+		debug_write({'callback','ADD'},uuid)
+		table.insert(global.exp_core.server.callbacks,{fun=callback,uuid=uuid})
+		server.refresh_uuid(uuid)
+		return uuid
+	end 
+end
 --adds a call back function to the queue uuid can be provided
 function server.queue_callback(callback,args,uuid)
 	if type(command) == 'function' then
 		local args = args or {}
 		local uuid = uuid or server.get_uuid(callback)
-		debug_write({'sudo','ADD'},return_name)
-		table.insert(global.exp_core.server.callbacks,{fun=command,args=args,uuid=uuid})
+		debug_write({'callback','QUEUE'},uuid)
+		table.insert(global.exp_core.server.callbacks_queue,{fun=callback,args=args,uuid=uuid})
 		server.refresh_uuid(uuid)
 		return uuid
 	end 
 end
 -- clears all temp values and call backs in queue
 function server.clear_callbacks()
-	global.exp_core.server = {callbacks={},temp_varibles={}}
+	global.exp_core.server = {callback_queue={},callbacks={},temp_varibles={}}
 end
 -- converts any value into the uuid the script will use
 function server.get_uuid(var)
-	if type(var) == 'string' then uuid = var
-	else uuid = tostring(var)..tostring(#global.exp_core.server.callbacks) end
+	if type(var) == 'string' then uuid = var..tostring(#global.exp_core.server.callbacks_queue)
+	else uuid = tostring(var)..tostring(#global.exp_core.server.callbacks_queue) end
 	server.refresh_uuid(uuid)
 	return string.tohex('uuid'..uuid)
 end
@@ -68,7 +92,7 @@ end
 function server.get_uuid_data(uuid)
 	if global.exp_core.server.temp_varibles[uuid] then 
 		server.refresh_uuid(uuid)
-		debug_write({'sudo','TEMP-VAR'},uuid) 
+		debug_write({'callback','TEMP-VAR'},uuid) 
 		return global.exp_core.server.temp_varibles[uuid].data
 	end return nil
 end
@@ -76,22 +100,22 @@ end
 function server.get_callback_queue_info(string) 
 	local lenth = 0
 	for _,v in pairs(global.exp_core.server.temp_varibles) do lenth = lenth + 1 end
-	if string then return {'server-interface.sudo-info',game.tick,#global.exp_core.server.callbacks,lenth}
-	else return {tick=game.tick,commands=#global.exp_core.server.callbacks,temp_varibles=#global.exp_core.server.temp_varibles} end 
+	if string then return {'server-interface.callback-info',game.tick,#global.exp_core.server.callbacks_queue,lenth}
+	else return {tick=game.tick,commands=#global.exp_core.server.callbacks_queue,temp_varibles=#global.exp_core.server.temp_varibles} end 
 end
---sudo main loop
+--callback main loop
 Event.register(defines.events.on_tick, function(event)
-	--used with debug command will stop debuging once atleast one message is send to file and there are no commands in sudo
-	if global.exp_core.debug.state and global.exp_core.debug.triggered and #global.exp_core.server.callbacks == 0 then debug_write({'END'},game.tick) global.exp_core.debug.state = global.exp_core.debug.focre end
-	-- runs the commands in sudo
-	debug_write({'sudo'},server.get_callback_queue_info(true),true)
-	if game.tick % ticks_per_iteration == 0 and global.exp_core.server.callbacks and #global.exp_core.server.callbacks > 0 then
+	--used with debug command will stop debuging once atleast one message is send to file and there are no commands in callback
+	if global.exp_core.debug.state and global.exp_core.debug.triggered and #global.exp_core.server.callbacks_queue == 0 then debug_write({'END'},game.tick) global.exp_core.debug.state = global.exp_core.debug.focre end
+	-- runs the commands in callback
+	debug_write({'callback'},server.get_callback_queue_info(true),true)
+	if game.tick % ticks_per_iteration == 0 and global.exp_core.server.callbacks_queue and #global.exp_core.server.callbacks_queue > 0 then
 		-- gets the number of call backs to run
 		local length = nil
-		if #global.exp_core.server.callbacks > commands_per_iteration then length = commands_per_iteration else length = #global.exp_core.server.callbacks end
+		if #global.exp_core.server.callbacks_queue > commands_per_iteration then length = commands_per_iteration else length = #global.exp_core.server.callbacks_queue end
 		-- runs the right number of commands as set
 		for i = 1,length do
-			local callback=table.remove(global.exp_core.server.callbacks,1)
+			local callback=table.remove(global.exp_core.server.callbacks_queue,1)
 			if callback and callback.fun and type(callback.fun) == 'function' then
 				local args = {}
 				-- retrives any temp varibles
@@ -101,7 +125,7 @@ Event.register(defines.events.on_tick, function(event)
 					else args[n] = value end
 				end
 				-- makes new temp value and runs command
-				local returns = {command.fun(unpack(args))} or {}
+				local returns = {callback.fun(unpack(args))} or {}
 				server.refresh_uuid(callback.uuid,returns)
 			end
 		end
@@ -111,5 +135,5 @@ Event.register(defines.events.on_tick, function(event)
 		if data.remove_time <= game.tick then global.exp_core.server.temp_varibles[uuid] = nil end
 	end
 end)
-Event.register(Event.soft_init,function() global.exp_core.server = {callbacks={},temp_varibles={}} end)
+Event.register(Event.soft_init,function() global.exp_core.server = {callback_queue={},callbacks={},temp_varibles={}} end)
 return server
