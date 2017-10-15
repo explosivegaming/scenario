@@ -26,8 +26,8 @@ function add_input.draw_button(frame,name,display,tooltip)
 	debug_write({'GUI','INPUT'},name)
 	if inputs.buttons[name] then
 		local button = inputs.buttons[name]
-		local display = display or button.display or button.name
-		local tooltip = tooltip or button.tooltip
+		local display = display or button.display or {'expgui.button-no-display'}
+		local tooltip = tooltip or button.tooltip or {'expgui.button-no-tooltip'}
 		if frame.gui.is_valid_sprite_path(display) then
 			frame.add{name=name, type = "sprite-button", sprite=display, tooltip=tooltip, style = mod_gui.button_style}
 		else
@@ -43,7 +43,7 @@ function add_input.draw_text(frame,name,display)
 	debug_write({'GUI','INPUT'},name)
 	if inputs.text[name] then
 		local text = inputs.text[name]
-		local display = display or text.display or text.name
+		local display = display or text.display or {'expgui.text-no-display'}
 		frame.add{name=name, type='textfield'}
 		frame[name].caption=display
 		return
@@ -69,5 +69,3 @@ Event.register(defines.events.on_gui_text_changed, function(event)
 		if text.event then text.event(player,event.element) end
 	end
 end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
