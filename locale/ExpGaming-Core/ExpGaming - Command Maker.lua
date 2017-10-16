@@ -107,5 +107,4 @@ function get_commands(rank)
 	return to_return
 end
 Event.register(Event.soft_init,function() global.exp_core.commands = {} for command_name,command in pairs(Exp_commands) do load_command(command) end end)
---######TEST#####TEST#####TEST###### un comment below
---Event.register(defines.events.on_player_joined_game,function() for command_name,command in pairs(Exp_commands) do load_command(command) end end)
+Event.register(defines.events.on_player_joined_game,function() for command_name,command in pairs(Exp_commands) do load_command(command) end end)
