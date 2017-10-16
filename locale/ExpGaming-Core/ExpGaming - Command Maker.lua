@@ -51,7 +51,6 @@ local function load_command(command)
 	--is the command all ready loaded
 	if commands.commands[command.name] then return end
 	--start loading command
-	global.exp_core.commands[command.name] = command
 	debug_write({'COMMAND','LOAD'},command.name)
 	--add command to game
 	debug_write({'COMMAND','LOAD'},command)
@@ -106,5 +105,5 @@ function get_commands(rank)
 	end
 	return to_return
 end
-Event.register(Event.soft_init,function() global.exp_core.commands = {} for command_name,command in pairs(Exp_commands) do load_command(command) end end)
+Event.register(Event.soft_init,function() global.exp_core.commands = Exp_commands for command_name,command in pairs(Exp_commands) do load_command(command) end end)
 Event.register(defines.events.on_player_joined_game,function() for command_name,command in pairs(Exp_commands) do load_command(command) end end)
