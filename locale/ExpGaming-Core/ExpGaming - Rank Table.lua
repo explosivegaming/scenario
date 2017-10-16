@@ -243,7 +243,7 @@ for n = #ranks.ranks, 1, -1 do
 	end
 end
 -- returns a list off all the ranks, return only one part if given
-function get_ranks(part)
+local function get_ranks(part)
 	local to_return = {}
 	if part then 
 		for _,rank in pairs(global.exp_core.ranks.ranks) do table.insert(to_return,rank[part]) end
@@ -251,7 +251,7 @@ function get_ranks(part)
 	return to_return
 end
 -- returns a list off all the groups, return only one part if given
-function get_rank_groups(part)
+local function get_rank_groups(part)
 	local to_return = {}
 	if part then 
 		for _,group in pairs(global.exp_core.ranks.groups) do table.insert(to_return,group[part]) end
@@ -261,4 +261,4 @@ end
 -- Move the ranks to the global array
 Event.register(Event.soft_init,function() global.exp_core.ranks = ranks end)
 --Please Only Edit Above This Line-----------------------------------------------------------
-return get_ranks, get_rank_groups
+return {get_ranks, get_rank_groups}

@@ -7,6 +7,7 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/XSsBV6b
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
+local ExpGui = require("ExpGaming - Module Setup")
 local toolbar = ExpGui.toolbar
 --similar to ExpGui.add_input.button but it also accepts a restriction and button is drawn to the toolbar
 function toolbar.add_button(name,default_display,default_tooltip,event)
@@ -30,3 +31,5 @@ function toolbar.draw(player)
 end
 --auto-redraw toolbar after new rank is given
 Event.register(Event.rank_change,function(event) toolbar.draw(event.player) end)
+
+return ExpGui

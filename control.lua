@@ -12,7 +12,7 @@ require("mod-gui")
 Event = require("locale/StdLib/event")
 --this is the main code that starts the softmod
 Event.soft_init = script.generate_event_name()
-local function init() if not global.soft_init then script.raise_event(Event.soft_init,{tick=game.tick}) global.soft_init = true end end
+local function init() if not global.soft_init then global.exp_core = {} script.raise_event(Event.soft_init,{tick=game.tick}) global.soft_init = true end end
 Event.register(defines.events.on_player_joined_game,init)
 Event.register(defines.events.on_tick,init)
 --below 'game.tick/(3600*game.speed)) % 15 == 0' raises the gui_update event every 15 minutes - feel free to change the update time
@@ -32,7 +32,7 @@ Event.register(defines.events.on_tick, function(event)
 	end
 end)
 --loads core files
-ranking,ExpGui,server = require("locale/ExpGaming-Core/file-header")
+ranking,ExpGui,server = unpack(require("locale/ExpGaming-Core/file-header"))
 --loads all the other scripts
 require("locale/Stand-Alone/file-header")
 require("locale/ExpGaming-Addons/file-header")

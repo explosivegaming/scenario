@@ -7,11 +7,12 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/XSsBV6b
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
+local function merge(first_table,second_table) for k,v in pairs(second_table) do first_table[k] = v end end
 local ExpGui = require("ExpGaming - Module Setup")
-require("ExpGaming - Inputs")
-require("ExpGaming - Toolbar")
-require("ExpGaming - Center Gui")
-require("ExpGaming - Left Gui")
-require("ExpGaming - Popup")
-require("ExpGaming - Player Table")
+merge(ExpGui,require("ExpGaming - Inputs"))
+merge(ExpGui,require("ExpGaming - Toolbar"))
+merge(ExpGui,require("ExpGaming - Center Gui"))
+merge(ExpGui,require("ExpGaming - Left Gui"))
+merge(ExpGui,require("ExpGaming - Popup"))
+merge(ExpGui,require("ExpGaming - Player Table"))
 return ExpGui

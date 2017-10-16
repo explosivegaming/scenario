@@ -7,8 +7,8 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/XSsBV6b
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
-ranking = {}
-local ranking.get_ranks, ranking.get_rank_groups = require("ExpGaming - Rank Table")
+local ranking = {}
+ranking.get_ranks,ranking.get_rank_groups = unpack(require("ExpGaming - Rank Table"))
 --Return the rank of a given player
 function ranking.get_player_rank(player)
 	if player then
@@ -17,7 +17,7 @@ function ranking.get_player_rank(player)
 			if player.permission_group == game.permissions.get_group(rank.name) then return rank end
 		end
 		return ranking.string_to_rank_group('User').lowest_rank
-	end
+	end 
 end
 --Convert the name of a rank into the rank object
 function ranking.string_to_rank(string)
@@ -126,7 +126,7 @@ function ranking.find_new_rank(player,tick)
 	-- to reduce lag if the player is already higher than any time rank then it does not cheak
 	-- also there play time must be higher than the lowest required for a rank
 	debug_write({'RANK','NEW-RANK','TIME-CHEAK'},tick_to_min(player.online_time))
-	if current_rank.power > global.exp_core.exp_core.ranks.highest_timed_rank.power and tick_to_min(player.online_time) >= global.exp_core.exp_core.ranks.lowest_timed_rank.time then
+	if current_rank.power > global.exp_core.ranks.highest_timed_rank.power and tick_to_min(player.online_time) >= global.exp_core.ranks.lowest_timed_rank.time then
 		debug_write({'RANK','NEW-RANK','TIME-START'},player.name)
 		--Loop through rank times
 		for _,rank in pairs(ranking.get_ranks()) do

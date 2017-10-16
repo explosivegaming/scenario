@@ -14,4 +14,4 @@ local ExpGui = require("GUI/file-header")
 require("ExpGaming - Command Maker")
 local server = require("ExpGaming - Server Interface")
 --Please Only Edit Above This Line-----------------------------------------------------------
-return ranking,ExpGui,server
+return {ranking,ExpGui,server}

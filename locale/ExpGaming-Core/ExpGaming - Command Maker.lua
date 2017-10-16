@@ -54,7 +54,8 @@ local function load_command(command)
 	global.exp_core.commands[command.name] = command
 	debug_write({'COMMAND','LOAD'},command.name)
 	--add command to game
-	commands.add_command(command.name,{command.help,command_inputs_to_string(command)},function(event)
+	debug_write({'COMMAND','LOAD'},command)
+	commands.add_command(command.name,{'commands.help-format',command_inputs_to_string(command),command.help},function(event)
 		--gets the command data
 		local command_data = global.exp_core.commands[event.name]
 		debug_write({'COMMAND','RUN','START'},command.name)
@@ -105,6 +106,6 @@ function get_commands(rank)
 	end
 	return to_return
 end
-Event.register(Event.soft_init,function() for command_name,command in pairs(Exp_commands) do load_command(command) end end)
+Event.register(Event.soft_init,function() global.exp_core.commands = {} for command_name,command in pairs(Exp_commands) do load_command(command) end end)
 --######TEST#####TEST#####TEST###### un comment below
 --Event.register(defines.events.on_player_joined_game,function() for command_name,command in pairs(Exp_commands) do load_command(command) end end)

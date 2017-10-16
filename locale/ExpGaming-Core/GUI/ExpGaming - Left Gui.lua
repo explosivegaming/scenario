@@ -7,6 +7,7 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/XSsBV6b
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
+local ExpGui = require("ExpGaming - Module Setup")
 local add_frame = ExpGui.add_frame
 local frames = ExpGui.frames
 local draw_frame = ExpGui.draw_frame
@@ -62,3 +63,5 @@ Event.register(Event.rank_change,function(event)
 		if left[frame_data.name] then left[frame_data.name].style.visible = frame_data.vis end
 	end
 end)
+
+return ExpGui

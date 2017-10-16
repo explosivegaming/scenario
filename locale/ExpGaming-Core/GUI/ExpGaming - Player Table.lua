@@ -7,6 +7,7 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/XSsBV6b
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
+local ExpGui = require("ExpGaming - Module Setup")
 local player_table_functions = ExpGui.player_table
 --filters that are used. Feel free to add more
 player_table_functions.filters = {
@@ -109,3 +110,5 @@ function player_table_functions.draw(player,frame,filters,input_location)
 end
 
 Event.register(Event.soft_init,function() global.exp_core.current_filters = {} end)
+
+return ExpGui

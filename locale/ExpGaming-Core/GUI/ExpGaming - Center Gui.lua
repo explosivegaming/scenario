@@ -7,6 +7,7 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/XSsBV6b
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
+local ExpGui = require("ExpGaming - Module Setup")
 local add_frame = ExpGui.add_frame
 local frames = ExpGui.frames
 local draw_frame = ExpGui.draw_frame
@@ -77,3 +78,5 @@ function draw_frame.tab(player,element)
 end
 
 Event.register(Event.rank_change,function(event) event.player.gui.center.clear() end)
+
+return ExpGui

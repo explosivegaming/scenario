@@ -5,18 +5,7 @@ This file can be used with permission but this and the credit below must remain 
 Contact a member of management on our discord to seek permission to use our code.
 Any changes that you may make to the code are yours but that does not make the script yours.
 Discord: https://discord.gg/XSsBV6b
-
-The credit below may be used by another script do not remove.
 ]]
-local credits = {{
-	name='ExpGaming - Lib',
-	owner='Explosive Gaming',
-	dev='Cooldude2606',
-	description='A few basic functions used by scripts',
-	factorio_version='0.15.23',
-	show=false
-	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
 --Convert ticks to 12H 34M format or 8.97M when less than 10
 function tick_to_display_format(tick)
@@ -89,5 +78,3 @@ function debug_write(idenitys,string,no_trigger)
 end
 Event.register(defines.events.on_tick,function() debug_write({'NEW TICK'},game.tick,true) end)
 Event.register(Event.soft_init,function() global.exp_core.debug={state=false,triggered=false,force=false} end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits

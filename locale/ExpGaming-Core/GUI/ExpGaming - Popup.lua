@@ -7,6 +7,7 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/XSsBV6b
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
+local ExpGui = require("ExpGaming - Module Setup")
 local add_frame = ExpGui.add_frame
 local frames = ExpGui.frames
 local draw_frame = ExpGui.draw_frame
@@ -32,7 +33,7 @@ end
 function add_frame.popup(style,default_display,default_tooltip,on_click,event)
 	if not style then error('Popup style requires a name') end
 	if not event or type(event) ~= 'function' then error('Popup style requires a draw function') end
-	frames.popup[style] = {style=style,display=default_display,on_click=on_click,event=event})
+	frames.popup[style] = {style=style,display=default_display,on_click=on_click,event=event}
 	if on_click and type(on_click) == 'function' then
 		ExpGui.toolbar.add_button(style,default_display,default_tooltip,draw_frame.popup_button)
 	end
@@ -61,4 +62,10 @@ function draw_frame.popup(style,args)
 	end
 end
 --used to make the popup area
-Event.register(defines.events.on_player_joined_game,function(event) if not mod_gui.get_frame_flow(game.players[event.player_index]).popups then mod_gui.get_frame_flow(game.players[event.player_index]).add{name='popups',type='flow',direction='vertical'} end end)
+Event.register(defines.events.on_player_joined_game,function(event) 
+	if not mod_gui.get_frame_flow(game.players[event.player_index]).popups then 
+		mod_gui.get_frame_flow(game.players[event.player_index]).add{name='popups',type='flow',direction='vertical'} 
+	end 
+end)
+
+return ExpGui
