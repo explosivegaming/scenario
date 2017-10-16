@@ -51,7 +51,7 @@ function server.add_callback(callback,uuid)
 		local args = args or {}
 		local uuid = uuid or server.get_uuid(callback)
 		debug_write({'callback','ADD'},uuid)
-		table.insert(global.exp_core.server.callbacks,{fun=callback,uuid=uuid})
+		global.exp_core.server.callbacks[uuid]={fun=callback,uuid=uuid}
 		server.refresh_uuid(uuid)
 		return uuid
 	end 
