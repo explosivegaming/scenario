@@ -53,7 +53,7 @@ end
 function ranking.rank_print(msg, rank, inv)
 	local rank = ranking.string_to_rank(rank) or ranking.string_to_rank_group('Moderation').lowest_rank -- default mod or higher
 	local inv = inv or false
-	debug_write({'RANK','PRINT'},rank.name..': '..msg)
+	debug_write({'RANK','PRINT'},rank.name..': '..tostring(msg))
 	for _, player in pairs(game.players) do
 		--this part uses sudo to soread it other many ticks
 		player_rank_power = ranking.get_player_rank(player).power
