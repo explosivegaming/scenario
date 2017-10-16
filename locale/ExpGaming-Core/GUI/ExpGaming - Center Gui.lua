@@ -28,7 +28,7 @@ function add_frame.tab(name,default_display,default_tooltip,frame,event)
 	ExpGui.add_input.button(name,default_display,default_tooltip,draw_frame.tab)
 end
 --Draw the center GUI for the player; do not call manually, must use other functions to call
-ExpGui.add_input.button('close_center','Close','Close this GUI',function(player,element) element.parent.parent.parent.destroy() end)
+ExpGui.add_input.button('close_center',{'expgui.close-button'},{'expgui.close-button-tooltip'},function(player,element) element.parent.parent.parent.destroy() end)
 function draw_frame.center(player,element)
 	frame_data = frames.center[element.name]
 	debug_write({'GUI','CENTER'},player.name..' '..frame_data.name)
