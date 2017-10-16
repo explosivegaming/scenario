@@ -58,10 +58,10 @@ function server.add_callback(callback,uuid)
 end
 --adds a call back function to the queue uuid can be provided
 function server.queue_callback(callback,args,uuid)
-	if type(command) == 'function' then
+	if type(callback) == 'function' then
 		local args = args or {}
 		local uuid = uuid or server.get_uuid(callback)
-		debug_write({'callback','QUEUE'},uuid)
+		debug_write({'CALLBACK','QUEUE'},uuid)
 		table.insert(global.exp_core.server.callback_queue,{fun=callback,args=args,uuid=uuid})
 		server.refresh_uuid(uuid)
 		return uuid
@@ -108,7 +108,7 @@ Event.register(defines.events.on_tick, function(event)
 	--used with debug command will stop debuging once atleast one message is send to file and there are no commands in callback
 	if global.exp_core.debug.state and global.exp_core.debug.triggered and #global.exp_core.server.callback_queue == 0 then debug_write({'END'},game.tick) global.exp_core.debug.state = global.exp_core.debug.focre end
 	-- runs the commands in callback
-	debug_write({'callback'},server.get_callback_queue_info(true),true)
+	debug_write({'CALLBACK'},server.get_callback_queue_info(true),true)
 	if game.tick % ticks_per_iteration == 0 and global.exp_core.server.callback_queue and #global.exp_core.server.callback_queue > 0 then
 		-- gets the number of call backs to run
 		local length = nil
