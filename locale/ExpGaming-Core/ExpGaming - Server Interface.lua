@@ -47,7 +47,7 @@ function server.emit(code, callback)
 end
 --adds a call back that can be ran with a command
 function server.add_callback(callback,uuid)
-	if type(command) == 'function' then
+	if type(callback) == 'function' then
 		local args = args or {}
 		local uuid = uuid or server.get_uuid(callback)
 		debug_write({'callback','ADD'},uuid)
