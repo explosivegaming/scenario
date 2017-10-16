@@ -31,7 +31,7 @@ end)
 --runs the preset callback with the uuid
 define_command('socket',{'server.socket-command-help'},{'uuid','args'},function(player,event,args)
 	if global.exp_core.server.callbacks[args[1]] then
-		server.queue_callback(global.exp_core.server.callbacks[args[1]],{unpack(args,2)},args[1])
+		server.queue_callback(global.exp_core.server.callbacks[args[1].fun],{unpack(args,2)},args[1])
 	end
 end)
 --this is used when changing permission groups when the person does not have permsion to, can also be used to split a large event accross multiple ticks
