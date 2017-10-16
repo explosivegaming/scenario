@@ -5,22 +5,9 @@ This file can be used with permission but this and the credit below must remain 
 Contact a member of management on our discord to seek permission to use our code.
 Any changes that you may make to the code are yours but that does not make the script yours.
 Discord: https://discord.gg/XSsBV6b
-
-The credit below may be used by another script do not remove.
 ]]
-local credits = {{
-	name='ExpGaming - Player Table',
-	owner='Explosive Gaming',
-	dev='Cooldude2606',
-	description='Allows addition of a player table with filters',
-	factorio_version='0.15.23',
-	show=false
-	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
 local player_table_functions = ExpGui.player_table
-local yes = {'yes','y','true','ye'}
-local no = {'no','false','nay'}
 --filters that are used. Feel free to add more
 player_table_functions.filters = {
 	--{name,is_text,function(player,input) return true/false end}
@@ -34,7 +21,7 @@ player_table_functions.filters = {
 --set up all the text inputs
 for _,filter in pairs(player_table_functions.filters) do
 	if filter.is_text then
-		ExpGui.add_input.text(filter.name,'Enter '..filter.name:gsub('_',' '),function(player,element) ExpGui.player_table.redraw(player,element) end)
+		ExpGui.add_input.text(filter.name,{'expgui.player-table-enter',filter.name:gsub('_',' ')},function(player,element) ExpGui.player_table.redraw(player,element) end)
 	end
 end
 --used to draw filters from the list above
@@ -85,11 +72,11 @@ function player_table_functions.draw(player,frame,filters,input_location)
  	player_table.style.minimal_width = 500
   	player_table.style.maximal_width = 500
 	player_table.style.horizontal_spacing = 10
-  	player_table.add{name="id", type="label", caption="Id"}
-  	player_table.add{name="player_name", type="label", caption="Name"}
-	player_table.add{name="status", type="label", caption="Status"}
-  	player_table.add{name="online_time", type="label", caption="Online Time"}
-  	player_table.add{name="rank", type="label", caption="Rank"}
+  	player_table.add{name="id", type="label", caption={"expgui.player-table-id"}}
+  	player_table.add{name="player_name", type="label", caption={"expgui.player-table-name"}}
+	player_table.add{name="status", type="label", caption={"expgui.player-table-status"}}
+  	player_table.add{name="online_time", type="label", caption={"expgui.player-table-online-time"}}
+  	player_table.add{name="rank", type="label", caption={"expgui.player-table-rank"}}
 	for i,p in pairs(game.players) do
 		--filter cheaking
 		local add=true
@@ -122,5 +109,3 @@ function player_table_functions.draw(player,frame,filters,input_location)
 end
 
 Event.register(Event.soft_init,function() global.exp_core.current_filters = {} end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
