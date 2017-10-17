@@ -37,7 +37,7 @@ function(player,frame)
 	ExpGui.add_input.draw_button(flow,'send_message','Send')
 	flow.add{name='label',type='label',caption={'announcements.send-to-ranks'},style="caption_label_style"}
 	local drop_down = flow.add{name='drop_down',type='drop-down'}
-	for n,rank_name in pairs(get_ranks('name')) do drop_down.add_item(rank_name) if rank_name == 'Guest' then drop_down.selected_index = n end end
+	for n,rank_name in pairs(ranking.get_ranks('name')) do drop_down.add_item(rank_name) if rank_name == 'Guest' then drop_down.selected_index = n end end
 end,
 function(player,frame,args)
 	frame.style.maximal_width = 600

@@ -24,7 +24,7 @@ Event.register(defines.events.on_marked_for_deconstruction, function(event)
 	local entity = event.entity
 	-- sets up the temp var value to be used in later sudo functions
 	local tree_remover = nil
-	if not get_temp_var_data(player.name..'_tree_remover') then
+	if not server.get_uuid_data(player.name..'_tree_remover') then
 		tree_remover = server.queue_callback(function(player)
 			if not rank_allowed(ranking.get_player_rank(player),'decon') then return 1
 			elseif rank_allowed(ranking.get_player_rank(player),'tree_remover') then return 2 
@@ -36,7 +36,7 @@ Event.register(defines.events.on_marked_for_deconstruction, function(event)
 		if not entity.valid then return end
 		local result = tree_remover.data[1]
 		server.refresh_uuid(tree_remover.temp_var_name)
-		local printed = nil; if type(get_temp_var_data(player.name..'_tree_remover_printed')) == 'table' then printed = get_temp_var_data(player.name..'_tree_remover_printed')[1] end
+		local printed = nil; if type(server.get_uuid_data(player.name..'_tree_remover_printed')) == 'table' then printed = server.get_uuid_data(player.name..'_tree_remover_printed')[1] end
 		if result == 1 and entity.last_user then
 			entity.cancel_deconstruction('player')
 			if printed ~= true then
