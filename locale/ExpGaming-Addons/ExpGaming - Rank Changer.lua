@@ -21,9 +21,9 @@ local credits = {{
 ExpGui.add_input.button('close_rank_gui','Close','Close this gui',function(player,element) element.parent.parent.destroy() end)
 ExpGui.add_input.button('give_rank','Give Rank','Give the above player the above rank',function(player,element)
 	local p = game.players[element.parent.parent.input_table.player_dropdown.items[element.parent.parent.input_table.player_dropdown.selected_index]]
-	local rank = string_to_rank(element.parent.parent.input_table.rank_dropdown.items[element.parent.parent.input_table.rank_dropdown.selected_index])
+	local rank = ranking.string_to_rank(element.parent.parent.input_table.rank_dropdown.items[element.parent.parent.input_table.rank_dropdown.selected_index])
 	if not rank or not p then player.print('Invalid Player') return end
-	give_rank(p,rank,player)
+	ranking.give_rank(p,rank,player)
 	element.parent.parent.destroy()
 end)
 
@@ -33,7 +33,7 @@ ExpGui.add_frame.center('rank_changer','Edit Ranks','Allows you to edit players 
 	inputs.add{name='player_lable',type='label',caption='Player: '}
 	inputs.add{name='player_dropdown',type='drop-down'}
 	for _,p in pairs(game.connected_players) do 
-		if get_rank(player).power < get_rank(p).power and not global.temp_bans[p.name] then
+		if ranking.get_player_rank(player).power < ranking.get_player_rank(p).power and not global.temp_bans[p.name] then
 			inputs.player_dropdown.add_item(p.name)
 		end
 	end
@@ -42,7 +42,7 @@ ExpGui.add_frame.center('rank_changer','Edit Ranks','Allows you to edit players 
 	inputs.add{name='rank_lable',type='label',caption='Rank: '}
 	inputs.add{name='rank_dropdown',type='drop-down'}
 	for _,rank in pairs(get_ranks()) do 
-		if get_rank(player).power < rank.power then
+		if ranking.get_player_rank(player).power < rank.power then
 			inputs.rank_dropdown.add_item(rank.name)
 		end
 	end

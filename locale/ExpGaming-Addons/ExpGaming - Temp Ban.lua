@@ -22,10 +22,10 @@ define_command('temp-ban','Temp ban a player untill the next reset, can not be u
     if player == '<server>' then
         local jail_player = game.players[args[1]]
         if not jail_player then print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
-        give_rank(jail_player,'Jail')
+        ranking.give_rank(jail_player,'Jail')
         table.insert(global.temp_bans,{jail_player.name,player,table.concat(args,' ',2),jail_player})
         ExpGui.draw_frame.popup('temp_ban',{player,table.concat(args,' ',2)})
-        rank_print(jail_player.name..' has been temp banned by '..player..' reason: '..table.concat(args,' ',2),'Guest')
+        ranking.rank_print(jail_player.name..' has been temp banned by '..player..' reason: '..table.concat(args,' ',2),'Guest')
         game.write_file('multi.log','\n{"type":"TEMP_BAN","tick":'..game.tick..',"username":"'..jail_player.name..'","by":"<server>","reason":"'..table.concat(args,' ',2)..'"}\n', true, 0)
         jail_player.gui.center.clear()
         for _,gui in pairs(mod_gui.get_frame_flow(jail_player).children) do gui.style.visible = false end
@@ -33,11 +33,11 @@ define_command('temp-ban','Temp ban a player untill the next reset, can not be u
     else
         local jail_player = game.players[args[1]]
         if not jail_player then player.print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
-        if get_rank(player).power < get_rank(jail_player).power then
-            sudo(give_rank,{jail_player,'Jail',player})
+        if ranking.get_player_rank(player).power < ranking.get_player_rank(jail_player).power then
+            server.queue_callback(give_rank,{jail_player,'Jail',player})
             global.temp_bans[jail_player.name] = {player.name,table.concat(args,' ',2)}
             ExpGui.draw_frame.popup('temp_ban',{player.name,table.concat(args,' ',2),jail_player})
-            rank_print(jail_player.name..' has been temp banned by '..player.name..' reason: '..table.concat(args,' ',2),'Guest')
+            ranking.rank_print(jail_player.name..' has been temp banned by '..player.name..' reason: '..table.concat(args,' ',2),'Guest')
             game.write_file('multi.log','\n{"type":"TEMP_BAN","tick":'..game.tick..',"username":"'..jail_player.name..'","by":"'..player.name..'","reason":"'..table.concat(args,' ',2)..'"}\n', true, 0)
             jail_player.gui.center.clear()
             for _,gui in pairs(mod_gui.get_frame_flow(jail_player).children) do gui.style.visible = false end

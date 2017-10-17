@@ -5,30 +5,19 @@ This file can be used with permission but this and the credit below must remain 
 Contact a member of management on our discord to seek permission to use our code.
 Any changes that you may make to the code are yours but that does not make the script yours.
 Discord: https://discord.gg/XSsBV6b
-
-The credit below may be used by another script do not remove.
 ]]
-local credits = {{
-	name='Explosive Gaming Announcements',
-	owner='Explosive Gaming',
-	dev='Cooldude2606',
-	description='Allows the sending of popups to send announcements',
-	factorio_version='0.15.23',
-	show=true
-	}}
-
 --Please Only Edit Below This Line-----------------------------------------------------------
 --this function can be called at any time to make an announcement
 function announcement(message,rank,player)
 	if not message then return end
-	local rank = string_to_rank(rank) or string_to_rank_group('User').lowest_rank
+	local rank = ranking.string_to_rank(rank) or string_to_rank_group('User').lowest_rank
 	local player = player or '<server>'
 	ExpGui.draw_frame.popup('announcement',{player,rank,message})
 end
 --this is the in game gui for the announcements
 ExpGui.add_input.button('send_message','Send Message','Seads a message from the text box',function(player,element)
 	local text = element.parent.parent.input.text
-	local rank = string_to_rank(element.parent.drop_down.get_item(element.parent.drop_down.selected_index))
+	local rank = ranking.string_to_rank(element.parent.drop_down.get_item(element.parent.drop_down.selected_index))
 	ExpGui.draw_frame.popup('announcement',{player,rank,text})
 	element.parent.parent.parent.destroy()
 end)
@@ -53,9 +42,9 @@ end,
 function(player,frame,args)
 	frame.style.maximal_width = 600
 	local message = 'Announcement from '
-	if args[1] ~= '<server>' then message = message..get_rank(args[1]).name..' to ' else message = message..' <server> to ' end
+	if args[1] ~= '<server>' then message = message..ranking.get_player_rank(args[1]).name..' to ' else message = message..' <server> to ' end
 	if args[2].name == 'Guest' then message = message..'Everyone' else message = message..args[2].name..'s' end
-	if get_rank(player).power > args[2].power then frame.parent.destroy() else
+	if ranking.get_player_rank(player).power > args[2].power then frame.parent.destroy() else
 		frame.add{name='label',type='label',caption=message,style="caption_label_style"}
 		local text_box = frame.add{name='message',type='text-box'}
 		text_box.text = args[3]
@@ -66,4 +55,3 @@ function(player,frame,args)
 		text_box.style.minimal_width = 400
 	end
 end)
-

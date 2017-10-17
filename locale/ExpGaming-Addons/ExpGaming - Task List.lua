@@ -25,7 +25,7 @@ local function draw_standard(player,frame)
 		table.add{type='label',name=n..'_number',caption=n..'.'}
 		table.add{type='label',name=n..'_task',caption=task}
 	end
-	if rank_allowed(get_rank(player),'edit_tasks') then ExpGui.add_input.draw_button(frame,'enter_edit') end
+	if rank_allowed(ranking.get_player_rank(player),'edit_tasks') then ExpGui.add_input.draw_button(frame,'enter_edit') end
 end
 
 local function draw_edit_mode(player,frame)

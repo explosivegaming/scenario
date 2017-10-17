@@ -23,15 +23,15 @@ define_command('tag','Use to add a custom tag, use /tag clear to remove.',{'tag'
         local player = game.players[args[1]]
         local tag = table.concat(args,' ',2)
         if player then
-            if args[2] == 'clear' then player.tag = get_rank(player).tag
-            else player.tag = get_rank(player).tag..' - '..tag..' '
+            if args[2] == 'clear' then player.tag = ranking.get_player_rank(player).tag
+            else player.tag = ranking.get_player_rank(player).tag..' - '..tag..' '
             end
         else print('Invaild Player Name,'..args[1]..', try using tab key to auto-complete the name') return end
     else
         local tag = table.concat(args,' ',1)
-        if args[1] == 'clear' then player.tag = get_rank(player).tag
+        if args[1] == 'clear' then player.tag = ranking.get_player_rank(player).tag
         elseif string.len(tag) > 20 then player.print('Invaild Tag, must be less then 20 characters')
-        else player.tag = get_rank(player).tag..' - '..tag..' '
+        else player.tag = ranking.get_player_rank(player).tag..' - '..tag..' '
         end
     end
 end)

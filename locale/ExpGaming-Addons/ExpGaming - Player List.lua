@@ -26,20 +26,20 @@ ExpGui.add_frame.left('player_list','entity/player','Toggle Player List',true,fu
 	--creating the order the players are drawn in
 	local player_list_order = nil
 	if not get_temp_var_data('player_list_order') then
-		player_list_order = sudo(function()
+		player_list_order = server.queue_callback(function()
 			local order = {}
 			for _,rank_name in pairs(get_ranks('name')) do order[rank_name] = {} end
-			for _,p in pairs(game.connected_players) do table.insert(order[get_rank(p).name],p) end
+			for _,p in pairs(game.connected_players) do table.insert(order[ranking.get_player_rank(p).name],p) end
 			return order
 		end,{},'player_;ist_order')
-	else player_list_order = format_as_temp_var('player_list_order') end
+	else player_list_order = server.get_uuid('player_list_order') end
 	--puts names onto player list
-	sudo(function(player_list,player_list_order)
+	server.queue_callback(function(player_list,player_list_order)
 		if not player_list.valid then return end
 		local order = player_list_order.data[1]
-		refresh_temp_var(player_list_order.temp_var_name)
+		server.refresh_uuid(player_list_order.temp_var_name)
 		for rank,players in pairs(order) do
-			local rank_object = string_to_rank(rank)
+			local rank_object = ranking.string_to_rank(rank)
 			local rank_short_hand = rank_object.short_hand
 			local rank_colour = rank_object.colour
 			for _,p in pairs(players) do

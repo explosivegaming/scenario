@@ -50,7 +50,7 @@ Event.register(Event.soft_init,function()
 end)
 -- returns this list, or just one rank if given
 function get_preset_ranks(rank)
-	if rank then return global.preset_ranks[string_to_rank(rank).name] else return global.preset_ranks end
+	if rank then return global.preset_ranks[ranking.string_to_rank(rank).name] else return global.preset_ranks end
 end
 
 

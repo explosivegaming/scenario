@@ -30,7 +30,7 @@ define_command('tp','Teleport players to each other, ON DUTIY ONLY!',{'player','
 		local p2 = game.players[args[2]] if p2 then else player.print('Invaild Player Name,'..args[2]..', try using tab key to auto-complete the name') return end
         if p1 == p2 then  player.print('Invaild Players, must be two diffrent players') return end
 		if p1.connected and p2.connected then else player.print('Invaild Player, player is not online') return end
-		if get_rank(player).power > get_rank(p1).power then player.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
+		if ranking.get_player_rank(player).power > ranking.get_player_rank(p1).power then player.print('401 - Unauthorized: Access is denied due to invalid credentials') return end
 		p1.teleport(game.surfaces[p2.surface.name].find_non_colliding_position("player", p2.position, 32, 1))
     end
 end)

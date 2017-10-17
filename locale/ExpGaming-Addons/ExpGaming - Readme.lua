@@ -47,7 +47,7 @@ ExpGui.add_frame.tab('commands','Commands','Useful commands you can use','readme
 	frame.add{name='command_table',type='table',colspan=2}
 	frame.command_table.add{name='command_title',type='label',caption='Command'}
 	frame.command_table.add{name='help_title',type='label',caption='Help Info'}
-    for n,command in pairs(get_commands(get_rank(player).name)) do
+    for n,command in pairs(get_commands(ranking.get_player_rank(player).name)) do
         frame.command_table.add{name='command_'..n,type='label',caption='/'..command.name}
         frame.command_table.add{name='help_'..n,type='label',caption=command.help,single_line=false}.style.maximal_width=480
     end
