@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=true
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 local low_ranks_only={
     'Please join us on:',
@@ -41,5 +41,5 @@ function auto_message(event)
 end
 
 Event.register(Event.gui_update,auto_message)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+
+

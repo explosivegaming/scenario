@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=true
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 define_command('temp-ban','Temp ban a player untill the next reset, can not be un done',{'player','reason',true},function(player,event,args)
     if player == '<server>' then
@@ -68,5 +68,5 @@ end)
 
 function get_temp_bans() return global.temp_bans end
 Event.register(-1,function() global.temp_bans = {} end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+
+

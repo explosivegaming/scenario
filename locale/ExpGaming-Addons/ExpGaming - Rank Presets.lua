@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=false
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 -- we run an exturnle script which syncs this table with discord, only top ranks are filled in case of error
 Event.register(-1,function()
@@ -52,5 +52,5 @@ end)
 function get_preset_ranks(rank)
 	if rank then return global.preset_ranks[string_to_rank(rank).name] else return global.preset_ranks end
 end
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+
+

@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=true
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 local function get_report_info(reporter,player,reason)
 	local info = {player=player,total_reports=0,trusted_reports=0,reports=0,reasons={},players={}}
@@ -92,5 +92,5 @@ define_command('remove-report','Clears the reports give to a user',{'player','re
 end)
 function get_reported_users() return global.reported_users end
 Event.register(-1,function() global.reported_users = {} end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+
+

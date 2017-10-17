@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=true
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 define_command('tp','Teleport players to each other, ON DUTIY ONLY!',{'player','to_player'},function(player,event,args)
     if player == '<server>' then
@@ -34,5 +34,4 @@ define_command('tp','Teleport players to each other, ON DUTIY ONLY!',{'player','
 		p1.teleport(game.surfaces[p2.surface.name].find_non_colliding_position("player", p2.position, 32, 1))
     end
 end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+

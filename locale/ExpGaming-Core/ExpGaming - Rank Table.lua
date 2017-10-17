@@ -260,5 +260,5 @@ local function get_rank_groups(part)
 end
 -- Move the ranks to the global array
 Event.register(Event.soft_init,function() global.exp_core.ranks = ranks end)
---Please Only Edit Above This Line-----------------------------------------------------------
+
 return {get_ranks, get_rank_groups}

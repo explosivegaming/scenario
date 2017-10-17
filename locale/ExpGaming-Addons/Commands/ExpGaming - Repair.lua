@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=true
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 define_command('repair','Used to repair large parts of the factory. Admin can use all as range.',{'range'},function(player,event,args)
     if player == '<server>' then
@@ -36,5 +36,4 @@ define_command('repair','Used to repair large parts of the factory. Admin can us
         end
     end
 end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+

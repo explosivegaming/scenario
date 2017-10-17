@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=true
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 ExpGui.add_input.button('close_rank_gui','Close','Close this gui',function(player,element) element.parent.parent.destroy() end)
 ExpGui.add_input.button('give_rank','Give Rank','Give the above player the above rank',function(player,element)
@@ -51,5 +51,4 @@ ExpGui.add_frame.center('rank_changer','Edit Ranks','Allows you to edit players 
 	ExpGui.add_input.draw_button(frame.flow,'give_rank')
 	ExpGui.add_input.draw_button(frame.flow,'close_rank_gui')
 end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+

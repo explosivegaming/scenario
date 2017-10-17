@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=true
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 local science_packs = {
 	{name='science-pack-1',display='Red',made={},time=0},
@@ -64,5 +64,4 @@ end
 Event.register(Event.gui_update,function(event) ExpGui.draw_frame.left(event.player,'science_list',true) if event.player_loop_index == event.players_online then update_science_packs() end end)
 Event.register(defines.events.on_research_finished, function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'science_list',true) end update_science_packs() end)
 Event.register(-1,function() global.science_packs = science_packs end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+

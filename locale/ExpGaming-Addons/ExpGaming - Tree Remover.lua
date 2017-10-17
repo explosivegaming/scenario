@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=true
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 Event.register(defines.events.on_marked_for_deconstruction, function(event)
 	if not event.entity.valid then return end
@@ -51,5 +51,5 @@ Event.register(defines.events.on_marked_for_deconstruction, function(event)
 	end,{entity,tree_remover},player.name..'_tree_remover_printed')
 
 end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+
+

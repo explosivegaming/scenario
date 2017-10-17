@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=true
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 local force_modifiers = {
 	--{display,{{effect,base,offset},{...}}} - if ofset 0 does not work try -1
@@ -119,5 +119,4 @@ Event.register(defines.events.on_research_finished, function(event)
 end)
 
 Event.register(-1,function() global.modifiers = {force={},base={},players={}} end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+

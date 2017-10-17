@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=true
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 ExpGui.add_frame.center('readme','README','Click To Open Readme')
 
@@ -68,5 +68,5 @@ Event.register(defines.events.on_player_joined_game,function(event)
         ExpGui.draw_frame.center(player,fake_button)
     end
 end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+
+

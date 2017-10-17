@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=true
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 --this function can be called at any time to make an announcement
 function announcement(message,rank,player)
@@ -66,5 +66,4 @@ function(player,frame,args)
 		text_box.style.minimal_width = 400
 	end
 end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+

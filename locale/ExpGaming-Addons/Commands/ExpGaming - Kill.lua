@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=true
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 define_command('kill','Used to kill a player, you can always kill your self!',{'player'},function(player,event,args)
     if player == '<server>' then
@@ -33,5 +33,4 @@ define_command('kill','Used to kill a player, you can always kill your self!',{'
         else player.print('401 - Unauthorized: Access is denied due to invalid credentials') end
     end
 end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+

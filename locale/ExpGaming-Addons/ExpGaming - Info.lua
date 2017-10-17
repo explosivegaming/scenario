@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=true
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 ExpGui.add_frame.center('info','Info','All useful information about the server is here',{{name='commands'}})
 
@@ -68,5 +68,5 @@ ExpGui.add_frame.tab('credit','Script Credit','Who made all of the diffrent part
     end
     frame.horizontal_scroll_policy = 'always'
 end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+
+

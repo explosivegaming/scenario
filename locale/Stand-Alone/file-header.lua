@@ -7,4 +7,4 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/XSsBV6b
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
-credit_loop(require("Factorio Starting Items"))
+require("Factorio Starting Items")

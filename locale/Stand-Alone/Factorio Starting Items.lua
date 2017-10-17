@@ -5,18 +5,7 @@ This file can be used with permission but this and the credit below must remain 
 Contact a member of management on our discord to seek permission to use our code.
 Any changes that you may make to the code are yours but that does not make the script yours.
 Discord: https://discord.gg/XSsBV6b
-
-The credit below may be used by another script do not remove.
 ]]
-local credits = {{
-	name='Factorio Starting Items',
-	owner='Factorio',
-	dev='Factorio Team',
-	description='Items you get when you join the game',
-	factorio_version='0.15.23',
-	show=true
-	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
 Event.register(defines.events.on_player_created, function(event)
   local player = game.players[event.player_index]
@@ -32,5 +21,3 @@ Event.register(defines.events.on_player_created, function(event)
 		player.insert{name="stone-furnace", count = 1}
 	end
 end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits

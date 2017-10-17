@@ -16,7 +16,7 @@ local credits = {{
 	factorio_version='0.15.23',
 	show=true
 	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+
 --Please Only Edit Below This Line-----------------------------------------------------------
 ExpGui.add_frame.left('rocket_list','item/rocket-silo','Open a list with rocket milestones',nil,function(player,frame)
 	frame.caption = 'Rockets'
@@ -43,5 +43,4 @@ end
 
 Event.register(defines.events.on_rocket_launched, function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'rocket_list',true) end end)
 Event.register(-1,function(event) global.rockets = {m1=0,m2=0,m5=0,m10=0,m20=0,m50=0,m100=0,m200=0,m500=0} end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+
