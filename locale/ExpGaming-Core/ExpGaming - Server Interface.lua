@@ -75,8 +75,9 @@ end
 function server.get_uuid(var)
 	if type(var) == 'string' then uuid = var..tostring(#global.exp_core.server.callback_queue)
 	else uuid = tostring(var)..tostring(#global.exp_core.server.callback_queue) end
+	uuid = string.tohex('uuid'..uuid)
 	server.refresh_uuid(uuid)
-	return string.tohex('uuid'..uuid)
+	return uuid
 end
 --update the time on a temp var or add it as a new one
 function server.refresh_uuid(uuid,data,offset)
