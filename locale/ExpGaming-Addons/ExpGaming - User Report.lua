@@ -91,6 +91,6 @@ define_command('remove-report','Clears the reports give to a user',{'player','re
 	end
 end)
 function get_reported_users() return global.reported_users end
-Event.register(-1,function() global.reported_users = {} end)
+Event.register(Event.soft_init,function() global.reported_users = {} end)
 
 

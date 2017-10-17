@@ -82,5 +82,5 @@ end)
 
 function get_tasks() return global.tasks.server end
 Event.register(Event.rank_change,function(event) for _,player in pairs(game.connected_players) do ExpGui.draw_frame.left(player,'task_list',true) end end)
-Event.register(-1,function() global.tasks = {server={'Power','Starter base for red science','Plans for main base','Work on building main smelters','Green science in starter base'},players={}} end)
+Event.register(Event.soft_init,function() global.tasks = {server={'Power','Starter base for red science','Plans for main base','Work on building main smelters','Green science in starter base'},players={}} end)
 

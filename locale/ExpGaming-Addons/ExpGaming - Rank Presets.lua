@@ -19,7 +19,7 @@ local credits = {{
 
 --Please Only Edit Below This Line-----------------------------------------------------------
 -- we run an exturnle script which syncs this table with discord, only top ranks are filled in case of error
-Event.register(-1,function()
+Event.register(Event.soft_init,function()
 	global.preset_ranks = {
 	Owner={'badgamernl'},
 	
