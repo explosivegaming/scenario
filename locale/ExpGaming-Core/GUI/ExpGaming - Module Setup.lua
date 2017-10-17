@@ -5,21 +5,10 @@ This file can be used with permission but this and the credit below must remain 
 Contact a member of management on our discord to seek permission to use our code.
 Any changes that you may make to the code are yours but that does not make the script yours.
 Discord: https://discord.gg/XSsBV6b
-
-The credit below may be used by another script do not remove.
 ]]
-local credits = {{
-	name='Explosive Gaming Gui System',
-	owner='Explosive Gaming',
-	dev='Cooldude2606',
-	description='Without this, it would not be the same',
-	factorio_version='0.15.23',
-	show=true
-	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
 -- Mainly used as a plan for how the gui is stored also as a header for the credit
-ExpGui = {
+local ExpGui = {
 	add_frame={
 	--center
 	--tab
@@ -72,4 +61,4 @@ function ExpGui.toggle_visible(frame)
 	end
 end
 --Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+return ExpGui
