@@ -15,18 +15,18 @@ function announcement(message,rank,player)
 	ExpGui.draw_frame.popup('announcement',{player,rank,message})
 end
 --this is the in game gui for the announcements
-ExpGui.add_input.button('send_message','Send Message','Seads a message from the text box',function(player,element)
+ExpGui.add_input.button('send_message',{'announcements.button-send-message'},{'announcements.button-send-message-tooltip'},function(player,element)
 	local text = element.parent.parent.input.text
 	local rank = ranking.string_to_rank(element.parent.drop_down.get_item(element.parent.drop_down.selected_index))
 	ExpGui.draw_frame.popup('announcement',{player,rank,text})
 	element.parent.parent.parent.destroy()
 end)
 
-ExpGui.add_frame.popup('announcement','item/programmable-speaker','Sends an announcement to players',
+ExpGui.add_frame.popup('announcement','item/programmable-speaker',{'announcements.toolbar-tooltip'},
 function(player,frame)
 	frame.style.maximal_width = 600
 	local text_box = frame.add{name='input',type='text-box'}
-	text_box.text = 'Enter Message To Send'
+	text_box.text = {'announcements.default-text'}
 	text_box.read_only = false
 	text_box.word_wrap = true
 	text_box.selectable = true
@@ -35,17 +35,16 @@ function(player,frame)
 	text_box.style.minimal_height = 100
 	local flow = frame.add{name='flow',type='flow',direction='horizontal'}
 	ExpGui.add_input.draw_button(flow,'send_message','Send')
-	flow.add{name='label',type='label',caption='to players above the rank of',style="caption_label_style"}
+	flow.add{name='label',type='label',caption={'announcements.send-to-ranks'},style="caption_label_style"}
 	local drop_down = flow.add{name='drop_down',type='drop-down'}
 	for n,rank_name in pairs(get_ranks('name')) do drop_down.add_item(rank_name) if rank_name == 'Guest' then drop_down.selected_index = n end end
 end,
 function(player,frame,args)
 	frame.style.maximal_width = 600
-	local message = 'Announcement from '
-	if args[1] ~= '<server>' then message = message..ranking.get_player_rank(args[1]).name..' to ' else message = message..' <server> to ' end
-	if args[2].name == 'Guest' then message = message..'Everyone' else message = message..args[2].name..'s' end
+	local from_rank = nil; if args[1] == '<server>' then from_rank='<server>' else from_rank = ranking.get_player_rank(args[1]).name end
+	local to_rank = nil; if args[2].name == 'Guest' then to_rank = 'Everyone' else to_rank = args[2].name..'s' end
 	if ranking.get_player_rank(player).power > args[2].power then frame.parent.destroy() else
-		frame.add{name='label',type='label',caption=message,style="caption_label_style"}
+		frame.add{name='label',type='label',caption={'announcements.message',from_rank,to_rank},style="caption_label_style"}
 		local text_box = frame.add{name='message',type='text-box'}
 		text_box.text = args[3]
 		text_box.read_only = true
