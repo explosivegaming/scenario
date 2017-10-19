@@ -4,7 +4,7 @@ Explosive Gaming
 This file can be used with permission but this and the credit below must remain in the file.
 Contact a member of management on our discord to seek permission to use our code.
 Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/XSsBV6b
+Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 local server = {}
@@ -74,7 +74,7 @@ end
 -- converts any value into the uuid the script will use
 function server.get_uuid(var)
 	if type(var) == 'string' then uuid = var
-	else uuid = tostring(var) end
+	else uuid = tostring(global.exp_core.uuids.operator()) end
 	uuid = string.tohex('uuid'..uuid)
 	server.refresh_uuid(uuid)
 	return uuid
@@ -136,5 +136,5 @@ Event.register(defines.events.on_tick, function(event)
 		if data.remove_time <= game.tick then global.exp_core.server.temp_varibles[uuid] = nil end
 	end
 end)
-Event.register(Event.soft_init,function() global.exp_core.server = {callback_queue={},callbacks={},temp_varibles={}} end)
+Event.register(Event.soft_init,function() global.exp_core.server = {callback_queue={},callbacks={},temp_varibles={}} global.exp_core.uuids = game.create_random_generator() end)
 return server

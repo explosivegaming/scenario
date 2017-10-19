@@ -4,7 +4,7 @@ Explosive Gaming
 This file can be used with permission but this and the credit below must remain in the file.
 Contact a member of management on our discord to seek permission to use our code.
 Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/XSsBV6b
+Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 -- Mainly used as a plan for how the gui is stored also as a header for the credit
