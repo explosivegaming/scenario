@@ -29,7 +29,7 @@ function add_input.draw_button(frame,name,display,tooltip)
 		local button = inputs.buttons[name]
 		local display = display or button.display or {'expgui.button-no-display'}
 		local tooltip = tooltip or button.tooltip or {'expgui.button-no-tooltip'}
-		if frame.gui.is_valid_sprite_path(display) then
+		if type(display) == 'string' and frame.gui.is_valid_sprite_path(display) then
 			frame.add{name=name, type = "sprite-button", sprite=display, tooltip=tooltip, style = mod_gui.button_style}
 		else
 			frame.add{name=name, type = "button", caption=display, tooltip=tooltip, style = mod_gui.button_style}
