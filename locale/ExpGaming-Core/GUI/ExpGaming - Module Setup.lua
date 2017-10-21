@@ -60,5 +60,5 @@ function ExpGui.toggle_visible(frame)
 		end
 	end
 end
---Please Only Edit Above This Line-----------------------------------------------------------
+
 return ExpGui

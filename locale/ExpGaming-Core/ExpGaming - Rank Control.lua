@@ -194,5 +194,5 @@ Event.register(Event.soft_init,function()
 end)
 Event.register(defines.events.on_player_joined_game,function(event) ranking.find_new_rank(game.players[event.player_index]) end)
 Event.register(Event.soft_init,function() global.exp_core.preset_ranks = {} end)
---Please Only Edit Above This Line-----------------------------------------------------------
+
 return ranking

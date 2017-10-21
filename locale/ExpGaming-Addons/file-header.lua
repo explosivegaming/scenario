@@ -7,3 +7,18 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
+require("ExpGaming - Rank Presets")
+require("ExpGaming - Science List")
+require("ExpGaming - Rocket List")
+require("ExpGaming - Player List")
+require("ExpGaming - Task List")
+require("ExpGaming - Announcements")
+require("ExpGaming - Readme")
+require("ExpGaming - Info")
+require("ExpGaming - Rank Changer")
+require("ExpGaming - Admin")
+require("ExpGaming - Auto Message")
+require("ExpGaming - Temp Ban")
+require("ExpGaming - Tree Remover")
+require("ExpGaming - User Report")
+require("Commands/file-header")

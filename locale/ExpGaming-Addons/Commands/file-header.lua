@@ -7,11 +7,10 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
---As this is the core file, the order in which the files are loaded does matter. Do not change!
-require("ExpGaming - Lib")
-local ranking = require("ExpGaming - Rank Control")
-local ExpGui = require("GUI/file-header")
-require("ExpGaming - Command Maker")
-local server = require("ExpGaming - Server Interface")
+require("ExpGaming - Repair")
+require("ExpGaming - TP")
+require("ExpGaming - Tp All")
+require("ExpGaming - Kill")
+require("ExpGaming - Tags")
+require("ExpGaming - Cheat Mode")
 
-return {ranking,ExpGui,server}
