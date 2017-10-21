@@ -33,6 +33,7 @@ function draw_frame.left(player,element,update)
 		frame_data = frames.left[element.name]
 		if left[frame_data.name] then ExpGui.toggle_visible(left[frame_data.name]) return end
 		frame = left.add{name=frame_data.name,type='frame',caption=frame_data.display,direction='vertical',style=mod_gui.frame_style}
+		frame.style.visible = frame_data.vis
 	else
 		-- only clears the gui
 		frame_data = frames.left[element]
@@ -52,7 +53,6 @@ Event.register(defines.events.on_player_joined_game,function(event)
 		else
 			-- makes the gui if its not made
 			ExpGui.draw_frame.left(player,{name=frame_data.name})
-			frame.style.visible = frame_data.vis
 		end
 	end
 end)
