@@ -13,8 +13,8 @@ ExpGui.add_frame.left('rocket_list','item/rocket-silo',{'rocket-gui.tooltip'},ni
 	local rockets_send = player.force.get_item_launched("satellite")
 	local rocket_time = {'rocket-gui.na'}
 	if rockets_send > 1 then rocket_time = tick_to_display_format((game.tick-global.rockets.m1)/rockets_send) end
-	frame.add{name='rockets',type='label',caption={'rocket-gui.send',rockets_send}
-	frame.add{name='time_per',type='label',caption={'rocket-gui.time',rocket_time}
+	frame.add{name='rockets',type='label',caption={'rocket-gui.send',rockets_send}}
+	frame.add{name='time_per',type='label',caption={'rocket-gui.time',rocket_time}}
 	-- milestones
 	frame.add{name='milestones_title',type='label',caption={'rocket-gui.milestones'},style="caption_label_style"}
 	local milestones = frame.add{name='milestones',type='flow',direction='vertical'}

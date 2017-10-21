@@ -38,7 +38,7 @@ ExpGui.add_frame.left('science_list','item/lab',{'science-gui.tooltip'},false,fu
 		local ammount_made = player.force.item_production_statistics.get_input_count(pack.name)
 		frame.total_flow.add{name=pack.name,type='label',caption={'science-gui.display-format',{'science-gui.'..pack.name},ammount_made}}
 		if not pack.made[player.force.name] then frame.minute_flow.add{name=pack.name,type='label',caption={'science-gui.display-format',{'science-gui.'..pack.name},'0.00'}} update_science_packs()
-		else frame.minute_flow.add{name=pack.name,type='label',caption={'science-gui.display-format',{'science-gui.'..pack.name},string.format('%.2f',(ammount_made-pack.made[player.force.name])/((game.tick-pack.time)/(3600*game.speed)))} end
+		else frame.minute_flow.add{name=pack.name,type='label',caption={'science-gui.display-format',{'science-gui.'..pack.name},string.format('%.2f',(ammount_made-pack.made[player.force.name])/((game.tick-pack.time)/(3600*game.speed)))}} end
 	end
 end)
 
