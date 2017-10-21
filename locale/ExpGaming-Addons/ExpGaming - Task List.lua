@@ -5,18 +5,7 @@ This file can be used with permission but this and the credit below must remain 
 Contact a member of management on our discord to seek permission to use our code.
 Any changes that you may make to the code are yours but that does not make the script yours.
 Discord: https://discord.gg/r6dC2uK
-
-The credit below may be used by another script do not remove.
 ]]
-local credits = {{
-	name='Task List',
-	owner='Explosive Gaming',
-	dev='Cooldude2606',
-	description='Shows a task with the curent tasks set by players',
-	factorio_version='0.15.23',
-	show=true
-	}}
-
 --Please Only Edit Below This Line-----------------------------------------------------------
 local function draw_standard(player,frame)
 	frame.clear()
@@ -43,24 +32,24 @@ local function draw_edit_mode(player,frame)
 	ExpGui.add_input.draw_button(frame.button_flow,'add_task')
 end
 
-ExpGui.add_input.button('add_task','Add','Add a new task',function(player,element)
+ExpGui.add_input.button('add_task',{'task-gui.add'},{'task-gui.add-tooltip'},function(player,element)
 	for n,task in pairs(global.tasks.players[player.index]) do global.tasks.players[player.index][n] = element.parent.parent.task_table[n..'_task'].text end
 	table.insert(global.tasks.players[player.index],'')
 	draw_edit_mode(player,element.parent.parent)
 end)
 
-ExpGui.add_input.button('remove','X','Remove this task',function(player,element)
+ExpGui.add_input.button('remove',{'task-gui.remove'},{'task-gui.remove-tooltip'},function(player,element)
 	for n,task in pairs(global.tasks.players[player.index]) do global.tasks.players[player.index][n] = element.parent.parent.parent.task_table[n..'_task'].text end
 	local n = tonumber(element.parent.name:match('%d+'))
 	table.remove(global.tasks.players[player.index],n)
 	draw_edit_mode(player,element.parent.parent.parent)
 end)
 
-ExpGui.add_input.button('exit','Exit','Returns to stanard view without saving',function(player,element)
+ExpGui.add_input.button('exit',{'task-gui.exit'},{'task-gui.exit-tooltip'},function(player,element)
 	draw_standard(player,element.parent.parent)
 end)
 
-ExpGui.add_input.button('save','Save','Press to save any changes (will update for other users)',function(player,element)
+ExpGui.add_input.button('save',{'task-gui.save'},{'task-gui.save-tooltip'},function(player,element)
 	local temp_list = {}
 	for n,task in pairs(global.tasks.players[player.index]) do
 		global.tasks.players[player.index][n] = element.parent.parent.task_table[n..'_task'].text
@@ -70,12 +59,12 @@ ExpGui.add_input.button('save','Save','Press to save any changes (will update fo
 	for _,p in pairs(game.connected_players) do ExpGui.draw_frame.left(p,'task_list',true) end
 end)
 
-ExpGui.add_input.button('enter_edit','Press To Edit','Press to edit the current tasks',function(player,element)
+ExpGui.add_input.button('enter_edit',{'task-gui.edit'},{'task-gui.edit-tooltip'},function(player,element)
 	global.tasks.players[player.index] = {table.unpack(global.tasks.server)}
 	draw_edit_mode(player,element.parent)
 end)
 
-ExpGui.add_frame.left('task_list','item/inserter','Toggle Task List',true,function(player,frame)
+ExpGui.add_frame.left('task_list','item/inserter',{'task-gui.tooltip'},true,function(player,frame)
 	frame.caption = 'Task List'
 	draw_standard(player,frame)
 end)
