@@ -48,7 +48,7 @@ local ranks = {
 		allow={
 			'temp-ban',
 			'rank_changer',
-			'remove-report'}
+			'clear-reports'}
 		},
 
 		{name='User',
