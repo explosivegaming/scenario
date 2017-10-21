@@ -7,7 +7,7 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
-ExpGui.add_frame.center('info','Info','All useful information about the server is here',{{name='commands'}})
+ExpGui.add_frame.center('info','Info','All useful information about the server is here',{name='commands'})
 
 ExpGui.add_frame.tab('links','Links','More ways to get in contact','info',function(player,frame)
     local function format(text_box)
