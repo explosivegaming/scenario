@@ -27,7 +27,7 @@ ExpGui.add_frame.left('rocket_list','item/rocket-silo',{'rocket-gui.tooltip'},ni
 		end
 		-- time and output
 		local time_display = {'rocket-gui.na'}; if milestone.time > 0 then time_display = tick_to_display_format(milestone.time) end
-		milestones.add{name=milestone,type='label',caption={'rocket-gui.milestones-format',tostring(milestone.number),time_display}}
+		milestones.add{name=milestone.number,type='label',caption={'rocket-gui.milestones-format',tostring(milestone.number),time_display}}
 	end
 end)
 
