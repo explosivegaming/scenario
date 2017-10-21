@@ -93,7 +93,8 @@ end
 function server.get_uuid_data(uuid)
 	if global.exp_core.server.temp_varibles[uuid] then 
 		server.refresh_uuid(uuid)
-		debug_write({'CALLBACK','TEMP-VAR'},uuid) 
+		debug_write({'CALLBACK','TEMP-VAR'},uuid)
+		if global.exp_core.server.temp_varibles[uuid].data == 'temp-var-temp-value' then return nil end
 		return global.exp_core.server.temp_varibles[uuid].data
 	end return nil
 end
