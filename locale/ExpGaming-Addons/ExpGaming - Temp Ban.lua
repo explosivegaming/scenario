@@ -21,7 +21,7 @@ define_command('temp-ban',{'temp-ban.help'},{'player','reason',true},function(pl
         mod_gui.get_frame_flow(jail_player).popups.style.visible = true
     else
         local jail_player = game.players[args[1]]
-        if not jail_player then player.print{'temp-ban.invalid-player',args[1]} return end
+        if not jail_player then player.print{'commands.invalid-player',args[1]} return end
         if ranking.get_player_rank(player).power < ranking.get_player_rank(jail_player).power then
             server.queue_callback(ranking.give_rank,{jail_player,'Jail',player})
             global.temp_bans[jail_player.name] = {player.name,table.concat(args,' ',2)}
