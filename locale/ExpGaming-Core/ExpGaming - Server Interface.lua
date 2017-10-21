@@ -74,7 +74,7 @@ end
 -- converts any value into the uuid the script will use
 function server.get_uuid(var)
 	if type(var) == 'string' then uuid = var
-	else uuid = tostring(global.exp_core.uuids.operator()) end
+	else uuid = tostring(global.exp_core.uuids()) end
 	uuid = string.tohex('uuid'..uuid)
 	server.refresh_uuid(uuid)
 	return uuid
