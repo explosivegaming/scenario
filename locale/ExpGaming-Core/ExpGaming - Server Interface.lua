@@ -93,7 +93,7 @@ end
 function server.get_uuid_data(uuid)
 	if global.exp_core.server.temp_varibles[uuid] then 
 		server.refresh_uuid(uuid)
-		debug_write({'callback','TEMP-VAR'},uuid) 
+		debug_write({'CALLBACK','TEMP-VAR'},uuid) 
 		return global.exp_core.server.temp_varibles[uuid].data
 	end return nil
 end
@@ -109,7 +109,7 @@ Event.register(defines.events.on_tick, function(event)
 	--used with debug command will stop debuging once atleast one message is send to file and there are no commands in callback
 	if global.exp_core.debug.state and global.exp_core.debug.triggered and #global.exp_core.server.callback_queue == 0 then debug_write({'END'},game.tick) global.exp_core.debug.state = global.exp_core.debug.focre end
 	-- runs the commands in callback
-	debug_write({'CALLBACK'},server.get_callback_queue_info(true),true)
+	debug_write({'CALLBACK'},server.get_callback_queue_info(),true)
 	if game.tick % ticks_per_iteration == 0 and global.exp_core.server.callback_queue and #global.exp_core.server.callback_queue > 0 then
 		-- gets the number of call backs to run
 		local length = nil
