@@ -53,7 +53,7 @@ define_command('report',{'reports.report-help'},{'player','reason',true},functio
 	end
 end)
 
-define_command('remove-reports',{'reports.remove-help'},{'player','reason',true},function(player,event,args)
+define_command('clear-reports',{'reports.remove-help'},{'player','reason',true},function(player,event,args)
 	if player == '<server>' then
 		local p = game.players[args[1]]
 		local reason = table.concat(args,' ',2)
