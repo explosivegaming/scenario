@@ -127,7 +127,7 @@ Event.register(defines.events.on_tick, function(event)
 					else args[n] = value end
 				end
 				-- makes new temp value and runs command
-				local returns = {callback.fun(unpack(args))} or {}
+				local returns = callback.fun(unpack(args)) or {}
 				server.refresh_uuid(callback.uuid,returns)
 			end
 		end
