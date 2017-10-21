@@ -36,10 +36,12 @@ ExpGui.add_frame.left('player_list','entity/player',{'player-list.tooltip'},true
 	-- passing the uuid into a callback will return its data to the call back
 	server.queue_callback(function(player_list,player_list_order)
 		if not player_list.valid then return end
-		for rank,players in pairs(player_list_order) do
-			local rank_object = ranking.string_to_rank(rank)
-			local rank_short_hand = rank_object.short_hand
-			local rank_colour = rank_object.colour
+		debug_write({'PLAYER LIST','ORDER'},player_list_order)
+		for rank_name,players in pairs(player_list_order) do
+			debug_write({'PLAYER LIST','RANK'},rank_name)
+			local rank = ranking.string_to_rank(rank_name)
+			local rank_short_hand = rank.short_hand
+			local rank_colour = rank.colour
 			for _,p in pairs(players) do
 				local play_time = tick_to_display_format(p.online_time)
 				if rank_short_hand ~= '' then player_list.add{type = "label",  name=p.name, style="caption_label_style", caption={'player-list.format',play_time,p.name,rank_short_hand}}
