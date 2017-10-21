@@ -5,20 +5,9 @@ This file can be used with permission but this and the credit below must remain 
 Contact a member of management on our discord to seek permission to use our code.
 Any changes that you may make to the code are yours but that does not make the script yours.
 Discord: https://discord.gg/r6dC2uK
-
-The credit below may be used by another script do not remove.
 ]]
-local credits = {{
-	name='Tag Command',
-	owner='Explosive Gaming',
-	dev='Cooldude2606',
-	description='Allows users to have custom tags',
-	factorio_version='0.15.23',
-	show=true
-	}}
-
 --Please Only Edit Below This Line-----------------------------------------------------------
-define_command('tag','Use to add a custom tag, use /tag clear to remove.',{'tag',true},function(player,event,args)
+define_command('tag',{'tags.help'},{'tag',true},function(player,event,args)
     if player == '<server>' then
         local player = game.players[args[1]]
         local tag = table.concat(args,' ',2)
@@ -30,7 +19,7 @@ define_command('tag','Use to add a custom tag, use /tag clear to remove.',{'tag'
     else
         local tag = table.concat(args,' ',1)
         if args[1] == 'clear' then player.tag = ranking.get_player_rank(player).tag
-        elseif string.len(tag) > 20 then player.print('Invaild Tag, must be less then 20 characters')
+        elseif string.len(tag) > 20 then player.print{'tags.invalid-tag'}
         else player.tag = ranking.get_player_rank(player).tag..' - '..tag..' '
         end
     end
