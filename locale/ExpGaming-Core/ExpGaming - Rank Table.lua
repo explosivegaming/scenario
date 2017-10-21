@@ -243,7 +243,7 @@ for n = #ranks.ranks, 1, -1 do
 	end
 end
 -- returns a list off all the ranks, return only one part if given
-local function ranking.get_ranks(part)
+local function get_ranks(part)
 	local to_return = {}
 	if part then 
 		for _,rank in pairs(global.exp_core.ranks.ranks) do table.insert(to_return,rank[part]) end
