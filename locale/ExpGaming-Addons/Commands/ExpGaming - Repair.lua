@@ -13,7 +13,7 @@ define_command('repair',{'repair.help'},{'range'},function(player,event,args)
 		for key, entity in pairs(game.surfaces[1].find_entities()) do if entity.health then entity.health = 10000 end end
     else
         if args[1] == 'all' then 
-            if not rank_allowed(ranking.get_player_rank(player),'adv_repair') then player.print{'commands.unauthorized'} return end
+            if not ranking.rank_allowed(ranking.get_player_rank(player),'adv_repair') then player.print{'commands.unauthorized'} return end
             for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() end
             for key, entity in pairs(game.surfaces[1].find_entities()) do if entity.health then entity.health = 10000 end end return
         elseif tonumber(args[1]) and tonumber(args[1]) < 50 and tonumber(args[1]) > 0 then

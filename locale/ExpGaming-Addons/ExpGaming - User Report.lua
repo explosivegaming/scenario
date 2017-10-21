@@ -15,7 +15,7 @@ local function get_report_info(reporter,player,reason)
 	for _,reporter_name in pairs(info.players) do if reporter.name == reporter_name then return end end
 	table.insert(info.players,reporter.name)
 	-- updates the report info
-	if rank_allowed(ranking.get_player_rank(player),'trusted_reporter') then info.trusted_reports = info.trusted_reports + 1
+	if ranking.rank_allowed(ranking.get_player_rank(player),'trusted_reporter') then info.trusted_reports = info.trusted_reports + 1
 	else info.reports = info.reports + 1 end
 	table.insert(info.reasons,reason)
 	info.total_reports = info.trusted_reports + info.reports
@@ -30,16 +30,16 @@ define_command('report',{'reports.report-help'},{'player','reason',true},functio
 		print('No reason to use this command, you are the server')
 	else
 		-- validation
-		if rank_allowed(ranking.get_player_rank(player),'rank_changer') then player.print{'reports.no-reason'} return end
+		if ranking.rank_allowed(ranking.get_player_rank(player),'rank_changer') then player.print{'reports.no-reason'} return end
 		local p = game.players[args[1]]
 		if not p then player.print{'commands.invalid-player',args[1]} return end
-		if rank_allowed(ranking.get_player_rank(p),'report_protection') then player.print{'reports.report-protection'} return end
+		if ranking.rank_allowed(ranking.get_player_rank(p),'report_protection') then player.print{'reports.report-protection'} return end
 		if p == player then player.print{'reports.self-report'} return end
 		local reason = table.concat(args,' ',2)
 		local info = get_report_info(player,p,reason)
 		if not info then player.print{'reports.re-report'} return end
 		-- prints to players
-		if rank_allowed(ranking.get_player_rank(player),'trusted_reporter') then ranking.rank_print({'reports.trusted-report',p.name},'Owner',true)
+		if ranking.rank_allowed(ranking.get_player_rank(player),'trusted_reporter') then ranking.rank_print({'reports.trusted-report',p.name},'Owner',true)
 		else ranking.rank_print({'reports.report',p.name},'Owner',true) end
 		local trusted='60'; if info.trusted_reports > 0 then trusted='40' end
 		ranking.rank_print({'reports.print',p.name,info.total_reports,trusted},'Owner',true)
