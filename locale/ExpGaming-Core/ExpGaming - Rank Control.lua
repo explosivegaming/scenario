@@ -80,7 +80,7 @@ function ranking.give_rank(player,rank,by_player,tick)
 	if old_rank == rank then return end
 	--messaging
 	local message = 'ranking.rank-down'
-	if rank.power <= old_rank.power then message = 'ranking.rank-down' end
+	if rank.power <= old_rank.power then message = 'ranking.rank-up' end
 	if by_player.name then
 		debug_write({'RANK','GIVE'},'player: '..player.name..' by player: '..by_player.name..' new rank: '..rank.name..' old rank: '..old_rank.name)
 		ranking.rank_print({message,player.name,rank.name,by_player.name},'Guest')
@@ -150,7 +150,7 @@ function ranking.find_new_rank(player,tick)
 			debug_write({'RANK','NEW-RANK','GIVE','VIA-SERVER'},player.name..' '..highest_rank.name)
 			player.tag = highest_rank.tag
 			player.permission_group=game.permissions.get_group('Guest')
-			Expgui.toolbar.draw(event.player)
+			ExpGui.toolbar.draw(event.player)
 		else
 			debug_write({'RANK','NEW-RANK','GIVE','VIA-GIVE-RANK'},player.name..' '..highest_rank.name)
 			if highest_rank ~= current_rank then ranking.give_rank(player,highest_rank,nil,tick) end
