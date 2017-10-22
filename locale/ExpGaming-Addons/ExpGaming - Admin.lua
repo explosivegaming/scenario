@@ -109,7 +109,7 @@ end)
 Event.register(defines.events.on_player_respawned, function(event)
 	local player = game.players[event.player_index]
 	if not global.modifiers.players[player.index] then return end
-	for _,modifier_name in pairs(global.modifiers.players[player.index]) do
+	for modifier_name,_ in pairs(global.modifiers.players[player.index]) do
 		local modifier = nil; for _,m in pairs(player_modifiers) do if m[1][1] == modifier_name then modifier = m break end end
 		for n,effect in pairs(modifier[2]) do
 			local base = global.modifiers.base[effect[2]] or effect[2]
