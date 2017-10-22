@@ -26,7 +26,7 @@ ExpGui.add_frame.popup('announcement','item/programmable-speaker',{'announcement
 function(player,frame)
 	frame.style.maximal_width = 600
 	local text_box = frame.add{name='input',type='text-box'}
-	text_box.text = {'announcements.default-text'}
+	text_box.text = 'Enter Message To Send'
 	text_box.read_only = false
 	text_box.word_wrap = true
 	text_box.selectable = true

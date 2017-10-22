@@ -10,16 +10,21 @@ Discord: https://discord.gg/r6dC2uK
 ExpGui.add_frame.center('info','Info','All useful information about the server is here',{name='commands'})
 
 ExpGui.add_frame.tab('links','Links','More ways to get in contact','info',function(player,frame)
-    local function format(text_box,i)
+	local links={
+		'https://discord.me/explosivegaming',
+		'https://explosivegaming.nl',
+		'http://steamcommunity.com/groups/tntexplosivegaming',
+		'https://www.patreon.com/badgamernl'
+	}
+    local function format(text_box)
         text_box.style.minimal_width=400
         text_box.read_only = true
 	    text_box.word_wrap = true
 	    text_box.selectable = true
-		text_box.text = {'info-gui.link-'..tostring(i)}
     end
 	for i = 1,4 do
     	frame.add{name=i..'caption', type="label", caption={'info-gui.link-caption-'..tostring(i)}}
-		format(frame.add{name=i..'link', type='text-box',text='DOTO - LOCALE FOR TEXT'},i)
+		format(frame.add{name=i..'link', type='text-box',text=links[i]})
 	end
 end)
 
