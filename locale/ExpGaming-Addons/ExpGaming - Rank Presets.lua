@@ -9,7 +9,7 @@ Discord: https://discord.gg/r6dC2uK
 --Please Only Edit Below This Line-----------------------------------------------------------
 -- we run an exturnle script which syncs this table with discord, only top ranks are filled in case of error
 Event.register(Event.soft_init,function()
-	global.preset_ranks = {
+	global.exp_core.preset_ranks = {
 	Owner={'badgamernl'},
 	
 	['Community Manager']={'arty714'},

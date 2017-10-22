@@ -10,20 +10,21 @@ Discord: https://discord.gg/r6dC2uK
 ExpGui.add_frame.center('info','Info','All useful information about the server is here',{name='commands'})
 
 ExpGui.add_frame.tab('links','Links','More ways to get in contact','info',function(player,frame)
-    local function format(text_box)
+    local function format(text_box,i)
         text_box.style.minimal_width=400
         text_box.read_only = true
 	    text_box.word_wrap = true
 	    text_box.selectable = true
+		text_box.text = {'info-gui.link-'..tostring(i)}
     end
 	for i = 1,4 do
     	frame.add{name=i..'caption', type="label", caption={'info-gui.link-caption-'..tostring(i)}}
-		format(frame.add{name=i..'link', type='text-box', text={'info-gui.link-'..tostring(i)}})
+		format(frame.add{name=i..'link', type='text-box',text='DOTO - LOCALE FOR TEXT'},i)
 	end
 end)
 
 ExpGui.add_frame.tab('servers','Other Servers','All the other server we have','info',function(player,frame)
-	frame.add{name=i, type="label", caption={'info-gui.welcome-message'}, single_line=false}.style.maximal_width=480
+	frame.add{name='message', type="label", caption={'info-gui.welcome-message'}, single_line=false}.style.maximal_width=480
 	for i = 1,5 do 
 		frame.add{name=i..'name', type="label", caption={'info-gui.server-format',tostring(i),{'info-gui.name-s'..tostring(i)}}, single_line=false}.style.maximal_width=480
 		frame.add{name=i..'description', type="label", caption={'info-gui.description-s'..tostring(i)}, single_line=false}.style.maximal_width=480  
