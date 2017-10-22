@@ -150,7 +150,7 @@ function ranking.find_new_rank(player,tick)
 			debug_write({'RANK','NEW-RANK','GIVE','VIA-SERVER'},player.name..' '..highest_rank.name)
 			player.tag = highest_rank.tag
 			player.permission_group=game.permissions.get_group('Guest')
-			ExpGui.toolbar.draw(event.player)
+			ExpGui.toolbar.draw(player)
 		else
 			debug_write({'RANK','NEW-RANK','GIVE','VIA-GIVE-RANK'},player.name..' '..highest_rank.name)
 			if highest_rank ~= current_rank then ranking.give_rank(player,highest_rank,nil,tick) end
