@@ -10,7 +10,8 @@ Discord: https://discord.gg/r6dC2uK
 ExpGui.add_input.button('close_rank_gui',{'expgui.close-button'},{'expgui.close-button-tooltip'},function(player,element) element.parent.parent.destroy() end)
 ExpGui.add_input.button('give_rank',{'ingame-rank-changer.button-give-rank'},{'ingame-rank-changer.button-give-rank-tooltip'},function(player,element)
 	local input_table = element.parent.parent.input_table
-	local p = game.players[input_table.player_dropdown.items[input_table.player_dropdown.selected_index]]
+	local p = input_table.player_dropdown.items[input_table.player_dropdown.selected_index]
+	if type(p) == 'table' then p = nil else p = game.players[p] end
 	local rank = ranking.string_to_rank(input_table.rank_dropdown.items[input_table.rank_dropdown.selected_index])
 	if not rank or not p then player.print('Invalid Player') return end
 	ranking.give_rank(p,rank,player)

@@ -10,7 +10,7 @@ Discord: https://discord.gg/r6dC2uK
 local force_modifiers = {
 	--{display,{{effect,base,offset},{...}}} - if ofset 0 does not work try -1
 	{{'admin-gui.modifier-mining'},{{'manual_mining_speed_modifier',1,-1}}},
-	{{'admin-gui.modifier-craftin-speed'},{{'manual_crafting_speed_modifier',1,-1}}},
+	{{'admin-gui.modifier-crafting'},{{'manual_crafting_speed_modifier',1,-1}}},
 	{{'admin-gui.modifier-running'},{{'character_running_speed_modifier',1,-1}}},
 	{{'admin-gui.modifier-reach'},{{'character_build_distance_bonus',6,-1},{'character_reach_distance_bonus',6,-1}}},
 	{{'admin-gui.modifier-bot'},{{'worker_robots_speed_modifier','worker-robot-speed',0},{'worker_robots_storage_bonus','worker-robot-storage',0}}}
@@ -41,7 +41,7 @@ local function get_state(name,player,is_player,value)
 end
 
 local function add_moddifier(table,name,player,is_player) --player can be a force
-	table.add{type='label',name=name..'_name',caption=name}
+	table.add{type='label',name=name..'_name',caption={name}}
 	for _,state in pairs(states) do
 		table.add{name=name..'__x'..state, type='radiobutton',state=get_state(name,player,is_player,state)}
     end
