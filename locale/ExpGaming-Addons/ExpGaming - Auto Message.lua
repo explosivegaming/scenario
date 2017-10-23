@@ -11,10 +11,10 @@ function auto_message(event)
 	if event.player_loop_index < event.players_online then return end
 	local low_rank = 'Regular'
 	local high_rank = 'Owner'
-	server.queue_callback(rank_print,{{'auto-message.players-online',#game.connected_players},high_rank,true})
-	server.queue_callback(rank_print,{{'auto-message.map-time',tick_to_display_format(game.tick)},high_rank,true})
+	server.queue_callback(ranking.rank_print,{{'auto-message.players-online',#game.connected_players},high_rank,true})
+	server.queue_callback(ranking.rank_print,{{'auto-message.map-time',tick_to_display_format(game.tick)},high_rank,true})
 	for i = 1,8 do -- if you know a way to set this limit from the locale file please tell me :)
-		server.queue_callback(rank_print,{{'auto-message.line-'..tostring(i)},low_rank,true})
+		server.queue_callback(ranking.rank_print,{{'auto-message.line-'..tostring(i)},low_rank,true})
 	end
 end
 
