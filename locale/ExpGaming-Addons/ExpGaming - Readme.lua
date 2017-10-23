@@ -18,15 +18,15 @@ ExpGui.add_frame.tab('chat',{'readme-gui.chat-name'},{'readme-gui.chat-tooltip'}
 end)
 
 ExpGui.add_frame.tab('commands',{'readme-gui.command-name'},{'readme-gui.command-tooltip'},'readme',function(player,frame)
-    frame.add{name='intro', type="label", caption={'readme-gui.command-caption'}, single_line=false}.style.maximal_width=480
+    frame.add{name='intro', type="label", caption={'readme-gui.command-caption'}, single_line=false}.style.maximal_width=420
 	-- table setup
 	frame.add{name='command_table',type='table',colspan=2}
 	frame.command_table.add{name='command_title',type='label',caption={'readme-gui.command-command'}}
 	frame.command_table.add{name='help_title',type='label',caption={'readme-gui.command-help'}}
 	-- adds all commands which this player can use
     for n,command in pairs(get_commands(ranking.get_player_rank(player).name)) do
-        frame.command_table.add{name='command_'..n,type='label',caption='/'..command.name}
-        frame.command_table.add{name='help_'..n,type='label',caption=command.help,single_line=false}.style.maximal_width=480
+        frame.command_table.add{name='command_'..n,type='label',caption='/'..command.name}.style.maximal_width=80
+        frame.command_table.add{name='help_'..n,type='label',caption=command.help,single_line=false}.style.maximal_width=420
     end
 end)
 
