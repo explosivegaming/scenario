@@ -64,7 +64,7 @@ function ranking.rank_print(msg, rank, inv)
 		else
 			server.queue_callback(function(player_rank_power,rank)
 				if player_rank_power <= rank.power then
-					if rank.short_hand ~= '' then player.print(('['..(rank.short_hand)..']: '..msg)) else player.print({'ranking.all-rank-print',msg}) end 
+					if rank.short_hand ~= '' then player.print{'ranking.rank-print',rank.short_hand,msg} else player.print{'ranking.all-rank-print',msg} end 
 				end
 			end,{player_rank_power,rank})
 		end
