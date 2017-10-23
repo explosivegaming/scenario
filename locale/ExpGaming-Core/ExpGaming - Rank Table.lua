@@ -4,21 +4,8 @@ Explosive Gaming
 This file can be used with permission but this and the credit below must remain in the file.
 Contact a member of management on our discord to seek permission to use our code.
 Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/XSsBV6b
-
-The credit below may be used by another script do not remove.
-]]
-local credits = {{
-	name='ExpGaming - Ranks Table',
-	owner='Explosive Gaming',
-	dev='Cooldude2606',
-	description='Table holding the ranks used',
-	factorio_version='0.15.23',
-	show=false
-	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
+Discord: https://discord.gg/r6dC2uK
 --Please Only Edit Below This Line-----------------------------------------------------------
---[[
 How to use groups:
 name		the name that you can use to refence it.
 colour		if present then all ranks in this group will have this colour.
@@ -61,7 +48,7 @@ local ranks = {
 		allow={
 			'temp-ban',
 			'rank_changer',
-			'remove-report'}
+			'clear-reports'}
 		},
 
 		{name='User',
@@ -256,22 +243,22 @@ for n = #ranks.ranks, 1, -1 do
 	end
 end
 -- returns a list off all the ranks, return only one part if given
-function get_ranks(part)
+local function get_ranks(part)
 	local to_return = {}
 	if part then 
-		for _,rank in pairs(global.ranks.ranks) do table.insert(to_return,rank[part]) end
-	else to_return = global.ranks.ranks end
+		for _,rank in pairs(global.exp_core.ranks.ranks) do table.insert(to_return,rank[part]) end
+	else to_return = global.exp_core.ranks.ranks end
 	return to_return
 end
 -- returns a list off all the groups, return only one part if given
-function get_rank_groups(part)
+local function get_rank_groups(part)
 	local to_return = {}
 	if part then 
-		for _,group in pairs(global.ranks.groups) do table.insert(to_return,group[part]) end
-	else to_return = global.ranks.groups end
+		for _,group in pairs(global.exp_core.ranks.groups) do table.insert(to_return,group[part]) end
+	else to_return = global.exp_core.ranks.groups end
 	return to_return
 end
 -- Move the ranks to the global array
-Event.register(-1,function() global.ranks = ranks end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
+Event.register(Event.soft_init,function() global.exp_core.ranks = ranks end)
+
+return {get_ranks, get_rank_groups}
