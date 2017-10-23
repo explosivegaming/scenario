@@ -14,13 +14,13 @@ define_command('repair',{'repair.help'},{'range'},function(player,event,args)
     else
         if args[1] == 'all' then 
             if not ranking.rank_allowed(ranking.get_player_rank(player),'adv_repair') then player.print{'commands.unauthorized'} return end
-            for key, entity in pairs(game.surfaces[1].find_entities_filtered({type = "entity-ghost"})) do entity.revive() end
-            for key, entity in pairs(game.surfaces[1].find_entities()) do if entity.health then entity.health = 10000 end end return
+            for key, entity in pairs(player.surface.find_entities_filtered({type = "entity-ghost"})) do entity.revive() end
+            for key, entity in pairs(player.surface.find_entities()) do if entity.health then entity.health = 10000 end end return
         elseif tonumber(args[1]) and tonumber(args[1]) < 50 and tonumber(args[1]) > 0 then
             local range = tonumber(args[1])
             local pos = player.position
-            for key, entity in pairs(game.surfaces[1].find_entities_filtered({area={{pos.x-range,pos.y-range},{pos.x+range,pos.y+range}},type = "entity-ghost"})) do entity.revive() end
-			for key, entity in pairs(game.surfaces[1].find_entities({{pos.x-range,pos.y-range},{pos.x+range,pos.y+range}})) do if entity.health then entity.health = 10000 end end return
+            for key, entity in pairs(player.surface.find_entities_filtered({area={{pos.x-range,pos.y-range},{pos.x+range,pos.y+range}},type = "entity-ghost"})) do entity.revive() end
+			for key, entity in pairs(player.surface.find_entities({{pos.x-range,pos.y-range},{pos.x+range,pos.y+range}})) do if entity.health then entity.health = 10000 end end return
         else player.print{'repai.invalid-range'}
         end
     end
