@@ -7,9 +7,9 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
-ExpGui.add_frame.center('info','Info','All useful information about the server is here',{name='commands'})
+ExpGui.add_frame.center('info',{'info-gui.name'},{'info-gui.tooltip'},{name='commands'})
 
-ExpGui.add_frame.tab('links','Links','More ways to get in contact','info',function(player,frame)
+ExpGui.add_frame.tab('links',{'info-gui.tab-links'},{'info-gui.tab-links-tooltip'},'info',function(player,frame)
 	local links={
 		'https://discord.me/explosivegaming',
 		'https://explosivegaming.nl',
@@ -28,7 +28,7 @@ ExpGui.add_frame.tab('links','Links','More ways to get in contact','info',functi
 	end
 end)
 
-ExpGui.add_frame.tab('servers','Other Servers','All the other server we have','info',function(player,frame)
+ExpGui.add_frame.tab('servers',{'info-gui.tab-servers'},{'info-gui.tab-servers-tooltip'},'info',function(player,frame)
 	frame.add{name='message', type="label", caption={'info-gui.welcome-message'}, single_line=false}.style.maximal_width=480
 	for i = 1,5 do 
 		frame.add{name=i..'name', type="label", caption={'info-gui.server-format',tostring(i),{'info-gui.name-s'..tostring(i)}}, single_line=false}.style.maximal_width=480
