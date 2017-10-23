@@ -16,7 +16,7 @@ define_command('kill',{'kill.help'},{'player'},function(player,event,args)
     else
         local kill_player = game.players[args[1]]
         if not kill_player then player.print{'commands.invalid-player',args[1]} return end
-        if kill_player == player or ranking.get_player_rank(player).power < ranking.get_player_rank(kill_player).power and ranking.get_player_rank(player).power <= string_to_rank_group('Moderation').lowest_rank.power then
+        if kill_player == player or ranking.get_player_rank(player).power < ranking.get_player_rank(kill_player).power and ranking.get_player_rank(player).power <= ranking.string_to_rank_group('Moderation').lowest_rank.power then
             if kill_player.connected then else player.print{'kill.not-online'} return end
             if kill_player.character then kill_player.character.die() else player.print{'kill.dead'} return end
         else player.print{'commands.unauthorized'} end
