@@ -9,11 +9,11 @@ Discord: https://discord.gg/r6dC2uK
 --Please Only Edit Below This Line-----------------------------------------------------------
 --for each item the key is the name and the value is the count given
 local items = {
-	['iron-plate']=function(player,made) if tick_to_min(game.tick) < 5 then return 8 else return (math.log(made)*3)/tick_to_min(game.tick) end end,
-	['copper-plate']=function(player,made) if tick_to_min(game.tick) < 5 then return 0 else return (math.log(made)*2)/tick_to_min(game.tick) end end,
-	['electronic-circuit']=function(player,made) if tick_to_min(game.tick) < 5 then return 0 else return (math.log(made)*1)/tick_to_min(game.tick) end end,
-	['iron-gear-wheel']=function(player,made) if tick_to_min(game.tick) < 5 then return 0 else return (math.log(made)*1)/tick_to_min(game.tick) end end,
-	['steel-plate']=function(player,made) if tick_to_min(game.tick) < 5 then return 0 else return (math.log(made)*0.5)/tick_to_min(game.tick) end end,
+	['iron-plate']=function(player,made) if tick_to_min(game.tick) < 5 then return 8 else return (math.log(made+1)*3)/tick_to_min(game.tick) end end,
+	['copper-plate']=function(player,made) if tick_to_min(game.tick) < 5 then return 0 else return (math.log(made+1)*2)/tick_to_min(game.tick) end end,
+	['electronic-circuit']=function(player,made) if tick_to_min(game.tick) < 5 then return 0 else return (math.log(made+1)*1)/tick_to_min(game.tick) end end,
+	['iron-gear-wheel']=function(player,made) if tick_to_min(game.tick) < 5 then return 0 else return (math.log(made+1)*1)/tick_to_min(game.tick) end end,
+	['steel-plate']=function(player,made) if tick_to_min(game.tick) < 5 then return 0 else return (math.log(made+1)*0.5)/tick_to_min(game.tick) end end,
 	['pistol']=function(player,made) if player.force.item_production_statistics.get_input_count('submachine-gun') > 5 then return 0 else return 1 end end,
 	['submachine-gun']=function(player,made) if made > 5 then return 1 else return 0 end end,	
 	['firearm-magazine']=function(player,made) if player.force.item_production_statistics.get_input_count('piercing-rounds-magazine') > 100 then return 0 else return 10 end end,
