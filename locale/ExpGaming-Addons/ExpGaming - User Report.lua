@@ -81,7 +81,7 @@ define_command('clear-reports',{'reports.remove-help'},{'player','reason',true},
 		json_log({type='USER_REPORT_CLEAR',tick=game.tick,online=#game.connected_players,onlineMods=online_mods,username=p.name,by=player.name,reason=reason})
 		--game.write_file('multi.log','\n{"type":"USER_REPORT_CLEAR","tick":'..game.tick..',"username":"'..p.name..'","by":"'..player.name..'","reason":"'..reason..'"}\n', true, 0)
 		global.reported_users[p.name] = nil
-		if ranking.get_player_rank(p).name == 'Jail' then server.queue_callback(revert_rank,{p,player}) end
+		if ranking.get_player_rank(p).name == 'Jail' then server.queue_callback(ranking.revert_rank,{p,player}) end
 	end
 end)
 function get_reported_users() return global.reported_users end
