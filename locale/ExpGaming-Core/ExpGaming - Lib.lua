@@ -73,7 +73,7 @@ function json_log(lua_table,no_log)
   for key,value in ipairs(lua_table) do
     done[key] = true
     if type(value) == 'table' then value = table.insert(result,json_log(value,true))
-    else if type(value) == 'string' then json = table.insert(result,'"'..value..'"')
+    elseif type(value) == 'string' then json = table.insert(result,'"'..value..'"')
     elseif type(value) == 'number' then table.insert(result,value)
     else table.insert(result,key..':null') end
   end
