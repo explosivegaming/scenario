@@ -69,15 +69,30 @@ function table.tostring( tbl )
 end
 -- converts a table to json and logs it to a file
 function json_log(table,no_log)
-  local json = '{'
-  for key,value in pairs(table) do
-    if type(value) == 'table' then value = json_log(value,true) end
-    if type(value) == 'string' then json = json..'"'..key..'":"'..value..'",' end
-    elseif type(value) == 'number' then json = json..'"'..key..'":'..value..','
-    else json = json..'"'..key..'":null,' end
+  local result, done, only_indexs = {}, {}, true
+  for key,value in ipairs(table) do
+    done[key] = true
+    if type(value) == 'table' then value = table.insert(result,json_log(value,true)) end
+    if type(value) == 'string' then json = table.insert(result,key..':""'..value..'"') end
+    elseif type(value) == 'number' then table.insert(result,key..':'..value)
+    else table.insert(result,key..':null') end
   end
-  if no_log then return json:sub(-1)..'}'
-  else game.write_file('multi.log',json:sub(-1)..'}\n', true, 0) end
+  for key,value in pairs(table) do
+    if not done[key] then
+      only_indexs = false
+      if type(value) == 'table' then table.insert(result,json_log(value,true)) end
+      if type(value) == 'string' then table.insert(result,key..':"'..value..'"') end
+      elseif type(value) == 'number' then table.insert(result,key..':'..value)
+      else table.insert(result,key..':null') end
+    end
+  end
+  if only_indexs then
+    if no_log then return "["..table.concat(result,",").."]"
+    else game.write_file('multi.log',"["..table.concat(result,",").."]\n",true,0) end
+  else
+    if no_log then return "{"..table.concat(result,",").."}"
+    else game.write_file('multi.log',"{"..table.concat(result,",").."}\n",true,0) end
+  end
 end
 -- allows a simple way to debug code; idenitys = {'string1','string2'}; string will be writen to file; no_trigger dissables the trigger useful for on_tick events
 function debug_write(idenitys,string,no_trigger)
