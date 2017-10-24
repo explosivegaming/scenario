@@ -106,4 +106,4 @@ function debug_write(idenitys,string,no_trigger)
   end
 end
 Event.register(defines.events.on_tick,function() debug_write({'NEW TICK'},game.tick,true) end)
-Event.register(Event.soft_init,function() global.exp_core.debug={state=false,triggered=false,force=false} end)
+Event.register(Event.soft_init,function() global.exp_core.debug={state=true,triggered=false,force=false} end)

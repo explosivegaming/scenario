@@ -34,7 +34,7 @@ function draw_frame.center(player,element)
 	frame_data = frames.center[element.name]
 	debug_write({'GUI','CENTER'},player.name..' '..frame_data.name)
 	--setup so nothing will break (name is set as caption if display a sprite)
-	if player.gui.is_valid_sprite_path(frame_data.display) then frame_data.display = frame_data.name end
+	if type(frame_data.display) == 'string' and player.gui.is_valid_sprite_path(frame_data.display) then frame_data.display = frame_data.name end
 	if player.gui.center[frame_data.name] then player.gui.center.clear() return else player.gui.center.clear() end
 	-- start drawing
 	local frame = player.gui.center.add{name=frame_data.name,type='frame',caption=frame_data.display,direction='vertical',style=mod_gui.frame_style}

@@ -4,33 +4,34 @@ Explosive Gaming
 This file can be used with permission but this and the credit below must remain in the file.
 Contact a member of management on our discord to seek permission to use our code.
 Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/XSsBV6b
-
-The credit below may be used by another script do not remove.
+Discord: https://discord.gg/r6dC2uK
 ]]
-local credits = {{
-	name='Factorio Starting Items',
-	owner='Factorio',
-	dev='Factorio Team',
-	description='Items you get when you join the game',
-	factorio_version='0.15.23',
-	show=true
-	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
 --Please Only Edit Below This Line-----------------------------------------------------------
+--for each item the key is the name and the value is the count given
+local items = {
+	['iron-plate']=function(player,made) if tick_to_min(game.tick) < 5 then return 8 else return (math.log(made+1)*3)/tick_to_min(game.tick) end end,
+	['copper-plate']=function(player,made) if tick_to_min(game.tick) < 5 then return 0 else return (math.log(made+1)*2)/tick_to_min(game.tick) end end,
+	['electronic-circuit']=function(player,made) if tick_to_min(game.tick) < 5 then return 0 else return (math.log(made+1)*1)/tick_to_min(game.tick) end end,
+	['iron-gear-wheel']=function(player,made) if tick_to_min(game.tick) < 5 then return 0 else return (math.log(made+1)*1)/tick_to_min(game.tick) end end,
+	['steel-plate']=function(player,made) if tick_to_min(game.tick) < 5 then return 0 else return (math.log(made+1)*0.5)/tick_to_min(game.tick) end end,
+	['pistol']=function(player,made) if player.force.item_production_statistics.get_input_count('submachine-gun') > 5 then return 0 else return 1 end end,
+	['submachine-gun']=function(player,made) if made > 5 then return 1 else return 0 end end,	
+	['firearm-magazine']=function(player,made) if player.force.item_production_statistics.get_input_count('piercing-rounds-magazine') > 100 then return 0 else return 10 end end,
+	['light-armor']=function(player,made) if made > 5 and player.force.item_production_statistics.get_input_count('heavy-armor') <= 5 then return 1 else return 0 end end,
+	['heavy-armor']=function(player,made) if made > 5 then return 1 else return 0 end end,
+	['burner-mining-drill']=function(player,made) if tick_to_min(game.tick) < 5 then return 4 else return 0 end end,
+	['stone-furnace']=function(player,made) if tick_to_min(game.tick) < 5 then return 4 else return 0 end end,
+	['iron-axe']=function(player,made) if made > 5 and player.force.item_production_statistics.get_input_count('steel-axe') <= 5 then return 1 else return 0 end end,
+	['steel-axe']=function(player,made) if made > 5 then return 1 else return 0 end end
+}
 Event.register(defines.events.on_player_created, function(event)
-  local player = game.players[event.player_index]
+  	local player = game.players[event.player_index]
 	if event.player_index == 1 then
 		player.force.friendly_fire = false
 		player.force.chart(player.surface, {{player.position.x - 400, player.position.y - 400}, {player.position.x + 400, player.position.y + 400}})
 	end
-	if tick_to_min(game.tick) < 60 then
-		player.insert{name="iron-plate", count=8}
-		player.insert{name="pistol", count=1}
-		player.insert{name="firearm-magazine", count=10}
-		player.insert{name="burner-mining-drill", count = 1}
-		player.insert{name="stone-furnace", count = 1}
+	for item,count in pairs(items) do
+		if type(count) == 'function' then count = math.floor(count(player,player.force.item_production_statistics.get_input_count(item))) end
+		if count > 0 then player.insert{name=item, count=count} end
 	end
 end)
---Please Only Edit Above This Line-----------------------------------------------------------
-return credits
