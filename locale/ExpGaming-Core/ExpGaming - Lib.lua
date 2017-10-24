@@ -68,16 +68,16 @@ function table.tostring( tbl )
   return "{" .. table.concat( result, "," ) .. "}"
 end
 -- converts a table to json and logs it to a file
-function json_log(table,no_log)
+function json_log(lua_table,no_log)
   local result, done, only_indexs = {}, {}, true
-  for key,value in ipairs(table) do
+  for key,value in ipairs(lua_table) do
     done[key] = true
     if type(value) == 'table' then value = table.insert(result,json_log(value,true)) end
     if type(value) == 'string' then json = table.insert(result,key..':""'..value..'"')
     elseif type(value) == 'number' then table.insert(result,key..':'..value)
     else table.insert(result,key..':null') end
   end
-  for key,value in pairs(table) do
+  for key,value in pairs(lua_table) do
     if not done[key] then
       only_indexs = false
       if type(value) == 'table' then table.insert(result,json_log(value,true)) end
