@@ -67,6 +67,18 @@ function table.tostring( tbl )
   end
   return "{" .. table.concat( result, "," ) .. "}"
 end
+-- converts a table to json and logs it to a file
+function json_log(table,no_log)
+  local json = '{'
+  for key,value in pairs(table) do
+    if type(value) == 'table' then value = json_log(value,true) end
+    if type(value) == 'string' then json = json..'"'..key..'"="'..value..'",' end
+    elseif type(value) == 'number' then json = json..'"'..key..'"='..value..','
+    else json = json..'"'..key..'"=null,' end
+  end
+  if no_log then return json:sub(-1)..'}'
+  else game.write_file('multi.log',json:sub(-1)..'}\n', true, 0) end
+end
 -- allows a simple way to debug code; idenitys = {'string1','string2'}; string will be writen to file; no_trigger dissables the trigger useful for on_tick events
 function debug_write(idenitys,string,no_trigger)
   if global.exp_core.debug.state then
