@@ -72,9 +72,9 @@ function json_log(table,no_log)
   local json = '{'
   for key,value in pairs(table) do
     if type(value) == 'table' then value = json_log(value,true) end
-    if type(value) == 'string' then json = json..'"'..key..'"="'..value..'",' end
-    elseif type(value) == 'number' then json = json..'"'..key..'"='..value..','
-    else json = json..'"'..key..'"=null,' end
+    if type(value) == 'string' then json = json..'"'..key..'":"'..value..'",' end
+    elseif type(value) == 'number' then json = json..'"'..key..'":'..value..','
+    else json = json..'"'..key..'":null,' end
   end
   if no_log then return json:sub(-1)..'}'
   else game.write_file('multi.log',json:sub(-1)..'}\n', true, 0) end
