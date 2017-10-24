@@ -80,9 +80,9 @@ function json_log(lua_table,no_log)
   for key,value in pairs(lua_table) do
     if not done[key] then
       only_indexs = false
-      if type(value) == 'table' then table.insert(result,json_log(value,true)) end
-      if type(value) == 'string' then table.insert(result,key..':"'..value..'"')
-      elseif type(value) == 'number' then table.insert(result,key..':'..value)
+      if type(value) == 'table' then table.insert(result,'"'..key..'":'..json_log(value,true)) end
+      if type(value) == 'string' then table.insert(result,'"'..key..'":"'..value..'"')
+      elseif type(value) == 'number' then table.insert(result,'"'..key..'":'..value)
       else table.insert(result,key..':null') end
     end
   end
