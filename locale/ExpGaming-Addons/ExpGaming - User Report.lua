@@ -45,7 +45,9 @@ define_command('report',{'reports.report-help'},{'player','reason',true},functio
 		ranking.rank_print({'reports.print',p.name,info.total_reports,trusted},'Owner',true)
 		ranking.rank_print({'reports.tail'},'Owner',true)
 		-- logs to file
-		game.write_file('multi.log','{"type": "USER_REPORT","tick":'..game.tick..',"username":"'..info.player.name..'","by":"'..player.name..'","reason":"'..reason..'"}\n', true, 0)
+		local online_mods=0; for _,player in pairs(game.connected_players) do if ranking.get_player_rank(player).power <= ranking.string_to_rank_group('Moderation').lowest_rank.power then online_mods=online_mods+1 end end
+		json_log({type='USER_REPORT',tick=game.tick,online=#game.connected_players,onlineMods=online_mods,username=info.player.name,by=player.name,reason=reason})
+		--game.write_file('multi.log','{"type": "USER_REPORT","tick":'..game.tick..',"online":'..#game.connected_players..',"online-mods":'..online_mods..',"username":"'..info.player.name..'","by":"'..player.name..'","reason":"'..reason..'"}\n', true, 0)
 		-- logic to jail player
 		local percent_needed = 0.6; if info.trusted_reports > 0 then percent_needed = 0.4 end
 		local players_needed = math.floor(#game.connected_players * percent_needed)
