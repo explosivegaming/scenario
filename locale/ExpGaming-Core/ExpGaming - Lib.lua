@@ -74,7 +74,8 @@ function json_log(lua_table,no_log)
     done[key] = true
     if type(value) == 'table' then table.insert(result,json_log(value,true))
     elseif type(value) == 'string' then table.insert(result,'"'..value..'"')
-    elseif type(value) == 'number' or type(value) == 'boolean' then table.insert(result,value)
+    elseif type(value) == 'number' then table.insert(result,value)
+    elseif type(value) == 'boolean' then table.insert(result,tostring(value))
     else table.insert(result,'null') end
   end
   for key,value in pairs(lua_table) do
@@ -82,7 +83,8 @@ function json_log(lua_table,no_log)
       only_indexs = false
       if type(value) == 'table' then table.insert(result,'"'..key..'":'..json_log(value,true))
       elseif type(value) == 'string' then table.insert(result,'"'..key..'":"'..value..'"')
-      elseif type(value) == 'number' or type(value) == 'boolean' then table.insert(result,'"'..key..'":'..value)
+      elseif type(value) == 'number' then table.insert(result,'"'..key..'":'..value)
+      elseif type(value) == 'boolean' then table.insert(result,'"'..key..'":'..tostring(value))
       else table.insert(result,'"'..key..'":null') end
     end
   end
