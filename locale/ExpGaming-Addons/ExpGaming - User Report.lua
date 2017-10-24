@@ -77,7 +77,9 @@ define_command('clear-reports',{'reports.remove-help'},{'player','reason',true},
 		if not index and ranking.get_player_rank(p).name ~= 'Jail' then player.print{'reports.no-reports'} return end
 		-- reverts rank and clears report
 		ranking.rank_print({'reports.clear-reports',p.name,player.name},'Owner',true)
-		game.write_file('multi.log','\n{"type":"USER_REPORT_CLEAR","tick":'..game.tick..',"username":"'..p.name..'","by":"'..player.name..'","reason":"'..reason..'"}\n', true, 0)
+		local online_mods=0; for _,player in pairs(game.connected_players) do if ranking.get_player_rank(player).power <= ranking.string_to_rank_group('Moderation').lowest_rank.power then online_mods=online_mods+1 end end
+		json_log({type='USER_REPORT_CLEAR',tick=game.tick,online=#game.connected_players,onlineMods=online_mods,username=p.name,by=player.name,reason=reason})
+		--game.write_file('multi.log','\n{"type":"USER_REPORT_CLEAR","tick":'..game.tick..',"username":"'..p.name..'","by":"'..player.name..'","reason":"'..reason..'"}\n', true, 0)
 		global.reported_users[p.name] = nil
 		if ranking.get_player_rank(p).name == 'Jail' then server.queue_callback(revert_rank,{p,player}) end
 	end
