@@ -73,7 +73,7 @@ function json_log(table,no_log)
   for key,value in ipairs(table) do
     done[key] = true
     if type(value) == 'table' then value = table.insert(result,json_log(value,true)) end
-    if type(value) == 'string' then json = table.insert(result,key..':""'..value..'"') end
+    if type(value) == 'string' then json = table.insert(result,key..':""'..value..'"')
     elseif type(value) == 'number' then table.insert(result,key..':'..value)
     else table.insert(result,key..':null') end
   end
@@ -81,7 +81,7 @@ function json_log(table,no_log)
     if not done[key] then
       only_indexs = false
       if type(value) == 'table' then table.insert(result,json_log(value,true)) end
-      if type(value) == 'string' then table.insert(result,key..':"'..value..'"') end
+      if type(value) == 'string' then table.insert(result,key..':"'..value..'"')
       elseif type(value) == 'number' then table.insert(result,key..':'..value)
       else table.insert(result,key..':null') end
     end
