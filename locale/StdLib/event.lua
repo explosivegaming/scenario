@@ -5,20 +5,10 @@
 -- @module Event
 -- @usage require('stdlib/event/event')
 
-local credits = {{
-	name='Factorio StdLib',
-	owner='Afforess',
-	dev='Afforess',
-	description='The Factorio StdLib used here for the event handler',
-	factorio_version='0.15.23',
-	show=true
-	}}
-local function credit_loop(reg) for _,cred in pairs(reg) do table.insert(credits,cred) end end
-
 local fail_if_missing = require 'core'['fail_if_missing']
 local Game = require 'game'
 
-Event = { --luacheck: allow defined top
+local Event = { --luacheck: allow defined top
     _registry = {},
     core_events = {
         init = -1,
@@ -168,4 +158,4 @@ function Event.remove(event, handler)
     return Event
 end
 
-return credits, Event
+return Event
