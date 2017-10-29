@@ -90,10 +90,10 @@ function json_log(lua_table,no_log)
   end
   if only_indexs then
     if no_log then return "["..table.concat(result,",").."]"
-    else game.write_file('multi.log',"["..table.concat(result,",").."]\n",true,0) end
+    else game.write_file('json.data',"["..table.concat(result,",").."]\n",true,0) end
   else
     if no_log then return "{"..table.concat(result,",").."}"
-    else game.write_file('multi.log',"{"..table.concat(result,",").."}\n",true,0) end
+    else game.write_file('json.data',"{"..table.concat(result,",").."}\n",true,0) end
   end
 end
 -- allows a simple way to debug code; idenitys = {'string1','string2'}; string will be writen to file; no_trigger dissables the trigger useful for on_tick events
