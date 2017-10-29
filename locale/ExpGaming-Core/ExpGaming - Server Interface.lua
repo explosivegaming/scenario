@@ -42,7 +42,7 @@ local temp_var_time = 1000/commands_per_iteration*ticks_per_iteration --temp var
 function server.emit(code, callback)
 	if type(callback) == 'function' then
 		local uuid = server.add_callback(callback)
-		game.write_file('socket.data','{ "type":  "JS", "id": "' .. uuid .. '", "code": "' .. code .. '" }\n', true, 0)
+		json_log({type='JS',id=uuid,code=code})
 	end
 end
 --adds a call back that can be ran with a command
