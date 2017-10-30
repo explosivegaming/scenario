@@ -40,7 +40,7 @@ ExpGui.add_frame.center('rank_changer',{'ingame-rank-changer.name'},{'ingame-ran
 			inputs.rank_dropdown.add_item(rank.name)
 		end
 	end
-	inputs.rank_dropdown.selected_index = #inputs.rank_dropdown.selected_index
+	inputs.rank_dropdown.selected_index = #inputs.rank_dropdown.items
 	-- buttons
 	frame.add{type='flow',name='flow'}
 	ExpGui.add_input.draw_button(frame.flow,'give_rank')
