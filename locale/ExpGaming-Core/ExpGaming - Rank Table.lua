@@ -71,7 +71,22 @@ local ranks = {
 			'credit_tab'}
 		},
 
-		{name='Jail'}
+		{name='Jail',
+		disallow={
+			'open_character_gui',
+			'begin_mining',
+			'start_walking',
+			'player_leave_game',
+			'rotate_entity',
+			'reverse_rotate_entity',
+			'select_gun',
+			'open_technology_gui',
+			'start_research',
+			'open_blueprint_library_gui',
+			'open_trains_gui',
+			'open_train_station_gui',
+			'use_item'}
+		}
 	},
 	ranks={
 		{name='Owner',
@@ -195,11 +210,7 @@ local ranks = {
 		time=nil,
 		colour={r=50,g=50,b=50},
 		group='Jail',
-		disallow={
-			'open_character_gui',
-			'begin_mining',
-			'start_walking',
-			'player_leave_game'},
+		disallow={},
 		allow={}
 		}
 	}
