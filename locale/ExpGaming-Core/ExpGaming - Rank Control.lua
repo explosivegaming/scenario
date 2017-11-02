@@ -72,6 +72,7 @@ function ranking.rank_print(msg, rank, inv)
 end
 --Give the user their new rank and raise the Event.rank_change event
 function ranking.give_rank(player,rank,by_player,tick)
+	if not player or not player.valid then return end
 	local tick = tick or game.tick
 	local by_player = by_player or 'server'
 	local rank = ranking.string_to_rank(rank) or rank or ranking.string_to_rank_group('User').lowest_rank
