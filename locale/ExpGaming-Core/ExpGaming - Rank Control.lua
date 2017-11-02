@@ -159,7 +159,7 @@ function ranking.find_new_rank(player,tick)
 	end
 	--Lose ends
 	if ranking.get_player_rank(player).power <= ranking.string_to_rank_group('Moderation').lowest_rank.power and not player.admin then ranking.rank_print(player.name..' needs to be promoted.') end
-	if player_rank.name ~= ranking.get_player_rank(player).name then global.exp_core.player_ranks[player.index]=player_rank.name end
+	if player_rank.name ~= ranking.get_player_rank(player).name then global.exp_core.old_ranks[player.index]=player_rank.name end
 	debug_write({'RANK','NEW-RANK','END'},player.name)
 end
 -- returns a list with every players current rank, or just the players of the rank given, includes online time
@@ -183,7 +183,8 @@ Event.register(Event.rank_change,function(event)
 end)
 Event.register(Event.soft_init,function()
 	debug_write({'RANK','SETUP'},'start')
-	global.exp_core.old_ranks = {} 
+	global.exp_core.old_ranks = {}
+	global.exp_core.preset_ranks = {}
 	for _,rank in pairs(ranking.get_ranks()) do
 		debug_write({'RANK','SETUP'},'added: '..rank.name)
 		game.permissions.create_group(rank.name)
@@ -194,6 +195,5 @@ Event.register(Event.soft_init,function()
 	end
 end)
 Event.register(defines.events.on_player_joined_game,function(event) ranking.find_new_rank(game.players[event.player_index]) end)
-Event.register(Event.soft_init,function() global.exp_core.preset_ranks = {} end)
 
 return ranking
