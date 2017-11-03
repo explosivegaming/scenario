@@ -48,7 +48,8 @@ local ranks = {
 		allow={
 			'temp-ban',
 			'rank_changer',
-			'clear-reports'}
+			'clear-reports',
+			'limitless_tags'}
 		},
 
 		{name='User',
