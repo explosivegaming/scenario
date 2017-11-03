@@ -141,10 +141,12 @@ local entitys = {
 }
 
 local global_offset = {x=0,y=-1}
+local decon_area = {{-15,-15},{15,15}}
 
 Event.register(defines.events.on_player_created, function(event)
     if event.player_index == 1 then
-        local offset = game.players[event.player_index].character.position
+        for _,entity in pairs(game.players[event.player_index].surface.find_entities(decon_area)) do if entity.name ~= 'player' then entity.destroy() end end
+        local offset = game.players[event.player_index].position
         local tiles = {}
         for _,position in pairs(tile_positions) do
             table.insert(tiles,{name='stone-path',position={position[1]+offset.x+global_offset.x,position[2]+offset.y+global_offset.y}})
