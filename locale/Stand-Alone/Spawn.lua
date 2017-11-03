@@ -143,7 +143,7 @@ local entitys = {
 local global_offset = {x=0,y=-1}
 local decon_area = {{-15,-15},{15,15}}
 local partern_tile = 'stone-path'
-local base_tile = 'dirt'
+local base_tile = 'grass'
 
 Event.register(defines.events.on_player_created, function(event)
     if event.player_index == 1 then
