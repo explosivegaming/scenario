@@ -180,6 +180,9 @@ Event.register(Event.rank_change,function(event)
 	if not event.by_player == 'server' then
 		game.write_file('rank-change.log','\n'..game.tick..' Player: '..event.player.name..' Was given rank: '..event.new_rank.name..' By: '..event.by_player.name..' Their rank was: '..event.old_rank.name, true, 0)	
 	end
+	if event.new_rank.name == 'Jail' then
+		json_log({type='JAIL',colour='#ff5400',tick=game.tick,online=#game.connected_players,onlineMods=online_mods,username=event.player.name,by=event.by_player.name})
+	end
 end)
 Event.register(Event.soft_init,function()
 	debug_write({'RANK','SETUP'},'start')
