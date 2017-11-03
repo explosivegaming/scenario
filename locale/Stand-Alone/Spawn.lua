@@ -142,14 +142,23 @@ local entitys = {
 
 local global_offset = {x=0,y=-1}
 local decon_area = {{-15,-15},{15,15}}
+local partern_tile = 'stone-path'
+local base_tile = 'dirt'
 
 Event.register(defines.events.on_player_created, function(event)
     if event.player_index == 1 then
-        for _,entity in pairs(game.players[event.player_index].surface.find_entities(decon_area)) do if entity.name ~= 'player' then entity.destroy() end end
         local offset = game.players[event.player_index].position
+        local base_tiles = {}
         local tiles = {}
+        for x = decon_area[1][1],decon_area[2][1] do
+            for y = decon_area[1][2],decon_area[2][2] do
+                table.insert(base_tiles,{name=base_tile,position={x+offset.x+global_offset.x,y+offset.y+global_offset.y}})
+            end
+        end
+        game.players[event.player_index].surface.set_tiles(base_tiles)
+        for _,entity in pairs(game.players[event.player_index].surface.find_entities(decon_area)) do if entity.name ~= 'player' then entity.destroy() end end
         for _,position in pairs(tile_positions) do
-            table.insert(tiles,{name='stone-path',position={position[1]+offset.x+global_offset.x,position[2]+offset.y+global_offset.y}})
+            table.insert(tiles,{name=partern_tile,position={position[1]+offset.x+global_offset.x,position[2]+offset.y+global_offset.y}})
         end
         game.players[event.player_index].surface.set_tiles(tiles)
         for _,entity in pairs(entitys) do
