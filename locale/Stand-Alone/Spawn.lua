@@ -130,7 +130,7 @@ local entitys = {
     {"iron-chest",-6,0},{"iron-chest",-6,3},{"small-lamp",-6,9},{"stone-wall",-6,11},{"stone-wall",-5,-8},{"small-lamp",-5,-1},{"iron-chest",-5,0},{"iron-chest",-5,3},{"small-lamp",-5,4},{"stone-wall",-5,11},
     {"stone-wall",-4,-8},{"small-electric-pole",-4,-5},{"iron-chest",-4,0},{"iron-chest",-4,3},{"small-electric-pole",-4,8},{"stone-wall",-4,11},{"stone-wall",-3,-8},{"small-lamp",-3,-6},{"small-lamp",-3,-3},{"small-lamp",-3,6},
     {"small-lamp",-3,9},{"stone-wall",-3,11},{"stone-wall",-2,-8},{"iron-chest",-2,-6},{"iron-chest",-2,-5},{"iron-chest",-2,-4},{"iron-chest",-2,-3},{"iron-chest",-2,-2},{"iron-chest",-2,5},{"iron-chest",-2,6},
-    {"iron-chest",-2,7},{"iron-chest",-2,8},{"iron-chest",-2,9},{"stone-wall",-2,11},{"fast-transport-belt",-1,1},{"fast-transport-belt",-1,2},{"fast-transport-belt",0,1},{"fast-transport-belt",0,2},{"stone-wall",1,-8},{"iron-chest",1,-6},
+    {"iron-chest",-2,7},{"iron-chest",-2,8},{"iron-chest",-2,9},{"stone-wall",-2,11},{"stone-wall",1,-8},{"iron-chest",1,-6},
     {"iron-chest",1,-5},{"iron-chest",1,-4},{"iron-chest",1,-3},{"iron-chest",1,-2},{"iron-chest",1,5},{"iron-chest",1,6},{"iron-chest",1,7},{"iron-chest",1,8},{"iron-chest",1,9},{"stone-wall",1,11},
     {"stone-wall",2,-8},{"small-lamp",2,-6},{"small-lamp",2,-3},{"small-lamp",2,6},{"small-lamp",2,9},{"stone-wall",2,11},{"stone-wall",3,-8},{"small-electric-pole",3,-5},{"iron-chest",3,0},{"iron-chest",3,3},
     {"small-electric-pole",3,8},{"stone-wall",3,11},{"stone-wall",4,-8},{"small-lamp",4,-1},{"iron-chest",4,0},{"iron-chest",4,3},{"small-lamp",4,4},{"stone-wall",4,11},{"stone-wall",5,-8},{"small-lamp",5,-6},
@@ -140,29 +140,37 @@ local entitys = {
     {"stone-wall",9,8},{"stone-wall",9,9}
 }
 
-local global_offset = {x=0,y=-1}
-local decon_area = {{-15,-15},{15,15}}
+local global_offset = {x=0,y=-2}
+local decon_radius = 20
+local decon_tile = 'concrete'
+local partern_radius = 50
+local partern_base_tile = 'grass'
 local partern_tile = 'stone-path'
-local base_tile = 'grass'
 
 Event.register(defines.events.on_player_created, function(event)
     if event.player_index == 1 then
+        local surface =  game.players[event.player_index].surface
         local offset = game.players[event.player_index].position
         local base_tiles = {}
         local tiles = {}
-        for x = decon_area[1][1],decon_area[2][1] do
-            for y = decon_area[1][2],decon_area[2][2] do
-                table.insert(base_tiles,{name=base_tile,position={x+offset.x+global_offset.x,y+offset.y+global_offset.y}})
+        for x = -partern_radius-5, partern_radius+5 do
+            for y = -partern_radius-5, partern_radius+5 do
+                if x^2+y^2 < decon_radius^2 then
+                    table.insert(base_tiles,{name=decon_tile,position={x+offset.x,y+offset.y}})
+                    local entities = surface.find_entities_filtered{area={{x+offset.x-1,y+offset.y-1},{x+offset.x,y+offset.y}}}
+                    for _,entity in pairs(entities) do if entity.name ~= 'player' then entity.destroy() end end
+                elseif x^2+y^2 < partern_radius^2 then
+                    table.insert(base_tiles,{name=partern_base_tile,position={x+offset.x,y+offset.y}})
+                end
             end
         end
-        game.players[event.player_index].surface.set_tiles(base_tiles)
-        for _,entity in pairs(game.players[event.player_index].surface.find_entities(decon_area)) do if entity.name ~= 'player' then entity.destroy() end end
+        surface.set_tiles(base_tiles)
         for _,position in pairs(tile_positions) do
             table.insert(tiles,{name=partern_tile,position={position[1]+offset.x+global_offset.x,position[2]+offset.y+global_offset.y}})
         end
-        game.players[event.player_index].surface.set_tiles(tiles)
+        surface.set_tiles(tiles)
         for _,entity in pairs(entitys) do
-            local entity = game.players[event.player_index].surface.create_entity{name=entity[1],position={entity[2]+offset.x+global_offset.x,entity[3]+offset.y+global_offset.y},force='neutral'}
+            local entity = surface.create_entity{name=entity[1],position={entity[2]+offset.x+global_offset.x,entity[3]+offset.y+global_offset.y},force='neutral'}
             entity.destructible = false; entity.health = 0; entity.minable = false; entity.rotatable = false
         end
     end
