@@ -9,3 +9,4 @@ Discord: https://discord.gg/r6dC2uK
 --Please Only Edit Below This Line-----------------------------------------------------------
 require("Factorio Starting Items")
 require("Spawn")
+require("Show Health")
