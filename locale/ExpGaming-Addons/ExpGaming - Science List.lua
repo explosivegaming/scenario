@@ -42,9 +42,13 @@ ExpGui.add_frame.left('science_list','item/lab',{'science-gui.tooltip'},false,fu
 	end
 end)
 
-function get_packs_per_minute()
+function get_packs_per_minute(player)
 	local to_return = {}
-	for n,pack in pairs(global.science_packs) do table.insert(to_return,{pack.name,string.format('%.2f',(ammount_made-pack.made['player'])/((game.tick-pack.time)/(3600*game.speed)))}) end
+	local force = player and player.force or game.forces['player']
+	for n,pack in pairs(global.science_packs) do
+		local ammount_made = force.item_production_statistics.get_input_count(pack.name)
+		table.insert(to_return,{pack.name,string.format('%.2f',(ammount_made-pack.made['player'])/((game.tick-pack.time)/(3600*game.speed)))}) 
+	end
 	return to_return
 end
 
