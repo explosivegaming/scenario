@@ -8,7 +8,7 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 Event.register(defines.events.on_tick, function(event)
-	if not event.tick % 15 == 0 then return end
+	if not (event.tick % 15 == 0) then return end
   	for _,player in pairs(game.connected_players) do
 		if player.character then
 			if player.character.health == nil then return end
