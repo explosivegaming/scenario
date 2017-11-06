@@ -247,7 +247,7 @@ for n,rank in pairs(ranks.ranks) do
 end
 
 for n = #ranks.ranks, 1, -1 do
-    rank = ranks.ranks[n]
+    local rank = ranks.ranks[n]
     if ranks.ranks[n+1] then
 		for _,allow in pairs(ranks.ranks[n+1].allow) do
 			table.insert(rank.allow,allow)

@@ -73,6 +73,7 @@ function server.clear_callbacks()
 end
 -- converts any value into the uuid the script will use
 function server.get_uuid(var)
+	local uuid = nil
 	if type(var) == 'string' then uuid = var
 	else uuid = tostring(global.exp_core.uuids()) end
 	uuid = string.tohex('uuid'..uuid)
