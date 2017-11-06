@@ -31,7 +31,7 @@ end
 --Draw the center GUI for the player; do not call manually, must use other functions to call
 ExpGui.add_input.button('close_center',{'expgui.close-button'},{'expgui.close-button-tooltip'},function(player,element) element.parent.parent.parent.destroy() end)
 function draw_frame.center(player,element)
-	frame_data = frames.center[element.name]
+	local frame_data = frames.center[element.name]
 	debug_write({'GUI','CENTER'},player.name..' '..frame_data.name)
 	--setup so nothing will break (name is set as caption if display a sprite)
 	if player.gui.is_valid_sprite_path(frame_data.display) then frame_data.display = frame_data.name end
