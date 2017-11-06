@@ -69,7 +69,7 @@ function player_table_functions.draw(player,frame,filters,input_location)
 	global.exp_core.current_filters[player.index] = {filters,frame}
 	--setup the table
 	if frame.player_table then frame.player_table.destroy() end
-	player_table = frame.add{name='player_table', type="table", colspan=5}
+	local player_table = frame.add{name='player_table', type="table", colspan=5}
  	player_table.style.minimal_width = 500
   	player_table.style.maximal_width = 500
 	player_table.style.horizontal_spacing = 10
