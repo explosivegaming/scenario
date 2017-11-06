@@ -8,7 +8,7 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 function auto_message(event)
-	if event.player_loop_index < event.players_online then return end
+	if event and event.player_loop_index < event.players_online then return end
 	local low_rank = 'Regular'
 	local high_rank = 'Owner'
 	server.queue_callback(ranking.rank_print,{{'auto-message.players-online',#game.connected_players},high_rank,true})
