@@ -176,13 +176,15 @@ end
 Event.rank_change = script.generate_event_name()
 Event.register(Event.rank_change,function(event)
 	debug_write({'RANK','EVENT'},event)
-	if event.new_rank == event.old_rank then return end
+	if event.new_rank.name == event.old_rank.name then return end
 	if not event.by_player == 'server' then
 		game.write_file('rank-change.log','\n'..game.tick..' Player: '..event.player.name..' Was given rank: '..event.new_rank.name..' By: '..event.by_player.name..' Their rank was: '..event.old_rank.name, true, 0)	
 	end
 	if event.new_rank.name == 'Jail' then
 		local by_name = ''; if event.by_player == 'server' then by_name = '<server>' else by_name = event.by_player.name end
-		json_log({type='JAIL',colour='#ff5400',tick=game.tick,online=#game.connected_players,onlineMods=online_mods,username=event.player.name,by=by_name})
+		if global.temp_bans and global.temp_bans[event.player.name] then else
+			json_log({type='JAIL',colour='#ff5400',tick=game.tick,online=#game.connected_players,onlineMods=online_mods,username=event.player.name,by=by_name})
+		end
 	end
 end)
 Event.register(Event.soft_init,function()
