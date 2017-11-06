@@ -15,7 +15,7 @@ Event.register(defines.events.on_marked_for_deconstruction, function(event)
 	-- get the uuid and data
 	local tree_remover_uuid = server.get_uuid(player.name..'_tree_remover')
 	if not server.get_uuid_data(tree_remover_uuid) then
-		tree_remover = server.queue_callback(function(player)
+		server.queue_callback(function(player)
 			if not ranking.rank_allowed(ranking.get_player_rank(player),'decon') then return 1
 			elseif ranking.rank_allowed(ranking.get_player_rank(player),'tree_remover') then return 2 
 			else return 0 end
