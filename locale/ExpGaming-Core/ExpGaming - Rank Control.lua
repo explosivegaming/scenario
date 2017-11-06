@@ -56,7 +56,7 @@ function ranking.rank_print(msg, rank, inv)
 	debug_write({'RANK','PRINT'},rank.name..': '..tostring(msg))
 	for _, player in pairs(game.players) do
 		--this part uses sudo to soread it other many ticks
-		player_rank_power = ranking.get_player_rank(player).power
+		local player_rank_power = ranking.get_player_rank(player).power
 		if inv then
 			server.queue_callback(function(player_rank_power,rank)
 				if player_rank_power >= rank.power then player.print({'ranking.all-rank-print',msg}) end
