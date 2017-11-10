@@ -39,10 +39,10 @@ end)
 ExpGui.add_input.button('remove-warp-point',{'warp-point.remove-name'},{'warp-point.remove-tooltip'},function(player,element)
     local warp_name = element.parent.name
     remove_warp_point(warp_name)
-end)
+end) 
 
-ExpGui.add_frame.left('warp-points',{'warp-point.name'},{'warp-point.tooltip'},false,function(player,frame)
-    if global.warp.can_open[player.index] == false then return end
+ExpGui.add_frame.left('warp-points',('item/'+warp_item),{'warp-point.tooltip'},false,function(player,frame)
+    if global.warp.can_open[player.index] == false and not ranking.rank_allowed(ranking.get_player_rank(player),'free-warp') then return end
     local warp_list = frame.add{name="scroll",type = "scroll-pane", direction = "vertical", vertical_scroll_policy="always", horizontal_scroll_policy="never"}
     warp_list.style.maximal_height = 100
     for name,warp in pairs(global.warp.warps) do
