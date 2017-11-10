@@ -132,7 +132,8 @@ local ranks = {
 			'admin',
 			'force_modifiers_tab',
 			'player_modifiers_tab',
-			'adv_repair'}
+			'adv_repair',
+			'free-warp'}
 		},
 		
 		{name='Mod',
