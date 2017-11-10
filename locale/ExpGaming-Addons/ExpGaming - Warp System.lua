@@ -8,9 +8,16 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
-local warp_tiles = {}
+local warp_tiles = {
+    {-3,-2},{-3,-1},{-3,0},{-3,1},{-3,2},{3,-2},{3,-1},{3,0},{3,1},{3,2},
+    {-2,-3},{-1,-3},{0,-3},{1,-3},{2,-3},{-2,3},{-1,3},{0,3},{1,3},{2,3}
+}
 
-local warp_entities = {}
+local warp_entities = {
+    {"small-lamp",-3,-2},{"small-lamp",-3,2},{"small-lamp",3,-2},{"small-lamp",3,2},
+    {"small-lamp",-2,-3},{"small-lamp",2,-3},{"small-lamp",-2,3},{"small-lamp",2,3},
+    {"small-electric-pole",-3,-3},{"small-electric-pole",3,3},{"small-electric-pole",-3,3},{"small-electric-pole",3,-3}
+}
 
 local warp_radius = 4
 local spawn_warp_scale = 5
@@ -48,9 +55,10 @@ ExpGui.add_frame.left('warp-points',('item/'..warp_item),{'warp-point.tooltip'},
     frame.caption = {'warp-point.name'}
     local warp_list = frame.add{name="scroll",type = "scroll-pane", direction = "vertical", vertical_scroll_policy="always", horizontal_scroll_policy="never"}
     warp_list.style.maximal_height = 100
+    local table = warp_list.add{name="table",type='table',colspan=2}
     for name,warp in pairs(global.warp.warps) do
-        local flow = warp_list.add{name=name,type='flow',direction='horizontal'}
-        flow.add{name='warp_name',style="caption_label_style",type='label',caption=name}
+        table.add{name='warp_'..name,style="caption_label_style",type='label',caption=name}
+        local flow = table.add{name=name,type='flow',direction='horizontal'}
         ExpGui.add_input.draw_button(flow,'goto-warp-point')
         if ranking.rank_allowed(ranking.get_player_rank(player),'warp-point') and name ~= 'Spawn' then
             ExpGui.add_input.draw_button(flow,'remove-warp-point')
@@ -65,7 +73,7 @@ function remove_warp_point(name)
     local tiles = {}
     for x = -warp_radius-2, warp_radius+2 do
         for y = -warp_radius-2, warp_radius+2 do
-            if x^2+y^2 < warp_radius^2 then
+            if x^2+y^2 < (warp_radius+1)^2 then
                 table.insert(tiles,{name=replace_tile,position={x+offset.x,y+offset.y}})
                 local entities = surface.find_entities_filtered{area={{x+offset.x-1,y+offset.y-1},{x+offset.x,y+offset.y}}}
                 for _,entity in pairs(entities) do if entity.name ~= 'player' then entity.destroy() end end
