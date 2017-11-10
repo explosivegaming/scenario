@@ -12,28 +12,30 @@ local warp_tiles = {}
 
 local warp_entities = {}
 
-local warp_radius = 2
+local warp_radius = 4
 local spawn_warp_scale = 5
 local warp_tile = 'lab-dark-1'
 local warp_partern = 'lab-dark-2'
+local warp_limit = 60
 local replace_tile = 'grass'
 local warp_item = 'discharge-defense-equipment'
 local global_offset = {x=0,y=0}
 
-define_command('warp-point',{'warp-point.help'},{'name'},function(player,event,args)
+define_command('warp-point',{'warp-point.help'},{'name',true},function(player,event,args)
     if player == '<server>' then
         print('Server cant use this command')
     else
-        if global.warp.warps[args[1]] then player.print{'warp-point.used'} return end
-        make_way_point(player,args[1])
+        if global.warp.warps[table.concat(args,' ',1)] then player.print{'warp-point.used'} return end
+        make_way_point(player,table.concat(args,' ',1))
     end
 end) 
 
 ExpGui.add_input.button('goto-warp-point',{'warp-point.goto-name'},{'warp-point.goto-tooltip'},function(player,element)
-    if global.warp.cooldown[player.index] > 0 then player.print{'warp-point.cooldown',global.warp.cooldown[player.index]} end
+    if global.warp.cooldown[player.index] and global.warp.cooldown[player.index] > 0 then player.print{'warp-point.cooldown',global.warp.cooldown[player.index]} return end
     local warp = global.warp.warps[element.parent.name]
+    warp.tag = warp.tag or player.force.add_chart_tag(warp.surface,{position=warp.position,text='Warp: '..element.parent.name,icon={type='item',name=warp_item}})
     player.teleport(warp.surface.find_non_colliding_position("player", warp.position, 32, 1),warp.surface)
-    global.warp.cooldown[player.index] = 60
+    if not ranking.rank_allowed(ranking.get_player_rank(player),'free-warp') then element.parent.parent.parent.style.visible = false global.warp.cooldown[player.index] = warp_limit end
 end)
 
 ExpGui.add_input.button('remove-warp-point',{'warp-point.remove-name'},{'warp-point.remove-tooltip'},function(player,element)
@@ -48,9 +50,9 @@ ExpGui.add_frame.left('warp-points',('item/'..warp_item),{'warp-point.tooltip'},
     warp_list.style.maximal_height = 100
     for name,warp in pairs(global.warp.warps) do
         local flow = warp_list.add{name=name,type='flow',direction='horizontal'}
-        flow.add{name='warp_name',style="caption_label_style",type='label',text=name}
+        flow.add{name='warp_name',style="caption_label_style",type='label',caption=name}
         ExpGui.add_input.draw_button(flow,'goto-warp-point')
-        if ranking.rank_allowed(ranking.get_player_rank(player),'warp-point') then
+        if ranking.rank_allowed(ranking.get_player_rank(player),'warp-point') and name ~= 'Spawn' then
             ExpGui.add_input.draw_button(flow,'remove-warp-point')
         end
     end
@@ -64,13 +66,14 @@ function remove_warp_point(name)
     for x = -warp_radius-2, warp_radius+2 do
         for y = -warp_radius-2, warp_radius+2 do
             if x^2+y^2 < warp_radius^2 then
-                table.insert(base_tiles,{name=replace_tile,position={x+offset.x,y+offset.y}})
+                table.insert(tiles,{name=replace_tile,position={x+offset.x,y+offset.y}})
                 local entities = surface.find_entities_filtered{area={{x+offset.x-1,y+offset.y-1},{x+offset.x,y+offset.y}}}
                 for _,entity in pairs(entities) do if entity.name ~= 'player' then entity.destroy() end end
             end
         end
     end
-    if global.warp.warps[name].valid then global.warp.warps[name].destroy() end
+    surface.set_tiles(tiles)
+    if global.warp.warps[name].tag.valid then global.warp.warps[name].tag.destroy() end
     global.warp.warps[name] = nil
     for _,player in pairs(game.connected_players) do
         ExpGui.draw_frame.left(player,'warp-points',true)
@@ -101,17 +104,19 @@ function make_way_point(player,name)
         entity.destructible = false; entity.health = 0; entity.minable = false; entity.rotatable = false
     end
     -- this adds the warp point to the map
-    local tag = player.force.add_chart_tag(surface,{position={math.floor(player.position.x),math.floor(player.position.y)},text=name,icon={type='item',name=warp_item}})
+    local tag = player.force.add_chart_tag(surface,{position={math.floor(player.position.x)+0.5,math.floor(player.position.y)+0.5},text='Warp: '..name,icon={type='item',name=warp_item}})
     global.warp.warps[name] = {tag=tag,surface=surface,position=tag.position}
+    for _,player in pairs(game.connected_players) do
+        ExpGui.draw_frame.left(player,'warp-points',true)
+    end
 end
 
 Event.register(defines.events.on_tick,function(event)
     if not (event.tick % 60 == 0) then return end
     for index,time in pairs(global.warp.cooldown) do
-        if time > 0 then 
-            time = time - 1 
-            -- if the cooldown has ran out then tell the player
-            if time == 0 then game.players[index].print{'warp-point.cooldown-zreo'} end
+        if time > 0 then
+            global.warp.cooldown[index] = time-1 
+            if global.warp.cooldown[index] == 0 then game.players[index].print{'warp-point.cooldown-zero'} end
         end
     end
     for _,player in pairs(game.connected_players) do
@@ -119,9 +124,9 @@ Event.register(defines.events.on_tick,function(event)
             if global.warp.can_open[player.index] ~= true then player.print{'warp-point.enter'} end
             global.warp.can_open[player.index] = true
         elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then -- this makes spawn a warp point
-            if global.warp.can_open[player.index] ~= true then player.print{'warp-point.enter'} end
+            if global.warp.can_open[player.index] ~= true and player.online_time > 100 then player.print{'warp-point.enter'} end
             global.warp.can_open[player.index] = true
-        else
+        elseif not ranking.rank_allowed(ranking.get_player_rank(player),'free-warp') then
             global.warp.can_open[player.index] = false
             if mod_gui.get_frame_flow(player)['warp-points'] then mod_gui.get_frame_flow(player)['warp-points'].style.visible = false end
         end
@@ -131,8 +136,8 @@ end)
 Event.register(defines.events.on_player_created, function(event)
     if event.player_index == 1 then
         local player = game.players[event.player_index]
-        player.force.chart(player.surface, {player.position, {player.position.x + 1, player.position.y + 1}})
-        local tag = player.force.add_chart_tag(player.surface,{position={0,0},text='Spawn',icon={type='item',name=warp_item}})
+        player.force.chart(player.surface, {{player.position.x - 20, player.position.y - 20}, {player.position.x + 20, player.position.y + 20}})
+        local tag = player.force.add_chart_tag(player.surface,{position={0,0},text='Warp: Spawn',icon={type='item',name=warp_item}})
         global.warp.warps['Spawn'] = {tag=tag,surface=player.surface,position={0,0}}
     end
 end)
