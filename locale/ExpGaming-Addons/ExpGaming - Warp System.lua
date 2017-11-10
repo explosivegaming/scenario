@@ -27,7 +27,7 @@ define_command('warp-point',{'warp-point.help'},{'name'},function(player,event,a
         if global.warp.warps[args[1]] then player.print{'warp-point.used'} return end
         make_way_point(player,args[1])
     end
-end
+end) 
 
 ExpGui.add_input.button('goto-warp-point',{'warp-point.goto-name'},{'warp-point.goto-tooltip'},function(player,element)
     if global.warp.cooldown[player.index] > 0 then player.print{'warp-point.cooldown',global.warp.cooldown[player.index]} end
@@ -41,13 +41,14 @@ ExpGui.add_input.button('remove-warp-point',{'warp-point.remove-name'},{'warp-po
     remove_warp_point(warp_name)
 end) 
 
-ExpGui.add_frame.left('warp-points',('item/'+warp_item),{'warp-point.tooltip'},false,function(player,frame)
+ExpGui.add_frame.left('warp-points',('item/'..warp_item),{'warp-point.tooltip'},false,function(player,frame)
     if global.warp.can_open[player.index] == false and not ranking.rank_allowed(ranking.get_player_rank(player),'free-warp') then return end
+    frame.caption = {'warp-point.name'}
     local warp_list = frame.add{name="scroll",type = "scroll-pane", direction = "vertical", vertical_scroll_policy="always", horizontal_scroll_policy="never"}
     warp_list.style.maximal_height = 100
     for name,warp in pairs(global.warp.warps) do
         local flow = warp_list.add{name=name,type='flow',direction='horizontal'}
-        flow.add{name='name',type='label',text=name}
+        flow.add{name='warp_name',style="caption_label_style",type='label',text=name}
         ExpGui.add_input.draw_button(flow,'goto-warp-point')
         if ranking.rank_allowed(ranking.get_player_rank(player),'warp-point') then
             ExpGui.add_input.draw_button(flow,'remove-warp-point')
@@ -106,7 +107,7 @@ end
 
 Event.register(defines.events.on_tick,function(event)
     if not (event.tick % 60 == 0) then return end
-    for index,time in pairs(global.warps.cooldown) do
+    for index,time in pairs(global.warp.cooldown) do
         if time > 0 then 
             time = time - 1 
             -- if the cooldown has ran out then tell the player
@@ -115,11 +116,11 @@ Event.register(defines.events.on_tick,function(event)
     end
     for _,player in pairs(game.connected_players) do
         if player.surface.get_tile(player.position).name == warp_tile or player.surface.get_tile(player.position).name == warp_partern then
+            if global.warp.can_open[player.index] ~= true then player.print{'warp-point.enter'} end
             global.warp.can_open[player.index] = true
-            player.print{'warp-point.enter'}
         elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then -- this makes spawn a warp point
+            if global.warp.can_open[player.index] ~= true then player.print{'warp-point.enter'} end
             global.warp.can_open[player.index] = true
-            player.print{'warp-point.enter'}
         else
             global.warp.can_open[player.index] = false
             if mod_gui.get_frame_flow(player)['warp-points'] then mod_gui.get_frame_flow(player)['warp-points'].style.visible = false end
@@ -130,8 +131,9 @@ end)
 Event.register(defines.events.on_player_created, function(event)
     if event.player_index == 1 then
         local player = game.players[event.player_index]
+        player.force.chart(player.surface, {player.position, {player.position.x + 1, player.position.y + 1}})
         local tag = player.force.add_chart_tag(player.surface,{position={0,0},text='Spawn',icon={type='item',name=warp_item}})
-        global.warp.warps[name] = {tag=tag,surface=player.surface,position={0,0}}
+        global.warp.warps['Spawn'] = {tag=tag,surface=player.surface,position={0,0}}
     end
 end)
 Event.register(Event.soft_init,function() global.warp = {warps={},can_open={},cooldown={}} end)
