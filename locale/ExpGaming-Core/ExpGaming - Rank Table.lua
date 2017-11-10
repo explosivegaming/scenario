@@ -175,7 +175,7 @@ local ranks = {
 		colour={r=24,g=172,b=188},
 		group='User',
 		disallow={},
-		allow={'trusted_reporter'}},
+		allow={'trusted_reporter','warp-point'}},
 		
 		{name='Regular',
 		short_hand='Reg',
