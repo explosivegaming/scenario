@@ -69,7 +69,7 @@ local ranks = {
 			'info',
 			'links_tab',
 			'servers_tab',
-			'credit_tab'}
+			'warp-points'}
 		},
 
 		{name='Jail',
