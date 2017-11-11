@@ -42,7 +42,7 @@ ExpGui.add_input.button('goto-warp-point',{'warp-point.goto-name'},{'warp-point.
     local warp = global.warp.warps[element.parent.name]
     warp.tag = warp.tag or player.force.add_chart_tag(warp.surface,{position=warp.position,text='Warp: '..element.parent.name,icon={type='item',name=warp_item}})
     player.teleport(warp.surface.find_non_colliding_position("player", warp.position, 32, 1),warp.surface)
-    if not ranking.rank_allowed(ranking.get_player_rank(player),'free-warp') then element.parent.parent.parent.style.visible = false global.warp.cooldown[player.index] = warp_limit end
+    if not ranking.rank_allowed(ranking.get_player_rank(player),'free-warp') then element.parent.parent.parent.parent.style.visible = false global.warp.cooldown[player.index] = warp_limit end
 end)
 
 ExpGui.add_input.button('remove-warp-point',{'warp-point.remove-name'},{'warp-point.remove-tooltip'},function(player,element)
