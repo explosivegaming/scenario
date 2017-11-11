@@ -51,7 +51,6 @@ ExpGui.add_input.button('remove-warp-point',{'warp-point.remove-name'},{'warp-po
 end) 
 
 ExpGui.add_frame.left('warp-points',('item/'..warp_item),{'warp-point.tooltip'},false,function(player,frame)
-    if global.warp.can_open[player.index] == false and not ranking.rank_allowed(ranking.get_player_rank(player),'free-warp') then player.print{"warp-point.on-pad"} return end
     frame.caption = {'warp-point.name'}
     local warp_list = frame.add{name="scroll",type = "scroll-pane", direction = "vertical", vertical_scroll_policy="always", horizontal_scroll_policy="never"}
     warp_list.style.maximal_height = 100
@@ -136,7 +135,7 @@ Event.register(defines.events.on_tick,function(event)
             global.warp.can_open[player.index] = true
         elseif not ranking.rank_allowed(ranking.get_player_rank(player),'free-warp') then
             global.warp.can_open[player.index] = false
-            if mod_gui.get_frame_flow(player)['warp-points'] then mod_gui.get_frame_flow(player)['warp-points'].style.visible = false end
+            if mod_gui.get_frame_flow(player)['warp-points'] then player.print{"warp-point.on-pad"} mod_gui.get_frame_flow(player)['warp-points'].style.visible = false end
         end
     end
 end)
