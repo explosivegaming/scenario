@@ -135,7 +135,7 @@ Event.register(defines.events.on_tick,function(event)
             global.warp.can_open[player.index] = true
         elseif not ranking.rank_allowed(ranking.get_player_rank(player),'free-warp') then
             global.warp.can_open[player.index] = false
-            if mod_gui.get_frame_flow(player)['warp-points'] then player.print{"warp-point.on-pad"} mod_gui.get_frame_flow(player)['warp-points'].style.visible = false end
+            if mod_gui.get_frame_flow(player)['warp-points'].style.visible == true then player.print{"warp-point.on-pad"} mod_gui.get_frame_flow(player)['warp-points'].style.visible = false end
         end
     end
 end)
