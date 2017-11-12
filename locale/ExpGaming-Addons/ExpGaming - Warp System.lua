@@ -38,9 +38,10 @@ define_command('warp-point',{'warp-point.help'},{'name',true},function(player,ev
 end) 
 
 ExpGui.add_input.button('goto-warp-point',{'warp-point.goto-name'},{'warp-point.goto-tooltip'},function(player,element)
+    if global.warp.can_open[player.index] == false then player.print{"warp-point.on-pad"} mod_gui.get_frame_flow(player)['warp-points'].style.visible = false end
     if global.warp.cooldown[player.index] and global.warp.cooldown[player.index] > 0 then player.print{'warp-point.cooldown',global.warp.cooldown[player.index]} return end
     local warp = global.warp.warps[element.parent.name]
-    warp.tag = warp.tag or player.force.add_chart_tag(warp.surface,{position=warp.position,text='Warp: '..element.parent.name,icon={type='item',name=warp_item}})
+    if not warp.tag.valid then warp.tag = player.force.add_chart_tag(warp.surface,{position=warp.position,text='Warp: '..element.parent.name,icon={type='item',name=warp_item}}) end
     player.teleport(warp.surface.find_non_colliding_position("player", warp.position, 32, 1),warp.surface)
     if not ranking.rank_allowed(ranking.get_player_rank(player),'free-warp') then element.parent.parent.parent.parent.style.visible = false global.warp.cooldown[player.index] = warp_limit end
 end)
@@ -56,6 +57,7 @@ ExpGui.add_frame.left('warp-points',('item/'..warp_item),{'warp-point.tooltip'},
     warp_list.style.maximal_height = 100
     local table = warp_list.add{name="table",type='table',colspan=2}
     for name,warp in pairs(global.warp.warps) do
+        if not warp.tag.valid then warp.tag = player.force.add_chart_tag(warp.surface,{position=warp.position,text='Warp: '..element.parent.name,icon={type='item',name=warp_item}}) end
         table.add{name='warp_'..name,style="caption_label_style",type='label',caption=name}
         local flow = table.add{name=name,type='flow',direction='horizontal'}
         ExpGui.add_input.draw_button(flow,'goto-warp-point')
