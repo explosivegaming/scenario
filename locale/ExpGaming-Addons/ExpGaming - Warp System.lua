@@ -57,7 +57,7 @@ ExpGui.add_frame.left('warp-points',('item/'..warp_item),{'warp-point.tooltip'},
     warp_list.style.maximal_height = 100
     local table = warp_list.add{name="table",type='table',colspan=2}
     for name,warp in pairs(global.warp.warps) do
-        if not warp.tag or not warp.tag.valid then warp.tag = player.force.add_chart_tag(warp.surface,{position=warp.position,text='Warp: '..element.parent.name,icon={type='item',name=warp_item}}) end
+        if not warp.tag or not warp.tag.valid then warp.tag = player.force.add_chart_tag(warp.surface,{position=warp.position,text='Warp: '..name,icon={type='item',name=warp_item}}) end
         table.add{name='warp_'..name,style="caption_label_style",type='label',caption=name}
         local flow = table.add{name=name,type='flow',direction='horizontal'}
         ExpGui.add_input.draw_button(flow,'goto-warp-point')
