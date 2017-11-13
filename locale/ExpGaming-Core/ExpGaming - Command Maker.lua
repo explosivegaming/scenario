@@ -56,7 +56,7 @@ local function load_command(command)
 	debug_write({'COMMAND','LOAD'},command)
 	commands.add_command(command.name,{'commands.help-format',command_inputs_to_string(command),command.help},function(event)
 		--gets the command data
-		local command_data = global.exp_core.commands[event.name]
+		local command = global.exp_core.commands[event.name]
 		debug_write({'COMMAND','RUN','START'},command.name)
 		debug_write({'COMMAND','RUN','PLAYER-INDEX'},event.player_index)
 		if event.player_index then
@@ -105,5 +105,5 @@ function get_commands(rank)
 	end
 	return to_return
 end
-Event.register(Event.soft_init,function() global.exp_core.commands = Exp_commands for command_name,command in pairs(Exp_commands) do load_command(command) end end)
-Event.register(defines.events.on_player_joined_game,function() for command_name,command in pairs(Exp_commands) do load_command(command) end end)
+Event.register(Event.soft_init,function() global.exp_core.commands = Exp_commands for command_name,command in pairs(global.exp_core.commands) do load_command(command) end end)
+Event.register(defines.events.on_player_joined_game,function() for command_name,command in pairs(global.exp_core.commands) do load_command(command) end end)
