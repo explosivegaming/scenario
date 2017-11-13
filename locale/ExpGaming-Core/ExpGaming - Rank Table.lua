@@ -69,7 +69,7 @@ local ranks = {
 			'info',
 			'links_tab',
 			'servers_tab',
-			'credit_tab'}
+			'warp-points'}
 		},
 
 		{name='Jail',
@@ -132,7 +132,8 @@ local ranks = {
 			'admin',
 			'force_modifiers_tab',
 			'player_modifiers_tab',
-			'adv_repair'}
+			'adv_repair',
+			'free-warp'}
 		},
 		
 		{name='Mod',
@@ -175,7 +176,7 @@ local ranks = {
 		colour={r=24,g=172,b=188},
 		group='User',
 		disallow={},
-		allow={'trusted_reporter'}},
+		allow={'trusted_reporter','warp-point'}},
 		
 		{name='Regular',
 		short_hand='Reg',
