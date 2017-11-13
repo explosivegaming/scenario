@@ -24,7 +24,6 @@ local spawn_warp_scale = 5
 local warp_tile = 'lab-dark-1'
 local warp_partern = 'lab-dark-2'
 local warp_limit = 60
-local replace_tile = 'grass'
 local warp_item = 'discharge-defense-equipment'
 local global_offset = {x=0,y=0}
 
@@ -69,20 +68,21 @@ end)
 
 function remove_warp_point(name)
     if not global.warp.warps[name] then return end
-    local surface =  global.warp.warps[name].surface
-    local offset = global.warp.warps[name].position
+    local warp = global.warp.warps[name]
+    local surface =  warp.surface
+    local offset = warp.position
     local tiles = {}
     for x = -warp_radius-2, warp_radius+2 do
         for y = -warp_radius-2, warp_radius+2 do
             if x^2+y^2 < (warp_radius+1)^2 then
-                table.insert(tiles,{name=replace_tile,position={x+offset.x,y+offset.y}})
+                table.insert(tiles,{name=warp.old_tile,position={x+offset.x,y+offset.y}})
                 local entities = surface.find_entities_filtered{area={{x+offset.x-1,y+offset.y-1},{x+offset.x,y+offset.y}}}
                 for _,entity in pairs(entities) do if entity.name ~= 'player' then entity.destroy() end end
             end
         end
     end
     surface.set_tiles(tiles)
-    if global.warp.warps[name].tag.valid then global.warp.warps[name].tag.destroy() end
+    if warp.tag.valid then warp.tag.destroy() end
     global.warp.warps[name] = nil
     for _,player in pairs(game.connected_players) do
         ExpGui.draw_frame.left(player,'warp-points',true)
@@ -91,7 +91,8 @@ end
 
 function make_way_point(player,name)
     local surface =  player.surface
-    local offset = player.position
+    local offset = {x=math.floor(player.position.x),y=math.floor(player.position.y)}
+    local old_tile = surface.get_tile(offset).name
     local base_tiles = {}
     local tiles = {}
     -- this makes a base plate to make the warp point
@@ -113,8 +114,8 @@ function make_way_point(player,name)
         entity.destructible = false; entity.health = 0; entity.minable = false; entity.rotatable = false
     end
     -- this adds the warp point to the map
-    local tag = player.force.add_chart_tag(surface,{position={math.floor(player.position.x)+0.5,math.floor(player.position.y)+0.5},text='Warp: '..name,icon={type='item',name=warp_item}})
-    global.warp.warps[name] = {tag=tag,surface=surface,position=tag.position}
+    local tag = player.force.add_chart_tag(surface,{position={offset.x+0.5,offset.y+0.5},text='Warp: '..name,icon={type='item',name=warp_item}})
+    global.warp.warps[name] = {tag=tag,surface=surface,position=tag.position,old_tile=old_tile}
     for _,player in pairs(game.connected_players) do
         ExpGui.draw_frame.left(player,'warp-points',true)
     end

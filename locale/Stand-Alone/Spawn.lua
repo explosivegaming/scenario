@@ -144,13 +144,13 @@ local global_offset = {x=0,y=-2}
 local decon_radius = 20
 local decon_tile = 'concrete'
 local partern_radius = 50
-local partern_base_tile = 'grass'
 local partern_tile = 'stone-path'
 
 Event.register(defines.events.on_player_created, function(event)
     if event.player_index == 1 then
         local surface =  game.players[event.player_index].surface
         local offset = game.players[event.player_index].position
+        local partern_base_tile = surface.get_tile(offset).name
         local base_tiles = {}
         local tiles = {}
         for x = -partern_radius-5, partern_radius+5 do
