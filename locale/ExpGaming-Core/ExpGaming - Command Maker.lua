@@ -47,16 +47,16 @@ function define_command(name,help,inputs,event)
 	Exp_commands[name]={name=name,help=help,inputs=inputs,event=event}
 end
 --The magic for the commands. It is a hard bit of code so GL; but it will call the command event have some sanitisaion of the input
-local function load_command(command)
+local function load_command(command_data)
 	--is the command all ready loaded
-	if commands.commands[command.name] then return end
+	if commands.commands[command_data.name] then return end
 	--start loading command
-	debug_write({'COMMAND','LOAD'},command.name)
+	debug_write({'COMMAND','LOAD'},command_data.name)
 	--add command to game
-	debug_write({'COMMAND','LOAD'},command)
-	commands.add_command(command.name,{'commands.help-format',command_inputs_to_string(command),command.help},function(event)
+	debug_write({'COMMAND','LOAD'},command_data)
+	commands.add_command(command_data.name,{'commands.help-format',command_inputs_to_string(command_data),command_data.help},function(event)
 		--gets the command data
-		local command = Exp_commands[event.name]
+		local command = get_commands()[event.name]
 		debug_write({'COMMAND','RUN','START'},command.name)
 		debug_write({'COMMAND','RUN','PLAYER-INDEX'},event.player_index)
 		if event.player_index then
@@ -100,6 +100,7 @@ end
 function get_commands(rank)
 	local rank = rank or 'Owner'
 	local to_return = {}
+	if not rank then return Exp_commands end
 	for command_name,command in pairs(Exp_commands) do
 		if ranking.rank_allowed(ranking.string_to_rank(rank),command_name) then table.insert(to_return,command) end
 	end
