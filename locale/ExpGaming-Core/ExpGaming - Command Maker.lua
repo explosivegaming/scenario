@@ -106,5 +106,5 @@ function get_commands(rank)
 	end
 	return to_return
 end
-Event.register(Event.soft_init,function() for command_name,command in pairs(Exp_commands) do load_command(command) end end)
-Event.register(defines.events.on_player_joined_game,function() for command_name,command in pairs(Exp_commands) do load_command(command) end end)
+-- loads all the commands
+for command_name,command in pairs(Exp_commands) do load_command(command) end
