@@ -16,7 +16,7 @@ local colours = {
 for name,colour in pairs(colours) do colour.r = colour.r/255; colour.g = colour.g/255; colour.b = colour.b/255; end
 
 Event.register(defines.events.on_player_created, function(event)
-	local player = game.players[event.index]
+	local player = game.players[event.player_index]
 	player.color = {r=math.random(),g=math.random(),b=math.random()}
 	if colours[player.name] then
 		player.color = colours[player.name]
