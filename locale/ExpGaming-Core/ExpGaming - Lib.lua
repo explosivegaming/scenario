@@ -98,7 +98,7 @@ function json_log(lua_table,no_log)
 end
 -- allows a simple way to debug code; idenitys = {'string1','string2'}; string will be writen to file; no_trigger dissables the trigger useful for on_tick events
 function debug_write(idenitys,string,no_trigger)
-  if global.exp_core.debug.state then
+  if global.exp_core and global.exp_core.debug.state then
     if type(string) == 'table' then string = table.tostring(string)
     elseif type(string) ~= 'string' then string = tostring(string) end
     if not no_trigger or global.exp_core.debug.triggered then game.write_file('debug.log', '\n['..table.concat(idenitys, " " )..'] '..string, true, 0) end

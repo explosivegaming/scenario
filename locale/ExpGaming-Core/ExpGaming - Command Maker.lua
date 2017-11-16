@@ -56,7 +56,7 @@ local function load_command(command_data)
 	debug_write({'COMMAND','LOAD'},command_data)
 	commands.add_command(command_data.name,{'commands.help-format',command_inputs_to_string(command_data),command_data.help},function(event)
 		--gets the command data
-		local command = get_commands()[event.name]
+		local command = Exp_commands[event.name]
 		debug_write({'COMMAND','RUN','START'},command.name)
 		debug_write({'COMMAND','RUN','PLAYER-INDEX'},event.player_index)
 		if event.player_index then
@@ -100,11 +100,12 @@ end
 function get_commands(rank)
 	local rank = rank or 'Owner'
 	local to_return = {}
-	if not rank then return Exp_commands end
 	for command_name,command in pairs(Exp_commands) do
 		if ranking.rank_allowed(ranking.string_to_rank(rank),command_name) then table.insert(to_return,command) end
 	end
 	return to_return
 end
--- loads all the commands
-for command_name,command in pairs(Exp_commands) do load_command(command) end
+-- loads all the commands, call once all script have been loaded
+function load_commands()
+	for command_name,command in pairs(Exp_commands) do load_command(command) end
+end
