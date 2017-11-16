@@ -37,3 +37,5 @@ ranking,ExpGui,server = unpack(require("locale/ExpGaming-Core/file-header"))
 --loads all the other scripts
 require("locale/Stand-Alone/file-header")
 require("locale/ExpGaming-Addons/file-header")
+--call from command maker
+load_commands()
