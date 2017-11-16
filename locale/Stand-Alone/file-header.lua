@@ -10,3 +10,4 @@ Discord: https://discord.gg/r6dC2uK
 require("Factorio Starting Items")
 require("Spawn")
 require("Show Health")
+require("Lazy Colours")
