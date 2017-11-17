@@ -86,7 +86,8 @@ local ranks = {
 			'open_blueprint_library_gui',
 			'open_trains_gui',
 			'open_train_station_gui',
-			'use_item'}
+			'use_item',
+			'build_item'}
 		}
 	},
 	ranks={
