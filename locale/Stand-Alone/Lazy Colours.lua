@@ -9,8 +9,10 @@ Discord: https://discord.gg/r6dC2uK
 --Please Only Edit Below This Line-----------------------------------------------------------
 local colours = {
 	BADgamerNL={r=255,g=20,b=147},
+	arty714={r=150,g=68,b=161},
 	Cooldude2606={r=57,g=192,b=207},
-	mark9064={r=99,g=0,b=255}
+	mark9064={r=99,g=0,b=255},
+	eissturm={r=25,g=25,b=112}
 }
 -- 255 converter
 for name,colour in pairs(colours) do colour.r = colour.r/255; colour.g = colour.g/255; colour.b = colour.b/255; end
