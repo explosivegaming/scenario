@@ -37,8 +37,9 @@ define_command('warp-point',{'warp-point.help'},{'name',true},function(player,ev
 end) 
 
 ExpGui.add_input.button('goto-warp-point',{'warp-point.goto-name'},{'warp-point.goto-tooltip'},function(player,element)
-    if global.warp.can_open[player.index] == false then player.print{"warp-point.on-pad"} mod_gui.get_frame_flow(player)['warp-points'].style.visible = false return end
+    if global.warp.can_open[player.index] == false then player.print{'warp-point.on-pad'} mod_gui.get_frame_flow(player)['warp-points'].style.visible = false return end
     if global.warp.cooldown[player.index] and global.warp.cooldown[player.index] > 0 then player.print{'warp-point.cooldown',global.warp.cooldown[player.index]} return end
+    if player.vehicle then player.print{'warp-point.in-vehicle'} return end
     local warp = global.warp.warps[element.parent.name]
     if not warp.tag or not warp.tag.valid then warp.tag = player.force.add_chart_tag(warp.surface,{position=warp.position,text='Warp: '..element.parent.name,icon={type='item',name=warp_item}}) end
     player.teleport(warp.surface.find_non_colliding_position("player", warp.position, 32, 1),warp.surface)
