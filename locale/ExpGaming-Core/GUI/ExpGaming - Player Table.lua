@@ -96,7 +96,7 @@ function player_table_functions.draw(player,frame,filters,input_location)
 			end
 		end
 		--add the player
-		if add then--and player.name ~= p.name then
+		if add and not player_table[p.name.."_id"] then
 			debug_write({'GUI','PLAYER-TABLE','ADD'},p.name)
 			player_table.add{name=p.name.."_id", type="label", caption=i}
       		player_table.add{name=p.name..'_name', type="label", caption=p.name}
