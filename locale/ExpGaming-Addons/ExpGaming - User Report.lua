@@ -41,13 +41,14 @@ define_command('report',{'reports.report-help'},{'player','reason',true},functio
 		-- prints to players
 		if ranking.rank_allowed(ranking.get_player_rank(player),'trusted_reporter') then ranking.rank_print({'reports.trusted-report',p.name},'Owner',true)
 		else ranking.rank_print({'reports.report',p.name},'Owner',true) end
-		local trusted='60'; if info.trusted_reports > 0 then trusted='40' end
+		local trusted='40'; if info.trusted_reports > 0 then trusted='20' end
 		ranking.rank_print({'reports.print',p.name,info.total_reports,trusted},'Owner',true)
 		ranking.rank_print({'reports.tail'},'Owner',true)
 		-- logs to file
-		game.write_file('multi.log','{"type": "USER_REPORT","tick":'..game.tick..',"username":"'..info.player.name..'","by":"'..player.name..'","reason":"'..reason..'"}\n', true, 0)
+		local online_mods=0; for _,player in pairs(game.connected_players) do if ranking.get_player_rank(player).power <= ranking.string_to_rank_group('Moderation').lowest_rank.power then online_mods=online_mods+1 end end
+		json_log({type='USER_REPORT',colour='#ffe242',tick=game.tick,online=#game.connected_players,onlineMods=online_mods,username=info.player.name,by=player.name,reason=reason})
 		-- logic to jail player
-		local percent_needed = 0.6; if info.trusted_reports > 0 then percent_needed = 0.4 end
+		local percent_needed = 0.4; if info.trusted_reports > 0 then percent_needed = 0.2 end
 		local players_needed = math.floor(#game.connected_players * percent_needed)
 		if info.total_reports >= players_needed then game.write_file('user_reports.log','\n'..game.tick..' '..p.name..' has been jailed', true, 0) server.queue_callback(give_rank,{p,'Jail'}) end
 	end
@@ -75,9 +76,10 @@ define_command('clear-reports',{'reports.remove-help'},{'player','reason',true},
 		if not index and ranking.get_player_rank(p).name ~= 'Jail' then player.print{'reports.no-reports'} return end
 		-- reverts rank and clears report
 		ranking.rank_print({'reports.clear-reports',p.name,player.name},'Owner',true)
-		game.write_file('multi.log','\n{"type":"USER_REPORT_CLEAR","tick":'..game.tick..',"username":"'..p.name..'","by":"'..player.name..'","reason":"'..reason..'"}\n', true, 0)
+		local online_mods=0; for _,player in pairs(game.connected_players) do if ranking.get_player_rank(player).power <= ranking.string_to_rank_group('Moderation').lowest_rank.power then online_mods=online_mods+1 end end
+		json_log({type='USER_REPORT_CLEAR',colour='#2dc42d',tick=game.tick,online=#game.connected_players,onlineMods=online_mods,username=p.name,by=player.name,reason=reason})
 		global.reported_users[p.name] = nil
-		if ranking.get_player_rank(p).name == 'Jail' then server.queue_callback(revert_rank,{p,player}) end
+		if ranking.get_player_rank(p).name == 'Jail' then server.queue_callback(ranking.revert_rank,{p,player}) end
 	end
 end)
 function get_reported_users() return global.reported_users end

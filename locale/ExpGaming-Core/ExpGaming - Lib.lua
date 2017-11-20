@@ -67,9 +67,38 @@ function table.tostring( tbl )
   end
   return "{" .. table.concat( result, "," ) .. "}"
 end
+-- converts a table to json and logs it to a file
+function json_log(lua_table,no_log)
+  local result, done, only_indexs = {}, {}, true
+  for key,value in ipairs(lua_table) do
+    done[key] = true
+    if type(value) == 'table' then table.insert(result,json_log(value,true))
+    elseif type(value) == 'string' then table.insert(result,'"'..value..'"')
+    elseif type(value) == 'number' then table.insert(result,value)
+    elseif type(value) == 'boolean' then table.insert(result,tostring(value))
+    else table.insert(result,'null') end
+  end
+  for key,value in pairs(lua_table) do
+    if not done[key] then
+      only_indexs = false
+      if type(value) == 'table' then table.insert(result,'"'..key..'":'..json_log(value,true))
+      elseif type(value) == 'string' then table.insert(result,'"'..key..'":"'..value..'"')
+      elseif type(value) == 'number' then table.insert(result,'"'..key..'":'..value)
+      elseif type(value) == 'boolean' then table.insert(result,'"'..key..'":'..tostring(value))
+      else table.insert(result,'"'..key..'":null') end
+    end
+  end
+  if only_indexs then
+    if no_log then return "["..table.concat(result,",").."]"
+    else game.write_file('json.data',"["..table.concat(result,",").."]\n",true,0) end
+  else
+    if no_log then return "{"..table.concat(result,",").."}"
+    else game.write_file('json.data',"{"..table.concat(result,",").."}\n",true,0) end
+  end
+end
 -- allows a simple way to debug code; idenitys = {'string1','string2'}; string will be writen to file; no_trigger dissables the trigger useful for on_tick events
 function debug_write(idenitys,string,no_trigger)
-  if global.exp_core.debug.state then
+  if global.exp_core and global.exp_core.debug.state then
     if type(string) == 'table' then string = table.tostring(string)
     elseif type(string) ~= 'string' then string = tostring(string) end
     if not no_trigger or global.exp_core.debug.triggered then game.write_file('debug.log', '\n['..table.concat(idenitys, " " )..'] '..string, true, 0) end

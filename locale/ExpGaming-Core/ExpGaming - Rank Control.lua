@@ -56,7 +56,7 @@ function ranking.rank_print(msg, rank, inv)
 	debug_write({'RANK','PRINT'},rank.name..': '..tostring(msg))
 	for _, player in pairs(game.players) do
 		--this part uses sudo to soread it other many ticks
-		player_rank_power = ranking.get_player_rank(player).power
+		local player_rank_power = ranking.get_player_rank(player).power
 		if inv then
 			server.queue_callback(function(player_rank_power,rank)
 				if player_rank_power >= rank.power then player.print({'ranking.all-rank-print',msg}) end
@@ -72,6 +72,7 @@ function ranking.rank_print(msg, rank, inv)
 end
 --Give the user their new rank and raise the Event.rank_change event
 function ranking.give_rank(player,rank,by_player,tick)
+	if not player or not player.valid then return end
 	local tick = tick or game.tick
 	local by_player = by_player or 'server'
 	local rank = ranking.string_to_rank(rank) or rank or ranking.string_to_rank_group('User').lowest_rank
@@ -111,14 +112,13 @@ function ranking.find_new_rank(player,tick)
 		end
 	end
 	local tick = tick or game.tick
-	local current_rank = ranking.get_player_rank(player)
-	local old_rank = ranking.get_player_rank(player)
-	local possible_ranks = {current_rank}
+	local player_rank = ranking.get_player_rank(player)
+	local possible_ranks = {player_rank}
 	--Loop through preset ranks only if playtime is less than 5 minutes
 	debug_write({'RANK','NEW-RANK','PRESET-CHEAK'},tick_to_min(player.online_time))
 	if tick_to_min(player.online_time) < 5 then
 		debug_write({'RANK','NEW-RANK','PRESET-START'},player.name)
-		for rank,players in pairs(global.exp_core.preset_ranks) do
+		for rank,players in pairs(ranking.get_player_rank_presets()) do
 			local found_rank = loop_preset_rank(players, rank)
 			if found_rank then debug_write({'RANK','NEW-RANK','ADD'},found_rank) table.insert(possible_ranks,ranking.string_to_rank(found_rank)) break end
 		end
@@ -126,7 +126,7 @@ function ranking.find_new_rank(player,tick)
 	-- to reduce lag if the player is already higher than any time rank then it does not cheak
 	-- also there play time must be higher than the lowest required for a rank
 	debug_write({'RANK','NEW-RANK','TIME-CHEAK'},tick_to_min(player.online_time))
-	if current_rank.power > global.exp_core.ranks.highest_timed_rank.power and tick_to_min(player.online_time) >= global.exp_core.ranks.lowest_timed_rank.time then
+	if player_rank.power > global.exp_core.ranks.highest_timed_rank.power and tick_to_min(player.online_time) >= global.exp_core.ranks.lowest_timed_rank.time then
 		debug_write({'RANK','NEW-RANK','TIME-START'},player.name)
 		--Loop through rank times
 		for _,rank in pairs(ranking.get_ranks()) do
@@ -135,8 +135,8 @@ function ranking.find_new_rank(player,tick)
 		end
 	end
 	--Loop through possible ranks
-	debug_write({'RANK','NEW-RANK','JAIL-CHEAK'},current_rank.name)
-	if current_rank.name ~='Jail' then 
+	debug_write({'RANK','NEW-RANK','JAIL-CHEAK'},player_rank.name)
+	if player_rank.name ~='Jail' then 
 		debug_write({'RANK','NEW-RANK','GIVE','START'},possible_ranks)
 		local highest_rank = possible_ranks[1]
 		for _,rank in pairs(possible_ranks) do
@@ -153,13 +153,13 @@ function ranking.find_new_rank(player,tick)
 			ExpGui.toolbar.draw(player)
 		else
 			debug_write({'RANK','NEW-RANK','GIVE','VIA-GIVE-RANK'},player.name..' '..highest_rank.name)
-			if highest_rank ~= current_rank then ranking.give_rank(player,highest_rank,nil,tick) end
+			if highest_rank ~= player_rank then ranking.give_rank(player,highest_rank,nil,tick) end
 		end
 		debug_write({'RANK','NEW-RANK','GIVE','END'},player.name)
 	end
 	--Lose ends
 	if ranking.get_player_rank(player).power <= ranking.string_to_rank_group('Moderation').lowest_rank.power and not player.admin then ranking.rank_print(player.name..' needs to be promoted.') end
-	if old_rank.name ~= ranking.get_player_rank(player).name then global.exp_core.old_ranks[player.index]=old_rank.name end
+	if player_rank.name ~= ranking.get_player_rank(player).name then global.exp_core.old_ranks[player.index]=player_rank.name end
 	debug_write({'RANK','NEW-RANK','END'},player.name)
 end
 -- returns a list with every players current rank, or just the players of the rank given, includes online time
@@ -176,14 +176,21 @@ end
 Event.rank_change = script.generate_event_name()
 Event.register(Event.rank_change,function(event)
 	debug_write({'RANK','EVENT'},event)
-	if event.new_rank == event.old_rank then return end
+	if event.new_rank.name == event.old_rank.name then return end
 	if not event.by_player == 'server' then
 		game.write_file('rank-change.log','\n'..game.tick..' Player: '..event.player.name..' Was given rank: '..event.new_rank.name..' By: '..event.by_player.name..' Their rank was: '..event.old_rank.name, true, 0)	
+	end
+	if event.new_rank.name == 'Jail' then
+		local by_name = ''; if event.by_player == 'server' then by_name = '<server>' else by_name = event.by_player.name end
+		if global.temp_bans and global.temp_bans[event.player.name] then else
+			json_log({type='JAIL',colour='#ff5400',tick=game.tick,online=#game.connected_players,onlineMods=online_mods,username=event.player.name,by=by_name})
+		end
 	end
 end)
 Event.register(Event.soft_init,function()
 	debug_write({'RANK','SETUP'},'start')
-	global.exp_core.old_ranks = {} 
+	global.exp_core.old_ranks = {}
+	global.exp_core.preset_ranks = {}
 	for _,rank in pairs(ranking.get_ranks()) do
 		debug_write({'RANK','SETUP'},'added: '..rank.name)
 		game.permissions.create_group(rank.name)
@@ -194,6 +201,5 @@ Event.register(Event.soft_init,function()
 	end
 end)
 Event.register(defines.events.on_player_joined_game,function(event) ranking.find_new_rank(game.players[event.player_index]) end)
-Event.register(Event.soft_init,function() global.exp_core.preset_ranks = {} end)
 
 return ranking

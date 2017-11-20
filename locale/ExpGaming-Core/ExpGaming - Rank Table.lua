@@ -48,7 +48,8 @@ local ranks = {
 		allow={
 			'temp-ban',
 			'rank_changer',
-			'clear-reports'}
+			'clear-reports',
+			'limitless_tags'}
 		},
 
 		{name='User',
@@ -68,10 +69,26 @@ local ranks = {
 			'info',
 			'links_tab',
 			'servers_tab',
-			'credit_tab'}
+			'warp-points'}
 		},
 
-		{name='Jail'}
+		{name='Jail',
+		disallow={
+			'open_character_gui',
+			'begin_mining',
+			'start_walking',
+			'player_leave_game',
+			'rotate_entity',
+			'reverse_rotate_entity',
+			'select_gun',
+			'open_technology_gui',
+			'start_research',
+			'open_blueprint_library_gui',
+			'open_trains_gui',
+			'open_train_station_gui',
+			'use_item',
+			'build_item'}
+		}
 	},
 	ranks={
 		{name='Owner',
@@ -116,7 +133,8 @@ local ranks = {
 			'admin',
 			'force_modifiers_tab',
 			'player_modifiers_tab',
-			'adv_repair'}
+			'adv_repair',
+			'free-warp'}
 		},
 		
 		{name='Mod',
@@ -159,7 +177,7 @@ local ranks = {
 		colour={r=24,g=172,b=188},
 		group='User',
 		disallow={},
-		allow={'trusted_reporter'}},
+		allow={'trusted_reporter','warp-point'}},
 		
 		{name='Regular',
 		short_hand='Reg',
@@ -195,11 +213,7 @@ local ranks = {
 		time=nil,
 		colour={r=50,g=50,b=50},
 		group='Jail',
-		disallow={
-			'open_character_gui',
-			'begin_mining',
-			'start_walking',
-			'player_leave_game'},
+		disallow={},
 		allow={}
 		}
 	}
@@ -235,7 +249,7 @@ for n,rank in pairs(ranks.ranks) do
 end
 
 for n = #ranks.ranks, 1, -1 do
-    rank = ranks.ranks[n]
+    local rank = ranks.ranks[n]
     if ranks.ranks[n+1] then
 		for _,allow in pairs(ranks.ranks[n+1].allow) do
 			table.insert(rank.allow,allow)

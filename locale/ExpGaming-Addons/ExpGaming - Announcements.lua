@@ -10,7 +10,7 @@ Discord: https://discord.gg/r6dC2uK
 --this function can be called at any time to make an announcement
 function announcement(message,rank,player)
 	if not message then return end
-	local rank = ranking.string_to_rank(rank) or string_to_rank_group('User').lowest_rank
+	local rank = ranking.string_to_rank(rank) or ranking.string_to_rank_group('User').lowest_rank
 	local player = player or '<server>'
 	ExpGui.draw_frame.popup('announcement',{player,rank,message})
 end

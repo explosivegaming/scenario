@@ -19,7 +19,7 @@ define_command('tag',{'tags.help'},{'tag',true},function(player,event,args)
     else
         local tag = table.concat(args,' ',1)
         if args[1] == 'clear' then player.tag = ranking.get_player_rank(player).tag
-        elseif string.len(tag) > 20 then player.print{'tags.invalid-tag'}
+        elseif string.len(tag) > 20 and not ranking.rank_allowed(ranking.get_player_rank(player),'limitless_tags') then player.print{'tags.invalid-tag'}
         else player.tag = ranking.get_player_rank(player).tag..' - '..tag..' '
         end
     end
