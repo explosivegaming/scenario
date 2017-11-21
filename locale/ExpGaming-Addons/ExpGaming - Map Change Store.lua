@@ -11,11 +11,10 @@ local function fullscreen(cam,state)
     local player = game.players[cam.player_index]
     if state then
         cam.style.visible = false
-        global.map_store.players[player.index] = player.character
-        player.character = nil
-        player.teleport(cam.position,global.map_store.surface)
         mod_gui.get_button_flow(player).style.visible = false
+        global.map_store.players[player.index] = player.character
         player.set_controller{type=defines.controllers.ghost}
+        player.teleport(cam.position,global.map_store.surface)
         local left = mod_gui.get_frame_flow(player)
         for _,frame_data in pairs(ExpGui.frames.left) do
             if left[frame_data.name] and frame_data.name ~= 'map-changes' then left[frame_data.name].style.visible = false end
@@ -24,7 +23,13 @@ local function fullscreen(cam,state)
     else
         cam.style.visible = true
         mod_gui.get_button_flow(player).style.visible = true
-        player.set_controller{type=defines.controllers.character,entity=global.map_store.players[player.index]}
+        player.teleport(cam.position,global.map_store.players[player.index].surface)
+        if global.map_store.players[player.index].valid then 
+            player.set_controller{type=defines.controllers.character,character=global.map_store.players[player.index]}
+        else
+            player.create_character()
+        end
+        global.map_store.players[player.index] = nil
         local left = mod_gui.get_frame_flow(player)
         for _,frame_data in pairs(ExpGui.frames.left) do
             if left[frame_data.name] then left[frame_data.name].style.visible = frame_data.vis end
@@ -33,7 +38,7 @@ local function fullscreen(cam,state)
 end
 
 local function draw_entity(event)
-    if not event.entity.last_user then return end
+    if not event.entity.last_user or entity.name == 'entity-ghost' then return end
     local entity = event.entity
     local player = game.players[event.player_index]
     local surface = global.map_store.surface
@@ -52,7 +57,10 @@ local function draw_ghosts(cam)
     local surface = global.map_store.surface
     local offset = cam.position
     local player = game.players[cam.player_index]
-    local ghosts = player.surface.find_entities_filtered{area={{offset.x-5,offset.y-5},{offset.x+5,offset.y+5}},force=player.force}
+    local ghosts = nil
+    if player.surface == surface then
+    ghosts = global.map_store.players[player.index].surface.find_entities_filtered{area={{offset.x-50,offset.y-50},{offset.x+50,offset.y+50}},force=player.force}
+    else ghosts = player.surface.find_entities_filtered{area={{offset.x-5,offset.y-5},{offset.x+5,offset.y+5}},force=player.force} end
     for _,entity in pairs(ghosts) do
         if entity.name ~= 'player' then
             local entity_name = entity.name == 'entity-ghost' and entity.ghost_name or entity.name
@@ -87,11 +95,12 @@ local function draw_cam(player,cam_root)
         cam.style.minimal_height = 200
     end
     cam.position = player.position
-    global.map_store.open_cams[player.index] = cam_root.style.visible and cam or nil
+    global.map_store.open_cams[player.index] = cam
     make_grid(player.position)
 end
 
-ExpGui.add_frame.left('map-changes','item.satellite','Allows you to see map changes',false,function(player,frame)
+ExpGui.add_frame.left('map-changes','item/satellite','Allows you to see map changes',false,function(player,frame)
+    frame.caption = ''
     draw_cam(player,frame)
     frame.add{type='checkbox',name='entitys',state=false,caption='View Entitys'}
     frame.add{type='checkbox',name='full-screen',state=false,caption='Full Screen Mode'}
@@ -109,7 +118,7 @@ Event.register(defines.events.on_player_rotated_entity,draw_entity)
 
 Event.register(defines.events.on_tick,function(event) 
     for _,cam in pairs(global.map_store.open_cams) do
-        if not cam.parent.style.visible then cam = nil return end
+        if not cam.parent.style.visible then return end
         cam.position = game.players[cam.player_index].position
         if event.tick % 60 == 0 then
             make_grid(cam.position)
