@@ -76,8 +76,8 @@ end
 local function make_grid(offset)
     local surface = global.map_store.surface
     local set_tiles = {}
-    for x = -5,5 do
-        for y = -5,5 do
+    for x = -8,8 do
+        for y = -8,8 do
             if (x+math.floor(offset.x)+y+math.floor(offset.y))%2 == 0 then
                 table.insert(set_tiles,{name='lab-dark-1',position={x+offset.x,y+offset.y}})
             else 

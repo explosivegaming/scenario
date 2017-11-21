@@ -173,5 +173,6 @@ Event.register(defines.events.on_player_created, function(event)
             local entity = surface.create_entity{name=entity[1],position={entity[2]+offset.x+global_offset.x,entity[3]+offset.y+global_offset.y},force='neutral'}
             entity.destructible = false; entity.health = 0; entity.minable = false; entity.rotatable = false
         end
+        game.players[event.player_index].force.set_spawn_position(offset,surface)
     end
 end)
