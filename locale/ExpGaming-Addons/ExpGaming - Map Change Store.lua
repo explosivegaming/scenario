@@ -24,7 +24,7 @@ local function fullscreen(cam,state)
         cam.style.visible = true
         mod_gui.get_button_flow(player).style.visible = true
         if not global.map_store.players[player.index] or not global.map_store.players[player.index].valid then 
-            global.map_store.players[player.index] = game.surfaces['nauvis'].create_entity{name='player',position={0,0}}
+            global.map_store.players[player.index] = game.surfaces['nauvis'].create_entity{name='player',position={0,0},force=player.force}
         end
         player.teleport(cam.position,global.map_store.players[player.index].surface)
         player.set_controller{type=defines.controllers.character,character=global.map_store.players[player.index]}
