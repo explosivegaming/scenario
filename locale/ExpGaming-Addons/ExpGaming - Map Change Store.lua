@@ -7,12 +7,31 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
---/server-interface root = game.player.gui.left.add{type='frame',name='root'}
---/server-interface root.style.visible = true
---/server-interface draw_cam(game.player,root)
---/server-interface 
---/server-interface 
---/server-interface 
+local function fullscreen(cam,state)
+    local player = game.players[cam.player_index]
+    if state then
+        cam.style.visible = false
+        global.map_store.players[player.index] = player.character
+        player.character = nil
+        player.teleport(cam.position,global.map_store.surface)
+        mod_gui.get_button_flow(player).style.visible = false
+        player.set_controller{type=defines.controllers.ghost}
+        local left = mod_gui.get_frame_flow(player)
+        for _,frame_data in pairs(ExpGui.frames.left) do
+            if left[frame_data.name] and frame_data.name ~= 'map-changes' then left[frame_data.name].style.visible = false end
+        end
+        player.gui.center.clear()
+    else
+        cam.style.visible = true
+        mod_gui.get_button_flow(player).style.visible = true
+        player.set_controller{type=defines.controllers.character,entity=global.map_store.players[player.index]}
+        local left = mod_gui.get_frame_flow(player)
+        for _,frame_data in pairs(ExpGui.frames.left) do
+            if left[frame_data.name] then left[frame_data.name].style.visible = frame_data.vis end
+        end
+    end
+end
+
 local function draw_entity(event)
     if not event.entity.last_user then return end
     local entity = event.entity
@@ -72,6 +91,19 @@ local function draw_cam(player,cam_root)
     make_grid(player.position)
 end
 
+ExpGui.add_frame.left('map-changes','item.satellite','Allows you to see map changes',false,function(player,frame)
+    draw_cam(player,frame)
+    frame.add{type='checkbox',name='entitys',state=false,caption='View Entitys'}
+    frame.add{type='checkbox',name='full-screen',state=false,caption='Full Screen Mode'}
+end)
+
+Event.register(defines.events.on_gui_click, function(event)
+	local element = event.element
+    if element.valid and element.type == 'checkbox' and element.name == 'full-screen' and element.parent.name == 'map-changes' then
+        fullscreen(global.map_store.open_cams[event.player_index],element.state)
+    end
+end)
+
 Event.register(defines.events.on_player_mined_entity,draw_entity)
 Event.register(defines.events.on_player_rotated_entity,draw_entity)
 
@@ -81,7 +113,9 @@ Event.register(defines.events.on_tick,function(event)
         cam.position = game.players[cam.player_index].position
         if event.tick % 60 == 0 then
             make_grid(cam.position)
-            draw_ghosts(cam)
+            if cam.parent.entitys.state then
+                draw_ghosts(cam)
+            end
         end
     end
 end)
