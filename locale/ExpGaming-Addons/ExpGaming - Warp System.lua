@@ -131,7 +131,7 @@ Event.register(defines.events.on_tick,function(event)
         end
     end
     for _,player in pairs(game.connected_players) do
-        if player.surface.get_tile(player.position).name == warp_tile or player.surface.get_tile(player.position).name == warp_partern then
+        if player.surface.get_tile(player.position).name == warp_tile or player.surface.get_tile(player.position).name == warp_partern and player.surface.name == 'nauvis' then
             if global.warp.can_open[player.index] ~= true then player.print{'warp-point.enter'} mod_gui.get_frame_flow(player)['warp-points'].style.visible = true end
             global.warp.can_open[player.index] = true
         elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then -- this makes spawn a warp point

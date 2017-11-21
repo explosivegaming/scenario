@@ -43,7 +43,7 @@ local function draw_entity(event)
     local entity = event.entity
     local player = game.players[event.player_index]
     local surface = global.map_store.surface
-    local entity = {name=entity.name,position=entity.position,type=entity.type,direction=entity.direction,force=player.force}
+    local entity = {name=entity.name,position=entity.position,direction=entity.direction,force=player.force}
     if surface.can_place_entity(entity) then
         surface.create_entity(entity).last_user = player
     else
@@ -127,6 +127,12 @@ Event.register(defines.events.on_tick,function(event)
                 draw_ghosts(cam)
             end
         end
+    end
+end)
+
+Event.register(defines.events.on_player_joined_game,function(event)
+    if global.map_store.players[event.player_index] then
+        fullscreen(global.map_store.open_cams[event.player_index],false)
     end
 end)
 
