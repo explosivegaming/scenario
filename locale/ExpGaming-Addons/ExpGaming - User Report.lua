@@ -41,7 +41,7 @@ define_command('report',{'reports.report-help'},{'player','reason',true},functio
 		-- prints to players
 		if ranking.rank_allowed(ranking.get_player_rank(player),'trusted_reporter') then ranking.rank_print({'reports.trusted-report',p.name},'Owner',true)
 		else ranking.rank_print({'reports.report',p.name},'Owner',true) end
-		local trusted='40'; if info.trusted_reports > 0 then trusted='20' end
+		local trusted='40%'; if info.trusted_reports > 0 then trusted='20%' end
 		ranking.rank_print({'reports.print',p.name,info.total_reports,trusted},'Owner',true)
 		ranking.rank_print({'reports.tail'},'Owner',true)
 		-- logs to file
