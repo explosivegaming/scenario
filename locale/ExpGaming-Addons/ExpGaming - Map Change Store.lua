@@ -7,6 +7,44 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
+--/server-interface root = game.player.gui.left.add{type='frame',name='root'}
+--/server-interface root.style.visible = true
+--/server-interface draw_cam(game.player,root)
+--/server-interface 
+--/server-interface 
+--/server-interface 
+local function draw_entity(event)
+    if not event.entity.last_user then return end
+    local entity = event.entity
+    local player = game.players[event.player_index]
+    local surface = global.map_store.surface
+    local entity = {name=entity.name,position=entity.position,type=entity.type,direction=entity.direction,force=player.force}
+    if surface.can_place_entity(entity) then
+        surface.create_entity(entity).last_user = player
+    else
+        for _,destroy in pairs(surface.find_entities_filtered{position=entity.position}) do destroy.destroy() end
+        local entity = surface.create_entity(entity)
+        entity.last_user = player
+        entity.active = false
+    end
+end
+
+local function draw_ghosts(cam)
+    local surface = global.map_store.surface
+    local offset = cam.position
+    local player = game.players[cam.player_index]
+    local ghosts = player.surface.find_entities_filtered{area={{offset.x-5,offset.y-5},{offset.x+5,offset.y+5}},force=player.force}
+    for _,entity in pairs(ghosts) do
+        if entity.name ~= 'player' then
+            local entity_name = entity.name == 'entity-ghost' and entity.ghost_name or entity.name
+            local ghost = {name='entity-ghost',position=entity.position,inner_name=entity_name,direction=entity.direction,force=player.force}
+            if surface.can_place_entity(ghost) then
+                surface.create_entity(ghost).time_to_live = 59
+            end
+        end
+    end
+end
+
 local function make_grid(offset)
     local surface = global.map_store.surface
     local set_tiles = {}
@@ -30,11 +68,27 @@ local function draw_cam(player,cam_root)
         cam.style.minimal_height = 200
     end
     cam.position = player.position
+    global.map_store.open_cams[player.index] = cam_root.style.visible and cam or nil
     make_grid(player.position)
 end
 
+Event.register(defines.events.on_player_mined_entity,draw_entity)
+Event.register(defines.events.on_player_rotated_entity,draw_entity)
+
+Event.register(defines.events.on_tick,function(event) 
+    for _,cam in pairs(global.map_store.open_cams) do
+        if not cam.parent.style.visible then cam = nil return end
+        cam.position = game.players[cam.player_index].position
+        if event.tick % 60 == 0 then
+            make_grid(cam.position)
+            draw_ghosts(cam)
+        end
+    end
+end)
+
 Event.register(Event.soft_init,function() 
     global.map_store = {open_cams={},players={},surface=game.create_surface('map-store',{width = 2, height = 2})}
+    game.forces['player'].ghost_time_to_live = 60
     global.map_store.surface.daytime = 1
     global.map_store.surface.freeze_daytime = true
 end)
