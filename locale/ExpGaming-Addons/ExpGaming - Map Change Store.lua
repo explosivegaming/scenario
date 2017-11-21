@@ -47,8 +47,10 @@ local function draw_entity(event)
     else
         for _,destroy in pairs(surface.find_entities_filtered{position=entity.position}) do destroy.destroy() end
         local entity = surface.create_entity(entity)
-        entity.last_user = player
-        entity.active = false
+        if entity then
+            entity.last_user = player
+            entity.active = false
+        end
     end
 end
 
