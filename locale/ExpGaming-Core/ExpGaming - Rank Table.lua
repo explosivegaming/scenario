@@ -49,7 +49,8 @@ local ranks = {
 			'temp-ban',
 			'rank_changer',
 			'clear-reports',
-			'limitless_tags'}
+			'limitless_tags',
+			'map-changes'}
 		},
 
 		{name='User',
