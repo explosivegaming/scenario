@@ -38,7 +38,7 @@ local function fullscreen(cam,state)
 end
 
 local function draw_entity(event)
-    if not event.entity.last_user or entity.name == 'entity-ghost' then return end
+    if not event.entity.last_user or event.entity.name == 'entity-ghost' then return end
     local entity = event.entity
     local player = game.players[event.player_index]
     local surface = global.map_store.surface
