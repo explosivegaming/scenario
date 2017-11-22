@@ -119,12 +119,13 @@ Event.register(defines.events.on_player_rotated_entity,draw_entity)
 
 Event.register(defines.events.on_tick,function(event) 
     for _,cam in pairs(global.map_store.open_cams) do
-        if not cam.parent.style.visible then return end
-        cam.position = game.players[cam.player_index].position
-        if event.tick % 60 == 0 then
-            make_grid(cam.position)
-            if cam.parent.entitys.state then
-                draw_ghosts(cam)
+        if cam.parent.style.visible then
+            cam.position = game.players[cam.player_index].position
+            if event.tick % 60 == 0 then
+                make_grid(cam.position)
+                if cam.parent.entitys.state then
+                    draw_ghosts(cam)
+                end
             end
         end
     end
