@@ -140,17 +140,42 @@ local entitys = {
     {"stone-wall",9,8},{"stone-wall",9,9}
 }
 
+local turrets = {{-3,-3},{-3,3},{3,-3},{3,3}}
+local turret_ammo = 'uranium-rounds-magazine'
+
 local global_offset = {x=0,y=-2}
 local decon_radius = 20
 local decon_tile = 'concrete'
 local partern_radius = 50
 local partern_tile = 'stone-path'
 
+local function spawn_turrets()
+    local surface = game.surfaces[1]
+    if not game.forces['spawn'] then game.create_force('spawn').set_cease_fire('player',true) end
+    for _,pos in pairs(turrets) do
+        local turret = surface.find_entity('gun-turret',pos)
+        if not turret then 
+            turret = surface.create_entity{name='gun-turret',position=pos,force='spawn'} 
+            turret.destructible = false; turret.health = 0; turret.minable = false; turret.rotatable = false; turret.operable = false; turret.health = 0
+        end
+        if turret.get_inventory(defines.inventory.turret_ammo).can_insert{name=turret_ammo,count=10} then
+            turret.get_inventory(defines.inventory.turret_ammo).insert{name=turret_ammo,count=10}
+        end
+    end
+end
+
+Event.register(defines.events.on_tick,function(event)
+    if event.tick % 3600 then
+        spawn_turrets()
+    end
+end)
+
 Event.register(defines.events.on_player_created, function(event)
     if event.player_index == 1 then
-        local surface =  game.players[event.player_index].surface
+        local player = game.players[event.player_index]
+        local surface =  player.surface
         local offset = {x=0,y=0}
-        local partern_base_tile = surface.get_tile(offset).name
+        local partern_base_tile = surface.get_tile(player.position).name
         local base_tiles = {}
         local tiles = {}
         for x = -partern_radius-5, partern_radius+5 do
@@ -173,7 +198,8 @@ Event.register(defines.events.on_player_created, function(event)
             local entity = surface.create_entity{name=entity[1],position={entity[2]+offset.x+global_offset.x,entity[3]+offset.y+global_offset.y},force='neutral'}
             entity.destructible = false; entity.health = 0; entity.minable = false; entity.rotatable = false
         end
-        game.players[event.player_index].force.set_spawn_position(offset,surface)
-        game.players[event.player_index].teleport(offset,surface)
+        spawn_turrets()
+        player.force.set_spawn_position(offset,surface)
+        player.teleport(offset,surface)
     end
 end)
