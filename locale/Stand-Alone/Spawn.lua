@@ -149,7 +149,7 @@ local partern_tile = 'stone-path'
 Event.register(defines.events.on_player_created, function(event)
     if event.player_index == 1 then
         local surface =  game.players[event.player_index].surface
-        local offset = game.players[event.player_index].position
+        local offset = {x=0,y=0}
         local partern_base_tile = surface.get_tile(offset).name
         local base_tiles = {}
         local tiles = {}
@@ -174,5 +174,6 @@ Event.register(defines.events.on_player_created, function(event)
             entity.destructible = false; entity.health = 0; entity.minable = false; entity.rotatable = false
         end
         game.players[event.player_index].force.set_spawn_position(offset,surface)
+        game.players[event.player_index].teleport(offset,surface)
     end
 end)
