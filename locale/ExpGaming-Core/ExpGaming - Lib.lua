@@ -96,6 +96,18 @@ function json_log(lua_table,no_log)
     else game.write_file('json.data',"{"..table.concat(result,",").."}\n",true,0) end
   end
 end
+--this will long the value of all varibles in script - will most lickely lag - useful for fixing desyncs
+function log_G() 
+  local index = 0 
+  for k,v in pairs(_G) do 
+    index = index + 1 
+    if index ~= 26 and index ~= 1 then 
+      if type(v) == 'table' then log(k..' '..table.tostring(v)) 
+      elseif type(v) == 'function' then log(k..' function') 
+      else log(k..' '..tostring(v)) end 
+    end 
+  end
+end
 -- allows a simple way to debug code; idenitys = {'string1','string2'}; string will be writen to file; no_trigger dissables the trigger useful for on_tick events
 function debug_write(idenitys,string,no_trigger)
   if global.exp_core and global.exp_core.debug.state then
