@@ -149,6 +149,15 @@ local decon_tile = 'concrete'
 local partern_radius = 50
 local partern_tile = 'stone-path'
 
+local function afk_belt(surface,offset)
+    local belts = {{-0.5,-0.5,2},{0.5,-0.5,4},{-0.5,0.5,0},{0.5,0.5,6}}
+    for _,pos in pairs(belts) do
+        local position = {pos[1]+offset[1],pos[2]+offset[2]}
+        local belt = surface.create_entity{name='transport-belt',position=position,force='neutral',direction=pos[3]}
+        belt.destructible = false; belt.health = 0; belt.minable = false; belt.rotatable = false
+    end
+end
+
 local function spawn_turrets()
     local surface = game.surfaces[1]
     if not game.forces['spawn'] then game.create_force('spawn').set_cease_fire('player',true) end
@@ -199,6 +208,10 @@ Event.register(defines.events.on_player_created, function(event)
             entity.destructible = false; entity.health = 0; entity.minable = false; entity.rotatable = false
         end
         spawn_turrets()
+        afk_belt(surface,{offset.x-5,offset.y-5})
+        afk_belt(surface,{offset.x+5,offset.y-5})
+        afk_belt(surface,{offset.x-5,offset.y+5})
+        afk_belt(surface,{offset.x+5,offset.y+5})
         player.force.set_spawn_position(offset,surface)
         player.teleport(offset,surface)
     end
