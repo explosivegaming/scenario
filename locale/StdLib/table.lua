@@ -435,8 +435,8 @@ end
 
 --- Returns a table in a form able to be read as a table
 -- @usage local a = {k1='foo',k2='bar'}
--- table.tostring(a) -- return '"value"'
--- @param tbl table to convert
+-- table.tostring(a) -- return '{["k1"]="foo",["k2"]="bar"}'
+-- @tparam table tbl table to convert
 -- @treturn string the converted table
 function table.to_string(tbl)
     local result, done = {}, {}
@@ -453,3 +453,34 @@ function table.to_string(tbl)
     return "{"..table.concat(result,",") .."}"
 end
 
+--- Simmilar to table.to_string but converts a lua table to a json one
+-- @usage local a = {k1='foo',k2='bar'}
+-- talbe.json(a) -- return '{"k1":"foo","k2":"bar"}'
+-- @tparam table lua_table the table to convert
+-- @treturn string the table in a json format
+function table.json(lua_table)
+    local result, done, only_indexs = {}, {}, true
+    for key,value in ipairs(lua_table) do
+        done[key] = true
+        if type(value) == 'table' then table.insert(result,json_log(value,true))
+        elseif type(value) == 'string' then table.insert(result,'"'..value..'"')
+        elseif type(value) == 'number' then table.insert(result,value)
+        elseif type(value) == 'boolean' then table.insert(result,tostring(value))
+        else table.insert(result,'null') 
+        end
+    end
+    for key,value in pairs(lua_table) do
+      if not done[key] then
+        only_indexs = false
+        if type(value) == 'table' then table.insert(result,'"'..key..'":'..json_log(value,true))
+        elseif type(value) == 'string' then table.insert(result,'"'..key..'":"'..value..'"')
+        elseif type(value) == 'number' then table.insert(result,'"'..key..'":'..value)
+        elseif type(value) == 'boolean' then table.insert(result,'"'..key..'":'..tostring(value))
+        else table.insert(result,'"'..key..'":null') 
+        end
+      end
+    end
+    if only_indexs then return "["..table.concat(result,",").."]"
+    else return "{"..table.concat(result,",").."}" 
+    end
+end
