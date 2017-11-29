@@ -13,13 +13,13 @@ Discord: https://discord.gg/r6dC2uK
 
 local ExpLib = {
     text_hex = {
-        ['']='#0',
-        info='#36F2FF',
-        alert='#000000',
-        low='#2dc42d',
-        med='#ffe242',
-        high='#ff5400',
-        crit='#FF0000'
+        ['']='0x0',
+        info='0x36F2FF',
+        alert='0x000000',
+        low='0x2dc42d',
+        med='0xffe242',
+        high='0xff5400',
+        crit='0xFF0000'
     },
     text_rgb = {
         ['']={0,0,0},
@@ -37,7 +37,7 @@ local ExpLib = {
 -- _load_to_G(a)
 -- @tparam table tbl table to add to the global lua table
 function ExpLib._load_to_G(tbl)
-    if not is_type(tbl,'table') then return end
+    if not is_type(tbl,'table') or game then return end
     for name,value in pairs(tbl) do
         if not _G[name] then _G[name] = value end
     end
@@ -73,26 +73,33 @@ function ExpLib.player_return(rtn)
     end
 end
 
---- Logs data to the json file, we use this for discord
+--- Logs an embed to the json.data we use a js script to add things we cant here
 -- @usage a = 'some data'
 -- json_emit('data','info',a)
 -- @tparam string type the type of emit your programe will look for
 -- @tparam string colour the colour based on the the text_hex use '' for no colour
 -- @param data any data which you want to include this will also be conevert to json
-function ExpLib.json_emit(type,colour,data)
-    if not is_type(type,'string') or
-    not is_type(colour,'string') or 
-    not text_hex[colour] or
-    not data then return end
+function ExpLib.discord_emit(title,colour,description,fields,add_to_server_detail)
+    if not is_type(title,'string') or
+    not is_type(fields,'table') then return end
+    local add_to_server_detail = add_to_server_detail or ''
+    local colour = colour or ''
+    local description or ''
     local log_data = {
-        type=string.upper(type)
-        tick=game.tick,
-        online=#game.connected_players,
-        colour=text_hex[colour],
-        data=data
+        title=title
+        description=description
+        color=text_hex[colour],
+        fields={
+            {
+                name='Server Details',
+                value='Server Name: {{ serverName }} Online Players: '..#game.connected_players..' Server Time: '..tick_to_display_format(game.tick)..' '..add_to_server_detail
+            },
+            unpack(fields)
+        }
     }
     game.write_file('json.data',table.json(log_data),true,0)
 end
+
 --- Convert ticks to hours
 -- @usage a = 216001
 -- tick_to_hour(a) -- return 1
