@@ -21,7 +21,7 @@ Event.register(defines.events.on_console_command,function(event)
 		crit='#FF0000'
 	}
 	local data = {type=string.upper(command),tick=game.tick,online=#game.connected_players}
-	data.by = event.player_index > 0 and game.players[event.player_index].name or '<server>'
+	data.by = event.player_index and game.players[event.player_index].name or '<server>'
 	if command == 'ban' then
 		data.colour = colours.crit
 		data.username = args[1]
