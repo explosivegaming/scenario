@@ -5,7 +5,7 @@
 -- @module Event
 -- @usage require('stdlib/event/event')
 
-local fail_if_missing = require 'core'['fail_if_missing']
+local fail_if_missing = require 'game'['fail_if_missing']
 local Game = require 'game'
 
 local Event = { --luacheck: allow defined top
@@ -102,9 +102,11 @@ function Event.dispatch(event)
                 -- If the handler errors lets make sure someone notices
                 if not success then
                     if _G.game then -- may be nil in on_load
-                        if Game.print_all(err) == 0 then
-                            error(err) -- no players received the message, force a real error so someone notices
-                        end
+                        -- edit by cooldude2606 custom error haddle
+                        --if Game.print_all(err) == 0 then
+                            --error(err) -- no players received the message, force a real error so someone notices
+                        --end
+                        error(err)
                     else
                         error(err) -- no way to handle errors cleanly when the game is not up
                     end

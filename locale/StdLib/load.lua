@@ -16,9 +16,11 @@ The array returned contains the stdlib modules so there can be decleared after t
 
 local StdLib = {}
 
-StdLib.Core = require 'core'
-StdLib.Game = require 'game'
-StdLib.Event = require 'event'
 require '/table'
+require '/string'
+require '/time'
+StdLib.Colour = require '/color'
+StdLib.Game = require '/game'
+StdLib.Event = require '/event'
 
 return StdLib

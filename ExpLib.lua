@@ -11,33 +11,13 @@ Discord: https://discord.gg/r6dC2uK
 -- @module ExpLib
 -- @usage require('/ExpLib')
 
-local ExpLib = {
-    text_hex = {
-        ['']='0x0',
-        info='0x36F2FF',
-        alert='0x000000',
-        low='0x2dc42d',
-        med='0xffe242',
-        high='0xff5400',
-        crit='0xFF0000'
-    },
-    text_rgb = {
-        ['']={0,0,0},
-        info={54,242,255},
-        alert={0,0,0},
-        low={45,196,45},
-        med={255,226,66},
-        high={255,84,0},
-        crit={255,0,0}
-    }
-}
-
+local ExpLib = {}
 --- Loads a table into the global lua table
 -- @usage a = {k1='foo',k2='bar'}
 -- _load_to_G(a)
 -- @tparam table tbl table to add to the global lua table
 function ExpLib._load_to_G(tbl)
-    if not is_type(tbl,'table') or game then return end
+    if not type(tbl) == 'table' or game then return end
     for name,value in pairs(tbl) do
         if not _G[name] then _G[name] = value end
     end
@@ -74,30 +54,41 @@ function ExpLib.player_return(rtn)
 end
 
 --- Logs an embed to the json.data we use a js script to add things we cant here
--- @usage a = 'some data'
--- json_emit('data','info',a)
--- @tparam string type the type of emit your programe will look for
--- @tparam string colour the colour based on the the text_hex use '' for no colour
--- @param data any data which you want to include this will also be conevert to json
-function ExpLib.discord_emit(title,colour,description,fields,add_to_server_detail)
-    if not is_type(title,'string') or
-    not is_type(fields,'table') then return end
-    local add_to_server_detail = add_to_server_detail or ''
-    local colour = colour or ''
-    local description or ''
+-- @usage json_emit{title='BAN',color_name='info',description='A player was banned' ... }
+-- @tparam table arg a table which contains everything that the embeded will use
+-- @param[opt=''] title the tile of the embed
+-- @param[opt='0x0'] color the color given in hex you can use Color.to_hex{r=0,g=0,b=0}
+-- @param[opt=''] description the description of the embed
+-- @param[opt=''] server_detail sting to add onto the pre-set server detail
+-- @param[opt] fieldone the filed to add to the embed (key is name) (value is text) (start value with <<inline>> to make inline)
+-- @param[optchain] fieldtwo 
+function ExpLib.discord_emit(args)
+    if not is_type(args,'table') then return end
+    local title = is_type(args.title,'string') and args.title or ''
+    local color = is_type(args.color,'string') and args.color:find("0x") and args.color or '0x0'
+    local description = is_type(args.description,'string') and args.description or ''
+    local server_detail = is_type(args.server_detail,'string') and args.server_detail or ''
+    local done, fields = {title=true,color=true,description=true,server_detail=true}, {{
+        name='Server Details',
+        value='Server Name: {{ serverName }} Online Players: '..#game.connected_players..' Server Time: '..tick_to_display_format(game.tick)..' '..server_detail
+    }}
+    for key, value in pairs(args) do
+        if not done[key] then
+            done[key] = true
+            local f = {name=key,value='',inline=false}
+            local value, inline = value:gsub("<<inline>>",'',1)
+            f.value = value
+            if inline > 0 then f.inline = true end
+            table.insert(fields,f)
+        end
+    end
     local log_data = {
-        title=title
-        description=description
-        color=text_hex[colour],
-        fields={
-            {
-                name='Server Details',
-                value='Server Name: {{ serverName }} Online Players: '..#game.connected_players..' Server Time: '..tick_to_display_format(game.tick)..' '..add_to_server_detail
-            },
-            unpack(fields)
-        }
+        title=title,
+        description=description,
+        color=color,
+        fields=fields
     }
-    game.write_file('json.data',table.json(log_data),true,0)
+    game.write_file('json.data','\n'..table.json(log_data),true,0)
 end
 
 --- Convert ticks to hours
@@ -137,18 +128,6 @@ function ExpLib.tick_to_display_format(tick)
             tick_to_min(tick)-60*tick_to_hour(tick)
         )
 	end
-end
-
---- Returns a string as a hex format (also a string)
--- @usage a = 'foo'
--- string.to_hex(a) -- return '666f6f'
--- @tparam string str the string to encode
--- @treturn string the hex format of the string
-function string.to_hex(str)
-    if not is_type(str,'string') then return '' end
-    return str:gsub('.',function (c)
-        return string.format('%02X',string.byte(c))
-    end)
 end
 
 return ExpLib

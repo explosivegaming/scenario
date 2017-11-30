@@ -462,7 +462,7 @@ function table.json(lua_table)
     local result, done, only_indexs = {}, {}, true
     for key,value in ipairs(lua_table) do
         done[key] = true
-        if type(value) == 'table' then table.insert(result,json_log(value,true))
+        if type(value) == 'table' then table.insert(result,table.json(value,true))
         elseif type(value) == 'string' then table.insert(result,'"'..value..'"')
         elseif type(value) == 'number' then table.insert(result,value)
         elseif type(value) == 'boolean' then table.insert(result,tostring(value))
@@ -472,7 +472,7 @@ function table.json(lua_table)
     for key,value in pairs(lua_table) do
       if not done[key] then
         only_indexs = false
-        if type(value) == 'table' then table.insert(result,'"'..key..'":'..json_log(value,true))
+        if type(value) == 'table' then table.insert(result,'"'..key..'":'..table.json(value,true))
         elseif type(value) == 'string' then table.insert(result,'"'..key..'":"'..value..'"')
         elseif type(value) == 'number' then table.insert(result,'"'..key..'":'..value)
         elseif type(value) == 'boolean' then table.insert(result,'"'..key..'":'..tostring(value))

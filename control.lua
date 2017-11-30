@@ -8,6 +8,21 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
+-- replaces the base error function
+_error = error
+error = function(err)
+    if _G.discord_emit then
+        local color = _G.Color and Color.to_hex(defines.text_color.bg) or '0x0'
+        discord_emit{title='SCRIPT ERROR',color=color,description=err}
+    elseif _G.game then
+        if Game.print_all(err) == 0 then
+            _error(err)
+        end
+    else
+        _error(err)
+    end
+end
+
 -- loads the stdlib and allows Core Game and Event
 local StdLib = require '/locale/StdLib/load'
 local Core, Game, Event = StdLib.Core, StdLib.Game, StdLib.Event
