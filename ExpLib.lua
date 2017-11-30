@@ -16,7 +16,7 @@ local ExpLib = {}
 -- @usage a = {k1='foo',k2='bar'}
 -- _load_to_G(a)
 -- @tparam table tbl table to add to the global lua table
-function ExpLib._load_to_G(tbl)
+function ExpLib._unpack_to_G(tbl)
     if not type(tbl) == 'table' or game then return end
     for name,value in pairs(tbl) do
         if not _G[name] then _G[name] = value end

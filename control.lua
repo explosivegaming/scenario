@@ -28,4 +28,4 @@ local Color, Game, Event = require('/locale/StdLib/load'){'Color','Game','Event'
 
 -- loads the ExpLib, functions are plased into the lua global
 local ExpLib = require 'ExpLib'
-ExpLib._load_to_G(ExpLib)
+ExpLib._unpack_to_G(ExpLib)
