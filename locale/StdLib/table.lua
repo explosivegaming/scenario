@@ -413,7 +413,7 @@ function table.val_to_str(v)
         end
         return '"'..string.gsub(v,'"', '\\"' )..'"'
     else
-        return "table" == type( v) and table.tostring(v) or
+        return "table" == type( v) and table.to_string(v) or
         "function" == type(v) and '"cant-display-function"' or
         "userdata" == type(v) and '"cant-display-userdata"' or
         tostring(v)

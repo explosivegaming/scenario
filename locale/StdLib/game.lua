@@ -2,7 +2,7 @@
 -- @module Game
 -- @usage local Game = require('stdlib/game')
 
-Game = { --luacheck: allow defined top
+local Game = { --luacheck: allow defined top
     VALID_FILTER = function(v)
         return v and v.valid
     end,

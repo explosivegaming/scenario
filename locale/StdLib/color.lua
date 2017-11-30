@@ -217,7 +217,7 @@ setmetatable(defines.lightcolor, _mt.lightcolor)
 --require 'stdlib/defines/color'
 local fail_if_missing = require 'game'['fail_if_missing']
 
-Color = {} --luacheck: allow defined top
+local Color = {} --luacheck: allow defined top
 
 --- Set a value for the alpha channel in the given color table.
 -- `color.a` represents the alpha channel in the given color table.

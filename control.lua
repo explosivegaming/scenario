@@ -24,8 +24,7 @@ error = function(err)
 end
 
 -- loads the stdlib and allows Core Game and Event
-local StdLib = require '/locale/StdLib/load'
-local Core, Game, Event = StdLib.Core, StdLib.Game, StdLib.Event
+local Color, Game, Event = require('/locale/StdLib/load'){'Color','Game','Event'}
 
 -- loads the ExpLib, functions are plased into the lua global
 local ExpLib = require 'ExpLib'
