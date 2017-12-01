@@ -15,20 +15,24 @@ This file will return a function which can be used to access only the part you w
 Pass a table with the names of the objects you want and it will be return in that order
 ]]
 
-local StdLib = {}
+local ExpCore = {}
 
-require '/table'
-require '/string'
-require '/time'
-StdLib.Color = require '/color'
-StdLib.Game = require '/game'
-StdLib.Event = require '/event'
+require '/commands'
+ExpCore.Ranking = require '/ranking'
+require '/ranks'
+ExpCore.Server = require '/server'
+ExpCore.Gui = require '/gui'
+require '/GuiParts/inputs'
+require '/GuiParts/toolbar'
+require '/GuiParts/center'
+require '/GuiParts/left'
+require '/GuiParts/popup'
 
 return function(rtn)
     local to_return = {}
     for _,name  in pairs(rtn) do
-        if StdLib[name] then
-            table.insert(to_return,StdLib[name])
+        if ExpCore[name] then
+            table.insert(to_return,StdExpCoreLib[name])
         end
     end
     return unpack(to_return)
