@@ -36,16 +36,16 @@ local function command_args(event,command)
     local args = {}
     -- haddles no parameters given
     if not event.parameter then
-        if #command.inputs > 0 then return false, args
-        else return true, args
+        if #command.inputs > 0 then return args, false
+        else return args, true
         end
     end
     -- finds all the words and cheaks if the right number were given
     local words = string.split(event.parameter,' ')
     if table.last(command.inputs) == true then 
-        if #words < #command.inputs-1 then return false, words end
+        if #words < #command.inputs-1 then return args, false end
     else 
-        if #words < #command.inputs then return false, words end
+        if #words < #command.inputs then return args, false end
     end
     -- if it is the right number then process and return the args
     for index,input in pairs(command.inputs) do
@@ -56,7 +56,7 @@ local function command_args(event,command)
             args[input] = words[index]
         end
     end
-    return true, args
+    return args, true
 end
 
 --- Used to return all the commands a player can use
@@ -77,11 +77,40 @@ end
 --- Used to call the custom commands
 -- @usage You dont its an internal command
 -- @tparam defines.events.on_console_command event the event rasied by the command
-local commands._add_command = commands.add_command
+commands._add_command = commands.add_command
 local function run_custom_command(command)
-    local status, err = pcall(command_calls[command.name])
+    local command_data = command_data[command.name]
+    local player_name = Game.get_player(commnd) and Game.get_player(commnd).name or 'server'
+    -- is the player allowed to use this command
+    if not Ranking.rank_allowed(Ranking.get_rank(command.player_index),command.name) then
+        player_return{'commands.unauthorized'}
+        game.write_file('commands.log','\n'..game.tick
+            ..' Player: '..player_name
+            ..' Failed to use command (Unauthorized): '..command.name
+            ..' With args of: '..table.to_string(command_args(command,command_data))
+        , true, 0)
+        return
+    end
+    -- gets the args for the command
+    local args, valid = command_args(command,command_data)
+    if not valid then
+        player_return{'commands.invalid-inputs',command.name,command_args(command)}
+        game.write_file('commands.log','\n'..game.tick
+            ..' Player: '..player.name
+            ..' Failed to use command (Invalid Args): '..command.name
+            ..' With args of: '..table.to_string(args)
+        , true, 0)
+        return
+    end
+    -- runs the command
+    local status, err = pcall(command_calls[command.name],event,args)
     if err then error(err) end
-    player_return('Command Complete')
+    player_return{'commands.command-ran'}
+    game.write_file('commands.log','\n'..game.tick
+        ..' Player: '..player.name
+        ..' Used command: '..command.name
+        ..' With args of: '..table.to_string(args)
+    , true, 0)
 end
 
 --- Used to define commands

@@ -18,7 +18,7 @@ Pass a table with the names of the objects you want and it will be return in tha
 local ExpCore = {}
 
 require '/commands'
-ExpCore.Ranking = require '/ranking'
+--[[ExpCore.Ranking = require '/ranking'
 require '/ranks'
 ExpCore.Server = require '/server'
 ExpCore.Gui = require '/gui'
@@ -26,7 +26,7 @@ require '/GuiParts/inputs'
 require '/GuiParts/toolbar'
 require '/GuiParts/center'
 require '/GuiParts/left'
-require '/GuiParts/popup'
+require '/GuiParts/popup']]
 
 return function(rtn)
     local to_return = {}
