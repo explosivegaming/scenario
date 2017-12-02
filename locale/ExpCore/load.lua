@@ -8,7 +8,7 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 
 --[[
-StdLib
+ExpCore
 
 This file allow you to only require this one file to return the diffent libarys.
 This file will return a function which can be used to access only the part you want.
