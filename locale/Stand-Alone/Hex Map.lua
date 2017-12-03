@@ -8,7 +8,7 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
-local ore_prob = {['stone']=0.02,['iron-ore']=0.07,['copper-ore']=0.12,['coal']=0.14,['crude-oil']=0.15,['uranium-ore']=0.151,['tree-02']=0.25,['water']=0.35}
+local ore_prob = {['stone']=0.02,['iron-ore']=0.07,['copper-ore']=0.12,['coal']=0.14,['crude-oil']=0.15,['uranium-ore']=0.151,['tree-02']=0.25,['water']=0.35,['base']=0.60}
 local tile_prob ={['out-of-map']=0.05,['dirt']=0.20,['grass']=0.65,['sand']=0.75,['red-desert']=0.78,['water-green']=0.80,['deepwater']=1.00}
 
 local hexs = {
@@ -35,6 +35,7 @@ end
 local function make_ore_base(surface,hex_type,center,inverter)
     for _,entity in ipairs(surface.find_entities_filtered{type="resource", area={{center.x-16,center.y-16},{center.x+16,center.y+16}}}) do entity.destroy() end
     for _,entity in ipairs(surface.find_entities_filtered{type="tree", area={{center.x-16,center.y-16},{center.x+16,center.y+16}}}) do entity.destroy() end
+    for _,entity in ipairs(surface.find_entities_filtered{force="enemy", area={{center.x-16,center.y-16},{center.x+16,center.y+16}}}) do entity.destroy() end
     for _,ore in pairs(hexs[hex_type..'ore']) do
         local entity={name='stone',
         position={
@@ -133,6 +134,7 @@ local function make_ore(surface,hex_name,area)
     global.hexs[hex_name] = global.hexs[hex_name] or {}
     global.hexs[hex_name].ore = global.hexs[hex_name].ore or math.random()
     local ores = surface.find_entities_filtered{type="resource", area=area}
+    local distance = math.sqrt((area[1][1]^2)+(area[1][2]^2))
     for item,chance in pairs(ore_prob) do
         if hex_name == '1616' then
             break
@@ -145,11 +147,26 @@ local function make_ore(surface,hex_name,area)
                     table.insert(tiles,{name='water',position=position})
                 end
                 surface.set_tiles(tiles)
+            elseif item == 'base' then
+                if distance > 500 then
+                    for _,entity in ipairs(ores) do 
+                        local position = entity.position
+                        entity.destroy()
+                        local name = "spitter-spawner"
+                        if math.random() < 0.5 then name = "biter-spawner" end
+                        if math.random() < 0.1 and surface.can_place_entity{name=name,position=position} then
+                            surface.create_entity{position=surface.find_non_colliding_position(name,position,20,1),name=name,force="enemy"}
+                        end
+                    end
+                else
+                    for _,entity in ipairs(ores) do entity.destroy() end
+                end
+                return
             elseif item == 'crude-oil' or item == 'tree-02' then
                 for _,entity in ipairs(ores) do 
                     local position = entity.position
                     entity.destroy()
-                    if item == 'tree-02' and math.random() < 0.2 or  math.random() < 0.1 and surface.can_place_entity{name=item,position=position} then
+                    if item == 'tree-02' and math.random() < 0.2 or math.random() < 0.1 and surface.can_place_entity{name=item,position=position} then
                         surface.create_entity{name=item,position=position}
                     end
                 end
@@ -157,7 +174,7 @@ local function make_ore(surface,hex_name,area)
                 for _,entity in ipairs(ores) do 
                     local position = entity.position
                     entity.destroy()
-                    surface.create_entity{name=item,position=position,amount=250}
+                    surface.create_entity{name=item,position=position,amount=math.floor(250*(math.sqrt(math.sqrt(distance)*math.random())))}
                 end
             end
             return
