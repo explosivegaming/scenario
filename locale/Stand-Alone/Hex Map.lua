@@ -157,7 +157,7 @@ local function make_ore(surface,hex_name,area)
                 for _,entity in ipairs(ores) do 
                     local position = entity.position
                     entity.destroy()
-                    surface.create_entity{name=item,position=position}
+                    surface.create_entity{name=item,position=position,amount=250}
                 end
             end
             return
