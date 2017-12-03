@@ -8,7 +8,7 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
-local ore_prob = {['stone']=0.02,['iron-ore']=0.07,['copper-ore']=0.12,['coal']=0.14,['uranium-ore']=0.141,['tree-02']=0.25,['water']=0.35}
+local ore_prob = {['stone']=0.02,['iron-ore']=0.07,['copper-ore']=0.12,['coal']=0.14,['crude-oil']=0.15,['uranium-ore']=0.151,['tree-02']=0.25,['water']=0.35}
 local tile_prob ={['out-of-map']=0.05,['dirt']=0.20,['grass']=0.65,['sand']=0.75,['red-desert']=0.78,['water-green']=0.80,['deepwater']=1.00}
 
 local hexs = {
@@ -145,6 +145,14 @@ local function make_ore(surface,hex_name,area)
                     table.insert(tiles,{name='water',position=position})
                 end
                 surface.set_tiles(tiles)
+            elseif item == 'crude-oil' or item == 'tree-02' then
+                for _,entity in ipairs(ores) do 
+                    local position = entity.position
+                    entity.destroy()
+                    if item == 'tree-02' and math.random() < 0.2 or  math.random() < 0.1 and surface.can_place_entity{name=item,position=position} then
+                        surface.create_entity{name=item,position=position}
+                    end
+                end
             else
                 for _,entity in ipairs(ores) do 
                     local position = entity.position
