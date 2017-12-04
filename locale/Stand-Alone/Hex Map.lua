@@ -248,7 +248,7 @@ local function make_tiles(surface,hex_name,center,area,inverter)
         global.hexs[hex_name].tile = 0.6 --always start on grass.
     end
     for item,chance in pairs(tile_prob) do
-        if global.hexs[hex_name].tile < chance then
+        if global.hexs[hex_name].tile <= chance then
             local tiles = {}
             if area.left_top then
                 for x = area.left_top.x, area.right_bottom.x-1 do
@@ -281,7 +281,7 @@ local function make_ore(surface,hex_name,area)
     for item,chance in pairs(ore_prob) do
         if hex_name == '1616' then
             break
-        elseif global.hexs[hex_name].ore < chance then
+        elseif global.hexs[hex_name].ore <= chance then
             if item == 'water' then
                 local tiles = {}
                 for _,entity in ipairs(ores) do 
