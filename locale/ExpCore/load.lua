@@ -17,10 +17,11 @@ Pass a table with the names of the objects you want and it will be return in tha
 
 local ExpCore = {}
 
+-- note to self - server with use async and promissis with .on_error and .on_success and the appilty to set data
+--ExpCore.Server = require '/server'
 require '/commands'
 --[[ExpCore.Ranking = require '/ranking'
 require '/ranks'
-ExpCore.Server = require '/server'
 ExpCore.Gui = require '/gui'
 require '/GuiParts/inputs'
 require '/GuiParts/toolbar'
