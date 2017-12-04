@@ -8,8 +8,27 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
-local ore_prob = {['stone']=0.02,['iron-ore']=0.07,['copper-ore']=0.12,['coal']=0.14,['crude-oil']=0.15,['uranium-ore']=0.151,['tree-02']=0.25,['water']=0.35,['base']=0.60}
-local tile_prob ={['out-of-map']=0.05,['dirt']=0.20,['grass']=0.65,['sand']=0.75,['red-desert']=0.78,['water-green']=0.80,['deepwater']=1.00}
+local ore_prob = {
+    ['stone'] = 0.02,
+    ['iron-ore'] = 0.07,
+    ['copper-ore'] = 0.12,
+    ['coal'] = 0.14,
+    ['crude-oil'] = 0.15,
+    ['uranium-ore'] = 0.151,
+    ['tree-02'] = 0.25,
+    ['water'] = 0.35,
+    ['base'] = 0.60
+}
+
+local tile_prob ={
+    ['out-of-map'] = 0.05,
+    ['dirt'] = 0.20,
+    ['grass'] = 0.65,
+    ['sand'] = 0.75,
+    ['red-desert'] = 0.78,
+    ['water-green'] = 0.80,
+    ['deepwater'] = 1.00
+}
 
 local hexs = {
     middle_ore = {
