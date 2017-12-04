@@ -355,20 +355,28 @@ Event.register(defines.events.on_chunk_generated,function(event)
         inverter.x = -1
         inverter.ox =-1
     end
+	
+	-- work out replace stone area
+    local area_one, area_two = get_hex_areas(hex_type,center,inverter)
+    local hex_one, hex_two = get_hex_names(hex_type,center,inverter)
+	
+	-- make tiles before plaxing dummy stone, inaccessible tiles could affect stone, convert tiles first
+	if hex_two then 
+        make_tiles(surface,hex_one,center,hexs.tile_big,inverter)
+        make_tiles(surface,hex_two,center,hexs.tile_small,inverter)
+    else
+        make_tiles(surface,hex_one,center,event.area,inverter)
+    end
+	
     -- make hex_type
     make_borders(surface,hex_type,center,inverter)
     make_ore_base(surface,hex_type,center,inverter)
-    -- work out replace stone area
-    local area_one, area_two = get_hex_areas(hex_type,center,inverter)
-    local hex_one, hex_two = get_hex_names(hex_type,center,inverter)
+    
     -- replace the stone
     if hex_two then 
-        make_tiles(surface,hex_one,center,hexs.tile_big,inverter)
-        make_tiles(surface,hex_two,center,hexs.tile_small,inverter)
         make_ore(surface,hex_one,area_one)
         make_ore(surface,hex_two,area_two)
     else
-        make_tiles(surface,hex_one,center,event.area,inverter)
         make_ore(surface,hex_one,area_one)
     end
 end)
