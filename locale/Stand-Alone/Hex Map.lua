@@ -15,9 +15,9 @@ local ore_prob = {
     ['coal'] = 0.14,
     ['crude-oil'] = 0.15,
     ['uranium-ore'] = 0.151,
-    ['tree-02'] = 0.25,
-    ['water'] = 0.35,
-    ['base'] = 0.60
+    ['tree-02'] = 0.35,
+    ['water'] = 0.45,
+    ['base'] = 0.70
 }
 
 local tile_prob ={
