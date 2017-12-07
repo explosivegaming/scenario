@@ -43,6 +43,11 @@ function Server._threads(reset)
     return global.exp_core.threads
 end
 
+-- see thread:create (this was done so thread can remain local)
+function Server.new_thread(obj)
+    return thread:create(obj)
+end
+
 --- Adds a thread into the resolve queue, can be used to lower lag
 -- @usage Server.queue_thread(thread) -- return true/false
 -- @tparam table the thread to add to the queue must have a resolve function (must be open)
