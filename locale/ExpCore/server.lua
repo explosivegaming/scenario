@@ -8,49 +8,123 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 -- server allows control over threads and other features the devs missed out
-local server = {}
+local Server = {}
 
 --- Returns a un-used uuid (better system needed)
--- @usage obj.uuid = server.new_uuid()
+-- @usage obj.uuid = Server.new_uuid()
 -- @treturn string the new uuid
-function server.new_uuid()
-	uuid = tostring(global.exp_core.uuids.operator())
+function Server.new_uuid()
+	uuid = tostring(Server._uuid().operator())
 	uuid = string.tohex('uuid'..uuid)
 	return uuid
 end
 
+-- use this to change the location of the server uuids
+function Server._uuids(reset)
+    global.exp_core = not reset and global.exp_core or {}
+    global.exp_core.uuids = not reset and global.exp_core.uuids or game.create_random_generator()
+    return global.exp_core.uuids
+end
+
 --- Returns either the number of threads or a able of threads
--- @usage server.threads() -- {...}
--- server.threads(true) -- int
+-- @usage Server.threads() -- return {...}
+-- Server.threads(true) -- return int
 -- @tparam[opt=nil] bolean count true to return the number of threads
 -- @return either a list of threads or a number
-function server.threads(count)
-    return count and #global.exp_core.threads.all or global.exp_core.threads.all
+function Server.threads(count)
+    return count and #Server._threads().all or Server._threads().all
 end
 
-function server.queue_thread(thread)
-    -- adds a thread the the queue to be resolved
+-- use this to change the location of the server threads
+-- all stores the threads indexed uuid, the other three only store the uuid's to index in the all table
+function Server._threads(reset)
+    global.exp_core = not reset and global.exp_core or {}
+    global.exp_core.threads = not reset and global.exp_core.threads or {queue={},on_tick={},timeout={},all={}}
+    return global.exp_core.threads
 end
 
-function server.close_all_threads(with_force)
-    -- closes all threads, if with_force then it sets all threads to nil (no on_close event)
+--- Adds a thread into the resolve queue, can be used to lower lag
+-- @usage Server.queue_thread(thread) -- return true/false
+-- @tparam table the thread to add to the queue must have a resolve function (must be open)
+-- @treturn bolean was the thread added
+function Server.queue_thread(thread)
+    if not thread and not thread.valid and not thread:valid() then return false end
+    if not thread._resolve then return false end
+    table.insert(Server._threads().queue,thread.uuid)
+    return true
 end
 
-function server.run_on_tick_threads()
-    -- runs the on tick function for all threads
+--- Closes all active threads, can use force if it causes errors
+-- @usage Server.close_all_threads()
+-- Server.close_all_threads(true) -- use if no force makes errors
+-- @tparam bolean with_force use force when closing
+function Server.close_all_threads(with_force)
+    if not with_force then
+        for uuid,thread in pairs(Server.threads()) do
+            thread:close()
+        end
+    end
+    Server._threads(true)
 end
 
-function server.check_timeouts()
-    -- checks the timeout status on all threads with timeout
+--- Runs all the theads which have opened with an on_tick event
+-- @ussage Server.run_on_tick_threads()
+function Server.run_on_tick_threads()
+    table.each(Server._threads().on_tick,function(uuid)
+        local thread = Server._threads().all[uuid]
+        if thread and thread:valid() and thread._on_tick then
+            local success, err = pcall(thread._on_tick,thread)
+            if not success then error(err) end
+        end
+    end)
 end
 
-function server.interface(callback)
-    -- runs a function from a string and returns any errors or values
+--- Checks the timeout on all active timeout threads
+-- @ussage Server.check_timeouts()
+function Server.check_timeouts()
+    table.each(Server._threads().timeout,function(uuid)
+        local thread = Server._threads().all[uuid]
+        if thread and thread:valid() then
+            thread:check_timeout()
+        end
+    end)
 end
+
+--- Given a string or function it will run that function and return any values
+-- @usage Server.interface('local x = 1+1 print(x) return x') -- return 2
+-- Server.interface('local x = 1+1 print(x)',thread) -- no return
+-- @param callback either a function or string which will be ran via pcall
+-- @param[opt] thread give a thread for the interface to run on (does not need to be open, but cant use on_resolve)
+-- @param[opt] ... any args you want to pass to the function
+function Server.interface(callback,thread,...)
+    if thread then
+        thread:on_resolve(function(callback,...)
+            if is_type(callback,'function') then
+                pcall(callback,...)
+            else 
+                pcall(loadstring(callback),...)
+            end
+        end)
+        thread:open()
+        Server.queue_thread(thread)
+    else
+        if is_type(callback,'function') then
+            local success, err = pcall(callback,...)
+            return success, err
+        else 
+            local success, err = pcall(loadstring(callback),...)
+            return success, err
+        end
+        return false
+    end
+end
+
+
 
 -- thread allows you to run fuinction async to the main game
 local thread = {}
 thread.__index = thread
+thread.uuid = Server.new_uuid
 --- Returns a new thread object
 -- @usage new_thread = thread:create()
 -- @tparam[opt={}] table obj all are opt {timeout=int,name=str,data=any} advanced users can prefix with _function to avoid the on_function functions
@@ -58,12 +132,28 @@ thread.__index = thread
 function thread:create(obj)
     local obj = obj or {}
     setmetatable(obj,self)
-    obj.uuid = server.new_uuid()
+    obj.uuid = Server.new_uuid()
     return obj
 end
 
+--- Test if the thread has all requied parts
+-- @usage if thread:valid() then end
+-- @treturn bolean is the thread valid
 function thread:valid()
-    -- tests if the thread is valid and stored
+    if is_type(self.uuid,'string') and
+    is_type(self.opened,'number') and
+    is_type(global.exp_core.threads[self.uuid],'table') and
+    is_type(self.timeout,'nil') or is_type(self.timeout,'number') and
+    is_type(self.name,'nil') or is_type(self.name,'string') and
+    is_type(self._close,'nil') or is_type(self._close,'function') and
+    is_type(self._timeout,'nil') or is_type(self._timeout,'function') and
+    is_type(self._on_tick,'nil') or is_type(self._on_tick,'function') and
+    is_type(self._resolve,'nil') or is_type(self._resolve,'function') and
+    is_type(self._success,'nil') or is_type(self._success,'function') and
+    is_type(self._error,'nil') or is_type(self._error,'function') then
+        return true
+    end
+    return false
 end
 
 function thread:open()
@@ -83,7 +173,7 @@ function thread:check_timeout()
 end
 
 function thread:on_close(callback)
-    -- set the function to run when closed (does not include timeout)
+    -- set the function to run when closed (also called on_timeout)
 end
 
 function thread:on_timeout(callback)
@@ -105,9 +195,3 @@ end
 function thread:on_error(callback)
     -- set the function to run if if resolve gives an error
 end
-
-Event.register(Event.soft_init,function() 
-    -- all stores the threads by uuid, the other three only store the uuid's to index in the all table
-    global.exp_core.threads = {queue={},on_tick={},timeout={},all={}} 
-    global.exp_core.uuids = game.create_random_generator() 
-end)

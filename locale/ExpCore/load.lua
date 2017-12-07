@@ -15,13 +15,13 @@ This file will return a function which can be used to access only the part you w
 Pass a table with the names of the objects you want and it will be return in that order
 ]]
 
-local ExpCore = {}
+local StdExpCoreLib = {}
 
-ExpCore.Server = require '/server'
+StdExpCoreLib.Server = require '/server'
 require '/commands'
---[[ExpCore.Ranking = require '/ranking'
+--[[StdExpCoreLib.Ranking = require '/ranking'
 require '/ranks'
-ExpCore.Gui = require '/gui'
+StdExpCoreLib.Gui = require '/gui'
 require '/GuiParts/inputs'
 require '/GuiParts/toolbar'
 require '/GuiParts/center'
@@ -31,7 +31,7 @@ require '/GuiParts/popup']]
 return function(rtn)
     local to_return = {}
     for _,name  in pairs(rtn) do
-        if ExpCore[name] then
+        if StdExpCoreLib[name] then
             table.insert(to_return,StdExpCoreLib[name])
         end
     end
