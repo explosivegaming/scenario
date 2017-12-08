@@ -29,11 +29,11 @@ require '/GuiParts/left'
 require '/GuiParts/popup']]
 
 return function(rtn)
-    local to_return = {}
+    local _return = {}
     for _,name  in pairs(rtn) do
         if StdExpCoreLib[name] then
-            table.insert(to_return,StdExpCoreLib[name])
+            table.insert(_return,StdExpCoreLib[name])
         end
     end
-    return unpack(to_return)
+    return unpack(_return)
 end

@@ -77,8 +77,8 @@ end
 function Server.run_on_tick_threads()
     table.each(Server._threads().on_tick,function(uuid)
         local thread = Server._threads().all[uuid]
-        if thread and thread:valid() and thread._on_tick then
-            local success, err = pcall(thread._on_tick,thread)
+        if thread and thread:valid() and thread._tick then
+            local success, err = pcall(thread._tick,thread)
             if not success then error(err) end
         end
     end)
@@ -148,16 +148,17 @@ end
 
 --- Test if the thread has all requied parts
 -- @usage if thread:valid() then end
+-- @tparam bolean skip_location_check true to skip the location check
 -- @treturn bolean is the thread valid
-function thread:valid()
+function thread:valid(skip_location_check)
     if is_type(self.uuid,'string') and
     is_type(self.opened,'number') and
-    is_type(global.exp_core.threads[self.uuid],'table') and
+    skip_location_check or is_type(Server._threads().all[self.uuid],'table') and
     is_type(self.timeout,'nil') or is_type(self.timeout,'number') and
     is_type(self.name,'nil') or is_type(self.name,'string') and
     is_type(self._close,'nil') or is_type(self._close,'function') and
     is_type(self._timeout,'nil') or is_type(self._timeout,'function') and
-    is_type(self._on_tick,'nil') or is_type(self._on_tick,'function') and
+    is_type(self._tick,'nil') or is_type(self._tick,'function') and
     is_type(self._resolve,'nil') or is_type(self._resolve,'function') and
     is_type(self._success,'nil') or is_type(self._success,'function') and
     is_type(self._error,'nil') or is_type(self._error,'function') then
@@ -166,42 +167,89 @@ function thread:valid()
     return false
 end
 
+--- Opens the thread by storing it in a place the server object can find it
+-- @usage thread:open() -- return true
+-- @treturn bolean if the thread was opened
 function thread:open()
-    -- adds the thread to global.exp_core.threads
+    if not self:valid(true) then return false end
+    local threads = Server._threads()
+    local uuid = self.uuid
+    threads.all[uuid] = self
+    if is_type(self.timeout,'number') then table.insert(threads.timeout,uuid) end
+    if is_type(self._tick,'function') then table.insert(threads.on_tick,uuid) end
+    return true
 end
 
+--- Inverse of thread:open() - it removes the thread and calles on_close
+-- @usage thread:close() -- return true
+-- @treturn bolean if the thread had a on_close function
 function thread:close()
-    -- removes the thread from global.exp_core.threads
+    local threads = Server._threads()
+    local uuid = self.uuid
+    local _return = false
+    if is_type(self._close,'function') then pcall(self._close) _return = true end
+    local value,key = table.find(threads.queue,function(v,k,uuid) return v == uuid end,uuid)
+    if key then table.remove(threads.queue,key) end
+    local value,key = table.find(threads.timeout,function(v,k,uuid) return v == uuid end,uuid)
+    if key then table.remove(threads.timeout,key) end
+    local value,key = table.find(threads.on_tick,function(v,k,uuid) return v == uuid end,uuid)
+    if key then table.remove(threads.on_tick,key) end
+    table.remove(threads.all,uuid)
+    return _return
 end
 
-function thread:resolve(args)
-    -- runs the thread callback and closes
+--- Trigger the on_resolve function and closes the thread - error and success called based on result of pcall (useful for async)
+-- @usage thread:resolve(x,y,z) -- return true
+-- @param[opt] ... any arguments you want to pass to the resolve function
+-- @treturn bolean true if the thread called on_success or on_error
+function thread:resolve(...)
+    local _return = false
+    if is_type(self._resolve,'function') then 
+        local success, err = pcall(self._resolve,...)
+        if success then
+            if is_type(self._success,'function') then
+                pcall(self._success,err)
+                _return = true
+            end
+        else
+            if is_type(self._error,'function') then
+                pcall(self._error,err)
+                _return = true
+            end
+        end
+    end
+    self:close()
+    return _return
 end
 
+--- Checks the timeout on a thread - if timedout then it calles on_timeout and closes
+-- @usage thread:check_timeout() -- return true
+-- @treturn bolean if the thread timedout
 function thread:check_timeout()
-    -- checks if the thread should time out
+    local _return = false
+    if not self:valid() then return false end
+    if is_type(self.timeout,'number') and game.tick >= (self.opened+self.timeout) then
+        if is_type(self._timeout,'function') then
+            pcall(self._timeout)
+        end
+        _return = true
+        self:close()
+    end
+    return _return
 end
 
-function thread:on_close(callback)
-    -- set the function to run when closed (also called on_timeout)
-end
-
-function thread:on_timeout(callback)
-    -- set the function to run if the function times out
-end
-
-function thread:on_tick(callback)
-    -- set the function to run every tick
-end
-
-function thread:on_resolve(callback)
-    -- set the function to run when resolve is called 
-end
-
-function thread:on_success(callback)
-    -- set the function to run if resolve gives no error
-end
-
-function thread:on_error(callback)
-    -- set the function to run if if resolve gives an error
+--- Set function to run then an event is called on a thread, none of them are 'needed' but you are advised to have atleast one
+-- @usage thread:on_event('close',function) -- return true
+-- events = ['close','timeout','tick','resolve','success','error']
+-- @tparam string event the name of the event that it is called on
+-- @tparam function callback the function which is called on the event
+-- @treturn was the function added
+function thread:on_event(event,callback)
+    local events = ['close','timeout','tick','resolve','success','error']
+    local value = table.find(threads.queue,function(v,k,find) return v == string.lower(find) end,event)
+    if value and is_type(callback,'function') then
+        self['_'..value] = callback
+        return true
+    end
+    return false
 end

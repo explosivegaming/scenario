@@ -25,11 +25,11 @@ StdLib.Game = require '/game'
 StdLib.Event = require '/event'
 
 return function(rtn)
-    local to_return = {}
+    local _return = {}
     for _,name  in pairs(rtn) do
         if StdLib[name] then
-            table.insert(to_return,StdLib[name])
+            table.insert(_return,StdLib[name])
         end
     end
-    return unpack(to_return)
+    return unpack(_return)
 end
