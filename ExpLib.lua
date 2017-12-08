@@ -27,10 +27,10 @@ end
 -- @usage a = 'foo'
 -- is_type(a,'string') -- return true
 -- @param v the value to be tested
--- @tparam string test_type the type to test for
+-- @tparam[opt=nil] string test_type the type to test for if nil then it tests for nil
 -- @treturn bolean is v a matching type
 function ExpLib.is_type(v,test_type)
-    return v and type(v) == test_type or false
+    return test_type and v and type(v) == test_type or not test_type and not v or false 
 end
 
 --- Returns a value to the player or if no player then log the return

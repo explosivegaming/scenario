@@ -9,18 +9,19 @@ Discord: https://discord.gg/r6dC2uK
 --Please Only Edit Below This Line-----------------------------------------------------------
 -- server allows control over threads and other features the devs missed out
 local Server = {}
+local thread = {}
 
 --- Returns a un-used uuid (better system needed)
 -- @usage obj.uuid = Server.new_uuid()
 -- @treturn string the new uuid
 function Server.new_uuid()
-	uuid = tostring(Server._uuid().operator())
-	uuid = string.tohex('uuid'..uuid)
+	uuid = tostring(Server._uuid()())
+	uuid = string.to_hex('uuid'..uuid)
 	return uuid
 end
 
 -- use this to change the location of the server uuids
-function Server._uuids(reset)
+function Server._uuid(reset)
     global.exp_core = not reset and global.exp_core or {}
     global.exp_core.uuids = not reset and global.exp_core.uuids or game.create_random_generator()
     return global.exp_core.uuids
@@ -39,7 +40,7 @@ end
 -- all stores the threads indexed uuid, the other three only store the uuid's to index in the all table
 function Server._threads(reset)
     global.exp_core = not reset and global.exp_core or {}
-    global.exp_core.threads = not reset and global.exp_core.threads or {queue={},on_tick={},timeout={},all={}}
+    global.exp_core.threads = not reset and global.exp_core.threads or {queue={},tick={},timeout={},all={}}
     return global.exp_core.threads
 end
 
@@ -73,9 +74,9 @@ function Server.close_all_threads(with_force)
 end
 
 --- Runs all the theads which have opened with an on_tick event
--- @ussage Server.run_on_tick_threads()
-function Server.run_on_tick_threads()
-    table.each(Server._threads().on_tick,function(uuid)
+-- @ussage Server.run_tick_threads()
+function Server.run_tick_threads()
+    table.each(Server._threads().tick,function(uuid)
         local thread = Server._threads().all[uuid]
         if thread and thread:valid() and thread._tick then
             local success, err = pcall(thread._tick,thread)
@@ -132,7 +133,6 @@ commands.add_command('server-interface', 'Runs the given input from the script',
 end)
 
 -- thread allows you to run fuinction async to the main game
-local thread = {}
 thread.__index = thread
 thread.uuid = Server.new_uuid
 --- Returns a new thread object
@@ -152,16 +152,16 @@ end
 -- @treturn bolean is the thread valid
 function thread:valid(skip_location_check)
     if is_type(self.uuid,'string') and
-    is_type(self.opened,'number') and
+    skip_location_check or is_type(self.opened,'number') and
     skip_location_check or is_type(Server._threads().all[self.uuid],'table') and
-    is_type(self.timeout,'nil') or is_type(self.timeout,'number') and
-    is_type(self.name,'nil') or is_type(self.name,'string') and
-    is_type(self._close,'nil') or is_type(self._close,'function') and
-    is_type(self._timeout,'nil') or is_type(self._timeout,'function') and
-    is_type(self._tick,'nil') or is_type(self._tick,'function') and
-    is_type(self._resolve,'nil') or is_type(self._resolve,'function') and
-    is_type(self._success,'nil') or is_type(self._success,'function') and
-    is_type(self._error,'nil') or is_type(self._error,'function') then
+    is_type(self.timeout) or is_type(self.timeout,'number') and
+    is_type(self.name) or is_type(self.name,'string') and
+    is_type(self._close) or is_type(self._close,'function') and
+    is_type(self._timeout) or is_type(self._timeout,'function') and
+    is_type(self._tick) or is_type(self._tick,'function') and
+    is_type(self._resolve) or is_type(self._resolve,'function') and
+    is_type(self._success) or is_type(self._success,'function') and
+    is_type(self._error) or is_type(self._error,'function') then
         return true
     end
     return false
@@ -174,9 +174,10 @@ function thread:open()
     if not self:valid(true) then return false end
     local threads = Server._threads()
     local uuid = self.uuid
+    self.opened = game.tick
     threads.all[uuid] = self
     if is_type(self.timeout,'number') then table.insert(threads.timeout,uuid) end
-    if is_type(self._tick,'function') then table.insert(threads.on_tick,uuid) end
+    if is_type(self._tick,'function') then table.insert(threads.tick,uuid) end
     return true
 end
 
@@ -192,8 +193,8 @@ function thread:close()
     if key then table.remove(threads.queue,key) end
     local value,key = table.find(threads.timeout,function(v,k,uuid) return v == uuid end,uuid)
     if key then table.remove(threads.timeout,key) end
-    local value,key = table.find(threads.on_tick,function(v,k,uuid) return v == uuid end,uuid)
-    if key then table.remove(threads.on_tick,key) end
+    local value,key = table.find(threads.tick,function(v,k,uuid) return v == uuid end,uuid)
+    if key then table.remove(threads.tick,key) end
     table.remove(threads.all,uuid)
     return _return
 end
@@ -245,11 +246,23 @@ end
 -- @tparam function callback the function which is called on the event
 -- @treturn was the function added
 function thread:on_event(event,callback)
-    local events = ['close','timeout','tick','resolve','success','error']
-    local value = table.find(threads.queue,function(v,k,find) return v == string.lower(find) end,event)
+    local events = {'close','timeout','tick','resolve','success','error'}
+    local value = table.find(events,function(v,k,find) return v == string.lower(find) end,event)
     if value and is_type(callback,'function') then
         self['_'..value] = callback
         return true
     end
     return false
 end
+
+Event.register(defines.events.on_tick,function(event)
+    local threads = Server._threads()
+    if #threads.tick > 0 then Server.run_tick_threads() end
+    if #threads.timeout > 0 then Server.check_timeouts() end
+    if #threads.queue > 0 then 
+        local thread = threads.all[threads.queue[1]]
+        if thread and thread:valid() then thread:resolve() end
+    end
+end)
+
+return Server

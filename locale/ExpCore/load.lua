@@ -19,6 +19,8 @@ local StdExpCoreLib = {}
 
 require '/commands'
 StdExpCoreLib.Server = require '/server'
+StdExpCoreLib.Ranking = {}
+StdExpCoreLib.Gui = {}
 --[[StdExpCoreLib.Ranking = require '/ranking'
 require '/ranks'
 StdExpCoreLib.Gui = require '/gui'
