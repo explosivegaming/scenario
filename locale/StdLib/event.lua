@@ -40,6 +40,16 @@ local Event = { --luacheck: allow defined top
     }
 }
 
+--[[ edit by cooldude2606 to allow change during run-time without desyncs -- still going to use this but FACTORIO NO LIKE
+Event.__registry = Event._registry
+Event._registry = function()
+    if game and global then
+        if not global.event_registry then global.event_registry = Event.__registry end
+        return global.event_registry
+    end
+    return Event.__registry
+end]]
+
 --- Registers a function for a given event. If a nil handler is passed remove all events and stop listening for that event.
 -- Events are dispatched in the order they are registered.
 -- @usage Event.register(defines.events.on_tick, function(event) print event.tick end)

@@ -40,13 +40,25 @@ end
 -- all stores the threads indexed uuid, the other three only store the uuid's to index in the all table
 function Server._threads(reset)
     global.exp_core = not reset and global.exp_core or {}
-    global.exp_core.threads = not reset and global.exp_core.threads or {queue={},tick={},timeout={},events={},all={}}
+    global.exp_core.threads = not reset and global.exp_core.threads or {queue={},tick={},timeout={},events={},all={},paused={},named={}}
     return global.exp_core.threads
 end
 
 -- see thread:create (this was done so thread can remain local)
 function Server.new_thread(obj)
     return thread:create(obj)
+end
+
+--- Used to get a thread via it's uuid or by name if one is given
+-- @usage Server.get_thread('decon') -- return thread
+-- @param mixed either a uuid or the name given to a thread
+-- @treturn table the thread by that name or uuid
+function Server.get_thread(mixed)
+    local threads = Server._threads()
+    if threads.named[mixed] then return threads.all[threads.named[mixed]]
+    elseif threads.paused[mixed] then return threads.all[threads.paused[mixed]]
+    elseif threads.all[mixed] then return threads.all[mixed]
+    else return false end
 end
 
 --- Adds a thread into the resolve queue, can be used to lower lag
@@ -69,15 +81,16 @@ function Server.close_all_threads(with_force)
         for uuid,thread in pairs(Server.threads()) do
             thread:close()
         end
+    else
+        Server._threads(true)
     end
-    Server._threads(true)
 end
 
 --- Runs all the theads which have opened with an on_tick event
 -- @ussage Server.run_tick_threads()
 function Server.run_tick_threads()
     table.each(Server._threads().tick,function(uuid)
-        local thread = Server._threads().all[uuid]
+        local thread = Server.get_thread(uuid)
         if thread and thread:valid() and thread._tick then
             local success, err = pcall(thread._tick,thread)
             if not success then thread:error(err) end
@@ -89,7 +102,7 @@ end
 -- @ussage Server.check_timeouts()
 function Server.check_timeouts()
     table.each(Server._threads().timeout,function(uuid)
-        local thread = Server._threads().all[uuid]
+        local thread = Server.get_thread(uuid)
         if thread and thread:valid() then
             thread:check_timeout()
         end
@@ -98,12 +111,12 @@ end
 
 --- Calles all threads on a certain game event (used with script.on_event)
 -- @tparam table event the event that is called
-function Server.game_event(event)
+function Server._thread_handler(event)
     local event_id = event.name
     local threads = Server._threads().events[event_id]
     if not threads then return end
     table.each(threads,function(uuid)
-        local thread = Server._threads().all[uuid]
+        local thread = Server.get_thread(uuid)
         if thread and thread:valid() then
             if is_type(thread._events[event_id],'function') then
                 local success, err = pcall(thread._events[event_id],thread,event)
@@ -113,24 +126,24 @@ function Server.game_event(event)
     end)
 end
 
---- Adds a thread to a game event (used in thread:on_event)
--- @usage Server.add_thread_handler(defines.event,thread,function)
--- @tparam number event the event to run the thread on
--- @tparam table thread the thread that will have the callback
--- @tparam function callback the function that the thread will run
+for _,event in pairs(defines.events) do Event.register(event,Server._thread_handler) end
+
+--[[ cant be used V
+--- Adds a event handler to tell threads about events
+-- @usage Server.add_thread_handler(defines.event)
+-- @tparam number event the event to run the thread handler on
 -- @treturn bolean if the handler was added
-function Server.add_thread_handler(event,thread,callback)
-    if not is_type(event,'number') or not is_type(thread,'table') or not is_type(callback,'function') then return false end
+function Server.add_thread_handler(event)
+    if not is_type(event,'number') then return false end
     local threads = Server._threads()
-    if not thread._events then thread._events = {} end
-    thread._events[event] = callback
     if not threads.events[event] then 
         threads.events[event] = {}
-        Event.register(event,Server.game_event)
+        Event.register(event,Server._thread_handler)
+        return true
     end
-    table.insert(threads.events[event],thread.uuid)
-    return true
+    return false
 end
+]]
 
 --- Given a string or function it will run that function and return any values
 -- @usage Server.interface('local x = 1+1 print(x) return x') -- return 2
@@ -207,13 +220,22 @@ end
 -- @usage thread:open() -- return true
 -- @treturn bolean if the thread was opened
 function thread:open()
-    if not self:valid(true) then return false end
+    if not self:valid(true) or self.opened then return false end
     local threads = Server._threads()
     local uuid = self.uuid
     self.opened = game.tick
-    threads.all[uuid] = self
+    threads.all[uuid] = threads.all[uuid] or self
     if is_type(self.timeout,'number') then table.insert(threads.timeout,uuid) end
     if is_type(self._tick,'function') then table.insert(threads.tick,uuid) end
+    if is_type(self.name,'string') then threads.named[self.name] = threads.named[self.name] or self.uuid end
+    if is_type(self._events,'table') then 
+        table.each(self._events,function(callback,event,threads,uuid)
+            -- cant be used V
+            --Server.add_thread_handler(event)
+            if not threads.events[event] then threads.events[event] = {} end
+            table.insert(threads.events[event],uuid)
+        end,threads,self.uuid)
+    end
     return true
 end
 
@@ -231,16 +253,18 @@ function thread:close()
     if key then table.remove(threads.timeout,key) end
     local value,key = table.find(threads.tick,function(v,k,uuid) return v == uuid end,uuid)
     if key then table.remove(threads.tick,key) end
-    if self._events then
+    if is_type(self._events,'table') then
         table.each(self._events,function(callback,event)
             if threads.events[event] then
                 local value,key = table.find(threads.events[event],function(v,k,uuid) return v == uuid end,uuid)
                 if key then table.remove(threads.events[event],key) end
-                if #threads.events[event] == 0 then Event.remove(event,Server.game_event) end
+                -- cant be used V
+                --if #threads.events[event] == 0 then Event.remove(event,Server.game_event) threads.events[event] = nil end
             end
         end)
     end
-    table.remove(threads.all,uuid)
+    if is_type(self.name,'string') then threads.paused[self.name] = self.uuid self.opened = nil
+    else table.remove(threads.all,uuid) end
     return _return
 end
 
@@ -309,7 +333,8 @@ function thread:on_event(event,callback)
         self['_'..value] = callback
         return true
     elseif is_type(event,'number') and is_type(callback,'function') then
-        Server.add_thread_handler(event,self,callback)
+        if not thread._events then thread._events = {} end
+        thread._events[event] = callback
         return true
     end
     return false
@@ -333,6 +358,7 @@ return Server
     -- user thread:on_event('tick') rather than thread:on_event(defines.events.on_tick) as it makes less lag
     thread:on_event('tick',function(self) 
         local trees = self.data
+        if #trees == 0 then return end
         local tree = table.remove(trees,1)
         if tree.valid then tree.destroy() end
     end)
@@ -345,6 +371,12 @@ return Server
         if event.entity.type == 'tree' then
             table.insert(self.data,event.entity)
         end
+    end)
+    thread:open()
+
+    local thread = Server.new_thread{name='print-place',data={}}
+    thread:on_event(defines.events.on_built_entity,function(self,event)
+        game.print('Events')
     end)
     thread:open()
 ]]
