@@ -96,6 +96,23 @@ function Server.check_timeouts()
     end)
 end
 
+--- Calles all threads on a certain game event (used with script.on_event)
+-- @tparam table event the event that is called
+function Server.game_event(event)
+    local event_id = event.name
+    local threads = Server._threads().events[event_id]
+    if not threads then return end
+    table.each(threads,function(uuid)
+        local thread = Server._threads().all[uuid]
+        if thread and thread:valid() then
+            if is_type(thread._events[event_id],'function') then
+                local success, err = pcall(thread._events[event_id],thread,event)
+                if not success then thread:error(err) end
+            end
+        end
+    end)
+end
+
 --- Adds a thread to a game event (used in thread:on_event)
 -- @usage Server.add_thread_handler(defines.event,thread,function)
 -- @tparam number event the event to run the thread on
@@ -109,20 +126,7 @@ function Server.add_thread_handler(event,thread,callback)
     thread._events[event] = callback
     if not threads.events[event] then 
         threads.events[event] = {}
-        Event.register(event,function(event)
-            local event_id = event.name
-            local threads = Server._threads().events[event_id]
-            if not threads then return end
-            table.each(threads,function(uuid)
-                local thread = Server._threads().all[uuid]
-                if thread and thread:valid() then
-                    if is_type(thread._events[event_id],'function') then
-                        local success, err = pcall(thread._events[event_id],thread,event)
-                        if not success then thread:error(err) end
-                    end
-                end
-            end)
-        end)
+        Event.register(event,Server.game_event)
     end
     table.insert(threads.events[event],thread.uuid)
     return true
@@ -232,6 +236,7 @@ function thread:close()
             if threads.events[event] then
                 local value,key = table.find(threads.events[event],function(v,k,uuid) return v == uuid end,uuid)
                 if key then table.remove(threads.events[event],key) end
+                if #threads.events[event] == 0 then Event.remove(event,Server.game_event) end
             end
         end)
     end
@@ -334,8 +339,7 @@ return Server
     thread:on_event('error',function(self,err)
         -- cant see how this can cause an error
         -- but this is where error handling goes
-        -- this is also called during on_resolve
-        -- but on_tick does not have on_success
+        -- any event including on_resolve and on_tick can raise this
     end)
     thread:on_event(defines.events.on_marked_for_deconstruction,function(self,event)
         if event.entity.type == 'tree' then
