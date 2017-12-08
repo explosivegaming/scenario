@@ -45,13 +45,11 @@ function ExpLib.player_return(rtn)
             else game.player.print(table.to_string(rtn))
             end
         elseif is_type(rtn,'function') then game.player.print('Cant Display Functions')
-        elseif is_type(rtn,'userdata') then game.player.print('Cant Display Userdata')
         else game.player.print(tostring(rtn))
         end
     else
         if is_type(rtn,'table') then log(table.to_string(rtn))
         elseif is_type(rtn,'function') then log('Cant Display Functions')
-        elseif is_type(rtn,'userdata') then log('Cant Display Userdata')
         else log(tostring(rtn))
         end
     end

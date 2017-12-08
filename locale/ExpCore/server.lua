@@ -126,6 +126,7 @@ end
 
 commands.add_command('server-interface', 'Runs the given input from the script', {'code',true}, function(event,args)
     local callback = args.code
+    if not string.find(callback,'%s') and not string.find(callback,'return') then callback = 'return '..callback end
     local success, err = Server.interface(callback)
     player_return(err)
 end)
