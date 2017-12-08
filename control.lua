@@ -24,7 +24,7 @@ error = function(err)
 end
 
 -- loads the stdlib and allows Core Game and Event
-local Color, Game, Event = require('/locale/StdLib/load'){'Color','Game','Event'}
+Color, Game, Event = require('/locale/StdLib/load'){'Color','Game','Event'}
 
 -- loads the ExpLib, functions are plased into the lua global
 local ExpLib = require 'ExpLib'
@@ -32,4 +32,4 @@ ExpLib._unpack_to_G(ExpLib)
 --_G.discord_emit = function(...) return false end -- un-comment this line if you are not using the json.data
 
 -- loads the ExpCore files these are need in order to run the other addons
-local Ranking, Server, Gui = require('/locale/ExpCore/load'){'Ranking','Server','Gui'}
+Ranking, Server, Gui = require('/locale/ExpCore/load'){'Ranking','Server','Gui'}

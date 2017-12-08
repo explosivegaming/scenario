@@ -76,13 +76,12 @@ end
 
 --- Used to call the custom commands
 -- @usage You dont its an internal command
--- @tparam defines.events.on_console_command event the event rasied by the command
-commands._add_command = commands.add_command
+-- @tparam defines.events.on_console_command event the event rasied by the command=
 local function run_custom_command(command)
     local command_data = command_data[command.name]
     local player_name = Game.get_player(commnd) and Game.get_player(commnd).name or 'server'
     -- is the player allowed to use this command
-    if not Ranking.rank_allowed(Ranking.get_rank(command.player_index),command.name) then
+    if is_type(Ranking,'table') and not Ranking.rank_allowed(Ranking.get_rank(command.player_index),command.name) then
         player_return{'commands.unauthorized'}
         game.write_file('commands.log','\n'..game.tick
             ..' Player: '..player_name
@@ -94,25 +93,26 @@ local function run_custom_command(command)
     -- gets the args for the command
     local args, valid = command_args(command,command_data)
     if not valid then
-        player_return{'commands.invalid-inputs',command.name,command_args(command)}
+        player_return{'commands.invalid-inputs',command.name,command_inputs(command_data)}
         game.write_file('commands.log','\n'..game.tick
-            ..' Player: '..player.name
+            ..' Player: '..player_name
             ..' Failed to use command (Invalid Args): '..command.name
             ..' With args of: '..table.to_string(args)
         , true, 0)
         return
     end
     -- runs the command
-    local status, err = pcall(command_calls[command.name],event,args)
+    local success, err = pcall(command_calls[command.name],event,args)
     if err then error(err) end
     player_return{'commands.command-ran'}
     game.write_file('commands.log','\n'..game.tick
-        ..' Player: '..player.name
+        ..' Player: '..player_name
         ..' Used command: '..command.name
         ..' With args of: '..table.to_string(args)
     , true, 0)
 end
 
+commands._add_command = commands.add_command
 --- Used to define commands
 -- @usage inputs = {'player','reason',true}
 -- commands.add_command('ban','bans a player',inputs,function() return end)
@@ -132,5 +132,5 @@ commands.add_command = function(name, description, inputs, event)
         inputs=inputs
     }
     command_calls[name] = event
-    _add_command(name,description,run_custom_command)
+    commands._add_command(name,command_inputs(command_data[name])..description,run_custom_command)
 end

@@ -124,7 +124,11 @@ function Server.interface(callback,thread,...)
     end
 end
 
-
+commands.add_command('server-interface', 'Runs the given input from the script', {'code',true}, function(event,args)
+    local callback = args.code
+    local success, err = Server.interface(callback)
+    player_return(err)
+end)
 
 -- thread allows you to run fuinction async to the main game
 local thread = {}

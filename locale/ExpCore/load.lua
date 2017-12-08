@@ -17,8 +17,8 @@ Pass a table with the names of the objects you want and it will be return in tha
 
 local StdExpCoreLib = {}
 
-StdExpCoreLib.Server = require '/server'
 require '/commands'
+StdExpCoreLib.Server = require '/server'
 --[[StdExpCoreLib.Ranking = require '/ranking'
 require '/ranks'
 StdExpCoreLib.Gui = require '/gui'

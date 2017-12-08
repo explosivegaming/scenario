@@ -39,7 +39,11 @@ end
 -- @param rtn the value to return
 function ExpLib.player_return(rtn)
     if game.player then
-        if is_type(rtn,'table') then game.player.print(table.to_string(rtn))
+        if is_type(rtn,'table') then 
+            -- test if its a localised string
+            if is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then game.player.print(rtn)
+            else game.player.print(table.to_string(rtn))
+            end
         elseif is_type(rtn,'function') then game.player.print('Cant Display Functions')
         elseif is_type(rtn,'userdata') then game.player.print('Cant Display Userdata')
         else game.player.print(tostring(rtn))
