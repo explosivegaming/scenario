@@ -55,9 +55,9 @@ end
 -- @treturn table the thread by that name or uuid
 function Server.get_thread(mixed)
     local threads = Server._threads()
-    if threads.named[mixed] then setmetatable(threads.all[threads.named[mixed]],threads.all[threads.named[mixed]].__index) return threads.all[threads.named[mixed]]
-    elseif threads.paused[mixed] then setmetatable(threads.all[threads.paused[mixed]],threads.all[threads.paused[mixed]].__index) return threads.all[threads.paused[mixed]]
-    elseif threads.all[mixed] then setmetatable(threads.all[mixed],threads.all[mixed].__index) return threads.all[mixed]
+    if threads.named[mixed] then return threads.all[threads.named[mixed]]
+    elseif threads.paused[mixed] then return threads.all[threads.paused[mixed]]
+    elseif threads.all[mixed] then return threads.all[mixed]
     else return false end
 end
 
@@ -116,9 +116,13 @@ function Server._thread_handler(event)
     local threads = Server._threads().events[event_id]
     if not threads then return end
     table.each(threads,function(uuid)
+        game.print('loop '..uuid)
         local next_thread = Server.get_thread(uuid)
+        game.print('before valid '..table.to_string(table.keys(next_thread)))
         if next_thread and next_thread:valid() then
+            game.print('before type check '..uuid)
             if is_type(next_thread._events[event_id],'function') then
+                game.print('before pcall '..uuid)
                 local success, err = pcall(next_thread._events[event_id],next_thread,event)
                 if not success then next_thread:error(err) end
             end
@@ -188,9 +192,7 @@ end)
 -- @treturn table the new thread object
 function thread:create(obj)
     local obj = obj or {}
-    setmetatable(obj,self)
-    self.__index = self
-    obj.__index = self
+    obj=table.merge(obj,self)
     obj.uuid = Server.new_uuid()
     return obj
 end
@@ -200,6 +202,16 @@ end
 -- @tparam bolean skip_location_check true to skip the location check
 -- @treturn bolean is the thread valid
 function thread:valid(skip_location_check)
+    game.print('1'..tosting(is_type(self.uuid,'string')))
+    game.print('1'..tosting(is_type(self.opened,'number')))
+    game.print('1'..tosting(is_type(Server._threads().all[self.uuid],'table')))
+    game.print('1'..tosting(is_type(self.timeout)))
+    game.print('1'..tosting(is_type(self.timeout,'number')))
+    game.print('1'..tosting(is_type(self.name)))
+    game.print('1'..tosting(is_type(self.name,'string')))
+    game.print('1'..tosting(is_type(self._close)))
+    game.print('1'..tosting(is_type(self._close,'function')))
+    local skip_location_check = skip_location_check or false
     if is_type(self.uuid,'string') and
     skip_location_check or is_type(self.opened,'number') and
     skip_location_check or is_type(Server._threads().all[self.uuid],'table') and
