@@ -113,6 +113,7 @@ local function run_custom_command(command)
 end
 
 commands._add_command = commands.add_command
+commands._expgaming = true
 --- Used to define commands
 -- @usage inputs = {'player','reason',true}
 -- commands.add_command('ban','bans a player',inputs,function() return end)

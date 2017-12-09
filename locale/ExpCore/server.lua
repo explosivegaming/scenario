@@ -175,12 +175,14 @@ function Server.interface(callback,use_thread,...)
     end
 end
 
-commands.add_command('server-interface', 'Runs the given input from the script', {'code',true}, function(event,args)
-    local callback = args.code
-    if not string.find(callback,'%s') and not string.find(callback,'return') then callback = 'return '..callback end
-    local success, err = Server.interface(callback)
-    player_return(err)
-end)
+if commands._expgaming then
+    commands.add_command('server-interface', 'Runs the given input from the script', {'code',true}, function(event,args)
+        local callback = args.code
+        if not string.find(callback,'%s') and not string.find(callback,'return') then callback = 'return '..callback end
+        local success, err = Server.interface(callback)
+        player_return(err)
+    end)
+end
 
 -- thread allows you to run fuinction async to the main game
 --- Returns a new thread object
