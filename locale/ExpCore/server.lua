@@ -55,9 +55,9 @@ end
 -- @treturn table the thread by that name or uuid
 function Server.get_thread(mixed)
     local threads = Server._threads()
-    if threads.named[mixed] then return threads.all[threads.named[mixed]]
-    elseif threads.paused[mixed] then return threads.all[threads.paused[mixed]]
-    elseif threads.all[mixed] then return threads.all[mixed]
+    if threads.named[mixed] then setmetatable(threads.all[threads.named[mixed]],threads.all[threads.named[mixed]].__index) return threads.all[threads.named[mixed]]
+    elseif threads.paused[mixed] then setmetatable(threads.all[threads.paused[mixed]],threads.all[threads.paused[mixed]].__index) return threads.all[threads.paused[mixed]]
+    elseif threads.all[mixed] then setmetatable(threads.all[mixed],threads.all[mixed].__index) return threads.all[mixed]
     else return false end
 end
 
@@ -65,10 +65,10 @@ end
 -- @usage Server.queue_thread(thread) -- return true/false
 -- @tparam table the thread to add to the queue must have a resolve function (must be open)
 -- @treturn bolean was the thread added
-function Server.queue_thread(thread)
-    if not thread and not thread.valid and not thread:valid() then return false end
-    if not thread._resolve then return false end
-    table.insert(Server._threads().queue,thread.uuid)
+function Server.queue_thread(thread_to_queue)
+    if not thread_to_queue and not thread_to_queue.valid and not thread_to_queue:valid() then return false end
+    if not thread_to_queue._resolve then return false end
+    table.insert(Server._threads().queue,thread_to_queue.uuid)
     return true
 end
 
@@ -78,8 +78,8 @@ end
 -- @tparam bolean with_force use force when closing
 function Server.close_all_threads(with_force)
     if not with_force then
-        for uuid,thread in pairs(Server.threads()) do
-            thread:close()
+        for uuid,next_thread in pairs(Server.threads()) do
+            next_thread:close()
         end
     else
         Server._threads(true)
@@ -90,10 +90,10 @@ end
 -- @ussage Server.run_tick_threads()
 function Server.run_tick_threads()
     table.each(Server._threads().tick,function(uuid)
-        local thread = Server.get_thread(uuid)
-        if thread and thread:valid() and thread._tick then
-            local success, err = pcall(thread._tick,thread)
-            if not success then thread:error(err) end
+        local next_thread = Server.get_thread(uuid)
+        if next_thread and next_thread:valid() and next_thread._tick then
+            local success, err = pcall(next_thread._tick,next_thread)
+            if not success then next_thread:error(err) end
         end
     end)
 end
@@ -102,9 +102,9 @@ end
 -- @ussage Server.check_timeouts()
 function Server.check_timeouts()
     table.each(Server._threads().timeout,function(uuid)
-        local thread = Server.get_thread(uuid)
-        if thread and thread:valid() then
-            thread:check_timeout()
+        local next_thread = Server.get_thread(uuid)
+        if next_thread and next_thread:valid() then
+            next_thread:check_timeout()
         end
     end)
 end
@@ -116,11 +116,11 @@ function Server._thread_handler(event)
     local threads = Server._threads().events[event_id]
     if not threads then return end
     table.each(threads,function(uuid)
-        local thread = Server.get_thread(uuid)
-        if thread and thread:valid() then
-            if is_type(thread._events[event_id],'function') then
-                local success, err = pcall(thread._events[event_id],thread,event)
-                if not success then thread:error(err) end
+        local next_thread = Server.get_thread(uuid)
+        if next_thread and next_thread:valid() then
+            if is_type(next_thread._events[event_id],'function') then
+                local success, err = pcall(next_thread._events[event_id],next_thread,event)
+                if not success then next_thread:error(err) end
             end
         end
     end)
@@ -149,19 +149,19 @@ end
 -- @usage Server.interface('local x = 1+1 print(x) return x') -- return 2
 -- Server.interface('local x = 1+1 print(x)',thread) -- no return
 -- @param callback either a function or string which will be ran via pcall
--- @param[opt] thread give a thread for the interface to run on (does not need to be open, but cant use on_resolve)
+-- @param[opt] use_thread give a thread for the interface to run on (does not need to be open, but cant use on_resolve)
 -- @param[opt] ... any args you want to pass to the function
-function Server.interface(callback,thread,...)
-    if thread then
-        thread:on_resolve(function(callback,...)
+function Server.interface(callback,use_thread,...)
+    if use_thread then
+        use_thread:on_resolve(function(callback,...)
             if is_type(callback,'function') then
                 pcall(callback,...)
             else 
                 pcall(loadstring(callback),...)
             end
         end)
-        thread:open()
-        Server.queue_thread(thread)
+        use_thread:open()
+        Server.queue_thread(use_thread)
     else
         if is_type(callback,'function') then
             local success, err = pcall(callback,...)
@@ -182,8 +182,6 @@ commands.add_command('server-interface', 'Runs the given input from the script',
 end)
 
 -- thread allows you to run fuinction async to the main game
-thread.__index = thread
-thread.uuid = Server.new_uuid
 --- Returns a new thread object
 -- @usage new_thread = thread:create()
 -- @tparam[opt={}] table obj all are opt {timeout=int,name=str,data=any} advanced users can prefix with _function to avoid the on_function functions
@@ -191,6 +189,8 @@ thread.uuid = Server.new_uuid
 function thread:create(obj)
     local obj = obj or {}
     setmetatable(obj,self)
+    self.__index = self
+    obj.__index = self
     obj.uuid = Server.new_uuid()
     return obj
 end
@@ -312,7 +312,7 @@ end
 function thread:error(err)
     local _return = false
     if is_type(self._error,'function') then
-        pcall(thread._error,self,err)
+        pcall(self._error,self,err)
         _return = true
     else
         error(err)
@@ -333,8 +333,8 @@ function thread:on_event(event,callback)
         self['_'..value] = callback
         return true
     elseif is_type(event,'number') and is_type(callback,'function') then
-        if not thread._events then thread._events = {} end
-        thread._events[event] = callback
+        if not self._events then self._events = {} end
+        self._events[event] = callback
         return true
     end
     return false
@@ -345,8 +345,8 @@ Event.register(defines.events.on_tick,function(event)
     if #threads.tick > 0 then Server.run_tick_threads() end
     if #threads.timeout > 0 then Server.check_timeouts() end
     if #threads.queue > 0 then 
-        local thread = threads.all[threads.queue[1]]
-        if thread and thread:valid() then thread:resolve() end
+        local current_thread = threads.all[threads.queue[1]]
+        if current_thread and current_thread:valid() then current_thread:resolve() end
     end
 end)
 
