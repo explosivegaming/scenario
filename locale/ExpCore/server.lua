@@ -9,13 +9,14 @@ Discord: https://discord.gg/r6dC2uK
 --Please Only Edit Below This Line-----------------------------------------------------------
 -- server allows control over threads and other features the devs missed out
 local Server = {}
-local thread = {}
+Server.thread = {}
+Server.thread.__index = Server.thread
 
 --- Returns a un-used uuid (better system needed)
 -- @usage obj.uuid = Server.new_uuid()
 -- @treturn string the new uuid
 function Server.new_uuid()
-	uuid = tostring(Server._uuid()())
+	local uuid = tostring(Server._uuid()())
 	uuid = string.to_hex('uuid'..uuid)
 	return uuid
 end
@@ -46,7 +47,7 @@ end
 
 -- see thread:create (this was done so thread can remain local)
 function Server.new_thread(obj)
-    return thread:create(obj)
+    return Server.thread:create(obj)
 end
 
 --- Used to get a thread via it's uuid or by name if one is given
@@ -116,13 +117,9 @@ function Server._thread_handler(event)
     local threads = Server._threads().events[event_id]
     if not threads then return end
     table.each(threads,function(uuid)
-        game.print('loop '..uuid)
         local next_thread = Server.get_thread(uuid)
-        game.print('before valid '..table.to_string(table.keys(next_thread)))
         if next_thread and next_thread:valid() then
-            game.print('before type check '..uuid)
             if is_type(next_thread._events[event_id],'function') then
-                game.print('before pcall '..uuid)
                 local success, err = pcall(next_thread._events[event_id],next_thread,event)
                 if not success then next_thread:error(err) end
             end
@@ -190,9 +187,9 @@ end)
 -- @usage new_thread = thread:create()
 -- @tparam[opt={}] table obj all are opt {timeout=int,name=str,data=any} advanced users can prefix with _function to avoid the on_function functions
 -- @treturn table the new thread object
-function thread:create(obj)
+function Server.thread:create(obj)
     local obj = obj or {}
-    obj=table.merge(obj,self)
+    setmetatable(obj,Server.thread)
     obj.uuid = Server.new_uuid()
     return obj
 end
@@ -201,16 +198,7 @@ end
 -- @usage if thread:valid() then end
 -- @tparam bolean skip_location_check true to skip the location check
 -- @treturn bolean is the thread valid
-function thread:valid(skip_location_check)
-    game.print('1'..tosting(is_type(self.uuid,'string')))
-    game.print('1'..tosting(is_type(self.opened,'number')))
-    game.print('1'..tosting(is_type(Server._threads().all[self.uuid],'table')))
-    game.print('1'..tosting(is_type(self.timeout)))
-    game.print('1'..tosting(is_type(self.timeout,'number')))
-    game.print('1'..tosting(is_type(self.name)))
-    game.print('1'..tosting(is_type(self.name,'string')))
-    game.print('1'..tosting(is_type(self._close)))
-    game.print('1'..tosting(is_type(self._close,'function')))
+function Server.thread:valid(skip_location_check)
     local skip_location_check = skip_location_check or false
     if is_type(self.uuid,'string') and
     skip_location_check or is_type(self.opened,'number') and
@@ -231,7 +219,7 @@ end
 --- Opens the thread by storing it in a place the server object can find it
 -- @usage thread:open() -- return true
 -- @treturn bolean if the thread was opened
-function thread:open()
+function Server.thread:open()
     if not self:valid(true) or self.opened then return false end
     local threads = Server._threads()
     local uuid = self.uuid
@@ -254,7 +242,7 @@ end
 --- Inverse of thread:open() - it removes the thread and calles on_close
 -- @usage thread:close() -- return true
 -- @treturn bolean if the thread had a on_close function
-function thread:close()
+function Server.thread:close()
     local threads = Server._threads()
     local uuid = self.uuid
     local _return = false
@@ -284,7 +272,7 @@ end
 -- @usage thread:resolve(x,y,z) -- return true
 -- @param[opt] ... any arguments you want to pass to the resolve function
 -- @treturn bolean true if the thread called on_success or on_error
-function thread:resolve(...)
+function Server.thread:resolve(...)
     local _return = false
     if is_type(self._resolve,'function') then 
         local success, err = pcall(self._resolve,...)
@@ -304,7 +292,7 @@ end
 --- Checks the timeout on a thread - if timedout then it calles on_timeout and closes
 -- @usage thread:check_timeout() -- return true
 -- @treturn bolean if the thread timedout
-function thread:check_timeout()
+function Server.thread:check_timeout()
     local _return = false
     if not self:valid() then return false end
     if is_type(self.timeout,'number') and game.tick >= (self.opened+self.timeout) then
@@ -321,7 +309,7 @@ end
 -- @usage thread:error(err) -- return true
 -- @param err the err to be rasied
 -- @treturn bolean did the thread handdle the error
-function thread:error(err)
+function Server.thread:error(err)
     local _return = false
     if is_type(self._error,'function') then
         pcall(self._error,self,err)
@@ -338,7 +326,7 @@ end
 -- @tparam string event the name of the event that it is called on
 -- @tparam function callback the function which is called on the event
 -- @treturn was the function added
-function thread:on_event(event,callback)
+function Server.thread:on_event(event,callback)
     local events = {'close','timeout','tick','resolve','success','error'}
     local value = table.find(events,function(v,k,find) return v == string.lower(find) end,event)
     if value and is_type(callback,'function') then
@@ -359,6 +347,13 @@ Event.register(defines.events.on_tick,function(event)
     if #threads.queue > 0 then 
         local current_thread = threads.all[threads.queue[1]]
         if current_thread and current_thread:valid() then current_thread:resolve() end
+    end
+end)
+
+Event.register(-2,function(event)
+    local threads = Server.threads()
+    for uuid,thread in pairs(threads) do
+        setmetatable(thread,Server.thread)
     end
 end)
 

@@ -11,7 +11,7 @@ Discord: https://discord.gg/r6dC2uK
 -- replaces the base error function
 _error = error
 error = function(err)
-    if _G.discord_emit then
+    if _G.discord_emit and game then
         local color = _G.Color and Color.to_hex(defines.text_color.bg) or '0x0'
         discord_emit{title='SCRIPT ERROR',color=color,description=err}
     elseif _G.game then
