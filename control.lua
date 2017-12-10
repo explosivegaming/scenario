@@ -14,7 +14,7 @@ error = function(err)
     if _G.discord_emit and game then
         local color = _G.Color and Color.to_hex(defines.text_color.bg) or '0x0'
         discord_emit{title='SCRIPT ERROR',color=color,description=err}
-    elseif _G.game then
+    elseif _G.Game then
         if Game.print_all(err) == 0 then
             _error(err)
         end
@@ -29,7 +29,7 @@ Color, Game, Event = require('/locale/StdLib/load'){'Color','Game','Event'}
 -- loads the ExpLib, functions are plased into the lua global
 local ExpLib = require 'ExpLib'
 ExpLib._unpack_to_G(ExpLib)
---_G.discord_emit = function(...) return false end -- un-comment this line if you are not using the json.data
+--_G.discord_emit = nil -- un-comment this line if you are not using the json.data
 
 -- loads the ExpCore files these are need in order to run the other addons
 Ranking, Server, Gui = require('/locale/ExpCore/load'){'Ranking','Server','Gui'}

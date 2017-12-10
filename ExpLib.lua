@@ -37,8 +37,19 @@ end
 -- @usage a = 'to return'
 -- player_return(a)
 -- @param rtn the value to return
-function ExpLib.player_return(rtn)
-    if game.player then
+-- @param player the player to print to
+function ExpLib.player_return(rtn,player)
+    if player then
+        local player = Game.get_player(player)
+        if is_type(rtn,'table') then 
+            -- test if its a localised string
+            if is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then pcall(player.print,rtn)
+            else player.print(table.to_string(rtn))
+            end
+        elseif is_type(rtn,'function') then player.print('Cant Display Functions')
+        else player.print(tostring(rtn))
+        end
+    elseif game.player then
         if is_type(rtn,'table') then 
             -- test if its a localised string
             if is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then pcall(game.player.print,rtn)
