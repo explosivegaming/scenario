@@ -490,8 +490,8 @@ end
 -- table.autokey(tbl,'f') -- return 1 
 function table.autokey(tbl,str)
     local _return = {}
-    for key,value in pairs(keys) do
-        if string.contains(string.lower(string),string.lower(key)) then table.insert(_return,value) end
+    for key,value in pairs(tbl) do
+        if string.contains(string.lower(str),string.lower(key)) then table.insert(_return,value) end
     end
     return _return[1] or false
 end

@@ -8,20 +8,34 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 local Ranking = {}
-
+Ranking.event = script.generate_event_name()
+Ranking._rank = {}
+Ranking._group = {}
 -- this function is to avoid errors - see /ranks.lua
-function Ranking._form_links()
-    return false
-end
-
--- this function is to avoid errors - see /ranks.lua
-function Ranking._ranks()
+function Ranking._ranks(names)
     return {}
 end
 
 -- this function is to avoid errors - see /ranks.lua
-function Ranking._groups()
+function Ranking._groups(names)
     return {}
+end
+
+-- this function is to avoid errors - see /ranks.lua
+function Ranking._meta()
+    return {}
+end
+
+-- this function is to avoid errors - see addons/playerRanks.lua
+function Ranking._base_preset()
+    return {}
+end
+
+-- this returns a global list
+function Ranking._presets()
+    if not global.exp_core then global.exp_core = {} end
+    if not global.exp_core.ranking then global.exp_core.ranking = {meta=Ranking._meta(),old={},current=Ranking._base_preset()} end
+    return global.exp_core.ranking
 end
 
 --- Returns a rank object given a player or rank name
@@ -30,15 +44,23 @@ end
 -- @param mixed player|player index|player name|rank name|rank|'server'|'root'  what rank to get
 -- @treturn table the rank that is linked to mixed
 function Ranking.get_rank(mixed)
-    local ranks = Ranking._ranks()
-    return game.players[mixed] and ranks[game.players[mixed].permission_group.name]
-    or mixed.index and game.players[mixed.index] and ranks[mixed.permission_group.name]
-    or is_type(mixed,'table') and mixed.group and mixed
-    or is_type(mixed,'string') and ranks[string.lower(mixed)] and ranks[string.lower(mixed)]
-    or is_type(mixed,'string') and mixed == 'server' and ranks['root']
-    or is_type(mixed,'string') and mixed == 'root' and ranks['root']
-    or false
-    -- ranks[mixed] and ranks[mixed] is to avoid returning nil given any string
+    if not mixed then return false end
+    local ranks = Ranking._ranks(true)
+    local _return = false
+    if is_type(mixed,'table') then
+        if mixed.index then
+            _return = game.players[mixed.index] and ranks[mixed.permission_group.name] or false
+        else
+            _return = mixed.group and mixed or false
+        end
+    else
+        _return = game.players[mixed] and ranks[game.players[mixed].permission_group.name]
+        or table.autokey(ranks,mixed) and table.autokey(ranks,mixed)
+        or string.contains(mixed,'server') and Ranking.get_group('Root').highest
+        or string.contains(mixed,'root') and Ranking.get_group('Root').highest
+        or false
+    end
+    return _return
 end
 
 --- Returns the group object used to sort ranks given group name or see Ranking.get_rank
@@ -47,11 +69,12 @@ end
 -- @param mixed player|player index|player name|rank name|rank|'server'|'root'|group name|group what group to get
 -- @treturn table the group that is linked to mixed
 function Ranking.get_group(mixed)
-    local groups = Ranking._groups()
+    if not mixed then return false end
+    local groups = Ranking._groups(true)
     local rank = Ranking.get_rank(mixed)
     return rank and rank.group
     or is_type(mixed,'table') and mixed.ranks and mixed
-    or is_type(mixed,'string') and groups[mixed] and groups[mixed]
+    or is_type(mixed,'string') and table.autokey(groups,mixed) and table.autokey(groups,mixed)
     or false
 end
 
@@ -82,23 +105,23 @@ end
 -- @param[opt=game.tick] tick the tick that the rank is being given on
 function Ranking.give_rank(player,rank,by_player,tick)
     local tick = tick or game.tick
-    local by_player_name = Game.get_player(by_player).name or game.player and game.player.name or 'server'
-    local rank = Ranking.get_rank(rank)
+    local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or game.player and game.player.name or 'server'
+    local rank = Ranking.get_rank(rank) or Ranking.get_rank(Ranking._presets().meta.default)
     local player = Game.get_player(player)
-    local old_rank = Ranking.get_rank(player)
+    local old_rank = Ranking.get_rank(player) or Ranking.get_rank(Ranking._presets().meta.default)
     local message = 'ranking.rank-down'
     -- messaging
     if old_rank.name == rank.name then return end
     if rank.power < old_rank.power then message = 'ranking.rank-up' end
     game.print{message,player.name,rank.name,by_player_name}
-    if not rank.group.name == 'User' then player.print{'ranking.rank-given',rank.name} end
-    if not player.tag == old_rank.tag then player.print{'ranking.tag-reset'} end
+    if rank.group.name ~= 'User' then player.print{'ranking.rank-given',rank.name} end
+    if player.tag ~= old_rank.tag then player.print{'ranking.tag-reset'} end
     -- rank change
     player.permission_group = game.permissions.get_group(rank.name)
     player.tag = rank.tag
     if not old_rank.group.name == 'Jail' then Ranking._presets().old[player.index] = rank.name end
-    if Ranking._presets()._event then 
-        script.raise_event(Ranking._presets()._event,{
+    if Ranking.event then 
+        script.raise_event(Ranking.event,{
             tick=tick, 
             player=player, 
             by_player_name=by_player_name, 
@@ -117,17 +140,53 @@ function Ranking.revert(player,by_player)
     Ranking.give_rank(player,Ranking._presets().old[player.index],by_player)
 end
 
-
+--- Given the player has a rank in the preset table it is given
+-- @usage Ranking.find_preset(1)
+-- @param player the player to test for an auto rank
+-- @tparam[opt=nil] tick the tick it happens on
+function Ranking.find_preset(player,tick)
+    local presets = Ranking._presets().current
+    local meta_data = Ranking._presets().meta
+    local default = Ranking.get_rank(meta_data.default)
+    local player = Game.get_player(player)
+    local current_rank = Ranking.get_rank(player) or {power=-1,group={name='not jail'}}
+    local ranks = {default}
+    if current_rank.group.name == 'Jail' then return end
+    if presets[string.lower(player.name)] then
+        local rank = Ranking.get_rank(presets[string.lower(player.name)])
+        if current_rank.power >= rank.power then return end
+        table.insert(ranks,rank)
+    end
+    if current_rank.power < meta_data.time_highest and tick_to_min(player.online_time) > meta_data.time_lowest then
+        for _,rank_name in pairs(meta_data.time_ranks) do
+            local rank = Ranking.get_rank(rank_name)
+            if tick_to_min(player.online_time) > rank.time then
+                table.insert(ranks,rank)
+            end
+        end
+    end
+    local _rank = nil
+    for _,rank in pairs(ranks) do
+        if rank.power > current_rank.power then _rank = rank end
+    end
+    if _rank then
+        if _rank.name == default.name then
+            player.tag = _rank.tag
+            player.permission_group = game.permissions.get_group(_rank.name)
+        else
+            Ranking.give_rank(player,_rank,nil,tick)
+        end
+    end
+end
 
 -- this is the base rank object, do not store in global
-Ranking._rank = {}
 
 --- Is this rank allowed to open this gui or use this command etc.
 -- @usage rank:allowed('server-interface')
 -- @tparam teh action to test for
 -- @treturn bolean is it allowed
 function Ranking._rank:allowed(action)
-    return self.allowed[action] or self.is_root or false
+    return self.allow[action] or self.is_root or false
 end
 
 --- Get all the players in this rank
@@ -169,7 +228,53 @@ function Ranking._rank:print(rtn)
         end)
     end
 end
--- this is the base rank object, do not store in global
-Ranking._group = {}
+-- this is the base group object, do not store in global, these cant be used in game
+
+-- this makes a new group 
+-- {name='root',allow={},disallow={}}
+function Ranking._group:create(obj)
+    if game then return end
+    if not is_type(obj.name,'string') then return end
+    setmetatable(obj,{__index=Ranking._group})
+    obj.ranks = {}
+    obj.allow = obj.allow or {}
+    obj.disallow = obj.disallow or {}
+    Ranking._add_group(obj)
+    return obj
+end
+    
+-- this makes a new rank in side this group 
+-- {name='Root',short_hand='Root',tag='[Root]',time=nil,colour=defines.colors.white,allow={},disallow={}}
+function Ranking._group:add_rank(obj)
+    if game then return end
+    if not is_type(obj.name,'string') or
+    not is_type(obj.short_hand,'string') or
+    not is_type(obj.tag,'string') or
+    not is_type(obj.colour,'table') then return end
+    setmetatable(obj,{__index=Ranking._rank})
+    obj.group = self
+    obj.allow = obj.allow or {}
+    obj.disallow = obj.disallow or {}
+    setmetatable(obj.allow,{__index=self.allow})
+    setmetatable(obj.disallow,{__index=self.disallow})
+    Ranking._add_rank(obj)
+    Ranking._set_rank_power()
+    table.insert(self.ranks,obj)
+    if not self.highest or obj.power > self.highest.power then self.highest = obj end
+    if not self.lowest or obj.power < self.lowest.power then self.lowest = obj end
+end
+
+Event.register(defines.events.on_player_joined_game,function(event)
+    Ranking.find_preset(event.player_index)
+end)
+
+Event.register(-1,function(event) 
+    for power,rank in pairs(Ranking._ranks()) do
+		local perm = game.permissions.create_group(rank.name)
+		for _,toRemove in pairs(rank.disallow) do
+			perm.set_allows_action(defines.input_action[toRemove],false)
+		end
+	end
+end)
 
 return Ranking

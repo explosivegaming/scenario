@@ -79,7 +79,7 @@ end
 -- @tparam defines.events.on_console_command event the event rasied by the command=
 local function run_custom_command(command)
     local command_data = command_data[command.name]
-    local player_name = Game.get_player(commnd) and Game.get_player(commnd).name or 'server'
+    local player_name = Game.get_player(command) and Game.get_player(command).name or 'server'
     -- is the player allowed to use this command 
     if is_type(Ranking,'table') and is_type(Ranking.get_rank,'function') and not Ranking.get_rank(player_name):allowed(command.name) then
         player_return{'commands.unauthorized'}

@@ -10,7 +10,6 @@ Discord: https://discord.gg/r6dC2uK
 -- server allows control over threads and other features the devs missed out
 local Server = {}
 Server._thread = {}
-Server._thread.__index = Server._thread
 
 --- Returns a un-used uuid (better system needed)
 -- @usage obj.uuid = Server.new_uuid()
@@ -80,7 +79,7 @@ end
 function Server.close_all_threads(with_force)
     if not with_force then
         for uuid,next_thread in pairs(Server.threads()) do
-            next_thread:close()
+            if uuid ~= '_n' then next_thread:close() end
         end
     else
         Server._threads(true)
@@ -186,6 +185,7 @@ if commands._expgaming then
         local callback = args.code
         if not string.find(callback,'%s') and not string.find(callback,'return') then callback = 'return '..callback end
         if game.player then callback = 'local player, surface, force = game.player, game.player.surface, game.player.force '..callback end 
+        if Ranking and Ranking.get_rank then callback = 'local rank = Ranking.get_rank(game.player) '..callback end
         local success, err = Server.interface(callback)
         player_return(err)
     end)
@@ -198,7 +198,7 @@ end
 -- @treturn table the new thread object
 function Server._thread:create(obj)
     local obj = obj or {}
-    setmetatable(obj,Server._thread)
+    setmetatable(obj,{__index=Server._thread})
     obj.uuid = Server.new_uuid()
     return obj
 end
@@ -366,7 +366,7 @@ end)
 Event.register(-2,function(event)
     local threads = Server.threads()
     for uuid,thread in pairs(threads) do
-        setmetatable(thread,Server._thread)
+        if uuid ~= '_n' then setmetatable(thread,{__index=Server._thread}) end
     end
 end)
 

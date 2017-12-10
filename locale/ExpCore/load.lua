@@ -21,7 +21,6 @@ require '/commands'
 StdExpCoreLib.Server = require '/server'
 StdExpCoreLib.Gui = {}
 StdExpCoreLib.Ranking = require '/ranking'
-require '/ranks'
 --[[StdExpCoreLib.Gui = require '/gui'
 require '/GuiParts/inputs'
 require '/GuiParts/toolbar'

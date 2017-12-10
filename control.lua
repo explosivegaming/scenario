@@ -14,7 +14,7 @@ error = function(err)
     if _G.discord_emit and game then
         local color = _G.Color and Color.to_hex(defines.text_color.bg) or '0x0'
         discord_emit{title='SCRIPT ERROR',color=color,description=err}
-    elseif _G.Game then
+    elseif _G.Game and game then
         if Game.print_all(err) == 0 then
             _error(err)
         end
@@ -33,3 +33,7 @@ _G.discord_emit = nil -- un-comment this line if you are not using the json.data
 
 -- loads the ExpCore files these are need in order to run the other addons
 Ranking, Server, Gui = require('/locale/ExpCore/load'){'Ranking','Server','Gui'}
+-- this loads the ranks that Ranking uses
+require('/locale/ExpCore/ranks')
+-- this loads any edits that are not need in core pcall as file may not be preset
+pcall(require,'/locale/Addons/playerRanks')
