@@ -484,3 +484,14 @@ function table.json(lua_table)
     else return "{"..table.concat(result,",").."}" 
     end
 end
+
+--- Returns the closest match to a key
+-- @usage tbl = {foo=1,bar=2}
+-- table.autokey(tbl,'f') -- return 1 
+function table.autokey(tbl,str)
+    local _return = {}
+    for key,value in pairs(keys) do
+        if string.contains(string.lower(string),string.lower(key)) then table.insert(_return,value) end
+    end
+    return _return[1] or false
+end
