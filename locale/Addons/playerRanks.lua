@@ -36,6 +36,36 @@ http://lua-api.factorio.com/latest/defines.html#defines.input_action
 
 -- see ExpCore/ranks.lua for examples - you add your own and edit pre-made ones here.
 
-function Ranking._base_preset()
-    return {}
-end
+local groups = Ranking._groups(true)
+local ranks = Ranking._ranks(true)
+
+groups['Root']:edit('allow',false,{
+    ['testing']=true
+})
+ranks['Root']:edit('test',true,'testing')
+
+groups['User']:add_rank{
+    name='Veteran',
+    short_hand='Vet',
+    tag='[Veteran]',
+    time=600,
+    colour={r=140,g=120,b=200},
+    power=8
+}
+groups['User']:add_rank{
+    name='Regular',
+    short_hand='Reg',
+    tag='[Regular]',
+    time=180,
+    colour={r=24,g=172,b=188},
+    power=10
+}
+
+Ranking._base_preset{
+    ['badgamernl']='Owner',
+    ['arty714']='Community Manager',
+    ['cooldude2606']='Developer',
+    ['eissturm']='Admin',
+    ['mark9064']='Admin',
+    ['smou']='Admin'
+}

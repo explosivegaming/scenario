@@ -185,7 +185,7 @@ if commands._expgaming then
         local callback = args.code
         if not string.find(callback,'%s') and not string.find(callback,'return') then callback = 'return '..callback end
         if game.player then callback = 'local player, surface, force = game.player, game.player.surface, game.player.force '..callback end 
-        if Ranking and Ranking.get_rank then callback = 'local rank = Ranking.get_rank(game.player) '..callback end
+        if Ranking and Ranking.get_rank and game.player then callback = 'local rank = Ranking.get_rank(game.player) '..callback end
         local success, err = Server.interface(callback)
         player_return(err)
     end)

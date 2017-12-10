@@ -37,3 +37,5 @@ Ranking, Server, Gui = require('/locale/ExpCore/load'){'Ranking','Server','Gui'}
 require('/locale/ExpCore/ranks')
 -- this loads any edits that are not need in core pcall as file may not be preset
 pcall(require,'/locale/Addons/playerRanks')
+-- this makes sure that all the little details are cleaned up
+Ranking._auto_edit_ranks()

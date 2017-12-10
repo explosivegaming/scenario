@@ -27,14 +27,14 @@ function Ranking._meta()
 end
 
 -- this function is to avoid errors - see addons/playerRanks.lua
-function Ranking._base_preset()
-    return {}
+function Ranking._base_preset(table)
+    Ranking._presets().current = table
 end
 
 -- this returns a global list
 function Ranking._presets()
     if not global.exp_core then global.exp_core = {} end
-    if not global.exp_core.ranking then global.exp_core.ranking = {meta=Ranking._meta(),old={},current=Ranking._base_preset()} end
+    if not global.exp_core.ranking then global.exp_core.ranking = {meta=Ranking._meta(),old={},current={}} end
     return global.exp_core.ranking
 end
 
@@ -56,8 +56,8 @@ function Ranking.get_rank(mixed)
     else
         _return = game.players[mixed] and ranks[game.players[mixed].permission_group.name]
         or table.autokey(ranks,mixed) and table.autokey(ranks,mixed)
-        or string.contains(mixed,'server') and Ranking.get_group('Root').highest
-        or string.contains(mixed,'root') and Ranking.get_group('Root').highest
+        or string.contains(mixed,'server') and Ranking.get_rank(Ranking._presets().meta.root)
+        or string.contains(mixed,'root') and Ranking.get_rank(Ranking._presets().meta.root)
         or false
     end
     return _return
@@ -228,6 +228,20 @@ function Ranking._rank:print(rtn)
         end)
     end
 end
+
+-- this is used to edit a group once made key is what is being edited and set_value makes it over ride the current value
+-- see Addons/playerRanks for examples
+function Ranking._rank:edit(key,set_value,value)
+    if game then return end
+    if set_value then self[key] = value return end
+    if key == 'disallow' then
+        self.disallow = table.merge(self.disallow,value,true)
+    elseif key == 'allow' then
+        self.allow = table.merge(self.allow,value)
+    end
+    Ranking._update_rank(self)
+end
+
 -- this is the base group object, do not store in global, these cant be used in game
 
 -- this makes a new group 
@@ -236,6 +250,7 @@ function Ranking._group:create(obj)
     if game then return end
     if not is_type(obj.name,'string') then return end
     setmetatable(obj,{__index=Ranking._group})
+    self.index = #Ranking._groups(names)+1
     obj.ranks = {}
     obj.allow = obj.allow or {}
     obj.disallow = obj.disallow or {}
@@ -257,18 +272,31 @@ function Ranking._group:add_rank(obj)
     obj.disallow = obj.disallow or {}
     setmetatable(obj.allow,{__index=self.allow})
     setmetatable(obj.disallow,{__index=self.disallow})
-    Ranking._add_rank(obj)
+    Ranking._add_rank(obj,obj.power)
     Ranking._set_rank_power()
     table.insert(self.ranks,obj)
     if not self.highest or obj.power > self.highest.power then self.highest = obj end
     if not self.lowest or obj.power < self.lowest.power then self.lowest = obj end
 end
 
+-- this is used to edit a group once made key is what is being edited and set_value makes it over ride the current value
+-- see Addons/playerRanks for examples
+function Ranking._group:edit(key,set_value,value)
+    if game then return end
+    if set_value then self[key] = value return end
+    if key == 'disallow' then
+        self.disallow = table.merge(self.disallow,value,true)
+    elseif key == 'allow' then
+        self.allow = table.merge(self.allow,value)
+    end
+    Ranking._update_group(self)
+end
+
 Event.register(defines.events.on_player_joined_game,function(event)
     Ranking.find_preset(event.player_index)
 end)
 
-Event.register(-1,function(event) 
+Event.register(-1,function(event)
     for power,rank in pairs(Ranking._ranks()) do
 		local perm = game.permissions.create_group(rank.name)
 		for _,toRemove in pairs(rank.disallow) do
