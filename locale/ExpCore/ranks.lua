@@ -29,7 +29,7 @@ short_hand	is what can be used when short on space but the rank still need to be
 tag			is the tag the player will gain when moved to the rank, it can be nil.
 time		is used for auto-rank feature where you are moved to the rank after a certain play time in minutes.
 colour		is the RGB value that can be used to emphasise GUI elements based on rank.
-power		is asigned by the script based on their index in ranks, you can insert new ranks between current ones.
+power		is asigned by the script based on their index in ranks, you can insert new ranks between current ones, lower is better
 group		is asigned by the script to show the group this rank is in
 disallow	is a list containing input actions that the user can not perform.
 allow		is a list of custom commands and effects that that rank can use, all defined in the sctips.
@@ -218,6 +218,7 @@ end
 function Ranking._meta()
     local meta = {time_ranks={}}
     for power,rank in pairs(ranks) do
+        meta.rank_count = power
         if rank.is_default then
             meta.default = rank.name
         end
@@ -226,8 +227,8 @@ function Ranking._meta()
         end
         if rank.time then
             table.insert(meta.time_ranks,rank.name)
-            if not meta.time_highest or power > meta.time_highest then meta.time_highest = power end
-            if not meta.time_lowest or power < meta.time_lowest then meta.time_lowest = power end
+            if not meta.time_highest or power < meta.time_highest then meta.time_highest = power end
+            if not meta.time_lowest or rank.time < meta.time_lowest then meta.time_lowest = power.time end
         end
         meta.time_highest = meta.time_highest or 0
         meta.time_lowest = meta.time_lowest or 0

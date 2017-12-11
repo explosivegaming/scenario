@@ -81,7 +81,7 @@ local function run_custom_command(command)
     local command_data = command_data[command.name]
     local player_name = Game.get_player(command) and Game.get_player(command).name or 'server'
     -- is the player allowed to use this command 
-    if is_type(Ranking,'table') and is_type(Ranking.get_rank,'function') and not Ranking.get_rank(player_name):allowed(command.name) then
+    if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 and not Ranking.get_rank(player_name):allowed(command.name) then
         player_return{'commands.unauthorized'}
         game.write_file('commands.log','\n'..game.tick
             ..' Player: '..player_name
