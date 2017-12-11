@@ -9,13 +9,23 @@ Discord: https://discord.gg/r6dC2uK
 
 local inputs = {}
 inputs._input = {}
+-- these are just so you can have short cuts to this
+inputs.events = {
+    error='error',
+    state=defines.events.on_gui_checked_state_changed,
+    click=defines.events.on_gui_click,
+    elem=defines.events.on_gui_elem_changed,
+    selection=defines.events.on_gui_selection_state_changed,
+    text=defines.events.on_gui_text_changed
+}
 
 --- Sets the input to trigger on an certain event
 -- @usage button:on_event(defines.events.on_gui_click,player_return)
--- @tparam number event the event to raise callback on | can also be 'error'
+-- @param event the event to raise callback on | can be number of the event | can be a key of inputs.events
 -- @tparam function callback the function you want to run on the event
 function inputs._input:on_event(event,callback)
     if not is_type(callback,'function') then return end
+    if inputs.events[event] then event = inputs.events[event] end
     if event == 'error' then self._error = callback return end
     self.events[event] = callback
 end
@@ -64,11 +74,11 @@ function inputs._event_handler(event)
     end
 end
 
-Event.register(defines.events.on_gui_checked_state_changed,inputs._event_handler)
-Event.register(defines.events.on_gui_click,inputs._event_handler)
-Event.register(defines.events.on_gui_elem_changed,inputs._event_handler)
-Event.register(defines.events.on_gui_selection_state_changed,inputs._event_handler)
-Event.register(defines.events.on_gui_text_changed,inputs._event_handler)
+Event.register(inputs.events.state,inputs._event_handler)
+Event.register(inputs.events.click,inputs._event_handler)
+Event.register(inputs.events.elem,inputs._event_handler)
+Event.register(inputs.events.state,inputs._event_handler)
+Event.register(inputs.events.text,inputs._event_handler)
 
 return inputs
 --[[
@@ -81,7 +91,7 @@ local test = Gui.inputs.add{
     type='button',
     caption='Test'
 }
-test:on_event(defines.events.on_gui_click,function(event) game.print('test') end)
+test:on_event(inputs.events.click,function(event) game.print('test') end)
 
 -- then later in code
 local frame = player.gui.top.add{name='test',type='frame'}
