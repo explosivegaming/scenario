@@ -19,14 +19,15 @@ local StdExpCoreLib = {}
 
 require '/commands'
 StdExpCoreLib.Server = require '/server'
-StdExpCoreLib.Gui = {}
 StdExpCoreLib.Ranking = require '/ranking'
---[[StdExpCoreLib.Gui = require '/gui'
-require '/GuiParts/inputs'
-require '/GuiParts/toolbar'
-require '/GuiParts/center'
-require '/GuiParts/left'
-require '/GuiParts/popup']]
+StdExpCoreLib.Gui = require '/gui'
+Gui:_load_parts{
+    'inputs',
+    --'toolbar',
+    --'center',
+    --'left',
+    --'popup'
+}
 
 return function(rtn)
     local _return = {}
