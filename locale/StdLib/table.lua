@@ -491,7 +491,7 @@ end
 function table.autokey(tbl,str)
     local _return = {}
     for key,value in pairs(tbl) do
-        if string.contains(string.lower(str),string.lower(key)) then table.insert(_return,value) end
+        if string.contains(string.lower(key),string.lower(str)) then table.insert(_return,value) end
     end
     return _return[1] or false
 end

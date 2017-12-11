@@ -203,6 +203,12 @@ function Server._thread:create(obj)
     return obj
 end
 
+-- see Server.queue_thread - this just opens it first
+function Server._thread:queue()
+    self:open()
+    return Server.queue_thread(self)
+end
+
 --- Test if the thread has all requied parts
 -- @usage if thread:valid() then end
 -- @tparam bolean skip_location_check true to skip the location check
@@ -291,7 +297,7 @@ function Server._thread:resolve(...)
                 Server.interface(function(thread,err) 
                     local success,err = pcall(thread._success,thread,err)
                     if not success then thread:error(err) end
-                end,true,err)
+                end,true,self,err)
                 _return = true
             end
         else

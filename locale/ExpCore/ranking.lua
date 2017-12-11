@@ -218,14 +218,15 @@ function Ranking._rank:print(rtn)
     else
         -- using threads to make less lag
         local thread = Server.new_thread{data={rank=self,rtn=rtn}}
-        thread.on_event('resolve',function(thread)
-            return self.data:get_players(true)
+        thread:on_event('resolve',function(thread)
+            return thread.data.rank:get_players(true)
         end)
-        thread.on_event('success',function(thread,players)
+        thread:on_event('success',function(thread,players)
             for _,player in pairs(players) do
-                player_return(rtn,player)
+                player_return(thread.data.rtn,player)
             end
         end)
+        thread:queue()
     end
 end
 
