@@ -35,12 +35,18 @@ end
 -- @param root the element you want to add the input to
 -- @return returns the element that was added
 function inputs._input:draw(root)
-    return root.add(self.draw_data)
+    if is_type(self.draw_data.caption,'string') and game.player.gui.is_valid_sprite_path(self.draw_data.caption) then
+        return root.add{type='sprite-button',name=self.draw_data.name,sprite=self.draw_data.caption,tooltip=self.draw_data.tooltip,style=mod_gui.button_style}
+    elseif is_type(self.draw_data.sprite,'string') and game.player.gui.is_valid_sprite_path(self.draw_data.sprite) then
+        return root.add{type='sprite-button',name=self.draw_data.name,sprite=self.draw_data.sprite,tooltip=self.draw_data.tooltip,style=mod_gui.button_style}
+    else
+        return root.add(self.draw_data)
+    end
 end
 
 --- Add a new input, this is the same as doing frame.add{} but returns a diffrent object
 -- @usage inputs.add{type='button',name='test',caption='Test'}
--- @tparam table obj the new element to add
+-- @tparam table obj the new element to add if caption is a sprite path then sprite is used
 -- @treturn table the custom input object
 function inputs.add(obj)
     if not is_type(obj,'table') then return end
@@ -54,6 +60,7 @@ function inputs.add(obj)
         type == 'textfield' or
         type == 'text-box' 
     then else return end
+    if obj.type == 'button' or obj.type == 'sprite-button' then obj.style = mod_gui.button_style end
     obj.draw_data = table.deepcopy(obj)
     obj.events = {}
     setmetatable(obj,{__index=inputs._input})
@@ -63,8 +70,12 @@ end
 
 -- this just runs the events given to inputs
 function inputs._event_handler(event)
-    local elements = Gui._get_data('inputs_'..event.element.type)
+    local elements = Gui._get_data('inputs_'..event.element.type) or {}
     local element = elements[event.element.name]
+    if not element and event.element.type == 'sprite-button' then 
+        elements = Gui._get_data('inputs_button') or {}
+        element = elements[event.element.name]
+    end
     if element then
         local success, err = pcall(element.events[event.name],event)
         if not success then
@@ -91,7 +102,7 @@ local test = Gui.inputs.add{
     type='button',
     caption='Test'
 }
-test:on_event(inputs.events.click,function(event) game.print('test') end)
+test:on_event(Gui.inputs.events.click,function(event) game.print('test') end)
 
 -- then later in code
 local frame = player.gui.top.add{name='test',type='frame'}

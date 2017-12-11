@@ -23,6 +23,7 @@ error = function(err)
     end
 end
 
+require("mod-gui")
 -- loads the stdlib and allows Core Game and Event
 Color, Game, Event = require('/locale/StdLib/load'){'Color','Game','Event'}
 
@@ -40,3 +41,21 @@ pcall(require,'/locale/Addons/playerRanks')
 -- this makes sure that all the little details are cleaned up
 Ranking._auto_edit_ranks()
 
+-- button testing - there are global for a reason
+text = Gui.inputs.add{
+    name='text-button',
+    type='button',
+    caption='Test'
+}
+text:on_event(Gui.inputs.events.click,function(event) game.print('test') end)
+
+sprite = Gui.inputs.add{
+    name='sprite-button',
+    type='button',
+    caption='item/lab'
+}
+sprite:on_event(Gui.inputs.events.click,function(event) game.print('test') end)
+
+Gui.toolbar.add('button1','btn1','test btn1',function(event) game.print('test') end)
+Gui.toolbar.add('button2','btn2','test btn2',function(event) game.print('test') end)
+Gui.toolbar.add('button3','item/lab','test btn3',function(event) game.print('test') end)

@@ -43,7 +43,8 @@ function ExpLib.player_return(rtn,player)
         local player = Game.get_player(player)
         if is_type(rtn,'table') then 
             -- test if its a localised string
-            if is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then pcall(player.print,rtn)
+            if is_type(rtn.__self,'userdata') then player.print('Cant Display Userdata')
+            elseif is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then pcall(player.print,rtn)
             else player.print(table.to_string(rtn))
             end
         elseif is_type(rtn,'function') then player.print('Cant Display Functions')
@@ -52,7 +53,8 @@ function ExpLib.player_return(rtn,player)
     elseif game.player then
         if is_type(rtn,'table') then 
             -- test if its a localised string
-            if is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then pcall(game.player.print,rtn)
+            if is_type(rtn.__self,'userdata') then player.print('Cant Display Userdata')
+            elseif is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then pcall(game.player.print,rtn)
             else game.player.print(table.to_string(rtn))
             end
         elseif is_type(rtn,'function') then game.player.print('Cant Display Functions')

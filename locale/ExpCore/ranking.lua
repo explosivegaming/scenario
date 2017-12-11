@@ -8,7 +8,7 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 local Ranking = {}
-Ranking.event = script.generate_event_name()
+defines.events.rank_change = script.generate_event_name()
 Ranking._rank = {}
 Ranking._group = {}
 -- this function is to avoid errors - see /ranks.lua
@@ -120,10 +120,10 @@ function Ranking.give_rank(player,rank,by_player,tick)
     player.permission_group = game.permissions.get_group(rank.name)
     player.tag = rank.tag
     if not old_rank.group.name == 'Jail' then Ranking._presets().old[player.index] = rank.name end
-    if Ranking.event then 
-        script.raise_event(Ranking.event,{
+    if defines.events.rank_change then 
+        script.raise_event(defines.events.rank_change,{
             tick=tick, 
-            player=player, 
+            player_index=player.index, 
             by_player_name=by_player_name, 
             new_rank=rank, 
             old_rank=old_rank

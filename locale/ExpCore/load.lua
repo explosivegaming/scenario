@@ -23,7 +23,7 @@ StdExpCoreLib.Ranking = require '/ranking'
 StdExpCoreLib.Gui = require '/gui'
 StdExpCoreLib.Gui:_load_parts{
     'inputs',
-    --'toolbar',
+    'toolbar',
     --'center',
     --'left',
     --'popup'
