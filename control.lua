@@ -39,3 +39,4 @@ require('/locale/ExpCore/ranks')
 pcall(require,'/locale/Addons/playerRanks')
 -- this makes sure that all the little details are cleaned up
 Ranking._auto_edit_ranks()
+

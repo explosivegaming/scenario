@@ -11,11 +11,10 @@ local Gui = {}
 local Gui_data = {}
 
 -- this is to enforce the read only propetry of the gui
-function Gui._add_data(key,value) 
+function Gui._add_data(key,value_key,value) 
     if game then return end 
-    if not Gui_data[key] then Gui_data[key] = {value}
-    else table.insert(Gui_data[key],value)
-    end 
+    if not Gui_data[key] then Gui_data[key] = {} end
+    Gui_data[key][value_key] = value
 end
 
 function Gui._get_data(key) return Gui_data[key] end

@@ -21,7 +21,7 @@ require '/commands'
 StdExpCoreLib.Server = require '/server'
 StdExpCoreLib.Ranking = require '/ranking'
 StdExpCoreLib.Gui = require '/gui'
-Gui:_load_parts{
+StdExpCoreLib.Gui:_load_parts{
     'inputs',
     --'toolbar',
     --'center',
