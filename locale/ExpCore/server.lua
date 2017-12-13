@@ -181,7 +181,7 @@ function Server.interface(callback,use_thread,...)
 end
 
 if commands._expgaming then
-    commands.add_command('server-interface', 'Runs the given input from the script', {'code',true}, function(event,args)
+    commands.add_command('interface', 'Runs the given input from the script', {'code',true}, function(event,args)
         local callback = args.code
         if not string.find(callback,'%s') and not string.find(callback,'return') then callback = 'return '..callback end
         if game.player then callback = 'local player, surface, force = game.player, game.player.surface, game.player.force '..callback end 
