@@ -65,7 +65,5 @@ Ranking._base_preset{
     ['badgamernl']='Owner',
     ['arty714']='Community Manager',
     ['cooldude2606']='Developer',
-    ['eissturm']='Admin',
-    ['mark9064']='Admin',
-    ['smou']='Admin'
+    ['mark9064']='Admin'
 }
