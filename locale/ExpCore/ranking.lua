@@ -83,16 +83,17 @@ end
 -- @param rank_base the rank that acts as the cut off point (rank is always included)
 -- @param rtn what do you want to return to the players
 -- @tparam bolean below if true rank below base are printed to
-function Ranking.print(rank_base,rtn,below)
+function Ranking.print(rank_base,rtn,colour,below)
+    local colour = colour or defines.color.white
     local rank_base = Ranking.get_rank(rank_base)
     local ranks = Ranking._ranks()
     if below then
         for power,rank in pairs(ranks) do
-            if rank_base.power >= power then rank:print(rtn) end
+            if rank_base.power >= power then rank:print(rtn,colour) end
         end
     else
         for power,rank in pairs(ranks) do
-            if rank_base.power <= power then rank:print(rtn) end
+            if rank_base.power <= power then rank:print(rtn,colour) end
         end
     end
 end
@@ -104,18 +105,20 @@ end
 -- @param[opt='server'] by_player the player who is giving the rank
 -- @param[opt=game.tick] tick the tick that the rank is being given on
 function Ranking.give_rank(player,rank,by_player,tick)
+    local print_colour = defines.text_color.info
     local tick = tick or game.tick
     local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or game.player and game.player.name or 'server'
     local rank = Ranking.get_rank(rank) or Ranking.get_rank(Ranking._presets().meta.default)
-    local player = Game.get_player(player)
+    local player = Game.get_player(player) or error('No Player To Give Rank')
     local old_rank = Ranking.get_rank(player) or Ranking.get_rank(Ranking._presets().meta.default)
     local message = 'ranking.rank-down'
     -- messaging
     if old_rank.name == rank.name then return end
-    if rank.power < old_rank.power then message = 'ranking.rank-up' end
-    game.print{message,player.name,rank.name,by_player_name}
-    if rank.group.name ~= 'User' then player.print{'ranking.rank-given',rank.name} end
-    if player.tag ~= old_rank.tag then player.print{'ranking.tag-reset'} end
+    if rank.power < old_rank.power then message = 'ranking.rank-up' player.play_sound{path='utility/achievement_unlocked'}
+    else player.play_sound{path='utility/game_lost'} end
+    game.print({message,player.name,rank.name,by_player_name},print_colour)
+    if rank.group.name ~= 'User' then player_return({'ranking.rank-given',rank.name},print_colour,player) end
+    if player.tag ~= old_rank.tag then player_return({'ranking.tag-reset'},print_colour,player) end
     -- rank change
     player.permission_group = game.permissions.get_group(rank.name)
     player.tag = rank.tag
@@ -194,15 +197,14 @@ end
 -- @tparam bolean online get only online players
 -- @treturn table a table of all players in this rank
 function Ranking._rank:get_players(online)
+    local players = game.permissions.get_group(rank.name).players
     local _return = {}
     if online then
-        for _,player in pairs(game.connected_players) do
-            if Ranking.get_rank(player).name == self.name then table.insert(_return,player) end
+        for _,player in pairs(players) do
+            if player.connected then table.insert(_return,player) end
         end
     else
-        for _,player in pairs(game.players) do
-            if Ranking.get_rank(player).name == self.name then table.insert(_return,player) end
-        end
+        _return = players
     end
     return _return
 end
@@ -210,10 +212,11 @@ end
 --- Print a message to all players of this rank
 -- @usage rank:print('foo')
 -- @param rtn any value you want to return
-function Ranking._rank:print(rtn)
+function Ranking._rank:print(rtn,colour)
+    local colour = colour or defines.color.white
     if not Server or not Server._thread then
         for _,player in pairs(self:get_players()) do
-            player_return(rtn,player)
+            player_return(rtn,colour,player)
         end
     else
         -- using threads to make less lag
@@ -223,7 +226,7 @@ function Ranking._rank:print(rtn)
         end)
         thread:on_event('success',function(thread,players)
             for _,player in pairs(players) do
-                player_return(thread.data.rtn,player)
+                player_return(thread.data.rtn,colour,player)
             end
         end)
         thread:queue()

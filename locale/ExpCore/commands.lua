@@ -82,7 +82,8 @@ local function run_custom_command(command)
     local player_name = Game.get_player(command) and Game.get_player(command).name or 'server'
     -- is the player allowed to use this command 
     if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 and not Ranking.get_rank(player_name):allowed(command.name) then
-        player_return{'commands.unauthorized'}
+        player_return({'commands.unauthorized'},defines.text_color.crit)
+        if game.player then game.player.play_sound{path='utility/cannot_build'} end
         game.write_file('commands.log','\n'..game.tick
             ..' Player: '..player_name
             ..' Failed to use command (Unauthorized): '..command.name
@@ -93,7 +94,8 @@ local function run_custom_command(command)
     -- gets the args for the command
     local args, valid = command_args(command,command_data)
     if not valid then
-        player_return{'commands.invalid-inputs',command.name,command_inputs(command_data)}
+        player_return({'commands.invalid-inputs',command.name,command_inputs(command_data)},defines.text_color.high)
+        if game.player then game.player.play_sound{path='utility/deconstruct_big'} end
         game.write_file('commands.log','\n'..game.tick
             ..' Player: '..player_name
             ..' Failed to use command (Invalid Args): '..command.name
@@ -104,7 +106,7 @@ local function run_custom_command(command)
     -- runs the command
     local success, err = pcall(command_calls[command.name],event,args)
     if err then error(err) end
-    player_return{'commands.command-ran'}
+    player_return({'commands.command-ran'},defines.text_color.info)
     game.write_file('commands.log','\n'..game.tick
         ..' Player: '..player_name
         ..' Used command: '..command.name

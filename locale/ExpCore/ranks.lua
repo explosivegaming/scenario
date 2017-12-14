@@ -51,7 +51,7 @@ http://lua-api.factorio.com/latest/defines.html#defines.input_action
 local root = Ranking._group:create{
     name='Root',
     allow={
-        ['server-interface'] = true
+        ['interface'] = true
     },
     disallow={}
 }

@@ -38,27 +38,21 @@ end
 -- player_return(a)
 -- @param rtn the value to return
 -- @param player the player to print to
-function ExpLib.player_return(rtn,player)
+function ExpLib.player_return(rtn,colour,player)
+    local colour = colour or defines.color.white
+    local player = player or game.player
     if player then
         local player = Game.get_player(player)
+        if not player then return end
+        player.play_sound{path='utility/scenario_message'}
         if is_type(rtn,'table') then 
             -- test if its a localised string
-            if is_type(rtn.__self,'userdata') then player.print('Cant Display Userdata')
-            elseif is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then pcall(player.print,rtn)
-            else player.print(table.to_string(rtn))
+            if is_type(rtn.__self,'userdata') then player.print('Cant Display Userdata',colour)
+            elseif is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then pcall(player.print,rtn,colour)
+            else player.print(table.to_string(rtn),colour)
             end
-        elseif is_type(rtn,'function') then player.print('Cant Display Functions')
-        else player.print(tostring(rtn))
-        end
-    elseif game.player then
-        if is_type(rtn,'table') then 
-            -- test if its a localised string
-            if is_type(rtn.__self,'userdata') then player.print('Cant Display Userdata')
-            elseif is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then pcall(game.player.print,rtn)
-            else game.player.print(table.to_string(rtn))
-            end
-        elseif is_type(rtn,'function') then game.player.print('Cant Display Functions')
-        else game.player.print(tostring(rtn))
+        elseif is_type(rtn,'function') then player.print('Cant Display Functions',colour)
+        else player.print(tostring(rtn),colour)
         end
     else
         if is_type(rtn,'table') then log(table.to_string(rtn))
