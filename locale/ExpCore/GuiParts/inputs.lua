@@ -16,7 +16,8 @@ inputs.events = {
     click=defines.events.on_gui_click,
     elem=defines.events.on_gui_elem_changed,
     selection=defines.events.on_gui_selection_state_changed,
-    text=defines.events.on_gui_text_changed
+    text=defines.events.on_gui_text_changed,
+    slider=defines.events.on_gui_value_changed
 }
 
 --- Sets the input to trigger on an certain event
@@ -58,7 +59,8 @@ function inputs.add(obj)
         type == 'checkbox' or 
         type == 'radiobutton' or
         type == 'textfield' or
-        type == 'text-box' 
+        type == 'text-box'  or
+        type == 'slider'
     then else return end
     if obj.type == 'button' or obj.type == 'sprite-button' then obj.style = mod_gui.button_style end
     obj.draw_data = table.deepcopy(obj)
