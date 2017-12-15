@@ -82,6 +82,7 @@ function inputs._event_handler(event)
         element = elements[event.element.name]
     end
     if element then
+        if not is_type(element.events[event.name],'function') then return end
         local success, err = pcall(element.events[event.name],event)
         if not success then
             if is_type(element._error,'function') then pcall(element._error) 
