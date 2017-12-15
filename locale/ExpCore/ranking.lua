@@ -125,6 +125,7 @@ function Ranking.give_rank(player,rank,by_player,tick)
     if not old_rank.group.name == 'Jail' then Ranking._presets().old[player.index] = rank.name end
     if defines.events.rank_change then 
         script.raise_event(defines.events.rank_change,{
+            name=defines.events.rank_change,
             tick=tick, 
             player_index=player.index, 
             by_player_name=by_player_name, 

@@ -170,7 +170,7 @@ function inputs.add_elem_button(name,elem_type,tooltip,callback)
 end
 
 --- Used to define a checkbox callback only on state_changed
--- @usage Gui.inputs.add_checkbox('test','Test','Just for testing',function)
+-- @usage Gui.inputs.add_checkbox('test',false,'Just for testing',function,function,funvtion)
 -- @tparam string name the name of this button
 -- @tparam string the display for this button, either text or sprite path
 -- @tparam string tooltip the tooltip to show on the button
@@ -204,6 +204,33 @@ function inputs.add_checkbox(name,radio,display,default,callback_true,callback_f
         end
     end)
     return checkbox
+end
+
+--- Used to reset the state of radio buttons, recomened to be called on_state_change to reset any radio buttons it is ment to work with.
+-- @usage Gui.inputs.reset_radio{radio1,radio2,...}
+-- @param elements can be a list of elements or a single element
+function inputs.reset_radio(elements)
+    if #elements > 0 then
+        for _,element in pairs(elements) do
+            if element.valid then
+                local _elements = Gui._get_data('inputs_'..element.type) or {}
+                local _element = _elements[element.name]
+                local state = false
+                local success, err = pcall(_element.data._state,element.parent)
+                if success then state = err else error(err) end
+                element.state = state
+            end
+        end
+    else
+        if elements.valid then
+            local _elements = Gui._get_data('inputs_'..elements.type) or {}
+            local _element = _elements[elements.name]
+            local state = false
+            local success, err = pcall(_element.data._state,elements.parent)
+            if success then state = err else error(err) end
+            element.state = state
+        end
+    end
 end
 
 return inputs
