@@ -344,19 +344,17 @@ end
 -- if event is a number then it is asumed to be a game event
 -- @tparam string event the name of the event that it is called on
 -- @tparam function callback the function which is called on the event
--- @treturn was the function added
+-- @treturn table returns self so that there can be chained
 function Server._thread:on_event(event,callback)
     local events = {'close','timeout','tick','resolve','success','error'}
     local value = table.find(events,function(v,k,find) return v == string.lower(find) end,event)
     if value and is_type(callback,'function') then
         self['_'..value] = callback
-        return true
     elseif is_type(event,'number') and is_type(callback,'function') then
         if not self._events then self._events = {} end
         self._events[event] = callback
-        return true
     end
-    return false
+    return self
 end
 
 Event.register(defines.events.on_tick,function(event)
@@ -405,4 +403,6 @@ return Server
         game.print('Events')
     end)
     thread:open()
+
+    all on_event functions can be chained from the thread creation rather than use varibles
 ]]
