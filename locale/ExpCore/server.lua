@@ -40,7 +40,7 @@ end
 -- all stores the threads indexed uuid, the other three only store the uuid's to index in the all table
 function Server._threads(reset)
     global.exp_core = not reset and global.exp_core or {}
-    global.exp_core.threads = not reset and global.exp_core.threads or {queue={},tick={},timeout={},events={},all={_n=0},paused={},named={}}
+    global.exp_core.threads = not reset and global.exp_core.threads or {print_to={},queue={},tick={},timeout={},events={},all={_n=0},paused={},named={}}
     return global.exp_core.threads
 end
 
@@ -109,9 +109,22 @@ function Server.check_timeouts()
     end)
 end
 
+-- for use in debuging
+function Server._thread_handler_debuger(player,event,state)
+    local player = Game.get_player(player)
+    local print_to = Server._threads().print_to
+    print_to[player.index] = print_to[player.index] or {}
+    print_to[player.index][event] = state
+end
 --- Calles all threads on a certain game event (used with script.on_event)
 -- @tparam table event the event that is called
 function Server._thread_handler(event)
+    table.each(Server._threads().print_to,function(print_to,player_index,event)
+        if event.name == defines.events.on_tick then return true end
+        if print_to[event.name] then
+            player_return(event,defines.text_color.bg,player_index)
+        end
+    end,event)
     local event_id = event.name
     local threads = Server._threads().events[event_id]
     if not threads then return end
