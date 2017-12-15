@@ -88,3 +88,19 @@ input_test = Gui.inputs.add_button('test-inputs','Try RMB','alt,ctrl,shift and m
 elem_test = Gui.inputs.add_elem_button('test-elem','item','Testing Elems',function(player,element,elem)
     player_return(elem.type..' '..elem.value,nil,player)
 end)
+
+check_test = Gui.inputs.add_checkbox('test-check',false,'Cheat Mode',function(parent) 
+    return game.players[parent.player_index].cheat_mode 
+end,function(player,element) 
+    player.cheat_mode = true 
+end,function(player,element)
+    player.cheat_mode = false
+end)
+
+radio_test = Gui.inputs.add_checkbox('test-radio',true,'Cheat Mode',function(parent) 
+    return game.players[parent.player_index].cheat_mode 
+end,function(player,element) 
+    player.cheat_mode = true 
+end,function(player,element)
+    player.cheat_mode = false
+end)

@@ -39,9 +39,18 @@ end
 -- @return returns the element that was added
 function inputs._input:draw(root)
     if is_type(self.draw_data.caption,'string') and game.player.gui.is_valid_sprite_path(self.draw_data.caption) then
-        return root.add{type='sprite-button',name=self.draw_data.name,sprite=self.draw_data.caption,tooltip=self.draw_data.tooltip,style=mod_gui.button_style}
+        local data = table.deepcopy(self.draw_data)
+        data.type = 'sprite-button'
+        return root.add(data)
     elseif is_type(self.draw_data.sprite,'string') and game.player.gui.is_valid_sprite_path(self.draw_data.sprite) then
-        return root.add{type='sprite-button',name=self.draw_data.name,sprite=self.draw_data.sprite,tooltip=self.draw_data.tooltip,style=mod_gui.button_style}
+        local data = table.deepcopy(self.draw_data)
+        data.type = 'sprite-button'
+        return root.add(data)
+    elseif is_type(self.data._state,'function') then
+        local data = table.deepcopy(self.draw_data)
+        local success, err = pcall(self.data._state,root)
+        if success then data.state = err else error(err) end
+        return root.add(data)
     else
         return root.add(self.draw_data)
     end
@@ -158,6 +167,43 @@ function inputs.add_elem_button(name,elem_type,tooltip,callback)
         else error('Invalid Callback') end
     end)
     return button
+end
+
+--- Used to define a checkbox callback only on state_changed
+-- @usage Gui.inputs.add_checkbox('test','Test','Just for testing',function)
+-- @tparam string name the name of this button
+-- @tparam string the display for this button, either text or sprite path
+-- @tparam string tooltip the tooltip to show on the button
+-- @tparam function the callback to call on change function(player,element,elem)
+-- @treturn table the button object that was made, to allow a custom error event if wanted
+function inputs.add_checkbox(name,radio,display,default,callback_true,callback_false)
+    local type = 'checkbox'; if radio then type='radiobutton' end
+    local state = false; if is_type(default,'boolean') then state = default end
+    local checkbox = inputs.add{
+        type=type,
+        name=name,
+        caption=display,
+        state=state
+    }
+    if is_type(default,'function') then checkbox.data._state = default end
+    checkbox.data._true = callback_true
+    checkbox.data._false = callback_false
+    checkbox:on_event('state',function(event)
+        local player = Game.get_player(event)
+        local state = event.element.state
+        if state then
+            if is_type(checkbox.data._true,'function') then
+                local success, err = pcall(checkbox.data._true,player,event.element)
+                if not success then error(err) end
+            else error('Invalid Callback') end
+        else
+            if is_type(checkbox.data._false,'function') then
+                local success, err = pcall(checkbox.data._false,player,event.element)
+                if not success then error(err) end
+            else error('Invalid Callback') end
+        end
+    end)
+    return checkbox
 end
 
 return inputs
