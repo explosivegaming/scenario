@@ -46,16 +46,41 @@ text = Gui.inputs.add{
     name='text-button',
     type='button',
     caption='Test'
-}
-text:on_event(Gui.inputs.events.click,function(event) game.print('test') end)
+}:on_event(Gui.inputs.events.click,function(event) game.print('test') end)
 
 sprite = Gui.inputs.add{
     name='sprite-button',
     type='button',
     caption='item/lab'
-}
-sprite:on_event(Gui.inputs.events.click,function(event) game.print('test') end)
+}:on_event(Gui.inputs.events.click,function(event) game.print('test') end)
 
 Gui.toolbar.add('button1','btn1','test btn1',function(event) game.print('test') end)
 Gui.toolbar.add('button2','btn2','test btn2',function(event) game.print('test') end)
 Gui.toolbar.add('button3','item/lab','test btn3',function(event) game.print('test') end)
+
+local input_test = Gui.inputs.add_button('test-inputs','Try RMB','alt,ctrl,shift and mouse buttons',{
+    {
+        function(player,mouse,keys) return mouse == defines.mouse_button_type.left and keys.alt end,
+        function(player,element) player_return('Left: Alt',nil,player) end
+    },
+    {
+        function(player,mouse,keys) return mouse == defines.mouse_button_type.left and keys.ctrl end,
+        function(player,element) player_return('Left: Ctrl',nil,player) end
+    },
+    {
+        function(player,mouse,keys) return mouse == defines.mouse_button_type.left and keys.shift end,
+        function(player,element) player_return('Left: Shift',nil,player) end
+    },
+    {
+        function(player,mouse,keys) return mouse == defines.mouse_button_type.right and keys.alt end,
+        function(player,element) player_return('Right: Alt',nil,player) end
+    },
+    {
+        function(player,mouse,keys) return mouse == defines.mouse_button_type.right and keys.ctrl end,
+        function(player,element) player_return('Right: Ctrl',nil,player) end
+    },
+    {
+        function(player,mouse,keys) return mouse == defines.mouse_button_type.right and keys.shift end,
+        function(player,element) player_return('Right: Shift',nil,player) end
+    }
+}):on_event('error',function(err) game.print('this is error handliling') end)
