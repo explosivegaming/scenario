@@ -84,3 +84,7 @@ input_test = Gui.inputs.add_button('test-inputs','Try RMB','alt,ctrl,shift and m
         function(player,element) player_return('Right: Shift',nil,player) end
     }
 }):on_event('error',function(err) game.print('this is error handliling') end)
+
+elem_test = Gui.inputs.add_elem_button('test-elem','item','Testing Elems',function(player,element,elem)
+    player_return(elem.type..' '..elem.value,nil,player)
+end)

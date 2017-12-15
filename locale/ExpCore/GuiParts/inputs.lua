@@ -113,9 +113,9 @@ function inputs.add_button(name,display,tooltip,callbacks)
     }
     button.data._callbacks = callbacks
     button:on_event('click',function(event)
+        local player = Game.get_player(event)
         local mouse = event.button
         local keys = {alt=event.alt,ctrl=event.control,shift=event.shift}
-        local player = Game.get_player(event)
         local element = event.element
         local callbacks = button.data._callbacks
         if is_type(callbacks,'function') then callbacks = {function(...) return true end,callbacks} end
@@ -128,6 +128,33 @@ function inputs.add_button(name,display,tooltip,callbacks)
                 elseif not success then error(err) end
             else error('Invalid Callback Condition Format') end
         end 
+    end)
+    return button
+end
+
+--- Used to define a choose-elem-button callback only on elem_changed
+-- @usage Gui.inputs.add_elem_button('test','Test','Just for testing',function)
+-- @tparam string name the name of this button
+-- @tparam string the display for this button, either text or sprite path
+-- @tparam string tooltip the tooltip to show on the button
+-- @tparam function the callback to call on change function(player,element,elem)
+-- @treturn table the button object that was made, to allow a custom error event if wanted
+function inputs.add_elem_button(name,elem_type,tooltip,callback)
+    local button = inputs.add{
+        type='choose-elem-button',
+        name=name,
+        elem_type=elem_type,
+        tooltip=tooltip
+    }
+    button.data._callback = callback
+    button:on_event('elem',function(event)
+        local player = Game.get_player(event)
+        local element = event.element or {elem_type=nil,elem_value=nil}
+        local elem = {type=element.elem_type,value=element.elem_value}
+        if is_type(button.data._callback,'function') then
+            local success, err = pcall(button.data._callback,player,element,elem)
+            if not success then error(err) end
+        else error('Invalid Callback') end
     end)
     return button
 end
