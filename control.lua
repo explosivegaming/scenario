@@ -58,7 +58,7 @@ Gui.toolbar.add('button1','btn1','test btn1',function(event) game.print('test') 
 Gui.toolbar.add('button2','btn2','test btn2',function(event) game.print('test') end)
 Gui.toolbar.add('button3','item/lab','test btn3',function(event) game.print('test') end)
 
-local input_test = Gui.inputs.add_button('test-inputs','Try RMB','alt,ctrl,shift and mouse buttons',{
+input_test = Gui.inputs.add_button('test-inputs','Try RMB','alt,ctrl,shift and mouse buttons',{
     {
         function(player,mouse,keys) return mouse == defines.mouse_button_type.left and keys.alt end,
         function(player,element) player_return('Left: Alt',nil,player) end

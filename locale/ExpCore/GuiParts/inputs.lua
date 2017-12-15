@@ -26,9 +26,9 @@ inputs.events = {
 -- @tparam function callback the function you want to run on the event
 -- @treturn table returns self so you can chain together
 function inputs._input:on_event(event,callback)
-    if not is_type(callback,'function') then return end
+    if not is_type(callback,'function') then return self end
     if inputs.events[event] then event = inputs.events[event] end
-    if event == 'error' then self._error = callback return end
+    if event == 'error' then self._error = callback return self end
     self.events[event] = callback
     return self
 end
@@ -106,7 +106,7 @@ Event.register(inputs.events.text,inputs._event_handler)
 -- @treturn table the button object that was made, to allow a custom error event if wanted
 function inputs.add_button(name,display,tooltip,callbacks)
     local button = inputs.add{
-        type='button'
+        type='button',
         name=name,
         caption=display,
         tooltip=tooltip
@@ -117,8 +117,8 @@ function inputs.add_button(name,display,tooltip,callbacks)
         local keys = {alt=event.alt,ctrl=event.control,shift=event.shift}
         local player = Game.get_player(event)
         local element = event.element
-        local callbacks = button.data._callback = callbacks
-        if is_type(callbacks,'function') then callbacks = {function(...) return true end,callbacks}
+        local callbacks = button.data._callbacks
+        if is_type(callbacks,'function') then callbacks = {function(...) return true end,callbacks} end
         for _,data in pairs(callbacks) do
             if is_type(data[1],'function') and is_type(data[2],'function') then
                 local success, err = pcall(data[1],player,mouse,keys,event)
