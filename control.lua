@@ -97,10 +97,8 @@ end,function(player,element)
     player.cheat_mode = false
 end)
 
-radio_test = Gui.inputs.add_checkbox('test-radio',true,'Cheat Mode',function(parent) 
-    return game.players[parent.player_index].cheat_mode 
+radio_test = Gui.inputs.add_checkbox('test-radio',true,'Kill Self',function(parent) 
+    return game.players[parent.player_index].in_combat
 end,function(player,element) 
-    player.cheat_mode = true 
-end,function(player,element)
-    player.cheat_mode = false
+    if player.character then player.character.die() end
 end)
