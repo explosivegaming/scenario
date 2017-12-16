@@ -58,14 +58,14 @@ end,function(player,element)
 end)
 
 local radio_test = Gui.inputs.add_checkbox('test-radio',true,'Kill Self',function(player,parent) 
-    return player.in_combat
+    return false
 end,function(player,element) 
     if player.character then player.character.die() end
     Gui.inputs.reset_radio(element.parent['test-radio-reset'])
 end)
 
-local radio_test_reset = Gui.inputs.add_checkbox('test-radio-reset',true,'Reset Kill Self',function(parent) 
-    return false
+local radio_test_reset = Gui.inputs.add_checkbox('test-radio-reset',true,'Reset Kill Self',function(player,parent) 
+    return not parent['test-radio'].state
 end,function(player,element) 
     Gui.inputs.reset_radio(element.parent['test-radio'])
 end)
@@ -78,11 +78,16 @@ local box_test = Gui.inputs.add_text('test-box',true,'default text but a box',fu
     player_return(text,nil,player)
 end)
 
-slider_test = Gui.inputs.add_slider('test-slider','vertical',0,5,function(player,parent)
+local slider_test = Gui.inputs.add_slider('test-slider','vertical',0,5,function(player,parent)
     return player.character_running_speed_modifier
 end,function(player,value,percent,element)
     player.character_running_speed_modifier = value
-    player_return('Value In Percent of Max '..percent*100,nil,player)
+    player_return('Value In Percent of Max '..math.floor(percent*100)-(math.floor(percent*100)%5),nil,player)
+end)
+
+local drop_test = Gui.inputs.add_drop_down('test-drop',table.keys(defines.color),1,function(player,selected,items,element)
+    player.color = defines.color[selected]
+    player.chat_color = defines.color[selected]
 end)
 
 local function test_gui(event)
@@ -101,6 +106,7 @@ local function test_gui(event)
     text_test:draw(frame)
     box_test:draw(frame)
     slider_test:draw(frame)
+    drop_test:draw(frame)
 end
 
 Gui.toolbar.add('open-gui-test','Open Test Gui','Opens the test gui with every input',test_gui)

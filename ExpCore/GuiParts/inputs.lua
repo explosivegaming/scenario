@@ -59,6 +59,24 @@ function inputs._input:draw(root)
         local success, err = pcall(self.data._start,player,root)
         if success then data.value = err else error(err) end
         return root.add(data)
+    elseif is_type(self.data._index,'function') then
+        local data = table.deepcopy(self.draw_data)
+        local success, err = pcall(self.data._index,player,root)
+        if success then data.selected_index = err else error(err) end
+        if is_type(self.data._items,'function') then
+            local success, err = pcall(self.data._items,player,root)
+            if success then data.items = err else error(err) end
+        end
+        return root.add(data)
+    elseif is_type(self.data._items,'function') then
+        local data = table.deepcopy(self.draw_data)
+        local success, err = pcall(self.data._items,player,root)
+        if success then data.items = err else error(err) end
+        if is_type(self.data._index,'function') then
+            local success, err = pcall(self.data._index,player,root)
+            if success then data.selected_index = err else error(err) end
+        end
+        return root.add(data)
     else
         return root.add(self.draw_data)
     end
@@ -115,6 +133,7 @@ Event.register(inputs.events.elem,inputs._event_handler)
 Event.register(inputs.events.state,inputs._event_handler)
 Event.register(inputs.events.text,inputs._event_handler)
 Event.register(inputs.events.slider,inputs._event_handler)
+Event.register(inputs.events.selection,inputs._event_handler)
 
 -- the folwing functions are just to make inputs easier but if what you want is not include use inputs.add(obj)
 --- Used to define a button, can have many function
@@ -238,7 +257,7 @@ function inputs.reset_radio(elements)
             local state = false
             local success, err = pcall(_element.data._state,elements.parent)
             if success then state = err else error(err) end
-            element.state = state
+            elements.state = state
         end
     end
 end
@@ -286,7 +305,7 @@ function inputs.add_slider(name,orientation,min,max,start_callback,callback)
         orientation=orientation,
         minimum_value=min,
         maximum_value=max,
-        value=start
+        value=start_callback
     }
     slider.data._start = start_callback
     slider.data._callback = callback
@@ -302,6 +321,36 @@ function inputs.add_slider(name,orientation,min,max,start_callback,callback)
         else error('Invalid Callback Condition Format') end
     end)
     return slider
+end
+
+--- Used to define a drop down callback only on value_changed
+-- @usage Gui.inputs.add_drop_down('test',{1,2,3},1,function)
+-- @param items either a list or a function which returns a list
+-- @param index either a number or a function which returns a number
+-- @tparam function callback the callback which is called when a new index is selected function(player,selected,items,element)
+-- @treturn table the drop-down object that was made, to allow a custom error event if wanted
+function inputs.add_drop_down(name,items,index,callback)
+    local drop_down = inputs.add{
+        type='drop-down',
+        name=name,
+        items=items,
+        selected_index=index
+    }
+    drop_down.data._items = items
+    drop_down.data._index = index
+    drop_down.data._callback = callback
+    drop_down:on_event('selection',function(event)
+        local player = Game.get_player(event)
+        local element = event.element
+        local items = element.items
+        local selected = items[element.selected_index]
+        local callback = drop_down.data._callback
+        if is_type(callback,'function') then
+            local success, err = pcall(callback,player,selected,items,element)
+            if not success then error(err) end
+        else error('Invalid Callback Condition Format') end
+    end)
+    return drop_down
 end
 
 return inputs
