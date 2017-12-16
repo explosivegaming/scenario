@@ -102,3 +102,11 @@ radio_test = Gui.inputs.add_checkbox('test-radio',true,'Kill Self',function(pare
 end,function(player,element) 
     if player.character then player.character.die() end
 end)
+
+text_test = Gui.inputs.add_text('test-text',false,'default text',function(player,text,element)
+    player_return(text,nil,player)
+end)
+
+box_test = Gui.inputs.add_text('test-box',true,'default text but a box',function(player,text,element)
+    player_return(text,nil,player)
+end)

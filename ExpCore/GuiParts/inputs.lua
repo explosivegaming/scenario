@@ -233,6 +233,33 @@ function inputs.reset_radio(elements)
     end
 end
 
+--- Used to define a text callback only on text_changed
+-- @usage Gui.inputs.add_text('test',false,'Just for testing',function)
+-- @tparam string name the name of this button
+-- @tparam boolean box is it a text box rather than a text field
+-- @tparam string text the starting text
+-- @tparam function the callback to call on change function(player,text,element)
+-- @treturn table the text object that was made, to allow a custom error event if wanted
+function inputs.add_text(name,box,text,callback)
+    local type = 'textfield'; if box then type='text-box' end
+    local textbox = inputs.add{
+        type=type,
+        name=name,
+        text=text
+    }
+    textbox.data._callback = callback
+    textbox:on_event('text',function(event)
+        local player = Game.get_player(event)
+        local element = event.element
+        local callback = textbox.data._callback
+        if is_type(callback,'function') then
+            local success, err = pcall(callback,player,element.text,element)
+            if not success then error(err) end
+        else error('Invalid Callback Condition Format') end
+    end)
+    return textbox
+end
+
 return inputs
 --[[
 
