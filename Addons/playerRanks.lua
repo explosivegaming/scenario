@@ -44,7 +44,7 @@ groups['Root']:edit('allow',false,{
 })
 ranks['Root']:edit('test',true,'testing')
 
-ranks['Root']:add_rank{
+groups['Root']:add_rank{
     name='Owner',
     short_hand='Owner',
     tag='[Owner]',
@@ -52,14 +52,14 @@ ranks['Root']:add_rank{
     colour={r=170,g=0,b=0},
     is_admin = true
 }
-ranks['Root']:add_rank{
+groups['Root']:add_rank{
     name='Community Manager',
     short_hand='Com Mngr',
     tag='[Com Mngr]',
     colour={r=150,g=68,b=161},
     is_admin = true
 }
-ranks['Root']:add_rank{
+groups['Root']:add_rank{
     name='Developer',
     short_hand='Dev',
     tag='[Dev]',
@@ -67,7 +67,7 @@ ranks['Root']:add_rank{
     is_admin = true
 }
 
-ranks['Admin']:add_rank{
+groups['Admin']:add_rank{
     name='Mod',
     short_hand='Mod',
     tag='[Mod]',
@@ -82,7 +82,8 @@ groups['User']:add_rank{
     name='Donator',
     short_hand='P2W',
     tag='[P2W]',
-    colour={r=233,g=63,b=233}
+    colour={r=233,g=63,b=233},
+    power=0
 }
 groups['User']:add_rank{
     name='Veteran',
@@ -90,7 +91,7 @@ groups['User']:add_rank{
     tag='[Veteran]',
     time=600,
     colour={r=140,g=120,b=200},
-    power=8
+    power=1
 }
 groups['User']:add_rank{
     name='Regular',
@@ -98,7 +99,7 @@ groups['User']:add_rank{
     tag='[Regular]',
     time=180,
     colour={r=24,g=172,b=188},
-    power=10
+    power=4
 }
 
 Ranking._base_preset{

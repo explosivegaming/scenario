@@ -82,7 +82,11 @@ local jail = Ranking._group:create{
         'set_allow_commands',
         'edit_permission_group',
         'delete_permission_group',
-        'add_permission_group'
+        'add_permission_group',
+        'open_character_gui',
+        'begin_mining',
+        'start_walking',
+        'player_leave_game'
     }
 }
 
@@ -136,12 +140,7 @@ jail:add_rank{
     short_hand='Jail',
     tag='[Jail]',
     colour={r=50,g=50,b=50},
-    disallow={
-        'open_character_gui',
-        'begin_mining',
-        'start_walking',
-        'player_leave_game'
-    }
+    disallow={}
 }
 
 function Ranking._auto_edit_ranks()

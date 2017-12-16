@@ -123,7 +123,7 @@ function Ranking.give_rank(player,rank,by_player,tick)
     player.permission_group = game.permissions.get_group(rank.name)
     player.tag = rank.tag
     if not old_rank.group.name == 'Jail' then Ranking._presets().old[player.index] = rank.name end
-    player.admin = rank.is_admin
+    player.admin = rank.is_admin or false
     if defines.events.rank_change then 
         script.raise_event(defines.events.rank_change,{
             name=defines.events.rank_change,
@@ -265,6 +265,7 @@ end
     
 -- this makes a new rank in side this group 
 -- {name='Root',short_hand='Root',tag='[Root]',time=nil,colour=defines.colors.white,allow={},disallow={}}
+-- if the rank is given power then it is given that place realative to the highest rank in that group,if no power then it is added to the end
 function Ranking._group:add_rank(obj)
     if game then return end
     if not is_type(obj.name,'string') or
@@ -275,13 +276,14 @@ function Ranking._group:add_rank(obj)
     obj.group = self
     obj.allow = obj.allow or {}
     obj.disallow = obj.disallow or {}
+    obj.power = obj.power and self.highest and self.highest.power+obj.power or obj.power or self.lowest and self.lowest.power+1 or nil
     setmetatable(obj.allow,{__index=self.allow})
     setmetatable(obj.disallow,{__index=self.disallow})
     Ranking._add_rank(obj,obj.power)
     Ranking._set_rank_power()
     table.insert(self.ranks,obj)
-    if not self.highest or obj.power > self.highest.power then self.highest = obj end
-    if not self.lowest or obj.power < self.lowest.power then self.lowest = obj end
+    if not self.highest or obj.power < self.highest.power then self.highest = obj end
+    if not self.lowest or obj.power > self.lowest.power then self.lowest = obj end
 end
 
 -- this is used to edit a group once made key is what is being edited and set_value makes it over ride the current value
