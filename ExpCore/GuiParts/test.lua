@@ -49,7 +49,7 @@ local elem_test = Gui.inputs.add_elem_button('test-elem','item','Testing Elems',
     player_return(elem.type..' '..elem.value,nil,player)
 end)
 
-local check_test = Gui.inputs.add_checkbox('test-check',false,'Cheat Mode',function(parent) 
+local check_test = Gui.inputs.add_checkbox('test-check',false,'Cheat Mode',function(player,parent) 
     return game.players[parent.player_index].cheat_mode 
 end,function(player,element) 
     player.cheat_mode = true 
@@ -57,8 +57,8 @@ end,function(player,element)
     player.cheat_mode = false
 end)
 
-local radio_test = Gui.inputs.add_checkbox('test-radio',true,'Kill Self',function(parent) 
-    return game.players[parent.player_index].in_combat
+local radio_test = Gui.inputs.add_checkbox('test-radio',true,'Kill Self',function(player,parent) 
+    return player.in_combat
 end,function(player,element) 
     if player.character then player.character.die() end
     Gui.inputs.reset_radio(element.parent['test-radio-reset'])
@@ -78,6 +78,13 @@ local box_test = Gui.inputs.add_text('test-box',true,'default text but a box',fu
     player_return(text,nil,player)
 end)
 
+slider_test = Gui.inputs.add_slider('test-slider','vertical',0,5,function(player,parent)
+    return player.character_running_speed_modifier
+end,function(player,value,percent,element)
+    player.character_running_speed_modifier = value
+    player_return('Value In Percent of Max '..percent*100,nil,player)
+end)
+
 local function test_gui(event)
     if not game.player and not event.player_index then return end
     local player = game.player or Game.get_player(event)
@@ -93,6 +100,7 @@ local function test_gui(event)
     radio_test_reset:draw(frame)
     text_test:draw(frame)
     box_test:draw(frame)
+    slider_test:draw(frame)
 end
 
 Gui.toolbar.add('open-gui-test','Open Test Gui','Opens the test gui with every input',test_gui)

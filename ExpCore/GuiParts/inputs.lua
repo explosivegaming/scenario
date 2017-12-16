@@ -51,8 +51,13 @@ function inputs._input:draw(root)
         return root.add(data)
     elseif is_type(self.data._state,'function') then
         local data = table.deepcopy(self.draw_data)
-        local success, err = pcall(self.data._state,root)
+        local success, err = pcall(self.data._state,player,root)
         if success then data.state = err else error(err) end
+        return root.add(data)
+    elseif is_type(self.data._start,'function') then
+        local data = table.deepcopy(self.draw_data)
+        local success, err = pcall(self.data._start,player,root)
+        if success then data.value = err else error(err) end
         return root.add(data)
     else
         return root.add(self.draw_data)
@@ -74,7 +79,8 @@ function inputs.add(obj)
         type == 'radiobutton' or
         type == 'textfield' or
         type == 'text-box'  or
-        type == 'slider'
+        type == 'slider' or
+        type == 'drop-down'
     then else return end
     if obj.type == 'button' or obj.type == 'sprite-button' then obj.style = mod_gui.button_style end
     obj.draw_data = table.deepcopy(obj)
@@ -108,6 +114,7 @@ Event.register(inputs.events.click,inputs._event_handler)
 Event.register(inputs.events.elem,inputs._event_handler)
 Event.register(inputs.events.state,inputs._event_handler)
 Event.register(inputs.events.text,inputs._event_handler)
+Event.register(inputs.events.slider,inputs._event_handler)
 
 -- the folwing functions are just to make inputs easier but if what you want is not include use inputs.add(obj)
 --- Used to define a button, can have many function
@@ -261,6 +268,40 @@ function inputs.add_text(name,box,text,callback)
         else error('Invalid Callback Condition Format') end
     end)
     return textbox
+end
+
+--- Used to define a slider callback only on value_changed
+-- @usage Gui.inputs.add_slider('test','horizontal',1,10,5,function)
+-- @tparam string name the name of this button
+-- @tapram string text the caption to go with the slider
+-- @tparam number min the lowest number
+-- @tparam number max the highest number
+-- @param start_callback either a number or a function to return a number
+-- @tparam function callback the function to be called on value_changed function(player,value,percent,element)
+-- @treturn table the slider object that was made, to allow a custom error event if wanted
+function inputs.add_slider(name,orientation,min,max,start_callback,callback)
+    local slider = inputs.add{
+        type='slider',
+        name=name,
+        orientation=orientation,
+        minimum_value=min,
+        maximum_value=max,
+        value=start
+    }
+    slider.data._start = start_callback
+    slider.data._callback = callback
+    slider.data.max = max
+    slider:on_event('slider',function(event)
+        local player = Game.get_player(event)
+        local value = event.element.slider_value
+        local data = slider.data
+        local percent = value/data.max
+        if is_type(data._callback,'function') then
+            local success, err = pcall(data._callback,player,value,percent,event.element)
+            if not success then error(err) end
+        else error('Invalid Callback Condition Format') end
+    end)
+    return slider
 end
 
 return inputs
