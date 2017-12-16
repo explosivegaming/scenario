@@ -123,6 +123,7 @@ function Ranking.give_rank(player,rank,by_player,tick)
     player.permission_group = game.permissions.get_group(rank.name)
     player.tag = rank.tag
     if not old_rank.group.name == 'Jail' then Ranking._presets().old[player.index] = rank.name end
+    player.admin = rank.is_admin
     if defines.events.rank_change then 
         script.raise_event(defines.events.rank_change,{
             name=defines.events.rank_change,

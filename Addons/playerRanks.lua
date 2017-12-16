@@ -44,6 +44,46 @@ groups['Root']:edit('allow',false,{
 })
 ranks['Root']:edit('test',true,'testing')
 
+ranks['Root']:add_rank{
+    name='Owner',
+    short_hand='Owner',
+    tag='[Owner]',
+    time=nil,
+    colour={r=170,g=0,b=0},
+    is_admin = true
+}
+ranks['Root']:add_rank{
+    name='Community Manager',
+    short_hand='Com Mngr',
+    tag='[Com Mngr]',
+    colour={r=150,g=68,b=161},
+    is_admin = true
+}
+ranks['Root']:add_rank{
+    name='Developer',
+    short_hand='Dev',
+    tag='[Dev]',
+    colour={r=179,g=125,b=46},
+    is_admin = true
+}
+
+ranks['Admin']:add_rank{
+    name='Mod',
+    short_hand='Mod',
+    tag='[Mod]',
+    colour={r=0,g=170,b=0},
+    disallow={
+        'server_command'
+    },
+    is_admin = true
+}
+
+groups['User']:add_rank{
+    name='Donator',
+    short_hand='P2W',
+    tag='[P2W]',
+    colour={r=233,g=63,b=233}
+}
 groups['User']:add_rank{
     name='Veteran',
     short_hand='Vet',

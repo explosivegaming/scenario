@@ -93,50 +93,18 @@ root:add_rank{
     short_hand='Root',
     tag='[Root]',
     colour=defines.color.white,
-    is_root=true
-}
-root:add_rank{
-    name='Owner',
-    short_hand='Owner',
-    tag='[Owner]',
-    time=nil,
-    colour={r=170,g=0,b=0}
-}
-root:add_rank{
-    name='Community Manager',
-    short_hand='Com Mngr',
-    tag='[Com Mngr]',
-    colour={r=150,g=68,b=161}
-}
-root:add_rank{
-    name='Developer',
-    short_hand='Dev',
-    tag='[Dev]',
-    colour={r=179,g=125,b=46}
+    is_root=true,
+    is_admin = true
 }
 
 admin:add_rank{
     name='Admin',
     short_hand='Admin',
     tag='[Admin]',
-    colour={r=233,g=63,b=233}
-}
-admin:add_rank{
-    name='Mod',
-    short_hand='Mod',
-    tag='[Mod]',
-    colour={r=0,g=170,b=0},
-    disallow={
-        'server_command'
-    }
+    colour={r=233,g=63,b=233},
+    is_admin = true
 }
 
-user:add_rank{
-    name='Donator',
-    short_hand='P2W',
-    tag='[P2W]',
-    colour={r=233,g=63,b=233}
-}
 user:add_rank{
     name='Member',
     short_hand='Mem',
