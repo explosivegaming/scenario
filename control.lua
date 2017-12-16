@@ -25,7 +25,7 @@ end
 
 require("mod-gui")
 -- loads the stdlib and allows Core Game and Event
-Color, Game, Event = require('/locale/StdLib/load'){'Color','Game','Event'}
+Color, Game, Event = require('/StdLib/load'){'Color','Game','Event'}
 
 -- loads the ExpLib, functions are plased into the lua global
 local ExpLib = require 'ExpLib'
@@ -33,11 +33,11 @@ ExpLib._unpack_to_G(ExpLib)
 _G.discord_emit = nil -- un-comment this line if you are not using the json.data
 
 -- loads the ExpCore files these are need in order to run the other addons
-Ranking, Server, Gui = require('/locale/ExpCore/load'){'Ranking','Server','Gui'}
+Ranking, Server, Gui = require('/ExpCore/load'){'Ranking','Server','Gui'}
 -- this loads the ranks that Ranking uses
-require('/locale/ExpCore/ranks')
+require('/ExpCore/ranks')
 -- this loads any edits that are not need in core pcall as file may not be preset
-pcall(require,'/locale/Addons/playerRanks')
+pcall(require,'/Addons/playerRanks')
 -- this makes sure that all the little details are cleaned up
 Ranking._auto_edit_ranks()
 
