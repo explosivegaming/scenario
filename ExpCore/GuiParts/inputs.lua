@@ -38,11 +38,14 @@ end
 -- @param root the element you want to add the input to
 -- @return returns the element that was added
 function inputs._input:draw(root)
-    if is_type(self.draw_data.caption,'string') and game.player.gui.is_valid_sprite_path(self.draw_data.caption) then
+    local player = Game.get_player(root.player_index)
+    if is_type(self.draw_data.caption,'string') and player.gui.is_valid_sprite_path(self.draw_data.caption) then
         local data = table.deepcopy(self.draw_data)
         data.type = 'sprite-button'
+        data.sprite = data.caption
+        data.caption = nil
         return root.add(data)
-    elseif is_type(self.draw_data.sprite,'string') and game.player.gui.is_valid_sprite_path(self.draw_data.sprite) then
+    elseif is_type(self.draw_data.sprite,'string') and player.gui.is_valid_sprite_path(self.draw_data.sprite) then
         local data = table.deepcopy(self.draw_data)
         data.type = 'sprite-button'
         return root.add(data)
@@ -261,47 +264,5 @@ function inputs.add_text(name,box,text,callback)
 end
 
 return inputs
---[[
 
-Input Example
-
--- Basic Button Using Gui.inputs.add
-local test = Gui.inputs.add{
-    name='test-button',
-    type='button',
-    caption='Test'
-}
-test:on_event(Gui.inputs.events.click,function(event) game.print('test') end)
-
--- then later in code
-local frame = player.gui.top.add{name='test',type='frame'}
-test:draw(frame)
-
--- Mutly Function Button Using Gui.inputs.add_button
-Gui.inputs.add_button('test-inputs','Try RMB','alt,ctrl,shift and mouse buttons',{
-    {
-        function(player,mouse,keys) return mouse == defines.mouse_button_type.left and keys.alt end,
-        function(player,element) player_return('Left: Alt',nil,player) end
-    },
-    {
-        function(player,mouse,keys) return mouse == defines.mouse_button_type.left and keys.ctrl end,
-        function(player,element) player_return('Left: Ctrl',nil,player) end
-    },
-    {
-        function(player,mouse,keys) return mouse == defines.mouse_button_type.left and keys.shift end,
-        function(player,element) player_return('Left: Shift',nil,player) end
-    },
-    {
-        function(player,mouse,keys) return mouse == defines.mouse_button_type.right and keys.alt end,
-        function(player,element) player_return('Right: Alt',nil,player) end
-    },
-    {
-        function(player,mouse,keys) return mouse == defines.mouse_button_type.right and keys.ctrl end,
-        function(player,element) player_return('Right: Ctrl',nil,player) end
-    },
-    {
-        function(player,mouse,keys) return mouse == defines.mouse_button_type.right and keys.shift end,
-        function(player,element) player_return('Right: Shift',nil,player) end
-    }
-}):on_event('error',function(err) game.print('this is error handliling') end)
-]]
+-- to see examples look at GuiParts/test.lua

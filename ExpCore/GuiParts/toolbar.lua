@@ -30,7 +30,8 @@ function toolbar.draw(player)
     local player = Game.get_player(player)
     if not player then return end
 	local toolbar_frame = mod_gui.get_button_flow(player)
-	toolbar_frame.clear()
+    toolbar_frame.clear()
+    if not Gui._get_data('toolbar') then return end
     for name,button in pairs(Gui._get_data('toolbar')) do
         if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 then
             local rank = Ranking.get_rank(player)
