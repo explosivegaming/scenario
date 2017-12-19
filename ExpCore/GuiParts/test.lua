@@ -111,6 +111,19 @@ end
 
 Gui.toolbar.add('open-gui-test','Open Test Gui','Opens the test gui with every input',test_gui)
 
+-- testing the center gui
+Gui.center.add{
+    name='test-center',
+    caption='Gui Center',
+    tooltip='Just a gui test'
+}:add_tab('tab-1','Tab 1','Just a tab',function(frame)
+    frame.add{type='label',caption='Test'}
+end):add_tab('tab-2','Tab 2','Just a tab',function(frame)
+    for i = 1,100 do
+        frame.add{type='label',caption='Test 2'}
+    end
+end)
+
 return test_gui
 
 
