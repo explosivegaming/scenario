@@ -24,7 +24,7 @@ StdExpCoreLib.Gui = require '/gui'
 StdExpCoreLib.Gui:_load_parts{
     'inputs',
     'toolbar',
-    --'center',
+    'center',
     --'left',
     --'popup'
 }
