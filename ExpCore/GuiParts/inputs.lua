@@ -318,13 +318,12 @@ function inputs.add_slider(name,orientation,min,max,start_callback,callback)
     }
     slider.data._start = start_callback
     slider.data._callback = callback
-    slider.data.max = max
     slider:on_event('slider',function(event)
         local slider = Gui._get_data('inputs_'..event.element.type)[event.element.name]
         local player = Game.get_player(event)
         local value = event.element.slider_value
         local data = slider.data
-        local percent = value/data.max
+        local percent = value/event.element.get_slider_maximum()
         if is_type(data._callback,'function') then
             local success, err = pcall(data._callback,player,value,percent,event.element)
             if not success then error(err) end
