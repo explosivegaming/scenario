@@ -152,6 +152,12 @@ function inputs.add_button(name,display,tooltip,callbacks)
     }
     button.data._callbacks = callbacks
     button:on_event('click',function(event)
+        local elements = Gui._get_data('inputs_'..event.element.type) or {}
+        local button = elements[event.element.name]
+        if not button and event.element.type == 'sprite-button' then 
+            elements = Gui._get_data('inputs_button') or {}
+            button = elements[event.element.name]
+        end
         local player = Game.get_player(event)
         local mouse = event.button
         local keys = {alt=event.alt,ctrl=event.control,shift=event.shift}
@@ -187,6 +193,7 @@ function inputs.add_elem_button(name,elem_type,tooltip,callback)
     }
     button.data._callback = callback
     button:on_event('elem',function(event)
+        local button = Gui._get_data('inputs_'..event.element.type)[event.element.name]
         local player = Game.get_player(event)
         local element = event.element or {elem_type=nil,elem_value=nil}
         local elem = {type=element.elem_type,value=element.elem_value}
@@ -218,6 +225,7 @@ function inputs.add_checkbox(name,radio,display,default,callback_true,callback_f
     checkbox.data._true = callback_true
     checkbox.data._false = callback_false
     checkbox:on_event('state',function(event)
+        local checkbox = Gui._get_data('inputs_'..event.element.type)[event.element.name]
         local player = Game.get_player(event)
         local state = event.element.state
         if state then
@@ -278,6 +286,7 @@ function inputs.add_text(name,box,text,callback)
     }
     textbox.data._callback = callback
     textbox:on_event('text',function(event)
+        local textbox = Gui._get_data('inputs_'..event.element.type)[event.element.name]
         local player = Game.get_player(event)
         local element = event.element
         local callback = textbox.data._callback
@@ -311,6 +320,7 @@ function inputs.add_slider(name,orientation,min,max,start_callback,callback)
     slider.data._callback = callback
     slider.data.max = max
     slider:on_event('slider',function(event)
+        local slider = Gui._get_data('inputs_'..event.element.type)[event.element.name]
         local player = Game.get_player(event)
         local value = event.element.slider_value
         local data = slider.data
@@ -340,6 +350,7 @@ function inputs.add_drop_down(name,items,index,callback)
     drop_down.data._index = index
     drop_down.data._callback = callback
     drop_down:on_event('selection',function(event)
+        local drop_down = Gui._get_data('inputs_'..event.element.type)[event.element.name]
         local player = Game.get_player(event)
         local element = event.element
         local items = element.items
