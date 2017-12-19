@@ -14,9 +14,10 @@ function center.add(obj)
     if not is_type(obj,'table') then return end    
     if not is_type(obj.name,'string') then return end 
     setmetatable(obj,{__index=center._center})
-    self.tabs = {}
+    obj.tabs = {}
+    obj._tabs = {}
     Gui._add_data('center',obj.name,obj)
-    toolbar.add(obj.name,obj.caption,obj.tooltip,obj.open)
+    Gui.toolbar.add(obj.name,obj.caption,obj.tooltip,obj.open)
     return obj
 end
 
@@ -82,7 +83,7 @@ end
 
 function center._center:add_tab(name,caption,tooltip,callback)
     self._tabs[self.name..'_'..name] = callback
-    self.tabs[name] = Gui.inputs.inputs.add{
+    self.tabs[name] = Gui.inputs.add{
         type='button',
         name=self.name..'_'..name,
         caption=caption,

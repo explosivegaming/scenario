@@ -42,3 +42,14 @@ require('/ExpCore/ranks')
 pcall(require,'/Addons/playerRanks')
 -- this makes sure that all the little details are cleaned up
 Ranking._auto_edit_ranks()
+
+-- testing the center gui
+center.add{
+    name='test-center',
+    caption='Gui Center',
+    tooltip='Just a gui test'
+}:add_tab('tab-1','Tab 1','Just a tab',function(frame)
+    frame.add{type='lable',caption='Test'}
+end):add_tab('tab-2','Tab 2','Just a tab',function(frame)
+    frame.add{type='lable',caption='Test 2'}
+end)
