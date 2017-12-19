@@ -98,6 +98,7 @@ function center._center:add_tab(name,caption,tooltip,callback)
             if not success then error(err) end
         end
     end)
+    return self
 end
 
 return center
