@@ -44,7 +44,7 @@ pcall(require,'/Addons/playerRanks')
 Ranking._auto_edit_ranks()
 
 -- testing the center gui
-center.add{
+Gui.center.add{
     name='test-center',
     caption='Gui Center',
     tooltip='Just a gui test'

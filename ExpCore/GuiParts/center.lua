@@ -7,7 +7,7 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/r6dC2uK
 ]]
 
-center = {}
+local center = {}
 center._center = {}
 
 function center.add(obj)
@@ -83,7 +83,7 @@ function center._center:callback(frame)
     self._tabs[self.name..'_'..first_tab](tab_scroll)
     tab_scroll.style.height = 300
     tab_scroll.style.width = 500
-    tab_bar_scroll.style.height = 80
+    tab_bar_scroll.style.minimal_height = 40
     tab_bar_scroll.style.width = 500
     frame.parent.add{type='frame',name='temp'}.destroy()--recenter the GUI
 end
