@@ -58,8 +58,7 @@ function center._center:callback(frame)
         type='scroll-pane', 
         name='tab_bar_scroll', 
         horizontal_scroll_policy='auto-and-reserve-space',
-        vertical_scroll_policy='never',
-        direction='horizontal'
+        vertical_scroll_policy='never'
     }
     local tab_bar_scroll_flow = tab_bar_scroll.add{
         type='flow', 
