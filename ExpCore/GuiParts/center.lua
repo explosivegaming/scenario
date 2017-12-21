@@ -57,7 +57,8 @@ function center._center:callback(frame)
     local tab_bar_scroll = tab_bar.add{
         type='scroll-pane', 
         name='tab_bar_scroll', 
-        can_scroll_horizontally=true,
+        horizontal_scroll_policy='auto-and-reserve-space',
+        vertical_scroll_policy='never',
         direction='horizontal'
     }
     local tab_bar_scroll_flow = tab_bar_scroll.add{
@@ -73,7 +74,8 @@ function center._center:callback(frame)
     local tab_scroll = tab.add{
         type ='scroll-pane',
         name='tab_scroll', 
-        can_scroll_horizontally=false
+        horizontal_scroll_policy='never',
+        vertical_scroll_policy='auto'
     }
     local first_tab = nil
     for name,button in pairs(self.tabs) do
