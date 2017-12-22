@@ -22,10 +22,12 @@ function center.add(obj)
 end
 
 function center.get_flow(player)
+    local player = Game.get_player(player)
     return player.gui.center.exp_center or player.gui.center.add{name='exp_center',type='flow'}
 end
 
 function center.clear(player)
+    local player = Game.get_player(player)
     center.get_flow(player).clear()
 end
 
@@ -113,5 +115,9 @@ end
 Event.register(defines.events.on_gui_closed,function(event)
     if event.element and event.element.valid then event.element.destroy() end
 end)
+
+if defines.events.rank_change then
+    Event.register(defines.events.rank_change,center.clear)
+end
 
 return center
