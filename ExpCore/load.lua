@@ -25,7 +25,7 @@ StdExpCoreLib.Gui:_load_parts{
     'inputs',
     'toolbar',
     'center',
-    --'left',
+    'left',
     --'popup'
 }
 

@@ -11,7 +11,7 @@ local center = {}
 center._center = {}
 
 --- Adds a new obj to the center gui
--- @usage center.add{name='foo',caption='Foo',tooltip='Testing',draw=function}
+-- @usage Gui.center.add{name='foo',caption='Foo',tooltip='Testing',draw=function}
 -- @param obj contains the new object, needs name, fraw is opt and is function(root_frame)
 -- @return the object made, used to add tabs
 function center.add(obj)
