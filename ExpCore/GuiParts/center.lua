@@ -10,6 +10,10 @@ Discord: https://discord.gg/r6dC2uK
 local center = {}
 center._center = {}
 
+--- Adds a new obj to the center gui
+-- @usage center.add{name='foo',caption='Foo',tooltip='Testing',draw=function}
+-- @param obj contains the new object, needs name, fraw is opt and is function(root_frame)
+-- @return the object made, used to add tabs
 function center.add(obj)
     if not is_type(obj,'table') then return end    
     if not is_type(obj.name,'string') then return end 
@@ -21,16 +25,19 @@ function center.add(obj)
     return obj
 end
 
+-- used to get the center frame of the player, used mainly in script
 function center.get_flow(player)
     local player = Game.get_player(player)
     return player.gui.center.exp_center or player.gui.center.add{name='exp_center',type='flow'}
 end
 
+-- used to clear the center frame of the player, used mainly in script
 function center.clear(player)
     local player = Game.get_player(player)
     center.get_flow(player).clear()
 end
 
+-- used on the button press when the toolbar button is press, can be overriden
 function center._center.open(event)
     local player = Game.get_player(event)
     local _center = Gui._get_data('center')[event.element.name]
@@ -43,15 +50,16 @@ function center._center.open(event)
         direction='vertical',
         style=mod_gui.frame_style
     }
-    if is_type(_center.callback,'function') then
-        local success, err = pcall(_center.callback,_center,center_frame)
+    if is_type(_center.draw,'function') then
+        local success, err = pcall(_center.draw,_center,center_frame)
         if not success then error(err) end
     else error('No Callback on center frame '.._center.name)
     end
     player.opened=center_frame
 end
 
-function center._center:callback(frame)
+-- this is the default draw function if one is not provided
+function center._center:draw(frame)
     local tab_bar = frame.add{
         type='frame',
         name='tab_bar'
@@ -91,6 +99,13 @@ function center._center:callback(frame)
     frame.parent.add{type='frame',name='temp'}.destroy()--recenter the GUI
 end
 
+--- If deafult draw is used then you can add tabs to the gui with this function
+-- @usage _center:add_tab('foo','Foo','Just a tab',function)
+-- @tparam string name this is the name of the tab
+-- @tparam string caption this is the words that appear on the tab button
+-- @tparam[opt] string tooltip the tooltip that is on the button
+-- @tparam function callback this is called when button is pressed with function(root_frame)
+-- @return self to allow chaining of _center:add_tab
 function center._center:add_tab(name,caption,tooltip,callback)
     self._tabs[self.name..'_'..name] = callback
     self.tabs[name] = Gui.inputs.add{
@@ -112,10 +127,12 @@ function center._center:add_tab(name,caption,tooltip,callback)
     return self
 end
 
+-- used so that when gui close key is pressed this will close the gui
 Event.register(defines.events.on_gui_closed,function(event)
     if event.element and event.element.valid then event.element.destroy() end
 end)
 
+-- when the player rank is changed it closses the center guis
 if defines.events.rank_change then
     Event.register(defines.events.rank_change,center.clear)
 end
