@@ -107,7 +107,7 @@ end
 -- draws the left guis when a player first joins, fake_event is just because i am lazy
 Event.register(defines.events.on_player_joined_game,function(event)
     local player = Game.get_player(event)
-    local frames = Gui._get_data('left')
+    local frames = Gui._get_data('left') or {}
     for name,left in pairs(frames) do
         local fake_event = {player_index=player.index,element={name=name}}
         left.open(fake_event)
