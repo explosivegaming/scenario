@@ -11,18 +11,49 @@ local left = {}
 left._left = {}
 
 --- Used to add a left gui frame
--- @usage Gui.left.add{name='foo',caption='Foo',tooltip='just testing',draw=function}
--- @param obj this is what will be made, needs a name and a draw function(root_frame)
+-- @usage Gui.left.add{name='foo',caption='Foo',tooltip='just testing',open_on_join=true,can_open=function,draw=function}
+-- @param obj this is what will be made, needs a name and a draw function(root_frame), open_on_join can be used to set the deaful state true/false, can_open is a test to block it from opening but is not needed
 -- @return the object that is made to... well idk but for the future
 function left.add(obj)
     if not is_type(obj,'table') then return end    
-    if not is_type(obj.name,'string') then return end 
+    if not is_type(obj.name,'string') then return end
     setmetatable(obj,{__index=left._left})
-    obj.open_on_join = obj.open_on_join or false
-    obj.can_open = true
     Gui._add_data('left',obj.name,obj)
     Gui.toolbar.add(obj.name,obj.caption,obj.tooltip,obj.toggle)
     return obj
+end
+
+--- This is used to update all the guis of conected players, good idea to use our thread system as it as nested for loops
+-- @usage Gui.left.update()
+-- @tparam string frame this is the name of a frame if you only want to update one
+function left.update(frame)
+    if not Server or not Server._thread then
+        for _,player in pairs(game.connected_players) do
+            local frames = Gui._get_data('left') or {}
+            if frame then frames = {[frame]=frames[frame]} or {} end
+            for name,left in pairs(frames) do
+                local fake_event = {player_index=player.index,element={name=name}}
+                left.open(fake_event)
+            end
+        end
+    else
+        local frames = Gui._get_data('left') or {}
+        if frame then frames = {[frame]=frames[frame]} or {} end
+        Server.new_thread{
+            data={players=game.connected_players,frames=frames}
+        }:on_event('tick',function(thread)
+            if #thread.data.players == 0 then thread:close() return end
+            local player = table.remove(thread.data.players,1)
+            Server.new_thread{
+                data={player=player,frames=thread.data.frames}
+            }:on_event('resolve',function(thread)
+                for name,left in pairs(thread.data.frames) do
+                    local fake_event = {player_index=thread.data.player.index,element={name=name}}
+                    left.open(fake_event)
+                end
+            end):queue()
+        end):open()
+    end
 end
 
 --- Used to open the left gui of every player
@@ -75,11 +106,15 @@ function left._left.open(event)
     local _left = Gui._get_data('left')[event.element.name]
     local left_flow = mod_gui.get_frame_flow(player)
     local frame = nil
-    if left_flow[_left.name] then frame = left_flow[_left.name] frame.clear()
-    else frame = left_flow.add{type='frame',name=_left.name,style=mod_gui.frame_style,caption=_left.caption} end
-    frame.style.visible = true
-    if is_type(_left.open_on_join,'boolean') then frame.style.visible = _left.open_on_join end
-    if is_type(_left.draw,'function') then _left:draw(frame) else frame.style.visible = false error('No Callback On '.._left.name) end
+    if left_flow[_left.name] then 
+        frame = left_flow[_left.name] 
+        frame.clear()
+    else 
+        frame = left_flow.add{type='frame',name=_left.name,style=mod_gui.frame_style,caption=_left.caption,direction='vertical'}
+        frame.style.visible = false
+        if is_type(_left.open_on_join,'boolean') then frame.style.visible = _left.open_on_join end
+    end
+    if is_type(_left.draw,'function') then _left.draw(frame) else frame.style.visible = false error('No Callback On '.._left.name) end
 end
 
 -- this is called when the toolbar button is pressed
@@ -94,14 +129,17 @@ function left._left.toggle(event)
         local success, err = pcall(_left.can_open,player)
         if not success then error(err)
         elseif err == true then open = true end
-    elseif is_type(_left.can_open,'boolean') then
-        open = _left.can_open
+    else
+        if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 then
+            if Ranking.get_rank(player):allowed(_left.name) then open = true end
+        end
     end
     if open and left.style.visible ~= true then
         left.style.visible = true
     else
         left.style.visible = false
     end
+    if not open then player_return('You can not open this panel right now',defines.text_color.crit,player) player.play_sound{path='utility/cannot_build'} end
 end
 
 -- draws the left guis when a player first joins, fake_event is just because i am lazy
@@ -113,3 +151,5 @@ Event.register(defines.events.on_player_joined_game,function(event)
         left.open(fake_event)
     end
 end)
+
+return left

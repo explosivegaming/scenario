@@ -94,7 +94,7 @@ local function test_gui(event)
     if not game.player and not event.player_index then return end
     local player = game.player or Game.get_player(event)
     if player.gui.top['gui-test'] then player.gui.top['gui-test'].destroy() end
-    local frame = player.gui.top.add{type='frame',name='gui-test'}
+    local frame = mod_gui.get_frame_flow(player).add{type='frame',name='gui-test',direction='vertical'}
     gui_tset_close:draw(frame)
     caption_test:draw(frame)
     sprite_test:draw(frame)
@@ -123,6 +123,19 @@ end):add_tab('tab-2','Tab 2','Just a tab',function(frame)
         frame.add{type='label',caption='Test 2'}
     end
 end)
+
+-- testing the left gui, open_test_on_all_left_guis is realy long just so it is very unlickly to be used
+Gui.left.add{
+    name='test-left',
+    caption='Gui Left',
+    tooltip='just testing',
+    draw=function(frame)
+        for _,player in pairs(game.connected_players) do
+            frame.add{type='label',caption=player.name}
+        end
+    end,
+    can_open=function(player) return player.index == 1 or global.open_test_on_all_left_guis end
+}
 
 return test_gui
 
