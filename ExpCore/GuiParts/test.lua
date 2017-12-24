@@ -93,7 +93,7 @@ end)
 local function test_gui(event)
     if not game.player and not event.player_index then return end
     local player = game.player or Game.get_player(event)
-    if mod_gui.get_frame_flow(player)['gui-test'] thenmod_gui.get_frame_flow(player)['gui-test'].destroy() end
+    if mod_gui.get_frame_flow(player)['gui-test'] then mod_gui.get_frame_flow(player)['gui-test'].destroy() end
     local frame = mod_gui.get_frame_flow(player).add{type='frame',name='gui-test',direction='vertical'}
     gui_tset_close:draw(frame)
     caption_test:draw(frame)

@@ -252,8 +252,9 @@ function inputs.reset_radio(elements)
             if element.valid then
                 local _elements = Gui._get_data('inputs_'..element.type) or {}
                 local _element = _elements[element.name]
+                local player = Game.get_player(element.player_index)
                 local state = false
-                local success, err = pcall(_element.data._state,element.parent)
+                local success, err = pcall(_element.data._state,player,element.parent)
                 if success then state = err else error(err) end
                 element.state = state
             end
@@ -262,8 +263,9 @@ function inputs.reset_radio(elements)
         if elements.valid then
             local _elements = Gui._get_data('inputs_'..elements.type) or {}
             local _element = _elements[elements.name]
+            local player = Game.get_player(elements.player_index)
             local state = false
-            local success, err = pcall(_element.data._state,elements.parent)
+            local success, err = pcall(_element.data._state,player,elements.parent)
             if success then state = err else error(err) end
             elements.state = state
         end
