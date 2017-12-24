@@ -32,8 +32,10 @@ function left.update(frame)
             local frames = Gui._get_data('left') or {}
             if frame then frames = {[frame]=frames[frame]} or {} end
             for name,left in pairs(frames) do
-                local fake_event = {player_index=player.index,element={name=name}}
-                left.open(fake_event)
+                if _left then
+                    local fake_event = {player_index=player.index,element={name=name}}
+                    left.open(fake_event)
+                end
             end
         end
     else
@@ -48,8 +50,10 @@ function left.update(frame)
                 data={player=player,frames=thread.data.frames}
             }:on_event('resolve',function(thread)
                 for name,left in pairs(thread.data.frames) do
-                    local fake_event = {player_index=thread.data.player.index,element={name=name}}
-                    left.open(fake_event)
+                    if left then
+                        local fake_event = {player_index=thread.data.player.index,element={name=name}}
+                        left.open(fake_event)
+                    end
                 end
             end):queue()
         end):open()
@@ -61,6 +65,7 @@ end
 -- @tparam string left_name this is the gui that you want to open
 function left.open(left_name)
     local _left = Gui._get_data('left')[left_name]
+    if not _left then return end
     if not Server or not Server._thread then
         for _,player in pairs(game.connected_players) do
             local left_flow = mod_gui.get_frame_flow(player)
@@ -83,6 +88,7 @@ end
 -- @tparam string left_name this is the gui that you want to close
 function left.close(left_name)
     local _left = Gui._get_data('left')[left_name]
+    if not _left then return end
     if not Server or not Server._thread then
         for _,player in pairs(game.connected_players) do
             local left_flow = mod_gui.get_frame_flow(player)
