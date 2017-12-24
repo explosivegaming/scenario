@@ -25,4 +25,10 @@ function Gui:_load_parts(parts)
     end
 end
 
+Event.register(defines.events.on_tick, function(event)
+	if (event.tick/(3600*game.speed)) % 15 == 0 then
+		Gui.left.update()
+	end
+end)
+
 return Gui
