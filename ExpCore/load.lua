@@ -26,7 +26,7 @@ StdExpCoreLib.Gui:_load_parts{
     'toolbar',
     'center',
     'left',
-    --'popup'
+    'popup'
 }
 
 return function(rtn)

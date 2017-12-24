@@ -36,6 +36,7 @@ _G.discord_emit = nil -- un-comment this line if you are not using the json.data
 Ranking, Server, Gui = require('/ExpCore/load'){'Ranking','Server','Gui'}
 local success,err = pcall(require,'/ExpCore/GuiParts/test')
 if success then Gui.test = err end
+if Gui.popup then Gui.popup._load() end
 -- this loads the ranks that Ranking uses
 require('/ExpCore/ranks')
 -- this loads any edits that are not need in core pcall as file may not be preset

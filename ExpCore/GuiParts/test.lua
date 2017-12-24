@@ -93,7 +93,7 @@ end)
 local function test_gui(event)
     if not game.player and not event.player_index then return end
     local player = game.player or Game.get_player(event)
-    if player.gui.top['gui-test'] then player.gui.top['gui-test'].destroy() end
+    if mod_gui.get_frame_flow(player)['gui-test'] thenmod_gui.get_frame_flow(player)['gui-test'].destroy() end
     local frame = mod_gui.get_frame_flow(player).add{type='frame',name='gui-test',direction='vertical'}
     gui_tset_close:draw(frame)
     caption_test:draw(frame)
@@ -135,6 +135,34 @@ Gui.left.add{
         end
     end,
     can_open=function(player) return player.index == 1 or global.open_test_on_all_left_guis end
+}
+
+local text_popup = Gui.inputs.add_text('test-popup-text',true,'Message To Send',function(player,text,element)
+    element.text = text
+end)
+local send_popup = Gui.inputs.add{
+    type='button',
+    name='test-popup-send',
+    caption='Send Message'
+}:on_event('click',function(event)
+    local player = Game.get_player(event)
+    local message = event.element.parent['test-popup-text'].text
+    Gui.popup.open('test-popup',{player=player.name,message=message})
+end)
+Gui.popup.add{
+    name='test-popup',
+    caption='Gui Popup',
+    draw=function(frame,data)
+        frame.add{type='label',caption='Opened by: '..data.player}
+        frame.add{type='label',caption='Message: '..data.message}
+    end
+}:add_left{
+    caption='Gui Left w/ Popup',
+    tooltip='Send a message',
+    draw=function(frame)
+        text_popup:draw(frame)
+        send_popup:draw(frame)
+    end
 }
 
 return test_gui
