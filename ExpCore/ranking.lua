@@ -172,7 +172,7 @@ function Ranking.find_preset(player,tick)
     end
     local _rank = nil
     for _,rank in pairs(ranks) do
-        if rank.power > current_rank.power then _rank = rank end
+        if rank.power < current_rank.power then _rank = rank end
     end
     if _rank then
         if _rank.name == default.name then
