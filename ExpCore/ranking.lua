@@ -312,4 +312,23 @@ Event.register(-1,function(event)
 	end
 end)
 
+Event.register(defines.events.on_tick,function(event)
+    if ((event.tick/(3600*game.speed))+(15/2))% 15 == 0 then
+        -- this is the system to auto rank players
+        if not Server or not Server._thread then
+            for _,player in pairs(game.connected_players) do
+                Ranking.find_preset(player,tick)
+            end
+        else
+            Server.new_thread{
+                data={players=game.connected_players}
+            }:on_event('tick',function(thread)
+                if #thread.data.players == 0 then thread:close() return end
+                local player = table.remove(thread.data.players,1)
+                Ranking.find_preset(player,tick)
+            end):open()
+        end
+	end
+end
+
 return Ranking
