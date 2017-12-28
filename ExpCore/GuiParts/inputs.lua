@@ -111,6 +111,7 @@ end
 
 -- this just runs the events given to inputs
 function inputs._event_handler(event)
+    if not event.element then return end
     local elements = Gui._get_data('inputs_'..event.element.type) or {}
     local element = elements[event.element.name]
     if not element and event.element.type == 'sprite-button' then 
