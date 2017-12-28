@@ -199,7 +199,7 @@ end
 -- @tparam bolean online get only online players
 -- @treturn table a table of all players in this rank
 function Ranking._rank:get_players(online)
-    local players = game.permissions.get_group(rank.name).players
+    local players = game.permissions.get_group(self.name).players
     local _return = {}
     if online then
         for _,player in pairs(players) do
