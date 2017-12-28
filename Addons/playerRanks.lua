@@ -40,9 +40,19 @@ local groups = Ranking._groups(true)
 local ranks = Ranking._ranks(true)
 
 groups['Root']:edit('allow',false,{
-    ['testing']=true
+    ['player-list']=true
 })
-ranks['Root']:edit('test',true,'testing')
+groups['Admin']:edit('allow',false,{
+    ['player-list']=true
+})
+groups['User']:edit('allow',false,{
+    ['player-list']=true
+})
+groups['Jail']:edit('allow',false,{
+    
+})
+
+
 
 groups['Root']:add_rank{
     name='Owner',
