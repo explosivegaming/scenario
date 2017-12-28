@@ -46,7 +46,7 @@ end):add_tab('commands',{'readme.tab3-name'},{'readme.tab3-tooltip'},function(fr
     }
     table.draw_vertical_lines = true
     table.draw_horizontal_line_after_headers = true
-    for _,command in pairs(Commands.get_commands(frame.player_index)) do
+    for _,command in pairs(commands.get_commands(frame.player_index)) do
         table.add{
             type='label',
             caption='/'..comand.name
