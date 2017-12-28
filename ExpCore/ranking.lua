@@ -216,19 +216,29 @@ end
 -- @param rtn any value you want to return
 function Ranking._rank:print(rtn,colour)
     local colour = colour or defines.color.white
+    local meta_data = Ranking._presets().meta
+    local default = Ranking.get_rank(meta_data.default)
     if not Server or not Server._thread then
         for _,player in pairs(self:get_players()) do
-            player_return(rtn,colour,player)
+            if thread.data.rank.name == thread.data.default then
+                player_return({'ranking.all-rank-print',rtn},colour,player)
+            else
+                player_return({'ranking.rank-print',self.name,rtn},colour,player)
+            end
         end
     else
         -- using threads to make less lag
         Server.new_thread{
-            data={rank=self,rtn=rtn}
+            data={rank=self,rtn=rtn,default=default.name}
         }:on_event('resolve',function(thread)
             return thread.data.rank:get_players(true)
         end):on_event('success',function(thread,players)
             for _,player in pairs(players) do
-                player_return(thread.data.rtn,colour,player)
+                if thread.data.rank.name == thread.data.default then
+                    player_return({'ranking.all-rank-print',thread.data.rtn},colour,player)
+                else
+                    player_return({'ranking.rank-print',thread.data.rank.name,thread.data.rtn},colour,player)
+                end
             end
         end):queue()
     end
