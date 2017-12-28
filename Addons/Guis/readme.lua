@@ -49,20 +49,20 @@ end):add_tab('commands',{'readme.tab3-name'},{'readme.tab3-tooltip'},function(fr
     for _,command in pairs(commands.get_commands(frame.player_index)) do
         table.add{
             type='label',
-            caption='/'..comand.name
+            caption='/'..command.name
         }
-        local help = table.add{
+        local discription = table.add{
             type='label',
-            caption=command.help,
+            caption=command.description,
         }
-        help.style.width = 400
-        help.style.single_line = false
+        discription.style.width = 400
+        discription.style.single_line = false
     end
 end)
 
 Event.register(defines.events.on_player_created,function(event)
+    local player = Game.get_player(event)
     if not player.admin then
-        local player = Game.get_player(event)
         script.raise_event(defines.events.on_gui_click,{
             name=defines.events.on_gui_click,
             tick=event.tick,
