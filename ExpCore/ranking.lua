@@ -339,6 +339,6 @@ Event.register(defines.events.on_tick,function(event)
             end):open()
         end
 	end
-end
+end)
 
 return Ranking
