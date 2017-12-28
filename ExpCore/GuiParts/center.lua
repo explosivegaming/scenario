@@ -50,6 +50,7 @@ function center._center.open(event)
         direction='vertical',
         style=mod_gui.frame_style
     }
+    if player.gui.is_valid_sprite_path(center_frame.caption) then center_frame.caption = '' end
     if is_type(_center.draw,'function') then
         local success, err = pcall(_center.draw,_center,center_frame)
         if not success then error(err) end
