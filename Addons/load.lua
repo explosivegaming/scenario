@@ -9,3 +9,12 @@ Discord: https://discord.gg/r6dC2uK
 --Please Only Edit Below This Line-----------------------------------------------------------
 
 -- this file will just contain all the diffrent requires
+
+-- admin dir
+
+-- commands dir
+
+-- guis dir
+require('Guis/player-list')
+
+-- other
