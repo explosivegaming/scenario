@@ -60,9 +60,9 @@ end):add_tab('commands',{'readme.tab3-name'},{'readme.tab3-tooltip'},function(fr
     end
 end)
 
-Event.register(defines.events.on_player_created,function(event)
+Event.register(defines.events.on_player_joined_game,function(event)
     local player = Game.get_player(event)
-    if not player.admin then
+    if not player.admin and player.online_time < 60 then
         script.raise_event(defines.events.on_gui_click,{
             name=defines.events.on_gui_click,
             tick=event.tick,
