@@ -21,7 +21,7 @@ end
 local function queue_update(tick)
     local data = _global()
     local tick = is_type(tick,'table') and tick.tick or is_type(tick,'number') and tick or game.tick
-    if tick + data.delay > data.update then
+    if tick + data.delay > data.update - data.intervial then
         data.update = tick + data.delay
     end
 end
@@ -44,13 +44,13 @@ Gui.left.add{
                 if rank.short_hand == '' then
                     player_list.add{
                         type='label',
-                        style='caption_style',
+                        style='caption_label',
                         caption={'player-list.format-nil',tick_to_display_format(player.online_time),player.name}
                     }.style.font_color = rank.colour
                 else
                     player_list.add{
                         type='label',
-                        style='caption_style',
+                        style='caption_label',
                         caption={'player-list.format',tick_to_display_format(player.online_time),player.name,rank.short_hand}
                     }.style.font_color = rank.colour
                 end
