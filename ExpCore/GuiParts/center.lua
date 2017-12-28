@@ -90,9 +90,10 @@ function center._center:draw(frame)
     local first_tab = nil
     for name,button in pairs(self.tabs) do
         first_tab = first_tab or name
-        button:draw(tab_bar_scroll_flow)
+        button:draw(tab_bar_scroll_flow).style.font_color = defines.color.white
     end
     self._tabs[self.name..'_'..first_tab](tab_scroll)
+    tab_bar_scroll_flow.children[1].style.font_color = defines.color.orange
     tab_scroll.style.height = 300
     tab_scroll.style.width = 500
     tab_bar_scroll.style.minimal_height = 40
@@ -121,6 +122,13 @@ function center._center:add_tab(name,caption,tooltip,callback)
         local _center = Gui._get_data('center')[frame_name]
         local _tab = _center._tabs[event.element.name]
         if is_type(_tab,'function') then
+            for _,button in pairs(event.element.parent.children) do
+                if button.name == event.element.name then
+                    button.style.font_color = defines.color.orange
+                else
+                    button.style.font_color = defines.color.white
+                end
+            end
             local success, err = pcall(_tab,tab)
             if not success then error(err) end
         end
