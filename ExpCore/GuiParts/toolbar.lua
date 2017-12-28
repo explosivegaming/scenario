@@ -45,6 +45,6 @@ end
 if defines.events.rank_change then
     Event.register(defines.events.rank_change,toolbar.draw)
 end
-Event.register(defines.events.on_player_join_game,toolbar.draw)
+Event.register(defines.events.on_player_joined_game,toolbar.draw)
 
 return toolbar
