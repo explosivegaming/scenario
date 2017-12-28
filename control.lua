@@ -30,7 +30,7 @@ Color, Game, Event = require('/StdLib/load'){'Color','Game','Event'}
 -- loads the ExpLib, functions are plased into the lua global
 local ExpLib = require 'ExpLib'
 ExpLib._unpack_to_G(ExpLib)
-_G.discord_emit = nil -- un-comment this line if you are not using the json.data
+--_G.discord_emit = nil -- un-comment this line if you are not using the json.data
 
 -- loads the ExpCore files these are need in order to run the other addons
 Ranking, Server, Gui = require('/ExpCore/load'){'Ranking','Server','Gui'}
@@ -43,3 +43,7 @@ require('/ExpCore/ranks')
 pcall(require,'/Addons/playerRanks')
 -- this makes sure that all the little details are cleaned up
 Ranking._auto_edit_ranks()
+-- this loads all the addons
+pcall(require,'Addons/load')
+-- this loads anything that does not use ExpCore (sourse given in the file)
+pcall(require,'StandAlone/load')
