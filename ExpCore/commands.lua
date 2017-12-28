@@ -63,7 +63,7 @@ end
 -- @usage get_commands(1) -- return {{command data},{command data}}
 -- @param player the player refreced by string|number|LuaPlayer|event
 -- @treturn table a table containg all the commands the player can use
-function get_commands(player)
+function commands.get_commands(player)
     local commands = {}
     local player = Game.get_player(player)
     if not player then return commands end
