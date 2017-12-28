@@ -69,7 +69,7 @@ function commands.get_commands(player)
     if not player then return commands end
     local rank = Ranking.get_rank(player)
     for name,data in pairs(command_data) do
-        if Ranking.rank_allowed(rank,name) then table.insert(commands,data) end
+        if rank:allowed(name) then table.insert(commands,data) end
     end
     return commands
 end
