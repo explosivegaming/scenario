@@ -18,10 +18,12 @@ Gui.center.add{
     caption='utility/questionmark',
     tooltip={'readme.tooltip'}
 }:add_tab('guildlines',{'readme.tab1-name'},{'readme.tab1-tooltip'},function(frame)
-    for i = 1,10 do 
+    for i = 1,10 do
+        local style=nil; if i == 1 then style = 'caption_label' end
         format_480(frame.add{
             type='label',
-            caption={'readme.tab1-line'..tostring(i)}
+            caption={'readme.tab1-line'..tostring(i)},
+            style=style
         })
     end
 end):add_tab('chat',{'readme.tab2-name'},{'readme.tab2-tooltip'},function(frame)
@@ -37,15 +39,17 @@ end):add_tab('commands',{'readme.tab3-name'},{'readme.tab3-tooltip'},function(fr
     local table = frame.add{name='command_table',type='table',column_count=2}
     table.add{
         type='label',
-        caption={'readme.tab3-col1'}
+        caption={'readme.tab3-col1'},
+        style='caption_label'
     }
     table.add{
         type='label',
-        caption={'readme.tab3-col2'}
+        caption={'readme.tab3-col2'},
+        style='caption_label'
     }
     table.draw_vertical_lines = true
     table.draw_horizontal_line_after_headers = true
-    for _,command in pairs(commands.get_commands(frame)) do
+    for _,command in pairs(commands.get_commands(frame.player_index)) do
         table.add{
             type='label',
             caption='/'..command.name
@@ -58,6 +62,12 @@ end):add_tab('commands',{'readme.tab3-name'},{'readme.tab3-tooltip'},function(fr
         discription.style.single_line = false
     end
 end):add_tab('links',{'readme.tab4-name'},{'readme.tab4-tooltip'},function(frame)
+    local links={
+		'https://discord.me/explosivegaming',
+		'https://explosivegaming.nl',
+		'http://steamcommunity.com/groups/tntexplosivegaming',
+		'https://www.patreon.com/badgamernl'
+	}
     local function format(text_box)
         text_box.style.minimal_width=400
         text_box.read_only = true
@@ -67,14 +77,15 @@ end):add_tab('links',{'readme.tab4-name'},{'readme.tab4-tooltip'},function(frame
     for i = 1,4 do
     	frame.add{
             type="label",
-            caption={'readme.tab4-cap'..tostring(i)}
+            caption={'readme.tab4-cap'..tostring(i)},
+            style='caption_label'
         }
 		format(frame.add{
             type='text-box',
-            text={'readme.tab4-link'..tostring(i)}
+            text=links[i]
         })
 	end
-end):add_tab('servers'.{'readme.tab5-name'},{'readme.tab5-tooltip'},function(frame)
+end):add_tab('servers',{'readme.tab5-name'},{'readme.tab5-tooltip'},function(frame)
     format_480(frame.add{
         type='label',
         caption={'readme.tab5-singleline'}
@@ -82,7 +93,8 @@ end):add_tab('servers'.{'readme.tab5-name'},{'readme.tab5-tooltip'},function(fra
     for i = 1,6 do
         frame.add{
             type='label',
-            caption={'readme.tab5-format',tostring(i),{'readme.tab5-cap'..tostring(i)}}
+            caption={'readme.tab5-format',tostring(i),{'readme.tab5-cap'..tostring(i)}},
+            style='caption_label'
         }
         format_480(frame.add{
             type='label',
