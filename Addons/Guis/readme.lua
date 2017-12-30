@@ -8,8 +8,8 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
-local function format_480(label)
-    label.style.maximal_width = 480
+local function format_label(label)
+    label.style.maximal_width = 475
     label.style.single_line = false
 end
 
@@ -20,19 +20,19 @@ Gui.center.add{
 }:add_tab('guildlines',{'readme.guildlines-name'},{'readme.guildlines-tooltip'},function(frame)
     for i = 1,10 do
         local style=nil; if i == 1 then style = 'caption_label' end
-        format_480(frame.add{
+        format_label(frame.add{
             type='label',
             caption={'readme.guildlines-line'..tostring(i)},
             style=style
         })
     end
 end):add_tab('chat',{'readme.chat-name'},{'readme.chat-tooltip'},function(frame)
-    format_480(frame.add{
+    format_label(frame.add{
         type='label',
         caption={'readme.chat-singleline'}
     })
 end):add_tab('commands',{'readme.commands-name'},{'readme.commands-tooltip'},function(frame)
-    format_480(frame.add{
+    format_label(frame.add{
         type='label',
         caption={'readme.commands-singleline'}
     })
@@ -87,7 +87,7 @@ end):add_tab('links',{'readme.links-name'},{'readme.links-tooltip'},function(fra
         })
 	end
 end):add_tab('servers',{'readme.servers-name'},{'readme.servers-tooltip'},function(frame)
-    format_480(frame.add{
+    format_label(frame.add{
         type='label',
         caption={'readme.servers-singleline'}
     })
@@ -98,19 +98,19 @@ end):add_tab('servers',{'readme.servers-name'},{'readme.servers-tooltip'},functi
             caption={'readme.servers-format',tostring(i),{'readme.servers-cap'..tostring(i)}},
             style='caption_label'
         }
-        format_480(frame.add{
+        format_label(frame.add{
             type='label',
             caption={'readme.servers-des'..tostring(i)}
         })
     end
 end):add_tab('rules',{'readme.rules-name'},{'readme.rules-tooltip'},function(frame)
-    format_480(frame.add{
+    format_label(frame.add{
         type='label',
         caption={'readme.rules-singleline'}
     })
     Gui.bar(frame,480)
     for i = 1,20 do
-        format_480(frame.add{
+        format_label(frame.add{
             type='label',
             caption={'readme.rules-format',i,{'readme.rules-rule'..tostring(i)}}
         })
