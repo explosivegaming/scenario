@@ -76,7 +76,7 @@ function center._center:draw(frame)
         vertical_scroll_policy='never'
     }
     tab_bar_scroll.style.minimal_height = 40
-    tab_bar_scroll.style.width = 490
+    tab_bar_scroll.style.width = 480
     local tab_bar_scroll_flow = tab_bar_scroll.add{
         type='flow', 
         name='tab_bar_scroll_flow', 
@@ -96,7 +96,7 @@ function center._center:draw(frame)
         vertical_scroll_policy='auto'
     }
     tab_scroll.style.height = 300
-    tab_scroll.style.width = 480
+    tab_scroll.style.width = 475
     Gui.bar(frame,500)
     local first_tab = nil
     for name,button in pairs(self.tabs) do
