@@ -76,7 +76,7 @@ function center._center:draw(frame)
         vertical_scroll_policy='never'
     }
     tab_bar_scroll.style.minimal_height = 40
-    tab_bar_scroll.style.width = 500
+    tab_bar_scroll.style.width = 490
     local tab_bar_scroll_flow = tab_bar_scroll.add{
         type='flow', 
         name='tab_bar_scroll_flow', 
@@ -88,6 +88,7 @@ function center._center:draw(frame)
         name='tab',
         direction='vertical'
     }
+    tab.style.width = 500
     local tab_scroll = tab.add{
         type ='scroll-pane',
         name='tab_scroll', 
