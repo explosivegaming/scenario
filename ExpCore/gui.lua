@@ -25,6 +25,18 @@ function Gui:_load_parts(parts)
     end
 end
 
+function Gui.bar(frame,width)
+    local line = frame.add{
+        type='progressbar',
+        size=1,
+        value=1
+    }
+    line.style.height = 3
+    line.style.width = width or 10
+    line.style.color = defines.color.white
+    return line
+end
+
 Event.register(defines.events.on_tick, function(event)
 	if (event.tick/(3600*game.speed)) % 15 == 0 then
 		Gui.left.update()
