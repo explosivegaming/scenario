@@ -69,21 +69,21 @@ function center._center:draw(frame)
         direction='vertical'
     }
     tab_bar.style.width = 510
+    tab_bar.style.height = 65
     local tab_bar_scroll = tab_bar.add{
         type='scroll-pane', 
         name='tab_bar_scroll', 
         horizontal_scroll_policy='auto-and-reserve-space',
         vertical_scroll_policy='never'
     }
-    tab_bar_scroll.style.minimal_height = 40
+    tab_bar_scroll.style.vertically_squashable = false
+    tab_bar_scroll.style.vertically_stretchable = true
     tab_bar_scroll.style.width = 500
     local tab_bar_scroll_flow = tab_bar_scroll.add{
         type='flow', 
         name='tab_bar_scroll_flow', 
         direction='horizontal'
     }
-    tab_bar_scroll_flow.style.height = 40
-    tab_bar_scroll_flow.style.width = 500
     Gui.bar(frame,510)
     local tab = frame.add{
         type ='frame',
