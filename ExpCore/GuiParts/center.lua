@@ -61,24 +61,28 @@ end
 
 -- this is the default draw function if one is not provided
 function center._center:draw(frame)
-    Gui.bar(frame,520)
+    Gui.bar(frame,500)
     local tab_bar = frame.add{
         type='frame',
         name='tab_bar',
+        style = 'image_frame',
         direction='vertical'
     }
+    tab_bar.style.width = 500
     local tab_bar_scroll = tab_bar.add{
         type='scroll-pane', 
         name='tab_bar_scroll', 
         horizontal_scroll_policy='auto-and-reserve-space',
         vertical_scroll_policy='never'
     }
+    tab_bar_scroll.style.minimal_height = 40
+    tab_bar_scroll.style.width = 500
     local tab_bar_scroll_flow = tab_bar_scroll.add{
         type='flow', 
         name='tab_bar_scroll_flow', 
         direction='horizontal'
     }
-    Gui.bar(frame,520)
+    Gui.bar(frame,500)
     local tab = frame.add{
         type ='frame',
         name='tab',
@@ -90,7 +94,9 @@ function center._center:draw(frame)
         horizontal_scroll_policy='never',
         vertical_scroll_policy='auto'
     }
-    Gui.bar(frame,520)
+    tab_scroll.style.height = 300
+    tab_scroll.style.width = 480
+    Gui.bar(frame,500)
     local first_tab = nil
     for name,button in pairs(self.tabs) do
         first_tab = first_tab or name
@@ -98,10 +104,6 @@ function center._center:draw(frame)
     end
     self._tabs[self.name..'_'..first_tab](tab_scroll)
     tab_bar_scroll_flow.children[1].style.font_color = defines.color.orange
-    tab_scroll.style.height = 300
-    tab_scroll.style.width = 500
-    tab_bar_scroll.style.minimal_height = 40
-    tab_bar_scroll.style.width = 500
     frame.parent.add{type='frame',name='temp'}.destroy()--recenter the GUI
 end
 
