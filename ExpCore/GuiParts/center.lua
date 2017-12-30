@@ -107,6 +107,7 @@ function center._center:draw(frame)
         name='tab_scroll_flow', 
         direction='vertical'
     }
+    tab_scroll_flow.style.width = 480
     Gui.bar(frame,510)
     local first_tab = nil
     for name,button in pairs(self.tabs) do
