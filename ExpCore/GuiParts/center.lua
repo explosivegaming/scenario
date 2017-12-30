@@ -89,7 +89,7 @@ function center._center:draw(frame)
         type ='frame',
         name='tab',
         direction='vertical',
-        style = 'image_frame'
+        style='image_frame'
     }
     tab.style.width = 510
     tab.style.height = 305

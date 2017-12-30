@@ -66,7 +66,7 @@ function popup.open(style,data,players)
                 type='frame',
                 name='inner_frame',
                 direction='vertical',
-                style=mod_gui.frame_style
+                style='image_frame'
             }
             _popup.close:draw(_frame)
             if is_type(_popup.draw,'function') then
@@ -90,7 +90,7 @@ function popup.open(style,data,players)
                 type='frame',
                 name='inner_frame',
                 direction='vertical',
-                style=mod_gui.frame_style
+                style='image_frame'
             }
             thread.data.popup.close:draw(_frame)
             if is_type(thread.data.popup.draw,'function') then
