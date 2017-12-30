@@ -92,21 +92,28 @@ function center._center:draw(frame)
         style = 'image_frame'
     }
     tab.style.width = 510
+    tab.style.height = 305
     local tab_scroll = tab.add{
         type ='scroll-pane',
         name='tab_scroll', 
         horizontal_scroll_policy='never',
         vertical_scroll_policy='auto'
     }
-    tab_scroll.style.height = 300
-    tab_scroll.style.width = 490
+    tab_scroll.style.vertically_squashable = false
+    tab_scroll.style.vertically_stretchable = true
+    tab_scroll.style.width = 500
+    local tab_scroll_flow = tab_scroll.add{
+        type='flow', 
+        name='tab_scroll_flow', 
+        direction='vertical'
+    }
     Gui.bar(frame,510)
     local first_tab = nil
     for name,button in pairs(self.tabs) do
         first_tab = first_tab or name
         button:draw(tab_bar_scroll_flow).style.font_color = defines.color.white
     end
-    self._tabs[self.name..'_'..first_tab](tab_scroll)
+    self._tabs[self.name..'_'..first_tab](tab_scroll_flow)
     tab_bar_scroll_flow.children[1].style.font_color = defines.color.orange
     frame.parent.add{type='frame',name='temp'}.destroy()--recenter the GUI
 end
@@ -126,9 +133,9 @@ function center._center:add_tab(name,caption,tooltip,callback)
         caption=caption,
         tooltip=tooltip
     }:on_event('click',function(event)
-        local tab = event.element.parent.parent.parent.parent.tab.tab_scroll
+        local tab = event.element.parent.parent.parent.parent.tab.tab_scroll.tab_scroll_flow
         tab.clear()
-        local frame_name = tab.parent.parent.name
+        local frame_name = tab.parent.parent.parent.name
         local _center = Gui._get_data('center')[frame_name]
         local _tab = _center._tabs[event.element.name]
         if is_type(_tab,'function') then
