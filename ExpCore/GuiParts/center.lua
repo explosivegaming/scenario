@@ -65,7 +65,7 @@ function center._center:draw(frame)
     local tab_bar = frame.add{
         type='frame',
         name='tab_bar',
-        style = 'image_frame',
+        style='image_frame',
         direction='vertical'
     }
     tab_bar.style.width = 510
@@ -88,7 +88,8 @@ function center._center:draw(frame)
     local tab = frame.add{
         type ='frame',
         name='tab',
-        direction='vertical'
+        direction='vertical',
+        style = 'image_frame'
     }
     tab.style.width = 510
     local tab_scroll = tab.add{
