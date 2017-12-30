@@ -61,14 +61,14 @@ end
 
 -- this is the default draw function if one is not provided
 function center._center:draw(frame)
-    Gui.bar(frame,500)
+    Gui.bar(frame,510)
     local tab_bar = frame.add{
         type='frame',
         name='tab_bar',
         style = 'image_frame',
         direction='vertical'
     }
-    tab_bar.style.width = 500
+    tab_bar.style.width = 510
     local tab_bar_scroll = tab_bar.add{
         type='scroll-pane', 
         name='tab_bar_scroll', 
@@ -76,19 +76,21 @@ function center._center:draw(frame)
         vertical_scroll_policy='never'
     }
     tab_bar_scroll.style.minimal_height = 40
-    tab_bar_scroll.style.width = 480
+    tab_bar_scroll.style.width = 500
     local tab_bar_scroll_flow = tab_bar_scroll.add{
         type='flow', 
         name='tab_bar_scroll_flow', 
         direction='horizontal'
     }
-    Gui.bar(frame,500)
+    tab_bar_scroll_flow.style.height = 40
+    tab_bar_scroll_flow.style.width = 500
+    Gui.bar(frame,510)
     local tab = frame.add{
         type ='frame',
         name='tab',
         direction='vertical'
     }
-    tab.style.width = 500
+    tab.style.width = 510
     local tab_scroll = tab.add{
         type ='scroll-pane',
         name='tab_scroll', 
@@ -96,8 +98,8 @@ function center._center:draw(frame)
         vertical_scroll_policy='auto'
     }
     tab_scroll.style.height = 300
-    tab_scroll.style.width = 475
-    Gui.bar(frame,500)
+    tab_scroll.style.width = 490
+    Gui.bar(frame,510)
     local first_tab = nil
     for name,button in pairs(self.tabs) do
         first_tab = first_tab or name
