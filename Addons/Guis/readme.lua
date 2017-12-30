@@ -9,7 +9,7 @@ Discord: https://discord.gg/r6dC2uK
 --Please Only Edit Below This Line-----------------------------------------------------------
 
 local function format_label(label)
-    label.style.maximal_width = 475
+    label.style.maximal_width = 480
     label.style.single_line = false
 end
 
@@ -48,6 +48,7 @@ end):add_tab('commands',{'readme.commands-name'},{'readme.commands-tooltip'},fun
         caption={'readme.commands-col2'},
         style='caption_label'
     }
+    table.style.width = 480
     table.draw_vertical_lines = true
     table.draw_horizontal_line_after_headers = true
     for _,command in pairs(commands.get_commands(frame.player_index)) do
@@ -59,7 +60,7 @@ end):add_tab('commands',{'readme.commands-name'},{'readme.commands-tooltip'},fun
             type='label',
             caption=command.description,
         }
-        discription.style.width = 400
+        discription.style.maximal_width = 400
         discription.style.single_line = false
     end
 end):add_tab('links',{'readme.links-name'},{'readme.links-tooltip'},function(frame)
