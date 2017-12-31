@@ -151,13 +151,13 @@ function left._left.toggle(event)
             else open = {gui.unauthorized} end
         end
     end
-    if open and left.style.visible ~= true then
+    if open == true and left.style.visible ~= true then
         left.style.visible = true
     else
         left.style.visible = false
     end
     if open == false then player_return({'gui.cant-open-no-reason'},defines.text_color.crit,player) player.play_sound{path='utility/cannot_build'} 
-    elseif open ~= true then player_return({'gui.cant-open',open},defines.text_color.crit,player) player.play_sound{path='utility/cannot_build'}  end
+    elseif open ~= true then player_return({'gui.cant-open',open},defines.text_color.crit,player) player.play_sound{path='utility/cannot_build'} end
 end
 
 -- draws the left guis when a player first joins, fake_event is just because i am lazy
