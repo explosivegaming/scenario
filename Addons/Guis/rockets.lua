@@ -64,7 +64,10 @@ Gui.left.add{
             }
         end
     end,
-    can_open=function(player) return player.force.get_item_launched('satellite') > 0 end
+    can_open=function(player) 
+        if player.force.get_item_launched('satellite') > 0 then return true
+        else return {'rockets.none'} end
+    end
 }
 
 Event.register(defines.events.on_rocket_launched,function(event) Gui.left.update('rockets') end)
