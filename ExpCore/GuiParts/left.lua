@@ -141,12 +141,14 @@ function left._left.toggle(event)
         elseif err == true then open = true 
         elseif global.over_ride_left_can_open then 
             if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 then
-                if Ranking.get_rank(player):allowed(_left.name) then open = true end
+                if Ranking.get_rank(player):allowed(_left.name) then open = true
+                else open = {gui.unauthorized} end
             end 
-        end
+        else open == err end
     else
         if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 then
-            if Ranking.get_rank(player):allowed(_left.name) then open = true end
+            if Ranking.get_rank(player):allowed(_left.name) then open = true 
+            else open = {gui.unauthorized} end
         end
     end
     if open and left.style.visible ~= true then
@@ -154,7 +156,8 @@ function left._left.toggle(event)
     else
         left.style.visible = false
     end
-    if not open then player_return('You can not open this panel right now',defines.text_color.crit,player) player.play_sound{path='utility/cannot_build'} end
+    if open == false then player_return({'gui.cant-open-no-reason'},defines.text_color.crit,player) player.play_sound{path='utility/cannot_build'} 
+    else open ~= true then player_return({'gui.cant-open',open},defines.text_color.crit,player) player.play_sound{path='utility/cannot_build'}  end
 end
 
 -- draws the left guis when a player first joins, fake_event is just because i am lazy
