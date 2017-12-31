@@ -10,6 +10,10 @@ Discord: https://discord.gg/r6dC2uK
 local left = {}
 left._left = {}
 
+-- used for debugging
+function left.override_open(state)
+    global.over_ride_left_can_open = state
+end
 --- Used to add a left gui frame
 -- @usage Gui.left.add{name='foo',caption='Foo',tooltip='just testing',open_on_join=true,can_open=function,draw=function}
 -- @param obj this is what will be made, needs a name and a draw function(root_frame), open_on_join can be used to set the deaful state true/false, can_open is a test to block it from opening but is not needed
@@ -134,7 +138,12 @@ function left._left.toggle(event)
     if is_type(_left.can_open,'function') then
         local success, err = pcall(_left.can_open,player)
         if not success then error(err)
-        elseif err == true then open = true end
+        elseif err == true then open = true 
+        elseif global.over_ride_left_can_open then 
+            if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 then
+                if Ranking.get_rank(player):allowed(_left.name) then open = true end
+            end 
+        end
     else
         if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 then
             if Ranking.get_rank(player):allowed(_left.name) then open = true end

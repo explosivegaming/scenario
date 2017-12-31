@@ -124,7 +124,7 @@ end):add_tab('tab-2','Tab 2','Just a tab',function(frame)
     end
 end)
 
--- testing the left gui, open_test_on_all_left_guis is realy long just so it is very unlickly to be used
+-- testing the left gui
 Gui.left.add{
     name='test-left',
     caption='Gui Left',
@@ -134,7 +134,7 @@ Gui.left.add{
             frame.add{type='label',caption=player.name}
         end
     end,
-    can_open=function(player) return player.index == 1 or global.open_test_on_all_left_guis end
+    can_open=function(player) return player.index == 1 end
 }
 
 local text_popup = Gui.inputs.add_text('test-popup-text',true,'Message To Send',function(player,text,element)
