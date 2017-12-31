@@ -18,7 +18,8 @@ Gui.left.add{
     caption='item/rocket-silo',
     tooltip={'rockets.tooltip'},
     draw=function(frame)
-        frame.caption = {'rocket-gui.name'}
+        frame.caption = {'rockets.name'}
+        local player = Game.get_player(frame.player_index)
         local data = _global()
         local satellites = player.force.get_item_launched('satellite')
         local time = {'rockets.nan'}
@@ -34,7 +35,7 @@ Gui.left.add{
         }
         frame.add{
             type='label',
-            caption={'rockets.last',tick_to_display_format(data.last)}
+            caption={'rockets.last',tick_to_display_format(game.tick-data.last)}
         }
         frame.add{
             type='label',
@@ -45,7 +46,7 @@ Gui.left.add{
             caption={'rockets.milestones'},
             style='caption_label'
         }
-        local milestones = {
+        local milestones = frame.add{
             type='flow',
             direction='vertical'
         }
@@ -60,7 +61,7 @@ Gui.left.add{
             if time > 0 then _time = tick_to_display_format(time) end
             milestones.add{
                 type='label',
-                caption={'rockets.format',tostring(milestone),time}
+                caption={'rockets.format',tostring(milestone),_time}
             }
         end
     end,
