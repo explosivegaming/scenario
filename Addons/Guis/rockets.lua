@@ -10,7 +10,7 @@ Discord: https://discord.gg/r6dC2uK
 
 local function _global(reset)
     global.addons = not reset and global.addons or {}
-    global.addons.rockets = not reset and global.addons.rockets or {first=0,last=0,milestones={m1=0,m2=0,m5=0,m10=0,m20=0,m50=0,m100=0,m200=0,m500=0}}
+    global.addons.rockets = not reset and global.addons.rockets or {update=0,first=0,_last=0,last=0,fastest=0,milestones={m1=0,m2=0,m5=0,m10=0,m20=0,m50=0,m100=0,m200=0,m500=0}}
     return global.addons.rockets
 end
 Gui.left.add{
@@ -23,23 +23,34 @@ Gui.left.add{
         local data = _global()
         local satellites = player.force.get_item_launched('satellite')
         local time = {'rockets.nan'}
-        if satellites == 1 then time = tick_to_display_format(game.tick) data.first = game.tick data.last = game.tick
-        elseif satellites > 1 then tick_to_display_format((game.tick-data.first)/satellites) data.last = game.tick end
+        if satellites == 1 then time = tick_to_display_format(game.tick)
+        elseif satellites > 1 then time = tick_to_display_format((game.tick-data.first)/satellites) end
+        if satellites ~= data.update then
+            data.update = satellites
+            if data.first == 0 then data.first = game.tick end
+            data._last = data.last
+            data.last = game.tick
+            if data.last-data._last < data.fastest or data.fastest == 0 then data.fastest = data.last-data._last end
+        end
         frame.add{
             type='label',
             caption={'rockets.sent',satellites}
         }
         frame.add{
             type='label',
-            caption={'rockets.first',tick_to_display_format(data.fist)}
+            caption={'rockets.first',tick_to_display_format(data.first)}
         }
         frame.add{
             type='label',
-            caption={'rockets.last',tick_to_display_format(game.tick-data.last)}
+            caption={'rockets.last',tick_to_display_format(data.last-data._last)}
         }
         frame.add{
             type='label',
             caption={'rockets.time',time}
+        }
+        frame.add{
+            type='label',
+            caption={'rockets.fastest',tick_to_display_format(data.fastest)}
         }
         frame.add{
             type='label',
@@ -63,6 +74,7 @@ Gui.left.add{
                 type='label',
                 caption={'rockets.format',tostring(milestone),_time}
             }
+            if time == 0 then break end
         end
     end,
     can_open=function(player) 
