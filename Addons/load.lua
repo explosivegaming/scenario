@@ -16,6 +16,7 @@ Discord: https://discord.gg/r6dC2uK
 
 -- guis dir
 require('Guis/readme')
+require('Guis/science')
 require('Guis/rockets')
 require('Guis/player-list')
 
