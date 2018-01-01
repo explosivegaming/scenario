@@ -29,10 +29,12 @@ end
 
 --- This is used to update all the guis of conected players, good idea to use our thread system as it as nested for loops
 -- @usage Gui.left.update()
--- @tparam string frame this is the name of a frame if you only want to update one
-function left.update(frame)
+-- @tparam[opt] string frame this is the name of a frame if you only want to update one
+-- @param[opt] players the player to update for, if not given all players are updated
+function left.update(frame,players)
     if not Server or not Server._thread then
-        for _,player in pairs(game.connected_players) do
+        local players = players and {unpack(players)} or game.connected_players
+        for _,player in pairs(players) do
             local frames = Gui._get_data('left') or {}
             if frame then frames = {[frame]=frames[frame]} or {} end
             for name,left in pairs(frames) do
@@ -45,8 +47,9 @@ function left.update(frame)
     else
         local frames = Gui._get_data('left') or {}
         if frame then frames = {[frame]=frames[frame]} or {} end
+        local players = players and {unpack(players)} or game.connected_players
         Server.new_thread{
-            data={players=game.connected_players,frames=frames}
+            data={players=players,frames=frames}
         }:on_event('tick',function(thread)
             if #thread.data.players == 0 then thread:close() return end
             local player = table.remove(thread.data.players,1)
