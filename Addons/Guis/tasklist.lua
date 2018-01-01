@@ -35,10 +35,14 @@ end)
 
 local function _edit(frame)
     local element = edit:draw(frame)
+    element.style.height = 20
+    element.style.width = 20
     local text_flow = element.parent.parent.text_flow
     local data = _global()._edit[frame.player_index]
-        data._tasks[text_flow.parent.name]=text
-        if data._editing[tonumber(text_flow.parent.name)] then
+    data._tasks[text_flow.parent.name]=text
+    if data._editing[tonumber(text_flow.parent.name)] then
+        element.style.height = 30
+        element.style.width = 30
         local text = text_flow.input.caption
         text_flow.clear()
         local _text = text_flow.add{
@@ -144,11 +148,22 @@ Gui.left.add{
             }
             if rank:allowed('edit-tasklist') then
                 _edit(button_flow)
-                remove:draw(button_flow)
-                add:draw(button_flow)
+                local element = remove:draw(button_flow)
+                element.style.height = 20
+                element.style.width = 20
+                local _element = add:draw(button_flow)
+                _element.style.height = 20
+                _element.style.width = 20
+                if data._edit[player.index]._editing[i] then
+                    element.style.height = 30
+                    element.style.width = 30
+                    _element.style.height = 30
+                    _element.style.width = 30
+                end
             end
         end
         if #_tasks(player) == 0 then
+            frame.style.visible = rank:allowed('edit-tasklist')
             local flow = frame.add{
                 name=0,
                 type='flow',
