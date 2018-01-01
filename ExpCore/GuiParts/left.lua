@@ -33,7 +33,7 @@ end
 -- @param[opt] players the player to update for, if not given all players are updated
 function left.update(frame,players)
     if not Server or not Server._thread then
-        local players = players and {unpack(players)} or game.connected_players
+        local players = is_type(players,'table') and #players > 0 and {unpack(players)} or is_type(players,'table') and {players} or game.connected_players
         for _,player in pairs(players) do
             local frames = Gui._get_data('left') or {}
             if frame then frames = {[frame]=frames[frame]} or {} end
@@ -47,7 +47,7 @@ function left.update(frame,players)
     else
         local frames = Gui._get_data('left') or {}
         if frame then frames = {[frame]=frames[frame]} or {} end
-        local players = players and {unpack(players)} or game.connected_players
+        local players = is_type(players,'table') and #players > 0 and {unpack(players)} or is_type(players,'table') and {players} or game.connected_players
         Server.new_thread{
             data={players=players,frames=frames}
         }:on_event('tick',function(thread)
