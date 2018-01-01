@@ -107,7 +107,7 @@ Gui.center.add{
         player_drop_down:draw(dropdowns)
         rank_drop_down:draw(dropdowns)
         local label = frame.add{
-            name='warning'
+            name='warning',
             type='label',
             caption='',
             style='bold_red_label'
@@ -116,12 +116,12 @@ Gui.center.add{
         label.style.width = 200
         set_rank:draw(dropdowns)
         frame.add{
-            name='player'
+            name='player',
             type='label',
             caption=''
         }.style.visible = false
         frame.add{
-            name='rank'
+            name='rank',
             type='label',
             caption=''
         }.style.visible = false

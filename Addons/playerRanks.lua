@@ -44,14 +44,16 @@ groups['Root']:edit('allow',false,{
     ['readme']=true,
     ['rockets']=true,
     ['science']=true,
-    ['tasklist']=true
+    ['tasklist']=true,
+    ['rank-changer']=true
 })
 groups['Admin']:edit('allow',false,{
     ['player-list']=true,
     ['readme']=true,
     ['rockets']=true,
     ['science']=true,
-    ['tasklist']=true
+    ['tasklist']=true,
+    ['rank-changer']=true
 })
 groups['User']:edit('allow',false,{
     ['player-list']=true,
