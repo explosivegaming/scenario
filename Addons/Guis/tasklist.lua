@@ -119,7 +119,16 @@ Gui.left.add{
     caption='utility/not_enough_repair_packs_icon',
     tooltip={'tasklist.tooltip'},
     draw=function(frame)
-        frame.caption = {'tasklist.name'}
+        frame.caption = ''
+        local title = frame.add{
+            type='flow',
+            direction='horizontal'
+        }
+        title.add{
+            type='label',
+            caption={'tasklist.name'},
+            style='caption_label'
+        }
         local data = _global()
         local player = Game.get_player(frame.player_index)
         local rank = Ranking.get_rank(player)
@@ -148,24 +157,19 @@ Gui.left.add{
             }
             if rank:allowed('edit-tasklist') then
                 _edit(button_flow)
-                local element = remove:draw(button_flow)
-                element.style.height = 20
-                element.style.width = 20
-                local _element = add:draw(button_flow)
-                _element.style.height = 20
-                _element.style.width = 20
                 if data._edit[player.index]._editing[i] then
+                    local element = remove:draw(button_flow)
                     element.style.height = 30
                     element.style.width = 30
+                    local _element = add:draw(button_flow)
                     _element.style.height = 30
                     _element.style.width = 30
                 end
             end
         end
-        if #_tasks(player) == 0 then
-            frame.style.visible = rank:allowed('edit-tasklist')
-            local flow = frame.add{
-                name=0,
+        if rank:allowed('edit-tasklist') then
+            local flow = title.add{
+                name=#_tasks(player),
                 type='flow',
                 direction='horizontal'
             }
@@ -173,8 +177,11 @@ Gui.left.add{
                 type='flow',
                 direction='horizontal'
             }
-            add:draw(button_flow)
+            local element = add:draw(button_flow)
+            element.style.height = 20
+            element.style.width = 20
         end
+        if #_tasks(player) == 0 and not rank:allowed('edit-tasklist') then frame.style.visible = false end
     end,
     can_open=function(player)
         local rank = Ranking.get_rank(player)
