@@ -19,5 +19,6 @@ require('Guis/readme')
 require('Guis/science')
 require('Guis/rockets')
 require('Guis/player-list')
+require('Guis/tasklist')
 
 -- other

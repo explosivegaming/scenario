@@ -43,19 +43,22 @@ groups['Root']:edit('allow',false,{
     ['player-list']=true,
     ['readme']=true,
     ['rockets']=true,
-    ['science']=true
+    ['science']=true,
+    ['tasklist']=true
 })
 groups['Admin']:edit('allow',false,{
     ['player-list']=true,
     ['readme']=true,
     ['rockets']=true,
-    ['science']=true
+    ['science']=true,
+    ['tasklist']=true
 })
 groups['User']:edit('allow',false,{
     ['player-list']=true,
     ['readme']=true,
     ['rockets']=true,
-    ['science']=true
+    ['science']=true,
+    ['tasklist']=true
 })
 groups['Jail']:edit('allow',false,{
     
@@ -120,6 +123,10 @@ groups['User']:add_rank{
     colour={r=24,g=172,b=188},
     power=4
 }
+
+ranks['Member']:edit('allow',false,{
+    ['edit-tasklist']=true
+})
 
 Ranking._base_preset{
     ['badgamernl']='Owner',
