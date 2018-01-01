@@ -8,11 +8,122 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
+local function get_player_info(player,frame)
+    frame.add{
+        type='label',
+        caption={'rank-changer.no-info-file'}
+    }
+end
+
+local function _players(_player,root_frame,state)
+    local players = {'Select Player'}
+    local _players = state and game.players or game.connected_players
+    for _,player in pairs(_players) do
+        if player.name ~= _player.name then
+            table.insert(players,player.name)
+        end
+    end
+    return players
+end
+
+local online_check = Gui.inputs.add_checkbox('online-check-rank-change',false,'Show Offline',false,function(player,element) 
+    element.parent['player-drop-down-rank-change'].items = _players(player,element.parent,true)
+    element.parent['player-drop-down-rank-change'].selected_index = 1
+end,function(player,element)
+    element.parent['player-drop-down-rank-change'].items = _players(player,element.parent,false)
+    element.parent['player-drop-down-rank-change'].selected_index = 1
+end)
+
+local player_drop_down = Gui.inputs.add_drop_down('player-drop-down-rank-change',_players,1,function(player,selected,items,element)
+    local player_info_flow = element.parent.parent.info_flow
+    player_info_flow.clear()
+    if selected == 'Select Player' then return
+    else get_player_info(selected,player_info_flow) end
+    local rank = Ranking.get_rank(player)
+    local _rank = Ranking.get_rank(selected)
+    if rank.power >= _rank.power then element.parent.parent.warning.caption = {'rank-change.warning'}
+    else element.parent.parent.warning.caption = '' end
+    element.parent.parent.player = selected
+end)
+
+local function _ranks(player)
+    local ranks = {'Select Rank'}
+    local _rank = Raning.get_rank(player)
+    for _,rank in pairs(Ranking._ranks) do
+        if rank.power > _rank.power then
+            table.insert(ranks,rank.name)
+        end
+    end
+    return ranks
+end
+
+local rank_drop_down = Gui.inputs.add_drop_down('rank-drop-down-rank-change',_ranks,1,function(player,selected,items,element)
+    element.parent.parent.rank = selected
+end)
+
+local set_rank = Gui.inputs.add{
+    type='button',
+    name='rank-change-set',
+    caption={'ranking.set-rank'}
+}:on_event('click',function(event)
+    local dropdowns = event.element.parent
+    local rank = Ranking.get_rank(event)
+    local _rank = Ranking.get_rank(dropdowns.rank)
+    local _player = Game.get_player(dropdowns.player)
+    if not _player or not _rank then element.parent.parent.warning.caption = {'rank-change.invalid'} return end
+    if rank.power >= _rank.power then element.parent.parent.warning.caption = {'rank-change.rank-high'} return end
+    Ranking.give_rank(_player,_rank,event)
+    Gui.center.clear(event)
+end)
+
 Gui.center.add{
     name='rank-changer',
-    caption='Gui Center',
-    tooltip='Just a gui test',
+    caption='utility/circuit_network_panel',
+    tooltip={'rank-changer.tooltip'},
     draw=function(frame)
-
+        frame.caption={'rank-changer.name'}
+        local frame = frame.add{
+            type='flow',
+            direction='horizontal'
+        }
+        local dropdowns = frame.add{
+            type='flow',
+            direction='vertical'
+        }
+        local player_info_flow = frame.add{
+            name='info_flow',
+            type='flow',
+            direction='vertical'
+        }
+        player_info_flow.style.height = 200
+        player_info_flow.style.width = 200
+        local label = frame.add{
+            type='label',
+            caption={'rank-changer.message'}
+        }
+        label.style.single_line = false
+        label.style.width = 200
+        online_check:draw(dropdowns)
+        player_drop_down:draw(dropdowns)
+        rank_drop_down:draw(dropdowns)
+        local label = frame.add{
+            name='warning'
+            type='label',
+            caption='',
+            style='bold_red_label'
+        }
+        label.style.single_line = false
+        label.style.width = 200
+        set_rank:draw(dropdowns)
+        frame.add{
+            name='player'
+            type='label',
+            caption=''
+        }.style.visible = false
+        frame.add{
+            name='rank'
+            type='label',
+            caption=''
+        }.style.visible = false
     end
 }
