@@ -17,6 +17,7 @@ end
 -- this file will just contain all the diffrent requires
 
 -- admin dir
+require('Asmin/player-info')
 
 -- commands dir
 
