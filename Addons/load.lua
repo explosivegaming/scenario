@@ -26,5 +26,6 @@ require('Guis/science')
 require('Guis/rockets')
 require('Guis/player-list')
 require('Guis/tasklist')
+require('Guis/rank-changer')
 
 -- other
