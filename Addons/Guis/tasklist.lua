@@ -119,7 +119,7 @@ Gui.left.add{
         end
         for i,task in pairs(_tasks(player)) do
             local flow = frame.add{
-                name=i
+                name=i,
                 type='flow',
                 direction='horizontal'
             }
