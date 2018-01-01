@@ -10,7 +10,7 @@ Discord: https://discord.gg/r6dC2uK
 
 local function _global(reset)
     global.addons = not reset and global.addons or {}
-    global.addons.tasklist = not reset and global.addons.tasklist or {tasks={},_edit={}}
+    global.addons.tasklist = not reset and global.addons.tasklist or {tasks={},_edit={},_base={_edit=false,_tasks={},_editing={}}}
     return global.addons.tasklist
 end
 
@@ -20,8 +20,9 @@ local edit = Gui.inputs.add{
     caption='utility/rename_icon_normal'
 }:on_event('click',function(event)
     local text_flow = event.element.parent.parent.text_flow
+    local data = _global()._edit[frame.player_index]
     if text_flow.text.type == 'label' then
-        _global()._edit[event.player_index]._editing[text_flow.parent.name]=true
+        data._editing[text_flow.parent.name]=true
         local text = text_flow.text.caption
         text_flow.clear()
         local _text = text_flow.add{
@@ -33,33 +34,67 @@ local edit = Gui.inputs.add{
         event.element.sprite = 'utility/enter'
     elseif text_flow.text.type == 'textfield' then
         local text = text_flow.text.text
-        _global()._edit[event.player_index]._editing[text_flow.parent.name]=false
-        _global()._edit[event.player_index]._tasks[text_flow.parent.name]=text
+        data._editing[text_flow.parent.name]=false
+        data._tasks[text_flow.parent.name]=text
         text_flow.parent.parent.clear()
         _draw(text_flow.parent.parent)
     end
 end)
 
+local function _edit(frame)
+    local element = edit:draw()
+    local text_flow = element.parent.parent.text_flow
+    local data = _global()._edit[frame.player_index]
+    if data._editing[text_flow.parent.name] then
+        local text = text_flow.text.caption
+        text_flow.clear()
+        local _text = text_flow.add{
+            name='text',
+            type='textfield',
+            text=text
+        }
+        _text.style.width = 100
+        element.sprite = 'utility/enter'
+    end
+end
+
 local remove = Gui.inputs.add{
     name='tasklist-remove',
     type='button',
     caption='utility/remove'
-}
+}:on_event('click',function(event)
+    local frame = event.element.parent.parent.parent
+    local data = _global()._edit[event.player_index]
+    table.remove(data._tasks,frame.name)
+    table.remove(data._editing,frame.name)
+    frame.clear()
+    _draw(frame)
+end)
 
 local add = Gui.inputs.add{
     name='tasklist-add',
     type='button',
     caption='add'
-}
+}:on_event('click',function(event)
+    local frame = event.element.parent.parent.parent
+    local data = _global()._edit[event.player_index]
+    table.insert(data._tasks,frame.name,'New Value')
+    table.insert(data._editing,frame.name,true)
+    frame.clear()
+    _draw(frame)
+end)
 
 local function _draw(frame)
     frame.caption = {'tasklist.name'}
     local data = _global()
     local player = Game.get_player(frame.player_index)
     local rank = Ranking.get_rank(player)
+    if rank:allowed('edit-tasklist') then
+        if not data._edit[player.index] then data._edit[player.index] = data._base end
+    end
     for i,task in pairs(_tasks(player)) do
         local flow = frame.add{
-            name=i-- use parent and children so there dont colidide with each other
+            name=i
             type='flow',
             direction='horizontal'
         }
@@ -78,13 +113,10 @@ local function _draw(frame)
             direction='horizontal'
         }
         if rank:allowed('edit-tasklist') then
-            edit:draw(button_flow)
+            _edit(button_flow)
             remove:draw(button_flow)
             add:draw(button_flow)
         end
-    end
-    if rank:allowed('edit-tasklist') then
-        if not data._edit[player.index] then data._edit[player.index] = {_edit=false,_tasks={},_editing={}} end
     end
 end
 
