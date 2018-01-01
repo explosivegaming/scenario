@@ -105,7 +105,7 @@ local function run_custom_command(command)
     end
     -- runs the command
     local success, err = pcall(command_calls[command.name],event,args)
-    if err then error(err) end
+    if not success then error(err) end
     player_return({'commands.command-ran'},defines.text_color.info)
     game.write_file('commands.log','\n'..game.tick
         ..' Player: '..player_name
