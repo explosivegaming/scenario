@@ -30,7 +30,7 @@ end
 --- This is used to update all the guis of conected players, good idea to use our thread system as it as nested for loops
 -- @usage Gui.left.update()
 -- @tparam[opt] string frame this is the name of a frame if you only want to update one
--- @param[opt] players the player to update for, if not given all players are updated
+-- @param[opt] players the player to update for, if not given all players are updated, can be one player
 function left.update(frame,players)
     if not Server or not Server._thread then
         local players = is_type(players,'table') and #players > 0 and {unpack(players)} or is_type(players,'table') and {players} or game.connected_players
