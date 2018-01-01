@@ -44,6 +44,7 @@ pcall(require,'/Addons/playerRanks')
 -- this makes sure that all the little details are cleaned up
 Ranking._auto_edit_ranks()
 -- this loads all the addons
-pcall(require,'Addons/load')
+local success,err = pcall(require,'Addons/load')
+if not success then error(err) end
 -- this loads anything that does not use ExpCore (sourse given in the file)
 pcall(require,'StandAlone/load')

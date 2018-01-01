@@ -7,5 +7,10 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
-
+local return_err = false
+local _require = require
+local function require(path)
+    local success, err = pcall(_require,path)
+    if not success and return_err then error(err) end
+end
 -- this file will just contain all the diffrent requires
