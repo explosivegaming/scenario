@@ -63,6 +63,7 @@ local remove = Gui.inputs.add{
         table.remove(data._editing,tonumber(frame.name))
     else
         table.remove(_global().tasks,tonumber(frame.name))
+        Gui.left.update('tasklist')
     end
     Gui.left.update('tasklist',event.player_index)
 end)
