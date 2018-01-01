@@ -20,7 +20,7 @@ local science_packs = {
 
 local function _global(reset)
     global.addons = not reset and global.addons or {}
-    global.addons.science = not reset and global.addons.science or {update=0,_update,made={0,0,0,0,0,0,0},_made={0,0,0,0,0,0,0}}
+    global.addons.science = not reset and global.addons.science or {_base={update=0,_update=0,made={0,0,0,0,0,0,0},_made={0,0,0,0,0,0,0}}}
     return global.addons.science
 end
 
@@ -31,6 +31,10 @@ Gui.left.add{
     draw=function(frame)
         local data = _global()
         local player = Game.get_player(frame.player_index)
+        if not data[player.force.name] then 
+            data[player.force.name] = table.deepcopy(data._base)
+        end
+        data = data[player.force.name]
         frame.caption = {'science.name'}
         frame.add{
             type='label',
@@ -44,15 +48,15 @@ Gui.left.add{
         frame.add{
             type='label',
             caption={'science.time'},
-            style='caption_lable'
+            style='caption_label'
         }
         local times = frame.add{
             type='flow',
             direction='vertical'
         }
-        if data.update < game.time-100 then
+        if data.update < game.tick-100 then
             data._update = data.update
-            data._made = data.made
+            data._made = table.deepcopy(data.made)
             for i,name in pairs(science_packs) do
                 data.made[i] = player.force.item_production_statistics.get_input_count(name)
             end
@@ -72,7 +76,11 @@ Gui.left.add{
                 }
             end
         end
+    end,
+    can_open=function(player)
+        if player.force.item_production_statistics.get_input_count('science-pack-1') > 0 then return true
+        else return {'science.none'} end
     end
 }
 
-Event.register(defines.events.on_research_finished, function(event) Gui.left.update('science') end)
+Event.register(defines.events.on_research_finished,function(event) Gui.left.update('science') end)

@@ -42,17 +42,20 @@ local ranks = Ranking._ranks(true)
 groups['Root']:edit('allow',false,{
     ['player-list']=true,
     ['readme']=true,
-    ['rockets']=true
+    ['rockets']=true,
+    ['science']=true
 })
 groups['Admin']:edit('allow',false,{
     ['player-list']=true,
     ['readme']=true,
-    ['rockets']=true
+    ['rockets']=true,
+    ['science']=true
 })
 groups['User']:edit('allow',false,{
     ['player-list']=true,
     ['readme']=true,
-    ['rockets']=true
+    ['rockets']=true,
+    ['science']=true
 })
 groups['Jail']:edit('allow',false,{
     
