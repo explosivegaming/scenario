@@ -37,7 +37,7 @@ local edit = Gui.inputs.add{
         data._editing[text_flow.parent.name]=false
         data._tasks[text_flow.parent.name]=text
         text_flow.parent.parent.clear()
-        _draw(text_flow.parent.parent)
+        Gui.left.update('tasklist',event.player_index)
     end
 end)
 
@@ -67,8 +67,7 @@ local remove = Gui.inputs.add{
     local data = _global()._edit[event.player_index]
     table.remove(data._tasks,frame.name)
     table.remove(data._editing,frame.name)
-    frame.clear()
-    _draw(frame)
+    Gui.left.update('tasklist',event.player_index)
 end)
 
 local add = Gui.inputs.add{
@@ -80,45 +79,8 @@ local add = Gui.inputs.add{
     local data = _global()._edit[event.player_index]
     table.insert(data._tasks,frame.name,'New Value')
     table.insert(data._editing,frame.name,true)
-    frame.clear()
-    _draw(frame)
+    Gui.left.update('tasklist',event.player_index)
 end)
-
-local function _draw(frame)
-    frame.caption = {'tasklist.name'}
-    local data = _global()
-    local player = Game.get_player(frame.player_index)
-    local rank = Ranking.get_rank(player)
-    if rank:allowed('edit-tasklist') then
-        if not data._edit[player.index] then data._edit[player.index] = data._base end
-    end
-    for i,task in pairs(_tasks(player)) do
-        local flow = frame.add{
-            name=i
-            type='flow',
-            direction='horizontal'
-        }
-        local text_flow = flow.add{
-            name='text_flow',
-            type='flow',
-            direction='horizontal'
-        }
-        text_flow.add{
-            name='text',
-            type='label',
-            caption=task
-        }
-        local button_flow = flow.add{
-            type='flow',
-            direction='horizontal'
-        }
-        if rank:allowed('edit-tasklist') then
-            _edit(button_flow)
-            remove:draw(button_flow)
-            add:draw(button_flow)
-        end
-    end
-end
 
 local function _tasks(player)
     local player = Game.get_player(player)
@@ -147,6 +109,43 @@ Gui.left.add{
     name='tasklist',
     caption='utility/not_enough_repair_packs_icon',
     tooltip={'tasklist.tooltip'},
-    draw=_draw,
+    draw=function(frame)
+        frame.caption = {'tasklist.name'}
+        local data = _global()
+        local player = Game.get_player(frame.player_index)
+        local rank = Ranking.get_rank(player)
+        if rank:allowed('edit-tasklist') then
+            if not data._edit[player.index] then data._edit[player.index] = data._base end
+        end
+        for i,task in pairs(_tasks(player)) do
+            local flow = frame.add{
+                name=i
+                type='flow',
+                direction='horizontal'
+            }
+            local text_flow = flow.add{
+                name='text_flow',
+                type='flow',
+                direction='horizontal'
+            }
+            text_flow.add{
+                name='text',
+                type='label',
+                caption=task
+            }
+            local button_flow = flow.add{
+                type='flow',
+                direction='horizontal'
+            }
+            if rank:allowed('edit-tasklist') then
+                _edit(button_flow)
+                remove:draw(button_flow)
+                add:draw(button_flow)
+            end
+        end
+        if #_tasks(player) == 0 then
+            add:draw(button_flow)
+        end
+    end,
     open_on_join=true
 }
