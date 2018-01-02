@@ -23,10 +23,12 @@ function get_player_info(player,frame)
     _player.group = Ranking.get_group(player).name
     if frame then
         local frame = frame.add{type='frame',direction='vertical',style='image_frame'}
+        frame.style.width = 200
+        frame.style.height = 150
         frame.add{type='label',caption={'player-info.name',_player.index,_player.name},style='caption_label'}
-        local _online = {'player-info.yes'}; if _player.online then _admin = {'player-info.no'} end
+        local _online = {'player-info.no'}; if _player.online then _online = {'player-info.yes'} end
         frame.add{type='label',caption={'player-info.online',_online,tick_to_display_format(_player.online_time)}}
-        local _admin = {'player-info.yes'}; if _player.admin then _admin = {'player-info.no'} end
+        local _admin = {'player-info.no'}; if _player.admin then _admin = {'player-info.yes'} end
         frame.add{type='label',caption={'player-info.admin',_admin}}
         frame.add{type='label',caption={'player-info.group',_player.group}}
         frame.add{type='label',caption={'player-info.rank',_player.rank}}
