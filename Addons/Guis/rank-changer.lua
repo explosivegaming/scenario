@@ -8,7 +8,7 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
-local function get_player_info(player,frame)
+local get_player_info = get_player_info or function(player,frame)
     frame.add{
         type='label',
         caption={'rank-changer.no-info-file'}
@@ -35,21 +35,21 @@ end,function(player,element)
 end)
 
 local player_drop_down = Gui.inputs.add_drop_down('player-drop-down-rank-change',_players,1,function(player,selected,items,element)
+    element.parent.parent.player.caption = selected
     local player_info_flow = element.parent.parent.info_flow
     player_info_flow.clear()
     if selected == 'Select Player' then return
     else get_player_info(selected,player_info_flow) end
     local rank = Ranking.get_rank(player)
     local _rank = Ranking.get_rank(selected)
-    if rank.power >= _rank.power then element.parent.parent.warning.caption = {'rank-change.warning'}
-    else element.parent.parent.warning.caption = '' end
-    element.parent.parent.player = selected
+    if rank.power >= _rank.power then element.parent.warning.caption = {'rank-changer.warning'}
+    else element.parent.warning.caption = '' end
 end)
 
 local function _ranks(player)
     local ranks = {'Select Rank'}
-    local _rank = Raning.get_rank(player)
-    for _,rank in pairs(Ranking._ranks) do
+    local _rank = Ranking.get_rank(player)
+    for _,rank in pairs(Ranking._ranks()) do
         if rank.power > _rank.power then
             table.insert(ranks,rank.name)
         end
@@ -58,20 +58,21 @@ local function _ranks(player)
 end
 
 local rank_drop_down = Gui.inputs.add_drop_down('rank-drop-down-rank-change',_ranks,1,function(player,selected,items,element)
-    element.parent.parent.rank = selected
+    element.parent.parent.rank.caption = selected
 end)
 
 local set_rank = Gui.inputs.add{
     type='button',
     name='rank-change-set',
-    caption={'ranking.set-rank'}
+    caption={'rank-changer.set-rank'}
 }:on_event('click',function(event)
     local dropdowns = event.element.parent
-    local rank = Ranking.get_rank(event)
-    local _rank = Ranking.get_rank(dropdowns.rank)
-    local _player = Game.get_player(dropdowns.player)
-    if not _player or not _rank then element.parent.parent.warning.caption = {'rank-change.invalid'} return end
-    if rank.power >= _rank.power then element.parent.parent.warning.caption = {'rank-change.rank-high'} return end
+    local rank = Ranking.get_rank(event.player_index)
+    local _rank = Ranking.get_rank(dropdowns.parent.rank.caption)
+    local _player = Game.get_player(dropdowns.parent.player.caption)
+    if not _player or not _rank then dropdowns.warning.caption = {'rank-changer.invalid'} return end
+    local __rank = Ranking.get_rank(_player)
+    if rank.power >= __rank.power then dropdowns.warning.caption = {'rank-changer.rank-high'} return end
     Ranking.give_rank(_player,_rank,event)
     Gui.center.clear(event)
 end)
@@ -80,7 +81,7 @@ Gui.center.add{
     name='rank-changer',
     caption='utility/circuit_network_panel',
     tooltip={'rank-changer.tooltip'},
-    draw=function(frame)
+    draw=function(self,frame)
         frame.caption={'rank-changer.name'}
         local frame = frame.add{
             type='flow',
@@ -97,7 +98,7 @@ Gui.center.add{
         }
         player_info_flow.style.height = 200
         player_info_flow.style.width = 200
-        local label = frame.add{
+        local label = dropdowns.add{
             type='label',
             caption={'rank-changer.message'}
         }
@@ -106,7 +107,7 @@ Gui.center.add{
         online_check:draw(dropdowns)
         player_drop_down:draw(dropdowns)
         rank_drop_down:draw(dropdowns)
-        local label = frame.add{
+        local label = dropdowns.add{
             name='warning',
             type='label',
             caption='',
