@@ -139,4 +139,24 @@ function ExpLib.tick_to_display_format(tick)
 	end
 end
 
+function ExpLib.Gui_tree(root)
+    local tree = {}
+    for _,child in pairs(root.children) do
+        if #child.children > 0 then
+            if child.name then
+                tree[child.name] = ExpLib.Gui_tree(child)
+            else
+                table.insert(tree,ExpLib.Gui_tree(child))
+            end
+        else
+            if child.name then
+                tree[child.name] = child.type
+            else
+                table.insert(tree,child.type)
+            end
+        end
+    end
+    return tree
+end
+
 return ExpLib

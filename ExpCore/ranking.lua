@@ -49,16 +49,16 @@ function Ranking.get_rank(mixed)
     local _return = false
     if is_type(mixed,'table') then
         if mixed.index then
-            _return = game.players[mixed.index] and ranks[mixed.permission_group.name] or false
+            _return = game.players[mixed.index] and ranks[mixed.permission_group.name] or nil
         else
-            _return = mixed.group and mixed or false
+            _return = mixed.group and mixed or nil
         end
     else
         _return = game.players[mixed] and ranks[game.players[mixed].permission_group.name]
         or table.autokey(ranks,mixed) and table.autokey(ranks,mixed)
         or string.contains(mixed,'server') and Ranking.get_rank(Ranking._presets().meta.root)
         or string.contains(mixed,'root') and Ranking.get_rank(Ranking._presets().meta.root)
-        or false
+        or nil
     end
     return _return
 end
