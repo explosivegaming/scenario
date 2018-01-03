@@ -39,7 +39,7 @@ local player_drop_down = Gui.inputs.add_drop_down('player-drop-down-rank-change'
     local player_info_flow = element.parent.parent.info_flow
     player_info_flow.clear()
     if selected == 'Select Player' then return
-    else get_player_info(selected,player_info_flow) end
+    else get_player_info(selected,player_info_flow,true) end
     local rank = Ranking.get_rank(player)
     local _rank = Ranking.get_rank(selected)
     if rank.power >= _rank.power then element.parent.warning.caption = {'rank-changer.warning'}

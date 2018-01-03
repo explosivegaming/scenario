@@ -8,7 +8,7 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
-function get_player_info(player,frame)
+function get_player_info(player,frame,add_cam)
     local player = Game.get_player(player)
     if not player then return {} end
     local _player = {}
@@ -24,7 +24,7 @@ function get_player_info(player,frame)
     if frame then
         local frame = frame.add{type='frame',direction='vertical',style='image_frame'}
         frame.style.width = 200
-        frame.style.height = 150
+        frame.style.height = 275
         frame.add{type='label',caption={'player-info.name',_player.index,_player.name},style='caption_label'}
         local _online = {'player-info.no'}; if _player.online then _online = {'player-info.yes'} end
         frame.add{type='label',caption={'player-info.online',_online,tick_to_display_format(_player.online_time)}}
@@ -32,6 +32,9 @@ function get_player_info(player,frame)
         frame.add{type='label',caption={'player-info.admin',_admin}}
         frame.add{type='label',caption={'player-info.group',_player.group}}
         frame.add{type='label',caption={'player-info.rank',_player.rank}}
+        if add_cam then
+            Gui.cam_link{entity=player.character,frame=frame,width=200,height=75,zoom=0.5}
+        end
     end
     return _player
 end
