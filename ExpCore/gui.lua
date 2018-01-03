@@ -157,7 +157,7 @@ Event.register(defines.events.on_tick, function(event)
 end)
 
 Event.register(defines.events.on_player_respawned,function(event)
-    if Gui._global().players[event.player_index] then
+    if Gui._global().players and is_type(Gui._global().players,'table') and #Gui._global().players > 0 and Gui._global().players[event.player_index] then
         local remove = {}
         for index,cam in pairs(Gui._global().players[event.player_index]) do
             Gui.cam_link{cam=cam,entity=Game.get_player(event).character}
