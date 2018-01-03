@@ -56,6 +56,7 @@ local function _thread()
         thread:on_event('tick',function(self) 
             local _cam = self.data.cams[self.data.cam_index]
             if not _cam then self.data.cam_index = 1 _cam = self.data.cams[self.data.cam_index] end
+            if not _cam then return end
             if not _cam.cam.valid then table.remove(self.data.cams,self.data.cam_index)
             elseif not _cam.entity.valid then table.remove(self.data.cams,self.data.cam_index)
             else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end self.data.cam_index = self.data.cam_index+1
@@ -119,6 +120,7 @@ Event.register(defines.events.on_tick, function(event)
     if Gui._global().cams and is_type(Gui._global().cams,'table') and #Gui._global().cams > 0 then
         local _cam = Gui._global().cams[Gui._global().cam_index]
         if not _cam then Gui._global().cam_index = 1 _cam = Gui._global().cams[Gui._global().cam_index] end
+        if not _cam then return end
         if not _cam.cam.valid then table.remove(Gui._global().cams,Gui._global().cam_index)
         elseif not _cam.entity.valid then table.remove(Gui._global().cams,Gui._global().cam_index)
         else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end Gui._global().cam_index = Gui._global().cam_index+1
