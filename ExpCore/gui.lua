@@ -73,7 +73,7 @@ local function _thread()
                     Gui.cam_link{cam=cam,entity=Game.get_player(event).character}
                     if not cam.valid then table.insert(remove,index) end
                 end
-                for _,index in pairs(self.data.players[event.player_index]) do
+                for _,index in pairs(remove) do
                     table.remove(self.data.players[event.player_index],index)
                 end
             end
@@ -163,7 +163,7 @@ Event.register(defines.events.on_player_respawned,function(event)
             Gui.cam_link{cam=cam,entity=Game.get_player(event).character}
             if not cam.valid then table.insert(remove,index) end
         end
-        for _,index in pairs(Gui._global().players[event.player_index]) do
+        for _,index in pairs(remove) do
             table.remove(Gui._global().players[event.player_index],index)
         end
     end
