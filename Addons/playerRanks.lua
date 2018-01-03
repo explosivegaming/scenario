@@ -45,7 +45,8 @@ groups['Root']:edit('allow',false,{
     ['rockets']=true,
     ['science']=true,
     ['tasklist']=true,
-    ['rank-changer']=true
+    ['rank-changer']=true,
+    ['admin-commands']=true
 })
 groups['Admin']:edit('allow',false,{
     ['player-list']=true,
@@ -53,7 +54,8 @@ groups['Admin']:edit('allow',false,{
     ['rockets']=true,
     ['science']=true,
     ['tasklist']=true,
-    ['rank-changer']=true
+    ['rank-changer']=true,
+    ['admin-commands']=true
 })
 groups['User']:edit('allow',false,{
     ['player-list']=true,
