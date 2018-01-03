@@ -12,7 +12,7 @@ left._left = {}
 
 -- used for debugging
 function left.override_open(state)
-    global.over_ride_left_can_open = state
+    Gui._global().over_ride_left_can_open = state
 end
 --- Used to add a left gui frame
 -- @usage Gui.left.add{name='foo',caption='Foo',tooltip='just testing',open_on_join=true,can_open=function,draw=function}
@@ -142,7 +142,7 @@ function left._left.toggle(event)
         local success, err = pcall(_left.can_open,player)
         if not success then error(err)
         elseif err == true then open = true 
-        elseif global.over_ride_left_can_open then 
+        elseif Gui._global().over_ride_left_can_open then 
             if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 then
                 if Ranking.get_rank(player):allowed(_left.name) then open = true
                 else open = {gui.unauthorized} end
