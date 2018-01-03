@@ -128,6 +128,10 @@ groups['User']:add_rank{
     power=4
 }
 
+rank['Admin']:edit('allow',false,{
+    ['game-settings']=true
+})
+
 ranks['Member']:edit('allow',false,{
     ['edit-tasklist']=true
 })
