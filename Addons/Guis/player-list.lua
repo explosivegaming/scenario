@@ -14,6 +14,13 @@ local function _global(reset)
     return global.addons.player_list
 end
 
+local get_player_info = get_player_info or function(player,frame)
+    frame.add{
+        type='label',
+        caption={'player-list.no-info-file'}
+    }
+end
+
 local function update()
     Gui.left.update('player-list')
 end
@@ -25,6 +32,15 @@ local function queue_update(tick)
         data.update = tick + data.delay
     end
 end
+
+local back_btn = Gui.inputs.add{
+    type='button',
+    caption='utility/enter',
+    name='player-list-back'
+}:on_event('click',function(event)
+    event.element.parent.parent.scroll.style.visible = true
+    event.element.parent.destroy()
+end)
 
 Gui.left.add{
     name='player-list',
@@ -41,15 +57,18 @@ Gui.left.add{
         }
         for _,rank in pairs(Ranking._ranks()) do
             for _,player in pairs(rank:get_players(true)) do
+                local flow = player_list.add{type='flow'}
                 if rank.short_hand == '' then
-                    player_list.add{
+                    flow.add{
                         type='label',
+                        name=player.name,
                         style='caption_label',
                         caption={'player-list.format-nil',tick_to_display_format(player.online_time),player.name}
                     }.style.font_color = rank.colour
                 else
-                    player_list.add{
+                    flow.add{
                         type='label',
+                        name=player.name,
                         style='caption_label',
                         caption={'player-list.format',tick_to_display_format(player.online_time),player.name,rank.short_hand}
                     }.style.font_color = rank.colour
@@ -66,6 +85,20 @@ Event.register(defines.events.on_tick,function(event)
         update()
         data.update = event.tick + data.intervial
     end
+end)
+
+Event.register(defines.events.on_gui_click,function(event)
+    if event.element and event.element.valid 
+    and event.element.parent and event.element.parent.parent and event.element.parent.parent.parent 
+    and event.element.parent.parent.parent.name == 'player-list' then else return end
+    if event.button == defines.mouse_button_type.right then else return end
+    local player_list = event.element.parent.parent.parent
+    player_list.scroll.style.visible = false
+    local flow = player_list.add{type='flow',direction='vertical'}
+    back_btn:draw(flow)
+    get_player_info(event.element.name,flow,true)
+    if event.player_index == Game.get_player(event.element.name).index then return end
+    if Admin and Admin.allowed(event.player_index) then Admin.btn_flow(flow).caption = event.element.name end
 end)
 
 Event.register(defines.events.on_player_joined_game,queue_update)
