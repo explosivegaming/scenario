@@ -13,7 +13,7 @@ _error = error
 error = function(err)
     if _G.discord_emit and game then
         local color = _G.Color and Color.to_hex(defines.text_color.bg) or '0x0'
-        discord_emit{title='SCRIPT ERROR',color=color,description=err}
+        discord_emit{title='SCRIPT ERROR',color=color,description='There was an error in the script @Developers ',Error=err}
     elseif _G.Game and game then
         if Game.print_all(err) == 0 then
             _error(err)
