@@ -49,6 +49,21 @@ function Gui.bar(frame,width)
     return line
 end
 
+--- Used to set the index of a drop down to a certian item
+-- @usage Gui.set_dropdown_index(dropdown,player.name)
+-- @param dropdown the dropdown that is to be effected
+-- @param _item this is the item to look for
+-- @return returns the dropdown if it was successful
+function Gui.set_dropdown_index(dropdown,_item)
+    if dropdown and dropdown.valid and dropdown.items and _item then else return end
+    local _index = 1
+    for index, item in pairs(dropdown.items) do
+        if item == _item then _index = index break end
+    end
+    dropdown.selected_index = _index
+    return dropdown
+end
+
 local function _thread()
     local thread = Server.get_thread('camera-follow')
     if not thread then

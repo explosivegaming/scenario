@@ -63,7 +63,7 @@ function ExpLib.player_return(rtn,colour,player)
 end
 
 --- Logs an embed to the json.data we use a js script to add things we cant here
--- @usage json_emit{title='BAN',color_name='info',description='A player was banned' ... }
+-- @usage json_emit{title='BAN',color='0x0',description='A player was banned' ... }
 -- @tparam table arg a table which contains everything that the embeded will use
 -- @param[opt=''] title the tile of the embed
 -- @param[opt='0x0'] color the color given in hex you can use Color.to_hex{r=0,g=0,b=0}
