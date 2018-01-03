@@ -52,8 +52,10 @@ end
 local function _thread()
     local thread = Server.get_thread('camera-follow')
     if not thread then
-        thread = Server.new_thread{name='camera-follow',data={cams={},cam_index=1}}
-        thread:on_event('tick',function(self) 
+        thread = Server.new_thread{
+            name='camera-follow',
+            data={cams={},cam_index=1,players={}}
+        }:on_event('tick',function(self) 
             local _cam = self.data.cams[self.data.cam_index]
             if not _cam then self.data.cam_index = 1 _cam = self.data.cams[self.data.cam_index] end
             if not _cam then return end
@@ -61,10 +63,20 @@ local function _thread()
             elseif not _cam.entity.valid then table.remove(self.data.cams,self.data.cam_index)
             else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end self.data.cam_index = self.data.cam_index+1
             end
-        end)
-        thread:on_event('error',function(self,err)
+        end):on_event('error',function(self,err)
             -- posible error handling if needed
             error(err)
+        end):on_event(defines.events.on_player_respawned,function(self,event)
+            if self.data.players[event.player_index] then
+                local remove = {}
+                for index,cam in pairs(self.data.players[event.player_index]) do
+                    Gui.cam_link{cam=cam,entity=Game.get_player(event).character}
+                    if not cam.valid then table.insert(remove,index) end
+                end
+                for _,index in pairs(self.data.players[event.player_index]) do
+                    table.remove(self.data.players[event.player_index],index)
+                end
+            end
         end)
         thread:open()
     end
@@ -80,6 +92,7 @@ end
 -- @param[chain=frame] width the width to give the new camera
 -- @param[chain=frame] height the height to give the new camera
 -- @param[opt] surface this will over ride the surface that the camera follows on, allowing for a 'ghost surface' while keeping same position
+-- @param[opt] respawn_open if set to true then the camera will auto re link to the player after a respawn
 -- @return the camera that the function used be it made or given as a param 
 function Gui.cam_link(data)
     if not data.entity or not data.entity.valid then return end
@@ -105,10 +118,25 @@ function Gui.cam_link(data)
             local surface = data.surface and data.surface.index or nil
             table.insert(Gui._global().cams,{cam=data.cam,entity=data.entity,surface=surface})
         end
+        if not Gui._global().players then
+            Gui._global().players = {}
+        end
+        if data.respawn_open then
+            if data.entity.player then
+                if not Gui._global().players[data.entity.player.index] then Gui._global().players[data.entity.player.index] = {} end
+                table.insert(Gui._global().players[data.entity.player.index],data.cam)
+            end
+        end
     else
         local thread = _thread()
         local surface = data.surface and data.surface.index or nil
         table.insert(thread.data.cams,{cam=data.cam,entity=data.entity,surface=surface})
+        if data.respawn_open then
+            if data.entity.player then
+                if not thread.data.players[data.entity.player.index] then thread.data.players[data.entity.player.index] = {} end
+                table.insert(thread.data.players[data.entity.player.index],data.cam)
+            end
+        end
     end
     return data.cam
 end
@@ -124,6 +152,19 @@ Event.register(defines.events.on_tick, function(event)
         if not _cam.cam.valid then table.remove(Gui._global().cams,Gui._global().cam_index)
         elseif not _cam.entity.valid then table.remove(Gui._global().cams,Gui._global().cam_index)
         else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end Gui._global().cam_index = Gui._global().cam_index+1
+        end
+    end
+end)
+
+Event.register(defines.events.on_player_respawned,function(event)
+    if Gui._global().players[event.player_index] then
+        local remove = {}
+        for index,cam in pairs(Gui._global().players[event.player_index]) do
+            Gui.cam_link{cam=cam,entity=Game.get_player(event).character}
+            if not cam.valid then table.insert(remove,index) end
+        end
+        for _,index in pairs(Gui._global().players[event.player_index]) do
+            table.remove(Gui._global().players[event.player_index],index)
         end
     end
 end)
