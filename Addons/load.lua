@@ -18,6 +18,7 @@ end
 
 -- admin dir
 require('Admin/player-info')
+require('Admin/admin') -- used with Guis/admin-gui, but can work without
 
 -- commands dir
 
@@ -28,5 +29,6 @@ require('Guis/rockets')
 require('Guis/player-list')
 require('Guis/tasklist')
 require('Guis/rank-changer')
+require('Guis/admin-gui') -- used with Admin/admin, requires Admin/admin
 
 -- other
