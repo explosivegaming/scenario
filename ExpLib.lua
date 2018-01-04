@@ -77,9 +77,14 @@ function ExpLib.discord_emit(args)
     local color = is_type(args.color,'string') and args.color:find("0x") and args.color or '0x0'
     local description = is_type(args.description,'string') and args.description or ''
     local server_detail = is_type(args.server_detail,'string') and args.server_detail or ''
+    local _count = 0
+    for _,player in pairs(game.connected_players) do 
+        if player.admin then _count=_count+1 end
+    end
+    local mods_online = 'Mods Online: '.._count
     local done, fields = {title=true,color=true,description=true,server_detail=true}, {{
-        name='Server Details',
-        value='Server Name: {{ serverName }} Online Players: '..#game.connected_players..' Server Time: '..tick_to_display_format(game.tick)..' '..server_detail
+         name='Server Details',
+        value='Server Name: {{ serverName }} Online Players: '..#game.connected_players..' '..mods_online..' Server Time: '..tick_to_display_format(game.tick)..' '..server_detail
     }}
     for key, value in pairs(args) do
         if not done[key] then
