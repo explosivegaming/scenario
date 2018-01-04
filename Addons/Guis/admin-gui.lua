@@ -139,7 +139,7 @@ Admin.center = Gui.center.add{
         label.style.width = 200
         online_check:draw(dropdowns)
         local _drop = player_drop_down:draw(dropdowns)
-        Gui.set_dropdown_index(_drop,pre_select_player.name)
+        if pre_select_player then Gui.set_dropdown_index(_drop,pre_select_player.name) end
         local _drop = action_drop_down:draw(dropdowns)
         Gui.set_dropdown_index(_drop,pre_select_action)
         local _text =  reason_input:draw(dropdowns)
