@@ -34,7 +34,7 @@ end
 -- this returns a global list
 function Ranking._presets()
     if not global.exp_core then global.exp_core = {} end
-    if not global.exp_core.ranking then global.exp_core.ranking = {meta=Ranking._meta(),old={},current={}} end
+    if not global.exp_core.ranking then global.exp_core.ranking = {meta=Ranking._meta(),old={},current={},last_jail=nil} end
     return global.exp_core.ranking
 end
 
@@ -133,6 +133,16 @@ function Ranking.give_rank(player,rank,by_player,tick)
             new_rank=rank, 
             old_rank=old_rank
         }) 
+    end
+    if rank.group.name == 'Jail' and Ranking._presets().last_jail ~= player.name then
+        discord_emit{
+            title='Player Jail',
+            color=Color.to_hex(defines.text_color.med),
+            description='There was a player jailed.',
+            ['Player:']=player.name,
+            ['By:']='<<inline>>'..by_player_name,
+            ['Reason:']='No Reason'
+        }
     end
 end
 
