@@ -128,7 +128,7 @@ groups['User']:add_rank{
     power=4
 }
 
-rank['Admin']:edit('allow',false,{
+ranks['Admin']:edit('allow',false,{
     ['game-settings']=true
 })
 
