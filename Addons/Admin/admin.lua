@@ -71,8 +71,14 @@ function Admin.ban(player,by_player,reason)
     local player = Game.get_player(player)
     local _player = Game.get_player(by_player)
     local reason = append_name(reason,_player)
-    local color = Color.to_hex(defines.text_color.crit)
-    discord_emit{title='Player Ban',color=color,description='There was a player banned.',['Player:']='<<inline>>'..player.name,['By:']='<<inline>>'.._player.name,['Reason:']=reason}
+    discord_emit{
+        title='Player Ban',
+        color=Color.to_hex(defines.text_color.crit),
+        description='There was a player banned.',
+        ['Player:']='<<inline>>'..player.name,
+        ['By:']='<<inline>>'.._player.name,
+        ['Reason:']=reason
+    }
     game.ban_player(player,reason)
 end
 
@@ -90,8 +96,14 @@ function Admin.kick(player,by_player,reason)
     local player = Game.get_player(player)
     local _player = Game.get_player(by_player)
     local reason = append_name(reason,_player)
-    local color = Color.to_hex(defines.text_color.high)
-    discord_emit{title='Player Kick',color=color,description='There was a player kicked.',['Player:']='<<inline>>'..player.name,['By:']='<<inline>>'.._player.name,['Reason:']=reason}
+    discord_emit{
+        title='Player Kick',
+        color=Color.to_hex(defines.text_color.high),
+        description='There was a player kicked.',
+        ['Player:']='<<inline>>'..player.name,
+        ['By:']='<<inline>>'.._player.name,
+        ['Reason:']=reason
+    }
     game.kick_player(player,reason)
 end
 
@@ -109,8 +121,15 @@ function Admin.jail(player,by_player,reason)
     local player = Game.get_player(player)
     local _player = Game.get_player(by_player)
     local reason = append_name(reason,_player)
-    local color = Color.to_hex(defines.text_color.med)
-    discord_emit{title='Player Jail',color=color,description='There was a player jailed.',['Player:']=player.name,['By:']='<<inline>>'.._player.name,['Reason:']=reason}
+    discord_emit{
+        title='Player Jail',
+        color=Color.to_hex(defines.text_color.med),
+        description='There was a player jailed.',
+        ['Player:']=player.name,
+        ['By:']='<<inline>>'.._player.name,
+        ['Reason:']=reason
+    }
+    Ranking._presets().last_jail = player.name
     Ranking.give_rank(player,'Jail',_player)
 end
 
