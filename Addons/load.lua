@@ -19,6 +19,7 @@ end
 -- admin dir
 require('Admin/player-info')
 require('Admin/admin') -- used with Guis/admin-gui, but can work without
+require('Admin/discord')
 
 -- commands dir
 

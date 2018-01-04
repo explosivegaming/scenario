@@ -40,7 +40,7 @@ Event.register(defines.events.on_console_command,function(event)
         data.username = args[1]
         if not Game.get_player(data.username) then return end
         if string.sub(command,-1) == 'e' then data.command = command..'d' else  data.command = command..'ed' end
-        data.reason = data.reason or 'No Reason Required'
+        data.reason = data.reason and not data.reason == '' or 'No Reason Required'
         discord_emit{
             title='Player '..data.title,
             color=data.colour,
