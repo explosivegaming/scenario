@@ -7,5 +7,8 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
-
 -- this file will just contain all the diffrent requires
+require('colours')
+require('health')
+require('spawn')
+require('starting-items')
