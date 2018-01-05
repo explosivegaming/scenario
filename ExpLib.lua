@@ -78,8 +78,10 @@ function ExpLib.discord_emit(args)
     local description = is_type(args.description,'string') and args.description or ''
     local server_detail = is_type(args.server_detail,'string') and args.server_detail or ''
     local _count = 0
-    for _,player in pairs(game.connected_players) do 
-        if player.admin then _count=_count+1 end
+    if game then
+        for _,player in pairs(game.connected_players) do 
+            if player.admin then _count=_count+1 end
+        end
     end
     local mods_online = 'Mods Online: '.._count
     local done, fields = {title=true,color=true,description=true,server_detail=true}, {{
