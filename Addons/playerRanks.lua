@@ -124,7 +124,7 @@ groups['User']:add_rank{
     tag='[Regular]',
     time=180,
     colour={r=24,g=172,b=188},
-    power=4
+    power=3
 }
 
 local ranks = Ranking._ranks(true)

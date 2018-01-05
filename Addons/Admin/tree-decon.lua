@@ -26,7 +26,8 @@ Event.register(-1,function(event)
             local player = Game.get_player(event)
             local rank = Ranking.get_rank(player)
             if rank:allowed('tree-decon') then self.data.chache[event.player_index] = {'tree-decon',false}
-            elseif not rank:allowed('decon') then self.data.chache[event.player_index] = {'no-decon',false} end
+            elseif not rank:allowed('decon') then self.data.chache[event.player_index] = {'no-decon',false} 
+            else self.data.chache[event.player_index] = {'decon',false} end
             chache = self.data.chache[event.player_index]
         end
         if not event.entity.last_user then
