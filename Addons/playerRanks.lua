@@ -41,7 +41,6 @@ local groups = Ranking._groups(true)
 groups['Root']:edit('allow',false,{
     ['testing']=true
 })
-ranks['Root']:edit('test',true,'testing')
 
 groups['Root']:add_rank{
     name='Owner',
@@ -102,6 +101,8 @@ groups['User']:add_rank{
 }
 
 local ranks = Ranking._ranks(true)
+
+ranks['Root']:edit('test',true,'testing')
 
 Ranking._base_preset{
     ['badgamernl']='Owner',
