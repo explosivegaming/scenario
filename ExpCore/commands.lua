@@ -106,7 +106,7 @@ local function run_custom_command(command)
     -- runs the command
     local success, err = pcall(command_calls[command.name],command,args)
     if not success then error(err) end
-    player_return({'commands.command-ran'},defines.text_color.info)
+    if err ~= commands.error then player_return({'commands.command-ran'},defines.text_color.info) end
     game.write_file('commands.log','\n'..game.tick
         ..' Player: '..player_name
         ..' Used command: '..command.name
@@ -114,8 +114,10 @@ local function run_custom_command(command)
     , true, 0)
 end
 
-commands._add_command = commands.add_command
-commands._expgaming = true
+-- this is a set of constants you can use
+commands._add_command = commands.add_command --if you dont want to use the custom commands interface
+commands._expgaming = true --if you want to test if the custom commands are present
+commands.error = 'COMMAND_ERROR' --if returned during a custom command, Command Complete message not printed
 --- Used to define commands
 -- @usage inputs = {'player','reason',true}
 -- commands.add_command('ban','bans a player',inputs,function() return end)
