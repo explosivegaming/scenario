@@ -37,7 +37,6 @@ http://lua-api.factorio.com/latest/defines.html#defines.input_action
 -- see ExpCore/ranks.lua for examples - you add your own and edit pre-made ones here.
 
 local groups = Ranking._groups(true)
-local ranks = Ranking._ranks(true)
 
 groups['Root']:edit('allow',false,{
     ['player-list']=true,
@@ -127,6 +126,8 @@ groups['User']:add_rank{
     colour={r=24,g=172,b=188},
     power=4
 }
+
+local ranks = Ranking._ranks(true)
 
 ranks['Developer']:edit('allow',false,{
     ['cheat-mode']=true
