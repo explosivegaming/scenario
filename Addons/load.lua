@@ -20,6 +20,7 @@ end
 require('Admin/player-info')
 require('Admin/admin') -- used with Guis/admin-gui, but can work without
 require('Admin/discord')
+require('Admin/auto-message')
 
 -- commands dir
 require('Commands/cheat-mode')
