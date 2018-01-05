@@ -47,4 +47,5 @@ Ranking._auto_edit_ranks()
 local success,err = pcall(require,'Addons/load')
 if not success then error(err) end
 -- this loads anything that does not use ExpCore (sourse given in the file)
-pcall(require,'StandAlone/load')
+local success,err = pcall(require,'StandAlone/load')
+if not success then error(err) end
