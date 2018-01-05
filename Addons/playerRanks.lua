@@ -141,12 +141,16 @@ ranks['Mod']:edit('allow',false,{
     ['bring']=true
 })
 
+ranks['Donator']:edit('allow',false,{
+    ['tree-decon']=true
+})
 ranks['Member']:edit('allow',false,{
     ['edit-tasklist']=true,
     ['repair']=true
 })
 ranks['Regular']:edit('allow',false,{
-    ['kill']=true
+    ['kill']=true,
+    ['decon']=true
 })
 ranks['Guest']:edit('allow',false,{
     ['tag']=true,
