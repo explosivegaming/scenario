@@ -11,6 +11,20 @@ local Ranking = {}
 defines.events.rank_change = script.generate_event_name()
 Ranking._rank = {}
 Ranking._group = {}
+-- this is just for debuging when setting you rank powers
+function Ranking.output_ranks(player)
+    local player = Game.get_player(player) or game.player or nil
+    if not player then return end
+    for power,rank in pairs(Ranking._ranks()) do
+        local output = power..') '..rank.name
+        output=output..' tag: '..rank.tag
+        local admin = 'No'; if rank.is_root then admin = 'Root' elseif rank.is_admin then admin = 'yes' end
+        output=output..' admin: '..admin
+        output=output..' group: '..rank.group.name
+        player_return(output,rank.colour,player)
+    end
+end
+
 -- this function is to avoid errors - see /ranks.lua
 function Ranking._ranks(names)
     return {}
