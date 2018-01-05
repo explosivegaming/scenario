@@ -12,7 +12,7 @@ local const = 20
 -- this is the max lenth of a tag
 
 commands.add_command('tag', 'Give yourself a custom tag, use /tag-clear self, to remove tag.', {'tag',true}, function(event,args)
-    local player = Game.get_player(args.player)
+    local player = Game.get_player(event)
     local rank = Ranking.get_rank(player)
     if string.len(args.tag) > const then player_return({'commands.invalid-length',const}) return commands.error end
     player.tag = rank.tag..' - '..args.tag
