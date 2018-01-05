@@ -137,7 +137,7 @@ ranks['Admin']:edit('allow',false,{
     ['game-settings']=true
 })
 ranks['Mod']:edit('allow',false,{
-    ['tp']=true,
+    ['go-to']=true,
     ['bring']=true
 })
 
