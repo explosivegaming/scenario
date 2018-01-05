@@ -137,5 +137,5 @@ commands.add_command = function(name, description, inputs, event)
         inputs=inputs
     }
     command_calls[name] = event
-    commands._add_command(name,command_inputs(command_data[name])..description,run_custom_command)
+    commands._add_command(name,command_inputs(command_data[name])..'- '..description,run_custom_command)
 end
