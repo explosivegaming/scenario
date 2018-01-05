@@ -12,8 +12,7 @@ commands.add_command('kill', 'Kills a player, must be either yourself (/kill sel
     local _player = Game.get_player(event)
     local player = Game.get_player(args.player)
     if args.player ~= 'self' and not player then player_return({'commands.invalid-player',args.player}) return commands.error end
-    if _player.name == player.name or args.player == 'self' then
-        if _player.connected then else player_return({'commands.offline-player'}) return commands.error end
+    if args.player == 'self' or _player.name == player.name then
         if _player.character then _player.character.die() else player_return({'commands.dead-player'}) return commands.error end
     elseif Ranking.get_rank(player).power > Ranking.get_rank(_player).power then
         if player.connected then else player_return({'commands.offline-player'}) return commands.error end

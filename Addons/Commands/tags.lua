@@ -24,7 +24,7 @@ commands.add_command('tag-clear', 'Removes a custom tag. Player can be self (/ta
     local player = Game.get_player(args.player)
     local rank = Ranking.get_rank(player)
     if args.player ~= 'self' and not player then player_return({'commands.invalid-player',args.player}) return commands.error end
-    if _player.name == player.name or args.player == 'self' then _player.tag = _rank.tag
+    if  args.player == 'self' or _player.name == player.name then _player.tag = _rank.tag
     elseif _rank.power < rank.power then player.tag = rank.tag
     else player_return({'commands.unauthorized'}) return commands.error end
 end)
