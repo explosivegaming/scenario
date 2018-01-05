@@ -22,6 +22,11 @@ require('Admin/admin') -- used with Guis/admin-gui, but can work without
 require('Admin/discord')
 
 -- commands dir
+require('Commands/cheat-mode')
+require('Commands/kill')
+require('Commands/repair')
+require('Commands/tags')
+require('Commands/tp') -- requires Admin/admin
 
 -- guis dir
 require('Guis/readme')

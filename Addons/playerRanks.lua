@@ -128,12 +128,28 @@ groups['User']:add_rank{
     power=4
 }
 
+ranks['Developer']:edit('allow',false,{
+    ['cheat-mode']=true
+})
+
 ranks['Admin']:edit('allow',false,{
     ['game-settings']=true
 })
+ranks['Mod']:edit('allow',false,{
+    ['tp']=true,
+    ['bring']=true
+})
 
 ranks['Member']:edit('allow',false,{
-    ['edit-tasklist']=true
+    ['edit-tasklist']=true,
+    ['repair']=true
+})
+ranks['Regular']:edit('allow',false,{
+    ['kill']=true
+})
+ranks['Guest']:edit('allow',false,{
+    ['tag']=true,
+    ['tag-clear']=true
 })
 
 Ranking._base_preset{
