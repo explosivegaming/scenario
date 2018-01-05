@@ -17,10 +17,10 @@ function Ranking.output_ranks(player)
     if not player then return end
     for power,rank in pairs(Ranking._ranks()) do
         local output = power..') '..rank.name
-        output=output..' tag: '..rank.tag
-        local admin = 'No'; if rank.is_root then admin = 'Root' elseif rank.is_admin then admin = 'yes' end
-        output=output..' admin: '..admin
-        output=output..' group: '..rank.group.name
+        output=output..' '..rank.tag
+        local admin = 'No'; if rank.is_root then admin = 'Root' elseif rank.is_admin then admin = 'Yes' end
+        output=output..' Admin: '..admin
+        output=output..' Group: '..rank.group.name
         player_return(output,rank.colour,player)
     end
 end
