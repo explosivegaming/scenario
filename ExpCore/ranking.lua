@@ -89,11 +89,11 @@ function Ranking.print(rank_base,rtn,colour,below)
     local ranks = Ranking._ranks()
     if below then
         for power,rank in pairs(ranks) do
-            if rank_base.power >= power then rank:print(rtn,colour) end
+            if rank_base.power <= power then rank:print(rtn,colour,true) end
         end
     else
         for power,rank in pairs(ranks) do
-            if rank_base.power <= power then rank:print(rtn,colour) end
+            if rank_base.power >= power then rank:print(rtn,colour) end
         end
     end
 end
@@ -224,13 +224,13 @@ end
 --- Print a message to all players of this rank
 -- @usage rank:print('foo')
 -- @param rtn any value you want to return
-function Ranking._rank:print(rtn,colour)
+function Ranking._rank:print(rtn,colour,show_default)
     local colour = colour or defines.color.white
     local meta_data = Ranking._presets().meta
     local default = Ranking.get_rank(meta_data.default)
     if not Server or not Server._thread then
         for _,player in pairs(self:get_players()) do
-            if thread.data.rank.name == thread.data.default then
+            if thread.data.rank.name == thread.data.default or show_default then
                 player_return({'ranking.all-rank-print',rtn},colour,player)
             else
                 player_return({'ranking.rank-print',self.name,rtn},colour,player)
@@ -239,12 +239,12 @@ function Ranking._rank:print(rtn,colour)
     else
         -- using threads to make less lag
         Server.new_thread{
-            data={rank=self,rtn=rtn,default=default.name}
+            data={rank=self,rtn=rtn,default=default.name,all=show_default}
         }:on_event('resolve',function(thread)
             return thread.data.rank:get_players(true)
         end):on_event('success',function(thread,players)
             for _,player in pairs(players) do
-                if thread.data.rank.name == thread.data.default then
+                if thread.data.rank.name == thread.data.default or thread.data.all then
                     player_return({'ranking.all-rank-print',thread.data.rtn},colour,player)
                 else
                     player_return({'ranking.rank-print',thread.data.rank.name,thread.data.rtn},colour,player)

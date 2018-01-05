@@ -201,7 +201,7 @@ if commands._expgaming then
         if Ranking and Ranking.get_rank and game.player then callback = 'local rank = Ranking.get_rank(game.player);'..callback end
         local success, err = Server.interface(callback)
         if not success and is_type(err,'string') then local _end = string.find(err,'stack traceback') if _end then err = string.sub(err,0,_end-2) end end
-        if err then player_return(err) end
+        if err or err == false then player_return(err) end
     end)
 end
 
@@ -255,6 +255,7 @@ function Server._thread:open()
     self.opened = game.tick
     threads.all[uuid] = threads.all[uuid] or self
     threads.all._n = threads.all._n+1
+    if threads.paused[self.name] then threads.paused[self.name] = nil end
     if is_type(self.timeout,'number') then table.insert(threads.timeout,uuid) end
     if is_type(self._tick,'function') then table.insert(threads.tick,uuid) end
     if is_type(self.name,'string') then threads.named[self.name] = threads.named[self.name] or self.uuid end
@@ -293,7 +294,8 @@ function Server._thread:close()
             end
         end)
     end
-    if is_type(self.name,'string') then threads.paused[self.name] = self.uuid self.opened = nil
+    if is_type(self.name,'string') then threads.paused[self.name]=self.uuid self.opened=nil
+        if self.reopen == true then self:open() end
     else threads.all[uuid] = nil threads.all._n = threads.all._n-1 end
     return _return
 end
