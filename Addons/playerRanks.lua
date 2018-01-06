@@ -60,11 +60,11 @@ groups['Admin']:edit('allow',false,{
     ['tasklist']=true,
     ['rank-changer']=true,
     ['admin-commands']=true,
-    ['give_warnings']=true,
-    ['temp_ban']=true,
-    ['clear_warings']=true,
-    ['clear_reports']=true,
-    ['clear_player']=true
+    ['give-warnings']=true,
+    ['temp-ban']=true,
+    ['clear-warings']=true,
+    ['clear-reports']=true,
+    ['clear-player']=true
 })
 groups['User']:edit('allow',false,{
     ['player-list']=true,

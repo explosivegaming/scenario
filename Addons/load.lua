@@ -30,6 +30,7 @@ require('Commands/kill')
 require('Commands/repair')
 require('Commands/tags')
 require('Commands/tp') -- requires Admin/admin
+require('Commands/admin') -- requires Admin/reports
 
 -- guis dir
 require('Guis/readme')
