@@ -57,6 +57,45 @@ function Admin.take_action(action,player,by_player,reason)
     end
 end
 
+local inventorys = {
+    defines.inventory.player_main,
+    defines.inventory.player_quickbar,
+    defines.inventory.player_trash,
+    defines.inventory.player_guns,
+    defines.inventory.player_ammo,
+    defines.inventory.player_armor,
+    defines.inventory.player_armor
+}
+
+local function put_item_in_chests(chests,item,surface)
+    local chests = chests
+    local chest = nil
+    while not chest or not chest.get_inventory(defines.inventory.chest).can_insert(item) do
+        chest = table.remove(chests,1)
+        if not chest then chest = surface.create_entity{
+            name='iron-chest',
+            position=surface.find_non_colliding_position('iron-chest',{0,0},32,1)
+        } end
+    end
+    chest.get_inventory(defines.inventory.chest).insert(item)
+    table.insert(chests,chest)
+    return chests
+end
+
+function Admin.move_inventory(player)
+    local player = Game.get_player(player)
+    if not player then return end
+    local chests = player.surface.find_entities_filtered{area={{-10,-10},{10,10}},name='iron-chest'} or {}
+    for _,_inventory in pairs(inventorys) do
+        local inventory = player.get_inventory(_inventory)
+        for item,count in pairs(inventory.get_contents()) do
+            local item = {name=item,count=count}
+            chests = put_item_in_chests(chests,item,player.surface)
+        end
+        inventory.clear()
+    end
+end
+
 Admin.ban_btn = Gui.inputs.add{
     type='button',
     name='admin-ban',
@@ -80,6 +119,7 @@ function Admin.ban(player,by_player,reason)
         ['By:']='<<inline>>'..by_player_name,
         ['Reason:']=reason
     }
+    Admin.move_inventory(player)
     game.ban_player(player,reason)
 end
 
@@ -106,6 +146,7 @@ function Admin.kick(player,by_player,reason)
         ['By:']='<<inline>>'..by_player_name,
         ['Reason:']=reason
     }
+    Admin.move_inventory(player)
     game.kick_player(player,reason)
 end
 
@@ -132,6 +173,7 @@ function Admin.jail(player,by_player,reason)
         ['By:']='<<inline>>'..by_player_name,
         ['Reason:']=reason
     }
+    Admin.move_inventory(player)
     Ranking._presets().last_jail = player.name
     Ranking.give_rank(player,'Jail',by_player_name)
 end
