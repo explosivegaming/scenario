@@ -10,8 +10,7 @@ Discord: https://discord.gg/r6dC2uK
 
 Admin = Admin or {}
 
-local function append_name(reason,player)
-    local name = Game.get_player(player).name
+local function append_name(reason,name)
     local reason = reason or 'No Reason'
     if not string.find(string.lower(reason),string.lower(name)) then return reason..' - '..name
     else return reason end
@@ -69,14 +68,14 @@ end)
 
 function Admin.ban(player,by_player,reason)
     local player = Game.get_player(player)
-    local _player = Game.get_player(by_player)
-    local reason = append_name(reason,_player)
+    local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or '<server>'
+    local reason = append_name(reason,by_player_name)
     discord_emit{
         title='Player Ban',
         color=Color.to_hex(defines.text_color.crit),
         description='There was a player banned.',
         ['Player:']='<<inline>>'..player.name,
-        ['By:']='<<inline>>'.._player.name,
+        ['By:']='<<inline>>'..by_player_name,
         ['Reason:']=reason
     }
     game.ban_player(player,reason)
@@ -94,14 +93,14 @@ end)
 
 function Admin.kick(player,by_player,reason)
     local player = Game.get_player(player)
-    local _player = Game.get_player(by_player)
-    local reason = append_name(reason,_player)
+    local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or '<server>'
+    local reason = append_name(reason,by_player_name)
     discord_emit{
         title='Player Kick',
         color=Color.to_hex(defines.text_color.high),
         description='There was a player kicked.',
         ['Player:']='<<inline>>'..player.name,
-        ['By:']='<<inline>>'.._player.name,
+        ['By:']='<<inline>>'..by_player_name,
         ['Reason:']=reason
     }
     game.kick_player(player,reason)
@@ -119,18 +118,18 @@ end)
 
 function Admin.jail(player,by_player,reason)
     local player = Game.get_player(player)
-    local _player = Game.get_player(by_player)
-    local reason = append_name(reason,_player)
+    local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or '<server>'
+    local reason = append_name(reason,by_player_name)
     discord_emit{
         title='Player Jail',
         color=Color.to_hex(defines.text_color.med),
         description='There was a player jailed.',
         ['Player:']=player.name,
-        ['By:']='<<inline>>'.._player.name,
+        ['By:']='<<inline>>'..by_player_name,
         ['Reason:']=reason
     }
     Ranking._presets().last_jail = player.name
-    Ranking.give_rank(player,'Jail',_player)
+    Ranking.give_rank(player,'Jail',by_player_name)
 end
 
 Admin.go_to_btn = Gui.inputs.add{

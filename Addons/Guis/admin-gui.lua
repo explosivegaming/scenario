@@ -22,7 +22,9 @@ local function _players(_player,root_frame,state)
     local _players = state and game.players or game.connected_players
     for _,player in pairs(_players) do
         if player.name ~= _player.name then
-            table.insert(players,player.name)
+            if Admin.is_banned and Admin.is_banned(player) then else
+                table.insert(players,player.name)
+            end
         end
     end
     return players

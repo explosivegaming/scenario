@@ -44,8 +44,9 @@ Event.register(-1,function(event)
                     player_return({'tree-decon.player-print'},defines.text_color.crit,player)
                     local rank = Ranking.get_group('Admin').lowest
                     Ranking.print(rank,{'tree-decon.rank-print',player.name},defines.text_color.info)
-                    self.data.clear = game.tick + 10
+                    Admin.give_warning(player,'<server>','Trying To Decon The Base')
                 end
+                self.data.clear = game.tick + 10
             end
         end
     end):open()

@@ -138,10 +138,14 @@ ranks['Admin']:edit('allow',false,{
 })
 ranks['Mod']:edit('allow',false,{
     ['go-to']=true,
-    ['bring']=true
+    ['bring']=true,
+    ['no-report']=true
 })
 
 ranks['Donator']:edit('allow',false,{
+    
+})
+ranks['Veteran']:edit('allow',false,{
     ['tree-decon']=true
 })
 ranks['Member']:edit('allow',false,{
