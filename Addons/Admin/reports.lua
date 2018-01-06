@@ -76,7 +76,7 @@ local function report_message(player,by_player,reason)
     }
 end
 
-local function count_reports(player)
+function count_reports(player)
     local player = Game.get_player(player)
     if not player then return 0 end
     local _count = 0
@@ -101,12 +101,6 @@ local function cheak_reports(player)
     if reports >= reports_needed_for_jail and _reports().actions[player.name] ~= 'report-jail' and Ranking.get_rank(player).group.name ~= 'Jail' then
         _reports().actions[player.name] = actions.report
         Admin.jail(player,'<server>','To many user reports. Contact an Admin to be unjailed.')
-        discord_emit{
-            title='Player Report Jail',
-            color=Color.to_hex(defines.text_color.med),
-            description='There was a player reported and jailed.',
-            ['Player:']=player.name,
-        }
     end
 end
 
@@ -155,10 +149,10 @@ function Admin.report(player,by_player,reason)
     if not player or Ranking.get_rank(player):allowed('no-report') then return end
     if rank:allowed('varified') then 
         _reports().varified[player.name] = _reports().varified[player.name] or {} 
-        table.insert(_reports().varified,{by_player_name,reason})
+        table.insert(_reports().varified[player.name],{by_player_name,reason})
     else
         _reports().reports[player.name] = _reports().reports[player.name] or {} 
-        table.insert(_reports().reports,{by_player_name,reason}) 
+        table.insert(_reports().reports[player.name],{by_player_name,reason}) 
     end
     report_message(player,by_player,reason)
     cheak_reports(player)
