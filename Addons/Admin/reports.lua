@@ -154,12 +154,13 @@ function Admin.report(player,by_player,reason)
     local player, by_player_name = valid_players(player,by_player)
     if not player or Ranking.get_rank(player):allowed('no-report') then return end
     if rank:allowed('varified') then 
-        _reports.varified[player.name] = _reports.varified[player.name] or {} 
-        table.insert(_reports.varified,{by_player_name,reason})
+        _reports().varified[player.name] = _reports().varified[player.name] or {} 
+        table.insert(_reports().varified,{by_player_name,reason})
     else
-        _reports.reports[player.name] = _reports.reports[player.name] or {} 
-        table.insert(_reports.reports,{by_player_name,reason}) 
+        _reports().reports[player.name] = _reports().reports[player.name] or {} 
+        table.insert(_reports().reports,{by_player_name,reason}) 
     end
+    report_message(player,by_player,reason)
     cheak_reports(player)
 end
 

@@ -49,11 +49,11 @@ Gui.left.add{
     draw=function(frame)
         frame.caption = ''
         local player_list = frame.add{
-            name="scroll",
-            type = "scroll-pane",
-            direction = "vertical",
-            vertical_scroll_policy="always",
-            horizontal_scroll_policy="never"
+            name='scroll',
+            type = 'scroll-pane',
+            direction = 'vertical',
+            vertical_scroll_policy='always',
+            horizontal_scroll_policy='never'
         }
         for _,rank in pairs(Ranking._ranks()) do
             for _,player in pairs(rank:get_players(true)) do
@@ -73,10 +73,12 @@ Gui.left.add{
                         caption={'player-list.format',tick_to_display_format(player.online_time),player.name,rank.short_hand}
                     }.style.font_color = rank.colour
                 end
-                if Admin.report_btn and not rank:allowed('no-report') and not player.index == frame.player_index then
-                    local btn = Admin.report_btn:draw(flow)
-                    btn.style.height = 20
-                    btn.style.width = 20
+                if Admin.report_btn then
+                    if not rank:allowed('no-report') and player.index ~= frame.player_index then
+                        local btn = Admin.report_btn:draw(flow)
+                        btn.style.height = 20
+                        btn.style.width = 20
+                    end
                 end
             end
         end

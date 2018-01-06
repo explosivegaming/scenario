@@ -11,27 +11,24 @@ Discord: https://discord.gg/r6dC2uK
 local confirm_report = Gui.inputs.add{
     type='button',
     name='admin-report-confirm',
-    caption='utility/spawn_flag'
+    caption='utility/spawn_flag',
+    tooltip={'reports.name'}
 }:on_event('click',function(event)
-    local parent = evet.element.parent
+    local parent = event.element.parent
     local player = Game.get_player(parent.player.caption)
     local reason = parent.reason.text
     Admin.report(player,event.player_index,reason)
+    Gui.center.clear(event.player_index)
 end)
 
 Admin.report_btn = Gui.inputs.add{
     type='button',
     name='admin-report',
-    caption='utility/spawp_flag'
+    caption='utility/spawn_flag',
+    tooltip={'reports.name'}
 }:on_event('click',function(event)
     local parent = event.element.parent
-    local player = nil
-    for name,_ in pairs(parent.children) do
-        if name ~= 'admin-report' then
-            player = Game.get_player(name)
-            break
-        end
-    end
+    local player = Game.get_player(parent.children[1].name)
     if not player then return end
     local _player = Game.get_player(event)
     Gui.center.clear(_player)
@@ -39,12 +36,15 @@ Admin.report_btn = Gui.inputs.add{
         type='frame',
         name='report-gui'
     }
+    _player.opened=frame
     frame.caption={'reports.name'}
     frame.add{
         type='textfield',
         name='reason'
     }.style.width = 300
-    confirm_report:draw(frame)
+    local btn = confirm_report:draw(frame)
+    btn.style.height = 30
+    btn.style.width = 30
     frame.add{
         type='label',
         name='player',
