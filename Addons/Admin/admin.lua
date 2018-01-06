@@ -60,7 +60,8 @@ end
 Admin.ban_btn = Gui.inputs.add{
     type='button',
     name='admin-ban',
-    caption='utility/danger_icon'
+    caption='utility/danger_icon',
+    tooltip={'admin-commands.tooltip-ban'}
 }:on_event('click',function(event)
     local parent = event.element.parent
     pre_select_player = parent.player and parent.player.caption or nil
@@ -85,7 +86,8 @@ end
 Admin.kick_btn = Gui.inputs.add{
     type='button',
     name='admin-kick',
-    caption='utility/warning_icon'
+    caption='utility/warning_icon',
+    tooltip={'admin-commands.tooltip-kick'}
 }:on_event('click',function(event)
     local parent = event.element.parent
     pre_select_player = parent.player and parent.player.caption or nil
@@ -110,7 +112,8 @@ end
 Admin.jail_btn = Gui.inputs.add{
     type='button',
     name='admin-jail',
-    caption='utility/clock'
+    caption='utility/clock',
+    tooltip={'admin-commands.tooltip-jail'}
 }:on_event('click',function(event)
     local parent = event.element.parent
     pre_select_player = parent.player and parent.player.caption or nil
@@ -136,7 +139,8 @@ end
 Admin.go_to_btn = Gui.inputs.add{
     type='button',
     name='admin-go-to',
-    caption='utility/export_slot'
+    caption='utility/export_slot',
+    tooltip={'admin-commands.tooltip-go-to'}
 }:on_event('click',function(event)
     local parent = event.element.parent
     pre_select_player = parent.player and parent.player.caption or nil
@@ -152,7 +156,8 @@ end
 Admin.bring_btn = Gui.inputs.add{
     type='button',
     name='admin-bring',
-    caption='utility/import_slot'
+    caption='utility/import_slot',
+    tooltip={'admin-commands.tooltip-bring'}
 }:on_event('click',function(event)
     local parent = event.element.parent
     pre_select_player = parent.player and parent.player.caption or nil
