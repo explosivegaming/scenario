@@ -23,6 +23,7 @@ require('Admin/reports') -- this adds onto Admin/admin, adds report command and 
 require('Admin/discord')
 require('Admin/auto-message')
 require('Admin/tree-decon')
+require('Admin/inventory-search')
 
 -- commands dir
 require('Commands/cheat-mode')
