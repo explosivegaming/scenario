@@ -46,7 +46,7 @@ groups['Root']:edit('allow',false,{
     ['tasklist']=true,
     ['rank-changer']=true,
     ['admin-commands']=true,
-    ['give-warnings']=true,
+    ['give-warning']=true,
     ['temp-ban']=true,
     ['clear-warings']=true,
     ['clear-reports']=true,
@@ -60,7 +60,7 @@ groups['Admin']:edit('allow',false,{
     ['tasklist']=true,
     ['rank-changer']=true,
     ['admin-commands']=true,
-    ['give-warnings']=true,
+    ['give-warning']=true,
     ['temp-ban']=true,
     ['clear-warings']=true,
     ['clear-reports']=true,
@@ -71,7 +71,8 @@ groups['User']:edit('allow',false,{
     ['readme']=true,
     ['rockets']=true,
     ['science']=true,
-    ['tasklist']=true
+    ['tasklist']=true,
+    ['report']=true
 })
 groups['Jail']:edit('allow',false,{
     
@@ -168,8 +169,7 @@ ranks['Regular']:edit('allow',false,{
 })
 ranks['Guest']:edit('allow',false,{
     ['tag']=true,
-    ['tag-clear']=true,
-    ['report']=true
+    ['tag-clear']=true
 })
 
 Ranking._base_preset{

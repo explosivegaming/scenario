@@ -64,7 +64,7 @@ local function report_message(player,by_player,reason)
     local player, by_player_name = valid_players(player,by_player)
     if not player then return end
     if _reports().actions[player.name] == actions.report then return end
-    Ranking.print(low_rank,{'reports.low-print',player.name,med},defines.text_color.info,true)
+    Ranking.print(low_rank,{'reports.low-print',player.name,reason},defines.text_color.info,true)
     Ranking.print(high_rank,{'reports.high-print',player.name,by_player_name,reason},defines.text_color.med)
     discord_emit{
         title='Player Report',
@@ -110,11 +110,12 @@ local function cheak_reports(player)
     end
 end
 
-local function give_punishment(player,reason)
+local function give_punishment(player,by_player,reason)
+    local player, by_player_name = valid_players(player,by_player)
     local warnings = get_warnings(player)
     local punishment = punishments[warnings]
     local reason = reason or 'No Other Reason'
-    if punishment[1] == 'nothing' then return
+    if not punishment or punishment[1] == 'nothing' then return
     elseif punishment[1] == 'message' then
         local message = punishment[2]
         local colour = punishment[3]
@@ -126,25 +127,27 @@ local function give_punishment(player,reason)
         report_message(player,'<server>',reason)
     elseif punishment[1] == 'kick' then
         _reports().actions[player.name] = actions.kick
-        Admin.kick(player,'<server>','Too Many Warnings: '..warnings..' Also: '..reason)
+        Admin.kick(player,by_player,'Too Many Warnings: '..warnings-(take_action-2)..' Also: '..reason)
     elseif punishment[1] == 'temp-ban' then
         _reports().actions[player.name] = actions.temp
-        Admin.temp_ban(player,'<server>','Too Many Warnings: '..warnings..' Also: '..reason)
+        Admin.temp_ban(player,by_player,'Too Many Warnings: '..warnings-(take_action-2)..' Also: '..reason)
     elseif punishment[1] == 'ban' then
         _reports().actions[player.name] = actions.ban
-        Admin.ban(player,'<server>','Too Many Warnings: '..warnings..' Also: '..reason)
+        Admin.ban(player,by_player,'Too Many Warnings: '..warnings-(take_action-2)..' Also: '..reason)
     end
 end
 
 function Admin.give_warning(player,by_player,reason,min)
     local player, by_player_name = valid_players(player,by_player)
     if not player then return end
-    local min = by_player_name and take_action or min or 0
+    local min = Game.get_player(by_player) and take_action or min or 0
     local warnings = get_warnings(player)
     if warnings < min then warnings = min end
     warnings = warnings+1
     _reports().warnings[player.name] = warnings
-    give_punishment(player,reason)
+    player_return({'reports.warning-given-by',by_player_name},defines.text_color.info,player)
+    game.print({'reports.player-warning',player,by_player_name})
+    give_punishment(player,by_player,reason)
 end
 
 function Admin.report(player,by_player,reason)
@@ -242,8 +245,8 @@ Event.register(defines.events.on_tick,function(event)
         _reports().remove_warnings_time = {}
         local highest = nil
         for power,rank in pairs(Ranking._ranks()) do
-            if not highest and not rank:allowed('no-report') then highest = power+1 end
-            local _power = power; if highest then _power = highest-power end
+            if not highest and not rank:allowed('no-report') then highest = power-1 end
+            local _power = power; if highest then _power = power-highest end
             if rank:allowed('no-report') then _reports().remove_warnings_time[power] = 0 
             else _reports().remove_warnings_time[power] = min_time_to_remove_warning*_power end
         end

@@ -16,7 +16,7 @@ commands.add_command('report', 'Reports a player', {'player','reason',true}, fun
     Admin.report(player,event.player_index,reason)
 end)
 
-commands.add_command('give-warnings', 'Gives a player a warnings', {'player','reason',true}, function(event,args)
+commands.add_command('give-warning', 'Gives a player a warnings', {'player','reason',true}, function(event,args)
     local player = Game.get_player(args.player)
     local reason = args.reason
     if not player then player_return({'commands.invalid-player',args.player}) return commands.error end
