@@ -38,6 +38,7 @@ require('Guis/science')
 require('Guis/rockets')
 require('Guis/player-list')
 require('Guis/tasklist')
+require('Guis/announcements')
 require('Guis/rank-changer')
 require('Guis/admin-gui') -- used with Admin/admin, requires Admin/admin
 require('Guis/reports') -- requires Admin/reports
