@@ -241,7 +241,7 @@ Event.register(defines.events.on_tick,function(event)
     if not _reports().remove_warnings_time then
         _reports().remove_warnings_time = {}
         local highest = nil
-        for power,rank in pairs(Ranking._rank) do
+        for power,rank in pairs(Ranking._ranks()) do
             if not highest and not rank:allowed('no-report') then highest = power+1 end
             local _power = power; if highest then _power = highest-power end
             if rank:allowed('no-report') then _reports().remove_warnings_time[power] = 0 
