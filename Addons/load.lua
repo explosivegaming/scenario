@@ -19,6 +19,7 @@ end
 -- admin dir
 require('Admin/player-info')
 require('Admin/admin') -- used with Guis/admin-gui, but can work without
+require('Admin/reports') -- this adds onto Admin/admin, adds report command and warnings, and temp ban
 require('Admin/discord')
 require('Admin/auto-message')
 require('Admin/tree-decon')
