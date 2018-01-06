@@ -74,7 +74,8 @@ groups['User']:edit('allow',false,{
     ['rockets']=true,
     ['science']=true,
     ['tasklist']=true,
-    ['report']=true
+    ['report']=true,
+    ['warp-list']=true
 })
 groups['Jail']:edit('allow',false,{
     
@@ -147,7 +148,8 @@ ranks['Developer']:edit('allow',false,{
 })
 
 ranks['Admin']:edit('allow',false,{
-    ['game-settings']=true
+    ['game-settings']=true,
+    ['always-warp']=true
 })
 ranks['Mod']:edit('allow',false,{
     ['go-to']=true,
@@ -163,7 +165,8 @@ ranks['Veteran']:edit('allow',false,{
 })
 ranks['Member']:edit('allow',false,{
     ['edit-tasklist']=true,
-    ['repair']=true
+    ['repair']=true,
+    ['edit-warp-list']=true
 })
 ranks['Regular']:edit('allow',false,{
     ['kill']=true,
