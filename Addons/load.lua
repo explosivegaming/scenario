@@ -41,5 +41,6 @@ require('Guis/tasklist')
 require('Guis/rank-changer')
 require('Guis/admin-gui') -- used with Admin/admin, requires Admin/admin
 require('Guis/game-settings')
+require('Guis/reports') -- requires Admin/reports
 
 -- other
