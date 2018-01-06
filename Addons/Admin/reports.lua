@@ -227,7 +227,7 @@ function Admin.temp_ban(player,by_player,reason)
         ['By:']='<<inline>>'..by_player_name,
         ['Reason:']=append_name(reason,by_player_name)
     }
-    game.print({'reports.temp-ban',player,by_player_name},defines,text_color.info)
+    game.print({'reports.temp-ban',player,by_player_name},defines.text_color.info)
     Ranking._presets().last_jail = player.name
     Ranking.give_rank(player,'Jail',by_player_name)
 end
