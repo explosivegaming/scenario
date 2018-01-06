@@ -36,7 +36,7 @@ local send_popup = Gui.inputs.add{
     local rank = Ranking.get_rank(player)
     local _rank = Ranking.get_rank(event.element.parent.rank.caption); if not _rank then return end
     local sent_by = {'announcements.sent-by',player.name,rank.name}
-    local rank_name = _rank.name; if rank_name == default.name then rank_name = 'Everyone' end
+    local rank_name = _rank.name..'s'; if rank_name == default.name..'s' then rank_name = 'Everyone' end
     local sent_to = {'announcements.sent-to',rank_name}
     local message = event.element.parent.parent.message.text
     for power,__rank in pairs(Ranking._ranks()) do
