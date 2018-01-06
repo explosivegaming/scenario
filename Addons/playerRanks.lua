@@ -50,7 +50,8 @@ groups['Root']:edit('allow',false,{
     ['temp-ban']=true,
     ['clear-warings']=true,
     ['clear-reports']=true,
-    ['clear-player']=true
+    ['clear-player']=true,
+    ['announcements']=true
 })
 groups['Admin']:edit('allow',false,{
     ['player-list']=true,
@@ -64,7 +65,8 @@ groups['Admin']:edit('allow',false,{
     ['temp-ban']=true,
     ['clear-warings']=true,
     ['clear-reports']=true,
-    ['clear-player']=true
+    ['clear-player']=true,
+    ['announcements']=true
 })
 groups['User']:edit('allow',false,{
     ['player-list']=true,
