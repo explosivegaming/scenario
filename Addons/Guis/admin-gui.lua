@@ -65,6 +65,7 @@ local function _actions(player)
         'Bring',
         'Jail',
         'Kick',
+        'Temp Ban',
         'Ban'
     }
 end

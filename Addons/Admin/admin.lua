@@ -49,6 +49,7 @@ end
 
 function Admin.take_action(action,player,by_player,reason)
     if action == 'Ban' then Admin.ban(player,by_player,reason)
+    elseif action == 'Temp Ban' and Admin.temp_ban then Admin.temp_ban(player,by_player,reason)
     elseif action == 'Kick' then Admin.kick(player,by_player,reason)
     elseif action == 'Jail' then Admin.jail(player,by_player,reason)
     elseif action == 'Go To' then Admin.go_to(player,by_player)
