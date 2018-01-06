@@ -14,9 +14,9 @@ local warp_tiles = {
 }
 
 local warp_entities = {
-    {"small-lamp",-3,-2},{"small-lamp",-3,2},{"small-lamp",3,-2},{"small-lamp",3,2},
-    {"small-lamp",-2,-3},{"small-lamp",2,-3},{"small-lamp",-2,3},{"small-lamp",2,3},
-    {"small-electric-pole",-3,-3},{"small-electric-pole",3,3},{"small-electric-pole",-3,3},{"small-electric-pole",3,-3}
+    {'small-lamp',-3,-2},{'small-lamp',-3,2},{'small-lamp',3,-2},{'small-lamp',3,2},
+    {'small-lamp',-2,-3},{'small-lamp',2,-3},{'small-lamp',-2,3},{'small-lamp',2,3},
+    {'small-electric-pole',-3,-3},{'small-electric-pole',3,3},{'small-electric-pole',-3,3},{'small-electric-pole',3,-3}
 }
 
 local warp_radius = 4
@@ -29,7 +29,7 @@ local global_offset = {x=0,y=0}
 
 local function _warps(reset)
     global.addons = not reset and global.addons or {}
-    global.addons.warps = not reset and global.addons.warps or {_n=0,warps={},cooldowns={}}
+    global.addons.warps = not reset and global.addons.warps or {warps={},cooldowns={}}
     return global.addons.warps
 end
 
@@ -52,11 +52,10 @@ local function remove_warp_point(name)
     surface.set_tiles(tiles)
     if warp.tag.valid then warp.tag.destroy() end
     _warps().warps[name] = nil
-    _warps()._n = _warps()._n-1
     Gui.left.update('warp-list')
 end
 
-local function make_warp_point(position,surface,name)
+local function make_warp_point(position,surface,force,name)
     local warp = _warps().warps[name]
     if warp then return end; warp = nil
     local offset = {x=math.floor(position.x),y=math.floor(position.y)}
@@ -81,8 +80,8 @@ local function make_warp_point(position,surface,name)
         local entity = surface.create_entity{name=entity[1],position={entity[2]+offset.x+global_offset.x,entity[3]+offset.y+global_offset.y},force='neutral'}
         entity.destructible = false; entity.health = 0; entity.minable = false; entity.rotatable = false
     end
-    local tag = player.force.add_chart_tag(warp.surface,{
-        position=warp.position,
+    local tag = force.add_chart_tag(surface,{
+        position={offset.x+0.5,offset.y+0.5},
         text='Warp: '..name,
         icon={type='item',name=warp_item}
     })
@@ -95,7 +94,7 @@ commands.add_command('make-warp', 'Make a warp point at your location', {'name',
     local position = game.player.position
     local name = args.name
     if _warps().warps[name] then player_return({'warp-system.name-used'},defines.text_color.med) return commands.error end
-    make_warp_point(position,game.player.surface,name)
+    make_warp_point(position,game.player.surface,game.player.force,name)
 end)
 
 local remove_warp = Gui.inputs.add{
@@ -108,7 +107,7 @@ local remove_warp = Gui.inputs.add{
     remove_warp_point(name)
 end)
 
-local go_to_warp Gui.inputs.add{
+local go_to_warp = Gui.inputs.add{
     type='button',
     name='go-to-warp-point',
     caption='utility/export_slot',
@@ -116,15 +115,15 @@ local go_to_warp Gui.inputs.add{
 }:on_event('click',function(event)
     local player = Game.get_player(event)
     local cooldown = _warps().cooldowns[event.player_index] or 0
-    local warp = _warps().warps[element.parent.name]
-    if cooldown > 0 then player_return({'warp-system.cooldown',cooldown},nil,event) end
+    local warp = _warps().warps[event.element.parent.name]
+    if cooldown > 0 then player_return({'warp-system.cooldown',cooldown},nil,event) return end
     if player.vehicle then player.vehicle.set_driver() end
     if player.vehicle then player.vehicle.set_passenger() end
     if player.vehicle then return end
     player.teleport(warp.surface.find_non_colliding_position('player',warp.position,32,1),warp.surface)
     if not Ranking.get_rank(player):allowed('always-warp') then 
-        event.element.parent.parent.parent.style.visible = false
-        _warps().cooldown[event.player_index] = warp_limit
+        event.element.parent.parent.parent.parent.style.visible = false
+        _warps().cooldowns[event.player_index] = warp_limit
     end
 end)
 
@@ -135,12 +134,18 @@ Gui.left.add{
     draw=function(frame)
         local player = Game.get_player(frame.player_index)
         frame.caption={'warp-system.name'}
-        local flow = frame.add{
-            type='flow',
-            direction='vertical'
+        local warp_list = frame.add{
+            type='scroll-pane',
+            direction='vertical', 
+            vertical_scroll_policy='always', 
+            horizontal_scroll_policy='never'
         }
-        flow.style.maximal_height = 200
-        for name,warp in pairs(_warps().warp) do
+        warp_list.style.maximal_height = 150
+        local table = warp_list.add{
+            type='table',
+            column_count=2
+        }
+        for name,warp in pairs(_warps().warps) do
             if not warp.tag or not warp.tag.valid then
                 player.force.add_chart_tag(warp.surface,{
                     position=warp.position,
@@ -148,28 +153,27 @@ Gui.left.add{
                     icon={type='item',name=warp_item}
                 })
             end
-            flow.add{
+            table.add{
                 type='label',
                 caption=name,
                 style='caption_label'
             }
-            local _flow = flow.add{
+            local _flow = table.add{
                 type='flow',
                 name=name
             }
             local btn = go_to_warp:draw(_flow)
             btn.style.height = 20
             btn.style.width = 20
-            if Ranking.get_rank(player):allowed('edit-warp-list') then
+            if Ranking.get_rank(player):allowed('make-warp') and name ~= 'Spawn' then
                 local btn = remove_warp:draw(_flow)
                 btn.style.height = 20
                 btn.style.width = 20
             end
         end
-        local cooldown = _warps().cooldowns[event.player_index] or 0
-        if cooldown > 0 then frame.style.visible = false return end
-        if _warps()._n == 0 then frame.style.visible = false return end
-        if Ranking.get_rank(player):allowed('always-warp') then return
+        local cooldown = _warps().cooldowns[player.index] or 0
+        if cooldown > 0 then frame.style.visible = false return
+        elseif Ranking.get_rank(player):allowed('always-warp') then return
         elseif player.surface.get_tile(player.position).name == warp_tile 
             or player.surface.get_tile(player.position).name == warp_partern 
             and player.surface.name == 'nauvis' 
@@ -178,15 +182,14 @@ Gui.left.add{
         else frame.style.visible = false end
     end,
     can_open=function(player)
-        local cooldown = _warps().cooldowns[event.player_index] or 0
-        if cooldown > 0 then return {'warp-system.cooldown',cooldown} end
-        if _warps()._n == 0 then return {'warp-system.none'} end
+        local cooldown = _warps().cooldowns[player.index] or 0
         if Ranking.get_rank(player):allowed('always-warp') then return true
         elseif player.surface.get_tile(player.position).name == warp_tile 
-            or player.surface.get_tile(player.position).name == warp_partern 
-            and player.surface.name == 'nauvis' 
-            then return true
+        or player.surface.get_tile(player.position).name == warp_partern 
+        and player.surface.name == 'nauvis' 
+        then return true
         elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then return true
+        elseif cooldown > 0 then return {'warp-system.cooldown',cooldown}
         else return {'warp-system.not-on-warp'} end
     end,
     open_on_join=true
@@ -194,10 +197,21 @@ Gui.left.add{
 
 Event.register(defines.events.on_tick,function(event)
     if not (event.tick % 60 == 0) then return end
-    for index,time in pairs(_warps().cooldown) do
+    for index,time in pairs(_warps().cooldowns) do
         if time > 0 then
-            _warps().cooldown[index] = time-1 
-            if _warps().cooldown[index] == 0 then player_return({'warp-point.cooldown-zero'},defines.text_color.low,index) end
+            _warps().cooldowns[index] = time-1 
+            if _warps().cooldowns[index] == 0 then player_return({'warp-system.cooldown-zero'},defines.text_color.low,index) end
+        end
+    end
+    for _,player in pairs(game.connected_players) do
+        local cooldown = _warps().cooldowns[player.index] or 0
+        if not Ranking.get_rank(player):allowed('always-warp') and cooldown == 0 then
+            if player.surface.get_tile(player.position).name == warp_tile 
+                or player.surface.get_tile(player.position).name == warp_partern 
+                and player.surface.name == 'nauvis' 
+                then mod_gui.get_frame_flow(player)['warp-list'].style.visible = true
+            elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then mod_gui.get_frame_flow(player)['warp-list'].style.visible = true
+            else mod_gui.get_frame_flow(player)['warp-list'].style.visible = false end
         end
     end
 end)

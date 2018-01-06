@@ -51,7 +51,8 @@ groups['Root']:edit('allow',false,{
     ['clear-warings']=true,
     ['clear-reports']=true,
     ['clear-player']=true,
-    ['announcements']=true
+    ['announcements']=true,
+    ['warp-list']=true
 })
 groups['Admin']:edit('allow',false,{
     ['player-list']=true,
@@ -66,7 +67,8 @@ groups['Admin']:edit('allow',false,{
     ['clear-warings']=true,
     ['clear-reports']=true,
     ['clear-player']=true,
-    ['announcements']=true
+    ['announcements']=true,
+    ['warp-list']=true
 })
 groups['User']:edit('allow',false,{
     ['player-list']=true,
@@ -166,7 +168,7 @@ ranks['Veteran']:edit('allow',false,{
 ranks['Member']:edit('allow',false,{
     ['edit-tasklist']=true,
     ['repair']=true,
-    ['edit-warp-list']=true
+    ['make-warp']=true
 })
 ranks['Regular']:edit('allow',false,{
     ['kill']=true,
