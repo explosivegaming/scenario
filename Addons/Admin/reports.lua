@@ -146,7 +146,7 @@ function Admin.give_warning(player,by_player,reason,min)
     warnings = warnings+1
     _reports().warnings[player.name] = warnings
     player_return({'reports.warning-given-by',by_player_name},defines.text_color.info,player)
-    game.print({'reports.player-warning',player,by_player_name})
+    game.print({'reports.player-warning',player.name,by_player_name})
     give_punishment(player,by_player,reason)
 end
 
@@ -227,7 +227,7 @@ function Admin.temp_ban(player,by_player,reason)
         ['By:']='<<inline>>'..by_player_name,
         ['Reason:']=append_name(reason,by_player_name)
     }
-    game.print({'reports.temp-ban',player,by_player_name},defines.text_color.info)
+    game.print({'reports.temp-ban',player.name,by_player_name,reason},defines.text_color.info)
     Ranking._presets().last_jail = player.name
     Ranking.give_rank(player,'Jail',by_player_name)
 end
@@ -258,7 +258,7 @@ Event.register(defines.events.on_tick,function(event)
                 local time_to_remove = _reports().remove_warnings_time[rank.power]
                 if (game.tick % time_to_remove) == 0 then
                     _reports().warnings[name]=warnings-1
-                    player_return({'reports.remove-warn',_reports().warnings[name],tick_to_displayer_format(time_to_remove)},defines,text_color.low,name)
+                    player_return({'reports.remove-warn',_reports().warnings[name],tick_to_display_format(time_to_remove)},defines,text_color.low,name)
                 end
             end
         end
