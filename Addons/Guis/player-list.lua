@@ -73,7 +73,7 @@ Gui.left.add{
                         caption={'player-list.format',tick_to_display_format(player.online_time),player.name,rank.short_hand}
                     }.style.font_color = rank.colour
                 end
-                if Admin.report_btn then
+                if Admin.report_btn and not rank:allowed('no-report') and not player.index == frame.player_index then
                     local btn = Admin.report_btn:draw(flow)
                     btn.style.height = 20
                     btn.style.width = 20
