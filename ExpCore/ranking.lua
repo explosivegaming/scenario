@@ -243,8 +243,8 @@ function Ranking._rank:print(rtn,colour,show_default)
     local meta_data = Ranking._presets().meta
     local default = Ranking.get_rank(meta_data.default)
     if not Server or not Server._thread then
-        for _,player in pairs(self:get_players()) do
-            if thread.data.rank.name == thread.data.default or show_default then
+        for _,player in pairs(self:get_players(true)) do
+            if self.name == default.name or show_default then
                 player_return({'ranking.all-rank-print',rtn},colour,player)
             else
                 player_return({'ranking.rank-print',self.name,rtn},colour,player)
