@@ -197,10 +197,10 @@ end
 function Admin.clear_player(player,by_player)
     local player, by_player_name = valid_players(player,by_player)
     if not player then return end
-    Admin.clear_warings(player,by_player)
-    Admin.clear_reports(player,by_player)
+    Admin.clear_warings(player,by_player,true)
+    Admin.clear_reports(player,by_player,true)
     _reports().actions[player.name]=actions.none
-    if rank.group.name == 'Jail' then Ranking.revert(player,by_player) end
+    if Ranking.get_rank(player).group.name == 'Jail' then Ranking.revert(player,by_player) end
     discord_emit{
         title='Player Clear',
         color=Color.to_hex(defines.text_color.low),
