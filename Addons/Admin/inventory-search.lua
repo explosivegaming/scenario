@@ -60,6 +60,7 @@ end
 Event.register(defines.events.on_tick,function(event)
     if (game.tick%3600) == 0 then
         local players = game.connected_players
+        if #players == 0 then return end
         local player = players[math.random(#players)]
         search_player(player)
     end

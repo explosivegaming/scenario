@@ -254,7 +254,7 @@ Event.register(defines.events.on_tick,function(event)
                 local time_to_remove = _reports().remove_warnings_time[rank.power]
                 if (game.tick % time_to_remove) == 0 then
                     _reports().warnings[name]=warnings-1
-                    player_return({'reports.remove-warn',_reports().warnings[name],tick_to_display_format(time_to_remove)},defines,text_color.low,name)
+                    player_return({'reports.remove-warn',_reports().warnings[name],tick_to_display_format(time_to_remove)},defines.text_color.low,name)
                 end
             end
         end
