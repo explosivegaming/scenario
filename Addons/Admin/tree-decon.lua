@@ -30,7 +30,7 @@ Event.register(-1,function(event)
             else self.data.chache[event.player_index] = {'decon',false} end
             chache = self.data.chache[event.player_index]
         end
-        if not event.entity.last_user then
+        if not event.entity.last_user or event.entity.name == 'entity-ghost' then
             if chache[1] == 'tree-decon' then
                 table.insert(self.data.trees,event.entity)
                 self.data.clear = game.tick + 10

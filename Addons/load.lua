@@ -24,6 +24,7 @@ require('Admin/discord')
 require('Admin/auto-message')
 require('Admin/tree-decon')
 require('Admin/inventory-search')
+require('Admin/capsules')
 
 -- commands dir
 require('Commands/cheat-mode')

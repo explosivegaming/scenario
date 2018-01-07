@@ -67,8 +67,8 @@ local inventorys = {
     defines.inventory.player_armor
 }
 
-local function put_item_in_chests(chests,item,surface)
-    local chests = chests
+function Admin.move_item_to_spawn(item,surface,chests)
+    local chests = chests or surface.find_entities_filtered{area={{-10,-10},{10,10}},name='iron-chest'} or {}
     local chest = nil
     while not chest or not chest.get_inventory(defines.inventory.chest).can_insert(item) do
         chest = table.remove(chests,1)
@@ -90,7 +90,7 @@ function Admin.move_inventory(player)
         local inventory = player.get_inventory(_inventory)
         for item,count in pairs(inventory.get_contents()) do
             local item = {name=item,count=count}
-            chests = put_item_in_chests(chests,item,player.surface)
+            chests = Admin.move_item_to_spawn(item,player.surface,chests)
         end
         inventory.clear()
     end
