@@ -178,7 +178,8 @@ ranks['Regular']:edit('allow',false,{
 })
 ranks['Guest']:edit('allow',false,{
     ['tag']=true,
-    ['tag-clear']=true
+    ['tag-clear']=true,
+    ['report']=true
 })
 
 Ranking._base_preset{
