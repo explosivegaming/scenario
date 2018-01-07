@@ -10,7 +10,7 @@ Discord: https://discord.gg/r6dC2uK
 Event.register(-1,function(event)
     Server.new_thread{
         name='auto-message',
-        timeout=3240000, -- 3240000 = 15 minutes
+        timeout=54000, -- 3240000 = 15 hours dont make the mistake i did, 54000 is 15 minutes
         reopen=true,
         data={
             high_rank= 'Owner',
