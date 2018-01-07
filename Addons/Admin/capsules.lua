@@ -45,8 +45,8 @@ Event.register(defines.events.on_player_ammo_inventory_changed,function(event)
     local player = Game.get_player(event)
     if Ranking.get_rank(player):allowed('nuke') then return end
     local found = player.remove_item({name='atomic-bomb',count=1000})
-    Admin.move_item_to_spawn({name='atomic-bomb',count=found},player.surface)
     if found > 0 then
+        Admin.move_item_to_spawn({name='atomic-bomb',count=found},player.surface)
         player_return({'capsules.nuke'},defines.text_color.med,player)
         Admin.give_warning(player,'<server>','Nukes are not allowed for your rank.',4)
     end
