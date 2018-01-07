@@ -139,8 +139,10 @@ function Admin.give_warning(player,by_player,reason,min)
     if warnings < min then warnings = min end
     warnings = warnings+1
     _reports().warnings[player.name] = warnings
-    player_return({'reports.warning-given-by',by_player_name},defines.text_color.info,player)
-    game.print({'reports.player-warning',player.name,by_player_name,reason})
+    if warnings > take_action then 
+        player_return({'reports.warning-given-by',by_player_name},defines.text_color.info,player)
+        game.print({'reports.player-warning',player.name,by_player_name,reason})
+    end
     give_punishment(player,by_player,reason)
 end
 
