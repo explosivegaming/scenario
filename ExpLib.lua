@@ -104,7 +104,7 @@ function ExpLib.discord_emit(args)
         color=color,
         fields=fields
     }
-    game.write_file('json.data','\n'..table.json(log_data),true,0)
+    game.write_file('json.data',table.json(log_data)..'\n',true,0)
 end
 
 --- Convert ticks to hours
