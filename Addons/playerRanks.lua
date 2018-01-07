@@ -168,11 +168,13 @@ ranks['Veteran']:edit('allow',false,{
 ranks['Member']:edit('allow',false,{
     ['edit-tasklist']=true,
     ['repair']=true,
-    ['make-warp']=true
+    ['make-warp']=true,
+    ['nuke']=true
 })
 ranks['Regular']:edit('allow',false,{
     ['kill']=true,
-    ['decon']=true
+    ['decon']=true,
+    ['capsules']=true
 })
 ranks['Guest']:edit('allow',false,{
     ['tag']=true,
