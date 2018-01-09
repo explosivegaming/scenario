@@ -196,10 +196,8 @@ function Ranking._meta()
         if rank.time then
             table.insert(meta.time_ranks,rank.name)
             if not meta.time_highest or power < meta.time_highest then meta.time_highest = power end
-            if not meta.time_lowest or rank.time < meta.time_lowest then meta.time_lowest = power.time end
+            if not meta.time_lowest or rank.time < meta.time_lowest then meta.time_lowest = rank.time end
         end
-        meta.time_highest = meta.time_highest or 0
-        meta.time_lowest = meta.time_lowest or 0
     end
     return meta
 end
