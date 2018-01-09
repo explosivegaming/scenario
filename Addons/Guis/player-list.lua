@@ -105,7 +105,7 @@ Event.register(defines.events.on_gui_click,function(event)
     local flow = player_list.add{type='flow',direction='vertical'}
     back_btn:draw(flow)
     get_player_info(event.element.name,flow,true)
-    if event.player_index == Game.get_player(event.element.name).index then return end
+    if Game.get_player(event.element.name) and event.player_index == Game.get_player(event.element.name).index then return end
     if Admin and Admin.allowed(event.player_index) then Admin.btn_flow(flow).caption = event.element.name end
 end)
 
