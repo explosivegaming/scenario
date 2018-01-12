@@ -52,7 +52,8 @@ groups['Root']:edit('allow',false,{
     ['clear-reports']=true,
     ['clear-player']=true,
     ['announcements']=true,
-    ['warp-list']=true
+    ['warp-list']=true,
+    ['polls']=true
 })
 groups['Admin']:edit('allow',false,{
     ['player-list']=true,
@@ -68,7 +69,8 @@ groups['Admin']:edit('allow',false,{
     ['clear-reports']=true,
     ['clear-player']=true,
     ['announcements']=true,
-    ['warp-list']=true
+    ['warp-list']=true,
+    ['polls']=true
 })
 groups['User']:edit('allow',false,{
     ['player-list']=true,
@@ -77,7 +79,8 @@ groups['User']:edit('allow',false,{
     ['science']=true,
     ['tasklist']=true,
     ['report']=true,
-    ['warp-list']=true
+    ['warp-list']=true,
+    ['polls']=true
 })
 groups['Jail']:edit('allow',false,{
     

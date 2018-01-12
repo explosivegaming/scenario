@@ -42,6 +42,7 @@ local send_popup = Gui.inputs.add{
     for power,__rank in pairs(Ranking._ranks()) do
         if power <= _rank.power then
             Gui.popup.open('announcements',{sent_by=sent_by,sent_to=sent_to,message=message},__rank:get_players(true))
+            event.element.parent.parent.message.text = ''
         end
     end
 end)

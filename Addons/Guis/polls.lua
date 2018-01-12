@@ -17,18 +17,24 @@ local function _polls(reset)
 end
 
 local function _poll_end(uuid)
-    local poll = _polls().active[poll.uuid]
+    local poll = _polls().active[uuid]
     if not poll then return end
+    local highest = {nil,-1}
+    local _votes = {}
     for index,answer in pairs(poll.answers) do
-        local _result = #poll.votes[index] or 0
-        poll.votes[index] = _result
+        local _result = poll.votes[index] or 0
+        if _result > highest[2] then highest = {answer,_result} end
+        _votes[answer] = _result
     end
     local uuid = poll.uuid
     poll.uuid = nil
+    poll.votes = _votes
     poll.answers = nil
     poll.voted = nil
     table.insert(_polls().old,poll)
     _polls().active[uuid] = nil
+    game.print({'polls.end',poll.question},defines.text_color.info)
+    game.print({'polls.winner',highest[1]},defines.text_color.info)
 end
 
 local function _poll_data(question,answers)
@@ -45,9 +51,32 @@ local function _poll_data(question,answers)
     }:on_event('timeout',function(self)
         local uuid = self.data.poll_uuid
         _poll_end(uuid)
-    end)
+    end):open()
     _polls().active[poll.uuid]=poll
     return poll.uuid
+end
+
+local function draw_poll(frame)
+    frame.clear()
+    local index = tonumber(frame.parent.current_index.caption)
+    local poll = _polls().old[index]
+    if not poll then
+        frame.add{
+            type='label',
+            caption={'polls.no-poll'}
+        }
+        return
+    end
+    frame.add{
+        type='label',
+        caption='Question: '..poll.question
+    }
+    for answer,votes in pairs(poll.votes) do
+        frame.add{
+            type='label',
+            caption=answer..') '..votes
+        }
+    end
 end
 
 local function _opptions(player,root_frame)
@@ -67,10 +96,10 @@ local opption_drop_down = Gui.inputs.add_drop_down('opption-drop-down-polls',_op
     if not poll then return end
     if poll.voted[player.index] and poll.voted[player.index] > 1 then
         local old_vote = poll.voted[player.index]
-        poll.votes[old_vote] = poll.votes[old_vote]-1
+        poll.votes[old_vote-1] = poll.votes[old_vote-1] and poll.votes[old_vote-1]-1 or 0
     end
     if element.selected_index > 1 then
-        poll.votes[element.selected_index-1] = poll.votes[element.selected_index-1] + 1
+        poll.votes[element.selected_index-1] = poll.votes[element.selected_index-1] and poll.votes[element.selected_index-1]+1 or 1
     end
     poll.voted[player.index]=element.selected_index
     element.parent.answer.caption = 'Your Answer: '..selected
@@ -79,26 +108,28 @@ end)
 local prev = Gui.inputs.add{
     type='button',
     name='prev-poll',
-    caption='utility/hint_arrow_right'
+    caption='utility/hint_arrow_left'
 }:on_event('click',function(event)
     local parent = event.element.parent
     local index = parent.parent.current_index.caption
     local _index = tonumber(index)-1
     if _index < 1 then _index = #_polls().old end
     parent.parent.current_index.caption = _index
+    parent.parent.title.title.caption = 'Viewing Poll: '.._index
     draw_poll(parent.parent.poll_area)
 end)
 
 local next = Gui.inputs.add{
     type='button',
     name='next-poll',
-    caption='utility/hint_arrow_left'
+    caption='utility/hint_arrow_right'
 }:on_event('click',function(event)
     local parent = event.element.parent
     local index = parent.parent.current_index.caption
     local _index = tonumber(index)+1
     if _index > #_polls().old then _index = 1 end
     parent.parent.current_index.caption = _index
+    parent.parent.title.title.caption = 'Viewing Poll: '.._index
     draw_poll(parent.parent.poll_area)
 end)
 
@@ -108,11 +139,11 @@ local function poll_assembler(frame)
 	local frame_table = frame.add { type = 'table', name = 'table_poll_assembler', column_count = 2 }
 	frame_table.add { type = 'label', caption = 'Question:' }
 	frame_table.add { type = 'textfield', name = 'textfield_question', text = '' }
-	frame_table.add { type = 'label', caption = 'Answer #1:' }
+	frame_table.add { type = 'label', caption = 'Option #1:' }
 	frame_table.add { type = 'textfield', name = 'textfield_answer_1', text = '' }
-	frame_table.add { type = 'label', caption = 'Answer #2:' }
+	frame_table.add { type = 'label', caption = 'Option #2:' }
 	frame_table.add { type = 'textfield', name = 'textfield_answer_2', text = '' }
-	frame_table.add { type = 'label', caption = 'Answer #3:' }
+	frame_table.add { type = 'label', caption = 'Option #3:' }
 	frame_table.add { type = 'textfield', name = 'textfield_answer_3', text = '' }
 	frame_table.add { type = 'label', caption = '' }
 end
@@ -123,42 +154,26 @@ local create_poll = Gui.inputs.add{
     caption='utility/add'
 }:on_event('click',function(event)
     local parent = event.element.parent
-    if event.element.caption == 'utility/enter' then
-        local inputs = parent.pool_area.table_poll_assembler
-        local uuid = _poll_data(inputs.textfield_question,{
-            inputs.textfield_answer_1,
-            inputs.textfield_answer_2,
-            inputs.textfield_answer_3
+    if event.element.sprite == 'utility/enter' then
+        local inputs = parent.parent.poll_area.table_poll_assembler
+        if not inputs then
+            event.element.sprite = 'utility/add'
+            draw_poll(parent.parent.poll_area)
+            return
+        end
+        local uuid = _poll_data(inputs.textfield_question.text,{
+            inputs.textfield_answer_1.text,
+            inputs.textfield_answer_2.text,
+            inputs.textfield_answer_3.text
         })
         Gui.popup.open('polls',{uuid=uuid})
+        event.element.sprite = 'utility/add'
+        draw_poll(parent.parent.poll_area)
     else
-        event.element.caption = 'utility/enter'
+        event.element.sprite = 'utility/enter'
         poll_assembler(parent.parent.poll_area)
     end
 end)
-
-local function draw_poll(frame)
-    frame.clear()
-    local index = frame.parent.current_index.caption
-    local poll = _polls().old[index]
-    if not poll then
-        frame.add{
-            type='label',
-            caption={'polls.no-poll'}
-        }
-        return
-    end
-    frame.add{
-        type='label',
-        caption='Question: '..poll.question
-    }
-    for answer,votes in pairs(poll.answers) do
-        frame.add{
-            type='label',
-            caption=answer..') '..votes
-        }
-    end
-end
 
 Gui.popup.add{
     name='polls',
@@ -177,36 +192,38 @@ Gui.popup.add{
         flow.add{type='label',caption='Question: '..poll.question}
         flow.add{type='label',name='answer',caption='Your Answer: None'}
         opption_drop_down:draw(flow)
-        flow.add{type='lable',caption={'polls.auto-update'}}.style.font_size = 8
+        flow.add{type='label',caption={'polls.time-left',poll_time_out}}
     end
 }:add_left{
     caption='utility/item_editor_icon',
     tooltip={'polls.tooltip'},
     draw=function(frame)
+        frame.caption={'polls.name'}
         frame.add{
-            type='lable',
+            type='label',
             name='current_index',
-            cpation=1
+            caption=1
         }.style.visible = false
         local title = frame.add{
             type='flow',
             name='title'
         }
         local btn = prev:draw(title)
-        btn.style.width = 30
-        btn.style.height = 30
+        btn.style.width = 20
+        btn.style.height = 20
         title.add{
             type='label',
+            name='title',
             caption='Viewing Poll: 1',
             style='caption_label'
         }
         local btn = next:draw(title)
-        btn.style.width = 30
-        btn.style.height = 30
+        btn.style.width = 20
+        btn.style.height = 20
         if Ranking.get_rank(frame.player_index):allowed('create-poll') then
             local btn = create_poll:draw(title)
-            btn.style.width = 30
-            btn.style.height = 30
+            btn.style.width = 20
+            btn.style.height = 20
         end
         local flow = frame.add{
             type='flow',
