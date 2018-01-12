@@ -163,7 +163,8 @@ ranks['Donator']:edit('allow',false,{
     
 })
 ranks['Veteran']:edit('allow',false,{
-    ['tree-decon']=true
+    ['tree-decon']=true,
+    ['create-poll']=true
 })
 ranks['Member']:edit('allow',false,{
     ['edit-tasklist']=true,
