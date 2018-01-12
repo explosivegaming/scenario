@@ -1,3 +1,5 @@
+### ExpGaming Repository [![CodeFactor](https://www.codefactor.io/repository/github/badgamernl/explosivegaming-main/badge)](https://www.codefactor.io/repository/github/badgamernl/explosivegaming-main) [![dev chat](https://discordapp.com/api/guilds/260843215836545025/widget.png?style=shield)](https://discord.me/explosivegaming)
+
 #### Using The Core Files
 1. Copy the core folder and the StdLib File 
 2. Copy the control.lua and edit the load.lua in each file
