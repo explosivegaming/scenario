@@ -186,7 +186,7 @@ function Ranking.find_preset(player,tick)
         if current_rank.power >= rank.power then return end
         table.insert(ranks,rank)
     end
-    if current_rank.power < meta_data.time_highest and tick_to_min(player.online_time) > meta_data.time_lowest then
+    if current_rank.power > meta_data.time_highest and tick_to_min(player.online_time) > meta_data.time_lowest then
         for _,rank_name in pairs(meta_data.time_ranks) do
             local rank = Ranking.get_rank(rank_name)
             if tick_to_min(player.online_time) > rank.time then
