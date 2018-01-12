@@ -189,10 +189,10 @@ Gui.popup.add{
             name=uuid,
             direction='vertical'
         }
+        flow.add{type='label',caption={'polls.time-left',poll_time_out}}
         flow.add{type='label',caption='Question: '..poll.question}
         flow.add{type='label',name='answer',caption='Your Answer: None'}
         opption_drop_down:draw(flow)
-        flow.add{type='label',caption={'polls.time-left',poll_time_out}}
     end
 }:add_left{
     caption='utility/item_editor_icon',
