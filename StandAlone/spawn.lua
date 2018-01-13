@@ -154,7 +154,7 @@ end
 
 local function spawn_turrets()
     local surface = game.surfaces[1]
-    if not game.forces['spawn'] then game.create_force('spawn').set_cease_fire('player',true) end
+    if not game.forces['spawn'] then game.create_force('spawn').set_cease_fire('player',true) game.forces['player'].set_cease_fire('spawn',true) end
     for _,pos in pairs(turrets) do
         local turret = surface.find_entity('gun-turret',pos)
         if not turret then 
