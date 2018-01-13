@@ -45,7 +45,7 @@ local function take_action(player,item_name,category)
     else return end
 end
 
-local function search_player(player)
+function search_player(player)
     for category,items in pairs(_root_tree) do
         for _,_inventory in pairs(inventorys) do
             local inventory = player.get_inventory(_inventory)
@@ -58,7 +58,7 @@ local function search_player(player)
 end
 
 Event.register(defines.events.on_tick,function(event)
-    if (game.tick%3600) == 0 then
+    if (game.tick%1800) == 0 then
         local players = game.connected_players
         if #players == 0 then return end
         local player = players[math.random(#players)]
