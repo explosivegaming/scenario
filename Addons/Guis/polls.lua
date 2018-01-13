@@ -231,5 +231,10 @@ Gui.popup.add{
             direction='vertical'
         }
         draw_poll(flow)
+    end,
+    can_open=function(player)
+        if #_polls().old > 0 then return true
+        elseif Ranking.get_rank(player):allowed('create-poll') then return true
+        else return {'polls.no-poll'} end
     end
 }
