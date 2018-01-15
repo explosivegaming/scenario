@@ -117,8 +117,8 @@ local go_to_warp = Gui.inputs.add{
     local cooldown = _warps().cooldowns[event.player_index] or 0
     local warp = _warps().warps[event.element.parent.name]
     if cooldown > 0 then player_return({'warp-system.cooldown',cooldown},nil,event) return end
-    if player.vehicle then player.vehicle.set_driver() end
-    if player.vehicle then player.vehicle.set_passenger() end
+    if player.vehicle then player.vehicle.set_driver(nil) end
+    if player.vehicle then player.vehicle.set_passenger(nil) end
     if player.vehicle then return end
     player.teleport(warp.surface.find_non_colliding_position('player',warp.position,32,1),warp.surface)
     if not Ranking.get_rank(player):allowed('always-warp') then 
