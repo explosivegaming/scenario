@@ -86,7 +86,17 @@ local jail = Ranking._group:create{
         'open_character_gui',
         'begin_mining',
         'start_walking',
-        'player_leave_game'
+        'player_leave_game',
+        'open_blueprint_library_gui',
+        'build_item',
+        'use_item',
+        'select_item',
+        'rotate_entity',
+        'open_train_gui',
+        'open_train_station_gui',
+        'open_gui',
+        'open_item',
+        'deconstruct'
     }
 }
 
