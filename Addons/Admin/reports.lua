@@ -121,13 +121,13 @@ local function give_punishment(player,by_player,reason)
         report_message(player,'<server>',reason)
     elseif punishment[1] == 'kick' then
         _reports().actions[player.name] = actions.kick
-        Admin.kick(player,by_player,'Too Many Warnings: '..warnings-(take_action-2)..' Also: '..reason)
+        Admin.kick(player,by_player,'Too Many Warnings: '..warnings-(take_action-1)..' Also: '..reason)
     elseif punishment[1] == 'temp-ban' then
         _reports().actions[player.name] = actions.temp
-        Admin.temp_ban(player,by_player,'Too Many Warnings: '..warnings-(take_action-2)..' Also: '..reason)
+        Admin.temp_ban(player,by_player,'Too Many Warnings: '..warnings-(take_action-1)..' Also: '..reason)
     elseif punishment[1] == 'ban' then
         _reports().actions[player.name] = actions.ban
-        Admin.ban(player,by_player,'Too Many Warnings: '..warnings-(take_action-2)..' Also: '..reason)
+        Admin.ban(player,by_player,'Too Many Warnings: '..warnings-(take_action-1)..' Also: '..reason)
     end
 end
 
@@ -256,7 +256,9 @@ Event.register(defines.events.on_tick,function(event)
                 local time_to_remove = _reports().remove_warnings_time[rank.power]
                 if (game.tick % time_to_remove) == 0 then
                     _reports().warnings[name]=warnings-1
-                    player_return({'reports.remove-warn',_reports().warnings[name],tick_to_display_format(time_to_remove)},defines.text_color.low,name)
+                    if _reports().warnings[name] > 5 then
+                        player_return({'reports.remove-warn',_reports().warnings[name],tick_to_display_format(time_to_remove)},defines.text_color.low,name)
+                    end
                 end
             end
         end

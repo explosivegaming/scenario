@@ -15,6 +15,7 @@ Event.register(defines.events.on_console_command,function(event)
     local data = {}
     data.title = string.gsub(command,'^%l',string.upper)
     data.by = event.player_index and game.players[event.player_index].name or '<server>'
+    if data.by == '<server>' then return end
     if command == 'config' or command == 'banlist' then
         discord_emit{
             title='Edit To '..data.title,
@@ -28,7 +29,7 @@ Event.register(defines.events.on_console_command,function(event)
             data.colour = Color.to_hex(defines.text_color.crit)
             data.reason = table.concat(args,' ',2)
         elseif command == 'kick' then
-            data.colour = Color.to_hex(defines.text_color.med)
+            data.colour = Color.to_hex(defines.text_color.high)
             data.reason = table.concat(args,' ',2)
         elseif command == 'unban' then data.colour = Color.to_hex(defines.text_color.low)
         elseif command == 'mute' then data.colour = Color.to_hex(defines.text_color.med)
