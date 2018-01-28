@@ -69,7 +69,7 @@ local function report_message(player,by_player,reason)
     discord_emit{
         title='Player Report',
         color=Color.to_hex(defines.text_color.med),
-        description='There was a player reported.',
+        description='A player was reported.',
         ['Player:']='<<inline>>'..player.name,
         ['By:']='<<inline>>'..by_player_name,
         ['Reason:']=reason
@@ -218,8 +218,8 @@ function Admin.temp_ban(player,by_player,reason)
     _reports().actions[player.name] = actions.temp
     discord_emit{
         title='Player Temp-Ban',
-        color=Color.to_hex(defines.text_color.med),
-        description='There was a player jailed.',
+        color=Color.to_hex(defines.text_color.high),
+        description='A player was jailed.',
         ['Player:']='<<inline>>'..player.name,
         ['By:']='<<inline>>'..by_player_name,
         ['Reason:']=append_name(reason,by_player_name)
