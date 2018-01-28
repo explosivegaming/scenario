@@ -209,5 +209,6 @@ end)
 function Admin.bring(player,by_player)
     local player = Game.get_player(player)
     local _player = Game.get_player(by_player)
+    if not player or not _player then return end
     player.teleport(_player.surface.find_non_colliding_position('player',_player.position,32,1),_player.surface)
 end
