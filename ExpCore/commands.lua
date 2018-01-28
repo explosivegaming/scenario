@@ -84,10 +84,12 @@ local function run_custom_command(command)
     if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 and not Ranking.get_rank(player_name):allowed(command.name) then
         player_return({'commands.unauthorized'},defines.text_color.crit)
         if game.player then game.player.play_sound{path='utility/cannot_build'} end
-        game.write_file('commands.log','\n'..game.tick
-            ..' Player: '..player_name
-            ..' Failed to use command (Unauthorized): '..command.name
+        game.write_file('commands.log',
+            game.tick
+            ..' Player: "'..player_name..'"'
+            ..' Failed to use command (Unauthorized): "'..command.name..'"'
             ..' With args of: '..table.to_string(command_args(command,command_data))
+            ..'\n'
         , true, 0)
         return
     end
@@ -96,10 +98,12 @@ local function run_custom_command(command)
     if not valid then
         player_return({'commands.invalid-inputs',command.name,command_inputs(command_data)},defines.text_color.high)
         if game.player then game.player.play_sound{path='utility/deconstruct_big'} end
-        game.write_file('commands.log','\n'..game.tick
-            ..' Player: '..player_name
-            ..' Failed to use command (Invalid Args): '..command.name
+        game.write_file('commands.log',
+            game.tick
+            ..' Player: "'..player_name..'"'
+            ..' Failed to use command (Invalid Args): "'..command.name..'"'
             ..' With args of: '..table.to_string(args)
+            ..'\n'
         , true, 0)
         return
     end
@@ -107,10 +111,12 @@ local function run_custom_command(command)
     local success, err = pcall(command_calls[command.name],command,args)
     if not success then error(err) end
     if err ~= commands.error then player_return({'commands.command-ran'},defines.text_color.info) end
-    game.write_file('commands.log','\n'..game.tick
-        ..' Player: '..player_name
-        ..' Used command: '..command.name
+    game.write_file('commands.log',
+        game.tick
+        ..' Player: "'..player_name..'"'
+        ..' Used command: "'..command.name..'"'
         ..' With args of: '..table.to_string(args)
+        ..'\n'
     , true, 0)
 end
 
