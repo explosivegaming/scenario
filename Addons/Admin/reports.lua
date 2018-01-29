@@ -197,7 +197,7 @@ function Admin.clear_player(player,by_player)
     Admin.clear_warings(player,by_player,true)
     Admin.clear_reports(player,by_player,true)
     _reports().actions[player.name]=actions.none
-    if Ranking.get_rank(player).group.name == 'Jail' then Ranking.revert(player,by_player) end
+    if Ranking.get_rank(player).group.name == 'Jail' then Server.interface(Ranking.revert,true,player,by_player) end
     discord_emit{
         title='Player Clear',
         color=Color.to_hex(defines.text_color.low),
@@ -227,7 +227,7 @@ function Admin.temp_ban(player,by_player,reason)
     game.print({'reports.temp-ban',player.name,by_player_name,reason},defines.text_color.info)
     Admin.move_inventory(player)
     Ranking._presets().last_jail = player.name
-    Ranking.give_rank(player,'Jail',by_player_name)
+    Server.interface(Ranking.give_rank,true,player,'Jail',by_player_name)
 end
 
 function Admin.is_banned(player)

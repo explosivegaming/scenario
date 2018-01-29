@@ -120,7 +120,7 @@ function Admin.ban(player,by_player,reason)
         ['Reason:']=reason
     }
     Admin.move_inventory(player)
-    game.ban_player(player,reason)
+    Server.interface(game.ban_player,true,player,reason)
 end
 
 Admin.kick_btn = Gui.inputs.add{
@@ -147,7 +147,7 @@ function Admin.kick(player,by_player,reason)
         ['Reason:']=reason
     }
     Admin.move_inventory(player)
-    game.kick_player(player,reason)
+    Server.interface(game.kick_player,true,player,reason)
 end
 
 Admin.jail_btn = Gui.inputs.add{
@@ -175,7 +175,7 @@ function Admin.jail(player,by_player,reason)
     }
     Admin.move_inventory(player)
     Ranking._presets().last_jail = player.name
-    Ranking.give_rank(player,'Jail',by_player_name)
+    Server.interface(Ranking.give_rank,true,player,'Jail',by_player_name)
 end
 
 Admin.go_to_btn = Gui.inputs.add{
