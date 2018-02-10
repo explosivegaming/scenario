@@ -52,9 +52,10 @@ Gui.left.add{
             name='scroll',
             type = 'scroll-pane',
             direction = 'vertical',
-            vertical_scroll_policy='always',
+            vertical_scroll_policy='auto',
             horizontal_scroll_policy='never'
         }
+        player_list.vertical_scroll_policy = 'auto'
         player_list.style.maximal_height=200
         for _,rank in pairs(Ranking._ranks()) do
             for _,player in pairs(rank:get_players(true)) do

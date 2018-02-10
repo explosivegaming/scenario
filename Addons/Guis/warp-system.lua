@@ -137,9 +137,10 @@ Gui.left.add{
         local warp_list = frame.add{
             type='scroll-pane',
             direction='vertical', 
-            vertical_scroll_policy='always', 
+            vertical_scroll_policy='auto', 
             horizontal_scroll_policy='never'
         }
+        warp_list.vertical_scroll_policy = 'auto'
         warp_list.style.maximal_height = 150
         local table = warp_list.add{
             type='table',
