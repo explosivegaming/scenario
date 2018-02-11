@@ -22,7 +22,8 @@ end
 
 function Admin.allowed(player)
     local player = Game.get_player(player)
-    return player.admin
+    local lowest_admin_power = Ranking.get_group('Admin').lowest.power
+    return lowest_admin_power <= Ranking.get_rank(player).power
 end
 
 function Admin.btn_flow(frame,buttons)
