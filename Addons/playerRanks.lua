@@ -118,8 +118,7 @@ groups['Admin']:add_rank{
     colour={r=0,g=170,b=0},
     disallow={
         'server_command'
-    },
-    is_admin = true
+    }
 }
 
 groups['User']:add_rank{
