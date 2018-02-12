@@ -347,7 +347,7 @@ Event.register(-1,function(event)
 end)
 
 Event.register(defines.events.on_tick,function(event)
-    if ((event.tick/(3600*game.speed))+(15/2))% 15 == 0 then
+    if (((event.tick+10)/(3600*game.speed))+(15/2))% 15 == 0 then
         -- this is the system to auto rank players
         if not Server or not Server._thread then
             for _,player in pairs(game.connected_players) do
