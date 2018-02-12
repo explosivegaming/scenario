@@ -157,7 +157,7 @@ function Gui.cam_link(data)
 end
 
 Event.register(defines.events.on_tick, function(event)
-	if gui.left and ((event.tick+10)/(3600*game.speed)) % 15 == 0 then
+	if Gui.left and ((event.tick+10)/(3600*game.speed)) % 15 == 0 then
 		Gui.left.update()
     end
     if Gui._global().cams and is_type(Gui._global().cams,'table') and #Gui._global().cams > 0 then
