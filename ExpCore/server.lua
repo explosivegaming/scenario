@@ -374,6 +374,7 @@ function Server._thread:on_event(event,callback)
 end
 
 Event.register(defines.events.on_tick,function(event)
+    if event.tick < 10 then return end
     local threads = Server._threads()
     if #threads.tick > 0 then Server.run_tick_threads() end
     if #threads.timeout > 0 then Server.check_timeouts() end
