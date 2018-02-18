@@ -149,12 +149,21 @@ end
 function Admin.report(player,by_player,reason)
     local player, by_player_name = valid_players(player,by_player)
     if not player or Ranking.get_rank(player):allowed('no-report') then return end
+    if Admin.is_banned(by_player) or Ranking.get_group(by_player).name == 'Jail' then return end
     if rank:allowed('varified') then 
         _reports().varified[player.name] = _reports().varified[player.name] or {} 
-        table.insert(_reports().varified[player.name],{by_player_name,reason})
+        local reports = _reports().varified[player.name]
+        for _,value in pairs(reports) do
+            if value[1] == by_player_name then return end
+        end
+        table.insert(reports,{by_player_name,reason})
     else
-        _reports().reports[player.name] = _reports().reports[player.name] or {} 
-        table.insert(_reports().reports[player.name],{by_player_name,reason}) 
+        _reports().reports[player.name] = _reports().reports[player.name] or {}
+        local reports = _reports().reports[player.name]
+        for _,value in pairs(reports) do
+            if value[1] == by_player_name then return end
+        end
+        table.insert(reports,{by_player_name,reason}) 
     end
     report_message(player,by_player,reason)
     cheak_reports(player)
@@ -232,6 +241,7 @@ end
 
 function Admin.is_banned(player)
     local player=Game.get_player(player)
+    if not player then return false end
     local action = _reports().actions[player.name]
     if action == actions.temp then return 'temp'
     elseif action == actions.ban then return true
