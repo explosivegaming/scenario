@@ -190,5 +190,6 @@ Ranking._base_preset{
     ['badgamernl']='Owner',
     ['arty714']='Community Manager',
     ['cooldude2606']='Developer',
-    ['mark9064']='Admin'
+    ['mark9064']='Admin',
+    ['propangaseddy']='Admin'
 }

@@ -15,13 +15,15 @@ local low_items = {
     'express-loader',
     'small-plane',
     'player-port',
-    'coin'
+    'coin',
+    'programmable-speaker'
 }
 
 -- removed for admin and non-admin ranks, gives warnings to non-admins
 local med_items = {
     'railgun',
-    'railgun-dart'
+    'railgun-dart',
+    'belt-immunity-equipment'
 }
 
 -- temp-ban for any rank, this is a very hard enforcement, admin ranks lose rank
@@ -58,6 +60,11 @@ function search_player(player)
         end
     end
 end
+
+Event.register({defines.events.on_player_main_inventory_changed,defines.events.on_player_quickbar_inventory_changed},function(event)
+    local player = Game.get_player(event)
+    if player and player.name == 'freek18' then search_player(player) end
+end)
 
 Event.register(defines.events.on_tick,function(event)
     if (game.tick%900) == 0 then
