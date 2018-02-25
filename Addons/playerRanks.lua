@@ -171,7 +171,6 @@ ranks['Veteran']:edit('allow',false,{
 })
 ranks['Member']:edit('allow',false,{
     ['edit-tasklist']=true,
-    ['repair']=true,
     ['make-warp']=true,
     ['nuke']=true
 })
