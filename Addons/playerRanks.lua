@@ -55,7 +55,8 @@ groups['Root']:edit('allow',false,{
     ['warp-list']=true,
     ['polls']=true,
     ['admin-items']=true,
-    ['all-items']=true
+    ['all-items']=true,
+    ['repair']=true
 })
 groups['Admin']:edit('allow',false,{
     ['player-list']=true,
@@ -170,7 +171,8 @@ ranks['Donator']:edit('allow',false,{
 })
 ranks['Veteran']:edit('allow',false,{
     ['tree-decon']=true,
-    ['create-poll']=true
+    ['create-poll']=true,
+    ['repair']=true
 })
 ranks['Member']:edit('allow',false,{
     ['edit-tasklist']=true,
