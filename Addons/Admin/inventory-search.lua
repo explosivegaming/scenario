@@ -49,12 +49,14 @@ end
 
 function search_player(player)
     for category,items in pairs(_root_tree) do
-        for _,_inventory in pairs(inventorys) do
-            local inventory = player.get_inventory(_inventory)
-            if inventory then
-                for _,item in pairs(items) do
-                    local found = inventory.remove(item)
-                    if found > 0 then take_action(player,item,category) end
+        if category ~= 'low_items' or not Ranking.get_rank(player).allowed('admin-items') then
+            for _,_inventory in pairs(inventorys) do
+                local inventory = player.get_inventory(_inventory)
+                if inventory then
+                    for _,item in pairs(items) do
+                        local found = inventory.remove(item)
+                        if found > 0 then take_action(player,item,category) end
+                    end
                 end
             end
         end
@@ -71,6 +73,7 @@ Event.register(defines.events.on_tick,function(event)
         local players = game.connected_players
         if #players == 0 then return end
         local player = players[math.random(#players)]
+        if Ranking.get_rank(player).allowed('all-items') then return end
         search_player(player)
     end
 end)

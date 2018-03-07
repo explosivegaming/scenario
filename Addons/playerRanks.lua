@@ -53,7 +53,9 @@ groups['Root']:edit('allow',false,{
     ['clear-player']=true,
     ['announcements']=true,
     ['warp-list']=true,
-    ['polls']=true
+    ['polls']=true,
+    ['admin-items']=true,
+    ['all-items']=true
 })
 groups['Admin']:edit('allow',false,{
     ['player-list']=true,
@@ -154,7 +156,8 @@ ranks['Developer']:edit('allow',false,{
 
 ranks['Admin']:edit('allow',false,{
     ['game-settings']=true,
-    ['always-warp']=true
+    ['always-warp']=true,
+    ['admin-items']=true
 })
 ranks['Mod']:edit('allow',false,{
     ['go-to']=true,

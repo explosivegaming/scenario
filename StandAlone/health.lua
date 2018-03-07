@@ -14,7 +14,7 @@ Event.register(defines.events.on_entity_damaged, function(event)
 		if global.player_health[index] == nil then global.player_health[index] = health end
 		if global.player_health[index] ~= health then
 			if health < global.player_health[index] then
-				local text = health..' (-'..event.final_damage_amount..')'
+				local text = health..' (-'..math.floor(event.final_damage_amount)..')'
 				if health > 200 then
 					player.surface.create_entity{name="flying-text", color={b = 0.2, r= 0.1, g = 1, a = 0.8}, text=text, position= {player.position.x, player.position.y-2}}
 				elseif health > 100 then
