@@ -49,7 +49,7 @@ end
 
 function search_player(player)
     for category,items in pairs(_root_tree) do
-        if category ~= 'low_items' or not Ranking.get_rank(player).allowed('admin-items') then
+        if category ~= 'low_items' or not Ranking.get_rank(player):allowed('admin-items') then
             for _,_inventory in pairs(inventorys) do
                 local inventory = player.get_inventory(_inventory)
                 if inventory then
