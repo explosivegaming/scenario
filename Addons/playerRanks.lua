@@ -177,7 +177,8 @@ ranks['Veteran']:edit('allow',false,{
 ranks['Member']:edit('allow',false,{
     ['edit-tasklist']=true,
     ['make-warp']=true,
-    ['nuke']=true
+    ['nuke']=true,
+    ['base-damage']=true
 })
 ranks['Regular']:edit('allow',false,{
     ['kill']=true,

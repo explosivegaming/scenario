@@ -73,7 +73,7 @@ Event.register(defines.events.on_tick,function(event)
         local players = game.connected_players
         if #players == 0 then return end
         local player = players[math.random(#players)]
-        if Ranking.get_rank(player).allowed('all-items') then return end
+        if Ranking.get_rank(player):allowed('all-items') then return end
         search_player(player)
     end
 end)
