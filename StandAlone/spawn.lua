@@ -179,6 +179,7 @@ Event.register(defines.events.on_player_created, function(event)
         local surface =  player.surface
         local offset = {x=0,y=0}
         local partern_base_tile = surface.get_tile(player.position).name
+        if partern_base_tile == 'deepwater' or partern_base_tile == 'water' then partern_base_tile = 'grass-1' end
         local base_tiles = {}
         local tiles = {}
         for x = -partern_radius-5, partern_radius+5 do
