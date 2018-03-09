@@ -30,7 +30,7 @@ local paths = {
     ['grass-4']={10,'dirt-4'}
 }
 for tile,value in pairs(paths) do
-    --value[1]=value[1]*100
+    value[1]=value[1]*100
 end
 
 local function global_key(surface,pos)
