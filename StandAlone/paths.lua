@@ -69,16 +69,16 @@ Event.register(defines.events.on_player_built_tile, function(event)
     local surface = game.surfaces[event.surface_index]
     local old_tiles = event.tiles
     for _,old_tile in pairs(old_tiles) do
-        if not paths[old_tile.old_tile.name] or not paths[surface.get_tile(old_tile.position).name] then remove_key(surface,pos) return end
         if old_tile.old_tile.name ~= 'refined-concrete' and old_tile.old_tile.name ~= 'refined-hazard-concrete-right' 
         and old_tile.old_tile.name ~= 'refined-hazard-concrete-left' and old_tile.old_tile.name ~= 'concrete'
         and old_tile.old_tile.name ~= 'hazard-concrete-right' and old_tile.old_tile.name ~= 'hazard-concrete-left'
         and old_tile.old_tile.name ~= 'stone-path' and old_tile.old_tile.name ~= 'water' and old_tile.old_tile.name ~= 'deep-water' then
             global_key(surface,old_tile.position)[1]=old_tile.old_tile.name
         end
+        if not paths[surface.get_tile(old_tile.position).name] then remove_key(surface,pos) return end
         global_key(surface,old_tile.position)[2]=paths[surface.get_tile(old_tile.position).name][1]
+        global_key(surface,old_tile.pos)[3] = event.tick
     end
-    global_key(surface,pos)[3] = event.tick
 end)
 
 Event.register(defines.events.on_player_mined_tile, function(event)
