@@ -26,8 +26,7 @@
 * Each file must be self contained with no _G varibles
 
 #### Forks and Pull Requests
-* We are happy for people to make pull requets if you wish to help make our server better
-* You can add a comment at the start of the file to mark any changes you make, for the credit
-* Your server is a comunity server, it is all about the people and feedback is good
-* Dont make small changes to the core files, please only big meaniful changes
-* Dont be afraid to make a pull request as if it fixes something then its a good change
+* We are happy for people to make pull requests if you wish to help make our server better
+* You can add comments at the start of files to mark any changes you make, so you are credited
+* Don't make small changes to the core files, please only big meaningful changes
+* Don't be afraid to make a pull request as if it fixes something then it's a good change
