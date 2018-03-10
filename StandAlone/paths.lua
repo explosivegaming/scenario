@@ -38,6 +38,7 @@ local function global_key(surface,pos)
     if not global.paths then global.paths = {} end
     if not global.paths[key] then 
         local tile = surface.get_tile(pos).name
+        if not paths[tile] then return end
         global.paths[key] = {tile,paths[tile][1]} 
     end
     return global.paths[key]
@@ -45,6 +46,7 @@ end
 
 local function down_grade(surface,pos)
     local tile = surface.get_tile(pos).name
+    if not paths[tile] then return end
     local new_tile = paths[tile][2]
     if new_tile == 'world-gen' then new_tile = global_key(surface,pos)[1] or 'grass-1' end
     surface.set_tiles{{name=new_tile,position=pos}}
