@@ -38,7 +38,6 @@ local function global_key(surface,pos)
     if not global.paths then global.paths = {} end
     if not global.paths[key] then 
         local tile = surface.get_tile(pos).name
-        if not paths[tile] then return end
         global.paths[key] = {tile,paths[tile][1]} 
     end
     return global.paths[key]
@@ -46,7 +45,6 @@ end
 
 local function down_grade(surface,pos)
     local tile = surface.get_tile(pos).name
-    if not paths[tile] then return end
     local new_tile = paths[tile][2]
     if new_tile == 'world-gen' then new_tile = global_key(surface,pos)[1] or 'grass-1' end
     surface.set_tiles{{name=new_tile,position=pos}}
@@ -57,6 +55,7 @@ Event.register(defines.events.on_player_built_tile, function(event)
     local surface = game.surfaces[event.surface_index]
     local old_tiles = event.tiles
     for _,old_tile in pairs(old_tiles) do
+        if not paths[old_tile.old_tile.name] or not paths[surface.get_tile(old_tile.position).name] then return end
         if old_tile.old_tile.name ~= 'refined-concrete' and old_tile.old_tile.name ~= 'refined-hazard-concrete-right' 
         and old_tile.old_tile.name ~= 'refined-hazard-concrete-left' and old_tile.old_tile.name ~= 'concrete'
         and old_tile.old_tile.name ~= 'hazard-concrete-right' and old_tile.old_tile.name ~= 'hazard-concrete-left'
@@ -71,6 +70,7 @@ Event.register(defines.events.on_player_mined_tile, function(event)
     local surface = game.surfaces[event.surface_index]
     local old_tiles = event.tiles
     for _,old_tile in pairs(old_tiles) do
+        if not paths[old_tile.old_tile.name] or not paths[surface.get_tile(old_tile.position).name] then return end
         global_key(surface,old_tile.position)[2]=paths[surface.get_tile(old_tile.position).name][1]
     end
 end)
@@ -79,6 +79,7 @@ Event.register(defines.events.on_player_changed_position, function(event)
     local player = Game.get_player(event)
     local surface = player.surface
     local pos = player.position
+    if not paths[surface.get_tile(pos).name] then return end
     global_key(surface,pos)[2] = global_key(surface,pos)[2]-1
     if global_key(surface,pos)[2] <= 0 then
         down_grade(surface,pos)
