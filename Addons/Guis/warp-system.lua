@@ -204,16 +204,18 @@ Event.register(defines.events.on_tick,function(event)
             if _warps().cooldowns[index] == 0 then player_return({'warp-system.cooldown-zero'},defines.text_color.low,index) end
         end
     end
-    for _,player in pairs(game.connected_players) do
-        local cooldown = _warps().cooldowns[player.index] or 0
-        if not Ranking.get_rank(player):allowed('always-warp') and cooldown == 0 then
-            if player.surface.get_tile(player.position).name == warp_tile 
-                or player.surface.get_tile(player.position).name == warp_partern 
-                and player.surface.name == 'nauvis' 
-                then mod_gui.get_frame_flow(player)['warp-list'].style.visible = true
-            elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then mod_gui.get_frame_flow(player)['warp-list'].style.visible = true
-            else mod_gui.get_frame_flow(player)['warp-list'].style.visible = false end
-        end
+end)
+
+Event.register(defines.events.on_player_changed_position, function(event)
+    local player = Game.get_player(event)
+    local cooldown = _warps().cooldowns[player.index] or 0
+    local tile = player.surface.get_tile(player.position).name
+    if not Ranking.get_rank(player):allowed('always-warp') and cooldown == 0 then
+        if tile == warp_tile or tile == warp_partern and player.surface.name == 'nauvis' then 
+            mod_gui.get_frame_flow(player)['warp-list'].style.visible = true
+        elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then 
+            mod_gui.get_frame_flow(player)['warp-list'].style.visible = true
+        else mod_gui.get_frame_flow(player)['warp-list'].style.visible = false end
     end
 end)
 
