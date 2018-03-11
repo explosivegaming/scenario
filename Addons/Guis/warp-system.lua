@@ -21,8 +21,7 @@ local warp_entities = {
 
 local warp_radius = 4
 local spawn_warp_scale = 5
-local warp_tile = 'lab-dark-1'
-local warp_partern = 'lab-dark-2'
+local warp_tile = 'tutorial-grid'
 local warp_limit = 60
 local warp_item = 'discharge-defense-equipment'
 local global_offset = {x=0,y=0}
@@ -73,7 +72,7 @@ local function make_warp_point(position,surface,force,name)
     surface.set_tiles(base_tiles)
     -- this adds the patern and entities
     for _,position in pairs(warp_tiles) do
-        table.insert(tiles,{name=warp_partern,position={position[1]+offset.x+global_offset.x,position[2]+offset.y+global_offset.y}})
+        table.insert(tiles,{name=warp_tile,position={position[1]+offset.x+global_offset.x,position[2]+offset.y+global_offset.y}})
     end
     surface.set_tiles(tiles)
     for _,entity in pairs(warp_entities) do
@@ -175,8 +174,7 @@ Gui.left.add{
         local cooldown = _warps().cooldowns[player.index] or 0
         if cooldown > 0 then frame.style.visible = false return
         elseif Ranking.get_rank(player):allowed('always-warp') then return
-        elseif player.surface.get_tile(player.position).name == warp_tile 
-            or player.surface.get_tile(player.position).name == warp_partern 
+        elseif player.surface.get_tile(player.position).name == warp_tile
             and player.surface.name == 'nauvis' 
             then return
         elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then return
@@ -185,8 +183,7 @@ Gui.left.add{
     can_open=function(player)
         local cooldown = _warps().cooldowns[player.index] or 0
         if Ranking.get_rank(player):allowed('always-warp') then return true
-        elseif player.surface.get_tile(player.position).name == warp_tile 
-        or player.surface.get_tile(player.position).name == warp_partern 
+        elseif player.surface.get_tile(player.position).name == warp_tile
         and player.surface.name == 'nauvis' 
         then return true
         elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then return true
@@ -211,7 +208,7 @@ Event.register(defines.events.on_player_changed_position, function(event)
     local cooldown = _warps().cooldowns[player.index] or 0
     local tile = player.surface.get_tile(player.position).name
     if not Ranking.get_rank(player):allowed('always-warp') and cooldown == 0 then
-        if tile == warp_tile or tile == warp_partern and player.surface.name == 'nauvis' then 
+        if tile == warp_tile and player.surface.name == 'nauvis' then 
             mod_gui.get_frame_flow(player)['warp-list'].style.visible = true
         elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then 
             mod_gui.get_frame_flow(player)['warp-list'].style.visible = true
