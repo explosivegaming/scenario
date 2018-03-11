@@ -1,5 +1,4 @@
-require("mod-gui")
-script.on_event(defines.events.on_player_joined_game,function(event)
+Event.register(defines.events.on_player_joined_game,function(event)
 	local player = game.players[event.player_index]
 	if mod_gui.get_frame_flow(player).time then return end
 	local frame = mod_gui.get_frame_flow(player).add{type='frame',name='time',direction='vertical',style=mod_gui.frame_style}
@@ -15,7 +14,7 @@ script.on_event(defines.events.on_player_joined_game,function(event)
 	table.add{type='label',name='ticks',caption='ticks'}
 end)
 
-script.on_event(defines.events.on_tick,function(event)
+Event.register(defines.events.on_tick,function(event)
 	if game.forces['player'].get_item_launched("satellite") > 0 then return end
 	local t = event.tick
 	local times = {math.floor(t/216000),math.floor(t/3600),math.floor(t/60),string.format('%.2f',t/60)}
@@ -29,7 +28,7 @@ script.on_event(defines.events.on_tick,function(event)
 	end
 end)
 
-script.on_event(defines.events.on_player_created, function(event)
+Event.register(defines.events.on_player_created, function(event)
 	local player = game.players[event.player_index]
 	player.insert{name="iron-plate", count=8}
 	player.insert{name="pistol", count=1}
@@ -42,15 +41,15 @@ script.on_event(defines.events.on_player_created, function(event)
 	else
 	  player.print({"msg-intro"})
 	end
-  end)
+end)
   
-  script.on_event(defines.events.on_player_respawned, function(event)
+Event.register(defines.events.on_player_respawned, function(event)
 	local player = game.players[event.player_index]
 	player.insert{name="pistol", count=1}
 	player.insert{name="firearm-magazine", count=10}
-  end)
+end)
   
-  script.on_event(defines.events.on_rocket_launched, function(event)
+Event.register(defines.events.on_rocket_launched, function(event)
 	local force = event.rocket.force
 	if event.rocket.get_item_count("satellite") == 0 then
 	  if (#game.players <= 1) then
@@ -80,5 +79,5 @@ script.on_event(defines.events.on_player_created, function(event)
 		frame.add{name="rocket_count", type = "label", caption=tostring(global.satellite_sent[force.name])}
 	  end
 	end
-  end)
+end)
   
