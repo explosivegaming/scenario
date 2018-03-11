@@ -14,3 +14,4 @@ local function require(path)
     if not success and return_err then error(err) end
 end
 -- this file will just contain all the diffrent requires
+require('speed-run')
