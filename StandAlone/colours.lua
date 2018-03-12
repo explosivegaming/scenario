@@ -11,11 +11,14 @@ local default_colours = {
 
 Event.register(defines.events.on_player_created, function(event)
     local player = game.players[event.player_index]
-    local colours = table.keys(defines.color)
-	player.color = defines.color[colours[math.random(#colours)]]
-    if default_colours[player.name] then
-        local c = default_colours[player.name]
-		player.color = Color.from_rgb(c.r,c.g,c.b)
+	local colours = table.keys(defines.color)
+	player.color = defines.color.black
+	while player.color == defines.colors.black do
+		player.color = defines.color[colours[math.random(#colours)]]
+		if default_colours[player.name] then
+			local c = default_colours[player.name]
+			player.color = Color.from_rgb(c.r,c.g,c.b)
+		end
 	end
 	player.chat_color = player.color
 end)
