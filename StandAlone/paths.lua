@@ -52,7 +52,7 @@ end
 local function clean_global()
     if not global.paths or not game then return end
     for key,tile in pairs(global.paths) do
-        if tile[3] < game.tick-clean_time then global.paths[key] = nil end
+        if tile[3] and tile[3] < game.tick-clean_time then global.paths[key] = nil end
     end
 end
 
