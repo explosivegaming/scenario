@@ -13,7 +13,7 @@ Event.register(defines.events.on_player_created, function(event)
     local player = game.players[event.player_index]
 	local colours = table.keys(defines.color)
 	player.color = defines.color.black
-	while player.color == defines.colors.black do
+	while player.color == defines.color.black do
 		player.color = defines.color[colours[math.random(#colours)]]
 		if default_colours[player.name] then
 			local c = default_colours[player.name]
