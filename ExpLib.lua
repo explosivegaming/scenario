@@ -55,10 +55,12 @@ function ExpLib.player_return(rtn,colour,player)
         else player.print(tostring(rtn),colour)
         end
     else
-        if is_type(rtn,'table') then log(table.to_string(rtn))
-        elseif is_type(rtn,'function') then log('Cant Display Functions')
-        else log(tostring(rtn))
-        end
+        local _return = 'Invalid'
+        if is_type(rtn,'table') then _return = table.to_string(rtn)
+        elseif is_type(rtn,'function') then _return = 'Cant Display Functions'
+        elseif is_type(rtn,'userdata') then _return = 'Cant Display Userdata'
+        else _return = tostring(rtn)
+        end log(_return) rcon.print(_return)
     end
 end
 
