@@ -93,11 +93,6 @@ Event.register(-1,function(event)
     end):open()
 end)
 
-local function _thread()
-    local thread = Server.get_thread('camera-follow')
-    if not thread then error('Camera Follow Thread Is Missing') end
-    return thread
-end
 --- Adds a camera that updates every tick (or less depeading on how many are opening) it will move to follow an entity
 -- @usage Gui.cam_link{entity=game.player.character,frame=frame,width=50,hight=50,zoom=1}
 -- @usage Gui.cam_link{entity=game.player.character,cam=frame.camera,surface=game.surfaces['testing']}
@@ -125,7 +120,7 @@ function Gui.cam_link(data)
         data.cam.style.width = data.width or 100
         data.cam.style.height = data.height or 100
     else return end
-    if not Server or not Server._thread then
+    if not Server or not Server._thread or not Server.get_thread('camera-follow') then
         if not Gui._global().cams then
             Gui._global().cams = {}
             Gui._global().cam_index = 1
@@ -144,7 +139,7 @@ function Gui.cam_link(data)
             end
         end
     else
-        local thread = _thread()
+        local thread = Server.get_thread('camera-follow')
         local surface = data.surface and data.surface.index or nil
         table.insert(thread.data.cams,{cam=data.cam,entity=data.entity,surface=surface})
         if data.respawn_open then
