@@ -11,7 +11,7 @@ Discord: https://discord.gg/r6dC2uK
 local const = 100
 -- given const = 100: admin+ has unlimited, admin has 100, mod has 50, member has 20
 
-commands.add_command('repair', 'Repairs all destoryed and damaged entites in an area', {'range'}, function(event,args)
+commands.add_command('repair', 'Repairs all destoryed and damaged entites in an area.', {'range'}, function(event,args)
     local range = tonumber(args.range)
     local player = Game.get_player(event)
     local rank = Ranking.get_rank(player)
