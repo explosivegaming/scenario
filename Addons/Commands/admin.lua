@@ -49,7 +49,7 @@ commands.add_command('clear-reports', 'Clears the reports on a player', {'player
     Admin.clear_reports(player,event.player_index)
 end)
 
-commands.add_command('clear-player', 'Clears reports and warnings and removes temp-ban', {'player'}, function(event,args)
+commands.add_command('clear-player', 'Clears reports and warnings, and removes temp-ban', {'player'}, function(event,args)
     local player = Game.get_player(args.player)
     local reason = args.reason
     if not player then player_return({'commands.invalid-player',args.player}) return commands.error end
