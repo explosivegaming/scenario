@@ -87,8 +87,8 @@ Event.register(defines.events.on_player_mined_tile, function(event)
     for _,old_tile in pairs(old_tiles) do
         if not paths[surface.get_tile(old_tile.position).name] then remove_key(surface,pos) return end
         global_key(surface,old_tile.position)[2]=paths[surface.get_tile(old_tile.position).name][1]
+        global_key(surface,old_tile.position)[3] = event.tick
     end
-    global_key(surface,old_tile.position)[3] = event.tick
 end)
 
 Event.register(defines.events.on_player_changed_position, function(event)
