@@ -100,7 +100,7 @@ local function cheak_reports(player)
     local reports = count_reports(player)
     if reports >= reports_needed_for_jail and _reports().actions[player.name] ~= 'report-jail' and Ranking.get_rank(player).group.name ~= 'Jail' then
         _reports().actions[player.name] = actions.report
-        Admin.jail(player,'<server>','To many user reports. Contact an Admin to be unjailed.')
+        Admin.jail(player,'<server>','Too many user reports. Contact an Admin to be unjailed.')
     end
 end
 
@@ -177,7 +177,7 @@ function Admin.clear_warings(player,by_player,no_emit)
         discord_emit{
             title='Player Clear',
             color=Color.to_hex(defines.text_color.low),
-            description='A player had there warnings cleared.',
+            description='A player had their warnings cleared.',
             ['Player:']='<<inline>>'..player.name,
             ['By:']='<<inline>>'..by_player_name,
         }
@@ -193,7 +193,7 @@ function Admin.clear_reports(player,by_player,no_emit)
         discord_emit{
             title='Player Clear',
             color=Color.to_hex(defines.text_color.low),
-            description='A player had there reports cleared.',
+            description='A player had their reports cleared.',
             ['Player:']='<<inline>>'..player.name,
             ['By:']='<<inline>>'..by_player_name,
         }
@@ -210,7 +210,7 @@ function Admin.clear_player(player,by_player)
     discord_emit{
         title='Player Clear',
         color=Color.to_hex(defines.text_color.low),
-        description='A player had there reports and warnings cleared.',
+        description='A player had their reports and warnings cleared.',
         ['Player:']='<<inline>>'..player.name,
         ['By:']='<<inline>>'..by_player_name,
     }
