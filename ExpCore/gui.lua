@@ -64,39 +64,35 @@ function Gui.set_dropdown_index(dropdown,_item)
     return dropdown
 end
 
-local function _thread()
-    local thread = Server.get_thread('camera-follow')
-    if not thread then
-        thread = Server.new_thread{
-            name='camera-follow',
-            data={cams={},cam_index=1,players={}}
-        }:on_event('tick',function(self) 
-            local _cam = self.data.cams[self.data.cam_index]
-            if not _cam then self.data.cam_index = 1 _cam = self.data.cams[self.data.cam_index] end
-            if not _cam then return end
-            if not _cam.cam.valid then table.remove(self.data.cams,self.data.cam_index)
-            elseif not _cam.entity.valid then table.remove(self.data.cams,self.data.cam_index)
-            else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end self.data.cam_index = self.data.cam_index+1
+Event.register(-1,function(event)
+    Server.new_thread{
+        name='camera-follow',
+        data={cams={},cam_index=1,players={}}
+    }:on_event('tick',function(self) 
+        local _cam = self.data.cams[self.data.cam_index]
+        if not _cam then self.data.cam_index = 1 _cam = self.data.cams[self.data.cam_index] end
+        if not _cam then return end
+        if not _cam.cam.valid then table.remove(self.data.cams,self.data.cam_index)
+        elseif not _cam.entity.valid then table.remove(self.data.cams,self.data.cam_index)
+        else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end self.data.cam_index = self.data.cam_index+1
+        end
+    end):on_event('error',function(self,err)
+        -- posible error handling if needed
+        error(err)
+    end):on_event(defines.events.on_player_respawned,function(self,event)
+        if self.data.players[event.player_index] then
+            local remove = {}
+            for index,cam in pairs(self.data.players[event.player_index]) do
+                Gui.cam_link{cam=cam,entity=Game.get_player(event).character}
+                if not cam.valid then table.insert(remove,index) end
             end
-        end):on_event('error',function(self,err)
-            -- posible error handling if needed
-            error(err)
-        end):on_event(defines.events.on_player_respawned,function(self,event)
-            if self.data.players[event.player_index] then
-                local remove = {}
-                for index,cam in pairs(self.data.players[event.player_index]) do
-                    Gui.cam_link{cam=cam,entity=Game.get_player(event).character}
-                    if not cam.valid then table.insert(remove,index) end
-                end
-                for _,index in pairs(remove) do
-                    table.remove(self.data.players[event.player_index],index)
-                end
+            for _,index in pairs(remove) do
+                table.remove(self.data.players[event.player_index],index)
             end
-        end)
-        thread:open()
-    end
-    return thread
-end
+        end
+    end):open()
+end)
+
 --- Adds a camera that updates every tick (or less depeading on how many are opening) it will move to follow an entity
 -- @usage Gui.cam_link{entity=game.player.character,frame=frame,width=50,hight=50,zoom=1}
 -- @usage Gui.cam_link{entity=game.player.character,cam=frame.camera,surface=game.surfaces['testing']}
@@ -124,7 +120,7 @@ function Gui.cam_link(data)
         data.cam.style.width = data.width or 100
         data.cam.style.height = data.height or 100
     else return end
-    if not Server or not Server._thread then
+    if not Server or not Server._thread or not Server.get_thread('camera-follow') then
         if not Gui._global().cams then
             Gui._global().cams = {}
             Gui._global().cam_index = 1
@@ -143,7 +139,7 @@ function Gui.cam_link(data)
             end
         end
     else
-        local thread = _thread()
+        local thread = Server.get_thread('camera-follow')
         local surface = data.surface and data.surface.index or nil
         table.insert(thread.data.cams,{cam=data.cam,entity=data.entity,surface=surface})
         if data.respawn_open then
