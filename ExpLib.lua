@@ -33,6 +33,31 @@ function ExpLib.is_type(v,test_type)
     return test_type and v and type(v) == test_type or not test_type and not v or false 
 end
 
+--- Prints to chat as if it were a player
+-- @usage server_print('Test','Cooldude2606')
+-- @param player_message the message to be printed in chat
+-- @param player_name the name of the player sending the message
+-- @param[opt] player_tag the tag apllied to the player's name
+-- @param[opt] plyaer_colour the colour of the message
+function ExpLib.server_print(player_message,player_name,player_tag,player_colour)
+    if not player_message then return 'No Message Found' end
+    local player = game.player or game.players[player_name]
+    local tag = player_tag or ''
+    local colour = player_colour or '#FFFFFF'
+    if player then
+        tag = player.tag
+        colour = player.color
+        player_name = player.name
+    else
+        if defines.color[player_colour] then
+            colour = defines.color[player_colour]
+        else
+            colour = Color.from_hex(colour)
+        end
+    end
+    game.print(player_name..' '..tag..': '..player_message,colour)
+end
+
 --- Returns a value to the player or if no player then log the return
 -- @usage a = 'to return'
 -- player_return(a)
