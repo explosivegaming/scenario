@@ -44,21 +44,17 @@ function ExpLib.server_print(player_message,player_name,player_tag,player_colour
     local player = game.player or game.players[player_name]
     local tag = player_tag and player_tag ~= '' and ' '..player_tag or ''
     local colour = player_colour and player_colour ~= '' and player_colour or '#FFFFFF'
-    player_return({game.tick..'-1',colour},nil,1)
     if player then
         tag = ' '..player.tag
         colour = player.color
         player_name = player.name
     else
-        if defines.color[player_colour] then
-            colour = defines.color[player_colour]
-            player_return({game.tick..'-2',colour},nil,1)
-        else
+        if colour:find('#') then
             colour = Color.from_hex(colour)
-            player_return({game.tick..'-3',colour},nil,1)
+        else
+            colour = defines.color[player_colour]
         end
     end
-    player_return({game.tick..'-4',colour},nil,1)
     game.print(player_name..tag..': '..player_message,colour)
 end
 
