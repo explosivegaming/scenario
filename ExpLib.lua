@@ -43,16 +43,16 @@ function ExpLib.server_print(player_message,player_name,player_tag,player_colour
     if not player_message then return 'No Message Found' end
     local player = game.player or game.players[player_name]
     local tag = player_tag and player_tag ~= '' and ' '..player_tag or ''
-    local colour = player_colour or '#FFFFFF'
+    local colour = player_colour and player_colour ~= '' and player_colour or '#FFFFFF'
     if player then
         tag = ' '..player.tag
         colour = player.color
         player_name = player.name
     else
-        if defines.color[player_colour] then
-            colour = defines.color[player_colour]
-        else
+        if colour:find('#') then
             colour = Color.from_hex(colour)
+        else
+            colour = defines.color[player_colour]
         end
     end
     game.print(player_name..tag..': '..player_message,colour)
