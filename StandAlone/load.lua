@@ -18,4 +18,4 @@ require('colours')
 require('health')
 require('spawn')
 require('starting-items')
-require('paths')
+--require('paths') -- takes up too much file size
