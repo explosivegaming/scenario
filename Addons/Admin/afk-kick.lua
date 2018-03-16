@@ -16,7 +16,7 @@ Event.register(-1,function(event)
         for _,player in pairs(game.connected_players) do
             local afk = Ranking.get_rank(player).max_afk_time or false
             if afk then
-                if player.afk_time > afk then game.kick_player(player) end
+                if player.afk_time > afk*3600 then game.kick_player(player) end
             end
         end
     end):on_event('error',function(self,err)
