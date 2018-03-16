@@ -108,7 +108,8 @@ root:add_rank{
     tag='[Root]',
     colour=defines.color.white,
     is_root=true,
-    is_admin = true
+    is_admin = true,
+    max_afk_time=false
 }
 
 admin:add_rank{
@@ -117,6 +118,8 @@ admin:add_rank{
     tag='[Admin]',
     colour={r=233,g=63,b=233},
     is_admin = true
+    ,
+    max_afk_time=false
 }
 
 user:add_rank{
@@ -128,7 +131,8 @@ user:add_rank{
         'set_auto_launch_rocket',
         'change_programmable_speaker_alert_parameters',
         'drop_item'
-    }
+    },
+    max_afk_time=60
 }
 user:add_rank{
     name='Guest',
@@ -142,7 +146,8 @@ user:add_rank{
         'launch_rocket',
         'reset_assembling_machine',
         'cancel_research'
-    }
+    },
+    max_afk_time=10
 }
 
 jail:add_rank{
@@ -150,7 +155,8 @@ jail:add_rank{
     short_hand='Jail',
     tag='[Jail]',
     colour={r=50,g=50,b=50},
-    disallow={}
+    disallow={},
+    max_afk_time=false
 }
 
 function Ranking._auto_edit_ranks()
