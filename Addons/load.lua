@@ -25,6 +25,7 @@ require('Admin/auto-message')
 require('Admin/tree-decon')
 require('Admin/inventory-search')
 require('Admin/base-damage')
+require('Admin/afk-kick')
 
 -- commands dir
 require('Commands/cheat-mode')
