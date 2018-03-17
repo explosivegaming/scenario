@@ -3,7 +3,7 @@
 #### Using The Core Files
 1. Copy the core folder and the StdLib File 
 2. Copy the control.lua and edit the load.lua in each file
-3. The require order is imporant in the control.lua
+3. The require order is important in the control.lua
 4. Use playerRanks.lua to edit the rank system
 5. Add your own files to the addons folder and require them in the load.lua
 
@@ -15,15 +15,15 @@
 #### Making Your Own Addons
 * You must have the core files and StdLib
 * The load.lua is the only file outside your own you need to edit
-* Keep the core files upto data with the core branch
+* Keep the core files updated with the core branch
 * Try not to edit StdLib or the core files
-* There is many comments inside the core files to descripe how to use them.
+* There is many comments inside the core files to describe how to use them.
 
 #### Stand Alone File
-* This file ocntains a few scripts from else where which dont require any lib
+* This file contains a few scripts from else where which don't require any lib
 * StdLib and ExpLib are the only exceptions as these are very basic functions
-* Any files added to this folder must be given proper sourses
-* Each file must be self contained with no _G varibles
+* Any files added to this folder must be given proper sources
+* Each file must be self contained with no _G variables
 
 #### Forks and Pull Requests
 * We are happy for people to make pull requests if you wish to help make our server better
