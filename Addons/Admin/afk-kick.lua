@@ -8,15 +8,23 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
+function get_afk_time(player)
+    local rank = Ranking.get_rank(player)
+    local count = #game.connected_players
+    local base = rank.base_afk_time or false
+    if not base then return false end
+    return (base/5)*count
+end
+
 Event.register(-1,function(event)
     Server.new_thread{
         name='afk-kick',
     }:on_event('tick',function(self)
         if (game.tick%3600) ~= 0 then return end
         for _,player in pairs(game.connected_players) do
-            local afk = Ranking.get_rank(player).max_afk_time or false
+            local afk = get_afk_time(player)
             if afk then
-                if player.afk_time > afk*3600 then game.kick_player(player,'AFK For Too Long ('..afk..' Minutes)') end
+                if player.afk_time > afk*3600 then game.kick_player(player,'AFK For Too Long ('..math.floor(afk)..' Minutes)') end
             end
         end
     end):on_event('error',function(self,err)
