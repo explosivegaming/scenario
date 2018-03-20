@@ -21,7 +21,7 @@ function Ranking.output_ranks(player)
         local admin = 'No'; if rank.is_root then admin = 'Root' elseif rank.is_admin then admin = 'Yes' end
         output=output..' Admin: '..admin
         output=output..' Group: '..rank.group.name
-        output=output..' AFK: '..tostring(rank.max_afk_time)
+        output=output..' AFK: '..tostring(rank.base_afk_time)
         player_return(output,rank.colour,player)
     end
 end
