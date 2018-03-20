@@ -49,7 +49,7 @@ groups['Root']:add_rank{
     time=nil,
     colour={r=170,g=0,b=0},
     is_admin = true,
-    max_afk_time=false
+    base_afk_time=false
 }
 groups['Root']:add_rank{
     name='Community Manager',
@@ -57,7 +57,7 @@ groups['Root']:add_rank{
     tag='[Com Mngr]',
     colour={r=150,g=68,b=161},
     is_admin = true,
-    max_afk_time=false
+    base_afk_time=false
 }
 groups['Root']:add_rank{
     name='Developer',
@@ -65,7 +65,7 @@ groups['Root']:add_rank{
     tag='[Dev]',
     colour={r=179,g=125,b=46},
     is_admin = true,
-    max_afk_time=false
+    base_afk_time=false
 }
 
 groups['Admin']:add_rank{
@@ -77,7 +77,7 @@ groups['Admin']:add_rank{
         'server_command'
     },
     is_admin = true,
-    max_afk_time=false
+    base_afk_time=false
 }
 
 groups['User']:add_rank{
@@ -86,7 +86,7 @@ groups['User']:add_rank{
     tag='[P2W]',
     colour={r=233,g=63,b=233},
     power=0,
-    max_afk_time=120
+    base_afk_time=120
 }
 groups['User']:add_rank{
     name='Veteran',
@@ -95,7 +95,7 @@ groups['User']:add_rank{
     time=600,
     colour={r=140,g=120,b=200},
     power=1,
-    max_afk_time=60
+    base_afk_time=60
 }
 groups['User']:add_rank{
     name='Regular',
@@ -104,7 +104,7 @@ groups['User']:add_rank{
     time=180,
     colour={r=24,g=172,b=188},
     power=3,
-    max_afk_time=30
+    base_afk_time=30
 }
 
 local ranks = Ranking._ranks(true)
