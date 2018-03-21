@@ -184,7 +184,6 @@ function Ranking.find_preset(player,tick)
     if current_rank.group.name == 'Jail' then return end
     if presets[string.lower(player.name)] then
         local rank = Ranking.get_rank(presets[string.lower(player.name)])
-        if current_rank.power >= rank.power then return end
         table.insert(ranks,rank)
     end
     if current_rank.power > meta_data.time_highest and tick_to_min(player.online_time) > meta_data.time_lowest then
