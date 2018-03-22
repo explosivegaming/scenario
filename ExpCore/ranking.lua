@@ -122,7 +122,7 @@ end
 function Ranking.give_rank(player,rank,by_player,tick)
     local print_colour = defines.text_color.info
     local tick = tick or game.tick
-    local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or game.player and game.player.name or 'server'
+    local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or game.player and game.player.name or is_type(by_player,'string') and by_player or 'server'
     local rank = Ranking.get_rank(rank) or Ranking.get_rank(Ranking._presets().meta.default)
     local player = Game.get_player(player) or error('No Player To Give Rank')
     local old_rank = Ranking.get_rank(player) or Ranking.get_rank(Ranking._presets().meta.default)
