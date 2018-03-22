@@ -139,7 +139,7 @@ function Ranking.give_rank(player,rank,by_player,tick)
     player.tag = rank.tag
     if not old_rank.group.name == 'Jail' then Ranking._presets().old[player.index] = rank.name end
     player.admin = rank.is_admin or false
-    if defines.events.rank_change then 
+    if defines.events.rank_change then
         script.raise_event(defines.events.rank_change,{
             name=defines.events.rank_change,
             tick=tick, 
@@ -159,6 +159,17 @@ function Ranking.give_rank(player,rank,by_player,tick)
             ['Reason:']='No Reason'
         }
     end
+    game.write_file('ranking.json',
+        table.json({
+            tick=tick,
+            play_time=player.online_time,
+            player_name=player.name,
+            by_player_name=by_player_name,
+            new_rank=rank.name,
+            old_rank=old_rank.name,
+            power_increase=(old_rank.power-rank.power)
+        })..'\n'
+    , true, 0)
 end
 
 --- Revert the last change to a players rank
