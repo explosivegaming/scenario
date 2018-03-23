@@ -51,7 +51,7 @@ local player_drop_down = Gui.inputs.add_drop_down('player-drop-down-admin-comman
 end)
 
 local reason_input = Gui.inputs.add_text('reason-input-admin-commands',false,'Enter Reason',function(player,text,element)
-    if string.len(text) < 20 then 
+    if string.len(text) < 20 or text == 'Enter Reason' then 
         element.parent.warning.caption = {'admin-commands.short-reason'}
     else
         element.parent.warning.caption = ''
@@ -92,6 +92,7 @@ local take_action = Gui.inputs.add{
     local _rank = Ranking.get_rank(_player)
     if rank.power >= _rank.power then dropdowns.warning.caption = {'admin-commands.rank-high'} return end
     local _reason = dropdowns['reason-input-admin-commands'] and dropdowns['reason-input-admin-commands'].text
+    if _reason == 'Enter Reason' then return end
     Admin.take_action(_action,_player,event.player_index,_reason)
     Gui.center.clear(event)
 end)
