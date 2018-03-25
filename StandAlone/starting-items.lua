@@ -1,15 +1,7 @@
---[[
-Explosive Gaming
 
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
---Please Only Edit Below This Line-----------------------------------------------------------
---for each item the key is the name and the value is the count given
+-- made by cooldude - this just allows condidtions on stating items and custom ammounts to be added, ie more iron made means more starting iron
+
 local items = {
-	['stone-wall']=function(player,made) return 100 end,
 	['iron-plate']=function(player,made) if tick_to_min(game.tick) < 5 then return 8 else return (made*10)/math.pow(tick_to_min(game.tick),2) end end,
 	['copper-plate']=function(player,made) if tick_to_min(game.tick) < 5 then return 0 else return (made*8)/math.pow(tick_to_min(game.tick),2) end end,
 	['electronic-circuit']=function(player,made) if tick_to_min(game.tick) < 5 then return 0 else return (made*6)/math.pow(tick_to_min(game.tick),2) end end,

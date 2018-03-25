@@ -14,8 +14,9 @@ local function require(path)
     if not success and return_err then error(err) end
 end
 -- this file will just contain all the diffrent requires
-require('Factorio Starting Items')
+require('body-marker')
 require('one-hour-peace')
-require('Lazy Colours')
-require('Show Health')
-require('Spawn')
+require('colours')
+require('health')
+require('spawn')
+require('starting-items')

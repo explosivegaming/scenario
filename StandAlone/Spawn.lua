@@ -1,12 +1,6 @@
---[[
-Explosive Gaming
 
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
---Please Only Edit Below This Line-----------------------------------------------------------
+-- made by cooldude - this makes a spawn area and auto refill turents to protect the afk people, idk what it is at this point, but feel ffree to try and make it yours
+
 --[[
 note for positions
 {-1,-1} {0,-1} {1,-1}
@@ -140,17 +134,52 @@ local entitys = {
     {"stone-wall",9,8},{"stone-wall",9,9}
 }
 
+local turrets = {{-3,-3},{-3,3},{3,-3},{3,3}}
+local turret_ammo = 'uranium-rounds-magazine'
+
 local global_offset = {x=0,y=-2}
 local decon_radius = 20
 local decon_tile = 'concrete'
 local partern_radius = 50
 local partern_tile = 'stone-path'
 
+local function afk_belt(surface,offset)
+    local belts = {{-0.5,-0.5,2},{0.5,-0.5,4},{-0.5,0.5,0},{0.5,0.5,6}}
+    for _,pos in pairs(belts) do
+        local position = {pos[1]+offset[1],pos[2]+offset[2]}
+        local belt = surface.create_entity{name='transport-belt',position=position,force='neutral',direction=pos[3]}
+        belt.destructible = false; belt.health = 0; belt.minable = false; belt.rotatable = false
+    end
+end
+
+local function spawn_turrets()
+    local surface = game.surfaces[1]
+    if not game.forces['spawn'] then game.create_force('spawn').set_cease_fire('player',true) game.forces['player'].set_cease_fire('spawn',true) end
+    for _,pos in pairs(turrets) do
+        local turret = surface.find_entity('gun-turret',pos)
+        if not turret then 
+            turret = surface.create_entity{name='gun-turret',position=pos,force='spawn'} 
+            turret.destructible = false; turret.health = 0; turret.minable = false; turret.rotatable = false; turret.operable = false; turret.health = 0
+        end
+        if turret.get_inventory(defines.inventory.turret_ammo).can_insert{name=turret_ammo,count=10} then
+            turret.get_inventory(defines.inventory.turret_ammo).insert{name=turret_ammo,count=10}
+        end
+    end
+end
+
+Event.register(defines.events.on_tick,function(event)
+    if event.tick % 3600 then
+        spawn_turrets()
+    end
+end)
+
 Event.register(defines.events.on_player_created, function(event)
     if event.player_index == 1 then
-        local surface =  game.players[event.player_index].surface
-        local offset = game.players[event.player_index].position
-        local partern_base_tile = surface.get_tile(offset).name
+        local player = Game.get_player(event)
+        local surface =  player.surface
+        local offset = {x=0,y=0}
+        local partern_base_tile = surface.get_tile(player.position).name
+        if partern_base_tile == 'deepwater' or partern_base_tile == 'water' then partern_base_tile = 'grass-1' end
         local base_tiles = {}
         local tiles = {}
         for x = -partern_radius-5, partern_radius+5 do
@@ -173,5 +202,12 @@ Event.register(defines.events.on_player_created, function(event)
             local entity = surface.create_entity{name=entity[1],position={entity[2]+offset.x+global_offset.x,entity[3]+offset.y+global_offset.y},force='neutral'}
             entity.destructible = false; entity.health = 0; entity.minable = false; entity.rotatable = false
         end
+        spawn_turrets()
+        afk_belt(surface,{offset.x-5,offset.y-5})
+        afk_belt(surface,{offset.x+5,offset.y-5})
+        afk_belt(surface,{offset.x-5,offset.y+5})
+        afk_belt(surface,{offset.x+5,offset.y+5})
+        player.force.set_spawn_position(offset,surface)
+        player.teleport(offset,surface)
     end
 end)
