@@ -25,9 +25,9 @@ Event.register(defines.events.on_chunk_generated,function(event)
     local scale = math.abs(chunk_delta)/(starting_area^2)
     
     if scale > 1 then
-        local base_spawn = 1.1
+        local base_spawn = 0.4
         local min = base_spawn*scale
-        local max = min+scale
+        local max = min+2
 		local spawns = math.abs(math.random(min,max)-enemies)
 		
 		for i = 0, spawns do
