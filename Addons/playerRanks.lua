@@ -98,6 +98,7 @@ groups['Root']:add_rank{
     time=nil,
     colour={r=170,g=0,b=0},
     is_admin = true,
+    is_spectator=true,
     base_afk_time=false
 }
 groups['Root']:add_rank{
@@ -106,6 +107,7 @@ groups['Root']:add_rank{
     tag='[Com Mngr]',
     colour={r=150,g=68,b=161},
     is_admin = true,
+    is_spectator=true,
     base_afk_time=false
 }
 groups['Root']:add_rank{
@@ -114,6 +116,7 @@ groups['Root']:add_rank{
     tag='[Dev]',
     colour={r=179,g=125,b=46},
     is_admin = true,
+    is_spectator=true,
     base_afk_time=false
 }
 
@@ -126,6 +129,7 @@ groups['Admin']:add_rank{
         'server_command'
     },
     is_admin = true,
+    is_spectator=true,
     base_afk_time=false
 }
 
@@ -135,6 +139,7 @@ groups['User']:add_rank{
     tag='[P2W]',
     colour={r=233,g=63,b=233},
     power=0,
+    is_spectator=true,
     base_afk_time=120
 }
 groups['User']:add_rank{

@@ -108,7 +108,8 @@ root:add_rank{
     tag='[Root]',
     colour=defines.color.white,
     is_root=true,
-    is_admin = true,
+    is_admin=true,
+    is_spectator=true,
     base_afk_time=false
 }
 
@@ -117,8 +118,8 @@ admin:add_rank{
     short_hand='Admin',
     tag='[Admin]',
     colour={r=233,g=63,b=233},
-    is_admin = true
-    ,
+    is_admin=true,
+    is_spectator=true,
     base_afk_time=false
 }
 
