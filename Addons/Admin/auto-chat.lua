@@ -19,7 +19,7 @@ local messages = {
     ['commands']={'chat-bot.custom-commands'},
     ['softmod']={'chat-bot.softmod'},
     ['script']={'chat-bot.softmod'},
-    ['afk']=function(_player) local max=_player for _,player in pairs(game.connected_players) do if max.afk_time < player.afk_time then max=player end end {'chat-bot.afk',max.name,tick_to_display_format(max.afk_time)} end
+    ['afk']=function(_player) local max=_player for _,player in pairs(game.connected_players) do if max.afk_time < player.afk_time then max=player end end return {'chat-bot.afk',max.name,tick_to_display_format(max.afk_time)} end
 }
 
 -- white spaces removed and made into lower
