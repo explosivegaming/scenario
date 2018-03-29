@@ -20,6 +20,10 @@ local messages = {
     ['script']={'chat-bot.softmod'},
     ['link']={'chat-bot.links'},
     ['links']={'chat-bot.links'},
+    ['loop']={'chat-bot.loops'},
+    ['loops']={'chat-bot.loops'},
+    ['roundabout']={'chat-bot.loops'},
+    ['roundabouts']={'chat-bot.loops'},
     ['afk']=function(_player) local max=_player for _,player in pairs(game.connected_players) do if max.afk_time < player.afk_time then max=player end end return {'chat-bot.afk',max.name,tick_to_display_format(max.afk_time)} end
 }
 
