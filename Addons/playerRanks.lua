@@ -56,7 +56,8 @@ groups['Root']:edit('allow',false,{
     ['polls']=true,
     ['admin-items']=true,
     ['all-items']=true,
-    ['repair']=true
+    ['repair']=true,
+    ['global-chat']=true
 })
 groups['Admin']:edit('allow',false,{
     ['player-list']=true,
@@ -73,7 +74,8 @@ groups['Admin']:edit('allow',false,{
     ['clear-player']=true,
     ['announcements']=true,
     ['warp-list']=true,
-    ['polls']=true
+    ['polls']=true,
+    ['global-chat']=true
 })
 groups['User']:edit('allow',false,{
     ['player-list']=true,
@@ -179,7 +181,7 @@ ranks['Mod']:edit('allow',false,{
 })
 
 ranks['Donator']:edit('allow',false,{
-    
+    ['global-chat']=true
 })
 ranks['Veteran']:edit('allow',false,{
     ['tree-decon']=true,
