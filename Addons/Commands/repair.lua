@@ -8,6 +8,15 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
+-- these items are not repaired, true means it is blocked
+local disallow = {
+    ['loader']=true,
+    ['fast-loader']=true,
+    ['express-loader']=true,
+    ['electric-energy-interface']=true,
+    ['infinity-chest']=true
+}
+
 local const = 100
 -- given const = 100: admin+ has unlimited, admin has 100, mod has 50, member has 20
 
@@ -22,7 +31,11 @@ commands.add_command('repair', 'Repairs all destoryed and damaged entites in an 
     for x = -range-2, range+2 do
         for y = -range-2, range+2 do
             if x^2+y^2 < range^2 then
-                for key, entity in pairs(player.surface.find_entities_filtered({area={{x+center.x,y+center.y},{x+center.x+1,y+center.y+1}},type='entity-ghost'})) do entity.revive() end
+                for key, entity in pairs(player.surface.find_entities_filtered({area={{x+center.x,y+center.y},{x+center.x+1,y+center.y+1}},type='entity-ghost'})) do
+                    if not disallow[entity.name] then
+                        entity.revive()
+                    else player_return('You have repaired: '..entity.name..' this item is not allowed.',defines.text_color.crit,player) Admin.temp_ban(player,'<server>','Attempt To Repair A Banned Item') entity.destroy() end
+                end
                 for key, entity in pairs(player.surface.find_entities({{x+center.x,y+center.y},{x+center.x+1,y+center.y+1}})) do if entity.health then entity.health = 10000 end end
             end
         end
