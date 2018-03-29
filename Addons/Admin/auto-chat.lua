@@ -10,7 +10,6 @@ Discord: https://discord.gg/r6dC2uK
 
 -- white spaces removed and made into lower
 -- these messages are sent only to the player
-local auto_chat = '[Chat Bot]: '
 local messages = {
     ['discord']={'chat-bot.discord'},
     ['expgaming']={'chat-bot.website'},
