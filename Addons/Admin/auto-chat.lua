@@ -18,6 +18,8 @@ local messages = {
     ['commands']={'chat-bot.custom-commands'},
     ['softmod']={'chat-bot.softmod'},
     ['script']={'chat-bot.softmod'},
+    ['link']={'chat-bot.links'},
+    ['links']={'chat-bot.links'},
     ['afk']=function(_player) local max=_player for _,player in pairs(game.connected_players) do if max.afk_time < player.afk_time then max=player end end return {'chat-bot.afk',max.name,tick_to_display_format(max.afk_time)} end
 }
 
@@ -32,7 +34,10 @@ local commands = {
     ['dev']={'chat-bot.not-real-dev'},
     ['blame']=function(player) local names = {'Cooldude2606','arty714','badgamernl',player.name} return {'chat-bot.blame',names[math.random(#names)]} end,
     ['readme']={'chat-bot.read-readme'},
-} 
+    ['magic']={'chat-bot.magic'},
+    ['aids']={'chat-bot.aids'},
+    ['riot']={'chat-bot.riot'}
+}
 
 Event.register(defines.events.on_console_chat,function(event)
     local player = Game.get_player(event)
