@@ -31,9 +31,9 @@ Event.register(-1,function(event)
         local _low = Ranking.get_rank(data.low_rank)
         Ranking.print(_high,{'auto-message.players-online',#game.connected_players},nil,true)
         Ranking.print(_high,{'auto-message.map-time',tick_to_display_format(game.tick)},nil,true)
-        for _,line in pairs(data.low) do
+        --[[for _,line in pairs(data.low) do
             Ranking.print(_low,line,nil,true)
-        end
+        end]]
         self.reopen = true
     end):on_event('error',function(self,err)
         discord_emit{
