@@ -26,13 +26,12 @@ local messages = {
 -- these are global chat commands that can be used
 -- comands start with ! (all messages are also commands)
 local command_syntax = '!'
-local names = {'Cooldude2606','arty714','badgamernl'}
 local commands = {
     ['online']=function(player) return {'chat-bot.players-online',#game.connected_players} end,
     ['playtime']=function(player) return {'chat-bot.map-time',tick_to_display_format(game.tick)} end,
     ['players']=function(player) return {'chat-bot.players',#game.players} end,
     ['dev']={'chat-bot.not-real-dev'},
-    ['blame']=function(player) local _names = {unpack(names),player.name} local name = _names[math.random(#_names)] return {'chat-bot.blame',name} end,
+    ['blame']=function(player) local names = {'Cooldude2606','arty714','badgamernl',player.name} return {'chat-bot.blame',names[math.random(#names)]} end,
     ['readme']={'chat-bot.read-readme'},
 } 
 
