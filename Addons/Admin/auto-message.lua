@@ -16,11 +16,11 @@ Event.register(-1,function(event)
             high_rank= 'Owner',
             low_rank= 'Regular',
             low={
-                {'auto-message.join-us'},
-                {'auto-message.discord'},
-                {'auto-message.website'},
-                {'auto-message.custom-commands'},
-                {'auto-message.read-readme'}
+                {'chat-bot.join-us'},
+                {'chat-bot.discord'},
+                {'chat-bot.website'},
+                {'chat-bot.custom-commands'},
+                {'chat-bot.read-readme'}
             }
         }
     }:on_event('timeout',function(self)
@@ -28,13 +28,24 @@ Event.register(-1,function(event)
         if not data.high_rank or not data.low_rank
         or not data.low then self.reopen = false return end
         local _high = Ranking.get_rank(data.high_rank)
-        local _low = Ranking.get_rank(data.low_rank)
-        Ranking.print(_high,{'auto-message.players-online',#game.connected_players},nil,true)
-        Ranking.print(_high,{'auto-message.map-time',tick_to_display_format(game.tick)},nil,true)
-        --[[for _,line in pairs(data.low) do
+        game.print{'chat-bot.message',{'chat-bot.players-online',#game.connected_players}}
+        game.print{'chat-bot.message',{'chat-bot.map-time',tick_to_display_format(game.tick)}}
+        --[[local _low = Ranking.get_rank(data.low_rank)
+        Ranking.print(_high,{'chat-bot.players-online',#game.connected_players},nil,true)
+        Ranking.print(_high,{'chat-bot.map-time',tick_to_display_format(game.tick)},nil,true)
+        for _,line in pairs(data.low) do
             Ranking.print(_low,line,nil,true)
         end]]
         self.reopen = true
+    end):on_event(defines.events.on_player_joined_game,function(self,event)
+        local player = Game.get_player(event)
+        if not player then return end
+        local data = self.data
+        if not data.high_rank or not data.low_rank
+        or not data.low then self.reopen = false return end
+        for _,message in pairs(data.low) do
+            player_return({'chat-bot.message',message},nil,player)
+        end
     end):on_event('error',function(self,err)
         discord_emit{
             title='Auto Message Error',
