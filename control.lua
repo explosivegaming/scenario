@@ -22,6 +22,13 @@ error = function(err)
         _error(err)
     end
 end
+-- replaces the base require function
+require_return_err = false
+_require = require
+local function require(path)
+    local success, err = pcall(_require,path)
+    if not success and require_return_err then error(err) end
+end
 
 require("mod-gui")
 -- loads the stdlib and allows Core Game and Event
