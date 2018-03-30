@@ -14,6 +14,9 @@ error = function(err)
     if _G.discord_emit and game then
         local color = _G.Color and Color.to_hex(defines.text_color.bg) or '0x0'
         discord_emit{title='SCRIPT ERROR',color=color,description='There was an error in the script @Developers ',Error=err}
+    elseif _G.error_handle and type(error_handle) == 'function' then
+        local success, _err = error_handle(err)
+        if not success then _error({handle=_err,err=err}) end
     elseif _G.Game and game then
         if Game.print_all(err) == 0 then
             _error(err)
@@ -23,11 +26,12 @@ error = function(err)
     end
 end
 -- replaces the base require function
-require_return_err = false
+require_return_err = false -- set to false when removing files; set to true for debuging
 _require = require
-local function require(path)
-    local success, err = pcall(_require,path)
-    if not success and require_return_err then error(err) end
+require = function(path)
+    local _return = {pcall(_require,path)}
+    if not table.remove(_return, 1) and require_return_err then error(unpack(_return)) end
+    return unpack(_return)
 end
 
 require("mod-gui")
