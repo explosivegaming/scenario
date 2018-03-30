@@ -1,5 +1,5 @@
 
--- this was just taken from some where
+-- This was just taken from somewhere
 -- /interface local base_spawn = 1.2 local chunk_delta = ((player.position.x)^2)+((player.position.y)^2)  local scale=math.abs(chunk_delta)/((4*32)^2) return {scale=scale,min=base_spawn*scale,max=(base_spawn*scale)+scale}
 
 Event.register(defines.events.on_chunk_generated,function(event)
@@ -11,14 +11,14 @@ Event.register(defines.events.on_chunk_generated,function(event)
         ["high"] = 6*32,
         ["very-high"] = 8*32
         ]]
-        -- due it it being round and not squre i have added two extra chunks
+        -- Due to it being round and not square, I have added two extra chunks
         ["very-low"] = 4*32,
         ["low"] = 5*32,
         ["normal"] = 6*32,
         ["high"] = 8*32,
         ["very-high"] = 10*32 
     }
-	local surface = game.surfaces[1]
+    local surface = game.surfaces[1]
     local enemies = surface.count_entities_filtered{area=event.area, force= "enemy"}
     local starting_area = areas[surface.map_gen_settings.starting_area]
     local chunk_delta = ((event.area.left_top.x+15)^2)+((event.area.left_top.y+15)^2)
