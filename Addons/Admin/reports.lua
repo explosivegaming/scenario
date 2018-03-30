@@ -10,7 +10,7 @@ Discord: https://discord.gg/r6dC2uK
 
 local report_to_warnings = 1 -- used in count_reports
 local varified_to_warings = 3 -- used in count_reports
-local reports_needed_for_jail = 10
+local reports_needed_for_jail = 6
 local min_time_to_remove_warning = 18000 -- this is in ticks
 local take_action = 8 -- below this number no action is taken, the first admin given warning jumps to this number
 local punishments = {
