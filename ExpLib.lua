@@ -39,11 +39,13 @@ end
 -- @param player_name the name of the player sending the message
 -- @param[opt] player_tag the tag apllied to the player's name
 -- @param[opt] plyaer_colour the colour of the message
-function ExpLib.server_print(player_message,player_name,player_tag,player_colour)
+-- @param[opt] prefix add a prefix before the chat eg [IRC]
+function ExpLib.server_print(player_message,player_name,player_tag,player_colour,prefix)
     if not player_message then return 'No Message Found' end
     local player = game.player or game.players[player_name]
     local tag = player_tag and player_tag ~= '' and ' '..player_tag or ''
     local colour = player_colour and player_colour ~= '' and player_colour or '#FFFFFF'
+    local prefix = prefix and prefix..' ' or ''
     if player then
         tag = ' '..player.tag
         colour = player.color
@@ -55,7 +57,7 @@ function ExpLib.server_print(player_message,player_name,player_tag,player_colour
             colour = defines.color[player_colour]
         end
     end
-    game.print(player_name..tag..': '..player_message,colour)
+    game.print(prefix..player_name..tag..': '..player_message,colour)
 end
 
 --- Returns a value to the player or if no player then log the return
