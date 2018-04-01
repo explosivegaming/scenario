@@ -160,7 +160,7 @@ end
 -- @return either true false if setting or the date time and tick off set
 function Sync.time(set)
     local info = Sync.info()
-    if not set then return info.time..' (+'..(game.tick-info.time_set)..'T)'
+    if not set then return info.time..' (+'..(game.tick-info.time_set[1])..' Ticks)'
     else
         if not is_type(set,'string') then return false end
         info.time = set
