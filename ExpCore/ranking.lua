@@ -137,7 +137,7 @@ function Ranking.give_rank(player,rank,by_player,tick)
     -- rank change
     player.permission_group = game.permissions.get_group(rank.name)
     player.tag = rank.tag
-    if old_rank.group.name ~= 'Jail' then Ranking._presets().old[player.index] = rank.name end
+    if old_rank.group.name ~= 'Jail' then Ranking._presets().old[player.index] = old_rank.name end
     player.admin = rank.is_admin or false
     player.spectator = rank.is_spectator or false
     if defines.events.rank_change then
