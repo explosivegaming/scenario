@@ -132,6 +132,8 @@ function Sync.info(set)
     if not global.exp_core.sync then global.exp_core.sync = {
         server_name='Factorio Server',
         reset_time='On Demand',
+        time='Day Mth 00 00:00:00 UTC Year',
+        time_set=0,
         last_update=0,
         time_period=18000,
         online=#game.connected_players,
@@ -148,6 +150,21 @@ function Sync.info(set)
         for key,value in pairs(set) do 
             global.exp_core.sync[key] = value
         end
+        return true
+    end
+end
+
+--- used to return the global time and set its value
+-- @usage Sync.time('Sun Apr  1 18:44:30 UTC 2018')
+-- @tparam[opt=nil] string the date time to be set
+-- @return either true false if setting or the date time and tick off set
+function Sync.time(set)
+    local info = Sync.info()
+    if not set then return info.time..'('..(game.tick-info.time_set)..')'
+    else
+        if not is_type(set,'string') then return false end
+        info.time = set
+        info.time_set = game.tick
         return true
     end
 end
