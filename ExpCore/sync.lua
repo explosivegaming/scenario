@@ -110,7 +110,9 @@ function Sync.count_ranks()
     local _ranks = {}
     for power,rank in pairs(Ranking._ranks()) do
         local players = rank:get_players()
+        for k,player in pairs(players) do players[k] = player.name end
         local online = rank:get_players(true)
+        for k,player in pairs(online) do online[k] = player.name end
         _ranks[rank.name] = {players=players,online=online,n_players=#players,n_online=#online}
     end
     return _ranks
@@ -125,13 +127,14 @@ function Sync.info(set)
     if not global.exp_core.sync then global.exp_core.sync = {
         server_name='Factorio Server',
         reset_time='On Demand',
+        last_update=0,
         time_period=18000,
         online=#game.connected_players,
         players=#game.players,
         admins=Sync.count_admins(),
         afk=Sync.count_afk(),
         ranks=Sync.count_ranks(),
-        rockets=game.players[1].force.get_item_launched('satellite')
+        rockets=game.players[1].force.get_item_launched('satellite'),
         mods={'base'}
     } end
     if not set then return global.exp_core.sync
@@ -149,6 +152,7 @@ end
 -- @return all of the new info
 function Sync.update()
     local info = Sync.info()
+    info.last_update = game.tick
     info.online = #game.connected_players
     info.players = #game.players
     info.admins = Sunc.count_admins()
