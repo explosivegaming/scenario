@@ -112,7 +112,7 @@ function Admin.ban(player,by_player,reason)
     local player = Game.get_player(player)
     local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or '<server>'
     local reason = append_name(reason,by_player_name)
-    discord_emit{
+    Sync.emit_embeded{
         title='Player Ban',
         color=Color.to_hex(defines.text_color.crit),
         description='There was a player banned.',
@@ -139,7 +139,7 @@ function Admin.kick(player,by_player,reason)
     local player = Game.get_player(player)
     local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or '<server>'
     local reason = append_name(reason,by_player_name)
-    discord_emit{
+    Sync.emit_embeded{
         title='Player Kick',
         color=Color.to_hex(defines.text_color.high),
         description='There was a player kicked.',
@@ -166,7 +166,7 @@ function Admin.jail(player,by_player,reason)
     local player = Game.get_player(player)
     local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or '<server>'
     local reason = append_name(reason,by_player_name)
-    discord_emit{
+    Sync.emit_embeded{
         title='Player Jail',
         color=Color.to_hex(defines.text_color.med),
         description='There was a player jailed.',

@@ -66,7 +66,7 @@ local function report_message(player,by_player,reason)
     if _reports().actions[player.name] == actions.report then return end
     Ranking.print(low_rank,{'reports.low-print',player.name,reason},defines.text_color.info,true)
     Ranking.print(high_rank,{'reports.high-print',player.name,by_player_name,reason},defines.text_color.med)
-    discord_emit{
+    Sync.emit_embeded{
         title='Player Report',
         color=Color.to_hex(defines.text_color.med),
         description='A player was reported.',
@@ -174,7 +174,7 @@ function Admin.clear_warings(player,by_player,no_emit)
     if not player then return end
     _reports().warnings[player.name]=0
     if not no_emit then
-        discord_emit{
+        Sync.emit_embeded{
             title='Player Clear',
             color=Color.to_hex(defines.text_color.low),
             description='A player had there warnings cleared.',
@@ -190,7 +190,7 @@ function Admin.clear_reports(player,by_player,no_emit)
     _reports().reports[player.name]={}
     _reports().varified[player.name]={}
     if not no_emit then
-        discord_emit{
+        Sync.emit_embeded{
             title='Player Clear',
             color=Color.to_hex(defines.text_color.low),
             description='A player had there reports cleared.',
@@ -207,7 +207,7 @@ function Admin.clear_player(player,by_player)
     Admin.clear_reports(player,by_player,true)
     _reports().actions[player.name]=actions.none
     if Ranking.get_rank(player).group.name == 'Jail' then Server.interface(Ranking.revert,true,player,by_player) end
-    discord_emit{
+    Sync.emit_embeded{
         title='Player Clear',
         color=Color.to_hex(defines.text_color.low),
         description='A player had there reports and warnings cleared.',
@@ -225,7 +225,7 @@ function Admin.temp_ban(player,by_player,reason)
     local player, by_player_name = valid_players(player,by_player)
     if not player or Admin.is_banned(player) then return end
     _reports().actions[player.name] = actions.temp
-    discord_emit{
+    Sync.emit_embeded{
         title='Player Temp-Ban',
         color=Color.to_hex(defines.text_color.high),
         description='A player was jailed.',

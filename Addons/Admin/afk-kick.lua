@@ -28,7 +28,7 @@ Event.register(-1,function(event)
             end
         end
     end):on_event('error',function(self,err)
-        discord_emit{
+        Sync.emit_embeded{
             title='Auto Kick Error',
             color=Color.to_hex(defines.text_color.bg),
             description='Auto Kick Error - Closed Thread',

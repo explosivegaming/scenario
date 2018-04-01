@@ -47,7 +47,7 @@ Event.register(-1,function(event)
             player_return({'chat-bot.message',message},nil,player)
         end
     end):on_event('error',function(self,err)
-        discord_emit{
+        Sync.emit_embeded{
             title='Auto Message Error',
             color=Color.to_hex(defines.text_color.bg),
             description='Auto Message Error - Closed Thread',

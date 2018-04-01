@@ -17,7 +17,7 @@ Event.register(defines.events.on_console_command,function(event)
     data.by = event.player_index and game.players[event.player_index].name or '<server>'
     if data.by == '<server>' then return end
     if command == 'config' or command == 'banlist' then
-        discord_emit{
+        Sync.emit_embeded{
             title='Edit To '..data.title,
             color=Color.to_hex(defines.text_color.bg),
             description='A player edited the '..command..'.',
@@ -42,7 +42,7 @@ Event.register(defines.events.on_console_command,function(event)
         if not Game.get_player(data.username) then return end
         if string.sub(command,-1) == 'e' then data.command = command..'d' else  data.command = command..'ed' end
         data.reason = data.reason and data.reason ~= '' and data.reason or 'No Reason Required'
-        discord_emit{
+        Sync.emit_embeded{
             title='Player '..data.title,
             color=data.colour,
             description='There was a player '..data.command..'.',
