@@ -11,9 +11,9 @@ Discord: https://discord.gg/r6dC2uK
 -- replaces the base error function
 _error = error
 error = function(err)
-    if _G.discord_emit and game then
+    if _G.Sync and game then
         local color = _G.Color and Color.to_hex(defines.text_color.bg) or '0x0'
-        discord_emit{title='SCRIPT ERROR',color=color,description='There was an error in the script @Developers ',Error=err}
+        Sync.emit_embeded{title='SCRIPT ERROR',color=color,description='There was an error in the script @Developers ',Error=err}
     elseif _G.error_handle and type(error_handle) == 'function' then
         local success, _err = error_handle(err)
         if not success then _error({handle=_err,err=err}) end
@@ -41,10 +41,10 @@ Color, Game, Event = require('/StdLib/load'){'Color','Game','Event'}
 -- loads the ExpLib, functions are plased into the lua global
 local ExpLib = require 'ExpLib'
 ExpLib._unpack_to_G(ExpLib)
---_G.discord_emit = nil -- un-comment this line if you are not using the json.data
+--_G.Sync.emit_embeded = nil -- un-comment this line if you are not using the json.data
 
 -- loads the ExpCore files these are need in order to run the other addons
-Ranking, Server, Gui = require('/ExpCore/load'){'Ranking','Server','Gui'}
+Sync, Ranking, Server, Gui = require('/ExpCore/load'){'Sync','Ranking','Server','Gui'}
 local success,err = pcall(require,'/ExpCore/GuiParts/test')
 if success then Gui.test = err end
 if Gui.popup then Gui.popup._load() end

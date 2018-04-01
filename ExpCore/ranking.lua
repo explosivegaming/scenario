@@ -151,7 +151,7 @@ function Ranking.give_rank(player,rank,by_player,tick)
         }) 
     end
     if rank.group.name == 'Jail' and Ranking._presets().last_jail ~= player.name then
-        discord_emit{
+        Sync.emit_embeded{
             title='Player Jail',
             color=Color.to_hex(defines.text_color.med),
             description='There was a player jailed.',
@@ -160,7 +160,7 @@ function Ranking.give_rank(player,rank,by_player,tick)
             ['Reason:']='No Reason'
         }
     end
-    game.write_file('ranking.json',
+    game.write_file('ranking-change.json',
         table.json({
             tick=tick,
             play_time=player.online_time,
