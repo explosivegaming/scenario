@@ -10,6 +10,11 @@ Discord: https://discord.gg/r6dC2uK
 -- this file is used to allow easy syncing with out side programes
 local Sync = {}
 
+-- only used as a faster way to get to the ranking function
+function Sync.set_ranks(...)
+    Ranking._base_preset(...)
+end
+
 --- Prints to chat as if it were a player
 -- @usage Sync.print('Test','Cooldude2606')
 -- @param player_message the message to be printed in chat
