@@ -133,9 +133,9 @@ function Sync.info(set)
         server_name='Factorio Server',
         reset_time='On Demand',
         time='Day Mth 00 00:00:00 UTC Year',
-        time_set=0,
-        last_update=0,
-        time_period=18000,
+        time_set={0,tick_to_display_format(0)},
+        last_update={0,tick_to_display_format(0)},
+        time_period={18000,tick_to_display_format(18000)},
         online=#game.connected_players,
         players=#game.players,
         admins=Sync.count_admins(),
@@ -160,11 +160,12 @@ end
 -- @return either true false if setting or the date time and tick off set
 function Sync.time(set)
     local info = Sync.info()
-    if not set then return info.time..'(+'..(game.tick-info.time_set)..'T)'
+    if not set then return info.time..' (+'..(game.tick-info.time_set[1])..' Ticks)'
     else
         if not is_type(set,'string') then return false end
         info.time = set
-        info.time_set = game.tick
+        info.time_set[1] = game.tick
+        info.time_set[2] = tick_to_display_format(game.tick)
         return true
     end
 end
@@ -174,7 +175,9 @@ end
 -- @return all of the new info
 function Sync.update()
     local info = Sync.info()
-    info.last_update = game.tick
+    info.time_period[2] = tick_to_display_format(info.time_period[1])
+    info.last_update[1] = game.tick
+    info.last_update[2] = tick_to_display_format(game.tick)
     info.online = #game.connected_players
     info.players = #game.players
     info.admins = Sync.count_admins()
@@ -193,7 +196,7 @@ end
 
 -- will auto replace the file every 5 min by default
 Event.register(defines.events.on_tick,function(event)
-    local time = Sync.info().time_period
+    local time = Sync.info().time_period[1]
     if (event.tick%time)==0 then Sync.update() Sync.emit_data() end
 end)
 
