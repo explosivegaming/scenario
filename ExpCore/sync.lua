@@ -163,7 +163,7 @@ function Sync.update()
     info.admins = Sync.count_admins()
     info.afk = Sync.count_afk()
     info.ranks = Sync.count_ranks()
-    info.rockets = game.players[1].force.get_item_launched('satellite')
+    info.rockets = game.forces['player'].get_item_launched('satellite')
     return info
 end
 
