@@ -139,7 +139,7 @@ function Sync.info(set)
         admins=Sync.count_admins(),
         afk=Sync.count_afk(),
         ranks=Sync.count_ranks(),
-        rockets=game.players[1].force.get_item_launched('satellite'),
+        rockets=game.forces['player'].get_item_launched('satellite'),
         mods={'base'}
     } end
     if not set then return global.exp_core.sync
