@@ -155,8 +155,8 @@ function Sync.update()
     info.last_update = game.tick
     info.online = #game.connected_players
     info.players = #game.players
-    info.admins = Sunc.count_admins()
-    info.afk = Sunc.count_afk()
+    info.admins = Sync.count_admins()
+    info.afk = Sync.count_afk()
     info.ranks = Sync.count_ranls()
     info.rockets = game.players[1].force.get_item_launched('satellite')
     return info
