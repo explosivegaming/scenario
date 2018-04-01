@@ -144,7 +144,7 @@ function Sync.info(set)
     } end
     if not set then return global.exp_core.sync
     else
-        if not is_type('set','table') then return false end
+        if not is_type(set,'table') then return false end
         for key,value in pairs(set) do 
             global.exp_core.sync[key] = value
         end
