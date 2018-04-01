@@ -72,7 +72,7 @@ end
 
 local action_drop_down = Gui.inputs.add_drop_down('action-drop-down-rank-change',_actions,1,function(player,selected,items,element)
     element.parent.parent.action.caption = selected
-    if selected == 'Jail' or selected == 'Kick' or selected == 'Ban' then
+    if selected == 'Jail' or selected == 'Kick' or selected == 'Ban' or selected == 'Temp Ban' then
         element.parent['reason-input-admin-commands'].style.visible = true
     else
         element.parent['reason-input-admin-commands'].style.visible = false
@@ -92,7 +92,7 @@ local take_action = Gui.inputs.add{
     local _rank = Ranking.get_rank(_player)
     if rank.power >= _rank.power then dropdowns.warning.caption = {'admin-commands.rank-high'} return end
     local _reason = dropdowns['reason-input-admin-commands'] and dropdowns['reason-input-admin-commands'].text
-    if _reason == 'Enter Reason' then return end
+    if selected == 'Jail' or selected == 'Kick' or selected == 'Ban' or selected == 'Temp Ban' and _reason == 'Enter Reason' or string.len(_reason) < 20 then return end
     Admin.take_action(_action,_player,event.player_index,_reason)
     Gui.center.clear(event)
 end)
