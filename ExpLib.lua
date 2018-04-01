@@ -33,33 +33,6 @@ function ExpLib.is_type(v,test_type)
     return test_type and v and type(v) == test_type or not test_type and not v or false 
 end
 
---- Prints to chat as if it were a player
--- @usage server_print('Test','Cooldude2606')
--- @param player_message the message to be printed in chat
--- @param player_name the name of the player sending the message
--- @param[opt] player_tag the tag apllied to the player's name
--- @param[opt] plyaer_colour the colour of the message
--- @param[opt] prefix add a prefix before the chat eg [IRC]
-function ExpLib.server_print(player_message,player_name,player_tag,player_colour,prefix)
-    if not player_message then return 'No Message Found' end
-    local player = game.player or game.players[player_name]
-    local tag = player_tag and player_tag ~= '' and ' '..player_tag or ''
-    local colour = player_colour and player_colour ~= '' and player_colour or '#FFFFFF'
-    local prefix = prefix and prefix..' ' or ''
-    if player then
-        tag = ' '..player.tag
-        colour = player.color
-        player_name = player.name
-    else
-        if colour:find('#') then
-            colour = Color.from_hex(colour)
-        else
-            colour = defines.color[player_colour]
-        end
-    end
-    game.print(prefix..player_name..tag..': '..player_message,colour)
-end
-
 --- Returns a value to the player or if no player then log the return
 -- @usage a = 'to return'
 -- player_return(a)
@@ -89,51 +62,6 @@ function ExpLib.player_return(rtn,colour,player)
         else _return = tostring(rtn)
         end log(_return) rcon.print(_return)
     end
-end
-
---- Logs an embed to the json.data we use a js script to add things we cant here
--- @usage json_emit{title='BAN',color='0x0',description='A player was banned' ... }
--- @tparam table arg a table which contains everything that the embeded will use
--- @param[opt=''] title the tile of the embed
--- @param[opt='0x0'] color the color given in hex you can use Color.to_hex{r=0,g=0,b=0}
--- @param[opt=''] description the description of the embed
--- @param[opt=''] server_detail sting to add onto the pre-set server detail
--- @param[opt] fieldone the filed to add to the embed (key is name) (value is text) (start value with <<inline>> to make inline)
--- @param[optchain] fieldtwo 
-function ExpLib.discord_emit(args)
-    if not is_type(args,'table') then return end
-    local title = is_type(args.title,'string') and args.title or ''
-    local color = is_type(args.color,'string') and args.color:find("0x") and args.color or '0x0'
-    local description = is_type(args.description,'string') and args.description or ''
-    local server_detail = is_type(args.server_detail,'string') and args.server_detail or ''
-    local _count = 0
-    if game then
-        for _,player in pairs(game.connected_players) do 
-            if player.admin then _count=_count+1 end
-        end
-    end
-    local mods_online = 'Mods Online: '.._count
-    local done, fields = {title=true,color=true,description=true,server_detail=true}, {{
-         name='Server Details',
-        value='Server Name: {{ serverName }} Online Players: '..#game.connected_players..' '..mods_online..' Server Time: '..tick_to_display_format(game.tick)..' '..server_detail
-    }}
-    for key, value in pairs(args) do
-        if not done[key] then
-            done[key] = true
-            local f = {name=key,value='',inline=false}
-            local value, inline = value:gsub("<<inline>>",'',1)
-            f.value = value
-            if inline > 0 then f.inline = true end
-            table.insert(fields,f)
-        end
-    end
-    local log_data = {
-        title=title,
-        description=description,
-        color=color,
-        fields=fields
-    }
-    game.write_file('json.data',table.json(log_data)..'\n',true,0)
 end
 
 --- Convert ticks to hours
