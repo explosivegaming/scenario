@@ -123,6 +123,15 @@ function Sync.count_ranks()
     return _ranks
 end
 
+function Sync.count_players()
+    if not game then return {'Offline'} end
+    local _players = {}
+    for index,player in pairs(game.players) do
+        _players[player.name] = {player.connected,player.online_time,tick_to_display_format(player.online_time)}
+    end
+    return _players
+end
+
 --- used to return the global list and set values in it
 -- @usage Sync.info{server_name='Factorio Server 2'}
 -- @tparam[opt=nil] table keys to be replaced in the server info
@@ -141,6 +150,7 @@ function Sync.info(set)
         admins=Sync.count_admins(),
         afk=Sync.count_afk(),
         ranks=Sync.count_ranks(),
+        info.player_times = Sync.count_players(),
         rockets=game.forces['player'].get_item_launched('satellite'),
         mods={'base'}
     } end
@@ -183,6 +193,7 @@ function Sync.update()
     info.admins = Sync.count_admins()
     info.afk = Sync.count_afk()
     info.ranks = Sync.count_ranks()
+    info.player_times = Sync.count_players()
     info.rockets = game.forces['player'].get_item_launched('satellite')
     return info
 end
