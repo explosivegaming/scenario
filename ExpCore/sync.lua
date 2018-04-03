@@ -150,7 +150,7 @@ function Sync.info(set)
         admins=Sync.count_admins(),
         afk=Sync.count_afk(),
         ranks=Sync.count_ranks(),
-        info.player_times = Sync.count_players(),
+        player_times=Sync.count_players(),
         rockets=game.forces['player'].get_item_launched('satellite'),
         mods={'base'}
     } end
