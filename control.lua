@@ -11,7 +11,7 @@ Discord: https://discord.gg/r6dC2uK
 -- replaces the base error function
 _error = error
 error = function(err)
-    if _G.Sync and game then
+    if _G.Sync and _G.Sync.emit_embeded and game then
         local color = _G.Color and Color.to_hex(defines.text_color.bg) or '0x0'
         Sync.emit_embeded{title='SCRIPT ERROR',color=color,description='There was an error in the script @Developers ',Error=err}
     elseif _G.error_handle and type(error_handle) == 'function' then
