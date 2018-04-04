@@ -133,7 +133,6 @@ function Sync.count_players(online)
     local players = {}
     if online then _players = game.connected_players else _players = game.players end
     for k,player in pairs(_players) do table.insert(players,player.name) end
-    players._n = #players
     return players
 end
 
@@ -164,7 +163,9 @@ function Sync.info(set)
         time_period={18000,tick_to_display_format(18000)},
         players={
             online=Sync.count_players(true),
+            n_online=#game.connected_players,
             all=Sync.count_players(),
+            n_all=#game.players,
             admins_online=Sync.count_admins(),
             afk_players=Sync.count_afk(),
             times=Sync.count_player_times()
