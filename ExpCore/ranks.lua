@@ -96,7 +96,17 @@ local jail = Ranking._group:create{
         'open_train_station_gui',
         'open_gui',
         'open_item',
-        'deconstruct'
+        'deconstruct',
+        'build_rail',
+        'cancel_research',
+        'start_research',
+        'set_train_stopped',
+        'select_gun',
+        'open_technology_gui',
+        'open_trains_gui',
+        'edit_custom_tag',
+        'craft',
+        'setup_assembling_machine',
     }
 }
 
