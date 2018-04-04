@@ -123,11 +123,28 @@ function Sync.count_ranks()
     return _ranks
 end
 
-function Sync.count_players()
+--- used to get the number of players either online or all
+-- @usage Sync.count_players()
+-- @tparam bolean online if true only get online players
+-- @treturn table contains player names
+function Sync.count_players(online)
+    if not game then return {'Offline'} end
+    local _players = {}
+    local players = {}
+    if online then _players = game.connected_players else _players = game.players end
+    for k,player in pairs(_players) do table.insert(players,player.name) end
+    players._n = #players
+    return players
+end
+
+--- used to get the number of players resulting in there play times
+-- @usage Sync.count_player_times()
+-- @treturn table contains players and each player is given a tick amount and a formated string
+function Sync.count_player_times()
     if not game then return {'Offline'} end
     local _players = {}
     for index,player in pairs(game.players) do
-        _players[player.name] = {player.connected,player.online_time,tick_to_display_format(player.online_time)}
+        _players[player.name] = {player.online_time,tick_to_display_format(player.online_time)}
     end
     return _players
 end
@@ -145,12 +162,14 @@ function Sync.info(set)
         time_set={0,tick_to_display_format(0)},
         last_update={0,tick_to_display_format(0)},
         time_period={18000,tick_to_display_format(18000)},
-        online=#game.connected_players,
-        players=#game.players,
-        admins=Sync.count_admins(),
-        afk=Sync.count_afk(),
+        players={
+            online=Sync.count_players(true),
+            all=Sync.count_players(),
+            admins_online=Sync.count_admins(),
+            afk_players=Sync.count_afk(),
+            times=Sync.count_player_times()
+        },
         ranks=Sync.count_ranks(),
-        player_times=Sync.count_players(),
         rockets=game.forces['player'].get_item_launched('satellite'),
         mods={'base'}
     } end
@@ -188,12 +207,14 @@ function Sync.update()
     info.time_period[2] = tick_to_display_format(info.time_period[1])
     info.last_update[1] = game.tick
     info.last_update[2] = tick_to_display_format(game.tick)
-    info.online = #game.connected_players
-    info.players = #game.players
-    info.admins = Sync.count_admins()
-    info.afk = Sync.count_afk()
+    info.players={
+        online=Sync.count_players(true),
+        all=Sync.count_players(),
+        admins_online=Sync.count_admins(),
+        afk_players=Sync.count_afk(),
+        times=Sync.count_player_times()
+    }
     info.ranks = Sync.count_ranks()
-    info.player_times = Sync.count_players()
     info.rockets = game.forces['player'].get_item_launched('satellite')
     return info
 end
