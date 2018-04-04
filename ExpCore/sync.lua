@@ -30,7 +30,7 @@ function Sync.print(player_message,player_name,player_tag,player_colour,prefix)
     local prefix = prefix and prefix..' ' or ''
     if player then
         tag = ' '..player.tag
-        colour = player.color
+        colour = player.chat_color
         player_name = player.name
     else
         if colour:find('#') then
