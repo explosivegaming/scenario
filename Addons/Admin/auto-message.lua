@@ -43,6 +43,7 @@ Event.register(-1,function(event)
         local data = self.data
         if not data.high_rank or not data.low_rank
         or not data.low then self.reopen = false return end
+        if Ranking.get_rank(player).power <= Ranking.get_rank(data.low_rank).power then return end
         for _,message in pairs(data.low) do
             player_return({'chat-bot.message',message},nil,player)
         end
