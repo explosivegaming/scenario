@@ -130,10 +130,11 @@ end
 function Sync.count_players(online)
     if not game then return {'Offline'} end
     local _players = {}
+    local players = {}
     if online then _players = game.connected_players else _players = game.players end
-    for k,player in pairs(_players) do _players[k] = player.name end
-    _players._n = #_players
-    return _players
+    for k,player in pairs(_players) do table.insert(players,player.name) end
+    players._n = #players
+    return players
 end
 
 --- used to get the number of players resulting in there play times
