@@ -210,7 +210,9 @@ function Sync.update()
     info.last_update[2] = tick_to_display_format(game.tick)
     info.players={
         online=Sync.count_players(true),
+        n_online=#game.connected_players,
         all=Sync.count_players(),
+        n_all=#game.players,
         admins_online=Sync.count_admins(),
         afk_players=Sync.count_afk(),
         times=Sync.count_player_times()
