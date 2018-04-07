@@ -44,7 +44,7 @@ ExpLib._unpack_to_G(ExpLib)
 --_G.Sync.emit_embeded = nil -- un-comment this line if you are not using the json.data
 
 -- loads the ExpCore files these are need in order to run the other addons
-Sync, Ranking, Server, Gui = require('/ExpCore/load'){'Sync','Ranking','Server','Gui'}
+Ranking, Sync, Server, Gui = require('/ExpCore/load'){'Ranking','Sync','Server','Gui'}
 local success,err = pcall(require,'/ExpCore/GuiParts/test')
 if success then Gui.test = err end
 if Gui.popup then Gui.popup._load() end
