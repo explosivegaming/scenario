@@ -18,9 +18,9 @@ Pass a table with the names of the objects you want and it will be return in tha
 local StdExpCoreLib = {}
 
 require '/commands'
-StdExpCoreLib.Sync = require '/sync'
 StdExpCoreLib.Server = require '/server'
 StdExpCoreLib.Ranking = require '/ranking'
+StdExpCoreLib.Sync = require '/sync'
 StdExpCoreLib.Gui = require '/gui'
 StdExpCoreLib.Gui:_load_parts{
     'inputs',
