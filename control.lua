@@ -48,6 +48,7 @@ Ranking, Sync, Server, Gui = require('/ExpCore/load'){'Ranking','Sync','Server',
 local success,err = pcall(require,'/ExpCore/GuiParts/test')
 if success then Gui.test = err end
 if Gui.popup then Gui.popup._load() end
+if Sync._load then Sync._load() end
 -- this loads the ranks that Ranking uses
 require('/ExpCore/ranks')
 -- this loads any edits that are not need in core pcall as file may not be preset
