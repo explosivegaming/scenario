@@ -252,29 +252,42 @@ function Sync._load()
         caption='Server Info',
         tooltip='Basic info about the current server',
         draw=function(self,frame)
+            frame.caption = ''
             local info = Sync.info()
             local frame = frame.add{type='flow',direction='vertical'}
             local _flow = frame.add{type='flow'}
             Gui.bar(_flow,200)
-            _flow.add{type='label',caption='Welcome To '..info.server_name,style='caption_label'}.style.width = 185
+            _flow.add{
+                type='label',
+                caption='Welcome To '..info.server_name,style='caption_label'
+            }.style.width = 185
             Gui.bar(_flow,200)
-            if info.description then frame.add{type='label',caption=info.description,style='description_label'} end
+            if info.description then frame.add{
+                type='label',
+                caption=info.description,style='description_label'
+            } end
             Gui.bar(frame,600)
+            local frame = frame.add{
+                type='frame',
+                direction='vertical',
+                style='image_frame'
+            }
+            frame.style.width = 600
             local text_flow = frame.add{type='flow',direction='vertical'}
             local button_flow = frame.add{type='table',column_count=3}
             for _,element in pairs(Sync_gui_functions) do
-                local type = table.remove(element,1)
-                if type == 'function' then
-                    local success, err = pcall(table.remove(element,1),unpack(element))
+                local _type = table.remove(element,1)
+                if _type == 'function' then
+                    local success, err = pcall(table.remove(element,1),frame.player_index,frame,unpack(element))
                     if not success then error(err) else
                         if is_type(err,'table') then
                             if element.draw then element:draw(button_flow)
-                            else text_flow.add{type='label',caption=table.to_string(element)} end
-                        else text_flow.add{type='label',caption=tostring(element)} end
+                            else text_flow.add{type='label',caption=table.to_string(err)} end
+                        else text_flow.add{type='label',caption=tostring(err)} end
                     end
-                elseif type == 'gui' then element:draw(button_flow)
-                elseif type == 'string' then text_flow.add{type='label',caption=tostring(element)}
-                elseif type == 'table' then text_flow.add{type='label',caption=table.to_string(element)} end
+                elseif _type == 'gui' then element:draw(button_flow)
+                elseif _type == 'string' then text_flow.add{type='label',caption=tostring(element)}
+                elseif _type == 'table' then text_flow.add{type='label',caption=table.to_string(element)} end
             end
     end}
 end
@@ -282,16 +295,7 @@ end
 Event.register(defines.events.on_player_joined_game,function(event)
     local player = Game.get_player(event)
     if not player.admin and player.online_time < 60 then
-        script.raise_event(defines.events.on_gui_click,{
-            name=defines.events.on_gui_click,
-            tick=event.tick,
-            element=mod_gui.get_button_flow(player)['server-info'],
-            player_index=player.index,
-            button=defines.mouse_button_type.left,
-            alt=false,
-            control=false,
-            shift=false
-        })
+        Gui.center.open(player,'server-info')
     end
 end)
 

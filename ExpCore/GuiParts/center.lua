@@ -31,6 +31,15 @@ function center.get_flow(player)
     return player.gui.center.exp_center or player.gui.center.add{name='exp_center',type='flow'}
 end
 
+-- used to open any center gui
+function center.open(player,center)
+    local player = Game.get_player(player)
+    Gui._get_data('center')[center].open{
+        element={name=center},
+        player_index=player.index
+    }
+end
+
 -- used to clear the center frame of the player, used mainly in script
 function center.clear(player)
     local player = Game.get_player(player)

@@ -18,8 +18,9 @@ Pass a table with the names of the objects you want and it will be return in tha
 local StdExpCoreLib = {}
 
 require '/commands'
-StdExpCoreLib.Server = require '/server'
 StdExpCoreLib.Ranking = require '/ranking'
+StdExpCoreLib.Server = require '/server'
+StdExpCoreLib.Sync = require '/sync'
 StdExpCoreLib.Gui = require '/gui'
 StdExpCoreLib.Gui:_load_parts{
     'inputs',
@@ -28,7 +29,6 @@ StdExpCoreLib.Gui:_load_parts{
     'left',
     'popup'
 }
-StdExpCoreLib.Sync = require '/sync'
 
 return function(rtn)
     local _return = {}
