@@ -157,6 +157,7 @@ function Sync.info(set)
     if not global.exp_core then global.exp_core = {} end
     if not global.exp_core.sync then global.exp_core.sync = {
         server_name='Factorio Server',
+        server_description='A factorio server for everyone',
         reset_time='On Demand',
         time='Day Mth 00 00:00:00 UTC Year',
         time_set={0,tick_to_display_format(0)},
@@ -246,6 +247,15 @@ function Sync.add_to_gui(element,...)
     else table.insert(Sync_gui_functions,{'string',element}) end
 end
 
+-- Examples for Sync.add_to_gui
+Sync.add_to_gui('Welcome to the Explosive Gaming comunity! This is one of many servers which we host.')
+Sync.add_to_gui(function(player,frame)
+    return 'This server will reset at: '..Sync.info().reset_time
+end)
+Sync.add_to_gui(function(player,frame)
+    return 'You have been given the rank '..Ranking.get_rank(player).name..' from our Discord'
+end)
+
 function Sync._load()
     Gui.center.add{
         name='server-info',
@@ -259,13 +269,14 @@ function Sync._load()
             Gui.bar(_flow,200)
             _flow.add{
                 type='label',
-                caption='Welcome To '..info.server_name,style='caption_label'
+                caption='Welcome To '..info.server_name,
+                style='caption_label'
             }.style.width = 185
             Gui.bar(_flow,200)
-            if info.description then frame.add{
+            frame.add{
                 type='label',
-                caption=info.description,style='description_label'
-            } end
+                caption=info.server_description,style='description_label'
+            }
             Gui.bar(frame,600)
             local frame = frame.add{
                 type='frame',
@@ -275,19 +286,19 @@ function Sync._load()
             frame.style.width = 600
             local text_flow = frame.add{type='flow',direction='vertical'}
             local button_flow = frame.add{type='table',column_count=3}
-            for _,element in pairs(Sync_gui_functions) do
+            for _,element in pairs(table.deepcopy(Sync_gui_functions)) do
                 local _type = table.remove(element,1)
                 if _type == 'function' then
                     local success, err = pcall(table.remove(element,1),frame.player_index,frame,unpack(element))
                     if not success then error(err) else
                         if is_type(err,'table') then
                             if element.draw then element:draw(button_flow)
-                            else text_flow.add{type='label',caption=table.to_string(err)} end
+                            else text_flow.add{type='label',caption=err} end
                         else text_flow.add{type='label',caption=tostring(err)} end
                     end
-                elseif _type == 'gui' then element:draw(button_flow)
-                elseif _type == 'string' then text_flow.add{type='label',caption=tostring(element)}
-                elseif _type == 'table' then text_flow.add{type='label',caption=table.to_string(element)} end
+                elseif _type == 'gui' then element[1]:draw(button_flow)
+                elseif _type == 'string' then text_flow.add{type='label',caption=tostring(element[1])}
+                elseif _type == 'table' then text_flow.add{type='label',caption=element[1]} end
             end
     end}
 end

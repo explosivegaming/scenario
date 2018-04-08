@@ -34,10 +34,6 @@ Example: defines.input_action.drop_item -> 'drop_item'
 http://lua-api.factorio.com/latest/defines.html#defines.input_action
 --]]
 
-Sync.add_to_gui(function(player,frame)
-    return 'You have been given the rank '..Ranking.get_rank(player).name..' from our Discord'
-end)
-
 -- see ExpCore/ranks.lua for examples - you add your own and edit pre-made ones here.
 
 local groups = Ranking._groups(true)

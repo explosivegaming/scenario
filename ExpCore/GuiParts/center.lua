@@ -34,6 +34,7 @@ end
 -- used to open any center gui
 function center.open(player,center)
     local player = Game.get_player(player)
+    Gui.center.clear(player)
     Gui._get_data('center')[center].open{
         element={name=center},
         player_index=player.index
@@ -51,7 +52,7 @@ function center._center.open(event)
     local player = Game.get_player(event)
     local _center = Gui._get_data('center')[event.element.name]
     local center_flow = center.get_flow(player)
-    if center_flow[_center.name] then center.clear(player) return end
+    if center_flow[_center.name] then Gui.center.clear(player) return end
     local center_frame = center_flow.add{
         name=_center.name,
         type='frame',
