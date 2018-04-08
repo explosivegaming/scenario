@@ -262,7 +262,7 @@ Sync.add_to_gui(function(player,frame)
 end)
 -- adds a string that can have depentant values
 Sync.add_to_gui(function(player,frame)
-    return 'You have been given the rank '..Ranking.get_rank(player).name..' from our Discord'
+    return 'You have been given the rank \''..Ranking.get_rank(player).name..'\' from our Discord'
 end)
 -- if readme is included then see addons/guis/readme.lua for more examples
 
@@ -279,16 +279,21 @@ function Sync._load()
             local frame = frame.add{type='flow',direction='vertical'}
             local _flow = frame.add{type='flow'}
             Gui.bar(_flow,200)
-            _flow.add{
+            local label = _flow.add{
                 type='label',
                 caption='Welcome To '..info.server_name,
                 style='caption_label'
-            }.style.width = 185
+            }.style
+            label.width = 185
+            label.align = 'center'
             Gui.bar(_flow,200)
-            frame.add{
+            local label = frame.add{
                 type='label',
                 caption=info.server_description,style='description_label'
-            }
+            }.style
+            label.width = 600
+            label.single_line = false
+            label.align = 'center'
             Gui.bar(frame,600)
             local _frame = frame
             local frame = frame.add{
