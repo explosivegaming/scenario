@@ -11,7 +11,8 @@ Discord: https://discord.gg/r6dC2uK
 local Sync = {}
 local Sync_gui_functions = {}
 
--- only used as a faster way to get to the ranking function
+--- Used as a faster way to get to the ranking function, overrides previous
+-- @usage Sync.set_ranks{name=rank_name}
 function Sync.set_ranks(...)
     Ranking._base_preset(...)
 end
@@ -237,25 +238,36 @@ Event.register(defines.events.on_tick,function(event)
     if (event.tick%time)==0 then Sync.update() Sync.emit_data() end
 end)
 
+--- Adds a emeltent to the sever info gui
+-- @usage Sync.add_to_gui('string') -- return trues
+-- @param element see examples before for what can be used, it can also be a return from Gui.inputs.add
+-- @treturn bolean based on weather it was successful or not
 function Sync.add_to_gui(element,...)
-    if game then return end
+    if game then return false end
     if is_type(element,'function') then
         table.insert(Sync_gui_functions,{'function',element,...})
     elseif is_type(element,'table') then
         if element.draw then table.insert(Sync_gui_functions,{'gui',element})
         else table.insert(Sync_gui_functions,{'table',element}) end
     else table.insert(Sync_gui_functions,{'string',element}) end
+    return true
 end
 
 -- Examples for Sync.add_to_gui
+-- adds a basic string to the table
 Sync.add_to_gui('Welcome to the Explosive Gaming comunity! This is one of many servers which we host.')
+-- adds a string that can have depentant values
 Sync.add_to_gui(function(player,frame)
     return 'This server will reset at: '..Sync.info().reset_time
 end)
+-- adds a string that can have depentant values
 Sync.add_to_gui(function(player,frame)
     return 'You have been given the rank '..Ranking.get_rank(player).name..' from our Discord'
 end)
+-- if readme is included then see addons/guis/readme.lua for more examples
 
+-- used to load the gui infomation when _G.Gui is not yet loaded
+-- internal use not recomend to be used
 function Sync._load()
     Gui.center.add{
         name='server-info',
@@ -303,6 +315,7 @@ function Sync._load()
     end}
 end
 
+-- opens the server info gui for all new joins except admins
 Event.register(defines.events.on_player_joined_game,function(event)
     local player = Game.get_player(event)
     if not player.admin and player.online_time < 60 then
