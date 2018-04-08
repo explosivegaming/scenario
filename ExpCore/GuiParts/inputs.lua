@@ -164,7 +164,7 @@ function inputs.add_button(name,display,tooltip,callbacks)
         local keys = {alt=event.alt,ctrl=event.control,shift=event.shift}
         local element = event.element
         local callbacks = button.data._callbacks
-        if is_type(callbacks,'function') then callbacks = {function(...) return true end,callbacks} end
+        if is_type(callbacks,'function') then callbacks = {{function(...) return true end,callbacks}} end
         for _,data in pairs(callbacks) do
             if is_type(data[1],'function') and is_type(data[2],'function') then
                 local success, err = pcall(data[1],player,mouse,keys,event)
