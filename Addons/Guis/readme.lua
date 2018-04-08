@@ -118,18 +118,6 @@ end):add_tab('rules',{'readme.rules-name'},{'readme.rules-tooltip'},function(fra
     end
 end)
 
-Event.register(defines.events.on_player_joined_game,function(event)
-    local player = Game.get_player(event)
-    if not player.admin and player.online_time < 60 then
-        script.raise_event(defines.events.on_gui_click,{
-            name=defines.events.on_gui_click,
-            tick=event.tick,
-            element=mod_gui.get_button_flow(player).readme,
-            player_index=player.index,
-            button=defines.mouse_button_type.left,
-            alt=false,
-            control=false,
-            shift=false
-        })
-    end
-end)
+Sync.add_to_gui(Gui.inputs.add_button('readme-sync-guildlines','View Guildlines','View the guildlines in the readme',function(player,element)
+    Gui.center.open_tab(player,'readme','guildlines')
+end))
