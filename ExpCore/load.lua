@@ -20,7 +20,6 @@ local StdExpCoreLib = {}
 require '/commands'
 StdExpCoreLib.Server = require '/server'
 StdExpCoreLib.Ranking = require '/ranking'
-StdExpCoreLib.Sync = require '/sync'
 StdExpCoreLib.Gui = require '/gui'
 StdExpCoreLib.Gui:_load_parts{
     'inputs',
@@ -29,6 +28,7 @@ StdExpCoreLib.Gui:_load_parts{
     'left',
     'popup'
 }
+StdExpCoreLib.Sync = require '/sync'
 
 return function(rtn)
     local _return = {}
