@@ -25,13 +25,20 @@ function center.add(obj)
     return obj
 end
 
--- used to get the center frame of the player, used mainly in script
+--- Used to get the center frame of the player, used mainly in script
+-- @usage Gui.center.get_flow(player) -- returns gui emelemt
+-- @param player a player indifier to get the flow for
+-- @treturn table the gui element flow
 function center.get_flow(player)
     local player = Game.get_player(player)
     return player.gui.center.exp_center or player.gui.center.add{name='exp_center',type='flow'}
 end
 
--- used to open any center gui
+--- Used to open a center frame for a player
+-- @usage Gui.center.open(player,'server-info') -- return true
+-- @param player a player indifier to get the flow for
+-- @tparam center string the name of the center frame to open
+-- @treturn boelon based on if it successed or not
 function center.open(player,center)
     local player = Game.get_player(player)
     Gui.center.clear(player)
@@ -43,13 +50,33 @@ function center.open(player,center)
     return true
 end
 
--- used to clear the center frame of the player, used mainly in script
+--- Used to open a center frame for a player
+-- @usage Gui.center.open_tab(player,'readme','rules') -- return true
+-- @param player a player indifier to get the flow for
+-- @tparam center string the name of the center frame to open
+-- @tparam tab string the name of the tab to open
+-- @treturn boelon based on if it successed or not
+function center.open_tab(player,center,tab)
+    local player = Game.get_player(player)
+    if not Gui.center.open(player,center) then return false end
+    local name = center..'_'..tab
+    if not Gui._get_data('inputs_button')[name] then return false end
+    Gui._get_data('inputs_button')[name].events[defines.events.on_gui_click]{
+        element=Gui.center.get_flow(player)[center].tab_bar.tab_bar_scroll.tab_bar_scroll_flow[name],
+    }
+    return true
+end
+
+--- Used to clear the center frame of the player, used mainly in script
+-- @usage Gui.center.clear(player)
+-- @param player a player indifier to get the flow for
 function center.clear(player)
     local player = Game.get_player(player)
     center.get_flow(player).clear()
 end
 
 -- used on the button press when the toolbar button is press, can be overriden
+-- not recomented for direct use see Gui.center.open
 function center._center.open(event)
     local player = Game.get_player(event)
     local _center = Gui._get_data('center')[event.element.name]
@@ -71,7 +98,8 @@ function center._center.open(event)
     player.opened=center_frame
 end
 
--- this is the default draw function if one is not provided
+-- this is the default draw function if one is not provided, can be overriden
+-- not recomented for direct use see Gui.center.open
 function center._center:draw(frame)
     Gui.bar(frame,510)
     local tab_bar = frame.add{
@@ -129,17 +157,6 @@ function center._center:draw(frame)
     self._tabs[self.name..'_'..first_tab](tab_scroll_flow)
     tab_bar_scroll_flow.children[1].style.font_color = defines.color.orange
     frame.parent.add{type='frame',name='temp'}.destroy()--recenter the GUI
-end
-
-function center.open_tab(player,center,tab)
-    local player = Game.get_player(player)
-    if not Gui.center.open(player,center) then return false end
-    local name = center..'_'..tab
-    if not Gui._get_data('inputs_button')[name] then return false end
-    Gui._get_data('inputs_button')[name].events[defines.events.on_gui_click]{
-        element=Gui.center.get_flow(player)[center].tab_bar.tab_bar_scroll.tab_bar_scroll_flow[name],
-    }
-    return true
 end
 
 --- If deafult draw is used then you can add tabs to the gui with this function
