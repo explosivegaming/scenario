@@ -28,7 +28,8 @@ Event.register(defines.events.on_player_joined_game,function(event)
 	local player = game.players[event.player_index]
 	if mod_gui.get_frame_flow(player).time then return end
 	local frame = mod_gui.get_frame_flow(player).add{type='frame',name='time',direction='vertical',style=mod_gui.frame_style}
-	frame.add{type='label',name='title',caption='Time Left:',style='caption_label'}
+    frame.add{type='label',name='title',caption='Time Left:',style='caption_label'}
+    if global.time_passed > 0 then frame.title.caption = 'Time Survived:' end
 	local table = frame.add{type='table',name='table',column_count=7}
 	table.style.horizontal_spacing = 5
 	table.add{type='label',name='hours',caption='hours'}
