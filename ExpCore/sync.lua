@@ -9,6 +9,7 @@ Discord: https://discord.gg/r6dC2uK
 --Please Only Edit Below This Line-----------------------------------------------------------
 -- this file is used to allow easy syncing with out side programes
 local Sync = {}
+local Sync_gui_functions = {}
 
 -- only used as a faster way to get to the ranking function
 function Sync.set_ranks(...)
@@ -233,6 +234,49 @@ end
 Event.register(defines.events.on_tick,function(event)
     local time = Sync.info().time_period[1]
     if (event.tick%time)==0 then Sync.update() Sync.emit_data() end
+end)
+
+function Sync.add_to_gui(element,...)
+    if game then return end
+    if is_type(element,'function') then
+        table.insert(Sync_gui_functions,{'function',element,...})
+    elseif is_type(element,'table') then
+        if element.draw then
+            table.insert(Sync_gui_functions,{'gui',element})
+        else
+            table.insert(Sync_gui_functions,{'table',element})
+        end
+    else
+        table.insert(Sync_gui_functions,{'string',element})
+    end
+end
+
+Gui.center.add{
+    name='server-info',
+    caption='Server Info',
+    tooltip='Basic info about the current server',
+    draw=function(self,frame)
+        local info = Sync.info()
+        Gui.bar(frame,200)
+        frame.add{type='lable',caption='Welcome To '..info.server_name,style='caption_label'}
+        if info.description then frame.add{type='lable',caption=info.description,style='description_label'} end
+        Gui.bar(frame,200)
+        local text_flow = frame.add{type='flow',direction='vertical'}
+        local button_flow = frame.add{type='table',column_count=3}
+        for _,element in pairs(Sync_gui_functions) do
+            local type = table.remove(element,1)
+            if type == 'function' then
+                local success, err = pcall(table.remove(element,1),unpack(element))
+                if not success then error(err) else
+                    if is_type(err,'table') then
+                        if element.draw then element:draw(button_flow)
+                        else text_flow.add{type='lable',caption=table.to_string(element)} end
+                    else text_flow.add{type='lable',caption=tostring(element)} end
+                end
+            elseif type == 'gui' then element:draw(button_flow)
+            elseif type == 'string' then text_flow.add{type='lable',caption=tostring(element)}
+            elseif type == 'table' then text_flow.add{type='lable',caption=table.to_string(element)} end
+        end
 end)
 
 return Sync
