@@ -35,10 +35,12 @@ end
 function center.open(player,center)
     local player = Game.get_player(player)
     Gui.center.clear(player)
+    if not Gui._get_data('center')[center] then return false end
     Gui._get_data('center')[center].open{
         element={name=center},
         player_index=player.index
     }
+    return true
 end
 
 -- used to clear the center frame of the player, used mainly in script
@@ -127,6 +129,17 @@ function center._center:draw(frame)
     self._tabs[self.name..'_'..first_tab](tab_scroll_flow)
     tab_bar_scroll_flow.children[1].style.font_color = defines.color.orange
     frame.parent.add{type='frame',name='temp'}.destroy()--recenter the GUI
+end
+
+function center.open_tab(player,center,tab)
+    local player = Game.get_player(player)
+    if not Gui.center.open(player,center) then return false end
+    local name = center..'_'..tab
+    if not Gui._get_data('inputs_button')[name] then return false end
+    Gui._get_data('inputs_button')[name].events[defines.events.on_gui_click]{
+        element=Gui.center.get_flow(player)[center].tab_bar.tab_bar_scroll.tab_bar_scroll_flow[name],
+    }
+    return true
 end
 
 --- If deafult draw is used then you can add tabs to the gui with this function
