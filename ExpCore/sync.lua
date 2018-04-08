@@ -290,6 +290,7 @@ function Sync._load()
                 caption=info.server_description,style='description_label'
             }
             Gui.bar(frame,600)
+            local _frame = frame
             local frame = frame.add{
                 type='frame',
                 direction='vertical',
@@ -297,7 +298,7 @@ function Sync._load()
             }
             frame.style.width = 600
             local text_flow = frame.add{type='flow',direction='vertical'}
-            local button_flow = frame.add{type='table',column_count=3}
+            local button_flow = frame.add{type='table',column_count=4}
             for _,element in pairs(table.deepcopy(Sync_gui_functions)) do
                 local _type = table.remove(element,1)
                 if _type == 'function' then
@@ -312,6 +313,11 @@ function Sync._load()
                 elseif _type == 'string' then text_flow.add{type='label',caption=tostring(element[1])}
                 elseif _type == 'table' then text_flow.add{type='label',caption=element[1]} end
             end
+            _frame.add{
+                type='label',
+                caption='Press Ecs or E to close; this is only visible once!',
+                style='fake_disabled_label'
+            }
     end}
 end
 
