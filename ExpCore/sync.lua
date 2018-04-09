@@ -258,17 +258,21 @@ end
 Sync.add_to_gui('Welcome to the Explosive Gaming comunity! This is one of many servers which we host.')
 -- adds a string that can have depentant values
 Sync.add_to_gui(function(player,frame)
-    return 'This server will reset at: '..Sync.info().reset_time
+    return 'You have been assigned the rank \''..Ranking.get_rank(player).name..'\''
 end)
--- adds a string that can have depentant values
 Sync.add_to_gui(function(player,frame)
-    return 'You have been given the rank \''..Ranking.get_rank(player).name..'\' from our Discord'
+    return 'This server will reset at: '..Sync.info().reset_time
 end)
 -- if readme is included then see addons/guis/readme.lua for more examples
 
 -- used to load the gui infomation when _G.Gui is not yet loaded
 -- internal use not recomend to be used
 function Sync._load()
+    local function label_format(label,width)
+        label.style.width = width
+        label.style.align = 'center'
+        label.style.single_line = false
+    end
     Gui.center.add{
         name='server-info',
         caption='Server Info',
@@ -279,21 +283,16 @@ function Sync._load()
             local frame = frame.add{type='flow',direction='vertical'}
             local _flow = frame.add{type='flow'}
             Gui.bar(_flow,200)
-            local label = _flow.add{
+            label_format(_flow.add{
                 type='label',
                 caption='Welcome To '..info.server_name,
                 style='caption_label'
-            }.style
-            label.width = 185
-            label.align = 'center'
+            },180)
             Gui.bar(_flow,200)
-            local label = frame.add{
+            label_format(frame.add{
                 type='label',
                 caption=info.server_description,style='description_label'
-            }.style
-            label.width = 600
-            label.single_line = false
-            label.align = 'center'
+            },600)
             Gui.bar(frame,600)
             local _frame = frame
             local frame = frame.add{
@@ -303,35 +302,33 @@ function Sync._load()
             }
             frame.style.width = 600
             local text_flow = frame.add{type='flow',direction='vertical'}
-            local button_flow = frame.add{type='table',column_count=4}
+            local button_flow = frame.add{type='table',column_count=3}
             for _,element in pairs(table.deepcopy(Sync_gui_functions)) do
                 local _type = table.remove(element,1)
                 if _type == 'function' then
                     local success, err = pcall(table.remove(element,1),frame.player_index,frame,unpack(element))
                     if not success then error(err) else
                         if is_type(err,'table') then
-                            if element.draw then element:draw(button_flow)
-                            else text_flow.add{type='label',caption=err} end
-                        else text_flow.add{type='label',caption=tostring(err)} end
+                            if element.draw then element:draw(button_flow).style.width = 195
+                            else label_format(text_flow.add{type='label',caption=err},585) end
+                        else label_format(text_flow.add{type='label',caption=tostring(err)},585) end
                     end
-                elseif _type == 'gui' then element[1]:draw(button_flow)
-                elseif _type == 'string' then text_flow.add{type='label',caption=tostring(element[1])}
-                elseif _type == 'table' then text_flow.add{type='label',caption=element[1]} end
+                elseif _type == 'gui' then element[1]:draw(button_flow).style.width = 195
+                elseif _type == 'string' then label_format(text_flow.add{type='label',caption=tostring(element[1])},585)
+                elseif _type == 'table' then label_format(text_flow.add{type='label',caption=element[1]},585) end
             end
             _frame.add{
                 type='label',
                 caption='Press Ecs or E to close; this is only visible once!',
                 style='fake_disabled_label'
-            }
+            }.style.font='default-small'
     end}
 end
 
 -- opens the server info gui for all new joins except admins
 Event.register(defines.events.on_player_joined_game,function(event)
     local player = Game.get_player(event)
-    if not player.admin and player.online_time < 60 then
-        Gui.center.open(player,'server-info')
-    end
+    Gui.center.open(player,'server-info')
 end)
 
 return Sync
