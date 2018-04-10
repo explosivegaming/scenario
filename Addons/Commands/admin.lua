@@ -27,6 +27,20 @@ commands.add_command('warn', 'Gives a player a warnings', {'player','reason',tru
     Admin.give_warning(player,event.player_index,reason)
 end)
 
+commands.add_command('jail', 'Jails a player', {'player','reason',true}, function(event,args)
+    local player = Game.get_player(args.player)
+    local reason = args.reason
+    if not player then player_return({'commands.invalid-player',args.player}) return commands.error end
+    if Ranking.get_rank(player):allowed('no-report') or Admin.is_banned(player) then player_return({'reports.cant-report',args.player}) return commands.error end
+    Admin.jail(player,event.player_index,reason)
+end)
+
+commands.add_command('unjail', 'Returns the players old rank', {'player',true}, function(event,args)
+    local player = Game.get_player(args.player)
+    if not player then player_return({'commands.invalid-player',args.player}) return commands.error end
+    Ranking.revert(player,event.player_index)
+end)
+
 commands.add_command('temp-ban', 'Temp Ban A Player', {'player','reason',true}, function(event,args)
     local player = Game.get_player(args.player)
     local reason = args.reason
