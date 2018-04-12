@@ -121,12 +121,12 @@ Gui.center.add{
         frame.add{
             name='player',
             type='label',
-            caption=''
+            caption='///'
         }.style.visible = false
         frame.add{
             name='rank',
             type='label',
-            caption=''
+            caption='///'
         }.style.visible = false
     end
 }
