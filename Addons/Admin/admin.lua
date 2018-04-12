@@ -89,11 +89,13 @@ function Admin.move_inventory(player)
     local chests = player.surface.find_entities_filtered{area={{-10,-10},{10,10}},name='iron-chest'} or {}
     for _,_inventory in pairs(inventorys) do
         local inventory = player.get_inventory(_inventory)
-        for item,count in pairs(inventory.get_contents()) do
-            local item = {name=item,count=count}
-            chests = Admin.move_item_to_spawn(item,player.surface,chests)
+        if inventory then
+            for item,count in pairs(inventory.get_contents()) do
+                local item = {name=item,count=count}
+                chests = Admin.move_item_to_spawn(item,player.surface,chests)
+            end
+            inventory.clear()
         end
-        inventory.clear()
     end
 end
 
