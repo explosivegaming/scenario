@@ -1,0 +1,37 @@
+--[[
+Explosive Gaming
+
+This file can be used with permission but this and the credit below must remain in the file.
+Contact a member of management on our discord to seek permission to use our code.
+Any changes that you may make to the code are yours but that does not make the script yours.
+Discord: https://discord.gg/r6dC2uK
+]]
+--Please Only Edit Below This Line-----------------------------------------------------------
+
+local function homes(reset)
+    global.addons = not reset and global.addons or {}
+    global.addons.homes = not reset and global.addons.homes or {}
+    return global.addons.homes
+end
+
+commands.add_command('set-home', 'Set Your Home Possition', {}, function(event,args)
+    local player = Game.get_player(event)
+    if not homes()[player.index] then homes()[player.index] = {player.force.get_spawn_position(player.surface),player.force.get_spawn_position(player.surface)} end
+    homes()[player.index][1] = player.position
+    player_return('Home set at: ('..math.floor(player.position.x)..','..math.floor(player.position.y)..')')
+end)
+
+commands.add_command('home', 'Goto you home possition', {}, function(event,args)
+    local player = Game.get_player(event)
+    if not homes()[player.index] then homes()[player.index] = {player.force.get_spawn_position(player.surface),player.force.get_spawn_position(player.surface)} end
+    homes()[player.index][2] = player.position
+    player.teleport(player.surface.find_non_colliding_position('player',homes()[player.index][1],32,1),player.surface)
+end)
+
+commands.add_command('return', 'Goto where you were before using /home', {}, function(event,args)
+    local player = Game.get_player(event)
+    if not homes()[player.index] then homes()[player.index] = {player.force.get_spawn_position(player.surface),player.force.get_spawn_position(player.surface)} end
+    local _temp = player.position
+    player.teleport(player.surface.find_non_colliding_position('player',homes()[player.index][2],32,1),player.surface)
+    homes()[player.index][2] = _temp
+end)

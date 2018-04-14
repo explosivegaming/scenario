@@ -184,7 +184,10 @@ ranks['Mod']:edit('allow',false,{
 ranks['Donator']:edit('allow',false,{
     ['global-chat']=true,
     ['jail']=true,
-    ['unjail']=true
+    ['unjail']=true,
+    ['set-home']=true,
+    ['home']=true,
+    ['return']=true
 })
 ranks['Veteran']:edit('allow',false,{
     ['tree-decon']=true,

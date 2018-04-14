@@ -26,6 +26,7 @@ require('Commands/cheat-mode')
 require('Commands/kill')
 require('Commands/repair')
 require('Commands/tags')
+require('Commands/home')
 require('Commands/tp') -- requires Admin/admin
 require('Commands/admin') -- requires Admin/reports
 
