@@ -8,7 +8,7 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
-commands.add_command('cheat-mode', 'Toggles cheat mode for a player', {'player'}, function(event,args)
+commands.add_command('cheat-mode', 'Toggles cheat mode for a player.', {'player'}, function(event,args)
     local player = Game.get_player(args.player)
     if not player then player_return({'commands.invalid-player',args.player}) return commands.error end
     if player.cheat_mode == true then player.cheat_mode = false else player.cheat_mode = true end
