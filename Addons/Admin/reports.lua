@@ -123,7 +123,7 @@ local function give_punishment(player,by_player,reason)
         _reports().actions[player.name] = actions.kick
         Admin.kick(player,by_player,'Too Many Warnings: '..warnings-(take_action-1)..' Also: '..reason)
     elseif punishment[1] == 'temp-ban' then
-        _reports().actions[player.name] = actions.temp
+        --_reports().actions[player.name] = actions.temp -- see Admin.temp-ban
         Admin.temp_ban(player,by_player,'Too Many Warnings: '..warnings-(take_action-1)..' Also: '..reason)
     elseif punishment[1] == 'ban' then
         _reports().actions[player.name] = actions.ban
