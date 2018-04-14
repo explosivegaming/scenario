@@ -25,6 +25,7 @@ require('Admin/auto-chat')
 require('Commands/cheat-mode')
 require('Commands/kill')
 require('Commands/repair')
+require('Commands/bonus')
 require('Commands/tags')
 require('Commands/home')
 require('Commands/tp') -- requires Admin/admin

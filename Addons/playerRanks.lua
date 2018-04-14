@@ -188,7 +188,8 @@ ranks['Donator']:edit('allow',false,{
     ['unjail']=true,
     ['set-home']=true,
     ['home']=true,
-    ['return']=true
+    ['return']=true,
+    ['bonus']=true
 })
 ranks['Veteran']:edit('allow',false,{
     ['tree-decon']=true,
