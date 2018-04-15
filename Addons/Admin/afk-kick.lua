@@ -8,7 +8,7 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
-function get_afk_time(player)
+local function get_afk_time(player)
     local rank = Ranking.get_rank(player)
     local count = #game.connected_players
     local base = rank.base_afk_time or false

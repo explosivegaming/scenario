@@ -76,7 +76,7 @@ local function report_message(player,by_player,reason)
     }
 end
 
-function count_reports(player)
+local function count_reports(player)
     local player = Game.get_player(player)
     if not player then return 0 end
     local _count = 0
