@@ -8,7 +8,7 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
-local function homes(reset)
+local function _homes(reset)
     global.addons = not reset and global.addons or {}
     global.addons.homes = not reset and global.addons.homes or {}
     return global.addons.homes
