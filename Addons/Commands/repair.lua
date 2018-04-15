@@ -32,7 +32,7 @@ commands.add_command('repair', 'Repairs all destoryed and damaged entites in an 
         for y = -range-2, range+2 do
             if x^2+y^2 < range^2 then
                 for key, entity in pairs(player.surface.find_entities_filtered({area={{x+center.x,y+center.y},{x+center.x+1,y+center.y+1}},type='entity-ghost'})) do
-                    if disallow[entity.name] then
+                    if disallow[entity.ghost_prototype.name] then
                         player_return('You have repaired: '..entity.name..' this item is not allowed.',defines.text_color.crit,player) 
                         Admin.temp_ban(player,'<server>','Attempt To Repair A Banned Item') 
                         entity.destroy()
