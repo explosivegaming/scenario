@@ -495,3 +495,30 @@ function table.autokey(tbl,str)
     end
     return _return[1] or false
 end
+
+--- Returns the list is a sorted way that would be expected by people (this is by key)
+-- @usage tbl = table.alphanumsort(tbl)
+-- @tparam tbl table the table to be sorted
+-- @treturn table the sorted table
+function table.alphanumsort(tbl)
+    local o = table.keys(tbl)
+    local function padnum(d) local dec, n = string.match(d, "(%.?)0*(.+)")
+        return #dec > 0 and ("%.12f"):format(d) or ("%s%03d%s"):format(dec, #n, n) end
+    table.sort(o, function(a,b)
+        return tostring(a):gsub("%.?%d+",padnum)..("%3d"):format(#b)
+           < tostring(b):gsub("%.?%d+",padnum)..("%3d"):format(#a) end)
+    local _tbl = {}
+    for _,k in pairs(o) do _tbl[k] = tbl[k] end
+    return _tbl
+end
+
+--- Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
+-- @usage tbl = table.alphanumsort(tbl)
+-- @tparam tbl table the table to be sorted
+-- @treturn table the sorted table
+function table.keysort(tbl)
+    local o = table.keys(tbl,true)
+    local _tbl = {}
+    for _,k in pairs(o) do _tbl[k] = tbl[k] end
+    return _tbl
+end
