@@ -51,9 +51,9 @@ Event.register(defines.events.on_player_respawned,function(event)
     end
 end)
 
-Event.register(defines.events.on_player_died,function(event)
+Event.register(defines.events.on_pre_player_died,function(event)
     local player = Game.get_player(event)
     if Ranking.get_rank(player):allowed('bonus-respawn') then
-        player.ticks_to_respawn = 0
+        player.ticks_to_respawn = nil
     end
 end)
