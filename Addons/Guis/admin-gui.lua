@@ -92,7 +92,7 @@ local take_action = Gui.inputs.add{
     local _rank = Ranking.get_rank(_player)
     if rank.power >= _rank.power then dropdowns.warning.caption = {'admin-commands.rank-high'} return end
     local _reason = dropdowns['reason-input-admin-commands'] and dropdowns['reason-input-admin-commands'].text
-    if selected == 'Jail' or selected == 'Kick' or selected == 'Ban' or selected == 'Temp Ban' and _reason == 'Enter Reason' or string.len(_reason) < 20 then return end
+    if (selected == 'Jail' or selected == 'Kick' or selected == 'Ban' or selected == 'Temp Ban') and (_reason == 'Enter Reason' or string.len(_reason) < 20) then return end
     Admin.take_action(_action,_player,event.player_index,_reason)
     Gui.center.clear(event)
 end)

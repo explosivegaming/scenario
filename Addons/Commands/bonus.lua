@@ -19,7 +19,7 @@ local settings = {
 
 local function _bonus(reset)
     global.addons = not reset and global.addons or {}
-    global.addons.homes = not reset and global.addons.bonus or {}
+    global.addons.bonus = not reset and global.addons.bonus or {}
     return global.addons.bonus
 end
 
@@ -36,14 +36,14 @@ Event.register(defines.events.rank_change,function(event)
     local player = Game.get_player(event)
     if event.new_rank:allowed('bonus') then
         for _,setting in pairs(settings) do player[setting.key] = setting.scale*0.2 end
-        _bonus()[player.index]=0.2
+        _bonus()[player.index]=20
     else
         for _,setting in pairs(settings) do player[setting.key] = 0 end
         _bonus()[player.index]=nil
     end
 end)
 
-Event.register(defines.events.on_player_respawned,fucntion(event)
+Event.register(defines.events.on_player_respawned,function(event)
     local player = Game.get_player(event)
     local bonus = _bonus()[player.index]
     if bonus then
@@ -54,6 +54,6 @@ end)
 Event.register(defines.events.on_player_died,function(event)
     local player = Game.get_player(event)
     if Ranking.get_rank(player):allowed('bonus-respawn') then
-        player.ticks_to_respawn = nil
+        player.ticks_to_respawn = 0
     end
 end)
