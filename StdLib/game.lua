@@ -58,6 +58,14 @@ function Game.get_player(mixed)
         end
     elseif mixed then
         local player = game.players[mixed]
+        if type(mixed) == "string" and tonumber(mixed) then
+            for _, p in pairs(game.players) do
+                if p.name == mixed then
+                    player = p
+                    break
+                end
+            end
+        end
         return player and player.valid and player
     end
 end
