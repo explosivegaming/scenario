@@ -177,7 +177,7 @@ function Ranking._auto_edit_ranks()
         end
     end
     for power = #ranks, 1, -1 do
-        rank = ranks[power]
+        local rank = ranks[power]
         rank:edit('disallow',false,rank.group.disallow)
         if ranks[power+1] then
             rank:edit('allow',false,ranks[power+1].allow)
