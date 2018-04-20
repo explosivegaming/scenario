@@ -8,6 +8,9 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
+-- a base for functions to keep things clean
+_G._ = {}
+
 -- replaces the base error function
 _error = error
 error = function(err)
