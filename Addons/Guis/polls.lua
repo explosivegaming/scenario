@@ -16,7 +16,7 @@ local function _polls(reset)
     return global.addons.polls
 end
 
-local function _poll_end(self)
+function _._poll_end(self)
     local uuid = self.data.poll_uuid
     local poll = _polls().active[uuid]
     if not poll then return end
@@ -49,7 +49,7 @@ local function _poll_data(question,answers)
     Server.new_thread{
         data={poll_uuid=poll.uuid},
         timeout=poll_time_out*60
-    }:on_event('timeout',_poll_end):open()
+    }:on_event('timeout',_._poll_end):open()
     -- this time out is knowen to cause desyncs and so i have moved it to a hard coded function
     _polls().active[poll.uuid]=poll
     return poll.uuid
