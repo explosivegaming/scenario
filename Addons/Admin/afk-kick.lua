@@ -21,9 +21,8 @@ Event.register(-1,function(event)
         name='afk-kick',
     }:on_event('tick',function(self)
         if (game.tick%3600) ~= 0 then return end
-        if game.tick < 1 then return end
         for _,player in pairs(game.connected_players) do
-            local afk = #game.connected_players < 3 and 10 or _.get_afk_time(player)
+            local afk = #game.connected_players < 3 and 10 or _G._.get_afk_time(player)
             if afk then
                 if player.afk_time > afk*3600 then game.kick_player(player,'AFK For Too Long ('..math.floor(afk)..' Minutes)') end
             end
