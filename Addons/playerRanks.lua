@@ -46,11 +46,12 @@ groups['Root']:edit('allow',false,{
     ['tasklist']=true,
     ['rank-changer']=true,
     ['admin-commands']=true,
-    ['give-warning']=true,
+    ['warn']=true,
     ['temp-ban']=true,
     ['clear-warings']=true,
     ['clear-reports']=true,
-    ['clear-player']=true,
+    ['clear-all']=true,
+    ['clear-inv']=true,
     ['announcements']=true,
     ['warp-list']=true,
     ['polls']=true,
@@ -184,7 +185,12 @@ ranks['Mod']:edit('allow',false,{
 ranks['Donator']:edit('allow',false,{
     ['global-chat']=true,
     ['jail']=true,
-    ['unjail']=true
+    ['unjail']=true,
+    ['set-home']=true,
+    ['home']=true,
+    ['return']=true,
+    ['bonus']=true,
+    ['bonus-respawn']=true
 })
 ranks['Veteran']:edit('allow',false,{
     ['tree-decon']=true,

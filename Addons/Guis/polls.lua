@@ -16,7 +16,7 @@ local function _polls(reset)
     return global.addons.polls
 end
 
-local function _poll_end(self)
+function _poll_end(self)
     local uuid = self.data.poll_uuid
     local poll = _polls().active[uuid]
     if not poll then return end

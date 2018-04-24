@@ -40,7 +40,8 @@ local commands = {
     ['readme']={'chat-bot.read-readme'},
     ['magic']={'chat-bot.magic'},
     ['aids']={'chat-bot.aids'},
-    ['riot']={'chat-bot.riot'}
+    ['riot']={'chat-bot.riot'},
+    ['lenny']={'chat-bot.lenny'}
 }
 
 Event.register(defines.events.on_console_chat,function(event)

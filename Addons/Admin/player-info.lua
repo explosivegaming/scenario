@@ -33,7 +33,7 @@ function get_player_info(player,frame,add_cam)
         frame.add{type='label',caption={'player-info.group',_player.group}}
         frame.add{type='label',caption={'player-info.rank',_player.rank}}
         if add_cam then
-            Gui.cam_link{entity=player.character,frame=frame,width=200,height=75,zoom=0.5,respawn_open=true}
+            Gui.cam_link{entity=player.character,frame=frame,width=200,height=150,zoom=0.5,respawn_open=true}
         end
     end
     return _player
