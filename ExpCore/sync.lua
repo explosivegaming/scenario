@@ -10,6 +10,7 @@ Discord: https://discord.gg/r6dC2uK
 -- this file is used to allow easy syncing with out side programes
 local Sync = {}
 local Sync_gui_functions = {}
+local Sync_updates = {}
 
 --- Used as a faster way to get to the ranking function, overrides previous
 -- @usage Sync.set_ranks{name=rank_name}
@@ -222,7 +223,14 @@ function Sync.update()
     }
     info.ranks = Sync.count_ranks()
     info.rockets = game.forces['player'].get_item_launched('satellite')
+    for key,callback in pairs(Sync_updates) do info[key] = callback() end
     return info
+end
+
+function Sync.add_update(key,callback)
+    if game then return end
+    if not is_type(callback,'function') then return end
+    Sync_updates[key] = callback
 end
 
 --- outputs the curent server info into a file
