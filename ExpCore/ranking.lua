@@ -131,7 +131,7 @@ function Ranking.give_rank(player,rank,by_player,tick)
     if old_rank.name == rank.name then return end
     if rank.power < old_rank.power then message = 'ranking.rank-up' player.play_sound{path='utility/achievement_unlocked'}
     else player.play_sound{path='utility/game_lost'} end
-    game.print({message,player.name,rank.name,by_player_name},print_colour)
+    if player.online_time > 60 or by_player_name ~= 'server' then game.print({message,player.name,rank.name,by_player_name},print_colour) end
     if rank.group.name ~= 'User' then player_return({'ranking.rank-given',rank.name},print_colour,player) end
     if player.tag ~= old_rank.tag then player_return({'ranking.tag-reset'},print_colour,player) end
     -- rank change
