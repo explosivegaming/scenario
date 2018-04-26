@@ -21,7 +21,7 @@ end
 --- Used to standidise the tick format for any sync info
 -- @usage Sync.tick_format(60) -- return {60,'1.00M'}
 function Sync.tick_format(tick)
-    return {tick,tick_to_display_format(18000)}
+    return {tick,tick_to_display_format(tick)}
 end
 
 --- Prints to chat as if it were a player
