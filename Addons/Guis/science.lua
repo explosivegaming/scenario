@@ -84,3 +84,19 @@ Gui.left.add{
 }
 
 Event.register(defines.events.on_research_finished,function(event) Gui.left.update('science') end)
+Sync.add_update('science',function()
+    local _return = {}
+    local _data = _global()
+    for force_name,data in pairs(_data) do
+        if force_name ~= '_base' then
+            _return[force_name] = {totals={},times={}}
+            for i,name in pairs(science_packs) do
+                local made = data.made[i]
+                _return[force_name].totals[name] = made
+                local _made = string.format('%.2f',(made-data._made[i])/((data.update-data._update)/(3600*game.speed)))
+                _return[force_name].times[name] = _made
+            end
+        end
+    end
+    return _return
+end)
