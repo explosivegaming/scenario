@@ -85,7 +85,10 @@ local function make_warp_point(position,surface,force,name)
         icon={type='item',name=warp_item}
     })
     _warps().warps[name] = {tag=tag,surface=surface,position=tag.position,old_tile=old_tile}
-    _warps().warps = table.keysort(_warps().warps)
+    local _temp = {Spawn=_warps().warps.Spawn}
+    _warps().warps.Spawn = nil
+    for name,data in pairs(table.keysort(_warps().warps)) do _temp[name] = data end
+    _warps().warps = _temp
     Gui.left.update('warp-list')
 end
 
