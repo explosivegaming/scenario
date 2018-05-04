@@ -14,21 +14,21 @@ local function _homes(reset)
     return global.addons.homes
 end
 
-commands.add_command('set-home', 'Set Your Home Possition', {}, function(event,args)
+commands.add_command('set-home', 'Set your home position', {}, function(event,args)
     local player = Game.get_player(event)
     if not _homes()[player.index] then _homes()[player.index] = {player.force.get_spawn_position(player.surface),player.force.get_spawn_position(player.surface)} end
     _homes()[player.index][1] = {math.floor(player.position.x),math.floor(player.position.y)}
     player_return('Home set at: ('..math.floor(player.position.x)..','..math.floor(player.position.y)..')')
 end)
 
-commands.add_command('home', 'Goto you home possition', {}, function(event,args)
+commands.add_command('home', 'Go to you home position', {}, function(event,args)
     local player = Game.get_player(event)
     if not _homes()[player.index] then _homes()[player.index] = {player.force.get_spawn_position(player.surface),player.force.get_spawn_position(player.surface)} end
     _homes()[player.index][2] = {math.floor(player.position.x),math.floor(player.position.y)}
     player.teleport(player.surface.find_non_colliding_position('player',_homes()[player.index][1],32,1),player.surface)
 end)
 
-commands.add_command('return', 'Goto where you were before using /home', {}, function(event,args)
+commands.add_command('return', 'Go to where you were before using /home', {}, function(event,args)
     local player = Game.get_player(event)
     if not _homes()[player.index] then _homes()[player.index] = {player.force.get_spawn_position(player.surface),player.force.get_spawn_position(player.surface)} end
     local _temp = {math.floor(player.position.x),math.floor(player.position.y)}
