@@ -1,7 +1,6 @@
 -- made by cooldude
 -- idea from Mylon - Dirt Path
 
-local clean_time = 18000 -- time in ticks
 local paths = {
     -- ['tile name'] = {health,convert to}
     -- health is in hundrads of steps
@@ -30,39 +29,21 @@ local paths = {
     ['grass-4']={10,'dirt-4'}
 }
 for tile,value in pairs(paths) do
-    value[1]=value[1]*100
+    value[1]=1/(value[1]*200)
 end
 
 local function global_key(surface,pos)
-    local key = 'S'..surface.name..'X'..math.floor(pos.x)..'Y'..math.floor(pos.y)
-    if not global.paths then global.paths = {} end
-    if not global.paths[key] then 
-        local tile = surface.get_tile(pos).name
-        global.paths[key] = {tile,paths[tile][1]} 
-    end
-    return global.paths[key]
-end
-
-local function remove_key(surface,pos)
-    local key = 'S'..surface.name..'X'..math.floor(pos.x)..'Y'..math.floor(pos.y)
-    if not global.paths then global.paths = {} end
-    global.paths[key] = nil
-end
-
-local function clean_global()
-    if not global.paths or not game then return end
-    for key,tile in pairs(global.paths) do
-        if tile[3] and tile[3] < game.tick-clean_time then global.paths[key] = nil end
-    end
+    return 'S'..surface.name..'X'..math.floor(pos.x)..'Y'..math.floor(pos.y)
 end
 
 local function down_grade(surface,pos)
     local tile = surface.get_tile(pos).name
     local new_tile = paths[tile][2]
-    if new_tile == 'world-gen' then new_tile = global_key(surface,pos)[1] or 'grass-1' end
+    if new_tile == 'world-gen' then
+        if global.paths == nil then global.paths = {} end -- nil as you can set to false to disable
+        new_tile = global.paths[global_key(surface,pos)] or 'grass-1' 
+    end
     surface.set_tiles{{name=new_tile,position=pos}}
-    global_key(surface,pos)[2]=paths[new_tile][1]
-    if not paths[new_tile] then remove_key(surface,pos) return end
 end
 
 Event.register(defines.events.on_player_built_tile, function(event)
@@ -73,21 +54,9 @@ Event.register(defines.events.on_player_built_tile, function(event)
         and old_tile.old_tile.name ~= 'refined-hazard-concrete-left' and old_tile.old_tile.name ~= 'concrete'
         and old_tile.old_tile.name ~= 'hazard-concrete-right' and old_tile.old_tile.name ~= 'hazard-concrete-left'
         and old_tile.old_tile.name ~= 'stone-path' and old_tile.old_tile.name ~= 'water' and old_tile.old_tile.name ~= 'deep-water' then
-            global_key(surface,old_tile.position)[1]=old_tile.old_tile.name
+            if global.paths == nil then global.paths = {} end -- nil as you can set to false to disable
+            global.paths[global_key(surface,old_tile.position)]=old_tile.old_tile.name
         end
-        if not paths[surface.get_tile(old_tile.position).name] then remove_key(surface,old_tile.position) return end
-        global_key(surface,old_tile.position)[2]=paths[surface.get_tile(old_tile.position).name][1]
-        global_key(surface,old_tile.position)[3] = event.tick
-    end
-end)
-
-Event.register(defines.events.on_player_mined_tile, function(event)
-    local surface = game.surfaces[event.surface_index]
-    local old_tiles = event.tiles
-    for _,old_tile in pairs(old_tiles) do
-        if not paths[surface.get_tile(old_tile.position).name] then remove_key(surface,old_tile.position) return end
-        global_key(surface,old_tile.position)[2]=paths[surface.get_tile(old_tile.position).name][1]
-        global_key(surface,old_tile.position)[3] = event.tick
     end
 end)
 
@@ -95,16 +64,8 @@ Event.register(defines.events.on_player_changed_position, function(event)
     local player = Game.get_player(event)
     local surface = player.surface
     local pos = player.position
-    if not paths[surface.get_tile(pos).name] then remove_key(surface,pos) return end
-    global_key(surface,pos)[2] = global_key(surface,pos)[2]-1
-    if global_key(surface,pos)[2] <= 0 then
+    if not paths[surface.get_tile(pos).name] then return end
+    if math.random() < paths[surface.get_tile(pos).name][1] then
         down_grade(surface,pos)
-    end
-    global_key(surface,pos)[3] = event.tick
-end)
-
-Event.register(defines.events.on_tick, function(event)
-    if (game.tick%clean_time) == 0 then
-        clean_global()
     end
 end)
