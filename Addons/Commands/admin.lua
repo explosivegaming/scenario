@@ -60,7 +60,7 @@ commands.add_command('clear-inv', 'Clears the player\'s invetory', {'player'}, f
     Admin.move_inventory(player)
 end)
 
-commands.add_command('clear-warings', 'Clears the warnings on a player.', {'player'}, function(event,args)
+commands.add_command('clear-warnings', 'Clears the warnings on a player.', {'player'}, function(event,args)
     local player = Game.get_player(args.player)
     if not player then player_return({'commands.invalid-player',args.player}) return commands.error end
     if Admin.is_banned(player) then player_return({'reports.cant-report-ban',args.player}) return commands.error end
