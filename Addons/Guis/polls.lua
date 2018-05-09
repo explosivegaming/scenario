@@ -132,19 +132,33 @@ local next = Gui.inputs.add{
     draw_poll(parent.parent.poll_area)
 end)
 
--- this function from redmew, would take too much to make a better one
+local poll_question_input = Gui.inputs.add_text('poll-question-input',true,'Question',function(player,text,element)
+    local options = element.parent.options
+    if not options.question then options.add{type='label',name='question',caption=''}
+    else options.question.caption = text end
+end)
+
+local _self_referace_poll_option_input = nil
+local poll_option_input = Gui.inputs.add_text('poll-option-input',true,'Enter Option',function(player,text,element)
+    local options = element.parent.parent.parent.options
+    if not options[element.parent.name] then options.add{type='label',name=element.parent.name,caption=text} 
+    else options[element.parent.name].caption = text end
+    if options.last.caption == element.parent.name then
+        options.last.caption = tonumber(options.last.caption)+1
+        _self_referace_poll_option_input:draw(element.parent.parent.add{type='flow',name=options.last.caption}).style.minimal_width = 200
+    end
+end)
+_self_referace_poll_option_input = poll_option_input
+
 local function poll_assembler(frame)
-	frame.clear()
-	local frame_table = frame.add { type = 'table', name = 'table_poll_assembler', column_count = 2 }
-	frame_table.add { type = 'label', caption = 'Question:' }
-	frame_table.add { type = 'textfield', name = 'textfield_question', text = '' }
-	frame_table.add { type = 'label', caption = 'Option #1:' }
-	frame_table.add { type = 'textfield', name = 'textfield_answer_1', text = '' }
-	frame_table.add { type = 'label', caption = 'Option #2:' }
-	frame_table.add { type = 'textfield', name = 'textfield_answer_2', text = '' }
-	frame_table.add { type = 'label', caption = 'Option #3:' }
-	frame_table.add { type = 'textfield', name = 'textfield_answer_3', text = '' }
-	frame_table.add { type = 'label', caption = '' }
+    frame.clear()
+    local options = frame.add{type='flow',name='options'}
+    options.style.visible = false
+    options.add{type='label',name='last',caption='2'}
+    poll_question_input:draw(frame).style.minimal_width = 200
+    local flow = frame.add{type='flow',direction='vertical'}
+    poll_option_input:draw(flow.add{type='flow',name='1'}).style.minimal_width = 200
+    poll_option_input:draw(flow.add{type='flow',name='2'}).style.minimal_width = 200
 end
 
 local create_poll = Gui.inputs.add{
@@ -154,17 +168,24 @@ local create_poll = Gui.inputs.add{
 }:on_event('click',function(event)
     local parent = event.element.parent
     if event.element.sprite == 'utility/enter' then
-        local inputs = parent.parent.poll_area.table_poll_assembler
+        local inputs = parent.parent.poll_area.options
         if not inputs then
             event.element.sprite = 'utility/add'
             draw_poll(parent.parent.poll_area)
             return
         end
-        local uuid = _poll_data(inputs.textfield_question.text,{
-            inputs.textfield_answer_1.text,
-            inputs.textfield_answer_2.text,
-            inputs.textfield_answer_3.text
-        })
+        local options = {}
+        for _,option in pairs(inputs.children) do
+            if option.name ~= 'question' and option.name ~= 'last' then 
+                if option.caption ~= 'Enter Option' and option.caption ~= '' then table.insert(options,option.caption) end
+            end
+        end
+        if not inputs.question or #options == 0 then 
+            event.element.sprite = 'utility/add'
+            draw_poll(parent.parent.poll_area)
+            return
+        end
+        local uuid = _poll_data(inputs.question.caption,options)
         Gui.popup.open('polls',{uuid=uuid})
         event.element.sprite = 'utility/add'
         draw_poll(parent.parent.poll_area)
