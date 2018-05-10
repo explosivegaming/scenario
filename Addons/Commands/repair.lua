@@ -28,18 +28,20 @@ commands.add_command('repair', 'Repairs all destoryed and damaged entites in an 
     local max_range = rank.power-highest_admin_power > 0 and const/(rank.power-highest_admin_power) or nil
     local center = player and player.position or {x=0,y=0}
     if not range or max_range and range > max_range then player_return({'commands.invalid-range',0,math.floor(max_range)}) return commands.error end
-    for x = -range-2, range+2 do
-        for y = -range-2, range+2 do
-            if x^2+y^2 < range^2 then
-                for key, entity in pairs(player.surface.find_entities_filtered({area={{x+center.x,y+center.y},{x+center.x+1,y+center.y+1}},type='entity-ghost'})) do
-                    if disallow[entity.ghost_prototype.name] then
-                        player_return('You have repaired: '..entity.name..' this item is not allowed.',defines.text_color.crit,player) 
-                        Admin.temp_ban(player,'<server>','Attempt To Repair A Banned Item') 
-                        entity.destroy()
-                    else entity.revive() end
-                end
-                for key, entity in pairs(player.surface.find_entities({{x+center.x,y+center.y},{x+center.x+1,y+center.y+1}})) do if entity.health then entity.health = 10000 end end
-            end
+    local area = {{center.x-range,center.y-range},{center.x+range,center.y+range}}
+    local max_health = 2^32 - 1
+    local sq_range = range^2
+    for key, entity in pairs(player.surface.find_entities_filtered({area=area,type='entity-ghost'})) do
+        if entity.force == player.force and (entity.position.x-center.x)^2+(entity.position.y-center.y)^2 < sq_range then
+            if disallow[entity.ghost_prototype.name] then
+                player_return('You have repaired: '..entity.name..' this item is not allowed.',defines.text_color.crit,player)
+                Admin.temp_ban(player,'<server>','Attempt To Repair A Banned Item')
+                entity.destroy()
+            elseif entity.time_to_live ~= max_health then
+                entity.revive() end
         end
+    end
+    for key, entity in pairs(player.surface.find_entities(area)) do
+        if entity.force == player.force and (entity.position.x-center.x)^2+(entity.position.y-center.y)^2 < sq_range and entity.health then entity.health = 10000 end
     end
 end)
