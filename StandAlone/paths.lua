@@ -3,33 +3,33 @@
 
 local paths = {
     -- ['tile name'] = {health,convert to}
-    -- health is the average (aim for 75%) number of steps in hundards before it changes
-    ['refined-concrete']={40,'concrete'},
-    ['refined-hazard-concrete-right']={40,'hazard-concrete-right'},
-    ['refined-hazard-concrete-left']={40,'hazard-concrete-left'},
-    ['concrete']={30,'stone-path'},
-    ['hazard-concrete-right']={30,'stone-path'},
-    ['hazard-concrete-left']={30,'stone-path'},
-    ['stone-path']={15,'world-gen'}, -- world-gen just makes it pick the last tile not placed by a player
-    ['sand-1']={3,'sand-2'},
-    ['sand-2']={8,'sand-3'},
-    ['sand-3']={3,'red-desert-3'},
-    ['red-desert-3']={3,'red-desert-2'},
-    ['red-desert-2']={8,'dirt-1'},
-    ['grass-2']={3,'grass-1'},
-    ['grass-1']={3,'grass-3'},
-    ['grass-3']={8,'red-desert-0'},
-    ['red-desert-0']={3,'red-desert-1'},
-    ['red-desert-1']={8,'dirt-1'},
-    ['dirt-1']={3,'dirt-2'},
-    ['dirt-2']={3,'dirt-3'},
-    ['dirt-3']={8,'dirt-4'},
-    ['dirt-4']={3,'dirt-5'},
-    ['dirt-5']={3,'dirt-6'},
-    ['grass-4']={8,'dirt-4'}
+    -- health is the average number of steps in hundards before it changes
+    ['refined-concrete']={30,'concrete'},
+    ['refined-hazard-concrete-right']={30,'hazard-concrete-right'},
+    ['refined-hazard-concrete-left']={30,'hazard-concrete-left'},
+    ['concrete']={25,'stone-path'},
+    ['hazard-concrete-right']={25,'stone-path'},
+    ['hazard-concrete-left']={25,'stone-path'},
+    ['stone-path']={10,'world-gen'}, -- world-gen just makes it pick the last tile not placed by a player
+    ['sand-1']={1,'sand-2'},
+    ['sand-2']={5,'sand-3'},
+    ['sand-3']={1,'red-desert-3'},
+    ['red-desert-3']={1,'red-desert-2'},
+    ['red-desert-2']={5,'dirt-1'},
+    ['grass-2']={1,'grass-1'},
+    ['grass-1']={1,'grass-3'},
+    ['grass-3']={5,'red-desert-0'},
+    ['red-desert-0']={1,'red-desert-1'},
+    ['red-desert-1']={5,'dirt-1'},
+    ['dirt-1']={1,'dirt-2'},
+    ['dirt-2']={1,'dirt-3'},
+    ['dirt-3']={5,'dirt-4'},
+    ['dirt-4']={1,'dirt-5'},
+    ['dirt-5']={1,'dirt-6'},
+    ['grass-4']={5,'dirt-4'}
 }
 for tile,value in pairs(paths) do
-    value[1]=1/(value[1]*150)
+    value[1]=1/(value[1]*150) -- 150 do make it so about 75% will change by the expected value
 end
 
 local function global_key(surface,pos)
