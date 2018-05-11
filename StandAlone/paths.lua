@@ -62,6 +62,7 @@ end)
 
 Event.register(defines.events.on_player_changed_position, function(event)
     local player = Game.get_player(event)
+    if player.afk_time > 300 then return end
     local surface = player.surface
     local pos = player.position
     if not paths[surface.get_tile(pos).name] then return end
