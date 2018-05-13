@@ -77,9 +77,24 @@ Event.register(defines.events.on_player_changed_position, function(event)
     local chance = paths[tile_name][1]
     for x = -1,1 do for y = -1,1 do
         local _pos = {pos.x+x,pos.y+y}
-        if paths[tile_name][2] == 'world-gen' and not placed_paths[surface.get_tile(_pos).name] or surface.get_tile(_pos).name == paths[tile_name][2] then chance=chance*adjacency_boost end
+        if paths[tile_name][2] == 'world-gen' and not placed_paths[surface.get_tile(_pos).name] 
+        or surface.get_tile(_pos).name == paths[tile_name][2] 
+        then chance=chance*adjacency_boost end
     end end
     if math.random() < chance then
         down_grade(surface,pos)
     end
 end)
+
+--[[
+/interface 
+local tile_name = tile.name 
+local chance = paths[tile_name][1] 
+for x = -1,1 do for y = -1,1 do
+    local _pos = {position.x+x,position.y+y}
+    if paths[tile_name][2] == 'world-gen' and not placed_paths[surface.get_tile(_pos).name]
+    or surface.get_tile(_pos).name == paths[tile_name][2]
+    then game.print('boost'..tostring(math.random())) chance=chance*adjacency_boost end end 
+end 
+return chance
+]]
