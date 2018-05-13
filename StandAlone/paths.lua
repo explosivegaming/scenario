@@ -1,6 +1,7 @@
 -- made by cooldude
 -- idea from Mylon - Dirt Path
 
+local adjacency_boost = 1.3 -- makes paths more lickly to be next to each other
 local paths = {
     -- ['tile name'] = {health,convert to}
     -- health is the average number of steps in hundards before it changes
@@ -65,8 +66,14 @@ Event.register(defines.events.on_player_changed_position, function(event)
     if player.afk_time > 300 then return end
     local surface = player.surface
     local pos = player.position
-    if not paths[surface.get_tile(pos).name] then return end
-    if math.random() < paths[surface.get_tile(pos).name][1] then
+    local tile_name = surface.get_tile(pos).name 
+    if not paths[tile_name] then return end
+    local chance = paths[tile_name][1]
+    for x = -1,1 do for y = -1,1 do
+        local _pos = {pos.x+x,pos.y+y}
+        if surface.get_tile(_pos).name == paths[tile_name][2] then chance=chance*adjacency_boost end
+    end end
+    if math.random() < chance then
         down_grade(surface,pos)
     end
 end)
