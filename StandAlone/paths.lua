@@ -2,6 +2,15 @@
 -- idea from Mylon - Dirt Path
 
 local adjacency_boost = 1.3 -- makes paths more lickly to be next to each other
+local placed_paths = {
+    ['refined-concrete']=true,
+    ['refined-hazard-concrete-right']=true,
+    ['refined-hazard-concrete-left']=true,
+    ['concrete']=true,
+    ['hazard-concrete-right']=true,
+    ['hazard-concrete-left']=true,
+    ['stone-path']=true
+}
 local paths = {
     -- ['tile name'] = {health,convert to}
     -- health is the average number of steps in hundards before it changes
@@ -51,10 +60,7 @@ Event.register(defines.events.on_player_built_tile, function(event)
     local surface = game.surfaces[event.surface_index]
     local old_tiles = event.tiles
     for _,old_tile in pairs(old_tiles) do
-        if old_tile.old_tile.name ~= 'refined-concrete' and old_tile.old_tile.name ~= 'refined-hazard-concrete-right' 
-        and old_tile.old_tile.name ~= 'refined-hazard-concrete-left' and old_tile.old_tile.name ~= 'concrete'
-        and old_tile.old_tile.name ~= 'hazard-concrete-right' and old_tile.old_tile.name ~= 'hazard-concrete-left'
-        and old_tile.old_tile.name ~= 'stone-path' and old_tile.old_tile.name ~= 'water' and old_tile.old_tile.name ~= 'deep-water' then
+        if placed_paths[old_tile.old_tile.name] or old_tile.old_tile.name == 'water' or old_tile.old_tile.name == 'deep-water' then else
             if global.paths == nil then global.paths = {} end -- nil as you can set to false to disable
             global.paths[global_key(surface,old_tile.position)]=old_tile.old_tile.name
         end
@@ -71,7 +77,7 @@ Event.register(defines.events.on_player_changed_position, function(event)
     local chance = paths[tile_name][1]
     for x = -1,1 do for y = -1,1 do
         local _pos = {pos.x+x,pos.y+y}
-        if surface.get_tile(_pos).name == paths[tile_name][2] then chance=chance*adjacency_boost end
+        if paths[tile_name][2] == 'world-gen' and not placed_paths[surface.get_tile(_pos).name] or surface.get_tile(_pos).name == paths[tile_name][2] then chance=chance*adjacency_boost end
     end end
     if math.random() < chance then
         down_grade(surface,pos)
