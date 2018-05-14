@@ -133,7 +133,7 @@ Admin.center = Gui.center.add{
             type='flow',
             direction='vertical'
         }
-        player_info_flow.style.height = 200
+        player_info_flow.style.height = 300
         player_info_flow.style.width = 200
         local label = dropdowns.add{
             type='label',

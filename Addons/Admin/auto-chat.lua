@@ -41,7 +41,12 @@ local commands = {
     ['magic']={'chat-bot.magic'},
     ['aids']={'chat-bot.aids'},
     ['riot']={'chat-bot.riot'},
-    ['lenny']={'chat-bot.lenny'}
+    ['lenny']={'chat-bot.lenny'},
+    ['maketea']=function(player) Server.new_thread{
+        timeout=math.floor(180*(math.random()+0.5)),data=player.name
+    }:on_event('timeout',function(self)
+        if self.data then game.print{'chat-bot.message',{'chat-bot.make-tea-2',self.data}} end
+    end):open() return {'chat-bot.make-tea-1'} end
 }
 
 Event.register(defines.events.on_console_chat,function(event)

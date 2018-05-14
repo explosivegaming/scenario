@@ -22,6 +22,7 @@ Event.register(defines.events.on_player_created, function(event)
   	local player = game.players[event.player_index]
 	if event.player_index == 1 then
 		player.force.friendly_fire = false
+		game.map_settings.enemy_expansion.enabled = false
 		player.force.chart(player.surface, {{player.position.x - 400, player.position.y - 400}, {player.position.x + 400, player.position.y + 400}})
 	end
 	for item,count in pairs(items) do
