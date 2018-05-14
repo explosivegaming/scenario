@@ -48,7 +48,7 @@ local commands = {
         if self.data[2]==0 then game.print{'chat-bot.message',{'chat-bot.order-pizza-2',self.data[1]}}                     
         elseif self.data[2]==1 then game.print{'chat-bot.message',{'chat-bot.order-pizza-3',self.data[1]}} self.reopen = false
         end
-        self.data[2]=sel.data[2] + 1
+        self.data[2]=self.data[2]+1
     end):open() return {'chat-bot.order-pizza-1'} end,
     ['maketea']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
