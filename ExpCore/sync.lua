@@ -10,11 +10,18 @@ Discord: https://discord.gg/r6dC2uK
 -- this file is used to allow easy syncing with out side programes
 local Sync = {}
 local Sync_gui_functions = {}
+local Sync_updates = {}
 
 --- Used as a faster way to get to the ranking function, overrides previous
 -- @usage Sync.set_ranks{name=rank_name}
 function Sync.set_ranks(...)
     Ranking._base_preset(...)
+end
+
+--- Used to standidise the tick format for any sync info
+-- @usage Sync.tick_format(60) -- return {60,'1.00M'}
+function Sync.tick_format(tick)
+    return {tick,tick_to_display_format(tick)}
 end
 
 --- Prints to chat as if it were a player
@@ -145,7 +152,7 @@ function Sync.count_player_times()
     if not game then return {'Offline'} end
     local _players = {}
     for index,player in pairs(game.players) do
-        _players[player.name] = {player.online_time,tick_to_display_format(player.online_time)}
+        _players[player.name] = Sync.tick_format(player.online_time)
     end
     return _players
 end
@@ -161,9 +168,9 @@ function Sync.info(set)
         server_description='A factorio server for everyone',
         reset_time='On Demand',
         time='Day Mth 00 00:00:00 UTC Year',
-        time_set={0,tick_to_display_format(0)},
-        last_update={0,tick_to_display_format(0)},
-        time_period={18000,tick_to_display_format(18000)},
+        time_set=Sync.tick_format(0),
+        last_update=Sync.tick_format(0),
+        time_period=Sync.tick_format(18000),
         players={
             online=Sync.count_players(true),
             n_online=#game.connected_players,
@@ -222,7 +229,18 @@ function Sync.update()
     }
     info.ranks = Sync.count_ranks()
     info.rockets = game.forces['player'].get_item_launched('satellite')
+    for key,callback in pairs(Sync_updates) do info[key] = callback() end
     return info
+end
+
+--- Adds a callback to be called when the info is updated
+-- @usage Sync.add_update('players',function() return #game.players end)
+-- @tparam key string the key that the value will be stored in
+-- @tparam callback function the function which will return this value
+function Sync.add_update(key,callback)
+    if game then return end
+    if not is_type(callback,'function') then return end
+    Sync_updates[key] = callback
 end
 
 --- outputs the curent server info into a file
