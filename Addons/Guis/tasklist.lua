@@ -108,6 +108,7 @@ local function _tasks(player)
         return _global().tasks
     elseif not data._edit and _edit then
         data._edit = true
+        for key,_ in pairs(data._tasks) do if not data._editing[key] then data._editing[key] = false end end
         return data._tasks
     elseif _edit then return data._tasks
     else return _global().tasks

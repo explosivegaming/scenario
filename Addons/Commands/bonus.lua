@@ -54,6 +54,13 @@ end)
 Event.register(defines.events.on_pre_player_died,function(event)
     local player = Game.get_player(event)
     if Ranking.get_rank(player):allowed('bonus-respawn') then
-        player.ticks_to_respawn = 60
+        player.ticks_to_respawn = 120
+        -- manually dispatch death event because it is not fired when ticks_to_respawn is set pre death
+        Event.dispatch{
+            name=defines.events.on_player_died,
+            tick=event.tick,
+            player_index=event.player_index,
+            cause = event.cause
+        }
     end
 end)

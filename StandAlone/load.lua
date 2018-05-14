@@ -12,5 +12,5 @@ require('colours')
 require('health')
 require('spawn')
 require('starting-items')
---require('paths') -- takes up too much file size
+require('paths')
 require('body-marker')
