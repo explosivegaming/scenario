@@ -1,7 +1,7 @@
 -- made by cooldude
 -- idea from Mylon - Dirt Path
 
-local adjacency_boost = 1.3 -- makes paths more lickly to be next to each other
+local adjacency_boost = 1.5 -- makes paths more lickly to be next to each other
 local placed_paths = {
     ['refined-concrete']=true,
     ['refined-hazard-concrete-right']=true,
