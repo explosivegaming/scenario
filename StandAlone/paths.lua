@@ -1,7 +1,7 @@
 -- made by cooldude
 -- idea from Mylon - Dirt Path
 
-local adjacency_boost = 1.5 -- makes paths more lickly to be next to each other
+local adjacency_boost = 2.25 -- makes paths more lickly to be next to each other
 local placed_paths = {
     ['refined-concrete']=true,
     ['refined-hazard-concrete-right']=true,
@@ -39,7 +39,7 @@ local paths = {
     ['grass-4']={5,'dirt-4'}
 }
 for tile,value in pairs(paths) do
-    value[1]=1/(value[1]*150) -- 150 do make it so about 75% will change by the expected value
+    value[1]=1/(value[1]*175) -- 150 do make it so about 75% will change by the expected value
 end
 
 local function global_key(surface,pos)
