@@ -65,7 +65,7 @@ end):add_tab('commands',{'readme.commands-name'},{'readme.commands-tooltip'},fun
     end
 end):add_tab('links',{'readme.links-name'},{'readme.links-tooltip'},function(frame)
     local links={
-		'https://discord.me/explosivegaming',
+		'https://discord.explosivegaming.nl',
 		'https://explosivegaming.nl',
 		'http://steamcommunity.com/groups/tntexplosivegaming',
 		'https://www.patreon.com/badgamernl'
