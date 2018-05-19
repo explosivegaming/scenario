@@ -8,7 +8,7 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
--- these items are not repaired, true means it is blocked
+-- Set an item to true to disallow it from being repaired
 local disallow = {
     ['loader']=true,
     ['fast-loader']=true,
@@ -18,7 +18,7 @@ local disallow = {
 }
 
 local const = 100
--- given const = 100: admin+ has unlimited, admin has 100, mod has 50, member has 20
+-- Given const = 100: admin+ has unlimited, admin has const (100), mod has const / 2 (50), member has const / 5 (20)
 
 commands.add_command('repair', 'Repairs all destoryed and damaged entites in an area.', {'range'}, function(event,args)
     local range = tonumber(args.range)
