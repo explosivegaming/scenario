@@ -43,7 +43,7 @@ local commands = {
     ['riot']={'chat-bot.riot'},
     ['lenny']={'chat-bot.lenny'},
 	-- jokes about food and drink
-    ['whattoeat']={'chat-bot.get-food_link'},
+    ['whattoeat']={'chat-bot.food'},
     ['orderpizza']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data={player.name,0}, reopen=true
     }:on_event('timeout',function(self)
@@ -68,8 +68,7 @@ local commands = {
         end
         self.data[2]=self.data[2]+1
     end):open() return {'chat-bot.get-cocktail-1'} end,
-
-	['makecoffee']=function(player) Server.new_thread{
+    ['makecoffee']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
         if self.data then game.print{'chat-bot.message',{'chat-bot.make-coffee-2',self.data}} end
