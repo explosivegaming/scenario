@@ -43,6 +43,7 @@ local commands = {
     ['riot']={'chat-bot.riot'},
     ['lenny']={'chat-bot.lenny'},
 	-- jokes about food and drink
+    ['food']={'chat-bot.food'},	
     ['orderpizza']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data={player.name,0}, reopen=true
     }:on_event('timeout',function(self)
