@@ -1,7 +1,7 @@
 -- made by cooldude
 -- idea from Mylon - Dirt Path
 
-local adjacency_boost = 2.25 -- makes paths more lickly to be next to each other
+local adjacency_boost = 3.25 -- makes paths more lickly to be next to each other
 local placed_paths = {
     ['refined-concrete']=true,
     ['refined-hazard-concrete-right']=true,
@@ -22,24 +22,24 @@ local paths = {
     ['hazard-concrete-left']={25,'stone-path'},
     ['stone-path']={10,'world-gen'}, -- world-gen just makes it pick the last tile not placed by a player
     ['sand-1']={1,'sand-2'},
-    ['sand-2']={5,'sand-3'},
+    ['sand-2']={3,'sand-3'},
     ['sand-3']={1,'red-desert-3'},
     ['red-desert-3']={1,'red-desert-2'},
-    ['red-desert-2']={5,'dirt-1'},
+    ['red-desert-2']={3,'dirt-1'},
     ['grass-2']={1,'grass-1'},
     ['grass-1']={1,'grass-3'},
-    ['grass-3']={5,'red-desert-0'},
+    ['grass-3']={3,'red-desert-0'},
     ['red-desert-0']={1,'red-desert-1'},
-    ['red-desert-1']={5,'dirt-1'},
+    ['red-desert-1']={3,'dirt-1'},
     ['dirt-1']={1,'dirt-2'},
     ['dirt-2']={1,'dirt-3'},
-    ['dirt-3']={5,'dirt-4'},
+    ['dirt-3']={3,'dirt-4'},
     ['dirt-4']={1,'dirt-5'},
     ['dirt-5']={1,'dirt-6'},
-    ['grass-4']={5,'dirt-4'}
+    ['grass-4']={3,'dirt-4'}
 }
 for tile,value in pairs(paths) do
-    value[1]=1/(value[1]*175) -- 150 do make it so about 75% will change by the expected value
+    value[1]=1/(value[1]*100)
 end
 
 local function global_key(surface,pos)

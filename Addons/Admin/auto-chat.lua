@@ -66,7 +66,12 @@ local commands = {
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
         if self.data then game.print{'chat-bot.message',{'chat-bot.make-tea-2',self.data}} end
-    end):open() return {'chat-bot.make-tea-1'} end
+    end):open() return {'chat-bot.make-tea-1'} end,
+    ['passabeer']=function(player) Server.new_thread{
+        timeout=math.floor(180*(math.random()+0.5)),data=player.name
+    }:on_event('timeout',function(self)
+        if self.data then game.print{'chat-bot.message',{'chat-bot.get-beer-2',self.data}} end
+    end):open() return {'chat-bot.get-beer-1'} end
 }
 
 Event.register(defines.events.on_console_chat,function(event)

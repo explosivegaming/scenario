@@ -56,7 +56,7 @@ Gui.left.add{
             horizontal_scroll_policy='never'
         }
         player_list.vertical_scroll_policy = 'auto'
-        player_list.style.maximal_height=200
+        player_list.style.maximal_height=195
         for _,rank in pairs(Ranking._ranks()) do
             for _,player in pairs(rank:get_players(true)) do
                 local flow = player_list.add{type='flow'}
