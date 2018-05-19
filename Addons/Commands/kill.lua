@@ -8,7 +8,7 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
-commands.add_command('kill', 'Kills a player. Must be either yourself (/kill self) or a person of a lower rank.', {'player'}, function(event,args)
+commands.add_command('kill', 'Kills a player. Must be either yourself (/kill self) or a person of a lower rank', {'player'}, function(event,args)
     local _player = Game.get_player(event)
     local player = Game.get_player(args.player)
     if args.player ~= 'self' and not player then player_return({'commands.invalid-player',args.player}) return commands.error end
