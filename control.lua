@@ -34,7 +34,7 @@ require_return_err = false -- Set to false when removing files; set to true for 
 _require = require
 require = function(path)
     local _path = path
-    if not string.sub(path,1) == '/' then path = '/'..path end
+    if string.sub(path,1) ~= '/' then path = '/'..path end
     local _return = {pcall(_require,path)}
     if not table.remove(_return, 1) then
         local __return = {pcall(_require,'/..'..path)}
