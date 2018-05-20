@@ -22,6 +22,9 @@ local messages = {
     ['links']={'chat-bot.links'},
     ['loop']={'chat-bot.loops'},
     ['loops']={'chat-bot.loops'},
+    --Thadius suggestion start
+    ['rhd']={'chat-bot.lhd'},
+    --Thadius suggestion end
     ['roundabout']={'chat-bot.loops'},
     ['roundabouts']={'chat-bot.loops'},
     ['afk']=function(_player) local max=_player for _,player in pairs(game.connected_players) do if max.afk_time < player.afk_time then max=player end end return {'chat-bot.afk',max.name,tick_to_display_format(max.afk_time)} end
@@ -41,8 +44,6 @@ local commands = {
     ['aids']={'chat-bot.aids'},
     ['riot']={'chat-bot.riot'},
     ['lenny']={'chat-bot.lenny'},
-    --Thadius suggestion
-    ['rhd']={'chat-bot.lhd'},
     --Jokes about food and drink
     ['whattoeat']={'chat-bot.food'},
     ['orderpizza']=function(player) Server.new_thread{
