@@ -10,6 +10,7 @@ Discord: https://discord.gg/r6dC2uK
 -- This file just contains all the diffrent requires
 
 -- Admin dir
+verbose('Begain Admin Loading')
 require('Admin/player-info')
 require('Admin/admin') -- Used with Guis/admin-gui, but can work without
 require('Admin/reports') -- This adds onto Admin/admin, adds report command and warnings, and temp ban
@@ -22,6 +23,7 @@ require('Admin/afk-kick')
 require('Admin/auto-chat')
 
 -- Commands dir
+verbose('Begain Command Loading')
 require('Commands/cheat-mode')
 require('Commands/kill')
 require('Commands/repair')
@@ -32,6 +34,7 @@ require('Commands/tp') -- Requires Admin/admin
 require('Commands/admin') -- Requires Admin/reports
 
 -- GUIs dir
+verbose('Begain Gui Loading')
 require('Guis/readme')
 require('Guis/science')
 require('Guis/rockets')
@@ -44,5 +47,3 @@ require('Guis/rank-changer')
 require('Guis/admin-gui') -- Used with Admin/admin, requires Admin/admin
 require('Guis/reports') -- Requires Admin/reports
 require('Guis/game-settings')
-
--- other
