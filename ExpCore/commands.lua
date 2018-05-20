@@ -135,6 +135,7 @@ commands.add_command = function(name, description, inputs, event)
     if command_calls[name] then return end
     if not is_type(name,'string') then return end
     if not is_type(event,'function') then return end
+    verbose('Created Command: '..name)
     local description = is_type(description,'string') and description or 'No Description'
     local inputs = is_type(inputs,'table') and inputs or {'parameter',true}
     command_data[name] = {

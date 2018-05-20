@@ -21,6 +21,7 @@ end
 function left.add(obj)
     if not is_type(obj,'table') then return end    
     if not is_type(obj.name,'string') then return end
+    verbose('Created Left Gui: '..obj.name)
     setmetatable(obj,{__index=left._left})
     Gui._add_data('left',obj.name,obj)
     Gui.toolbar.add(obj.name,obj.caption,obj.tooltip,obj.toggle)
