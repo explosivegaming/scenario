@@ -44,8 +44,6 @@ local commands = {
     ['aids']={'chat-bot.aids'},
     ['riot']={'chat-bot.riot'},
     ['lenny']={'chat-bot.lenny'},
-    --Thadius suggestion
-    ['rhd']={'chat-bot.lhd'},
     --Jokes about food and drink
     ['whattoeat']={'chat-bot.food'},
     ['orderpizza']=function(player) Server.new_thread{
