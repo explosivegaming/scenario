@@ -7,7 +7,10 @@ local default_colours = {
 	Cooldude2606={r=57,g=192,b=207},
 	mark9064={r=99,g=0,b=255},
 	eissturm={r=25,g=25,b=112},
-	Sakama={r=20,g=213,b=80}
+	Sakama={r=20,g=213,b=80},
+	freek18={r=50,g=0,b=255},
+	aldldl={r=0,g=131,b=255},
+	UUBlueFire={r=0,g=204,b=255}
 }
 
 Event.register(defines.events.on_player_created, function(event)
