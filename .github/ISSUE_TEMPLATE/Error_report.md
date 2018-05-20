@@ -27,7 +27,7 @@ Steps to reproduce the behavior:
 
 **Other information (please complete the following information):**
  - OS: [e.g. iOS, Windows, Linux]
- - Factorio Version [e.g. 0.16.30]
+ - Factorio Version: [e.g. 0.16.30]
 
 **Additional context**
 Add any other context about the problem here.
