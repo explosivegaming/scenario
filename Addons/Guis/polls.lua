@@ -8,7 +8,7 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
-local poll_time_out = 90 -- this is in seconds
+local poll_time_out = 90 -- In seconds
 
 local function _polls(reset)
     global.addons = not reset and global.addons or {}
@@ -50,7 +50,7 @@ local function _poll_data(question,answers)
         data={poll_uuid=poll.uuid},
         timeout=poll_time_out*60
     }:on_event('timeout',_poll_end):open()
-    -- this time out is knowen to cause desyncs and so i have moved it to a hard coded function
+    -- This time out is known to cause desyncs and so I have moved it to a hard coded function
     _polls().active[poll.uuid]=poll
     return poll.uuid
 end

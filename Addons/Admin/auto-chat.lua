@@ -26,7 +26,6 @@ local messages = {
     ['roundabouts']={'chat-bot.loops'},
     ['afk']=function(_player) local max=_player for _,player in pairs(game.connected_players) do if max.afk_time < player.afk_time then max=player end end return {'chat-bot.afk',max.name,tick_to_display_format(max.afk_time)} end
 }
-
 -- white spaces removed and made into lower
 -- these are global chat commands that can be used
 -- comands start with ! (all messages are also commands)
@@ -42,6 +41,39 @@ local commands = {
     ['aids']={'chat-bot.aids'},
     ['riot']={'chat-bot.riot'},
     ['lenny']={'chat-bot.lenny'},
+    --Thadius suggestion
+    ['rhd']={'chat-bot.lhd'},
+------ jokes about food and drink
+    ['whattoeat']={'chat-bot.food'},
+    ['orderpizza']=function(player) Server.new_thread{
+        timeout=math.floor(180*(math.random()+0.5)),data={player.name,0}, reopen=true
+    }:on_event('timeout',function(self)
+        if self.data[2]==0 then game.print{'chat-bot.message',{'chat-bot.order-pizza-2',self.data[1]}}                
+        elseif self.data[2]==1 then game.print{'chat-bot.message',{'chat-bot.order-pizza-3',self.data[1]}} self.reopen = false
+        end
+        self.data[2]=self.data[2]+1
+    end):open() return {'chat-bot.order-pizza-1'} end,
+    ['passsomesnaps']=function(player) Server.new_thread{
+        timeout=math.floor(180*(math.random()+0.5)),data={player.name,0}, reopen=true
+    }:on_event('timeout',function(self)
+        if self.data[2]==0 then game.print{'chat-bot.message',{'chat-bot.get-snaps-2',self.data[1]}}                
+        elseif self.data[2]==1 then game.print{'chat-bot.message',{'chat-bot.get-snaps-3',self.data[1]}} self.reopen = false
+        end
+        self.data[2]=self.data[2]+1
+    end):open() return {'chat-bot.get-snaps-1'} end,
+    ['makecocktail']=function(player) Server.new_thread{
+        timeout=math.floor(180*(math.random()+0.5)),data={player.name,0}, reopen=true
+    }:on_event('timeout',function(self)
+        if self.data[2]==0 then game.print{'chat-bot.message',{'chat-bot.get-cocktail-2',self.data[1]}}                
+        elseif self.data[2]==1 then game.print{'chat-bot.message',{'chat-bot.get-cocktail-3',self.data[1]}} self.reopen = false
+        end
+        self.data[2]=self.data[2]+1
+    end):open() return {'chat-bot.get-cocktail-1'} end,
+    ['makecoffee']=function(player) Server.new_thread{
+        timeout=math.floor(180*(math.random()+0.5)),data=player.name
+    }:on_event('timeout',function(self)
+        if self.data then game.print{'chat-bot.message',{'chat-bot.make-coffee-2',self.data}} end
+    end):open() return {'chat-bot.make-coffee-1'} end,
     ['makecoffee']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
@@ -60,7 +92,17 @@ local commands = {
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
         if self.data then game.print{'chat-bot.message',{'chat-bot.make-tea-2',self.data}} end
-    end):open() return {'chat-bot.make-tea-1'} end
+    end):open() return {'chat-bot.make-tea-1'} end,
+    ['meadplease']=function(player) Server.new_thread{
+        timeout=math.floor(180*(math.random()+0.5)),data=player.name
+    }:on_event('timeout',function(self)
+        if self.data then game.print{'chat-bot.message',{'chat-bot.get-mead-2',self.data}} end
+    end):open() return {'chat-bot.get-mead-1'} end,
+    ['passabeer']=function(player) Server.new_thread{
+        timeout=math.floor(180*(math.random()+0.5)),data=player.name
+    }:on_event('timeout',function(self)
+        if self.data then game.print{'chat-bot.message',{'chat-bot.get-beer-2',self.data}} end
+    end):open() return {'chat-bot.get-beer-1'} end
 }
 
 Event.register(defines.events.on_console_chat,function(event)

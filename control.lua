@@ -8,10 +8,10 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
--- a base for functions to keep things clean
+-- A base for functions to keep things clean
 _G._ = {}
 
--- replaces the base error function
+-- Replaces the base error function
 _error = error
 error = function(err)
     if _G.Sync and _G.Sync.emit_embeded and game then
@@ -28,8 +28,8 @@ error = function(err)
         _error(err)
     end
 end
--- replaces the base require function
-require_return_err = false -- set to false when removing files; set to true for debuging
+-- Replaces the base require function
+require_return_err = false -- Set to false when removing files; set to true for debuging
 _require = require
 require = function(path)
     local _return = {pcall(_require,path)}
@@ -38,29 +38,29 @@ require = function(path)
 end
 
 require("mod-gui")
--- loads the stdlib and allows Core Game and Event
+-- Loads the stdlib and allows Core Game and Event
 Color, Game, Event = require('/StdLib/load'){'Color','Game','Event'}
 
--- loads the ExpLib, functions are plased into the lua global
+-- loads the ExpLib, functions are placed into the lua global
 local ExpLib = require 'ExpLib'
 ExpLib._unpack_to_G(ExpLib)
---_G.Sync.emit_embeded = nil -- un-comment this line if you are not using the json.data
+--_G.Sync.emit_embeded = nil -- Un-comment this line if you are not using the json.data
 
--- loads the ExpCore files these are need in order to run the other addons
+-- Loads the ExpCore files. These are need in order to run the other addons
 Ranking, Sync, Server, Gui = require('/ExpCore/load'){'Ranking','Sync','Server','Gui'}
 local success,err = pcall(require,'/ExpCore/GuiParts/test')
 if success then Gui.test = err end
 if Gui.popup then Gui.popup._load() end
 if Sync._load then Sync._load() end
--- this loads the ranks that Ranking uses
+-- Loads the ranks that Ranking uses
 require('/ExpCore/ranks')
--- this loads any edits that are not need in core pcall as file may not be preset
+-- Loads any edits that are not need in core pcall as file may not be present
 pcall(require,'/Addons/playerRanks')
--- this makes sure that all the little details are cleaned up
+-- Makes sure that all the little details are cleaned up
 Ranking._auto_edit_ranks()
--- this loads all the addons
+-- Loads all the addons
 local success,err = pcall(require,'Addons/load')
 if not success then error(err) end
--- this loads anything that does not use ExpCore (sourse given in the file)
+-- Loads anything that does not use ExpCore (source given in the file)
 local success,err = pcall(require,'StandAlone/load')
 if not success then error(err) end

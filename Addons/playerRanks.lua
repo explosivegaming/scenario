@@ -10,21 +10,21 @@ Discord: https://discord.gg/r6dC2uK
 
 --[[
     How to use groups:
-name		the name that you can use to refence it.
-disallow	if present then all ranks in this group will have this added to their disallow.
-allow		if present then all ranks in this group will have this added to their allow.
-highest     is asigned by the script to show the highest rank in this group.
-lowest      is asigned by the script to show the lowest rank in this group.
+name		The name that you can use to reference it.
+disallow	If present then all ranks in this group will have this added to their disallow.
+allow		If present then all ranks in this group will have this added to their allow.
+highest     Assigned by the script to show the highest rank in this group.
+lowest      Assigned by the script to show the lowest rank in this group.
 How to add ranks:
-Name		is what will be used in the scripts and is often the best choice for display in text.
-short_hand	is what can be used when short on space but the rank still need to be displayed.
-tag			is the tag the player will gain when moved to the rank, it can be nil.
-time		is used for auto-rank feature where you are moved to the rank after a certain play time in minutes.
-colour		is the RGB value that can be used to emphasise GUI elements based on rank.
-power		is asigned by the script based on their index in ranks, you can insert new ranks between current ones.
-group		is asigned by the script to show the group this rank is in
-disallow	is a list containing input actions that the user can not perform.
-allow		is a list of custom commands and effects that that rank can use, all defined in the sctips.
+Name		What will be used in the scripts and is often the best choice for display in text.
+short_hand	What can be used when short on space but the rank still need to be displayed.
+tag			The tag the player will gain when moved to the rank, it can be nil.
+time		Used for auto-rank feature where you are moved to the rank after a certain play time in minutes.
+colour		The RGB value that can be used to emphasise GUI elements based on rank.
+power		Assigned by the script based on their index in ranks, you can insert new ranks between current ones.
+group		Assigned by the script to show the group this rank is in.
+disallow	A list containing input actions that the user can not perform.
+allow		A list of custom commands and effects that that rank can use, all defined in the scripts.
 
 For allow, add the allow as the key and the value as true
 Example: test for 'server-interface' => allow['server-interface'] = true
@@ -34,7 +34,7 @@ Example: defines.input_action.drop_item -> 'drop_item'
 http://lua-api.factorio.com/latest/defines.html#defines.input_action
 --]]
 
--- see ExpCore/ranks.lua for examples - you add your own and edit pre-made ones here.
+-- See ExpCore/ranks.lua for examples - you add your own and edit pre-made ones here.
 
 local groups = Ranking._groups(true)
 
