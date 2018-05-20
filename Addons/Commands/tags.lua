@@ -11,14 +11,14 @@ Discord: https://discord.gg/r6dC2uK
 local const = 20
 -- this is the max lenth of a tag
 
-commands.add_command('tag', 'Give yourself a custom tag. Use /tag-clear self to remove tag.', {'tag',true}, function(event,args)
+commands.add_command('tag', 'Give yourself a custom tag. Use /tag-clear self to remove tag', {'tag',true}, function(event,args)
     local player = Game.get_player(event)
     local rank = Ranking.get_rank(player)
     if string.len(args.tag) > const then player_return({'commands.invalid-length',const}) return commands.error end
     player.tag = rank.tag..' - '..args.tag
 end)
 
-commands.add_command('tag-clear', 'Removes a custom tag. Player can be self (/tag-clear self).', {'player'}, function(event,args)
+commands.add_command('tag-clear', 'Removes a custom tag. Player can be self (/tag-clear self)', {'player'}, function(event,args)
     local _player = Game.get_player(event)
     local _rank = Ranking.get_rank(_player)
     local player = Game.get_player(args.player)
