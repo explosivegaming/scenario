@@ -10,6 +10,7 @@ local default_colours = {
 	Sakama={r=20,g=213,b=80},
 	freek18={r=50,g=0,b=255},
 	aldldl={r=0,g=131,b=255},
+	NAD4X4={r=135,g=206,b=250},
 	UUBlueFire={r=0,g=204,b=255}
 }
 
