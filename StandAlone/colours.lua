@@ -6,7 +6,7 @@ local default_colours = {
 	arty714={r=150,g=68,b=161},
 	Cooldude2606={r=57,g=192,b=207},
 	mark9064={r=99,g=0,b=255},
-	eissturm={r=25,g=25,b=112}
+	eissturm={r=25,g=25,b=112},
 	Sakama={r=20,g=213,b=80}
 }
 
