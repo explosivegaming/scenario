@@ -27,7 +27,7 @@ error = function(err)
     end
 end
 -- Replaces the base require function and verbose function
-_verbose = true -- Set to true for more on the loading of the files
+_verbose = false -- Set to true for more on the loading of the files
 function verbose(str) if _verbose then log(str) print(str) end end
 verbose('============================= START =============================')
 require_return_err = false -- Set to false when removing files; set to true for debuging
