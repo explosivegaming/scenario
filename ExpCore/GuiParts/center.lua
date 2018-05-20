@@ -17,7 +17,7 @@ center._center = {}
 function center.add(obj)
     if not is_type(obj,'table') then return end    
     if not is_type(obj.name,'string') then return end 
-    verbose('Created Center Gui: '..name)
+    verbose('Created Center Gui: '..obj.name)
     setmetatable(obj,{__index=center._center})
     obj.tabs = {}
     obj._tabs = {}
