@@ -294,9 +294,11 @@ function Server._thread:close()
             end
         end)
     end
-    if is_type(self.name,'string') then threads.paused[self.name]=self.uuid self.opened=nil
-        if self.reopen == true then self:open() end
-    else threads.all[uuid] = nil threads.all._n = threads.all._n-1 end
+    self.opened=nil
+    if self.reopen == true then self:open() else
+        if is_type(self.name,'string') then threads.paused[self.name]=self.uuid
+        else threads.all[uuid] = nil threads.all._n = threads.all._n-1 end
+    end
     return _return
 end
 
