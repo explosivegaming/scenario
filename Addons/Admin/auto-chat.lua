@@ -42,7 +42,9 @@ local commands = {
     ['aids']={'chat-bot.aids'},
     ['riot']={'chat-bot.riot'},
     ['lenny']={'chat-bot.lenny'},
-	-- jokes about food and drink
+    --Thadius suggestion
+    ['rhd']={'chat-bot.lhd'},
+------ jokes about food and drink
     ['whattoeat']={'chat-bot.food'},
     ['orderpizza']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data={player.name,0}, reopen=true
