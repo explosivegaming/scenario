@@ -37,9 +37,10 @@ require = function(path)
     if string.sub(path,1) ~= '/' then path = '/'..path end
     local _return = {pcall(_require,path)}
     if not table.remove(_return, 1) then
-        local __return = {pcall(_require,'/..'..path)}
+        local __return = {pcall(_require,'/Addons'..path)}
         if not table.remove(__return, 1) then
-            verbose('Failed to load: '.._path..' ('.._return[1]..')') 
+            verbose('Failed to load: '.._path..' ('.._return[1]..')')
+            verbose('Also Attemped: /Addons'..path..' ('..__return[1]..')')
             if require_return_err then error(unpack(_return)) end
         else verbose('Loaded: '.._path) return unpack(__return) end
     else verbose('Loaded: '.._path) end
