@@ -46,14 +46,15 @@ Color, Game, Event = require('StdLib/load'){'Color','Game','Event'}
 
 -- loads the ExpLib, functions are placed into the lua global
 local ExpLib = require 'ExpLib'
-verbose('ExpLib Initiation')
+verbose('ExpLib Extraction')
 ExpLib._unpack_to_G(ExpLib)
 
 verbose('Begain Core File Loading')
 -- Loads the ExpCore files. These are need in order to run the other addons
 Ranking, Sync, Server, Gui = require('ExpCore/load'){'Ranking','Sync','Server','Gui'}
+verbose('Gui Test Initiation')
 local success,err = require('ExpCore/GuiParts/test')
-if success then verbose('Gui Test Initiation') Gui.test = err end
+if success then Gui.test = err else verbose('No Test Present') end
 if Gui.popup then verbose('Gui Popup Initiation') Gui.popup._load() end
 if Sync._load then verbose('Sync Initiation') Sync._load() end
 -- Loads the ranks that Ranking uses
