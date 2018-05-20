@@ -33,9 +33,16 @@ verbose('============================= START =============================')
 require_return_err = false -- Set to false when removing files; set to true for debuging
 _require = require
 require = function(path)
+    local _path = path
+    if string.sub(path,1) ~= '/' then path = '/'..path end
     local _return = {pcall(_require,path)}
-    if not table.remove(_return, 1) then verbose('Failed to load: '..path..' ('.._return[1]..')') if require_return_err then error(unpack(_return)) end
-    else verbose('Loaded: '..path) end
+    if not table.remove(_return, 1) then
+        local __return = {pcall(_require,'/..'..path)}
+        if not table.remove(__return, 1) then
+            verbose('Failed to load: '.._path..' ('.._return[1]..')') 
+            if require_return_err then error(unpack(_return)) end
+        else verbose('Loaded: '.._path) return unpack(__return) end
+    else verbose('Loaded: '.._path) end
     return unpack(_return)
 end
 
