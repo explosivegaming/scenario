@@ -17,12 +17,12 @@ Pass a table with the names of the objects you want and it will be return in tha
 
 local StdLib = {}
 
-require('/table')
-require('/string')
-require('/time')
-StdLib.Color = require('/color')
-StdLib.Game = require('/game')
-StdLib.Event = require('/event')
+require('table')
+require('string')
+require('time')
+StdLib.Color = require('color')
+StdLib.Game = require('game')
+StdLib.Event = require('event')
 
 return function(rtn)
     local _return = {}
