@@ -17,6 +17,7 @@ center._center = {}
 function center.add(obj)
     if not is_type(obj,'table') then return end    
     if not is_type(obj.name,'string') then return end 
+    verbose('Created Center Gui: '..obj.name)
     setmetatable(obj,{__index=center._center})
     obj.tabs = {}
     obj._tabs = {}
@@ -167,6 +168,7 @@ end
 -- @tparam function callback this is called when button is pressed with function(root_frame)
 -- @return self to allow chaining of _center:add_tab
 function center._center:add_tab(name,caption,tooltip,callback)
+    verbose('Created Tab: '..self.name..'/'..name)
     self._tabs[self.name..'_'..name] = callback
     self.tabs[name] = Gui.inputs.add{
         type='button',

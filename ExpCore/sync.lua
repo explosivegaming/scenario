@@ -90,6 +90,13 @@ function Sync.emit_embeded(args)
     game.write_file('embeded.json',table.json(log_data)..'\n',true,0)
 end
 
+-- set up error handle
+verbose('Set New Error Handle')
+_G.error_handle = function(err)
+    local color = _G.Color and Color.to_hex(defines.text_color.bg) or '0x0'
+    Sync.emit_embeded{title='SCRIPT ERROR',color=color,description='There was an error in the script @Developers ',Error=err}
+end
+
 --- used to get the number of admins currently online
 -- @usage Sync.count_admins()
 -- @treturn int the number of admins online
