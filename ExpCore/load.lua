@@ -17,11 +17,12 @@ Pass a table with the names of the objects you want and it will be return in tha
 
 local StdExpCoreLib = {}
 
-require '/commands'
-StdExpCoreLib.Ranking = require '/ranking'
-StdExpCoreLib.Server = require '/server'
-StdExpCoreLib.Sync = require '/sync'
-StdExpCoreLib.Gui = require '/gui'
+require('/commands')
+StdExpCoreLib.Ranking = require('/ranking')
+StdExpCoreLib.Server = require('/server')
+StdExpCoreLib.Sync = require('/sync')
+StdExpCoreLib.Gui = require('/gui')
+verbose('Begain Gui Part Loading')
 StdExpCoreLib.Gui:_load_parts{
     'inputs',
     'toolbar',
@@ -34,6 +35,7 @@ return function(rtn)
     local _return = {}
     for _,name  in pairs(rtn) do
         if StdExpCoreLib[name] then
+            verbose('Core File Extraction: '..name)
             table.insert(_return,StdExpCoreLib[name])
         end
     end

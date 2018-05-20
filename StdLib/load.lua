@@ -17,17 +17,18 @@ Pass a table with the names of the objects you want and it will be return in tha
 
 local StdLib = {}
 
-require '/table'
-require '/string'
-require '/time'
-StdLib.Color = require '/color'
-StdLib.Game = require '/game'
-StdLib.Event = require '/event'
+require('/table')
+require('/string')
+require('/time')
+StdLib.Color = require('/color')
+StdLib.Game = require('/game')
+StdLib.Event = require('/event')
 
 return function(rtn)
     local _return = {}
     for _,name  in pairs(rtn) do
         if StdLib[name] then
+            verbose('StdLib Extraction: '..name)
             table.insert(_return,StdLib[name])
         end
     end
