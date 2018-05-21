@@ -1,6 +1,6 @@
 ---
-name: Error Report
-about: Create a report on a bug which gives an error
+name: Error/Desync Report
+about: Create a report on a bug which gives an error or desync
 
 ---
 
