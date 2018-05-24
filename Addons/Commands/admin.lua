@@ -42,7 +42,7 @@ commands.add_command('unjail', 'Returns a player\'s old rank', {'player',true}, 
     local player = Game.get_player(args.player)
     if not player then player_return({'commands.invalid-player',args.player}) return commands.error end
     if Admin.is_banned(player) then player_return({'commands.cant-report-ban',args.player}) return commands.error end
-    Ranking.revert(player,event.player_index)
+    Server.interface(Ranking.revert,true,player,event.player_index)
 end)
 
 commands.add_command('temp-ban', 'Temporarily ban a player', {'player','reason',true}, function(event,args)
