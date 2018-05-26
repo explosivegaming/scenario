@@ -10,7 +10,7 @@ Discord: https://discord.gg/r6dC2uK
 
 local function _global(reset)
     global.addons = not reset and global.addons or {}
-    global.addons.rockets = not reset and global.addons.rockets or {update=0,first=0,_last=0,last=0,fastest=0,milestones={m1=0,m2=0,m5=0,m10=0,m20=0,m50=0,m100=0,m200=0,m500=0,m1000=0,m1500=0,m2000=0}}
+    global.addons.rockets = not reset and global.addons.rockets or {update=0,first=0,_last=0,last=0,fastest=0,milestones={m1=0,m2=0,m5=0,m10=0,m20=0,m50=0,m100=0,m200=0,m500=0,m1000=0,m2000=0,m5000=0}}
     return global.addons.rockets
 end
 Gui.left.add{
