@@ -11,6 +11,9 @@ Discord: https://discord.gg/r6dC2uK
 -- Replaces the base error function
 _error = error
 error = function(err)
+    if type(err) == 'table' then err = serpent.line(err) -- used factorio build in to avoid more errors
+    elseif type(err) ~= 'number' and type(err) ~= 'string' then err = tostring(err)
+    end
     verbose('Error Called: '..err)
     if _G.error_handle and type(error_handle) == 'function' then
         verbose('Exception Caught By Error Handle')
