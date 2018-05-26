@@ -11,13 +11,10 @@ Discord: https://discord.gg/r6dC2uK
 -- Replaces the base error function
 _error = error
 error = function(err)
-    if type(err) == 'table' then err = serpent.line(err) -- used factorio build in to avoid more errors
-    elseif type(err) ~= 'number' and type(err) ~= 'string' then err = tostring(err)
-    end
     verbose('Error Called: '..err)
     if _G.error_handle and type(error_handle) == 'function' then
         verbose('Exception Caught By Error Handle')
-        local success, _err = error_handle(err)
+        local success, _err = pcall(error_handle,err)
         if not success then _error({handle=_err,err=err}) end
     elseif _G.Game and game then
         verbose('Exception Caught By Game Print')
@@ -30,7 +27,7 @@ error = function(err)
     end
 end
 -- Replaces the base require function and verbose function
-_verbose = false -- Set to true for more on the loading of the files
+_verbose = true -- Set to true for more on the loading of the files
 function verbose(str) if _verbose then log(str) print(str) end end
 verbose('============================= START =============================')
 require_return_err = false -- Set to false when removing files; set to true for debuging
