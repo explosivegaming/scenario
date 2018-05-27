@@ -2,13 +2,9 @@
 
 Event.register(defines.events.on_player_died, function(event)
     local player = game.players[event.player_index]
-    local o = player.position
-    local entity = player.surface.find_entities_filtered{area={{o.x-1,o.y-1},{o.x+1,o.y+1}},name='character-corpse'}
-    table.insert(entity,nil)
     local tag = player.force.add_chart_tag(player.surface,{
         position=player.position,
-        text='Death: '..player.name..' ('..tick_to_display_format(event.tick)..')',
-        target=entity[1]
+        text='Death: '..player.name..' ('..tick_to_display_format(event.tick)..')'
     })
     if not global.corpses then global.corpses = {} end
     table.insert(global.corpses,tag)
@@ -19,6 +15,7 @@ Event.register(defines.events.on_tick, function(event)
     if not global.corpses then global.corpses = {} end
     for key,tag in pairs(global.corpses) do
         if not tag.valid then global.corpses[key] = nil return end
+        if not tag.target then tag.target = tag.surface.find_entity('character-corpse',tag.position) or nil end
         if not tag.target or not tag.target.valid then tag.destroy() global.corpses[key] = nil return end
     end
 end)
