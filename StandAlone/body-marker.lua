@@ -13,9 +13,16 @@ end)
 Event.register(defines.events.on_tick, function(event)
     if (game.tick%3600) ~= 0 then return end
     if not global.corpses then global.corpses = {} end
-    for key,tag in pairs(global.corpses) do
-        if not tag.valid then global.corpses[key] = nil return end
-        if not tag.target then tag.target = tag.surface.find_entity('character-corpse',tag.position) or nil end
-        if not tag.target or not tag.target.valid then tag.destroy() global.corpses[key] = nil return end
+    local key = 1
+    while key <= #global.corpses do
+        local tag = global.corpses[key]
+        if not tag or not tag.valid then table.remove(global.corpses,key) else
+            if not tag.target then 
+                local entity = tag.surface.find_entity('character-corpse',tag.position)
+                if entity then tag.target = entity
+                else tag.destroy() table.remove(global.corpses,key) key=key-1 end
+            elseif not tag.target.valid then tag.destroy() table.remove(global.corpses,key) key=key-1 end
+        end
+        key=key+1
     end
 end)
