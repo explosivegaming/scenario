@@ -172,7 +172,7 @@ function Admin.jail(player,by_player,reason)
         title='Player Jail',
         color=Color.to_hex(defines.text_color.med),
         description='There was a player jailed.',
-        ['Player:']=player.name,
+        ['Player:']='<<inline>>'..player.name,
         ['By:']='<<inline>>'..by_player_name,
         ['Reason:']=reason
     }
