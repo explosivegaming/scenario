@@ -217,7 +217,7 @@ Manager.loadModules = setmetatable({},
                         else for key,value in pairs(table.remove(module,1)) do tbl[module_name][key] = value end end
                     end
                     -- if there is a module by this name in _G ex table then it will be indexed to the new module
-                    if rawget(_G,module_name) then setmetatable(rawget(_G,module_name),{__index=tbl[module_name]}) end
+                    if rawget(_G,module_name) and type(tbl[module_name]) == 'table' then setmetatable(rawget(_G,module_name),{__index=tbl[module_name]}) end
                 else
                     Manager.verbose('Failed load: "'..module_name..'"; Location: '..location..' ('..module..')','errorCaught')
                 end
