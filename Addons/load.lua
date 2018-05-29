@@ -7,4 +7,42 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
--- this file will just contain all the diffrent requires
+-- This file just contains all the diffrent requires
+
+-- Admin dir
+require('Admin/player-info')
+require('Admin/admin') -- Used with Guis/admin-gui, but can work without
+require('Admin/reports') -- This adds onto Admin/admin, adds report command and warnings, and temp ban
+require('Admin/discord')
+require('Admin/auto-message')
+require('Admin/tree-decon')
+require('Admin/inventory-search')
+require('Admin/base-damage')
+require('Admin/afk-kick')
+require('Admin/auto-chat')
+
+-- Commands dir
+require('Commands/cheat-mode')
+require('Commands/kill')
+require('Commands/repair')
+require('Commands/bonus')
+require('Commands/tags')
+require('Commands/home')
+require('Commands/tp') -- Requires Admin/admin
+require('Commands/admin') -- Requires Admin/reports
+
+-- GUIs dir
+require('Guis/readme')
+require('Guis/science')
+require('Guis/rockets')
+require('Guis/player-list')
+require('Guis/tasklist')
+require('Guis/warp-system')
+require('Guis/polls') -- Too many desyncs
+require('Guis/announcements')
+require('Guis/rank-changer')
+require('Guis/admin-gui') -- Used with Admin/admin, requires Admin/admin
+require('Guis/reports') -- Requires Admin/reports
+require('Guis/game-settings')
+
+-- other

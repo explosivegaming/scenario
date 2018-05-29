@@ -7,10 +7,9 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
--- this file will just contain all the diffrent requires
-require('colours')
-require('health')
-require('spawn')
-require('starting-items')
-require('paths')
-require('body-marker')
+
+commands.add_command('cheat-mode', 'Toggles cheat mode for a player', {'player'}, function(event,args)
+    local player = Game.get_player(args.player)
+    if not player then player_return({'commands.invalid-player',args.player}) return commands.error end
+    if player.cheat_mode == true then player.cheat_mode = false else player.cheat_mode = true end
+end)

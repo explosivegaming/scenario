@@ -39,8 +39,61 @@ http://lua-api.factorio.com/latest/defines.html#defines.input_action
 local groups = Ranking._groups(true)
 
 groups['Root']:edit('allow',false,{
-    ['testing']=true
+    ['player-list']=true,
+    ['readme']=true,
+    ['rockets']=true,
+    ['science']=true,
+    ['tasklist']=true,
+    ['rank-changer']=true,
+    ['admin-commands']=true,
+    ['warn']=true,
+    ['temp-ban']=true,
+    ['clear-warings']=true,
+    ['clear-reports']=true,
+    ['clear-all']=true,
+    ['clear-inv']=true,
+    ['announcements']=true,
+    ['warp-list']=true,
+    ['polls']=true,
+    ['admin-items']=true,
+    ['all-items']=true,
+    ['repair']=true,
+    ['global-chat']=true
 })
+groups['Admin']:edit('allow',false,{
+    ['player-list']=true,
+    ['readme']=true,
+    ['rockets']=true,
+    ['science']=true,
+    ['tasklist']=true,
+    ['rank-changer']=true,
+    ['admin-commands']=true,
+    ['warn']=true,
+    ['temp-ban']=true,
+    ['clear-warings']=true,
+    ['clear-reports']=true,
+    ['clear-all']=true,
+    ['clear-inv']=true,
+    ['announcements']=true,
+    ['warp-list']=true,
+    ['polls']=true,
+    ['global-chat']=true
+})
+groups['User']:edit('allow',false,{
+    ['player-list']=true,
+    ['readme']=true,
+    ['rockets']=true,
+    ['science']=true,
+    ['tasklist']=true,
+    ['report']=true,
+    ['warp-list']=true,
+    ['polls']=true
+})
+groups['Jail']:edit('allow',false,{
+    
+})
+
+
 
 groups['Root']:add_rank{
     name='Owner',
@@ -114,11 +167,58 @@ groups['User']:add_rank{
 
 local ranks = Ranking._ranks(true)
 
-ranks['Root']:edit('test',true,'testing')
+ranks['Developer']:edit('allow',false,{
+    ['cheat-mode']=true
+})
+
+ranks['Admin']:edit('allow',false,{
+    ['game-settings']=true,
+    ['always-warp']=true,
+    ['admin-items']=true
+})
+ranks['Mod']:edit('allow',false,{
+    ['go-to']=true,
+    ['bring']=true,
+    ['no-report']=true
+})
+
+ranks['Donator']:edit('allow',false,{
+    ['global-chat']=true,
+    ['jail']=true,
+    ['unjail']=true,
+    ['set-home']=true,
+    ['home']=true,
+    ['return']=true,
+    ['bonus']=true,
+    ['bonus-respawn']=true
+})
+ranks['Veteran']:edit('allow',false,{
+    ['tree-decon']=true,
+    ['create-poll']=true,
+    ['repair']=true
+})
+ranks['Member']:edit('allow',false,{
+    ['edit-tasklist']=true,
+    ['make-warp']=true,
+    ['nuke']=true,
+    ['base-damage']=true,
+    ['varified']=true
+})
+ranks['Regular']:edit('allow',false,{
+    ['kill']=true,
+    ['decon']=true,
+    ['capsules']=true
+})
+ranks['Guest']:edit('allow',false,{
+    ['tag']=true,
+    ['tag-clear']=true,
+    ['report']=true
+})
 
 Ranking._base_preset{
     ['badgamernl']='Owner',
     ['arty714']='Community Manager',
     ['cooldude2606']='Developer',
-    ['mark9064']='Admin'
+    ['mark9064']='Admin',
+    ['propangaseddy']='Admin'
 }
