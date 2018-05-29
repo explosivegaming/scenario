@@ -2,7 +2,6 @@
 -- Extends the Factorio defines table.
 -- @usage require('stdlib/defines/color')
 -- @module defines.color
--- @see Concepts.Color
 
 -- defines table is automatically required in all mod loading stages.
 -- luacheck: ignore 122/defines
@@ -210,10 +209,6 @@ setmetatable(defines.anticolor, _mt.anticolor)
 setmetatable(defines.text_color, _mt.text_color)
 setmetatable(defines.lightcolor, _mt.lightcolor)
 
---- For playing with colors.
--- @module Color
--- @usage local Color = require('stdlib/color/color')
-
 local Color = {} --luacheck: allow defined top
 
 --- Set a value for the alpha channel in the given color table.
@@ -234,7 +229,7 @@ function Color.set(color, alpha)
 end
 
 --- Converts a color in the array format to a color in the table format.
--- @tparam array c_arr the color to convert &mdash; { [1] = @{float}, [2] = @{float}, [3] = @{float}, [4] = @{float} }
+-- @tparam table c_arr the color to convert 
 -- @treturn Concepts.Color a converted color &mdash; { r = c\_arr[1], g = c\_arr[2], b = c\_arr[3], a = c\_arr[4] }
 function Color.to_table(c_arr)
     if #c_arr > 0 then

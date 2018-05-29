@@ -498,7 +498,7 @@ end
 
 --- Returns the list is a sorted way that would be expected by people (this is by key)
 -- @usage tbl = table.alphanumsort(tbl)
--- @tparam tbl table the table to be sorted
+-- @tparam table tbl the table to be sorted
 -- @treturn table the sorted table
 function table.alphanumsort(tbl)
     local o = table.keys(tbl)
@@ -514,7 +514,7 @@ end
 
 --- Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
 -- @usage tbl = table.alphanumsort(tbl)
--- @tparam tbl table the table to be sorted
+-- @tparam table tbl the table to be sorted
 -- @treturn table the sorted table
 function table.keysort(tbl)
     local o = table.keys(tbl,true)

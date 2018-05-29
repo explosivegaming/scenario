@@ -1,3 +1,8 @@
+--- Factorio Softmod Manager
+-- @module FSM
+-- @alias Manager
+-- @author Cooldude2606
+-- @usage Manager = require("FactorioSoftmodManager")
 -- Used to load all other modules that are indexed in index.lua
 local moduleIndex = require("/modules/index")
 local Manager = {}
@@ -46,7 +51,7 @@ Manager.currentState = 'selfInit'
 
 --- Default output for the verbose
 -- @usage Manager.verbose('Hello, World!')
--- @tparm rtn string the value that will be returned though verbose output
+-- @tparam string rtn the value that will be returned though verbose output
 Manager._verbose = function(rtn)
     -- creates one file per game, ie clears file on reset
     if game and Manager.setVerbose._output ~= true then Manager.setVerbose._output=true game.write_file('verbose.log',rtn)
@@ -58,8 +63,8 @@ end
 
 --- Used to call the output of the verbose when the current state allows it
 -- @usage Manager.verbose('Hello, World!')
--- @tparm rtn string the value that will be returned though verbose output
--- @tparm action string is used to decide which verbose this is error || event etc
+-- @tparam string rtn the value that will be returned though verbose output
+-- @tparam string action is used to decide which verbose this is error || event etc
 Manager.verbose = function(rtn,action)
     local settings = Manager.setVerbose
     local state = Manager.currentState
@@ -428,7 +433,9 @@ Manager.event = setmetatable({
     end
 })
 --- Sub set to Manger.event and acts as a coverter between event_name and event_id
+-- @field names
 -- @usage Manager.event[event_name] -- see above, can not be accessed via Manager.event.names
+-- @see Manager.event
 rawset(Manager.event,'names',setmetatable({},{
     __index=function(tbl,key)
         if type(key) == 'number' or tonumber(key) then

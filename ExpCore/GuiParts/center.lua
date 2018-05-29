@@ -38,7 +38,7 @@ end
 --- Used to open a center frame for a player
 -- @usage Gui.center.open(player,'server-info') -- return true
 -- @param player a player indifier to get the flow for
--- @tparam center string the name of the center frame to open
+-- @tparam string center the name of the center frame to open
 -- @treturn boelon based on if it successed or not
 function center.open(player,center)
     local player = Game.get_player(player)
@@ -54,8 +54,8 @@ end
 --- Used to open a center frame for a player
 -- @usage Gui.center.open_tab(player,'readme','rules') -- return true
 -- @param player a player indifier to get the flow for
--- @tparam center string the name of the center frame to open
--- @tparam tab string the name of the tab to open
+-- @tparam string center the name of the center frame to open
+-- @tparam string tab the name of the tab to open
 -- @treturn boelon based on if it successed or not
 function center.open_tab(player,center,tab)
     local player = Game.get_player(player)

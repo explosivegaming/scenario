@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>expcore.guiparts.center</strong></li>
+  <li><a href="../modules/expcore.guiparts.inputs.html">expcore.guiparts.inputs</a></li>
+  <li><a href="../modules/expcore.guiparts.left.html">expcore.guiparts.left</a></li>
+  <li><a href="../modules/expcore.guiparts.popup.html">expcore.guiparts.popup</a></li>
+  <li><a href="../modules/expcore.guiparts.toolbar.html">expcore.guiparts.toolbar</a></li>
+  <li><a href="../modules/expcore.commands.html">expcore.commands</a></li>
+  <li><a href="../modules/expcore.gui.html">expcore.gui</a></li>
+  <li><a href="../modules/expcore.ranking.html">expcore.ranking</a></li>
+  <li><a href="../modules/expcore.server.html">expcore.server</a></li>
+  <li><a href="../modules/expcore.sync.html">expcore.sync</a></li>
+  <li><a href="../modules/FSM.html">FSM</a></li>
+  <li><a href="../modules/modules.expgaminglib.control.html">modules.expgaminglib.control</a></li>
+  <li><a href="../modules/defines.color.html">defines.color</a></li>
+  <li><a href="../modules/Game.html">Game</a></li>
+  <li><a href="../modules/string.html">string</a></li>
+  <li><a href="../modules/table.html">table</a></li>
+  <li><a href="../modules/defines.time.html">defines.time</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="nowrap">
+  <li><a href="../scripts/control.lua.html">control.lua</a></li>
+  <li><a href="../scripts/index.lua.html">index.lua</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>expcore.guiparts.center</code></h1>
+<p>Adds a new obj to the center gui</p>
+<p></p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Gui.center.add{name=&apos;foo&apos;,caption=&apos;Foo&apos;,tooltip=&apos;Testing&apos;,draw=function}
+</pre>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#get_flow">get_flow (player)</a></td>
+	<td class="summary">Used to get the center frame of the player, used mainly in script</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#open">open (player, center)</a></td>
+	<td class="summary">Used to open a center frame for a player</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#open_tab">open_tab (player, center, tab)</a></td>
+	<td class="summary">Used to open a center frame for a player</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#clear">clear (player)</a></td>
+	<td class="summary">Used to clear the center frame of the player, used mainly in script</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#center._center:add_tab">center._center:add_tab (name, caption[, tooltip], callback)</a></td>
+	<td class="summary">If deafult draw is used then you can add tabs to the gui with this function</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "get_flow"></a>
+    <strong>get_flow (player)</strong>
+    </dt>
+    <dd>
+    Used to get the center frame of the player, used mainly in script
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         a player indifier to get the flow for
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        the gui element flow
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Gui.center.get_flow(player) <span class="comment">-- returns gui emelemt</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "open"></a>
+    <strong>open (player, center)</strong>
+    </dt>
+    <dd>
+    Used to open a center frame for a player
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         a player indifier to get the flow for
+        </li>
+        <li><span class="parameter">center</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the name of the center frame to open
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boelon</span></span>
+        based on if it successed or not
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Gui.center.open(player,<span class="string">'server-info'</span>) <span class="comment">-- return true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "open_tab"></a>
+    <strong>open_tab (player, center, tab)</strong>
+    </dt>
+    <dd>
+    Used to open a center frame for a player
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         a player indifier to get the flow for
+        </li>
+        <li><span class="parameter">center</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the name of the center frame to open
+        </li>
+        <li><span class="parameter">tab</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the name of the tab to open
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boelon</span></span>
+        based on if it successed or not
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Gui.center.open_tab(player,<span class="string">'readme'</span>,<span class="string">'rules'</span>) <span class="comment">-- return true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "clear"></a>
+    <strong>clear (player)</strong>
+    </dt>
+    <dd>
+    Used to clear the center frame of the player, used mainly in script
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         a player indifier to get the flow for
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Gui.center.clear(player)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "center._center:add_tab"></a>
+    <strong>center._center:add_tab (name, caption[, tooltip], callback)</strong>
+    </dt>
+    <dd>
+    If deafult draw is used then you can add tabs to the gui with this function
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         this is the name of the tab
+        </li>
+        <li><span class="parameter">caption</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         this is the words that appear on the tab button
+        </li>
+        <li><span class="parameter">tooltip</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the tooltip that is on the button
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+         this is called when button is pressed with function(root_frame)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        self to allow chaining of _center:add_tab
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">_center:add_tab(<span class="string">'foo'</span>,<span class="string">'Foo'</span>,<span class="string">'Just a tab'</span>,<span class="keyword">function</span>)</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-05-29 20:15:05 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

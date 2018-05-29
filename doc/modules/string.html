@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/expcore.guiparts.center.html">expcore.guiparts.center</a></li>
+  <li><a href="../modules/expcore.guiparts.inputs.html">expcore.guiparts.inputs</a></li>
+  <li><a href="../modules/expcore.guiparts.left.html">expcore.guiparts.left</a></li>
+  <li><a href="../modules/expcore.guiparts.popup.html">expcore.guiparts.popup</a></li>
+  <li><a href="../modules/expcore.guiparts.toolbar.html">expcore.guiparts.toolbar</a></li>
+  <li><a href="../modules/expcore.commands.html">expcore.commands</a></li>
+  <li><a href="../modules/expcore.gui.html">expcore.gui</a></li>
+  <li><a href="../modules/expcore.ranking.html">expcore.ranking</a></li>
+  <li><a href="../modules/expcore.server.html">expcore.server</a></li>
+  <li><a href="../modules/expcore.sync.html">expcore.sync</a></li>
+  <li><a href="../modules/FSM.html">FSM</a></li>
+  <li><a href="../modules/modules.expgaminglib.control.html">modules.expgaminglib.control</a></li>
+  <li><a href="../modules/defines.color.html">defines.color</a></li>
+  <li><a href="../modules/Game.html">Game</a></li>
+  <li><strong>string</strong></li>
+  <li><a href="../modules/table.html">table</a></li>
+  <li><a href="../modules/defines.time.html">defines.time</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="nowrap">
+  <li><a href="../scripts/control.lua.html">control.lua</a></li>
+  <li><a href="../scripts/index.lua.html">index.lua</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>string</code></h1>
+<p>Extends Lua 5.2 string.</p>
+<p></p>
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/string.html#">string</a>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#trim">trim (s)</a></td>
+	<td class="summary">Returns a copy of the string with any leading or trailing whitespace from the string removed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#starts_with">starts_with (s, start)</a></td>
+	<td class="summary">Tests if a string starts with a given substring.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ends_with">ends_with (s, ends)</a></td>
+	<td class="summary">Tests if a string ends with a given substring.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#contains">contains (s, contains)</a></td>
+	<td class="summary">Tests if a string contains a given substring.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#is_empty">is_empty (s)</a></td>
+	<td class="summary">Tests whether a string is empty.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#split">split (s[, sep="."[, pattern=false]])</a></td>
+	<td class="summary">Splits a string into an array.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "trim"></a>
+    <strong>trim (s)</strong>
+    </dt>
+    <dd>
+    Returns a copy of the string with any leading or trailing whitespace from the string removed.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">s</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the string to remove leading or trailing whitespace from
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+        a copy of the string without leading or trailing whitespace
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "starts_with"></a>
+    <strong>starts_with (s, start)</strong>
+    </dt>
+    <dd>
+    Tests if a string starts with a given substring.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">s</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the string to check for the start substring
+        </li>
+        <li><span class="parameter">start</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the substring to test for
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        true if the start substring was found in the string
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ends_with"></a>
+    <strong>ends_with (s, ends)</strong>
+    </dt>
+    <dd>
+    Tests if a string ends with a given substring.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">s</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the string to check for the end substring
+        </li>
+        <li><span class="parameter">ends</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the substring to test for
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        true if the end substring was found in the string
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "contains"></a>
+    <strong>contains (s, contains)</strong>
+    </dt>
+    <dd>
+    Tests if a string contains a given substring.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">s</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the string to check for the substring
+        </li>
+        <li><span class="parameter">contains</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the substring to test for
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        true if the substring was found in the string
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "is_empty"></a>
+    <strong>is_empty (s)</strong>
+    </dt>
+    <dd>
+    Tests whether a string is empty.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">s</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the string to test
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        true if the string is empty
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "split"></a>
+    <strong>split (s[, sep="."[, pattern=false]])</strong>
+    </dt>
+    <dd>
+    Splits a string into an array.
+ *Note:* Empty split substrings are not included in the resulting table.
+ <p>For example, `string.split("foo.bar...", ".", false)` results in the table `{"foo", "bar"}`.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">s</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the string to split
+        </li>
+        <li><span class="parameter">sep</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the separator to use.
+         (<em>default</em> ".")
+        </li>
+        <li><span class="parameter">pattern</span>
+            <span class="types"><span class="type">boolean</span></span>
+         whether to interpret the separator as a lua pattern or plaintext for the string split
+         (<em>default</em> false)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">{string,...}</a></span>
+        an array of strings
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-05-29 20:15:05 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

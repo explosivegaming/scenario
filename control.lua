@@ -1,3 +1,5 @@
+--- Root Script File
+-- @script control.lua
 function _log(...) log(...) end
 --[[
 Explosive Gaming
@@ -8,8 +10,6 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
-
--- File Which Factorio Will Call
 Manager = require("FactorioSoftmodManager")
 Manager.setVerbose{
     selfInit=true, -- called while the manager is being set up

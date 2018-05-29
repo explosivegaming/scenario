@@ -97,14 +97,15 @@ end)
 --- Adds a camera that updates every tick (or less depeading on how many are opening) it will move to follow an entity
 -- @usage Gui.cam_link{entity=game.player.character,frame=frame,width=50,hight=50,zoom=1}
 -- @usage Gui.cam_link{entity=game.player.character,cam=frame.camera,surface=game.surfaces['testing']}
--- @param entity this is the entity that the camera will follow
--- @param[opt] cam a camera that you already have in the gui
--- @param[opt] frame the frame to add the camera to, no effect if cam param is given
--- @param[chain=frame] zoom the zoom to give the new camera
--- @param[chain=frame] width the width to give the new camera
--- @param[chain=frame] height the height to give the new camera
--- @param[opt] surface this will over ride the surface that the camera follows on, allowing for a 'ghost surface' while keeping same position
--- @param[opt] respawn_open if set to true then the camera will auto re link to the player after a respawn
+-- @tparam table data contains all other params given below
+-- @field entity this is the entity that the camera will follow
+-- @field cam a camera that you already have in the gui
+-- @field frame the frame to add the camera to, no effect if cam param is given
+-- @field zoom the zoom to give the new camera
+-- @field width the width to give the new camera
+-- @field height the height to give the new camera
+-- @field surface this will over ride the surface that the camera follows on, allowing for a 'ghost surface' while keeping same position
+-- @field respawn_open if set to true then the camera will auto re link to the player after a respawn
 -- @return the camera that the function used be it made or given as a param 
 function Gui.cam_link(data)
     if not data.entity or not data.entity.valid then return end

@@ -1,0 +1,14 @@
+{
+    "name": "FactorioStdLib",
+    "module": "StdLib",
+    "description": "Factorio Standard Library Projects",
+    "keywords": ["Standard Library","Lib","StdLib"],
+    "version": "0.8.0",
+    "location": "nil",
+    "submodules": {
+
+    },
+    "author": "Afforess",
+    "contact": "https://github.com/Afforess/Factorio-Stdlib/issues",
+    "license": "https://github.com/Afforess/Factorio-Stdlib/blob/master/LICENSE"
+}

@@ -97,6 +97,7 @@ end
 -- @usage Ranking.print('admin','We got a grifer')
 -- @param rank_base the rank that acts as the cut off point (rank is always included)
 -- @param rtn what do you want to return to the players
+-- @tparam defines.color colour the colour that will be used to print
 -- @tparam bolean below if true rank below base are printed to
 function Ranking.print(rank_base,rtn,colour,below)
     local colour = colour or defines.color.white
@@ -185,7 +186,7 @@ end
 --- Given the player has a rank in the preset table it is given
 -- @usage Ranking.find_preset(1)
 -- @param player the player to test for an auto rank
--- @tparam[opt=nil] tick the tick it happens on
+-- @tparam[opt=nil] number tick the tick it happens on
 function Ranking.find_preset(player,tick)
     local presets = Ranking._presets().current
     local meta_data = Ranking._presets().meta
@@ -250,6 +251,8 @@ end
 --- Print a message to all players of this rank
 -- @usage rank:print('foo')
 -- @param rtn any value you want to return
+-- @tparam define.color colour the colour that will be used to print
+-- @tparam boolean show_default weather to use the default rank name for the print 
 function Ranking._rank:print(rtn,colour,show_default)
     local colour = colour or defines.color.white
     local meta_data = Ranking._presets().meta

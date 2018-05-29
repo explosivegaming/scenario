@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/expcore.guiparts.center.html">expcore.guiparts.center</a></li>
+  <li><a href="../modules/expcore.guiparts.inputs.html">expcore.guiparts.inputs</a></li>
+  <li><a href="../modules/expcore.guiparts.left.html">expcore.guiparts.left</a></li>
+  <li><a href="../modules/expcore.guiparts.popup.html">expcore.guiparts.popup</a></li>
+  <li><a href="../modules/expcore.guiparts.toolbar.html">expcore.guiparts.toolbar</a></li>
+  <li><a href="../modules/expcore.commands.html">expcore.commands</a></li>
+  <li><a href="../modules/expcore.gui.html">expcore.gui</a></li>
+  <li><a href="../modules/expcore.ranking.html">expcore.ranking</a></li>
+  <li><a href="../modules/expcore.server.html">expcore.server</a></li>
+  <li><a href="../modules/expcore.sync.html">expcore.sync</a></li>
+  <li><a href="../modules/FSM.html">FSM</a></li>
+  <li><strong>modules.expgaminglib.control</strong></li>
+  <li><a href="../modules/defines.color.html">defines.color</a></li>
+  <li><a href="../modules/Game.html">Game</a></li>
+  <li><a href="../modules/string.html">string</a></li>
+  <li><a href="../modules/table.html">table</a></li>
+  <li><a href="../modules/defines.time.html">defines.time</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="nowrap">
+  <li><a href="../scripts/control.lua.html">control.lua</a></li>
+  <li><a href="../scripts/index.lua.html">index.lua</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>modules.expgaminglib.control</code></h1>
+<p>Loads a table into _G even when sandboxed; will not overwrite values or append to tables; will not work during runtime to avoid desyncs</p>
+<p></p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">unpack_to_G{key1=&apos;foo&apos;,key2=&apos;bar&apos;}
+</pre>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#ExpLib.get_env">ExpLib.get_env ()</a></td>
+	<td class="summary">Used to get the current ENV with all _G keys removed; useful when saving function to global</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ExpLib.is_type">ExpLib.is_type (v[, test_type=nil])</a></td>
+	<td class="summary">Compear types faster for faster valadation of prams</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ExpLib.player_return">ExpLib.player_return (rtn[, colour=defines.colour.white[, player=game.player]])</a></td>
+	<td class="summary">Will return a value of any type to the player/server console, allows colour for in-game players</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ExpLib.tick_to_hour">ExpLib.tick_to_hour (tick)</a></td>
+	<td class="summary">Convert ticks to hours</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ExpLib.tick_to_min">ExpLib.tick_to_min (tick)</a></td>
+	<td class="summary">Convert ticks to minutes</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ExpLib.tick_to_display_format">ExpLib.tick_to_display_format (tick)</a></td>
+	<td class="summary">Converts a tick into a clean format for end user</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ExpLib.gui_tree">ExpLib.gui_tree (root)</a></td>
+	<td class="summary">Used as a way to view the structure of a gui, used for debuging</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "ExpLib.get_env"></a>
+    <strong>ExpLib.get_env ()</strong>
+    </dt>
+    <dd>
+    Used to get the current ENV with all _G keys removed; useful when saving function to global
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        the env table with _G keys removed
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">get_env() returns current ENV with _G keys removed</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "ExpLib.is_type"></a>
+    <strong>ExpLib.is_type (v[, test_type=nil])</strong>
+    </dt>
+    <dd>
+    Compear types faster for faster valadation of prams
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">v</span>
+         the value to be tested
+        </li>
+        <li><span class="parameter">test_type</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the type to test for if not given then it tests for nil
+         (<em>default</em> nil)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bolean</span></span>
+        is v of type test_type
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">is_type(<span class="string">'foo'</span>,<span class="string">'string'</span>) <span class="comment">-- return true</span></pre></li>
+        <li><pre class="example">is_type(<span class="string">'foo'</span>) <span class="comment">-- return false</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "ExpLib.player_return"></a>
+    <strong>ExpLib.player_return (rtn[, colour=defines.colour.white[, player=game.player]])</strong>
+    </dt>
+    <dd>
+    Will return a value of any type to the player/server console, allows colour for in-game players
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">rtn</span>
+         any value of any type that will be returned to the player or console
+        </li>
+        <li><span class="parameter">colour</span>
+            <span class="types"><span class="type">defines.color</span> or <a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the colour of the text for the player, ingroned when printing to console
+         (<em>default</em> defines.colour.white)
+        </li>
+        <li><span class="parameter">player</span>
+            <span class="types"><span class="type">LuaPlayer</span></span>
+          the player that return will go to, if no game.player then returns to server
+         (<em>default</em> game.player)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">player_return(<span class="string">'Hello, World!'</span>) <span class="comment">-- returns 'Hello, World!' to game.player or server console</span></pre></li>
+        <li><pre class="example">player_return(<span class="string">'Hello, World!'</span>,<span class="string">'green'</span>) <span class="comment">-- returns 'Hello, World!' to game.player with colour green or server console</span></pre></li>
+        <li><pre class="example">player_return(<span class="string">'Hello, World!'</span>,<span class="keyword">nil</span>,player) <span class="comment">-- returns 'Hello, World!' to the given player</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "ExpLib.tick_to_hour"></a>
+    <strong>ExpLib.tick_to_hour (tick)</strong>
+    </dt>
+    <dd>
+    Convert ticks to hours
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tick</span>
+            <span class="types"><span class="type">number</span></span>
+         tick to convert to hours
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        the number of whole hours from this tick
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">tick_to_hour(<span class="number">216001</span>) <span class="comment">-- return 1</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "ExpLib.tick_to_min"></a>
+    <strong>ExpLib.tick_to_min (tick)</strong>
+    </dt>
+    <dd>
+    Convert ticks to minutes
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tick</span>
+            <span class="types"><span class="type">number</span></span>
+         tick to convert to minutes
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        the number of whole minutes from this tick
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">tick_to_hour(<span class="number">3601</span>) <span class="comment">-- return 1</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "ExpLib.tick_to_display_format"></a>
+    <strong>ExpLib.tick_to_display_format (tick)</strong>
+    </dt>
+    <dd>
+    Converts a tick into a clean format for end user
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tick</span>
+            <span class="types"><span class="type">number</span></span>
+         the tick to convert
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+        the formated string
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">tick_to_display_format(<span class="number">3600</span>) <span class="comment">-- return '1.00 M'</span></pre></li>
+        <li><pre class="example">tick_to_display_format(<span class="number">234000</span>) <span class="comment">-- return '1 H 5 M'</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "ExpLib.gui_tree"></a>
+    <strong>ExpLib.gui_tree (root)</strong>
+    </dt>
+    <dd>
+    Used as a way to view the structure of a gui, used for debuging
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">root</span>
+            <span class="types"><span class="type">LuaGuiElement</span></span>
+         the root to start the tree from
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        the table that describes the gui
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Gui_tree(root) returns all children of gui recusivly</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-05-29 20:15:05 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

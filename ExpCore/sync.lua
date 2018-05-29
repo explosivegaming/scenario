@@ -29,7 +29,7 @@ end
 -- @param player_message the message to be printed in chat
 -- @param player_name the name of the player sending the message
 -- @param[opt] player_tag the tag apllied to the player's name
--- @param[opt] plyaer_colour the colour of the message
+-- @param[opt] player_colour the colour of the message
 -- @param[opt] prefix add a prefix before the chat eg [IRC]
 function Sync.print(player_message,player_name,player_tag,player_colour,prefix)
     if not player_message then return 'No Message Found' end
@@ -53,13 +53,13 @@ end
 
 --- Logs an embed to the json.data we use a js script to add things we cant here
 -- @usage Sync.emit_embeded{title='BAN',color='0x0',description='A player was banned' ... }
--- @tparam table arg a table which contains everything that the embeded will use
--- @param[opt=''] title the tile of the embed
--- @param[opt='0x0'] color the color given in hex you can use Color.to_hex{r=0,g=0,b=0}
--- @param[opt=''] description the description of the embed
--- @param[opt=''] server_detail sting to add onto the pre-set server detail
--- @param[opt] fieldone the filed to add to the embed (key is name) (value is text) (start value with <<inline>> to make inline)
--- @param[optchain] fieldtwo 
+-- @tparam table args a table which contains everything that the embeded will use
+-- @field title the tile of the embed
+-- @field color the color given in hex you can use Color.to_hex{r=0,g=0,b=0}
+-- @field description the description of the embed
+-- @field server_detail sting to add onto the pre-set server detail
+-- @field fieldone the filed to add to the embed (key is name) (value is text) (start value with <<inline>> to make inline)
+-- @field fieldtwo the filed to add to the embed (key is name) (value is text) (start value with <<inline>> to make inline)
 function Sync.emit_embeded(args)
     if not is_type(args,'table') then return end
     local title = is_type(args.title,'string') and args.title or ''
@@ -166,7 +166,7 @@ end
 
 --- used to return the global list and set values in it
 -- @usage Sync.info{server_name='Factorio Server 2'}
--- @tparam[opt=nil] table keys to be replaced in the server info
+-- @tparam[opt=nil] table set keys to be replaced in the server info
 -- @return either returns success when setting or the info when not setting
 function Sync.info(set)
     if not global.exp_core then global.exp_core = {} end
@@ -203,7 +203,7 @@ end
 
 --- used to return the global time and set its value
 -- @usage Sync.time('Sun Apr  1 18:44:30 UTC 2018')
--- @tparam[opt=nil] string the date time to be set
+-- @tparam[opt=nil] string set the date time to be set
 -- @return either true false if setting or the date time and tick off set
 function Sync.time(set)
     local info = Sync.info()
@@ -242,8 +242,8 @@ end
 
 --- Adds a callback to be called when the info is updated
 -- @usage Sync.add_update('players',function() return #game.players end)
--- @tparam key string the key that the value will be stored in
--- @tparam callback function the function which will return this value
+-- @tparam string key the key that the value will be stored in
+-- @tparam function callback the function which will return this value
 function Sync.add_update(key,callback)
     if game then return end
     if not is_type(callback,'function') then return end

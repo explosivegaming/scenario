@@ -13,7 +13,7 @@ local toolbar = {}
 -- @usage toolbar.add('foo','Foo','Test',function() game.print('test') end)
 -- @tparam string name the name of the button
 -- @tparam string caption can be a sprite path or text to show
--- @tparma string tooltip the help to show for the button
+-- @tparam string tooltip the help to show for the button
 -- @tparam function callback the function which is called on_click
 -- @treturn table the button object that was made
 function toolbar.add(name,caption,tooltip,callback)

@@ -182,9 +182,9 @@ end
 --- Used to define a choose-elem-button callback only on elem_changed
 -- @usage Gui.inputs.add_elem_button('test','Test','Just for testing',function)
 -- @tparam string name the name of this button
--- @tparam string the display for this button, either text or sprite path
+-- @tparam string elem_type the display for this button, either text or sprite path
 -- @tparam string tooltip the tooltip to show on the button
--- @tparam function the callback to call on change function(player,element,elem)
+-- @tparam function callback the callback to call on change function(player,element,elem)
 -- @treturn table the button object that was made, to allow a custom error event if wanted
 function inputs.add_elem_button(name,elem_type,tooltip,callback)
     local button = inputs.add{
@@ -210,9 +210,11 @@ end
 --- Used to define a checkbox callback only on state_changed
 -- @usage Gui.inputs.add_checkbox('test',false,'Just for testing',function,function,funvtion)
 -- @tparam string name the name of this button
--- @tparam string the display for this button, either text or sprite path
--- @tparam string tooltip the tooltip to show on the button
--- @tparam function the callback to call on change function(player,element,elem)
+-- @tparam boolean radio if this is a radio button
+-- @tparam string display the display for this button, either text or sprite path
+-- @tparam function default the callback which choses the default check state
+-- @tparam function callback_true the callback to call when changed to true
+-- @tparam function callback_false the callback to call when changed to false
 -- @treturn table the button object that was made, to allow a custom error event if wanted
 function inputs.add_checkbox(name,radio,display,default,callback_true,callback_false)
     local type = 'checkbox'; if radio then type='radiobutton' end
@@ -279,7 +281,7 @@ end
 -- @tparam string name the name of this button
 -- @tparam boolean box is it a text box rather than a text field
 -- @tparam string text the starting text
--- @tparam function the callback to call on change function(player,text,element)
+-- @tparam function callback the callback to call on change function(player,text,element)
 -- @treturn table the text object that was made, to allow a custom error event if wanted
 function inputs.add_text(name,box,text,callback)
     local type = 'textfield'; if box then type='text-box' end
@@ -305,10 +307,10 @@ end
 --- Used to define a slider callback only on value_changed
 -- @usage Gui.inputs.add_slider('test','horizontal',1,10,5,function)
 -- @tparam string name the name of this button
--- @tapram string text the caption to go with the slider
+-- @tparam string orientation direction of the slider
 -- @tparam number min the lowest number
 -- @tparam number max the highest number
--- @param start_callback either a number or a function to return a number
+-- @tparam function start_callback either a number or a function to return a number
 -- @tparam function callback the function to be called on value_changed function(player,value,percent,element)
 -- @treturn table the slider object that was made, to allow a custom error event if wanted
 function inputs.add_slider(name,orientation,min,max,start_callback,callback)
@@ -338,6 +340,7 @@ end
 
 --- Used to define a drop down callback only on value_changed
 -- @usage Gui.inputs.add_drop_down('test',{1,2,3},1,function)
+-- @tparam string name name of the drop down
 -- @param items either a list or a function which returns a list
 -- @param index either a number or a function which returns a number
 -- @tparam function callback the callback which is called when a new index is selected function(player,selected,items,element)

@@ -76,7 +76,7 @@ end
 
 --- Used to call the custom commands
 -- @usage You dont its an internal command
--- @tparam defines.events.on_console_command event the event rasied by the command=
+-- @tparam defines.events.on_console_command command the event rasied by the command
 local function run_custom_command(command)
     local command_data = command_data[command.name]
     local player_name = Game.get_player(command) and Game.get_player(command).name or 'server'

@@ -1,0 +1,571 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/expcore.guiparts.center.html">expcore.guiparts.center</a></li>
+  <li><a href="../modules/expcore.guiparts.inputs.html">expcore.guiparts.inputs</a></li>
+  <li><a href="../modules/expcore.guiparts.left.html">expcore.guiparts.left</a></li>
+  <li><a href="../modules/expcore.guiparts.popup.html">expcore.guiparts.popup</a></li>
+  <li><a href="../modules/expcore.guiparts.toolbar.html">expcore.guiparts.toolbar</a></li>
+  <li><a href="../modules/expcore.commands.html">expcore.commands</a></li>
+  <li><a href="../modules/expcore.gui.html">expcore.gui</a></li>
+  <li><a href="../modules/expcore.ranking.html">expcore.ranking</a></li>
+  <li><strong>expcore.server</strong></li>
+  <li><a href="../modules/expcore.sync.html">expcore.sync</a></li>
+  <li><a href="../modules/FSM.html">FSM</a></li>
+  <li><a href="../modules/modules.expgaminglib.control.html">modules.expgaminglib.control</a></li>
+  <li><a href="../modules/defines.color.html">defines.color</a></li>
+  <li><a href="../modules/Game.html">Game</a></li>
+  <li><a href="../modules/string.html">string</a></li>
+  <li><a href="../modules/table.html">table</a></li>
+  <li><a href="../modules/defines.time.html">defines.time</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="nowrap">
+  <li><a href="../scripts/control.lua.html">control.lua</a></li>
+  <li><a href="../scripts/index.lua.html">index.lua</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>expcore.server</code></h1>
+<p>Returns a un-used uuid (better system needed)</p>
+<p></p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">obj.uuid = Server.new_uuid()
+</pre>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Server.threads">Server.threads ([count=nil])</a></td>
+	<td class="summary">Returns either the number of threads or a able of threads</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server.get_thread">Server.get_thread (mixed)</a></td>
+	<td class="summary">Used to get a thread via it's uuid or by name if one is given</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server.queue_thread">Server.queue_thread (thread_to_queue)</a></td>
+	<td class="summary">Adds a thread into the resolve queue, can be used to lower lag</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server.close_all_threads">Server.close_all_threads (with_force)</a></td>
+	<td class="summary">Closes all active threads, can use force if it causes errors</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server.run_tick_threads">Server.run_tick_threads ()</a></td>
+	<td class="summary">Runs all the theads which have opened with an on_tick event</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server.check_timeouts">Server.check_timeouts ()</a></td>
+	<td class="summary">Checks the timeout on all active timeout threads</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread_handler">Server._thread_handler (event)</a></td>
+	<td class="summary">Calles all threads on a certain game event (used with script.on_event)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server.interface">Server.interface (callback[, use_thread[, ...]])</a></td>
+	<td class="summary">Given a string or function it will run that function and return any values</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:valid">Server._thread:valid (skip_location_check)</a></td>
+	<td class="summary">Test if the thread has all requied parts</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:open">Server._thread:open ()</a></td>
+	<td class="summary">Opens the thread by storing it in a place the server object can find it</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:close">Server._thread:close ()</a></td>
+	<td class="summary">Inverse of thread:open() - it removes the thread and calles on_close</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:resolve">Server._thread:resolve ([...])</a></td>
+	<td class="summary">Trigger the on_resolve function and closes the thread - error and success called based on result of pcall (useful for async)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:check_timeout">Server._thread:check_timeout ()</a></td>
+	<td class="summary">Checks the timeout on a thread - if timedout then it calles on_timeout and closes</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:error">Server._thread:error (err)</a></td>
+	<td class="summary">Rasies an error on this thread</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:on_event">Server._thread:on_event (event, callback)</a></td>
+	<td class="summary">Set function to run then an event is called on a thread, none of them are 'needed' but you are advised to have atleast one</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Server.threads"></a>
+    <strong>Server.threads ([count=nil])</strong>
+    </dt>
+    <dd>
+    Returns either the number of threads or a able of threads
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">count</span>
+            <span class="types"><span class="type">bolean</span></span>
+         true to return the number of threads
+         (<em>default</em> nil)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        either a list of threads or a number
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Server.threads() <span class="comment">-- return {...}
+</span> Server.threads(<span class="keyword">true</span>) <span class="comment">-- return int</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server.get_thread"></a>
+    <strong>Server.get_thread (mixed)</strong>
+    </dt>
+    <dd>
+    Used to get a thread via it's uuid or by name if one is given
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mixed</span>
+         either a uuid or the name given to a thread
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        the thread by that name or uuid
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Server.get_thread(<span class="string">'decon'</span>) <span class="comment">-- return thread</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server.queue_thread"></a>
+    <strong>Server.queue_thread (thread_to_queue)</strong>
+    </dt>
+    <dd>
+    Adds a thread into the resolve queue, can be used to lower lag
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">thread_to_queue</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         the thread to add to the queue must have a resolve function (must be open)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        was the thread added
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Server.queue_thread(thread) <span class="comment">-- return true/false</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server.close_all_threads"></a>
+    <strong>Server.close_all_threads (with_force)</strong>
+    </dt>
+    <dd>
+    Closes all active threads, can use force if it causes errors
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">with_force</span>
+            <span class="types"><span class="type">bolean</span></span>
+         use force when closing
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Server.close_all_threads()
+ Server.close_all_threads(<span class="keyword">true</span>) <span class="comment">-- use if no force makes errors</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server.run_tick_threads"></a>
+    <strong>Server.run_tick_threads ()</strong>
+    </dt>
+    <dd>
+    Runs all the theads which have opened with an on_tick event
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Server.run_tick_threads()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server.check_timeouts"></a>
+    <strong>Server.check_timeouts ()</strong>
+    </dt>
+    <dd>
+    Checks the timeout on all active timeout threads
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Server.check_timeouts()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread_handler"></a>
+    <strong>Server._thread_handler (event)</strong>
+    </dt>
+    <dd>
+    Calles all threads on a certain game event (used with script.on_event)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">event</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         the event that is called
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Server.interface"></a>
+    <strong>Server.interface (callback[, use_thread[, ...]])</strong>
+    </dt>
+    <dd>
+    Given a string or function it will run that function and return any values
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+         either a function or string which will be ran via pcall
+        </li>
+        <li><span class="parameter">use_thread</span>
+         give a thread for the interface to run on (does not need to be open, but cant use on_resolve)
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">...</span>
+         any args you want to pass to the function
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Server.interface(<span class="string">'local x = 1+1 print(x) return x'</span>) <span class="comment">-- return 2
+</span> Server.interface(<span class="string">'local x = 1+1 print(x)'</span>,thread) <span class="comment">-- no return</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:valid"></a>
+    <strong>Server._thread:valid (skip_location_check)</strong>
+    </dt>
+    <dd>
+    Test if the thread has all requied parts
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">skip_location_check</span>
+            <span class="types"><span class="type">bolean</span></span>
+         true to skip the location check
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bolean</span></span>
+        is the thread valid
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">if</span> thread:valid() <span class="keyword">then</span> <span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:open"></a>
+    <strong>Server._thread:open ()</strong>
+    </dt>
+    <dd>
+    Opens the thread by storing it in a place the server object can find it
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bolean</span></span>
+        if the thread was opened
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">thread:open() <span class="comment">-- return true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:close"></a>
+    <strong>Server._thread:close ()</strong>
+    </dt>
+    <dd>
+    Inverse of thread:open() - it removes the thread and calles on_close
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bolean</span></span>
+        if the thread had a on_close function
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">thread:close() <span class="comment">-- return true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:resolve"></a>
+    <strong>Server._thread:resolve ([...])</strong>
+    </dt>
+    <dd>
+    Trigger the on_resolve function and closes the thread - error and success called based on result of pcall (useful for async)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+         any arguments you want to pass to the resolve function
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bolean</span></span>
+        true if the thread called on_success or on_error
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">thread:resolve(x,y,z) <span class="comment">-- return true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:check_timeout"></a>
+    <strong>Server._thread:check_timeout ()</strong>
+    </dt>
+    <dd>
+    Checks the timeout on a thread - if timedout then it calles on_timeout and closes
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bolean</span></span>
+        if the thread timedout
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">thread:check_timeout() <span class="comment">-- return true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:error"></a>
+    <strong>Server._thread:error (err)</strong>
+    </dt>
+    <dd>
+    Rasies an error on this thread
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">err</span>
+         the err to be rasied
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bolean</span></span>
+        did the thread handdle the error
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">thread:<span class="global">error</span>(err) <span class="comment">-- return true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:on_event"></a>
+    <strong>Server._thread:on_event (event, callback)</strong>
+    </dt>
+    <dd>
+    Set function to run then an event is called on a thread, none of them are 'needed' but you are advised to have atleast one
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">event</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the name of the event that it is called on
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+         the function which is called on the event
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        returns self so that there can be chained
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">thread:on_event(<span class="string">'close'</span>,<span class="keyword">function</span>) <span class="comment">-- return true
+</span>events = [<span class="string">'close'</span>,<span class="string">'timeout'</span>,<span class="string">'tick'</span>,<span class="string">'resolve'</span>,<span class="string">'success'</span>,<span class="string">'error'</span>]
+<span class="keyword">if</span> event is a number <span class="keyword">then</span> it is asumed to be a game event</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-05-29 20:15:05 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/expcore.guiparts.center.html">expcore.guiparts.center</a></li>
+  <li><a href="../modules/expcore.guiparts.inputs.html">expcore.guiparts.inputs</a></li>
+  <li><a href="../modules/expcore.guiparts.left.html">expcore.guiparts.left</a></li>
+  <li><a href="../modules/expcore.guiparts.popup.html">expcore.guiparts.popup</a></li>
+  <li><a href="../modules/expcore.guiparts.toolbar.html">expcore.guiparts.toolbar</a></li>
+  <li><a href="../modules/expcore.commands.html">expcore.commands</a></li>
+  <li><a href="../modules/expcore.gui.html">expcore.gui</a></li>
+  <li><a href="../modules/expcore.ranking.html">expcore.ranking</a></li>
+  <li><a href="../modules/expcore.server.html">expcore.server</a></li>
+  <li><strong>expcore.sync</strong></li>
+  <li><a href="../modules/FSM.html">FSM</a></li>
+  <li><a href="../modules/modules.expgaminglib.control.html">modules.expgaminglib.control</a></li>
+  <li><a href="../modules/defines.color.html">defines.color</a></li>
+  <li><a href="../modules/Game.html">Game</a></li>
+  <li><a href="../modules/string.html">string</a></li>
+  <li><a href="../modules/table.html">table</a></li>
+  <li><a href="../modules/defines.time.html">defines.time</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="nowrap">
+  <li><a href="../scripts/control.lua.html">control.lua</a></li>
+  <li><a href="../scripts/index.lua.html">index.lua</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>expcore.sync</code></h1>
+<p>Used as a faster way to get to the ranking function, overrides previous</p>
+<p></p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.set_ranks{name=rank_name}
+</pre>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Sync.tick_format">Sync.tick_format (tick)</a></td>
+	<td class="summary">Used to standidise the tick format for any sync info</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Sync.print">Sync.print (player_message, player_name[, player_tag[, player_colour[, prefix]]])</a></td>
+	<td class="summary">Prints to chat as if it were a player</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Sync.emit_embeded">Sync.emit_embeded (args)</a></td>
+	<td class="summary">Logs an embed to the json.data we use a js script to add things we cant here</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Sync.count_admins">Sync.count_admins ()</a></td>
+	<td class="summary">used to get the number of admins currently online</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Sync.count_afk">Sync.count_afk ([time=7200])</a></td>
+	<td class="summary">used to get the number of afk players defined by 2 min by default</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Sync.count_ranks">Sync.count_ranks ()</a></td>
+	<td class="summary">used to get the number of players in each rank and currently online</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Sync.count_players">Sync.count_players (online)</a></td>
+	<td class="summary">used to get the number of players either online or all</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Sync.count_player_times">Sync.count_player_times ()</a></td>
+	<td class="summary">used to get the number of players resulting in there play times</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Sync.info">Sync.info ([set=nil])</a></td>
+	<td class="summary">used to return the global list and set values in it</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Sync.time">Sync.time ([set=nil])</a></td>
+	<td class="summary">used to return the global time and set its value</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Sync.update">Sync.update ()</a></td>
+	<td class="summary">called to update values inside of the info</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Sync.add_update">Sync.add_update (key, callback)</a></td>
+	<td class="summary">Adds a callback to be called when the info is updated</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Sync.emit_data">Sync.emit_data ()</a></td>
+	<td class="summary">outputs the curent server info into a file</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Sync.add_to_gui">Sync.add_to_gui (element)</a></td>
+	<td class="summary">Adds a emeltent to the sever info gui</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Sync.tick_format"></a>
+    <strong>Sync.tick_format (tick)</strong>
+    </dt>
+    <dd>
+    Used to standidise the tick format for any sync info
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tick</span>
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.tick_format(<span class="number">60</span>) <span class="comment">-- return {60,'1.00M'}</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Sync.print"></a>
+    <strong>Sync.print (player_message, player_name[, player_tag[, player_colour[, prefix]]])</strong>
+    </dt>
+    <dd>
+    Prints to chat as if it were a player
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player_message</span>
+         the message to be printed in chat
+        </li>
+        <li><span class="parameter">player_name</span>
+         the name of the player sending the message
+        </li>
+        <li><span class="parameter">player_tag</span>
+         the tag apllied to the player's name
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">player_colour</span>
+         the colour of the message
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">prefix</span>
+         add a prefix before the chat eg [IRC]
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.<span class="global">print</span>(<span class="string">'Test'</span>,<span class="string">'Cooldude2606'</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Sync.emit_embeded"></a>
+    <strong>Sync.emit_embeded (args)</strong>
+    </dt>
+    <dd>
+    Logs an embed to the json.data we use a js script to add things we cant here
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">args</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         a table which contains everything that the embeded will use
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.emit_embeded{title=<span class="string">'BAN'</span>,color=<span class="string">'0x0'</span>,description=<span class="string">'A player was banned'</span> ... }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Sync.count_admins"></a>
+    <strong>Sync.count_admins ()</strong>
+    </dt>
+    <dd>
+    used to get the number of admins currently online
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        the number of admins online
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.count_admins()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Sync.count_afk"></a>
+    <strong>Sync.count_afk ([time=7200])</strong>
+    </dt>
+    <dd>
+    used to get the number of afk players defined by 2 min by default
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">time</span>
+            <span class="types"><span class="type">int</span></span>
+         in ticks that a player is called afk
+         (<em>default</em> 7200)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        the number of afk players
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.count_afk()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Sync.count_ranks"></a>
+    <strong>Sync.count_ranks ()</strong>
+    </dt>
+    <dd>
+    used to get the number of players in each rank and currently online
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        contains the ranks and the players in that rank
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.count_ranks()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Sync.count_players"></a>
+    <strong>Sync.count_players (online)</strong>
+    </dt>
+    <dd>
+    used to get the number of players either online or all
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">online</span>
+            <span class="types"><span class="type">bolean</span></span>
+         if true only get online players
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        contains player names
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.count_players()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Sync.count_player_times"></a>
+    <strong>Sync.count_player_times ()</strong>
+    </dt>
+    <dd>
+    used to get the number of players resulting in there play times
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        contains players and each player is given a tick amount and a formated string
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.count_player_times()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Sync.info"></a>
+    <strong>Sync.info ([set=nil])</strong>
+    </dt>
+    <dd>
+    used to return the global list and set values in it
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">set</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         keys to be replaced in the server info
+         (<em>default</em> nil)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        either returns success when setting or the info when not setting
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.info{server_name=<span class="string">'Factorio Server 2'</span>}</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Sync.time"></a>
+    <strong>Sync.time ([set=nil])</strong>
+    </dt>
+    <dd>
+    used to return the global time and set its value
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">set</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the date time to be set
+         (<em>default</em> nil)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        either true false if setting or the date time and tick off set
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.time(<span class="string">'Sun Apr  1 18:44:30 UTC 2018'</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Sync.update"></a>
+    <strong>Sync.update ()</strong>
+    </dt>
+    <dd>
+    called to update values inside of the info
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        all of the new info
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.update()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Sync.add_update"></a>
+    <strong>Sync.add_update (key, callback)</strong>
+    </dt>
+    <dd>
+    Adds a callback to be called when the info is updated
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">key</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the key that the value will be stored in
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+         the function which will return this value
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.add_update(<span class="string">'players'</span>,<span class="keyword">function</span>() <span class="keyword">return</span> #game.players <span class="keyword">end</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Sync.emit_data"></a>
+    <strong>Sync.emit_data ()</strong>
+    </dt>
+    <dd>
+    outputs the curent server info into a file
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.emit_data()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Sync.add_to_gui"></a>
+    <strong>Sync.add_to_gui (element)</strong>
+    </dt>
+    <dd>
+    Adds a emeltent to the sever info gui
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">element</span>
+         see examples before for what can be used, it can also be a return from Gui.inputs.add
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bolean</span></span>
+        based on weather it was successful or not
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Sync.add_to_gui(<span class="string">'string'</span>) <span class="comment">-- return trues</span></pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-05-29 20:15:05 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

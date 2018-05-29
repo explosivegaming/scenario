@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/expcore.guiparts.center.html">expcore.guiparts.center</a></li>
+  <li><a href="../modules/expcore.guiparts.inputs.html">expcore.guiparts.inputs</a></li>
+  <li><strong>expcore.guiparts.left</strong></li>
+  <li><a href="../modules/expcore.guiparts.popup.html">expcore.guiparts.popup</a></li>
+  <li><a href="../modules/expcore.guiparts.toolbar.html">expcore.guiparts.toolbar</a></li>
+  <li><a href="../modules/expcore.commands.html">expcore.commands</a></li>
+  <li><a href="../modules/expcore.gui.html">expcore.gui</a></li>
+  <li><a href="../modules/expcore.ranking.html">expcore.ranking</a></li>
+  <li><a href="../modules/expcore.server.html">expcore.server</a></li>
+  <li><a href="../modules/expcore.sync.html">expcore.sync</a></li>
+  <li><a href="../modules/FSM.html">FSM</a></li>
+  <li><a href="../modules/modules.expgaminglib.control.html">modules.expgaminglib.control</a></li>
+  <li><a href="../modules/defines.color.html">defines.color</a></li>
+  <li><a href="../modules/Game.html">Game</a></li>
+  <li><a href="../modules/string.html">string</a></li>
+  <li><a href="../modules/table.html">table</a></li>
+  <li><a href="../modules/defines.time.html">defines.time</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="nowrap">
+  <li><a href="../scripts/control.lua.html">control.lua</a></li>
+  <li><a href="../scripts/index.lua.html">index.lua</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>expcore.guiparts.left</code></h1>
+<p>Used to add a left gui frame</p>
+<p></p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Gui.left.add{name=&apos;foo&apos;,caption=&apos;Foo&apos;,tooltip=&apos;just testing&apos;,open_on_join=true,can_open=function,draw=function}
+</pre>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#update">update ([frame[, players]])</a></td>
+	<td class="summary">This is used to update all the guis of conected players, good idea to use our thread system as it as nested for loops</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#open">open (left_name)</a></td>
+	<td class="summary">Used to open the left gui of every player</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#close">close (left_name)</a></td>
+	<td class="summary">Used to close the left gui of every player</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "update"></a>
+    <strong>update ([frame[, players]])</strong>
+    </dt>
+    <dd>
+    This is used to update all the guis of conected players, good idea to use our thread system as it as nested for loops
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">frame</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         this is the name of a frame if you only want to update one
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">players</span>
+         the player to update for, if not given all players are updated, can be one player
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Gui.left.update()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "open"></a>
+    <strong>open (left_name)</strong>
+    </dt>
+    <dd>
+    Used to open the left gui of every player
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">left_name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         this is the gui that you want to open
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Gui.left.open(<span class="string">'foo'</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "close"></a>
+    <strong>close (left_name)</strong>
+    </dt>
+    <dd>
+    Used to close the left gui of every player
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">left_name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         this is the gui that you want to close
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Gui.left.close(<span class="string">'foo'</span>)</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-05-29 20:15:05 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

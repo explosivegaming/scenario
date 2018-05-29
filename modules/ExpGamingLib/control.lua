@@ -7,12 +7,16 @@ Any changes that you may make to the code are yours but that does not make the s
 Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
+--- Adds some common functions used though out all ExpGaming modules
+-- @module ExpGamingLib
+-- @alias ExpLib
+-- @author Cooldude2606
 local module_verbose = false -- there is no verbose in this file so true will do nothing
 local ExpLib = {}
 
 --- Loads a table into _G even when sandboxed; will not overwrite values or append to tables; will not work during runtime to avoid desyncs
 -- @usage unpack_to_G{key1='foo',key2='bar'}
--- @tparam table tbl -- table to be unpacked
+-- @tparam table tbl table to be unpacked
 function ExpLib.unpack_to_G(tbl)
     if not type(tbl) == 'table' or game then return end
     for key,value in pairs(tbl) do
@@ -21,8 +25,8 @@ function ExpLib.unpack_to_G(tbl)
 end
 
 --- Used to get the current ENV with all _G keys removed; useful when saving function to global
--- @usage get_env() -- returns current ENV with _G keys removed
--- @treturn table -- the env table with _G keys removed
+-- @usage get_env() returns current ENV with _G keys removed
+-- @treturn table the env table with _G keys removed
 function ExpLib.get_env()
     local level = 2
     local env = setmetatable({},{__index=_G})
@@ -43,9 +47,9 @@ end
 --- Compear types faster for faster valadation of prams
 -- @usage is_type('foo','string') -- return true
 -- @usage is_type('foo') -- return false
--- @param v -- the value to be tested
--- @tparam[opt=nil] string test_type -- the type to test for if not given then it tests for nil
--- @treturn bolean -- is v of type test_type
+-- @param v the value to be tested
+-- @tparam[opt=nil] string test_type the type to test for if not given then it tests for nil
+-- @treturn bolean is v of type test_type
 function ExpLib.is_type(v,test_type)
     return test_type and v and type(v) == test_type or not test_type and not v or false 
 end
@@ -54,9 +58,9 @@ end
 -- @usage player_return('Hello, World!') -- returns 'Hello, World!' to game.player or server console
 -- @usage player_return('Hello, World!','green') -- returns 'Hello, World!' to game.player with colour green or server console
 -- @usage player_return('Hello, World!',nil,player) -- returns 'Hello, World!' to the given player
--- @param rtn -- any value of any type that will be returned to the player or console
--- @tparam[opt=defines.colour.white] defines.color || string colour -- the colour of the text for the player, ingroned when printing to console
--- @tparam[opt=game.player] LuaPlayer player -- the player that return will go to, if no game.player then returns to server
+-- @param rtn any value of any type that will be returned to the player or console
+-- @tparam[opt=defines.colour.white] ?defines.color|string colour the colour of the text for the player, ingroned when printing to console
+-- @tparam[opt=game.player] LuaPlayer player  the player that return will go to, if no game.player then returns to server
 function ExpLib.player_return(rtn,colour,player)
     local colour = ExpLib.is_type(colour) == 'table' and colour or defines.color[colour]
     local player = player or game.player
@@ -84,8 +88,8 @@ end
 
 --- Convert ticks to hours
 -- @usage tick_to_hour(216001) -- return 1
--- @tparam number tick -- tick to convert to hours
--- @treturn number -- the number of whole hours from this tick
+-- @tparam number tick tick to convert to hours
+-- @treturn number the number of whole hours from this tick
 function ExpLib.tick_to_hour(tick)
     if not ExpLib.is_type(tick,'number') then return 0 end
     return math.floor(tick/(216000*game.speed))
@@ -93,8 +97,8 @@ end
 
 --- Convert ticks to minutes
 -- @usage tick_to_hour(3601) -- return 1
--- @tparam number tick -- tick to convert to minutes
--- @treturn number -- the number of whole minutes from this tick
+-- @tparam number tick tick to convert to minutes
+-- @treturn number the number of whole minutes from this tick
 function ExpLib.tick_to_min (tick)
     if not ExpLib.is_type(tick,'number') then return 0 end
     return math.floor(tick/(3600*game.speed))
@@ -103,8 +107,8 @@ end
 --- Converts a tick into a clean format for end user
 -- @usage tick_to_display_format(3600) -- return '1.00 M'
 -- @usage tick_to_display_format(234000) -- return '1 H 5 M'
--- @tparam number tick -- the tick to convert
--- @treturn string -- the formated string
+-- @tparam number tick the tick to convert
+-- @treturn string the formated string
 function ExpLib.tick_to_display_format(tick)
     if not ExpLib.is_type(tick,'number') then return '0H 0M' end
     if ExpLib.tick_to_min(tick) < 10 then
@@ -118,9 +122,9 @@ function ExpLib.tick_to_display_format(tick)
 end
 
 --- Used as a way to view the structure of a gui, used for debuging
--- @usage Gui_tree(root) -- returns all children of gui recusivly
--- @tparam LuaGuiElement root -- the root to start the tree from
--- @treturn table -- the table that describes the gui
+-- @usage Gui_tree(root) returns all children of gui recusivly
+-- @tparam LuaGuiElement root the root to start the tree from
+-- @treturn table the table that describes the gui
 function ExpLib.gui_tree(root)
     if not ExpLib.is_type(root,'table') or not root.valid then error('Invalid Gui Element given to gui_tree',2) end
     local tree = {}

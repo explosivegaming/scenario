@@ -63,8 +63,8 @@ end
 
 --- Adds a thread into the resolve queue, can be used to lower lag
 -- @usage Server.queue_thread(thread) -- return true/false
--- @tparam table the thread to add to the queue must have a resolve function (must be open)
--- @treturn bolean was the thread added
+-- @tparam table thread_to_queue the thread to add to the queue must have a resolve function (must be open)
+-- @treturn boolean was the thread added
 function Server.queue_thread(thread_to_queue)
     if not thread_to_queue and not thread_to_queue.valid and not thread_to_queue:valid() then return false end
     if not thread_to_queue._resolve then return false end
@@ -87,7 +87,7 @@ function Server.close_all_threads(with_force)
 end
 
 --- Runs all the theads which have opened with an on_tick event
--- @ussage Server.run_tick_threads()
+-- @usage Server.run_tick_threads()
 function Server.run_tick_threads()
     table.each(Server._threads().tick,function(uuid)
         local next_thread = Server.get_thread(uuid)
@@ -99,7 +99,7 @@ function Server.run_tick_threads()
 end
 
 --- Checks the timeout on all active timeout threads
--- @ussage Server.check_timeouts()
+-- @usage Server.check_timeouts()
 function Server.check_timeouts()
     table.each(Server._threads().timeout,function(uuid)
         local next_thread = Server.get_thread(uuid)
