@@ -70,8 +70,8 @@ Manager.verbose = function(rtn,action)
     local settings = Manager.setVerbose
     local state = Manager.currentState
     -- if ran in a module the the global module_name is present
-    if module_name then rtn='['..module_name..'] '..rtn 
-    else rtn='[FSM] '..rtn end
+    if module_name then rtn='['..module_name..'] '..tostring(rtn)
+    else rtn='[FSM] '..tostring(rtn) end
     -- module_verbose is a local override for a file, action is used in the manager to describe an extra type, state is the current state
     -- if action is true then it will always trigger verbose
     if module_verbose or action and (action == true or settings[action]) or settings[state] then

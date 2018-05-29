@@ -1,6 +1,7 @@
 --- A defines module for retrieving the number of ticks in 1 unit of time.
 -- Extends the Factorio defines table.
--- @module defines.time
+-- @module Time
+-- @alias defines.time
 -- @usage require('stdlib/defines/time')
 
 -- defines table is automatically required in all mod loading stages.

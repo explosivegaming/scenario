@@ -49,8 +49,8 @@
   <li><a href="../modules/expcore.server.html">expcore.server</a></li>
   <li><a href="../modules/expcore.sync.html">expcore.sync</a></li>
   <li><a href="../modules/FSM.html">FSM</a></li>
-  <li><strong>modules.expgaminglib.control</strong></li>
-  <li><a href="../modules/defines.color.html">defines.color</a></li>
+  <li><strong>ExpGamingLib</strong></li>
+  <li><a href="../modules/Color.html">Color</a></li>
   <li><a href="../modules/Game.html">Game</a></li>
   <li><a href="../modules/string.html">string</a></li>
   <li><a href="../modules/table.html">table</a></li>
@@ -66,44 +66,47 @@
 
 <div id="content">
 
-<h1>Module <code>modules.expgaminglib.control</code></h1>
-<p>Loads a table into _G even when sandboxed; will not overwrite values or append to tables; will not work during runtime to avoid desyncs</p>
+<h1>Module <code>ExpGamingLib</code></h1>
+<p>Adds some common functions used though out all ExpGaming modules</p>
 <p></p>
-    <h3>Usage:</h3>
+    <h3>Info:</h3>
     <ul>
-        <pre class="example">unpack_to_G{key1=&apos;foo&apos;,key2=&apos;bar&apos;}
-</pre>
+        <li><strong>Author</strong>: Cooldude2606</li>
     </ul>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#ExpLib.get_env">ExpLib.get_env ()</a></td>
+	<td class="name" nowrap><a href="#unpack_to_G">unpack_to_G (tbl)</a></td>
+	<td class="summary">Loads a table into _G even when sandboxed; will not overwrite values or append to tables; will not work during runtime to avoid desyncs</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_env">get_env ()</a></td>
 	<td class="summary">Used to get the current ENV with all _G keys removed; useful when saving function to global</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ExpLib.is_type">ExpLib.is_type (v[, test_type=nil])</a></td>
+	<td class="name" nowrap><a href="#is_type">is_type (v[, test_type=nil])</a></td>
 	<td class="summary">Compear types faster for faster valadation of prams</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ExpLib.player_return">ExpLib.player_return (rtn[, colour=defines.colour.white[, player=game.player]])</a></td>
+	<td class="name" nowrap><a href="#player_return">player_return (rtn[, colour=defines.colour.white[, player=game.player]])</a></td>
 	<td class="summary">Will return a value of any type to the player/server console, allows colour for in-game players</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ExpLib.tick_to_hour">ExpLib.tick_to_hour (tick)</a></td>
+	<td class="name" nowrap><a href="#tick_to_hour">tick_to_hour (tick)</a></td>
 	<td class="summary">Convert ticks to hours</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ExpLib.tick_to_min">ExpLib.tick_to_min (tick)</a></td>
+	<td class="name" nowrap><a href="#tick_to_min">tick_to_min (tick)</a></td>
 	<td class="summary">Convert ticks to minutes</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ExpLib.tick_to_display_format">ExpLib.tick_to_display_format (tick)</a></td>
+	<td class="name" nowrap><a href="#tick_to_display_format">tick_to_display_format (tick)</a></td>
 	<td class="summary">Converts a tick into a clean format for end user</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#ExpLib.gui_tree">ExpLib.gui_tree (root)</a></td>
+	<td class="name" nowrap><a href="#gui_tree">gui_tree (root)</a></td>
 	<td class="summary">Used as a way to view the structure of a gui, used for debuging</td>
 	</tr>
 </table>
@@ -116,8 +119,33 @@
 
     <dl class="function">
     <dt>
-    <a name = "ExpLib.get_env"></a>
-    <strong>ExpLib.get_env ()</strong>
+    <a name = "unpack_to_G"></a>
+    <strong>unpack_to_G (tbl)</strong>
+    </dt>
+    <dd>
+    Loads a table into _G even when sandboxed; will not overwrite values or append to tables; will not work during runtime to avoid desyncs
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tbl</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         table to be unpacked
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">unpack_to_G{key1=<span class="string">'foo'</span>,key2=<span class="string">'bar'</span>}</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "get_env"></a>
+    <strong>get_env ()</strong>
     </dt>
     <dd>
     Used to get the current ENV with all _G keys removed; useful when saving function to global
@@ -140,8 +168,8 @@
 
 </dd>
     <dt>
-    <a name = "ExpLib.is_type"></a>
-    <strong>ExpLib.is_type (v[, test_type=nil])</strong>
+    <a name = "is_type"></a>
+    <strong>is_type (v[, test_type=nil])</strong>
     </dt>
     <dd>
     Compear types faster for faster valadation of prams
@@ -176,8 +204,8 @@
 
 </dd>
     <dt>
-    <a name = "ExpLib.player_return"></a>
-    <strong>ExpLib.player_return (rtn[, colour=defines.colour.white[, player=game.player]])</strong>
+    <a name = "player_return"></a>
+    <strong>player_return (rtn[, colour=defines.colour.white[, player=game.player]])</strong>
     </dt>
     <dd>
     Will return a value of any type to the player/server console, allows colour for in-game players
@@ -212,8 +240,8 @@
 
 </dd>
     <dt>
-    <a name = "ExpLib.tick_to_hour"></a>
-    <strong>ExpLib.tick_to_hour (tick)</strong>
+    <a name = "tick_to_hour"></a>
+    <strong>tick_to_hour (tick)</strong>
     </dt>
     <dd>
     Convert ticks to hours
@@ -243,8 +271,8 @@
 
 </dd>
     <dt>
-    <a name = "ExpLib.tick_to_min"></a>
-    <strong>ExpLib.tick_to_min (tick)</strong>
+    <a name = "tick_to_min"></a>
+    <strong>tick_to_min (tick)</strong>
     </dt>
     <dd>
     Convert ticks to minutes
@@ -274,8 +302,8 @@
 
 </dd>
     <dt>
-    <a name = "ExpLib.tick_to_display_format"></a>
-    <strong>ExpLib.tick_to_display_format (tick)</strong>
+    <a name = "tick_to_display_format"></a>
+    <strong>tick_to_display_format (tick)</strong>
     </dt>
     <dd>
     Converts a tick into a clean format for end user
@@ -306,8 +334,8 @@
 
 </dd>
     <dt>
-    <a name = "ExpLib.gui_tree"></a>
-    <strong>ExpLib.gui_tree (root)</strong>
+    <a name = "gui_tree"></a>
+    <strong>gui_tree (root)</strong>
     </dt>
     <dd>
     Used as a way to view the structure of a gui, used for debuging
@@ -343,7 +371,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2018-05-29 20:15:05 </i>
+<i style="float:right;">Last updated 2018-05-29 20:54:20 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

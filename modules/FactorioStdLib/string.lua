@@ -1,6 +1,6 @@
 --- Extends Lua 5.2 string.
--- @module string
--- @see string
+-- @module String
+-- @alias string
 
 -- luacheck: globals string (Allow mutating string)
 

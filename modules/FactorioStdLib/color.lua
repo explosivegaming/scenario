@@ -32,9 +32,7 @@ defines = defines or {} --luacheck: ignore defines (This is used for testing loc
 -- @tfield Concepts.Color pink
 -- @tfield Concepts.Color purple
 -- @tfield Concepts.Color brown
-defines.color = {}
-
-local colors = {
+defines.color = {
     white = {r = 1.00, g = 1.00, b = 1.00},
     black = {r = 0.00, g = 0.00, b = 0.00},
     darkgrey = {r = 0.25, g = 0.25, b = 0.25},
@@ -55,7 +53,7 @@ local colors = {
     purple = {r = 0.60, g = 0.10, b = 0.60},
     brown = {r = 0.60, g = 0.40, b = 0.10}
 }
-
+local colors = defines.color
 --- Returns white for dark colors or black for lighter colors.
 -- @tfield Concepts.Color green defines.color.black
 -- @tfield Concepts.Color grey defines.color.black
@@ -76,9 +74,7 @@ local colors = {
 -- @tfield Concepts.Color pink defines.color.white
 -- @tfield Concepts.Color purple defines.color.white
 -- @tfield Concepts.Color red defines.color.white
-defines.anticolor = {}
-
-local anticolors = {
+defines.anticolor = {
     green = colors.black,
     grey = colors.black,
     lightblue = colors.black,
@@ -109,8 +105,7 @@ local anticolors = {
 -- @tfield Concepts.Color blue defines.color.lightblue
 -- @tfield Concepts.Color yellow defines.color.orange
 -- @tfield Concepts.Color pink defines.color.purple
-defines.lightcolor = {}
-local lightcolors = {
+defines.lightcolor = {
     white = colors.lightgrey, 
     grey = colors.darkgrey, 
     lightgrey = colors.grey,
@@ -129,8 +124,7 @@ local lightcolors = {
 -- @tfield Concepts.Color med
 -- @tfield Concepts.Color high
 -- @tfield Concepts.Color crit
-defines.text_color = {}
-local text_color = {
+defines.text_color = {
     info = {r = 0.21, g = 0.95, b = 1.00},
     bg = {r = 0.00, g = 0.00, b = 0.00},
     low = {r = 0.18, g = 0.77, b = 0.18},
@@ -139,76 +133,27 @@ local text_color = {
     crit = {r = 1.00, g = 0.00, b = 0.00}
 }
 
+-- metatable remade by cooldude
 local _mt = {
-    color = {
-        __index = function(_, c)
-            return colors[c]
-            and { r = colors[c]['r'], g=colors[c]['g'], b=colors[c]['b'], a = colors[c]['a'] }
-            or { r = 1, g = 1, b = 1, a = 1 }
-        end,
-        __pairs = function()
-            local k = nil
-            local c = colors
-            return function()
-                local v
-                k, v = next(c, k)
-                return k, (v and {r = v['r'], g = v['g'], b = v['b'], a = v['a']}) or nil
-            end
-        end
-    },
-    anticolor = {
-        __index = function(_, c)
-            return anticolors[c]
-            and { r = anticolors[c]['r'], g=anticolors[c]['g'], b=anticolors[c]['b'], a = anticolors[c]['a'] }
-            or { r = 1, g = 1, b = 1, a = 1 }
-        end,
-        __pairs = function()
-            local k = nil
-            local c = anticolors
-            return function()
-                local v
-                k, v = next(c, k)
-                return k, (v and {r = v['r'], g = v['g'], b = v['b'], a = v['a']}) or nil
-            end
-        end
-    },
-    lightcolor = {
-        __index = function(_, c)
-            return lightcolors[c]
-            and { r = lightcolors[c]['r'], g=lightcolors[c]['g'], b=lightcolors[c]['b'], a = lightcolors[c]['a'] }
-            or { r = 1, g = 1, b = 1, a = 1 }
-        end,
-        __pairs = function()
-            local k = nil
-            local c = lightcolors
-            return function()
-                local v
-                k, v = next(c, k)
-                return k, (v and {r = v['r'], g = v['g'], b = v['b'], a = v['a']}) or nil
-            end
-        end
-    },
-    text_color = { -- added by cooldude2606
-        __index = function(_, c)
-            return text_color[c]
-            and { r = text_color[c]['r'], g=text_color[c]['g'], b=text_color[c]['b'], a = text_color[c]['a'] }
-            or { r = 1, g = 1, b = 1, a = 1 }
-        end,
-        __pairs = function()
-            local k = nil
-            local c = text_color
-            return function()
-                local v
-                k, v = next(c, k)
-                return k, (v and {r = v['r'], g = v['g'], b = v['b'], a = v['a']}) or nil
-            end
-        end
-    }
+    __index=function(tbl,key)
+        return rawget(tbl,tostring(key):lower()) or rawget(defines.color,'white')
+    end,
+    __pairs=function(tbl)
+        return function()
+            local v
+            k, v = next(tbl, k)
+            return k, (v and {r = v['r'], g = v['g'], b = v['b'], a = v['a']}) or nil
+        end, tbl, nil
+    end,
+    __eq=function(tbl1,tbl2)
+        return tbl1.r == tbl2.r and tbl1.g == tbl2.g and tbl1.b == tbl2.b and tbl1.a == tbl2.a
+    end
 }
-setmetatable(defines.color, _mt.color)
-setmetatable(defines.anticolor, _mt.anticolor)
-setmetatable(defines.text_color, _mt.text_color)
-setmetatable(defines.lightcolor, _mt.lightcolor)
+
+setmetatable(defines.color, _mt)
+setmetatable(defines.anticolor, _mt)
+setmetatable(defines.text_color, _mt)
+setmetatable(defines.lightcolor, _mt)
 
 local Color = {} --luacheck: allow defined top
 

@@ -33,7 +33,7 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
-<li><a href="#Fields">Fields</a></li>
+<li><a href="#Tables">Tables</a></li>
 </ul>
 
 
@@ -50,8 +50,8 @@
   <li><a href="../modules/expcore.server.html">expcore.server</a></li>
   <li><a href="../modules/expcore.sync.html">expcore.sync</a></li>
   <li><strong>FSM</strong></li>
-  <li><a href="../modules/modules.expgaminglib.control.html">modules.expgaminglib.control</a></li>
-  <li><a href="../modules/defines.color.html">defines.color</a></li>
+  <li><a href="../modules/ExpGamingLib.html">ExpGamingLib</a></li>
+  <li><a href="../modules/Color.html">Color</a></li>
   <li><a href="../modules/Game.html">Game</a></li>
   <li><a href="../modules/string.html">string</a></li>
   <li><a href="../modules/table.html">table</a></li>
@@ -73,7 +73,6 @@
     <h3>Usage:</h3>
     <ul>
         <pre class="example">Manager = require(&quot;FactorioSoftmodManager&quot;)
- Used to load all other modules that are indexed in index.lua
 </pre>
     </ul>
     <h3>Info:</h3>
@@ -92,27 +91,31 @@
 	<td class="name" nowrap><a href="#verbose">verbose (rtn, action)</a></td>
 	<td class="summary">Used to call the output of the verbose when the current state allows it</td>
 	</tr>
-</table>
-<h2><a href="#Fields">Fields</a></h2>
-<table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#setVerbose">setVerbose</a></td>
+	<td class="name" nowrap><a href="#setVerbose">setVerbose (settings)</a></td>
 	<td class="summary">Main logic for allowing verbose at different stages though out the script</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#sandbox">sandbox</a></td>
+	<td class="name" nowrap><a href="#sandbox">sandbox (callback[, env])</a></td>
 	<td class="summary">Creates a sand box envorment and runs a callback in that sand box; provents global pollution</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#loadModules">loadModules</a></td>
+	<td class="name" nowrap><a href="#loadModules">loadModules ()</a></td>
 	<td class="summary">Loads the modules that are present in the index list</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#error">error</a></td>
+	<td class="name" nowrap><a href="#error">error (err, callback)</a></td>
 	<td class="summary">A more detailed replacement for the lua error function to allow for handlers to be added; repleaces default error so error can be used instead of Manager.error</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#names">names</a></td>
+	<td class="name" nowrap><a href="#event">event (event_name, callback)</a></td>
+	<td class="summary">Event handler that modules can use, each module can register one function per event</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Manager.event.names">Manager.event.names</a></td>
 	<td class="summary">Sub set to Manger.event and acts as a coverter between event_name and event_id</td>
 	</tr>
 </table>
@@ -178,20 +181,17 @@
     </ul>
 
 </dd>
-</dl>
-    <h2 class="section-header "><a name="Fields"></a>Fields</h2>
-
-    <dl class="function">
     <dt>
     <a name = "setVerbose"></a>
-    <strong>setVerbose</strong>
+    <strong>setVerbose (settings)</strong>
     </dt>
     <dd>
     Main logic for allowing verbose at different stages though out the script
 
 
+    <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">table</span>
+        <li><span class="parameter">settings</span>
             <span class="types"><span class="type">newTbl</span></span>
          the table that will be searched for settings to be updated
         </li>
@@ -210,19 +210,20 @@
 </dd>
     <dt>
     <a name = "sandbox"></a>
-    <strong>sandbox</strong>
+    <strong>sandbox (callback[, env])</strong>
     </dt>
     <dd>
     Creates a sand box envorment and runs a callback in that sand box; provents global pollution
 
 
+    <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">function</span>
-            <span class="types"><span class="type">callback</span></span>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
          the function that will be ran in the sandbox
         </li>
-        <li><span class="parameter">any</span>
-         other params that the function will use
+        <li><span class="parameter">env</span>
+         any other params that the function will use
          (<em>optional</em>)
         </li>
     </ul>
@@ -240,7 +241,7 @@
 </dd>
     <dt>
     <a name = "loadModules"></a>
-    <strong>loadModules</strong>
+    <strong>loadModules ()</strong>
     </dt>
     <dd>
     Loads the modules that are present in the index list
@@ -261,24 +262,21 @@
 </dd>
     <dt>
     <a name = "error"></a>
-    <strong>error</strong>
+    <strong>error (err, callback)</strong>
     </dt>
     <dd>
     A more detailed replacement for the lua error function to allow for handlers to be added; repleaces default error so error can be used instead of Manager.error
 
 
+    <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">string</span>
-            <span class="types"><span class="type">name</span></span>
-         || fucntion the name that is given to the callback || the callback that will be used
+        <li><span class="parameter">err</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a> or <span class="type">fucntion</span></span>
+         the string to be passed to handlers; if a function it will register a handler
         </li>
-        <li><span class="parameter">string</span>
-            <span class="types"><span class="type">name</span></span>
-         || fucntion the name that is given to the callback || the callback that will be used
-        </li>
-        <li><span class="parameter">function</span>
-            <span class="types"><span class="type">callback</span></span>
-         if name is given as a string this will be the callback used
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+         if given the err param will be used to given the handler a name
         </li>
     </ul>
 
@@ -298,18 +296,53 @@
 
 </dd>
     <dt>
-    <a name = "names"></a>
-    <strong>names</strong>
+    <a name = "event"></a>
+    <strong>event (event_name, callback)</strong>
+    </dt>
+    <dd>
+    Event handler that modules can use, each module can register one function per event
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">event_name</span>
+            <span class="types"><span class="type">int</span> or <a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         that referes to an event
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+         the function that will be set for that event
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">Manager.event[event_name] = callback <span class="comment">-- sets the callback for that event</span></pre></li>
+        <li><pre class="example">Manager.event[event_name] = <span class="keyword">nil</span> <span class="comment">-- clears the callback for that event</span></pre></li>
+        <li><pre class="example">Manager.event(event_name,callback) <span class="comment">-- sets the callback for that event</span></pre></li>
+        <li><pre class="example">Manager.event[event_name] <span class="comment">-- returns the callback for that event or the event id if not registered</span></pre></li>
+        <li><pre class="example">Manager.event(event_name) <span class="comment">-- runs all the call backs for that event</span></pre></li>
+        <li><pre class="example">Manager.event() <span class="comment">-- returns the stop value for the event proccessor, if returned during an event will stop all other callbacks</span></pre></li>
+        <li><pre class="example">#Manager.event <span class="comment">-- returns the number of callbacks that are registered</span></pre></li>
+        <li><pre class="example"><span class="global">pairs</span>(Manager.events) <span class="comment">-- returns event_id,table of callbacks</span></pre></li>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Manager.event.names"></a>
+    <strong>Manager.event.names</strong>
     </dt>
     <dd>
     Sub set to Manger.event and acts as a coverter between event_name and event_id
 
 
-    <ul>
-        <li><span class="parameter">names</span>
-
-        </li>
-    </ul>
 
 
 
@@ -319,7 +352,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">Manager.event[event_name] <span class="comment">-- see above, can not be accessed via Manager.event.names</span></pre>
+        <pre class="example">Manager.event[event_name]</pre>
     </ul>
 
 </dd>
@@ -330,7 +363,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2018-05-29 20:15:05 </i>
+<i style="float:right;">Last updated 2018-05-29 20:54:20 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
