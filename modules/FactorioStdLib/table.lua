@@ -438,7 +438,7 @@ end
 -- table.tostring(a) -- return '{["k1"]="foo",["k2"]="bar"}'
 -- @tparam table tbl table to convert
 -- @treturn string the converted table
-function table.to_string(tbl)
+function table.tostring(tbl)
     local result, done = {}, {}
     for k, v in ipairs(tbl) do
       table.insert(result,table.val_to_str(v))
