@@ -1,0 +1,14 @@
+{
+    "name": "ExpGamingLib",
+    "module": "ExpLib",
+    "description": "Adds some common functions used though out all ExpGaming modules",
+    "keywords": ["ExpGaming","Lib"],
+    "version": "1.0.0",
+    "location": "nil",
+    "main": "control",
+    "dependencies": {},
+    "author": "Cooldude2606",
+    "contact": "Discord: Cooldude2606#5241",
+    "license": "https://github.com/badgamernl/explosivegaming-main/blob/master/LICENSE"
+}
+  
