@@ -6,7 +6,10 @@
     "version": "1.0.0",
     "location": "nil",
     "main": "control",
-    "dependencies": {},
+    "dependencies": {
+        "StdLib/Game": ">=1.0.0",
+        "StdLib/Color": ">=1.0.0"
+    },
     "author": "Cooldude2606",
     "contact": "Discord: Cooldude2606#5241",
     "license": "https://github.com/badgamernl/explosivegaming-main/blob/master/LICENSE"
