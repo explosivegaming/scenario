@@ -3,9 +3,9 @@
 -- @alias Manager
 -- @author Cooldude2606
 -- @usage Manager = require("FactorioSoftmodManager")
--- Used to load all other modules that are indexed in index.lua
 local moduleIndex = require("/modules/index")
 local Manager = {}
+
 --- Setup for metatable of the Manager to force read only nature
 -- @usage Manager() -- runs Manager.loadModdules()
 -- @usage Manager[name] -- returns module by that name
@@ -35,6 +35,7 @@ local ReadOnlyManager = setmetatable({},{
         return tostring(Manager.loadModules)
     end
 })
+
 local function setupModuleName(name)
     -- creates a table that acts like a string but is read only
     return setmetatable({},{
@@ -84,8 +85,9 @@ Manager.verbose = function(rtn,action)
 end
 
 --- Main logic for allowing verbose at different stages though out the script
+-- @function Manager.setVerbose
 -- @usage Manager.setVerbose{output=log}
--- @tparam newTbl table the table that will be searched for settings to be updated
+-- @tparam newTbl settings the table that will be searched for settings to be updated
 -- @usage Manager.setVerbose[setting] -- returns the value of that setting
 -- @usage tostring(Manager.setVerbose) -- returns a formated list of the current settings
 Manager.setVerbose = setmetatable(
@@ -101,9 +103,9 @@ Manager.setVerbose = setmetatable(
     },
     {
         __metatable=false,
-        __call=function(tbl,newTbl)
+        __call=function(tbl,settings)
             -- does not allow any new keys, but will override any existing ones
-            for key,value in pairs(newTbl) do
+            for key,value in pairs(settings) do
                 if rawget(tbl,key) ~= nil then
                     Manager.verbose('Verbose for: "'..key..'" has been set to: '..tostring(value))
                     rawset(tbl,key,value)
@@ -134,9 +136,10 @@ Manager.setVerbose = setmetatable(
 Manager.verbose('Current state is now: "selfInit"; The verbose state is: '..tostring(Manager.setVerbose.selfInit),true)
 
 --- Creates a sand box envorment and runs a callback in that sand box; provents global pollution
+-- @function Manager.sandbox
 -- @usage Manager.sandbox(callback) -- return sandbox, success, other returns from callback
--- @tparam callback function the function that will be ran in the sandbox
--- @param[opt] any other params that the function will use
+-- @tparam function callback the function that will be ran in the sandbox
+-- @param[opt] env any other params that the function will use
 -- @usage Manager.sandbox() -- returns and empty sandbox
 -- @usage Manager.sandbox[key] -- returns the sand box value in that key
 Manager.sandbox = setmetatable({
@@ -165,6 +168,7 @@ Manager.sandbox = setmetatable({
 })
 
 --- Loads the modules that are present in the index list
+-- @function Manager.loadModules
 -- @usage Manager.loadModules() -- loads all moddules in the index list
 -- @usage #Manager.loadModules -- returns the number of modules loaded
 -- @usage tostring(Manager.loadModules) -- returns a formatted list of all modules loaded
@@ -259,13 +263,13 @@ Manager.loadModules = setmetatable({},
 )
 
 --- A more detailed replacement for the lua error function to allow for handlers to be added; repleaces default error so error can be used instead of Manager.error
+-- @function Manager.error
 -- @usage Manager.error(err) -- calls all error handlers that are set or if none then prints to game and if that fails crashs game
--- @tparam err string the err string that will be passed to the handlers
 -- @usage Manager.error() -- returns an error constant that can be used to crash game
 -- @usage Manager.error(Manager.error()) -- crashs the game
 -- @usage Manager.error.addHandler(name,callback) -- adds a new handler if handler returns Manager.error() then game will crash
--- @tparam name string || fucntion the name that is given to the callback || the callback that will be used
--- @tparam[opt:type(name)=='function'] callback function if name is given as a string this will be the callback used
+-- @tparam[2] ?string|fucntion err the string to be passed to handlers; if a function it will register a handler
+-- @tparam[2] function callback if given the err param will be used to given the handler a name
 -- @usage Manager.error[name] -- returns the handler of that name if present
 -- @usage #Manager.error -- returns the number of error handlers that are present
 -- @usage pairs(Manager.error) -- loops over only the error handlers handler_name,hander
@@ -339,14 +343,16 @@ Manager.error = setmetatable({
 error=Manager.error
 
 -- event does work a bit differnt from error, and if event breaks error is the fallback
+
 --- Event handler that modules can use, each module can register one function per event
+-- @function Manager.event
 -- @usage Manager.event[event_name] = callback -- sets the callback for that event
 -- @usage Manager.event[event_name] = nil -- clears the callback for that event
 -- @usage Manager.event(event_name,callback) -- sets the callback for that event
 -- @usage Manager.event[event_name] -- returns the callback for that event or the event id if not registered
 -- @usage Manager.event(event_name) -- runs all the call backs for that event
--- @tparam event_name int|string index that referes to an event
--- @tparam callback function the function that will be set for that event
+-- @tparam ?int|string event_name that referes to an event
+-- @tparam function callback the function that will be set for that event
 -- @usage Manager.event() -- returns the stop value for the event proccessor, if returned during an event will stop all other callbacks
 -- @usage #Manager.event -- returns the number of callbacks that are registered
 -- @usage pairs(Manager.events) -- returns event_id,table of callbacks
@@ -432,9 +438,10 @@ Manager.event = setmetatable({
         return next_pair, tbl, nil
     end
 })
+
 --- Sub set to Manger.event and acts as a coverter between event_name and event_id
--- @field names
--- @usage Manager.event[event_name] -- see above, can not be accessed via Manager.event.names
+-- @table Manager.event.names
+-- @usage Manager.event[event_name]
 -- @see Manager.event
 rawset(Manager.event,'names',setmetatable({},{
     __index=function(tbl,key)
@@ -460,6 +467,7 @@ rawset(Manager.event,'names',setmetatable({},{
         else return rawget(rawget(Manager.event,'events'),key) end
     end
 }))
+
 --over rides for the base values; can be called though Event
 Event=setmetatable({},{__index=function(tbl,key) return Manager.event[key] or script[key] or error('Invalid Index To Table Event') end})
 script.mod_name = setmetatable({},{
