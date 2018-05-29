@@ -53,9 +53,9 @@
   <li><a href="../modules/ExpGamingLib.html">ExpGamingLib</a></li>
   <li><strong>Color</strong></li>
   <li><a href="../modules/Game.html">Game</a></li>
-  <li><a href="../modules/string.html">string</a></li>
-  <li><a href="../modules/table.html">table</a></li>
-  <li><a href="../modules/defines.time.html">defines.time</a></li>
+  <li><a href="../modules/String.html">String</a></li>
+  <li><a href="../modules/Table.html">Table</a></li>
+  <li><a href="../modules/Time.html">Time</a></li>
 </ul>
 <h2>Scripts</h2>
 <ul class="nowrap">
@@ -111,6 +111,10 @@
 	<td class="name" nowrap><a href="#defines.lightcolor">defines.lightcolor</a></td>
 	<td class="summary">Returns a lighter color of a named color.</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#defines.textcolor">defines.textcolor</a></td>
+	<td class="summary">Returns a lighter color of a named color.</td>
+	</tr>
 </table>
 
 <br/>
@@ -151,8 +155,8 @@
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">Concepts.Color</span></span>
-        a color table that has the specified value for the alpha channel
+           <span class="types"><span class="type">a</span></span>
+        color table that has the specified value for the alpha channel
     </ol>
 
 
@@ -178,8 +182,8 @@
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">Concepts.Color</span></span>
-        a converted color &mdash; { r = c\_arr[1], g = c\_arr[2], b = c\_arr[3], a = c\_arr[4] }
+           <span class="types"><span class="type">a</span></span>
+        converted color &mdash; { r = c\_arr[1], g = c\_arr[2], b = c\_arr[3], a = c\_arr[4] }
     </ol>
 
 
@@ -254,8 +258,8 @@
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">Concepts.Color</span></span>
-        a color table with RGB converted from Hex and with alpha
+           <span class="types"><span class="type">a</span></span>
+        color table with RGB converted from Hex and with alpha
     </ol>
 
 
@@ -277,90 +281,67 @@
     <h3>Fields:</h3>
     <ul>
         <li><span class="parameter">white</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=1.00,g=1.00,b=1.00}
         </li>
         <li><span class="parameter">black</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=0.00,g=0.00,b=0.00}
         </li>
         <li><span class="parameter">darkgrey</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=0.25,g=0.25,b=0.25}
         </li>
         <li><span class="parameter">grey</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=0.50,g=0.50,b=0.50}
         </li>
         <li><span class="parameter">lightgrey</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=0.75,g=0.75,b=0.75}
         </li>
         <li><span class="parameter">red</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=1.00,g=0.00,b=0.00}
         </li>
         <li><span class="parameter">darkred</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=0.50,g=0.00,b=0.00}
         </li>
         <li><span class="parameter">lightred</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=1.00,g=0.50,b=0.50}
         </li>
         <li><span class="parameter">green</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=0.00,g=1.00,b=0.00}
         </li>
         <li><span class="parameter">darkgreen</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=0.00,g=0.50,b=0.00}
         </li>
         <li><span class="parameter">lightgreen</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=0.50,g=1.00,b=0.50}
         </li>
         <li><span class="parameter">blue</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=0.00,g=0.00,b=1.00}
         </li>
         <li><span class="parameter">darkblue</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=0.00,g=0.00,b=0.50}
         </li>
         <li><span class="parameter">lightblue</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=0.50,g=0.50,b=1.00}
         </li>
         <li><span class="parameter">orange</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=1.00,g=0.55,b=0.10}
         </li>
         <li><span class="parameter">yellow</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=1.00,g=1.00,b=0.00}
         </li>
         <li><span class="parameter">pink</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=1.00,g=0.00,b=1.00}
         </li>
         <li><span class="parameter">purple</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=0.60,g=0.10,b=0.60}
         </li>
         <li><span class="parameter">brown</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-
+         {r=0.60,g=0.40,b=0.10}
         </li>
     </ul>
 
 
 
 
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example">color = defines.color.red</pre>
-    </ul>
 
 </dd>
     <dt>
@@ -374,80 +355,61 @@
     <h3>Fields:</h3>
     <ul>
         <li><span class="parameter">green</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.black
+        defines.color.black
         </li>
         <li><span class="parameter">grey</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.black
+        defines.color.black
         </li>
         <li><span class="parameter">lightblue</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.black
+        defines.color.black
         </li>
         <li><span class="parameter">lightgreen</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.black
+        defines.color.black
         </li>
         <li><span class="parameter">lightgrey</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.black
+        defines.color.black
         </li>
         <li><span class="parameter">lightred</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.black
+        defines.color.black
         </li>
         <li><span class="parameter">orange</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.black
+        defines.color.black
         </li>
         <li><span class="parameter">white</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.black
+        defines.color.black
         </li>
         <li><span class="parameter">yellow</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.black
+        defines.color.black
         </li>
         <li><span class="parameter">black</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.white
+        defines.color.white
         </li>
         <li><span class="parameter">blue</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.white
+        defines.color.white
         </li>
         <li><span class="parameter">brown</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.white
+        defines.color.white
         </li>
         <li><span class="parameter">darkblue</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.white
+        defines.color.white
         </li>
         <li><span class="parameter">darkgreen</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.white
+        defines.color.white
         </li>
         <li><span class="parameter">darkgrey</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.white
+        defines.color.white
         </li>
         <li><span class="parameter">darkred</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.white
+        defines.color.white
         </li>
         <li><span class="parameter">pink</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.white
+        defines.color.white
         </li>
         <li><span class="parameter">purple</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.white
+        defines.color.white
         </li>
         <li><span class="parameter">red</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.white
+        defines.color.white
         </li>
     </ul>
 
@@ -467,36 +429,63 @@
     <h3>Fields:</h3>
     <ul>
         <li><span class="parameter">white</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.lightgrey
+        defines.color.lightgrey
         </li>
         <li><span class="parameter">grey</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.darkgrey
+        defines.color.darkgrey
         </li>
         <li><span class="parameter">lightgrey</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.grey
+        defines.color.grey
         </li>
         <li><span class="parameter">red</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.lightred
+        defines.color.lightred
         </li>
         <li><span class="parameter">green</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.lightgreen
+        defines.color.lightgreen
         </li>
         <li><span class="parameter">blue</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.lightblue
+        defines.color.lightblue
         </li>
         <li><span class="parameter">yellow</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.orange
+        defines.color.orange
         </li>
         <li><span class="parameter">pink</span>
-            <span class="types"><span class="type">Concepts.Color</span></span>
-         defines.color.purple
+        defines.color.purple
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "defines.textcolor"></a>
+    <strong>defines.textcolor</strong>
+    </dt>
+    <dd>
+    Returns a lighter color of a named color.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">info</span>
+         {r=0.21,g=0.95,b=1.00}
+        </li>
+        <li><span class="parameter">bg</span>
+         {r=0.00,g=0.00,b=0.00}
+        </li>
+        <li><span class="parameter">low</span>
+         {r=0.18,g=0.77,b=0.18}
+        </li>
+        <li><span class="parameter">med</span>
+         {r=1.00,g=0.89,b=0.26}
+        </li>
+        <li><span class="parameter">high</span>
+         {r=1.00,g=0.33,b=0.00}
+        </li>
+        <li><span class="parameter">crit</span>
+         {r=1.00,g=0.00,b=0.00}
         </li>
     </ul>
 
@@ -512,7 +501,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2018-05-29 20:54:20 </i>
+<i style="float:right;">Last updated 2018-05-29 22:53:53 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

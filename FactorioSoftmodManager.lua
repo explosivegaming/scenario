@@ -91,15 +91,25 @@ end
 -- @usage Manager.setVerbose[setting] -- returns the value of that setting
 -- @usage tostring(Manager.setVerbose) -- returns a formated list of the current settings
 Manager.setVerbose = setmetatable(
+    --- Different verbose settings used for setVerbose
+    -- @table Manager.verboseSettings
+    -- @tfield boolean selfInit called while the manager is being set up
+    -- @tfield boolean moduleLoad when a module is required by the manager
+    -- @tfield boolean moduleInit when and within the initation of a module
+    -- @tfield boolean moduleEnv during module runtime, this is a global option set within each module(module_verbose=true ln:1) for fine control
+    -- @tfield boolean eventRegistered when a module registers its event handlers
+    -- @tfield boolean errorCaught when an error is caught during runtime
+    -- @tfield function output can be: print || log || or other function
+    -- @field _output a constant value that can used to store output data
     {
-        selfInit=true, -- called while the manager is being set up
-        moduleLoad=false, -- when a module is required by the manager
-        moduleInit=false, -- when and within the initation of a module
-        moduleEnv=false, -- during module runtime, this is a global option set within each module(module_verbose=true ln:1) for fine control
-        eventRegistered=false, -- when a module registers its event handlers
-        errorCaught=true, -- when an error is caught during runtime
-        output=Manager._verbose, -- can be: print || log || or other function
-        _output={} -- a constant value that can used to store output data
+        selfInit=true,
+        moduleLoad=false,
+        moduleInit=false,
+        moduleEnv=false,
+        eventRegistered=false,
+        errorCaught=true,
+        output=Manager._verbose,
+        _output={}
     },
     {
         __metatable=false,
@@ -442,7 +452,6 @@ Manager.event = setmetatable({
 --- Sub set to Manger.event and acts as a coverter between event_name and event_id
 -- @table Manager.event.names
 -- @usage Manager.event[event_name]
--- @see Manager.event
 rawset(Manager.event,'names',setmetatable({},{
     __index=function(tbl,key)
         if type(key) == 'number' or tonumber(key) then

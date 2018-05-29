@@ -12,125 +12,103 @@
 defines = defines or {} --luacheck: ignore defines (This is used for testing locally)
 
 --- A table of colors allowing retrieval by color name.
--- @usage color = defines.color.red
--- @tfield Concepts.Color white
--- @tfield Concepts.Color black
--- @tfield Concepts.Color darkgrey
--- @tfield Concepts.Color grey
--- @tfield Concepts.Color lightgrey
--- @tfield Concepts.Color red
--- @tfield Concepts.Color darkred
--- @tfield Concepts.Color lightred
--- @tfield Concepts.Color green
--- @tfield Concepts.Color darkgreen
--- @tfield Concepts.Color lightgreen
--- @tfield Concepts.Color blue
--- @tfield Concepts.Color darkblue
--- @tfield Concepts.Color lightblue
--- @tfield Concepts.Color orange
--- @tfield Concepts.Color yellow
--- @tfield Concepts.Color pink
--- @tfield Concepts.Color purple
--- @tfield Concepts.Color brown
+-- @table defines.color
+-- @field white {r=1.00,g=1.00,b=1.00}
+-- @field black {r=0.00,g=0.00,b=0.00}
+-- @field darkgrey {r=0.25,g=0.25,b=0.25}
+-- @field grey {r=0.50,g=0.50,b=0.50}
+-- @field lightgrey {r=0.75,g=0.75,b=0.75}
+-- @field red {r=1.00,g=0.00,b=0.00}
+-- @field darkred {r=0.50,g=0.00,b=0.00}
+-- @field lightred {r=1.00,g=0.50,b=0.50}
+-- @field green {r=0.00,g=1.00,b=0.00}
+-- @field darkgreen {r=0.00,g=0.50,b=0.00}
+-- @field lightgreen {r=0.50,g=1.00,b=0.50}
+-- @field blue {r=0.00,g=0.00,b=1.00}
+-- @field darkblue {r=0.00,g=0.00,b=0.50}
+-- @field lightblue {r=0.50,g=0.50,b=1.00}
+-- @field orange {r=1.00,g=0.55,b=0.10}
+-- @field yellow {r=1.00,g=1.00,b=0.00}
+-- @field pink {r=1.00,g=0.00,b=1.00}
+-- @field purple {r=0.60,g=0.10,b=0.60}
+-- @field brown {r=0.60,g=0.40,b=0.10}
 defines.color = {
-    white = {r = 1.00, g = 1.00, b = 1.00},
-    black = {r = 0.00, g = 0.00, b = 0.00},
-    darkgrey = {r = 0.25, g = 0.25, b = 0.25},
-    grey = {r = 0.50, g = 0.50, b = 0.50},
-    lightgrey = {r = 0.75, g = 0.75, b = 0.75},
-    red = {r = 1.00, g = 0.00, b = 0.00},
-    darkred = {r = 0.50, g = 0.00, b = 0.00},
-    lightred = {r = 1.00, g = 0.50, b = 0.50},
-    green = {r = 0.00, g = 1.00, b = 0.00},
-    darkgreen = {r = 0.00, g = 0.50, b = 0.00},
-    lightgreen = {r = 0.50, g = 1.00, b = 0.50},
-    blue = {r = 0.00, g = 0.00, b = 1.00},
-    darkblue = {r = 0.00, g = 0.00, b = 0.50},
-    lightblue = {r = 0.50, g = 0.50, b = 1.00},
-    orange = {r = 1.00, g = 0.55, b = 0.10},
-    yellow = {r = 1.00, g = 1.00, b = 0.00},
-    pink = {r = 1.00, g = 0.00, b = 1.00},
-    purple = {r = 0.60, g = 0.10, b = 0.60},
-    brown = {r = 0.60, g = 0.40, b = 0.10}
+    white={r=1.00,g=1.00,b=1.00},
+    black={r=0.00,g=0.00,b=0.00},
+    darkgrey={r=0.25,g=0.25,b=0.25},
+    grey={r=0.50,g=0.50,b=0.50},
+    lightgrey={r=0.75,g=0.75,b=0.75},
+    red={r=1.00,g=0.00,b=0.00},
+    darkred={r=0.50,g=0.00,b=0.00},
+    lightred={r=1.00,g=0.50,b=0.50},
+    green={r=0.00,g=1.00,b=0.00},
+    darkgreen={r=0.00,g=0.50,b=0.00},
+    lightgreen={r=0.50,g=1.00,b=0.50},
+    blue={r=0.00,g=0.00,b=1.00},
+    darkblue={r=0.00,g=0.00,b=0.50},
+    lightblue={r=0.50,g=0.50,b=1.00},
+    orange={r=1.00,g=0.55,b=0.10},
+    yellow={r=1.00,g=1.00,b=0.00},
+    pink={r=1.00,g=0.00,b=1.00},
+    purple={r=0.60,g=0.10,b=0.60},
+    brown={r=0.60,g=0.40,b=0.10}
 }
 local colors = defines.color
+
 --- Returns white for dark colors or black for lighter colors.
--- @tfield Concepts.Color green defines.color.black
--- @tfield Concepts.Color grey defines.color.black
--- @tfield Concepts.Color lightblue defines.color.black
--- @tfield Concepts.Color lightgreen defines.color.black
--- @tfield Concepts.Color lightgrey defines.color.black
--- @tfield Concepts.Color lightred defines.color.black
--- @tfield Concepts.Color orange defines.color.black
--- @tfield Concepts.Color white defines.color.black
--- @tfield Concepts.Color yellow defines.color.black
--- @tfield Concepts.Color black defines.color.white
--- @tfield Concepts.Color blue defines.color.white
--- @tfield Concepts.Color brown defines.color.white
--- @tfield Concepts.Color darkblue defines.color.white
--- @tfield Concepts.Color darkgreen defines.color.white
--- @tfield Concepts.Color darkgrey defines.color.white
--- @tfield Concepts.Color darkred defines.color.white
--- @tfield Concepts.Color pink defines.color.white
--- @tfield Concepts.Color purple defines.color.white
--- @tfield Concepts.Color red defines.color.white
+-- @table defines.anticolor
 defines.anticolor = {
-    green = colors.black,
-    grey = colors.black,
-    lightblue = colors.black,
-    lightgreen = colors.black,
-    lightgrey = colors.black,
-    lightred = colors.black,
-    orange = colors.black,
-    white = colors.black,
-    yellow = colors.black,
-    black = colors.white,
-    blue = colors.white,
-    brown = colors.white,
-    darkblue = colors.white,
-    darkgreen = colors.white,
-    darkgrey = colors.white,
-    darkred = colors.white,
-    pink = colors.white,
-    purple = colors.white,
-    red = colors.white
+    green = colors.black, -- defines.color.black
+    grey = colors.black, -- defines.color.black
+    lightblue = colors.black, -- defines.color.black
+    lightgreen = colors.black, -- defines.color.black
+    lightgrey = colors.black, -- defines.color.black
+    lightred = colors.black, -- defines.color.black
+    orange = colors.black, -- defines.color.black
+    white = colors.black, -- defines.color.black
+    yellow = colors.black, -- defines.color.black
+    black = colors.white, -- defines.color.white
+    blue = colors.white, -- defines.color.white
+    brown = colors.white, -- defines.color.white
+    darkblue = colors.white, -- defines.color.white
+    darkgreen = colors.white, -- defines.color.white
+    darkgrey = colors.white, -- defines.color.white
+    darkred = colors.white, -- defines.color.white
+    pink = colors.white, -- defines.color.white
+    purple = colors.white, -- defines.color.white
+    red = colors.white -- defines.color.white
 }
 
 --- Returns a lighter color of a named color.
--- @tfield Concepts.Color white defines.color.lightgrey
--- @tfield Concepts.Color grey defines.color.darkgrey
--- @tfield Concepts.Color lightgrey defines.color.grey
--- @tfield Concepts.Color red defines.color.lightred
--- @tfield Concepts.Color green defines.color.lightgreen
--- @tfield Concepts.Color blue defines.color.lightblue
--- @tfield Concepts.Color yellow defines.color.orange
--- @tfield Concepts.Color pink defines.color.purple
+-- @table defines.lightcolor
 defines.lightcolor = {
-    white = colors.lightgrey, 
-    grey = colors.darkgrey, 
-    lightgrey = colors.grey,
-    red = colors.lightred, 
-    green = colors.lightgreen, 
-    blue = colors.lightblue,
-    yellow = colors.orange, 
-    pink = colors.purple
+    white = colors.lightgrey, -- defines.color.lightgrey
+    grey = colors.darkgrey, -- defines.color.darkgrey
+    lightgrey = colors.grey, -- defines.color.grey
+    red = colors.lightred, -- defines.color.lightred
+    green = colors.lightgreen, -- defines.color.lightgreen
+    blue = colors.lightblue, -- defines.color.lightblue
+    yellow = colors.orange, -- defines.color.orange
+    pink = colors.purple -- defines.color.purple
 }
 
--- added by cooldude2606
+-- added by cooldude260
+
 --- Returns a lighter color of a named color.
--- @tfield Concepts.Color info
--- @tfield Concepts.Color bg
--- @tfield Concepts.Color low
--- @tfield Concepts.Color med
--- @tfield Concepts.Color high
--- @tfield Concepts.Color crit
-defines.text_color = {
-    info = {r = 0.21, g = 0.95, b = 1.00},
-    bg = {r = 0.00, g = 0.00, b = 0.00},
-    low = {r = 0.18, g = 0.77, b = 0.18},
-    med = {r = 1.00, g = 0.89, b = 0.26},
-    high = {r = 1.00, g = 0.33, b = 0.00},
-    crit = {r = 1.00, g = 0.00, b = 0.00}
+-- @table defines.textcolor
+-- @field info {r=0.21,g=0.95,b=1.00}
+-- @field bg {r=0.00,g=0.00,b=0.00}
+-- @field low {r=0.18,g=0.77,b=0.18}
+-- @field med {r=1.00,g=0.89,b=0.26}
+-- @field high {r=1.00,g=0.33,b=0.00}
+-- @field crit {r=1.00,g=0.00,b=0.00}
+defines.textcolor = {
+    info={r=0.21,g=0.95,b=1.00},
+    bg={r=0.00,g=0.00,b=0.00},
+    low={r=0.18,g=0.77,b=0.18},
+    med={r=1.00,g=0.89,b=0.26},
+    high={r=1.00,g=0.33,b=0.00},
+    crit={r=1.00,g=0.00,b=0.00}
 }
 
 -- metatable remade by cooldude
@@ -152,7 +130,7 @@ local _mt = {
 
 setmetatable(defines.color, _mt)
 setmetatable(defines.anticolor, _mt)
-setmetatable(defines.text_color, _mt)
+setmetatable(defines.textcolor, _mt)
 setmetatable(defines.lightcolor, _mt)
 
 local Color = {} --luacheck: allow defined top
@@ -166,7 +144,7 @@ local Color = {} --luacheck: allow defined top
 -- </ul>
 -- @tparam[opt=white] defines.color|Concepts.Color color the color to configure
 -- @tparam[opt=1] float alpha the alpha value (*[0 - 1]*) to set for the given color
--- @treturn Concepts.Color a color table that has the specified value for the alpha channel
+-- @treturn a color table that has the specified value for the alpha channel
 function Color.set(color, alpha)
     color = color or defines.color.white
     Color.to_table(color)
@@ -176,7 +154,7 @@ end
 
 --- Converts a color in the array format to a color in the table format.
 -- @tparam table c_arr the color to convert 
--- @treturn Concepts.Color a converted color &mdash; { r = c\_arr[1], g = c\_arr[2], b = c\_arr[3], a = c\_arr[4] }
+-- @treturn a converted color &mdash; { r = c\_arr[1], g = c\_arr[2], b = c\_arr[3], a = c\_arr[4] }
 function Color.to_table(c_arr)
     if #c_arr > 0 then
         return {r = c_arr[1], g = c_arr[2], b = c_arr[3], a = c_arr[4]}
@@ -202,7 +180,7 @@ end
 -- Optionally provide the value for the alpha channel.
 -- @tparam string hex hexadecimal color string (#ffffff, not #fff)
 -- @tparam[opt=1] float alpha the alpha value to set; such that ***[ 0 &#8924; value &#8924; 1 ]***
--- @treturn Concepts.Color a color table with RGB converted from Hex and with alpha
+-- @treturn a color table with RGB converted from Hex and with alpha
 function Color.from_hex(hex, alpha)
     if not _G.Game then error('StdLib/Game not loaded') end
     _G.Game.fail_if_missing(hex, "missing color hex value")

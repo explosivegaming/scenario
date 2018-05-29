@@ -30,3 +30,7 @@ defines.time = {
     month = MONTH, -- the number of Factorio ticks in a month (30 days)
     year = YEAR, -- the number of Factorio ticks in a year (365 days)
 }
+
+--- Allows index to deines.time though the Time module
+--@table Time
+return setmetatable({},{__index=defines.time})

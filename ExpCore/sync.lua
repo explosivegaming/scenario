@@ -93,7 +93,7 @@ end
 -- set up error handle
 verbose('Set New Error Handle')
 _G.error_handle = function(err)
-    local color = _G.Color and Color.to_hex(defines.text_color.bg) or '0x0'
+    local color = _G.Color and Color.to_hex(defines.textcolor.bg) or '0x0'
     Sync.emit_embeded{title='SCRIPT ERROR',color=color,description='There was an error in the script @Developers ',Error=err}
 end
 

@@ -122,7 +122,7 @@ function Server._thread_handler(event)
     table.each(Server._threads().print_to,function(print_to,player_index,event)
         if event.name == defines.events.on_tick then return true end
         if print_to[event.name] then
-            player_return(event,defines.text_color.bg,player_index)
+            player_return(event,defines.textcolor.bg,player_index)
         end
     end,event)
     local event_id = event.name

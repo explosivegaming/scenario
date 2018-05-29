@@ -121,7 +121,7 @@ end
 -- @param[opt='server'] by_player the player who is giving the rank
 -- @param[opt=game.tick] tick the tick that the rank is being given on
 function Ranking.give_rank(player,rank,by_player,tick)
-    local print_colour = defines.text_color.info
+    local print_colour = defines.textcolor.info
     local tick = tick or game.tick
     local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or game.player and game.player.name or is_type(by_player,'string') and by_player or 'server'
     local rank = Ranking.get_rank(rank) or Ranking.get_rank(Ranking._presets().meta.default)
@@ -154,7 +154,7 @@ function Ranking.give_rank(player,rank,by_player,tick)
     if rank.group.name == 'Jail' and Ranking._presets().last_jail ~= player.name then
         Sync.emit_embeded{
             title='Player Jail',
-            color=Color.to_hex(defines.text_color.med),
+            color=Color.to_hex(defines.textcolor.med),
             description='There was a player jailed.',
             ['Player:']=player.name,
             ['By:']='<<inline>>'..by_player_name,

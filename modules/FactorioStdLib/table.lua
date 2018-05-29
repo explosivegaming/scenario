@@ -69,11 +69,8 @@ end
 --- Given a candidate search function, iterates over the table, calling the function
 -- for each element in the table, and returns true if search function returned true.
 -- Passes the index as second argument to the function.
--- @see table.find
---- @usage a= { 1, 2, 3, 4, 5}
----table.any(a, function(v) return v % 2 == 0 end) --produces: true
---- @usage a = {1, 2, 3, 4, 5}
----table.any(a, function(v, k, x) return k % 2 == 1 end) --produces: true
+-- @usage a= { 1, 2, 3, 4, 5} table.any(a, function(v) return v % 2 == 0 end) --produces: true
+-- @usage a = {1, 2, 3, 4, 5} table.any(a, function(v, k, x) return k % 2 == 1 end) --produces: true
 -- @tparam table tbl the table to be searched
 -- @tparam function func the function to use to search for any matching element
 -- @param[opt] ... additional arguments passed to the function
