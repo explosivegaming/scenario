@@ -1,7 +1,6 @@
 --- A defines module for retrieving colors by name.
 -- Extends the Factorio defines table.
--- @usage require('stdlib/defines/color')
--- @module Color
+-- @module StdLib.Color
 -- @alias defines.color
 
 -- defines table is automatically required in all mod loading stages.
@@ -79,7 +78,7 @@ defines.anticolor = {
     red = colors.white -- defines.color.white
 }
 
---- Returns a lighter color of a named color.
+--- Returns a lighter color of a named color
 -- @table defines.lightcolor
 defines.lightcolor = {
     white = colors.lightgrey, -- defines.color.lightgrey
@@ -196,6 +195,7 @@ function Color.from_hex(hex, alpha)
 end
 
 --added by cooldude2606
+
 --- Converts a color in the color table format to rgb
 -- @tparam table color the color to convert
 -- @treturn table the color as rgb
@@ -208,6 +208,7 @@ function Color.to_rgb(color)
 end
 
 --added by cooldude2606
+
 --- Converts a color in the color table format to hex
 -- @tparam table color the color to convert
 -- @treturn string the color as hex

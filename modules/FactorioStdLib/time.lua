@@ -1,8 +1,7 @@
 --- A defines module for retrieving the number of ticks in 1 unit of time.
 -- Extends the Factorio defines table.
--- @module Time
+-- @module StdLib.Time
 -- @alias defines.time
--- @usage require('stdlib/defines/time')
 
 -- defines table is automatically required in all mod loading stages.
 -- luacheck: ignore 122/defines
@@ -31,6 +30,4 @@ defines.time = {
     year = YEAR, -- the number of Factorio ticks in a year (365 days)
 }
 
---- Allows index to deines.time though the Time module
---@table Time
 return setmetatable({},{__index=defines.time})

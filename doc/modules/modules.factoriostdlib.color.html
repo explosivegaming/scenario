@@ -51,11 +51,8 @@
   <li><a href="../modules/expcore.sync.html">expcore.sync</a></li>
   <li><a href="../modules/FSM.html">FSM</a></li>
   <li><a href="../modules/ExpGamingLib.html">ExpGamingLib</a></li>
-  <li><strong>Color</strong></li>
-  <li><a href="../modules/Game.html">Game</a></li>
-  <li><a href="../modules/String.html">String</a></li>
-  <li><a href="../modules/Table.html">Table</a></li>
-  <li><a href="../modules/Time.html">Time</a></li>
+  <li><a href="../modules/StdLib.html">StdLib</a></li>
+  <li><strong>modules.factoriostdlib.color</strong></li>
 </ul>
 <h2>Scripts</h2>
 <ul class="nowrap">
@@ -67,7 +64,7 @@
 
 <div id="content">
 
-<h1>Module <code>Color</code></h1>
+<h1>Module <code>modules.factoriostdlib.color</code></h1>
 <p>A defines module for retrieving colors by name.</p>
 <p>
  Extends the Factorio defines table.</p>
@@ -81,20 +78,28 @@
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#set">set ([color=white[, alpha=1]])</a></td>
+	<td class="name" nowrap><a href="#Color.set">Color.set ([color=white[, alpha=1]])</a></td>
 	<td class="summary">Set a value for the alpha channel in the given color table.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#to_table">to_table (c_arr)</a></td>
+	<td class="name" nowrap><a href="#Color.to_table">Color.to_table (c_arr)</a></td>
 	<td class="summary">Converts a color in the array format to a color in the table format.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#from_rgb">from_rgb ([r=0[, g=0[, b=0[, a=255]]]])</a></td>
+	<td class="name" nowrap><a href="#Color.from_rgb">Color.from_rgb ([r=0[, g=0[, b=0[, a=255]]]])</a></td>
 	<td class="summary">Converts a color in the rgb format to a color table</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#from_hex">from_hex (hex[, alpha=1])</a></td>
+	<td class="name" nowrap><a href="#Color.from_hex">Color.from_hex (hex[, alpha=1])</a></td>
 	<td class="summary">Get a color table with a hexadecimal string.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color.to_rgb">Color.to_rgb (color)</a></td>
+	<td class="summary">Converts a color in the color table format to rgb</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color.to_hex">Color.to_hex (color)</a></td>
+	<td class="summary">Converts a color in the color table format to hex</td>
 	</tr>
 </table>
 <h2><a href="#Tables">Tables</a></h2>
@@ -109,7 +114,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#defines.lightcolor">defines.lightcolor</a></td>
-	<td class="summary">Returns a lighter color of a named color.</td>
+	<td class="summary">Returns a lighter color of a named color</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#defines.textcolor">defines.textcolor</a></td>
@@ -125,8 +130,8 @@
 
     <dl class="function">
     <dt>
-    <a name = "set"></a>
-    <strong>set ([color=white[, alpha=1]])</strong>
+    <a name = "Color.set"></a>
+    <strong>Color.set ([color=white[, alpha=1]])</strong>
     </dt>
     <dd>
     Set a value for the alpha channel in the given color table.
@@ -141,7 +146,7 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">color</span>
-            <span class="types"><a class="type" href="../modules/Color.html#defines.color">defines.color</a> or <span class="type">Concepts.Color</span></span>
+            <span class="types"><a class="type" href="../modules/modules.factoriostdlib.color.html#defines.color">defines.color</a> or <span class="type">Concepts.Color</span></span>
          the color to configure
          (<em>default</em> white)
         </li>
@@ -164,8 +169,8 @@
 
 </dd>
     <dt>
-    <a name = "to_table"></a>
-    <strong>to_table (c_arr)</strong>
+    <a name = "Color.to_table"></a>
+    <strong>Color.to_table (c_arr)</strong>
     </dt>
     <dd>
     Converts a color in the array format to a color in the table format.
@@ -191,8 +196,8 @@
 
 </dd>
     <dt>
-    <a name = "from_rgb"></a>
-    <strong>from_rgb ([r=0[, g=0[, b=0[, a=255]]]])</strong>
+    <a name = "Color.from_rgb"></a>
+    <strong>Color.from_rgb ([r=0[, g=0[, b=0[, a=255]]]])</strong>
     </dt>
     <dd>
     Converts a color in the rgb format to a color table
@@ -234,8 +239,8 @@
 
 </dd>
     <dt>
-    <a name = "from_hex"></a>
-    <strong>from_hex (hex[, alpha=1])</strong>
+    <a name = "Color.from_hex"></a>
+    <strong>Color.from_hex (hex[, alpha=1])</strong>
     </dt>
     <dd>
     Get a color table with a hexadecimal string.
@@ -260,6 +265,60 @@
 
            <span class="types"><span class="type">a</span></span>
         color table with RGB converted from Hex and with alpha
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color.to_rgb"></a>
+    <strong>Color.to_rgb (color)</strong>
+    </dt>
+    <dd>
+    Converts a color in the color table format to rgb
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">color</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         the color to convert
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        the color as rgb
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color.to_hex"></a>
+    <strong>Color.to_hex (color)</strong>
+    </dt>
+    <dd>
+    Converts a color in the color table format to hex
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">color</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         the color to convert
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+        the color as hex
     </ol>
 
 
@@ -423,7 +482,7 @@
     <strong>defines.lightcolor</strong>
     </dt>
     <dd>
-    Returns a lighter color of a named color.
+    Returns a lighter color of a named color
 
 
     <h3>Fields:</h3>
@@ -501,7 +560,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2018-05-29 22:53:53 </i>
+<i style="float:right;">Last updated 2018-05-29 23:30:03 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

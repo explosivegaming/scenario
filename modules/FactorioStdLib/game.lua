@@ -1,6 +1,5 @@
 --- The game module.
--- @module Game
--- @usage local Game = require('stdlib/game')
+-- @module StdLib.Game
 
 local Game = { --luacheck: allow defined top
     VALID_FILTER = function(v)

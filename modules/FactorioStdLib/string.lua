@@ -1,5 +1,5 @@
 --- Extends Lua 5.2 string.
--- @module String
+-- @module StdLib.String
 -- @alias string
 
 -- luacheck: globals string (Allow mutating string)

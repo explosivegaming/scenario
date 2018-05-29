@@ -1,5 +1,5 @@
 --- Extends Lua 5.2 table.
--- @module Table
+-- @module StdLib.Table
 -- @alias table
 
 -- luacheck: globals table (Allow mutating global table)
