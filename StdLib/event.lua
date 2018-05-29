@@ -5,9 +5,6 @@
 -- @module Event
 -- @usage require('stdlib/event/event')
 
-local fail_if_missing = require 'game'['fail_if_missing']
-local Game = require 'game'
-
 local Event = { --luacheck: allow defined top
     _registry = {},
     core_events = {
@@ -58,7 +55,8 @@ end]]
 -- @tparam function handler Function to call when event is triggered
 -- @treturn Event
 function Event.register(event, handler)
-    fail_if_missing(event, "missing event argument")
+    if not _G.Game then error('StdLib/Game not loaded') end
+    _G.Game.fail_if_missing(event, "missing event argument")
 
     event = (type(event) == "table" and event) or {event}
 
@@ -146,8 +144,9 @@ end
 -- @tparam function handler to remove
 -- @return Event
 function Event.remove(event, handler)
-    fail_if_missing(event, "missing event argument")
-    fail_if_missing(handler, "missing handler argument")
+    if not _G.Game then error('StdLib/Game not loaded') end
+    _G.Game.fail_if_missing(event, "missing event argument")
+    _G.Game.fail_if_missing(handler, "missing handler argument")
 
     event = (type(event) == "table" and event) or {event}
 

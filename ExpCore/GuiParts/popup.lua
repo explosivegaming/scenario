@@ -29,6 +29,7 @@ end
 function popup.add(obj)
     if not is_type(obj,'table') then return end    
     if not is_type(obj.name,'string') then return end
+    verbose('Created Popup Gui: '..obj.name)
     setmetatable(obj,{__index=popup._popup})
     local name = obj.name; obj.name = nil
     Gui._add_data('popup',name,obj)

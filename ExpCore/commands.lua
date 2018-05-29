@@ -110,7 +110,7 @@ local function run_custom_command(command)
     -- runs the command
     local success, err = pcall(command_calls[command.name],command,args)
     if not success then error(err) end
-    if err ~= commands.error then player_return({'commands.command-ran'},defines.text_color.info) end
+    if err ~= commands.error and player_name ~= 'server' then player_return({'commands.command-ran'},defines.text_color.info) end
     game.write_file('commands.log',
         game.tick
         ..' Player: "'..player_name..'"'
@@ -135,6 +135,7 @@ commands.add_command = function(name, description, inputs, event)
     if command_calls[name] then return end
     if not is_type(name,'string') then return end
     if not is_type(event,'function') then return end
+    verbose('Created Command: '..name)
     local description = is_type(description,'string') and description or 'No Description'
     local inputs = is_type(inputs,'table') and inputs or {'parameter',true}
     command_data[name] = {

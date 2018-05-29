@@ -131,7 +131,7 @@ function Ranking.give_rank(player,rank,by_player,tick)
     if old_rank.name == rank.name then return end
     if rank.power < old_rank.power then message = 'ranking.rank-up' player.play_sound{path='utility/achievement_unlocked'}
     else player.play_sound{path='utility/game_lost'} end
-    game.print({message,player.name,rank.name,by_player_name},print_colour)
+    if player.online_time > 60 or by_player_name ~= 'server' then game.print({message,player.name,rank.name,by_player_name},print_colour) end
     if rank.group.name ~= 'User' then player_return({'ranking.rank-given',rank.name},print_colour,player) end
     if player.tag ~= old_rank.tag then player_return({'ranking.tag-reset'},print_colour,player) end
     -- rank change
@@ -284,6 +284,7 @@ end
 -- see Addons/playerRanks for examples
 function Ranking._rank:edit(key,set_value,value)
     if game then return end
+    verbose('Edited Rank: '..self.name..'/'..key)
     if set_value then self[key] = value return end
     if key == 'disallow' then
         self.disallow = table.merge(self.disallow,value,true)
@@ -300,6 +301,7 @@ end
 function Ranking._group:create(obj)
     if game then return end
     if not is_type(obj.name,'string') then return end
+    verbose('Created Group: '..obj.name)
     setmetatable(obj,{__index=Ranking._group})
     self.index = #Ranking._groups(names)+1
     obj.ranks = {}
@@ -318,6 +320,7 @@ function Ranking._group:add_rank(obj)
     not is_type(obj.short_hand,'string') or
     not is_type(obj.tag,'string') or
     not is_type(obj.colour,'table') then return end
+    verbose('Created Rank: '..obj.name)
     setmetatable(obj,{__index=Ranking._rank})
     obj.group = self
     obj.allow = obj.allow or {}
@@ -336,6 +339,7 @@ end
 -- see Addons/playerRanks for examples
 function Ranking._group:edit(key,set_value,value)
     if game then return end
+    verbose('Edited Group: '..self.name..'/'..key)
     if set_value then self[key] = value return end
     if key == 'disallow' then
         self.disallow = table.merge(self.disallow,value,true)

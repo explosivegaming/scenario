@@ -197,7 +197,7 @@ if commands._expgaming then
     commands.add_command('interface', 'Runs the given input from the script', {'code',true}, function(event,args)
         local callback = args.code
         if not string.find(callback,'%s') and not string.find(callback,'return') then callback = 'return '..callback end
-        if game.player then callback = 'local player, surface, force, entity = game.player, game.player.surface, game.player.force, game.player.selected;'..callback end 
+        if game.player then callback = 'local player, surface, force, position, entity, tile = game.player, game.player.surface, game.player.force, game.player.position, game.player.selected, game.player.surface.get_tile(game.player.position);'..callback end 
         if Ranking and Ranking.get_rank and game.player then callback = 'local rank = Ranking.get_rank(game.player);'..callback end
         local success, err = Server.interface(callback)
         if not success and is_type(err,'string') then local _end = string.find(err,'stack traceback') if _end then err = string.sub(err,0,_end-2) end end
@@ -294,9 +294,11 @@ function Server._thread:close()
             end
         end)
     end
-    if is_type(self.name,'string') then threads.paused[self.name]=self.uuid self.opened=nil
-        if self.reopen == true then self:open() end
-    else threads.all[uuid] = nil threads.all._n = threads.all._n-1 end
+    self.opened=nil
+    if self.reopen == true then self:open() else
+        if is_type(self.name,'string') then threads.paused[self.name]=self.uuid
+        else threads.all[uuid] = nil threads.all._n = threads.all._n-1 end
+    end
     return _return
 end
 

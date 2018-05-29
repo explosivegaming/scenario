@@ -28,7 +28,8 @@ function Gui._get_data(key) return Gui_data[key] end
 
 function Gui:_load_parts(parts)
     for _,part in pairs(parts) do
-        self[part] = require('/GuiParts/'..part)
+        verbose('Gui Extraction: '..part)
+        self[part] = require('GuiParts/'..part)
     end
 end
 
