@@ -155,6 +155,7 @@ Manager.verbose('Current state is now: "selfInit"; The verbose state is: '..tost
 Manager.sandbox = setmetatable({
     -- can not use existing keys of _G
     verbose=Manager.verbose,
+    loaded_modules=ReadOnlyManager,
     module_verbose=false,
     module_exports=false
 },{

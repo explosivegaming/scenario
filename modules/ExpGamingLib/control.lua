@@ -45,6 +45,23 @@ function ExpLib.get_env()
     return env
 end
 
+--- Creats a table that will act like a string and a function
+-- @usage add_metatable({},function) -- returns table
+-- @tparam table tbl the table that will have its metatable set
+-- @tparam[opt=tostring] function callback the function that will be used for the call
+-- @tparam[opt=table.tostring] ?function|string string a function that resolves to a string or a string
+-- @treturn table the new table with its metatable set
+function ExpLib.add_metatable(tbl,callback,string)
+    if not ExpLib.is_type(tbl,'table') then error('No table given to add_metatable',2) end
+    local callback = ExpLib.is_type(callback,'function') and callback or tostring
+    local string = ExpLib.is_type(string,'function') and string or ExpLib.is_type(string,'string') and function() return string end or table.tostring
+    return setmetatable(tbl,{
+        __tostring=string,
+        __concat=function(val1,val2) return type(val1) == 'string' and val1..string() or string()..val2 end,
+        __call=callback
+    })
+end
+
 --- Compear types faster for faster valadation of prams
 -- @usage is_type('foo','string') -- return true
 -- @usage is_type('foo') -- return false
