@@ -410,7 +410,7 @@ function table.val_to_str(v)
         end
         return '"'..string.gsub(v,'"', '\\"' )..'"'
     else
-        return "table" == type( v) and table.to_string(v) or
+        return "table" == type( v) and table.tostring(v) or
         "function" == type(v) and '"cant-display-function"' or
         "userdata" == type(v) and '"cant-display-userdata"' or
         tostring(v)
@@ -450,7 +450,7 @@ function table.tostring(tbl)
     return "{"..table.concat(result,",") .."}"
 end
 
---- Simmilar to table.to_string but converts a lua table to a json one
+--- Simmilar to table.tostring but converts a lua table to a json one
 -- @usage local a = {k1='foo',k2='bar'}
 -- talbe.json(a) -- return '{"k1":"foo","k2":"bar"}'
 -- @tparam table lua_table the table to convert

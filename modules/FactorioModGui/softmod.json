@@ -1,0 +1,12 @@
+{
+    "name": "FactorioModGui",
+    "module": "mod_gui",
+    "description": "A way to standadise the way mods hanndle their guis.",
+    "keywords": ["Factorio","Gui","Non-Download","Included"],
+    "version": "1.0.0",
+    "location": "url",
+    "dependencies": {},
+    "author": "Factorio Dev Team",
+    "contact": "Any other questions please feel free to ask on the modding help forum.",
+    "license": "C:/Program Files (x86)/Steam/steamapps/common/Factorio/data/licenses.txt"
+}

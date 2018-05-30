@@ -88,7 +88,7 @@ local function run_custom_command(command)
             game.tick
             ..' Player: "'..player_name..'"'
             ..' Failed to use command (Unauthorized): "'..command.name..'"'
-            ..' With args of: '..table.to_string(command_args(command,command_data))
+            ..' With args of: '..table.tostring(command_args(command,command_data))
             ..'\n'
         , true, 0)
         return
@@ -102,7 +102,7 @@ local function run_custom_command(command)
             game.tick
             ..' Player: "'..player_name..'"'
             ..' Failed to use command (Invalid Args): "'..command.name..'"'
-            ..' With args of: '..table.to_string(args)
+            ..' With args of: '..table.tostring(args)
             ..'\n'
         , true, 0)
         return
@@ -115,15 +115,15 @@ local function run_custom_command(command)
         game.tick
         ..' Player: "'..player_name..'"'
         ..' Used command: "'..command.name..'"'
-        ..' With args of: '..table.to_string(args)
+        ..' With args of: '..table.tostring(args)
         ..'\n'
     , true, 0)
 end
 
 -- this is a set of constants you can use
 commands._add_command = commands.add_command --if you dont want to use the custom commands interface
-commands._expgaming = true --if you want to test if the custom commands are present
-commands.error = 'COMMAND_ERROR' --if returned during a custom command, Command Complete message not printed
+commands.expgaming = true --if you want to test if the custom commands are present
+commands.error = {} --if returned during a custom command, Command Complete message not printed
 --- Used to define commands
 -- @usage inputs = {'player','reason',true}
 -- commands.add_command('ban','bans a player',inputs,function() return end)

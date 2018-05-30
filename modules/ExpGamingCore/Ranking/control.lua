@@ -384,4 +384,9 @@ Event.register(defines.events.on_tick,function(event)
 	end
 end)
 
+Ranking.on_init=function(self)
+    require(module_path.."/base_ranks")
+    require(module_path.."/config_ranks")
+end
+
 return Ranking

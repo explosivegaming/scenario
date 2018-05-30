@@ -1,0 +1,75 @@
+{
+    "name": "ExpGamingCore",
+    "module": "Collection",
+    "description": "Explosive Gaming Core Files",
+    "keywords": ["Library","Lib","ExpGaming","Core"],
+    "version": "3.4.0",
+    "location": "url",
+    "submodules": {
+        "Commands": {
+            "name": "Commands",
+            "module": "commands",
+            "description": "A better command handler than the base game.",
+            "keywords": ["Library","Lib","ExpGaming","Core","Commands"],
+            "version": "3.4.0",
+            "location": "url",
+            "dependencies": {
+                "ExpGamingLib": ">=3.0.0",
+                "ExpGamingCore/Ranking": ">=3.0.0"
+            }
+        },
+        "Gui": {
+            "name": "Gui",
+            "module": "Gui",
+            "description": "Adds a objective version to custom guis.",
+            "keywords": ["Library","Lib","ExpGaming","Core","Gui","ExpGui"],
+            "version": "3.4.0",
+            "location": "url",
+            "dependencies": {
+                "FactorioModGui": ">=1.0.0",
+                "ExpGamingLib": ">=3.0.0",
+                "ExpGamingCore/Ranking": ">=3.0.0",
+                "ExpGamingCore/Server": "?>=3.0.0"
+            }
+        },
+        "Ranking": {
+            "name": "Ranking",
+            "module": "Ranking",
+            "description": "A full ranking system for factorio.",
+            "keywords": ["Library","Lib","ExpGaming","Core","Ranking","Ranks","Permissions","Roles"],
+            "version": "3.4.0",
+            "location": "url",
+            "dependencies": {
+                "ExpGamingLib": ">=3.0.0"
+            }
+        },
+        "Server": {
+            "name": "Server",
+            "module": "Server",
+            "description": "Adds a thread system and event listening and a admin bypass (recommend to disable /c and use optional /interface)",
+            "keywords": ["Library","Lib","ExpGaming","Core","Server","Thread","Interface","Events"],
+            "version": "3.4.0",
+            "location": "url",
+            "dependencies": {
+                "ExpGamingLib": ">=3.0.0",
+                "ExpGamingCore/Ranking": "?>=3.0.0",
+                "ExpGamingCore/Commands": "?>=3.0.0"
+            }
+        },
+        "Sync": {
+            "name": "Sync",
+            "module": "Sync",
+            "description": "Allows syncing with an outside server and info panle.",
+            "keywords": ["Library","Lib","ExpGaming","Core","Info","Sync","External","Discord"],
+            "version": "3.4.0",
+            "location": "url",
+            "dependencies": {
+                "ExpGamingLib": ">=3.0.0",
+                "Ranking": "?>=3.0.0"
+            }
+        }
+    },
+    "author": "Cooldude2606",
+    "contact": "Discord: Cooldude2606#5241",
+    "license": "https://github.com/badgamernl/explosivegaming-main/blob/master/LICENSE"
+}

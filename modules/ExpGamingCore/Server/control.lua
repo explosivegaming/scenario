@@ -139,8 +139,6 @@ function Server._thread_handler(event)
     end)
 end
 
-for _,event in pairs(defines.events) do Event.register(event,Server._thread_handler) end
-
 --[[ cant be used V
 --- Adds a event handler to tell threads about events
 -- @usage Server.add_thread_handler(defines.event)
@@ -191,18 +189,6 @@ function Server.interface(callback,use_thread,...)
         end
         return false
     end
-end
-
-if commands._expgaming then
-    commands.add_command('interface', 'Runs the given input from the script', {'code',true}, function(event,args)
-        local callback = args.code
-        if not string.find(callback,'%s') and not string.find(callback,'return') then callback = 'return '..callback end
-        if game.player then callback = 'local player, surface, force, position, entity, tile = game.player, game.player.surface, game.player.force, game.player.position, game.player.selected, game.player.surface.get_tile(game.player.position);'..callback end 
-        if Ranking and Ranking.get_rank and game.player then callback = 'local rank = Ranking.get_rank(game.player);'..callback end
-        local success, err = Server.interface(callback)
-        if not success and is_type(err,'string') then local _end = string.find(err,'stack traceback') if _end then err = string.sub(err,0,_end-2) end end
-        if err or err == false then player_return(err) end
-    end)
 end
 
 -- thread allows you to run fuinction async to the main game
@@ -392,6 +378,21 @@ Event.register(-2,function(event)
         if uuid ~= '_n' then setmetatable(thread,{__index=Server._thread}) end
     end
 end)
+
+Server.on_init=function(self)
+    Event.register(defines.event,Server._thread_handler)
+    if pcall(function() return commands._expgaming end) then
+        commands.add_command('interface', 'Runs the given input from the script', {'code',true}, function(event,args)
+            local callback = args.code
+            if not string.find(callback,'%s') and not string.find(callback,'return') then callback = 'return '..callback end
+            if game.player then callback = 'local player, surface, force, position, entity, tile = game.player, game.player.surface, game.player.force, game.player.position, game.player.selected, game.player.surface.get_tile(game.player.position);'..callback end 
+            if Ranking and Ranking.get_rank and game.player then callback = 'local rank = Ranking.get_rank(game.player);'..callback end
+            local success, err = Server.interface(callback)
+            if not success and is_type(err,'string') then local _end = string.find(err,'stack traceback') if _end then err = string.sub(err,0,_end-2) end end
+            if err or err == false then player_return(err) end
+        end)
+    end
+end
 
 return Server
 --[[

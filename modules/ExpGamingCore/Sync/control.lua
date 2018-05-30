@@ -15,7 +15,7 @@ local Sync_updates = {}
 --- Used as a faster way to get to the ranking function, overrides previous
 -- @usage Sync.set_ranks{name=rank_name}
 function Sync.set_ranks(...)
-    Ranking._base_preset(...)
+    if Ranking then Ranking._base_preset(...) else error('Ranking module not installed') end
 end
 
 --- Used to standidise the tick format for any sync info
@@ -91,11 +91,10 @@ function Sync.emit_embeded(args)
 end
 
 -- set up error handle
-verbose('Set New Error Handle')
-_G.error_handle = function(err)
+error.addHandler('Discord Emit',function(err)
     local color = _G.Color and Color.to_hex(defines.textcolor.bg) or '0x0'
     Sync.emit_embeded{title='SCRIPT ERROR',color=color,description='There was an error in the script @Developers ',Error=err}
-end
+end)
 
 --- used to get the number of admins currently online
 -- @usage Sync.count_admins()
@@ -128,6 +127,7 @@ end
 -- @treturn table contains the ranks and the players in that rank
 function Sync.count_ranks()
     if not game then return {'Offline'} end
+    if not Ranking then return {'Ranking module not installed'} end
     local _ranks = {}
     for power,rank in pairs(Ranking._ranks()) do
         local players = rank:get_players()
@@ -278,16 +278,21 @@ function Sync.add_to_gui(element,...)
     return true
 end
 
--- Examples for Sync.add_to_gui
--- adds a basic string to the table
-Sync.add_to_gui('Welcome to the Explosive Gaming comunity! This is one of many servers which we host.')
--- adds a string that can have depentant values
-Sync.add_to_gui(function(player,frame)
-    return 'You have been assigned the rank \''..Ranking.get_rank(player).name..'\''
-end)
-Sync.add_to_gui(function(player,frame)
-    return 'This server will reset at: '..Sync.info().reset_time
-end)
+
+Sync.on_init=function(self)
+    -- Examples for Sync.add_to_gui
+    -- adds a basic string to the table
+    Sync.add_to_gui('Welcome to the Explosive Gaming comunity! This is one of many servers which we host.')
+    if Ranking then
+        -- adds a string that can have depentant values
+        Sync.add_to_gui(function(player,frame)
+            return 'You have been assigned the rank \''..Ranking.get_rank(player).name..'\''
+        end)
+    end
+    Sync.add_to_gui(function(player,frame)
+        return 'This server will reset at: '..Sync.info().reset_time
+    end)
+end
 -- if readme is included then see addons/guis/readme.lua for more examples
 
 -- used to load the gui infomation when _G.Gui is not yet loaded

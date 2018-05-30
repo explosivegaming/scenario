@@ -74,7 +74,7 @@ Manager.verbose = function(rtn,action)
     else rtn='[FSM] '..tostring(rtn) end
     -- module_verbose is a local override for a file, action is used in the manager to describe an extra type, state is the current state
     -- if action is true then it will always trigger verbose
-    if module_verbose or action and (action == true or settings[action]) or settings[state] then
+    if module_verbose or action and (action == true or settings[action]) or (not action and settings[state]) then
         if type(settings.output) == 'function' then
             -- calls the output function, not pcalled as if this fails some thing is very wrong
             settings.output(rtn)
@@ -159,10 +159,12 @@ Manager.sandbox = setmetatable({
     module_exports=false
 },{
     __metatable=false,
+    __index=ReadOnlyManager,
     __call=function(tbl,callback,env,...)
         if type(callback) == 'function' then 
             -- creates a new sandbox env
             local sandbox = tbl()
+            local env = type(env) == 'table' and env or type(env) ~= 'nil' and {env} or {}
             -- new indexs are saved into sandbox and if _G does not have the index then look in sandbox
             setmetatable(env,{__index=sandbox})
             setmetatable(_G,{__index=env,__newindex=sandbox})
@@ -190,17 +192,17 @@ Manager.loadModules = setmetatable({},
             -- ReadOnlyManager used to trigger verbose change
             ReadOnlyManager.currentState = 'moduleLoad'
             -- goes though the index looking for modules
-            for module_name,location in pairs (moduleIndex) do
-                Manager.verbose('Loading module: "'..module_name..'"; Location: '..location)
+            for module_name,path in pairs(moduleIndex) do
+                Manager.verbose('Loading module: "'..module_name..'"; path: '..path)
                 -- runs the module in a sandbox env
-                local sandbox, success, module = Manager.sandbox(require,{module_name=setupModuleName(module_name),module_location=location},location)
+                local sandbox, success, module = Manager.sandbox(require,{module_name=setupModuleName(module_name),module_path=path},path..'/control')
                 -- extracts the module into a global index table for later use
                 if success then
                     -- verbose to notifie of any globals that were attempted to be created
                     local globals = ''
                     for key,value in pairs(sandbox) do globals = globals..key..', ' end
                     if globals ~= '' then Manager.verbose('Globals caught in "'..module_name..'": '..globals:sub(1,-3),'errorCaught') end
-                    Manager.verbose('Successfully loaded: "'..module_name..'"; Location: '..location)
+                    Manager.verbose('Successfully loaded: "'..module_name..'"; path: '..path)
                     -- sets that it has been loaded and adds to the loaded index
                     -- if you prefere module_exports can be used rather than returning the module
                     if type(tbl[module_name]) == 'nil' then
@@ -229,7 +231,7 @@ Manager.loadModules = setmetatable({},
                     -- if there is a module by this name in _G ex table then it will be indexed to the new module
                     if rawget(_G,module_name) and type(tbl[module_name]) == 'table' then setmetatable(rawget(_G,module_name),{__index=tbl[module_name]}) end
                 else
-                    Manager.verbose('Failed load: "'..module_name..'"; Location: '..location..' ('..module..')','errorCaught')
+                    Manager.verbose('Failed load: "'..module_name..'"; path: '..path..' ('..module..')','errorCaught')
                 end
             end
             -- new state for the manager to allow control of verbose
@@ -239,8 +241,8 @@ Manager.loadModules = setmetatable({},
                 -- looks for init so that init or on_init can be used
                 if type(data) == 'table' and data.init and data.on_init == nil then data.on_init = data.init data.init = nil end
                 if type(data) == 'table' and data.on_init and type(data.on_init) == 'function' then
-                    Manager.verbose('Initiating module: "'..module_name)
-                    local sandbox, success, err = Manager.sandbox(data.on_init,{module_name=setupModuleName(module_name)},data)
+                    Manager.verbose('Initiating module: "'..module_name..'"')
+                    local sandbox, success, err = Manager.sandbox(data.on_init,{module_name=setupModuleName(module_name),module_path=moduleIndex[module_name]},data)
                     if success then
                         Manager.verbose('Successfully Initiated: "'..module_name..'"')
                     else
@@ -397,7 +399,7 @@ Manager.event = setmetatable({
             for module_name,callback in pairs(tbl[event_name]) do
                 -- loops over the call backs and which module it is from
                 if type(callback) ~= 'function' then error('Invalid Event Callback: "'..event_name..'/'..module_name..'"') end
-                local sandbox, success, err = Manager.sandbox(callback,{module_name=setupModuleName(module_name)},new_callback,...)
+                local sandbox, success, err = Manager.sandbox(callback,{module_name=setupModuleName(module_name),module_path=moduleIndex[module_name]},new_callback,...)
                 if not success then Manager.verbose('Event Failed: "'..tbl.names[event_name]..'/'..module_name..'" ('..err..')','errorCaught') error('Event Failed: "'..event_name..'/'..module_name..'" ('..err..')') end
                 -- if stop constant is returned then stop further processing
                 if err == rawget(tbl,'__stop') then Manager.verbose('Event Haulted By: "'..module_name..'"','errorCaught') break end
@@ -410,14 +412,19 @@ Manager.event = setmetatable({
         -- checks for a global module name that is present
         local module_name = module_name or 'FSM'
         -- converts the key to a number index for the event
-        key = tonumber(key) or tbl.names[key]
-        Manager.verbose('Added Handler: "'..tbl.names[key]..'"','errorCaught')
+        Manager.verbose('Added Handler: "'..tbl.names[key]..'"','eventRegistered')
         -- checks that the event has a valid table to store callbacks; if its not valid it will creat it and register a real event handler
-        if not rawget(rawget(tbl,'__events'),key) then rawget(tbl,'__event')(key,function(...) tbl(...) end) rawset(rawget(tbl,'__events'),key,{}) end
+        if not rawget(rawget(tbl,'__events'),key) then 
+            if key < 0  then rawget(tbl,tbl.names[key])(function(...) tbl(key,...) end) 
+            else rawget(tbl,'__event')(key,function(...) tbl(key,...) end) end
+            rawset(rawget(tbl,'__events'),key,{}) end
         -- adds callback to Manager.event.__events[event_id][module_name]
         rawset(rawget(rawget(tbl,'__events'),key),module_name,value)
     end,
     __index=function(tbl,key)
+        -- few redirect key
+        local redirect={register=tbl,dispatch=tbl,remove=function(event_id) tbl[event_name]=nil end}
+        if rawget(redirect,key) then return rawget(redirect,key) end
         -- proforms different look ups depentding weather the current module has an event handler registered
         if module_name then
             -- first looks for the event callback table and then under the module name; does same but converts the key to a number; no handler regisered so returns the converted event id
@@ -458,12 +465,9 @@ rawset(Manager.event,'names',setmetatable({},{
             -- if it is a number then it will first look in the chache
             if rawget(tbl,key) then return rawget(tbl,key) end
             -- if it is a core event then it will simply return
-            if key == 'on_init' or key == 'init' then
-                rawset(tbl,key,-1)
-            elseif key == 'on_load' or key == 'load' then
-                rawset(tbl,key,-2)
-            elseif key == 'on_configuration_changed' or key == 'configuration_changed' then
-                rawset(tbl,key,-3)
+            if key == -1 then rawset(tbl,key,'__init')
+            elseif key == -2 then rawset(tbl,key,'__load')
+            elseif key == -3 then rawset(tbl,key,'__config')
             else
                 -- if it is not a core event then it does a value look up on Manager.events aka defines.events
                 for event,id in pairs(rawget(Manager.event,'events')) do
@@ -473,19 +477,18 @@ rawset(Manager.event,'names',setmetatable({},{
             -- returns the value from the chache after being loaded in
             return rawget(tbl,key)
             -- if it is a string then no reverse look up is required
-        else return rawget(rawget(Manager.event,'events'),key) end
+        else
+            if key == 'on_init' or key == 'init' or key == '__init' then return -1
+            elseif key == 'on_load' or key == 'load' or key == '__load' then return -2
+            elseif key == 'on_configuration_changed' or key == 'configuration_changed' or key == '__config' then return -3
+            else return rawget(rawget(Manager.event,'events'),key) end
+        end
     end
 }))
 
 --over rides for the base values; can be called though Event
 Event=setmetatable({},{__index=function(tbl,key) return Manager.event[key] or script[key] or error('Invalid Index To Table Event') end})
-script.mod_name = setmetatable({},{
-    __index=function(tbl,key) return _G.module_name end,
-    __newindex=function(tbl,key,value) error('Module Name Is Read Only') end,
-    __tostring=function(tbl) return _G.module_name end,
-    __concat=function(tbl,val) return _G.module_name..val end,
-    __metatable=false,
-})
+script.mod_name = setmetatable({},{__index=_G.module_name})
 script.on_event=Manager.event
 script.raise_event=Manager.event
 script.on_init=function(callback) Manager.event(-1,callback) end

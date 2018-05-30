@@ -26,12 +26,11 @@ end
 
 function Gui._get_data(key) return Gui_data[key] end
 
-function Gui:_load_parts(parts)
-    for _,part in pairs(parts) do
-        verbose('Gui Extraction: '..part)
-        self[part] = require('GuiParts/'..part)
-    end
-end
+Gui.center = require(module_path..'/GuiParts/center')
+Gui.inputs = require(module_path..'/GuiParts/inputs')
+Gui.left = require(module_path..'/GuiParts/left')
+Gui.popup = require(module_path..'/GuiParts/popup')
+Gui.toolbar = require(module_path..'/GuiParts/toolbar')
 
 --- Add a white bar to any gui frame
 -- @usage Gui.bar(frame,100)
@@ -65,34 +64,38 @@ function Gui.set_dropdown_index(dropdown,_item)
     return dropdown
 end
 
-Event.register(-1,function(event)
-    Server.new_thread{
-        name='camera-follow',
-        data={cams={},cam_index=1,players={}}
-    }:on_event('tick',function(self) 
-        local _cam = self.data.cams[self.data.cam_index]
-        if not _cam then self.data.cam_index = 1 _cam = self.data.cams[self.data.cam_index] end
-        if not _cam then return end
-        if not _cam.cam.valid then table.remove(self.data.cams,self.data.cam_index)
-        elseif not _cam.entity.valid then table.remove(self.data.cams,self.data.cam_index)
-        else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end self.data.cam_index = self.data.cam_index+1
-        end
-    end):on_event('error',function(self,err)
-        -- posible error handling if needed
-        error(err)
-    end):on_event(defines.events.on_player_respawned,function(self,event)
-        if self.data.players[event.player_index] then
-            local remove = {}
-            for index,cam in pairs(self.data.players[event.player_index]) do
-                Gui.cam_link{cam=cam,entity=Game.get_player(event).character}
-                if not cam.valid then table.insert(remove,index) end
+Gui.on_init=function(self)
+    Gui.test = require(module_path..'/GuiParts/test')
+    if not Server then return end
+    Event.register(-1,function(event)
+        Server.new_thread{
+            name='camera-follow',
+            data={cams={},cam_index=1,players={}}
+        }:on_event('tick',function(self) 
+            local _cam = self.data.cams[self.data.cam_index]
+            if not _cam then self.data.cam_index = 1 _cam = self.data.cams[self.data.cam_index] end
+            if not _cam then return end
+            if not _cam.cam.valid then table.remove(self.data.cams,self.data.cam_index)
+            elseif not _cam.entity.valid then table.remove(self.data.cams,self.data.cam_index)
+            else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end self.data.cam_index = self.data.cam_index+1
             end
-            for _,index in pairs(remove) do
-                table.remove(self.data.players[event.player_index],index)
+        end):on_event('error',function(self,err)
+            -- posible error handling if needed
+            error(err)
+        end):on_event(defines.events.on_player_respawned,function(self,event)
+            if self.data.players[event.player_index] then
+                local remove = {}
+                for index,cam in pairs(self.data.players[event.player_index]) do
+                    Gui.cam_link{cam=cam,entity=Game.get_player(event).character}
+                    if not cam.valid then table.insert(remove,index) end
+                end
+                for _,index in pairs(remove) do
+                    table.remove(self.data.players[event.player_index],index)
+                end
             end
-        end
-    end):open()
-end)
+        end):open()
+    end)
+end
 
 --- Adds a camera that updates every tick (or less depeading on how many are opening) it will move to follow an entity
 -- @usage Gui.cam_link{entity=game.player.character,frame=frame,width=50,hight=50,zoom=1}
