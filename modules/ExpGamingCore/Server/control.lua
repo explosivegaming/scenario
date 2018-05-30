@@ -380,7 +380,7 @@ Event.register(-2,function(event)
 end)
 
 Server.on_init=function(self)
-    Event.register(defines.event,Server._thread_handler)
+    Event.register(defines.events,Server._thread_handler)
     if pcall(function() return commands._expgaming end) then
         commands.add_command('interface', 'Runs the given input from the script', {'code',true}, function(event,args)
             local callback = args.code

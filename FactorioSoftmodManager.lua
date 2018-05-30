@@ -74,7 +74,7 @@ Manager.verbose = function(rtn,action)
     else rtn='[FSM] '..tostring(rtn) end
     -- module_verbose is a local override for a file, action is used in the manager to describe an extra type, state is the current state
     -- if action is true then it will always trigger verbose
-    if module_verbose or action and (action == true or settings[action]) or (not action and settings[state]) then
+    if module_verbose or (action and (action == true or settings[action])) or (not action and settings[state]) then
         if type(settings.output) == 'function' then
             -- calls the output function, not pcalled as if this fails some thing is very wrong
             settings.output(rtn)
@@ -487,7 +487,7 @@ rawset(Manager.event,'names',setmetatable({},{
 }))
 
 --over rides for the base values; can be called though Event
-Event=setmetatable({},{__index=function(tbl,key) return Manager.event[key] or script[key] or error('Invalid Index To Table Event') end})
+Event=setmetatable({},{__call=Manager.event,__index=function(tbl,key) return Manager.event[key] or script[key] or error('Invalid Index To Table Event') end})
 script.mod_name = setmetatable({},{__index=_G.module_name})
 script.on_event=Manager.event
 script.raise_event=Manager.event
