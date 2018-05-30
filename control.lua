@@ -1,3 +1,4 @@
+-- not_luadoc=true
 --- Root Script File
 -- @script control.lua
 function _log(...) log(...) end
@@ -16,7 +17,7 @@ Manager.setVerbose{
     moduleLoad=true, -- when a module is required by the manager
     moduleInit=true, -- when and within the initation of a module
     moduleEnv=true, -- during module runtime, this is a global option set within each module for fine control
-    eventRegistered=true, -- when a module registers its event handlers
+    eventRegistered=false, -- when a module registers its event handlers
     errorCaught=true, -- when an error is caught during runtime
     output=Manager._verbose -- can be: can be: print || log || other function
 }

@@ -1,13 +1,9 @@
---[[
-Explosive Gaming
+--- Description - A small description that will be displayed on the doc
+-- @module ExpGamingCore.Sync
+-- @alias Sync
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
---Please Only Edit Below This Line-----------------------------------------------------------
--- this file is used to allow easy syncing with out side programes
 local Sync = {}
 local Sync_updates = {}
 
@@ -45,16 +41,19 @@ function Sync.print(player_message,player_name,player_tag,player_colour,prefix)
     game.print(prefix..player_name..tag..': '..player_message,colour)
 end
 
---- Logs an embed to the json.data we use a js script to add things we cant here
--- @usage Sync.emit_embeded{title='BAN',color='0x0',description='A player was banned' ... }
--- @tparam table args a table which contains everything that the embeded will use
--- @table args
+--- Outline of the paramaters accepted by Sync.emit_embeded
+-- @table EmitEmbededParamaters
 -- @field title the tile of the embed
 -- @field color the color given in hex you can use Color.to_hex{r=0,g=0,b=0}
 -- @field description the description of the embed
 -- @field server_detail sting to add onto the pre-set server detail
--- @field fieldone the filed to add to the embed (key is name) (value is text) (start value with <<inline>> to make inline)
--- @field fieldtwo the filed to add to the embed (key is name) (value is text) (start value with <<inline>> to make inline)
+-- @field fieldone the filed to add to the embed (key is name) (value is text) (start value with &lt;&lt;inline&gt;&gt; to make inline)
+-- @field fieldtwo the filed to add to the embed (key is name) (value is text) (start value with &lt;&lt;inline&gt;&gt; to make inline)
+
+--- Logs an embed to the json.data we use a js script to add things we cant here
+-- @usage Sync.emit_embeded{title='BAN',color='0x0',description='A player was banned' ... }
+-- @tparam table args a table which contains everything that the embeded will use
+-- @see EmitEmbededParamaters
 function Sync.emit_embeded(args)
     if not is_type(args,'table') then error('Args table not given to Sync.emit_embeded',2) end
     local title = is_type(args.title,'string') and args.title or ''
@@ -90,6 +89,7 @@ function Sync.emit_embeded(args)
 end
 
 --- The error handle setup by sync to emit a discord embed for any errors
+-- @local here
 -- @function errorHandler
 -- @tparam string err the error passed by the err control
 error.addHandler('Discord Emit',function(err)
@@ -241,7 +241,7 @@ function Sync.add_update(key,callback)
     Sync_updates[key] = callback
 end
 
---- outputs the curent server info into a file
+--- Outputs the curent server info into a file
 -- @usage Sync.emit_data()
 function Sync.emit_data()
     local info = Sync.info

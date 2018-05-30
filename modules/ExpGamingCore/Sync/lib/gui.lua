@@ -4,7 +4,9 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
--- this file will be loaded when ExpGamingCore/Gui is present
+--- This file will be loaded when ExpGamingCore/Gui is present
+-- @function _comment
+
 
 local Sync_gui_functions = {}
 
@@ -35,6 +37,7 @@ local function label_format(label,width)
 end
 
 --- Creates a center gui that will appear on join
+-- @table server-info
 -- @local call to Gui.Center
 Gui.center.add{
     name='server-info',
