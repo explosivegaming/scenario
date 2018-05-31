@@ -161,9 +161,6 @@ function ExpLib.gui_tree(root)
     return tree
 end
 
--- unpacks lib to _G on module init
-function ExpLib.on_init(self)
-    self:unpack_to_G()
-end
-
+-- bypasses the module sandbox and places functions into _G
+ExpLib:unpack_to_G()
 return ExpLib

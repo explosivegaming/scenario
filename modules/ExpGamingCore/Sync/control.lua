@@ -238,6 +238,20 @@ function Sync.emit_data()
     game.write_file('server-info.json',table.json(info),false,0)
 end
 
+--- Used to return and set the current IRL time; not very good need a better way to do this
+-- @usage Sync.time('Sun Apr  1 18:44:30 UTC 2018')
+-- @usage Sync.time -- string
+-- @tparam[opt=nil] string set the date time to be set
+-- @treturn boolean if the datetime set was successful
+Sync.time=add_metatable({},function(set)
+    local info = Sync.info
+    if not is_type(set,'string') then return false end
+    info.time = set
+    info.time_set[1] = game.tick
+    info.time_set[2] = tick_to_display_format(game.tick)
+    return true
+end,function() local info = Sync.info return info.time..' (+'..(game.tick-info.time_set[1])..' Ticks)' end)
+
 -- will auto replace the file every 5 min by default
 script.on_event('on_tick',function(event)
     local time = Sync.info.time_period[1]
@@ -245,21 +259,8 @@ script.on_event('on_tick',function(event)
 end)
 
 function Sync:on_init()
-    --- Used to return and set the current IRL time; not very good need a better way to do this
-    -- @usage Sync.time('Sun Apr  1 18:44:30 UTC 2018')
-    -- @usage Sync.time -- string
-    -- @tparam[opt=nil] string set the date time to be set
-    -- @treturn boolean if the datetime set was successful
-    Sync.time=add_metatable({},function(set)
-        local info = Sync.info
-        if not is_type(set,'string') then return false end
-        info.time = set
-        info.time_set[1] = game.tick
-        info.time_set[2] = tick_to_display_format(game.tick)
-        return true
-    end,function() local info = Sync.info return info.time..' (+'..(game.tick-info.time_set[1])..' Ticks)' end)
     -- updates installed mods
-    --Sync.info{mods=table.keys(loaded_modules)}
+    Sync.info{mods=table.keys(loaded_modules)}
     -- optinal dependies
     if loaded_modules.Gui then verbose('ExpGamingCore.Gui is installed; Loading gui lib') require(module_path..'/src/gui') end
     if loaded_modules.Ranking then verbose('ExpGamingCore.Ranking is installed; Loading ranking lib') require(module_path..'/src/ranking') end
