@@ -27,5 +27,5 @@ commands.add_command('tp', 'Teleport a player to another player\'s location', {'
     local to_player = Game.get_player(args.to)
     if not to_player then player_return({'commands.invalid-player',args.to_player}) return commands.error end
     
-    Admin.tp(player, event)
+    Admin.tp(from_player, to_player, event)
 end)
