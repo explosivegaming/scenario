@@ -145,6 +145,38 @@ Manager.setVerbose = setmetatable(
 -- call to verbose to show start up, will always be present
 Manager.verbose('Current state is now: "selfInit"; The verbose state is: '..tostring(Manager.setVerbose.selfInit),true)
 
+--- An optinal feature that can be used if you dont want to worry about conflicting global paths
+-- @usage local global = global_manager() -- sets up the global struture
+-- @usage global{'foo','bar'} -- sets the default value
+-- @tparam[opt={}] table default the default value of global
+-- @treturn table the new global table for that module
+function Manager.global(default)
+    local default = default or {}
+    return setmetatable(default,{
+        __call=function(tbl,default)
+            if default then rawset(tbl,'default',default) end
+            local global = _G.global
+            if not module_path then return global end
+            local path = 'global'
+            local new_dir = false -- this is to test if the default should be used
+            for dir in module_path:gmatch('%a+') do
+                path = path..'.'..dir
+                if not rawget(global,dir) then new_dir=true Manager.verbose('Added Global Dir: '..path) rawset(global,dir,{}) end
+                global = rawget(global,dir)
+            end
+            if new_dir then 
+                Manager.verbose('Set Global Dir: '..path..' to its default') 
+                for key,value in pairs(rawget(tbl,'default')) do rawset(global,key,value) end
+            end
+            return global
+        end,
+        __index=function(tbl,key) return rawget(tbl(),key) or rawget(_G.global,key) end,
+        __newindex=function(tbl,key,value) rawset(tbl(),key,value) end,
+        __pairs=function(tbl) return pairs(tbl()) end,
+        __ipairs=function(tbl) return ipairs(tbl()) end
+    })
+end
+
 --- Creates a sand box envorment and runs a callback in that sand box; provents global pollution
 -- @function Manager.sandbox
 -- @usage Manager.sandbox(callback) -- return sandbox, success, other returns from callback
@@ -233,6 +265,7 @@ Manager.loadModules = setmetatable({},
                     if rawget(_G,module_name) and type(tbl[module_name]) == 'table' then setmetatable(rawget(_G,module_name),{__index=tbl[module_name]}) end
                 else
                     Manager.verbose('Failed load: "'..module_name..'"; path: '..path..' ('..module..')','errorCaught')
+                    for event_name,callbacks in pairs(Manager.event) do Manager.verbose('Removed Event Handler: "'..module_name..'/'..tbl.names[event_name],'eventRegistered') callbacks[module_name] = nil end
                 end
             end
             -- new state for the manager to allow control of verbose
@@ -243,7 +276,7 @@ Manager.loadModules = setmetatable({},
                 if type(data) == 'table' and data.init and data.on_init == nil then data.on_init = data.init data.init = nil end
                 if type(data) == 'table' and data.on_init and type(data.on_init) == 'function' then
                     Manager.verbose('Initiating module: "'..module_name..'"')
-                    local sandbox, success, err = Manager.sandbox(data.on_init,{module_name=setupModuleName(module_name),module_path=moduleIndex[module_name]},data)
+                    local sandbox, success, err = Manager.sandbox(data.on_init,{module_name=setupModuleName(module_name),module_path=moduleIndex[tostring(module_name)]},data)
                     if success then
                         Manager.verbose('Successfully Initiated: "'..module_name..'"')
                     else
@@ -400,8 +433,8 @@ Manager.event = setmetatable({
             for module_name,callback in pairs(tbl[event_name]) do
                 -- loops over the call backs and which module it is from
                 if type(callback) ~= 'function' then error('Invalid Event Callback: "'..event_name..'/'..module_name..'"') end
-                local sandbox, success, err = Manager.sandbox(callback,{module_name=setupModuleName(module_name),module_path=moduleIndex[module_name]},new_callback,...)
-                if not success then Manager.verbose('Event Failed: "'..tbl.names[event_name]..'/'..module_name..'" ('..err..')','errorCaught') error('Event Failed: "'..event_name..'/'..module_name..'" ('..err..')') end
+                local sandbox, success, err = Manager.sandbox(callback,{module_name=setupModuleName(module_name),module_path=moduleIndex[tostring(module_name)]},new_callback,...)
+                if not success then Manager.verbose('Event Failed: "'..module_name..'/'..tbl.names[event_name]..'" ('..err..')','errorCaught') error('Event Failed: "'..module_name..'/'..tbl.names[event_name]..'" ('..err..')') end
                 -- if stop constant is returned then stop further processing
                 if err == rawget(tbl,'__stop') then Manager.verbose('Event Haulted By: "'..module_name..'"','errorCaught') break end
             end
@@ -415,12 +448,12 @@ Manager.event = setmetatable({
         -- converts the key to a number index for the event
         Manager.verbose('Added Handler: "'..tbl.names[key]..'"','eventRegistered')
         -- checks that the event has a valid table to store callbacks; if its not valid it will creat it and register a real event handler
-        if not rawget(rawget(tbl,'__events'),key) then 
+        if not rawget(rawget(tbl,'__events'),key) then
             if key < 0  then rawget(tbl,tbl.names[key])(function(...) tbl(key,...) end) 
             else rawget(tbl,'__event')(key,function(...) tbl(key,...) end) end
             rawset(rawget(tbl,'__events'),key,{}) end
         -- adds callback to Manager.event.__events[event_id][module_name]
-        rawset(rawget(rawget(tbl,'__events'),key),module_name,value)
+        rawset(rawget(rawget(tbl,'__events'),key),tostring(module_name),value)
     end,
     __index=function(tbl,key)
         -- few redirect key
@@ -429,8 +462,8 @@ Manager.event = setmetatable({
         -- proforms different look ups depentding weather the current module has an event handler registered
         if module_name then
             -- first looks for the event callback table and then under the module name; does same but converts the key to a number; no handler regisered so returns the converted event id
-            return rawget(rawget(tbl,'__events'),key) and rawget(rawget(rawget(tbl,'__events'),key),module_name)
-            or rawget(rawget(tbl,'__events'),rawget(tbl,'names')[key]) and rawget(rawget(rawget(tbl,'__events'),rawget(tbl,'names')[key]),module_name) 
+            return rawget(rawget(tbl,'__events'),key) and rawget(rawget(rawget(tbl,'__events'),key),tostring(module_name))
+            or rawget(rawget(tbl,'__events'),rawget(tbl,'names')[key]) and rawget(rawget(rawget(tbl,'__events'),rawget(tbl,'names')[key]),tostring(module_name)) 
             or rawget(tbl,'names')[key]
         else
             -- if there is no module present then it will return the full list of regisered handlers; or other wise the converted event id

@@ -7,7 +7,6 @@
 --- This file will be loaded when ExpGamingCore/Gui is present
 -- @function _comment
 
-
 local Sync_gui_functions = {}
 
 --- Adds a emeltent to the sever info gui

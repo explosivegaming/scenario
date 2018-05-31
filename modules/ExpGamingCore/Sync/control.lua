@@ -6,6 +6,7 @@
 
 local Sync = {}
 local Sync_updates = {}
+local global = Manager.global()
 
 --- Used to standidise the tick format for any sync info
 -- @usage Sync.tick_format(60) -- return {60,'1.00M'}
@@ -175,35 +176,10 @@ end
 -- @tparam[opt=nil] table set keys to be replaced in the server info
 -- @treturn boolean success was the data set
 Sync.info = setmetatable({},{
-    __index=function(tbl,key)
-        if not global.exp_core then global.exp_core = {} end
-        if not global.exp_core.sync then global.exp_core.sync = {
-            server_name='Factorio Server',
-            server_description='A factorio server for everyone',
-            reset_time='On Demand',
-            time='Day Mth 00 00:00:00 UTC Year',
-            time_set=Sync.tick_format(0),
-            last_update=Sync.tick_format(0),
-            time_period=Sync.tick_format(18000),
-            players={
-                online=Sync.count_players(true),
-                n_online=#game.connected_players,
-                all=Sync.count_players(),
-                n_all=#game.players,
-                admins_online=Sync.count_admins(),
-                afk_players=Sync.count_afk(),
-                times=Sync.count_player_times()
-            },
-            ranks=Sync.count_ranks(),
-            rockets=game.forces['player'].get_item_launched('satellite'),
-            mods={'base'}
-        } end
-        return global.exp_core.sync[key]
-    end,
+    __index=global,
     __call=function(tbl,set)
-        local _ = tbl.time -- used to create the global if not made
         if not is_type(set,'table') then return false end
-        for key,value in pairs(set) do global.exp_core.sync[key] = value end
+        for key,value in pairs(set) do global[key] = value end
         return true
     end
 })
@@ -268,9 +244,31 @@ function Sync:on_init()
         info.time_set[2] = tick_to_display_format(game.tick)
         return true
     end,function() local info = Sync.info return info.time..' (+'..(game.tick-info.time_set[1])..' Ticks)' end)
+    -- sets up the global for this module
+    global{
+        server_name='Factorio Server',
+        server_description='A factorio server for everyone',
+        reset_time='On Demand',
+        time='Day Mth 00 00:00:00 UTC Year',
+        time_set=Sync.tick_format(0),
+        last_update=Sync.tick_format(0),
+        time_period=Sync.tick_format(18000),
+        players={
+            online=Sync.count_players(true),
+            n_online=game and #game.connected_players or 0,
+            all=Sync.count_players(),
+            n_all=game and #game.players or 0,
+            admins_online=Sync.count_admins(),
+            afk_players=Sync.count_afk(),
+            times=Sync.count_player_times()
+        },
+        ranks=Sync.count_ranks(),
+        rockets=game and game.forces['player'].get_item_launched('satellite') or 0,
+        mods=table.keys(loaded_modules)
+    }    
     -- optinal dependies
-    if loaded_modules.Gui then verbose('ExpGamingCore.Gui is installed; Loading gui lib') require(module_path..'/lib/gui') end
-    if loaded_modules.Ranking then verbose('ExpGamingCore.Ranking is installed; Loading ranking lib') require(module_path..'/lib/ranking') end
+    if loaded_modules.Gui then verbose('ExpGamingCore.Gui is installed; Loading gui lib') require(module_path..'/src/gui') end
+    if loaded_modules.Ranking then verbose('ExpGamingCore.Ranking is installed; Loading ranking lib') require(module_path..'/src/ranking') end
 end
 
 return Sync

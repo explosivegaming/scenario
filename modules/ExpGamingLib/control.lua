@@ -110,6 +110,7 @@ end
 -- @treturn number the number of whole hours from this tick
 function ExpLib.tick_to_hour(tick)
     if not ExpLib.is_type(tick,'number') then return 0 end
+    if not game then return math.floor(tick/216000) end
     return math.floor(tick/(216000*game.speed))
 end
 
@@ -119,6 +120,7 @@ end
 -- @treturn number the number of whole minutes from this tick
 function ExpLib.tick_to_min (tick)
     if not ExpLib.is_type(tick,'number') then return 0 end
+    if not game then return math.floor(tick/3600) end
     return math.floor(tick/(3600*game.speed))
 end
 
@@ -130,6 +132,7 @@ end
 function ExpLib.tick_to_display_format(tick)
     if not ExpLib.is_type(tick,'number') then return '0H 0M' end
     if ExpLib.tick_to_min(tick) < 10 then
+        if not game then return math.floor(tick/3600) end
 		return string.format('%.2f M',tick/(3600*game.speed))
 	else
         return string.format('%d H %d M',
