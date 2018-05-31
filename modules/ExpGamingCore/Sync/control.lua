@@ -190,6 +190,7 @@ end
 -- @treturn boolean success was the data set
 Sync.info = setmetatable({},{
     __index=global,
+    __newindex=global,
     __call=function(tbl,set)
         if not is_type(set,'table') then return false end
         for key,value in pairs(set) do global[key] = value end
@@ -258,7 +259,7 @@ function Sync:on_init()
         return true
     end,function() local info = Sync.info return info.time..' (+'..(game.tick-info.time_set[1])..' Ticks)' end)
     -- updates installed mods
-    Sync.info{mods=table.keys(loaded_modules)}
+    --Sync.info{mods=table.keys(loaded_modules)}
     -- optinal dependies
     if loaded_modules.Gui then verbose('ExpGamingCore.Gui is installed; Loading gui lib') require(module_path..'/src/gui') end
     if loaded_modules.Ranking then verbose('ExpGamingCore.Ranking is installed; Loading ranking lib') require(module_path..'/src/ranking') end

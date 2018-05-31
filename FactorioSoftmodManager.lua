@@ -70,8 +70,9 @@ Manager.verbose = function(rtn,action)
     local settings = Manager.setVerbose
     local state = Manager.currentState
     -- if ran in a module the the global module_name is present
-    if module_name then rtn='['..module_name..'] '..tostring(rtn)
-    else rtn='[FSM] '..tostring(rtn) end
+    local rtn = type(rtn) == table and serpent.line(rtn) or tostring(rtn)
+    if module_name then rtn='['..module_name..'] '..rtn
+    else rtn='[FSM] '..rtn end
     -- module_verbose is a local override for a file, action is used in the manager to describe an extra type, state is the current state
     -- if action is true then it will always trigger verbose
     if module_verbose or (action and (action == true or settings[action])) or (not action and settings[state]) then
@@ -150,30 +151,52 @@ Manager.verbose('Current state is now: "selfInit"; The verbose state is: '..tost
 -- @usage global{'foo','bar'} -- sets the default value
 -- @tparam[opt={}] table default the default value of global
 -- @treturn table the new global table for that module
-Manager.global=setmetatable({__global=global,__defaults={}},{
-        __call=function(tbl,default)
-            local global = rawget(tbl,'__global')
-            if not module_path or not module_name then return global end
-            if default then rawset(rawget(tbl,'__defaults'),tostring(module_name),default) end
-            local path = 'global'
-            local new_dir = false
-            for dir in module_path:gmatch('%a+') do
-                path = path..'.'..dir
-                if not rawget(global,dir) then new_dir=true Manager.verbose('Added Global Dir: '..path) rawset(global,dir,{}) end
-                global = rawget(global,dir)
-            end
-            if new_dir then 
-                Manager.verbose('Set Global Dir: '..path..' to its default') 
-                for key,value in pairs(rawget(rawget(tbl,'__defaults'),tostring(module_name))) do rawset(global,key,value) end
-            end
-            return global
-        end,
-        __index=function(tbl,key) return rawget(tbl(),key) or rawget(_G.global,key) end,
-        __newindex=function(tbl,key,value) rawset(tbl(),key,value) end,
-        __pairs=function(tbl) return pairs(tbl()) end,
-        __ipairs=function(tbl) return ipairs(tbl()) end
+Manager.global=setmetatable({__defaults={},__global={
+    __call=function(tbl,default) Manager.global(default) end,
+    __index=function(tbl,key) return Manager.global() == tbl and nil or rawget(Manager.global(),key) end,
+    __newindex=function(tbl,key,value) rawset(Manager.global(),key,value) end,
+    __pairs=function(tbl)
+        Manager.verbose('Global Pair 1')
+        local tbl = Manager.global()
+        Manager.verbose('Global Pair 2')
+        local function next_pair(tbl,k)
+            k, v = next(tbl, k)
+            if type(v) ~= nil then return k,v end
+        end
+        return next_pair, tbl, nil
+    end
+}},{
+    __call=function(tbl,default)
+        local global = _G.global
+        if not module_path or not module_name then return _G.global end
+        if default then rawset(rawget(tbl,'__defaults'),tostring(module_name),default) end
+        local path = 'global'
+        local new_dir = false
+        for dir in module_path:gmatch('%a+') do
+            path = path..'.'..dir
+            if not rawget(global,dir) then new_dir=true Manager.verbose('Added Global Dir: '..path) rawset(global,dir,{}) end
+            global = rawget(global,dir)
+        end
+        if new_dir and rawget(rawget(tbl,'__defaults'),tostring(module_name)) then 
+            Manager.verbose('Set Global Dir: '..path..' to its default') 
+            for key,value in pairs(rawget(rawget(tbl,'__defaults'),tostring(module_name))) do rawset(global,key,value) end
+        end
+        return global
+    end,
+    __index=function(tbl,key) Manager.verbose('Manager Index') return rawget(tbl(),key) or rawget(_G.global,key) end,
+    __newindex=function(tbl,key,value) rawset(tbl(),key,value) end,
+    __pairs=function(tbl)
+        Manager.verbose('Manager Pair 1')
+        local tbl = Manager.global()
+        Manager.verbose('Manager Pair 2')
+        local function next_pair(tbl,k)
+            k, v = next(tbl, k)
+            if type(v) ~= nil then return k,v end
+        end
+        return next_pair, tbl, nil
+    end
 })
-global=Manager.global
+setmetatable(global,Manager.global.__global)
 
 --- Creates a sand box envorment and runs a callback in that sand box; provents global pollution
 -- @function Manager.sandbox
@@ -186,7 +209,6 @@ Manager.sandbox = setmetatable({
     -- can not use existing keys of _G
     verbose=Manager.verbose,
     loaded_modules=ReadOnlyManager,
-    global=Manager.global,
     module_verbose=false,
     module_exports=false
 },{
@@ -448,7 +470,7 @@ Manager.event = setmetatable({
         Manager.verbose('Added Handler: "'..tbl.names[key]..'"','eventRegistered')
         -- checks that the event has a valid table to store callbacks; if its not valid it will creat it and register a real event handler
         if not rawget(rawget(tbl,'__events'),key) then
-            if key == -1 then -- this already has a handler
+            if key == -1 or key == -2 then -- this already has a handler
             elseif key < 0  then rawget(tbl,tbl.names[key])(function(...) tbl(key,...) end) 
             else rawget(tbl,'__event')(key,function(...) tbl(key,...) end) end
             rawset(rawget(tbl,'__events'),key,{}) end
@@ -521,9 +543,13 @@ rawset(Manager.event,'names',setmetatable({},{
 }))
 
 script.on_init(function(...)
-    --rawset(Manager.global,'_global',global)
-    --global = Manager.global
-    Manager.event(key,...) 
+    setmetatable(global,Manager.global.__global)
+    Manager.event(-1,...) 
+end)
+
+script.on_load(function(...)
+    setmetatable(global,Manager.global.__global)
+    Manager.event(-2,...)
 end)
 --over rides for the base values; can be called though Event
 Event=setmetatable({},{__call=Manager.event,__index=function(tbl,key) return Manager.event[key] or script[key] or error('Invalid Index To Table Event') end})

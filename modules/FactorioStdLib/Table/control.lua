@@ -442,10 +442,10 @@ function table.tostring(tbl)
       done[k] = true
     end
     for k, v in pairs(tbl) do
-      if not done[k] then
-        table.insert(result,
-          table.key_to_str(k).."="..table.val_to_str(v))
-      end
+        if not done[k] then
+            table.insert(result,
+            table.key_to_str(k).."="..table.val_to_str(v))
+        end
     end
     return "{"..table.concat(result,",") .."}"
 end
