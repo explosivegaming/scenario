@@ -9,9 +9,9 @@ return {
     ['Color']='/modules/FactorioStdLib/Color',
     ['table']='/modules/FactorioStdLib/Table',
     ['string']='/modules/FactorioStdLib/String',
-    ['Ranking']='/modules/ExpGamingCore/Ranking',
-    ['commands']='/modules/ExpGamingCore/Commands',
-    ['Gui']='/modules/ExpGamingCore/Gui',
-    ['Server']='/modules/ExpGamingCore/Server',
+    --['Ranking']='/modules/ExpGamingCore/Ranking',
+    --['commands']='/modules/ExpGamingCore/Commands',
+    --['Gui']='/modules/ExpGamingCore/Gui',
+    --['Server']='/modules/ExpGamingCore/Server',
     ['Sync']='/modules/ExpGamingCore/Sync',
 }

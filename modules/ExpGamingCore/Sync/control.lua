@@ -6,7 +6,20 @@
 
 local Sync = {}
 local Sync_updates = {}
-local global = Manager.global()
+-- sets up the global for this module
+global{
+    server_name='Factorio Server',
+    server_description='A factorio server for everyone',
+    reset_time='On Demand',
+    time='Day Mth 00 00:00:00 UTC Year',
+    time_set={0,'0.00M'},
+    last_update={0,'0.00M'},
+    time_period={18000,'5.00M'},
+    players={online={'Offline'},n_online=0,all={'Offline'},n_all=0,admins_online=0,afk_players=0,times={'Offline'}},
+    ranks={'Offline'},
+    rockets=0,
+    mods={'Offline'}
+}
 
 --- Used to standidise the tick format for any sync info
 -- @usage Sync.tick_format(60) -- return {60,'1.00M'}
@@ -131,7 +144,7 @@ end
 function Sync.count_ranks()
     if not game then return {'Offline'} end
     local _ranks = {admin={online={},players={}},user={online={},players={}}}
-    for power,rank in pairs(game.players) do
+    for index,player in pairs(game.players) do
         if player.admin then
             table.insert(_ranks.admin.players,player.name)
             if player.connected then table.insert(_ranks.admin.online,player.name) end
@@ -244,28 +257,8 @@ function Sync:on_init()
         info.time_set[2] = tick_to_display_format(game.tick)
         return true
     end,function() local info = Sync.info return info.time..' (+'..(game.tick-info.time_set[1])..' Ticks)' end)
-    -- sets up the global for this module
-    global{
-        server_name='Factorio Server',
-        server_description='A factorio server for everyone',
-        reset_time='On Demand',
-        time='Day Mth 00 00:00:00 UTC Year',
-        time_set=Sync.tick_format(0),
-        last_update=Sync.tick_format(0),
-        time_period=Sync.tick_format(18000),
-        players={
-            online=Sync.count_players(true),
-            n_online=game and #game.connected_players or 0,
-            all=Sync.count_players(),
-            n_all=game and #game.players or 0,
-            admins_online=Sync.count_admins(),
-            afk_players=Sync.count_afk(),
-            times=Sync.count_player_times()
-        },
-        ranks=Sync.count_ranks(),
-        rockets=game and game.forces['player'].get_item_launched('satellite') or 0,
-        mods=table.keys(loaded_modules)
-    }    
+    -- updates installed mods
+    Sync.info{mods=table.keys(loaded_modules)}
     -- optinal dependies
     if loaded_modules.Gui then verbose('ExpGamingCore.Gui is installed; Loading gui lib') require(module_path..'/src/gui') end
     if loaded_modules.Ranking then verbose('ExpGamingCore.Ranking is installed; Loading ranking lib') require(module_path..'/src/ranking') end

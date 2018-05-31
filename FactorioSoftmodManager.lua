@@ -145,20 +145,18 @@ Manager.setVerbose = setmetatable(
 -- call to verbose to show start up, will always be present
 Manager.verbose('Current state is now: "selfInit"; The verbose state is: '..tostring(Manager.setVerbose.selfInit),true)
 
---- An optinal feature that can be used if you dont want to worry about conflicting global paths
--- @usage local global = Manager.global() -- sets up the global struture
+--- Used to avoid conflicts in the global table
+-- @usage global[key] -- used like the normal global table
 -- @usage global{'foo','bar'} -- sets the default value
 -- @tparam[opt={}] table default the default value of global
 -- @treturn table the new global table for that module
-function Manager.global(default)
-    local default = default or {}
-    return setmetatable(default,{
+Manager.global=setmetatable({__global=global,__defaults={}},{
         __call=function(tbl,default)
-            if default then rawset(tbl,'default',default) end
-            local global = _G.global
-            if not module_path then return global end
+            local global = rawget(tbl,'__global')
+            if not module_path or not module_name then return global end
+            if default then rawset(rawget(tbl,'__defaults'),tostring(module_name),default) end
             local path = 'global'
-            local new_dir = false -- this is to test if the default should be used
+            local new_dir = false
             for dir in module_path:gmatch('%a+') do
                 path = path..'.'..dir
                 if not rawget(global,dir) then new_dir=true Manager.verbose('Added Global Dir: '..path) rawset(global,dir,{}) end
@@ -166,7 +164,7 @@ function Manager.global(default)
             end
             if new_dir then 
                 Manager.verbose('Set Global Dir: '..path..' to its default') 
-                for key,value in pairs(rawget(tbl,'default')) do rawset(global,key,value) end
+                for key,value in pairs(rawget(rawget(tbl,'__defaults'),tostring(module_name))) do rawset(global,key,value) end
             end
             return global
         end,
@@ -174,8 +172,8 @@ function Manager.global(default)
         __newindex=function(tbl,key,value) rawset(tbl(),key,value) end,
         __pairs=function(tbl) return pairs(tbl()) end,
         __ipairs=function(tbl) return ipairs(tbl()) end
-    })
-end
+})
+global=Manager.global
 
 --- Creates a sand box envorment and runs a callback in that sand box; provents global pollution
 -- @function Manager.sandbox
@@ -188,6 +186,7 @@ Manager.sandbox = setmetatable({
     -- can not use existing keys of _G
     verbose=Manager.verbose,
     loaded_modules=ReadOnlyManager,
+    global=Manager.global,
     module_verbose=false,
     module_exports=false
 },{
@@ -265,7 +264,7 @@ Manager.loadModules = setmetatable({},
                     if rawget(_G,module_name) and type(tbl[module_name]) == 'table' then setmetatable(rawget(_G,module_name),{__index=tbl[module_name]}) end
                 else
                     Manager.verbose('Failed load: "'..module_name..'"; path: '..path..' ('..module..')','errorCaught')
-                    for event_name,callbacks in pairs(Manager.event) do Manager.verbose('Removed Event Handler: "'..module_name..'/'..tbl.names[event_name],'eventRegistered') callbacks[module_name] = nil end
+                    for event_name,callbacks in pairs(Manager.event) do Manager.verbose('Removed Event Handler: "'..module_name..'/'..Manager.event.names[event_name],'eventRegistered') callbacks[module_name] = nil end
                 end
             end
             -- new state for the manager to allow control of verbose
@@ -449,7 +448,8 @@ Manager.event = setmetatable({
         Manager.verbose('Added Handler: "'..tbl.names[key]..'"','eventRegistered')
         -- checks that the event has a valid table to store callbacks; if its not valid it will creat it and register a real event handler
         if not rawget(rawget(tbl,'__events'),key) then
-            if key < 0  then rawget(tbl,tbl.names[key])(function(...) tbl(key,...) end) 
+            if key == -1 then -- this already has a handler
+            elseif key < 0  then rawget(tbl,tbl.names[key])(function(...) tbl(key,...) end) 
             else rawget(tbl,'__event')(key,function(...) tbl(key,...) end) end
             rawset(rawget(tbl,'__events'),key,{}) end
         -- adds callback to Manager.event.__events[event_id][module_name]
@@ -520,6 +520,11 @@ rawset(Manager.event,'names',setmetatable({},{
     end
 }))
 
+script.on_init(function(...)
+    --rawset(Manager.global,'_global',global)
+    --global = Manager.global
+    Manager.event(key,...) 
+end)
 --over rides for the base values; can be called though Event
 Event=setmetatable({},{__call=Manager.event,__index=function(tbl,key) return Manager.event[key] or script[key] or error('Invalid Index To Table Event') end})
 script.mod_name = setmetatable({},{__index=_G.module_name})
