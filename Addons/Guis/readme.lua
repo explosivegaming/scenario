@@ -69,6 +69,7 @@ end):add_tab('links',{'readme.links-name'},{'readme.links-tooltip'},function(fra
 		'https://explosivegaming.nl',
 		'http://steamcommunity.com/groups/tntexplosivegaming',
 		'https://www.patreon.com/badgamernl'
+		'https://wiki.explosivegaming.nl/'
 	}
     local function format(text_box)
         text_box.style.minimal_width=400
