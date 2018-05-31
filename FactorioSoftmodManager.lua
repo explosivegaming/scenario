@@ -146,7 +146,7 @@ Manager.setVerbose = setmetatable(
 Manager.verbose('Current state is now: "selfInit"; The verbose state is: '..tostring(Manager.setVerbose.selfInit),true)
 
 --- An optinal feature that can be used if you dont want to worry about conflicting global paths
--- @usage local global = global_manager() -- sets up the global struture
+-- @usage local global = Manager.global() -- sets up the global struture
 -- @usage global{'foo','bar'} -- sets the default value
 -- @tparam[opt={}] table default the default value of global
 -- @treturn table the new global table for that module
