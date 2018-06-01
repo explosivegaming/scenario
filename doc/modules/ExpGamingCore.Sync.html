@@ -35,8 +35,8 @@
 <li><a href="#Functions">Functions</a></li>
 <li><a href="#Tables">Tables</a></li>
 <li><a href="#Fields">Fields</a></li>
-<li><a href="#modules_expgamingcore_sync_lib_gui_Functions">modules.expgamingcore.sync.lib.gui Functions</a></li>
-<li><a href="#modules_expgamingcore_sync_lib_ranking_Functions">modules.expgamingcore.sync.lib.ranking Functions</a></li>
+<li><a href="#modules_expgamingcore_sync_src_gui_Functions">modules.expgamingcore.sync.src.gui Functions</a></li>
+<li><a href="#modules_expgamingcore_sync_src_ranking_Functions">modules.expgamingcore.sync.src.ranking Functions</a></li>
 </ul>
 
 
@@ -51,7 +51,7 @@
   <li><a href="../modules/modules.expgamingcore.gui.guiparts.toolbar.html">modules.expgamingcore.gui.guiparts.toolbar</a></li>
   <li><a href="../modules/modules.expgamingcore.gui.control.html">modules.expgamingcore.gui.control</a></li>
   <li><a href="../modules/modules.expgamingcore.ranking.control.html">modules.expgamingcore.ranking.control</a></li>
-  <li><a href="../modules/modules.expgamingcore.server.control.html">modules.expgamingcore.server.control</a></li>
+  <li><a href="../modules/ExpGamingCore.Server.html">ExpGamingCore.Server</a></li>
   <li><strong>ExpGamingCore.Sync</strong></li>
   <li><a href="../modules/ExpGamingLib.html">ExpGamingLib</a></li>
   <li><a href="../modules/StdLib.Color.html">StdLib.Color</a></li>
@@ -66,7 +66,7 @@
 <div id="content">
 
 <h1>Module <code>ExpGamingCore.Sync</code></h1>
-<p>Description - A small description that will be displayed on the doc</p>
+<p>Allows syncing with an outside server and info panle.</p>
 <p></p>
     <h3>Info:</h3>
     <ul>
@@ -125,6 +125,14 @@
 <h2><a href="#Tables">Tables</a></h2>
 <table class="function_list">
 	<tr>
+	<td class="name" nowrap><a href="#global">global</a></td>
+	<td class="summary">Global Table</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#global.players">global.players</a></td>
+	<td class="summary">Player sub-table</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#EmitEmbededParamaters">EmitEmbededParamaters</a></td>
 	<td class="summary">Outline of the paramaters accepted by Sync.emit_embeded</td>
 	</tr>
@@ -140,22 +148,22 @@
 	<td class="summary">Used to return and set the current IRL time; not very good need a better way to do this</td>
 	</tr>
 </table>
-<h2><a href="#modules_expgamingcore_sync_lib_gui_Functions">modules.expgamingcore.sync.lib.gui Functions</a></h2>
+<h2><a href="#modules_expgamingcore_sync_src_gui_Functions">modules.expgamingcore.sync.src.gui Functions</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#_comment">_comment ()</a></td>
-	<td class="summary">This file will be loaded when ExpGamingCore/Gui is present</td>
+	<td class="summary">This file will be loaded when ExpGamingCore.Gui is present</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#add_to_gui">add_to_gui (element)</a></td>
 	<td class="summary">Adds a emeltent to the sever info gui</td>
 	</tr>
 </table>
-<h2><a href="#modules_expgamingcore_sync_lib_ranking_Functions">modules.expgamingcore.sync.lib.ranking Functions</a></h2>
+<h2><a href="#modules_expgamingcore_sync_src_ranking_Functions">modules.expgamingcore.sync.src.ranking Functions</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#_comment">_comment ()</a></td>
-	<td class="summary">This file will be loaded when ExpGamingCore/Ranking is present</td>
+	<td class="summary">This file will be loaded when ExpGamingCore.Ranking is present</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#set_ranks">set_ranks (...)</a></td>
@@ -487,6 +495,94 @@
 
     <dl class="function">
     <dt>
+    <a name = "global"></a>
+    <strong>global</strong>
+    </dt>
+    <dd>
+    Global Table
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">server_name</span>
+         the server name
+        </li>
+        <li><span class="parameter">server_description</span>
+         a short description of the server
+        </li>
+        <li><span class="parameter">reset_time</span>
+         the reset time of the server
+        </li>
+        <li><span class="parameter">time</span>
+         the last knowen irl time
+        </li>
+        <li><span class="parameter">time_set</span>
+         the last in game time that the time was set
+        </li>
+        <li><span class="parameter">last_update</span>
+         the last time that this info was updated
+        </li>
+        <li><span class="parameter">time_period</span>
+         how often this infomation is updated
+        </li>
+        <li><span class="parameter">players</span>
+         a list of different player related states
+        </li>
+        <li><span class="parameter">ranks</span>
+         a list of player ranks
+        </li>
+        <li><span class="parameter">rockets</span>
+         the number of rockets launched
+        </li>
+        <li><span class="parameter">mods</span>
+         the mods which are loaded
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "global.players"></a>
+    <strong>global.players</strong>
+    </dt>
+    <dd>
+    Player sub-table
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">online</span>
+         list of all players online
+        </li>
+        <li><span class="parameter">n_online</span>
+         the number of players online
+        </li>
+        <li><span class="parameter">all</span>
+         list of all player on or offline
+        </li>
+        <li><span class="parameter">n_all</span>
+         the number of players who have joined the server
+        </li>
+        <li><span class="parameter">admins_online</span>
+         the number of admins online
+        </li>
+        <li><span class="parameter">afk_players</span>
+         the number of afk players
+        </li>
+        <li><span class="parameter">times</span>
+         the play times of every player
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
     <a name = "EmitEmbededParamaters"></a>
     <strong>EmitEmbededParamaters</strong>
     </dt>
@@ -578,7 +674,7 @@
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="modules_expgamingcore_sync_lib_gui_Functions"></a>modules.expgamingcore.sync.lib.gui Functions</h2>
+    <h2 class="section-header "><a name="modules_expgamingcore_sync_src_gui_Functions"></a>modules.expgamingcore.sync.src.gui Functions</h2>
 
     <dl class="function">
     <dt>
@@ -586,7 +682,7 @@
     <strong>_comment ()</strong>
     </dt>
     <dd>
-    This file will be loaded when ExpGamingCore/Gui is present
+    This file will be loaded when ExpGamingCore.Gui is present
 
 
 
@@ -626,7 +722,7 @@
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="modules_expgamingcore_sync_lib_ranking_Functions"></a>modules.expgamingcore.sync.lib.ranking Functions</h2>
+    <h2 class="section-header "><a name="modules_expgamingcore_sync_src_ranking_Functions"></a>modules.expgamingcore.sync.src.ranking Functions</h2>
 
     <dl class="function">
     <dt>
@@ -634,7 +730,7 @@
     <strong>_comment ()</strong>
     </dt>
     <dd>
-    This file will be loaded when ExpGamingCore/Ranking is present
+    This file will be loaded when ExpGamingCore.Ranking is present
 
 
 
@@ -698,7 +794,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2018-05-31 00:41:31 </i>
+<i style="float:right;">Last updated 2018-06-01 16:29:39 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

@@ -1,0 +1,835 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Fields">Fields</a></li>
+<li><a href="#Class_Thread">Class Thread </a></li>
+<li><a href="#modules_expgamingcore_server_src_commands_Functions">modules.expgamingcore.server.src.commands Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/FSM.html">FSM</a></li>
+  <li><a href="../modules/modules.expgamingcore.commands.control.html">modules.expgamingcore.commands.control</a></li>
+  <li><a href="../modules/modules.expgamingcore.gui.guiparts.center.html">modules.expgamingcore.gui.guiparts.center</a></li>
+  <li><a href="../modules/modules.expgamingcore.gui.guiparts.inputs.html">modules.expgamingcore.gui.guiparts.inputs</a></li>
+  <li><a href="../modules/modules.expgamingcore.gui.guiparts.left.html">modules.expgamingcore.gui.guiparts.left</a></li>
+  <li><a href="../modules/modules.expgamingcore.gui.guiparts.popup.html">modules.expgamingcore.gui.guiparts.popup</a></li>
+  <li><a href="../modules/modules.expgamingcore.gui.guiparts.toolbar.html">modules.expgamingcore.gui.guiparts.toolbar</a></li>
+  <li><a href="../modules/modules.expgamingcore.gui.control.html">modules.expgamingcore.gui.control</a></li>
+  <li><a href="../modules/modules.expgamingcore.ranking.control.html">modules.expgamingcore.ranking.control</a></li>
+  <li><strong>ExpGamingCore.Server</strong></li>
+  <li><a href="../modules/ExpGamingCore.Sync.html">ExpGamingCore.Sync</a></li>
+  <li><a href="../modules/ExpGamingLib.html">ExpGamingLib</a></li>
+  <li><a href="../modules/StdLib.Color.html">StdLib.Color</a></li>
+  <li><a href="../modules/StdLib.Game.html">StdLib.Game</a></li>
+  <li><a href="../modules/StdLib.String.html">StdLib.String</a></li>
+  <li><a href="../modules/StdLib.Table.html">StdLib.Table</a></li>
+  <li><a href="../modules/StdLib.Time.html">StdLib.Time</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>ExpGamingCore.Server</code></h1>
+<p>Adds a thread system and event listening and a admin bypass (recommend to disable /c and use optional /interface)</p>
+<p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>License</strong>: https://github.com/explosivegaming/scenario/blob/master/LICENSE</li>
+        <li><strong>Author</strong>: Cooldude2606</li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#new_thread">new_thread (obj)</a></td>
+	<td class="summary">Generates a new thread object</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_thread">get_thread (mixed)</a></td>
+	<td class="summary">Used to get a thread via uuid or name (if one is assied)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#queue_thread">queue_thread (thread_to_queue)</a></td>
+	<td class="summary">Adds a thread into the resolve queue, can be used to lower lag</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#close_all_threads">close_all_threads (with_force)</a></td>
+	<td class="summary">Closes all active threads, can use force if it causes errors</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#run_tick_threads">run_tick_threads ()</a></td>
+	<td class="summary">Runs all the theads which have opened with an on_tick event</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#check_timeouts">check_timeouts ()</a></td>
+	<td class="summary">Checks the timeout on all active timeout threads</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#_thread_debuger">_thread_debuger (player, event[, state=toggle])</a></td>
+	<td class="summary">Used to print event info to a player</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#interface">interface (callback[, use_thread[, env[, ...]]])</a></td>
+	<td class="summary">Acts as a bypass for running functions, can accept a string</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#global">global</a></td>
+	<td class="summary">Global Table</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uuid">uuid</a></td>
+	<td class="summary">Used to generate a new uuid for the thread system</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#threads">threads</a></td>
+	<td class="summary">Redirect to the thread index</td>
+	</tr>
+</table>
+<h2><a href="#Class_Thread">Class Thread </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:create">Server._thread:create ([obj={}])</a></td>
+	<td class="summary">Returns a new thread object</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:queue">Server._thread:queue ()</a></td>
+	<td class="summary">Opens and queses a thread</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:valid">Server._thread:valid ([skip_location_check=false])</a></td>
+	<td class="summary">Test if the thread has all requied parts</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:open">Server._thread:open ()</a></td>
+	<td class="summary">Opens the thread; indexs this thread in the global index</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:close">Server._thread:close ()</a></td>
+	<td class="summary">Inverse of thread:open() - Removes all indexs to this thread, most cases this will cause it to become inassible</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:resolve">Server._thread:resolve ([...])</a></td>
+	<td class="summary">Trigger the on_resolve function and closes the thread - error and success called based on result of pcall (useful for async)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:check_timeout">Server._thread:check_timeout ()</a></td>
+	<td class="summary">Checks the timeout on a thread - if timed out then it calles on_timeout and closes</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:error">Server._thread:error (err)</a></td>
+	<td class="summary">Used to check and raise the error handler of the thread, if not present it raises an error</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server._thread:on_event">Server._thread:on_event (event, callback)</a></td>
+	<td class="summary">Set function to run then an event is triggered, none of them are 'needed' but you are advised to have atleast one</td>
+	</tr>
+</table>
+<h2><a href="#modules_expgamingcore_server_src_commands_Functions">modules.expgamingcore.server.src.commands Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#_comment">_comment ()</a></td>
+	<td class="summary">This file will be loaded when ExpGamingCore.Commands is present</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#interface">interface</a></td>
+	<td class="summary">Runs the given input from the script</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "new_thread"></a>
+    <strong>new_thread (obj)</strong>
+    </dt>
+    <dd>
+    Generates a new thread object
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">obj</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         the atributes to give to the thread
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Server._thread</span></span>
+        the new thread created
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Server.new_thread{name=<span class="string">'foo'</span>,data={}}</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "get_thread"></a>
+    <strong>get_thread (mixed)</strong>
+    </dt>
+    <dd>
+    Used to get a thread via uuid or name (if one is assied)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mixed</span>
+         either a uuid or the name given to a thread
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Server._thread</span></span>
+        the thread by that name or uuid
+    </ol>
+     <h3>Or</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        if false is returned then no thread existes
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Server.get_thread(<span class="string">'decon'</span>) <span class="comment">-- return thread</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "queue_thread"></a>
+    <strong>queue_thread (thread_to_queue)</strong>
+    </dt>
+    <dd>
+    Adds a thread into the resolve queue, can be used to lower lag
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">thread_to_queue</span>
+            <span class="types"><span class="type">Server._thread</span></span>
+         the thread to be added to the queue, must be open and have a on_resolve function
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        was it added successfuly
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Server.queue_thread(thread) <span class="comment">-- return true/false</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "close_all_threads"></a>
+    <strong>close_all_threads (with_force)</strong>
+    </dt>
+    <dd>
+    Closes all active threads, can use force if it causes errors
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">with_force</span>
+            <span class="types"><span class="type">bolean</span></span>
+         use force when closing
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">Server.close_all_threads() <span class="comment">-- asks all threads to close</span></pre></li>
+        <li><pre class="example">Server.close_all_threads(<span class="keyword">true</span>) <span class="comment">-- forcefuly close all threads</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "run_tick_threads"></a>
+    <strong>run_tick_threads ()</strong>
+    </dt>
+    <dd>
+    Runs all the theads which have opened with an on_tick event
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Server.run_tick_threads()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "check_timeouts"></a>
+    <strong>check_timeouts ()</strong>
+    </dt>
+    <dd>
+    Checks the timeout on all active timeout threads
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Server.check_timeouts()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "_thread_debuger"></a>
+    <strong>_thread_debuger (player, event[, state=toggle])</strong>
+    </dt>
+    <dd>
+    Used to print event info to a player
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+            <span class="types"><span class="type">name</span>, <span class="type">index</span> or <span class="type">LuaPlayer</span></span>
+         the player that the info will be returned to
+        </li>
+        <li><span class="parameter">event</span>
+            <span class="types"><span class="type">name</span> or <span class="type">index</span></span>
+         the event that info will be returned fo
+        </li>
+        <li><span class="parameter">state</span>
+            <span class="types"><span class="type">boolean</span></span>
+         will info be returned, nil to toggle current state
+         (<em>default</em> toggle)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Server._thread_debuger(<span class="string">'Cooldude2606'</span>,<span class="string">'on_player_died'</span>,<span class="keyword">true</span>) <span class="comment">-- will output event info to 'Cooldude2606' for 'on_player_died'</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "interface"></a>
+    <strong>interface (callback[, use_thread[, env[, ...]]])</strong>
+    </dt>
+    <dd>
+    Acts as a bypass for running functions, can accept a string
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a> or <span class="type">function</span></span>
+         function to be ran
+        </li>
+        <li><span class="parameter">use_thread</span>
+            <span class="types"><span class="type">Server._thread</span> or <span class="type">true</span></span>
+         run the command on a premade thread or let it make its own
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">env</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         run the env to run the command in must have _env key as true to be
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">...</span>
+         any args you want to pass to the function
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        if no thread then it will return the value(s) returned by the callback
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">Server.interface(<span class="string">'local x = 1+1 print(x) return x'</span>) <span class="comment">-- return 2</span></pre></li>
+        <li><pre class="example">Server.interface(<span class="string">'local x = 1+1 print(x)'</span>,<span class="keyword">true</span>) <span class="comment">-- will creat a thread to run as root (this is the bypass)</span></pre></li>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "global"></a>
+    <strong>global</strong>
+    </dt>
+    <dd>
+    Global Table
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">all</span>
+         a list of every thread (indexed by uuid)
+        </li>
+        <li><span class="parameter">queue</span>
+         an index for threads which will be resolved (contains uuids)
+        </li>
+        <li><span class="parameter">tick</span>
+         an index for threads which will run every tick (contains uuids)
+        </li>
+        <li><span class="parameter">timeout</span>
+         an index for threads which will timeout (contains uuids)
+        </li>
+        <li><span class="parameter">events</span>
+         an index of threads based on event ids (contains uuids)
+        </li>
+        <li><span class="parameter">paused</span>
+         an index of pasued threads (contains uuids)
+        </li>
+        <li><span class="parameter">named</span>
+          a name index for thread uuids
+        </li>
+        <li><span class="parameter">print_to</span>
+         contains players that event details will be printed to
+        </li>
+        <li><span class="parameter">uuid</span>
+         contains the random number generator for the uuid system
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Fields"></a>Fields</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "uuid"></a>
+    <strong>uuid</strong>
+    </dt>
+    <dd>
+    Used to generate a new uuid for the thread system
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> uuid = <span class="global">tostring</span>(Server.uuid) <span class="comment">-- calling tostring locks the value</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "threads"></a>
+    <strong>threads</strong>
+    </dt>
+    <dd>
+    Redirect to the thread index
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">Server.threads <span class="comment">-- return #global.all</span></pre></li>
+        <li><pre class="example">Server.threads <span class="comment">-- return global.all</span></pre></li>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_Thread"></a>Class Thread </h2>
+
+          <div class="section-description">
+          The class for the server threads, allows abbilty to run async function
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "Server._thread:create"></a>
+    <strong>Server._thread:create ([obj={}])</strong>
+    </dt>
+    <dd>
+    Returns a new thread object
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">obj</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         all values are opt {timeout=int,name=str,data=any}
+         (<em>default</em> {})
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Server._thread</span></span>
+        the new thread object
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">new_thread = thread:create()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:queue"></a>
+    <strong>Server._thread:queue ()</strong>
+    </dt>
+    <dd>
+    Opens and queses a thread
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        was the thread queued successfuly
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/ExpGamingCore.Server.html#queue_thread">Server.queue_thread</a>
+    </ul>
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Server._thread:queue() <span class="comment">-- returns true/false</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:valid"></a>
+    <strong>Server._thread:valid ([skip_location_check=false])</strong>
+    </dt>
+    <dd>
+    Test if the thread has all requied parts
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">skip_location_check</span>
+            <span class="types"><span class="type">bolean</span></span>
+         true to skip the location checking
+         (<em>default</em> false)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        is the thread valid
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">if</span> thread:valid() <span class="keyword">then</span> <span class="keyword">end</span> <span class="comment">-- basic test for valid</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:open"></a>
+    <strong>Server._thread:open ()</strong>
+    </dt>
+    <dd>
+    Opens the thread; indexs this thread in the global index
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bolean</span></span>
+        if the thread was opened successfuly
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">thread:open() <span class="comment">-- return true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:close"></a>
+    <strong>Server._thread:close ()</strong>
+    </dt>
+    <dd>
+    Inverse of thread:open() - Removes all indexs to this thread, most cases this will cause it to become inassible
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        if the thread had a on_close function
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">thread:close() <span class="comment">-- return true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:resolve"></a>
+    <strong>Server._thread:resolve ([...])</strong>
+    </dt>
+    <dd>
+    Trigger the on_resolve function and closes the thread - error and success called based on result of pcall (useful for async)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+         any arguments you want to pass to the resolve function
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bolean</span></span>
+        true if the thread called on_success or on_error
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">thread:resolve(x,y,z) <span class="comment">-- return true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:check_timeout"></a>
+    <strong>Server._thread:check_timeout ()</strong>
+    </dt>
+    <dd>
+    Checks the timeout on a thread - if timed out then it calles on_timeout and closes
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bolean</span></span>
+        if the thread timed out
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">thread:check_timeout() <span class="comment">-- return true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:error"></a>
+    <strong>Server._thread:error (err)</strong>
+    </dt>
+    <dd>
+    Used to check and raise the error handler of the thread, if not present it raises an error
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">err</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the err to be rasied
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        did the thread have an error handler
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">thread:<span class="global">error</span>(err) <span class="comment">-- return true</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Server._thread:on_event"></a>
+    <strong>Server._thread:on_event (event, callback)</strong>
+    </dt>
+    <dd>
+    Set function to run then an event is triggered, none of them are 'needed' but you are advised to have atleast one
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">event</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a> or <span class="type">index</span></span>
+         the name of the event that the function should be called on
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+         the function which is called by the event trigger
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        returns self so that they can be chained together
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">thread:on_event(<span class="string">'close'</span>,<span class="keyword">function</span>) <span class="comment">-- if event is not one below then a game event is used</span></pre></li>
+        <li><pre class="example">thread_only_events = [<span class="string">'close'</span>,<span class="string">'timeout'</span>,<span class="string">'tick'</span>,<span class="string">'resolve'</span>,<span class="string">'success'</span>,<span class="string">'error'</span>]</pre></li>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="modules_expgamingcore_server_src_commands_Functions"></a>modules.expgamingcore.server.src.commands Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "_comment"></a>
+    <strong>_comment ()</strong>
+    </dt>
+    <dd>
+    This file will be loaded when ExpGamingCore.Commands is present
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "interface"></a>
+    <strong>interface</strong>
+    </dt>
+    <dd>
+    Runs the given input from the script
+
+
+    <h3>param:</h3>
+    <ul>
+        <li><span class="parameter">code</span>
+         The code that will be ran
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-06-01 16:29:39 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

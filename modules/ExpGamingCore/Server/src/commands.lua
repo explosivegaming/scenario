@@ -7,6 +7,9 @@
 --- This file will be loaded when ExpGamingCore.Commands is present
 -- @function _comment
 
+--- Runs the given input from the script
+-- @command interface
+-- @param code The code that will be ran
 commands.add_command('interface', 'Runs the given input from the script', {'code',true}, function(event,args)
     local callback = args.code
     -- looks for spaces, if non the it will prefix the command with return

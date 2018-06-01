@@ -8,16 +8,25 @@ local Server = {}
 
 --- Global Table
 -- @table global
+-- @field all a list of every thread (indexed by uuid)
+-- @field queue an index for threads which will be resolved (contains uuids)
+-- @field tick an index for threads which will run every tick (contains uuids)
+-- @field timeout an index for threads which will timeout (contains uuids)
+-- @field events an index of threads based on event ids (contains uuids)
+-- @field paused an index of pasued threads (contains uuids)
+-- @field named  a name index for thread uuids
+-- @field print_to contains players that event details will be printed to
+-- @field uuid contains the random number generator for the uuid system
 local global = global{
-    all={_n=0}, -- a list of every thread (indexed by uuid)
-    queue={}, -- an index for threads which will be resolved (contains uuids)
-    tick={}, -- an index for threads which will run every tick (contains uuids)
-    timeout={}, -- an index for threads which will timeout (contains uuids)
-    events={}, -- an index of threads based on event ids (contains uuids)
-    paused={}, -- an index of pasued threads (contains uuids)
-    named={}, -- a name index for thread uuids
-    print_to={}, -- contains players that event details will be printed to
-    uuid=nil -- contains the random number generator for the uuid system
+    all={_n=0},
+    queue={},
+    tick={},
+    timeout={},
+    events={},
+    paused={},
+    named={},
+    print_to={},
+    uuid=nil
 }
 
 --- Used to generate a new uuid for the thread system
@@ -220,7 +229,7 @@ function Server.interface(callback,use_thread,env,...)
 end
 
 --- The class for the server threads, allows abbilty to run async function
--- @class Thread
+-- @type Thread
 -- @alias Server._thread
 Server._thread = {}
 

@@ -1,0 +1,1 @@
+new_type('command','Commands',false,'param')
