@@ -149,16 +149,15 @@ Manager.verbose('Current state is now: "selfInit"; The verbose state is: '..tost
 --- Used to avoid conflicts in the global table
 -- @usage global[key] -- used like the normal global table
 -- @usage global{'foo','bar'} -- sets the default value
--- @tparam[opt={}] table default the default value of global
+-- @usage global(true) -- restores global to default
+-- @tparam[opt={}] ?table|true default the default value of global, if true then default is restored
 -- @treturn table the new global table for that module
 Manager.global=setmetatable({__defaults={},__global={
-    __call=function(tbl,default) Manager.global(default) end,
+    __call=function(tbl,default) return Manager.global(default) end,
     __index=function(tbl,key) return Manager.global() == tbl and nil or rawget(Manager.global(),key) end,
     __newindex=function(tbl,key,value) rawset(Manager.global(),key,value) end,
     __pairs=function(tbl)
-        Manager.verbose('Global Pair 1')
         local tbl = Manager.global()
-        Manager.verbose('Global Pair 2')
         local function next_pair(tbl,k)
             k, v = next(tbl, k)
             if type(v) ~= nil then return k,v end
@@ -177,7 +176,7 @@ Manager.global=setmetatable({__defaults={},__global={
             if not rawget(global,dir) then new_dir=true Manager.verbose('Added Global Dir: '..path) rawset(global,dir,{}) end
             global = rawget(global,dir)
         end
-        if new_dir and rawget(rawget(tbl,'__defaults'),tostring(module_name)) then 
+        if (new_dir or default == true) and rawget(rawget(tbl,'__defaults'),tostring(module_name)) then 
             Manager.verbose('Set Global Dir: '..path..' to its default') 
             for key,value in pairs(rawget(rawget(tbl,'__defaults'),tostring(module_name))) do rawset(global,key,value) end
         end

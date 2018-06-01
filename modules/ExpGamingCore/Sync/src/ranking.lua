@@ -4,7 +4,7 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
---- This file will be loaded when ExpGamingCore/Ranking is present
+--- This file will be loaded when ExpGamingCore.Ranking is present
 -- @function _comment
     
 --- Used as a redirect to Ranking._base_preset that will set the rank given to a player apon joining

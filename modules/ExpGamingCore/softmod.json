@@ -52,6 +52,7 @@
             "location": "url",
             "dependencies": {
                 "ExpGamingLib": ">=3.0.0",
+                "FactorioStdLib.Table": ">=0.8.0",
                 "ExpGamingCore/Ranking": "?>=3.0.0",
                 "ExpGamingCore/Commands": "?>=3.0.0"
             }

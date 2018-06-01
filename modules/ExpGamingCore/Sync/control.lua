@@ -1,4 +1,4 @@
---- Description - A small description that will be displayed on the doc
+--- Allows syncing with an outside server and info panle.
 -- @module ExpGamingCore.Sync
 -- @alias Sync
 -- @author Cooldude2606
@@ -6,19 +6,28 @@
 
 local Sync = {}
 local Sync_updates = {}
--- sets up the global for this module
-global{
-    server_name='Factorio Server',
-    server_description='A factorio server for everyone',
-    reset_time='On Demand',
-    time='Day Mth 00 00:00:00 UTC Year',
-    time_set={0,'0.00M'},
-    last_update={0,'0.00M'},
-    time_period={18000,'5.00M'},
-    players={online={'Offline'},n_online=0,all={'Offline'},n_all=0,admins_online=0,afk_players=0,times={'Offline'}},
-    ranks={'Offline'},
-    rockets=0,
-    mods={'Offline'}
+--- Global Table
+-- @table global
+local global = global{
+    server_name='Factorio Server', -- the server name
+    server_description='A factorio server for everyone', -- a short description of the server
+    reset_time='On Demand', -- the reset time of the server
+    time='Day Mth 00 00:00:00 UTC Year', -- the last knowen irl time
+    time_set={0,'0.00M'}, -- the last in game time that the time was set
+    last_update={0,'0.00M'}, -- the last time that this info was updated
+    time_period={18000,'5.00M'}, -- how often this infomation is updated
+    players={
+        online={'Offline'}, -- list of all players online
+        n_online=0, -- the number of players online
+        all={'Offline'}, -- list of all player on or offline
+        n_all=0, -- the number of players who have joined the server
+        admins_online=0, -- the number of admins online
+        afk_players=0, -- the number of afk players
+        times={'Offline'} -- the play times of every player
+    }, -- a sub list of players in the game
+    ranks={'Offline'}, -- a list of player ranks
+    rockets=0, -- the number of rockets launched
+    mods={'Offline'} -- the mods which are loaded
 }
 
 --- Used to standidise the tick format for any sync info

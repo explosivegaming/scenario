@@ -12,6 +12,6 @@ return {
     --['Ranking']='/modules/ExpGamingCore/Ranking',
     --['commands']='/modules/ExpGamingCore/Commands',
     --['Gui']='/modules/ExpGamingCore/Gui',
-    --['Server']='/modules/ExpGamingCore/Server',
+    ['Server']='/modules/ExpGamingCore/Server',
     ['Sync']='/modules/ExpGamingCore/Sync',
 }
