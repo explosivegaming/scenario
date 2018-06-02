@@ -68,11 +68,7 @@ end):add_tab('links',{'readme.links-name'},{'readme.links-tooltip'},function(fra
 		'https://discord.explosivegaming.nl',
 		'https://explosivegaming.nl',
 		'http://steamcommunity.com/groups/tntexplosivegaming',
-<<<<<<< HEAD
-		'https://www.patreon.com/badgamernl'
-=======
 		'https://www.patreon.com/badgamernl',
->>>>>>> upstream/master
 		'https://wiki.explosivegaming.nl/'
 	}
     local function format(text_box)
