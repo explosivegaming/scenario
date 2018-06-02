@@ -215,3 +215,15 @@ function Admin.bring(player,by_player)
     if not player or not _player then return end
     player.teleport(_player.surface.find_non_colliding_position('player',_player.position,32,1),_player.surface)
 end
+
+function Admin.tp(from_playaer, to_player)
+    local _from_player = Game.get_player(from_player)
+    local _to_player = Game.get_player(to_player)
+    
+    if not _from_player or not _to_player then return end
+    
+    if Game.players[_from_player].health >= 0 then return end
+    if Game.players[_to_player].health >= 0 then return end
+    
+    _from_player.teleport(_to_player.surface.find_non_colliding_position('player',_to_player.position,32,1),_to_player.surface)
+end

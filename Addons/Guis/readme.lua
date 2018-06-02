@@ -68,7 +68,11 @@ end):add_tab('links',{'readme.links-name'},{'readme.links-tooltip'},function(fra
 		'https://discord.explosivegaming.nl',
 		'https://explosivegaming.nl',
 		'http://steamcommunity.com/groups/tntexplosivegaming',
+<<<<<<< HEAD
 		'https://www.patreon.com/badgamernl'
+=======
+		'https://www.patreon.com/badgamernl',
+>>>>>>> upstream/master
 		'https://wiki.explosivegaming.nl/'
 	}
     local function format(text_box)
@@ -77,7 +81,7 @@ end):add_tab('links',{'readme.links-name'},{'readme.links-tooltip'},function(fra
 	    text_box.word_wrap = true
 	    text_box.selectable = true
     end
-    for i = 1,4 do
+    for i,link in pairs(links) do
     	frame.add{
             type="label",
             caption={'readme.links-cap'..tostring(i)},
@@ -85,7 +89,7 @@ end):add_tab('links',{'readme.links-name'},{'readme.links-tooltip'},function(fra
         }
 		format(frame.add{
             type='text-box',
-            text=links[i]
+            text=link
         })
 	end
 end):add_tab('servers',{'readme.servers-name'},{'readme.servers-tooltip'},function(frame)
