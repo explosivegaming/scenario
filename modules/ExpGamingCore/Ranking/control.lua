@@ -125,7 +125,7 @@ function Ranking.get_rank(mixed)
     local _return = false
     if is_type(mixed,'table') then
         -- is it a player, then get player rank; if it is a rank then return the rank
-        if mixed.index then _return = game.players[mixed.index] and ranks[mixed.permission_group.name] or error('Invalid player name to Ranking.get_rank',2)
+        if mixed.index then _return = game.players[mixed.index] and ranks[mixed.permission_group.name] or nil
         else _return = mixed.group and mixed or nil end
     else
         -- if it is a player name/index, then get player rank; if it is a rank name, get that rank; if it is server or root; return root rank; else nil
