@@ -150,7 +150,8 @@ Manager.verbose('Current state is now: "selfInit"; The verbose state is: '..tost
 -- @usage global[key] -- used like the normal global table
 -- @usage global{'foo','bar'} -- sets the default value
 -- @usage global(true) -- restores global to default
--- @tparam[opt={}] ?table|true default the default value of global, if true then default is restored
+-- @usage global(mopdule_name) -- returns that module's global
+-- @tparam[opt={}] ?table|string|true if table then the default for the global, if a string then the module to get the global of, if true then reset the global to default
 -- @treturn table the new global table for that module
 Manager.global=setmetatable({__defaults={},__global={
     __call=function(tbl,default) return Manager.global(default) end,
@@ -167,8 +168,10 @@ Manager.global=setmetatable({__defaults={},__global={
 }},{
     __call=function(tbl,default)
         local global = _G.global
+        local module_name = type(default) == 'string' and default or module_name
+        local module_path = type(default) == 'string' and moduleIndex[default] or module_path
         if not module_path or not module_name then return _G.global end
-        if default then rawset(rawget(tbl,'__defaults'),tostring(module_name),default) end
+        if type(default) == 'table' then rawset(rawget(tbl,'__defaults'),tostring(module_name),default) end
         local path = 'global'
         local new_dir = false
         for dir in module_path:gmatch('%a+') do

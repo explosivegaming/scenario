@@ -72,7 +72,7 @@ end
 -- @tparam[opt=defines.colour.white] ?defines.color|string colour the colour of the text for the player, ingroned when printing to console
 -- @tparam[opt=game.player] LuaPlayer player  the player that return will go to, if no game.player then returns to server
 function ExpLib.player_return(rtn,colour,player)
-    local colour = ExpLib.is_type(colour) == 'table' and colour or defines.textcolor[colour] ~= defines.color.white and defines.textcolor[colour] or defines.color[colour]
+    local colour = ExpLib.is_type(colour,'table') and colour or defines.textcolor[colour] ~= defines.color.white and defines.textcolor[colour] or defines.color[colour]
     local player = player or game.player
     local function _return(callback,rtn)
         if ExpLib.is_type(rtn,'table') then 

@@ -18,9 +18,8 @@ end
 -- @treturn table contains the ranks and the players in that rank
 function Sync.count_ranks()
     if not game then return {'Offline'} end
-    if not Ranking then return {'Ranking module not installed'} end
     local _ranks = {}
-    for power,rank in pairs(Ranking._ranks()) do
+    for name,rank in pairs(Ranking.ranks) do
         local players = rank:get_players()
         for k,player in pairs(players) do players[k] = player.name end
         local online = rank:get_players(true)
@@ -36,3 +35,21 @@ if Sync.add_to_gui then
         return 'You have been assigned the rank \''..Ranking.get_rank(player).name..'\''
     end)
 end
+
+-- adds a discord emit for rank chaning
+script.on_event('rank_change',function(event)
+    local rank = Ranking.get_rank(event.new_rank)
+    local player = Game.get_player(event)
+    local by_player_name = Game.get_player(event.by_player_index) or '<server>'
+    local global = global('Ranking')
+    if rank.group.name == 'Jail' and global.last_change ~= player.name then
+        Sync.emit_embeded{
+            title='Player Jail',
+            color=Color.to_hex(defines.textcolor.med),
+            description='There was a player jailed.',
+            ['Player:']='<<inline>>'..player.name,
+            ['By:']='<<inline>>'..by_player_name,
+            ['Reason:']='No Reason'
+        }
+    end
+end)

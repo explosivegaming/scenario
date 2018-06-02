@@ -1,20 +1,8 @@
---[[
-Explosive Gaming
-
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
---Please Only Edit Below This Line-----------------------------------------------------------
-local groups = {}
-local ranks = {}
-
-function Ranking._add_group(group) if game then return end table.insert(groups,group) end
-function Ranking._add_rank(rank,pos) if game then return end if pos then table.insert(ranks,pos,rank) else table.insert(ranks,rank) end end
-function Ranking._set_rank_power() if game then return end for power,rank in pairs(ranks) do rank.power = power end end
-function Ranking._update_rank(rank) if game then return end ranks[rank.power] = rank end
-function Ranking._update_group(group) if game then return end groups[group.index] = group end
+--- Description - A small description that will be displayed on the doc
+-- @submodule ExpGamingCore.Ranking
+-- @alias Ranking
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
 --[[
     How to use groups:
@@ -42,11 +30,10 @@ Example: defines.input_action.drop_item -> 'drop_item'
 http://lua-api.factorio.com/latest/defines.html#defines.input_action
 --]]
 
--- If you wish to add more groups please use addons/playerRanks.lua
--- If you wish to add to these rank groups use addons/playerRanks.lua
--- Ranks will inherite from each other ie higher ranks can do everything lower ranks can
+-- If you wish to add more groups please use src/config or add during your own module
+-- If you wish to add to these rank groups use src/config or add during your own module
 -- But groups do not inherite from each other
--- DO NOT REMOVE ANY OF THESE GROUPS
+-- DO NOT REMOVE ANY OF THESE GROUPS!!!
 
 local root = Ranking._group:create{
     name='Root',
@@ -57,9 +44,9 @@ local root = Ranking._group:create{
 }
 local admin = Ranking._group:create{
     name='Admin',
+    parent='Root',
     allow={},
     disallow={
-        'set_allow_commands',
         'edit_permission_group',
         'delete_permission_group',
         'add_permission_group'
@@ -67,22 +54,15 @@ local admin = Ranking._group:create{
 }
 local user = Ranking._group:create{
     name='User',
+    parent='Admin',
     allow={},
-    disallow={
-        'set_allow_commands',
-        'edit_permission_group',
-        'delete_permission_group',
-        'add_permission_group'
-    }
+    disallow={}
 }
 local jail = Ranking._group:create{
     name='Jail',
+    parent='User',
     allow={},
     disallow={
-        'set_allow_commands',
-        'edit_permission_group',
-        'delete_permission_group',
-        'add_permission_group',
         'open_character_gui',
         'begin_mining',
         'start_walking',
@@ -110,8 +90,8 @@ local jail = Ranking._group:create{
     }
 }
 
--- If you wish to add more ranks please use addons/playerRanks.lua
--- If you wish to add to these rank use addons/playerRanks.lua
+-- If you wish to add more ranks please use src/config or add during your own module
+-- If you wish to add to these rank use src/config or add during your own module
 root:add_rank{
     name='Root',
     short_hand='Root',
@@ -127,6 +107,7 @@ admin:add_rank{
     name='Admin',
     short_hand='Admin',
     tag='[Admin]',
+    parent='Root',
     colour={r=233,g=63,b=233},
     is_admin=true,
     is_spectator=true,
@@ -137,6 +118,7 @@ user:add_rank{
     name='Member',
     short_hand='Mem',
     tag='[Member]',
+    parent='Admin',
     colour={r=24,g=172,b=188},
     disallow={
         'set_auto_launch_rocket',
@@ -149,6 +131,7 @@ user:add_rank{
     name='Guest',
     short_hand='',
     tag='',
+    parent='Member',
     colour={r=255,g=159,b=27},
     is_default=true,
     disallow={
@@ -165,66 +148,8 @@ jail:add_rank{
     name='Jail',
     short_hand='Jail',
     tag='[Jail]',
+    parent='Guest',
     colour={r=50,g=50,b=50},
     disallow={},
     base_afk_time=false
 }
-
-function Ranking._auto_edit_ranks()
-    for power,rank in pairs(ranks) do
-        if ranks[power-1] then
-            rank:edit('disallow',false,ranks[power-1].disallow)
-        end
-    end
-    for power = #ranks, 1, -1 do
-        local rank = ranks[power]
-        rank:edit('disallow',false,rank.group.disallow)
-        if ranks[power+1] then
-            rank:edit('allow',false,ranks[power+1].allow)
-        end
-    end
-end
--- used to force rank to be read-only
-function Ranking._groups(name) 
-    if name then 
-        if name then 
-            local _return = {}
-            for power,group in pairs(groups) do
-                _return[group.name] = group
-            end
-            return _return
-        end 
-    end 
-    return groups 
-end
-
-function Ranking._ranks(name) 
-    if name then 
-        local _return = {}
-        for power,rank in pairs(ranks) do
-            _return[rank.name] = rank
-        end
-        return _return
-    end 
-    return ranks 
-end
-
--- used to save lag by doing some calculation at the start
-function Ranking._meta()
-    local meta = {time_ranks={}}
-    for power,rank in pairs(ranks) do
-        meta.rank_count = power
-        if rank.is_default then
-            meta.default = rank.name
-        end
-        if rank.is_root then
-            meta.root = rank.name
-        end
-        if rank.time then
-            table.insert(meta.time_ranks,rank.name)
-            if not meta.time_highest or power < meta.time_highest then meta.time_highest = power end
-            if not meta.time_lowest or rank.time < meta.time_lowest then meta.time_lowest = rank.time end
-        end
-    end
-    return meta
-end

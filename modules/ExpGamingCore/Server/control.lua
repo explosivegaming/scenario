@@ -5,6 +5,7 @@
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
 local Server = {}
+local module_verbose = false --true|false
 
 --- Global Table
 -- @table global
@@ -45,6 +46,7 @@ end)
 -- @treturn[1] number the number of threads
 -- @treturn[2] table table of all threads
 Server.threads = setmetatable({},{
+    __metatable=false,
     __call=function(tbl) return global.all._n end,
     __index=function(tbl,key) return rawget(global.all,key) end,
     __newindex=function(tbl,key,value) rawset(global.all,key,value) end,
@@ -231,6 +233,10 @@ end
 --- The class for the server threads, allows abbilty to run async function
 -- @type Thread
 -- @alias Server._thread
+-- @field name the name that is given to the thread, use for easy later indexing
+-- @field timeout the time in ticks that the thread will have before it times out
+-- @field reopen when true the thread will reopen itself untill set to false, combine with timeout to create a long on_nth_tick wait
+-- @field data any data that the thread will beable to access 
 Server._thread = {}
 
 --- Returns a new thread object

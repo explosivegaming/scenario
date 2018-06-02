@@ -1,12 +1,8 @@
---[[
-Explosive Gaming
-
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
---Please Only Edit Below This Line-----------------------------------------------------------
+--- Description - A small description that will be displayed on the doc
+-- @submodule ExpGamingCore.Ranking
+-- @alias Ranking
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
 --[[
     How to use groups:
@@ -34,18 +30,14 @@ Example: defines.input_action.drop_item -> 'drop_item'
 http://lua-api.factorio.com/latest/defines.html#defines.input_action
 --]]
 
--- See ExpCore/ranks.lua for examples - you add your own and edit pre-made ones here.
-
-local groups = Ranking._groups(true)
-
-groups['Root']:edit('allow',false,{
-    ['testing']=true
-})
+local groups = Ranking.groups
+local ranks = Ranking.ranks
 
 groups['Root']:add_rank{
     name='Owner',
     short_hand='Owner',
     tag='[Owner]',
+    parent='Root',
     time=nil,
     colour={r=170,g=0,b=0},
     is_admin = true,
@@ -56,6 +48,7 @@ groups['Root']:add_rank{
     name='Community Manager',
     short_hand='Com Mngr',
     tag='[Com Mngr]',
+    parent='Root',
     colour={r=150,g=68,b=161},
     is_admin = true,
     is_spectator=true,
@@ -65,16 +58,19 @@ groups['Root']:add_rank{
     name='Developer',
     short_hand='Dev',
     tag='[Dev]',
+    parent='Root',
     colour={r=179,g=125,b=46},
     is_admin = true,
     is_spectator=true,
     base_afk_time=false
 }
 
+ranks['Admin']:edit('parent','Developer')
 groups['Admin']:add_rank{
     name='Mod',
     short_hand='Mod',
     tag='[Mod]',
+    parent='Admin',
     colour={r=0,g=170,b=0},
     disallow={
         'server_command'
@@ -88,8 +84,8 @@ groups['User']:add_rank{
     name='Donator',
     short_hand='P2W',
     tag='[P2W]',
+    parent='Mod',
     colour={r=233,g=63,b=233},
-    power=0,
     is_spectator=true,
     base_afk_time=120
 }
@@ -97,24 +93,22 @@ groups['User']:add_rank{
     name='Veteran',
     short_hand='Vet',
     tag='[Veteran]',
+    parent='Donator',
     time=600,
     colour={r=140,g=120,b=200},
-    power=1,
     base_afk_time=60
 }
+ranks['Member']:edit('parent','Veteran')
 groups['User']:add_rank{
     name='Regular',
     short_hand='Reg',
     tag='[Regular]',
+    parent='Member',
     time=180,
     colour={r=24,g=172,b=188},
-    power=3,
     base_afk_time=30
 }
-
-local ranks = Ranking._ranks(true)
-
-ranks['Root']:edit('test',true,'testing')
+ranks['Guest']:edit('parent','Regular')
 
 Ranking._base_preset{
     ['badgamernl']='Owner',

@@ -40,7 +40,10 @@
             "version": "3.4.0",
             "location": "url",
             "dependencies": {
-                "ExpGamingLib": ">=3.0.0"
+                "ExpGamingLib": ">=3.0.0",
+                "FactorioStdLib.Color": ">=0.8.0",
+                "FactorioStdLib.Table": ">=0.8.0",
+                "ExpGamingCore.Server": "?>=3.0.0"
             }
         },
         "Server": {
@@ -53,8 +56,8 @@
             "dependencies": {
                 "ExpGamingLib": ">=3.0.0",
                 "FactorioStdLib.Table": ">=0.8.0",
-                "ExpGamingCore/Ranking": "?>=3.0.0",
-                "ExpGamingCore/Commands": "?>=3.0.0"
+                "ExpGamingCore.Ranking": "?>=3.0.0",
+                "ExpGamingCore.Commands": "?>=3.0.0"
             }
         },
         "Sync": {

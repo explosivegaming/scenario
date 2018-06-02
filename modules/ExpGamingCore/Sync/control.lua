@@ -6,6 +6,7 @@
 
 local Sync = {}
 local Sync_updates = {}
+local module_verbose = false --true|false
 
 --- Global Table
 -- @table global
