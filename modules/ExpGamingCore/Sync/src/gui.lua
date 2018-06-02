@@ -1,4 +1,4 @@
---- Description - A small description that will be displayed on the doc
+--- Allows syncing with an outside server and info panle.
 -- @submodule ExpGamingCore.Sync
 -- @alias Sync
 -- @author Cooldude2606
@@ -36,8 +36,7 @@ local function label_format(label,width)
 end
 
 --- Creates a center gui that will appear on join
--- @table server-info
--- @local call to Gui.Center
+-- @gui server-info
 Gui.center.add{
     name='server-info',
     caption='Server Info',

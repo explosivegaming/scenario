@@ -3,7 +3,6 @@
 -- @alias Ranking
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
-
 local Ranking = {}
 local module_verbose = false --true|false
 
@@ -11,7 +10,7 @@ local module_verbose = false --true|false
 -- @table global
 -- @field old contains the previous rank a use had before a rank change
 -- @field preset contains the preset ranks that users will recive apon joining
--- @filed last_change contains the name of the player who last had there rank chagned
+-- @field last_change contains the name of the player who last had there rank chagned
 local global = global{old={},preset={},last_change=nil}
 
 --- Called when there is a rank change for a user
@@ -78,7 +77,7 @@ Ranking.groups = setmetatable({},{
 --- Contains some meta data about the ranks
 -- @table Ranking.meta
 -- @field default this is the name of the default rank
--- @filed root this is the name of the root rank
+-- @field root this is the name of the root rank
 -- @field time_ranks a list of all ranks which have a time requirement
 -- @field time_highest the power of the highest rank that has a time requirement
 -- @field time_lowest the lowest amount of time required for a time rank
@@ -118,7 +117,7 @@ end
 -- @usage Ranking.get_rank('admin') -- returns rank by the name of admin
 -- @tparam ?player|player_index|player_name|rank_name|Ranking._rank|'server'|'root' mixed what rank to get
 -- @treturn[1] table the rank that is linked to mixed
--- @trrturn[2] nil there was no rank found 
+-- @treturn[2] nil there was no rank found 
 function Ranking.get_rank(mixed)
     if not mixed then return error('Ranking.get_rank recived no paramerters') end
     local ranks = Ranking.ranks
@@ -141,10 +140,10 @@ end
 --- Returns the group object used to sort ranks given group name or rank
 -- @usage Ranking.get_group(game.player) -- returns player's rank group
 -- @usage Ranking.get_group('root') -- returns group by name of root
--- @tparam ?player|player_index|player_name|rank_name|rank|'server'|'root'|group name|group mixed what group to get
+-- @tparam ?player|player_index|player_name|rank_name|rank|'server'|'root'|group_name|group mixed what group to get
 -- @see Ranking.get_rank
 -- @treturn[1] table the group that is linked to mixed
--- @trrturn[2] nil there was no rank group found 
+-- @treturn[2] nil there was no rank group found 
 function Ranking.get_group(mixed)
     if not mixed then return error('Ranking.get_group recived no paramerters') end
     local groups = Ranking.groups

@@ -1,4 +1,4 @@
---- Description - A small description that will be displayed on the doc
+--- A full ranking system for factorio.
 -- @submodule ExpGamingCore.Ranking
 -- @alias Ranking
 -- @author Cooldude2606

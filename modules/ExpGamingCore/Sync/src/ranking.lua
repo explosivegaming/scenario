@@ -1,4 +1,4 @@
---- Description - A small description that will be displayed on the doc
+--- Allows syncing with an outside server and info panle.
 -- @submodule ExpGamingCore.Sync
 -- @alias Sync
 -- @author Cooldude2606

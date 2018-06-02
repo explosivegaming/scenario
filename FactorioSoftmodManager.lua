@@ -155,7 +155,7 @@ Manager.verbose('Current state is now: "selfInit"; The verbose state is: '..tost
 -- @treturn table the new global table for that module
 Manager.global=setmetatable({__defaults={},__global={
     __call=function(tbl,default) return Manager.global(default) end,
-    __index=function(tbl,key) return Manager.global() == tbl and nil or rawget(Manager.global(),key) end,
+    __index=function(tbl,key) return Manager.global() == tbl and nil or rawget(Manager.global(),key) or tbl(key) end,
     __newindex=function(tbl,key,value) rawset(Manager.global(),key,value) end,
     __pairs=function(tbl)
         local tbl = Manager.global()
@@ -185,12 +185,10 @@ Manager.global=setmetatable({__defaults={},__global={
         end
         return global
     end,
-    __index=function(tbl,key) Manager.verbose('Manager Index') return rawget(tbl(),key) or rawget(_G.global,key) end,
+    __index=function(tbl,key) return rawget(tbl(),key) or rawget(_G.global,key) or tbl(key) end,
     __newindex=function(tbl,key,value) rawset(tbl(),key,value) end,
     __pairs=function(tbl)
-        Manager.verbose('Manager Pair 1')
         local tbl = Manager.global()
-        Manager.verbose('Manager Pair 2')
         local function next_pair(tbl,k)
             k, v = next(tbl, k)
             if type(v) ~= nil then return k,v end

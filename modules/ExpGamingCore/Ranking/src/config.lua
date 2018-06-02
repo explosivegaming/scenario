@@ -1,9 +1,3 @@
---- Description - A small description that will be displayed on the doc
--- @submodule ExpGamingCore.Ranking
--- @alias Ranking
--- @author Cooldude2606
--- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
-
 --[[
     How to use groups:
 name		The name that you can use to reference it.
