@@ -102,6 +102,7 @@ end
 -- @see EmitEmbededParamaters
 function Sync.emit_embeded(args)
     if not is_type(args,'table') then error('Args table not given to Sync.emit_embeded',2) end
+    if not game then error('Game has not loaded',2) end
     local title = is_type(args.title,'string') and args.title or ''
     local color = is_type(args.color,'string') and args.color:find("0x") and args.color or '0x0'
     local description = is_type(args.description,'string') and args.description or ''

@@ -14,8 +14,11 @@
             "version": "3.4.0",
             "location": "url",
             "dependencies": {
-                "ExpGamingLib": ">=4.0.0",
-                "ExpGamingCore/Ranking": ">=4.0.0"
+                "ExpGamingLib": "^4.0.0",
+                "FactorioStdLib.Table": "^0.8.0",
+                "FactorioStdLib.Color": "^0.8.0",
+                "FactorioStdLib.Game": "^0.8.0",
+                "ExpGamingCore/Ranking": "?^4.0.0"
             }
         },
         "Gui": {
@@ -26,10 +29,10 @@
             "version": "3.4.0",
             "location": "url",
             "dependencies": {
-                "FactorioModGui": ">=1.0.0",
-                "ExpGamingLib": ">=4.0.0",
-                "ExpGamingCore/Ranking": ">=4.0.0",
-                "ExpGamingCore/Server": "?>=4.0.0"
+                "FactorioModGui": "^1.0.0",
+                "ExpGamingLib": "^4.0.0",
+                "ExpGamingCore/Ranking": "^4.0.0",
+                "ExpGamingCore/Server": "?^4.0.0"
             }
         },
         "Ranking": {
@@ -40,10 +43,11 @@
             "version": "3.4.0",
             "location": "url",
             "dependencies": {
-                "ExpGamingLib": ">=4.0.0",
-                "FactorioStdLib.Color": ">=0.8.0",
-                "FactorioStdLib.Table": ">=0.8.0",
-                "ExpGamingCore.Server": "?>=4.0.0"
+                "ExpGamingLib": "^4.0.0",
+                "FactorioStdLib.Color": "^0.8.0",
+                "FactorioStdLib.Table": "^0.8.0",
+                "FactorioStdLib.Game": "^0.8.0",
+                "ExpGamingCore.Server": "?^4.0.0"
             }
         },
         "Server": {
@@ -54,10 +58,11 @@
             "version": "3.4.0",
             "location": "url",
             "dependencies": {
-                "ExpGamingLib": ">=4.0.0",
-                "FactorioStdLib.Table": ">=0.8.0",
-                "ExpGamingCore.Ranking": "?>=4.0.0",
-                "ExpGamingCore.Commands": "?>=4.0.0"
+                "ExpGamingLib": "^4.0.0",
+                "FactorioStdLib.Table": "^0.8.0",
+                "FactorioStdLib.Game": "^0.8.0",
+                "ExpGamingCore.Ranking": "?^4.0.0",
+                "ExpGamingCore.Commands": "?^4.0.0"
             }
         },
         "Sync": {
@@ -68,11 +73,11 @@
             "version": "3.4.0",
             "location": "url",
             "dependencies": {
-                "ExpGamingLib": ">=4.0.0",
-                "FactorioStdLib.Color": ">=0.8.0",
-                "FactorioStdLib.Table": ">=0.8.0",
-                "ExpGamingCore.Ranking": "?>=4.0.0",
-                "ExpGamingCore.Gui": "?>=4.0.0"
+                "ExpGamingLib": "^4.0.0",
+                "FactorioStdLib.Color": "^0.8.0",
+                "FactorioStdLib.Table": "^0.8.0",
+                "ExpGamingCore.Ranking": "?^4.0.0",
+                "ExpGamingCore.Gui": "?^4.0.0"
             }
         }
     },

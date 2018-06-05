@@ -84,8 +84,10 @@ Ranking.groups = setmetatable({},{
 Ranking.meta = setmetatable({},{
     __metatable=false,
     __call=function(tbl)
+        local count = 0
         rawset(tbl,'time_ranks',{})
         for name,rank in pairs(Ranking.ranks) do
+            count=count+1
             if not rawget(tbl,'default') and rank.is_default then rawset(tbl,'default',rank.name) end
             if not rawget(tbl,'root') and rank.is_root then rawset(tbl,'root',rank.name) end
             if rank.time then
@@ -94,6 +96,7 @@ Ranking.meta = setmetatable({},{
                 if not rawget(tbl,'time_lowest') or rank.time < tbl.time_lowest then rawset(tbl,'time_lowest',rank.time) end
             end
         end
+        rawset(tbl,'rank_count',count)
         if not rawget(tbl,'default') then error('No default rank') end
         if not rawget(tbl,'root') then error('No root rank') end
     end,
@@ -444,6 +447,7 @@ Ranking.on_init=function(self)
         end
     end
     -- asigning of powers
+    -- @todo need a better system for non liner rank trees
     verbose('Assigning Rank Powers')
     local power = 1
     local function set_powers(rank)

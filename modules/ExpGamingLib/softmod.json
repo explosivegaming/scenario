@@ -6,9 +6,9 @@
     "version": "3.4.0",
     "location": "url",
     "dependencies": {
-        "StdLib.Game": ">=0.8.0",
-        "StdLib.Color": ">=0.8.0",
-        "StdLib.Table": ">=0.8.0"
+        "StdLib.Game": "^0.8.0",
+        "StdLib.Color": "^0.8.0",
+        "StdLib.Table": "^0.8.0"
     },
     "author": "Cooldude2606",
     "contact": "Discord: Cooldude2606#5241",

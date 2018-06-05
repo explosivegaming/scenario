@@ -20,6 +20,7 @@ end
 --- Used to get the current ENV with all _G keys removed; useful when saving function to global
 -- @usage get_env() returns current ENV with _G keys removed
 -- @treturn table the env table with _G keys removed
+-- @warning does not work from console
 function ExpLib.get_env()
     local level = 2
     local env = setmetatable({},{__index=_G})

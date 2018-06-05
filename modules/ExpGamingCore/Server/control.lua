@@ -193,7 +193,10 @@ end
 -- @tparam[opt] ?Server._thread|true use_thread run the command on a premade thread or let it make its own
 -- @tparam[opt] table env run the env to run the command in must have _env key as true to be
 -- @param[opt] ... any args you want to pass to the function
--- @return if no thread then it will return the value(s) returned by the callback
+-- @treturn[1] boolean if no thread then it will return a true for the success
+-- @return[1] if no thread then it will return the value(s) returned by the callback
+-- @treturn[2] boolean if no thread then it will return a false for the success
+-- @treturn[2] string if no thread then it will return a an err value
 function Server.interface(callback,use_thread,env,...)
     if use_thread then
         -- if use_thread is true then it makes a new thread
@@ -217,15 +220,20 @@ function Server.interface(callback,use_thread,env,...)
         use_thread:open()
         Server.queue_thread(use_thread)
     else
-        local callback = is_type(callback,'function') and callback or loadstring(callback)
+        local _callback = callback
+        if not is_type(callback,'function') then
+            local rtn, err = loadstring(callback)
+            if err then return false, err end
+            _callback = rtn
+        end
         if is_type(env,'table') and env._env == true then
-            local sandbox, success, err = Manager.sandbox(callback,env,unpack(thread.data))
-            if not success then error(err) end
-            return err
+            local sandbox, success, err = Manager.sandbox(_callback,env,...)
+            if not success then error(err) return success,err
+            else return success, unpack(err) end
         else 
-            local sandbox, success, err = Manager.sandbox(callback,{},env,unpack(thread.data))
-            if not success then error(err) end
-            return err
+            local sandbox, success, err = Manager.sandbox(_callback,{},env,...)
+            if not success then error(err) return success,err
+            else return success, unpack(err) end
         end
     end
 end
