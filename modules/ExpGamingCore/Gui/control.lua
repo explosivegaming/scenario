@@ -6,7 +6,7 @@
 
 local Gui = {}
 local Gui_data = {}
-
+local global = global()
 --- Used to set and get data about different guis
 -- @usage Gui.data[location] -- returns the gui data for that gui location ex center
 -- @usage Gui.data(location,gui_name,gui_data) -- adds gui data for a gui at a location
@@ -94,21 +94,21 @@ function Gui.cam_link(data)
         data.cam.style.height = data.height or 100
     else return end
     if not Server or not Server._thread or not Server.get_thread('camera-follow') then
-        if not global().cams then
-            global().cams = {}
-            global().cam_index = 1
+        if not global.cams then
+            global.cams = {}
+            global.cam_index = 1
         end
         if data.cam then
             local surface = data.surface and data.surface.index or nil
-            table.insert(global().cams,{cam=data.cam,entity=data.entity,surface=surface})
+            table.insert(global.cams,{cam=data.cam,entity=data.entity,surface=surface})
         end
-        if not global().players then
-            global().players = {}
+        if not global.players then
+            global.players = {}
         end
         if data.respawn_open then
             if data.entity.player then
-                if not global().players[data.entity.player.index] then global().players[data.entity.player.index] = {} end
-                table.insert(global().players[data.entity.player.index],data.cam)
+                if not global.players[data.entity.player.index] then global.players[data.entity.player.index] = {} end
+                table.insert(global.players[data.entity.player.index],data.cam)
             end
         end
     else
@@ -135,26 +135,26 @@ script.on_event('on_tick', function(event)
 	if Gui.left and ((event.tick+10)/(3600*game.speed)) % 15 == 0 then
 		Gui.left.update()
     end
-    if global().cams and is_type(global().cams,'table') and #global().cams > 0 then
-        local _cam = global().cams[global().cam_index]
-        if not _cam then global().cam_index = 1 _cam = global().cams[global().cam_index] end
+    if global.cams and is_type(global.cams,'table') and #global.cams > 0 then
+        local _cam = global.cams[global.cam_index]
+        if not _cam then global.cam_index = 1 _cam = global.cams[global.cam_index] end
         if not _cam then return end
-        if not _cam.cam.valid then table.remove(global().cams,global().cam_index)
-        elseif not _cam.entity.valid then table.remove(global().cams,global().cam_index)
-        else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end global().cam_index = global().cam_index+1
+        if not _cam.cam.valid then table.remove(global.cams,global.cam_index)
+        elseif not _cam.entity.valid then table.remove(global.cams,global.cam_index)
+        else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end global.cam_index = global.cam_index+1
         end
     end
 end)
 
 script.on_event('on_player_respawned',function(event)
-    if global().players and is_type(global().players,'table') and #global().players > 0 and global().players[event.player_index] then
+    if global.players and is_type(global.players,'table') and #global.players > 0 and global.players[event.player_index] then
         local remove = {}
-        for index,cam in pairs(global().players[event.player_index]) do
+        for index,cam in pairs(global.players[event.player_index]) do
             Gui.cam_link{cam=cam,entity=Game.get_player(event).character}
             if not cam.valid then table.insert(remove,index) end
         end
         for _,index in pairs(remove) do
-            table.remove(global().players[event.player_index],index)
+            table.remove(global.players[event.player_index],index)
         end
     end
 end)

@@ -48,13 +48,15 @@ end)
 Server.threads = setmetatable({},{
     __metatable=false,
     __call=function(tbl) return global.all._n end,
+    __len=function(tbl) return global.all._n end,
     __index=function(tbl,key) return rawget(global.all,key) end,
     __newindex=function(tbl,key,value) rawset(global.all,key,value) end,
     __pairs=function(tbl)
         local tbl = global.all
         local function next_pair(tbl,k)
             k, v = next(tbl, k)
-            if type(v) ~= nil and k ~= '_n' then return k,v end
+            if type(v) ~= nil and k ~= '_n' then return k,v
+            else return next(tbl, k) end
         end
         return next_pair, tbl, nil
     end
@@ -97,7 +99,7 @@ end
 function Server.close_all_threads(with_force)
     if not with_force then
         for uuid,thread in pairs(Server.threads) do thread:close() end
-    else global(true) end
+    else global.Server(true) end -- idk why you cant just use global even when global is defined at the top to be over ridren
 end
 
 --- Runs all the theads which have opened with an on_tick event
@@ -227,11 +229,11 @@ function Server.interface(callback,use_thread,env,...)
         end
         if is_type(env,'table') and env._env == true then
             local sandbox, success, err = Manager.sandbox(_callback,env,...)
-            if not success then error(err) return success,err
+            if not success then return success,err
             else return success, unpack(err) end
         else 
             local sandbox, success, err = Manager.sandbox(_callback,{},env,...)
-            if not success then error(err) return success,err
+            if not success then return success,err
             else return success, unpack(err) end
         end
     end

@@ -160,7 +160,7 @@ Manager.verbose('The verbose state is: '..tostring(Manager.setVerbose.selfInit),
 -- @treturn table the new global table for that module
 Manager.global=setmetatable({__defaults={},__global={
     __call=function(tbl,default) return Manager.global(default) end,
-    __index=function(tbl,key) return Manager.global() == tbl and nil or rawget(Manager.global(),key) or tbl(key) end,
+    __index=function(tbl,key) return rawget(Manager.global(),key) or tbl(key) end,
     __newindex=function(tbl,key,value) rawset(Manager.global(),key,value) end,
     __pairs=function(tbl)
         local tbl = Manager.global()
@@ -171,12 +171,13 @@ Manager.global=setmetatable({__defaults={},__global={
         return next_pair, tbl, nil
     end
 }},{
-    __call=function(tbl,default)
+    __call=function(tbl,default,tbl2)
         local global = _G.global
-        local module_name = type(default) == 'string' and default or module_name
-        local module_path = type(default) == 'string' and moduleIndex[default] or module_path
+        local tbl2 = type(tbl2) == 'table' and getmetatable(tbl2) or nil
+        local module_name = type(default) == 'string' and default or tbl2 and tbl2.name or module_name
+        local module_path = type(default) == 'string' and moduleIndex[default] or tbl2 and tbl2.path or module_path
         if not module_path or not module_name then return _G.global end
-        if type(default) == 'table' then rawset(rawget(tbl,'__defaults'),tostring(module_name),default) end
+        if type(default) == 'table' then Manager.verbose('Default global has been set for: global'..module_path:gsub('/','.')) rawset(rawget(tbl,'__defaults'),tostring(module_name),default) end
         local path = 'global'
         local new_dir = false
         for dir in module_path:gmatch('%a+') do
@@ -185,10 +186,17 @@ Manager.global=setmetatable({__defaults={},__global={
             global = rawget(global,dir)
         end
         if (new_dir or default == true) and rawget(rawget(tbl,'__defaults'),tostring(module_name)) then 
-            Manager.verbose('Set Global Dir: '..path..' to its default') 
-            for key,value in pairs(rawget(rawget(tbl,'__defaults'),tostring(module_name))) do rawset(global,key,value) end
+            Manager.verbose('Set Global Dir: '..path..' to its default')
+            -- cant set it to be equle otherwise it will lose its global propeity 
+            local function deepcopy(tbl) if type(tbl) ~= 'table' then return tbl end local rtn = {} for key,value in pairs(tbl) do rtn[key] = deepcopy(value) end return rtn end
+            for key,value in pairs(global) do rawset(global,key,nil) end
+            for key,value in pairs(rawget(rawget(tbl,'__defaults'),tostring(module_name))) do rawset(global,key,deepcopy(value)) end
         end
-        return global
+        return setmetatable(global,{
+            __call=function(tbl,default) return Manager.global(default,tbl) end,
+            __index=function(tbl,key) return rawget(Manager.global(),key) or tbl(key) end,
+            path=module_path,name=module_name
+        })
     end,
     __index=function(tbl,key) return rawget(tbl(),key) or rawget(_G.global,key) or tbl(key) end,
     __newindex=function(tbl,key,value) rawset(tbl(),key,value) end,

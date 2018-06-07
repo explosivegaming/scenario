@@ -194,6 +194,7 @@ end
 -- @tparam table tbl table to convert
 -- @treturn string the converted table
 function table.tostring(tbl)
+    if type(tbl) ~= 'table' then return tostring(tbl) end
     local result, done = {}, {}
     for k, v in ipairs(tbl) do
       table.insert(result,table.val_to_str(v))
