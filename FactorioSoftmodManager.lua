@@ -389,6 +389,7 @@ Manager.error = setmetatable({
         -- if the error constant is given crash game
         if err == rawget(tbl,'__error_const') then Manager.verbose('Force Stop','errorCaught') rawget(tbl,'__error_call')('Force Stop',2) end
         -- other wise treat the call as if its been passed an err string
+        Manager.verbose('An error has occurred: '..err,'errorCaught')
         if #tbl > 0 then
             -- there is at least one error handler loaded; loops over the error handlers
             for handler_name,callback in pairs(tbl) do
