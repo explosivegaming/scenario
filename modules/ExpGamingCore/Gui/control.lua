@@ -7,10 +7,6 @@
 local Gui = {}
 local Gui_data = {}
 
---- Stores all the on_player_joined_game event handlers for the guis
--- @table events
-Gui.events = {join={},rank={}}
-
 --- Used to set and get data about different guis
 -- @usage Gui.data[location] -- returns the gui data for that gui location ex center
 -- @usage Gui.data(location,gui_name,gui_data) -- adds gui data for a gui at a location
@@ -28,19 +24,11 @@ Gui.data = setmetatable({},{
     end
 })
 
--- loaded the different gui parts, each is its own module for ldoc reasons
-local join, rank
-Gui.center, join, rank = require(module_path..'/src/center')
-table.insert(Gui.events.join,event) table.insert(Gui.events.rank,rank)
-Gui.inputs, event  = require(module_path..'/src/inputs')
-table.insert(Gui.events.join,event) table.insert(Gui.events.rank,rank)
-Gui.left, event  = require(module_path..'/src/left')
-table.insert(Gui.events.join,event) table.insert(Gui.events.rank,rank)
-Gui.popup, event  = require(module_path..'/src/popup')
-table.insert(Gui.events.join,event) table.insert(Gui.events.rank,rank)
-Gui.toolbar, event  = require(module_path..'/src/toolbar')
-table.insert(Gui.events.join,event) table.insert(Gui.events.rank,rank)
-join, rank = nil, nil
+Gui.center = require(module_path..'/src/center')
+Gui.inputs = require(module_path..'/src/inputs')
+Gui.left = require(module_path..'/src/left')
+Gui.popup = require(module_path..'/src/popup')
+Gui.toolbar = require(module_path..'/src/toolbar')
 
 --- Add a white bar to any gui frame
 -- @usage Gui.bar(frame,100)
@@ -72,20 +60,6 @@ function Gui.set_dropdown_index(dropdown,_item)
     end
     dropdown.selected_index = _index
     return dropdown
-end
-
-function Gui:on_init()
-    if loaded_modules.Server then verbose('ExpGamingCore.Server is installed; Loading server src') require(module_path..'/src/server') end
-    if loaded_modules.Ranking then
-        verbose('ExpGamingCore.Ranking is installed; Loading ranking src')
-        script.on_event('on_player_joined_game',function(event)
-            for _,callback in pairs(Gui.events.rank) do callback(event) end
-        end)
-    end  
-end
-
-function Gui:on_post()
-    Gui.test = require(module_path..'/src/test')
 end
 
 --- Prams for Gui.cam_link
@@ -152,7 +126,9 @@ function Gui.cam_link(data)
 end
 
 script.on_event('on_player_joined_game',function(event)
-    for _,callback in pairs(Gui.events.join) do callback(event) end
+    Gui.toolbar.on_player_joined_game(event)
+    Gui.popup.on_player_joined_game(event)
+    Gui.left.on_player_joined_game(event)
 end)
 
 script.on_event('on_tick', function(event)
@@ -182,5 +158,22 @@ script.on_event('on_player_respawned',function(event)
         end
     end
 end)
+
+function Gui:on_init()
+    if loaded_modules.Server then verbose('ExpGamingCore.Server is installed; Loading server src') require(module_path..'/src/server') end
+    if loaded_modules.Ranking then
+        verbose('ExpGamingCore.Ranking is installed; Loading ranking src')
+        script.on_event('on_rank_change',function(event)
+            Gui.toolbar.on_rank_change(event)
+            Gui.center.on_rank_change(event)
+        end)
+    end  
+end
+
+function Gui:on_post()
+    Gui.test = require(module_path..'/src/test')
+    Gui.popup.load() Gui.popup.load = nil
+end
+
 
 return Gui

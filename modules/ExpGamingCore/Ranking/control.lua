@@ -14,14 +14,14 @@ local module_verbose = false --true|false
 local global = global{old={},preset={},last_change=nil}
 
 --- Called when there is a rank change for a user
--- @event rank_change
+-- @event on_rank_change
 -- @field name the rank id
 -- @field tick the tick which the event was raised on
 -- @field player_index the player whos rank was changed
 -- @field by_player_index the player who changed the rank, 0 means server
 -- @field new_rank the name of the rank that was given
 -- @field old_rank the name of the rank the player had
-script.generate_event_name('rank_change')
+script.generate_event_name('on_rank_change')
 
 --- Outputs as a string all the ranks and the loaded order
 -- @usage Ranking.output_ranks(player) -- prints to player
@@ -208,8 +208,8 @@ function Ranking.give_rank(player,rank,by_player,tick)
     player.admin = rank.is_admin or false
     player.spectator = rank.is_spectator or false
     local by_player_index = by_player_name == 'server' and 0 or Game.get_player(by_player_name).index
-    script.raise_event(defines.events.rank_change,{
-        name=defines.events.rank_change,
+    script.raise_event(defines.events.on_rank_change,{
+        name=defines.events.on_rank_change,
         tick=tick, 
         player_index=player.index, 
         by_player_index=by_player_index, 

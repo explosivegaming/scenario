@@ -144,13 +144,13 @@ function left._left.toggle(event)
         if not success then error(err)
         elseif err == true then open = true 
         elseif global().over_ride_left_can_open then 
-            if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 then
+            if is_type(Ranking,'table') and Ranking.meta.rank_count > 0 then
                 if Ranking.get_rank(player):allowed(_left.name) then open = true
                 else open = {gui.unauthorized} end
             end 
         else open = err end
     else
-        if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 then
+        if is_type(Ranking,'table') and Ranking.meta.rank_count > 0 then
             if Ranking.get_rank(player):allowed(_left.name) then open = true 
             else open = {gui.unauthorized} end
         end
@@ -164,8 +164,7 @@ function left._left.toggle(event)
     elseif open ~= true then player_return({'gui.cant-open',open},defines.textcolor.crit,player) player.play_sound{path='utility/cannot_build'} end
 end
 
--- second return is join event and third is rank change event
-return left, function(event)
+left.on_player_joined_game = function(event)
     -- draws the left guis when a player first joins, fake_event is just because i am lazy
     local player = Game.get_player(event)
     local frames = Gui.data.left or {}
@@ -173,4 +172,6 @@ return left, function(event)
         local fake_event = {player_index=player.index,element={name=name}}
         left.open(fake_event)
     end
-end, nil
+end
+
+return left

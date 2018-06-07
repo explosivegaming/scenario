@@ -201,6 +201,5 @@ script.on_event('on_gui_closed',function(event)
     if event.element and event.element.valid then event.element.destroy() end
 end)
 
--- when the player rank is changed it closses the center guis
--- second return is join event and third is rank change event
-return center, nil, center.clear
+center.on_rank_change = center.clear
+return center

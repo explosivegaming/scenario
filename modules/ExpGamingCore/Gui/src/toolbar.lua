@@ -34,7 +34,7 @@ function toolbar.draw(player)
     toolbar_frame.clear()
     if not Gui.data.toolbar then return end
     for name,button in pairs(Gui.data.toolbar) do
-        if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 then
+        if is_type(Ranking,'table') and Ranking.meta.rank_count > 0 then
             local rank = Ranking.get_rank(player)
             if rank:allowed(name) then
                 button:draw(toolbar_frame)
@@ -43,5 +43,6 @@ function toolbar.draw(player)
 	end
 end
 
--- second return is join event and third is rank change event
-return toolbar, toolbar.draw, toolbar.draw
+toolbar.on_rank_change = toolbar.draw
+toolbar.on_player_joined_game = toolbar.draw
+return toolbar

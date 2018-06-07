@@ -371,6 +371,6 @@ function inputs.add_drop_down(name,items,index,callback)
 end
 
 -- second return is join event and third is rank change event
-return inputs, nil, nil
+return inputs
 
 -- to see examples look at GuiParts/test.lua

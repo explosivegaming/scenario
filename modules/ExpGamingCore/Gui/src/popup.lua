@@ -10,7 +10,7 @@
 local popup = {}
 popup._popup = {}
 
-function popup._load()
+function popup.load()
     popup._popup.close = Gui.inputs.add{
         type='button',
         name='popup-close',
@@ -107,5 +107,6 @@ function popup._popup:add_left(obj)
     self.left = Gui.left.add(obj)
 end
 
--- second return is join event and third is rank change event
-return popup, popup.flow, nil
+popup.on_player_joined_game = popup.flow
+
+return popup

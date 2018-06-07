@@ -167,7 +167,6 @@ function Server._thread_handler(event)
         end
     end)
 end
-script.on_event(defines.events,Server._thread_handler)
 
 --[[ cant be used V
 --- Adds a event handler to tell threads about events
@@ -370,7 +369,7 @@ function Server._thread:resolve(...)
     local _return = false
     -- checks if the resolve haddler is still present
     if is_type(self._resolve,'function') then 
-        local sandbox, success, err = Manager.sandbox(self._resolve,thread._env,self,...)
+        local sandbox, success, err = Manager.sandbox(self._resolve,self._env,self,...)
         if success then
             -- if it was successful then it will attemp to call the success handler
             if is_type(self._success,'function') then
@@ -462,6 +461,7 @@ script.on_event(-2,function(event)
 end)
 
 function Server:on_init()
+    for name,id in pairs(defines.events) do if not script.get_event_handler(id) then script.on_event(id,Server._thread_handler) end end
     if loaded_modules.commands then verbose('ExpGamingCore.Commands is installed; Loading commands src') require(module_path..'/src/commands') end
 end
 
