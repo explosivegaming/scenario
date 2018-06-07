@@ -1,11 +1,11 @@
---[[
-Explosive Gaming
+--- Adds a location for popups which can be dismissed by a player and created from other scripts
+-- @module ExpGamingCore.Gui.Popup
+-- @alias popup
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
+--- This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module
+-- @function _comment
 
 local popup = {}
 popup._popup = {}
@@ -32,7 +32,7 @@ function popup.add(obj)
     verbose('Created Popup Gui: '..obj.name)
     setmetatable(obj,{__index=popup._popup})
     local name = obj.name; obj.name = nil
-    Gui._add_data('popup',name,obj)
+    Gui.data('popup',name,obj)
     obj.name = name
     return obj
 end
@@ -50,7 +50,7 @@ end
 -- @param data this is the data that is sent to the draw function
 -- @tparam[opt=game.connected_players] table players the players to open the popup for
 function popup.open(style,data,players)
-    local _popup = Gui._get_data('popup')[style]
+    local _popup = Gui.data.popup[style]
     local players = players or game.connected_players
     local data = data or {}
     if not _popup then return end
@@ -107,6 +107,5 @@ function popup._popup:add_left(obj)
     self.left = Gui.left.add(obj)
 end
 
-Event.register(defines.events.on_player_joined_game,popup.flow)
-
-return popup
+-- second return is join event and third is rank change event
+return popup, popup.flow, nil

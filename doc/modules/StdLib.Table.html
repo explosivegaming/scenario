@@ -40,12 +40,13 @@
 <ul class="nowrap">
   <li><a href="../modules/FSM.html">FSM</a></li>
   <li><a href="../modules/ExpGamingCore.Commands.html">ExpGamingCore.Commands</a></li>
-  <li><a href="../modules/modules.expgamingcore.gui.guiparts.center.html">modules.expgamingcore.gui.guiparts.center</a></li>
-  <li><a href="../modules/modules.expgamingcore.gui.guiparts.inputs.html">modules.expgamingcore.gui.guiparts.inputs</a></li>
-  <li><a href="../modules/modules.expgamingcore.gui.guiparts.left.html">modules.expgamingcore.gui.guiparts.left</a></li>
-  <li><a href="../modules/modules.expgamingcore.gui.guiparts.popup.html">modules.expgamingcore.gui.guiparts.popup</a></li>
-  <li><a href="../modules/modules.expgamingcore.gui.guiparts.toolbar.html">modules.expgamingcore.gui.guiparts.toolbar</a></li>
-  <li><a href="../modules/modules.expgamingcore.gui.control.html">modules.expgamingcore.gui.control</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.html">ExpGamingCore.Gui</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Center.html">ExpGamingCore.Gui.Center</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Inputs.html">ExpGamingCore.Gui.Inputs</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Left.html">ExpGamingCore.Gui.Left</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Popup.html">ExpGamingCore.Gui.Popup</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Test.html">ExpGamingCore.Gui.Test</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Toolbar.html">ExpGamingCore.Gui.Toolbar</a></li>
   <li><a href="../modules/ExpGamingCore.Ranking.html">ExpGamingCore.Ranking</a></li>
   <li><a href="../modules/ExpGamingCore.Server.html">ExpGamingCore.Server</a></li>
   <li><a href="../modules/ExpGamingCore.Sync.html">ExpGamingCore.Sync</a></li>
@@ -157,30 +158,6 @@
 	<tr>
 	<td class="name" nowrap><a href="#arr_to_bool">arr_to_bool (tbl)</a></td>
 	<td class="summary">For all string or number values in an array map them to a key = true table</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#key_to_str">key_to_str (k)</a></td>
-	<td class="summary">Returns a value in a form able to be read as a key</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#tostring">tostring (tbl)</a></td>
-	<td class="summary">Returns a table in a form able to be read as a table</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#json">json (lua_table)</a></td>
-	<td class="summary">Simmilar to table.tostring but converts a lua table to a json one</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#autokey">autokey (tbl, str)</a></td>
-	<td class="summary">Returns the closest match to a key</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#alphanumsort">alphanumsort (tbl)</a></td>
-	<td class="summary">Returns the list is a sorted way that would be expected by people (this is by key)</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#keysort">keysort (tbl)</a></td>
-	<td class="summary">Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)</td>
 	</tr>
 </table>
 
@@ -931,191 +908,6 @@ some_func(<span class="number">1</span>,<span class="number">2</span>) <span cla
     </ul>
 
 </dd>
-    <dt>
-    <a name = "key_to_str"></a>
-    <strong>key_to_str (k)</strong>
-    </dt>
-    <dd>
-    Returns a value in a form able to be read as a key
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">k</span>
-         key to convert
-        </li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-        the converted key
-    </ol>
-
-
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example"><span class="keyword">local</span> a = <span class="string">'key'</span>
- <span class="global">table</span>.key_to_str(a) <span class="comment">-- return '["key"]'</span></pre>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "tostring"></a>
-    <strong>tostring (tbl)</strong>
-    </dt>
-    <dd>
-    Returns a table in a form able to be read as a table
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">tbl</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
-         table to convert
-        </li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-        the converted table
-    </ol>
-
-
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example"><span class="keyword">local</span> a = {k1=<span class="string">'foo'</span>,k2=<span class="string">'bar'</span>}
- <span class="global">table</span>.<span class="global">tostring</span>(a) <span class="comment">-- return '{["k1"]="foo",["k2"]="bar"}'</span></pre>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "json"></a>
-    <strong>json (lua_table)</strong>
-    </dt>
-    <dd>
-    Simmilar to table.tostring but converts a lua table to a json one
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">lua_table</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
-         the table to convert
-        </li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-        the table in a json format
-    </ol>
-
-
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example"><span class="keyword">local</span> a = {k1=<span class="string">'foo'</span>,k2=<span class="string">'bar'</span>}
- talbe.json(a) <span class="comment">-- return '{"k1":"foo","k2":"bar"}'</span></pre>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "autokey"></a>
-    <strong>autokey (tbl, str)</strong>
-    </dt>
-    <dd>
-    Returns the closest match to a key
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">tbl</span>
-
-        </li>
-        <li><span class="parameter">str</span>
-
-        </li>
-    </ul>
-
-
-
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example">tbl = {foo=<span class="number">1</span>,bar=<span class="number">2</span>}
- <span class="global">table</span>.autokey(tbl,<span class="string">'f'</span>) <span class="comment">-- return 1</span></pre>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "alphanumsort"></a>
-    <strong>alphanumsort (tbl)</strong>
-    </dt>
-    <dd>
-    Returns the list is a sorted way that would be expected by people (this is by key)
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">tbl</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
-         the table to be sorted
-        </li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
-        the sorted table
-    </ol>
-
-
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example">tbl = <span class="global">table</span>.alphanumsort(tbl)</pre>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "keysort"></a>
-    <strong>keysort (tbl)</strong>
-    </dt>
-    <dd>
-    Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">tbl</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
-         the table to be sorted
-        </li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
-        the sorted table
-    </ol>
-
-
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example">tbl = <span class="global">table</span>.alphanumsort(tbl)</pre>
-    </ul>
-
-</dd>
 </dl>
 
 
@@ -1123,7 +915,7 @@ some_func(<span class="number">1</span>,<span class="number">2</span>) <span cla
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2018-06-05 19:31:42 </i>
+<i style="float:right;">Last updated 2018-06-07 12:58:23 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

@@ -427,10 +427,19 @@ script.on_event('on_tick',function(event)
     end
 end)
 
-Ranking.on_init=function(self)
-    if loaded_modules.Server then require(module_path..'/src/server') end
-    require(module_path..'/src/core')
-    require(module_path..'/src/config')
+_G.Ranking = Ranking
+verbose('Loading rank core...')
+require(module_path..'/src/core')
+verbose('Loading rank configs...')
+require(module_path..'/src/config')
+_G.Ranking = nil
+
+function Ranking:on_init()
+    if loaded_modules.Server then verbose('ExpGamingCore.Server is installed; Loading server src') require(module_path..'/src/server') end
+end
+
+function Ranking:on_post()
+    -- other modules can creat ranks during init and this will then set up the meta data
     -- sets up the power system, the lower the power the closer to root, root is 0
     -- there must be a rank with is_root flag set and one rank with is_default flag set, if multiple found then first found is used
     local root = Ranking.get_rank(Ranking.meta.root)

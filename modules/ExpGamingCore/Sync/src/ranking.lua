@@ -41,7 +41,7 @@ script.on_event('rank_change',function(event)
     local rank = Ranking.get_rank(event.new_rank)
     local player = Game.get_player(event)
     local by_player_name = Game.get_player(event.by_player_index) or '<server>'
-    local global = global('Ranking')
+    local global = global.Ranking
     if rank.group.name == 'Jail' and global.last_change ~= player.name then
         Sync.emit_embeded{
             title='Player Jail',

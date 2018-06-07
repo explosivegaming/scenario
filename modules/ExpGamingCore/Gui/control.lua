@@ -1,36 +1,46 @@
---[[
-Explosive Gaming
-
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
+--- Adds a objective version to custom guis.
+-- @module ExpGamingCore.Gui
+-- @alias Gui
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
 local Gui = {}
 local Gui_data = {}
 
--- only really used when parts of expcore are missing, or script debuging (ie to store the location of frames)
-function Gui._global(reset)
-    global.exp_core = not reset and global.exp_core or {}
-    global.exp_core.gui = not reset and global.exp_core.gui or {}
-    return global.exp_core.gui
-end
+--- Stores all the on_player_joined_game event handlers for the guis
+-- @table events
+Gui.events = {join={},rank={}}
 
--- this is to enforce the read only propetry of the gui
-function Gui._add_data(key,value_key,value) 
-    if game then return end 
-    if not Gui_data[key] then Gui_data[key] = {} end
-    Gui_data[key][value_key] = value
-end
+--- Used to set and get data about different guis
+-- @usage Gui.data[location] -- returns the gui data for that gui location ex center
+-- @usage Gui.data(location,gui_name,gui_data) -- adds gui data for a gui at a location
+-- @tparam string location the location to get/set the data, center left etc...
+-- @tparam[opt] string key the name of the gui to set the value of
+-- @param[opt] value the data that will be set can be any value but table advised
+-- @treturn[1] table all the gui data that is locationed in that location
+Gui.data = setmetatable({},{
+    __call=function(tbl,location,key,value)
+        if not location then return tbl end
+        if not key then return rawget(tbl,location) or rawset(tbl,location,{}) and rawget(tbl,location) end
+        if game then error('New guis cannot be added during runtime',2) end
+        if not rawget(tbl,location) then rawset(tbl,location,{}) end
+        rawset(rawget(tbl,location),key,value)
+    end
+})
 
-function Gui._get_data(key) return Gui_data[key] end
-
-Gui.center = require(module_path..'/GuiParts/center')
-Gui.inputs = require(module_path..'/GuiParts/inputs')
-Gui.left = require(module_path..'/GuiParts/left')
-Gui.popup = require(module_path..'/GuiParts/popup')
-Gui.toolbar = require(module_path..'/GuiParts/toolbar')
+-- loaded the different gui parts, each is its own module for ldoc reasons
+local join, rank
+Gui.center, join, rank = require(module_path..'/src/center')
+table.insert(Gui.events.join,event) table.insert(Gui.events.rank,rank)
+Gui.inputs, event  = require(module_path..'/src/inputs')
+table.insert(Gui.events.join,event) table.insert(Gui.events.rank,rank)
+Gui.left, event  = require(module_path..'/src/left')
+table.insert(Gui.events.join,event) table.insert(Gui.events.rank,rank)
+Gui.popup, event  = require(module_path..'/src/popup')
+table.insert(Gui.events.join,event) table.insert(Gui.events.rank,rank)
+Gui.toolbar, event  = require(module_path..'/src/toolbar')
+table.insert(Gui.events.join,event) table.insert(Gui.events.rank,rank)
+join, rank = nil, nil
 
 --- Add a white bar to any gui frame
 -- @usage Gui.bar(frame,100)
@@ -50,7 +60,7 @@ function Gui.bar(frame,width)
 end
 
 --- Used to set the index of a drop down to a certian item
--- @usage Gui.set_dropdown_index(dropdown,player.name)
+-- @usage Gui.set_dropdown_index(dropdown,player.name) -- will select the index with the players name as the value
 -- @param dropdown the dropdown that is to be effected
 -- @param _item this is the item to look for
 -- @return returns the dropdown if it was successful
@@ -64,43 +74,22 @@ function Gui.set_dropdown_index(dropdown,_item)
     return dropdown
 end
 
-Gui.on_init=function(self)
-    Gui.test = require(module_path..'/GuiParts/test')
-    if not Server then return end
-    Event.register(-1,function(event)
-        Server.new_thread{
-            name='camera-follow',
-            data={cams={},cam_index=1,players={}}
-        }:on_event('tick',function(self) 
-            local _cam = self.data.cams[self.data.cam_index]
-            if not _cam then self.data.cam_index = 1 _cam = self.data.cams[self.data.cam_index] end
-            if not _cam then return end
-            if not _cam.cam.valid then table.remove(self.data.cams,self.data.cam_index)
-            elseif not _cam.entity.valid then table.remove(self.data.cams,self.data.cam_index)
-            else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end self.data.cam_index = self.data.cam_index+1
-            end
-        end):on_event('error',function(self,err)
-            -- posible error handling if needed
-            error(err)
-        end):on_event(defines.events.on_player_respawned,function(self,event)
-            if self.data.players[event.player_index] then
-                local remove = {}
-                for index,cam in pairs(self.data.players[event.player_index]) do
-                    Gui.cam_link{cam=cam,entity=Game.get_player(event).character}
-                    if not cam.valid then table.insert(remove,index) end
-                end
-                for _,index in pairs(remove) do
-                    table.remove(self.data.players[event.player_index],index)
-                end
-            end
-        end):open()
-    end)
+function Gui:on_init()
+    if loaded_modules.Server then verbose('ExpGamingCore.Server is installed; Loading server src') require(module_path..'/src/server') end
+    if loaded_modules.Ranking then
+        verbose('ExpGamingCore.Ranking is installed; Loading ranking src')
+        script.on_event('on_player_joined_game',function(event)
+            for _,callback in pairs(Gui.events.rank) do callback(event) end
+        end)
+    end  
 end
 
---- Adds a camera that updates every tick (or less depeading on how many are opening) it will move to follow an entity
--- @usage Gui.cam_link{entity=game.player.character,frame=frame,width=50,hight=50,zoom=1}
--- @usage Gui.cam_link{entity=game.player.character,cam=frame.camera,surface=game.surfaces['testing']}
--- @tparam table data contains all other params given below
+function Gui:on_post()
+    Gui.test = require(module_path..'/src/test')
+end
+
+--- Prams for Gui.cam_link
+-- @table ParametersForCamLink
 -- @field entity this is the entity that the camera will follow
 -- @field cam a camera that you already have in the gui
 -- @field frame the frame to add the camera to, no effect if cam param is given
@@ -109,6 +98,11 @@ end
 -- @field height the height to give the new camera
 -- @field surface this will over ride the surface that the camera follows on, allowing for a 'ghost surface' while keeping same position
 -- @field respawn_open if set to true then the camera will auto re link to the player after a respawn
+
+--- Adds a camera that updates every tick (or less depeading on how many are opening) it will move to follow an entity
+-- @usage Gui.cam_link{entity=game.player.character,frame=frame,width=50,hight=50,zoom=1}
+-- @usage Gui.cam_link{entity=game.player.character,cam=frame.camera,surface=game.surfaces['testing']}
+-- @tparam table data contains all other params given below
 -- @return the camera that the function used be it made or given as a param 
 function Gui.cam_link(data)
     if not data.entity or not data.entity.valid then return end
@@ -126,21 +120,21 @@ function Gui.cam_link(data)
         data.cam.style.height = data.height or 100
     else return end
     if not Server or not Server._thread or not Server.get_thread('camera-follow') then
-        if not Gui._global().cams then
-            Gui._global().cams = {}
-            Gui._global().cam_index = 1
+        if not global().cams then
+            global().cams = {}
+            global().cam_index = 1
         end
         if data.cam then
             local surface = data.surface and data.surface.index or nil
-            table.insert(Gui._global().cams,{cam=data.cam,entity=data.entity,surface=surface})
+            table.insert(global().cams,{cam=data.cam,entity=data.entity,surface=surface})
         end
-        if not Gui._global().players then
-            Gui._global().players = {}
+        if not global().players then
+            global().players = {}
         end
         if data.respawn_open then
             if data.entity.player then
-                if not Gui._global().players[data.entity.player.index] then Gui._global().players[data.entity.player.index] = {} end
-                table.insert(Gui._global().players[data.entity.player.index],data.cam)
+                if not global().players[data.entity.player.index] then global().players[data.entity.player.index] = {} end
+                table.insert(global().players[data.entity.player.index],data.cam)
             end
         end
     else
@@ -157,30 +151,34 @@ function Gui.cam_link(data)
     return data.cam
 end
 
-Event.register(defines.events.on_tick, function(event)
+script.on_event('on_player_joined_game',function(event)
+    for _,callback in pairs(Gui.events.join) do callback(event) end
+end)
+
+script.on_event('on_tick', function(event)
 	if Gui.left and ((event.tick+10)/(3600*game.speed)) % 15 == 0 then
 		Gui.left.update()
     end
-    if Gui._global().cams and is_type(Gui._global().cams,'table') and #Gui._global().cams > 0 then
-        local _cam = Gui._global().cams[Gui._global().cam_index]
-        if not _cam then Gui._global().cam_index = 1 _cam = Gui._global().cams[Gui._global().cam_index] end
+    if global().cams and is_type(global().cams,'table') and #global().cams > 0 then
+        local _cam = global().cams[global().cam_index]
+        if not _cam then global().cam_index = 1 _cam = global().cams[global().cam_index] end
         if not _cam then return end
-        if not _cam.cam.valid then table.remove(Gui._global().cams,Gui._global().cam_index)
-        elseif not _cam.entity.valid then table.remove(Gui._global().cams,Gui._global().cam_index)
-        else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end Gui._global().cam_index = Gui._global().cam_index+1
+        if not _cam.cam.valid then table.remove(global().cams,global().cam_index)
+        elseif not _cam.entity.valid then table.remove(global().cams,global().cam_index)
+        else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end global().cam_index = global().cam_index+1
         end
     end
 end)
 
-Event.register(defines.events.on_player_respawned,function(event)
-    if Gui._global().players and is_type(Gui._global().players,'table') and #Gui._global().players > 0 and Gui._global().players[event.player_index] then
+script.on_event('on_player_respawned',function(event)
+    if global().players and is_type(global().players,'table') and #global().players > 0 and global().players[event.player_index] then
         local remove = {}
-        for index,cam in pairs(Gui._global().players[event.player_index]) do
+        for index,cam in pairs(global().players[event.player_index]) do
             Gui.cam_link{cam=cam,entity=Game.get_player(event).character}
             if not cam.valid then table.insert(remove,index) end
         end
         for _,index in pairs(remove) do
-            table.remove(Gui._global().players[event.player_index],index)
+            table.remove(global().players[event.player_index],index)
         end
     end
 end)

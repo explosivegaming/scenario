@@ -1,4 +1,10 @@
--- this is just testing all the diffrent inputs to open test use /c Gui.test()
+--- Used to test all gui elements and parts can be used in game via Gui.test()
+-- @module ExpGamingCore.Gui.Test
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
+
+--- This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module
+-- @function _comment
 
 local gui_tset_close = Gui.inputs.add{
     name='gui-test-close',
@@ -90,9 +96,13 @@ local drop_test = Gui.inputs.add_drop_down('test-drop',table.keys(defines.color)
     player.chat_color = defines.color[selected]
 end)
 
-local function test_gui(event)
-    if not game.player and not event.player_index then return end
-    local player = game.player or Game.get_player(event)
+--- The funcation that is called when calling Gui.test
+-- @function Gui.test
+-- @usage Gui.test() -- draws test gui
+-- @param[opt=game.player] player a pointer to a player to draw the test gui for
+local function test_gui(player)
+    local player = game.player or Game.get_player(player) or nil
+    if not player then return end
     if mod_gui.get_frame_flow(player)['gui-test'] then mod_gui.get_frame_flow(player)['gui-test'].destroy() end
     local frame = mod_gui.get_frame_flow(player).add{type='frame',name='gui-test',direction='vertical'}
     gui_tset_close:draw(frame)

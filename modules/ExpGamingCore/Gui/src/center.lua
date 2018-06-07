@@ -1,11 +1,11 @@
---[[
-Explosive Gaming
+--- Adds a uniform preset for guis in the center of the screen which allow for different tabs to be opened
+-- @module ExpGamingCore.Gui.Center
+-- @alias center
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
+--- This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module
+-- @function _comment
 
 local center = {}
 center._center = {}
@@ -21,7 +21,7 @@ function center.add(obj)
     setmetatable(obj,{__index=center._center})
     obj.tabs = {}
     obj._tabs = {}
-    Gui._add_data('center',obj.name,obj)
+    Gui.data('center',obj.name,obj)
     Gui.toolbar.add(obj.name,obj.caption,obj.tooltip,obj.open)
     return obj
 end
@@ -43,8 +43,8 @@ end
 function center.open(player,center)
     local player = Game.get_player(player)
     Gui.center.clear(player)
-    if not Gui._get_data('center')[center] then return false end
-    Gui._get_data('center')[center].open{
+    if not Gui.data.center[center] then return false end
+    Gui.data.center[center].open{
         element={name=center},
         player_index=player.index
     }
@@ -61,8 +61,8 @@ function center.open_tab(player,center,tab)
     local player = Game.get_player(player)
     if not Gui.center.open(player,center) then return false end
     local name = center..'_'..tab
-    if not Gui._get_data('inputs_button')[name] then return false end
-    Gui._get_data('inputs_button')[name].events[defines.events.on_gui_click]{
+    if not Gui.data.inputs_button[name] then return false end
+    Gui.data.inputs_button[name].events[defines.events.on_gui_click]{
         element=Gui.center.get_flow(player)[center].tab_bar.tab_bar_scroll.tab_bar_scroll_flow[name],
     }
     return true
@@ -80,7 +80,7 @@ end
 -- not recomented for direct use see Gui.center.open
 function center._center.open(event)
     local player = Game.get_player(event)
-    local _center = Gui._get_data('center')[event.element.name]
+    local _center = Gui.data.center[event.element.name]
     local center_flow = center.get_flow(player)
     if center_flow[_center.name] then Gui.center.clear(player) return end
     local center_frame = center_flow.add{
@@ -179,7 +179,7 @@ function center._center:add_tab(name,caption,tooltip,callback)
         local tab = event.element.parent.parent.parent.parent.tab.tab_scroll.tab_scroll_flow
         tab.clear()
         local frame_name = tab.parent.parent.parent.name
-        local _center = Gui._get_data('center')[frame_name]
+        local _center = Gui.data.center[frame_name]
         local _tab = _center._tabs[event.element.name]
         if is_type(_tab,'function') then
             for _,button in pairs(event.element.parent.children) do
@@ -197,13 +197,10 @@ function center._center:add_tab(name,caption,tooltip,callback)
 end
 
 -- used so that when gui close key is pressed this will close the gui
-Event.register(defines.events.on_gui_closed,function(event)
+script.on_event('on_gui_closed',function(event)
     if event.element and event.element.valid then event.element.destroy() end
 end)
 
 -- when the player rank is changed it closses the center guis
-if defines.events.rank_change then
-    Event.register(defines.events.rank_change,center.clear)
-end
-
-return center
+-- second return is join event and third is rank change event
+return center, nil, center.clear

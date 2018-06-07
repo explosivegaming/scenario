@@ -461,8 +461,8 @@ script.on_event(-2,function(event)
     for uuid,thread in pairs(Server.threads) do setmetatable(thread,{__index=Server._thread}) end
 end)
 
-Server.on_init=function(self)
-    if loaded_modules.commands then require(module_path..'/src/commands') end
+function Server:on_init()
+    if loaded_modules.commands then verbose('ExpGamingCore.Commands is installed; Loading commands src') require(module_path..'/src/commands') end
 end
 
 return Server

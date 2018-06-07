@@ -154,6 +154,130 @@ function ExpLib.gui_tree(root)
     return tree
 end
 
+--- Extents the table class
+-- @type table
+-- @alias table
+
+--- Returns a value in a form able to be read as a value, any value to string
+-- @usage table.val_to_str{a='foo'} -- return '"foo"'
+-- @param v value to convert
+-- @treturn string the converted value
+function table.val_to_str(v)
+    if "string" == type( v ) then
+        v = string.gsub(v,"\n","\\n")
+        if string.match(string.gsub(v,"[^'\"]",""),'^"+$') then
+            return "'"..v.."'"
+        end
+        return '"'..string.gsub(v,'"', '\\"' )..'"'
+    else
+        return "table" == type( v) and table.tostring(v) or
+        "function" == type(v) and '"cant-display-function"' or
+        "userdata" == type(v) and '"cant-display-userdata"' or
+        tostring(v)
+    end
+end
+
+--- Returns a value in a form able to be read as a key, any key to string
+-- @usage table.val_to_str{a='foo'} -- return '["a"]'
+-- @param k key to convert
+-- @treturn string the converted key
+function table.key_to_str (k)
+    if "string" == type(k) and string.match(k,"^[_%player][_%player%d]*$") then
+        return k
+    else
+        return "["..table.val_to_str(k).."]"
+    end
+end
+
+--- Returns a table in a form able to be read as a table
+-- @usage table.tostring{k1='foo',k2='bar'} -- return '{["k1"]="foo",["k2"]="bar"}'
+-- @tparam table tbl table to convert
+-- @treturn string the converted table
+function table.tostring(tbl)
+    local result, done = {}, {}
+    for k, v in ipairs(tbl) do
+      table.insert(result,table.val_to_str(v))
+      done[k] = true
+    end
+    for k, v in pairs(tbl) do
+        if not done[k] then
+            table.insert(result,
+            table.key_to_str(k).."="..table.val_to_str(v))
+        end
+    end
+    return "{"..table.concat(result,",") .."}"
+end
+
+--- Simmilar to table.tostring but converts a lua table to a json one
+-- @usage talbe.json{k1='foo',k2='bar'} -- return '{"k1":"foo","k2":"bar"}'
+-- @tparam table lua_table the table to convert
+-- @treturn string the table in a json format
+function table.json(lua_table)
+    local result, done, only_indexs = {}, {}, true
+    for key,value in ipairs(lua_table) do
+        done[key] = true
+        if type(value) == 'table' then table.insert(result,table.json(value,true))
+        elseif type(value) == 'string' then table.insert(result,'"'..value..'"')
+        elseif type(value) == 'number' then table.insert(result,value)
+        elseif type(value) == 'boolean' then table.insert(result,tostring(value))
+        else table.insert(result,'null') 
+        end
+    end
+    for key,value in pairs(lua_table) do
+      if not done[key] then
+        only_indexs = false
+        if type(value) == 'table' then table.insert(result,'"'..key..'":'..table.json(value,true))
+        elseif type(value) == 'string' then table.insert(result,'"'..key..'":"'..value..'"')
+        elseif type(value) == 'number' then table.insert(result,'"'..key..'":'..value)
+        elseif type(value) == 'boolean' then table.insert(result,'"'..key..'":'..tostring(value))
+        else table.insert(result,'"'..key..'":null') 
+        end
+      end
+    end
+    if only_indexs then return "["..table.concat(result,",").."]"
+    else return "{"..table.concat(result,",").."}" 
+    end
+end
+
+--- Returns the closest match to a key
+-- @usage table.autokey({foo=1,bar=2},'f') -- return 1 
+-- @tparam table tbl the table that will be searched
+-- @tparam string str the string that will be looked for in the keys
+function table.autokey(tbl,str)
+    local _return = {}
+    for key,value in pairs(tbl) do
+        if string.contains(string.lower(key),string.lower(str)) then table.insert(_return,value) end
+    end
+    return _return[1] or false
+end
+
+--- Returns the list is a sorted way that would be expected by people (this is by key)
+-- @usage tbl = table.alphanumsort(tbl)
+-- @tparam table tbl the table to be sorted
+-- @treturn table the sorted table
+function table.alphanumsort(tbl)
+    local o = table.keys(tbl)
+    local function padnum(d) local dec, n = string.match(d, "(%.?)0*(.+)")
+        return #dec > 0 and ("%.12f"):format(d) or ("%s%03d%s"):format(dec, #n, n) end
+    table.sort(o, function(a,b)
+        return tostring(a):gsub("%.?%d+",padnum)..("%3d"):format(#b)
+           < tostring(b):gsub("%.?%d+",padnum)..("%3d"):format(#a) end)
+    local _tbl = {}
+    for _,k in pairs(o) do _tbl[k] = tbl[k] end
+    return _tbl
+end
+
+--- Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
+-- @usage tbl = table.alphanumsort(tbl)
+-- @tparam table tbl the table to be sorted
+-- @treturn table the sorted table
+function table.keysort(tbl)
+    local o = table.keys(tbl,true)
+    local _tbl = {}
+    for _,k in pairs(o) do _tbl[k] = tbl[k] end
+    return _tbl
+end
+
 -- bypasses the module sandbox and places functions into _G
 ExpLib:unpack_to_G()
 return ExpLib

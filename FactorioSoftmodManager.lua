@@ -26,7 +26,8 @@ local ReadOnlyManager = setmetatable({},{
         -- provents the changing of any key that is not currentState
         if key == 'currentState' then
             -- provides a verbose that is always emited describing the change in state
-            Manager.verbose('Current state is now: "'..value.. '"; The verbose state is now: '..tostring(Manager.setVerbose[value]),true) 
+            Manager.verbose(string.rep('__',10)..'| Start: '..value..' |'..string.rep('__',10),true)
+            Manager.verbose('The verbose state is now: '..tostring(Manager.setVerbose[value]),true) 
             rawset(Manager,key,value)
         else error('Manager is read only please use included methods',2)  end
     end,
@@ -48,7 +49,7 @@ local function setupModuleName(name)
 end
 
 Manager.currentState = 'selfInit'
--- selfInit > moduleLoad > moduleInit > moduleEnv
+-- selfInit > moduleLoad > moduleInit > modulePost > moduleEnv
 
 --- Default output for the verbose
 -- @usage Manager.verbose('Hello, World!')
@@ -98,6 +99,7 @@ Manager.setVerbose = setmetatable(
     -- @tfield boolean selfInit called while the manager is being set up
     -- @tfield boolean moduleLoad when a module is required by the manager
     -- @tfield boolean moduleInit when and within the initation of a module
+    -- @tfield boolean modulePost when and within the post of a module
     -- @tfield boolean moduleEnv during module runtime, this is a global option set within each module(module_verbose=true ln:1) for fine control
     -- @tfield boolean eventRegistered when a module registers its event handlers
     -- @tfield boolean errorCaught when an error is caught during runtime
@@ -107,6 +109,7 @@ Manager.setVerbose = setmetatable(
         selfInit=true,
         moduleLoad=false,
         moduleInit=false,
+        modulePost=false,
         moduleEnv=false,
         eventRegistered=false,
         errorCaught=true,
@@ -145,7 +148,8 @@ Manager.setVerbose = setmetatable(
     }
 )
 -- call to verbose to show start up, will always be present
-Manager.verbose('Current state is now: "selfInit"; The verbose state is: '..tostring(Manager.setVerbose.selfInit),true)
+Manager.verbose(string.rep('__',10)..'| Start: selfInit |'..string.rep('__',10),true)
+Manager.verbose('The verbose state is: '..tostring(Manager.setVerbose.selfInit),true)
 
 --- Used to avoid conflicts in the global table
 -- @usage global[key] -- used like the normal global table
@@ -292,7 +296,7 @@ Manager.loadModules = setmetatable({},
             end
             -- new state for the manager to allow control of verbose
             ReadOnlyManager.currentState = 'moduleInit'
-            -- runs though all loaded modules looking for on_init function; all other modules have been loaded
+            -- runs though all loaded modules looking for on_init function; all other modules have been loaded use this to load extra code based on opttial dependies
             for module_name,data in pairs(tbl) do
                 -- looks for init so that init or on_init can be used
                 if type(data) == 'table' and data.init and data.on_init == nil then data.on_init = data.init data.init = nil end
@@ -306,6 +310,24 @@ Manager.loadModules = setmetatable({},
                     end
                     -- clears the init function so it cant be used in runtime
                     data.on_init = nil
+                end
+            end
+            -- new state for the manager to allow control of verbose
+            ReadOnlyManager.currentState = 'modulePost'
+            -- runs though all loaded modules looking for on_post function; all other modules have been loaded and inited, do not load extra code in this time only altar your own data
+            for module_name,data in pairs(tbl) do
+                -- looks for post so that post or on_post can be used
+                if type(data) == 'table' and data.post and data.on_post == nil then data.on_post = data.post data.post = nil end
+                if type(data) == 'table' and data.on_post and type(data.on_post) == 'function' then
+                    Manager.verbose('Post for module: "'..module_name..'"')
+                    local sandbox, success, err = Manager.sandbox(data.on_post,{module_name=setupModuleName(module_name),module_path=moduleIndex[tostring(module_name)]},data)
+                    if success then
+                        Manager.verbose('Successful post: "'..module_name..'"')
+                    else
+                        Manager.verbose('Failed post: "'..module_name..'" ('..err..')','errorCaught')
+                    end
+                    -- clears the post function so it cant be used in runtime
+                    data.on_post = nil
                 end
             end
             -- this could also be called runtime

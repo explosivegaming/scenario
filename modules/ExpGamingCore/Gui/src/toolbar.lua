@@ -1,11 +1,11 @@
---[[
-Explosive Gaming
+--- Adds a toolbar to the top left of the screen
+-- @module ExpGamingCore.Gui.Toolbar
+-- @alias toolbar
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
+--- This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module
+-- @function _comment
 
 local toolbar = {}
 
@@ -20,7 +20,7 @@ function toolbar.add(name,caption,tooltip,callback)
     verbose('Created Toolbar Button: '..name)
     local button = Gui.inputs.add{type='button',name=name,caption=caption,tooltip=tooltip}
     button:on_event(Gui.inputs.events.click,callback)
-    Gui._add_data('toolbar',name,button)
+    Gui.data('toolbar',name,button)
     return button
 end
 
@@ -32,8 +32,8 @@ function toolbar.draw(player)
     if not player then return end
 	local toolbar_frame = mod_gui.get_button_flow(player)
     toolbar_frame.clear()
-    if not Gui._get_data('toolbar') then return end
-    for name,button in pairs(Gui._get_data('toolbar')) do
+    if not Gui.data.toolbar then return end
+    for name,button in pairs(Gui.data.toolbar) do
         if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 then
             local rank = Ranking.get_rank(player)
             if rank:allowed(name) then
@@ -43,9 +43,5 @@ function toolbar.draw(player)
 	end
 end
 
-if defines.events.rank_change then
-    Event.register(defines.events.rank_change,toolbar.draw)
-end
-Event.register(defines.events.on_player_joined_game,toolbar.draw)
-
-return toolbar
+-- second return is join event and third is rank change event
+return toolbar, toolbar.draw, toolbar.draw

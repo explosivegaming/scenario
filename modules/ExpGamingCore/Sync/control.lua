@@ -292,11 +292,12 @@ script.on_event('on_tick',function(event)
 end)
 
 function Sync:on_init()
-    -- updates installed mods
+    if loaded_modules.Gui then verbose('ExpGamingCore.Gui is installed; Loading gui src') require(module_path..'/src/gui') end
+    if loaded_modules.Ranking then verbose('ExpGamingCore.Ranking is installed; Loading ranking src') require(module_path..'/src/ranking') end
+end
+
+function Sync:on_post()
     Sync.info{mods=table.keys(loaded_modules)}
-    -- optinal dependies
-    if loaded_modules.Gui then verbose('ExpGamingCore.Gui is installed; Loading gui lib') require(module_path..'/src/gui') end
-    if loaded_modules.Ranking then verbose('ExpGamingCore.Ranking is installed; Loading ranking lib') require(module_path..'/src/ranking') end
 end
 
 return Sync

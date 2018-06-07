@@ -1,18 +1,18 @@
---[[
-Explosive Gaming
+--- Adds a organiser for left gui ellements which will automaticaly update there information and have open requirements
+-- @module ExpGamingCore.Gui.Left
+-- @alias left
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
+--- This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module
+-- @function _comment
 
 local left = {}
 left._left = {}
 
 -- used for debugging
 function left.override_open(state)
-    Gui._global().over_ride_left_can_open = state
+    global().over_ride_left_can_open = state
 end
 --- Used to add a left gui frame
 -- @usage Gui.left.add{name='foo',caption='Foo',tooltip='just testing',open_on_join=true,can_open=function,draw=function}
@@ -23,7 +23,7 @@ function left.add(obj)
     if not is_type(obj.name,'string') then return end
     verbose('Created Left Gui: '..obj.name)
     setmetatable(obj,{__index=left._left})
-    Gui._add_data('left',obj.name,obj)
+    Gui.data('left',obj.name,obj)
     Gui.toolbar.add(obj.name,obj.caption,obj.tooltip,obj.toggle)
     return obj
 end
@@ -36,7 +36,7 @@ function left.update(frame,players)
     if not Server or not Server._thread then
         local players = is_type(players,'table') and #players > 0 and {unpack(players)} or is_type(players,'table') and {players} or Game.get_player(players) and {Game.get_player(players)} or game.connected_players
         for _,player in pairs(players) do
-            local frames = Gui._get_data('left') or {}
+            local frames = Gui.data.left or {}
             if frame then frames = {[frame]=frames[frame]} or {} end
             for name,left in pairs(frames) do
                 if _left then
@@ -46,7 +46,7 @@ function left.update(frame,players)
             end
         end
     else
-        local frames = Gui._get_data('left') or {}
+        local frames = Gui.data.left or {}
         if frame then frames = {[frame]=frames[frame]} or {} end
         local players = is_type(players,'table') and #players > 0 and {unpack(players)} or is_type(players,'table') and {players} or Game.get_player(players) and {Game.get_player(players)} or game.connected_players
         Server.new_thread{
@@ -72,7 +72,7 @@ end
 -- @usage Gui.left.open('foo')
 -- @tparam string left_name this is the gui that you want to open
 function left.open(left_name)
-    local _left = Gui._get_data('left')[left_name]
+    local _left = Gui.data.left[left_name]
     if not _left then return end
     if not Server or not Server._thread then
         for _,player in pairs(game.connected_players) do
@@ -95,7 +95,7 @@ end
 -- @usage Gui.left.close('foo')
 -- @tparam string left_name this is the gui that you want to close
 function left.close(left_name)
-    local _left = Gui._get_data('left')[left_name]
+    local _left = Gui.data.left[left_name]
     if not _left then return end
     if not Server or not Server._thread then
         for _,player in pairs(game.connected_players) do
@@ -117,7 +117,7 @@ end
 -- this is used to draw the gui for the first time (these guis are never destoryed), used by the script
 function left._left.open(event)
     local player = Game.get_player(event)
-    local _left = Gui._get_data('left')[event.element.name]
+    local _left = Gui.data.left[event.element.name]
     local left_flow = mod_gui.get_frame_flow(player)
     local frame = nil
     if left_flow[_left.name] then 
@@ -134,7 +134,7 @@ end
 -- this is called when the toolbar button is pressed
 function left._left.toggle(event)
     local player = Game.get_player(event)
-    local _left = Gui._get_data('left')[event.element.name]
+    local _left = Gui.data.left[event.element.name]
     local left_flow = mod_gui.get_frame_flow(player)
     if not left_flow[_left.name] then _left.open(event) end
     local left = left_flow[_left.name]
@@ -143,7 +143,7 @@ function left._left.toggle(event)
         local success, err = pcall(_left.can_open,player)
         if not success then error(err)
         elseif err == true then open = true 
-        elseif Gui._global().over_ride_left_can_open then 
+        elseif global().over_ride_left_can_open then 
             if is_type(Ranking,'table') and Ranking._presets and Ranking._presets().meta.rank_count > 0 then
                 if Ranking.get_rank(player):allowed(_left.name) then open = true
                 else open = {gui.unauthorized} end
@@ -164,14 +164,13 @@ function left._left.toggle(event)
     elseif open ~= true then player_return({'gui.cant-open',open},defines.textcolor.crit,player) player.play_sound{path='utility/cannot_build'} end
 end
 
--- draws the left guis when a player first joins, fake_event is just because i am lazy
-Event.register(defines.events.on_player_joined_game,function(event)
+-- second return is join event and third is rank change event
+return left, function(event)
+    -- draws the left guis when a player first joins, fake_event is just because i am lazy
     local player = Game.get_player(event)
-    local frames = Gui._get_data('left') or {}
+    local frames = Gui.data.left or {}
     for name,left in pairs(frames) do
         local fake_event = {player_index=player.index,element={name=name}}
         left.open(fake_event)
     end
-end)
-
-return left
+end, nil

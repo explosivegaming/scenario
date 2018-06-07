@@ -33,6 +33,7 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Functions">Functions</a></li>
+<li><a href="#Class_table">Class table </a></li>
 </ul>
 
 
@@ -40,12 +41,13 @@
 <ul class="nowrap">
   <li><a href="../modules/FSM.html">FSM</a></li>
   <li><a href="../modules/ExpGamingCore.Commands.html">ExpGamingCore.Commands</a></li>
-  <li><a href="../modules/modules.expgamingcore.gui.guiparts.center.html">modules.expgamingcore.gui.guiparts.center</a></li>
-  <li><a href="../modules/modules.expgamingcore.gui.guiparts.inputs.html">modules.expgamingcore.gui.guiparts.inputs</a></li>
-  <li><a href="../modules/modules.expgamingcore.gui.guiparts.left.html">modules.expgamingcore.gui.guiparts.left</a></li>
-  <li><a href="../modules/modules.expgamingcore.gui.guiparts.popup.html">modules.expgamingcore.gui.guiparts.popup</a></li>
-  <li><a href="../modules/modules.expgamingcore.gui.guiparts.toolbar.html">modules.expgamingcore.gui.guiparts.toolbar</a></li>
-  <li><a href="../modules/modules.expgamingcore.gui.control.html">modules.expgamingcore.gui.control</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.html">ExpGamingCore.Gui</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Center.html">ExpGamingCore.Gui.Center</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Inputs.html">ExpGamingCore.Gui.Inputs</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Left.html">ExpGamingCore.Gui.Left</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Popup.html">ExpGamingCore.Gui.Popup</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Test.html">ExpGamingCore.Gui.Test</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Toolbar.html">ExpGamingCore.Gui.Toolbar</a></li>
   <li><a href="../modules/ExpGamingCore.Ranking.html">ExpGamingCore.Ranking</a></li>
   <li><a href="../modules/ExpGamingCore.Server.html">ExpGamingCore.Server</a></li>
   <li><a href="../modules/ExpGamingCore.Sync.html">ExpGamingCore.Sync</a></li>
@@ -110,6 +112,37 @@
 	<td class="summary">Used as a way to view the structure of a gui, used for debuging</td>
 	</tr>
 </table>
+<h2><a href="#Class_table">Class table </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#table.val_to_str">table.val_to_str (v)</a></td>
+	<td class="summary">Returns a value in a form able to be read as a value, any value to string</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#table.key_to_str">table.key_to_str (k)</a></td>
+	<td class="summary">Returns a value in a form able to be read as a key, any key to string</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#table.tostring">table.tostring (tbl)</a></td>
+	<td class="summary">Returns a table in a form able to be read as a table</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#table.json">table.json (lua_table)</a></td>
+	<td class="summary">Simmilar to table.tostring but converts a lua table to a json one</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#table.autokey">table.autokey (tbl, str)</a></td>
+	<td class="summary">Returns the closest match to a key</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#table.alphanumsort">table.alphanumsort (tbl)</a></td>
+	<td class="summary">Returns the list is a sorted way that would be expected by people (this is by key)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#table.keysort">table.keysort (tbl)</a></td>
+	<td class="summary">Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)</td>
+	</tr>
+</table>
 
 <br/>
 <br/>
@@ -129,7 +162,7 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">tbl</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+            <span class="types"><a class="type" href="../modules/ExpGamingLib.html#table">table</a></span>
          table to be unpacked
         </li>
     </ul>
@@ -155,7 +188,7 @@
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+           <span class="types"><a class="type" href="../modules/ExpGamingLib.html#table">table</a></span>
         the env table with _G keys removed
     </ol>
 
@@ -178,7 +211,7 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">tbl</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+            <span class="types"><a class="type" href="../modules/ExpGamingLib.html#table">table</a></span>
          the table that will have its metatable set
         </li>
         <li><span class="parameter">callback</span>
@@ -196,7 +229,7 @@
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+           <span class="types"><a class="type" href="../modules/ExpGamingLib.html#table">table</a></span>
         the new table with its metatable set
     </ol>
 
@@ -393,7 +426,7 @@
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+           <span class="types"><a class="type" href="../modules/ExpGamingLib.html#table">table</a></span>
         the table that describes the gui
     </ol>
 
@@ -406,13 +439,233 @@
 
 </dd>
 </dl>
+    <h2 class="section-header has-description"><a name="Class_table"></a>Class table </h2>
+
+          <div class="section-description">
+          Extents the table class
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "table.val_to_str"></a>
+    <strong>table.val_to_str (v)</strong>
+    </dt>
+    <dd>
+    Returns a value in a form able to be read as a value, any value to string
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">v</span>
+         value to convert
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+        the converted value
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="global">table</span>.val_to_str{a=<span class="string">'foo'</span>} <span class="comment">-- return '"foo"'</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "table.key_to_str"></a>
+    <strong>table.key_to_str (k)</strong>
+    </dt>
+    <dd>
+    Returns a value in a form able to be read as a key, any key to string
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">k</span>
+         key to convert
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+        the converted key
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="global">table</span>.val_to_str{a=<span class="string">'foo'</span>} <span class="comment">-- return '["a"]'</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "table.tostring"></a>
+    <strong>table.tostring (tbl)</strong>
+    </dt>
+    <dd>
+    Returns a table in a form able to be read as a table
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tbl</span>
+            <span class="types"><a class="type" href="../modules/ExpGamingLib.html#table">table</a></span>
+         table to convert
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+        the converted table
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="global">table</span>.<span class="global">tostring</span>{k1=<span class="string">'foo'</span>,k2=<span class="string">'bar'</span>} <span class="comment">-- return '{["k1"]="foo",["k2"]="bar"}'</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "table.json"></a>
+    <strong>table.json (lua_table)</strong>
+    </dt>
+    <dd>
+    Simmilar to table.tostring but converts a lua table to a json one
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">lua_table</span>
+            <span class="types"><a class="type" href="../modules/ExpGamingLib.html#table">table</a></span>
+         the table to convert
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+        the table in a json format
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">talbe.json{k1=<span class="string">'foo'</span>,k2=<span class="string">'bar'</span>} <span class="comment">-- return '{"k1":"foo","k2":"bar"}'</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "table.autokey"></a>
+    <strong>table.autokey (tbl, str)</strong>
+    </dt>
+    <dd>
+    Returns the closest match to a key
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tbl</span>
+            <span class="types"><a class="type" href="../modules/ExpGamingLib.html#table">table</a></span>
+         the table that will be searched
+        </li>
+        <li><span class="parameter">str</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the string that will be looked for in the keys
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="global">table</span>.autokey({foo=<span class="number">1</span>,bar=<span class="number">2</span>},<span class="string">'f'</span>) <span class="comment">-- return 1</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "table.alphanumsort"></a>
+    <strong>table.alphanumsort (tbl)</strong>
+    </dt>
+    <dd>
+    Returns the list is a sorted way that would be expected by people (this is by key)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tbl</span>
+            <span class="types"><a class="type" href="../modules/ExpGamingLib.html#table">table</a></span>
+         the table to be sorted
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../modules/ExpGamingLib.html#table">table</a></span>
+        the sorted table
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">tbl = <span class="global">table</span>.alphanumsort(tbl)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "table.keysort"></a>
+    <strong>table.keysort (tbl)</strong>
+    </dt>
+    <dd>
+    Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tbl</span>
+            <span class="types"><a class="type" href="../modules/ExpGamingLib.html#table">table</a></span>
+         the table to be sorted
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../modules/ExpGamingLib.html#table">table</a></span>
+        the sorted table
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">tbl = <span class="global">table</span>.alphanumsort(tbl)</pre>
+    </ul>
+
+</dd>
+</dl>
 
 
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2018-06-05 19:31:42 </i>
+<i style="float:right;">Last updated 2018-06-07 12:58:23 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

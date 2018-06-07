@@ -1,4 +1,4 @@
---- Description - A small description that will be displayed on the doc
+--- Adds a thread system and event listening and a admin bypass (recommend to disable /c and use optional /interface)
 -- @submodule ExpGamingCore.Server
 -- @alias Server
 -- @author Cooldude2606

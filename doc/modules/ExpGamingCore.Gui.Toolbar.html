@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/FSM.html">FSM</a></li>
+  <li><a href="../modules/ExpGamingCore.Commands.html">ExpGamingCore.Commands</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.html">ExpGamingCore.Gui</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Center.html">ExpGamingCore.Gui.Center</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Inputs.html">ExpGamingCore.Gui.Inputs</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Left.html">ExpGamingCore.Gui.Left</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Popup.html">ExpGamingCore.Gui.Popup</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Test.html">ExpGamingCore.Gui.Test</a></li>
+  <li><strong>ExpGamingCore.Gui.Toolbar</strong></li>
+  <li><a href="../modules/ExpGamingCore.Ranking.html">ExpGamingCore.Ranking</a></li>
+  <li><a href="../modules/ExpGamingCore.Server.html">ExpGamingCore.Server</a></li>
+  <li><a href="../modules/ExpGamingCore.Sync.html">ExpGamingCore.Sync</a></li>
+  <li><a href="../modules/ExpGamingLib.html">ExpGamingLib</a></li>
+  <li><a href="../modules/StdLib.Color.html">StdLib.Color</a></li>
+  <li><a href="../modules/StdLib.Game.html">StdLib.Game</a></li>
+  <li><a href="../modules/StdLib.String.html">StdLib.String</a></li>
+  <li><a href="../modules/StdLib.Table.html">StdLib.Table</a></li>
+  <li><a href="../modules/StdLib.Time.html">StdLib.Time</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>ExpGamingCore.Gui.Toolbar</code></h1>
+<p>Adds a toolbar to the top left of the screen</p>
+<p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>License</strong>: https://github.com/explosivegaming/scenario/blob/master/LICENSE</li>
+        <li><strong>Author</strong>: Cooldude2606</li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#_comment">_comment ()</a></td>
+	<td class="summary">This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#add">add (name, caption, tooltip, callback)</a></td>
+	<td class="summary">Add a button to the toolbar, ranks need to be allowed to use these buttons if ranks is preset</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#draw">draw (player)</a></td>
+	<td class="summary">Draws the toolbar for a certain player</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "_comment"></a>
+    <strong>_comment ()</strong>
+    </dt>
+    <dd>
+    This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "add"></a>
+    <strong>add (name, caption, tooltip, callback)</strong>
+    </dt>
+    <dd>
+    Add a button to the toolbar, ranks need to be allowed to use these buttons if ranks is preset
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the name of the button
+        </li>
+        <li><span class="parameter">caption</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         can be a sprite path or text to show
+        </li>
+        <li><span class="parameter">tooltip</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the help to show for the button
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+         the function which is called on_click
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        the button object that was made
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">toolbar.add(<span class="string">'foo'</span>,<span class="string">'Foo'</span>,<span class="string">'Test'</span>,<span class="keyword">function</span>() game.<span class="global">print</span>(<span class="string">'test'</span>) <span class="keyword">end</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "draw"></a>
+    <strong>draw (player)</strong>
+    </dt>
+    <dd>
+    Draws the toolbar for a certain player
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         the player to draw the tool bar of
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">toolbar.draw(<span class="number">1</span>)</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-06-07 12:58:23 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
