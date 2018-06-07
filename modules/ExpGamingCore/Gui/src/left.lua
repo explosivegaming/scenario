@@ -147,13 +147,13 @@ function left._left.toggle(event)
             if is_type(Ranking,'table') and Ranking.meta.rank_count > 0 then
                 if Ranking.get_rank(player):allowed(_left.name) then open = true
                 else open = {gui.unauthorized} end
-            end 
+            else open = true end 
         else open = err end
     else
         if is_type(Ranking,'table') and Ranking.meta.rank_count > 0 then
             if Ranking.get_rank(player):allowed(_left.name) then open = true 
             else open = {gui.unauthorized} end
-        end
+        else open = true end
     end
     if open == true and left.style.visible ~= true then
         left.style.visible = true

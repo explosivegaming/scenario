@@ -133,8 +133,8 @@ function Ranking.get_rank(mixed)
         -- if it is a player name/index, then get player rank; if it is a rank name, get that rank; if it is server or root; return root rank; else nil
         _return = game and game.players[mixed] and ranks[game.players[mixed].permission_group.name]
         or table.autokey(ranks,mixed) and table.autokey(ranks,mixed)
-        or string.contains(mixed,'server') and Ranking.get_rank(Ranking.meta.root)
-        or string.contains(mixed,'root') and Ranking.get_rank(Ranking.meta.root)
+        or string.find(mixed,'server') and Ranking.get_rank(Ranking.meta.root)
+        or string.find(mixed,'root') and Ranking.get_rank(Ranking.meta.root)
         or nil
     end
     return _return

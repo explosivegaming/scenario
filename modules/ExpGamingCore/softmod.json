@@ -3,7 +3,7 @@
     "module": "Collection",
     "description": "Explosive Gaming Core Files",
     "keywords": ["Library","Lib","ExpGaming","Core"],
-    "version": "3.4.0",
+    "version": "4.0.0",
     "location": "url",
     "submodules": {
         "Commands": {
@@ -31,7 +31,10 @@
             "dependencies": {
                 "FactorioModGui": "^1.0.0",
                 "ExpGamingLib": "^4.0.0",
-                "ExpGamingCore/Ranking": "^4.0.0",
+                "FactorioStdLib.Table": "^0.8.0",
+                "FactorioStdLib.Color": "^0.8.0",
+                "FactorioStdLib.Game": "^0.8.0",
+                "ExpGamingCore/Ranking": "?^4.0.0",
                 "ExpGamingCore/Server": "?^4.0.0"
             }
         },
@@ -60,6 +63,8 @@
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
                 "FactorioStdLib.Table": "^0.8.0",
+                "FactorioStdLib.Color": "^0.8.0",
+                "FactorioStdLib.String": "^0.8.0",
                 "FactorioStdLib.Game": "^0.8.0",
                 "ExpGamingCore.Ranking": "?^4.0.0",
                 "ExpGamingCore.Commands": "?^4.0.0"
@@ -75,6 +80,7 @@
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
                 "FactorioStdLib.Color": "^0.8.0",
+                "FactorioStdLib.Game": "^0.8.0",
                 "FactorioStdLib.Table": "^0.8.0",
                 "ExpGamingCore.Ranking": "?^4.0.0",
                 "ExpGamingCore.Gui": "?^4.0.0"
