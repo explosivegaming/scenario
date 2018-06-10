@@ -259,7 +259,7 @@ local sortfunc =
             else
                 return x < y and true or false --similar type can be compared
             end
-        elseif tx == true then
+        elseif tx == 'number' then
             return true --only x is a number and goes first
         else
             return false --only y is a number and goes first
