@@ -246,18 +246,20 @@ function table.deepcopy(object)
     return _copy(object)
 end
 
+--- Default table comparator sort function.
+-- @local
+-- @param x one comparator operand
+-- @param y the other comparator operand
+-- @return true if x logically comes before y in a list, false otherwise
 local sortfunc =
     function(x, y) --sorts tables with mixed index types.
         local tx = type(x)
         local ty = type(y)
         if tx == ty then
-            if type(x) == 'string' and type(y) == 'string' then
-                if string.lower(x) == string.lower(y) then
-                    return x < y
-                end
+            if type(x) == 'string' then
                 return string.lower(x) < string.lower(y)
             else
-                return x < y and true or false --similar type can be compared
+                return x < y
             end
         elseif tx == 'number' then
             return true --only x is a number and goes first
