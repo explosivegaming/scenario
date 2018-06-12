@@ -1,6 +1,6 @@
 {
     "name": "ExpGamingLib",
-    "module": "ExpLib",
+    "module": "GlobalLib",
     "description": "Adds some common functions used though out all ExpGaming modules",
     "keywords": ["ExpGaming","Lib"],
     "version": "3.4.0",

@@ -90,7 +90,7 @@ root:add_rank{
     name='Root',
     short_hand='Root',
     tag='[Root]',
-    colour=defines.color.white,
+    colour={r=255,b=255,g=255},
     is_root=true,
     is_admin=true,
     is_spectator=true,

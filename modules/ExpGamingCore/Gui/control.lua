@@ -125,12 +125,6 @@ function Gui.cam_link(data)
     return data.cam
 end
 
-script.on_event('on_player_joined_game',function(event)
-    Gui.toolbar.on_player_joined_game(event)
-    Gui.popup.on_player_joined_game(event)
-    Gui.left.on_player_joined_game(event)
-end)
-
 script.on_event('on_tick', function(event)
 	if Gui.left and ((event.tick+10)/(3600*game.speed)) % 15 == 0 then
 		Gui.left.update()
@@ -167,7 +161,12 @@ function Gui:on_init()
             Gui.toolbar.on_rank_change(event)
             Gui.center.on_rank_change(event)
         end)
-    end  
+    end
+    script.on_event('on_player_joined_game',function(event)
+        Gui.toolbar.on_player_joined_game(event)
+        Gui.popup.on_player_joined_game(event)
+        Gui.left.on_player_joined_game(event)
+    end) 
 end
 
 function Gui:on_post()

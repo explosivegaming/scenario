@@ -279,6 +279,5 @@ function table.keysort(tbl)
     return _tbl
 end
 
--- bypasses the module sandbox and places functions into _G
-ExpLib:unpack_to_G()
+-- because this is marked as GlobalLib it will be auto extracted into _G
 return ExpLib

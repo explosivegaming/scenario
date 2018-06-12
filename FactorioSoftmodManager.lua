@@ -274,9 +274,17 @@ Manager.loadModules = setmetatable({},
                     -- if you prefere module_exports can be used rather than returning the module
                     if type(tbl[module_name]) == 'nil' then
                         -- if it is a new module then creat the new index
-                        if sandbox.module_exports and type(sandbox.module_exports) == 'table'
-                        then tbl[module_name] = sandbox.module_exports
-                        else tbl[module_name] = table.remove(module,1) end
+                        if string.find(module_name,'GlobalLib') then
+                            Manager.verbose('Extracting GlobalLib: '..module_name)
+                            -- if it is named GlobalLib then it will be auto extracted into _G
+                            if sandbox.module_exports and type(sandbox.module_exports) == 'table'
+                            then for key,value in pairs(sandbox.module_exports) do _G[key] = value end
+                            else for key,value in pairs(table.remove(module,1)) do _G[key] = value end end
+                        else
+                            if sandbox.module_exports and type(sandbox.module_exports) == 'table'
+                            then tbl[module_name] = sandbox.module_exports
+                            else tbl[module_name] = table.remove(module,1) end
+                        end
                     elseif type(tbl[module_name]) == 'table' then
                         -- if this module adds onto an existing one then append the keys
                         if sandbox.module_exports and type(sandbox.module_exports) == 'table'
