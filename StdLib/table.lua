@@ -246,6 +246,28 @@ function table.deepcopy(object)
     return _copy(object)
 end
 
+--- Default table comparator sort function.
+-- @local
+-- @param x one comparator operand
+-- @param y the other comparator operand
+-- @return true if x logically comes before y in a list, false otherwise
+local sortfunc =
+    function(x, y) --sorts tables with mixed index types.
+        local tx = type(x)
+        local ty = type(y)
+        if tx == ty then
+            if type(x) == 'string' then
+                return string.lower(x) < string.lower(y)
+            else
+                return x < y
+            end
+        elseif tx == 'number' then
+            return true --only x is a number and goes first
+        else
+            return false --only y is a number and goes first
+        end
+    end
+
 --- Returns a copy of all of the values in the table.
 -- @tparam table tbl the table to copy the keys from, or an empty table if tbl is nil
 -- @tparam[opt] boolean sorted whether to sort the keys (slower) or keep the random order from pairs()
@@ -267,19 +289,7 @@ function table.values(tbl, sorted, as_string)
         end
     end
     if sorted then
-        table.sort(valueset,
-            function(x, y) --sorts tables with mixed index types.
-                local tx = type(x) == 'number'
-                local ty = type(y) == 'number'
-                if tx == ty then
-                    return x < y and true or false --similar type can be compared
-                elseif tx == true then
-                    return true --only x is a number and goes first
-                else
-                    return false --only y is a number and goes first
-                end
-            end
-        )
+        table.sort(valueset, sortfunc)
     end
     return valueset
 end
@@ -305,19 +315,7 @@ function table.keys(tbl, sorted, as_string)
         end
     end
     if sorted then
-        table.sort(keyset,
-            function(x, y) --sorts tables with mixed index types.
-                local tx = type(x) == 'number'
-                local ty = type(y) == 'number'
-                if tx == ty then
-                    return x < y and true or false --similar type can be compared
-                elseif tx == true then
-                    return true --only x is a number and goes first
-                else
-                    return false --only y is a number and goes first
-                end
-            end
-        )
+        table.sort(keyset, sortfunc)
     end
     return keyset
 end
