@@ -25,14 +25,14 @@
                 "Core",
                 "Commands"
             ],
-            "version": "3.4.0",
+            "version": "4.0.0",
             "location": "url",
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
                 "FactorioStdLib.Table": "^0.8.0",
                 "FactorioStdLib.Color": "^0.8.0",
                 "FactorioStdLib.Game": "^0.8.0",
-                "ExpGamingCore/Ranking": "?^4.0.0"
+                "ExpGamingCore.Ranking": "?^4.0.0"
             }
         },
         "Gui": {
@@ -47,7 +47,7 @@
                 "Gui",
                 "ExpGui"
             ],
-            "version": "3.4.0",
+            "version": "4.0.0",
             "location": "url",
             "dependencies": {
                 "FactorioModGui": "^1.0.0",
@@ -55,8 +55,8 @@
                 "FactorioStdLib.Table": "^0.8.0",
                 "FactorioStdLib.Color": "^0.8.0",
                 "FactorioStdLib.Game": "^0.8.0",
-                "ExpGamingCore/Ranking": "?^4.0.0",
-                "ExpGamingCore/Server": "?^4.0.0"
+                "ExpGamingCore.Ranking": "?^4.0.0",
+                "ExpGamingCore.Server": "?^4.0.0"
             }
         },
         "Ranking": {
@@ -73,7 +73,7 @@
                 "Permissions",
                 "Roles"
             ],
-            "version": "3.4.0",
+            "version": "4.0.0",
             "location": "url",
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
@@ -97,7 +97,7 @@
                 "Interface",
                 "Events"
             ],
-            "version": "3.4.0",
+            "version": "4.0.0",
             "location": "url",
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
@@ -123,7 +123,7 @@
                 "External",
                 "Discord"
             ],
-            "version": "3.4.0",
+            "version": "4.0.0",
             "location": "url",
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",

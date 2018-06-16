@@ -3,12 +3,12 @@
     "module": "GlobalLib",
     "description": "Adds some common functions used though out all ExpGaming modules",
     "keywords": ["ExpGaming","Lib"],
-    "version": "3.4.0",
+    "version": "4.0.0",
     "location": "url",
     "dependencies": {
-        "StdLib.Game": "^0.8.0",
-        "StdLib.Color": "^0.8.0",
-        "StdLib.Table": "^0.8.0"
+        "FactorioStdLib.Game": "^0.8.0",
+        "FactorioStdLib.Color": "^0.8.0",
+        "FactorioStdLib.Table": "^0.8.0"
     },
     "author": "Cooldude2606",
     "contact": "Discord: Cooldude2606#5241",
