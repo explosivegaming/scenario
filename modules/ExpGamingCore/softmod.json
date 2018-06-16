@@ -3,7 +3,7 @@
     "version": "4.0.0",
     "module": "Collection",
     "description": "Explosive Gaming Core Files",
-    "location": "url",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.zip",
     "keywords": [
         "Library",
         "Lib",
@@ -26,7 +26,7 @@
                 "Commands"
             ],
             "version": "4.0.0",
-            "location": "url",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Commands.zip",
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
                 "FactorioStdLib.Table": "^0.8.0",
@@ -48,7 +48,7 @@
                 "ExpGui"
             ],
             "version": "4.0.0",
-            "location": "url",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Gui.zip",
             "dependencies": {
                 "FactorioModGui": "^1.0.0",
                 "ExpGamingLib": "^4.0.0",
@@ -74,7 +74,7 @@
                 "Roles"
             ],
             "version": "4.0.0",
-            "location": "url",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Ranking.zip",
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
                 "FactorioStdLib.Color": "^0.8.0",
@@ -98,7 +98,7 @@
                 "Events"
             ],
             "version": "4.0.0",
-            "location": "url",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Server.zip",
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
                 "FactorioStdLib.Table": "^0.8.0",
@@ -124,7 +124,7 @@
                 "Discord"
             ],
             "version": "4.0.0",
-            "location": "url",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Sync.zip",
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
                 "FactorioStdLib.Color": "^0.8.0",

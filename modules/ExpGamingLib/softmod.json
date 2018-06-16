@@ -4,7 +4,7 @@
     "description": "Adds some common functions used though out all ExpGaming modules",
     "keywords": ["ExpGaming","Lib"],
     "version": "4.0.0",
-    "location": "url",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingLib.zip",
     "dependencies": {
         "FactorioStdLib.Game": "^0.8.0",
         "FactorioStdLib.Color": "^0.8.0",
