@@ -13,7 +13,6 @@
     "version": "4.0.0",
     "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Gui.zip",
     "dependencies": {
-        "FactorioModGui": "^1.0.0",
         "ExpGamingLib": "^4.0.0",
         "FactorioStdLib.Table": "^0.8.0",
         "FactorioStdLib.Color": "^0.8.0",

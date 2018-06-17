@@ -6,6 +6,8 @@
 --- This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module
 -- @function _comment
 
+local mod_gui = require("mod-gui")
+
 local gui_tset_close = Gui.inputs.add{
     name='gui-test-close',
     type='button',

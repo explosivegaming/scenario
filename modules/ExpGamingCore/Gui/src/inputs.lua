@@ -7,6 +7,7 @@
 --- This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module
 -- @function _comment
 
+local mod_gui = require("mod-gui")
 local inputs = {}
 inputs._input = {}
 -- these are just so you can have short cuts to this
