@@ -1,0 +1,15 @@
+{
+    "name": "Color",
+    "module": "Color",
+    "description": "A defines module for retrieving colors by name.",
+    "keywords": [
+        "Standard Library",
+        "Lib",
+        "StdLib",
+        "Color",
+        "Extends"
+    ],
+    "version": "0.8.0",
+    "location": "url",
+    "dependencies": {}
+}

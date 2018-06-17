@@ -1,0 +1,25 @@
+{
+    "name": "Sync",
+    "module": "Sync",
+    "description": "Allows syncing with an outside server and info panle.",
+    "keywords": [
+        "Library",
+        "Lib",
+        "ExpGaming",
+        "Core",
+        "Info",
+        "Sync",
+        "External",
+        "Discord"
+    ],
+    "version": "4.0.0",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Sync.zip",
+    "dependencies": {
+        "ExpGamingLib": "^4.0.0",
+        "FactorioStdLib.Color": "^0.8.0",
+        "FactorioStdLib.Game": "^0.8.0",
+        "FactorioStdLib.Table": "^0.8.0",
+        "ExpGamingCore.Ranking": "?^4.0.0",
+        "ExpGamingCore.Gui": "?^4.0.0"
+    }
+}

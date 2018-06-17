@@ -1,0 +1,26 @@
+{
+    "name": "Server",
+    "module": "Server",
+    "description": "Adds a thread system and event listening and a admin bypass (recommend to disable /c and use optional /interface)",
+    "keywords": [
+        "Library",
+        "Lib",
+        "ExpGaming",
+        "Core",
+        "Server",
+        "Thread",
+        "Interface",
+        "Events"
+    ],
+    "version": "4.0.0",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Server.zip",
+    "dependencies": {
+        "ExpGamingLib": "^4.0.0",
+        "FactorioStdLib.Table": "^0.8.0",
+        "FactorioStdLib.Color": "^0.8.0",
+        "FactorioStdLib.String": "^0.8.0",
+        "FactorioStdLib.Game": "^0.8.0",
+        "ExpGamingCore.Ranking": "?^4.0.0",
+        "ExpGamingCore.Commands": "?^4.0.0"
+    }
+}

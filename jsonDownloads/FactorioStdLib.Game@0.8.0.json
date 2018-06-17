@@ -1,0 +1,15 @@
+{
+    "name": "Game",
+    "module": "Game",
+    "description": "The game module.",
+    "keywords": [
+        "Standard Library",
+        "Lib",
+        "StdLib",
+        "Game",
+        "Extends"
+    ],
+    "version": "0.8.0",
+    "location": "url",
+    "dependencies": {}
+}

@@ -1,0 +1,21 @@
+{
+    "name": "Commands",
+    "module": "commands",
+    "description": "A better command handler than the base game.",
+    "keywords": [
+        "Library",
+        "Lib",
+        "ExpGaming",
+        "Core",
+        "Commands"
+    ],
+    "version": "4.0.0",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Commands.zip",
+    "dependencies": {
+        "ExpGamingLib": "^4.0.0",
+        "FactorioStdLib.Table": "^0.8.0",
+        "FactorioStdLib.Color": "^0.8.0",
+        "FactorioStdLib.Game": "^0.8.0",
+        "ExpGamingCore.Ranking": "?^4.0.0"
+    }
+}

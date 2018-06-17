@@ -7,10 +7,4 @@ return {
     ['Ranking']='./modules/ExpGamingCore/Ranking',
     ['Server']='./modules/ExpGamingCore/Server',
     ['Sync']='./modules/ExpGamingCore/Sync',
-    ['mod_gui']='./modules/FactorioModGui',
-    ['Color']='./modules/FactorioStdLib/Color',
-    ['Game']='./modules/FactorioStdLib/Game',
-    ['string']='./modules/FactorioStdLib/String',
-    ['table']='./modules/FactorioStdLib/Table',
-    ['Time']='./modules/FactorioStdLib/Time',
 }

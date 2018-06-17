@@ -1,0 +1,13 @@
+{
+    "name": "ExpGamingScenario",
+    "version": "0.16.51",
+    "module": "Scenario",
+    "description": "Explosive gaming's factorio secenario ran on every public server",
+    "modules": {
+        "ExpGamingCore": "^4.0.0",
+        "ExpGamingLib": "^4.0.0",
+        "FactorioModGui": "^1.0.0",
+        "FactorioStdLib": "^0.8.0"
+    },
+    "dependencies": {}
+}
