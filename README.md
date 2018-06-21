@@ -13,8 +13,8 @@
   <a href="http://github.com/explosivegaming/scenario/fork">
     <img src="https://img.shields.io/github/forks/explosivegaming/scenario.svg?label=Forks" alt="Fork">
   </a>
-  <a href="https://www.codefactor.io/repository/github/badgamernl/scenario">
-    <img src="https://www.codefactor.io/repository/github/badgamernl/scenario/badge" alt="CodeFactor">
+  <a href="https://www.codefactor.io/repository/github/badgamernl/explosivegaming-main">
+    <img src="https://www.codefactor.io/repository/github/badgamernl/explosivegaming-main/badge" alt="CodeFactor">
   </a>
   <a href="https://discord.me/explosivegaming">
     <img src="https://discordapp.com/api/guilds/260843215836545025/widget.png?style=shield" alt="Discord">
