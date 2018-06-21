@@ -2,16 +2,19 @@
   <img alt="logo" src="https://avatars2.githubusercontent.com/u/39745392?s=200&v=4" width="120">
   <br>
   <a href="https://github.com/explosivegaming/scenario/tags">
-    <img src="https://img.shields.io/github/tag/explosivegaming/scenario.svg?label=tag" alt="Tag">
+    <img src="https://img.shields.io/github/tag/explosivegaming/scenario.svg?label=Release" alt="Release">
+  </a>
+  <a href="https://github.com/explosivegaming/scenario/archive/master.zip">
+    <img src="https://img.shields.io/github/downloads/explosivegaming/scenario/total.svg?label=Downloads" alt="Downloads">
   </a>
   <a href="https://github.com/explosivegaming/scenario/stargazers">
-    <img src="http://github-svg-buttons.herokuapp.com/star.svg?user=explosivegaming&repo=scenario&style=flat&background=007ec6" alt="Star">
+    <img src="https://img.shields.io/github/stars/explosivegaming/scenario.svg?label=Stars" alt="Star">
   </a>
   <a href="http://github.com/explosivegaming/scenario/fork">
-    <img src="http://github-svg-buttons.herokuapp.com/fork.svg?user=explosivegaming&repo=scenario&style=flat&background=007ec6" alt="Fork">
+    <img src="https://img.shields.io/github/forks/explosivegaming/scenario.svg?label=Forks" alt="Fork">
   </a>
-  <a href="https://www.codefactor.io/repository/github/badgamernl/explosivegaming-main">
-    <img src="https://www.codefactor.io/repository/github/badgamernl/explosivegaming-main/badge" alt="CodeFactor">
+  <a href="https://www.codefactor.io/repository/github/badgamernl/scenario">
+    <img src="https://www.codefactor.io/repository/github/badgamernl/scenario/badge" alt="CodeFactor">
   </a>
   <a href="https://discord.me/explosivegaming">
     <img src="https://discordapp.com/api/guilds/260843215836545025/widget.png?style=shield" alt="Discord">
