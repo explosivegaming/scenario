@@ -4,6 +4,12 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
+-- this is optional and is hanndled by it being present
+local success, Ranking = pcall(require,'ExpGamingCore.Ranking')
+if not success then Ranking = nil end success = nil
+
 --- Used as an error constant for validation
 -- @field commands.error
 -- @usage return commands.error, 'err message'

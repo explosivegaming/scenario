@@ -7,7 +7,12 @@
 --- This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module
 -- @function _comment
 
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
+local success, Ranking = pcall(require,'ExpGamingCore.Ranking')
+if not success then Ranking = nil end success = nil
 local mod_gui = require("mod-gui")
+
 local left = {}
 left._left = {}
 

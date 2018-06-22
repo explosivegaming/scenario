@@ -7,7 +7,11 @@
 --- This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module
 -- @function _comment
 
+local Game = require('FactorioStdLib.Game')
+local success, Ranking = pcall(require,'ExpGamingCore.Ranking')
+if not success then Ranking = nil end success = nil
 local mod_gui = require("mod-gui")
+
 local toolbar = {}
 
 --- Add a button to the toolbar, ranks need to be allowed to use these buttons if ranks is preset

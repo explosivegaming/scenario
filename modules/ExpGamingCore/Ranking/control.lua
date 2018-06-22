@@ -3,6 +3,10 @@
 -- @alias Ranking
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
+
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
+
 local Ranking = {}
 local module_verbose = false --true|false
 
@@ -427,15 +431,13 @@ script.on_event('on_tick',function(event)
     end
 end)
 
-_G.Ranking = Ranking
 verbose('Loading rank core...')
-require(module_path..'/src/core')
+require(module_path..'/src/core',{Ranking=Ranking})
 verbose('Loading rank configs...')
-require(module_path..'/src/config')
-_G.Ranking = nil
+require(module_path..'/src/config',{Ranking=Ranking})
 
 function Ranking:on_init()
-    if loaded_modules.Server then verbose('ExpGamingCore.Server is installed; Loading server src') require(module_path..'/src/server') end
+    if loaded_modules['ExpGamingCore.Server'] then verbose('ExpGamingCore.Server is installed; Loading server src') require(module_path..'/src/server',{Ranking=Ranking}) end
 end
 
 function Ranking:on_post()

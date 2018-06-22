@@ -4,6 +4,9 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
+
 local module_verbose = false -- there is no verbose in this file so true will do nothing
 local ExpLib = {}
 

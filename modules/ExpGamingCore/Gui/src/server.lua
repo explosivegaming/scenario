@@ -7,6 +7,9 @@
 --- This file will be loaded when ExpGamingCore.Commands is present
 -- @function _comment
 
+local Game = require('FactorioStdLib.Game')
+local Server = require('ExpGamingCore.Server')
+
 --- Adds a server thread that allows the camera follows to be toggled off and on
 -- @function __comment
 script.on_event(-1,function(event)

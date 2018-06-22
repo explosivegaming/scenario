@@ -4,6 +4,9 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
+
 local Gui = {}
 local Gui_data = {}
 local global = global()
@@ -154,8 +157,8 @@ script.on_event('on_player_respawned',function(event)
 end)
 
 function Gui:on_init()
-    if loaded_modules.Server then verbose('ExpGamingCore.Server is installed; Loading server src') require(module_path..'/src/server') end
-    if loaded_modules.Ranking then
+    if loaded_modules['ExpGamingCore.Server'] then verbose('ExpGamingCore.Server is installed; Loading server src') require(module_path..'/src/server') end
+    if loaded_modules['ExpGamingCore.Ranking'] then
         verbose('ExpGamingCore.Ranking is installed; Loading ranking src')
         script.on_event('on_rank_change',function(event)
             Gui.toolbar.on_rank_change(event)

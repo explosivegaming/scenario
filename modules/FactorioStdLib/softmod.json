@@ -1,19 +1,26 @@
 {
     "name": "FactorioStdLib",
-    "module": "Collection",
+    "version": "0.8.0",
+    "module": "factorioStdLib",
+    "type": "Collection",
     "description": "Factorio Standard Library Projects",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.zip",
     "keywords": [
         "Standard Library",
         "Lib",
         "StdLib"
     ],
-    "version": "0.8.0",
-    "location": "url",
+    "author": "Afforess",
+    "contact": "https://github.com/Afforess/Factorio-Stdlib/issues",
+    "license": "https://github.com/Afforess/Factorio-Stdlib/blob/master/LICENSE",
     "submodules": {
         "Color": {
             "name": "Color",
+            "version": "0.8.0",
             "module": "Color",
+            "type": "Submodule",
             "description": "A defines module for retrieving colors by name.",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.Color.zip",
             "keywords": [
                 "Standard Library",
                 "Lib",
@@ -21,14 +28,15 @@
                 "Color",
                 "Extends"
             ],
-            "version": "0.8.0",
-            "location": "url",
             "dependencies": {}
         },
         "Game": {
             "name": "Game",
+            "version": "0.8.0",
             "module": "Game",
+            "type": "Submodule",
             "description": "The game module.",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.Game.zip",
             "keywords": [
                 "Standard Library",
                 "Lib",
@@ -36,14 +44,15 @@
                 "Game",
                 "Extends"
             ],
-            "version": "0.8.0",
-            "location": "url",
             "dependencies": {}
         },
         "String": {
             "name": "String",
+            "version": "0.8.0",
             "module": "string",
+            "type": "Submodule",
             "description": "Extends Lua 5.2 string.",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.String.zip",
             "keywords": [
                 "Standard Library",
                 "Lib",
@@ -51,14 +60,15 @@
                 "String",
                 "Extends"
             ],
-            "version": "0.8.0",
-            "location": "url",
             "dependencies": {}
         },
         "Table": {
             "name": "Table",
+            "version": "0.8.0",
             "module": "table",
+            "type": "Submodule",
             "description": "Extends Lua 5.2 table.",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.Table.zip",
             "keywords": [
                 "Standard Library",
                 "Lib",
@@ -66,28 +76,7 @@
                 "Table",
                 "Extends"
             ],
-            "version": "0.8.0",
-            "location": "url",
-            "dependencies": {}
-        },
-        "Time": {
-            "name": "Time",
-            "module": "Time",
-            "description": "A defines module for retrieving the number of ticks in 1 unit of time.",
-            "keywords": [
-                "Standard Library",
-                "Lib",
-                "StdLib",
-                "Time",
-                "Extends"
-            ],
-            "version": "0.8.0",
-            "location": "url",
             "dependencies": {}
         }
-    },
-    "author": "Afforess",
-    "contact": "https://github.com/Afforess/Factorio-Stdlib/issues",
-    "license": "https://github.com/Afforess/Factorio-Stdlib/blob/master/LICENSE",
-    "dependencies": {}
+    }
 }

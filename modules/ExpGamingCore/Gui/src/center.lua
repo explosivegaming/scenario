@@ -7,7 +7,10 @@
 --- This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module
 -- @function _comment
 
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
 local mod_gui = require("mod-gui")
+
 local center = {}
 center._center = {}
 

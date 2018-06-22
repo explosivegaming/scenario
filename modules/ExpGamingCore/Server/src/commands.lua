@@ -7,6 +7,8 @@
 --- This file will be loaded when ExpGamingCore.Commands is present
 -- @function _comment
 
+local Game = require('FactorioStdLib.Game')
+
 --- Runs the given input from the script
 -- @command interface
 -- @param code The code that will be ran

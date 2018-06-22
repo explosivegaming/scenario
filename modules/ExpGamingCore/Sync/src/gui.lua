@@ -7,6 +7,9 @@
 --- This file will be loaded when ExpGamingCore.Gui is present
 -- @function _comment
 
+local Game = require('FactorioStdLib.Game')
+local Gui = require('ExpGamingCore.Gui')
+
 local Sync_gui_functions = {}
 
 --- Adds a emeltent to the sever info gui

@@ -4,6 +4,9 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
+
 local Server = {}
 local module_verbose = false --true|false
 
@@ -464,7 +467,7 @@ end)
 
 function Server:on_init()
     for name,id in pairs(defines.events) do if not script.get_event_handler(id) then script.on_event(id,Server._thread_handler) end end
-    if loaded_modules.commands then verbose('ExpGamingCore.Commands is installed; Loading commands src') require(module_path..'/src/commands') end
+    if loaded_modules['ExpGamingCore.Commands'] then verbose('ExpGamingCore.Commands is installed; Loading commands src') require(module_path..'/src/commands',{Server=Server}) end
 end
 
 return Server

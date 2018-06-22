@@ -7,6 +7,10 @@
 --- This file will be loaded when ExpGamingCore.Server is present
 -- @function _comment
 
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
+local Server = require('ExpGamingCore.Server')
+
 --- Print a message to all players of this rank
 -- @usage rank:print('foo') -- prints to all members of this rank
 -- @param rtn any value you want to return

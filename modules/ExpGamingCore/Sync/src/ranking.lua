@@ -6,7 +6,11 @@
 
 --- This file will be loaded when ExpGamingCore.Ranking is present
 -- @function _comment
-    
+
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
+local Ranking = require('ExpGamingCore.Ranking')
+
 --- Used as a redirect to Ranking._base_preset that will set the rank given to a player apon joining
 -- @usage Sync.set_ranks{player_name=rank_name,...}
 function Sync.set_ranks(...)

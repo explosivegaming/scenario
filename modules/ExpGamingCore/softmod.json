@@ -1,7 +1,8 @@
 {
     "name": "ExpGamingCore",
     "version": "4.0.0",
-    "module": "Collection",
+    "module": "expGamingCore",
+    "type": "Collection",
     "description": "Explosive Gaming Core Files",
     "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.zip",
     "keywords": [
@@ -16,8 +17,11 @@
     "submodules": {
         "Commands": {
             "name": "Commands",
+            "version": "4.0.0",
             "module": "commands",
+            "type": "Submodule",
             "description": "A better command handler than the base game.",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Commands.zip",
             "keywords": [
                 "Library",
                 "Lib",
@@ -25,8 +29,6 @@
                 "Core",
                 "Commands"
             ],
-            "version": "4.0.0",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Commands.zip",
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
                 "FactorioStdLib.Table": "^0.8.0",
@@ -37,8 +39,10 @@
         },
         "Gui": {
             "name": "Gui",
+            "version": "4.0.0",
             "module": "Gui",
             "description": "Adds a objective version to custom guis.",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Gui.zip",
             "keywords": [
                 "Library",
                 "Lib",
@@ -47,8 +51,6 @@
                 "Gui",
                 "ExpGui"
             ],
-            "version": "4.0.0",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Gui.zip",
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
                 "FactorioStdLib.Table": "^0.8.0",
@@ -56,12 +58,15 @@
                 "FactorioStdLib.Game": "^0.8.0",
                 "ExpGamingCore.Ranking": "?^4.0.0",
                 "ExpGamingCore.Server": "?^4.0.0"
-            }
+            },
+            "type": "Submodule"
         },
         "Ranking": {
             "name": "Ranking",
+            "version": "4.0.0",
             "module": "Ranking",
             "description": "A full ranking system for factorio.",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Ranking.zip",
             "keywords": [
                 "Library",
                 "Lib",
@@ -72,20 +77,21 @@
                 "Permissions",
                 "Roles"
             ],
-            "version": "4.0.0",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Ranking.zip",
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
                 "FactorioStdLib.Color": "^0.8.0",
                 "FactorioStdLib.Table": "^0.8.0",
                 "FactorioStdLib.Game": "^0.8.0",
                 "ExpGamingCore.Server": "?^4.0.0"
-            }
+            },
+            "type": "Submodule"
         },
         "Server": {
             "name": "Server",
+            "version": "4.0.0",
             "module": "Server",
             "description": "Adds a thread system and event listening and a admin bypass (recommend to disable /c and use optional /interface)",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Server.zip",
             "keywords": [
                 "Library",
                 "Lib",
@@ -96,8 +102,6 @@
                 "Interface",
                 "Events"
             ],
-            "version": "4.0.0",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Server.zip",
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
                 "FactorioStdLib.Table": "^0.8.0",
@@ -106,12 +110,15 @@
                 "FactorioStdLib.Game": "^0.8.0",
                 "ExpGamingCore.Ranking": "?^4.0.0",
                 "ExpGamingCore.Commands": "?^4.0.0"
-            }
+            },
+            "type": "Submodule"
         },
         "Sync": {
             "name": "Sync",
+            "version": "4.0.0",
             "module": "Sync",
             "description": "Allows syncing with an outside server and info panle.",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Sync.zip",
             "keywords": [
                 "Library",
                 "Lib",
@@ -122,8 +129,6 @@
                 "External",
                 "Discord"
             ],
-            "version": "4.0.0",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Sync.zip",
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
                 "FactorioStdLib.Color": "^0.8.0",
@@ -131,8 +136,8 @@
                 "FactorioStdLib.Table": "^0.8.0",
                 "ExpGamingCore.Ranking": "?^4.0.0",
                 "ExpGamingCore.Gui": "?^4.0.0"
-            }
+            },
+            "type": "Submodule"
         }
-    },
-    "dependencies": {}
+    }
 }

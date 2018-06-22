@@ -233,18 +233,59 @@ Manager.sandbox = setmetatable({
             local sandbox = tbl()
             local env = type(env) == 'table' and env or type(env) ~= 'nil' and {env} or {}
             -- new indexs are saved into sandbox and if _G does not have the index then look in sandbox
+            local old_mt = getmetatable(_G) or {}
             setmetatable(env,{__index=sandbox})
             setmetatable(_G,{__index=env,__newindex=sandbox})
             -- runs the callback
             local rtn = {pcall(callback,...)}
             local success = table.remove(rtn,1)
             -- this is to allow modules to be access with out the need of using Mangaer[name] also keeps global clean
-            setmetatable(_G,{__index=ReadOnlyManager})
+            setmetatable(_G,old_mt)
             if success then return sandbox, success, rtn
             else return sandbox, success, rtn[1] end
         else return setmetatable({},{__index=tbl}) end
     end
 })
+
+--- Allows access to modules via require and collections are returned as one object
+-- @function Manager.require
+-- @usage local Module = Manager.require(ModuleName)
+-- @usage local Module = Manager.require[ModuleName]
+-- @usage local SrcData = Manager.require(path)
+-- @treturn table the module that was required, one object containg submodules for a 
+Manager.require = setmetatable({
+    __require=require
+},{
+    __metatable=false,
+    __index=function(tbl,key) return tbl(key) end,
+    __call=function(tbl,path,env) 
+        local raw_require = rawget(tbl,'__require')
+        local env = env or {}
+        -- runs in a sand box becuase sandbox everything
+        local sandbox, success, data = Manager.sandbox(raw_require,env,path)
+        -- if there was no error then it assumed the path existed and returns the data
+        if success then return data
+        else
+            -- else it assums the path was a module name and checks index for the module
+            if moduleIndex[path] then return rawget(Manager.loadModules,path) end
+            -- if its not listed then it tries to remove a version tag and tries again
+            local path_no_version = path.find('@') and path:sub(1,path:find('@')-1) or path
+            if moduleIndex[path_no_version] then return rawget(Manager.loadModules,path_no_version) end
+            -- still no then it will look for all modules that include this one in the name (like a collection)
+            local collection = {}
+            for module_name,path in pairs(moduleIndex) do
+                if module_name:find(path_no_version) then 
+                    local start, _end = module_name:find(path_no_version)
+                    collection[module_name:sub(_end)] = rawget(Manager.loadModules,module_name)
+                end
+            end
+            -- if there is any keys in the collection the collection is returned else the errors with the require error
+            for _ in pairs(collection) do return collection end
+            error(data,2)
+        end
+    end
+})
+require = Manager.require
 
 --- Loads the modules that are present in the index list
 -- @function Manager.loadModules
@@ -262,7 +303,7 @@ Manager.loadModules = setmetatable({},
             for module_name,path in pairs(moduleIndex) do
                 Manager.verbose('Loading module: "'..module_name..'"; path: '..path)
                 -- runs the module in a sandbox env
-                local sandbox, success, module = Manager.sandbox(require,{module_name=setupModuleName(module_name),module_path=path},path..'/control')
+                local sandbox, success, module = Manager.sandbox(Manager.require.__require,{module_name=setupModuleName(module_name),module_path=path},path..'/control')
                 -- extracts the module into a global index table for later use
                 if success then
                     -- verbose to notifie of any globals that were attempted to be created

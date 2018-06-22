@@ -4,6 +4,9 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
+
 local Sync = {}
 local Sync_updates = {}
 local module_verbose = false --true|false
@@ -292,8 +295,8 @@ script.on_event('on_tick',function(event)
 end)
 
 function Sync:on_init()
-    if loaded_modules.Gui then verbose('ExpGamingCore.Gui is installed; Loading gui src') require(module_path..'/src/gui') end
-    if loaded_modules.Ranking then verbose('ExpGamingCore.Ranking is installed; Loading ranking src') require(module_path..'/src/ranking') end
+    if loaded_modules['ExpGamingCore.Gui'] then verbose('ExpGamingCore.Gui is installed; Loading gui src') require(module_path..'/src/gui',{Sync=Sync}) end
+    if loaded_modules['ExpGamingCore.Ranking'] then verbose('ExpGamingCore.Ranking is installed; Loading ranking src') require(module_path..'/src/ranking',{Sync=Sync}) end
 end
 
 function Sync:on_post()
