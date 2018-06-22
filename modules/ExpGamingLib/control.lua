@@ -282,5 +282,5 @@ function table.keysort(tbl)
     return _tbl
 end
 
--- because this is marked as GlobalLib it will be auto extracted into _G
+ExpLib:unpack_to_G()
 return ExpLib
