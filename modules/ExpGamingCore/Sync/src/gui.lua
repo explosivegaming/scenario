@@ -9,6 +9,7 @@
 
 local Game = require('FactorioStdLib.Game')
 local Gui = require('ExpGamingCore.Gui')
+local Sync = Sync -- this is to force sync to remain in the ENV
 
 local Sync_gui_functions = {}
 

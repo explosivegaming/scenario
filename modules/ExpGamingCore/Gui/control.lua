@@ -27,11 +27,11 @@ Gui.data = setmetatable({},{
     end
 })
 
-Gui.center = require(module_path..'/src/center')
-Gui.inputs = require(module_path..'/src/inputs')
-Gui.left = require(module_path..'/src/left')
-Gui.popup = require(module_path..'/src/popup')
-Gui.toolbar = require(module_path..'/src/toolbar')
+Gui.center = require(module_path..'/src/center',{Gui=Gui})
+Gui.inputs = require(module_path..'/src/inputs',{Gui=Gui})
+Gui.left = require(module_path..'/src/left',{Gui=Gui})
+Gui.popup = require(module_path..'/src/popup',{Gui=Gui})
+Gui.toolbar = require(module_path..'/src/toolbar',{Gui=Gui})
 
 --- Add a white bar to any gui frame
 -- @usage Gui.bar(frame,100)
@@ -157,7 +157,7 @@ script.on_event('on_player_respawned',function(event)
 end)
 
 function Gui:on_init()
-    if loaded_modules['ExpGamingCore.Server'] then verbose('ExpGamingCore.Server is installed; Loading server src') require(module_path..'/src/server') end
+    if loaded_modules['ExpGamingCore.Server'] then verbose('ExpGamingCore.Server is installed; Loading server src') require(module_path..'/src/server',{Gui=Gui}) end
     if loaded_modules['ExpGamingCore.Ranking'] then
         verbose('ExpGamingCore.Ranking is installed; Loading ranking src')
         script.on_event('on_rank_change',function(event)
@@ -173,7 +173,7 @@ function Gui:on_init()
 end
 
 function Gui:on_post()
-    Gui.test = require(module_path..'/src/test')
+    Gui.test = require(module_path..'/src/test',{Gui=Gui})
     Gui.popup.load() Gui.popup.load = nil
 end
 

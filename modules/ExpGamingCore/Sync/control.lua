@@ -143,6 +143,7 @@ end
 -- @function errorHandler
 -- @tparam string err the error passed by the err control
 error.addHandler('Discord Emit',function(err)
+    if not game then return error(error()) end
     local color = Color and Color.to_hex(defines.textcolor.bg) or '0x0'
     Sync.emit_embeded{title='SCRIPT ERROR',color=color,description='There was an error in the script @Developers ',Error=err}
 end)

@@ -11,6 +11,7 @@ local Game = require('FactorioStdLib.Game')
 local success, Ranking = pcall(require,'ExpGamingCore.Ranking')
 if not success then Ranking = nil end success = nil
 local mod_gui = require("mod-gui")
+local Gui = Gui -- this is to force gui to remain in the ENV
 
 local toolbar = {}
 

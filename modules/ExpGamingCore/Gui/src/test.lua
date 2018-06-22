@@ -6,7 +6,7 @@
 --- This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module
 -- @function _comment
 
-local Gui = require('ExpGamingCore.Gui')
+local Gui = Gui -- this is to force gui to remain in the ENV
 local mod_gui = require("mod-gui")
 
 local gui_tset_close = Gui.inputs.add{

@@ -9,6 +9,7 @@
 
 local Game = require('FactorioStdLib.Game')
 local Server = require('ExpGamingCore.Server')
+local Gui = Gui -- this is to force gui to remain in the ENV
 
 --- Adds a server thread that allows the camera follows to be toggled off and on
 -- @function __comment
