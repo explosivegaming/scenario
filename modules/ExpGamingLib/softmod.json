@@ -1,7 +1,6 @@
 {
     "name": "ExpGamingLib",
     "version": "4.0.0",
-    "module": "GlobalLib",
     "type": "Module",
     "description": "Adds some common functions used though out all ExpGaming modules",
     "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingLib.zip",

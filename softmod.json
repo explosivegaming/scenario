@@ -1,7 +1,7 @@
 {
     "name": "ExpGamingScenario",
     "version": "0.16.51",
-    "module": "expGamingScenario",
+    
     "type": "Scenario",
     "description": "Explosive gaming's factorio secenario ran on every public server",
     "modules": {

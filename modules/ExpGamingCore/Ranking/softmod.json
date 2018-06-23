@@ -1,7 +1,6 @@
 {
     "name": "Ranking",
-    "version": "4.0.0",
-    "module": "Ranking",
+    "version": "4.0.0",   
     "type": "Submodule",
     "description": "A full ranking system for factorio.",
     "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Ranking.zip",

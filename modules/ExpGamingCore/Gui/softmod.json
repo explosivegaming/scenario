@@ -1,7 +1,6 @@
 {
     "name": "Gui",
     "version": "4.0.0",
-    "module": "Gui",
     "type": "Submodule",
     "description": "Adds a objective version to custom guis.",
     "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Gui.zip",

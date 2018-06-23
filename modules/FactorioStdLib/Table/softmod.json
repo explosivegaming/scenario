@@ -1,7 +1,6 @@
 {
     "name": "Table",
     "version": "0.8.0",
-    "module": "table",
     "type": "Submodule",
     "description": "Extends Lua 5.2 table.",
     "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.Table.zip",

@@ -27,7 +27,8 @@ commands.add_command('interface',{'Server.interface-description'}, {
         env.position = game.player.position
         env.entity = game.player.selected
         env.tile = game.player.surface.get_tile(game.player.position)
-        if Ranking and Ranking.get_rank then env.rank = Ranking.get_rank(game.player) end
+        -- this works if loaded modules is not present as Mamager will always have the modules
+        if Manager['ExpGamingCore.Ranking'] then env.rank = Manager['ExpGamingCore.Ranking'].get_rank(game.player) end
     end
     -- runs the function
     local success, err = Server.interface(callback,false,env)

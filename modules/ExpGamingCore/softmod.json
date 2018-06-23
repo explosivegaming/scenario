@@ -1,7 +1,6 @@
 {
     "name": "ExpGamingCore",
     "version": "4.0.0",
-    "module": "expGamingCore",
     "type": "Collection",
     "description": "Explosive Gaming Core Files",
     "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.zip",
@@ -18,7 +17,6 @@
         "Commands": {
             "name": "Commands",
             "version": "4.0.0",
-            "module": "commands",
             "type": "Submodule",
             "description": "A better command handler than the base game.",
             "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Commands.zip",
@@ -40,7 +38,6 @@
         "Gui": {
             "name": "Gui",
             "version": "4.0.0",
-            "module": "Gui",
             "description": "Adds a objective version to custom guis.",
             "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Gui.zip",
             "keywords": [
@@ -64,7 +61,6 @@
         "Ranking": {
             "name": "Ranking",
             "version": "4.0.0",
-            "module": "Ranking",
             "description": "A full ranking system for factorio.",
             "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Ranking.zip",
             "keywords": [
@@ -89,7 +85,6 @@
         "Server": {
             "name": "Server",
             "version": "4.0.0",
-            "module": "Server",
             "description": "Adds a thread system and event listening and a admin bypass (recommend to disable /c and use optional /interface)",
             "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Server.zip",
             "keywords": [
@@ -108,7 +103,6 @@
                 "FactorioStdLib.Color": "^0.8.0",
                 "FactorioStdLib.String": "^0.8.0",
                 "FactorioStdLib.Game": "^0.8.0",
-                "ExpGamingCore.Ranking": "?^4.0.0",
                 "ExpGamingCore.Commands": "?^4.0.0"
             },
             "type": "Submodule"
@@ -116,7 +110,6 @@
         "Sync": {
             "name": "Sync",
             "version": "4.0.0",
-            "module": "Sync",
             "description": "Allows syncing with an outside server and info panle.",
             "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Sync.zip",
             "keywords": [

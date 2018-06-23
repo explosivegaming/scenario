@@ -1,7 +1,6 @@
 {
     "name": "Server",
-    "version": "4.0.0",
-    "module": "Server",
+    "version": "4.0.0",    
     "type": "Submodule",
     "description": "Adds a thread system and event listening and a admin bypass (recommend to disable /c and use optional /interface)",
     "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Server.zip",

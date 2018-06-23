@@ -157,6 +157,8 @@ script.on_event('on_player_respawned',function(event)
 end)
 
 function Gui:on_init()
+    self.left:on_init(); self.left.on_init = nil
+    self.toolbar:on_init(); self.toolbar.on_init = nil
     if loaded_modules['ExpGamingCore.Server'] then verbose('ExpGamingCore.Server is installed; Loading server src') require(module_path..'/src/server',{Gui=Gui}) end
     if loaded_modules['ExpGamingCore.Ranking'] then
         verbose('ExpGamingCore.Ranking is installed; Loading ranking src')

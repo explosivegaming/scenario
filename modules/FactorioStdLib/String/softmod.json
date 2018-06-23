@@ -1,7 +1,6 @@
 {
     "name": "String",
     "version": "0.8.0",
-    "module": "string",
     "type": "Submodule",
     "description": "Extends Lua 5.2 string.",
     "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.String.zip",

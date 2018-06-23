@@ -9,8 +9,7 @@
 
 local Game = require('FactorioStdLib.Game')
 local Color = require('FactorioStdLib.Color')
-local success, Ranking = pcall(require,'ExpGamingCore.Ranking')
-if not success then Ranking = nil end success = nil
+local Ranking -- this is optional and is hanndled by it being present, it is loaded on init
 local mod_gui = require("mod-gui")
 local Gui = Gui -- this is to force gui to remain in the ENV
 
@@ -179,6 +178,10 @@ left.on_player_joined_game = function(event)
         local fake_event = {player_index=player.index,element={name=name}}
         left.open(fake_event)
     end
+end
+
+function left:on_init()
+    if loaded_modules['ExpGamingCore.Ranking'] then Ranking = require('ExpGamingCore.Ranking') end
 end
 
 return left

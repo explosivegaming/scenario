@@ -6,9 +6,7 @@
 
 local Game = require('FactorioStdLib.Game')
 local Color = require('FactorioStdLib.Color')
--- this is optional and is hanndled by it being present
-local success, Ranking = pcall(require,'ExpGamingCore.Ranking')
-if not success then Ranking = nil end success = nil
+local Ranking -- this is optional and is hanndled by it being present, it is loaded on init
 
 --- Used as an error constant for validation
 -- @field commands.error
@@ -224,6 +222,10 @@ commands.add_command = function(name, description, inputs, callback)
         local success, err = pcall(run_custom_command,...)
         if not success then error(err) end
     end)
+end
+
+function commands:on_init()
+    if loaded_modules['ExpGamingCore.Ranking'] then Ranking = require('ExpGamingCore.Ranking') end
 end
 
 --[[

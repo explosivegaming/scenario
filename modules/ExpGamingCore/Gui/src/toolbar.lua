@@ -8,8 +8,7 @@
 -- @function _comment
 
 local Game = require('FactorioStdLib.Game')
-local success, Ranking = pcall(require,'ExpGamingCore.Ranking')
-if not success then Ranking = nil end success = nil
+local Ranking -- this is optional and is hanndled by it being present, it is loaded on init
 local mod_gui = require("mod-gui")
 local Gui = Gui -- this is to force gui to remain in the ENV
 
@@ -47,6 +46,10 @@ function toolbar.draw(player)
             end
         else button:draw(toolbar_frame) end
 	end
+end
+
+function toolbar:on_init()
+    if loaded_modules['ExpGamingCore.Ranking'] then Ranking = require('ExpGamingCore.Ranking') end
 end
 
 toolbar.on_rank_change = toolbar.draw
