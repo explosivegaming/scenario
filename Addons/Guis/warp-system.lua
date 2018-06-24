@@ -154,7 +154,7 @@ Gui.left.add{
         }
         for name,warp in pairs(_warps().warps) do
             if not warp.tag or not warp.tag.valid then
-                player.force.add_chart_tag(warp.surface,{
+                warp.tag = player.force.add_chart_tag(warp.surface,{
                     position=warp.position,
                     text='Warp: '..name,
                     icon={type='item',name=warp_item}
