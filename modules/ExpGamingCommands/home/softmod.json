@@ -1,0 +1,22 @@
+{
+    "name": "home",
+    "version": "4.0.0",
+    "type": "Module",
+    "description": "Allows players to set homes and then return to them later.",
+    "location": "<blank>",
+    "keywords": [
+        "Teleport",
+        "ExpGaming",
+        "Home",
+        "Return",
+        "Set Home",
+        "Commands"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "FactorioStdLib.Game": "^0.8.0",
+        "ExpGamingCore.Commands": "^4.0.0"
+    }
+}
