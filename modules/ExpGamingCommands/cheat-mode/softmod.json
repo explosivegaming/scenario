@@ -1,0 +1,21 @@
+{
+    "name": "cheatMode",
+    "version": "4.0.0",
+    "type": "Module",
+    "description": "Adds a command which allow you to toggle cheatmode",
+    "location": "<blank>",
+    "keywords": [
+        "Cheat",
+        "Commands",
+        "Admin",
+        "ExpGaming",
+        "Cheat Mode",
+        "Hacks"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "ExpGamingCore.Commands": "^4.0.0"
+    }
+}
