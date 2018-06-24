@@ -1,0 +1,24 @@
+{
+    "name": "bonus",
+    "version": "4.0.0",
+    "type": "Module",
+    "description": "Allows a bonus to be applied to players and instant respawn.",
+    "location": "<blank>",
+    "keywords": [
+        "Instant Respawn",
+        "Bonus",
+        "Cheat",
+        "Commands",
+        "ExpGaming",
+        "Respawn"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "FactorioStdLib.Game": "^0.8.0",
+        "ExpGamingLib": "^4.0.0",
+        "ExpGamingCore.Commands": "^4.0.0",
+        "ExpGamingCore.Ranking": "?^4.0.0"
+    }
+}
