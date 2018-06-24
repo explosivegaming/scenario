@@ -1,0 +1,23 @@
+{
+    "name": "kill",
+    "version": "4.0.0",
+    "type": "Module",
+    "description": "Adds a command which can be used to kill a player or yourself.",
+    "location": "<blank>",
+    "keywords": [
+        "Command",
+        "ExpGaming",
+        "Kill",
+        "Death",
+        "Admin",
+        "Tool"
+    ],
+    "author": "Cooldude2606",
+    "contact": "Discord: Cooldude2606#5241",
+    "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+    "dependencies": {
+        "ExpGamingCore.Commands": "^4.0.0",
+        "ExpGamingCore.Ranking": "^4.0.0",
+        "FactorioStdLib.Game": "^0.8.0"
+    }
+}
