@@ -46,7 +46,7 @@ setmetatable(commands,{
 -- @field player converts the input into a valid player
 -- @field player_online converts the input to a player if the player is online
 -- @field player_alive converts the input to a player if the player is online and alive
--- @field player_rank converts the input to a player if the player is a lower rank than the user
+-- @field player_rank converts the input to a player if the player is a lower rank than the user or if the person is not admin and the user is
 -- @field player_rank-online converts the input to a player if the player is a lower rank than the user and online
 -- @field player_rank_alive converts the input to a player if the player is a lower rank than the user and online and alive
 commands.validate = {
@@ -60,9 +60,9 @@ commands.validate = {
     ['player']=function(value,event) return Game.get_player(player) or commands.error{'commands.error-player'} end,
     ['player-online']=function(value,event) local player,err = commands.validate['player'](value) return err and commands.error(err) or player.conected and player or commands.error{'commands.error-player-online'} end,
     ['player-alive']=function(value,event) local player,err = commands.validate['player-online'](value) return err and commands.error(err) or player.character and player.character.health > 0 and player or commands.error{'commands.error-player-alive'} end,
-    ['player-rank']=function(value,event) local player,err = commands.validate['player'](value) return err and commands.error(err) or Ranking and Ranking.get_rank(player).power > Ranking.get_rank(event).power or not player.admin or commands.error{'commands.error-player-rank'} end,
-    ['player-rank-online']=function(value,event) local player,err = commands.validate['player-online'](value) return err and commands.error(err) or Ranking and Ranking.get_rank(player).power > Ranking.get_rank(event).power or not player.admin or commands.error{'commands.error-player-rank'} end,
-    ['player-rank-alive']=function(value,event) local player,err = commands.validate['player-alive'](value) return err and commands.error(err) or Ranking and Ranking.get_rank(player).power > Ranking.get_rank(event).power or not player.admin or commands.error{'commands.error-player-rank'} end
+    ['player-rank']=function(value,event) local player,err = commands.validate['player'](value) return err and commands.error(err) or Ranking and Ranking.get_rank(player).power > Ranking.get_rank(event).power or not player.admin and Game.get_player(event).admin or commands.error{'commands.error-player-rank'} end,
+    ['player-rank-online']=function(value,event) local player,err = commands.validate['player-online'](value) return err and commands.error(err) or Ranking and Ranking.get_rank(player).power > Ranking.get_rank(event).power or not player.admin and Game.get_player(event).admin or commands.error{'commands.error-player-rank'} end,
+    ['player-rank-alive']=function(value,event) local player,err = commands.validate['player-alive'](value) return err and commands.error(err) or Ranking and Ranking.get_rank(player).power > Ranking.get_rank(event).power or not player.admin and Game.get_player(event).admin or commands.error{'commands.error-player-rank'} end
 }
 
 --- Returns the inputs of this command as a formated string

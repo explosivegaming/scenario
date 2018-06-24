@@ -1,0 +1,18 @@
+--- A full ranking system for factorio.
+-- @module ExpGamingCommands.kill
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
+
+-- this file should be replaced with a collection but idk if fsm can hanndle collections in a collection
+
+local Admin = require('ExpGamingAdmin')
+
+return {
+    on_init = function(self) 
+        if loaded_modules['ExpGamingAdmin.TempBan'] then verbose('ExpGamingAdmin.TempBan is installed; Loading tempban src') require(module_path..'/src/tempban',{Admin=Admin}) end
+        if loaded_modules['ExpGamingAdmin.Jail'] then verbose('ExpGamingAdmin.Jail is installed; Loading tempban src') require(module_path..'/src/jail',{Admin=Admin}) end
+        if loaded_modules['ExpGamingAdmin.Warnings'] then verbose('ExpGamingAdmin.Warnings is installed; Loading tempban src') require(module_path..'/src/warnings',{Admin=Admin}) end
+        if loaded_modules['ExpGamingAdmin.Reports'] then verbose('ExpGamingAdmin.Reports is installed; Loading tempban src') require(module_path..'/src/reprots',{Admin=Admin}) end
+        if loaded_modules['ExpGamingAdmin.ClearInventory'] then verbose('ExpGamingAdmin.ClearInventory is installed; Loading tempban src') require(module_path..'/src/clear',{Admin=Admin}) end
+    end
+}

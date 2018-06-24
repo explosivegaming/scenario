@@ -1,0 +1,29 @@
+{
+    "name": "admin",
+    "version": "4.0.0",
+    "type": "Module",
+    "description": "Admins many of the admin featues which the script can use as in game commands.",
+    "location": "<blank>",
+    "keywords": [
+        "ExpGaming",
+        "Admin",
+        "Tools",
+        "Commands",
+        "Temp ban",
+        "Jail",
+        "Clear Inventory",
+        "Report",
+        "Warnings"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "ExpGamingCore.Commands": "^4.0.0",
+        "ExpGamingAdmin.TempBan": "?^4.0.0",
+        "ExpGamingAdmin.Jail": "?^4.0.0",
+        "ExpGamingAdmin.Warnings": "?^4.0.0",
+        "ExpGamingAdmin.Reports": "^?4.0.0",
+        "ExpGamingAdmin.ClearInventory": "?^4.0.0"
+    }
+}
