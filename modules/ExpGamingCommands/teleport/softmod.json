@@ -1,0 +1,24 @@
+{
+    "name": "teleport",
+    "version": "4.0.0",
+    "type": "Module",
+    "description": "Adds a few commands used to teleport players.",
+    "location": "<blank>",
+    "keywords": [
+        "Teleport",
+        "Tp",
+        "Bring",
+        "GoTo",
+        "ExpGaming",
+        "Command",
+        "Admin",
+        "Tools"
+    ],
+    "author": "Cooldude2606",
+    "contact": "Discord: Cooldude2606#5241",
+    "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+    "dependencies": {
+        "ExpGamingCore.Commands": "^4.0.0",
+        "ExpGamingAdmin.Teleport": "^4.0.0"
+    }
+}
