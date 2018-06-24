@@ -1,0 +1,24 @@
+{
+    "name": "repair",
+    "version": "4.0.0",
+    "type": "Module",
+    "description": "Allows items to be healed and repaired with a command",
+    "location": "<blank>",
+    "keywords": [
+        "ExpGaming",
+        "Command",
+        "Heal",
+        "Repair",
+        "Ghosts",
+        "Revive"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "ExpGamingLib": "^4.0.0",
+        "FactorioStdLib.Game": "^0.8.0",
+        "ExpGamingCore.Ranking": "^4.0.0",
+        "ExpGamingAdmin.TempBan": "?^4.0.0"
+    }
+}

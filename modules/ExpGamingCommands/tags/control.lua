@@ -15,7 +15,7 @@ commands.add_command('tag', 'Give yourself a custom tag. Use "" to have more tha
     local player = Game.get_player(event)
     local rank = Ranking.get_rank(player)
     player.tag = rank.tag..' - '..args.tag
-    player.print('Your tag has been set. Use /tag-clear to remove your tag')
+    player_return('Your tag has been set. Use /tag-clear to remove your tag')
 end)
 
 --- Gives you a tag
@@ -27,5 +27,5 @@ commands.add_command('tag-clear', 'Removes a custom tag. Player can be self (/ta
     local player = args.player
     local rank = Ranking.get_rank(player)
     player.tag = rank.tag
-    player.print('Your tag has been removed.')
+    player_return('Your tag has been removed.')
 end)
