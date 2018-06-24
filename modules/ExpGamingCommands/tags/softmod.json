@@ -1,0 +1,21 @@
+{
+    "name": "tags",
+    "version": "4.0.0",
+    "type": "Module",
+    "description": "Allows tags to be used by users.",
+    "location": "<blank>",
+    "keywords": [
+        "Tags",
+        "Custom Tags",
+        "Commands",
+        "ExpGaming"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "ExpGamingCore.Ranking": "^4.0.0",
+        "ExpGamingCore.Commands": "^4.0.0",
+        "FactorioStdLib.Game": "^0.8.0"
+    }
+}
