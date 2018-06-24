@@ -13,5 +13,172 @@
     "author": "Cooldude2606",
     "contact": "Discord: Cooldude2606#5241",
     "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
-    "submodules": {}
+    "submodules": {
+        "admin": {
+            "name": "admin",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Admins many of the admin featues which the script can use as in game commands.",
+            "location": "<blank>",
+            "keywords": [
+                "ExpGaming",
+                "Admin",
+                "Tools",
+                "Commands",
+                "Temp ban",
+                "Jail",
+                "Clear Inventory",
+                "Report",
+                "Warnings"
+            ],
+            "dependencies": {
+                "ExpGamingCore.Commands": "^4.0.0",
+                "ExpGamingAdmin.TempBan": "?^4.0.0",
+                "ExpGamingAdmin.Jail": "?^4.0.0",
+                "ExpGamingAdmin.Warnings": "?^4.0.0",
+                "ExpGamingAdmin.Reports": "^?4.0.0",
+                "ExpGamingAdmin.ClearInventory": "?^4.0.0"
+            }
+        },
+        "bonus": {
+            "name": "bonus",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Allows a bonus to be applied to players and instant respawn.",
+            "location": "<blank>",
+            "keywords": [
+                "Instant Respawn",
+                "Bonus",
+                "Cheat",
+                "Commands",
+                "ExpGaming",
+                "Respawn"
+            ],
+            "dependencies": {
+                "FactorioStdLib.Game": "^0.8.0",
+                "ExpGamingLib": "^4.0.0",
+                "ExpGamingCore.Commands": "^4.0.0",
+                "ExpGamingCore.Ranking": "?^4.0.0"
+            }
+        },
+        "cheatMode": {
+            "name": "cheatMode",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Adds a command which allow you to toggle cheatmode",
+            "location": "<blank>",
+            "keywords": [
+                "Cheat",
+                "Commands",
+                "Admin",
+                "ExpGaming",
+                "Cheat Mode",
+                "Hacks"
+            ],
+            "dependencies": {
+                "ExpGamingCore.Commands": "^4.0.0"
+            }
+        },
+        "home": {
+            "name": "home",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Allows players to set homes and then return to them later.",
+            "location": "<blank>",
+            "keywords": [
+                "Teleport",
+                "ExpGaming",
+                "Home",
+                "Return",
+                "Set Home",
+                "Commands"
+            ],
+            "dependencies": {
+                "FactorioStdLib.Game": "^0.8.0",
+                "ExpGamingCore.Commands": "^4.0.0"
+            }
+        },
+        "kill": {
+            "name": "kill",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Adds a command which can be used to kill a player or yourself.",
+            "location": "<blank>",
+            "keywords": [
+                "Command",
+                "ExpGaming",
+                "Kill",
+                "Death",
+                "Admin",
+                "Tool"
+            ],
+            "dependencies": {
+                "ExpGamingCore.Commands": "^4.0.0",
+                "ExpGamingCore.Ranking": "^4.0.0",
+                "FactorioStdLib.Game": "^0.8.0"
+            }
+        },
+        "repair": {
+            "name": "repair",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Allows items to be healed and repaired with a command",
+            "location": "<blank>",
+            "keywords": [
+                "ExpGaming",
+                "Command",
+                "Heal",
+                "Repair",
+                "Ghosts",
+                "Revive"
+            ],
+            "dependencies": {
+                "ExpGamingLib": "^4.0.0",
+                "FactorioStdLib.Game": "^0.8.0",
+                "ExpGamingCore.Ranking": "^4.0.0",
+                "ExpGamingAdmin.TempBan": "?^4.0.0"
+            }
+        },
+        "tags": {
+            "name": "tags",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Allows tags to be used by users.",
+            "location": "<blank>",
+            "keywords": [
+                "Tags",
+                "Custom Tags",
+                "Commands",
+                "ExpGaming"
+            ],
+            "dependencies": {
+                "ExpGamingLib": "^4.0.0",
+                "ExpGamingCore.Ranking": "^4.0.0",
+                "ExpGamingCore.Commands": "^4.0.0",
+                "FactorioStdLib.Game": "^0.8.0"
+            }
+        },
+        "teleport": {
+            "name": "teleport",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Adds a few commands used to teleport players.",
+            "location": "<blank>",
+            "keywords": [
+                "Teleport",
+                "Tp",
+                "Bring",
+                "GoTo",
+                "ExpGaming",
+                "Command",
+                "Admin",
+                "Tools"
+            ],
+            "dependencies": {
+                "ExpGamingCore.Commands": "^4.0.0",
+                "ExpGamingAdmin.Teleport": "^4.0.0"
+            }
+        }
+    },
+    "dependencies": {}
 }

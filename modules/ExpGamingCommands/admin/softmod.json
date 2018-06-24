@@ -1,7 +1,7 @@
 {
     "name": "admin",
     "version": "4.0.0",
-    "type": "Module",
+    "type": "Submodule",
     "description": "Admins many of the admin featues which the script can use as in game commands.",
     "location": "<blank>",
     "keywords": [

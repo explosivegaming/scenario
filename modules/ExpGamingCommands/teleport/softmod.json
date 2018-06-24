@@ -1,7 +1,7 @@
 {
     "name": "teleport",
     "version": "4.0.0",
-    "type": "Module",
+    "type": "Submodule",
     "description": "Adds a few commands used to teleport players.",
     "location": "<blank>",
     "keywords": [

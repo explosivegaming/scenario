@@ -1,7 +1,7 @@
 {
     "name": "tags",
     "version": "4.0.0",
-    "type": "Module",
+    "type": "Submodule",
     "description": "Allows tags to be used by users.",
     "location": "<blank>",
     "keywords": [

@@ -1,7 +1,7 @@
 {
     "name": "repair",
     "version": "4.0.0",
-    "type": "Module",
+    "type": "Submodule",
     "description": "Allows items to be healed and repaired with a command",
     "location": "<blank>",
     "keywords": [

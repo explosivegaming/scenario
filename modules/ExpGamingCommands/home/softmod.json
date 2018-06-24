@@ -1,7 +1,7 @@
 {
     "name": "home",
     "version": "4.0.0",
-    "type": "Module",
+    "type": "Submodule",
     "description": "Allows players to set homes and then return to them later.",
     "location": "<blank>",
     "keywords": [
