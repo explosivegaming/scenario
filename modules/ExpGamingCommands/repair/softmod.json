@@ -12,9 +12,6 @@
         "Ghosts",
         "Revive"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
     "dependencies": {
         "ExpGamingLib": "^4.0.0",
         "FactorioStdLib.Game": "^0.8.0",

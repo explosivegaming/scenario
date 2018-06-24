@@ -12,9 +12,6 @@
         "Cheat Mode",
         "Hacks"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
     "dependencies": {
         "ExpGamingCore.Commands": "^4.0.0"
     }

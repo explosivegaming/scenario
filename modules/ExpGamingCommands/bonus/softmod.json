@@ -12,9 +12,6 @@
         "ExpGaming",
         "Respawn"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
     "dependencies": {
         "FactorioStdLib.Game": "^0.8.0",
         "ExpGamingLib": "^4.0.0",

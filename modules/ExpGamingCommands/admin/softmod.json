@@ -15,10 +15,8 @@
         "Report",
         "Warnings"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
     "dependencies": {
+        "ExpGamingLib": "^4.0.0",
         "ExpGamingCore.Commands": "^4.0.0",
         "ExpGamingAdmin.TempBan": "?^4.0.0",
         "ExpGamingAdmin.Jail": "?^4.0.0",
