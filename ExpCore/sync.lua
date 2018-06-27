@@ -344,7 +344,7 @@ function Sync._load()
             end
             _frame.add{
                 type='label',
-                caption='Press Ecs or E to close; this is only visible once!',
+                caption='Press Esc or E to close; this is only visible once!',
                 style='fake_disabled_label'
             }.style.font='default-small'
     end}
