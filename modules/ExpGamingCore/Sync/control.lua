@@ -163,15 +163,15 @@ function Sync.count_admins()
 end
 
 --- Used to get the number of afk players defined by 2 min by default
--- @usage Sync.count_afk()
+-- @usage Sync.count_afk_times()
 -- @tparam[opt=7200] int time in ticks that a player is called afk
 -- @treturn number the number of afk players
-function Sync.count_afk(time)
+function Sync.count_afk_times(time)
     if not game then return 0 end
     local time = time or 7200
     local rtn = {}
     for _,player in pairs(game.connected_players) do 
-        if player.afk_time > time then rtn[player.name] = player.afk_time end
+        if player.afk_time > time then rtn[player.name] = Sync.tick_format(player.afk_time) end
     end
     return rtn
 end
