@@ -1,0 +1,17 @@
+{
+    "name": "ExpGamingPlayer",
+    "version": "4.0.0",
+    "type": "Collection",
+    "description": "Useful collection of modules for displaying player infomation.",
+    "location": "<blank>",
+    "keywords": [
+        "ExpGaming",
+        "Player",
+        "Information",
+        "AFK"
+    ],
+    "author": "Cooldude2606",
+    "contact": "Discord: Cooldude2606#5241",
+    "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+    "submodules": {}
+}

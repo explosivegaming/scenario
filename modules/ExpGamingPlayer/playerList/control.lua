@@ -1,35 +1,39 @@
---[[
-Explosive Gaming
+--- A full ranking system for factorio.
+-- @module ExpGamingPlayer.playerList
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
---Please Only Edit Below This Line-----------------------------------------------------------
+local Game = require('FactorioStdLib.Game')
+local Gui = require('ExpGamingCore.Gui')
+local Admin -- hanndled on load
 
-local function _global(reset)
-    global.addons = not reset and global.addons or {}
-    global.addons.player_list = not reset and global.addons.player_list or {update=0,delay=10,intervial=54000}
-    return global.addons.player_list
-end
+local global = global{
+    update=0,
+    delay=10,
+    intervial=54000
+}
 
-local get_player_info = get_player_info or function(player,frame)
+-- this will be replaced on load if playerInfo module is present
+local function playerInfo(player,frame)
     frame.add{
         type='label',
         caption={'player-list.no-info-file'}
     }
 end
 
-local function update()
-    Gui.left.update('player-list')
+local function getPlayers()
+    local rtn = {{{r=233,g=63,b=233},'Admin',{}},{{r=255,g=159,b=27},'',{}}}
+    for _,player in pairs(game.connected_players) do
+        if player.admin then table.insert(rtn[2][3],player)
+        else table.insert(rtn[1][3],player) end
+    end
+    return rtn
 end
 
 local function queue_update(tick)
-    local data = _global()
     local tick = is_type(tick,'table') and tick.tick or is_type(tick,'number') and tick or game.tick
-    if tick + data.delay > data.update - data.intervial then
-        data.update = tick + data.delay
+    if tick + global.delay > global.update - global.intervial then
+        global.update = tick + global.delay
     end
 end
 
@@ -57,23 +61,24 @@ Gui.left.add{
         }
         player_list.vertical_scroll_policy = 'auto'
         player_list.style.maximal_height=195
-        for _,rank in pairs(Ranking._ranks()) do
-            for _,player in pairs(rank:get_players(true)) do
+        local players = getPlayers() -- list of [colour,shortHand,[playerOne,playerTwo]]
+        for _,rank in pairs(players) do
+            for _,player in pairs(rank[3]) do
                 local flow = player_list.add{type='flow'}
-                if rank.short_hand == '' then
+                if rank[2] == '' then
                     flow.add{
                         type='label',
                         name=player.name,
                         style='caption_label',
                         caption={'player-list.format-nil',tick_to_display_format(player.online_time),player.name}
-                    }.style.font_color = rank.colour
+                    }.style.font_color = rank[1]
                 else
                     flow.add{
                         type='label',
                         name=player.name,
                         style='caption_label',
-                        caption={'player-list.format',tick_to_display_format(player.online_time),player.name,rank.short_hand}
-                    }.style.font_color = rank.colour
+                        caption={'player-list.format',tick_to_display_format(player.online_time),player.name,rank[2]}
+                    }.style.font_color = rank[1]
                 end
                 if Admin.report_btn then
                     if not rank:allowed('no-report') and player.index ~= frame.player_index then
@@ -88,28 +93,40 @@ Gui.left.add{
     open_on_join=true
 }
 
-Event.register(defines.events.on_tick,function(event)
-    local data = _global()
-    if event.tick > data.update then
-        update()
-        data.update = event.tick + data.intervial
+script.on_event(defines.events.on_tick,function(event)
+    if event.tick > global.update then
+        Gui.left.update('player-list')
+        global.update = event.tick + global.intervial
     end
 end)
 
-Event.register(defines.events.on_gui_click,function(event)
+script.on_event(defines.events.on_gui_click,function(event)
+    -- lots of checks for it being valid
     if event.element and event.element.valid 
     and event.element.parent and event.element.parent.parent and event.element.parent.parent.parent 
     and event.element.parent.parent.parent.name == 'player-list' then else return end
+    -- must be a right click
     if event.button == defines.mouse_button_type.right then else return end
     local player_list = event.element.parent.parent.parent
+    -- hides the player list to show the info
     player_list.scroll.style.visible = false
     local flow = player_list.add{type='flow',direction='vertical'}
     back_btn:draw(flow)
-    get_player_info(event.element.name,flow,true)
+    playerInfo(event.element.name,flow,true)
     if Game.get_player(event.element.name) and event.player_index == Game.get_player(event.element.name).index then return end
     if Admin and Admin.allowed(event.player_index) then Admin.btn_flow(flow).caption = event.element.name end
 end)
 
-Event.register(defines.events.on_player_joined_game,queue_update)
-Event.register(defines.events.on_player_left_game,queue_update)
-Event.register(defines.events.rank_change,queue_update)
+script.on_event(defines.events.on_player_joined_game,queue_update)
+script.on_event(defines.events.on_player_left_game,queue_update)
+script.on_event(defines.events.rank_change,queue_update)
+
+function commands:on_init()
+    if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer.playerInfo') end
+    if loaded_modules['ExpGamingAdmin'] then Admin = require('ExpGamingAdmin') end
+end
+
+return {
+    force_update=function() return Gui.left.update('player-list') end,
+    update=queue_update
+}
