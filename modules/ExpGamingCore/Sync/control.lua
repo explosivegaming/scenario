@@ -32,13 +32,14 @@ local global = global{
     time_set={0,'0.00M'},
     last_update={0,'0.00M'},
     time_period={18000,'5.00M'},
+    game_speed=1.0,
     players={
         online={'Offline'},
         n_online=0,
         all={'Offline'},
         n_all=0,
         admins_online=0,
-        afk_players=0,
+        afk_players={},
         times={'Offline'} 
     },
     ranks={'Offline'},
@@ -162,17 +163,17 @@ function Sync.count_admins()
 end
 
 --- Used to get the number of afk players defined by 2 min by default
--- @usage Sync.count_afk()
+-- @usage Sync.count_afk_times()
 -- @tparam[opt=7200] int time in ticks that a player is called afk
 -- @treturn number the number of afk players
-function Sync.count_afk(time)
+function Sync.count_afk_times(time)
     if not game then return 0 end
     local time = time or 7200
-    local _count = 0
+    local rtn = {}
     for _,player in pairs(game.connected_players) do 
-        if player.afk_time > time then _count=_count+1 end
+        if player.afk_time > time then rtn[player.name] = Sync.tick_format(player.afk_time) end
     end
-    return _count
+    return rtn
 end
 
 --- Used to get the number of players in each rank and currently online; if ExpGamingCore/Ranking is present then it will give more than admin and user
@@ -243,13 +244,14 @@ function Sync.update()
     info.time_period[2] = tick_to_display_format(info.time_period[1])
     info.last_update[1] = game.tick
     info.last_update[2] = tick_to_display_format(game.tick)
+    info.game_speed = game.speed
     info.players={
         online=Sync.count_players(true),
         n_online=#game.connected_players,
         all=Sync.count_players(),
         n_all=#game.players,
         admins_online=Sync.count_admins(),
-        afk_players=Sync.count_afk(),
+        afk_players=Sync.count_afk_times(),
         times=Sync.count_player_times()
     }
     info.ranks = Sync.count_ranks()
