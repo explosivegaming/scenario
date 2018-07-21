@@ -233,7 +233,7 @@ function Sync.update()
         all=Sync.count_players(),
         n_all=#game.players,
         admins_online=Sync.count_admins(),
-        afk_players=Sync.count_afk(),
+        afk_players=Sync.count_afk_times(),
         times=Sync.count_player_times()
     }
     info.ranks = Sync.count_ranks()
