@@ -113,14 +113,14 @@ end
 -- @usage Sync.count_afk()
 -- @tparam[opt=7200] int time in ticks that a player is called afk
 -- @treturn int the number of afk players
-function Sync.count_afk(time)
+function Sync.count_afk_times(time)
     if not game then return 0 end
     local time = time or 7200
-    local _count = 0
+    local rtn = {}
     for _,player in pairs(game.connected_players) do 
-        if player.afk_time > time then _count=_count+1 end
+        if player.afk_time > time then rtn[player.name] = player.afk_time end
     end
-    return _count
+    return rtn
 end
 
 --- used to get the number of players in each rank and currently online
@@ -175,6 +175,7 @@ function Sync.info(set)
         server_description='A factorio server for everyone',
         reset_time='On Demand',
         time='Day Mth 00 00:00:00 UTC Year',
+        game_speed=game.speed,
         time_set=Sync.tick_format(0),
         last_update=Sync.tick_format(0),
         time_period=Sync.tick_format(18000),
@@ -184,7 +185,7 @@ function Sync.info(set)
             all=Sync.count_players(),
             n_all=#game.players,
             admins_online=Sync.count_admins(),
-            afk_players=Sync.count_afk(),
+            afk_players=Sync.count_afk_times(),
             times=Sync.count_player_times()
         },
         ranks=Sync.count_ranks(),
@@ -225,6 +226,7 @@ function Sync.update()
     info.time_period[2] = tick_to_display_format(info.time_period[1])
     info.last_update[1] = game.tick
     info.last_update[2] = tick_to_display_format(game.tick)
+    info.game_speed=game.speed,
     info.players={
         online=Sync.count_players(true),
         n_online=#game.connected_players,
