@@ -118,7 +118,7 @@ function Sync.count_afk_times(time)
     local time = time or 7200
     local rtn = {}
     for _,player in pairs(game.connected_players) do 
-        if player.afk_time > time then rtn[player.name] = player.afk_time end
+        if player.afk_time > time then rtn[player.name] = Sync.tick_format(player.afk_time) end
     end
     return rtn
 end
