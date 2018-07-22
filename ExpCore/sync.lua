@@ -226,7 +226,7 @@ function Sync.update()
     info.time_period[2] = tick_to_display_format(info.time_period[1])
     info.last_update[1] = game.tick
     info.last_update[2] = tick_to_display_format(game.tick)
-    info.game_speed=game.speed,
+    info.game_speed=game.speed
     info.players={
         online=Sync.count_players(true),
         n_online=#game.connected_players,
