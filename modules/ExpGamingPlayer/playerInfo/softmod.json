@@ -1,0 +1,18 @@
+{
+    "name": "playerInfo",
+    "version": "4.0.0",
+    "type": "Module",
+    "description": "Used to give so common info on a player as a lua table or a frame.",
+    "location": "<blank>",
+    "keywords": [
+        "Cam",
+        "Follow",
+        "Player",
+        "Info",
+        "Useful"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {}
+}

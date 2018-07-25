@@ -121,12 +121,11 @@ script.on_event(defines.events.on_player_joined_game,queue_update)
 script.on_event(defines.events.on_player_left_game,queue_update)
 script.on_event(defines.events.rank_change,queue_update)
 
-function commands:on_init()
-    if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer.playerInfo') end
-    if loaded_modules['ExpGamingAdmin'] then Admin = require('ExpGamingAdmin') end
-end
-
 return {
     force_update=function() return Gui.left.update('player-list') end,
-    update=queue_update
+    update=queue_update,
+    on_init=function(self)
+        if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer.playerInfo') end
+        if loaded_modules['ExpGamingAdmin'] then Admin = require('ExpGamingAdmin') end
+    end
 }
