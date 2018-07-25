@@ -13,5 +13,68 @@
     "author": "Cooldude2606",
     "contact": "Discord: Cooldude2606#5241",
     "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
-    "submodules": {}
+    "submodules": {
+        "afkKick": {
+            "name": "afkKick",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Adds a varible amount of time before a user is kicked based on the current player count.",
+            "location": "<blank>",
+            "keywords": [
+                "Kick",
+                "AFK",
+                "Players",
+                "Smart",
+                "Varible"
+            ],
+            "dependencies": {
+                "FactorioStdLib.Game": "^0.8.0",
+                "ExpGamingCore.Gui": "^4.0.0",
+                "ExpGamingCore.Ranking": "?^4.0.0",
+                "ExpGamingCore.Sync": "?^4.0.0",
+                "ExpGamingCore.Server": "?^4.0.0"
+            }
+        },
+        "playerInfo": {
+            "name": "playerInfo",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Used to give so common info on a player as a lua table or a frame.",
+            "location": "<blank>",
+            "keywords": [
+                "Cam",
+                "Follow",
+                "Player",
+                "Info",
+                "Useful"
+            ],
+            "dependencies": {
+                "FactorioStdLib.Game": "^0.8.0",
+                "ExpGamingCore.Gui": "^4.0.0",
+                "ExpGamingCore.Ranking": "?^4.0.0"
+            }
+        },
+        "playerList": {
+            "name": "playerList",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Used to display player names and online time on the top left.",
+            "location": "<blank>",
+            "keywords": [
+                "Player List",
+                "List",
+                "Gui",
+                "Names"
+            ],
+            "dependencies": {
+                "FactorioStdLib.Game": "^0.8.0",
+                "ExpGamingCore.Gui": "^4.0.0",
+                "ExpGamingCore.Ranking": "?^4.0.0",
+                "ExpGamingAdmin.buttonFlow": "?^4.0.0",
+                "ExpGamingAdmin.reports": "?^4.0.0",
+                "ExpGamingPlayer.playerInfo": "?^4.0.0"
+            }
+        }
+    },
+    "dependencies": {}
 }
