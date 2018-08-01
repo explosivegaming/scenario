@@ -44,6 +44,7 @@ local commands = {
     ['aids']={'chat-bot.aids'},
     ['riot']={'chat-bot.riot'},
     ['lenny']={'chat-bot.lenny'},
+    ['feedback']={'chat-bot.feedback'},
     ['wiki']={'chat-bot.wiki'},
     ['evolution']=function(player) return {'chat-bot.current-evolution',string.format('%.2f',game.forces['enemy'].evolution_factor)} end,
     --Jokes about food and drink
