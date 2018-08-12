@@ -1,7 +1,7 @@
 -- made by cooldude
 -- idea from Mylon - Dirt Path
 
-local adjacency_boost = 10 -- makes paths more lickly to be next to each other
+local adjacency_boost = 2 -- makes paths more lickly to be next to each other; must be greater than 0
 local placed_paths = {
     ['refined-concrete']=true,
     ['refined-hazard-concrete-right']=true,
@@ -14,13 +14,13 @@ local placed_paths = {
 local paths = {
     -- ['tile name'] = {health,convert to}
     -- health is the average number of steps in hundards before it changes
-    ['refined-concrete']={40,'concrete'},
-    ['refined-hazard-concrete-right']={40,'hazard-concrete-right'},
-    ['refined-hazard-concrete-left']={40,'hazard-concrete-left'},
-    ['concrete']={30,'stone-path'},
-    ['hazard-concrete-right']={30,'stone-path'},
-    ['hazard-concrete-left']={30,'stone-path'},
-    ['stone-path']={25,'world-gen'}, -- world-gen just makes it pick the last tile not placed by a player
+    ['refined-concrete']={70,'concrete'},
+    ['refined-hazard-concrete-right']={70,'hazard-concrete-right'},
+    ['refined-hazard-concrete-left']={70,'hazard-concrete-left'},
+    ['concrete']={50,'stone-path'},
+    ['hazard-concrete-right']={50,'stone-path'},
+    ['hazard-concrete-left']={50,'stone-path'},
+    ['stone-path']={40,'world-gen'}, -- world-gen just makes it pick the last tile not placed by a player
     ['sand-1']={1,'sand-2'},
     ['sand-2']={3,'sand-3'},
     ['sand-3']={1,'red-desert-3'},
@@ -62,7 +62,7 @@ Event.register(defines.events.on_player_built_tile, function(event)
     for _,old_tile in pairs(old_tiles) do
         if placed_paths[old_tile.old_tile.name] or old_tile.old_tile.name == 'water' or old_tile.old_tile.name == 'deep-water' then else
             if global.paths == nil then global.paths = {} end -- nil as you can set to false to disable
-            global.paths[global_key(surface,old_tile.position)]=old_tile.old_tile.name
+            global.paths[global_key(surface,old_tile.position)]=old_tile.old_tile.name -- not a mistake, this makes it have dimising returns
         end
     end
 end)
@@ -79,9 +79,9 @@ Event.register(defines.events.on_player_changed_position, function(event)
     local count = 1
     for x = -1,1 do for y = -1,1 do
         local _pos = {pos.x+x,pos.y+y}
-        if paths[tile_name][2] == 'world-gen' and not placed_paths[surface.get_tile(_pos).name] 
+        if placed_paths[tile_name] and not placed_paths[surface.get_tile(_pos).name] 
         or surface.get_tile(_pos).name == paths[tile_name][2] 
-        then chance=chance*(adjacency_boost/count) count=count+1 end
+        then chance=chance*((adjacency_boost+8)/count) count=count+1 end
     end end
     if math.random() < chance then
         down_grade(surface,pos)
