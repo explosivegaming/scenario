@@ -2,6 +2,33 @@
 -- idea from Mylon - Dirt Path
 
 local adjacency_boost = 2 -- makes paths more lickly to be next to each other; must be greater than 0
+local entities = {
+    ['stone-furnace']=2,
+    ['steel-furnace']=2,
+    ['electric-furnace']=3,
+    ['assembling-machine-1']=3,
+    ['assembling-machine-2']=3,
+    ['assembling-machine-3']=3,
+    ['beacon']=3,
+    ['centrifuge']=3,
+    ['chemical-plant']=3,
+    ['oil-refinery']=7,
+    ['storage-tank']=3,
+    ['nuclear-reactor']=5,
+    ['steam-engine']=4,
+    ['steam-turbine']=4,
+    ['boiler']=3,
+    ['heat-exchanger']=3,
+    ['stone-wall']=1,
+    ['gate']=1,
+    ['gun-turret']=2,
+    ['laser-turret']=2,
+    ['radar']=3,
+    ['lab']=3,
+    ['big-electric-pole']=2,
+    ['substation']=2,
+    ['rocket-silo']=7
+}
 local placed_paths = {
     ['refined-concrete']=true,
     ['refined-hazard-concrete-right']=true,
@@ -85,6 +112,21 @@ Event.register(defines.events.on_player_changed_position, function(event)
     end end
     if math.random() < chance then
         down_grade(surface,pos)
+    end
+end)
+
+Event.register(defines.events.on_built_entity, function(event)
+    local entity = event.entity
+    local surface = player.surface
+    if entities[entity.name] then
+        local size = entities[entity.name]
+        for (x in 0,size) do for (y in 0,size) do
+            local pos = [entity.position.x+x,entity.position.y+y]
+            local tile = surface.get_tile(pos).name
+            if math.random() < paths[tile]*size then
+                down_grade(surface,pos)
+            end
+        end end
     end
 end)
 
