@@ -123,7 +123,7 @@ Event.register(defines.events.on_built_entity, function(event)
         for (x in 0,size) do for (y in 0,size) do
             local pos = [entity.position.x+x,entity.position.y+y]
             local tile = surface.get_tile(pos).name
-            if math.random() < paths[tile]*size then
+            if math.random() < paths[tile]*size*10 then
                 down_grade(surface,pos)
             end
         end end
