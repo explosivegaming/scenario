@@ -1,0 +1,17 @@
+{
+    "name": "autoChat",
+    "version": "4.0.0",
+    "type": "Module",
+    "description": "Sends messages in chat based on what has been said by other players",
+    "location": "<blank>",
+    "keywords": [
+        "Chat",
+        " Bot",
+        " Jokes",
+        " Fun"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {}
+}

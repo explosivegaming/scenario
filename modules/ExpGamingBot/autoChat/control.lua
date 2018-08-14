@@ -1,12 +1,12 @@
---[[
-Explosive Gaming
+--- Sends messages in chat in resposce to other messages
+-- @module ExpGamingBot.autoChat
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
---Please Only Edit Below This Line-----------------------------------------------------------
+local Game = require('FactorioStdLib.Game')
+local Ranking
+
+-- lots of these are jokes, but some have uses
 
 -- white spaces removed and made into lower
 -- these messages are sent only to the player
@@ -22,11 +22,10 @@ local messages = {
     ['links']={'chat-bot.links'},
     ['loop']={'chat-bot.loops'},
     ['loops']={'chat-bot.loops'},
-    --Thadius suggestion start
     ['rhd']={'chat-bot.lhd'},
-    --Thadius suggestion end
     ['roundabout']={'chat-bot.loops'},
     ['roundabouts']={'chat-bot.loops'},
+    ['redmew']={'chat-bot.redmew'},
     ['afk']=function(_player) local max=_player for _,player in pairs(game.connected_players) do if max.afk_time < player.afk_time then max=player end end return {'chat-bot.afk',max.name,tick_to_display_format(max.afk_time)} end
 }
 -- white spaces removed and made into lower
@@ -107,11 +106,11 @@ local commands = {
     end):open() return {'chat-bot.get-beer-1'} end
 }
 
-Event.register(defines.events.on_console_chat,function(event)
+script.on_event(defines.events.on_console_chat,function(event)
     local player = Game.get_player(event)
     if not player then return end
     local player_message = event.message:lower():gsub("%s+", "")
-    local allowed = Ranking.get_rank(player):allowed('global-chat')
+    local allowed = Ranking and Ranking.get_rank(player):allowed('global-chat') or player.admin
     for to_find,message in pairs(messages) do
         if player_message:match(command_syntax..to_find) then
             if allowed then
@@ -132,3 +131,9 @@ Event.register(defines.events.on_console_chat,function(event)
         end
     end
 end)
+
+return {
+    on_init = function(self) 
+        if loaded_modules['ExpGamingCore.Ranking'] then Ranking = require('ExpGamingCore.Ranking') end
+    end
+}
