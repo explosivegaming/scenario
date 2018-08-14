@@ -3,7 +3,7 @@
     "version": "4.0.0",
     "type": "Submodule",
     "description": "A better command handler than the base game.",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Commands.zip",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Commands_4.0.0.zip",
     "keywords": [
         "Library",
         "Lib",
@@ -11,14 +11,12 @@
         "Core",
         "Commands"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
     "dependencies": {
         "ExpGamingLib": "^4.0.0",
         "FactorioStdLib.Table": "^0.8.0",
         "FactorioStdLib.Color": "^0.8.0",
         "FactorioStdLib.Game": "^0.8.0",
         "ExpGamingCore.Ranking": "?^4.0.0"
-    }
+    },
+    "collection": "ExpGamingCore_4.0.0"
 }

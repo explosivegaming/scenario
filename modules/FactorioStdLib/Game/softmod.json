@@ -3,7 +3,7 @@
     "version": "0.8.0",
     "type": "Submodule",
     "description": "The game module.",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.Game.zip",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.Game_0.8.0.zip",
     "keywords": [
         "Standard Library",
         "Lib",
@@ -11,8 +11,6 @@
         "Game",
         "Extends"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
-    "dependencies": {}
+    "dependencies": {},
+    "collection": "FactorioStdLib_0.8.0"
 }

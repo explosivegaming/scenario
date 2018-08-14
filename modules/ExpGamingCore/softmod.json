@@ -3,7 +3,7 @@
     "version": "4.0.0",
     "type": "Collection",
     "description": "Explosive Gaming Core Files",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.zip",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore_4.0.0.zip",
     "keywords": [
         "Library",
         "Lib",
@@ -19,7 +19,7 @@
             "version": "4.0.0",
             "type": "Submodule",
             "description": "A better command handler than the base game.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Commands.zip",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Commands_4.0.0.zip",
             "keywords": [
                 "Library",
                 "Lib",
@@ -33,13 +33,15 @@
                 "FactorioStdLib.Color": "^0.8.0",
                 "FactorioStdLib.Game": "^0.8.0",
                 "ExpGamingCore.Ranking": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingCore_4.0.0"
         },
         "Gui": {
             "name": "Gui",
             "version": "4.0.0",
+            "type": "Submodule",
             "description": "Adds a objective version to custom guis.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Gui.zip",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Gui_4.0.0.zip",
             "keywords": [
                 "Library",
                 "Lib",
@@ -56,13 +58,14 @@
                 "ExpGamingCore.Ranking": "?^4.0.0",
                 "ExpGamingCore.Server": "?^4.0.0"
             },
-            "type": "Submodule"
+            "collection": "ExpGamingCore_4.0.0"
         },
         "Ranking": {
             "name": "Ranking",
             "version": "4.0.0",
+            "type": "Submodule",
             "description": "A full ranking system for factorio.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Ranking.zip",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Ranking_4.0.0.zip",
             "keywords": [
                 "Library",
                 "Lib",
@@ -80,13 +83,14 @@
                 "FactorioStdLib.Game": "^0.8.0",
                 "ExpGamingCore.Server": "?^4.0.0"
             },
-            "type": "Submodule"
+            "collection": "ExpGamingCore_4.0.0"
         },
         "Server": {
             "name": "Server",
             "version": "4.0.0",
+            "type": "Submodule",
             "description": "Adds a thread system and event listening and a admin bypass (recommend to disable /c and use optional /interface)",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Server.zip",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Server_4.0.0.zip",
             "keywords": [
                 "Library",
                 "Lib",
@@ -105,13 +109,14 @@
                 "FactorioStdLib.Game": "^0.8.0",
                 "ExpGamingCore.Commands": "?^4.0.0"
             },
-            "type": "Submodule"
+            "collection": "ExpGamingCore_4.0.0"
         },
         "Sync": {
             "name": "Sync",
             "version": "4.0.0",
+            "type": "Submodule",
             "description": "Allows syncing with an outside server and info panle.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Sync.zip",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Sync_4.0.0.zip",
             "keywords": [
                 "Library",
                 "Lib",
@@ -130,7 +135,8 @@
                 "ExpGamingCore.Ranking": "?^4.0.0",
                 "ExpGamingCore.Gui": "?^4.0.0"
             },
-            "type": "Submodule"
+            "collection": "ExpGamingCore_4.0.0"
         }
-    }
+    },
+    "dependencies": {}
 }

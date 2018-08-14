@@ -228,6 +228,8 @@ function commands:on_init()
     if loaded_modules['ExpGamingCore.Ranking'] then Ranking = require('ExpGamingCore.Ranking') end
 end
 
+return commands
+
 --[[
     command example
 

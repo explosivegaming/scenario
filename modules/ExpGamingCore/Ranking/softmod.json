@@ -1,9 +1,9 @@
 {
     "name": "Ranking",
-    "version": "4.0.0",   
+    "version": "4.0.0",
     "type": "Submodule",
     "description": "A full ranking system for factorio.",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Ranking.zip",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Ranking_4.0.0.zip",
     "keywords": [
         "Library",
         "Lib",
@@ -14,14 +14,12 @@
         "Permissions",
         "Roles"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
     "dependencies": {
         "ExpGamingLib": "^4.0.0",
         "FactorioStdLib.Color": "^0.8.0",
         "FactorioStdLib.Table": "^0.8.0",
         "FactorioStdLib.Game": "^0.8.0",
         "ExpGamingCore.Server": "?^4.0.0"
-    }
+    },
+    "collection": "ExpGamingCore_4.0.0"
 }

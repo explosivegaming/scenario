@@ -3,7 +3,7 @@
     "version": "4.0.0",
     "type": "Submodule",
     "description": "Adds a command which can be used to kill a player or yourself.",
-    "location": "<blank>",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.kill_4.0.0.zip",
     "keywords": [
         "Command",
         "ExpGaming",
@@ -16,5 +16,6 @@
         "ExpGamingCore.Commands": "^4.0.0",
         "ExpGamingCore.Ranking": "^4.0.0",
         "FactorioStdLib.Game": "^0.8.0"
-    }
+    },
+    "collection": "ExpGamingCommands_4.0.0"
 }

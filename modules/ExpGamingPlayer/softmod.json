@@ -3,7 +3,7 @@
     "version": "4.0.0",
     "type": "Collection",
     "description": "Useful collection of modules for displaying player infomation.",
-    "location": "<blank>",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingPlayer_4.0.0.zip",
     "keywords": [
         "ExpGaming",
         "Player",
@@ -19,7 +19,7 @@
             "version": "4.0.0",
             "type": "Submodule",
             "description": "Adds a varible amount of time before a user is kicked based on the current player count.",
-            "location": "<blank>",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingPlayer.afkKick_4.0.0.zip",
             "keywords": [
                 "Kick",
                 "AFK",
@@ -33,14 +33,15 @@
                 "ExpGamingCore.Ranking": "?^4.0.0",
                 "ExpGamingCore.Sync": "?^4.0.0",
                 "ExpGamingCore.Server": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingPlayer_4.0.0"
         },
         "playerInfo": {
             "name": "playerInfo",
             "version": "4.0.0",
             "type": "Submodule",
             "description": "Used to give so common info on a player as a lua table or a frame.",
-            "location": "<blank>",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingPlayer.playerInfo_4.0.0.zip",
             "keywords": [
                 "Cam",
                 "Follow",
@@ -52,14 +53,15 @@
                 "FactorioStdLib.Game": "^0.8.0",
                 "ExpGamingCore.Gui": "^4.0.0",
                 "ExpGamingCore.Ranking": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingPlayer_4.0.0"
         },
         "playerList": {
             "name": "playerList",
             "version": "4.0.0",
             "type": "Submodule",
             "description": "Used to display player names and online time on the top left.",
-            "location": "<blank>",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingPlayer.playerList_4.0.0.zip",
             "keywords": [
                 "Player List",
                 "List",
@@ -73,7 +75,8 @@
                 "ExpGamingAdmin.buttonFlow": "?^4.0.0",
                 "ExpGamingAdmin.reports": "?^4.0.0",
                 "ExpGamingPlayer.playerInfo": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingPlayer_4.0.0"
         }
     },
     "dependencies": {}

@@ -3,7 +3,7 @@
     "version": "4.0.0",
     "type": "Submodule",
     "description": "Used to display player names and online time on the top left.",
-    "location": "<blank>",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingPlayer.playerList_4.0.0.zip",
     "keywords": [
         "Player List",
         "List",
@@ -17,5 +17,6 @@
         "ExpGamingAdmin.buttonFlow": "?^4.0.0",
         "ExpGamingAdmin.reports": "?^4.0.0",
         "ExpGamingPlayer.playerInfo": "?^4.0.0"
-    }
+    },
+    "collection": "ExpGamingPlayer_4.0.0"
 }

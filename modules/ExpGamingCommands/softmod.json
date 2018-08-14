@@ -3,7 +3,7 @@
     "version": "4.0.0",
     "type": "Collection",
     "description": "A Collection of all of the custom commands used on ExpGaming servers.",
-    "location": "<blank>",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands_4.0.0.zip",
     "keywords": [
         "Commands",
         "ExpGaming",
@@ -19,7 +19,7 @@
             "version": "4.0.0",
             "type": "Submodule",
             "description": "Admins many of the admin featues which the script can use as in game commands.",
-            "location": "<blank>",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.admin_4.0.0.zip",
             "keywords": [
                 "ExpGaming",
                 "Admin",
@@ -39,14 +39,15 @@
                 "ExpGamingAdmin.Warnings": "?^4.0.0",
                 "ExpGamingAdmin.Reports": "^?4.0.0",
                 "ExpGamingAdmin.ClearInventory": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingCommands_4.0.0"
         },
         "bonus": {
             "name": "bonus",
             "version": "4.0.0",
             "type": "Submodule",
             "description": "Allows a bonus to be applied to players and instant respawn.",
-            "location": "<blank>",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.bonus_4.0.0.zip",
             "keywords": [
                 "Instant Respawn",
                 "Bonus",
@@ -60,14 +61,15 @@
                 "ExpGamingLib": "^4.0.0",
                 "ExpGamingCore.Commands": "^4.0.0",
                 "ExpGamingCore.Ranking": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingCommands_4.0.0"
         },
         "cheatMode": {
             "name": "cheatMode",
             "version": "4.0.0",
             "type": "Submodule",
             "description": "Adds a command which allow you to toggle cheatmode",
-            "location": "<blank>",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.cheatMode_4.0.0.zip",
             "keywords": [
                 "Cheat",
                 "Commands",
@@ -78,14 +80,15 @@
             ],
             "dependencies": {
                 "ExpGamingCore.Commands": "^4.0.0"
-            }
+            },
+            "collection": "ExpGamingCommands_4.0.0"
         },
         "home": {
             "name": "home",
             "version": "4.0.0",
             "type": "Submodule",
             "description": "Allows players to set homes and then return to them later.",
-            "location": "<blank>",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.home_4.0.0.zip",
             "keywords": [
                 "Teleport",
                 "ExpGaming",
@@ -97,14 +100,15 @@
             "dependencies": {
                 "FactorioStdLib.Game": "^0.8.0",
                 "ExpGamingCore.Commands": "^4.0.0"
-            }
+            },
+            "collection": "ExpGamingCommands_4.0.0"
         },
         "kill": {
             "name": "kill",
             "version": "4.0.0",
             "type": "Submodule",
             "description": "Adds a command which can be used to kill a player or yourself.",
-            "location": "<blank>",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.kill_4.0.0.zip",
             "keywords": [
                 "Command",
                 "ExpGaming",
@@ -117,14 +121,15 @@
                 "ExpGamingCore.Commands": "^4.0.0",
                 "ExpGamingCore.Ranking": "^4.0.0",
                 "FactorioStdLib.Game": "^0.8.0"
-            }
+            },
+            "collection": "ExpGamingCommands_4.0.0"
         },
         "repair": {
             "name": "repair",
             "version": "4.0.0",
             "type": "Submodule",
             "description": "Allows items to be healed and repaired with a command",
-            "location": "<blank>",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.repair_4.0.0.zip",
             "keywords": [
                 "ExpGaming",
                 "Command",
@@ -138,14 +143,15 @@
                 "FactorioStdLib.Game": "^0.8.0",
                 "ExpGamingCore.Ranking": "^4.0.0",
                 "ExpGamingAdmin.TempBan": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingCommands_4.0.0"
         },
         "tags": {
             "name": "tags",
             "version": "4.0.0",
             "type": "Submodule",
             "description": "Allows tags to be used by users.",
-            "location": "<blank>",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.tags_4.0.0.zip",
             "keywords": [
                 "Tags",
                 "Custom Tags",
@@ -157,14 +163,15 @@
                 "ExpGamingCore.Ranking": "^4.0.0",
                 "ExpGamingCore.Commands": "^4.0.0",
                 "FactorioStdLib.Game": "^0.8.0"
-            }
+            },
+            "collection": "ExpGamingCommands_4.0.0"
         },
         "teleport": {
             "name": "teleport",
             "version": "4.0.0",
             "type": "Submodule",
             "description": "Adds a few commands used to teleport players.",
-            "location": "<blank>",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.teleport_4.0.0.zip",
             "keywords": [
                 "Teleport",
                 "Tp",
@@ -178,7 +185,8 @@
             "dependencies": {
                 "ExpGamingCore.Commands": "^4.0.0",
                 "ExpGamingAdmin.Teleport": "^4.0.0"
-            }
+            },
+            "collection": "ExpGamingCommands_4.0.0"
         }
     },
     "dependencies": {}

@@ -3,7 +3,7 @@
     "version": "4.0.0",
     "type": "Submodule",
     "description": "Adds a few commands used to teleport players.",
-    "location": "<blank>",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.teleport_4.0.0.zip",
     "keywords": [
         "Teleport",
         "Tp",
@@ -17,5 +17,6 @@
     "dependencies": {
         "ExpGamingCore.Commands": "^4.0.0",
         "ExpGamingAdmin.Teleport": "^4.0.0"
-    }
+    },
+    "collection": "ExpGamingCommands_4.0.0"
 }

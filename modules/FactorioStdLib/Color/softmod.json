@@ -3,7 +3,7 @@
     "version": "0.8.0",
     "type": "Submodule",
     "description": "A defines module for retrieving colors by name.",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.Color.zip",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.Color_0.8.0.zip",
     "keywords": [
         "Standard Library",
         "Lib",
@@ -11,8 +11,6 @@
         "Color",
         "Extends"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
-    "dependencies": {}
+    "dependencies": {},
+    "collection": "FactorioStdLib_0.8.0"
 }

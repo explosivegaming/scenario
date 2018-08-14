@@ -8,6 +8,7 @@
 -- @function _comment
 
 local Game = require('FactorioStdLib.Game')
+local Server = Server
 
 --- Runs the given input from the script
 -- @command interface

@@ -3,7 +3,7 @@
     "version": "0.8.0",
     "type": "Submodule",
     "description": "Extends Lua 5.2 string.",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.String.zip",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.String_0.8.0.zip",
     "keywords": [
         "Standard Library",
         "Lib",
@@ -11,8 +11,6 @@
         "String",
         "Extends"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
-    "dependencies": {}
+    "dependencies": {},
+    "collection": "FactorioStdLib_0.8.0"
 }

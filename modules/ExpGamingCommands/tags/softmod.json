@@ -3,7 +3,7 @@
     "version": "4.0.0",
     "type": "Submodule",
     "description": "Allows tags to be used by users.",
-    "location": "<blank>",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.tags_4.0.0.zip",
     "keywords": [
         "Tags",
         "Custom Tags",
@@ -15,5 +15,6 @@
         "ExpGamingCore.Ranking": "^4.0.0",
         "ExpGamingCore.Commands": "^4.0.0",
         "FactorioStdLib.Game": "^0.8.0"
-    }
+    },
+    "collection": "ExpGamingCommands_4.0.0"
 }

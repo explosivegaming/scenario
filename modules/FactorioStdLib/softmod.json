@@ -3,7 +3,7 @@
     "version": "0.8.0",
     "type": "Collection",
     "description": "Factorio Standard Library Projects",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.zip",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib_0.8.0.zip",
     "keywords": [
         "Standard Library",
         "Lib",
@@ -18,7 +18,7 @@
             "version": "0.8.0",
             "type": "Submodule",
             "description": "A defines module for retrieving colors by name.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.Color.zip",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.Color_0.8.0.zip",
             "keywords": [
                 "Standard Library",
                 "Lib",
@@ -26,14 +26,15 @@
                 "Color",
                 "Extends"
             ],
-            "dependencies": {}
+            "dependencies": {},
+            "collection": "FactorioStdLib_0.8.0"
         },
         "Game": {
             "name": "Game",
             "version": "0.8.0",
             "type": "Submodule",
             "description": "The game module.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.Game.zip",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.Game_0.8.0.zip",
             "keywords": [
                 "Standard Library",
                 "Lib",
@@ -41,14 +42,15 @@
                 "Game",
                 "Extends"
             ],
-            "dependencies": {}
+            "dependencies": {},
+            "collection": "FactorioStdLib_0.8.0"
         },
         "String": {
             "name": "String",
             "version": "0.8.0",
             "type": "Submodule",
             "description": "Extends Lua 5.2 string.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.String.zip",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.String_0.8.0.zip",
             "keywords": [
                 "Standard Library",
                 "Lib",
@@ -56,14 +58,15 @@
                 "String",
                 "Extends"
             ],
-            "dependencies": {}
+            "dependencies": {},
+            "collection": "FactorioStdLib_0.8.0"
         },
         "Table": {
             "name": "Table",
             "version": "0.8.0",
             "type": "Submodule",
             "description": "Extends Lua 5.2 table.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.Table.zip",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/FactorioStdLib.Table_0.8.0.zip",
             "keywords": [
                 "Standard Library",
                 "Lib",
@@ -71,7 +74,9 @@
                 "Table",
                 "Extends"
             ],
-            "dependencies": {}
+            "dependencies": {},
+            "collection": "FactorioStdLib_0.8.0"
         }
-    }
+    },
+    "dependencies": {}
 }
