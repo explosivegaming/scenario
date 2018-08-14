@@ -1,7 +1,7 @@
 {
     "name": "autoChat",
     "version": "4.0.0",
-    "type": "Module",
+    "type": "Submodule",
     "description": "Sends messages in chat based on what has been said by other players",
     "location": "<blank>",
     "keywords": [
@@ -10,8 +10,9 @@
         " Jokes",
         " Fun"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
-    "dependencies": {}
+    "dependencies": {
+        "FactorioStdLib.Game": "^0.8.0",
+        "ExpGamingCore.Ranking": "?^4.0.0"
+    },
+    "collection": "ExpGamingBot_4.0.0"
 }

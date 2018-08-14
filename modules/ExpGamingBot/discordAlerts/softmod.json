@@ -1,0 +1,20 @@
+{
+    "name": "discordAlerts",
+    "version": "4.0.0",
+    "type": "Submodule",
+    "description": "Sends alerts to discord once there is a bot set up to read the alerts.",
+    "location": "<blank>",
+    "keywords": [
+        "Bot",
+        " Discord",
+        " Alerts",
+        " Messages",
+        " Acctions"
+    ],
+    "dependencies": {
+        "ExpGamingCore.Sync": "^4.0.0",
+        "FactorioStdLib.Color": "^0.8.0",
+        "FactorioStdLib.Game": "^0.8.0"
+    },
+    "collection": "ExpGamingBot_4.0.0"
+}

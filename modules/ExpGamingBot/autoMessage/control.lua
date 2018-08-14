@@ -43,12 +43,12 @@ script.on_init(function(event)
             player_return({'chat-bot.message',message},nil,player)
         end
     end):on_event('error',function(self,err)
-        Sync.emit_embeded{
+        if Sync then Sync.emit_embeded{
             title='Auto Message Error',
             color=Color.to_hex(defines.text_color.bg),
             description='Auto Message Error - Closed Thread',
             Error=err
-        }
+        } end
         self.reopen = false
         self:close()
     end):open()

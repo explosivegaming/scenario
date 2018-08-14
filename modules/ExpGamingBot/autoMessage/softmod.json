@@ -1,7 +1,7 @@
 {
     "name": "autoMessage",
     "version": "4.0.0",
-    "type": "Module",
+    "type": "Submodule",
     "description": "Prints a message every 15 minutes to chat.",
     "location": "<blank>",
     "keywords": [
@@ -10,8 +10,11 @@
         " Auto Message",
         " Message"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
-    "dependencies": {}
+    "dependencies": {
+        "ExpGamingCore.Server": "^4.0.0",
+        "FactorioStdLib.Game": "^0.8.0",
+        "ExpGamingCore.Ranking": "?^4.0.0",
+        "ExpGamingCore.Sync": "?^4.0.0"
+    },
+    "collection": "ExpGamingBot_4.0.0"
 }

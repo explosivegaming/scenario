@@ -1,0 +1,78 @@
+{
+    "name": "ExpGamingBot",
+    "version": "4.0.0",
+    "type": "Collection",
+    "description": "Different parts of a useful bot to help run a server. Discord Bot Not Included.",
+    "location": "<blank>",
+    "keywords": [
+        "Discord",
+        " Bot",
+        " Messages",
+        " Chat",
+        " Auto"
+    ],
+    "author": "Cooldude2606",
+    "contact": "Discord: Cooldude2606#5241",
+    "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+    "submodules": {
+        "autoChat": {
+            "name": "autoChat",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Sends messages in chat based on what has been said by other players",
+            "location": "<blank>",
+            "keywords": [
+                "Chat",
+                " Bot",
+                " Jokes",
+                " Fun"
+            ],
+            "dependencies": {
+                "FactorioStdLib.Game": "^0.8.0",
+                "ExpGamingCore.Ranking": "?^4.0.0"
+            },
+            "collection": "ExpGamingBot_4.0.0"
+        },
+        "autoMessage": {
+            "name": "autoMessage",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Prints a message every 15 minutes to chat.",
+            "location": "<blank>",
+            "keywords": [
+                "Bot",
+                " Chat",
+                " Auto Message",
+                " Message"
+            ],
+            "dependencies": {
+                "ExpGamingCore.Server": "^4.0.0",
+                "FactorioStdLib.Game": "^0.8.0",
+                "ExpGamingCore.Ranking": "?^4.0.0",
+                "ExpGamingCore.Sync": "?^4.0.0"
+            },
+            "collection": "ExpGamingBot_4.0.0"
+        },
+        "discordAlerts": {
+            "name": "discordAlerts",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Sends alerts to discord once there is a bot set up to read the alerts.",
+            "location": "<blank>",
+            "keywords": [
+                "Bot",
+                " Discord",
+                " Alerts",
+                " Messages",
+                " Acctions"
+            ],
+            "dependencies": {
+                "ExpGamingCore.Sync": "^4.0.0",
+                "FactorioStdLib.Color": "^0.8.0",
+                "FactorioStdLib.Game": "^0.8.0"
+            },
+            "collection": "ExpGamingBot_4.0.0"
+        }
+    },
+    "dependencies": {}
+}
