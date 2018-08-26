@@ -37,6 +37,7 @@ end
 -- @treturn table the gui element flow
 function center.get_flow(player)
     local player = Game.get_player(player)
+    if not player then error('Invalid player') end
     return player.gui.center.exp_center or player.gui.center.add{name='exp_center',type='flow'}
 end
 
@@ -47,6 +48,7 @@ end
 -- @treturn boelon based on if it successed or not
 function center.open(player,center)
     local player = Game.get_player(player)
+    if not player then error('Invalid player') return false end
     Gui.center.clear(player)
     if not Gui.data.center[center] then return false end
     Gui.data.center[center].open{
@@ -64,6 +66,7 @@ end
 -- @treturn boelon based on if it successed or not
 function center.open_tab(player,center,tab)
     local player = Game.get_player(player)
+    if not player then error('Invalid player') end
     if not Gui.center.open(player,center) then return false end
     local name = center..'_'..tab
     if not Gui.data.inputs_button[name] then return false end

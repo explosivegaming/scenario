@@ -30,7 +30,7 @@ local send_popup = Gui.inputs.add{
     name='send-annoncement',
     caption='utility/export_slot'
 }:on_event('click',function(event)
-    local meta_data = Ranking._presets().meta
+    local meta_data = Ranking.meta
     local default = Ranking.get_rank(meta_data.default)
     local player = Game.get_player(event)
     local rank = Ranking.get_rank(player)

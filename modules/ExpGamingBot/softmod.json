@@ -6,10 +6,10 @@
     "location": "<blank>",
     "keywords": [
         "Discord",
-        " Bot",
-        " Messages",
-        " Chat",
-        " Auto"
+        "Bot",
+        "Messages",
+        "Chat",
+        "Auto"
     ],
     "author": "Cooldude2606",
     "contact": "Discord: Cooldude2606#5241",
@@ -23,9 +23,9 @@
             "location": "<blank>",
             "keywords": [
                 "Chat",
-                " Bot",
-                " Jokes",
-                " Fun"
+                "Bot",
+                "Jokes",
+                "Fun"
             ],
             "dependencies": {
                 "FactorioStdLib.Game": "^0.8.0",
@@ -41,9 +41,9 @@
             "location": "<blank>",
             "keywords": [
                 "Bot",
-                " Chat",
-                " Auto Message",
-                " Message"
+                "Chat",
+                "Auto Message",
+                "Message"
             ],
             "dependencies": {
                 "ExpGamingCore.Server": "^4.0.0",
@@ -61,10 +61,10 @@
             "location": "<blank>",
             "keywords": [
                 "Bot",
-                " Discord",
-                " Alerts",
-                " Messages",
-                " Acctions"
+                "Discord",
+                "Alerts",
+                "Messages",
+                "Acctions"
             ],
             "dependencies": {
                 "ExpGamingCore.Sync": "^4.0.0",

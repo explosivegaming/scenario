@@ -1,0 +1,26 @@
+{
+    "name": "Reports",
+    "version": "4.0.0",
+    "type": "Submodule",
+    "description": "Adds a report system into the game that can also push notifactions to discord.",
+    "location": "<blank>",
+    "keywords": [
+        "Report",
+        "Player",
+        "Admin",
+        "ExpGaming",
+        "Player List",
+        "Commands"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "ExpGamingAdmin.AdminLib": "^4.0.0",
+        "ExpGamingCore.Server": "^4.0.0",
+        "ExpGamingCore.Ranking": "^4.0.0",
+        "FactorioStdLib.Game": "^0.8.0",
+        "FactorioStdLib.Color": "^0.8.0",
+        "ExpGamingCore.Sync": "?^4.0.0"
+    }
+}

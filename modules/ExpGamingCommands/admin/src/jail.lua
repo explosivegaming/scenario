@@ -11,7 +11,7 @@ commands.add_command('jail', 'Jails a player', {
 }, function(event,args)
     local player = args.player
     local reason = args.reason
-    if Ranking.get_rank(player):allowed('no-report') then player_return({'reports.cant-report',args.player}) return commands.error end
+    if Ranking.get_rank(player):allowed('no-report') then player_return({'ExpGamingAdmin@4-0-0.cant-report',args.player}) return commands.error end
     if Admin.is_banned(player) then player_return({'commands.cant-report-ban',args.player}) return commands.error end
     Admin.jail(player,event.player_index,reason)
 end)

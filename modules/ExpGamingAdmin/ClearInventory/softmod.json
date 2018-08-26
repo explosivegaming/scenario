@@ -1,0 +1,22 @@
+{
+    "name": "ClearInventory",
+    "version": "4.0.0",
+    "type": "Submodule",
+    "description": "Adds a function to clear a players inventoy and move the items to spawn.",
+    "location": "<blank>",
+    "keywords": [
+        "Spawn",
+        "Items",
+        "Admin",
+        "Move",
+        "Clear",
+        "Inventory"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "ExpGamingAdmin.AdminLib": "^4.0.0",
+        "FactorioStdLib.Game": "^0.8.0"
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "name": "AdminLib",
+    "version": "4.0.0",
+    "type": "Submodule",
+    "description": "The base functions required to make the others work.",
+    "location": "<blank>",
+    "keywords": [
+        "lib",
+        "ExpGaming",
+        "Admin"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "FactorioStdLib": "^0.8.0",
+        "ExpGamingCore.Ranking": "?^4.0.0",
+        "ExpGamingCore.Sync": "?^4.0.0"
+    }
+}

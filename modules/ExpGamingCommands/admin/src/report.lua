@@ -12,10 +12,10 @@ commands.add_command('report', 'Reports a player', {
     local _player = Game.get_player(event)
     local player = args.player
     local reason = args.reason
-    if Admin.is_banned(player) then player_return({'reports.cant-report-ban',args.player}) return commands.error end
-    if Ranking.get_rank(player):allowed('no-report') then player_return({'reports.cant-report',args.player}) return commands.error end
-    for _,report in pairs(global.addons.reports.reports) do if report[1] == _player.name then player_return({'reports.cant-report',args.player}) return commands.error end end
-    for _,report in pairs(global.addons.reports.varified) do if report[1] == _player.name then player_return({'reports.cant-report',args.player}) return commands.error end end
+    if Admin.is_banned(player) then player_return({'ExpGamingAdmin@4-0-0.cant-report-ban',args.player}) return commands.error end
+    if Ranking.get_rank(player):allowed('no-report') then player_return({'ExpGamingAdmin@4-0-0.cant-report',args.player}) return commands.error end
+    for _,report in pairs(global.addons.reports.reports) do if report[1] == _player.name then player_return({'ExpGamingAdmin@4-0-0.cant-report',args.player}) return commands.error end end
+    for _,report in pairs(global.addons.reports.varified) do if report[1] == _player.name then player_return({'ExpGamingAdmin@4-0-0.cant-report',args.player}) return commands.error end end
     Admin.report(player,event.player_index,reason)
 end)
 

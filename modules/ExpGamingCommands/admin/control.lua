@@ -7,6 +7,15 @@
 
 local Admin = require('ExpGamingAdmin')
 
+--- Used to clear all parts of a player, removing warnings, reports, jail and temp ban
+-- @command clear-all
+-- @param player the player to clear
+commands.add_command('clear-all', 'Clears a player of any temp-ban, reports or warnings', {
+    ['player']={true,'player'}
+}, function(event,args)
+    Admin.clear_player(args.player,event.player_index)
+end)
+
 return {
     on_init = function(self) 
         if loaded_modules['ExpGamingAdmin.TempBan'] then verbose('ExpGamingAdmin.TempBan is installed; Loading tempban src') require(module_path..'/src/tempban',{Admin=Admin}) end

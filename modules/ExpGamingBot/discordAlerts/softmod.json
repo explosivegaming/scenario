@@ -6,10 +6,10 @@
     "location": "<blank>",
     "keywords": [
         "Bot",
-        " Discord",
-        " Alerts",
-        " Messages",
-        " Acctions"
+        "Discord",
+        "Alerts",
+        "Messages",
+        "Acctions"
     ],
     "dependencies": {
         "ExpGamingCore.Sync": "^4.0.0",

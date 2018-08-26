@@ -1,0 +1,23 @@
+{
+    "name": "Gui",
+    "version": "4.0.0",
+    "type": "Submodule",
+    "description": "Adds a gui that can be used to access all the admin commands.",
+    "location": "<blank>",
+    "keywords": [
+        "Admin",
+        "ExpGaming",
+        "Commands",
+        "Gui"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "ExpGamingAdmin.AdminLib": "^4.0.0",
+        "ExpGamingCore.Gui": "^4.0.0",
+        "ExpGamingCore.Ranking": "^4.0.0",
+        "FactorioStdLib.Game": "^0.8.0",
+        "ExpGamingPlayer": "?^4.0.0"
+    }
+}

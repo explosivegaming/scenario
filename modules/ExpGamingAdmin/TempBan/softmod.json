@@ -1,0 +1,26 @@
+{
+    "name": "TempBan",
+    "version": "4.0.0",
+    "type": "Submodule",
+    "description": "Adds a temp ban function to the admin set, requires ExpGamingCore.Ranking to work.",
+    "location": "<blank>",
+    "keywords": [
+        "Jail",
+        "Temp Ban",
+        "Admin",
+        "ExpGaming",
+        "Ranking"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "ExpGamingAdmin.AdminLib": "^4.0.0",
+        "ExpGamingCore.Server": "^4.0.0",
+        "ExpGamingCore.Ranking": "^4.0.0",
+        "FactorioStdLib.Game": "^0.8.0",
+        "FactorioStdLib.Color": "^0.8.0",
+        "ExpGamingCore.Sync": "?^4.0.0",
+        "ExpGamingAdmin.ClearInventory": "?^4.0.0"
+    }
+}

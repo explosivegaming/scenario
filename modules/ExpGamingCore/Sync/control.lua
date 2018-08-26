@@ -29,6 +29,7 @@ local global = global{
     server_description='A factorio server for everyone',
     reset_time='On Demand',
     time='Day Mth 00 00:00:00 UTC Year',
+    date='0000/00/00',
     time_set={0,'0.00M'},
     last_update={0,'0.00M'},
     time_period={18000,'5.00M'},
@@ -282,12 +283,12 @@ end
 -- @usage Sync.time -- string
 -- @tparam[opt=nil] string set the date time to be set
 -- @treturn boolean if the datetime set was successful
-Sync.time=add_metatable({},function(set)
+Sync.time=add_metatable({},function(full,date)
     local info = Sync.info
-    if not is_type(set,'string') then return false end
-    info.time = set
-    info.time_set[1] = game.tick
-    info.time_set[2] = tick_to_display_format(game.tick)
+    if not is_type(full,'string') then return false end
+    info.time = full
+    info.date = date
+    info.time_set[1] = Sync.tick_format(game.tick)
     return true
 end,function() local info = Sync.info return info.time..' (+'..(game.tick-info.time_set[1])..' Ticks)' end)
 

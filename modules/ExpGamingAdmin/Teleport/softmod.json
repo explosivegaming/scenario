@@ -1,0 +1,24 @@
+{
+    "name": "Teleport",
+    "version": "4.0.0",
+    "type": "Submodule",
+    "description": "Adds three function to admin: tp, bring and go to, these all move the player.",
+    "location": "<blank>",
+    "keywords": [
+        "Tp",
+        "Bring",
+        "Go To",
+        "Admin",
+        "ExpGaming",
+        "Teleport",
+        "Commands"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "ExpGamingAdmin.AdminLib": "^4.0.0",
+        "ExpGamingAdmin.AdminGui": "^4.0.0",
+        "FactorioStdLib.Game": "^0.8.0"
+    }
+}

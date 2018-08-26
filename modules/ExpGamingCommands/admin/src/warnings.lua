@@ -11,8 +11,8 @@ commands.add_command('warn', 'Gives a player a warning', {
 }, function(event,args)
     local player = args.player
     local reason = args.reason
-    if Admin.is_banned(player) then player_return({'reports.cant-report-ban',args.player}) return commands.error end
-    if Ranking.get_rank(player):allowed('no-report') then player_return({'reports.cant-report',args.player}) return commands.error end
+    if Admin.is_banned(player) then player_return({'ExpGamingAdmin@4-0-0.cant-report-ban',args.player}) return commands.error end
+    if Ranking.get_rank(player):allowed('no-report') then player_return({'ExpGamingAdmin@4-0-0.cant-report',args.player}) return commands.error end
     Admin.give_warning(player,event.player_index,reason)
 end)
 
@@ -23,6 +23,6 @@ commands.add_command('clear-warnings', 'Clears a player\'s warnings', {
     ['player'] = {true,'player'}
 }, function(event,args)
     local player = args.player
-    if Admin.is_banned(player) then player_return({'reports.cant-report-ban',args.player}) return commands.error end
+    if Admin.is_banned(player) then player_return({'ExpGamingAdmin@4-0-0.cant-report-ban',args.player}) return commands.error end
     Admin.clear_warings(player,event.player_index)
 end)

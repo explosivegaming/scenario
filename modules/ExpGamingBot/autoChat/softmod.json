@@ -6,9 +6,9 @@
     "location": "<blank>",
     "keywords": [
         "Chat",
-        " Bot",
-        " Jokes",
-        " Fun"
+        "Bot",
+        "Jokes",
+        "Fun"
     ],
     "dependencies": {
         "FactorioStdLib.Game": "^0.8.0",
