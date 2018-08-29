@@ -30,16 +30,17 @@ local global = global{
     paused={},
     named={},
     print_to={},
-    uuid=nil
+    uuid=0
 }
 
 --- Used to generate a new uuid for the thread system
 -- @usage local uuid = tostring(Server.uuid) -- calling tostring locks the value
 -- @treturn string the new uuid
 Server.uuid = add_metatable({},function()
-    if not global.uuid then global.uuid = game.create_random_generator() end
-    return global.uuid()
+    -- when it is called as a function
+    return global.uuid + 1
 end,function()
+    -- when it is treated as a string
     return string.to_hex(tostring(Server.uuid()))
 end)
 

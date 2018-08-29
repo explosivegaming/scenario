@@ -92,6 +92,13 @@ Gui.center.add{
         }.style.font='default-small'
 end}
 
+script.on_event(defines.events.on_gui_click,function(event)
+    local element = event.element
+    if element and element.valid and element.caption and element.caption == 'Press Ecs or E to close; this is only visible once!' then
+        Gui.center.clear(event)
+    end
+end)
+
 script.on_event(defines.events.on_player_joined_game,function(event)
     local player = Game.get_player(event)
     Gui.center.open(player,'server-info')
