@@ -6,7 +6,7 @@
 
 -- Module Require
 local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
-local AdminGui = require('ExpGamingAdmin.AdminGui@^4.0.0')
+local AdminGui = require('ExpGamingAdmin.Gui@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
 
 -- Module Define

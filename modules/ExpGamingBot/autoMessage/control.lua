@@ -45,7 +45,7 @@ script.on_init(function(event)
     end):on_event('error',function(self,err)
         if Sync then Sync.emit_embeded{
             title='Auto Message Error',
-            color=Color.to_hex(defines.text_color.bg),
+            color=Color.to_hex(defines.textcolor.bg),
             description='Auto Message Error - Closed Thread',
             Error=err
         } end

@@ -1,4 +1,5 @@
 local Sync = Sync
+local Server = require('ExpGamingCore.Server@^4.0.0')
 Event[defines.events.on_tick] = nil
 script.on_init(function(event)
     Server.new_thread{
@@ -15,7 +16,7 @@ script.on_init(function(event)
         if Sync then
             Sync.emit_embeded{
                 title='Auto Kick Error',
-                color=Color.to_hex(defines.text_color.bg),
+                color=Color.to_hex(defines.textcolor.bg),
                 description='Auto Kick Error - Closed Thread',
                 Error=err
             }

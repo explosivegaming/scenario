@@ -13,9 +13,6 @@
         "Punishments",
         "Ban"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
     "dependencies": {
         "ExpGamingAdmin.AdminLib": "^4.0.0",
         "ExpGamingCore.Server": "^4.0.0",
@@ -24,5 +21,6 @@
         "FactorioStdLib.Color": "^0.8.0",
         "ExpGamingAdmin.Reports": "?^4.0.0",
         "ExpGamingCore.Sync": "?^4.0.0"
-    }
+    },
+    "collection": "ExpGamingAdmin_4.0.0"
 }

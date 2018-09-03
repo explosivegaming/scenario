@@ -25,7 +25,7 @@ local const = 100
 -- @param player the player who called the command
 -- @param entity the entity which was repaired
 local repairDisallow = function(player,entity)
-    player_return('You have repaired: '..entity.name..' this item is not allowed.',defines.text_color.crit,player)
+    player_return('You have repaired: '..entity.name..' this item is not allowed.',defines.textcolor.crit,player)
     entity.destroy()
 end
 

@@ -32,7 +32,8 @@
                 "FactorioStdLib": "^0.8.0",
                 "ExpGamingCore.Ranking": "?^4.0.0",
                 "ExpGamingCore.Sync": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingAdmin_4.0.0"
         },
         "Ban": {
             "name": "Ban",
@@ -48,13 +49,14 @@
             ],
             "dependencies": {
                 "ExpGamingAdmin.AdminLib": "^4.0.0",
-                "ExpGamingAdmin.AdminGui": "^4.0.0",
+                "ExpGamingAdmin.Gui": "^4.0.0",
                 "ExpGamingCore.Server": "^4.0.0",
                 "FactorioStdLib.Game": "^0.8.0",
                 "FactorioStdLib.Color": "?^0.8.0",
                 "ExpGamingCore.Sync": "?^4.0.0",
                 "ExpGamingAdmin.ClearInventory": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingAdmin_4.0.0"
         },
         "ClearInventory": {
             "name": "ClearInventory",
@@ -73,7 +75,8 @@
             "dependencies": {
                 "ExpGamingAdmin.AdminLib": "^4.0.0",
                 "FactorioStdLib.Game": "^0.8.0"
-            }
+            },
+            "collection": "ExpGamingAdmin_4.0.0"
         },
         "Gui": {
             "name": "Gui",
@@ -93,7 +96,8 @@
                 "ExpGamingCore.Ranking": "^4.0.0",
                 "FactorioStdLib.Game": "^0.8.0",
                 "ExpGamingPlayer": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingAdmin_4.0.0"
         },
         "Jail": {
             "name": "Jail",
@@ -109,14 +113,15 @@
             ],
             "dependencies": {
                 "ExpGamingAdmin.AdminLib": "^4.0.0",
-                "ExpGamingAdmin.AdminGui": "^4.0.0",
+                "ExpGamingAdmin.Gui": "^4.0.0",
                 "ExpGamingCore.Server": "^4.0.0",
                 "ExpGamingCore.Ranking": "^4.0.0",
-                "FactorioStdLib.Game": "^0.8.0'",
+                "FactorioStdLib.Game": "^0.8.0",
                 "FactorioStdLib.Color": "?^0.8.0",
                 "ExpGamingCore.Sync": "?^4.0.0",
                 "ExpGamingAdmin.ClearInventory": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingAdmin_4.0.0"
         },
         "Kick": {
             "name": "Kick",
@@ -132,13 +137,14 @@
             ],
             "dependencies": {
                 "ExpGamingAdmin.AdminLib": "^4.0.0",
-                "ExpGamingAdmin.AdminGui": "^4.0.0",
+                "ExpGamingAdmin.Gui": "^4.0.0",
                 "ExpGamingCore.Server": "^4.0.0",
                 "FactorioStdLib.Game": "^0.8.0",
                 "FactorioStdLib.Color": "?^0.8.0",
                 "ExpGamingCore.Sync": "?^4.0.0",
                 "ExpGamingAdmin.ClearInventory": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingAdmin_4.0.0"
         },
         "Reports": {
             "name": "Reports",
@@ -161,7 +167,8 @@
                 "FactorioStdLib.Game": "^0.8.0",
                 "FactorioStdLib.Color": "^0.8.0",
                 "ExpGamingCore.Sync": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingAdmin_4.0.0"
         },
         "Teleport": {
             "name": "Teleport",
@@ -180,9 +187,10 @@
             ],
             "dependencies": {
                 "ExpGamingAdmin.AdminLib": "^4.0.0",
-                "ExpGamingAdmin.AdminGui": "^4.0.0",
+                "ExpGamingAdmin.Gui": "^4.0.0",
                 "FactorioStdLib.Game": "^0.8.0"
-            }
+            },
+            "collection": "ExpGamingAdmin_4.0.0"
         },
         "TempBan": {
             "name": "TempBan",
@@ -205,7 +213,8 @@
                 "FactorioStdLib.Color": "^0.8.0",
                 "ExpGamingCore.Sync": "?^4.0.0",
                 "ExpGamingAdmin.ClearInventory": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingAdmin_4.0.0"
         },
         "Warnings": {
             "name": "Warnings",
@@ -230,7 +239,9 @@
                 "FactorioStdLib.Color": "^0.8.0",
                 "ExpGamingAdmin.Reports": "?^4.0.0",
                 "ExpGamingCore.Sync": "?^4.0.0"
-            }
+            },
+            "collection": "ExpGamingAdmin_4.0.0"
         }
-    }
+    },
+    "dependencies": {}
 }

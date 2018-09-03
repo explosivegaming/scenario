@@ -221,7 +221,7 @@ setmetatable(global,Manager.global.__global)
 Manager.sandbox = setmetatable({
     -- can not use existing keys of _G
     verbose=Manager.verbose,
-    loaded_modules=ReadOnlyManager,
+    loaded_modules={}, -- this is over riden later
     module_verbose=false,
     module_exports=false
 },{
@@ -264,19 +264,21 @@ Manager.require = setmetatable({
         -- runs in a sand box becuase sandbox everything
         local sandbox, success, data = Manager.sandbox(raw_require,env,path)
         -- if there was no error then it assumed the path existed and returns the data
-        if success then return data
+        if success then return unpack(data)
         else
             -- else it assums the path was a module name and checks index for the module
             if moduleIndex[path] then return rawget(Manager.loadModules,path) end
+            if moduleIndex[path:gsub('?','')] then return rawget(Manager.loadModules,path) end
             -- if its not listed then it tries to remove a version tag and tries again
-            local path_no_version = path.find('@') and path:sub(1,path:find('@')-1) or path
+            local path_no_version = path:find('@') and path:sub(1,path:find('@')-1) or path
             if moduleIndex[path_no_version] then return rawget(Manager.loadModules,path_no_version) end
             -- still no then it will look for all modules that include this one in the name (like a collection)
             local collection = {}
             for module_name,path in pairs(moduleIndex) do
+                if module_name:find('@') and module_name:sub(1,module_name:find('@')-1) == path_no_version then return rawget(Manager.loadModules,module_name) end
                 if module_name:find(path_no_version) then 
                     local start, _end = module_name:find(path_no_version)
-                    collection[module_name:sub(_end)] = rawget(Manager.loadModules,module_name)
+                    collection[module_name:sub(_end+2)] = rawget(Manager.loadModules,module_name)
                 end
             end
             -- if there is any keys in the collection the collection is returned else the errors with the require error
@@ -296,6 +298,7 @@ require = Manager.require
 Manager.loadModules = setmetatable({},
     {
         __metatable=false,
+        __index=Manager.require,
         __call=function(tbl)
             -- ReadOnlyManager used to trigger verbose change
             ReadOnlyManager.currentState = 'moduleLoad'
@@ -408,6 +411,7 @@ Manager.loadModules = setmetatable({},
         end
     }
 )
+Manager.sandbox.loaded_modules = Manager.loadModules
 
 --- A more detailed replacement for the lua error function to allow for handlers to be added; repleaces default error so error can be used instead of Manager.error
 -- @function Manager.error

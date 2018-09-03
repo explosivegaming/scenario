@@ -49,5 +49,5 @@ return setmetatable({
         if loaded_modules['ExpGamingCore.Ranking'] then Ranking = require('ExpGamingCore.Ranking') end
     end
 },{
-    __call=function(self) self.get_player_info(...) end
+    __call=function(self,...) self.get_player_info(...) end
 })

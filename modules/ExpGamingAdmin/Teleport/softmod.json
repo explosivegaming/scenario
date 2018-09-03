@@ -13,12 +13,10 @@
         "Teleport",
         "Commands"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
     "dependencies": {
         "ExpGamingAdmin.AdminLib": "^4.0.0",
-        "ExpGamingAdmin.AdminGui": "^4.0.0",
+        "ExpGamingAdmin.Gui": "^4.0.0",
         "FactorioStdLib.Game": "^0.8.0"
-    }
+    },
+    "collection": "ExpGamingAdmin_4.0.0"
 }

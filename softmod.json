@@ -12,7 +12,9 @@
         "FactorioStdLib.Table": "^0.8.0",
         "FactorioStdLib": "^0.8.0",
         "ExpGamingCommands": "^4.0.0",
-        "ExpGamingPlayer": "^4.0.0"
+        "ExpGamingPlayer": "^4.0.0",
+        "ExpGamingAdmin": "^4.0.0",
+        "ExpGamingBot": "^4.0.0"
     },
     "dependencies": {}
 }

@@ -10,14 +10,12 @@
         "Commands",
         "Gui"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
     "dependencies": {
         "ExpGamingAdmin.AdminLib": "^4.0.0",
         "ExpGamingCore.Gui": "^4.0.0",
         "ExpGamingCore.Ranking": "^4.0.0",
         "FactorioStdLib.Game": "^0.8.0",
         "ExpGamingPlayer": "?^4.0.0"
-    }
+    },
+    "collection": "ExpGamingAdmin_4.0.0"
 }

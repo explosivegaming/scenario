@@ -31,7 +31,7 @@ local AdminGui = {
 function AdminGui.add_button(name,caption,tooltip,callback)
     AdminGui.buttons[name] = Gui.inputs.add{
         type='button',
-        name='admin-gui-'+name,
+        name='admin-gui-'..name,
         caption=caption,
         tooltip=tooltip
     }:on_event('click',function(event)
@@ -56,7 +56,6 @@ function AdminGui.draw(frame,filter_buttons)
         btn.style.width = 30
     end
     for name,button in pairs(AdminGui.buttons) do
-        filter_buttons
         if not filter_buttons or filter_buttons[name] then format(button:draw(frame)) end
     end
     return frame.player

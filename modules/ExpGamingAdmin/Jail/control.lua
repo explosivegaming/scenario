@@ -6,7 +6,7 @@
 
 -- Module Require
 local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
-local AdminGui = require('ExpGamingAdmin.AdminGui@^4.0.0')
+local AdminGui = require('ExpGamingAdmin.Gui@^4.0.0')
 local Server = require('ExpGamingCore.Server@^4.0.0')
 local Ranking = require('ExpGamingCore.Ranking@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
@@ -33,7 +33,7 @@ function Admin.jail(player,by_player,reason)
     local reason = Admin.create_reason(reason,by_player_name)
     if Sync then Sync.emit_embeded{
         title='Player Jail',
-        color=Color.to_hex(defines.text_color.med),
+        color=Color.to_hex(defines.textcolor.med),
         description='There was a player jailed.',
         ['Player:']='<<inline>>'..player.name,
         ['By:']='<<inline>>'..by_player_name,

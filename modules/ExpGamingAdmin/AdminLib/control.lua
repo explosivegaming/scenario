@@ -31,7 +31,7 @@ function Admin.create_reason(reason,name)
     if not string.find(string.lower(reason),string.lower(name)) then reason = reason..' - '..name end
     if Sync and Sync.info.date ~= '0000/00/00' and not string.find(string.lower(reason),Sync.info.date) then reason = reason..' - '..Sync.info.date end
     if not string.find(string.lower(reason),'appeal') then reason = reason..' - Vist www.explosivegaming.nl to appeal.' end
-    return reason end
+    return reason
 end
 
 function Admin.open(player,pre_select_player,pre_select_action)
@@ -43,7 +43,7 @@ function Admin.allowed(player)
     if Ranking then
         local lowest_admin_power = Ranking.get_group('Admin').lowest.power
         return lowest_admin_power >= Ranking.get_rank(player).power
-    else return player.admin
+    else return player.admin end
 end
 
 function Admin.set_banned(player,set)
@@ -81,7 +81,7 @@ function Admin.clear_player(player,by_player)
     if Ranking.get_rank(player).group.name == 'Jail' then Server.interface(Ranking.revert,true,player,by_player) end
     if Sync then Sync.emit_embeded{
         title='Player Clear',
-        color=Color.to_hex(defines.text_color.low),
+        color=Color.to_hex(defines.textcolor.low),
         description='A player had their reports and warnings cleared.',
         ['Player:']='<<inline>>'..player.name,
         ['By:']='<<inline>>'..by_player_name,

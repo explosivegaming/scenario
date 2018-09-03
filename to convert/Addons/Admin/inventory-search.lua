@@ -41,9 +41,9 @@ local inventorys = {
 local _root_tree = {low_items=low_items,med_items=med_items,high_items=high_items}
 
 local function take_action(player,item_name,category)
-    if category == 'low_items' then player_return({'inventory-search.low',item_name},defines.text_color.med,player)
-    elseif category == 'med_items' then player_return({'inventory-search.med',item_name},defines.text_color.high,player) Admin.give_warning(player,'<server>','Found A Banned Item',5)
-    elseif category == 'high_items' then player_return({'inventory-search.high',item_name},defines.text_color.crit,player) Admin.temp_ban(player,'<server>','Found A Banned Item')
+    if category == 'low_items' then player_return({'inventory-search.low',item_name},defines.textcolor.med,player)
+    elseif category == 'med_items' then player_return({'inventory-search.med',item_name},defines.textcolor.high,player) Admin.give_warning(player,'<server>','Found A Banned Item',5)
+    elseif category == 'high_items' then player_return({'inventory-search.high',item_name},defines.textcolor.crit,player) Admin.temp_ban(player,'<server>','Found A Banned Item')
     else return end
 end
 

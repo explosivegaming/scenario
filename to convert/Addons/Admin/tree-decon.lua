@@ -42,9 +42,9 @@ Event.register(-1,function(event)
                 if not chache[2] then
                     chache[2] = true
                     local player = Game.get_player(event)
-                    player_return({'tree-decon.player-print'},defines.text_color.crit,player)
+                    player_return({'tree-decon.player-print'},defines.textcolor.crit,player)
                     local rank = Ranking.get_group('Admin').lowest
-                    Ranking.print(rank,{'tree-decon.rank-print',player.name},defines.text_color.info)
+                    Ranking.print(rank,{'tree-decon.rank-print',player.name},defines.textcolor.info)
                     Admin.give_warning(player,'<server>','Trying To Decon The Base')
                 end
                 self.data.clear = game.tick + 10

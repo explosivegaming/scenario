@@ -26,7 +26,7 @@ Event.register(defines.events.on_entity_damaged,function(event)
     _damage()[player.index][1] = _damage()[player.index][1]+event.final_damage_amount
     if _damage()[player.index][2] < event.tick-300 then
         _damage()[player.index][2] = event.tick
-        player_return({'base-damage.used'},defines.text_color.med,player)
+        player_return({'base-damage.used'},defines.textcolor.med,player)
         Admin.give_warning(player,'<server>','Damaged something inside the base. Total Delt: '.._damage()[player.index][1],4)
     end
 end)
@@ -38,7 +38,7 @@ Event.register(defines.events.on_player_ammo_inventory_changed,function(event)
     if not _damage()[player.index] then _damage()[player.index] = {0,0} end
     if found > 0 then
         Admin.move_item_to_spawn({name='atomic-bomb',count=found},player.surface)
-        player_return({'base-damage.nuke'},defines.text_color.med,player)
+        player_return({'base-damage.nuke'},defines.textcolor.med,player)
         if _damage()[player.index][2] < event.tick-300 then
             _damage()[player.index][2] = event.tick
             Admin.give_warning(player,'<server>','Nukes are not allowed for your rank.',4)

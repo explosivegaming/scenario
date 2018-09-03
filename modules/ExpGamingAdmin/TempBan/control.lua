@@ -28,13 +28,13 @@ function Admin.temp_ban(player,by_player,reason)
     Admin.set_banned(player,'temp')
     if Sync then Sync.emit_embeded{
         title='Player Temp-Ban',
-        color=Color.to_hex(defines.text_color.high),
+        color=Color.to_hex(defines.textcolor.high),
         description='A player was jailed.',
         ['Player:']='<<inline>>'..player.name,
         ['By:']='<<inline>>'..by_player_name,
         ['Reason:']=Admin.create_reason(reason,by_player_name)
     } end
-    game.print({'ExpGamingAdmin@4-0-0.temp-ban',player.name,by_player_name,reason},defines.text_color.info)
+    game.print({'ExpGamingAdmin@4-0-0.temp-ban',player.name,by_player_name,reason},defines.textcolor.info)
     if Admin.move_inventory then Admin.move_inventory(player) end
     Ranking.meta.last_jail = player.name
     Server.interface(Ranking.give_rank,true,player,'Jail',by_player_name)

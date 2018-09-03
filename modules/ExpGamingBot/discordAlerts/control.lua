@@ -19,24 +19,24 @@ Event.register(defines.events.on_console_command,function(event)
     if command == 'config' or command == 'banlist' then
         Sync.emit_embeded{
             title='Edit To '..data.title,
-            color=Color.to_hex(defines.text_color.bg),
+            color=Color.to_hex(defines.textcolor.bg),
             description='A player edited the '..command..'.',
             ['By:']=data.by,
             ['Edit:']=table.concat(args,' ',1)
         }
     else
         if command == 'ban' then
-            data.colour = Color.to_hex(defines.text_color.crit)
+            data.colour = Color.to_hex(defines.textcolor.crit)
             data.reason = table.concat(args,' ',2)
         elseif command == 'kick' then
-            data.colour = Color.to_hex(defines.text_color.high)
+            data.colour = Color.to_hex(defines.textcolor.high)
             data.reason = table.concat(args,' ',2)
-        elseif command == 'unban' then data.colour = Color.to_hex(defines.text_color.low)
-        elseif command == 'mute' then data.colour = Color.to_hex(defines.text_color.med)
-        elseif command == 'unmute' then data.colour = Color.to_hex(defines.text_color.low)
-        elseif command == 'promote' then data.colour = Color.to_hex(defines.text_color.info)
-        elseif command == 'demote' then data.colour = Color.to_hex(defines.text_color.info)
-        elseif command == 'purge' then data.colour = Color.to_hex(defines.text_color.med)
+        elseif command == 'unban' then data.colour = Color.to_hex(defines.textcolor.low)
+        elseif command == 'mute' then data.colour = Color.to_hex(defines.textcolor.med)
+        elseif command == 'unmute' then data.colour = Color.to_hex(defines.textcolor.low)
+        elseif command == 'promote' then data.colour = Color.to_hex(defines.textcolor.info)
+        elseif command == 'demote' then data.colour = Color.to_hex(defines.textcolor.info)
+        elseif command == 'purge' then data.colour = Color.to_hex(defines.textcolor.med)
         else return end
         data.username = args[1]
         if not Game.get_player(data.username) then return end

@@ -6,7 +6,7 @@
 
 -- Module Require
 local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
-local AdminGui = require('ExpGamingAdmin.AdminGui@^4.0.0')
+local AdminGui = require('ExpGamingAdmin.Gui@^4.0.0')
 local Server = require('ExpGamingCore.Server@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
 local Color -- FactorioStdLib.Color@^0.8.0
@@ -33,7 +33,7 @@ function Admin.ban(player,by_player,reason)
     Admin.set_banned(player,true)
     if Sync then Sync.emit_embeded{
         title='Player Ban',
-        color=Color.to_hex(defines.text_color.crit),
+        color=Color.to_hex(defines.textcolor.crit),
         description='There was a player banned.',
         ['Player:']='<<inline>>'..player.name,
         ['By:']='<<inline>>'..by_player_name,

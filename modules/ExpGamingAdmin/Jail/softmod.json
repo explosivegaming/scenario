@@ -10,17 +10,15 @@
         "Admin",
         "ExpGaming"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
     "dependencies": {
         "ExpGamingAdmin.AdminLib": "^4.0.0",
-        "ExpGamingAdmin.AdminGui": "^4.0.0",
+        "ExpGamingAdmin.Gui": "^4.0.0",
         "ExpGamingCore.Server": "^4.0.0",
         "ExpGamingCore.Ranking": "^4.0.0",
-        "FactorioStdLib.Game": "^0.8.0'",
+        "FactorioStdLib.Game": "^0.8.0",
         "FactorioStdLib.Color": "?^0.8.0",
         "ExpGamingCore.Sync": "?^4.0.0",
         "ExpGamingAdmin.ClearInventory": "?^4.0.0"
-    }
+    },
+    "collection": "ExpGamingAdmin_4.0.0"
 }

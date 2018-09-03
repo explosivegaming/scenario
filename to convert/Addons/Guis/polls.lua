@@ -34,8 +34,8 @@ function _poll_end(self)
     poll.voted = nil
     table.insert(_polls().old,poll)
     _polls().active[uuid] = nil
-    game.print({'polls.end',poll.question},defines.text_color.info)
-    game.print({'polls.winner',highest[1]},defines.text_color.info)
+    game.print({'polls.end',poll.question},defines.textcolor.info)
+    game.print({'polls.winner',highest[1]},defines.textcolor.info)
 end
 
 local function _poll_data(question,answers)

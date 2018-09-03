@@ -6,7 +6,7 @@
 
 -- Module Require
 local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
-local AdminGui = require('ExpGamingAdmin.AdminGui@^4.0.0')
+local AdminGui = require('ExpGamingAdmin.Gui@^4.0.0')
 local Server = require('ExpGamingCore.Server@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
 local Color -- FactorioStdLib.Color@^0.8.0
@@ -31,7 +31,7 @@ function Admin.kick(player,by_player,reason)
     local reason = Admin.create_reason(reason,by_player_name)
     if Sync then Sync.emit_embeded{
         title='Player Kick',
-        color=Color.to_hex(defines.text_color.high),
+        color=Color.to_hex(defines.textcolor.high),
         description='There was a player kicked.',
         ['Player:']='<<inline>>'..player.name,
         ['By:']='<<inline>>'..by_player_name,

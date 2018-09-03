@@ -33,6 +33,6 @@ return {
     on_init=function(self)
         if loaded_modules['ExpGamingCore.Ranking'] then Ranking = require('ExpGamingCore.Ranking') end
         if loaded_modules['ExpGamingCore.Sync'] then Sync = require('ExpGamingCore.Sync') end
-        if loaded_modules['ExpGamingCore.Server'] then require(module_path..'/src/server.lua',Sync) end
+        if loaded_modules['ExpGamingCore.Server'] then require(module_path..'/src/server',Sync) end
     end
 }

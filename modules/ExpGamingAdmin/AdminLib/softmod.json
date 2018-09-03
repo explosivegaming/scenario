@@ -9,12 +9,10 @@
         "ExpGaming",
         "Admin"
     ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
     "dependencies": {
         "FactorioStdLib": "^0.8.0",
         "ExpGamingCore.Ranking": "?^4.0.0",
         "ExpGamingCore.Sync": "?^4.0.0"
-    }
+    },
+    "collection": "ExpGamingAdmin_4.0.0"
 }

@@ -96,9 +96,9 @@ commands.add_command('make-warp', 'Make a warp point at your location', {'name',
     if not game.player then return end
     local position = game.player.position
     local name = args.name
-    if game.player.gui.top[name] then player_return({'warp-system.name-used'},defines.text_color.med) return commands.error end
-    if _warps().warps[name] then player_return({'warp-system.name-used'},defines.text_color.med) return commands.error end
-    if position.x^2 + position.y^2 < 100 then player_return({'warp-system.too-close'},defines.text_color.med) return commands.error end
+    if game.player.gui.top[name] then player_return({'warp-system.name-used'},defines.textcolor.med) return commands.error end
+    if _warps().warps[name] then player_return({'warp-system.name-used'},defines.textcolor.med) return commands.error end
+    if position.x^2 + position.y^2 < 100 then player_return({'warp-system.too-close'},defines.textcolor.med) return commands.error end
     -- to do add a test for all warps
     make_warp_point(position,game.player.surface,game.player.force,name)
 end)
@@ -205,7 +205,7 @@ Event.register(defines.events.on_tick,function(event)
     for index,time in pairs(_warps().cooldowns) do
         if time > 0 then
             _warps().cooldowns[index] = time-1 
-            if _warps().cooldowns[index] == 0 then player_return({'warp-system.cooldown-zero'},defines.text_color.low,index) end
+            if _warps().cooldowns[index] == 0 then player_return({'warp-system.cooldown-zero'},defines.textcolor.low,index) end
         end
     end
 end)
