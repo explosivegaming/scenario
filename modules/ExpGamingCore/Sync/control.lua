@@ -306,6 +306,7 @@ end)
 
 script.on_event('on_player_joined_game',Sync.emit_update)
 script.on_event('on_pre_player_left_game',Sync.emit_update)
+script.on_event('on_rocket_launched',Sync.emit_update)
 
 function Sync:on_init()
     if loaded_modules['ExpGamingCore.Gui'] then verbose('ExpGamingCore.Gui is installed; Loading gui src') require(module_path..'/src/gui',{Sync=Sync}) end
