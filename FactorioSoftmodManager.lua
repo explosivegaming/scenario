@@ -172,7 +172,7 @@ Manager.global=setmetatable({__defaults={},__global={
     end
 }},{
     __call=function(tbl,default,tbl2)
-        local global = _G.global
+        local Global = _G.global
         local tbl2 = type(tbl2) == 'table' and getmetatable(tbl2) or nil
         local module_name = type(default) == 'string' and default or tbl2 and tbl2.name or module_name
         local module_path = type(default) == 'string' and moduleIndex[default] or tbl2 and tbl2.path or module_path
@@ -182,23 +182,23 @@ Manager.global=setmetatable({__defaults={},__global={
         local new_dir = false
         for dir in module_path:gmatch('%a+') do
             path = path..'.'..dir
-            if not rawget(global,dir) then new_dir=true Manager.verbose('Added Global Dir: '..path) rawset(global,dir,{}) end
-            global = rawget(global,dir)
+            if not rawget(Global,dir) then new_dir=true Manager.verbose('Added Global Dir: '..path) rawset(Global,dir,{}) end
+            Global = rawget(Global,dir)
         end
         if (new_dir or default == true) and rawget(rawget(tbl,'__defaults'),tostring(module_name)) then 
             Manager.verbose('Set Global Dir: '..path..' to its default')
             -- cant set it to be equle otherwise it will lose its global propeity 
             local function deepcopy(tbl) if type(tbl) ~= 'table' then return tbl end local rtn = {} for key,value in pairs(tbl) do rtn[key] = deepcopy(value) end return rtn end
-            for key,value in pairs(global) do rawset(global,key,nil) end
-            for key,value in pairs(rawget(rawget(tbl,'__defaults'),tostring(module_name))) do rawset(global,key,deepcopy(value)) end
+            for key,value in pairs(Global) do rawset(Global,key,nil) end
+            for key,value in pairs(rawget(rawget(tbl,'__defaults'),tostring(module_name))) do rawset(Global,key,deepcopy(value)) end
         end
-        return setmetatable(global,{
+        return setmetatable(Global,{
             __call=function(tbl,default) return Manager.global(default,tbl) end,
-            __index=function(tbl,key) return rawget(Manager.global(),key) or tbl(key) end,
+            __index=function(tbl,key) return rawget(Manager.global(),key) or moduleIndex[key] and Manager.global(key) end,
             path=module_path,name=module_name
         })
     end,
-    __index=function(tbl,key) return rawget(tbl(),key) or rawget(_G.global,key) or tbl(key) end,
+    __index=function(tbl,key) return rawget(tbl(),key) or rawget(_G.global,key) or moduleIndex[key] and Manager.global(key) end,
     __newindex=function(tbl,key,value) rawset(tbl(),key,value) end,
     __pairs=function(tbl)
         local tbl = Manager.global()
@@ -519,7 +519,8 @@ Manager.event = setmetatable({
     __init=script.on_init,
     __load=script.on_load,
     __config=script.on_configuration_changed,
-    events=defines.events
+    events=defines.events,
+    error_chache={}
 },{
     __metatable=false,
     __call=function(tbl,event_name,new_callback,...)
@@ -542,7 +543,20 @@ Manager.event = setmetatable({
                 -- loops over the call backs and which module it is from
                 if type(callback) ~= 'function' then error('Invalid Event Callback: "'..event_name..'/'..module_name..'"') end
                 local sandbox, success, err = Manager.sandbox(callback,{module_name=setupModuleName(module_name),module_path=moduleIndex[tostring(module_name)]},new_callback,...)
-                if not success then Manager.verbose('Event Failed: "'..module_name..'/'..tbl.names[event_name]..'" ('..err..')','errorCaught') error('Event Failed: "'..module_name..'/'..tbl.names[event_name]..'" ('..err..')') end
+                if not success then 
+                    local chache = tbl.error_chache
+                    local error_message = 'Event Failed: "'..module_name..'/'..tbl.names[event_name]..'" ('..err..')'
+                    if not chache[error_message] then Manager.verbose(error_message,'errorCaught') error(error_message) end
+                    if tbl.names[event_name] == 'on_tick' then 
+                        if not chache[error_message] then chache[error_message] = {game.tick,1} end
+                        if chache[error_message][1] >= game.tick-10 then chache[error_message] = {game.tick,chache[error_message][2]+1}
+                        else chache[error_message] = nil end
+                        if chache[error_message] and chache[error_message][2] > 100 then
+                            Manager.verbose('There was an error happening every tick for 100 ticks, the event handler has been removed!','errorCaught')
+                            tbl[event_name][module_name] = nil
+                        end
+                    end
+                end
                 -- if stop constant is returned then stop further processing
                 if err == rawget(tbl,'__stop') then Manager.verbose('Event Haulted By: "'..module_name..'"','errorCaught') break end
             end

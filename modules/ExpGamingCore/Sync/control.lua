@@ -278,6 +278,12 @@ function Sync.emit_data()
     game.write_file('server-info.json',table.json(info),false,0)
 end
 
+--- Updates the info and emits the data to a file
+-- @usage Sync.emit_update()
+function Sync.emit_update()
+    Sync.update() Sync.emit_data()  
+end
+
 --- Used to return and set the current IRL time; not very good need a better way to do this
 -- @usage Sync.time('Sun Apr  1 18:44:30 UTC 2018')
 -- @usage Sync.time -- string
@@ -295,8 +301,11 @@ end,function() local info = Sync.info return info.time..' (+'..(game.tick-info.t
 -- will auto replace the file every 5 min by default
 script.on_event('on_tick',function(event)
     local time = Sync.info.time_period[1]
-    if (event.tick%time)==0 then Sync.update() Sync.emit_data() end
+    if (event.tick%time)==0 then Sync.emit_update() end
 end)
+
+script.on_event('on_player_joined_game',Sync.emit_update)
+script.on_event('on_pre_player_left_game',Sync.emit_update)
 
 function Sync:on_init()
     if loaded_modules['ExpGamingCore.Gui'] then verbose('ExpGamingCore.Gui is installed; Loading gui src') require(module_path..'/src/gui',{Sync=Sync}) end
