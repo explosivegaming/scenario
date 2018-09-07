@@ -10,8 +10,8 @@
 local Game = require('FactorioStdLib.Game')
 local Server = Server
 
-Server.interface = {}
-function Server.add_to_interface(loadAs,callback) Server.interface[loadAs] = callback end
+Server.interfaceCallbacks = {}
+function Server.add_to_interface(loadAs,callback) Server.interfaceCallbacks[loadAs] = callback end
 
 function Server.add_module_to_interface(loadAs,moduleName,version)
     local moduleName = module_name or version and moduleName..'@'..version  or moduleName or error('No module name supplied')
@@ -38,7 +38,7 @@ commands.add_command('interface',{'Server.interface-description'}, {
         env.tile = game.player.surface.get_tile(game.player.position)
     end
     -- adds custom callbacks to the interface
-    for name,callback in pairs(Server.interface) do env[name] = callback() end
+    for name,callback in pairs(Server.interfaceCallbacks) do env[name] = callback() end
     -- runs the function
     local success, err = Server.interface(callback,false,env)
     -- if there is an error then it will remove the stacktrace and return the error
