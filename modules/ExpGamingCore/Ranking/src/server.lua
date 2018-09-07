@@ -10,6 +10,7 @@
 local Game = require('FactorioStdLib.Game')
 local Color = require('FactorioStdLib.Color')
 local Server = require('ExpGamingCore.Server')
+local Ranking = Ranking
 
 --- Print a message to all players of this rank
 -- @usage rank:print('foo') -- prints to all members of this rank
@@ -45,3 +46,6 @@ script.on_event('on_tick',function(event)
         end):open()
     end
 end)
+
+Server.add_to_interface('rank',function() return Ranking.get_rank(game.player) end)
+Server.add_module_to_interface('Ranking')

@@ -41,3 +41,5 @@ script.on_event(-1,function(event)
         end
     end):open()
 end)
+
+Server.add_module_to_interface('ExpGui')

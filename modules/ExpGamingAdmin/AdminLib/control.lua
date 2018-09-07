@@ -15,6 +15,7 @@ local Admin = {
     on_init=function()
         if loaded_modules['ExpGamingCore.Ranking@^4.0.0'] then Ranking = require('ExpGamingCore.Ranking@^4.0.0') end
         if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then Sync = require('ExpGamingCore.Sync@^4.0.0') end
+        if loaded_modules['ExoGamingCore.Server'] then Server.add_module_to_interface('Admin','ExpGamingAdmin') end
     end,
     actions={},
     action_names={}

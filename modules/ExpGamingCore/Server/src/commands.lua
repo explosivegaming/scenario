@@ -10,6 +10,14 @@
 local Game = require('FactorioStdLib.Game')
 local Server = Server
 
+Server.interface = {}
+function Server.add_to_interface(loadAs,callback) Server.interface[loadAs] = callback end
+
+function Server.add_module_to_interface(loadAs,moduleName,version)
+    local moduleName = module_name or version and moduleName..'@'..version  or moduleName or error('No module name supplied')
+    Server.add_to_interface(loadAs,function() return require(moduleName) end)
+end
+
 --- Runs the given input from the script
 -- @command interface
 -- @param code The code that will be ran
@@ -28,9 +36,9 @@ commands.add_command('interface',{'Server.interface-description'}, {
         env.position = game.player.position
         env.entity = game.player.selected
         env.tile = game.player.surface.get_tile(game.player.position)
-        -- this works if loaded modules is not present as Mamager will always have the modules
-        if Manager['ExpGamingCore.Ranking'] then env.rank = Manager['ExpGamingCore.Ranking'].get_rank(game.player) end
     end
+    -- adds custom callbacks to the interface
+    for name,callback in pairs(Server.interface) do env[name] = callback() end
     -- runs the function
     local success, err = Server.interface(callback,false,env)
     -- if there is an error then it will remove the stacktrace and return the error
