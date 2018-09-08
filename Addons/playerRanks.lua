@@ -88,7 +88,10 @@ groups['Admin']:edit('allow',false,{
     ['announcements']=true,
     ['warp-list']=true,
     ['polls']=true,
-    ['global-chat']=true
+    ['global-chat']=true,
+    ['set-home']=true,
+    ['home']=true,
+    ['return']=true,
 })
 groups['Donator']:edit('allow',false,{
     ['player-list']=true,
@@ -163,7 +166,7 @@ groups['Admin']:add_rank{
 }
 groups['Admin']:add_rank{
     name='Trainee',
-    short_hand='TMod',
+    short_hand='TrMod',
     tag='[Trainee]',
     colour={r=0,g=196,b=137},
     disallow={
