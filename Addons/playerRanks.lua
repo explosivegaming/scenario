@@ -36,6 +36,17 @@ http://lua-api.factorio.com/latest/defines.html#defines.input_action
 
 -- See ExpCore/ranks.lua for examples - you add your own and edit pre-made ones here.
 
+Ranking._group:create{
+    name='Donator',
+    allow={},
+    disallow={
+        'set_allow_commands',
+        'edit_permission_group',
+        'delete_permission_group',
+        'add_permission_group'
+    }
+}
+
 local groups = Ranking._groups(true)
 
 groups['Root']:edit('allow',false,{
@@ -78,6 +89,20 @@ groups['Admin']:edit('allow',false,{
     ['warp-list']=true,
     ['polls']=true,
     ['global-chat']=true
+})
+groups['Donator']:edit('allow',false,{
+    ['player-list']=true,
+    ['readme']=true,
+    ['rockets']=true,
+    ['science']=true,
+    ['tasklist']=true,
+    ['report']=true,
+    ['warp-list']=true,
+    ['polls']=true,
+    ['global-chat']=true,
+    ['set-home']=true,
+    ['home']=true,
+    ['return']=true,
 })
 groups['User']:edit('allow',false,{
     ['player-list']=true,
@@ -137,13 +162,38 @@ groups['Admin']:add_rank{
     base_afk_time=false
 }
 
-groups['User']:add_rank{
+groups['Donator']:add_rank{
+    name='Sponsor',
+    short_hand='Spon',
+    tag='[Sponsor]',
+    colour={r=247,g=246,b=54},
+    power=7,
+    is_spectator=true,
+    base_afk_time=false
+}
+groups['Donator']:add_rank{
+    name='Subscription',
+    short_hand='Sub',
+    tag='[Sub]',
+    colour={r=238,g=172,b=44},
+    is_spectator=true,
+    base_afk_time=160
+}
+groups['Donator']:add_rank{
     name='Donator',
     short_hand='P2W',
     tag='[P2W]',
-    colour={r=233,g=63,b=233},
-    power=0,
+    colour={r=230,g=99,b=34},
     is_spectator=true,
+    base_afk_time=120
+}
+
+groups['User']:add_rank{
+    name='Partner',
+    short_hand='Part',
+    tag='[Partner]',
+    power=0,
+    colour={r=26,g=118,b=156},
     base_afk_time=120
 }
 groups['User']:add_rank{
@@ -151,8 +201,8 @@ groups['User']:add_rank{
     short_hand='Vet',
     tag='[Veteran]',
     time=600,
-    colour={r=140,g=120,b=200},
     power=1,
+    colour={r=140,g=120,b=200},
     base_afk_time=60
 }
 groups['User']:add_rank{
@@ -182,16 +232,22 @@ ranks['Mod']:edit('allow',false,{
     ['no-report']=true
 })
 
-ranks['Donator']:edit('allow',false,{
-    ['global-chat']=true,
+ranks['Sponsor']:edit('allow',false,{
     ['jail']=true,
     ['unjail']=true,
-    ['set-home']=true,
-    ['home']=true,
-    ['return']=true,
     ['bonus']=true,
     ['bonus-respawn']=true
 })
+ranks['Subscription']:edit('allow',false,{
+    ['jail']=true,
+    ['unjail']=true,
+    ['bonus']=true,
+    ['bonus-respawn']=true
+})
+ranks['Donator']:edit('allow',false,{
+
+})
+
 ranks['Veteran']:edit('allow',false,{
     ['tree-decon']=true,
     ['create-poll']=true,
