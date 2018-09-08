@@ -29,7 +29,7 @@ function Sync.add_to_gui(element,...)
 end
 
 Sync.add_to_gui('Welcome to the Explosive Gaming comunity! This is one of many servers which we host.')
-Sync.add_to_gui(function(player,frame) return 'This server will reset at: '..Sync.info.reset_time end)
+Sync.add_to_gui(function(player,frame) return 'This server\'s next reset: '..Sync.info.reset_time end)
 
 --- Formats a lable to be a certain format
 -- @local label_format
