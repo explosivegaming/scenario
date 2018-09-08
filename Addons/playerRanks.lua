@@ -161,13 +161,24 @@ groups['Admin']:add_rank{
     is_spectator=true,
     base_afk_time=false
 }
+groups['Admin']:add_rank{
+    name='Trainee',
+    short_hand='TMod',
+    tag='[Trainee]',
+    colour={r=0,g=196,b=137},
+    disallow={
+        'server_command'
+    },
+    is_spectator=true,
+    base_afk_time=false
+}
 
 groups['Donator']:add_rank{
     name='Sponsor',
     short_hand='Spon',
     tag='[Sponsor]',
     colour={r=247,g=246,b=54},
-    power=7,
+    power=8,
     is_spectator=true,
     base_afk_time=false
 }
@@ -227,6 +238,11 @@ ranks['Admin']:edit('allow',false,{
     ['admin-items']=true
 })
 ranks['Mod']:edit('allow',false,{
+    ['go-to']=true,
+    ['bring']=true,
+    ['no-report']=true
+})
+ranks['Trainee']:edit('allow',false,{
     ['go-to']=true,
     ['bring']=true,
     ['no-report']=true
