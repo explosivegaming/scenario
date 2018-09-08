@@ -288,7 +288,7 @@ Sync.add_to_gui(function(player,frame)
     return 'You have been assigned the rank \''..Ranking.get_rank(player).name..'\''
 end)
 Sync.add_to_gui(function(player,frame)
-    return 'This server will reset at: '..Sync.info().reset_time
+    return 'This server\'s next reset: '..Sync.info().reset_time
 end)
 -- if readme is included then see addons/guis/readme.lua for more examples
 
