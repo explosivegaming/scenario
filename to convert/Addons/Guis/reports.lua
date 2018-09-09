@@ -12,7 +12,7 @@ local confirm_report = Gui.inputs.add{
     type='button',
     name='admin-report-confirm',
     caption='utility/spawn_flag',
-    tooltip={ExpGamingAdmin@4-0-0.name'}
+    tooltip={ExpGamingAdmin.name'}
 }:on_event('click',function(event)
     local parent = event.element.parent
     local player = Game.get_player(parent.player.caption)
@@ -25,7 +25,7 @@ Admin.report_btn = Gui.inputs.add{
     type='button',
     name='admin-report',
     caption='utility/spawn_flag',
-    tooltip={ExpGamingAdmin@4-0-0.name'}
+    tooltip={ExpGamingAdmin.name'}
 }:on_event('click',function(event)
     local parent = event.element.parent
     local player = Game.get_player(parent.children[1].name)
@@ -37,7 +37,7 @@ Admin.report_btn = Gui.inputs.add{
         name='report-gui'
     }
     _player.opened=frame
-    frame.caption={ExpGamingAdmin@4-0-0.name'}
+    frame.caption={ExpGamingAdmin.name'}
     frame.add{
         type='textfield',
         name='reason'

@@ -44,8 +44,8 @@ local function report_message(player,by_player,reason)
     local player, by_player_name = valid_players(player,by_player)
     if not player then return end
     if Admin.is_banned(player,true) == 'report' then return end
-    Ranking.print(low_rank,{'ExpGamingAdmin@4-0-0.low-print',player.name,reason},defines.textcolor.info,true)
-    Ranking.print(high_rank,{'ExpGamingAdmin@4-0-0.high-print',player.name,by_player_name,reason},defines.textcolor.med)
+    Ranking.print(low_rank,{'ExpGamingAdmin.low-print',player.name,reason},defines.textcolor.info,true)
+    Ranking.print(high_rank,{'ExpGamingAdmin.high-print',player.name,by_player_name,reason},defines.textcolor.med)
     if Sync then Sync.emit_embeded{
         title='Player Report',
         color=Color.to_hex(defines.textcolor.med),

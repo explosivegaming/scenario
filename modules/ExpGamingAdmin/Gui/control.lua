@@ -19,7 +19,7 @@ local AdminGui = {
         else playerInfo = function(player,frame)
             frame.add{
                 type='label',
-                caption={'ExpGamingAdmin@4-0-0.no-info-file'}
+                caption={'ExpGamingAdmin.no-info-file'}
             }
         end end
         --code
@@ -91,13 +91,13 @@ local player_drop_down = Gui.inputs.add_drop_down('player-drop-down-admin-comman
     else get_player_info(selected,player_info_flow,true) end
     local rank = Ranking.get_rank(player)
     local _rank = Ranking.get_rank(selected)
-    if rank.power >= _rank.power then element.parent.warning.caption = {'ExpGamingAdmin@4-0-0.warning'}
+    if rank.power >= _rank.power then element.parent.warning.caption = {'ExpGamingAdmin.warning'}
     else element.parent.warning.caption = '' end
 end)
 
 local reason_input = Gui.inputs.add_text('reason-input-admin-commands',false,'Enter Reason',function(player,text,element)
     if string.len(text) < 20 or text == 'Enter Reason' then 
-        element.parent.warning.caption = {'ExpGamingAdmin@4-0-0.short-reason'}
+        element.parent.warning.caption = {'ExpGamingAdmin.short-reason'}
     else
         element.parent.warning.caption = ''
     end
@@ -115,15 +115,15 @@ end)
 local take_action = Gui.inputs.add{
     type='button',
     name='admin-commands-take',
-    caption={'ExpGamingAdmin@4-0-0.take-action'}
+    caption={'ExpGamingAdmin.take-action'}
 }:on_event('click',function(event)
     local dropdowns = event.element.parent
     local rank = Ranking.get_rank(event.player_index)
     local _action= dropdowns.parent.action.caption ~= 'Select Action' and dropdowns.parent.action.caption or nil
     local _player = Game.get_player(dropdowns.parent.player.caption)
-    if not _player or not _action then dropdowns.warning.caption = {'ExpGamingAdmin@4-0-0.invalid'} return end
+    if not _player or not _action then dropdowns.warning.caption = {'ExpGamingAdmin.invalid'} return end
     local _rank = Ranking.get_rank(_player)
-    if rank.power >= _rank.power then dropdowns.warning.caption = {'ExpGamingAdmin@4-0-0.rank-high'} return end
+    if rank.power >= _rank.power then dropdowns.warning.caption = {'ExpGamingAdmin.rank-high'} return end
     local _reason = dropdowns['reason-input-admin-commands'] and dropdowns['reason-input-admin-commands'].text
     if (_action == 'Jail' or _action == 'Kick' or _action == 'Ban' or _action == 'Temp Ban') and (_reason == 'Enter Reason' or string.len(_reason) < 20) then return end
     Admin.take_action(_action,_player,event.player_index,_reason)
@@ -133,7 +133,7 @@ end)
 Admin.center = Gui.center.add{
     name='admin-commands',
     caption='utility/danger_icon',
-    tooltip={'ExpGamingAdmin@4-0-0.tooltip'},
+    tooltip={'ExpGamingAdmin.tooltip'},
     open=function(event,pre_select_player,pre_select_action)
         local _player = Game.get_player(pre_select_player)
         local player = Game.get_player(event)
@@ -152,7 +152,7 @@ Admin.center = Gui.center.add{
         player.opened=center_frame
     end,
     draw=function(frame,pre_select_player,pre_select_action)
-        frame.caption={'ExpGamingAdmin@4-0-0.name'}
+        frame.caption={'ExpGamingAdmin.name'}
         local frame = frame.add{
             type='flow',
             direction='horizontal'
@@ -170,7 +170,7 @@ Admin.center = Gui.center.add{
         player_info_flow.style.width = 200
         local label = dropdowns.add{
             type='label',
-            caption={'ExpGamingAdmin@4-0-0.message'}
+            caption={'ExpGamingAdmin.message'}
         }
         label.style.single_line = false
         label.style.width = 200

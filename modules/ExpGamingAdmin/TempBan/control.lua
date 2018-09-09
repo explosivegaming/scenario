@@ -34,7 +34,7 @@ function Admin.temp_ban(player,by_player,reason)
         ['By:']='<<inline>>'..by_player_name,
         ['Reason:']=Admin.create_reason(reason,by_player_name)
     } end
-    game.print({'ExpGamingAdmin@4-0-0.temp-ban',player.name,by_player_name,reason},defines.textcolor.info)
+    game.print({'ExpGamingAdmin.temp-ban',player.name,by_player_name,reason},defines.textcolor.info)
     if Admin.move_inventory then Admin.move_inventory(player) end
     Ranking.meta.last_jail = player.name
     Server.interface(Ranking.give_rank,true,player,'Jail',by_player_name)

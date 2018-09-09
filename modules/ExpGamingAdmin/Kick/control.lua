@@ -21,7 +21,7 @@ local ThisModule = {
     end
 }
 -- Function Define
-AdminGui.add_button('kick','utility/warning_icon',{'ExpGamingAdmin@4-0-0.tooltip-kick'},function(player,byPlayer)
+AdminGui.add_button('kick','utility/warning_icon',{'ExpGamingAdmin.tooltip-kick'},function(player,byPlayer)
     Admin.open(byPlayer,player,'kick')
 end)
 
