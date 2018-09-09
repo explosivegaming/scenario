@@ -149,7 +149,7 @@ user:add_rank{
     name='Guest',
     short_hand='',
     tag='',
-    colour={r=255,g=159,b=27},
+    colour={r=132,g=88,b=155},
     is_default=true,
     disallow={
         'build_terrain',

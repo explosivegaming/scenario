@@ -186,17 +186,17 @@ groups['Donator']:add_rank{
     base_afk_time=false
 }
 groups['Donator']:add_rank{
-    name='Subscription',
-    short_hand='Sub',
-    tag='[Sub]',
+    name='Pay to Win',
+    short_hand='P2W',
+    tag='[P2W]',
     colour={r=238,g=172,b=44},
     is_spectator=true,
     base_afk_time=160
 }
 groups['Donator']:add_rank{
     name='Donator',
-    short_hand='P2W',
-    tag='[P2W]',
+    short_hand='Don',
+    tag='[Donator]',
     colour={r=230,g=99,b=34},
     is_spectator=true,
     base_afk_time=120
