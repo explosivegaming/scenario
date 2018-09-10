@@ -69,7 +69,10 @@ groups['Root']:edit('allow',false,{
     ['admin-items']=true,
     ['all-items']=true,
     ['repair']=true,
-    ['global-chat']=true
+    ['global-chat']=true,
+    ['set-home']=true,
+    ['home']=true,
+    ['return']=true,
 })
 groups['Admin']:edit('allow',false,{
     ['player-list']=true,
