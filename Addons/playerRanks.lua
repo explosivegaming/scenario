@@ -149,7 +149,7 @@ groups['Root']:add_rank{
     name='Developer',
     short_hand='Dev',
     tag='[Dev]',
-    colour={r=179,g=125,b=46},
+    colour={r=57,g=192,b=207},
     is_admin = true,
     is_spectator=true,
     base_afk_time=false
@@ -260,7 +260,7 @@ ranks['Sponsor']:edit('allow',false,{
     ['bonus']=true,
     ['bonus-respawn']=true
 })
-ranks['Subscription']:edit('allow',false,{
+ranks['Pay to Win']:edit('allow',false,{
     ['jail']=true,
     ['unjail']=true,
     ['bonus']=true,

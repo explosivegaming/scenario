@@ -30,7 +30,7 @@ end
 _verbose = false -- Set to true for more on the loading of the files
 function verbose(str) if _verbose then log(str) print(str) end end
 verbose('============================= START =============================')
-require_return_err = false -- Set to false when removing files; set to true for debuging
+require_return_err = true -- Set to false when removing files; set to true for debuging
 _require = require
 require = function(path)
     local _path = path
