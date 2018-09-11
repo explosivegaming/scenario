@@ -149,7 +149,7 @@ groups['Root']:add_rank{
     name='Developer',
     short_hand='Dev',
     tag='[Dev]',
-    colour={r=57,g=192,b=207},
+    colour={r=179,g=125,b=46},
     is_admin = true,
     is_spectator=true,
     base_afk_time=false
@@ -210,7 +210,7 @@ groups['User']:add_rank{
     short_hand='Part',
     tag='[Partner]',
     power=0,
-    colour={r=26,g=118,b=156},
+    colour={r=140,g=120,b=200},
     base_afk_time=120
 }
 groups['User']:add_rank{
@@ -219,7 +219,7 @@ groups['User']:add_rank{
     tag='[Veteran]',
     time=600,
     power=1,
-    colour={r=140,g=120,b=200},
+    colour={r=26,g=118,b=156},
     base_afk_time=60
 }
 groups['User']:add_rank{
@@ -227,7 +227,7 @@ groups['User']:add_rank{
     short_hand='Reg',
     tag='[Regular]',
     time=180,
-    colour={r=24,g=172,b=188},
+    colour={r=79,g=155,b=163},
     power=3,
     base_afk_time=30
 }
@@ -270,6 +270,9 @@ ranks['Donator']:edit('allow',false,{
 
 })
 
+ranks['Partner']:edit('allow',false,{
+
+})
 ranks['Veteran']:edit('allow',false,{
     ['tree-decon']=true,
     ['create-poll']=true,
