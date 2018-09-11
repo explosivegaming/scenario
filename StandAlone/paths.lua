@@ -117,7 +117,7 @@ end)
 
 Event.register(defines.events.on_built_entity, function(event)
     local entity = event.entity
-    local surface = player.surface
+    local surface = entity.surface
     if entities[entity.name] then
         local size = entities[entity.name]
         for x in 0,size do for y in 0,size do
