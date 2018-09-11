@@ -72,7 +72,7 @@ Event.register(-1,function(event)
             data={cams={},cam_index=1,players={}}
         }:on_event('tick',function(self)
             local update = 4
-            if self.data.cam_index > #self.data.cams then self.data.cam_index = 1 end
+            if self.data.cam_index >= #self.data.cams then self.data.cam_index = 1 end
             if update > #self.data.cams then update = #self.data.cams end
             for cam_offset = 0,update do
                 local _cam = self.data.cams[self.data.cam_index+cam_offset]
@@ -91,7 +91,7 @@ Event.register(-1,function(event)
                 local remove = {}
                 for index,cam in pairs(self.data.players[event.player_index]) do
                     if not cam.valid then table.insert(remove,index)
-                    else cam.entity=Game.get_player(event).character end
+                    else Gui.cam_link{cam=cam,entity=Game.get_player(event).character} end
                 end
                 for _,index in pairs(remove) do
                     table.remove(self.data.players[event.player_index],index)
@@ -168,7 +168,7 @@ Event.register(-1,function(event)
             end
             if Gui._global().cams and is_type(Gui._global().cams,'table') and #Gui._global().cams > 0 then
                 local update = 4
-                if Gui._global().cam_index > #Gui._global().cams then Gui._global().cam_index = 1 end
+                if Gui._global().cam_index >= #Gui._global().cams then Gui._global().cam_index = 1 end
                 if update > #Gui._global().cams then update = #Gui._global().cams end
                 for cam_offset = 0,update do
                     local _cam = Gui._global().cams[Gui._global().cam_index]
@@ -187,7 +187,7 @@ Event.register(-1,function(event)
                 local remove = {}
                 for index,cam in pairs(Gui._global().players[event.player_index]) do
                     if not cam.valid then table.insert(remove,index)
-                    else cam.entity=Game.get_player(event).character end
+                    else Gui.cam_link{cam=cam,entity=Game.get_player(event).character} end
                 end
                 for _,index in pairs(remove) do
                     table.remove(Gui._global().players[event.player_index],index)
