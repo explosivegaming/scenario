@@ -9,6 +9,8 @@ local Module = require('Module@>X.Y.Z')
 local SubModule = require('Collection.Submodule@^X.Y.Z')
 local OptModule -- OptModule@^X.Y.Z
 
+-- Local Varibles
+
 -- Module Define
 local module_verbose = false
 local ThisModule = {
