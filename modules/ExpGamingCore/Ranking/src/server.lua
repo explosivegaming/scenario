@@ -48,4 +48,4 @@ script.on_event('on_tick',function(event)
 end)
 
 Server.add_to_interface('rank',function() return Ranking.get_rank(game.player) end)
-Server.add_module_to_interface('Ranking')
+Server.add_module_to_interface('Ranking','ExpGamingCore.Ranking')

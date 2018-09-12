@@ -151,7 +151,7 @@ local function run_custom_command(command)
     local player_name = Game.get_player(command) and Game.get_player(command).name or 'server'
     -- is the player allowed to use this command, if no ExpGamingCore.Ranking then this is ingroned
     if Ranking and Ranking.meta and Ranking.meta.rank_count > 0 and not Ranking.get_rank(player_name):allowed(command.name) 
-    or not Ranking and data.setAdminOnly == true and game.player and not game.player.admin then
+    or not Ranking and data.admin_only == true and game.player and not game.player.admin then
         player_return({'commands.unauthorized'},defines.textcolor.crit)
         if game.player then game.player.play_sound{path='utility/cannot_build'} end
         game.write_file('commands.log',
@@ -214,10 +214,7 @@ commands.add_command = function(name, description, inputs, callback)
         description=description,
         inputs=inputs,
         callback=callback,
-        setAdminOnly=function(tbl,value) 
-            if is_type(tbl,'table') then if is_type(value,'boolean') then tbl.setAdminOnly = value else tbl.setAdminOnly = true end
-            else if is_type(tbl,'boolean') then data[name].setAdminOnly = value else data[name].setAdminOnly = true end
-        end
+        admin_only=false
     }
     local help = is_type(description,'string') and commands.format_inputs(name)..'- '..description
     or is_type(description,'table') and is_type(description[1],'string') and string.find(description[1],'.+[.].+') and {description,commands.format_inputs(name)..'- '}

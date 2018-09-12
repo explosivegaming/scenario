@@ -14,9 +14,11 @@ Server.interfaceCallbacks = {}
 function Server.add_to_interface(loadAs,callback) Server.interfaceCallbacks[loadAs] = callback end
 
 function Server.add_module_to_interface(loadAs,moduleName,version)
-    local moduleName = module_name or version and moduleName..'@'..version  or moduleName or error('No module name supplied')
+    local moduleName = _G.moduleName or version and moduleName..'@'..version or moduleName or nil
+    if not moduleName then error('No module name supplied for: '..loadAs,2) return end
     Server.add_to_interface(loadAs,function() return require(moduleName) end)
 end
+Server.add_module_to_interface('Server','ExpGamingCore.Server')
 
 --- Runs the given input from the script
 -- @command interface

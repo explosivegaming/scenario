@@ -5,7 +5,7 @@
 -- @alais Admin 
 
 -- Module Require
-local Game = require('FactorioStdLib@^0.8.0')
+local Game = require('FactorioStdLib.Game@^0.8.0')
 local Ranking -- ExpGamingCore.Ranking@^4.0.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
 
@@ -15,7 +15,7 @@ local Admin = {
     on_init=function()
         if loaded_modules['ExpGamingCore.Ranking@^4.0.0'] then Ranking = require('ExpGamingCore.Ranking@^4.0.0') end
         if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then Sync = require('ExpGamingCore.Sync@^4.0.0') end
-        if loaded_modules['ExoGamingCore.Server'] then Server.add_module_to_interface('Admin','ExpGamingAdmin') end
+        if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require('ExpGamingCore.Server@^4.0.0').add_module_to_interface('Admin','ExpGamingAdmin.AdminLib') end
     end,
     actions={},
     action_names={}

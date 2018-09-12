@@ -5,7 +5,7 @@
 
 -- this file should be replaced with a collection but idk if fsm can hanndle collections in a collection
 
-local Admin = require('ExpGamingAdmin')
+local Admin = require('ExpGamingAdmin.AdminLib')
 
 --- Used to clear all parts of a player, removing warnings, reports, jail and temp ban
 -- @command clear-all

@@ -132,18 +132,25 @@ script.on_event('on_tick', function(event)
 	if Gui.left and ((event.tick+10)/(3600*game.speed)) % 15 == 0 then
 		Gui.left.update()
     end
+    if loaded_modules['ExpGamingCore.Server'] then return end
     if global.cams and is_type(global.cams,'table') and #global.cams > 0 then
-        local _cam = global.cams[global.cam_index]
-        if not _cam then global.cam_index = 1 _cam = global.cams[global.cam_index] end
-        if not _cam then return end
-        if not _cam.cam.valid then table.remove(global.cams,global.cam_index)
-        elseif not _cam.entity.valid then table.remove(global.cams,global.cam_index)
-        else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end global.cam_index = global.cam_index+1
+        local update = 4
+        if global.cam_index >= #global.cams then global.cam_index = 1 end
+        if update > #global.cams then update = #global.cams end
+        for cam_offset = 0,update do
+            local _cam = global.cams[global.cam_index]
+            if not _cam then return end
+            if not _cam.cam.valid then table.remove(global.cams,global.cam_index)
+            elseif not _cam.entity.valid then table.remove(global.cams,global.cam_index)
+            else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end global.cam_index = global.cam_index+1
+            end
         end
+        global.cam_index = global.cam_index+update
     end
 end)
 
 script.on_event('on_player_respawned',function(event)
+    if loaded_modules['ExpGamingCore.Server'] then return end
     if global.players and is_type(global.players,'table') and #global.players > 0 and global.players[event.player_index] then
         local remove = {}
         for index,cam in pairs(global.players[event.player_index]) do

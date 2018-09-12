@@ -114,7 +114,7 @@ script.on_event(defines.events.on_gui_click,function(event)
     back_btn:draw(flow)
     playerInfo(event.element.name,flow,true)
     if Game.get_player(event.element.name) and event.player_index == Game.get_player(event.element.name).index then return end
-    if Admin and Admin.allowed(event.player_index) then Admin.btn_flow(flow).caption = event.element.name end
+    if Admin and Admin.allowed and Admin.allowed(event.player_index) then Admin.btn_flow(flow).caption = event.element.name end
 end)
 
 script.on_event(defines.events.on_player_joined_game,queue_update)
@@ -126,6 +126,6 @@ return {
     update=queue_update,
     on_init=function(self)
         if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer.playerInfo') end
-        if loaded_modules['ExpGamingAdmin'] then Admin = require('ExpGamingAdmin') end
+        if loaded_modules['ExpGamingAdmin.AdminLib'] then Admin = require('ExpGamingAdmin.AdminLib') end
     end
 }

@@ -257,8 +257,8 @@ Manager.require = setmetatable({
     __require=require
 },{
     __metatable=false,
-    __index=function(tbl,key) return tbl(key) end,
-    __call=function(tbl,path,env) 
+    __index=function(tbl,key) return tbl(key,nil,true) end,
+    __call=function(tbl,path,env,mute) 
         local raw_require = rawget(tbl,'__require')
         local env = env or {}
         -- runs in a sand box becuase sandbox everything
@@ -266,6 +266,7 @@ Manager.require = setmetatable({
         -- if there was no error then it assumed the path existed and returns the data
         if success then return unpack(data)
         else
+            if type(path) ~= 'string' then error('Path supplied must be a string; got: '..type(path),2) return end
             -- else it assums the path was a module name and checks index for the module
             if moduleIndex[path] then return rawget(Manager.loadModules,path) end
             if moduleIndex[path:gsub('?','')] then return rawget(Manager.loadModules,path) end
@@ -283,7 +284,7 @@ Manager.require = setmetatable({
             end
             -- if there is any keys in the collection the collection is returned else the errors with the require error
             for _ in pairs(collection) do return collection end
-            error(data,2)
+            if mute then return false else error(data,2) end
         end
     end
 })

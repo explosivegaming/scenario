@@ -14,6 +14,7 @@
         "FactorioStdLib.Game": "^0.8.0",
         "ExpGamingCore.Gui": "^4.0.0",
         "ExpGamingCore.Ranking": "?^4.0.0",
+        "ExpGamingAdmin.AdminLib": "?^4.0.0",
         "ExpGamingAdmin.buttonFlow": "?^4.0.0",
         "ExpGamingAdmin.reports": "?^4.0.0",
         "ExpGamingPlayer.playerInfo": "?^4.0.0"
