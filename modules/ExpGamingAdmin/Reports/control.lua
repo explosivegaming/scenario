@@ -8,6 +8,7 @@
 local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
 local Server = require('ExpGamingCore.Server@^4.0.0')
 local Ranking = require('ExpGamingCore.Ranking@^4.0.0')
+local Gui = require('ExpGamingCore.Gui@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
 local Color = require('FactorioStdLib.Color@^0.8.0')
 local Sync -- ExpGamingCore.Sync@^4.0.0
@@ -121,6 +122,50 @@ function Admin.clear_reports(player,by_player,no_emit)
         }
     end
 end
+
+local confirm_report = Gui.inputs.add{
+    type='button',
+    name='admin-report-confirm',
+    caption='utility/spawn_flag',
+    tooltip={'ExpGamingAdmin.name'}
+}:on_event('click',function(event)
+    local parent = event.element.parent
+    local player = Game.get_player(parent.player.caption)
+    local reason = parent.reason.text
+    Admin.report(player,event.player_index,reason)
+    Gui.center.clear(event.player_index)
+end)
+
+Admin.report_btn = Gui.inputs.add{
+    type='button',
+    name='admin-report',
+    caption='utility/spawn_flag',
+    tooltip={'ExpGamingAdmin.name'}
+}:on_event('click',function(event)
+    local parent = event.element.parent
+    local player = Game.get_player(parent.children[1].name)
+    if not player then return end
+    local _player = Game.get_player(event)
+    Gui.center.clear(_player)
+    local frame = Gui.center.get_flow(_player).add{
+        type='frame',
+        name='report-gui'
+    }
+    _player.opened=frame
+    frame.caption={'ExpGamingAdmin.name'}
+    frame.add{
+        type='textfield',
+        name='reason'
+    }.style.width = 300
+    local btn = confirm_report:draw(frame)
+    btn.style.height = 30
+    btn.style.width = 30
+    frame.add{
+        type='label',
+        name='player',
+        caption=player.name
+    }.style.visible = false
+end)
 
 -- Module Return
 return ThisModule 

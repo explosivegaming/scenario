@@ -7,6 +7,7 @@
 -- Module Require
 local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
+local Ranking -- ExpGamingCore.Ranking@^4.0.0
 
 -- Local Varibles
 -- removed from none admin ranks, no further action
