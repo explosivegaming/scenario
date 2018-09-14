@@ -48,4 +48,5 @@ return {
     ['ExpGamingAdmin.Jail@4.0.0']='./modules/ExpGamingAdmin/Jail',
     ['ExpGamingCommands.admin@4.0.0']='./modules/ExpGamingCommands/admin',
     ['ExpGamingAdmin.Ban@4.0.0']='./modules/ExpGamingAdmin/Ban',
+    ['ChatPopup@4.0.0']='./modules/ChatPopup',
 }
