@@ -1,26 +1,4 @@
 
--- Edited health popup to make chat popup https://lua-api.factorio.com/latest/events.html#on_console_chat
-
-Event.register(defines.events.on_console_chat, function(event)
-	local player = Game.get_player(event.player_index)
-	if not player then return end
-	if event.message then
-		-- Send message player send to player itself
-		local message = player.name .. ': ' .. event.message
-		sendFlyingText(player, message)
-
-		-- parse message for players and if it includes player, send him a notification that he has been mentioned in the chat
-		local player_message = event.message:lower():gsub("%s+", "")
-		for i,_player in ipairs(game.connected_players) do
-			if _player.index ~= player.index then
-				if player_message:match(_player.name:lower()) then
-					sendFlyingText(_player, 'You\'ve been mentioned by: ' ..player.name .. ' in chat!')
-				end
-			end
-    end
-	end
-end)
-
 function sendFlyingText(player, text)
 	local _player = Game.get_player(player)
 	if not _player then return end
@@ -40,3 +18,24 @@ function sendFlyingText(player, text)
 		}
 	end
 end
+
+-- Edited health popup to make chat popup https://lua-api.factorio.com/latest/events.html#on_console_chat
+Event.register(defines.events.on_console_chat, function(event)
+	local player = Game.get_player(event.player_index)
+	if not player then return end
+	if event.message then
+		-- Send message player send to player itself
+		local message = player.name .. ': ' .. event.message
+		sendFlyingText(player, message)
+
+		-- parse message for players and if it includes player, send him a notification that he has been mentioned in the chat
+		local player_message = event.message:lower():gsub("%s+", "")
+		for i,_player in ipairs(game.connected_players) do
+			if _player.index ~= player.index then
+				if player_message:match(_player.name:lower()) then
+					sendFlyingText(_player, 'You\'ve been mentioned by: ' ..player.name .. ' in chat!')
+				end
+			end
+    end
+	end
+end)
