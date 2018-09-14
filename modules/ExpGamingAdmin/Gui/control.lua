@@ -1,7 +1,7 @@
---- Desction <get from json>
+--- Adds a gui that can be used to access all the admin commands.
 -- @module ExpGamingAdmin.Gui@4.0.0
--- @author <get from json>
--- @license <get from json>
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alais AdminGui 
 
 -- Module Require

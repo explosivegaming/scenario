@@ -1,7 +1,7 @@
---- Desction <get from json>
--- @module ExpGamingAdmin.Kick@4.0.0
--- @author <get from json>
--- @license <get from json>
+--- Adds a temp ban function to the admin set, requires ExpGamingCore.Ranking to work.
+-- @module ExpGamingAdmin.KicTempBan@4.0.0
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alais ThisModule 
 
 -- Module Require

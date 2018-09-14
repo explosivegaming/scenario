@@ -1,14 +1,20 @@
---- Desction <get from json>
+--- Sends alerts to discord once there is a bot set up to read the alerts.
 -- @module ExpGamingBot.discordAlerts@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alais ThisModule 
 
-local Sync = require('ExpGamingCore.Sync')
-local Color = require('FactorioStdLib.Color')
-local Game = require('FactorioStdLib.Game')
+-- Module Require
+local Sync = require('ExpGamingCore.Sync@^4.0.0')
+local Color = require('FactorioStdLib.Color@^0.8.0')
+local Game = require('FactorioStdLib.Game@^0.8.0')
 
-Event.register(defines.events.on_console_command,function(event)
+-- Module Define
+local module_verbose = false
+local ThisModule = {}
+
+-- Event Handlers Define
+script.on_event(defines.events.on_console_command,function(event)
     local command = event.command
     local args = {}
     if event.parameters then for word in event.parameters:gmatch('%S+') do table.insert(args,word) end end
@@ -52,3 +58,6 @@ Event.register(defines.events.on_console_command,function(event)
         }
     end
 end)
+
+-- Module Return
+return ThisModule 

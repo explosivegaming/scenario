@@ -1,7 +1,7 @@
---- Desction <get from json>
--- @module ExpGamingAdmin.Jail@4.0.0
--- @author <get from json>
--- @license <get from json>
+--- Adds three function to admin: tp, bring and go to, these all move the player
+-- @module ExpGamingAdmin.Teleport@4.0.0
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alais ThisModule 
 
 -- Module Require

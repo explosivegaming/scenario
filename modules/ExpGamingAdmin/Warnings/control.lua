@@ -1,7 +1,7 @@
---- Desction <get from json>
--- @module ThisModule@X.Y.Z
--- @author <get from json>
--- @license <get from json>
+--- Adds a warning system into the admin set which can be used by admins and the script.
+-- @module ExpGamingAdmin.Warnings@4.0.0
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alais ThisModule 
 
 -- Module Require

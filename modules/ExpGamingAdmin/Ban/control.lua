@@ -1,7 +1,7 @@
---- Desction <get from json>
+--- Adds a custom ban function to the admin command set.
 -- @module ExpGamingAdmin.Ban@4.0.0
--- @author <get from json>
--- @license <get from json>
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alais ThisModule 
 
 -- Module Require

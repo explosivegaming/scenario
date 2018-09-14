@@ -1,7 +1,7 @@
---- Desction <get from json>
+--- The base functions required to make the others work.
 -- @module ExpGamingAdmin.AdminLib@4.0.0
--- @author <get from json>
--- @license <get from json>
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alais Admin 
 
 -- Module Require

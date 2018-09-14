@@ -1,13 +1,30 @@
---- Sends messages in chat in resposce to other messages
--- @module ExpGamingBot.autoChat
+--- Prints a message every 15 minutes to chat.
+-- @module ExpGamingBot.autoMessage
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
+-- @alais ThisModule 
 
+-- Module Require
 local Server = require('ExpGamingCore.Server')
 local Game = require('FactorioStdLib.Game')
-local Ranking
-local Sync
+local Ranking -- ExpGamingCore.Ranking@4.0.0
+local Sync -- ExpGamingCore.Sync@4.0.0
 
+-- Local Varibles
+
+-- Module Define
+local module_verbose = false
+local ThisModule = {
+    on_init=function()
+        if loaded_modules['ExpGamingCore.Ranking@^4.0.0'] then Ranking = require('ExpGamingCore.Ranking@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then Sync = require('ExpGamingCore.Sync@^4.0.0') end
+    end,
+    on_post=function()
+        --code
+    end
+}
+
+-- Event Handlers Define
 script.on_init(function(event)
     Server.new_thread{
         name='auto-message',
@@ -17,19 +34,19 @@ script.on_init(function(event)
             high_rank= 'Owner',
             low_rank= 'Regular',
             low={
-                {'chat-bot.join-us'},
-                {'chat-bot.discord'},
-                {'chat-bot.website'},
-                {'chat-bot.custom-commands'},
-                {'chat-bot.read-readme'}
+                {'ExpGamingBot-autoMessage.join-us'},
+                {'ExpGamingBot-autoMessage.discord'},
+                {'ExpGamingBot-autoMessage.website'},
+                {'ExpGamingBot-autoMessage.custom-commands'},
+                {'ExpGamingBot-autoMessage.read-readme'}
             }
         }
     }:on_event('timeout',function(self)
         local data = self.data
         if not data.high_rank or not data.low_rank
         or not data.low then self.reopen = false return end
-        game.print{'chat-bot.message',{'chat-bot.players-online',#game.connected_players}}
-        game.print{'chat-bot.message',{'chat-bot.map-time',tick_to_display_format(game.tick)}}
+        game.print{'ExpGamingBot-autoMessage.message',{'ExpGamingBot-autoMessage.players-online',#game.connected_players}}
+        game.print{'ExpGamingBot-autoMessage.message',{'ExpGamingBot-autoMessage.map-time',tick_to_display_format(game.tick)}}
         self.reopen = true
     end):on_event(defines.events.on_player_joined_game,function(self,event)
         local player = Game.get_player(event)
@@ -40,7 +57,7 @@ script.on_init(function(event)
         -- idk but this stoped working for no appent reason so i added more checks for nil values
         if Ranking and Ranking.get_rank(player).power <= Ranking.get_rank(data.low_rank).power or player.admin then return end
         for _,message in pairs(data.low) do
-            player_return({'chat-bot.message',message},nil,player)
+            player_return({'ExpGamingBot-autoMessage.message',message},nil,player)
         end
     end):on_event('error',function(self,err)
         if Sync then Sync.emit_embeded{
@@ -54,9 +71,5 @@ script.on_init(function(event)
     end):open()
 end)
 
-return {
-    on_init = function(self) 
-        if loaded_modules['ExpGamingCore.Ranking'] then Ranking = require('ExpGamingCore.Ranking') end
-        if loaded_modules['ExpGamingCore.Sync'] then Sync = require('ExpGamingCore.Sync') end
-    end
-}
+-- Module Return
+return ThisModule 

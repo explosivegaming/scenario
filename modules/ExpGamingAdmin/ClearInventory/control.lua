@@ -1,7 +1,7 @@
---- Desction <get from json>
+--- Adds a function to clear a players inventoy and move the items to spawn.
 -- @module ExpGamingAdmin.ClearInventory@4.0.0
--- @author <get from json>
--- @license <get from json>
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alais ThisModule 
 
 -- Module Require

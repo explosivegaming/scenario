@@ -2,110 +2,122 @@
 -- @module ExpGamingBot.autoChat
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
+-- @alais ThisModule 
 
-local Game = require('FactorioStdLib.Game')
-local Ranking
+-- Module Require
+local Game = require('FactorioStdLib.Game@^0.8.0')
+local Ranking -- ExpGamingCore.Ranking@^4.0.0
 
+-- Local Varibles
 -- lots of these are jokes, but some have uses
 
 -- white spaces removed and made into lower
 -- these messages are sent only to the player
 local messages = {
-    ['discord']={'chat-bot.discord'},
-    ['expgaming']={'chat-bot.website'},
-    ['website']={'chat-bot.website'},
-    ['command']={'chat-bot.custom-commands'},
-    ['commands']={'chat-bot.custom-commands'},
-    ['softmod']={'chat-bot.softmod'},
-    ['script']={'chat-bot.softmod'},
-    ['link']={'chat-bot.links'},
-    ['links']={'chat-bot.links'},
-    ['loop']={'chat-bot.loops'},
-    ['loops']={'chat-bot.loops'},
-    ['rhd']={'chat-bot.lhd'},
-    ['roundabout']={'chat-bot.loops'},
-    ['roundabouts']={'chat-bot.loops'},
-    ['redmew']={'chat-bot.redmew'},
-    ['afk']=function(_player) local max=_player for _,player in pairs(game.connected_players) do if max.afk_time < player.afk_time then max=player end end return {'chat-bot.afk',max.name,tick_to_display_format(max.afk_time)} end
+    ['discord']={'ExpGamingBot-autoChat.discord'},
+    ['expgaming']={'ExpGamingBot-autoChat.website'},
+    ['website']={'ExpGamingBot-autoChat.website'},
+    ['command']={'ExpGamingBot-autoChat.custom-commands'},
+    ['commands']={'ExpGamingBot-autoChat.custom-commands'},
+    ['softmod']={'ExpGamingBot-autoChat.softmod'},
+    ['script']={'ExpGamingBot-autoChat.softmod'},
+    ['link']={'ExpGamingBot-autoChat.links'},
+    ['links']={'ExpGamingBot-autoChat.links'},
+    ['loop']={'ExpGamingBot-autoChat.loops'},
+    ['loops']={'ExpGamingBot-autoChat.loops'},
+    ['rhd']={'ExpGamingBot-autoChat.lhd'},
+    ['roundabout']={'ExpGamingBot-autoChat.loops'},
+    ['roundabouts']={'ExpGamingBot-autoChat.loops'},
+    ['redmew']={'ExpGamingBot-autoChat.redmew'},
+    ['afk']=function(_player) local max=_player for _,player in pairs(game.connected_players) do if max.afk_time < player.afk_time then max=player end end return {'ExpGamingBot-autoChat.afk',max.name,tick_to_display_format(max.afk_time)} end
 }
 -- white spaces removed and made into lower
 -- these are global chat commands that can be used
 -- comands start with ! (all messages are also commands)
 local command_syntax = '!'
 local commands = {
-    ['online']=function(player) return {'chat-bot.players-online',#game.connected_players} end,
-    ['playtime']=function(player) return {'chat-bot.map-time',tick_to_display_format(game.tick)} end,
-    ['players']=function(player) return {'chat-bot.players',#game.players} end,
-    ['dev']={'chat-bot.not-real-dev'},
-    ['blame']=function(player) local names = {'Cooldude2606','arty714','badgamernl',player.name} return {'chat-bot.blame',names[math.random(#names)]} end,
-    ['readme']={'chat-bot.read-readme'},
-    ['magic']={'chat-bot.magic'},
-    ['aids']={'chat-bot.aids'},
-    ['riot']={'chat-bot.riot'},
-    ['lenny']={'chat-bot.lenny'},
-    ['wiki']={'chat-bot.wiki'},
-    ['evolution']=function(player) return {'chat-bot.current-evolution',string.format('%.2f',game.forces['enemy'].evolution_factor)} end,
+    ['online']=function(player) return {'ExpGamingBot-autoChat.players-online',#game.connected_players} end,
+    ['playtime']=function(player) return {'ExpGamingBot-autoChat.map-time',tick_to_display_format(game.tick)} end,
+    ['players']=function(player) return {'ExpGamingBot-autoChat.players',#game.players} end,
+    ['dev']={'ExpGamingBot-autoChat.not-real-dev'},
+    ['blame']=function(player) local names = {'Cooldude2606','arty714','badgamernl',player.name} return {'ExpGamingBot-autoChat.blame',names[math.random(#names)]} end,
+    ['readme']={'ExpGamingBot-autoChat.read-readme'},
+    ['magic']={'ExpGamingBot-autoChat.magic'},
+    ['aids']={'ExpGamingBot-autoChat.aids'},
+    ['riot']={'ExpGamingBot-autoChat.riot'},
+    ['lenny']={'ExpGamingBot-autoChat.lenny'},
+    ['wiki']={'ExpGamingBot-autoChat.wiki'},
+    ['evolution']=function(player) return {'ExpGamingBot-autoChat.current-evolution',string.format('%.2f',game.forces['enemy'].evolution_factor)} end,
     --Jokes about food and drink
-    ['whattoeat']={'chat-bot.food'},
+    ['whattoeat']={'ExpGamingBot-autoChat.food'},
     ['makepopcorn']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
-        if self.data then game.print{'chat-bot.message',{'chat-bot.get-popcorn-2',self.data}} end
-    end):open() return {'chat-bot.get-popcorn-1'} end,    
+        if self.data then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.get-popcorn-2',self.data}} end
+    end):open() return {'ExpGamingBot-autoChat.get-popcorn-1'} end,    
     ['orderpizza']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data={player.name,0}, reopen=true
     }:on_event('timeout',function(self)
-        if self.data[2]==0 then game.print{'chat-bot.message',{'chat-bot.order-pizza-2',self.data[1]}}                
-        elseif self.data[2]==1 then game.print{'chat-bot.message',{'chat-bot.order-pizza-3',self.data[1]}} self.reopen = false
+        if self.data[2]==0 then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.order-pizza-2',self.data[1]}}                
+        elseif self.data[2]==1 then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.order-pizza-3',self.data[1]}} self.reopen = false
         end
         self.data[2]=self.data[2]+1
-    end):open() return {'chat-bot.order-pizza-1'} end,
+    end):open() return {'ExpGamingBot-autoChat.order-pizza-1'} end,
     ['passsomesnaps']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data={player.name,0}, reopen=true
     }:on_event('timeout',function(self)
-        if self.data[2]==0 then game.print{'chat-bot.message',{'chat-bot.get-snaps-2',self.data[1]}}                
-        elseif self.data[2]==1 then game.print{'chat-bot.message',{'chat-bot.get-snaps-3',self.data[1]}} self.reopen = false
+        if self.data[2]==0 then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.get-snaps-2',self.data[1]}}                
+        elseif self.data[2]==1 then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.get-snaps-3',self.data[1]}} self.reopen = false
         end
         self.data[2]=self.data[2]+1
-    end):open() return {'chat-bot.get-snaps-1'} end,
+    end):open() return {'ExpGamingBot-autoChat.get-snaps-1'} end,
     ['makecocktail']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data={player.name,0}, reopen=true
     }:on_event('timeout',function(self)
-        if self.data[2]==0 then game.print{'chat-bot.message',{'chat-bot.get-cocktail-2',self.data[1]}}                
-        elseif self.data[2]==1 then game.print{'chat-bot.message',{'chat-bot.get-cocktail-3',self.data[1]}} self.reopen = false
+        if self.data[2]==0 then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.get-cocktail-2',self.data[1]}}                
+        elseif self.data[2]==1 then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.get-cocktail-3',self.data[1]}} self.reopen = false
         end
         self.data[2]=self.data[2]+1
-    end):open() return {'chat-bot.get-cocktail-1'} end,
+    end):open() return {'ExpGamingBot-autoChat.get-cocktail-1'} end,
     ['makecoffee']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
-        if self.data then game.print{'chat-bot.message',{'chat-bot.make-coffee-2',self.data}} end
-    end):open() return {'chat-bot.make-coffee-1'} end,
+        if self.data then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.make-coffee-2',self.data}} end
+    end):open() return {'ExpGamingBot-autoChat.make-coffee-1'} end,
     ['orderpizza']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data={player.name,0}, reopen=true
     }:on_event('timeout',function(self)
-        if self.data[2]==0 then game.print{'chat-bot.message',{'chat-bot.order-pizza-2',self.data[1]}}                     
-        elseif self.data[2]==1 then game.print{'chat-bot.message',{'chat-bot.order-pizza-3',self.data[1]}} self.reopen = false
+        if self.data[2]==0 then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.order-pizza-2',self.data[1]}}                     
+        elseif self.data[2]==1 then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.order-pizza-3',self.data[1]}} self.reopen = false
         end
         self.data[2]=self.data[2] + 1
-    end):open() return {'chat-bot.order-pizza-1'} end,
+    end):open() return {'ExpGamingBot-autoChat.order-pizza-1'} end,
     ['maketea']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
-        if self.data then game.print{'chat-bot.message',{'chat-bot.make-tea-2',self.data}} end
-    end):open() return {'chat-bot.make-tea-1'} end,
+        if self.data then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.make-tea-2',self.data}} end
+    end):open() return {'ExpGamingBot-autoChat.make-tea-1'} end,
     ['meadplease']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
-        if self.data then game.print{'chat-bot.message',{'chat-bot.get-mead-2',self.data}} end
-    end):open() return {'chat-bot.get-mead-1'} end,
+        if self.data then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.get-mead-2',self.data}} end
+    end):open() return {'ExpGamingBot-autoChat.get-mead-1'} end,
     ['passabeer']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
-        if self.data then game.print{'chat-bot.message',{'chat-bot.get-beer-2',self.data}} end
-    end):open() return {'chat-bot.get-beer-1'} end
+        if self.data then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.get-beer-2',self.data}} end
+    end):open() return {'ExpGamingBot-autoChat.get-beer-1'} end
 }
 
+-- Module Define
+local module_verbose = false
+local ThisModule = {
+    on_init=function()
+        if loaded_modules['ExpGamingCore.Ranking@^4.0.0'] then Ranking = require('ExpGamingCore.Ranking@^4.0.0') end
+    end
+}
+
+-- Event Handlers Define
 script.on_event(defines.events.on_console_chat,function(event)
     local player = Game.get_player(event)
     if not player then return end
@@ -115,25 +127,22 @@ script.on_event(defines.events.on_console_chat,function(event)
         if player_message:match(command_syntax..to_find) then
             if allowed then
                 if is_type(message,'function') then message=message(player) end
-                game.print{'chat-bot.message',message}
-            else player_return({'chat-bot.rank-error'},nil,player) end
+                game.print{'ExpGamingBot-autoChat.message',message}
+            else player_return({'ExpGamingBot-autoChat.rank-error'},nil,player) end
         elseif player_message:match(to_find) then
             if is_type(message,'function') then message=message(player) end
-            player_return({'chat-bot.message',message},nil,player)
+            player_return({'ExpGamingBot-autoChat.message',message},nil,player)
         end
     end
     for to_find,message in pairs(commands) do
         if player_message:match(command_syntax..to_find) then
             if allowed then
                 if is_type(message,'function') then message=message(player) end
-                game.print{'chat-bot.message',message}
-            else player_return({'chat-bot.rank-error'},nil,player) end
+                game.print{'ExpGamingBot-autoChat.message',message}
+            else player_return({'ExpGamingBot-autoChat.rank-error'},nil,player) end
         end
     end
 end)
 
-return {
-    on_init = function(self) 
-        if loaded_modules['ExpGamingCore.Ranking'] then Ranking = require('ExpGamingCore.Ranking') end
-    end
-}
+-- Module Return
+return ThisModule 

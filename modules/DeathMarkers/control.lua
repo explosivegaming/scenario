@@ -1,5 +1,19 @@
--- made by cooldude - this just adds a marker to the map which is removed when the body is removed
+--- Adds markers to the map when a player dies and removes it when the body is removed.
+-- @module DeathMarkers@4.0.0
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
+-- @alais ThisModule 
 
+-- Module Define
+local module_verbose = false
+local ThisModule = {}
+
+-- Global Define
+local global = global{
+    corpses={}
+}
+
+-- Event Handlers Define
 Event.register(defines.events.on_player_died, function(event)
     local player = game.players[event.player_index]
     local tag = player.force.add_chart_tag(player.surface,{
@@ -26,3 +40,6 @@ Event.register(defines.events.on_tick, function(event)
         key=key+1
     end
 end)
+
+-- Module Return
+return ThisModule 
