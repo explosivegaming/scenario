@@ -116,7 +116,7 @@ Event.register(defines.events.on_player_changed_position, function(event)
 end)
 
 Event.register(defines.events.on_built_entity, function(event)
-    local entity = event.entity
+    local entity = event.created_entity
     local surface = entity.surface
     if entities[entity.name] then
         local size = entities[entity.name]
