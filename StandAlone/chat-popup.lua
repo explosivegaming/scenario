@@ -33,6 +33,7 @@ Event.register(defines.events.on_console_chat, function(event)
 		for i,_player in ipairs(game.connected_players) do
 			if _player.index ~= player.index then
 				if player_message:match(_player.name:lower()) then
+					_player.play_sound{path='utility/scenario_message'} -- plays a deeper sound when mentioned
 					sendFlyingText(_player, 'You\'ve been mentioned by: ' ..player.name .. ' in chat!')
 				end
 			end
