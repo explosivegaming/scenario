@@ -1,12 +1,11 @@
---- A full ranking system for factorio.
--- @module ExpGamingCore.Commands
--- @alias commands
+--- Command system that allows middle ware and auto validation of command arguments.
+-- @module ExpGamingCore.Commands@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
+-- @alias commands
 
-local Game = require('FactorioStdLib.Game')
-local Color = require('FactorioStdLib.Color')
-local Ranking -- this is optional and is hanndled by it being present, it is loaded on init
+local Game = require('FactorioStdLib.Game@^0.8.0')
+local Color = require('FactorioStdLib.Color@^0.8.0')
 
 --- Used as an error constant for validation
 -- @field commands.error
@@ -15,6 +14,11 @@ local Ranking -- this is optional and is hanndled by it being present, it is loa
 commands.error = setmetatable({},{__call=function(...) return ... end})
 commands._add_command = commands.add_command
 local data = {}
+local middleware = {}
+
+--- Used to add middle ware to the command handler, functions should return true or false
+-- @tparam function callback function(player,commandName,event) should return true to allow next middle ware to run
+function commands.add_middleware(callback) if not is_type(callback,'function') then error('Callback is not a function',2) return end table.insert(middleware,callback) end
 
 --- Index of all command data
 -- @field commands.data
@@ -50,6 +54,7 @@ setmetatable(commands,{
 -- @field player_rank-online converts the input to a player if the player is a lower rank than the user and online
 -- @field player_rank_alive converts the input to a player if the player is a lower rank than the user and online and alive
 commands.validate = {
+    ['boolean']=function(value,event) local value = value.lower() if value == 'true' or valule == 'yes' or value == 'y' or value == '1' then return true else return false end end,
     ['string']=function(value,event) return tostring(value) end,
     ['string-inf']=function(value,event) return tostring(value) end,
     ['string-len']=function(value,event,max) return tostring(value) and tostring(value):len() <= max and tostring(value) or commands.error{'commands.error-string-len'} end,
@@ -60,10 +65,14 @@ commands.validate = {
     ['player']=function(value,event) return Game.get_player(player) or commands.error{'commands.error-player'} end,
     ['player-online']=function(value,event) local player,err = commands.validate['player'](value) return err and commands.error(err) or player.conected and player or commands.error{'commands.error-player-online'} end,
     ['player-alive']=function(value,event) local player,err = commands.validate['player-online'](value) return err and commands.error(err) or player.character and player.character.health > 0 and player or commands.error{'commands.error-player-alive'} end,
-    ['player-rank']=function(value,event) local player,err = commands.validate['player'](value) return err and commands.error(err) or Ranking and Ranking.get_rank(player).power > Ranking.get_rank(event).power or not player.admin and Game.get_player(event).admin or commands.error{'commands.error-player-rank'} end,
-    ['player-rank-online']=function(value,event) local player,err = commands.validate['player-online'](value) return err and commands.error(err) or Ranking and Ranking.get_rank(player).power > Ranking.get_rank(event).power or not player.admin and Game.get_player(event).admin or commands.error{'commands.error-player-rank'} end,
-    ['player-rank-alive']=function(value,event) local player,err = commands.validate['player-alive'](value) return err and commands.error(err) or Ranking and Ranking.get_rank(player).power > Ranking.get_rank(event).power or not player.admin and Game.get_player(event).admin or commands.error{'commands.error-player-rank'} end
+    ['player-rank']=function(value,event) local player,err = commands.validate['player'](value) return err and commands.error(err) or not player.admin and Game.get_player(event).admin and player or commands.error{'commands.error-player-rank'} end,
+    ['player-rank-online']=function(value,event) local player,err = commands.validate['player-online'](value) if err then return commands.error(err) end local player,err = commands.validate['player-rank'](player) if err then return commands.error(err) end return player end,
+    ['player-rank-alive']=function(value,event) local player,err = commands.validate['player-alive'](value) if err then return commands.error(err) end local player,err = commands.validate['player-rank'](player) if err then return commands.error(err) end return player end,
 }
+--- Adds a function to the validation list
+-- @tparam string name the name of the validation
+-- @tparam function callback function(value,event) which returns either the value to be used or commands.error{'error-message'}
+function commands.add_validation(name,callback) if not is_type(callback,'function') then error('Callback is not a function',2) return end commands.validate[name]=callback end
 
 --- Returns the inputs of this command as a formated string
 -- @usage commands.format_inputs('interface') -- returns <code> (if you have ExpGamingCore.Server)
@@ -136,11 +145,24 @@ function commands.get_commands(player)
     local commands = {}
     local player = Game.get_player(player)
     if not player then return error('Invalid player',2) end
-    local rank = Ranking.get_rank(player)
     for name,data in pairs(data) do
-        if rank:allowed(name) then table.insert(commands,data) end
+        if #middleware > 0 then for _,callback in pairs(middleware) do
+            local success, err = pcall(callback,player_name,command.name,command)
+            if not success then error(err)
+            elseif err then table.insert(commands,data) end
+        end elseif data.default_admin_only == true and player.admin then table.insert(commands,data) end
     end
     return commands
+end
+
+local function logMessage(player_name,command,message,args)
+    game.write_file('commands.log',
+        game.tick
+        ..' Player: "'..player_name..'"'
+        ..' '..message..': "'..command.name..'"'
+        ..' With args of: '..table.tostring(args)
+        ..'\n'
+    , true, 0)
 end
 
 --- Used to call the custom commands
@@ -149,45 +171,35 @@ end
 local function run_custom_command(command)
     local data = commands.data[command.name]
     local player_name = Game.get_player(command) and Game.get_player(command).name or 'server'
-    -- is the player allowed to use this command, if no ExpGamingCore.Ranking then this is ingroned
-    if Ranking and Ranking.meta and Ranking.meta.rank_count > 0 and not Ranking.get_rank(player_name):allowed(command.name) 
-    or not Ranking and data.admin_only == true and game.player and not game.player.admin then
+    -- runs all middle ware if any, if there is no middle where then it relyis on .default_admin_only
+    if #middleware > 0 then for _,callback in pairs(middleware) do
+        local success, err = pcall(callback,player_name,command.name,command)
+        if not success then error(err)
+        elseif not err then
+            player_return({'commands.unauthorized'},defines.textcolor.crit)
+            logMessage(player_name,command,'Failed to use command (Unauthorized)',commands.validate_args(command))
+            if game.player then game.player.play_sound{path='utility/cannot_build'} end
+            return
+        end
+    end elseif data.default_admin_only == true and game.player and not game.player.admin then
         player_return({'commands.unauthorized'},defines.textcolor.crit)
+        logMessage(player_name,command,'Failed to use command (Unauthorized)',commands.validate_args(command))
         if game.player then game.player.play_sound{path='utility/cannot_build'} end
-        game.write_file('commands.log',
-            game.tick
-            ..' Player: "'..player_name..'"'
-            ..' Failed to use command (Unauthorized): "'..command.name..'"'
-            ..' With args of: '..table.tostring(commands.validate_args(command))
-            ..'\n'
-        , true, 0)
         return
     end
     -- gets the args for the command
     local args, err = commands.validate_args(command)
     if args == commands.error then
         player_return({'commands.'..err,command.name,commands.format_inputs(data)},defines.textcolor.high)
+        logMessage(player_name,command,'Failed to use command (Invalid Args)',args)
         if game.player then game.player.play_sound{path='utility/deconstruct_big'} end
-        game.write_file('commands.log',
-            game.tick
-            ..' Player: "'..player_name..'"'
-            ..' Failed to use command (Invalid Args): "'..command.name..'"'
-            ..' With args of: '..table.tostring(args)
-            ..'\n'
-        , true, 0)
         return
     end
     -- runs the command
     local success, err = pcall(data.callback,command,args)
     if not success then error(err) end
     if err ~= commands.error and player_name ~= 'server' then player_return({'commands.command-ran'},defines.textcolor.info) end
-    game.write_file('commands.log',
-        game.tick
-        ..' Player: "'..player_name..'"'
-        ..' Used command: "'..command.name..'"'
-        ..' With args of: '..table.tostring(args)
-        ..'\n'
-    , true, 0)
+    logMessage(player_name,command,'Used command',args)
 end
 
 --- Used to define commands
@@ -227,19 +239,16 @@ commands.add_command = function(name, description, inputs, callback)
     return data[name]
 end
 
-function commands:on_init()
-    if loaded_modules['ExpGamingCore.Ranking'] then Ranking = require('ExpGamingCore.Ranking') end
-end
-
 return commands
 
 --[[
     command example
 
-    locale file
+    **locale file**
     [foo]
     description=__1__ this is a command
 
+    **control.lua**
     commands.add_command('foo',{'foo.description'},{
         ['player']={true,'player'}, -- a required arg that must be a valid player
         ['number']={true,'number-range',0,10}, -- a required arg that must be a number 0<X<=10

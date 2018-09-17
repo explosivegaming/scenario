@@ -1,5 +1,5 @@
 local Admin = Admin
-local Ranking = require('ExpGamingCore.Ranking')
+local Ranking = require('ExpGamingCore.Ranking@^4.0.0')
 
 --- Gives a warning to a player
 -- @command warn

@@ -19,7 +19,7 @@ return {
     ['ExpGamingCore.Server@^4.0.0']='./modules/ExpGamingCore/Server',
     ['ExpGamingCommands.tags@4.0.0']='./modules/ExpGamingCommands/tags',
     ['ExpGamingCore.Commands@^4.0.0']='./modules/ExpGamingCore/Commands',
-    ['ExpGamingCommands.kill@4.0.0']='./modules/ExpGamingCommands/kill',
+    ['ExpGamingAdmin.Commands@4.0.0']='./modules/ExpGamingCommands/kill',
     ['ExpGamingCommands.home@4.0.0']='./modules/ExpGamingCommands/home',
     ['ExpGamingCommands.cheatMode@4.0.0']='./modules/ExpGamingCommands/cheatMode',
     ['ExpGamingCommands.bonus@4.0.0']='./modules/ExpGamingCommands/bonus',

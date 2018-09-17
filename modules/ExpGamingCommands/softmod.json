@@ -14,34 +14,6 @@
     "contact": "Discord: Cooldude2606#5241",
     "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
     "submodules": {
-        "admin": {
-            "name": "admin",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Admins many of the admin featues which the script can use as in game commands.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.admin_4.0.0.zip",
-            "keywords": [
-                "ExpGaming",
-                "Admin",
-                "Tools",
-                "Commands",
-                "Temp ban",
-                "Jail",
-                "Clear Inventory",
-                "Report",
-                "Warnings"
-            ],
-            "dependencies": {
-                "ExpGamingLib": "^4.0.0",
-                "ExpGamingCore.Commands": "^4.0.0",
-                "ExpGamingAdmin.TempBan": "?^4.0.0",
-                "ExpGamingAdmin.Jail": "?^4.0.0",
-                "ExpGamingAdmin.Warnings": "?^4.0.0",
-                "ExpGamingAdmin.Reports": "^?4.0.0",
-                "ExpGamingAdmin.ClearInventory": "?^4.0.0"
-            },
-            "collection": "ExpGamingCommands_4.0.0"
-        },
         "bonus": {
             "name": "bonus",
             "version": "4.0.0",
@@ -108,7 +80,7 @@
             "version": "4.0.0",
             "type": "Submodule",
             "description": "Adds a command which can be used to kill a player or yourself.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.kill_4.0.0.zip",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingAdmin.Commands_4.0.0.zip",
             "keywords": [
                 "Command",
                 "ExpGaming",
@@ -160,7 +132,7 @@
             ],
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
-                "ExpGamingCore.Ranking": "^4.0.0",
+                "ExpGamingCore.Ranking": "?^4.0.0",
                 "ExpGamingCore.Commands": "^4.0.0",
                 "FactorioStdLib.Game": "^0.8.0"
             },

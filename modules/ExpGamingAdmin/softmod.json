@@ -241,6 +241,34 @@
                 "ExpGamingCore.Sync": "?^4.0.0"
             },
             "collection": "ExpGamingAdmin_4.0.0"
+        },
+        "Commands": {
+            "name": "Commands",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Admins many of the admin featues which the script can use as in game commands.",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.admin_4.0.0.zip",
+            "keywords": [
+                "ExpGaming",
+                "Admin",
+                "Tools",
+                "Commands",
+                "Temp ban",
+                "Jail",
+                "Clear Inventory",
+                "Report",
+                "Warnings"
+            ],
+            "dependencies": {
+                "ExpGamingLib": "^4.0.0",
+                "ExpGamingCore.Commands": "^4.0.0",
+                "ExpGamingAdmin.TempBan": "?^4.0.0",
+                "ExpGamingAdmin.Jail": "?^4.0.0",
+                "ExpGamingAdmin.Warnings": "?^4.0.0",
+                "ExpGamingAdmin.Reports": "^?4.0.0",
+                "ExpGamingAdmin.ClearInventory": "?^4.0.0"
+            },
+            "collection": "ExpGamingAdmin_4.0.0"
         }
     },
     "dependencies": {}

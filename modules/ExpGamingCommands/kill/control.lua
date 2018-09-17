@@ -1,9 +1,9 @@
 --- A full ranking system for factorio.
--- @module ExpGamingCommands.kill
+-- @module ExpGamingCommands.kill@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-local Game = require('FactorioStdLib.Game')
+local Game = require('FactorioStdLib.Game@^4.0.0')
 
 --- Kills a player of a lower rank
 -- @command kill
@@ -15,4 +15,4 @@ commands.add_command('kill', 'Kills a player. No player name kills yourself.', {
     local player = args.player
     if player then player.character.die()
     else _player.character.die() end
-end)
+end).default_admin_only = true
