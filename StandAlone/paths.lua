@@ -87,7 +87,7 @@ Event.register({defines.events.on_player_built_tile,defines.events.on_robot_buil
     local surface = event.surface_index and game.surfaces[event.surface_index] or event.robot and event.robot.surface
     local old_tiles = event.tiles
     for _,old_tile in pairs(old_tiles) do
-        if placed_paths[old_tile.old_tile.name] or old_tile.old_tile.name == 'water' or old_tile.old_tile.name == 'deep-water' then else
+        if placed_paths[old_tile.old_tile.name] or old_tile.old_tile.name == 'water' or old_tile.old_tile.name == 'deepwater' then else
             if global.paths == nil then global.paths = {} end -- nil as you can set to false to disable
             global.paths[global_key(surface,old_tile.position)]=old_tile.old_tile.name -- not a mistake, this makes it have dimising returns
         end
