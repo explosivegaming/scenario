@@ -2,7 +2,7 @@
 -- idea from Mylon - Dirt Path
 
 local adjacency_boost = 2 -- makes paths more lickly to be next to each other; must be greater than 0
-local entities = {
+local sizes = {
     ['stone-furnace']=2,
     ['steel-furnace']=2,
     ['electric-furnace']=3,
@@ -83,8 +83,8 @@ local function down_grade(surface,pos)
     surface.set_tiles{{name=new_tile,position=pos}}
 end
 
-Event.register(defines.events.on_player_built_tile, function(event)
-    local surface = game.surfaces[event.surface_index]
+Event.register({defines.events.on_player_built_tile,defines.events.on_robot_built_tile}, function(event)
+    local surface = event.surface_index and game.surfaces[event.surface_index] or event.robot and event.robot.surface
     local old_tiles = event.tiles
     for _,old_tile in pairs(old_tiles) do
         if placed_paths[old_tile.old_tile.name] or old_tile.old_tile.name == 'water' or old_tile.old_tile.name == 'deep-water' then else
@@ -115,11 +115,11 @@ Event.register(defines.events.on_player_changed_position, function(event)
     end
 end)
 
-Event.register(defines.events.on_built_entity, function(event)
+Event.register({defines.events.on_built_entity,on_robot_built_entity}, function(event)
     local entity = event.created_entity
     local surface = entity.surface
-    if entities[entity.name] then
-        local size = entities[entity.name]
+    if sizes[entity.name] then
+        local size = sizes[entity.name]
         for x in 0,size do for y in 0,size do
             local pos = {entity.position.x+x,entity.position.y+y}
             local tile = surface.get_tile(pos).name
