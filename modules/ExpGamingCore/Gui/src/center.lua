@@ -205,9 +205,9 @@ function center._center:add_tab(name,caption,tooltip,callback)
 end
 
 -- used so that when gui close key is pressed this will close the gui
-script.on_event('on_gui_closed',function(event)
+center._events = {[defines.events.on_gui_closed]=function(event)
     if event.element and event.element.valid then event.element.destroy() end
-end)
+end}
 
 center.on_rank_change = center.clear
 return center

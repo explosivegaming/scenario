@@ -252,6 +252,7 @@ return commands
     commands.add_command('foo',{'foo.description'},{
         ['player']={true,'player'}, -- a required arg that must be a valid player
         ['number']={true,'number-range',0,10}, -- a required arg that must be a number 0<X<=10
+        ['pwd']={true,function(value,event) if value == 'password123' then return true else return commands.error('Invalid Password') end} -- a requireed arg pwd that has custom validation
         ['reason']={false,'string-inf'} -- an optinal arg that is and infite lengh (useful for reasons)
     },function(event,args)
         args.player.print(args.number)
