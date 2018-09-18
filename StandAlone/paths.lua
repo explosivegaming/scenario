@@ -2,6 +2,7 @@
 -- idea from Mylon - Dirt Path
 
 local adjacency_boost = 2 -- makes paths more lickly to be next to each other; must be greater than 0
+adjacency_boost = 10/adjacency_boost -- dont change this line
 local sizes = {
     ['stone-furnace']=2,
     ['steel-furnace']=2,
@@ -40,7 +41,7 @@ local placed_paths = {
 }
 local paths = {
     -- ['tile name'] = {health,convert to}
-    -- health is the average number of steps in hundards before it changes
+    -- the greater health is the lower the chance it will be down graded, must be grater than 0
     ['refined-concrete']={70,'concrete'},
     ['refined-hazard-concrete-right']={70,'hazard-concrete-right'},
     ['refined-hazard-concrete-left']={70,'hazard-concrete-left'},
@@ -48,25 +49,25 @@ local paths = {
     ['hazard-concrete-right']={50,'stone-path'},
     ['hazard-concrete-left']={50,'stone-path'},
     ['stone-path']={40,'world-gen'}, -- world-gen just makes it pick the last tile not placed by a player
-    ['sand-1']={1,'sand-2'},
-    ['sand-2']={3,'sand-3'},
-    ['sand-3']={1,'red-desert-3'},
-    ['red-desert-3']={1,'red-desert-2'},
-    ['red-desert-2']={3,'dirt-1'},
-    ['grass-2']={1,'grass-1'},
-    ['grass-1']={1,'grass-3'},
-    ['grass-3']={3,'red-desert-0'},
-    ['red-desert-0']={1,'red-desert-1'},
-    ['red-desert-1']={3,'dirt-1'},
-    ['dirt-1']={1,'dirt-2'},
-    ['dirt-2']={1,'dirt-3'},
-    ['dirt-3']={3,'dirt-4'},
-    ['dirt-4']={1,'dirt-5'},
-    ['dirt-5']={1,'dirt-6'},
-    ['grass-4']={3,'dirt-4'}
+    ['sand-1']={5,'sand-2'},
+    ['sand-2']={10,'sand-3'},
+    ['sand-3']={5,'red-desert-3'},
+    ['red-desert-3']={5,'red-desert-2'},
+    ['red-desert-2']={10,'dirt-1'},
+    ['grass-2']={5,'grass-1'},
+    ['grass-1']={5,'grass-3'},
+    ['grass-3']={10,'red-desert-0'},
+    ['red-desert-0']={5,'red-desert-1'},
+    ['red-desert-1']={10,'dirt-1'},
+    ['dirt-1']={5,'dirt-2'},
+    ['dirt-2']={5,'dirt-3'},
+    ['dirt-3']={10,'dirt-4'},
+    ['dirt-4']={5,'dirt-5'},
+    ['dirt-5']={5,'dirt-6'},
+    ['grass-4']={10,'dirt-4'}
 }
 for tile,value in pairs(paths) do
-    value[1]=1/(value[1]*125)
+    value[1]=-1/value[1]
 end
 
 local function global_key(surface,pos)
@@ -102,14 +103,14 @@ Event.register(defines.events.on_player_changed_position, function(event)
     local pos = player.position
     local tile_name = surface.get_tile(pos).name 
     if not paths[tile_name] then return end
-    local chance = paths[tile_name][1]
-    local count = 1
+    local count = -9 -- this value is important
     for x = -1,1 do for y = -1,1 do
         local _pos = {pos.x+x,pos.y+y}
         if placed_paths[tile_name] and not placed_paths[surface.get_tile(_pos).name] 
         or surface.get_tile(_pos).name == paths[tile_name][2] 
-        then chance=chance*((adjacency_boost+8)/count) count=count+1 end
+        then count=count+1 end
     end end
+    local chance = paths[tile_name][1]/(count-adjacency_boost)
     if math.random() < chance then
         down_grade(surface,pos)
     end
