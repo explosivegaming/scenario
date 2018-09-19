@@ -1,4 +1,4 @@
---- Desction <get from json>
+--- Adds a system to manage and auto-create permission groups.
 -- @module ExpGamingCore@Group
 -- @author Cooldude2606
 -- @license Discord: Cooldude2606@5241
@@ -17,7 +17,9 @@ local module_verbose = false
 -- @field _prototype the prototype of this class
 -- @field groups a table of all groups, includes auto complete on the indexing
 local Group = {
-    _prototype = {},
+    _prototype = setmetatable({},{
+        __index=function(tbl,key) return rawget(rawget(tbl,'_raw_group'),key) end
+    }),
     groups = setmetatable({},{
         __index=table.autokey,
         __newindex=function(tbl,key,value)
