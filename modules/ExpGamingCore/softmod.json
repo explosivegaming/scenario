@@ -19,7 +19,7 @@
             "version": "4.0.0",
             "type": "Submodule",
             "description": "A better command handler than the base game.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Commands_4.0.0.zip",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Command_4.0.0.zip",
             "keywords": [
                 "Library",
                 "Lib",
@@ -107,7 +107,7 @@
                 "FactorioStdLib.Color": "^0.8.0",
                 "FactorioStdLib.String": "^0.8.0",
                 "FactorioStdLib.Game": "^0.8.0",
-                "ExpGamingCore.Commands": "?^4.0.0"
+                "ExpGamingCore.Command": "?^4.0.0"
             },
             "collection": "ExpGamingCore_4.0.0"
         },
@@ -134,6 +134,47 @@
                 "FactorioStdLib.Table": "^0.8.0",
                 "ExpGamingCore.Ranking": "?^4.0.0",
                 "ExpGamingCore.Gui": "?^4.0.0"
+            },
+            "collection": "ExpGamingCore_4.0.0"
+        },
+        "Command": {
+            "name": "Command",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "A better command handler than the base game.",
+            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Command_4.0.0.zip",
+            "keywords": [
+                "Library",
+                "Lib",
+                "ExpGaming",
+                "Core",
+                "Commands"
+            ],
+            "dependencies": {
+                "ExpGamingLib": "^4.0.0",
+                "FactorioStdLib.Table": "^0.8.0",
+                "FactorioStdLib.Color": "^0.8.0",
+                "FactorioStdLib.Game": "^0.8.0"
+            },
+            "collection": "ExpGamingCore_4.0.0"
+        },
+        "Group": {
+            "name": "Group",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Adds a system to manage and auto-create permission groups.",
+            "location": "<blank>",
+            "keywords": [
+                "Groups",
+                "ExpGaming",
+                "System",
+                "Management",
+                "Manage",
+                "Permissions"
+            ],
+            "dependencies": {
+                "FactorioStdLib": "^0.8.0",
+                "ExpGamingLib": "^4.0.0"
             },
             "collection": "ExpGamingCore_4.0.0"
         }

@@ -1,5 +1,5 @@
 --- Command system that allows middle ware and auto validation of command arguments.
--- @module ExpGamingCore.Commands@4.0.0
+-- @module ExpGamingCore.Command@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alias commands

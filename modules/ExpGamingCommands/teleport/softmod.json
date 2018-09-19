@@ -15,7 +15,7 @@
         "Tools"
     ],
     "dependencies": {
-        "ExpGamingCore.Commands": "^4.0.0",
+        "ExpGamingCore.Command": "^4.0.0",
         "ExpGamingAdmin.Teleport": "^4.0.0"
     },
     "collection": "ExpGamingCommands_4.0.0"

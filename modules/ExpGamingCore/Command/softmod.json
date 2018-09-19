@@ -1,9 +1,9 @@
 {
-    "name": "Commands",
+    "name": "Command",
     "version": "4.0.0",
     "type": "Submodule",
     "description": "A better command handler than the base game.",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Commands_4.0.0.zip",
+    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Command_4.0.0.zip",
     "keywords": [
         "Library",
         "Lib",

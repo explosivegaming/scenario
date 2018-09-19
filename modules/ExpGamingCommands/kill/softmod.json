@@ -13,7 +13,7 @@
         "Tool"
     ],
     "dependencies": {
-        "ExpGamingCore.Commands": "^4.0.0",
+        "ExpGamingCore.Command": "^4.0.0",
         "ExpGamingCore.Ranking": "^4.0.0",
         "FactorioStdLib.Game": "^0.8.0"
     },
