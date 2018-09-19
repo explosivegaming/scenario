@@ -17,15 +17,20 @@ local module_verbose = false
 -- @field _prototype the prototype of this class
 -- @field groups a table of all groups, includes auto complete on the indexing
 local Group = {
-    _prototype = setmetatable({},{
-        __index=function(tbl,key) return rawget(rawget(tbl,'_raw_group'),key) end
-    }),
+    _prototype = {},
     groups = setmetatable({},{
         __index=table.autokey,
         __newindex=function(tbl,key,value)
             rawset(tbl,key,Group.define(obj))
         end
-    })
+    }),
+    on_init = function()
+        if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require('ExpGamingCore.Server@^4.0.0').add_module_to_interface('Group','ExpGamingCore.Group') end
+    end,
+    on_post = function(self)
+        -- loads the groups in config
+        require(module_path..'/config',{Group=self})
+    end
 }
 
 -- Function Define
@@ -40,7 +45,7 @@ function Group.define(obj)
     if not type_error(obj.name,'string','Group creation is invalid: group.name is not a string') then return end
     if not type_error(obj.disallow,'table','Group creation is invalid: group.disallow is not a table') then return end
     verbose('Created Group: '..obj.name)
-    setmetatable(obj,{__index=Group._prototype})
+    setmetatable(obj,{__index=function(tbl,key) return Group._prototype[key] or rawget(tbl,'_raw_group') and rawget(tbl,'_raw_group')[key] or nil end})
     rawset(Group.groups,obj.name,obj)
     return obj
 end
@@ -62,8 +67,8 @@ end
 -- @treturn LuaPermissionGroup the factorio group linked to this group
 function Group._prototype:get_raw()
     if not self_test(self,'group','get_raw') then return end
-    if not group._raw_group then error('No permissions group found, please to not remove groups with /permissions',2) return end
-    return setmetatable({},{__index=group._raw_group})
+    if not self._raw_group then error('No permissions group found, please to not remove groups with /permissions',2) return end
+    return setmetatable({},{__index=self._raw_group})
 end
 
 --- Used to add a player to this group

@@ -85,7 +85,7 @@ end
 -- @tparam string prototype_name the name of the class
 -- @tparam string function_name the name of the function
 function ExpLib.self_test(self,prototype_name,function_name)
-    return ExpLib.is_type(value,'table') or error('Call to prototype without context, either supply a '..prototype_name..' or use '..prototype_name..':'..function_name,3)
+    return ExpLib.is_type(self,'table') or error('Call to prototype without context, either supply a '..prototype_name..' or use '..prototype_name..':'..function_name,3)
 end
 
 --- Will return a value of any type to the player/server console, allows colour for in-game players
