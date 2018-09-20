@@ -7,8 +7,6 @@
 -- Module Require
 local Game = require('FactorioStdLib.Game')
 
--- Local Varibles
-
 -- Module Define
 local module_verbose = false
 
@@ -59,7 +57,22 @@ function Group.get(mixed)
     local player = Game.get_player(mixed)
     if player then mixed = player.permission_group.name end
     if is_type(mixed,'table') and mixed.__self and mixed.name then mixed = mixed.name end
-    return Group.groups[mixed]
+    return Group.groups[mixed] or game.permissions.get_group(mixed) and setmetatable({disallow={},name=mixed,_raw_group=game.permissions.get_group(mixed)},{
+        __index=function(tbl,key) return Group._prototype[key] or rawget(tbl,'_raw_group') and rawget(tbl,'_raw_group')[key] or nil end
+    })
+end
+
+--- Used to place a player into a group
+-- @usage Group.assign(player,group)
+-- @tparam ?LuaPlayer|pointerToPlayer player the player to assign the group to
+-- @tparam ?string|LuaPermissionGroup the group to add the player to
+-- @treturn boolean was the player assigned
+function Group.assign(player,group)
+    local player = Game.get_player(player)
+    if not player then error('Invalid player given to Group.assign.',2) end
+    local group = Group.get(group)
+    if not group then error('Invalid group given to Group.assign.',2) end
+    return group:add_player(player)
 end
 
 --- Used to get the factorio permission group linked to this group
@@ -67,7 +80,7 @@ end
 -- @treturn LuaPermissionGroup the factorio group linked to this group
 function Group._prototype:get_raw()
     if not self_test(self,'group','get_raw') then return end
-    if not self._raw_group then error('No permissions group found, please to not remove groups with /permissions',2) return end
+    if not self._raw_group or self._raw_group.valid == false then error('No permissions group found, please to not remove groups with /permissions',2) return end
     return setmetatable({},{__index=self._raw_group})
 end
 
