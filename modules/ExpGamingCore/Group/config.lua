@@ -1,11 +1,11 @@
 -- defines for groups
 Group{
-    name='_root',
+    name='Root',
     disallow={}
 }
 
 Group{
-    name='_admin',
+    name='Admin',
     disallow={
         'edit_permission_group',
         'delete_permission_group',
@@ -14,7 +14,7 @@ Group{
 }
 
 Group{
-    name='_member',
+    name='Member',
     disallow={
         'edit_permission_group',
         'delete_permission_group',
@@ -23,7 +23,7 @@ Group{
 }
 
 Group{
-    name='_guest',
+    name='Guest',
     disallow={
         'edit_permission_group',
         'delete_permission_group',
