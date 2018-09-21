@@ -9,6 +9,7 @@ local Group = require('ExpGamingCore.Group@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
 
 -- Local Varibles
+local role_change_event_id = script.generate_event_name()
 
 -- Module Define
 local module_verbose = false
@@ -17,6 +18,7 @@ local Role = {
     order={},
     flags={},
     actions={},
+    meta={},
     roles=setmetatable({},{
         __index=table.autokey,
         __newindex=function(tbl,key,value)
@@ -29,6 +31,17 @@ local Role = {
     on_post=function(self)
         -- loads the roles in config
         require(module_path..'/config',{Role=self})
+        -- joins role allows into a chain
+        local previous
+        for index,role_name in pairs(self.order) do
+            local role = self.get(role_name)
+            if not role then error('Invalid role name in order listing: '..role_name) return end
+            if role.is_default then self.meta.default = role end
+            if previous then setmetatable(previous.allow,{__index=role.allow}) end
+            role.index = index
+            previous = role
+        end
+        setmetatable(previous.allow,{__index=function(tbl,key) return false end})
     end
 }
 
@@ -62,8 +75,13 @@ end
 -- gets all roles of a user or a role by name
 function Role.get(mixed)
     local player = Game.get_player(mixed)
-    if player then return global.players[player.index] and global.players[player.index] or {} end -- add some thing about default role here
-    return Roles.roles[mixed]
+    if player then 
+        local rtn = {}
+        if not global.players[player.index] then return Role.meta.default and {Role.meta.default} or {} end
+        for _,role in pairs(global.players[player.index]) do table.insert(rtn,Role.get(role)) end
+        return rtn
+    elseif is_type(mixed,'table') and mixed.role_name then return Roles.roles[mixed.role_name]
+    elseif is_type(mixed,'string') then return Roles.roles[mixed] end
 end
 
 -- gives a player a role by name or a table of roles
@@ -105,7 +123,9 @@ function Role.unassign(player,role,no_log)
 end
 
 -- gets the highest role from a set of options; player can be passed
-function Role.highest(options)
+function Role.get_highest(options)
+    local player = Game.get_player(options)
+    if player then options = Role.get(player) end
     if not type_error(options,'table','Invalid argument to Role.highest, options is not a table of roles.') then return end
     local highest_index = -1
     local highest
@@ -208,37 +228,129 @@ function Role.debug_output(role,player)
     else for index,role_name in pairs(Role.roles) do _output(Role.roles[role_name]) end end
 end
 
+-- returns true if this role has this flag set
 function Role._prototype:has_flag(flag)
-    -- if this role has this flag
+    if not self_test(self,'role','has_flag') then return end
+    if not type_error(flag,'string','Invalid argument to role:has_flag, flag is not a string.') then return end
+    return self[flag] or false
 end
 
+-- returns true if the rank is allowed, indexing with metatables for inheraitance
 function Role._prototype:allowed(action)
-    -- if this role is allowed this action
+    if not self_test(self,'role','allowed') then return end
+    if not type_error(action,'string','Invalid argument to role:allowed, action is not a string.') then return end
+    return self.allowed[action] or self.is_root or false -- still include is_root exception flag
 end
 
+-- gets the players in this role and online only if online is true
 function Role._prototype:get_players(online)
-    -- gets all/online players who have this role
+    if not self_test(self,'role','get_players') then return end
+    if online and not type_error(online,'boolean','Invalid argument to role:get_players, online is not a boolean.') then return end
+    if not global.roles[self.name] then global.roles[self.name] = {} end
+    local rtn = {}
+    for _,player_index in pairs(global.roles[self.name]) do
+        local player = game.players[player_index]
+        if player and not online or player.connected then table.insert(rtn,player) end
+    end
+    return rtn
 end
 
+-- prints a message to all players with this role
 function Role._prototype:print(rtn,colour)
-    -- prints a message to all players with this role
+    if not self_test(self,'role','print') then return end
+    if colour and not type_error(colour,'table','Invalid argument to Role.print, colour is not a table.') then return end
+    local ctn = 0
+    for _,player in pairs(self:get_players(true)) do ctn=ctn+1 player_return(rtn,colour,player) end
+    return ctn
 end
 
+-- runs though Role.actions and returns a list of which this role can do
 function Role._prototype:get_permissions()
-    -- runs though Role.actions and returns a list of which this role can do
+    if not self_test(self,'role','get_permissions') then return end
+    local rtn = {}
+    for _,action in pairs(Role.actions) do rtn[action] = self:allowed(action) end
+    return rtn
 end
 
-function Role._prototype.add_player(player)
-    -- adds a player to this role
+-- adds a player to this role
+function Role._prototype:add_player(player,by_player)
+    if not self_test(self,'role','add_player') then return end
+    local player = Game.get_player(player)
+    if not player then error('Invalid player given to role:add_player.',2) return end
+    local by_player = Game.get_player(by_player)
+    if not by_player then by_player = {name='<server>',index=0} end
+    if not global.roles[self.name] then global.roles[self.name] = {} end
+    if not global.players[player.index] then global.roles[player.index] = {} end
+    local highest = Role.get_highest(player)
+    table.insert(global.roles[self.name],player.index)
+    table.insert(global.players[player.index],self.name)
+    script.raise_event(role_change_event_id,{
+        name=role_change_event_id,
+        tick=game.tick,
+        player_index=player.index,
+        by_player_index=by_player.index,
+        old_highest=highest.name,
+        role_name=self.name,
+        effect='assign'
+    })
 end
 
-function Role._prototype.remove_player(player)
-    -- removes this role from the player
+-- removes a player from this role
+function Role._prototype:remove_player(player,by_player)
+    if not self_test(self,'role','add_player') then return end
+    local player = Game.get_player(player)
+    if not player then error('Invalid player given to role:remove_player.',2) return end
+    local by_player = Game.get_player(by_player) or {name='<server>',index=0}
+    if not global.roles[self.name] then global.roles[self.name] = {} end
+    if not global.players[player.index] then global.roles[player.index] = {} end
+    local highest = Role.get_highest(player)
+    local index = 0
+    for _index,player_index in pairs(global.roles[self.name]) do if player_index == player.index then index=_index break end end
+    table.remove(global.roles[self.name],index)
+    for _index,role_name in pairs(global.players[player.index]) do if role_name == self.name then index=_index break end end
+    table.insert(global.players[player.index],index)
+    script.raise_event(role_change_event_id,{
+        name=role_change_event_id,
+        tick=game.tick,
+        player_index=player.index,
+        by_player_index=by_player.index,
+        old_highest=highest.name,
+        role_name=self.name,
+        effect='unassign'
+    })
 end
 
 -- Event Handlers Define
-
--- event call for role updates
+script.on_event(role_change_event_id,function(event)
+    -- varible init
+    local player = Game.get_player(event)
+    local by_player = Game.get_player(event.by_player_index) or {name='<server>',index=0}
+    local role = Role.get(event)
+    local highest = Role.get_highest(player)
+    -- assign new tag and group of highest role
+    Group.assign(player,highest.group) 
+    player.tag = highest.tag
+    -- play a sound to the player
+    if event.effect == 'assign' and not role.is_jail then player.play_sound{path='utility/achievement_unlocked'} 
+    else player.play_sound{path='utility/game_lost'} end
+    if player.online_time > 60 then
+        -- send a message to other players
+        if event.effect == 'assign' then game.print(player.name..' was assigned the new role: '..role.name)
+        else game.print(player.name..' was unassigned the role: '..role.name) end
+        -- log change to file
+        game.write_file('ranking-change.json',
+            table.json({
+                tick=game.tick,
+                play_time=player.online_time,
+                player_name=player.name,
+                by_player_name=by_player.name,
+                role_name=role.name,
+                highest_role_name=highest.name,
+                effect=event.effect
+            })..'\n'
+        , true, 0)
+    end
+end)
 
 -- Module Return
 return setmetatable(Role,{__call=function(tbl,...) tbl.define(...) end}) 
