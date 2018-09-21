@@ -3,25 +3,19 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-local Game = require('FactorioStdLib.Game')
-local Gui = require('ExpGamingCore.Gui')
-local Admin -- hanndled on load
+local Game = require('FactorioStdLib.Game@^0.8.0')
+local Gui = require('ExpGamingCore.Gui@^4.0.0')
+local Admin -- ExpGamingAdmin.AdminLib@^4.0.0
 
-local global = global{
-    update=0,
-    delay=10,
-    intervial=54000
-}
-
--- this will be replaced on load if playerInfo module is present
-local function playerInfo(player,frame)
+-- Local Varibles
+local playerInfo = function(player,frame)
     frame.add{
         type='label',
-        caption={'player-list.no-info-file'}
+        caption={'ExpGamingPlayer-playerList.no-info-file'}
     }
 end
 
-local function getPlayers()
+local getPlayers = function()
     local rtn = {{{r=233,g=63,b=233},'Admin',{}},{{r=255,g=159,b=27},'',{}}}
     for _,player in pairs(game.connected_players) do
         if player.admin then table.insert(rtn[2][3],player)
@@ -30,7 +24,24 @@ local function getPlayers()
     return rtn
 end
 
-local function queue_update(tick)
+-- Module Define
+local module_verbose = false
+local ThisModule = {
+    on_init=function(self)
+        if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer.playerInfo') end
+        if loaded_modules['ExpGamingCore.Ranking@^4.0.0'] then getPlayers = require(module_path..'/src/ranking') end
+        if loaded_modules['ExpGamingAdmin.AdminLib@^4.0.0'] then Admin = require('ExpGamingAdmin.AdminLib@^4.0.0') end
+    end
+}
+
+-- Global Define
+local global = global{
+    update=0,
+    delay=10,
+    intervial=54000
+}
+
+function ThisModule.update(tick)
     local tick = is_type(tick,'table') and tick.tick or is_type(tick,'number') and tick or game.tick
     if tick + global.delay > global.update - global.intervial then
         global.update = tick + global.delay
@@ -49,7 +60,7 @@ end)
 Gui.left.add{
     name='player-list',
     caption='entity/player',
-    tooltip={'player-list.tooltip'},
+    tooltip={'ExpGamingPlayer-playerList.tooltip'},
     draw=function(frame)
         frame.caption = ''
         local player_list = frame.add{
@@ -70,18 +81,18 @@ Gui.left.add{
                         type='label',
                         name=player.name,
                         style='caption_label',
-                        caption={'player-list.format-nil',tick_to_display_format(player.online_time),player.name}
+                        caption={'ExpGamingPlayer-playerList.format-nil',tick_to_display_format(player.online_time),player.name}
                     }.style.font_color = rank[1]
                 else
                     flow.add{
                         type='label',
                         name=player.name,
                         style='caption_label',
-                        caption={'player-list.format',tick_to_display_format(player.online_time),player.name,rank[2]}
+                        caption={'ExpGamingPlayer-playerList.format',tick_to_display_format(player.online_time),player.name,rank[2]}
                     }.style.font_color = rank[1]
                 end
-                if Admin.report_btn then
-                    if not rank:allowed('no-report') and player.index ~= frame.player_index then
+                if Admin and Admin.report_btn then
+                    if not rank[4] and player.index ~= frame.player_index then
                         local btn = Admin.report_btn:draw(flow)
                         btn.style.height = 20
                         btn.style.width = 20
@@ -114,18 +125,12 @@ script.on_event(defines.events.on_gui_click,function(event)
     back_btn:draw(flow)
     playerInfo(event.element.name,flow,true)
     if Game.get_player(event.element.name) and event.player_index == Game.get_player(event.element.name).index then return end
-    if Admin and Admin.allowed and Admin.allowed(event.player_index) then Admin.btn_flow(flow).caption = event.element.name end
+    if Admin and Admin.allowed(event.player_index) then Admin.btn_flow(flow).caption = event.element.name end
 end)
 
-script.on_event(defines.events.on_player_joined_game,queue_update)
-script.on_event(defines.events.on_player_left_game,queue_update)
-script.on_event(defines.events.rank_change,queue_update)
+script.on_event(defines.events.on_player_joined_game,ThisModule.update)
+script.on_event(defines.events.on_player_left_game,ThisModule.update)
+script.on_event(defines.events.rank_change,ThisModule.update)
 
-return {
-    force_update=function() return Gui.left.update('player-list') end,
-    update=queue_update,
-    on_init=function(self)
-        if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer.playerInfo') end
-        if loaded_modules['ExpGamingAdmin.AdminLib'] then Admin = require('ExpGamingAdmin.AdminLib') end
-    end
-}
+ThisModule.force_update = function() return Gui.left.update('player-list') end
+return ThisModule

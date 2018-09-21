@@ -468,7 +468,7 @@ end)
 
 function Server:on_init()
     for name,id in pairs(defines.events) do if not script.get_event_handler(id) then script.on_event(id,Server._thread_handler) end end
-    if loaded_modules['ExpGamingCore.Commands'] then verbose('ExpGamingCore.Commands is installed; Loading commands src') require(module_path..'/src/commands',{Server=Server}) end
+    if loaded_modules['ExpGamingCore.Command'] then verbose('ExpGamingCore.Command is installed; Loading commands src') require(module_path..'/src/commands',{Server=Server}) end
 end
 
 return Server

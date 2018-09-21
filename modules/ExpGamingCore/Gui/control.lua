@@ -27,11 +27,21 @@ Gui.data = setmetatable({},{
     end
 })
 
+local events = {}
+
 Gui.center = require(module_path..'/src/center',{Gui=Gui})
+table.merge(events,Gui.center._events)
+Gui.center._events = nil
+
 Gui.inputs = require(module_path..'/src/inputs',{Gui=Gui})
+table.merge(events,Gui.inputs._events)
+Gui.inputs._events = nil
+
 Gui.left = require(module_path..'/src/left',{Gui=Gui})
 Gui.popup = require(module_path..'/src/popup',{Gui=Gui})
 Gui.toolbar = require(module_path..'/src/toolbar',{Gui=Gui})
+
+for event,callback in pairs(events) do script.on_event(event,callback) end
 
 --- Add a white bar to any gui frame
 -- @usage Gui.bar(frame,100)

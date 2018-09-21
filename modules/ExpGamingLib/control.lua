@@ -68,6 +68,26 @@ function ExpLib.is_type(v,test_type)
     return test_type and v and type(v) == test_type or not test_type and not v or false 
 end
 
+--- Compear types faster for faster valadation of prams, including giving an error if incorrect
+-- @usage type_error('foo','string','Value is not a string') -- return true
+-- @usage type_error('foo','table','Value is not a string') -- return error
+-- @param value the value to be tested
+-- @tparam[opt=nil] string type the type that the value should be
+-- @tparam string error_message the message given when type is not matched
+-- @treturn boolean if it matched or and error
+function ExpLib.type_error(value,type,error_message)
+    return ExpLib.is_type(value,type) or error(error_message,3)
+end
+
+--- A speailsied verion of type_error to test for self
+-- @usage self_test(self,'Object','get_name')
+-- @tparam table self the table that is the object
+-- @tparam string prototype_name the name of the class
+-- @tparam string function_name the name of the function
+function ExpLib.self_test(self,prototype_name,function_name)
+    return ExpLib.is_type(self,'table') or error('Call to prototype without context, either supply a '..prototype_name..' or use '..prototype_name..':'..function_name,3)
+end
+
 --- Will return a value of any type to the player/server console, allows colour for in-game players
 -- @usage player_return('Hello, World!') -- returns 'Hello, World!' to game.player or server console
 -- @usage player_return('Hello, World!','green') -- returns 'Hello, World!' to game.player with colour green or server console

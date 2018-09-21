@@ -438,6 +438,7 @@ require(module_path..'/src/config',{Ranking=Ranking})
 
 function Ranking:on_init()
     if loaded_modules['ExpGamingCore.Server'] then verbose('ExpGamingCore.Server is installed; Loading server src') require(module_path..'/src/server',{Ranking=Ranking}) end
+    if loaded_modules['ExpGamingCore.Command'] then verbose('ExpGamingCore.Server is installed; Loading commands src') require(module_path..'/src/commands',{Ranking=Ranking}) end
 end
 
 function Ranking:on_post()

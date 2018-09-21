@@ -1,0 +1,20 @@
+{
+    "name": "Group",
+    "version": "4.0.0",
+    "type": "Submodule",
+    "description": "Adds a system to manage and auto-create permission groups.",
+    "location": "<blank>",
+    "keywords": [
+        "Groups",
+        "ExpGaming",
+        "System",
+        "Management",
+        "Manage",
+        "Permissions"
+    ],
+    "dependencies": {
+        "FactorioStdLib": "^0.8.0",
+        "ExpGamingLib": "^4.0.0"
+    },
+    "collection": "ExpGamingCore_4.0.0"
+}

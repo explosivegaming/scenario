@@ -1,11 +1,11 @@
 --- A full ranking system for factorio.
--- @module ExpGamingCommands.kill
+-- @module ExpGamingCommands.repair@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
 
-local Game = require('FactorioStdLib.Game')
-local Ranking = require('ExpGamingCore.Ranking')
+local Game = require('FactorioStdLib.Game@^0.8.0')
+local Ranking = require('ExpGamingCore.Ranking@^4.0.0')
 
 -- Set an item to true to disallow it from being repaired
 local disallow = {
@@ -18,13 +18,22 @@ local disallow = {
 
 -- Given const = 100: admin+ has unlimited, admin has const (100), mod has const / 2 (50), member has const / 5 (20)
 local const = 100
+local repairDisallow
+
+-- Module Define
+local module_verbose = false
+local ThisModule = {
+    on_init = function(self) 
+        if loaded_modules['ExpGamingAdmin.TempBan@^4.0.0'] then verbose('ExpGamingAdmin.TempBan is installed; Loading tempban src') repairDisallow = require(module_path..'/src/tempban') end
+    end
+}
 
 --- Used so that the value can be overriden if tempban is present
 -- @local
 -- @function repairDisallow
 -- @param player the player who called the command
 -- @param entity the entity which was repaired
-local repairDisallow = function(player,entity)
+repairDisallow = function(player,entity)
     player_return('You have repaired: '..entity.name..' this item is not allowed.',defines.textcolor.crit,player)
     entity.destroy()
 end
@@ -54,10 +63,6 @@ commands.add_command('repair', 'Repairs all destoryed and damaged entites in an 
     for key, entity in pairs(player.surface.find_entities(area)) do
         if entity.force == player.force and (entity.position.x-center.x)^2+(entity.position.y-center.y)^2 < sq_range and entity.health then entity.health = 10000 end
     end
-end)
+end).default_admin_only = true
 
-return {
-    on_init = function(self) 
-        if loaded_modules['ExpGamingAdmin.TempBan'] then verbose('ExpGamingAdmin.TempBan is installed; Loading tempban src') repairDisallow = require(module_path..'/src/tempban') end
-    end
-}
+return ThisModule

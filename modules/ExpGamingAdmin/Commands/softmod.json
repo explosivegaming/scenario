@@ -1,5 +1,5 @@
 {
-    "name": "admin",
+    "name": "Commands",
     "version": "4.0.0",
     "type": "Submodule",
     "description": "Admins many of the admin featues which the script can use as in game commands.",
@@ -17,12 +17,12 @@
     ],
     "dependencies": {
         "ExpGamingLib": "^4.0.0",
-        "ExpGamingCore.Commands": "^4.0.0",
+        "ExpGamingCore.Command": "^4.0.0",
         "ExpGamingAdmin.TempBan": "?^4.0.0",
         "ExpGamingAdmin.Jail": "?^4.0.0",
         "ExpGamingAdmin.Warnings": "?^4.0.0",
         "ExpGamingAdmin.Reports": "^?4.0.0",
         "ExpGamingAdmin.ClearInventory": "?^4.0.0"
     },
-    "collection": "ExpGamingCommands_4.0.0"
+    "collection": "ExpGamingAdmin_4.0.0"
 }

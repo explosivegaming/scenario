@@ -125,6 +125,7 @@ function inputs._event_handler(event)
         element = elements[event.element.name]
     end
     if element then
+        verbose('There was a gui event ('..Event.names[event.name]..') with element: '..event.element.name)
         if not is_type(element.events[event.name],'function') then return end
         local success, err = pcall(element.events[event.name],event)
         if not success then
@@ -134,13 +135,15 @@ function inputs._event_handler(event)
     end
 end
 
-script.on_event(inputs.events.state,inputs._event_handler)
-script.on_event(inputs.events.click,inputs._event_handler)
-script.on_event(inputs.events.elem,inputs._event_handler)
-script.on_event(inputs.events.state,inputs._event_handler)
-script.on_event(inputs.events.text,inputs._event_handler)
-script.on_event(inputs.events.slider,inputs._event_handler)
-script.on_event(inputs.events.selection,inputs._event_handler)
+inputs._events = {
+    [inputs.events.state]=inputs._event_handler,
+    [inputs.events.click]=inputs._event_handler,
+    [inputs.events.elem]=inputs._event_handler,
+    [inputs.events.state]=inputs._event_handler,
+    [inputs.events.text]=inputs._event_handler,
+    [inputs.events.slider]=inputs._event_handler,
+    [inputs.events.selection]=inputs._event_handler
+}
 
 -- the folwing functions are just to make inputs easier but if what you want is not include use inputs.add(obj)
 --- Used to define a button, can have many function

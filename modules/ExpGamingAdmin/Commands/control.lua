@@ -1,11 +1,9 @@
 --- A full ranking system for factorio.
--- @module ExpGamingCommands.kill
+-- @module ExpGamingAdmin.Commands@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
--- this file should be replaced with a collection but idk if fsm can hanndle collections in a collection
-
-local Admin = require('ExpGamingAdmin.AdminLib')
+local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
 
 --- Used to clear all parts of a player, removing warnings, reports, jail and temp ban
 -- @command clear-all

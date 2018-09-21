@@ -1,9 +1,9 @@
 --- A full ranking system for factorio.
--- @module ExpGamingCommands.kill
+-- @module ExpGamingCommands.teleport@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-local Admin = require('ExpGamingAdmin.Teleport')
+local Admin = require('ExpGamingAdmin.Teleport@^4.0.0')
 
 --- Teleports the user to the player given
 -- @command go-to

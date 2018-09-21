@@ -4,7 +4,7 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
---- This file will be loaded when ExpGamingCore.Commands is present
+--- This file will be loaded when ExpGamingCore.Command is present
 -- @function _comment
 
 local Game = require('FactorioStdLib.Game')
