@@ -54,7 +54,8 @@ end
 -- @tparam ?LuaPlayer|pointerToPlayer|string mixed can either be the name or raw group of a group or a player indenifier
 -- @treturn table the group which was found or nil
 function Group.get(mixed)
-    local player = Game.get_player(mixed)
+    local player = game and Game.get_player(mixed)
+    if is_type(mixed,'table') and mixed._raw_group then return mixed end
     if player then mixed = player.permission_group.name end
     if is_type(mixed,'table') and mixed.__self and mixed.name then mixed = mixed.name end
     return Group.groups[mixed] or game.permissions.get_group(mixed) and setmetatable({disallow={},name=mixed,_raw_group=game.permissions.get_group(mixed)},{
@@ -69,9 +70,9 @@ end
 -- @treturn boolean was the player assigned
 function Group.assign(player,group)
     local player = Game.get_player(player)
-    if not player then error('Invalid player given to Group.assign.',2) return end
+    if not player then error('Invalid player #1 given to Group.assign.',2) return end
     local group = Group.get(group)
-    if not group then error('Invalid group given to Group.assign.',2) return end
+    if not group then error('Invalid group #2 given to Group.assign.',2) return end
     return group:add_player(player)
 end
 
@@ -91,7 +92,7 @@ end
 function Group._prototype:add_player(player)
     if not self_test(self,'group','add_player') then return end
     local player = Game.get_player(player)
-    if not player then error('Invalid player given to group.add_player.',2) return end
+    if not player then error('Invalid player #1 given to group.add_player.',2) return end
     local raw_group = self:get_raw()
     return raw_group.add_player(player)
 end
@@ -103,7 +104,7 @@ end
 function Group._prototype:remove_player(player)
     if not self_test(self,'group','remove_player') then return end
     local player = Game.get_player(player)
-    if not player then error('Invalid player given to group.remove_player.',2) return end
+    if not player then error('Invalid player #1 given to group.remove_player.',2) return end
     local raw_group = self:get_raw()
     return raw_group.remove_player(player)
 end
@@ -114,6 +115,7 @@ end
 -- @treturn table table of players
 function Group._prototype:get_players(online)
     if not self_test(self,'group','get_players') then return end
+    if online and not type_error(online,'boolean','Invalid argument #1 to group:get_players, online is not a boolean.') then return end
     local raw_group = self:get_raw()
     local rtn = {}
     if online then for _,player in pairs(raw_group.players) do if player.connected then table.insert(rtn,player) end end end
@@ -127,6 +129,7 @@ end
 -- @treturn number the number of players who recived the message
 function Group._prototype:print(rtn,colour)
     if not self_test(self,'group','print') then return end
+    if colour and not type_error(colour,'table','Invalid argument #2 to group:print, colour is not a table.') then return end
     local players = self:get_players()
     local ctn = 0
     for _,player in pairs(players) do if player.connected then player_return(rtn,colour,player) ctn=ctn+1 end end

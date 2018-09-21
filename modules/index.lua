@@ -50,4 +50,5 @@ return {
     ['ChatPopup@4.0.0']='./modules/ChatPopup',
     ['DamagePopup@4.0.0']='./modules/DamagePopup',
     ['ExpGamingCore.Group@4.0.0']='./modules/ExpGamingCore/Group',
+    ['ExpGamingCore.Role@4.0.0']='./modules/ExpGamingCore/Role',
 }

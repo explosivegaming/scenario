@@ -13,6 +13,7 @@ Role{
     is_root=true,
     is_admin=true,
     is_spectator=true,
+    is_default=true,
     allow={}
 }
 

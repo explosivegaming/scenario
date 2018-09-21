@@ -223,7 +223,8 @@ Manager.sandbox = setmetatable({
     verbose=Manager.verbose,
     loaded_modules={}, -- this is over riden later
     module_verbose=false,
-    module_exports=false
+    module_exports=false,
+    _no_error_in_sandbox=true
 },{
     __metatable=false,
     __index=ReadOnlyManager,
@@ -443,14 +444,14 @@ Manager.error = setmetatable({
         -- if the error constant is given crash game
         if err == rawget(tbl,'__error_const') then Manager.verbose('Force Stop','errorCaught') rawget(tbl,'__error_call')('Force Stop',2) end
         -- other wise treat the call as if its been passed an err string
-        Manager.verbose('An error has occurred: '..err,'errorCaught')
+        if _G._no_error_in_sandbox and ReadOnlyManager.currentState == 'moduleEnv' then else Manager.verbose('An error has occurred: '..err,'errorCaught') end
         if #tbl > 0 then
             -- there is at least one error handler loaded; loops over the error handlers
             for handler_name,callback in pairs(tbl) do
                 local success, err = pcall(callback,err,...)
                 if not success then Manager.verbose('Error handler: "'..handler_name..'" failed to run ('..err..')','errorCaught') end
                 -- if the error constant is returned from the handler then crash the game
-                if err == rawget(tbl,'__error_const') then Manager.verbose('Force Stop by: '..handler_name,'errorCaught') rawget(tbl,'__error_call')('Force Stop by: '..handler_name) end
+                if err == rawget(tbl,'__error_const') then Manager.verbose('Force Stop by: '..handler_name,'errorCaught') rawset(tbl,'__crash',true) rawget(tbl,'__error_call')('Force Stop by: '..handler_name) end
             end
         elseif game then
             -- there are no handlers loaded so it will print to the game if loaded
@@ -459,8 +460,10 @@ Manager.error = setmetatable({
         else
             -- all else fails it will crash the game with the error code
             Manager.verbose('No error handlers loaded; Game not loaded; Forced crash: '..err,'errorCaught')
+            rawset(tbl,'__crash',true)
             rawget(tbl,'__error_call')(err,2)
         end
+        rawget(tbl,'__error_call')(err,2)
     end,
     __index=function(tbl,key)
         -- this allows the __error_handler to be called from many different names
