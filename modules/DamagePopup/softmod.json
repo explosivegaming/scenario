@@ -1,0 +1,14 @@
+{
+  "name": "DamagePopup",
+  "version": "4.0.0",
+  "type": "Module",
+  "description": "When a entibty is damaged y a player it will show how much damage you've dealth, When a player gets attacked by a entity it will popup the player's health in color.",
+  "location": "<blank>",
+  "keywords": ["Damage", "Popup", "Floating", "Text"],
+  "author": "badgamernl",
+  "contact": "badgamernl@gmail.com",
+  "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+  "dependencies": {
+    "FactorioStdLib.Color": "^0.8.0"
+  }
+}
