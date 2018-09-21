@@ -19,7 +19,7 @@ local Group = {
     groups = setmetatable({},{
         __index=table.autokey,
         __newindex=function(tbl,key,value)
-            rawset(tbl,key,Group.define(obj))
+            rawset(tbl,key,Group.define(value))
         end
     }),
     on_init = function()
@@ -69,9 +69,9 @@ end
 -- @treturn boolean was the player assigned
 function Group.assign(player,group)
     local player = Game.get_player(player)
-    if not player then error('Invalid player given to Group.assign.',2) end
+    if not player then error('Invalid player given to Group.assign.',2) return end
     local group = Group.get(group)
-    if not group then error('Invalid group given to Group.assign.',2) end
+    if not group then error('Invalid group given to Group.assign.',2) return end
     return group:add_player(player)
 end
 
@@ -91,7 +91,7 @@ end
 function Group._prototype:add_player(player)
     if not self_test(self,'group','add_player') then return end
     local player = Game.get_player(player)
-    if not player then error('Invalid player given to group.add_player.',2) end
+    if not player then error('Invalid player given to group.add_player.',2) return end
     local raw_group = self:get_raw()
     return raw_group.add_player(player)
 end
@@ -103,7 +103,7 @@ end
 function Group._prototype:remove_player(player)
     if not self_test(self,'group','remove_player') then return end
     local player = Game.get_player(player)
-    if not player then error('Invalid player given to group.remove_player.',2) end
+    if not player then error('Invalid player given to group.remove_player.',2) return end
     local raw_group = self:get_raw()
     return raw_group.remove_player(player)
 end
