@@ -120,8 +120,8 @@ Event.register({defines.events.on_built_entity,on_robot_built_entity}, function(
     local entity = event.created_entity
     local surface = entity.surface
     if sizes[entity.name] then
-        local size = sizes[entity.name]
-        for x = 0,size do for y = 0,size do
+        local size = sizes[entity.name]-1
+        for x = -size,0 do for y = -size,0 do
             local pos = {entity.position.x+x,entity.position.y+y}
             local tile = surface.get_tile(pos).name
             if math.random() < paths[tile][1]*size*(-10) then
