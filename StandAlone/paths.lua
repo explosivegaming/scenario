@@ -124,7 +124,7 @@ Event.register({defines.events.on_built_entity,on_robot_built_entity}, function(
         for x = -size,0 do for y = -size,0 do
             local pos = {entity.position.x+x,entity.position.y+y}
             local tile = surface.get_tile(pos).name
-            if math.random() < paths[tile][1]*size*(-10) then
+            if paths[tile] and math.random() < paths[tile][1]*size*(-10) then
                 down_grade(surface,pos)
             end
         end end
