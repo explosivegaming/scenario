@@ -32,10 +32,10 @@ end)
 --- Gives you a tag
 -- @command tag
 -- @param tag the tag you want to have
-commands.add_command('tag-clear', 'Removes a custom tag. Player can be self (/tag-clear self)', {
-    ['player'] = {true,'player-rank'}
+commands.add_command('tag-clear', 'Removes a custom tag.', {
+    ['player'] = {false,'player-rank'}
 }, function(event,args)
-    local player = args.player
+    local player = args.player or game.player
     if Ranking then
         local rank = Ranking.get_rank(player)
         player.tag = rank.tag
