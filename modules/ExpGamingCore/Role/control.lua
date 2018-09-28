@@ -253,10 +253,11 @@ function Role.print(role,rtn,colour,inv)
     if not type_error(role,'table','Invalid argument #1 to Role.print, role is invalid.') then return end
     if colour and not type_error(colour,'table','Invalid argument #3 to Role.print, colour is not a table.') then return end
     if inv and not type_error(inv,'boolean','Invalid argument #4 to Role.print, inv is not a boolean.') then return end
+    local message = inv and {'ExpGamingCore-Role.default-print',rtn} or {'ExpGamingCore-Role.print',role.name,rtn}
     local print = inv or false
     local ctn = 0
     for index,_role in pairs(Role.roles) do
-        if print or _role == role then ctn=ctn+_role:print(rtn,colour) end
+        if print or _role == role then ctn=ctn+_role:print(message,colour) end
         if _role == role then if print then break else print = true end end
     end
     return ctn
@@ -429,14 +430,14 @@ script.on_event(role_change_event_id,function(event)
     -- assign new tag and group of highest role
     if highest.__faild then Group.get(player):remove_player(player)
     else Group.assign(player,highest.group) end
-    player.tag = highest.tag
+    if not player.tag == highest.tag then player.tag = highest.tag player.print{'ExpGamingCore-Role.tag-reset'} end
     -- play a sound to the player
     if event.effect == 'assign' and not role.is_jail then player.play_sound{path='utility/achievement_unlocked'} 
     else player.play_sound{path='utility/game_lost'} end
     if player.online_time > 60 then
         -- send a message to other players
-        if event.effect == 'assign' then game.print(player.name..' was assigned the new role: '..role.name)
-        else game.print(player.name..' was unassigned the role: '..role.name) end
+        if event.effect == 'assign' then game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.assign',player.name,role.name,by_player.name}}
+        else game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.unassign',player.name,role.name,by_player.name}} end
         -- log change to file
         game.write_file('ranking-change.json',
             table.json({
