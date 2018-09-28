@@ -18,7 +18,7 @@ local Role = {
     order={},
     flags={},
     actions={},
-    meta={},
+    meta={times={}},
     roles=setmetatable({},{
         __index=table.autokey,
         __newindex=function(tbl,key,value)
@@ -27,6 +27,7 @@ local Role = {
     }),
     on_init=function()
         if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require('ExpGamingCore.Server@^4.0.0').add_module_to_interface('Role','ExpGamingCore.Role') end
+        if loaded_modules['ExpGamingCore.Commands@^4.0.0'] then require(module_path..'/src/commands',{Role=Role}) end
     end,
     on_post=function(self)
         -- loads the roles in config
@@ -37,6 +38,7 @@ local Role = {
             local role = self.get(role_name)
             if not role then error('Invalid role name in order listing: '..role_name) return end
             if role.is_default then self.meta.default = role end
+            if role.is_timed then self.meta.times[role.name] = {index,role.time} end
             if previous then setmetatable(previous.allow,{__index=role.allow}) end
             role.index = index
             previous = role
@@ -50,11 +52,16 @@ local Role = {
 local global = global{
     change_chache_length=15,
     changes={},
+    preassign={},
     players={},
     roles={}
 }
 
 -- Function Define
+
+--- Used to set default roles for players who join
+-- @usage Role.set_preassign{name={roles}}
+function Role.set_preassign(tbl) global.preassign = tbl end
 
 --- Defines a new instance of a role
 -- @usage Role.define{name='Root',short_hand='Root',tag='[Root]',group='Root',colour={r=255,b=255,g=255},is_root=true,allow={}} -- returns new role
@@ -211,7 +218,7 @@ function Role.has_flag(mixed,flag)
     if not type_error(flag,'string','Invalid argument #2 to Role.has_flag, flag is not a string.') then return end 
     local roles = Role.get(mixed)
     if not type_error(roles,'table','Invalid argument #1 to Role.has_flag, mixed is not a role or player.') then return end
-    if #roles then for _,role in pairs(roles) do
+    if #roles > 0 then for _,role in pairs(roles) do
         if role:has_flag(flag) then return true end
     end elseif roles:has_flag(flag) then return true end
     return false
@@ -235,7 +242,7 @@ function Role.allowed(mixed,action)
     if not type_error(action,'string','Invalid argument #2 to Role.allowed, action is not a string.') then return end 
     local roles = Role.get(mixed)
     if not type_error(roles,'table','Invalid argument #1 to Role.allowed, mixed is not a role or player.') then return end
-    if #roles then for _,role in pairs(roles) do
+    if #roles > 0 then for _,role in pairs(roles) do
         if role:allowed(action) then return true end
     end elseif roles:allowed(action) then return true end
     return false
@@ -430,7 +437,7 @@ script.on_event(role_change_event_id,function(event)
     -- assign new tag and group of highest role
     if highest.__faild then Group.get(player):remove_player(player)
     else Group.assign(player,highest.group) end
-    if not player.tag == highest.tag then player.tag = highest.tag player.print{'ExpGamingCore-Role.tag-reset'} end
+    if player.tag ~= highest.tag then player.tag = highest.tag player.print{'ExpGamingCore-Role.tag-reset'} end
     -- play a sound to the player
     if event.effect == 'assign' and not role.is_jail then player.play_sound{path='utility/achievement_unlocked'} 
     else player.play_sound{path='utility/game_lost'} end
@@ -439,7 +446,7 @@ script.on_event(role_change_event_id,function(event)
         if event.effect == 'assign' then game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.assign',player.name,role.name,by_player.name}}
         else game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.unassign',player.name,role.name,by_player.name}} end
         -- log change to file
-        game.write_file('ranking-change.json',
+        game.write_file('role-change.json',
             table.json({
                 tick=game.tick,
                 play_time=player.online_time,
@@ -450,6 +457,24 @@ script.on_event(role_change_event_id,function(event)
                 effect=event.effect
             })..'\n'
         , true, 0)
+    end
+end)
+
+script.on_event(defines.events.on_player_joined_game,function(event)
+    local player = Game.get_player(event)
+    local highest = Role.get_highest(player) or Role.meta.default
+    Group.assign(player,highest.group)
+    player.tag=highest.tag
+    if global.preassign[player.name:lower()] then Role.assign(player,global.preassign[player.name:lower()]) end
+end)
+
+script.on_event(defines.events.on_tick,function(event)
+    if game.tick%(3600*5) ~= 0 then return end -- every 5 minutes
+    for role_name, time in pairs(Role.meta.times) do
+        for _,player in pairs(game.connected_players) do
+            local highest = Role.get_highest(player)
+            if highest.index > time[1] and (player.online_time) > time[2] then Role.assign(player,role_name) end
+        end
     end
 end)
 

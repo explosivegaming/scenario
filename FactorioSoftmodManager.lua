@@ -542,8 +542,9 @@ Manager.event = setmetatable({
             Manager.event[event_name] = new_callback return
         end
         -- other wise raise the event and call every callback; no use of script.raise_event due to override
-        if type(tbl[event_name]) == 'table' then
-            for module_name,callback in pairs(tbl[event_name]) do
+        local event_functions = tbl.__events[event_name]
+        if type(event_functions) == 'table' then
+            for module_name,callback in pairs(event_functions) do
                 -- loops over the call backs and which module it is from
                 if type(callback) ~= 'function' then error('Invalid Event Callback: "'..event_name..'/'..module_name..'"') end
                 local sandbox, success, err = Manager.sandbox(callback,{module_name=setupModuleName(module_name),module_path=moduleIndex[tostring(module_name)]},new_callback,...)
@@ -557,7 +558,7 @@ Manager.event = setmetatable({
                         else chache[error_message] = nil end
                         if chache[error_message] and chache[error_message][2] > 100 then
                             Manager.verbose('There was an error happening every tick for 100 ticks, the event handler has been removed!','errorCaught')
-                            tbl[event_name][module_name] = nil
+                            event_functions[module_name] = nil
                         end
                     end
                 end

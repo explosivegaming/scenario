@@ -36,7 +36,7 @@ function ExpLib.get_env()
             i=i+1
         end
         level=level+1
-        if debug.getinfo(level-1).namewhat == 'global' then break end
+        if debug.getinfo(level-2).namewhat == 'global' then break end
     end
     return env
 end

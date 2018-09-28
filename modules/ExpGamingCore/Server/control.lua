@@ -38,7 +38,8 @@ local global = global{
 -- @treturn string the new uuid
 Server.uuid = add_metatable({},function()
     -- when it is called as a function
-    return global.uuid + 1
+    global.uuid=global.uuid+1
+    return global.uuid
 end,function()
     -- when it is treated as a string
     return string.to_hex(tostring(Server.uuid()))
@@ -457,6 +458,7 @@ script.on_event(defines.events.on_tick,function(event)
     if #global.timeout > 0 then Server.check_timeouts() end -- timeout checks
     if #global.queue > 0 then -- resolve one thread
         local current_thread = global.all[global.queue[1]]
+        game.print(current_thread.uuid)
         if current_thread and current_thread:valid() then current_thread:resolve() end
     end
 end)
