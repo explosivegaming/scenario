@@ -44,6 +44,7 @@ function Group.define(obj)
     if not type_error(obj.disallow,'table','Group creation is invalid: group.disallow is not a table') then return end
     verbose('Created Group: '..obj.name)
     setmetatable(obj,{__index=function(tbl,key) return Group._prototype[key] or rawget(tbl,'_raw_group') and rawget(tbl,'_raw_group')[key] or nil end})
+    obj.connected_players = setmetatable({self=obj},Group._prototype.connected_players_mt)
     rawset(Group.groups,obj.name,obj)
     return obj
 end
@@ -54,13 +55,17 @@ end
 -- @tparam ?LuaPlayer|pointerToPlayer|string mixed can either be the name or raw group of a group or a player indenifier
 -- @treturn table the group which was found or nil
 function Group.get(mixed)
-    local player = game and Game.get_player(mixed)
-    if is_type(mixed,'table') and mixed._raw_group then return mixed end
-    if player then mixed = player.permission_group.name end
+    if is_type(mixed,'table') and not mixed.__self and mixed._raw_group then return mixed end
     if is_type(mixed,'table') and mixed.__self and mixed.name then mixed = mixed.name end
-    return Group.groups[mixed] or game.permissions.get_group(mixed) and setmetatable({disallow={},name=mixed,_raw_group=game.permissions.get_group(mixed)},{
-        __index=function(tbl,key) return Group._prototype[key] or rawget(tbl,'_raw_group') and rawget(tbl,'_raw_group')[key] or nil end
-    })
+    if game and game.players[mixed] then mixed = game.players[mixed].permission_group.name end
+    local rtn = Group.groups[mixed]
+    if not rtn and game.permissions.get_group(mixed) then
+        rtn = setmetatable({disallow={},name=mixed,_raw_group=game.permissions.get_group(mixed)},{
+            __index=function(tbl,key) return Group._prototype[key] or rawget(tbl,'_raw_group') and rawget(tbl,'_raw_group')[key] or nil end
+        })
+        rtn.connected_players = setmetatable({self=rtn},Group._prototype.connected_players_mt)
+    end
+    return rtn
 end
 
 --- Used to place a player into a group
@@ -110,7 +115,9 @@ function Group._prototype:remove_player(player)
 end
 
 --- Gets all players in this group
--- @usage group:get_players(true) -- returns all online players
+-- @usage group:get_players() -- returns table of players
+-- @usage group.players -- returns table of players
+-- @usage group.connected_players -- returns table of online players
 -- @tparam[opt=false] boolean online if true returns only online players
 -- @treturn table table of players
 function Group._prototype:get_players(online)
@@ -121,6 +128,27 @@ function Group._prototype:get_players(online)
     if online then for _,player in pairs(raw_group.players) do if player.connected then table.insert(rtn,player) end end end
     return online and rtn or raw_group.players
 end
+
+-- this is used to create a connected_players table
+Group._prototype.connected_players_mt = {
+    __call=function(tbl) return tbl.self:get_players(true) end,
+    __pairs=function(tbl) 
+        local players = tbl.self:get_players(true) 
+        local function next_pair(tbl,k)
+            k, v = next(players, k)
+            if v then return k,v end
+        end
+        return next_pair, players, nil
+    end,
+    __ipairs=function(tbl) 
+        local players = tbl.self:get_players(true) 
+        local function next_pair(tbl,k)
+            k, v = next(players, k)
+            if v then return k,v end
+        end
+        return next_pair, players, nil
+    end
+}
 
 --- Prints a message or value to all online players in this group
 -- @usage group.print('Hello, World!')
