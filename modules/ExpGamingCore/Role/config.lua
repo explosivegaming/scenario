@@ -151,7 +151,9 @@ Role{
     tag='[Partner]',
     group='HiMember',
     colour={r=140,g=120,b=200},
-    allow={}
+    allow={
+        ['global-chat']=true,
+    }
 }
 Role{
     name='Veteran',
@@ -163,7 +165,6 @@ Role{
     is_varified=true,
     time=600, -- 10 hours
     allow={
-        ['global-chat']=true,
         ['tree-decon']=true,
         ['create-poll']=true,
         ['repair']=true
