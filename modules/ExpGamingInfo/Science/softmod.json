@@ -1,0 +1,22 @@
+{
+    "name": "Science",
+    "version": "4.0.0",
+    "type": "Submodule",
+    "description": "Adds a science count gui to the game that shows toatal made and per minute",
+    "location": "<blank>",
+    "keywords": [
+        "Gui",
+        "Info",
+        "ExpGaming",
+        "Science",
+        "Production"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "ExpGamingCore.Gui": "^4.0.0",
+        "FactoiorStdLib.Game": "^0.8.0",
+        "ExpGamingCore.Sync": "?^4.0.0"
+    }
+}

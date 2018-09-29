@@ -1,26 +1,36 @@
---[[
-    Explosive Gaming
-    
-    This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
---Please Only Edit Below This Line-----------------------------------------------------------
+--- Adds a task list gui which acts like a bulletin board for the current tasks
+-- @module ExpGamingInfo.Tasklist
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
+-- @alais ThisModule 
 
-local function _global(reset)
-    global.addons = not reset and global.addons or {}
-    global.addons.tasklist = not reset and global.addons.tasklist or {tasks={},_edit={},_base={_edit=false,_tasks={},_editing={}}}
-    return global.addons.tasklist
-end
+-- Module Require
+local Gui = require('ExpGamingCore.Role@^4.0.0')
+local Game = require('FactoiorStdLib.Game@^0.8.0')
 
+-- Module Define
+local module_verbose = false
+local ThisModule = {}
+
+-- Global Define
+local global = global{
+    tasks={},
+    _edit={},
+    _base={
+        _edit=false,
+        _tasks={},
+        _editing={}
+    }
+}
+
+-- Function Define
 local edit = Gui.inputs.add{
     name='tasklist-edit',
     type='button',
     caption='utility/rename_icon_normal'
 }:on_event('click',function(event)
     local text_flow = event.element.parent.parent.text_flow
-    local data = _global()._edit[event.player_index]
+    local data = global._edit[event.player_index]
     if not data._edit then data._tasks = table.deepcopy(_global().tasks) end
     if text_flow.input.type == 'label' then
         data._editing[tonumber(text_flow.parent.name)]=true
@@ -38,7 +48,7 @@ local function _edit(frame)
     element.style.height = 20
     element.style.width = 20
     local text_flow = element.parent.parent.text_flow
-    local data = _global()._edit[frame.player_index]
+    local data = global._edit[frame.player_index]
     data._tasks[text_flow.parent.name]=text
     if data._editing[tonumber(text_flow.parent.name)] then
         element.style.height = 30
@@ -190,3 +200,5 @@ Gui.left.add{
     end,
     open_on_join=true
 }
+
+return ThisModule

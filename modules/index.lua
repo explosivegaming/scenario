@@ -49,5 +49,9 @@ return {
     ['ExpGamingAdmin.Commands@4.0.0']='./modules/ExpGamingAdmin/Commands',
     ['ExpGamingAdmin.Ban@4.0.0']='./modules/ExpGamingAdmin/Ban',
     ['ChatPopup@4.0.0']='./modules/ChatPopup',
-    ['DamagePopup@4.0.0']='./modules/DamagePopup'
+    ['DamagePopup@4.0.0']='./modules/DamagePopup',
+    ['ExpGamingInfo.Readme@4.0.0']='./modules/DamagePopup',
+    ['ExpGamingInfo.Rockets@4.0.0']='./modules/DamagePopup',
+    ['ExpGamingInfo.Science@4.0.0']='./modules/DamagePopup',
+    ['ExpGamingInfo.Tasklist@4.0.0']='./modules/DamagePopup',
 }

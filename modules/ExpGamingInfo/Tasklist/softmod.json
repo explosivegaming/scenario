@@ -1,0 +1,20 @@
+{
+    "name": "Tasklist",
+    "version": "4.0.0",
+    "type": "Submodule",
+    "description": "Adds a task list gui which acts like a bulletin board for the current tasks",
+    "location": "<blank>",
+    "keywords": [
+        "Gui",
+        "Info",
+        "ExpGaming",
+        "Tasks"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "ExpGamingCore.Gui": "^4.0.0",
+        "FactoiorStdLib.Game": "^0.8.0"
+    }
+}

@@ -1,7 +1,7 @@
 --- Adds a system to manage and auto-create permission groups.
 -- @module ExpGamingCore@Group
 -- @author Cooldude2606
--- @license Discord: Cooldude2606@5241
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alais Group 
 
 -- Module Require

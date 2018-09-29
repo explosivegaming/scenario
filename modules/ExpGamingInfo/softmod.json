@@ -1,0 +1,91 @@
+{
+    "name": "ExpGamingInfo",
+    "version": "4.0.0",
+    "type": "Collection",
+    "description": "Adds info guis to the game for different production areas",
+    "location": "<blank>",
+    "keywords": [
+        "Gui",
+        "Info",
+        "ExpGaming",
+        "Production"
+    ],
+    "author": "Cooldude2606",
+    "contact": "Discord: Cooldude2606@5241",
+    "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+    "submodules": {
+        "Readme": {
+            "name": "Readme",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Adds a readme gui to the game that contains useful information",
+            "location": "<blank>",
+            "keywords": [
+                "Gui",
+                "Info",
+                "ExpGaming",
+                "Readme",
+                "New Player"
+            ],
+            "dependencies": {
+                "ExpGamingCore.Gui": "^4.0.0",
+                "FactoiorStdLib.Game": "^0.8.0",
+                "ExpGamingCore.Sync": "?^4.0.0"
+            }
+        },
+        "Rockets": {
+            "name": "Rockets",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Adds a rocket count gui to the game that shows milestones and average rocket time",
+            "location": "<blank>",
+            "keywords": [
+                "Gui",
+                "Info",
+                "ExpGaming",
+                "Rockets"
+            ],
+            "dependencies": {
+                "ExpGamingCore.Gui": "^4.0.0",
+                "FactoiorStdLib.Game": "^0.8.0",
+                "ExpGamingCore.Sync": "?^4.0.0"
+            }
+        },
+        "Science": {
+            "name": "Science",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Adds a science count gui to the game that shows toatal made and per minute",
+            "location": "<blank>",
+            "keywords": [
+                "Gui",
+                "Info",
+                "ExpGaming",
+                "Science",
+                "Production"
+            ],
+            "dependencies": {
+                "ExpGamingCore.Gui": "^4.0.0",
+                "FactoiorStdLib.Game": "^0.8.0",
+                "ExpGamingCore.Sync": "?^4.0.0"
+            }
+        },
+        "Tasklist": {
+            "name": "Tasklist",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Adds a task list gui which acts like a bulletin board for the current tasks",
+            "location": "<blank>",
+            "keywords": [
+                "Gui",
+                "Info",
+                "ExpGaming",
+                "Tasks"
+            ],
+            "dependencies": {
+                "ExpGamingCore.Gui": "^4.0.0",
+                "FactoiorStdLib.Game": "^0.8.0"
+            }
+        }
+    }
+}

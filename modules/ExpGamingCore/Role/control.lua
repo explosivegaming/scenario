@@ -1,7 +1,7 @@
 --- Adds roles where a player can have more than one role
 -- @module ExpGamingCore.Role@4.0.0
 -- @author Cooldude2606
--- @license https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Role_4.0.0.zip
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alais Role 
 
 -- Module Require

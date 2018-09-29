@@ -1,13 +1,22 @@
---[[
-Explosive Gaming
+--- Adds a readme gui to the game that contains useful information
+-- @module ExpGamingInfo.Readme
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
+-- @alais ThisModule 
 
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
---Please Only Edit Below This Line-----------------------------------------------------------
+-- Module Require
+local Gui = require('ExpGamingCore.Gui@^4.0.0')
+local Game = require('FactoiorStdLib.Game@^0.8.0')
 
+-- Module Define
+local module_verbose = false
+local ThisModule = {
+    on_init=function()
+        if loaded_modules['ExpGamingCore.Sync^4.0.0'] then require(module_path..'/src/sync',{Gui=Gui}) end
+    end
+}
+
+-- Function Define
 local function format_label(label)
     label.style.maximal_width = 480
     label.style.single_line = false
@@ -119,14 +128,5 @@ end):add_tab('rules',{'readme.rules-name'},{'readme.rules-tooltip'},function(fra
     end
 end)
 
-Sync.add_to_gui(Gui.inputs.add_button('readme-sync-guildlines','View Guildlines','View the guildlines in the readme',function(player,element)
-    Gui.center.open_tab(player,'readme','guildlines')
-end))
-
-Sync.add_to_gui(Gui.inputs.add_button('readme-sync-links','View Other Links','View the links in the readme',function(player,element)
-    Gui.center.open_tab(player,'readme','links')
-end))
-
-Sync.add_to_gui(Gui.inputs.add_button('readme-sync-rules','View All Rules','View the all rules in the readme',function(player,element)
-    Gui.center.open_tab(player,'readme','rules')
-end))
+-- Module Return
+return ThisModule

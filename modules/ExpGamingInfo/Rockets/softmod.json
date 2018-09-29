@@ -1,0 +1,21 @@
+{
+    "name": "Rockets",
+    "version": "4.0.0",
+    "type": "Submodule",
+    "description": "Adds a rocket count gui to the game that shows milestones and average rocket time",
+    "location": "<blank>",
+    "keywords": [
+        "Gui",
+        "Info",
+        "ExpGaming",
+        "Rockets"
+    ],
+    "author": "<blank>",
+    "contact": "<blank>",
+    "license": "<blank>",
+    "dependencies": {
+        "ExpGamingCore.Gui": "^4.0.0",
+        "FactoiorStdLib.Game": "^0.8.0",
+        "ExpGamingCore.Sync": "?^4.0.0"
+    }
+}
