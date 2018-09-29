@@ -46,6 +46,7 @@ local commands = {
     ['lenny']={'chat-bot.lenny'},
     ['feedback']={'chat-bot.feedback'},
     ['wiki']={'chat-bot.wiki'},
+    ['blame']=function(player) local options = {'?','.','!','!!!'} return {'chat-bot.hodor',options[math.random(#options)]} end,
     ['evolution']=function(player) return {'chat-bot.current-evolution',string.format('%.2f',game.forces['enemy'].evolution_factor)} end,
     --Jokes about food and drink
     ['whattoeat']={'chat-bot.food'},
@@ -96,6 +97,11 @@ local commands = {
     }:on_event('timeout',function(self)
         if self.data then game.print{'chat-bot.message',{'chat-bot.make-tea-2',self.data}} end
     end):open() return {'chat-bot.make-tea-1'} end,
+    ['popcorn']=function(player) Server.new_thread{
+        timeout=math.floor(180*(math.random()+0.5)),data=player.name
+    }:on_event('timeout',function(self)
+        if self.data then game.print{'chat-bot.message',{'chat-bot.get-popcorn-2',self.data}} end
+    end):open() return {'chat-bot.get-popcorn-1'} end,
     ['meadplease']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)

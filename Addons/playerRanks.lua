@@ -271,7 +271,7 @@ ranks['Donator']:edit('allow',false,{
 })
 
 ranks['Partner']:edit('allow',false,{
-
+    ['global-chat']=true
 })
 ranks['Veteran']:edit('allow',false,{
     ['tree-decon']=true,
