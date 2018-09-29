@@ -7,7 +7,7 @@
 -- Module Require
 local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
-local Ranking -- ExpGamingCore.Ranking@^4.0.0
+local Role -- ExpGamingCore.Role@^4.0.0
 
 -- Local Varibles
 -- removed from none admin ranks, no further action
@@ -48,7 +48,7 @@ local _root_tree = {low_items=low_items,med_items=med_items,high_items=high_item
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Ranking@^4.0.0'] then Ranking = require('ExpGamingCore.Ranking@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
     end
 }
 
@@ -62,7 +62,7 @@ end
 
 function ThisModule.search_player(player)
     for category,items in pairs(_root_tree) do
-        if not Ranking or category ~= 'low_items' and not Ranking.get_rank(player):allowed('admin-items') then
+        if not Role or category ~= 'low_items' and not Role.allowed(player,'admin-items') then
             for _,_inventory in pairs(inventorys) do
                 local inventory = player.get_inventory(_inventory)
                 if inventory then
@@ -82,7 +82,7 @@ script.on_event(defines.events.on_tick,function(event)
         local players = game.connected_players
         if #players == 0 then return end
         local player = players[math.random(#players)]
-        if Ranking and Ranking.get_rank(player):allowed('all-items') then return end
+        if Role and Role.allowed(player,'all-items') then return end
         ThisModule.search_player(player)
     end
 end)

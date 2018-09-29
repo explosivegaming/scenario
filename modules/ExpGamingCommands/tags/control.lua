@@ -4,14 +4,13 @@
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
 local Game = require('FactorioStdLib.Game@^0.8.0')
-local Ranking -- ExpGamingCore.Ranking@^4.0.0
+local Role -- ExpGamingCore.Role@^4.0.0
 
 -- Module Define
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Ranking@^4.0.0'] then Ranking = require('ExpGamingCore.Ranking@^4.0.0') end
-        --code
+        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
     end
 }
 
@@ -22,9 +21,9 @@ commands.add_command('tag', 'Give yourself a custom tag. Use "" to have more tha
     ['tag'] = {true,'string-len',20}
 }, function(event,args)
     local player = Game.get_player(event)
-    if Ranking then
-        local rank = Ranking.get_rank(player)
-        player.tag = rank.tag..' - '..args.tag
+    if Role then
+        local role = Role.get_highest(player)
+        player.tag = role.tag..' - '..args.tag
     else player.tag = args.tag end
     player_return('Your tag has been set. Use /tag-clear to remove your tag')
 end)
@@ -36,10 +35,11 @@ commands.add_command('tag-clear', 'Removes a custom tag.', {
     ['player'] = {false,'player-rank'}
 }, function(event,args)
     local player = args.player or game.player
-    if Ranking then
-        local rank = Ranking.get_rank(player)
-        player.tag = rank.tag
+    if Role then
+        local role = Role.get_highest(player)
+        player.tag = role.tag
     else player.tag = '' end
     player_return('Your tag has been removed.')
 end)
 
+return ThisModule

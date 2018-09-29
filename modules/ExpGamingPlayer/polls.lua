@@ -240,7 +240,7 @@ Gui.popup.add{
         local btn = next:draw(title)
         btn.style.width = 20
         btn.style.height = 20
-        if Ranking.get_rank(frame.player_index):allowed('create-poll') then
+        if Role.get_highest(frame.player_index):allowed('create-poll') then
             local btn = create_poll:draw(title)
             btn.style.width = 20
             btn.style.height = 20
@@ -254,7 +254,7 @@ Gui.popup.add{
     end,
     can_open=function(player)
         if #_polls().old > 0 then return true
-        elseif Ranking.get_rank(player):allowed('create-poll') then return true
+        elseif Role.allowed(player,'create-poll') then return true
         else return {'polls.no-poll'} end
     end
 }

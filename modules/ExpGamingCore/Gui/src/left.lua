@@ -9,7 +9,7 @@
 
 local Game = require('FactorioStdLib.Game')
 local Color = require('FactorioStdLib.Color')
-local Ranking -- this is optional and is hanndled by it being present, it is loaded on init
+local Role -- this is optional and is hanndled by it being present, it is loaded on init
 local mod_gui = require("mod-gui")
 local Gui = Gui -- this is to force gui to remain in the ENV
 
@@ -150,14 +150,14 @@ function left._left.toggle(event)
         if not success then error(err)
         elseif err == true then open = true 
         elseif global.over_ride_left_can_open then 
-            if is_type(Ranking,'table') and Ranking.meta.rank_count > 0 then
-                if Ranking.get_rank(player):allowed(_left.name) then open = true
+            if is_type(Role,'table')  then
+                if Role.allowed(player,_left.name) then open = true
                 else open = {gui.unauthorized} end
             else open = true end 
         else open = err end
     else
-        if is_type(Ranking,'table') and Ranking.meta.rank_count > 0 then
-            if Ranking.get_rank(player):allowed(_left.name) then open = true 
+        if is_type(Role,'table')  then
+            if Role.allowed(player,_left.name) then open = true 
             else open = {gui.unauthorized} end
         else open = true end
     end
@@ -181,7 +181,7 @@ left.on_player_joined_game = function(event)
 end
 
 function left:on_init()
-    if loaded_modules['ExpGamingCore.Ranking'] then Ranking = require('ExpGamingCore.Ranking') end
+    if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
 end
 
 return left

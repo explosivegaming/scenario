@@ -1,10 +1,13 @@
 Role.add_flag('is_default') -- this must be included in atleast one role
 Role.add_flag('is_root',function(player,state) player.character.destructible = not state end) -- not required but setting true will allow everythin for that role
+Role.add_flag('is_antiroot',function(player,state) player.character.destructible = not state end) -- not required but setting true will disallow everythin for that role
 Role.add_flag('is_admin',function(player,state) player.admin = state end) -- highly recomented but not required
 Role.add_flag('is_spectator',function(player,state) player.spectator = state end)
 Role.add_flag('is_jail',function(player,state) player.character.active = not state end)
 Role.add_flag('is_donator')
 Role.add_flag('is_timed')
+Role.add_flag('is_varified')
+Role.add_flag('not_reportable')
 
 -- Root
 Role{
@@ -16,6 +19,7 @@ Role{
     is_root=true,
     is_admin=true,
     is_spectator=true,
+    not_reportable=true,
     allow={}
 }
 Role{
@@ -53,6 +57,7 @@ Role{
     colour={r=233,g=63,b=233},
     is_admin=true,
     is_spectator=true,
+    not_reportable=true,
     allow={
         ['game-settings']=true,
         ['always-warp']=true,
@@ -67,6 +72,7 @@ Role{
     colour={r=0,g=170,b=0},
     is_admin=true,
     is_spectator=true,
+    not_reportable=true,
     allow={
         ['set-home']=true,
         ['home']=true,
@@ -82,6 +88,7 @@ Role{
     group='Admin',
     colour={r=0,g=196,b=137},
     is_spectator=true,
+    not_reportable=true,
     allow={
         ['go-to']=true,
         ['bring']=true,
@@ -153,6 +160,7 @@ Role{
     group='HiMember',
     colour={r=140,g=120,b=200},
     is_timed=true,
+    is_varified=true,
     time=600, -- 10 hours
     allow={
         ['global-chat']=true,
@@ -169,6 +177,7 @@ Role{
     tag='[Member]',
     group='Member',
     colour={r=24,g=172,b=188},
+    is_varified=true,
     allow={
         ['edit-tasklist']=true,
         ['make-warp']=true,
@@ -223,6 +232,7 @@ Role{
     group='Jail',
     colour={r=50,g=50,b=50},
     is_jail=true,
+    is_antiroot=true,
     allow={}
 }
 

@@ -1,7 +1,7 @@
 --- Adds roles where a player can have more than one role
 -- @module ExpGamingCore.Role@4.0.0
 -- @author Cooldude2606
--- @license https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Ranking_4.0.0.zip
+-- @license https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Role_4.0.0.zip
 -- @alais Role 
 
 -- Module Require
@@ -18,7 +18,7 @@ local Role = {
     order={},
     flags={},
     actions={},
-    meta={times={}},
+    meta={times={},groups={}},
     roles=setmetatable({},{
         __index=table.autokey,
         __newindex=function(tbl,key,value)
@@ -39,6 +39,9 @@ local Role = {
             if not role then error('Invalid role name in order listing: '..role_name) return end
             if role.is_default then self.meta.default = role end
             if role.is_timed then self.meta.times[role.name] = {index,role.time} end
+            if not self.meta.groups[role.group.name] then self.meta.groups[role.group.name] = {lowest=index,highest=index} end
+            if self.meta.groups[role.group.name].highest > index then self.meta.groups[role.group.name].highest = index end
+            if self.meta.groups[role.group.name].lowest < index then self.meta.groups[role.group.name].lowest = index end
             if previous then setmetatable(previous.allow,{__index=role.allow}) end
             role.index = index
             previous = role
@@ -52,6 +55,7 @@ local Role = {
 local global = global{
     change_chache_length=15,
     changes={},
+    latest_change={},
     preassign={},
     players={},
     roles={}
@@ -118,14 +122,14 @@ function Role.assign(player,role,by_player,no_log)
     if is_type(role,'table') and not role.name then 
         local ctn = 0 
         for _,_role in ipairs(role) do ctn=ctn+1 Role.assign(player,_role,by_player,true) end 
-        if ctn > 0 then if not no_log then table.insert(global.changes[player.index],{'assign',role}) end return end 
+        if ctn > 0 then if not no_log then table.insert(global.changes[player.index],{'assign',role}) global.latest_change = {player.index,'assign',role} end return end 
     end
     local role = Role.get(role)
     if not role then error('Invalid role #2 given to Role.assign.',2) return end
     -- this acts as a way to provent the global table getting too full
     if not global.changes[player.index] then global.changes[player.index]={} end
     if #global.changes[player.index] > global.change_chache_length then table.remove(global.changes[player.index],1) end
-    if not no_log then table.insert(global.changes[player.index],{'assign',role.name}) end
+    if not no_log then table.insert(global.changes[player.index],{'assign',role.name}) global.latest_change = {player.index,'assign',role.name} end
     return role:add_player(player,by_player)
 end
 
@@ -143,14 +147,14 @@ function Role.unassign(player,role,by_player,no_log)
     if is_type(role,'table') and not role.name then 
         local ctn = 0 
         for _,_role in ipairs(role) do ctn=ctn+1 Role.unassign(player,_role,by_player,true) end 
-        if ctn > 0 then if not no_log then table.insert(global.changes[player.index],{'unassign',role}) end return end 
+        if ctn > 0 then if not no_log then table.insert(global.changes[player.index],{'unassign',role}) global.latest_change = {player.index,'unassign',role} end return end 
     end
     local role = Role.get(role)
     if not role then error('Invalid role #2 given to Role.unassign.',2) return end
     if not global.changes[player.index] then global.changes[player.index]={} end
     -- this acts as a way to provent the global table getting too full
     if #global.changes[player.index] > global.change_chache_length then table.remove(global.changes[player.index],1) end
-    if not no_log then table.insert(global.changes[player.index],{'unassign',role.name}) end
+    if not no_log then table.insert(global.changes[player.index],{'unassign',role.name}) global.latest_change = {player.index,'unassign',role.name} end
     return role:remove_player(player,by_player)
 end
 
@@ -306,6 +310,7 @@ end
 function Role._prototype:allowed(action)
     if not self_test(self,'role','allowed') then return end
     if not type_error(action,'string','Invalid argument #1 to role:allowed, action is not a string.') then return end
+    if self.is_antiroot then return false end
     return self.allow[action] or self.is_root or false -- still include is_root exception flag
 end
 
@@ -379,8 +384,7 @@ function Role._prototype:add_player(player,by_player)
     if not self_test(self,'role','add_player') then return end
     local player = Game.get_player(player)
     if not player then error('Invalid player #1 given to role:add_player.',2) return end
-    local by_player = Game.get_player(by_player)
-    if not by_player then by_player = {name='<server>',index=0} end
+    local by_player = Game.get_player(by_player) or SERVER
     if not global.roles[self.name] then global.roles[self.name] = {} end
     if not global.players[player.index] then global.players[player.index] = {} end
     local highest = Role.get_highest(player) or Role.meta.default
@@ -405,7 +409,7 @@ function Role._prototype:remove_player(player,by_player)
     if not self_test(self,'role','add_player') then return end
     local player = Game.get_player(player)
     if not player then error('Invalid player #1 given to role:remove_player.',2) return end
-    local by_player = Game.get_player(by_player) or {name='<server>',index=0}
+    local by_player = Game.get_player(by_player) or SERVER
     if not global.roles[self.name] then global.roles[self.name] = {} end
     if not global.players[player.index] then global.players[player.index] = {} end
     local highest = Role.get_highest(player) or Role.meta.default
@@ -429,7 +433,7 @@ end
 script.on_event(role_change_event_id,function(event)
     -- varible init
     local player = Game.get_player(event)
-    local by_player = Game.get_player(event.by_player_index) or {name='<server>',index=0}
+    local by_player = Game.get_player(event.by_player_index) or SERVER
     local role = Role.get(event.role_name)
     local highest = Role.get_highest(player) or {__faild=true,tag='',name='None'}
     -- gets the falgs the player currently has
@@ -437,7 +441,10 @@ script.on_event(role_change_event_id,function(event)
     -- assign new tag and group of highest role
     if highest.__faild then Group.get(player):remove_player(player)
     else Group.assign(player,highest.group) end
-    if player.tag ~= highest.tag then player.tag = highest.tag player.print{'ExpGamingCore-Role.tag-reset'} end
+    local old_highest_tag = Role.get(event.old_highest).tag or ''
+    local start, _end = string.find(player.tag,old_highest_tag,1,true)
+    if start and old_highest_tag ~= highest.tag then player.tag = string.sub(player.tag,0,start-1)..highest.tag..string.sub(player.tag,_end+1) end
+    if not start then player.tag = highest.tag player_return({'ExpGamingCore-Role.tag-reset'},nil,player) end
     -- play a sound to the player
     if event.effect == 'assign' and not role.is_jail then player.play_sound{path='utility/achievement_unlocked'} 
     else player.play_sound{path='utility/game_lost'} end
@@ -454,6 +461,7 @@ script.on_event(role_change_event_id,function(event)
                 by_player_name=by_player.name,
                 role_name=role.name,
                 highest_role_name=highest.name,
+                old_highest=event.highest,
                 effect=event.effect
             })..'\n'
         , true, 0)

@@ -6,7 +6,7 @@
 
 -- Module Require
 local Game = require('FactorioStdLib.Game@^0.8.0')
-local Ranking -- ExpGamingCore.Ranking@^4.0.0
+local Role -- ExpGamingCore.Role@^4.0.0
 
 -- Local Varibles
 -- lots of these are jokes, but some have uses
@@ -113,7 +113,7 @@ local commands = {
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Ranking@^4.0.0'] then Ranking = require('ExpGamingCore.Ranking@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
     end
 }
 
@@ -122,7 +122,7 @@ script.on_event(defines.events.on_console_chat,function(event)
     local player = Game.get_player(event)
     if not player then return end
     local player_message = event.message:lower():gsub("%s+", "")
-    local allowed = Ranking and Ranking.get_rank(player):allowed('global-chat') or player.admin
+    local allowed = Role and Role.allowed(player,'global-chat') or player.admin
     for to_find,message in pairs(messages) do
         if player_message:match(command_syntax..to_find) then
             if allowed then
@@ -131,7 +131,7 @@ script.on_event(defines.events.on_console_chat,function(event)
             else player_return({'ExpGamingBot-autoChat.rank-error'},nil,player) end
         elseif player_message:match(to_find) then
             if is_type(message,'function') then message=message(player) end
-            player_return({'ExpGamingBot-autoChat.message',message},nil,player)
+            if not allowed then player_return({'ExpGamingBot-autoChat.message',message},nil,player) end
         end
     end
     for to_find,message in pairs(commands) do

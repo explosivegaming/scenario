@@ -127,7 +127,7 @@ local go_to_warp = Gui.inputs.add{
     if player.vehicle then player.vehicle.set_passenger(nil) end
     if player.vehicle then return end
     player.teleport(warp.surface.find_non_colliding_position('player',warp.position,32,1),warp.surface)
-    if not Ranking.get_rank(player):allowed('always-warp') then 
+    if not Role.allowed(player,'always-warp') then 
         event.element.parent.parent.parent.parent.style.visible = false
         _warps().cooldowns[event.player_index] = warp_limit
     end
@@ -172,7 +172,7 @@ Gui.left.add{
             local btn = go_to_warp:draw(_flow)
             btn.style.height = 20
             btn.style.width = 20
-            if Ranking.get_rank(player):allowed('make-warp') and name ~= 'Spawn' then
+            if Role.allowed(player,'make-warp') and name ~= 'Spawn' then
                 local btn = remove_warp:draw(_flow)
                 btn.style.height = 20
                 btn.style.width = 20
@@ -180,7 +180,7 @@ Gui.left.add{
         end
         local cooldown = _warps().cooldowns[player.index] or 0
         if cooldown > 0 then frame.style.visible = false return
-        elseif Ranking.get_rank(player):allowed('always-warp') then return
+        elseif Role.allowed(player,'always-warp') then return
         elseif player.surface.get_tile(player.position).name == warp_tile
             and player.surface.name == 'nauvis' 
             then return
@@ -189,7 +189,7 @@ Gui.left.add{
     end,
     can_open=function(player)
         local cooldown = _warps().cooldowns[player.index] or 0
-        if Ranking.get_rank(player):allowed('always-warp') then return true
+        if Role.allowed(player,'always-warp') then return true
         elseif player.surface.get_tile(player.position).name == warp_tile
         and player.surface.name == 'nauvis' 
         then return true
@@ -214,7 +214,7 @@ Event.register(defines.events.on_player_changed_position, function(event)
     local player = Game.get_player(event)
     local cooldown = _warps().cooldowns[player.index] or 0
     local tile = player.surface.get_tile(player.position).name
-    if not Ranking.get_rank(player):allowed('always-warp') and cooldown == 0 then
+    if not Role.allowed(player,'always-warp') and cooldown == 0 then
         if tile == warp_tile and player.surface.name == 'nauvis' then 
             mod_gui.get_frame_flow(player)['warp-list'].style.visible = true
         elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then 

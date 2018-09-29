@@ -5,7 +5,7 @@
 
 
 local Game = require('FactorioStdLib.Game@^0.8.0')
-local Ranking = require('ExpGamingCore.Ranking@^4.0.0')
+local Role = require('ExpGamingCore.Role@^4.0.0')
 
 -- Set an item to true to disallow it from being repaired
 local disallow = {
@@ -46,9 +46,9 @@ commands.add_command('repair', 'Repairs all destoryed and damaged entites in an 
 }, function(event,args)
     local range = args.range
     local player = Game.get_player(event)
-    local rank = Ranking.get_rank(player)
-    local highest_admin_power = Ranking.get_group('Admin').highest.power-1
-    local max_range = rank.power-highest_admin_power > 0 and const/(rank.power-highest_admin_power) or nil
+    local role = Role.get_highest(player)
+    local highest_admin_power = Role.meta.groups.Admin.highest-1
+    local max_range = role.index-highest_admin_power > 0 and const/(role.index-highest_admin_power) or nil
     local center = player and player.position or {x=0,y=0}
     if not range or max_range and range > max_range then player_return({'commands.invalid-range',0,math.floor(max_range)}) return commands.error end
     local area = {{center.x-range,center.y-range},{center.x+range,center.y+range}}

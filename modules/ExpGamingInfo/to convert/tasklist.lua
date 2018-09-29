@@ -132,8 +132,8 @@ Gui.left.add{
         }
         local data = _global()
         local player = Game.get_player(frame.player_index)
-        local rank = Ranking.get_rank(player)
-        if rank:allowed('edit-tasklist') then
+        local allowed = Role.allowed(player,'edit-tasklist')
+        if allowed then
             if not data._edit[player.index] then data._edit[player.index] = table.deepcopy(data._base) end
         end
         for i,task in pairs(_tasks(player)) do
@@ -156,7 +156,7 @@ Gui.left.add{
                 type='flow',
                 direction='horizontal'
             }
-            if rank:allowed('edit-tasklist') then
+            if allowed then
                 _edit(button_flow)
                 if data._edit[player.index]._editing[i] then
                     local element = remove:draw(button_flow)
@@ -168,7 +168,7 @@ Gui.left.add{
                 end
             end
         end
-        if rank:allowed('edit-tasklist') then
+        if allowed then
             local flow = title.add{
                 name=#_tasks(player),
                 type='flow',
@@ -182,11 +182,10 @@ Gui.left.add{
             element.style.height = 20
             element.style.width = 20
         end
-        if #_tasks(player) == 0 and not rank:allowed('edit-tasklist') then frame.style.visible = false end
+        if #_tasks(player) == 0 and not role:allowed('edit-tasklist') then frame.style.visible = false end
     end,
     can_open=function(player)
-        local rank = Ranking.get_rank(player)
-        if rank:allowed('edit-tasklist') or #_global().tasks > 0 then return true
+        if Role.allowed(player,'edit-tasklist') or #_global().tasks > 0 then return true
         else return {'tasklist.none'} end
     end,
     open_on_join=true

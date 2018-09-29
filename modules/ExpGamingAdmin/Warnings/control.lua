@@ -7,7 +7,7 @@
 -- Module Require
 local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
 local Server = require('ExpGamingCore.Server@^4.0.0')
-local Ranking = require('ExpGamingCore.Ranking@^4.0.0')
+local Role = require('ExpGamingCore.Role@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
 local Color = require('FactorioStdLib.Color@^0.8.0')
 local Sync -- ExpGamingCore.Sync@^4.0.0
@@ -45,11 +45,11 @@ local ThisModule = {
     end,
     on_post=function()
         local highest = nil
-        for _,rank in pairs(Ranking.ranks) do
-            local power = rank.power
-            if not highest and not rank:allowed('no-report') then highest = power-1 end
+        for _,role in pairs(Role.roles) do
+            local power = role.index
+            if not highest and not role.not_reportable then highest = power-1 end
             local _power = power; if highest then _power = power-highest end
-            if rank:allowed('no-report') then remove_warnings_time[power] = 0 
+            if role.not_reportable then remove_warnings_time[power] = 0 
             else remove_warnings_time[power] = min_time_to_remove_warning*_power end
         end
     end
@@ -131,8 +131,8 @@ script.on_event(defines.events.on_tick,function(event)
     if (game.tick % min_time_to_remove_warning) == 0 then
         for name,warnings in pairs(global) do
             if warnings > 0 then
-                local rank = Ranking.get_rank(name)
-                local time_to_remove = remove_warnings_time[rank.power]
+                local role = Role.get(name)
+                local time_to_remove = remove_warnings_time[role.index]
                 if (game.tick % time_to_remove) == 0 then
                     global[name]=warnings-1
                     if global.warnings[name] > 5 then

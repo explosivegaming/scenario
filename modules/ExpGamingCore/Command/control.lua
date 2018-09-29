@@ -50,9 +50,9 @@ setmetatable(commands,{
 -- @field player converts the input into a valid player
 -- @field player_online converts the input to a player if the player is online
 -- @field player_alive converts the input to a player if the player is online and alive
--- @field player_rank converts the input to a player if the player is a lower rank than the user or if the person is not admin and the user is
--- @field player_rank-online converts the input to a player if the player is a lower rank than the user and online
--- @field player_rank_alive converts the input to a player if the player is a lower rank than the user and online and alive
+-- @field player_role converts the input to a player if the player is a lower rank than the user or if the person is not admin and the user is
+-- @field player_role-online converts the input to a player if the player is a lower rank than the user and online
+-- @field player_role_alive converts the input to a player if the player is a lower rank than the user and online and alive
 commands.validate = {
     ['boolean']=function(value,event) local value = value.lower() if value == 'true' or valule == 'yes' or value == 'y' or value == '1' then return true else return false end end,
     ['string']=function(value,event) return tostring(value) end,
@@ -129,7 +129,7 @@ function commands.validate_args(event)
         if not arg and not data[1] then return commands.error('invalid-inputs') end
         if data[2] == 'string-inf' then rtn[name] = table.concat(words,' ',index) break end
         local valid = is_type(data[2],'function') and data[2] or commands.validate[data[2]] or error('Invalid type for command: "'..command.name..'/'..name..'"')
-        local temp_tbl = table.deep_copy(data) table.remove(temp_tbl,1) table.remove(temp_tbl,2)
+        local temp_tbl = table.deepcopy(data) table.remove(temp_tbl,1) table.remove(temp_tbl,1)
         local value, err = valid(arg,event,unpack(temp_tbl))
         if value == commands.error then return value, err end
         rtn[name] = value

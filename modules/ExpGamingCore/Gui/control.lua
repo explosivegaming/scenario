@@ -177,11 +177,11 @@ function Gui:on_init()
     self.left:on_init(); self.left.on_init = nil
     self.toolbar:on_init(); self.toolbar.on_init = nil
     if loaded_modules['ExpGamingCore.Server'] then verbose('ExpGamingCore.Server is installed; Loading server src') require(module_path..'/src/server',{Gui=Gui}) end
-    if loaded_modules['ExpGamingCore.Ranking'] then
-        verbose('ExpGamingCore.Ranking is installed; Loading ranking src')
-        script.on_event('on_rank_change',function(event)
-            Gui.toolbar.on_rank_change(event)
-            Gui.center.on_rank_change(event)
+    if loaded_modules['ExpGamingCore.Role'] then
+        verbose('ExpGamingCore.Role is installed; Loading ranking src')
+        script.on_event('on_role_change',function(event)
+            Gui.toolbar.on_role_change(event)
+            Gui.center.on_role_change(event)
         end)
     end
     script.on_event('on_player_joined_game',function(event)

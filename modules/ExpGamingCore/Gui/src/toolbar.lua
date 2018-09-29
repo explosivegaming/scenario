@@ -8,7 +8,7 @@
 -- @function _comment
 
 local Game = require('FactorioStdLib.Game')
-local Ranking -- this is optional and is hanndled by it being present, it is loaded on init
+local Role -- this is optional and is hanndled by it being present, it is loaded on init
 local mod_gui = require("mod-gui")
 local Gui = Gui -- this is to force gui to remain in the ENV
 
@@ -39,9 +39,8 @@ function toolbar.draw(player)
     toolbar_frame.clear()
     if not Gui.data.toolbar then return end
     for name,button in pairs(Gui.data.toolbar) do
-        if is_type(Ranking,'table') and Ranking.meta.rank_count > 0 then
-            local rank = Ranking.get_rank(player)
-            if rank:allowed(name) then
+        if is_type(Role,'table') then
+            if Role.allowed(player,name) then
                 button:draw(toolbar_frame)
             end
         else button:draw(toolbar_frame) end
@@ -49,9 +48,9 @@ function toolbar.draw(player)
 end
 
 function toolbar:on_init()
-    if loaded_modules['ExpGamingCore.Ranking'] then Ranking = require('ExpGamingCore.Ranking') end
+    if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
 end
 
-toolbar.on_rank_change = toolbar.draw
+toolbar.on_role_change = toolbar.draw
 toolbar.on_player_joined_game = toolbar.draw
 return toolbar

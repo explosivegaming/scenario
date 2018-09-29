@@ -1,4 +1,4 @@
---- Allows control over decon rights, if ExpGamingCore.Ranking is not installed it will allow admins to instant remove trees and thats it.
+--- Allows control over decon rights, if ExpGamingCore.Role is not installed it will allow admins to instant remove trees and thats it.
 -- @module DeconControl@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
@@ -7,13 +7,13 @@
 -- Module Require
 local Game = require('FactorioStdLib.Game@^0.8.0')
 local Server = require('ExpGamingCore.Server@^4.0.0')
-local Ranking -- ExpGamingCore.Ranking@^4.0.0
+local Role -- ExpGamingCore.Role@^4.0.0
 
 -- Module Define
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Ranking@^4.0.0'] then Ranking = require('ExpGamingCore.Ranking@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
     end
 }
 
@@ -35,13 +35,12 @@ Event.register(-1,function(event)
         if not chache then
             local player = Game.get_player(event)
             if not player then return end
-            if not Ranking then 
+            if not Role then 
                 if player.admin then self.data.chache[event.player_index] = {'tree-decon',false}
                 else self.data.chache[event.player_index] = {'decon',false} end
             else
-                local rank = Ranking.get_rank(player)
-                if rank:allowed('tree-decon') then self.data.chache[event.player_index] = {'tree-decon',false}
-                elseif not rank:allowed('decon') then self.data.chache[event.player_index] = {'no-decon',false} 
+                if Role.allowed(player,'tree-decon') then self.data.chache[event.player_index] = {'tree-decon',false}
+                elseif not Role.allowed(player,'decon') then self.data.chache[event.player_index] = {'no-decon',false} 
                 else self.data.chache[event.player_index] = {'decon',false} end
             end
             chache = self.data.chache[event.player_index]
@@ -58,8 +57,7 @@ Event.register(-1,function(event)
                     chache[2] = true
                     local player = Game.get_player(event)
                     player_return({'tree-decon.player-print'},defines.textcolor.crit,player)
-                    local rank = Ranking.get_group('Admin').lowest
-                    Ranking.print(rank,{'tree-decon.rank-print',player.name},defines.textcolor.info)
+                    Role.print(Role.meta.groups.Admin.lowest,{'tree-decon.rank-print',player.name},defines.textcolor.info)
                     if Admin then Admin.give_warning(player,'<server>','Trying To Decon The Base') end
                 end
                 self.data.clear = game.tick + 10

@@ -177,24 +177,24 @@ function Sync.count_afk_times(time)
     return rtn
 end
 
---- Used to get the number of players in each rank and currently online; if ExpGamingCore/Ranking is present then it will give more than admin and user
--- @usage Sync.count_ranks()
+--- Used to get the number of players in each rank and currently online; if ExpGamingCore/Role is present then it will give more than admin and user
+-- @usage Sync.count_roles()
 -- @treturn table contains the ranks and the players in that rank
-function Sync.count_ranks()
+function Sync.count_roles()
     if not game then return {'Offline'} end
-    local _ranks = {admin={online={},players={}},user={online={},players={}}}
+    local _roles = {admin={online={},players={}},user={online={},players={}}}
     for index,player in pairs(game.players) do
         if player.admin then
-            table.insert(_ranks.admin.players,player.name)
-            if player.connected then table.insert(_ranks.admin.online,player.name) end
+            table.insert(_roles.admin.players,player.name)
+            if player.connected then table.insert(_roles.admin.online,player.name) end
         else
-            table.insert(_ranks.user.players,player.name)
-            if player.connected then table.insert(_ranks.user.online,player.name) end
+            table.insert(_roles.user.players,player.name)
+            if player.connected then table.insert(_roles.user.online,player.name) end
         end
     end
-    _ranks.admin.n_players,_ranks.admin.n_online=#_ranks.admin.players,#_ranks.admin.online
-    _ranks.user.n_players,_ranks.user.n_online=#_ranks.user.players,#_ranks.user.online
-    return _ranks
+    _roles.admin.n_players,_roles.admin.n_online=#_roles.admin.players,#_roles.admin.online
+    _roles.user.n_players,_roles.user.n_online=#_roles.user.players,#_roles.user.online
+    return _roles
 end
 
 --- Used to get a list of every player name with the option to limit to only online players
@@ -255,7 +255,7 @@ function Sync.update()
         afk_players=Sync.count_afk_times(),
         times=Sync.count_player_times()
     }
-    info.ranks = Sync.count_ranks()
+    info.ranks = Sync.count_roles()
     info.rockets = game.forces['player'].get_item_launched('satellite')
     for key,callback in pairs(Sync_updates) do info[key] = callback() end
     return info
@@ -310,7 +310,7 @@ script.on_event('on_rocket_launched',Sync.emit_update)
 
 function Sync:on_init()
     if loaded_modules['ExpGamingCore.Gui'] then verbose('ExpGamingCore.Gui is installed; Loading gui src') require(module_path..'/src/gui',{Sync=Sync}) end
-    if loaded_modules['ExpGamingCore.Ranking'] then verbose('ExpGamingCore.Ranking is installed; Loading ranking src') require(module_path..'/src/ranking',{Sync=Sync}) end
+    if loaded_modules['ExpGamingCore.Role'] then verbose('ExpGamingCore.Role is installed; Loading role src') require(module_path..'/src/ranking',{Sync=Sync}) end
     if loaded_modules['ExpGamingCore.Server'] then require('ExpGamingCore.Server').add_module_to_interface('Sync','ExpGamingCore.Sync') end
 end
 

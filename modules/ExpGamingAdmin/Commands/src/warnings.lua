@@ -1,5 +1,5 @@
 local Admin = Admin
-local Ranking = require('ExpGamingCore.Ranking@^4.0.0')
+local Role = require('ExpGamingCore.Role@^4.0.0')
 
 --- Gives a warning to a player
 -- @command warn
@@ -11,8 +11,8 @@ commands.add_command('warn', 'Gives a player a warning', {
 }, function(event,args)
     local player = args.player
     local reason = args.reason
-    if Admin.is_banned(player) then player_return({'ExpGamingAdmin.cant-report-ban',args.player}) return commands.error end
-    if Ranking.get_rank(player):allowed('no-report') then player_return({'ExpGamingAdmin.cant-report',args.player}) return commands.error end
+    if Admin.is_banned(player) then player_return{'ExpGamingAdmin.cant-report-ban',args.player} return commands.error end
+    if Role.allowed(player,'no-report') then player_return{'ExpGamingAdmin.cant-report',args.player} return commands.error end
     Admin.give_warning(player,event.player_index,reason)
 end)
 

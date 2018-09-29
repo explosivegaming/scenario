@@ -13,8 +13,9 @@ return {
     ['ExpGamingLib@4.0.0']='./modules/ExpGamingLib',
     ['ExpGamingCore.Command@4.0.0']='./modules/ExpGamingCore/Command',
     ['ExpGamingCore.Server@4.0.0']='./modules/ExpGamingCore/Server',
-    ['ExpGamingCore.Ranking@^4.0.0']='./modules/ExpGamingCore/Ranking',
-		['ExpGamingCore.Ranking@4.0.0']='./modules/ExpGamingCore/Ranking',
+    ['ExpGamingCore.Group@4.0.0']='./modules/ExpGamingCore/Group',
+    ['ExpGamingCore.Role@^4.0.0']='./modules/ExpGamingCore/Role',
+		['ExpGamingCore.Role@4.0.0']='./modules/ExpGamingCore/Role',
     ['ExpGamingBot.autoChat@4.0.0']='./modules/ExpGamingBot/autoChat',
     ['ExpGamingCore.Server@^4.0.0']='./modules/ExpGamingCore/Server',
     ['ExpGamingCommands.tags@4.0.0']='./modules/ExpGamingCommands/tags',
@@ -48,7 +49,5 @@ return {
     ['ExpGamingAdmin.Commands@4.0.0']='./modules/ExpGamingAdmin/Commands',
     ['ExpGamingAdmin.Ban@4.0.0']='./modules/ExpGamingAdmin/Ban',
     ['ChatPopup@4.0.0']='./modules/ChatPopup',
-    ['DamagePopup@4.0.0']='./modules/DamagePopup',
-    ['ExpGamingCore.Group@4.0.0']='./modules/ExpGamingCore/Group',
-    ['ExpGamingCore.Role@4.0.0']='./modules/ExpGamingCore/Role',
+    ['DamagePopup@4.0.0']='./modules/DamagePopup'
 }

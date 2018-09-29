@@ -7,7 +7,7 @@
 -- Module Require
 local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
 local Server = require('ExpGamingCore.Server@^4.0.0')
-local Ranking = require('ExpGamingCore.Ranking@^4.0.0')
+local Role = require('ExpGamingCore.Role@^4.0.0')
 local Gui = require('ExpGamingCore.Gui@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
 local Color = require('FactorioStdLib.Color@^0.8.0')
@@ -40,13 +40,11 @@ local function valid_players(player,by_player)
 end
 
 local function report_message(player,by_player,reason)
-    local low_rank = Ranking.get_group('User').highest
-    local high_rank = Ranking.get_group('Admin').lowest
     local player, by_player_name = valid_players(player,by_player)
     if not player then return end
     if Admin.is_banned(player,true) == 'report' then return end
-    Ranking.print(low_rank,{'ExpGamingAdmin.low-print',player.name,reason},defines.textcolor.info,true)
-    Ranking.print(high_rank,{'ExpGamingAdmin.high-print',player.name,by_player_name,reason},defines.textcolor.med)
+    Role.print(Role.meta.groups.User.lowest,{'ExpGamingAdmin.low-print',player.name,reason},defines.textcolor.info,true)
+    Role.print(Role.meta.groups.Admin.lowest,{'ExpGamingAdmin.high-print',player.name,by_player_name,reason},defines.textcolor.med)
     if Sync then Sync.emit_embeded{
         title='Player Report',
         color=Color.to_hex(defines.textcolor.med),
@@ -61,7 +59,7 @@ local function cheak_reports(player)
     local player = Game.get_player(player)
     if not player then return end
     local reports = Admin.count_reports(player)
-    if reports >= reports_needed_for_jail and global.actions[player.name] ~= 'report-jail' and Ranking.get_rank(player).group.name ~= 'Jail' then
+    if reports >= reports_needed_for_jail and global.actions[player.name] ~= 'report-jail' and Role.get_highest(player).group.name ~= 'Jail' then
         global.actions[player.name] = actions.report
         Admin.jail(player,'<server>','Too many user reports. Contact an Admin to be unjailed.')
     end
@@ -86,9 +84,9 @@ end
 
 function Admin.report(player,by_player,reason)
     local player, by_player_name = valid_players(player,by_player)
-    if not player or Ranking.get_rank(player):allowed('no-report') then return end
-    if Admin.is_banned(by_player) or Ranking.get_group(by_player).name == 'Jail' then return end
-    if Ranking.get_rank(by_player):allowed('varified') then 
+    if not player or Role.allowed(player,'no-report') then return end
+    if Admin.is_banned(by_player) or Role.has_flag(by_player,'is_jail') then return end
+    if Role.has_flag(by_player,'is_varified') then 
         global.varified[player.name] = global.varified[player.name] or {} 
         local reports = global.varified[player.name]
         for _,value in pairs(reports) do

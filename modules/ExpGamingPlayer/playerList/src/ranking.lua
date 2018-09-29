@@ -1,9 +1,10 @@
-local Ranking = require('ExpGamingCore.Ranking@^4.0.0')
+local Role = require('ExpGamingCore.Role@^4.0.0')
 
 return function()
     local rtn = {}
-    for _,rank in pairs(Ranking.ranks) do
-        table.insert(rtn,{rank.colour,rank.short_hand,rank:get_players(true),rank:allowed('no-report')})
+    for _,role_name in pairs(Role.order) do
+        local role = Role.get(role_name)
+        table.insert(rtn,{role.colour,role.short_hand,role:get_players(true),role.not_reportable})
     end
     return rtn
 end

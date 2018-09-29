@@ -1,5 +1,5 @@
 local Admin = Admin
-local Ranking = require('ExpGamingCore.Ranking')
+local Role = require('ExpGamingCore.Role')
 
 --- Used to jail a player which stops them from moving
 -- @command jail
@@ -11,8 +11,8 @@ commands.add_command('jail', 'Jails a player', {
 }, function(event,args)
     local player = args.player
     local reason = args.reason
-    if Ranking.get_rank(player):allowed('no-report') then player_return({'ExpGamingAdmin.cant-report',args.player}) return commands.error end
-    if Admin.is_banned(player) then player_return({'commands.cant-report-ban',args.player}) return commands.error end
+    if Role.allowed(player,'no-report') then player_return{'ExpGamingAdmin.cant-report',args.player} return commands.error end
+    if Admin.is_banned(player) then player_return{'commands.cant-report-ban',args.player} return commands.error end
     Admin.jail(player,event.player_index,reason)
 end)
 
@@ -24,5 +24,5 @@ commands.add_command('unjail', 'Returns a player\'s old rank', {
 }, function(event,args)
     local player = args.player
     if Admin.is_banned(player) then player_return({'commands.cant-report-ban',args.player}) return commands.error end
-    Server.interface(Ranking.revert,true,player,event.player_index)
+    Server.interface(Role.revert,true,player,event.player_index,2)
 end)

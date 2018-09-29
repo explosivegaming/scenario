@@ -7,7 +7,7 @@
 -- Module Require
 local Server = require('ExpGamingCore.Server')
 local Game = require('FactorioStdLib.Game')
-local Ranking -- ExpGamingCore.Ranking@4.0.0
+local Role -- ExpGamingCore.Role@4.0.0
 local Sync -- ExpGamingCore.Sync@4.0.0
 
 -- Local Varibles
@@ -16,7 +16,7 @@ local Sync -- ExpGamingCore.Sync@4.0.0
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Ranking@^4.0.0'] then Ranking = require('ExpGamingCore.Ranking@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
         if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then Sync = require('ExpGamingCore.Sync@^4.0.0') end
     end,
     on_post=function()
@@ -31,8 +31,8 @@ script.on_init(function(event)
         timeout=54000, -- 3240000 = 15 hours dont make the mistake i did, 54000 is 15 minutes
         reopen=true,
         data={
-            high_rank= 'Owner',
-            low_rank= 'Regular',
+            high_role= 'Owner',
+            low_role= 'Regular',
             low={
                 {'ExpGamingBot-autoMessage.join-us'},
                 {'ExpGamingBot-autoMessage.discord'},
@@ -43,7 +43,7 @@ script.on_init(function(event)
         }
     }:on_event('timeout',function(self)
         local data = self.data
-        if not data.high_rank or not data.low_rank
+        if not data.high_role or not data.low_role
         or not data.low then self.reopen = false return end
         game.print{'ExpGamingBot-autoMessage.message',{'ExpGamingBot-autoMessage.players-online',#game.connected_players}}
         game.print{'ExpGamingBot-autoMessage.message',{'ExpGamingBot-autoMessage.map-time',tick_to_display_format(game.tick)}}
@@ -52,10 +52,10 @@ script.on_init(function(event)
         local player = Game.get_player(event)
         if not player then return end
         local data = self.data
-        if not data.high_rank or not data.low_rank
+        if not data.high_role or not data.low_role
         or not data.low then self.reopen = false return end
         -- idk but this stoped working for no appent reason so i added more checks for nil values
-        if Ranking and Ranking.get_rank(player).power <= Ranking.get_rank(data.low_rank).power or player.admin then return end
+        if Role and Role.get_highest(player).index <= Role.get(data.low_role).index or player.admin then return end
         for _,message in pairs(data.low) do
             player_return({'ExpGamingBot-autoMessage.message',message},nil,player)
         end

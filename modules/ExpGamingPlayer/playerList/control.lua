@@ -29,7 +29,7 @@ local module_verbose = false
 local ThisModule = {
     on_init=function(self)
         if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer.playerInfo') end
-        if loaded_modules['ExpGamingCore.Ranking@^4.0.0'] then getPlayers = require(module_path..'/src/ranking') end
+        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then getPlayers = require(module_path..'/src/ranking') end
         if loaded_modules['ExpGamingAdmin.AdminLib@^4.0.0'] then Admin = require('ExpGamingAdmin.AdminLib@^4.0.0') end
     end
 }
@@ -72,30 +72,34 @@ Gui.left.add{
         }
         player_list.vertical_scroll_policy = 'auto'
         player_list.style.maximal_height=195
+        local done = {}
         local players = getPlayers() -- list of [colour,shortHand,[playerOne,playerTwo]]
         for _,rank in pairs(players) do
             for _,player in pairs(rank[3]) do
-                local flow = player_list.add{type='flow'}
-                if rank[2] == '' then
-                    flow.add{
-                        type='label',
-                        name=player.name,
-                        style='caption_label',
-                        caption={'ExpGamingPlayer-playerList.format-nil',tick_to_display_format(player.online_time),player.name}
-                    }.style.font_color = rank[1]
-                else
-                    flow.add{
-                        type='label',
-                        name=player.name,
-                        style='caption_label',
-                        caption={'ExpGamingPlayer-playerList.format',tick_to_display_format(player.online_time),player.name,rank[2]}
-                    }.style.font_color = rank[1]
-                end
-                if Admin and Admin.report_btn then
-                    if not rank[4] and player.index ~= frame.player_index then
-                        local btn = Admin.report_btn:draw(flow)
-                        btn.style.height = 20
-                        btn.style.width = 20
+                if not done[player.index] then
+                    done[player.index] = true
+                    local flow = player_list.add{type='flow'}
+                    if rank[2] == '' then
+                        flow.add{
+                            type='label',
+                            name=player.name,
+                            style='caption_label',
+                            caption={'ExpGamingPlayer-playerList.format-nil',tick_to_display_format(player.online_time),player.name}
+                        }.style.font_color = rank[1]
+                    else
+                        flow.add{
+                            type='label',
+                            name=player.name,
+                            style='caption_label',
+                            caption={'ExpGamingPlayer-playerList.format',tick_to_display_format(player.online_time),player.name,rank[2]}
+                        }.style.font_color = rank[1]
+                    end
+                    if Admin and Admin.report_btn then
+                        if not rank[4] and player.index ~= frame.player_index then
+                            local btn = Admin.report_btn:draw(flow)
+                            btn.style.height = 20
+                            btn.style.width = 20
+                        end
                     end
                 end
             end

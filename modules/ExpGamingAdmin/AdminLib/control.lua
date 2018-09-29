@@ -6,14 +6,14 @@
 
 -- Module Require
 local Game = require('FactorioStdLib.Game@^0.8.0')
-local Ranking -- ExpGamingCore.Ranking@^4.0.0
+local Role -- ExpGamingCore.Role@^4.0.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
 
 -- Module Define
 local module_verbose = false
 local Admin = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Ranking@^4.0.0'] then Ranking = require('ExpGamingCore.Ranking@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
         if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then Sync = require('ExpGamingCore.Sync@^4.0.0') end
         if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require('ExpGamingCore.Server@^4.0.0').add_module_to_interface('Admin','ExpGamingAdmin.AdminLib') end
     end,
@@ -41,9 +41,8 @@ end
 
 function Admin.allowed(player)
     local player = Game.get_player(player)
-    if Ranking then
-        local lowest_admin_power = Ranking.get_group('Admin').lowest.power
-        return lowest_admin_power >= Ranking.get_rank(player).power
+    if Role then
+        return Role.allowed(player,'admin-commands')
     else return player.admin end
 end
 
@@ -79,7 +78,7 @@ function Admin.clear_player(player,by_player)
     if Admin.is_banned(player,true) == true then Server.interface(game.unban_player,true,player,by_player) end
     if Admin.clear_warings then Admin.clear_warings(player,by_player,true) end
     if Admin.clear_reports then Admin.clear_reports(player,by_player,true) end
-    if Ranking.get_rank(player).group.name == 'Jail' then Server.interface(Ranking.revert,true,player,by_player) end
+    if Role.has_flag(player,'is_jail') then Server.interface(Role.revert,true,player,by_player,2) end
     if Sync then Sync.emit_embeded{
         title='Player Clear',
         color=Color.to_hex(defines.textcolor.low),

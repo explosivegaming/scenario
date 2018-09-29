@@ -7,7 +7,7 @@
 -- Module Require
 local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
 local Gui = require('ExpGamingCore.Gui@^4.0.0')
-local Ranking = require('ExpGamingCore.Ranking@^4.0.0')
+local Role = require('ExpGamingCore.Role@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
 local playerInfo -- ExpGamingPlayer@^4.0.0
 
@@ -89,9 +89,9 @@ local player_drop_down = Gui.inputs.add_drop_down('player-drop-down-admin-comman
     player_info_flow.clear()
     if selected == 'Select Player' then return
     else get_player_info(selected,player_info_flow,true) end
-    local rank = Ranking.get_rank(player)
-    local _rank = Ranking.get_rank(selected)
-    if rank.power >= _rank.power then element.parent.warning.caption = {'ExpGamingAdmin.warning'}
+    local role = Role.get_highest(player)
+    local _role = Role.get(selected)
+    if role.index >= _role.index then element.parent.warning.caption = {'ExpGamingAdmin.warning'}
     else element.parent.warning.caption = '' end
 end)
 
@@ -118,12 +118,12 @@ local take_action = Gui.inputs.add{
     caption={'ExpGamingAdmin.take-action'}
 }:on_event('click',function(event)
     local dropdowns = event.element.parent
-    local rank = Ranking.get_rank(event.player_index)
+    local role = Role.get_highest(event.player_index)
     local _action= dropdowns.parent.action.caption ~= 'Select Action' and dropdowns.parent.action.caption or nil
     local _player = Game.get_player(dropdowns.parent.player.caption)
     if not _player or not _action then dropdowns.warning.caption = {'ExpGamingAdmin.invalid'} return end
-    local _rank = Ranking.get_rank(_player)
-    if rank.power >= _rank.power then dropdowns.warning.caption = {'ExpGamingAdmin.rank-high'} return end
+    local _role = Role.get_highest(_player)
+    if role.index >= _role.index then dropdowns.warning.caption = {'ExpGamingAdmin.rank-high'} return end
     local _reason = dropdowns['reason-input-admin-commands'] and dropdowns['reason-input-admin-commands'].text
     if (_action == 'Jail' or _action == 'Kick' or _action == 'Ban' or _action == 'Temp Ban') and (_reason == 'Enter Reason' or string.len(_reason) < 20) then return end
     Admin.take_action(_action,_player,event.player_index,_reason)

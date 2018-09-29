@@ -42,40 +42,40 @@ local player_drop_down = Gui.inputs.add_drop_down('player-drop-down-rank-change'
     player_info_flow.clear()
     if selected == 'Select Player' then return
     else get_player_info(selected,player_info_flow,true) end
-    local rank = Ranking.get_rank(player)
-    local _rank = Ranking.get_rank(selected)
-    if rank.power >= _rank.power then element.parent.warning.caption = {'rank-changer.warning'}
+    local role = Role.get_highest(player)
+    local _role = Role.get(selected)
+    if role.index >= _role.index then element.parent.warning.caption = {'rank-changer.warning'}
     else element.parent.warning.caption = '' end
 end)
 
-local function _ranks(player)
-    local ranks = {'Select Rank'}
-    local _rank = Ranking.get_rank(player)
-    for _,rank in pairs(Ranking._ranks()) do
-        if rank.power > _rank.power then
-            table.insert(ranks,rank.name)
+local function _roles(player)
+    local roles = {'Select Rank'}
+    local _role = Role.get_highest(player)
+    for index,role_name in pairs(Role.order) do
+        if index > _role.index then
+            table.insert(ranks,role_name)
         end
     end
     return ranks
 end
 
-local rank_drop_down = Gui.inputs.add_drop_down('rank-drop-down-rank-change',_ranks,1,function(player,selected,items,element)
-    element.parent.parent.rank.caption = selected
+local role_drop_down = Gui.inputs.add_drop_down('rank-drop-down-rank-change',_roles,1,function(player,selected,items,element)
+    element.parent.parent.role.caption = selected
 end)
 
-local set_rank = Gui.inputs.add{
+local set_role = Gui.inputs.add{
     type='button',
     name='rank-change-set',
     caption={'rank-changer.set-rank'}
 }:on_event('click',function(event)
     local dropdowns = event.element.parent
-    local rank = Ranking.get_rank(event.player_index)
-    local _rank = Ranking.get_rank(dropdowns.parent.rank.caption)
+    local role = Role.get_highest(event.player_index)
+    local _role = Role.get(dropdowns.parent.role.caption)
     local _player = Game.get_player(dropdowns.parent.player.caption)
-    if not _player or not _rank then dropdowns.warning.caption = {'rank-changer.invalid'} return end
-    local __rank = Ranking.get_rank(_player)
-    if rank.power >= __rank.power then dropdowns.warning.caption = {'rank-changer.rank-high'} return end
-    Ranking.give_rank(_player,_rank,event)
+    if not _player or not _role then dropdowns.warning.caption = {'rank-changer.invalid'} return end
+    local __role = Role.get_highest(_player)
+    if role.index >= __role.index then dropdowns.warning.caption = {'rank-changer.rank-high'} return end
+    Role.assign(_player,_role,event)
     Gui.center.clear(event)
 end)
 
@@ -117,7 +117,7 @@ Gui.center.add{
         }
         label.style.single_line = false
         label.style.width = 200
-        set_rank:draw(dropdowns)
+        set_role:draw(dropdowns)
         frame.add{
             name='player',
             type='label',

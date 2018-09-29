@@ -209,5 +209,5 @@ center._events = {[defines.events.on_gui_closed]=function(event)
     if event.element and event.element.valid then event.element.destroy() end
 end}
 
-center.on_rank_change = center.clear
+center.on_role_change = center.clear
 return center

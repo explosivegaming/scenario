@@ -1,4 +1,4 @@
---- Adds a jail function to the admin set, require ExpGamingRanking to work.
+--- Adds a jail function to the admin set, require ExpGamingRole to work.
 -- @module ExpGamingAdmin.Jail@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
@@ -8,7 +8,7 @@
 local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
 local AdminGui = require('ExpGamingAdmin.Gui@^4.0.0')
 local Server = require('ExpGamingCore.Server@^4.0.0')
-local Ranking = require('ExpGamingCore.Ranking@^4.0.0')
+local Role = require('ExpGamingCore.Role@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
 local Color -- FactorioStdLib.Color@^0.8.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
@@ -40,8 +40,9 @@ function Admin.jail(player,by_player,reason)
         ['Reason:']=reason
     } end
     if Admin.move_inventory then Admin.move_inventory(player) end
-    Ranking.meta.last_jail = player.name
-    Server.interface(Ranking.give_rank,true,player,'Jail',by_player_name)
+    Role.meta.last_jail = player.name
+    Server.interface(Role.unassign,true,player,Role.get(player),by_player_name)
+    Server.interface(Role.assign,true,player,'Jail',by_player_name)
 end
 
 Admin.add_action('Jail',Admin.jail)

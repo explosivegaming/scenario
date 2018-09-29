@@ -8,19 +8,19 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
-local function _ranks(player)
-    local ranks = {'Select Rank'}
-    local _rank = Ranking.get_rank(player)
-    for _,rank in pairs(Ranking._ranks()) do
-        if rank.power >= _rank.power then
-            table.insert(ranks,rank.name)
+local function _roles(player)
+    local roles = {'Select Rank'}
+    local _role = Role.get_highest(player)
+    for index,role_name in pairs(Role.order) do
+        if index >= _role.index then
+            table.insert(ranks,role_name)
         end
     end
     return ranks
 end
 
-local rank_drop_down = Gui.inputs.add_drop_down('rank-drop-down-annoncements',_ranks,1,function(player,selected,items,element)
-    element.parent.rank.caption = selected
+local role_drop_down = Gui.inputs.add_drop_down('rank-drop-down-annoncements',_roles,1,function(player,selected,items,element)
+    element.parent.role.caption = selected
     if selected == 'Select Rank' then element.parent['send-annoncement'].style.visible = false
     else element.parent['send-annoncement'].style.visible = true end
 end)
@@ -30,18 +30,16 @@ local send_popup = Gui.inputs.add{
     name='send-annoncement',
     caption='utility/export_slot'
 }:on_event('click',function(event)
-    local meta_data = Ranking.meta
-    local default = Ranking.get_rank(meta_data.default)
     local player = Game.get_player(event)
-    local rank = Ranking.get_rank(player)
-    local _rank = Ranking.get_rank(event.element.parent.rank.caption); if not _rank then return end
-    local sent_by = {'announcements.sent-by',player.name,rank.name}
-    local rank_name = _rank.name..'s'; if rank_name == default.name..'s' then rank_name = 'Everyone' end
+    local role = Role.get_highest(player)
+    local _role = Role.get(event.element.parent.role.caption); if not _role then return end
+    local sent_by = {'announcements.sent-by',player.name,role.name}
+    local role_name = _role.name..'s'; if rank_name == Role.meta.default.name..'s' then rank_name = 'Everyone' end
     local sent_to = {'announcements.sent-to',rank_name}
     local message = event.element.parent.parent.message.text
-    for power,__rank in pairs(Ranking._ranks()) do
-        if power <= _rank.power then
-            Gui.popup.open('announcements',{sent_by=sent_by,sent_to=sent_to,message=message},__rank:get_players(true))
+    for index,_role_name in pairs(Role.order) do
+        if index <= _role.index then
+            Gui.popup.open('announcements',{sent_by=sent_by,sent_to=sent_to,message=message},Role.get(_role_name):get_players(true))
             event.element.parent.parent.message.text = ''
         end
     end
