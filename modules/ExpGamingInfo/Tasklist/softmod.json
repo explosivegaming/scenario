@@ -15,6 +15,7 @@
     "license": "<blank>",
     "dependencies": {
         "ExpGamingCore.Gui": "^4.0.0",
+        "ExpGamingCore.Role": "^4.0.0",
         "FactoiorStdLib.Game": "^0.8.0"
     }
 }

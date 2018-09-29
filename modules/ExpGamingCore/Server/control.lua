@@ -178,7 +178,7 @@ end
 --[[ cant be used V
 --- Adds a event handler to tell threads about events
 -- @usage Server.add_thread_handler(defines.event)
--- @tparam number event the event to run the thread handler on
+-- @tparam number event the event to run the thread handler on`
 -- @treturn bolean if the handler was added
 function Server.add_thread_handler(event)
     if not is_type(event,'number') then return false end
@@ -458,7 +458,6 @@ script.on_event(defines.events.on_tick,function(event)
     if #global.timeout > 0 then Server.check_timeouts() end -- timeout checks
     if #global.queue > 0 then -- resolve one thread
         local current_thread = global.all[global.queue[1]]
-        game.print(current_thread.uuid)
         if current_thread and current_thread:valid() then current_thread:resolve() end
     end
 end)

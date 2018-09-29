@@ -5,8 +5,9 @@
 -- @alais ThisModule 
 
 -- Module Require
-local Gui = require('ExpGamingCore.Role@^4.0.0')
-local Game = require('FactoiorStdLib.Game@^0.8.0')
+local Gui = require('ExpGamingCore.Gui@^4.0.0')
+local Role = require('ExpGamingCore.Role@^4.0.0')
+local Game = require('FactorioStdLib.Game@^0.8.0')
 
 -- Module Define
 local module_verbose = false
@@ -31,7 +32,7 @@ local edit = Gui.inputs.add{
 }:on_event('click',function(event)
     local text_flow = event.element.parent.parent.text_flow
     local data = global._edit[event.player_index]
-    if not data._edit then data._tasks = table.deepcopy(_global().tasks) end
+    if not data._edit then data._tasks = table.deepcopy(global.tasks) end
     if text_flow.input.type == 'label' then
         data._editing[tonumber(text_flow.parent.name)]=true
         Gui.left.update('tasklist',event.player_index)
@@ -71,12 +72,12 @@ local remove = Gui.inputs.add{
     caption='utility/remove'
 }:on_event('click',function(event)
     local frame = event.element.parent.parent
-    local data = _global()._edit[event.player_index]
+    local data = global._edit[event.player_index]
     if data._edit then
         table.remove(data._tasks,tonumber(frame.name))
         table.remove(data._editing,tonumber(frame.name))
     else
-        table.remove(_global().tasks,tonumber(frame.name))
+        table.remove(global.tasks,tonumber(frame.name))
         Gui.left.update('tasklist')
     end
     Gui.left.update('tasklist',event.player_index)
@@ -88,12 +89,12 @@ local add = Gui.inputs.add{
     caption='utility/add'
 }:on_event('click',function(event)
     local frame = event.element.parent.parent
-    local data = _global()._edit[event.player_index]
+    local data = global._edit[event.player_index]
     if data._edit then
         table.insert(data._tasks,tonumber(frame.name)+1,'New Value')
         table.insert(data._editing,tonumber(frame.name)+1,true)
     else
-        data._tasks = table.deepcopy(_global().tasks)
+        data._tasks = table.deepcopy(global.tasks)
         table.insert(data._tasks,tonumber(frame.name)+1,'New Value')
         table.insert(data._editing,tonumber(frame.name)+1,true)
     end
@@ -102,8 +103,8 @@ end)
 
 local function _tasks(player)
     local player = Game.get_player(player)
-    local data = _global()._edit[player.index]
-    if not data then return _global().tasks end
+    local data = global._edit[player.index]
+    if not data then return global.tasks end
     local _edit = false
     for _,v in pairs(data._editing) do
         if v == true then
@@ -112,16 +113,16 @@ local function _tasks(player)
         end
     end
     if data._edit and not _edit then
-        _global().tasks = table.deepcopy(data._tasks)
-        _global()._edit[player.index] = table.deepcopy(_global()._base)
+        global.tasks = table.deepcopy(data._tasks)
+        global._edit[player.index] = table.deepcopy(global._base)
         Gui.left.update('tasklist')
-        return _global().tasks
+        return global.tasks
     elseif not data._edit and _edit then
         data._edit = true
         for key,_ in pairs(data._tasks) do if not data._editing[key] then data._editing[key] = false end end
         return data._tasks
     elseif _edit then return data._tasks
-    else return _global().tasks
+    else return global.tasks
     end
 end
 
@@ -140,11 +141,10 @@ Gui.left.add{
             caption={'tasklist.name'},
             style='caption_label'
         }
-        local data = _global()
         local player = Game.get_player(frame.player_index)
         local allowed = Role.allowed(player,'edit-tasklist')
         if allowed then
-            if not data._edit[player.index] then data._edit[player.index] = table.deepcopy(data._base) end
+            if not global._edit[player.index] then global._edit[player.index] = table.deepcopy(global._base) end
         end
         for i,task in pairs(_tasks(player)) do
             local flow = frame.add{
@@ -168,7 +168,7 @@ Gui.left.add{
             }
             if allowed then
                 _edit(button_flow)
-                if data._edit[player.index]._editing[i] then
+                if global._edit[player.index]._editing[i] then
                     local element = remove:draw(button_flow)
                     element.style.height = 30
                     element.style.width = 30
@@ -192,10 +192,10 @@ Gui.left.add{
             element.style.height = 20
             element.style.width = 20
         end
-        if #_tasks(player) == 0 and not role:allowed('edit-tasklist') then frame.style.visible = false end
+        if #_tasks(player) == 0 and not allowed then frame.style.visible = false end
     end,
     can_open=function(player)
-        if Role.allowed(player,'edit-tasklist') or #_global().tasks > 0 then return true
+        if Role.allowed(player,'edit-tasklist') or #global.tasks > 0 then return true
         else return {'tasklist.none'} end
     end,
     open_on_join=true

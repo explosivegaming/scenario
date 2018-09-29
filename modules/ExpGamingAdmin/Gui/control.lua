@@ -10,6 +10,7 @@ local Gui = require('ExpGamingCore.Gui@^4.0.0')
 local Role = require('ExpGamingCore.Role@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
 local playerInfo -- ExpGamingPlayer@^4.0.0
+local mod_gui = require('mod-gui')
 
 -- Module Define
 local module_verbose = false
@@ -137,7 +138,7 @@ Admin.center = Gui.center.add{
     open=function(event,pre_select_player,pre_select_action)
         local _player = Game.get_player(pre_select_player)
         local player = Game.get_player(event)
-        local _center = Gui._get_data('center')['admin-commands']
+        local _center = Gui.data.center['admin-commands']
         local center_flow = Gui.center.get_flow(player)
         if center_flow[_center.name] then Gui.center.clear(player) return end
         local center_frame = center_flow.add{

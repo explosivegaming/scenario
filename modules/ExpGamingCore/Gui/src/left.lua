@@ -8,6 +8,7 @@
 -- @function _comment
 
 local Game = require('FactorioStdLib.Game')
+local Server = require('ExpGamingCore.Server')
 local Color = require('FactorioStdLib.Color')
 local Role -- this is optional and is hanndled by it being present, it is loaded on init
 local mod_gui = require("mod-gui")
