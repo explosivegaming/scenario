@@ -129,7 +129,7 @@ end
 Gui.left.add{
     name='tasklist',
     caption='utility/not_enough_repair_packs_icon',
-    tooltip={'tasklist.tooltip'},
+    tooltip={'ExpGamingInfo-Tasklist.tooltip'},
     draw=function(frame)
         frame.caption = ''
         local title = frame.add{
@@ -138,7 +138,7 @@ Gui.left.add{
         }
         title.add{
             type='label',
-            caption={'tasklist.name'},
+            caption={'ExpGamingInfo-Tasklist.name'},
             style='caption_label'
         }
         local player = Game.get_player(frame.player_index)
@@ -196,7 +196,7 @@ Gui.left.add{
     end,
     can_open=function(player)
         if Role.allowed(player,'edit-tasklist') or #global.tasks > 0 then return true
-        else return {'tasklist.none'} end
+        else return {'ExpGamingInfo-Tasklist.none'} end
     end,
     open_on_join=true
 }

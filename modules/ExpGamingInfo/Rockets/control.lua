@@ -30,12 +30,12 @@ local global = global{
 Gui.left.add{
     name='rockets',
     caption='item/rocket-silo',
-    tooltip={'rockets.tooltip'},
+    tooltip={'ExpGamingInfo-Rockets.tooltip'},
     draw=function(frame)
-        frame.caption = {'rockets.name'}
+        frame.caption = {'ExpGamingInfo-Rockets.name'}
         local player = Game.get_player(frame.player_index)
         local satellites = player.force.get_item_launched('satellite')
-        local time = {'rockets.nan'}
+        local time = {'ExpGamingInfo-Rockets.nan'}
         if satellites == 1 then time = tick_to_display_format(game.tick)
         elseif satellites > 1 then time = tick_to_display_format((game.tick-global.first)/satellites) end
         if satellites ~= global.update then
@@ -47,27 +47,27 @@ Gui.left.add{
         end
         frame.add{
             type='label',
-            caption={'rockets.sent',satellites}
+            caption={'ExpGamingInfo-Rockets.sent',satellites}
         }
         frame.add{
             type='label',
-            caption={'rockets.first',tick_to_display_format(global.first)}
+            caption={'ExpGamingInfo-Rockets.first',tick_to_display_format(global.first)}
         }
         frame.add{
             type='label',
-            caption={'rockets.last',tick_to_display_format(global.last-global._last)}
+            caption={'ExpGamingInfo-Rockets.last',tick_to_display_format(global.last-global._last)}
         }
         frame.add{
             type='label',
-            caption={'rockets.time',time}
+            caption={'ExpGamingInfo-Rockets.time',time}
         }
         frame.add{
             type='label',
-            caption={'rockets.fastest',tick_to_display_format(global.fastest)}
+            caption={'ExpGamingInfo-Rockets.fastest',tick_to_display_format(global.fastest)}
         }
         frame.add{
             type='label',
-            caption={'rockets.milestones'},
+            caption={'ExpGamingInfo-Rockets.milestones'},
             style='caption_label'
         }
         local milestones = frame.add{
@@ -81,18 +81,18 @@ Gui.left.add{
                 time = global.last
                 Gui.left.open('rockets')
             end
-            local _time = {'rockets.nan'}
+            local _time = {'ExpGamingInfo-Rockets.nan'}
             if time > 0 then _time = tick_to_display_format(time) end
             milestones.add{
                 type='label',
-                caption={'rockets.format',tostring(milestone),_time}
+                caption={'ExpGamingInfo-Rockets.format',tostring(milestone),_time}
             }
             if time == 0 then break end
         end
     end,
     can_open=function(player) 
         if player.force.get_item_launched('satellite') > 0 then return true
-        else return {'rockets.none'} end
+        else return {'ExpGamingInfo-Rockets.none'} end
     end
 }
 

@@ -41,17 +41,17 @@ local global = global{
 Gui.left.add{
     name='science',
     caption='item/lab',
-    tooltip={'science.tooltip'},
+    tooltip={'ExpGamingInfo-Science.tooltip'},
     draw=function(frame)
         local player = Game.get_player(frame.player_index)
         if not global[player.force.name] then 
             global[player.force.name] = table.deepcopy(global._base)
         end
         global = global[player.force.name]
-        frame.caption = {'science.name'}
+        frame.caption = {'ExpGamingInfo-Science.name'}
         frame.add{
             type='label',
-            caption={'science.total'},
+            caption={'ExpGamingInfo-Science.total'},
             style='caption_label'
         }
         local totals = frame.add{
@@ -60,7 +60,7 @@ Gui.left.add{
         }
         frame.add{
             type='label',
-            caption={'science.time'},
+            caption={'ExpGamingInfo-Science.time'},
             style='caption_label'
         }
         local times = frame.add{
@@ -80,19 +80,19 @@ Gui.left.add{
             if made > 0 then
                 totals.add{
                     type='label',
-                    caption={'science.format',{'science.'..name},made}
+                    caption={'ExpGamingInfo-Science.format',{'ExpGamingInfo-Science.'..name},made}
                 }
                 local _made = string.format('%.2f',(made-global._made[i])/((global.update-global._update)/(3600*game.speed)))
                 times.add{
                     type='label',
-                    caption={'science.format',{'science.'..name},_made}
+                    caption={'ExpGamingInfo-Science.format',{'ExpGamingInfo-Science.'..name},_made}
                 }
             end
         end
     end,
     can_open=function(player)
         if player.force.item_production_statistics.get_input_count('science-pack-1') > 0 then return true
-        else return {'science.none'} end
+        else return {'ExpGamingInfo-Science.none'} end
     end
 }
 

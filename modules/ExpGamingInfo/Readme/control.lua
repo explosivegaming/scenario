@@ -25,36 +25,36 @@ end
 Gui.center.add{
     name='readme',
     caption='utility/questionmark',
-    tooltip={'readme.tooltip'}
-}:add_tab('guildlines',{'readme.guildlines-name'},{'readme.guildlines-tooltip'},function(frame)
+    tooltip={'ExpGamingInfo-Readme.tooltip'}
+}:add_tab('guildlines',{'ExpGamingInfo-Readme.guildlines-name'},{'ExpGamingInfo-Readme.guildlines-tooltip'},function(frame)
     for i = 1,10 do
         local style=nil; if i == 1 then style = 'caption_label' end
         format_label(frame.add{
             type='label',
-            caption={'readme.guildlines-line'..tostring(i)},
+            caption={'ExpGamingInfo-Readme.guildlines-line'..tostring(i)},
             style=style
         })
     end
-end):add_tab('chat',{'readme.chat-name'},{'readme.chat-tooltip'},function(frame)
+end):add_tab('chat',{'ExpGamingInfo-Readme.chat-name'},{'ExpGamingInfo-Readme.chat-tooltip'},function(frame)
     format_label(frame.add{
         type='label',
-        caption={'readme.chat-singleline'}
+        caption={'ExpGamingInfo-Readme.chat-singleline'}
     })
-end):add_tab('commands',{'readme.commands-name'},{'readme.commands-tooltip'},function(frame)
+end):add_tab('commands',{'ExpGamingInfo-Readme.commands-name'},{'ExpGamingInfo-Readme.commands-tooltip'},function(frame)
     format_label(frame.add{
         type='label',
-        caption={'readme.commands-singleline'}
+        caption={'ExpGamingInfo-Readme.commands-singleline'}
     })
     Gui.bar(frame,480)
     local table = frame.add{name='command_table',type='table',column_count=2}
     table.add{
         type='label',
-        caption={'readme.commands-col1'},
+        caption={'ExpGamingInfo-Readme.commands-col1'},
         style='caption_label'
     }
     table.add{
         type='label',
-        caption={'readme.commands-col2'},
+        caption={'ExpGamingInfo-Readme.commands-col2'},
         style='caption_label'
     }
     table.style.width = 480
@@ -72,7 +72,7 @@ end):add_tab('commands',{'readme.commands-name'},{'readme.commands-tooltip'},fun
         discription.style.maximal_width = 400
         discription.style.single_line = false
     end
-end):add_tab('links',{'readme.links-name'},{'readme.links-tooltip'},function(frame)
+end):add_tab('links',{'ExpGamingInfo-Readme.links-name'},{'ExpGamingInfo-Readme.links-tooltip'},function(frame)
     local links={
 		'https://discord.explosivegaming.nl',
 		'https://explosivegaming.nl',
@@ -89,7 +89,7 @@ end):add_tab('links',{'readme.links-name'},{'readme.links-tooltip'},function(fra
     for i,link in pairs(links) do
     	frame.add{
             type="label",
-            caption={'readme.links-cap'..tostring(i)},
+            caption={'ExpGamingInfo-Readme.links-cap'..tostring(i)},
             style='caption_label'
         }
 		format(frame.add{
@@ -97,33 +97,33 @@ end):add_tab('links',{'readme.links-name'},{'readme.links-tooltip'},function(fra
             text=link
         })
 	end
-end):add_tab('servers',{'readme.servers-name'},{'readme.servers-tooltip'},function(frame)
+end):add_tab('servers',{'ExpGamingInfo-Readme.servers-name'},{'ExpGamingInfo-Readme.servers-tooltip'},function(frame)
     format_label(frame.add{
         type='label',
-        caption={'readme.servers-singleline'}
+        caption={'ExpGamingInfo-Readme.servers-singleline'}
     })
     Gui.bar(frame,480)
     for i = 1,6 do
         frame.add{
             type='label',
-            caption={'readme.servers-format',tostring(i),{'readme.servers-cap'..tostring(i)}},
+            caption={'ExpGamingInfo-Readme.servers-format',tostring(i),{'ExpGamingInfo-Readme.servers-cap'..tostring(i)}},
             style='caption_label'
         }
         format_label(frame.add{
             type='label',
-            caption={'readme.servers-des'..tostring(i)}
+            caption={'ExpGamingInfo-Readme.servers-des'..tostring(i)}
         })
     end
-end):add_tab('rules',{'readme.rules-name'},{'readme.rules-tooltip'},function(frame)
+end):add_tab('rules',{'ExpGamingInfo-Readme.rules-name'},{'ExpGamingInfo-Readme.rules-tooltip'},function(frame)
     format_label(frame.add{
         type='label',
-        caption={'readme.rules-singleline'}
+        caption={'ExpGamingInfo-Readme.rules-singleline'}
     })
     Gui.bar(frame,480)
     for i = 1,20 do
         format_label(frame.add{
             type='label',
-            caption={'readme.rules-format',i,{'readme.rules-rule'..tostring(i)}}
+            caption={'ExpGamingInfo-Readme.rules-format',i,{'ExpGamingInfo-Readme.rules-rule'..tostring(i)}}
         })
     end
 end)
