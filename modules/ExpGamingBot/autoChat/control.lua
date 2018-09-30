@@ -48,7 +48,7 @@ local commands = {
     ['lenny']={'chat-bot.lenny'},
     ['feedback']={'chat-bot.feedback'},
     ['wiki']={'chat-bot.wiki'},
-    ['blame']=function(player) local options = {'?','.','!','!!!'} return {'chat-bot.hodor',options[math.random(#options)]} end,
+    ['hodor']=function(player) local options = {'?','.','!','!!!'} return {'chat-bot.hodor',options[math.random(#options)]} end,
     ['evolution']=function(player) return {'chat-bot.current-evolution',string.format('%.2f',game.forces['enemy'].evolution_factor)} end,
     --Jokes about food and drink
     ['whattoeat']={'chat-bot.food'},
