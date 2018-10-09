@@ -177,4 +177,5 @@ script.on_event('on_init',function(event)
 end)
 
 -- Module Return
+-- calling will attempt to define a new group
 return setmetatable(Group,{__call=function(tbl,...) tbl.define(...) end})

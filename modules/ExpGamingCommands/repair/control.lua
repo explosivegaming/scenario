@@ -50,7 +50,7 @@ commands.add_command('repair', 'Repairs all destoryed and damaged entites in an 
     local highest_admin_power = Role.meta.groups.Admin.highest-1
     local max_range = role.index-highest_admin_power > 0 and const/(role.index-highest_admin_power) or nil
     local center = player and player.position or {x=0,y=0}
-    if not range or max_range and range > max_range then player_return({'commands.invalid-range',0,math.floor(max_range)}) return commands.error end
+    if not range or max_range and range > max_range then player_return({'ExpGamingCore_Command.invalid-range',0,math.floor(max_range)}) return commands.error end
     local area = {{center.x-range,center.y-range},{center.x+range,center.y+range}}
     local max_time_to_live = 2^32 - 1
     local sq_range = range^2

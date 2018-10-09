@@ -20,7 +20,7 @@ local toolbar = {}
 -- @tparam string caption can be a sprite path or text to show
 -- @tparam string tooltip the help to show for the button
 -- @tparam function callback the function which is called on_click
--- @treturn table the button object that was made
+-- @treturn table the button object that was made, calling the returned value will draw the toolbar button added
 function toolbar.add(name,caption,tooltip,callback)
     verbose('Created Toolbar Button: '..name)
     local button = Gui.inputs.add{type='button',name=name,caption=caption,tooltip=tooltip}
@@ -41,9 +41,9 @@ function toolbar.draw(player)
     for name,button in pairs(Gui.data.toolbar) do
         if is_type(Role,'table') then
             if Role.allowed(player,name) then
-                button:draw(toolbar_frame)
+                button(toolbar_frame)
             end
-        else button:draw(toolbar_frame) end
+        else button(toolbar_frame) end
 	end
 end
 
@@ -53,4 +53,5 @@ end
 
 toolbar.on_role_change = toolbar.draw
 toolbar.on_player_joined_game = toolbar.draw
-return toolbar
+-- calling with only a player will draw the toolbar for that player, more params will attempt to add a button
+return setmetatable(toolbar,{__call=function(self,player,extra,...) if extra then self.add(player,extra,...) else self.draw(player) end end})

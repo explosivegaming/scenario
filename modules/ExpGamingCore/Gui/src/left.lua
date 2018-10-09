@@ -15,7 +15,7 @@ local mod_gui = require("mod-gui")
 local Gui = Gui -- this is to force gui to remain in the ENV
 
 local left = {}
-left._left = {}
+left._prototype = {}
 
 -- used for debugging
 function left.override_open(state)
@@ -23,13 +23,14 @@ function left.override_open(state)
 end
 --- Used to add a left gui frame
 -- @usage Gui.left.add{name='foo',caption='Foo',tooltip='just testing',open_on_join=true,can_open=function,draw=function}
+-- @usage return_value(player) -- toggles visiblity for that player, if no player then updates for all players
 -- @param obj this is what will be made, needs a name and a draw function(root_frame), open_on_join can be used to set the deaful state true/false, can_open is a test to block it from opening but is not needed
--- @return the object that is made to... well idk but for the future
+-- @return the object that is made, calling the returned value with out a param will update the gui, else will toggle visiblity for that player
 function left.add(obj)
     if not is_type(obj,'table') then return end    
     if not is_type(obj.name,'string') then return end
     verbose('Created Left Gui: '..obj.name)
-    setmetatable(obj,{__index=left._left})
+    setmetatable(obj,{__index=left._prototype,__call=function(self,player) if player then self:toggle{player=player,element={name=self.name}} else left.update(self.name) end end})
     Gui.data('left',obj.name,obj)
     Gui.toolbar.add(obj.name,obj.caption,obj.tooltip,obj.toggle)
     return obj
@@ -122,7 +123,7 @@ function left.close(left_name)
 end
 
 -- this is used to draw the gui for the first time (these guis are never destoryed), used by the script
-function left._left.open(event)
+function left._prototype.open(event)
     local player = Game.get_player(event)
     local _left = Gui.data.left[event.element.name]
     local left_flow = mod_gui.get_frame_flow(player)
@@ -139,7 +140,7 @@ function left._left.open(event)
 end
 
 -- this is called when the toolbar button is pressed
-function left._left.toggle(event)
+function left._prototype.toggle(event)
     local player = Game.get_player(event)
     local _left = Gui.data.left[event.element.name]
     local left_flow = mod_gui.get_frame_flow(player)
@@ -167,8 +168,8 @@ function left._left.toggle(event)
     else
         left.style.visible = false
     end
-    if open == false then player_return({'gui.cant-open-no-reason'},defines.textcolor.crit,player) player.play_sound{path='utility/cannot_build'} 
-    elseif open ~= true then player_return({'gui.cant-open',open},defines.textcolor.crit,player) player.play_sound{path='utility/cannot_build'} end
+    if open == false then player_return({'ExpGamingCore_Gui.cant-open-no-reason'},defines.textcolor.crit,player) player.play_sound{path='utility/cannot_build'} 
+    elseif open ~= true then player_return({'ExpGamingCore_Gui.cant-open',open},defines.textcolor.crit,player) player.play_sound{path='utility/cannot_build'} end
 end
 
 left.on_player_joined_game = function(event)
@@ -185,4 +186,5 @@ function left:on_init()
     if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
 end
 
-return left
+-- calling will attempt to add a new gui
+return setmetatable(left,{__call=function(self,...) self.add(...) end})

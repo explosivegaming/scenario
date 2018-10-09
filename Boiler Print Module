@@ -14,8 +14,9 @@ local OptModule -- OptModule@^X.Y.Z
 -- Module Define
 local module_verbose = false
 local ThisModule = {
-    on_init=function()
+    on_init=function(self)
         if loaded_modules['OptModule@^X.Y.Z'] then OptModule = require('OptModule@^X.Y.Z') end
+        if loaded_modules['OptModule2@^X.Y.Z'] then require(module_path..'/src/module2',{self=self}) end
         --code
     end,
     on_post=function()

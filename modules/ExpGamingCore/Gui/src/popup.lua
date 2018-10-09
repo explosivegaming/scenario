@@ -12,10 +12,10 @@ local mod_gui = require("mod-gui")
 local Gui = Gui -- this is to force gui to remain in the ENV
 
 local popup = {}
-popup._popup = {}
+popup._prototype = {}
 
 function popup.load()
-    popup._popup.close = Gui.inputs.add{
+    popup._prototype.close = Gui.inputs.add{
         type='button',
         name='popup-close',
         caption='utility/set_bar_slot',
@@ -28,13 +28,14 @@ end
 
 --- Used to add a popup gui style
 -- @usage Gui.left.add{name='foo',caption='Foo',draw=function}
+-- @usage return_value(data,player) -- opens popup for one player use popup.open to open for more than one player
 -- @param obj this is what will be made, needs a name and a draw function(root_frame,data)
--- @return the object that is made to... well idk but for the future
+-- @return the object that is made, calling the returned value will open the popup for that player
 function popup.add(obj)
     if not is_type(obj,'table') then return end    
     if not is_type(obj.name,'string') then return end
     verbose('Created Popup Gui: '..obj.name)
-    setmetatable(obj,{__index=popup._popup})
+    setmetatable(obj,{__index=popup._prototype,__call=function(self,data,player) local players = player and {player} or nil popup.open(self.name,data,players) end})
     local name = obj.name; obj.name = nil
     Gui.data('popup',name,obj)
     obj.name = name
@@ -73,7 +74,7 @@ function popup.open(style,data,players)
                 direction='vertical',
                 style='image_frame'
             }
-            _popup.close:draw(_frame)
+            _popup.close(_frame)
             if is_type(_popup.draw,'function') then
                 local success, err = pcall(_popup.draw,frame,data)
                 if not success then error(err) end
@@ -97,7 +98,7 @@ function popup.open(style,data,players)
                 direction='vertical',
                 style='image_frame'
             }
-            thread.data.popup.close:draw(_frame)
+            thread.data.popup.close(_frame)
             if is_type(thread.data.popup.draw,'function') then
                 local success, err = pcall(thread.data.popup.draw,frame,thread.data.data)
                 if not success then error(err) end
@@ -106,11 +107,12 @@ function popup.open(style,data,players)
     end
 end
 
-function popup._popup:add_left(obj)
+function popup._prototype:add_left(obj)
     obj.name = obj.name or self.name
     self.left = Gui.left.add(obj)
 end
 
 popup.on_player_joined_game = popup.flow
 
-return popup
+-- calling will attempt to add a new popup style
+return setmetatable(popup,{__call=function(self,...) self.add(...) end})

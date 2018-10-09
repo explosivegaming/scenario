@@ -13,17 +13,18 @@ local mod_gui = require("mod-gui")
 local Gui = Gui -- this is to force gui to remain in the ENV
 
 local center = {}
-center._center = {}
+center._prototype = {}
 
 --- Adds a new obj to the center gui
 -- @usage Gui.center.add{name='foo',caption='Foo',tooltip='Testing',draw=function}
+-- @usage return_value(player) -- opens the center gui for that player
 -- @param obj contains the new object, needs name, fraw is opt and is function(root_frame)
--- @return the object made, used to add tabs
+-- @return the object made, used to add tabs, calling the returned value will open the center for the given player
 function center.add(obj)
     if not is_type(obj,'table') then return end    
     if not is_type(obj.name,'string') then return end 
     verbose('Created Center Gui: '..obj.name)
-    setmetatable(obj,{__index=center._center})
+    setmetatable(obj,{__index=center._prototype,__call=function(self,...) center.open(player,self.name) end})
     obj.tabs = {}
     obj._tabs = {}
     Gui.data('center',obj.name,obj)
@@ -86,7 +87,7 @@ end
 
 -- used on the button press when the toolbar button is press, can be overriden
 -- not recomented for direct use see Gui.center.open
-function center._center.open(event)
+function center._prototype.open(event)
     local player = Game.get_player(event)
     local _center = Gui.data.center[event.element.name]
     local center_flow = center.get_flow(player)
@@ -109,7 +110,7 @@ end
 
 -- this is the default draw function if one is not provided, can be overriden
 -- not recomented for direct use see Gui.center.open
-function center._center:draw(frame)
+function center._prototype:draw(frame)
     Gui.bar(frame,510)
     local tab_bar = frame.add{
         type='frame',
@@ -161,7 +162,7 @@ function center._center:draw(frame)
     local first_tab = nil
     for name,button in pairs(self.tabs) do
         first_tab = first_tab or name
-        button:draw(tab_bar_scroll_flow).style.font_color = defines.color.white
+        button(tab_bar_scroll_flow).style.font_color = defines.color.white
     end
     self._tabs[self.name..'_'..first_tab](tab_scroll_flow)
     tab_bar_scroll_flow.children[1].style.font_color = defines.color.orange
@@ -175,7 +176,7 @@ end
 -- @tparam[opt] string tooltip the tooltip that is on the button
 -- @tparam function callback this is called when button is pressed with function(root_frame)
 -- @return self to allow chaining of _center:add_tab
-function center._center:add_tab(name,caption,tooltip,callback)
+function center._prototype:add_tab(name,caption,tooltip,callback)
     verbose('Created Tab: '..self.name..'/'..name)
     self._tabs[self.name..'_'..name] = callback
     self.tabs[name] = Gui.inputs.add{
@@ -210,4 +211,5 @@ center._events = {[defines.events.on_gui_closed]=function(event)
 end}
 
 center.on_role_change = center.clear
-return center
+-- calling will attempt to add a new gui
+return setmetatable(center,{__call=function(self,...) self.add(...) end})

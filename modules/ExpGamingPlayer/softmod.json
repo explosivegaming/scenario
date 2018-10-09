@@ -99,6 +99,25 @@
                 "FactorioStdLib.Game": "^0.8.0"
             },
             "collection": "ExpGamingPlayer_4.0.0"
+        },
+        "polls": {
+            "name": "polls",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Adds a poll gui into the game for quick polls (default 90 seconds)",
+            "location": "<blank>",
+            "keywords": [
+                "Polls",
+                "Poll",
+                "Question",
+                "Gui"
+            ],
+            "dependencies": {
+                "ExpGamingCore.Gui": "^4.0.0",
+                "ExpGamingCore.Server": "^4.0.0",
+                "ExpGamingCore.Role": "?^4.0.0"
+            },
+            "collection": "ExpGamingPlayer_4.0.0"
         }
     },
     "dependencies": {}

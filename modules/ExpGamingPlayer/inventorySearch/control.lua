@@ -1,7 +1,7 @@
---- Desction <get from json>
--- @module ThisModule@X.Y.Z
--- @author <get from json>
--- @license <get from json>
+--- Adds an inventory search that is proformed on a random player every 15 seconds
+-- @module ExpGamingPlayer.inventorySearch@4.0.0
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alais ThisModule 
 
 -- Module Require
@@ -54,9 +54,9 @@ local ThisModule = {
 
 -- Function Define
 local function take_action(player,item_name,category)
-    if category == 'low_items' then player_return({'inventory-search.low',item_name},defines.textcolor.med,player)
-    elseif category == 'med_items' then player_return({'inventory-search.med',item_name},defines.textcolor.high,player) Admin.give_warning(player,'<server>','Found A Banned Item',5)
-    elseif category == 'high_items' then player_return({'inventory-search.high',item_name},defines.textcolor.crit,player) Admin.temp_ban(player,'<server>','Found A Banned Item')
+    if category == 'low_items' then player_return({'ExpGamingPlayer_inventorySearch.low',item_name},defines.textcolor.med,player)
+    elseif category == 'med_items' then player_return({'ExpGamingPlayer_inventorySearch.med',item_name},defines.textcolor.high,player) Admin.give_warning(player,'<server>','Found A Banned Item',5)
+    elseif category == 'high_items' then player_return({'ExpGamingPlayer_inventorySearch.high',item_name},defines.textcolor.crit,player) Admin.temp_ban(player,'<server>','Found A Banned Item')
     else return end
 end
 

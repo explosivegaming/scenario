@@ -18,7 +18,7 @@ local Role = {
     order={},
     flags={},
     actions={},
-    meta={times={},groups={}},
+    meta={times={},groups={},count=0},
     roles=setmetatable({},{
         __index=table.autokey,
         __newindex=function(tbl,key,value)
@@ -43,6 +43,7 @@ local Role = {
             if self.meta.groups[role.group.name].highest > index then self.meta.groups[role.group.name].highest = index end
             if self.meta.groups[role.group.name].lowest < index then self.meta.groups[role.group.name].lowest = index end
             if previous then setmetatable(previous.allow,{__index=role.allow}) end
+            self.meta.count = self.meta.count+1
             role.index = index
             previous = role
         end
@@ -487,4 +488,5 @@ script.on_event(defines.events.on_tick,function(event)
 end)
 
 -- Module Return
+-- calling will attempt to define a new role
 return setmetatable(Role,{__call=function(tbl,...) tbl.define(...) end}) 

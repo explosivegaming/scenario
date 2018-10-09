@@ -4,7 +4,7 @@ commands.add_validation('player-rank',function(value,event)
     local player,err = commands.validate['player'](value) 
     return err and commands.error(err) 
     or Role.get_highest(player).index > Role.get_highest(event).index and player
-    or commands.error{'commands.error-player-rank'} 
+    or commands.error{'ExpGamingCore_Command.error-player-rank'} 
 end)
 
 commands.add_validation('player-rank-online',function(value,event) 

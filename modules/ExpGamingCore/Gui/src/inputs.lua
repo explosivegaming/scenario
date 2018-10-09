@@ -13,7 +13,7 @@ local mod_gui = require("mod-gui")
 local Gui = Gui -- this is to force gui to remain in the ENV
 
 local inputs = {}
-inputs._input = {}
+inputs._prototype = {}
 -- these are just so you can have short cuts to this
 inputs.events = {
     error='error',
@@ -30,7 +30,7 @@ inputs.events = {
 -- @param event the event to raise callback on | can be number of the event | can be a key of inputs.events
 -- @tparam function callback the function you want to run on the event
 -- @treturn table returns self so you can chain together
-function inputs._input:on_event(event,callback)
+function inputs._prototype:on_event(event,callback)
     if not is_type(callback,'function') then return self end
     if inputs.events[event] then event = inputs.events[event] end
     if event == 'error' then self._error = callback return self end
@@ -42,7 +42,7 @@ end
 -- @usage button:draw(frame)
 -- @param root the element you want to add the input to
 -- @return returns the element that was added
-function inputs._input:draw(root)
+function inputs._prototype:draw(root)
     local player = Game.get_player(root.player_index)
     if is_type(self.draw_data.caption,'string') and player.gui.is_valid_sprite_path(self.draw_data.caption) then
         local data = table.deepcopy(self.draw_data)
@@ -89,8 +89,9 @@ end
 
 --- Add a new input, this is the same as doing frame.add{} but returns a diffrent object
 -- @usage Gui.inputs.add{type='button',name='test',caption='Test'}
+-- @usage return_value(frame) -- draws the button onto that frame
 -- @tparam table obj the new element to add if caption is a sprite path then sprite is used
--- @treturn table the custom input object
+-- @treturn table the custom input object, calling the returned calue will draw the button
 function inputs.add(obj)
     if not is_type(obj,'table') then return end
     if not is_type(obj.type,'string') then return end
@@ -110,7 +111,7 @@ function inputs.add(obj)
     obj.draw_data = table.deepcopy(obj)
     obj.data = {}
     obj.events = {}
-    setmetatable(obj,{__index=inputs._input})
+    setmetatable(obj,{__index=inputs._prototype,__call=function(self,...) self:draw(...) end})
     Gui.data('inputs_'..type,obj.name,obj)
     return obj
 end
@@ -378,7 +379,7 @@ function inputs.add_drop_down(name,items,index,callback)
     return drop_down
 end
 
--- second return is join event and third is rank change event
-return inputs
+-- calling will attempt to add a new input
+return setmetatable(inputs,{__call=function(self,...) self.add(...) end})
 
 -- to see examples look at GuiParts/test.lua

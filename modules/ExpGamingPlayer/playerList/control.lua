@@ -1,5 +1,5 @@
 --- A full ranking system for factorio.
--- @module ExpGamingPlayer.playerList
+-- @module ExpGamingPlayer.playerList@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 

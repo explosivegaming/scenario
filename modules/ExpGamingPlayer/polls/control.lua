@@ -1,24 +1,34 @@
---[[
-Explosive Gaming
+--- Adds a poll gui into the game for quick polls (default 90 seconds)
+-- @module ExpGamingPlayer.polls@4.0.0
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
---Please Only Edit Below This Line-----------------------------------------------------------
+-- Module Require
+local Server = require('ExpGamingCore.Server@^4.0.0')
+local Gui = require('ExpGamingCore.Gui@^4.0.0')
+local Role -- ExpGamingCore.Server@^4.0.0
 
+-- Local Varibles
 local poll_time_out = 90 -- In seconds
 
-local function _polls(reset)
-    global.addons = not reset and global.addons or {}
-    global.addons.polls = not reset and global.addons.polls or {active={},old={}}
-    return global.addons.polls
-end
+-- Module Define
+local module_verbose = false
+local ThisModule = {
+    on_init=function()
+        if loaded_modules['ExpGamingCore.Server@^4.0.0'] then Role = require('ExpGamingCore.Server@^4.0.0') end
+    end
+}
 
-function _poll_end(self)
+-- Global Define
+local global = global{
+    active={},
+    old={}
+}
+
+-- Function Define
+local function _poll_end(self)
     local uuid = self.data.poll_uuid
-    local poll = _polls().active[uuid]
+    local poll = global.active[uuid]
     if not poll then return end
     local highest = {nil,-1}
     local _votes = {}
@@ -32,15 +42,15 @@ function _poll_end(self)
     poll.votes = _votes
     poll.answers = nil
     poll.voted = nil
-    table.insert(_polls().old,poll)
-    _polls().active[uuid] = nil
+    table.insert(global.old,poll)
+    global.active[uuid] = nil
     game.print({'polls.end',poll.question},defines.textcolor.info)
     game.print({'polls.winner',highest[1]},defines.textcolor.info)
 end
 
 local function _poll_data(question,answers)
     local poll = {
-        uuid=Server.new_uuid(),
+        uuid=Server.uuid(),
         question=question,
         answers=answers or {'None'},
         votes={},
@@ -51,37 +61,14 @@ local function _poll_data(question,answers)
         timeout=poll_time_out*60
     }:on_event('timeout',_poll_end):open()
     -- This time out is known to cause desyncs and so I have moved it to a hard coded function
-    _polls().active[poll.uuid]=poll
+    global.active[poll.uuid]=poll
     return poll.uuid
-end
-
-local function draw_poll(frame)
-    frame.clear()
-    local index = tonumber(frame.parent.current_index.caption)
-    local poll = _polls().old[index]
-    if not poll then
-        frame.add{
-            type='label',
-            caption={'polls.no-poll'}
-        }
-        return
-    end
-    frame.add{
-        type='label',
-        caption='Question: '..poll.question
-    }
-    for answer,votes in pairs(poll.votes) do
-        frame.add{
-            type='label',
-            caption=answer..') '..votes
-        }
-    end
 end
 
 local function _opptions(player,root_frame)
     local opptions = {'Please Select An Opption'}
     local uuid = root_frame.name
-    local poll = _polls().active[uuid]
+    local poll = global.active[uuid]
     if not poll then return {'Invalid Poll'} end
     for _,answer in pairs(poll.answers) do
         table.insert(opptions,answer)
@@ -91,7 +78,7 @@ end
 
 local opption_drop_down = Gui.inputs.add_drop_down('opption-drop-down-polls',_opptions,1,function(player,selected,items,element)
     local uuid = element.parent.name
-    local poll = _polls().active[uuid]
+    local poll = global.active[uuid]
     if not poll then return end
     if poll.voted[player.index] and poll.voted[player.index] > 1 then
         local old_vote = poll.voted[player.index]
@@ -112,7 +99,7 @@ local prev = Gui.inputs.add{
     local parent = event.element.parent
     local index = parent.parent.current_index.caption
     local _index = tonumber(index)-1
-    if _index < 1 then _index = #_polls().old end
+    if _index < 1 then _index = #global.old end
     parent.parent.current_index.caption = _index
     parent.parent.title.title.caption = 'Viewing Poll: '.._index
     draw_poll(parent.parent.poll_area)
@@ -126,7 +113,7 @@ local next = Gui.inputs.add{
     local parent = event.element.parent
     local index = parent.parent.current_index.caption
     local _index = tonumber(index)+1
-    if _index > #_polls().old then _index = 1 end
+    if _index > #global.old then _index = 1 end
     parent.parent.current_index.caption = _index
     parent.parent.title.title.caption = 'Viewing Poll: '.._index
     draw_poll(parent.parent.poll_area)
@@ -202,7 +189,7 @@ Gui.popup.add{
         frame.style.right_padding = 5
         frame.style.bottom_padding = 5
         local uuid = data.uuid
-        local poll = _polls().active[uuid]
+        local poll = global.active[uuid]
         if not poll then return end
         local flow = frame.add{
             type='flow',
@@ -240,7 +227,7 @@ Gui.popup.add{
         local btn = next:draw(title)
         btn.style.width = 20
         btn.style.height = 20
-        if Role.get_highest(frame.player_index):allowed('create-poll') then
+        if Role and Role.get_highest(frame.player_index):allowed('create-poll') or player.admin then
             local btn = create_poll:draw(title)
             btn.style.width = 20
             btn.style.height = 20
@@ -253,8 +240,12 @@ Gui.popup.add{
         draw_poll(flow)
     end,
     can_open=function(player)
-        if #_polls().old > 0 then return true
-        elseif Role.allowed(player,'create-poll') then return true
+        if #global.old > 0 then return true
+        elseif Role and Role.allowed(player,'create-poll') or player.admin then return true
         else return {'polls.no-poll'} end
     end
 }
+-- Event Handlers Define
+
+-- Module Return
+return ThisModule

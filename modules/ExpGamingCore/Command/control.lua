@@ -57,15 +57,15 @@ commands.validate = {
     ['boolean']=function(value,event) local value = value.lower() if value == 'true' or valule == 'yes' or value == 'y' or value == '1' then return true else return false end end,
     ['string']=function(value,event) return tostring(value) end,
     ['string-inf']=function(value,event) return tostring(value) end,
-    ['string-len']=function(value,event,max) return tostring(value) and tostring(value):len() <= max and tostring(value) or commands.error{'commands.error-string-len'} end,
-    ['number']=function(value,event) return tonumber(value) or commands.error{'commands.error-number'} end,
-    ['number-int']=function(value,event) return tonumber(value) and math.floor(tonumber(value)) or commands.error{'commands.error-number'} end,
-    ['number-range']=function(value,event,min,max) return tonumber(value) and tonumber(value) > min and tonumber(value) <= max and tonumber(value) or commands.error{'commands.error-number-range'} end,
-    ['number-range-int']=function(value,event,min,max) return tonumber(value) and math.floor(tonumber(value)) > min and math.floor(tonumber(value)) <= max and math.floor(tonumber(value)) or commands.error{'commands.error-number-range'} end,
-    ['player']=function(value,event) return Game.get_player(player) or commands.error{'commands.error-player'} end,
-    ['player-online']=function(value,event) local player,err = commands.validate['player'](value) return err and commands.error(err) or player.conected and player or commands.error{'commands.error-player-online'} end,
-    ['player-alive']=function(value,event) local player,err = commands.validate['player-online'](value) return err and commands.error(err) or player.character and player.character.health > 0 and player or commands.error{'commands.error-player-alive'} end,
-    ['player-rank']=function(value,event) local player,err = commands.validate['player'](value) return err and commands.error(err) or not player.admin and Game.get_player(event).admin and player or commands.error{'commands.error-player-rank'} end,
+    ['string-len']=function(value,event,max) return tostring(value) and tostring(value):len() <= max and tostring(value) or commands.error{'ExpGamingCore_Command.error-string-len'} end,
+    ['number']=function(value,event) return tonumber(value) or commands.error{'ExpGamingCore_Command.error-number'} end,
+    ['number-int']=function(value,event) return tonumber(value) and math.floor(tonumber(value)) or commands.error{'ExpGamingCore_Command.error-number'} end,
+    ['number-range']=function(value,event,min,max) return tonumber(value) and tonumber(value) > min and tonumber(value) <= max and tonumber(value) or commands.error{'ExpGamingCore_Command.error-number-range'} end,
+    ['number-range-int']=function(value,event,min,max) return tonumber(value) and math.floor(tonumber(value)) > min and math.floor(tonumber(value)) <= max and math.floor(tonumber(value)) or commands.error{'ExpGamingCore_Command.error-number-range'} end,
+    ['player']=function(value,event) return Game.get_player(player) or commands.error{'ExpGamingCore_Command.error-player'} end,
+    ['player-online']=function(value,event) local player,err = commands.validate['player'](value) return err and commands.error(err) or player.conected and player or commands.error{'ExpGamingCore_Command.error-player-online'} end,
+    ['player-alive']=function(value,event) local player,err = commands.validate['player-online'](value) return err and commands.error(err) or player.character and player.character.health > 0 and player or commands.error{'ExpGamingCore_Command.error-player-alive'} end,
+    ['player-rank']=function(value,event) local player,err = commands.validate['player'](value) return err and commands.error(err) or not player.admin and Game.get_player(event).admin and player or commands.error{'ExpGamingCore_Command.error-player-rank'} end,
     ['player-rank-online']=function(value,event) local player,err = commands.validate['player-online'](value) if err then return commands.error(err) end local player,err = commands.validate['player-rank'](player) if err then return commands.error(err) end return player end,
     ['player-rank-alive']=function(value,event) local player,err = commands.validate['player-alive'](value) if err then return commands.error(err) end local player,err = commands.validate['player-rank'](player) if err then return commands.error(err) end return player end,
 }
@@ -176,13 +176,13 @@ local function run_custom_command(command)
         local success, err = pcall(callback,player_name,command.name,command)
         if not success then error(err)
         elseif not err then
-            player_return({'commands.unauthorized'},defines.textcolor.crit)
+            player_return({'ExpGamingCore_Command.unauthorized'},defines.textcolor.crit)
             logMessage(player_name,command,'Failed to use command (Unauthorized)',commands.validate_args(command))
             if game.player then game.player.play_sound{path='utility/cannot_build'} end
             return
         end
     end elseif data.default_admin_only == true and game.player and not game.player.admin then
-        player_return({'commands.unauthorized'},defines.textcolor.crit)
+        player_return({'ExpGamingCore_Command.unauthorized'},defines.textcolor.crit)
         logMessage(player_name,command,'Failed to use command (Unauthorized)',commands.validate_args(command))
         if game.player then game.player.play_sound{path='utility/cannot_build'} end
         return
@@ -190,7 +190,7 @@ local function run_custom_command(command)
     -- gets the args for the command
     local args, err = commands.validate_args(command)
     if args == commands.error then
-        player_return({'commands.'..err,command.name,commands.format_inputs(data)},defines.textcolor.high)
+        player_return({'ExpGamingCore_Command.'..err,command.name,commands.format_inputs(data)},defines.textcolor.high)
         logMessage(player_name,command,'Failed to use command (Invalid Args)',args)
         if game.player then game.player.play_sound{path='utility/deconstruct_big'} end
         return
@@ -198,7 +198,7 @@ local function run_custom_command(command)
     -- runs the command
     local success, err = pcall(data.callback,command,args)
     if not success then error(err) end
-    if err ~= commands.error and player_name ~= 'server' then player_return({'commands.command-ran'},defines.textcolor.info) end
+    if err ~= commands.error and player_name ~= 'server' then player_return({'ExpGamingCore_Command.command-ran'},defines.textcolor.info) end
     logMessage(player_name,command,'Used command',args)
 end
 
