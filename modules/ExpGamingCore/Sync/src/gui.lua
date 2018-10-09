@@ -41,7 +41,7 @@ end
 
 --- Creates a center gui that will appear on join
 -- @gui server-info
-Gui.center.add{
+Sync.info_gui = Gui.center{
     name='server-info',
     caption='Server Info',
     tooltip='Basic info about the current server',
@@ -101,5 +101,5 @@ end)
 
 script.on_event(defines.events.on_player_joined_game,function(event)
     local player = Game.get_player(event)
-    Gui.center.open(player,'server-info')
+    Sync.info_gui(player)
 end)

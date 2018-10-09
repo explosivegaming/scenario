@@ -109,7 +109,7 @@ end
 
 function popup._prototype:add_left(obj)
     obj.name = obj.name or self.name
-    self.left = Gui.left.add(obj)
+    self.left = Gui.left(obj)
 end
 
 popup.on_player_joined_game = popup.flow

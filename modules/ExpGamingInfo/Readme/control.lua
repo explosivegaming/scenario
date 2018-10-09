@@ -22,7 +22,7 @@ local function format_label(label)
     label.style.single_line = false
 end
 
-Gui.center.add{
+ThisModule.Gui = Gui.center{
     name='readme',
     caption='utility/questionmark',
     tooltip={'ExpGamingInfo-Readme.tooltip'}
@@ -129,4 +129,5 @@ end):add_tab('rules',{'ExpGamingInfo-Readme.rules-name'},{'ExpGamingInfo-Readme.
 end)
 
 -- Module Return
-return ThisModule
+-- when called will open readme for that user
+return setmetatable(ThisModule,{__call=function(self,...) self.Gui(...) end})

@@ -48,7 +48,7 @@ function ThisModule.update(tick)
     end
 end
 
-local back_btn = Gui.inputs.add{
+local back_btn = Gui.inputs{
     type='button',
     caption='utility/enter',
     name='player-list-back'
@@ -57,7 +57,7 @@ local back_btn = Gui.inputs.add{
     event.element.parent.destroy()
 end)
 
-Gui.left.add{
+ThisModule.Gui = Gui.left{
     name='player-list',
     caption='entity/player',
     tooltip={'ExpGamingPlayer-playerList.tooltip'},
@@ -96,7 +96,7 @@ Gui.left.add{
                     end
                     if Admin and Admin.report_btn then
                         if not rank[4] and player.index ~= frame.player_index then
-                            local btn = Admin.report_btn:draw(flow)
+                            local btn = Admin.report_btn(flow)
                             btn.style.height = 20
                             btn.style.width = 20
                         end
@@ -110,7 +110,7 @@ Gui.left.add{
 
 script.on_event(defines.events.on_tick,function(event)
     if event.tick > global.update then
-        Gui.left.update('player-list')
+        ThisModule.Gui()
         global.update = event.tick + global.intervial
     end
 end)
@@ -136,5 +136,6 @@ script.on_event(defines.events.on_player_joined_game,ThisModule.update)
 script.on_event(defines.events.on_player_left_game,ThisModule.update)
 script.on_event(defines.events.rank_change,ThisModule.update)
 
-ThisModule.force_update = function() return Gui.left.update('player-list') end
-return ThisModule
+ThisModule.force_update = function() return ThisModule.Gui() end
+-- when called it will queue an update to the player list
+return setmetatable(ThisModule,{__call=function(self,...) self.update(...) end})

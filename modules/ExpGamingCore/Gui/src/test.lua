@@ -10,19 +10,19 @@ local Game = require('FactorioStdLib.Game@^0.8.0')
 local Gui = Gui -- this is to force gui to remain in the ENV
 local mod_gui = require("mod-gui")
 
-local gui_tset_close = Gui.inputs.add{
+local gui_test_close = Gui.inputs{
     name='gui-test-close',
     type='button',
     caption='Close Test Gui'
 }:on_event('click',function(event) event.element.parent.destroy() end)
 
-local caption_test = Gui.inputs.add{
+local caption_test = Gui.inputs{
     name='text-button',
     type='button',
     caption='Test'
 }:on_event('click',function(event) game.print('test') end)
 
-local sprite_test = Gui.inputs.add{
+local sprite_test = Gui.inputs{
     name='sprite-button',
     type='button',
     sprite='item/lab'
@@ -109,24 +109,24 @@ local function test_gui(player)
     if not player then return end
     if mod_gui.get_frame_flow(player)['gui-test'] then mod_gui.get_frame_flow(player)['gui-test'].destroy() end
     local frame = mod_gui.get_frame_flow(player).add{type='frame',name='gui-test',direction='vertical'}
-    gui_tset_close:draw(frame)
-    caption_test:draw(frame)
-    sprite_test:draw(frame)
-    input_test:draw(frame)
-    elem_test:draw(frame)
-    check_test:draw(frame)
-    radio_test:draw(frame)
-    radio_test_reset:draw(frame)
-    text_test:draw(frame)
-    box_test:draw(frame)
-    slider_test:draw(frame)
-    drop_test:draw(frame)
+    gui_test_close(frame)
+    caption_test(frame)
+    sprite_test(frame)
+    input_test(frame)
+    elem_test(frame)
+    check_test(frame)
+    radio_test(frame)
+    radio_test_reset(frame)
+    text_test(frame)
+    box_test(frame)
+    slider_test(frame)
+    drop_test(frame)
 end
 
 Gui.toolbar.add('open-gui-test','Open Test Gui','Opens the test gui with every input',test_gui)
 
 -- testing the center gui
-Gui.center.add{
+Gui.center{
     name='test-center',
     caption='Gui Center',
     tooltip='Just a gui test'
@@ -139,7 +139,7 @@ end):add_tab('tab-2','Tab 2','Just a tab',function(frame)
 end)
 
 -- testing the left gui
-Gui.left.add{
+Gui.left{
     name='test-left',
     caption='Gui Left',
     tooltip='just testing',
@@ -154,7 +154,7 @@ Gui.left.add{
 local text_popup = Gui.inputs.add_text('test-popup-text',true,'Message To Send',function(player,text,element)
     element.text = text
 end)
-local send_popup = Gui.inputs.add{
+local send_popup = Gui.inputs{
     type='button',
     name='test-popup-send',
     caption='Send Message'
@@ -163,7 +163,7 @@ local send_popup = Gui.inputs.add{
     local message = event.element.parent['test-popup-text'].text
     Gui.popup.open('test-popup',{player=player.name,message=message})
 end)
-Gui.popup.add{
+Gui.popup{
     name='test-popup',
     caption='Gui Popup',
     draw=function(frame,data)

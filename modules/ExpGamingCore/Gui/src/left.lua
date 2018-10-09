@@ -32,7 +32,7 @@ function left.add(obj)
     verbose('Created Left Gui: '..obj.name)
     setmetatable(obj,{__index=left._prototype,__call=function(self,player) if player then self:toggle{player=player,element={name=self.name}} else left.update(self.name) end end})
     Gui.data('left',obj.name,obj)
-    Gui.toolbar.add(obj.name,obj.caption,obj.tooltip,obj.toggle)
+    Gui.toolbar(obj.name,obj.caption,obj.tooltip,obj.toggle)
     return obj
 end
 
@@ -154,13 +154,13 @@ function left._prototype.toggle(event)
         elseif global.over_ride_left_can_open then 
             if is_type(Role,'table')  then
                 if Role.allowed(player,_left.name) then open = true
-                else open = {gui.unauthorized} end
+                else open = {'ExpGamingCore_Gui.unauthorized'} end
             else open = true end 
         else open = err end
     else
         if is_type(Role,'table')  then
             if Role.allowed(player,_left.name) then open = true 
-            else open = {gui.unauthorized} end
+            else open = {'ExpGamingCore_Gui.unauthorized'} end
         else open = true end
     end
     if open == true and left.style.visible ~= true then

@@ -38,7 +38,7 @@ local global = global{
 }
 
 -- Function Define
-Gui.left.add{
+ThisModule.Gui = Gui.left{
     name='science',
     caption='item/lab',
     tooltip={'ExpGamingInfo-Science.tooltip'},
@@ -100,4 +100,5 @@ Gui.left.add{
 script.on_event(defines.events.on_research_finished,function(event) Gui.left.update('science') end)
 
 -- Module Return
-return ThisModule
+-- when called will toogle the gui for that player, if no player it will update the gui
+return setmetatable(ThisModule,{_call=function(self,...) self.Gui(...) end})

@@ -25,7 +25,7 @@ local global = global{
 }
 
 -- Function Define
-local edit = Gui.inputs.add{
+local edit = Gui.inputs{
     name='tasklist-edit',
     type='button',
     caption='utility/rename_icon_normal'
@@ -45,7 +45,7 @@ local edit = Gui.inputs.add{
 end)
 
 local function _edit(frame)
-    local element = edit:draw(frame)
+    local element = edit(frame)
     element.style.height = 20
     element.style.width = 20
     local text_flow = element.parent.parent.text_flow
@@ -66,7 +66,7 @@ local function _edit(frame)
     end
 end
 
-local remove = Gui.inputs.add{
+local remove = Gui.inputs{
     name='tasklist-remove',
     type='button',
     caption='utility/remove'
@@ -83,7 +83,7 @@ local remove = Gui.inputs.add{
     Gui.left.update('tasklist',event.player_index)
 end)
 
-local add = Gui.inputs.add{
+local add = Gui.inputs{
     name='tasklist-add',
     type='button',
     caption='utility/add'
@@ -126,7 +126,7 @@ local function _tasks(player)
     end
 end
 
-Gui.left.add{
+ThisModule.Gui = Gui.left{
     name='tasklist',
     caption='utility/not_enough_repair_packs_icon',
     tooltip={'ExpGamingInfo-Tasklist.tooltip'},
@@ -169,10 +169,10 @@ Gui.left.add{
             if allowed then
                 _edit(button_flow)
                 if global._edit[player.index]._editing[i] then
-                    local element = remove:draw(button_flow)
+                    local element = remove(button_flow)
                     element.style.height = 30
                     element.style.width = 30
-                    local _element = add:draw(button_flow)
+                    local _element = add(button_flow)
                     _element.style.height = 30
                     _element.style.width = 30
                 end
@@ -188,7 +188,7 @@ Gui.left.add{
                 type='flow',
                 direction='horizontal'
             }
-            local element = add:draw(button_flow)
+            local element = add(button_flow)
             element.style.height = 20
             element.style.width = 20
         end
@@ -201,4 +201,6 @@ Gui.left.add{
     open_on_join=true
 }
 
-return ThisModule
+-- Module return
+-- when called it will toggle the gui for that player, if no player then it will update the gui
+return setmetatable(ThisModule,{__call=function(self,...) self.Gui(...) end})

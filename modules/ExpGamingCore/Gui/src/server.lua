@@ -1,15 +1,8 @@
---- Adds a objective version to custom guis.
--- @submodule ExpGamingCore.Gui
--- @alias Gui
--- @author Cooldude2606
--- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
-
---- This file will be loaded when ExpGamingCore.Command is present
+--- This file will be loaded when ExpGamingCore.Server is present
 -- @function _comment
 
-local Game = require('FactorioStdLib.Game')
-local Server = require('ExpGamingCore.Server')
-local Gui = Gui -- this is to force gui to remain in the ENV
+local Game = require('FactorioStdLib.Game@^0.8.0')
+local Server = require('ExpGamingCore.Server@^4.0.0')
 
 --- Adds a server thread that allows the camera follows to be toggled off and on
 -- @function __comment

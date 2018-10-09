@@ -91,7 +91,7 @@ local opption_drop_down = Gui.inputs.add_drop_down('opption-drop-down-polls',_op
     element.parent.answer.caption = 'Your Answer: '..selected
 end)
 
-local prev = Gui.inputs.add{
+local prev = Gui.inputs{
     type='button',
     name='prev-poll',
     caption='utility/hint_arrow_left'
@@ -105,7 +105,7 @@ local prev = Gui.inputs.add{
     draw_poll(parent.parent.poll_area)
 end)
 
-local next = Gui.inputs.add{
+local next = Gui.inputs{
     type='button',
     name='next-poll',
     caption='utility/hint_arrow_right'
@@ -132,7 +132,7 @@ local poll_option_input = Gui.inputs.add_text('poll-option-input',true,'Enter Op
     else options[element.parent.name].caption = text end
     if options.last.caption == element.parent.name then
         options.last.caption = tonumber(options.last.caption)+1
-        _self_referace_poll_option_input:draw(element.parent.parent.add{type='flow',name=options.last.caption}).style.minimal_width = 200
+        _self_referace_poll_option_input(element.parent.parent.add{type='flow',name=options.last.caption}).style.minimal_width = 200
     end
 end)
 _self_referace_poll_option_input = poll_option_input
@@ -142,13 +142,13 @@ local function poll_assembler(frame)
     local options = frame.add{type='flow',name='options'}
     options.style.visible = false
     options.add{type='label',name='last',caption='2'}
-    poll_question_input:draw(frame).style.minimal_width = 200
+    poll_question_input(frame).style.minimal_width = 200
     local flow = frame.add{type='flow',direction='vertical'}
-    poll_option_input:draw(flow.add{type='flow',name='1'}).style.minimal_width = 200
-    poll_option_input:draw(flow.add{type='flow',name='2'}).style.minimal_width = 200
+    poll_option_input(flow.add{type='flow',name='1'}).style.minimal_width = 200
+    poll_option_input(flow.add{type='flow',name='2'}).style.minimal_width = 200
 end
 
-local create_poll = Gui.inputs.add{
+local create_poll = Gui.inputs{
     type='button',
     name='create-poll',
     caption='utility/add'
@@ -182,7 +182,7 @@ local create_poll = Gui.inputs.add{
     end
 end)
 
-Gui.popup.add{
+ThisModule.Gui = Gui.popup{
     name='polls',
     caption={'polls.name'},
     draw=function(frame,data)
@@ -248,4 +248,5 @@ Gui.popup.add{
 -- Event Handlers Define
 
 -- Module Return
-return ThisModule
+-- when called it will toogle the left gui for this player
+return setmetatable(ThisModule,{__call=function(self,...) self.Gui(...) end})

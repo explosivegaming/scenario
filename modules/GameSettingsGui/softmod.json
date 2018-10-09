@@ -1,0 +1,21 @@
+{
+    "name": "GameSettingsGui",
+    "version": "4.0.0",
+    "type": "Module",
+    "description": "A gui for controlling game settings with sliders as well as some global commands.",
+    "location": "<blank>",
+    "keywords": [
+        "Gui",
+        "Game",
+        "Game Settings",
+        "Settings",
+        "Admin"
+    ],
+    "author": "Cooldude2606",
+    "contact": "Discord: Cooldude2606#5241",
+    "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+    "dependencies": {
+        "ExpGamingCore.Server": "^4.0.0",
+        "ExpGamingCore.Gui": "^4.0.0"
+    }
+}

@@ -8,6 +8,8 @@ Discord: https://discord.gg/r6dC2uK
 ]]
 --Please Only Edit Below This Line-----------------------------------------------------------
 
+-- to be removed as Ranking is not a thing now
+
 local get_player_info = get_player_info or function(player,frame)
     frame.add{
         type='label',
@@ -63,7 +65,7 @@ local role_drop_down = Gui.inputs.add_drop_down('rank-drop-down-rank-change',_ro
     element.parent.parent.role.caption = selected
 end)
 
-local set_role = Gui.inputs.add{
+local set_role = Gui.inputs{
     type='button',
     name='rank-change-set',
     caption={'rank-changer.set-rank'}
@@ -79,7 +81,7 @@ local set_role = Gui.inputs.add{
     Gui.center.clear(event)
 end)
 
-Gui.center.add{
+Gui.center{
     name='rank-changer',
     caption='utility/circuit_network_panel',
     tooltip={'rank-changer.tooltip'},
@@ -106,9 +108,9 @@ Gui.center.add{
         }
         label.style.single_line = false
         label.style.width = 200
-        online_check:draw(dropdowns)
-        player_drop_down:draw(dropdowns)
-        rank_drop_down:draw(dropdowns)
+        online_check(dropdowns)
+        player_drop_down(dropdowns)
+        rank_drop_down(dropdowns)
         local label = dropdowns.add{
             name='warning',
             type='label',
@@ -117,7 +119,7 @@ Gui.center.add{
         }
         label.style.single_line = false
         label.style.width = 200
-        set_role:draw(dropdowns)
+        set_role(dropdowns)
         frame.add{
             name='player',
             type='label',

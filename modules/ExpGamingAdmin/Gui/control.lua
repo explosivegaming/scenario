@@ -57,7 +57,7 @@ function AdminGui.draw(frame,filter_buttons)
         btn.style.width = 30
     end
     for name,button in pairs(AdminGui.buttons) do
-        if not filter_buttons or filter_buttons[name] then format(button:draw(frame)) end
+        if not filter_buttons or filter_buttons[name] then format(button(frame)) end
     end
     return frame.player
 end
@@ -113,7 +113,7 @@ local action_drop_down = Gui.inputs.add_drop_down('action-drop-down-rank-change'
     end
 end)
 
-local take_action = Gui.inputs.add{
+local take_action = Gui.inputs{
     type='button',
     name='admin-commands-take',
     caption={'ExpGamingAdmin.take-action'}
@@ -131,7 +131,7 @@ local take_action = Gui.inputs.add{
     Gui.center.clear(event)
 end)
 
-Admin.center = Gui.center.add{
+Admin.center = Gui.center{
     name='admin-commands',
     caption='utility/danger_icon',
     tooltip={'ExpGamingAdmin.tooltip'},
@@ -211,4 +211,5 @@ Admin.center = Gui.center.add{
 }
 
 -- Module Return
-return AdminGui 
+-- calling will draw the admin buttons to that frame
+return setmetatable(AdminGui,{__call=function(self,...) self.draw(...) end})

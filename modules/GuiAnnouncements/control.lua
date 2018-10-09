@@ -1,13 +1,20 @@
---[[
-Explosive Gaming
+--- Creates a gui for making and reciving announcements
+-- @module GuiAnnouncements@4.0.0
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
---Please Only Edit Below This Line-----------------------------------------------------------
+-- maybe make this not require Role and have it optinal
 
+-- Module Require
+local Game = require('FactorioStdLib.Game@^0.8.0')
+local Gui = require('ExpGamingCore.Gui@^4.0.0')
+local Role = require('ExpGamingCore.Role@^4.0.0')
+
+-- Module Define
+local module_verbose = false
+local ThisModule = {}
+
+-- Function Define
 local function _roles(player)
     local roles = {'Select Rank'}
     local _role = Role.get_highest(player)
@@ -25,7 +32,7 @@ local role_drop_down = Gui.inputs.add_drop_down('rank-drop-down-annoncements',_r
     else element.parent['send-annoncement'].style.visible = true end
 end)
 
-local send_popup = Gui.inputs.add{
+local send_popup = Gui.inputs{
     type='button',
     name='send-annoncement',
     caption='utility/export_slot'
@@ -45,7 +52,7 @@ local send_popup = Gui.inputs.add{
     end
 end)
 
-Gui.popup.add{
+ThisModule.Gui = Gui.popup{
     name='announcements',
     caption={'announcements.name'},
     draw=function(frame,data)
@@ -95,3 +102,7 @@ Gui.popup.add{
         }.style.visible = false
     end
 }
+
+-- Module return
+-- when called it will open the center gui for the player
+return setmetatable(ThisModule,{__call=function(self,...) self.Gui(...) end})

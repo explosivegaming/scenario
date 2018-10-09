@@ -121,7 +121,7 @@ function Admin.clear_reports(player,by_player,no_emit)
     end
 end
 
-local confirm_report = Gui.inputs.add{
+local confirm_report = Gui.inputs{
     type='button',
     name='admin-report-confirm',
     caption='utility/spawn_flag',
@@ -134,7 +134,7 @@ local confirm_report = Gui.inputs.add{
     Gui.center.clear(event.player_index)
 end)
 
-Admin.report_btn = Gui.inputs.add{
+Admin.report_btn = Gui.inputs{
     type='button',
     name='admin-report',
     caption='utility/spawn_flag',

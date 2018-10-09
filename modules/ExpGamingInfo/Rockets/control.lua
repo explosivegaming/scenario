@@ -27,7 +27,7 @@ local global = global{
 }
 
 -- Function Define
-Gui.left.add{
+ThisModule.Gui = Gui.left{
     name='rockets',
     caption='item/rocket-silo',
     tooltip={'ExpGamingInfo-Rockets.tooltip'},
@@ -100,4 +100,5 @@ Gui.left.add{
 script.on_event(defines.events.on_rocket_launched,function(event) Gui.left.update('rockets') end)
 
 -- Module Return
-return ThisModule
+-- when called will toggle the gui for that player, updates gui if no player given
+return setmetatable(ThisModule,{__call=function(self,...) self.Gui(...) end})

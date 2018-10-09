@@ -28,7 +28,7 @@ function center.add(obj)
     obj.tabs = {}
     obj._tabs = {}
     Gui.data('center',obj.name,obj)
-    Gui.toolbar.add(obj.name,obj.caption,obj.tooltip,obj.open)
+    Gui.toolbar(obj.name,obj.caption,obj.tooltip,obj.open)
     return obj
 end
 

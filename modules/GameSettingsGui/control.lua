@@ -1,13 +1,13 @@
---[[
-Explosive Gaming
+--- A gui for controlling game settings with sliders as well as some global commands.
+-- @module GameSettingsGui@4.0.0
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
---Please Only Edit Below This Line-----------------------------------------------------------
+-- Module Require
+local Server = require('ExpGamingCore.Server@^4.0.0')
+local Gui = require('ExpGamingCore.Gui@^4.0.0')
 
+-- Local Varibles
 --{type='slider',object='',key='',name='',min=x,max=y}
 --{type='function',object='',key='',name='',param={}}
 local basic_settings = {
@@ -46,6 +46,11 @@ local personal_settings = {
 
 local _root_list = {basic_settings=basic_settings,advanced_settings=advanced_settings,personal_settings=personal_settings}
 
+-- Module Define
+local module_verbose = false
+local ThisModule = {}
+
+-- Function Define
 local function _get_data(root_frame)
     local object = root_frame.name
     local key = root_frame.setting_name.caption
@@ -121,7 +126,7 @@ local function _draw_setting(frame,setting)
     }
     frame.add{
         type='label',
-        caption={'game-settings.effect-'..setting.name},
+        caption={'GameSettingsGui.effect-'..setting.name},
         style='caption_label'
     }
     frame.add{
@@ -130,7 +135,7 @@ local function _draw_setting(frame,setting)
         name='setting_name'
     }.style.visible = false
     if setting.type == 'slider' then
-        local slider = setting._loaded:draw(frame)
+        local slider = setting._loaded(frame)
         slider.style.width = 300
         local _caption = string.format('%.2f',slider.slider_value); if slider.slider_value > 2 then _caption = tostring(math.floor(slider.slider_value)) end
         frame.add{
@@ -139,44 +144,48 @@ local function _draw_setting(frame,setting)
             caption=_caption
         }
     elseif setting.type == 'function' then
-        are_you_sure:draw(frame)
+        are_you_sure(frame)
         local flow = frame.add{type='flow',name='sure'}
         flow.style.visible = false
         flow.add{
             type='label',
-            caption={'game-settings.sure'},
+            caption={'GameSettingsGui.sure'},
             style='bold_red_label'
         }
-        setting._loaded:draw(flow)
+        setting._loaded(flow)
     end
 end
 
-Gui.center.add{
+ThisModule.Gui = Gui.center{
     name='game-settings',
     caption='utility/no_building_material_icon',
-    tooltip={'game-settings.tooltip'}
-}:add_tab('basic',{'game-settings.basic-name'},{'game-settings.basic-name'},function(frame)
+    tooltip={'GameSettingsGui.tooltip'}
+}:add_tab('basic',{'GameSettingsGui.basic-name'},{'GameSettingsGui.basic-name'},function(frame)
     frame.add{
         type='label',
-        caption={'game-settings.basic-message'}
+        caption={'GameSettingsGui.basic-message'}
     }.style.single_line = false
     for _,setting in pairs(basic_settings) do
         _draw_setting(frame,setting)
     end
-end):add_tab('advanced',{'game-settings.advanced-name'},{'game-settings.advanced-tooltip'},function(frame)
+end):add_tab('advanced',{'GameSettingsGui.advanced-name'},{'GameSettingsGui.advanced-tooltip'},function(frame)
     frame.add{
         type='label',
-        caption={'game-settings.advanced-message'}
+        caption={'GameSettingsGui.advanced-message'}
     }.style.single_line = false
     for _,setting in pairs(advanced_settings) do
         _draw_setting(frame,setting)
     end
-end):add_tab('personal',{'game-settings.personal-name'},{'game-settings.personal-tooltip'},function(frame)
+end):add_tab('personal',{'GameSettingsGui.personal-name'},{'GameSettingsGui.personal-tooltip'},function(frame)
     frame.add{
         type='label',
-        caption={'game-settings.personal-message'}
+        caption={'GameSettingsGui.personal-message'}
     }.style.single_line = false
     for _,setting in pairs(personal_settings) do
         _draw_setting(frame,setting)
     end
 end)
+
+-- Module return
+-- when called it will open the center gui for the player
+return setmetatable(ThisModule,{__call=function(self,...) self.Gui(...) end})

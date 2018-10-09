@@ -4,7 +4,6 @@
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
 local Game = require('FactorioStdLib.Game@^0.8.0')
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
 local Role -- ExpGamingCore.Role@^4.0.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
 

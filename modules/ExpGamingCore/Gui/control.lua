@@ -8,7 +8,6 @@ local Game = require('FactorioStdLib.Game')
 local Color = require('FactorioStdLib.Color')
 
 local Gui = {}
-local Gui_data = {}
 local global = global()
 --- Used to set and get data about different guis
 -- @usage Gui.data[location] -- returns the gui data for that gui location ex center
@@ -143,13 +142,14 @@ script.on_event('on_tick', function(event)
 		Gui.left.update()
     end
     if loaded_modules['ExpGamingCore.Server'] then return end
+
     if global.cams and is_type(global.cams,'table') and #global.cams > 0 then
         local update = 4
         if global.cam_index >= #global.cams then global.cam_index = 1 end
         if update > #global.cams then update = #global.cams end
         for cam_offset = 0,update do
             local _cam = global.cams[global.cam_index]
-            if not _cam then return end
+            if not _cam then break end
             if not _cam.cam.valid then table.remove(global.cams,global.cam_index)
             elseif not _cam.entity.valid then table.remove(global.cams,global.cam_index)
             else _cam.cam.position = _cam.entity.position if not _cam.surface then _cam.cam.surface_index = _cam.entity.surface.index end global.cam_index = global.cam_index+1
@@ -164,11 +164,11 @@ script.on_event('on_player_respawned',function(event)
     if global.players and is_type(global.players,'table') and #global.players > 0 and global.players[event.player_index] then
         local remove = {}
         for index,cam in pairs(global.players[event.player_index]) do
-            Gui.cam_link{cam=cam,entity=Game.get_player(event).character}
-            if not cam.valid then table.insert(remove,index) end
+            if cam.valid then table.insert(global.cams,{cam=cam,entity=player.character,surface=player.surface})
+            else table.insert(remove,index) end
         end
-        for _,index in pairs(remove) do
-            table.remove(global.players[event.player_index],index)
+        for n,index in pairs(remove) do
+            table.remove(global.players[event.player_index],index-n+1)
         end
     end
 end)
