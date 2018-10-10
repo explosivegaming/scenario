@@ -26,6 +26,7 @@ local advanced_settings = {
     {type='slider',object='force',key='character_inventory_slots_bonus',name='inventory-size',min=0,max=1000},
     {type='slider',object='force',key='mining_drill_productivity_bonus',name='mining-prod',min=0,max=10},
     {type='slider',object='game',key='speed',name='game-speed',min=0.01,max=5},
+    {type='function',object='surface',key='clear_pollution',name='clear-pollution'},
     {type='function',object='game',key='server_save',name='save'},
     {type='function',object='force',key='reset_technology_effects',name='reload-effects'},
     {type='function',object='enemy',key='kill_all_units',name='kill-biters'},
@@ -59,7 +60,7 @@ local function _get_data(root_frame)
     end
 end
 
-local function _object_list(player) return {game=game,player=player,force=player.force,enemy=game.forces['enemy']} end
+local function _object_list(player) return {game=game,player=player,force=player.force,enemy=game.forces['enemy'],surface=player.surface} end
 
 for name,group in pairs(_root_list) do
     for key,setting in pairs(group) do
@@ -86,7 +87,9 @@ for name,group in pairs(_root_list) do
                 local data = _get_data(element.parent.parent)
                 local objects = _object_list(player)
                 local object = objects[data.object]
-                pcall(object[data.key],unpack(data.params))
+                -- if key is a function it will run the function rather than attempt to get a function
+                if is_type(data.key,'function') then pcall(data.key,object,unpack(data.params))
+                else pcall(object[data.key],unpack(data.params)) end
                 Server.new_thread{
                     timeout=60,
                     data=element
