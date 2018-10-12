@@ -1,0 +1,17 @@
+{
+    "name": "HealthIndicator",
+    "version": "1.0.1",
+    "type": "Module",
+    "description": "In game text float to desplay health to other players.",
+    "location": "<blank>",
+    "keywords": [
+        "Health",
+        "Overlay",
+        "Text",
+        "Damage"
+    ],
+    "author": " Ps7cho (converted by Cooldude2606)",
+    "contact": "Discord: Cooldude2606#5241",
+    "license": "https://opensource.org/licenses/MIT",
+    "dependencies": {}
+}

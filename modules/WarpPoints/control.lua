@@ -1,25 +1,17 @@
---[[
-Explosive Gaming
+--- Creates a warp point system which makes moving around large maps easier.
+-- @module WarpPoints@4.0.0
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
+-- @alais ThisModule 
 
-This file can be used with permission but this and the credit below must remain in the file.
-Contact a member of management on our discord to seek permission to use our code.
-Any changes that you may make to the code are yours but that does not make the script yours.
-Discord: https://discord.gg/r6dC2uK
-]]
---Please Only Edit Below This Line-----------------------------------------------------------
+-- Module Require
+local Gui = require('ExpGamingCore.Gui@^4.0.0')
+local Game = require('FactorioStdLib.Game@^0.8.0')
+local Role -- ExpGamingCore.Role@^4.0.0
 
--- Needs updating to new gui core
-
-local warp_tiles = {
-    {-3,-2},{-3,-1},{-3,0},{-3,1},{-3,2},{3,-2},{3,-1},{3,0},{3,1},{3,2},
-    {-2,-3},{-1,-3},{0,-3},{1,-3},{2,-3},{-2,3},{-1,3},{0,3},{1,3},{2,3}
-}
-
-local warp_entities = {
-    {'small-lamp',-3,-2},{'small-lamp',-3,2},{'small-lamp',3,-2},{'small-lamp',3,2},
-    {'small-lamp',-2,-3},{'small-lamp',2,-3},{'small-lamp',-2,3},{'small-lamp',2,3},
-    {'small-electric-pole',-3,-3},{'small-electric-pole',3,3},{'small-electric-pole',-3,3},{'small-electric-pole',3,-3}
-}
+-- Local Varibles
+local warp_tiles = require(module_path..'/src/warp_tiles')
+local warp_entities = require(module_path..'/src/warp_entities')
 
 local warp_radius = 4
 local spawn_warp_scale = 5
@@ -28,21 +20,37 @@ local warp_limit = 60
 local warp_item = 'discharge-defense-equipment'
 local global_offset = {x=0,y=0}
 
-local function _warps(reset)
-    global.addons = not reset and global.addons or {}
-    global.addons.warps = not reset and global.addons.warps or {warps={},cooldowns={}}
-    return global.addons.warps
-end
+-- Module Define
+local global
+local module_verbose = false
+local ThisModule = {
+    on_init=function(self)
+        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Command@^4.0.0'] then require(module_path..'/src/commands',{self=self,warps=global}) end
+    end
+}
 
-local function remove_warp_point(name)
-    local warp = _warps().warps[name]
+-- Global Define
+global = global{
+    warps={}, -- 0,0 is always a warp
+    cooldowns={}
+}
+
+-- Function Define
+
+--- Removes a warp point from the list, and then updates the gui
+-- @usage ThisModule.remove_warp_point(name) -- name cant be spawn
+-- @tparam string name the name of the warp point
+function ThisModule.remove_warp_point(name)
+    local warp = global.warps[name]
     if not warp then return end
     local surface =  warp.surface
     local offset = warp.position
     local tiles = {}
     local tiles = {}
-    for x = -warp_radius-2, warp_radius+2 do
-        for y = -warp_radius-2, warp_radius+2 do
+    -- clears the area where the warp was
+    for x = -warp_radius, warp_radius do
+        for y = -warp_radius, warp_radius do
             if x^2+y^2 < (warp_radius+1)^2 then
                 table.insert(tiles,{name=warp.old_tile,position={x+offset.x,y+offset.y}})
                 local entities = surface.find_entities_filtered{area={{x+offset.x-1,y+offset.y-1},{x+offset.x,y+offset.y}}}
@@ -52,20 +60,26 @@ local function remove_warp_point(name)
     end
     surface.set_tiles(tiles)
     if warp.tag.valid then warp.tag.destroy() end
-    _warps().warps[name] = nil
-    Gui.left.update('warp-list')
+    global.warps[name] = nil
+    ThisModule.Gui()
 end
 
-local function make_warp_point(position,surface,force,name)
-    local warp = _warps().warps[name]
+--- Adds a warp point from the list, and then updates the gui
+-- @usage ThisModule.make_warp_point({x=10,y=10},surface,force,name)
+-- @tparam table position the position of the new warp point
+-- @tparam surface surface the surface that the warp point is on
+-- @tparam force force the force that the warp point will belong to
+-- @tparam string name the name of the warp point to be made
+function ThisModule.make_warp_point(position,surface,force,name)
+    local warp = global.warps[name]
     if warp then return end; warp = nil
     local offset = {x=math.floor(position.x),y=math.floor(position.y)}
     local old_tile = surface.get_tile(offset).name
     local base_tiles = {}
     local tiles = {}
     -- this makes a base plate to make the warp point
-    for x = -warp_radius-2, warp_radius+2 do
-        for y = -warp_radius-2, warp_radius+2 do
+    for x = -warp_radius, warp_radius do
+        for y = -warp_radius, warp_radius do
             if x^2+y^2 < warp_radius^2 then
                 table.insert(base_tiles,{name=warp_tile,position={x+offset.x,y+offset.y}})
             end
@@ -81,61 +95,51 @@ local function make_warp_point(position,surface,force,name)
         local entity = surface.create_entity{name=entity[1],position={entity[2]+offset.x+global_offset.x,entity[3]+offset.y+global_offset.y},force='neutral'}
         entity.destructible = false; entity.health = 0; entity.minable = false; entity.rotatable = false
     end
+    -- creates a tag on the map for the wap point
     local tag = force.add_chart_tag(surface,{
         position={offset.x+0.5,offset.y+0.5},
         text='Warp: '..name,
         icon={type='item',name=warp_item}
     })
-    _warps().warps[name] = {tag=tag,surface=surface,position=tag.position,old_tile=old_tile}
-    local _temp = {Spawn=_warps().warps.Spawn}
-    _warps().warps.Spawn = nil
-    for name,data in pairs(table.keysort(_warps().warps)) do _temp[name] = data end
-    _warps().warps = _temp
-    Gui.left.update('warp-list')
+    global.warps[name] = {tag=tag,surface=surface,position=tag.position,old_tile=old_tile}
+    local _temp = {Spawn=global.warps.Spawn}
+    global.warps.Spawn = nil
+    for name,data in pairs(table.keysort(global.warps)) do _temp[name] = data end
+    global.warps = _temp
+    ThisModule.Gui()
 end
 
-commands.add_command('make-warp', 'Make a warp point at your location', {'name',true}, function(event,args)
-    if not game.player then return end
-    local position = game.player.position
-    local name = args.name
-    if game.player.gui.top[name] then player_return({'warp-system.name-used'},defines.textcolor.med) return commands.error end
-    if _warps().warps[name] then player_return({'warp-system.name-used'},defines.textcolor.med) return commands.error end
-    if position.x^2 + position.y^2 < 100 then player_return({'warp-system.too-close'},defines.textcolor.med) return commands.error end
-    -- to do add a test for all warps
-    make_warp_point(position,game.player.surface,game.player.force,name)
-end)
-
-local remove_warp = Gui.inputs.add{
+local remove_warp = Gui.inputs{
     type='button',
     name='remove-warp-point',
     caption='utility/remove',
     tooltip={'warp-system.remove-tooltip'}
 }:on_event('click',function(event)
     local name = event.element.parent.name
-    remove_warp_point(name)
+    ThisModule.remove_warp_point(name)
 end)
 
-local go_to_warp = Gui.inputs.add{
+local go_to_warp = Gui.inputs{
     type='button',
     name='go-to-warp-point',
     caption='utility/export_slot',
     tooltip={'warp-system.go-to-tooltip'}
 }:on_event('click',function(event)
     local player = Game.get_player(event)
-    local cooldown = _warps().cooldowns[event.player_index] or 0
-    local warp = _warps().warps[event.element.parent.name]
+    local cooldown = global.cooldowns[event.player_index] or 0
+    local warp = global.warps[event.element.parent.name]
     if cooldown > 0 then player_return({'warp-system.cooldown',cooldown},nil,event) return end
     if player.vehicle then player.vehicle.set_driver(nil) end
     if player.vehicle then player.vehicle.set_passenger(nil) end
     if player.vehicle then return end
     player.teleport(warp.surface.find_non_colliding_position('player',warp.position,32,1),warp.surface)
-    if not Role.allowed(player,'always-warp') then 
+    if not Role and not player.admin or Role and not Role.allowed(player,'always-warp') then 
         event.element.parent.parent.parent.parent.style.visible = false
-        _warps().cooldowns[event.player_index] = warp_limit
+        global.cooldowns[event.player_index] = warp_limit
     end
 end)
 
-Gui.left.add{
+ThisModule.Gui = Gui.left{
     name='warp-list',
     caption='item/'..warp_item,
     tooltip={'warp-system.tooltip'},
@@ -154,7 +158,7 @@ Gui.left.add{
             type='table',
             column_count=2
         }
-        for name,warp in pairs(_warps().warps) do
+        for name,warp in pairs(global.warps) do
             if not warp.tag or not warp.tag.valid then
                 player.force.add_chart_tag(warp.surface,{
                     position=warp.position,
@@ -171,18 +175,18 @@ Gui.left.add{
                 type='flow',
                 name=name
             }
-            local btn = go_to_warp:draw(_flow)
+            local btn = go_to_warp(_flow)
             btn.style.height = 20
             btn.style.width = 20
-            if Role.allowed(player,'make-warp') and name ~= 'Spawn' then
-                local btn = remove_warp:draw(_flow)
+            if not Role and player.admin and name ~= 'Spawn' or Role and Role.allowed(player,'make-warp') and name ~= 'Spawn' then
+                local btn = remove_warp(_flow)
                 btn.style.height = 20
                 btn.style.width = 20
             end
         end
-        local cooldown = _warps().cooldowns[player.index] or 0
+        local cooldown = global.cooldowns[player.index] or 0
         if cooldown > 0 then frame.style.visible = false return
-        elseif Role.allowed(player,'always-warp') then return
+        elseif not Role and player.admin or Role and Role.allowed(player,'always-warp') then return
         elseif player.surface.get_tile(player.position).name == warp_tile
             and player.surface.name == 'nauvis' 
             then return
@@ -190,8 +194,8 @@ Gui.left.add{
         else frame.style.visible = false end
     end,
     can_open=function(player)
-        local cooldown = _warps().cooldowns[player.index] or 0
-        if Role.allowed(player,'always-warp') then return true
+        local cooldown = global.cooldowns[player.index] or 0
+        if not Role and player.admin or Role and Role.allowed(player,'always-warp') then return true
         elseif player.surface.get_tile(player.position).name == warp_tile
         and player.surface.name == 'nauvis' 
         then return true
@@ -202,30 +206,31 @@ Gui.left.add{
     open_on_join=true
 }
 
-Event.register(defines.events.on_tick,function(event)
+-- Event Handlers Define
+script.on_event(defines.events.on_tick,function(event)
     if not (event.tick % 60 == 0) then return end
     for index,time in pairs(_warps().cooldowns) do
         if time > 0 then
-            _warps().cooldowns[index] = time-1 
-            if _warps().cooldowns[index] == 0 then player_return({'warp-system.cooldown-zero'},defines.textcolor.low,index) end
+            global.cooldowns[index] = time-1 
+            if global.cooldowns[index] == 0 then player_return({'warp-system.cooldown-zero'},defines.textcolor.low,index) end
         end
     end
 end)
 
-Event.register(defines.events.on_player_changed_position, function(event)
+script.on_event(defines.events.on_player_changed_position, function(event)
     local player = Game.get_player(event)
-    local cooldown = _warps().cooldowns[player.index] or 0
+    local cooldown = global.cooldowns[player.index] or 0
     local tile = player.surface.get_tile(player.position).name
-    if not Role.allowed(player,'always-warp') and cooldown == 0 then
+    if not Role and player.admin or Role and not Role.allowed(player,'always-warp') and cooldown == 0 then
         if tile == warp_tile and player.surface.name == 'nauvis' then 
-            mod_gui.get_frame_flow(player)['warp-list'].style.visible = true
+            ThisModule.Gui:open(player)
         elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then 
-            mod_gui.get_frame_flow(player)['warp-list'].style.visible = true
-        else mod_gui.get_frame_flow(player)['warp-list'].style.visible = false end
+            ThisModule.Gui:open(player)
+        else ThisModule.Gui:close(player) end
     end
 end)
 
-Event.register(defines.events.on_player_created, function(event)
+script.on_event(defines.events.on_player_created, function(event)
     if event.player_index == 1 then
         local player = Game.get_player(event)
         player.force.chart(player.surface, {{player.position.x - 20, player.position.y - 20}, {player.position.x + 20, player.position.y + 20}})
@@ -234,6 +239,9 @@ Event.register(defines.events.on_player_created, function(event)
             text='Warp: Spawn',
             icon={type='item',name=warp_item}
         })
-        _warps().warps['Spawn'] = {tag=tag,surface=player.surface,position={0,0}}
+        global.warps['Spawn'] = {tag=tag,surface=player.surface,position={0,0}}
     end
 end)
+
+-- Module Return
+return ThisModule 

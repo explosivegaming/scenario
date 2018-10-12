@@ -30,9 +30,9 @@ function left.add(obj)
     if not is_type(obj,'table') then return end    
     if not is_type(obj.name,'string') then return end
     verbose('Created Left Gui: '..obj.name)
-    setmetatable(obj,{__index=left._prototype,__call=function(self,player) if player then self:toggle{player=player,element={name=self.name}} else left.update(self.name) end end})
+    setmetatable(obj,{__index=left._prototype,__call=function(self,player) if player then self:toggle(player) else left.update(self.name) end end})
     Gui.data('left',obj.name,obj)
-    Gui.toolbar(obj.name,obj.caption,obj.tooltip,obj.toggle)
+    Gui.toolbar(obj.name,obj.caption,obj.tooltip,function(event) obj:toggle(event) end)
     return obj
 end
 
@@ -47,10 +47,7 @@ function left.update(frame,players)
             local frames = Gui.data.left or {}
             if frame then frames = {[frame]=frames[frame]} or {} end
             for name,left in pairs(frames) do
-                if _left then
-                    local fake_event = {player_index=player.index,element={name=name}}
-                    left.open(fake_event)
-                end
+                if _left then left:first_open(player) end
             end
         end
     else
@@ -67,8 +64,7 @@ function left.update(frame,players)
             }:on_event('resolve',function(thread)
                 for name,left in pairs(thread.data.frames) do
                     if left then
-                        local fake_event = {player_index=thread.data.player.index,element={name=name}}
-                        left.open(fake_event)
+                        left:first_open(thread.data.player)
                     end
                 end
             end):queue()
@@ -79,22 +75,20 @@ end
 --- Used to open the left gui of every player
 -- @usage Gui.left.open('foo')
 -- @tparam string left_name this is the gui that you want to open
-function left.open(left_name)
+-- @tparam[opt] LuaPlayer the player to open the gui for
+function left.open(left_name,player)
+    local players = player and {player} or game.connected_players
     local _left = Gui.data.left[left_name]
     if not _left then return end
     if not Server or not Server._thread then
-        for _,player in pairs(game.connected_players) do
-            local left_flow = mod_gui.get_frame_flow(player)
-            if left_flow[_left.name] then left_flow[_left.name].style.visible = true end
-        end
+        for _,player in pairs(players) do _left:open(player) end
     else
         Server.new_thread{
-            data={players=game.connected_players}
+            data={players=players}
         }:on_event('tick',function(thread)
             if #thread.data.players == 0 then thread:close() return end
             local player = table.remove(thread.data.players,1)
-            local left_flow = mod_gui.get_frame_flow(player)
-            if left_flow[_left.name] then left_flow[_left.name].style.visible = true end
+            _left:open(player)
         end):open()
     end
 end
@@ -102,49 +96,73 @@ end
 --- Used to close the left gui of every player
 -- @usage Gui.left.close('foo')
 -- @tparam string left_name this is the gui that you want to close
-function left.close(left_name)
+-- @tparam[opt] LuaPlayer the player to close the gui for
+function left.close(left_name,player)
+    local players = player and {player} or game.connected_players
     local _left = Gui.data.left[left_name]
     if not _left then return end
-    if not Server or not Server._thread then
-        for _,player in pairs(game.connected_players) do
-            local left_flow = mod_gui.get_frame_flow(player)
-            if left_flow[_left.name] then left_flow[_left.name].style.visible = false end
-        end
+    if not Server or not Server._thread or player then
+        for _,player in pairs(players) do _left:close(player) end
     else
         Server.new_thread{
-            data={players=game.connected_players}
+            data={players=players}
         }:on_event('tick',function(thread)
             if #thread.data.players == 0 then thread:close() return end
             local player = table.remove(thread.data.players,1)
-            local left_flow = mod_gui.get_frame_flow(player)
-            if left_flow[_left.name] then left_flow[_left.name].style.visible = false end
+            _left:close(player)
         end):open()
     end
 end
 
--- this is used to draw the gui for the first time (these guis are never destoryed), used by the script
-function left._prototype.open(event)
+
+--- Used to force the gui open for the player
+-- @usage left:open(player)
+-- @tparam luaPlayer player the player to open the gui for
+function left._prototype:open(player)
     local player = Game.get_player(event)
-    local _left = Gui.data.left[event.element.name]
     local left_flow = mod_gui.get_frame_flow(player)
-    local frame = nil
-    if left_flow[_left.name] then 
-        frame = left_flow[_left.name] 
-        frame.clear()
-    else 
-        frame = left_flow.add{type='frame',name=_left.name,style=mod_gui.frame_style,caption=_left.caption,direction='vertical'}
-        frame.style.visible = false
-        if is_type(_left.open_on_join,'boolean') then frame.style.visible = _left.open_on_join end
-    end
-    if is_type(_left.draw,'function') then _left.draw(frame) else frame.style.visible = false error('No Callback On '.._left.name) end
+    if not left_flow[_left.name] then self:first_open(player) end
+    left_flow[_left.name].style.visible = true
 end
 
--- this is called when the toolbar button is pressed
-function left._prototype.toggle(event)
+--- Used to force the gui closed for the player
+-- @usage left:open(player)
+-- @tparam luaPlayer player the player to close the gui for
+function left._prototype:close(player)
     local player = Game.get_player(event)
-    local _left = Gui.data.left[event.element.name]
     local left_flow = mod_gui.get_frame_flow(player)
-    if not left_flow[_left.name] then _left.open(event) end
+    if not left_flow[_left.name] then self:first_open(player) end
+    left_flow[_left.name].style.visible = false
+end
+
+--- When the gui is first made or is updated this function is called, used by the script
+-- @usage left:first_open(player) -- returns the frame
+-- @tparam LuaPlayer player the player to draw the gui for
+-- @treturn LuaFrame the frame made/updated
+function left._prototype:first_open(player)
+    local player = Game.get_player(player)
+    local left_flow = mod_gui.get_frame_flow(player)
+    local frame = nil
+    if left_flow[self.name] then 
+        frame = left_flow[self.name] 
+        frame.clear()
+    else 
+        frame = left_flow.add{type='frame',name=self.name,style=mod_gui.frame_style,caption=self.caption,direction='vertical'}
+        frame.style.visible = false
+        if is_type(self.open_on_join,'boolean') then frame.style.visible = self.open_on_join end
+    end
+    if is_type(self.draw,'function') then self.draw(frame) else frame.style.visible = false error('No Callback On '.._left.name) end
+    return frame
+end
+
+--- Toggles the visiblity of the gui based on some conditions
+-- @usage left:toggle(player) -- returns new state
+-- @tparam LuaPlayer player the player to toggle the gui for, remember there are condition which need to be met
+-- @treturn boolean the new state that the gui is in
+function left._prototype:toggle(player)
+    local player = Game.get_player(player)
+    local left_flow = mod_gui.get_frame_flow(player)
+    if not left_flow[_left.name] then _left:first_open(player) end
     local left = left_flow[_left.name]
     local open = false
     if is_type(_left.can_open,'function') then
@@ -170,6 +188,7 @@ function left._prototype.toggle(event)
     end
     if open == false then player_return({'ExpGamingCore_Gui.cant-open-no-reason'},defines.textcolor.crit,player) player.play_sound{path='utility/cannot_build'} 
     elseif open ~= true then player_return({'ExpGamingCore_Gui.cant-open',open},defines.textcolor.crit,player) player.play_sound{path='utility/cannot_build'} end
+    return left.style.visible
 end
 
 left.on_player_joined_game = function(event)
@@ -177,8 +196,7 @@ left.on_player_joined_game = function(event)
     local player = Game.get_player(event)
     local frames = Gui.data.left or {}
     for name,left in pairs(frames) do
-        local fake_event = {player_index=player.index,element={name=name}}
-        left.open(fake_event)
+        left:first_open(player)
     end
 end
 

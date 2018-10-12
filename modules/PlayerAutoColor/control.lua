@@ -1,7 +1,18 @@
+--- Assigns random colours to players (larger range than default) and allows predefined colours for users.
+-- @module PlayerAutoColor@4.0.0
+-- @author Cooldude2606
+-- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
+-- @alais ThisModule 
 
--- made by cooldude - we are lazy and we want to always have the same colour, also uses std lib to auto assign random colours
+-- Module Require
+local Color = require('FactorioStdLib@Color@^0.8.0')
 
-local default_colours = {
+-- Module Define
+local module_verbose = false
+local ThisModule = {}
+
+-- Global Define
+local global = global{
 	BADgamerNL={r=255,g=20,b=147},
 	arty714={r=150,g=68,b=161},
 	Cooldude2606={r=57,g=192,b=207},
@@ -16,6 +27,7 @@ local default_colours = {
 	UUBlueFire={r=0,g=204,b=255}
 }
 
+-- Event Handlers Define
 Event.register(defines.events.on_player_created, function(event)
     local player = game.players[event.player_index]
 	local colours = table.keys(defines.color)
@@ -30,3 +42,6 @@ Event.register(defines.events.on_player_created, function(event)
 	end
 	player.chat_color = player.color
 end)
+
+-- Module Return
+return ThisModule 

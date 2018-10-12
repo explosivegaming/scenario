@@ -1,0 +1,17 @@
+{
+    "name": "SpawnArea",
+    "version": "4.0.0",
+    "type": "Module",
+    "description": "Creates a safe spawn area with chests and auto refilling turrets.",
+    "location": "<blank>",
+    "keywords": [
+        "Spawn",
+        "Safe",
+        "Turrets",
+        "Auto Refill"
+    ],
+    "author": "Cooldude2606",
+    "contact": "Discord: Cooldude2606#5241",
+    "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+    "dependencies": {}
+}

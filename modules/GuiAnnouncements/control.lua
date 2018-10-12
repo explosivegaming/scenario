@@ -2,6 +2,7 @@
 -- @module GuiAnnouncements@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
+-- @alais ThisModule 
 
 -- maybe make this not require Role and have it optinal
 
