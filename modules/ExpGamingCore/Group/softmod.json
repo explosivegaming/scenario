@@ -14,6 +14,7 @@
     ],
     "dependencies": {
         "FactorioStdLib": "^0.8.0",
+        "ExpGamingCore.Server": "?^4.0.0",
         "ExpGamingLib": "^4.0.0"
     },
     "collection": "ExpGamingCore_4.0.0"

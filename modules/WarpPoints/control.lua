@@ -21,6 +21,7 @@ local warp_item = 'discharge-defense-equipment'
 local global_offset = {x=0,y=0}
 
 -- Module Define
+local _global = global
 local global
 local module_verbose = false
 local ThisModule = {
@@ -31,7 +32,7 @@ local ThisModule = {
 }
 
 -- Global Define
-global = global{
+global = _global{
     warps={}, -- 0,0 is always a warp
     cooldowns={}
 }
@@ -209,7 +210,7 @@ ThisModule.Gui = Gui.left{
 -- Event Handlers Define
 script.on_event(defines.events.on_tick,function(event)
     if not (event.tick % 60 == 0) then return end
-    for index,time in pairs(_warps().cooldowns) do
+    for index,time in pairs(global.cooldowns) do
         if time > 0 then
             global.cooldowns[index] = time-1 
             if global.cooldowns[index] == 0 then player_return({'warp-system.cooldown-zero'},defines.textcolor.low,index) end

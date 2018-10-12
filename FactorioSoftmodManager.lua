@@ -466,7 +466,9 @@ Manager.error = setmetatable({
             rawset(tbl,'__crash',true)
             rawget(tbl,'__error_call')(err,2)
         end
-        rawget(tbl,'__error_call')(err,2)
+        local args = {...}
+        local trace = args[1] and type(args[1]) == 'number' and args[1] or 2
+        rawget(tbl,'__error_call')(err,trace)
     end,
     __index=function(tbl,key)
         -- this allows the __error_handler to be called from many different names

@@ -167,7 +167,7 @@ end
 function Role.get_highest(options)
     local player = Game.get_player(options)
     if player then options = Role.get(player) end
-    if not type_error(options,'table','Invalid argument #1 to Role.highest, options is not a table of roles.') then return end
+    if not type_error(options,'table','Invalid argument #1 to Role.get_highest, options is not a table of roles.') then return end
     local highest_index = -1
     local highest
     for _,role_name in pairs(options) do

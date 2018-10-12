@@ -1,4 +1,4 @@
-local paths = {
+return {
     -- ['tile name'] = {health,convert to}
     -- the greater health is the lower the chance it will be down graded, must be grater than 0
     ['refined-concrete']={70,'concrete'},
