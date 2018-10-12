@@ -147,7 +147,7 @@ function left._prototype:close(player)
     left_flow[self.name].style.visible = false
     local count = 0
     for _,child in pairs(left_flow.children) do if child.style.visible then count = count+1 end if count > 1 then break end end
-    if count == 1 then left_flow['gui-left-hide'].style.visible = false end
+    if count == 1 and left_flow['gui-left-hide'] then left_flow['gui-left-hide'].style.visible = false end
 end
 
 --- When the gui is first made or is updated this function is called, used by the script
@@ -203,7 +203,7 @@ function left._prototype:toggle(player)
         left.style.visible = false
         local count = 0
         for _,child in pairs(left_flow.children) do if child.style.visible then count = count+1 end if count > 1 then break end end
-        if count == 1 then left_flow['gui-left-hide'].style.visible = false end
+        if count == 1 and left_flow['gui-left-hide'] then left_flow['gui-left-hide'].style.visible = false end
     end
     if open == false then player_return({'ExpGamingCore_Gui.cant-open-no-reason'},defines.textcolor.crit,player) player.play_sound{path='utility/cannot_build'} 
     elseif open ~= true then player_return({'ExpGamingCore_Gui.cant-open',open},defines.textcolor.crit,player) player.play_sound{path='utility/cannot_build'} end

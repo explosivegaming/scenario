@@ -12,7 +12,7 @@ local Game = require('FactorioStdLib.Game@^0.8.0')
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Sync^4.0.0'] then require(module_path..'/src/sync',{Gui=Gui}) end
+        if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then require(module_path..'/src/sync') end
     end
 }
 

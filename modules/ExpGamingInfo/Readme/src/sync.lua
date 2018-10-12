@@ -1,5 +1,5 @@
 local Sync = require('ExpGamingCore.Sync@^4.0.0')
-local Gui = Gui
+local Gui = require('ExpGamingCore.Gui@^4.0.0')
 
 Sync.add_to_gui(Gui.inputs.add_button('readme-sync-guildlines','View Guildlines','View the guildlines in the readme',function(player,element)
     Gui.center.open_tab(player,'readme','guildlines')

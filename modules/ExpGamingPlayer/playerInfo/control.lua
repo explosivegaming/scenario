@@ -38,7 +38,7 @@ local function get_player_info(player,frame,add_cam)
         if Role then
             frame.add{type='label',caption={'ExpGamingPlayer-playerInfo.group',_player.group}}
             frame.add{type='label',caption={'ExpGamingPlayer-playerInfo.role',_player.highest_role}}
-            frame.add{type='label',caption={'ExpGamingPlayer-playerInfo.roles',table.concat(_player.roles,', ')}}
+            frame.add{type='label',caption={'ExpGamingPlayer-playerInfo.roles',table.concat(_player.roles,', ')}}.style.single_line = false
         end
         if add_cam then
             Gui.cam_link{entity=player.character,frame=frame,width=200,height=150,zoom=0.5,respawn_open=true}

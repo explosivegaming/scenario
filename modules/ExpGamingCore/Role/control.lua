@@ -483,7 +483,6 @@ end)
 
 script.on_event(defines.events.on_player_joined_game,function(event)
     local player = Game.get_player(event)
-    log(serpent.line(event))
     local highest = Role.get_highest(player) or Role.meta.default
     Group.assign(player,highest.group)
     player.tag=highest.tag
