@@ -27,7 +27,7 @@ local Role = {
     }),
     on_init=function()
         if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require('ExpGamingCore.Server@^4.0.0').add_module_to_interface('Role','ExpGamingCore.Role') end
-        if loaded_modules['ExpGamingCore.Commands@^4.0.0'] then require(module_path..'/src/commands',{Role=Role}) end
+        if loaded_modules['ExpGamingCore.Command@^4.0.0'] then require(module_path..'/src/commands',{Role=Role}) end
     end,
     on_post=function(self)
         -- loads the roles in config

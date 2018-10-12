@@ -16,7 +16,7 @@
     "dependencies": {
         "ExpGamingAdmin.AdminLib": "^4.0.0",
         "ExpGamingCore.Server": "^4.0.0",
-        "ExpGamingCore.Ranking": "^4.0.0",
+        "ExpGamingCore.Role": "^4.0.0",
         "FactorioStdLib.Game": "^0.8.0",
         "FactorioStdLib.Color": "^0.8.0",
         "ExpGamingAdmin.Reports": "?^4.0.0",

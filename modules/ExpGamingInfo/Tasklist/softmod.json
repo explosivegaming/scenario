@@ -16,6 +16,6 @@
     "dependencies": {
         "ExpGamingCore.Gui": "^4.0.0",
         "ExpGamingCore.Role": "^4.0.0",
-        "FactoiorStdLib.Game": "^0.8.0"
+        "FactorioStdlib.Game": "^0.8.0"
     }
 }

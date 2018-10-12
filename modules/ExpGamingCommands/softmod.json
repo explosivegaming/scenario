@@ -32,7 +32,7 @@
                 "FactorioStdLib.Game": "^0.8.0",
                 "ExpGamingLib": "^4.0.0",
                 "ExpGamingCore.Command": "^4.0.0",
-                "ExpGamingCore.Ranking": "?^4.0.0"
+                "ExpGamingCore.Role": "?^4.0.0"
             },
             "collection": "ExpGamingCommands_4.0.0"
         },
@@ -91,7 +91,7 @@
             ],
             "dependencies": {
                 "ExpGamingCore.Command": "^4.0.0",
-                "ExpGamingCore.Ranking": "^4.0.0",
+                "ExpGamingCore.Role": "^4.0.0",
                 "FactorioStdLib.Game": "^0.8.0"
             },
             "collection": "ExpGamingCommands_4.0.0"
@@ -113,7 +113,7 @@
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
                 "FactorioStdLib.Game": "^0.8.0",
-                "ExpGamingCore.Ranking": "^4.0.0",
+                "ExpGamingCore.Role": "^4.0.0",
                 "ExpGamingAdmin.TempBan": "?^4.0.0"
             },
             "collection": "ExpGamingCommands_4.0.0"
@@ -132,7 +132,7 @@
             ],
             "dependencies": {
                 "ExpGamingLib": "^4.0.0",
-                "ExpGamingCore.Ranking": "?^4.0.0",
+                "ExpGamingCore.Role": "?^4.0.0",
                 "ExpGamingCore.Command": "^4.0.0",
                 "FactorioStdLib.Game": "^0.8.0"
             },

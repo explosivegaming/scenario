@@ -13,5 +13,7 @@
     "author": " Ps7cho (converted by Cooldude2606)",
     "contact": "Discord: Cooldude2606#5241",
     "license": "https://opensource.org/licenses/MIT",
-    "dependencies": {}
+    "dependencies": {
+        "FactorioStdLib.Game": "^0.8.0"
+    }
 }

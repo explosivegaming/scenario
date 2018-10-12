@@ -13,5 +13,10 @@
     "author": "Cooldude2606",
     "contact": "Discord: Cooldude2606#5241",
     "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
-    "dependencies": {}
+    "dependencies": {
+        "FactorioStdLib.Game": "^0.8.0",
+        "ExpGamingCore.Role": "?^4.0.0",
+        "ExpGamingCore.Command": "?^4.0.0",
+        "ExpGamingCore.Gui": "^4.0.0"
+    }
 }

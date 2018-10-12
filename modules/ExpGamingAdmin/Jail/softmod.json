@@ -2,11 +2,11 @@
     "name": "Jail",
     "version": "4.0.0",
     "type": "Submodule",
-    "description": "Adds a jail function to the admin set, require ExpGamingRanking to work.",
+    "description": "Adds a jail function to the admin set, require ExpGamingRole to work.",
     "location": "<blank>",
     "keywords": [
         "Jail",
-        "Ranking",
+        "Roles",
         "Admin",
         "ExpGaming"
     ],
@@ -14,7 +14,7 @@
         "ExpGamingAdmin.AdminLib": "^4.0.0",
         "ExpGamingAdmin.Gui": "^4.0.0",
         "ExpGamingCore.Server": "^4.0.0",
-        "ExpGamingCore.Ranking": "^4.0.0",
+        "ExpGamingCore.Role": "^4.0.0",
         "FactorioStdLib.Game": "^0.8.0",
         "FactorioStdLib.Color": "?^0.8.0",
         "ExpGamingCore.Sync": "?^4.0.0",

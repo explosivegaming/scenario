@@ -14,7 +14,20 @@
         "ExpGamingCommands": "^4.0.0",
         "ExpGamingPlayer": "^4.0.0",
         "ExpGamingAdmin": "^4.0.0",
-        "ExpGamingBot": "^4.0.0"
+        "ExpGamingBot": "^4.0.0",
+        "AdvancedStartingItems": "^4.0.0",
+        "ChatPopup": "^4.0.0",
+        "DamagePopup": "^4.0.0",
+        "DeathMarkers": "^4.0.0",
+        "DeconControl": "^4.0.0",
+        "ExpGamingInfo": "^4.0.0",
+        "GameSettingsGui": "^4.0.0",
+        "GuiAnnouncements": "^4.0.0",
+        "HealthIndicator": "^1.0.1",
+        "PlayerAutoColor": "^4.0.0",
+        "SpawnArea": "^4.0.0",
+        "WarpPoints": "^4.0.0",
+        "WornPaths": "^4.0.0"
     },
     "dependencies": {}
 }

@@ -19,7 +19,7 @@
         "FactorioStdLib.Color": "^0.8.0",
         "FactorioStdLib.Game": "^0.8.0",
         "FactorioStdLib.Table": "^0.8.0",
-        "ExpGamingCore.Ranking": "?^4.0.0",
+        "ExpGamingCore.Role": "?^4.0.0",
         "ExpGamingCore.Gui": "?^4.0.0"
     },
     "collection": "ExpGamingCore_4.0.0"

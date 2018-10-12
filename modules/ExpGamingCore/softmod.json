@@ -14,28 +14,6 @@
     "contact": "Discord: Cooldude2606#5241",
     "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
     "submodules": {
-        "Commands": {
-            "name": "Commands",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "A better command handler than the base game.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Command_4.0.0.zip",
-            "keywords": [
-                "Library",
-                "Lib",
-                "ExpGaming",
-                "Core",
-                "Commands"
-            ],
-            "dependencies": {
-                "ExpGamingLib": "^4.0.0",
-                "FactorioStdLib.Table": "^0.8.0",
-                "FactorioStdLib.Color": "^0.8.0",
-                "FactorioStdLib.Game": "^0.8.0",
-                "ExpGamingCore.Ranking": "?^4.0.0"
-            },
-            "collection": "ExpGamingCore_4.0.0"
-        },
         "Gui": {
             "name": "Gui",
             "version": "4.0.0",
@@ -55,32 +33,7 @@
                 "FactorioStdLib.Table": "^0.8.0",
                 "FactorioStdLib.Color": "^0.8.0",
                 "FactorioStdLib.Game": "^0.8.0",
-                "ExpGamingCore.Ranking": "?^4.0.0",
-                "ExpGamingCore.Server": "?^4.0.0"
-            },
-            "collection": "ExpGamingCore_4.0.0"
-        },
-        "Ranking": {
-            "name": "Ranking",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "A full ranking system for factorio.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Ranking_4.0.0.zip",
-            "keywords": [
-                "Library",
-                "Lib",
-                "ExpGaming",
-                "Core",
-                "Ranking",
-                "Ranks",
-                "Permissions",
-                "Roles"
-            ],
-            "dependencies": {
-                "ExpGamingLib": "^4.0.0",
-                "FactorioStdLib.Color": "^0.8.0",
-                "FactorioStdLib.Table": "^0.8.0",
-                "FactorioStdLib.Game": "^0.8.0",
+                "ExpGamingCore.Role": "?^4.0.0",
                 "ExpGamingCore.Server": "?^4.0.0"
             },
             "collection": "ExpGamingCore_4.0.0"
@@ -132,7 +85,7 @@
                 "FactorioStdLib.Color": "^0.8.0",
                 "FactorioStdLib.Game": "^0.8.0",
                 "FactorioStdLib.Table": "^0.8.0",
-                "ExpGamingCore.Ranking": "?^4.0.0",
+                "ExpGamingCore.Role": "?^4.0.0",
                 "ExpGamingCore.Gui": "?^4.0.0"
             },
             "collection": "ExpGamingCore_4.0.0"
@@ -175,6 +128,29 @@
             "dependencies": {
                 "FactorioStdLib": "^0.8.0",
                 "ExpGamingLib": "^4.0.0"
+            },
+            "collection": "ExpGamingCore_4.0.0"
+        },
+        "Role": {
+            "name": "Role",
+            "version": "4.0.0",
+            "type": "Submodule",
+            "description": "Adds roles where a player can have more than one role",
+            "location": "<blank>",
+            "keywords": [
+                "Role",
+                "Ranks",
+                "Permissions",
+                "Alowed",
+                "Admin"
+            ],
+            "dependencies": {
+                "ExpGamingLib": "^4.0.0",
+                "FactorioStdLib.Table": "^0.8.0",
+                "FactorioStdLib.Game": "^0.8.0",
+                "ExpGamingCore.Group": "^4.0.0",
+                "ExpGamingCore.Server": "?^4.0.0",
+                "ExpGamingCore.Command": "?^4.0.0"
             },
             "collection": "ExpGamingCore_4.0.0"
         }

@@ -2,7 +2,7 @@
     "name": "DeconControl",
     "version": "4.0.0",
     "type": "Module",
-    "description": "Allows control over decon rights, if ExpGamingCore.Ranking is not installed it will allow admins to instant remove trees and thats it.",
+    "description": "Allows control over decon rights, if ExpGamingCore.Role is not installed it will allow admins to instant remove trees and thats it.",
     "location": "<blank>",
     "keywords": [
         "Trees",
@@ -20,6 +20,6 @@
         "FactorioStdLib.Game": "^0.8.0",
         "ExpGamingLib": "^4.0.0",
         "ExpGamingAdmin.Warnings": "?^4.0.0",
-        "ExpGamingCore.Ranking": "?^4.0.0"
+        "ExpGamingCore.Role": "?^4.0.0"
     }
 }
