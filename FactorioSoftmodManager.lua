@@ -467,7 +467,7 @@ Manager.error = setmetatable({
             rawget(tbl,'__error_call')(err,2)
         end
         local args = {...}
-        local trace = args[1] and type(args[1]) == 'number' and args[1] or 2
+        local trace = args[1] and type(args[1]) == 'number' and args[1]+1 or 2
         rawget(tbl,'__error_call')(err,trace)
     end,
     __index=function(tbl,key)

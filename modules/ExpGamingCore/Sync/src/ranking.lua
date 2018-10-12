@@ -36,7 +36,9 @@ end
 -- Adds a caption to the info gui that shows the rank given to the player
 if Sync.add_to_gui then
     Sync.add_to_gui(function(player,frame)
-        return 'You have been assigned the rank \''..Role.get_highest(player).name..'\''
+        local names = {}
+        for _,role in pairs(Role.get(player)) do table.insert(names,role.name) end
+        return 'You have been assigned the roles: '..table.concat(names,', ')
     end)
 end
 

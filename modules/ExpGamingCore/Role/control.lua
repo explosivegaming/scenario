@@ -25,9 +25,9 @@ local Role = {
             rawset(tbl,key,Role.define(value))
         end
     }),
-    on_init=function()
+    on_init=function(self)
         if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require('ExpGamingCore.Server@^4.0.0').add_module_to_interface('Role','ExpGamingCore.Role') end
-        if loaded_modules['ExpGamingCore.Command@^4.0.0'] then require(module_path..'/src/commands',{Role=Role}) end
+        if loaded_modules['ExpGamingCore.Command@^4.0.0'] then require(module_path..'/src/commands',{self=self}) end
     end,
     on_post=function(self)
         -- loads the roles in config
@@ -399,8 +399,8 @@ function Role._prototype:add_player(player,by_player,batch)
         by_player_index=by_player.index,
         old_highest=highest.name,
         role_name=self.name,
-        batch=batch[2] or {self.name},
-        batch_index=batch[1] or 1,
+        batch=batch and batch[2] or {self.name},
+        batch_index=batch and batch[1] or 1,
         effect='assign'
     })
 end
@@ -430,8 +430,8 @@ function Role._prototype:remove_player(player,by_player,batch)
         by_player_index=by_player.index,
         old_highest=highest.name,
         role_name=self.name,
-        batch=batch[2] or {self.name},
-        batch_index=batch[1] or 1,
+        batch=batch and batch[2] or {self.name},
+        batch_index=batch and batch[1] or 1,
         effect='unassign'
     })
 end
@@ -441,7 +441,7 @@ script.on_event(role_change_event_id,function(event)
     -- varible init
     local player = Game.get_player(event)
     local by_player = Game.get_player(event.by_player_index) or SERVER
-    local role = Role.get(event.role_name)
+    local role = Role.get(event.role_name)    
     local highest = Role.get_highest(player) or {__faild=true,tag='',name='None'}
     -- gets the falgs the player currently has
     for flag,callback in pairs(Role.flags) do if is_type(callback,'function') then callback(player,Role.has_flag(player,flag)) end end
@@ -458,8 +458,9 @@ script.on_event(role_change_event_id,function(event)
     if player.online_time > 60 then
         -- send a message to other players
         if event.batch_index == 1 then
-            local name = table.concat(event.batch,', ')
-            if event.effect == 'assign' then game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.assign',player.name,name,by_player.name}}
+            local names = {}
+            for _,name in pairs(event.batch) do local role = Role.get(name) if role then table.insert(names,role.name) end end
+            if event.effect == 'assign' then game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.assign',player.name,table.concat(names,', '),by_player.name}}
             else game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.unassign',player.name,name,by_player.name}} end
         end
         -- log change to file
@@ -482,6 +483,7 @@ end)
 
 script.on_event(defines.events.on_player_joined_game,function(event)
     local player = Game.get_player(event)
+    log(serpent.line(event))
     local highest = Role.get_highest(player) or Role.meta.default
     Group.assign(player,highest.group)
     player.tag=highest.tag

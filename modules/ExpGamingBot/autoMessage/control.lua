@@ -54,7 +54,7 @@ script.on_init(function(event)
         local data = self.data
         if not data.high_role or not data.low_role
         or not data.low then self.reopen = false return end
-        -- idk but this stoped working for no appent reason so i added more checks for nil values
+        -- idk but this stoped working for no appent reason so i added more checks for nil values  
         if Role and Role.get_highest(player).index <= Role.get(data.low_role).index or player.admin then return end
         for _,message in pairs(data.low) do
             player_return({'ExpGamingBot-autoMessage.message',message},nil,player)

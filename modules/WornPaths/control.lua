@@ -69,7 +69,7 @@ script.on_event(defines.events.on_player_changed_position, function(event)
     end end
     local chance = paths[tile_name][1]/(count-adjacency_boost)
     if math.random() < chance then
-        down_grade(surface,pos)
+        ThisModule.down_grade(surface,pos)
     end
 end)
 

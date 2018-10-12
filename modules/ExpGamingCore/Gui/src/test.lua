@@ -161,7 +161,7 @@ local send_popup = Gui.inputs{
 }:on_event('click',function(event)
     local player = Game.get_player(event)
     local message = event.element.parent['test-popup-text'].text
-    Gui.popup.open('test-popup',{player=player.name,message=message})
+    Gui.popup.open('test-popup',{message=message,player=player.name})
 end)
 Gui.popup{
     name='test-popup',

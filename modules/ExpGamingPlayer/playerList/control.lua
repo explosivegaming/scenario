@@ -29,7 +29,7 @@ local module_verbose = false
 local ThisModule = {
     on_init=function(self)
         if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer.playerInfo') end
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then getPlayers = require(module_path..'/src/ranking') end
+        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then getPlayers = require(module_path..'/src/ranking',{self=self}) end
         if loaded_modules['ExpGamingAdmin.AdminLib@^4.0.0'] then Admin = require('ExpGamingAdmin.AdminLib@^4.0.0') end
     end
 }
@@ -134,7 +134,6 @@ end)
 
 script.on_event(defines.events.on_player_joined_game,ThisModule.update)
 script.on_event(defines.events.on_player_left_game,ThisModule.update)
-script.on_event(defines.events.rank_change,ThisModule.update)
 
 ThisModule.force_update = function() return ThisModule.Gui() end
 -- when called it will queue an update to the player list

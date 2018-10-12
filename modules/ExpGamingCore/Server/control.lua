@@ -407,7 +407,7 @@ function Server._thread:check_timeout()
     if is_type(self.timeout,'number') and game.tick >= (self.opened+self.timeout) then
         if is_type(self._timeout,'function') then
             -- we do not care if the time out has caused an error as it is in most cases an error in its own right
-            Manager.sandbox(self._timeout,thread._env,self)
+            Manager.sandbox(self._timeout,self._env,self)
         end
         _return = true
         -- closes the thread to provent any further event calls

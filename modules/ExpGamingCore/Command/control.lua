@@ -147,7 +147,7 @@ function commands.get_commands(player)
     if not player then return error('Invalid player',2) end
     for name,data in pairs(data) do
         if #middleware > 0 then for _,callback in pairs(middleware) do
-            local success, err = pcall(callback,player_name,command.name,command)
+            local success, err = pcall(callback,player,name,data)
             if not success then error(err)
             elseif err then table.insert(commands,data) end
         end elseif data.default_admin_only == true and player.admin then table.insert(commands,data) end

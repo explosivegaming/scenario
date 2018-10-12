@@ -11,8 +11,27 @@ local Game = require('FactorioStdLib.Game')
 local Role -- this is optional and is hanndled by it being present, it is loaded on init
 local mod_gui = require("mod-gui")
 local Gui = Gui -- this is to force gui to remain in the ENV
+local order_config = order_config
 
 local toolbar = {}
+
+toolbar.hide = Gui.inputs{
+    name='gui-toolbar-hide',
+    type='button',
+    caption='<'
+}:on_event('click',function(event)
+    if event.element.caption == '<' then
+        event.element.caption = '>'
+        for _,child in pairs(event.element.parent.children) do
+            if child.name ~= event.element.name then child.style.visible = false end
+        end
+    else
+        event.element.caption = '<'
+        for _,child in pairs(event.element.parent.children) do
+            if child.name ~= event.element.name then child.style.visible = true end
+        end
+    end
+end)
 
 --- Add a button to the toolbar, ranks need to be allowed to use these buttons if ranks is preset
 -- @usage toolbar.add('foo','Foo','Test',function() game.print('test') end)
@@ -38,12 +57,27 @@ function toolbar.draw(player)
 	local toolbar_frame = mod_gui.get_button_flow(player)
     toolbar_frame.clear()
     if not Gui.data.toolbar then return end
+    toolbar.hide(toolbar_frame).style.maximal_width = 15
+    local done = {}
+    for _,name in pairs(order_config) do
+        local button = Gui.data.toolbar[name]
+        if button then
+            done[name] = true
+            if is_type(Role,'table') then
+                if Role.allowed(player,name) then
+                    button(toolbar_frame)
+                end
+            else button(toolbar_frame) end
+        end
+    end
     for name,button in pairs(Gui.data.toolbar) do
-        if is_type(Role,'table') then
-            if Role.allowed(player,name) then
-                button(toolbar_frame)
-            end
-        else button(toolbar_frame) end
+        if not done[name] then
+            if is_type(Role,'table') then
+                if Role.allowed(player,name) then
+                    button(toolbar_frame)
+                end
+            else button(toolbar_frame) end
+        end
 	end
 end
 

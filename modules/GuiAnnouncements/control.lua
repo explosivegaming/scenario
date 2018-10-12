@@ -17,7 +17,7 @@ local ThisModule = {}
 
 -- Function Define
 local function _roles(player)
-    local roles = {'Select Rank'}
+    local roles = {'Select Role'}
     local _role = Role.get_highest(player)
     for index,role_name in pairs(Role.order) do
         if index >= _role.index then
@@ -29,7 +29,7 @@ end
 
 local role_drop_down = Gui.inputs.add_drop_down('rank-drop-down-annoncements',_roles,1,function(player,selected,items,element)
     element.parent.role.caption = selected
-    if selected == 'Select Rank' then element.parent['send-annoncement'].style.visible = false
+    if selected == 'Select Role' then element.parent['send-annoncement'].style.visible = false
     else element.parent['send-annoncement'].style.visible = true end
 end)
 
@@ -45,12 +45,8 @@ local send_popup = Gui.inputs{
     local role_name = _role.name..'s'; if rank_name == Role.meta.default.name..'s' then rank_name = 'Everyone' end
     local sent_to = {'announcements.sent-to',rank_name}
     local message = event.element.parent.parent.message.text
-    for index,_role_name in pairs(Role.order) do
-        if index <= _role.index then
-            Gui.popup.open('announcements',{sent_by=sent_by,sent_to=sent_to,message=message},Role.get(_role_name):get_players(true))
-            event.element.parent.parent.message.text = ''
-        end
-    end
+    Gui.popup.open('announcements',{sent_by=sent_by,sent_to=sent_to,message=message},_role:get_players(true))
+    event.element.parent.parent.message.text = ''
 end)
 
 ThisModule.Gui = Gui.popup{
@@ -98,7 +94,7 @@ ThisModule.Gui = Gui.popup{
         btn.style.width = 25
         flow.add{
             type='label',
-            name='rank',
+            name='role',
             caption=''
         }.style.visible = false
     end

@@ -1,4 +1,4 @@
-local Role = Role
+local Role = self
 
 commands.add_validation('player-rank',function(value,event) 
     local player,err = commands.validate['player'](value) 

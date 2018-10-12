@@ -1,5 +1,7 @@
 local Role = require('ExpGamingCore.Role@^4.0.0')
 
+script.on_event(defines.events.on_role_change,self.update)
+
 return function()
     local rtn = {}
     for _,role_name in pairs(Role.order) do

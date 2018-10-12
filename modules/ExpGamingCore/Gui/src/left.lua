@@ -13,9 +13,20 @@ local Color = require('FactorioStdLib.Color')
 local Role -- this is optional and is hanndled by it being present, it is loaded on init
 local mod_gui = require("mod-gui")
 local Gui = Gui -- this is to force gui to remain in the ENV
+local order_config = order_config
 
 local left = {}
 left._prototype = {}
+
+left.hide = Gui.inputs{
+    name='gui-left-hide',
+    type='button',
+    caption='<'
+}:on_event('click',function(event)
+    for _,child in pairs(event.element.parent.children) do
+        if child.name ~= 'popups' then child.style.visible = false end
+    end
+end)
 
 -- used for debugging
 function left.override_open(state)
@@ -63,9 +74,7 @@ function left.update(frame,players)
                 data={player=player,frames=thread.data.frames}
             }:on_event('resolve',function(thread)
                 for name,left in pairs(thread.data.frames) do
-                    if left then
-                        left:first_open(thread.data.player)
-                    end
+                    if left then left:first_open(thread.data.player) end
                 end
             end):queue()
         end):open()
@@ -119,20 +128,26 @@ end
 -- @usage left:open(player)
 -- @tparam luaPlayer player the player to open the gui for
 function left._prototype:open(player)
-    local player = Game.get_player(event)
+    local player = Game.get_player(player)
+    if not player then error('Invalid Player') end
     local left_flow = mod_gui.get_frame_flow(player)
-    if not left_flow[_left.name] then self:first_open(player) end
-    left_flow[_left.name].style.visible = true
+    if not left_flow[self.name] then self:first_open(player) end
+    left_flow[self.name].style.visible = true
+    left_flow['gui-left-hide'].style.visible = true
 end
 
 --- Used to force the gui closed for the player
 -- @usage left:open(player)
 -- @tparam luaPlayer player the player to close the gui for
 function left._prototype:close(player)
-    local player = Game.get_player(event)
+    local player = Game.get_player(player)
+    if not player then error('Invalid Player') end
     local left_flow = mod_gui.get_frame_flow(player)
-    if not left_flow[_left.name] then self:first_open(player) end
-    left_flow[_left.name].style.visible = false
+    if not left_flow[self.name] then self:first_open(player) end
+    left_flow[self.name].style.visible = false
+    local count = 0
+    for _,child in pairs(left_flow.children) do if child.style.visible then count = count+1 end if count > 1 then break end end
+    if count == 1 then left_flow['gui-left-hide'].style.visible = false end
 end
 
 --- When the gui is first made or is updated this function is called, used by the script
@@ -149,9 +164,9 @@ function left._prototype:first_open(player)
     else 
         frame = left_flow.add{type='frame',name=self.name,style=mod_gui.frame_style,caption=self.caption,direction='vertical'}
         frame.style.visible = false
-        if is_type(self.open_on_join,'boolean') then frame.style.visible = self.open_on_join end
+        if is_type(self.open_on_join,'boolean') then frame.style.visible = self.open_on_join left_flow['gui-left-hide'].style.visible = true end
     end
-    if is_type(self.draw,'function') then self.draw(frame) else frame.style.visible = false error('No Callback On '.._left.name) end
+    if is_type(self.draw,'function') then self.draw(frame) else frame.style.visible = false error('No Callback On '..self.name) end
     return frame
 end
 
@@ -162,29 +177,33 @@ end
 function left._prototype:toggle(player)
     local player = Game.get_player(player)
     local left_flow = mod_gui.get_frame_flow(player)
-    if not left_flow[_left.name] then _left:first_open(player) end
-    local left = left_flow[_left.name]
+    if not left_flow[self.name] then self:first_open(player) end
+    local left = left_flow[self.name]
     local open = false
-    if is_type(_left.can_open,'function') then
-        local success, err = pcall(_left.can_open,player)
+    if is_type(self.can_open,'function') then
+        local success, err = pcall(self.can_open,player)
         if not success then error(err)
         elseif err == true then open = true 
         elseif global.over_ride_left_can_open then 
             if is_type(Role,'table')  then
-                if Role.allowed(player,_left.name) then open = true
+                if Role.allowed(player,self.name) then open = true
                 else open = {'ExpGamingCore_Gui.unauthorized'} end
             else open = true end 
         else open = err end
     else
         if is_type(Role,'table')  then
-            if Role.allowed(player,_left.name) then open = true 
+            if Role.allowed(player,self.name) then open = true 
             else open = {'ExpGamingCore_Gui.unauthorized'} end
         else open = true end
     end
     if open == true and left.style.visible ~= true then
         left.style.visible = true
+        left_flow['gui-left-hide'].style.visible = true
     else
         left.style.visible = false
+        local count = 0
+        for _,child in pairs(left_flow.children) do if child.style.visible then count = count+1 end if count > 1 then break end end
+        if count == 1 then left_flow['gui-left-hide'].style.visible = false end
     end
     if open == false then player_return({'ExpGamingCore_Gui.cant-open-no-reason'},defines.textcolor.crit,player) player.play_sound{path='utility/cannot_build'} 
     elseif open ~= true then player_return({'ExpGamingCore_Gui.cant-open',open},defines.textcolor.crit,player) player.play_sound{path='utility/cannot_build'} end
@@ -195,8 +214,17 @@ left.on_player_joined_game = function(event)
     -- draws the left guis when a player first joins, fake_event is just because i am lazy
     local player = Game.get_player(event)
     local frames = Gui.data.left or {}
+    left.hide(mod_gui.get_frame_flow(player)).style.maximal_width=15
+    local done = {}
+    for _,name in pairs(order_config) do
+        local left = Gui.data.left[name]
+        if left then
+            done[name] = true
+            left:first_open(player)
+        end
+    end
     for name,left in pairs(frames) do
-        left:first_open(player)
+        if not done[name] then left:first_open(player) end
     end
 end
 

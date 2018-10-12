@@ -22,7 +22,8 @@ function popup.load()
         tooltip='Close This Popup'
     }:on_event('click',function(event)
         local frame = event.element.parent
-        if frame and frame.valid then frame.destroy() end
+        local parent = frame.parent
+        if frame and frame.valid then frame.destroy() if #parent.children == 0 then parent.style.visible = false end end
     end)
 end
 
@@ -45,7 +46,9 @@ end
 -- this is used by the script to find the popup flow
 function popup.flow(player)
     local player = Game.get_player(player)
-    local flow = mod_gui.get_frame_flow(player).popups or mod_gui.get_frame_flow(player).add{name='popups',type='flow',direction='vertical'}
+    if not player then error('Invalid Player',2) end
+    local flow = mod_gui.get_frame_flow(player).popups 
+    if not flow then flow = mod_gui.get_frame_flow(player).add{name='popups',type='flow',direction='vertical'} flow.style.visible=false end
     return flow
 end
 
@@ -59,10 +62,11 @@ function popup.open(style,data,players)
     local players = players or game.connected_players
     local data = data or {}
     if not _popup then return end
-    if _popup.left then Gui.left.close(_popup.left.name) end
     if not Server or not Server._thread then
         for _,player in pairs(players) do
+            if _popup.left then _popup.left:close(player) end
             local flow = popup.flow(player)
+            flow.style.visible=true
             local _frame = flow.add{
                 type='frame',
                 direction='horizontal',
@@ -86,7 +90,9 @@ function popup.open(style,data,players)
         }:on_event('tick',function(thread)
             if #thread.data.players == 0 then thread:close() return end
             local player = table.remove(thread.data.players,1)
+            if _popup.left then _popup.left:close(player) end
             local flow = popup.flow(player)
+            flow.style.visible=true
             local _frame = flow.add{
                 type='frame',
                 direction='horizontal',

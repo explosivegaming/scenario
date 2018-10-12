@@ -99,4 +99,4 @@ script.on_event(defines.events.on_gui_click,function(event)
     end
 end)
 
-script.on_event(defines.events.on_player_joined_game,Sync.info_gui)
+script.on_event(defines.events.on_player_joined_game,function(event) Sync.info_gui(event) end)

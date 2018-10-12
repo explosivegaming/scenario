@@ -23,7 +23,7 @@ Server.add_module_to_interface('Server','ExpGamingCore.Server')
 --- Runs the given input from the script
 -- @command interface
 -- @param code The code that will be ran
-commands.add_command('interface',{'ExpGamingCore_Server.interface-description'}, {
+commands.add_command('interface','Runs the given input from the script', {
     ['code']={true,'string-inf'}
 }, function(event,args)
     local callback = args.code
