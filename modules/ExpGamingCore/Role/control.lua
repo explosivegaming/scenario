@@ -114,24 +114,24 @@ end
 -- @tparam ?LuaPlayer|pointerToPlayer player the player to assign the role to
 -- @tparam ?string|role|table the role to add the player to, if its a table then it will act recursly though the table
 -- @tparam[opt='<server>'] ?LuaPlayer|pointerToPlayer by_player the player who assigned the roles to the player
--- @tparam[opt] boolean when true the assign will not be loged to the change chache
+-- @tparam[opt] table batch this is used internally to provent multiple event calls, conatins {role_index_in_batch,batch}
 -- @treturn boolean was the player assigned the roles
-function Role.assign(player,role,by_player,no_log)
+function Role.assign(player,role,by_player,batch)
     local player = Game.get_player(player)
     if not player then error('Invalid player #1 given to Role.assign.',2) return end
     -- this loops over a table of role if given; will return if ipairs returns, else will asume it was ment to be a role and error
     if is_type(role,'table') and not role.name then 
         local ctn = 0 
-        for _,_role in ipairs(role) do ctn=ctn+1 Role.assign(player,_role,by_player,true) end 
-        if ctn > 0 then if not no_log then table.insert(global.changes[player.index],{'assign',role}) global.latest_change = {player.index,'assign',role} end return end 
+        for n,_role in ipairs(role) do ctn=ctn+1 Role.assign(player,_role,by_player,{n,role}) end 
+        if ctn > 0 then if not batch then table.insert(global.changes[player.index],{'assign',role}) global.latest_change = {player.index,'assign',role} end return end 
     end
     local role = Role.get(role)
     if not role then error('Invalid role #2 given to Role.assign.',2) return end
     -- this acts as a way to provent the global table getting too full
     if not global.changes[player.index] then global.changes[player.index]={} end
     if #global.changes[player.index] > global.change_chache_length then table.remove(global.changes[player.index],1) end
-    if not no_log then table.insert(global.changes[player.index],{'assign',role.name}) global.latest_change = {player.index,'assign',role.name} end
-    return role:add_player(player,by_player)
+    if not batch then table.insert(global.changes[player.index],{'assign',role.name}) global.latest_change = {player.index,'assign',role.name} end
+    return role:add_player(player,by_player,batch)
 end
 
 --- Used to remove a player from a role(s)
@@ -139,24 +139,24 @@ end
 -- @tparam ?LuaPlayer|pointerToPlayer player the player to unassign the role to
 -- @tparam ?string|role|table role the role to remove the player from, if its a table then it will act recursly though the table
 -- @tparam[opt='<server>'] ?LuaPlayer|pointerToPlayer by_player the player who unassigned the roles from the player
--- @tparam[opt] boolean no_log when true the assign will not be loged to the change chache
+-- @tparam[opt] table batch this is used internally to provent multiple event calls
 -- @treturn boolean was the player unassigned the roles
-function Role.unassign(player,role,by_player,no_log)
+function Role.unassign(player,role,by_player,batch)
     local player = Game.get_player(player)
     if not player then error('Invalid player #1 given to Role.unassign.',2) return end
     -- this loops over a table of role if given; will return if ipairs returns, else will asume it was ment to be a role and error
     if is_type(role,'table') and not role.name then 
         local ctn = 0 
-        for _,_role in ipairs(role) do ctn=ctn+1 Role.unassign(player,_role,by_player,true) end 
-        if ctn > 0 then if not no_log then table.insert(global.changes[player.index],{'unassign',role}) global.latest_change = {player.index,'unassign',role} end return end 
+        for _,_role in ipairs(role) do ctn=ctn+1 Role.unassign(player,_role,by_player,role) end 
+        if ctn > 0 then if not batch then table.insert(global.changes[player.index],{'unassign',role}) global.latest_change = {player.index,'unassign',role} end return end 
     end
     local role = Role.get(role)
     if not role then error('Invalid role #2 given to Role.unassign.',2) return end
     if not global.changes[player.index] then global.changes[player.index]={} end
     -- this acts as a way to provent the global table getting too full
     if #global.changes[player.index] > global.change_chache_length then table.remove(global.changes[player.index],1) end
-    if not no_log then table.insert(global.changes[player.index],{'unassign',role.name}) global.latest_change = {player.index,'unassign',role.name} end
-    return role:remove_player(player,by_player)
+    if not batch then table.insert(global.changes[player.index],{'unassign',role.name}) global.latest_change = {player.index,'unassign',role.name} end
+    return role:remove_player(player,by_player,batch)
 end
 
 --- Returns the highest role given in a list, if a player is passed then it returns the highest role of the player
@@ -381,7 +381,8 @@ end
 -- @usage role:add_player(player)
 -- @tparam ?LuaPlayer|PointerToPlayer player the player to add
 -- @tparam[opt] ?LuaPlayer|PointerToPlayer by_player the player who ran the command
-function Role._prototype:add_player(player,by_player)
+-- @tparam[opt] table batch this is used internally to provent multiple event calls
+function Role._prototype:add_player(player,by_player,batch)
     if not self_test(self,'role','add_player') then return end
     local player = Game.get_player(player)
     if not player then error('Invalid player #1 given to role:add_player.',2) return end
@@ -398,6 +399,8 @@ function Role._prototype:add_player(player,by_player)
         by_player_index=by_player.index,
         old_highest=highest.name,
         role_name=self.name,
+        batch=batch[2] or {self.name},
+        batch_index=batch[1] or 1,
         effect='assign'
     })
 end
@@ -406,7 +409,8 @@ end
 -- @usage role:remove_player(player)
 -- @tparam ?LuaPlayer|PointerToPlayer player the player to remove
 -- @tparam[opt] ?LuaPlayer|PointerToPlayer by_player the player who ran the command
-function Role._prototype:remove_player(player,by_player)
+-- @tparam[opt] table batch this is used internally to provent multiple event calls
+function Role._prototype:remove_player(player,by_player,batch)
     if not self_test(self,'role','add_player') then return end
     local player = Game.get_player(player)
     if not player then error('Invalid player #1 given to role:remove_player.',2) return end
@@ -426,6 +430,8 @@ function Role._prototype:remove_player(player,by_player)
         by_player_index=by_player.index,
         old_highest=highest.name,
         role_name=self.name,
+        batch=batch[2] or {self.name},
+        batch_index=batch[1] or 1,
         effect='unassign'
     })
 end
@@ -451,19 +457,24 @@ script.on_event(role_change_event_id,function(event)
     else player.play_sound{path='utility/game_lost'} end
     if player.online_time > 60 then
         -- send a message to other players
-        if event.effect == 'assign' then game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.assign',player.name,role.name,by_player.name}}
-        else game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.unassign',player.name,role.name,by_player.name}} end
+        if event.batch_index == 1 then
+            local name = table.concat(event.batch,', ')
+            if event.effect == 'assign' then game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.assign',player.name,name,by_player.name}}
+            else game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.unassign',player.name,name,by_player.name}} end
+        end
         -- log change to file
         game.write_file('role-change.json',
             table.json({
                 tick=game.tick,
-                play_time=player.online_time,
+                effect=event.effect,
+                role_name=role.name,
                 player_name=player.name,
                 by_player_name=by_player.name,
-                role_name=role.name,
+                play_time=player.online_time,
                 highest_role_name=highest.name,
                 old_highest=event.highest,
-                effect=event.effect
+                batch_count=#event.batch,
+                batch_index=event.batch_index
             })..'\n'
         , true, 0)
     end
