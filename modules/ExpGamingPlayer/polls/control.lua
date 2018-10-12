@@ -44,8 +44,8 @@ local function _poll_end(self)
     poll.voted = nil
     table.insert(global.old,poll)
     global.active[uuid] = nil
-    game.print({'polls.end',poll.question},defines.textcolor.info)
-    game.print({'polls.winner',highest[1]},defines.textcolor.info)
+    game.print({'ExpGamingPlayer-polls.end',poll.question},defines.textcolor.info)
+    game.print({'ExpGamingPlayer-polls.winner',highest[1]},defines.textcolor.info)
 end
 
 local function _poll_data(question,answers)
@@ -72,7 +72,7 @@ local function draw_poll(frame)
     if not poll then
         frame.add{
             type='label',
-            caption={'polls.no-poll'}
+            caption={'ExpGamingPlayer-polls.no-poll'}
         }
         return
     end
@@ -207,7 +207,7 @@ end)
 
 ThisModule.Gui = Gui.popup{
     name='polls',
-    caption={'polls.name'},
+    caption={'ExpGamingPlayer-polls.name'},
     draw=function(frame,data)
         frame.style.right_padding = 5
         frame.style.bottom_padding = 5
@@ -219,16 +219,16 @@ ThisModule.Gui = Gui.popup{
             name=uuid,
             direction='vertical'
         }
-        flow.add{type='label',caption={'polls.time-left',poll_time_out}}
+        flow.add{type='label',caption={'ExpGamingPlayer-polls.time-left',poll_time_out}}
         flow.add{type='label',caption='Question: '..poll.question}
         flow.add{type='label',name='answer',caption='Your Answer: None'}
         opption_drop_down:draw(flow)
     end
 }:add_left{
     caption='utility/item_editor_icon',
-    tooltip={'polls.tooltip'},
+    tooltip={'ExpGamingPlayer-polls.tooltip'},
     draw=function(frame)
-        frame.caption={'polls.name'}
+        frame.caption={'ExpGamingPlayer-polls.name'}
         frame.add{
             type='label',
             name='current_index',
@@ -265,7 +265,7 @@ ThisModule.Gui = Gui.popup{
     can_open=function(player)
         if #global.old > 0 then return true
         elseif Role and Role.allowed(player,'create-poll') or player.admin then return true
-        else return {'polls.no-poll'} end
+        else return {'ExpGamingPlayer-polls.no-poll'} end
     end
 }
 -- Event Handlers Define

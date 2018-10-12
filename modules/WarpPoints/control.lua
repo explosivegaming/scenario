@@ -114,7 +114,7 @@ local remove_warp = Gui.inputs{
     type='button',
     name='remove-warp-point',
     caption='utility/remove',
-    tooltip={'warp-system.remove-tooltip'}
+    tooltip={'WarpPoints.remove-tooltip'}
 }:on_event('click',function(event)
     local name = event.element.parent.name
     ThisModule.remove_warp_point(name)
@@ -124,12 +124,12 @@ local go_to_warp = Gui.inputs{
     type='button',
     name='go-to-warp-point',
     caption='utility/export_slot',
-    tooltip={'warp-system.go-to-tooltip'}
+    tooltip={'WarpPoints.go-to-tooltip'}
 }:on_event('click',function(event)
     local player = Game.get_player(event)
     local cooldown = global.cooldowns[event.player_index] or 0
     local warp = global.warps[event.element.parent.name]
-    if cooldown > 0 then player_return({'warp-system.cooldown',cooldown},nil,event) return end
+    if cooldown > 0 then player_return({'WarpPoints.cooldown',cooldown},nil,event) return end
     if player.vehicle then player.vehicle.set_driver(nil) end
     if player.vehicle then player.vehicle.set_passenger(nil) end
     if player.vehicle then return end
@@ -143,10 +143,10 @@ end)
 ThisModule.Gui = Gui.left{
     name='warp-list',
     caption='item/'..warp_item,
-    tooltip={'warp-system.tooltip'},
+    tooltip={'WarpPoints.tooltip'},
     draw=function(frame)
         local player = Game.get_player(frame.player_index)
-        frame.caption={'warp-system.name'}
+        frame.caption={'WarpPoints.name'}
         local warp_list = frame.add{
             type='scroll-pane',
             direction='vertical', 
@@ -201,8 +201,8 @@ ThisModule.Gui = Gui.left{
         and player.surface.name == 'nauvis' 
         then return true
         elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then return true
-        elseif cooldown > 0 then return {'warp-system.cooldown',cooldown}
-        else return {'warp-system.not-on-warp'} end
+        elseif cooldown > 0 then return {'WarpPoints.cooldown',cooldown}
+        else return {'WarpPoints.not-on-warp'} end
     end,
     open_on_join=true
 }
@@ -213,7 +213,7 @@ script.on_event(defines.events.on_tick,function(event)
     for index,time in pairs(global.cooldowns) do
         if time > 0 then
             global.cooldowns[index] = time-1 
-            if global.cooldowns[index] == 0 then player_return({'warp-system.cooldown-zero'},defines.textcolor.low,index) end
+            if global.cooldowns[index] == 0 then player_return({'WarpPoints.cooldown-zero'},defines.textcolor.low,index) end
         end
     end
 end)

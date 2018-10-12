@@ -183,7 +183,6 @@ Role{
         ['edit-tasklist']=true,
         ['make-warp']=true,
         ['nuke']=true,
-        ['base-damage']=true,
         ['varified']=true
     }
 }

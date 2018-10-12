@@ -54,9 +54,9 @@ local ThisModule = {
 
 -- Function Define
 local function take_action(player,item_name,category)
-    if category == 'low_items' then player_return({'ExpGamingPlayer_inventorySearch.low',item_name},defines.textcolor.med,player)
-    elseif category == 'med_items' then player_return({'ExpGamingPlayer_inventorySearch.med',item_name},defines.textcolor.high,player) Admin.give_warning(player,'<server>','Found A Banned Item',5)
-    elseif category == 'high_items' then player_return({'ExpGamingPlayer_inventorySearch.high',item_name},defines.textcolor.crit,player) Admin.temp_ban(player,'<server>','Found A Banned Item')
+    if category == 'low_items' then player_return({'ExpGamingPlayer-inventorySearch.low',item_name},defines.textcolor.med,player)
+    elseif category == 'med_items' then player_return({'ExpGamingPlayer-inventorySearch.med',item_name},defines.textcolor.high,player) Admin.give_warning(player,'<server>','Found A Banned Item',5)
+    elseif category == 'high_items' then player_return({'ExpGamingPlayer-inventorySearch.high',item_name},defines.textcolor.crit,player) Admin.temp_ban(player,'<server>','Found A Banned Item')
     else return end
 end
 

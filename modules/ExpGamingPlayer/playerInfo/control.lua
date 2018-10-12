@@ -30,15 +30,15 @@ local function get_player_info(player,frame,add_cam)
         frame.style.width = 200
         if Role then frame.style.height = 275
         else frame.style.height = 260 end
-        frame.add{type='label',caption={'ExpGamingPlayer_playerInfo.name',_player.index,_player.name},style='caption_label'}
-        local _online = {'ExpGamingPlayer_playerInfo.no'}; if _player.online then _online = {'ExpGamingPlayer_playerInfo.yes'} end
-        frame.add{type='label',caption={'ExpGamingPlayer_playerInfo.online',_online,tick_to_display_format(_player.online_time)}}
-        local _admin = {'ExpGamingPlayer_playerInfo.no'}; if _player.admin then _admin = {'ExpGamingPlayer_playerInfo.yes'} end
-        frame.add{type='label',caption={'ExpGamingPlayer_playerInfo.admin',_admin}}
+        frame.add{type='label',caption={'ExpGamingPlayer-playerInfo.name',_player.index,_player.name},style='caption_label'}
+        local _online = {'ExpGamingPlayer-playerInfo.no'}; if _player.online then _online = {'ExpGamingPlayer-playerInfo.yes'} end
+        frame.add{type='label',caption={'ExpGamingPlayer-playerInfo.online',_online,tick_to_display_format(_player.online_time)}}
+        local _admin = {'ExpGamingPlayer-playerInfo.no'}; if _player.admin then _admin = {'ExpGamingPlayer-playerInfo.yes'} end
+        frame.add{type='label',caption={'ExpGamingPlayer-playerInfo.admin',_admin}}
         if Role then
-            frame.add{type='label',caption={'ExpGamingPlayer_playerInfo.group',_player.group}}
-            frame.add{type='label',caption={'ExpGamingPlayer_playerInfo.role',_player.highest_role}}
-            frame.add{type='label',caption={'ExpGamingPlayer_playerInfo.roles',table.concat(_player.roles,', ')}}
+            frame.add{type='label',caption={'ExpGamingPlayer-playerInfo.group',_player.group}}
+            frame.add{type='label',caption={'ExpGamingPlayer-playerInfo.role',_player.highest_role}}
+            frame.add{type='label',caption={'ExpGamingPlayer-playerInfo.roles',table.concat(_player.roles,', ')}}
         end
         if add_cam then
             Gui.cam_link{entity=player.character,frame=frame,width=200,height=150,zoom=0.5,respawn_open=true}

@@ -41,9 +41,9 @@ local send_popup = Gui.inputs{
     local player = Game.get_player(event)
     local role = Role.get_highest(player)
     local _role = Role.get(event.element.parent.role.caption); if not _role then return end
-    local sent_by = {'announcements.sent-by',player.name,role.name}
+    local sent_by = {'GuiAnnouncements.sent-by',player.name,role.name}
     local role_name = _role.name..'s'; if rank_name == Role.meta.default.name..'s' then rank_name = 'Everyone' end
-    local sent_to = {'announcements.sent-to',rank_name}
+    local sent_to = {'GuiAnnouncements.sent-to',rank_name}
     local message = event.element.parent.parent.message.text
     Gui.popup.open('announcements',{sent_by=sent_by,sent_to=sent_to,message=message},_role:get_players(true))
     event.element.parent.parent.message.text = ''
@@ -51,7 +51,7 @@ end)
 
 ThisModule.Gui = Gui.popup{
     name='announcements',
-    caption={'announcements.name'},
+    caption={'GuiAnnouncements.name'},
     draw=function(frame,data)
         frame.style.right_padding = 5
         frame.style.bottom_padding = 5
@@ -66,9 +66,9 @@ ThisModule.Gui = Gui.popup{
     end
 }:add_left{
     caption='item/programmable-speaker',
-    tooltip={'announcements.tooltip'},
+    tooltip={'GuiAnnouncements.tooltip'},
     draw=function(frame)
-        frame.caption = {'announcements.name'}
+        frame.caption = {'GuiAnnouncements.name'}
         local frame = frame.add{
             type='flow',
             direction='vertical'
@@ -85,7 +85,7 @@ ThisModule.Gui = Gui.popup{
         local flow = frame.add{type='flow'}
         flow.add{
             type='label',
-            caption={'announcements.select-rank'}
+            caption={'GuiAnnouncements.select-rank'}
         }
         role_drop_down(flow)
         local btn = send_popup(flow)
