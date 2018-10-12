@@ -24,7 +24,7 @@ function center.add(obj)
     if not is_type(obj,'table') then return end    
     if not is_type(obj.name,'string') then return end 
     verbose('Created Center Gui: '..obj.name)
-    setmetatable(obj,{__index=center._prototype,__call=function(self,...) center.open(player,self.name) end})
+    setmetatable(obj,{__index=center._prototype,__call=function(self,player) return center.open(player,self.name) end})
     obj.tabs = {}
     obj._tabs = {}
     Gui.data('center',obj.name,obj)
@@ -38,7 +38,7 @@ end
 -- @treturn table the gui element flow
 function center.get_flow(player)
     local player = Game.get_player(player)
-    if not player then error('Invalid player') end
+    if not player then error('Invalid player',2) end
     return player.gui.center.exp_center or player.gui.center.add{name='exp_center',type='flow'}
 end
 
@@ -49,7 +49,7 @@ end
 -- @treturn boelon based on if it successed or not
 function center.open(player,center)
     local player = Game.get_player(player)
-    if not player then error('Invalid player') return false end
+    if not player then error('Invalid player',2) return false end
     Gui.center.clear(player)
     if not Gui.data.center[center] then return false end
     Gui.data.center[center].open{
@@ -67,7 +67,7 @@ end
 -- @treturn boelon based on if it successed or not
 function center.open_tab(player,center,tab)
     local player = Game.get_player(player)
-    if not player then error('Invalid player') end
+    if not player then error('Invalid player',2) end
     if not Gui.center.open(player,center) then return false end
     local name = center..'_'..tab
     if not Gui.data.inputs_button[name] then return false end
@@ -212,4 +212,4 @@ end}
 
 center.on_role_change = center.clear
 -- calling will attempt to add a new gui
-return setmetatable(center,{__call=function(self,...) self.add(...) end})
+return setmetatable(center,{__call=function(self,...) return self.add(...) end})

@@ -15,7 +15,7 @@ local poll_time_out = 90 -- In seconds
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Server@^4.0.0'] then Role = require('ExpGamingCore.Server@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
     end
 }
 
@@ -63,6 +63,29 @@ local function _poll_data(question,answers)
     -- This time out is known to cause desyncs and so I have moved it to a hard coded function
     global.active[poll.uuid]=poll
     return poll.uuid
+end
+
+local function draw_poll(frame)
+    frame.clear()
+    local index = tonumber(frame.parent.current_index.caption)
+    local poll = global.old[index]
+    if not poll then
+        frame.add{
+            type='label',
+            caption={'polls.no-poll'}
+        }
+        return
+    end
+    frame.add{
+        type='label',
+        caption='Question: '..poll.question
+    }
+    for answer,votes in pairs(poll.votes) do
+        frame.add{
+            type='label',
+            caption=answer..') '..votes
+        }
+    end
 end
 
 local function _opptions(player,root_frame)
@@ -227,7 +250,7 @@ ThisModule.Gui = Gui.popup{
         local btn = next:draw(title)
         btn.style.width = 20
         btn.style.height = 20
-        if Role and Role.get_highest(frame.player_index):allowed('create-poll') or player.admin then
+        if Role and Role.allowed(frame.player_index,'create-poll') or player.admin then
             local btn = create_poll:draw(title)
             btn.style.width = 20
             btn.style.height = 20

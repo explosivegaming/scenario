@@ -30,7 +30,7 @@ function left.add(obj)
     if not is_type(obj,'table') then return end    
     if not is_type(obj.name,'string') then return end
     verbose('Created Left Gui: '..obj.name)
-    setmetatable(obj,{__index=left._prototype,__call=function(self,player) if player then self:toggle(player) else left.update(self.name) end end})
+    setmetatable(obj,{__index=left._prototype,__call=function(self,player) if player then return self:toggle(player) else return left.update(self.name) end end})
     Gui.data('left',obj.name,obj)
     Gui.toolbar(obj.name,obj.caption,obj.tooltip,function(event) obj:toggle(event) end)
     return obj
@@ -205,4 +205,4 @@ function left:on_init()
 end
 
 -- calling will attempt to add a new gui
-return setmetatable(left,{__call=function(self,...) self.add(...) end})
+return setmetatable(left,{__call=function(self,...) return self.add(...) end})

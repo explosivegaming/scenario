@@ -21,10 +21,10 @@ local function _roles(player)
     local _role = Role.get_highest(player)
     for index,role_name in pairs(Role.order) do
         if index >= _role.index then
-            table.insert(ranks,role_name)
+            table.insert(roles,role_name)
         end
     end
-    return ranks
+    return roles
 end
 
 local role_drop_down = Gui.inputs.add_drop_down('rank-drop-down-annoncements',_roles,1,function(player,selected,items,element)
@@ -91,8 +91,8 @@ ThisModule.Gui = Gui.popup{
             type='label',
             caption={'announcements.select-rank'}
         }
-        rank_drop_down:draw(flow)
-        local btn = send_popup:draw(flow)
+        role_drop_down(flow)
+        local btn = send_popup(flow)
         btn.style.visible = false
         btn.style.height = 25
         btn.style.width = 25

@@ -111,7 +111,7 @@ function inputs.add(obj)
     obj.draw_data = table.deepcopy(obj)
     obj.data = {}
     obj.events = {}
-    setmetatable(obj,{__index=inputs._prototype,__call=function(self,...) self:draw(...) end})
+    setmetatable(obj,{__index=inputs._prototype,__call=function(self,...) return self:draw(...) end})
     Gui.data('inputs_'..type,obj.name,obj)
     return obj
 end
@@ -380,6 +380,6 @@ function inputs.add_drop_down(name,items,index,callback)
 end
 
 -- calling will attempt to add a new input
-return setmetatable(inputs,{__call=function(self,...) self.add(...) end})
+return setmetatable(inputs,{__call=function(self,...) return self.add(...) end})
 
 -- to see examples look at GuiParts/test.lua

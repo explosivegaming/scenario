@@ -7,8 +7,8 @@
 --- This file will be loaded when ExpGamingCore.Gui is present
 -- @function _comment
 
-local Game = require('FactorioStdLib.Game')
-local Gui = require('ExpGamingCore.Gui')
+local Game = require('FactorioStdLib.Game@^0.8.0')
+local Gui = require('ExpGamingCore.Gui@^4.0.0')
 local Sync = Sync -- this is to force sync to remain in the ENV
 
 local Sync_gui_functions = {}
@@ -99,7 +99,4 @@ script.on_event(defines.events.on_gui_click,function(event)
     end
 end)
 
-script.on_event(defines.events.on_player_joined_game,function(event)
-    local player = Game.get_player(event)
-    Sync.info_gui(player)
-end)
+script.on_event(defines.events.on_player_joined_game,Sync.info_gui)

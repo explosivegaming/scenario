@@ -5,7 +5,7 @@
 -- @alais ThisModule 
 
 -- Module Require
-local Color = require('FactorioStdLib@Color@^0.8.0')
+local Color = require('FactorioStdLib.Color@^0.8.0')
 
 -- Module Define
 local module_verbose = false
@@ -35,8 +35,8 @@ Event.register(defines.events.on_player_created, function(event)
 	while player.color.r == defines.color.black.r and player.color.g == defines.color.black.g and player.color.b == defines.color.black.b 
 	or player.color.r == defines.color.white.r and player.color.g == defines.color.white.g and player.color.b == defines.color.white.b  do
 		player.color = defines.color[colours[math.random(#colours)]]
-		if default_colours[player.name] then
-			local c = default_colours[player.name]
+		if global[player.name] then
+			local c = global[player.name]
 			player.color = Color.from_rgb(c.r,c.g,c.b)
 		end
 	end

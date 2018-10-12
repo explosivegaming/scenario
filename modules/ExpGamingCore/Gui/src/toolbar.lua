@@ -54,4 +54,4 @@ end
 toolbar.on_role_change = toolbar.draw
 toolbar.on_player_joined_game = toolbar.draw
 -- calling with only a player will draw the toolbar for that player, more params will attempt to add a button
-return setmetatable(toolbar,{__call=function(self,player,extra,...) if extra then self.add(player,extra,...) else self.draw(player) end end})
+return setmetatable(toolbar,{__call=function(self,player,extra,...) if extra then return self.add(player,extra,...) else self.draw(player) end end})

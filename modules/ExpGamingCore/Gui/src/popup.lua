@@ -35,7 +35,7 @@ function popup.add(obj)
     if not is_type(obj,'table') then return end    
     if not is_type(obj.name,'string') then return end
     verbose('Created Popup Gui: '..obj.name)
-    setmetatable(obj,{__index=popup._prototype,__call=function(self,data,player) local players = player and {player} or nil popup.open(self.name,data,players) end})
+    setmetatable(obj,{__index=popup._prototype,__call=function(self,data,player) local players = player and {player} or nil return popup.open(self.name,data,players) end})
     local name = obj.name; obj.name = nil
     Gui.data('popup',name,obj)
     obj.name = name
@@ -115,4 +115,4 @@ end
 popup.on_player_joined_game = popup.flow
 
 -- calling will attempt to add a new popup style
-return setmetatable(popup,{__call=function(self,...) self.add(...) end})
+return setmetatable(popup,{__call=function(self,...) return self.add(...) end})
