@@ -55,11 +55,12 @@ end
 -- @tparam ?LuaPlayer|pointerToPlayer|string mixed can either be the name or raw group of a group or a player indenifier
 -- @treturn table the group which was found or nil
 function Group.get(mixed)
+    log(serpent.line(mixed))
     if is_type(mixed,'table') and not mixed.__self and mixed._raw_group then return mixed end
     if is_type(mixed,'table') and mixed.__self and mixed.name then mixed = mixed.name end
     if game and Game.get_player(mixed) then mixed = Game.get_player(mixed).permission_group.name end
     local rtn = Group.groups[mixed]
-    if not rtn and game.permissions.get_group(mixed) then
+    if not rtn and is_type(mixed,'string') and game.permissions.get_group(mixed) then
         rtn = setmetatable({disallow={},name=mixed,_raw_group=game.permissions.get_group(mixed)},{
             __index=function(tbl,key) return Group._prototype[key] or rawget(tbl,'_raw_group') and rawget(tbl,'_raw_group')[key] or nil end
         })
