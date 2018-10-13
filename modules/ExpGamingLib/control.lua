@@ -270,7 +270,8 @@ end
 function table.autokey(tbl,str)
     local _return = {}
     for key,value in pairs(tbl) do
-        if string.contains(string.lower(key),string.lower(str)) then table.insert(_return,value) end
+        if ExpLib.is_type(key,'string') and string.contains(string.lower(key),string.lower(str)) then table.insert(_return,value) end
+        if not ExpLib.is_type(key,'string') then log(serpent.line(tbl)) end
     end
     return _return[1] or false
 end
