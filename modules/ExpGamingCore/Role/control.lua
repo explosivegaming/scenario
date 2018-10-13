@@ -147,7 +147,7 @@ function Role.unassign(player,role,by_player,batch)
     -- this loops over a table of role if given; will return if ipairs returns, else will asume it was ment to be a role and error
     if is_type(role,'table') and not role.name then 
         local ctn = 0 
-        for _,_role in ipairs(role) do ctn=ctn+1 Role.unassign(player,_role,by_player,role) end 
+        for n,_role in ipairs(role) do ctn=ctn+1 Role.unassign(player,_role,by_player,{n,role}) end  
         if ctn > 0 then if not batch then table.insert(global.changes[player.index],{'unassign',role}) global.latest_change = {player.index,'unassign',role} end return end 
     end
     local role = Role.get(role)
@@ -442,26 +442,28 @@ script.on_event(role_change_event_id,function(event)
     local player = Game.get_player(event)
     local by_player = Game.get_player(event.by_player_index) or SERVER
     local role = Role.get(event.role_name)    
-    local highest = Role.get_highest(player) or {__faild=true,tag='',name='None'}
+    local highest = Role.get_highest(player)
+    if not highest then Role.meta.default:add_player(player) highest = Role.meta.default end
     -- gets the falgs the player currently has
     for flag,callback in pairs(Role.flags) do if is_type(callback,'function') then callback(player,Role.has_flag(player,flag)) end end
     -- assign new tag and group of highest role
-    if highest.__faild then Group.get(player):remove_player(player)
-    else Group.assign(player,highest.group) end
+    Group.assign(player,highest.group)
     local old_highest_tag = Role.get(event.old_highest).tag or ''
     local start, _end = string.find(player.tag,old_highest_tag,1,true)
     if start and old_highest_tag ~= highest.tag then player.tag = string.sub(player.tag,0,start-1)..highest.tag..string.sub(player.tag,_end+1) end
     if not start then player.tag = highest.tag player_return({'ExpGamingCore-Role.tag-reset'},nil,player) end
-    -- play a sound to the player
-    if event.effect == 'assign' and not role.is_jail then player.play_sound{path='utility/achievement_unlocked'} 
-    else player.play_sound{path='utility/game_lost'} end
     if player.online_time > 60 then
         -- send a message to other players
         if event.batch_index == 1 then
             local names = {}
             for _,name in pairs(event.batch) do local role = Role.get(name) if role then table.insert(names,role.name) end end
-            if event.effect == 'assign' then game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.assign',player.name,table.concat(names,', '),by_player.name}}
-            else game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.unassign',player.name,name,by_player.name}} end
+            if event.effect == 'assign' then
+                if not role.is_jail then player.play_sound{path='utility/achievement_unlocked'} end
+                game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.assign',player.name,table.concat(names,', '),by_player.name}}
+            else 
+                player.play_sound{path='utility/game_lost'}
+                game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.unassign',player.name,table.concat(names,', '),by_player.name}}
+            end
         end
         -- log change to file
         game.write_file('role-change.json',

@@ -28,7 +28,7 @@ local function get_player_info(player,frame,add_cam)
     if frame then
         local frame = frame.add{type='frame',direction='vertical',style='image_frame'}
         frame.style.width = 200
-        if Role then frame.style.height = 275
+        if Role then frame.style.height = 300
         else frame.style.height = 260 end
         frame.add{type='label',caption={'ExpGamingPlayer-playerInfo.name',_player.index,_player.name},style='caption_label'}
         local _online = {'ExpGamingPlayer-playerInfo.no'}; if _player.online then _online = {'ExpGamingPlayer-playerInfo.yes'} end

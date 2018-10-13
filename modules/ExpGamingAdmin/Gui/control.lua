@@ -104,7 +104,7 @@ local reason_input = Gui.inputs.add_text('reason-input-admin-commands',false,'En
     end
 end)
 
-local action_drop_down = Gui.inputs.add_drop_down('action-drop-down-rank-change',{'Select Action',unpack(Admin.action_names)},1,function(player,selected,items,element)
+local action_drop_down = Gui.inputs.add_drop_down('action-drop-down-rank-change',function() return {'Select Action',unpack(Admin.action_names)} end,1,function(player,selected,items,element)
     element.parent.parent.action.caption = selected
     if selected == 'Jail' or selected == 'Kick' or selected == 'Ban' or selected == 'Temp Ban' then
         element.parent['reason-input-admin-commands'].style.visible = true

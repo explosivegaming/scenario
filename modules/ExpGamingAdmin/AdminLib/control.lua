@@ -63,6 +63,7 @@ function Admin.is_banned(player,detail)
 end
 
 function Admin.add_action(action,callback)
+    verbose('Added admin action: '..action)
     table.insert(Admin.action_names,action)
     Admin.actions[string.lower(action)] = callback
 end

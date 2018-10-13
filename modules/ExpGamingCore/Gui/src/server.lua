@@ -4,9 +4,10 @@
 local Game = require('FactorioStdLib.Game@^0.8.0')
 local Server = require('ExpGamingCore.Server@^4.0.0')
 
+Server.add_module_to_interface('ExpGui','ExpGamingCore.Gui')
+
 --- Adds a server thread that allows the camera follows to be toggled off and on
--- @function __comment
-script.on_event(-1,function(event)
+return function(event)
     Server.new_thread{
         name='camera-follow',
         data={cams={},cam_index=1,players={}}
@@ -39,6 +40,4 @@ script.on_event(-1,function(event)
             end
         end
     end):open()
-end)
-
-Server.add_module_to_interface('ExpGui','ExpGamingCore.Gui')
+end

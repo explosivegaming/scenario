@@ -263,6 +263,8 @@ function Server._thread:create(obj)
     obj.uuid = tostring(Server.uuid)
     obj._env = get_env()
     obj._env.obj = nil -- provents infinte recusion
+    local name = obj.name or 'Anon'
+    verbose('Created new thread: '..name..' ('..obj.uuid..')')
     return obj
 end
 
@@ -327,6 +329,8 @@ function Server._thread:open()
             table.insert(global.events[event],uuid)
         end,global,self.uuid)
     end
+    local name = self.name or 'Anon'
+    verbose('Opened thread: '..name..' ('..self.uuid..')')
     return true
 end
 
@@ -365,6 +369,8 @@ function Server._thread:close()
         -- else it will just be wiped from the global index
         else global.all[uuid] = nil global.all._n = global.all._n-1 end
     end
+    local name = self.name or 'Anon'
+    verbose('Closed thread: '..name..' ('..self.uuid..')')
     return _return
 end
 

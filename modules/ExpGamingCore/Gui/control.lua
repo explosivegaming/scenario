@@ -6,6 +6,7 @@
 
 local Game = require('FactorioStdLib.Game')
 local Color = require('FactorioStdLib.Color')
+local Server -- ExpGamingCore.Server@?^4.0.0
 
 local Gui = {}
 local global = global()
@@ -106,7 +107,7 @@ function Gui.cam_link(data)
         data.cam.style.width = data.width or 100
         data.cam.style.height = data.height or 100
     else return end
-    if not Server or not Server._thread or not Server.get_thread('camera-follow') then
+    if not Server or not Server.get_thread('camera-follow') then
         if not global.cams then
             global.cams = {}
             global.cam_index = 1
@@ -177,18 +178,18 @@ end)
 function Gui:on_init()
     self.left:on_init(); self.left.on_init = nil
     self.toolbar:on_init(); self.toolbar.on_init = nil
-    if loaded_modules['ExpGamingCore.Server'] then verbose('ExpGamingCore.Server is installed; Loading server src') require(module_path..'/src/server',{Gui=Gui}) end
-    if loaded_modules['ExpGamingCore.Role'] then
+    if loaded_modules['ExpGamingCore.Server@^4.0.0'] then Server = require('ExpGamingCore.Server@^4.0.0') verbose('ExpGamingCore.Server is installed; Loading server src') script.on_init(require(module_path..'/src/server',{Gui=self})) end
+    if loaded_modules['ExpGamingCore.Role@^4.0.0'] then
         verbose('ExpGamingCore.Role is installed; Loading ranking src')
         script.on_event('on_role_change',function(event)
-            Gui.toolbar.on_role_change(event)
-            Gui.center.on_role_change(event)
+            self.toolbar.on_role_change(event)
+            self.center.on_role_change(event)
         end)
     end
     script.on_event('on_player_joined_game',function(event)
-        Gui.toolbar.on_player_joined_game(event)
-        Gui.popup.on_player_joined_game(event)
-        Gui.left.on_player_joined_game(event)
+        self.toolbar.on_player_joined_game(event)
+        self.popup.on_player_joined_game(event)
+        self.left.on_player_joined_game(event)
     end) 
 end
 
