@@ -19,9 +19,13 @@ return {
     ['gate']=true,
     ['gun-turret']=true,
     ['laser-turret']=true,
+    ['flamethrower-turret']=true,
     ['radar']=true,
     ['lab']=true,
     ['big-electric-pole']=true,
     ['substation']=true,
-    ['rocket-silo']=true
+    ['rocket-silo']=true,
+    ['pumpjack']=true,
+    ['electric-mining-drill']=true,
+    ['roboport']=true
 }

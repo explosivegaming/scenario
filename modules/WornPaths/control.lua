@@ -78,13 +78,10 @@ script.on_event({defines.events.on_built_entity,on_robot_built_entity}, function
     local surface = entity.surface
     if entites[entity.name] then
         local box = entity.prototype.collision_box
-        local size = math.ceil(box.right_bottom.x)*math.ceil(box.right_bottom.y)
         for x = box.left_top.x,box.right_bottom.x do for y = box.left_top.y,box.right_bottom.y do
             local pos = {x=entity.position.x+x,y=entity.position.y+y}
             local tile = surface.get_tile(pos).name
-            if paths[tile] and math.random() < paths[tile][1]*size*(-2) then
-                ThisModule.down_grade(surface,pos)
-            end
+            if paths[tile] then ThisModule.down_grade(surface,pos) end
         end end
     end
 end)
