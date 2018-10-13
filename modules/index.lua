@@ -1,8 +1,6 @@
 -- not_luadoc=true
 --- Used to index the files to be loaded
 return {
-    ['FactorioStdlib.Game@^0.8.0']='./modules/FactorioStdlib/Game',
-    ['FactorioStdlib.Game@0.8.0']='./modules/FactorioStdlib/Game',
     ['FactorioStdLib.String@^0.8.0']='./modules/FactorioStdLib/String',
     ['FactorioStdLib.String@0.8.0']='./modules/FactorioStdLib/String',
     ['FactorioStdLib.Table@^0.8.0']='./modules/FactorioStdLib/Table',

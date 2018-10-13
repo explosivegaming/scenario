@@ -15,7 +15,7 @@
     "license": "<blank>",
     "dependencies": {
         "ExpGamingCore.Gui": "^4.0.0",
-        "FactorioStdlib.Game": "^0.8.0",
+        "FactorioStdLib.Game": "^0.8.0",
         "ExpGamingCore.Sync": "?^4.0.0"
     }
 }
