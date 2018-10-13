@@ -43,7 +43,7 @@ function Group.define(obj)
     if not type_error(obj.name,'string','Group creation is invalid: group.name is not a string') then return end
     if not type_error(obj.disallow,'table','Group creation is invalid: group.disallow is not a table') then return end
     verbose('Created Group: '..obj.name)
-    setmetatable(obj,{__index=function(tbl,key) return Group._prototype[key] or rawget(tbl,'_raw_group') and rawget(tbl,'_raw_group')[key] or nil end})
+    setmetatable(obj,{__index=function(tbl,key) return Group._prototype[key] or game and game.permissions.get_group(tbl.name)[key] or nil end})
     obj.connected_players = setmetatable({self=obj},Group._prototype.connected_players_mt)
     rawset(Group.groups,obj.name,obj)
     return obj
@@ -55,14 +55,12 @@ end
 -- @tparam ?LuaPlayer|pointerToPlayer|string mixed can either be the name or raw group of a group or a player indenifier
 -- @treturn table the group which was found or nil
 function Group.get(mixed)
-    log(serpent.line(mixed))
-    if is_type(mixed,'table') and not mixed.__self and mixed._raw_group then return mixed end
-    if is_type(mixed,'table') and mixed.__self and mixed.name then mixed = mixed.name end
+    if is_type(mixed,'table') and mixed.name then mixed = mixed.name end
     if game and Game.get_player(mixed) then mixed = Game.get_player(mixed).permission_group.name end
     local rtn = Group.groups[mixed]
     if not rtn and is_type(mixed,'string') and game.permissions.get_group(mixed) then
-        rtn = setmetatable({disallow={},name=mixed,_raw_group=game.permissions.get_group(mixed)},{
-            __index=function(tbl,key) return Group._prototype[key] or rawget(tbl,'_raw_group') and rawget(tbl,'_raw_group')[key] or nil end
+        rtn = setmetatable({disallow={},name=mixed},{
+            __index=function(tbl,key) return Group._prototype[key] or game and game.permissions.get_group(tbl.name)[key] or nil end
         })
         rtn.connected_players = setmetatable({self=rtn},Group._prototype.connected_players_mt)
     end
@@ -87,8 +85,9 @@ end
 -- @treturn LuaPermissionGroup the factorio group linked to this group
 function Group._prototype:get_raw()
     if not self_test(self,'group','get_raw') then return end
-    if not self._raw_group or self._raw_group.valid == false then error('No permissions group found, please to not remove groups with /permissions',2) return end
-    return setmetatable({},{__index=self._raw_group})
+    local _group = game.permissions.get_group(self.name)
+    if not _group or _group.valid == false then error('No permissions group found, please to not remove groups with /permissions',2) return end
+    return setmetatable({},{__index=_group})
 end
 
 --- Used to add a player to this group
@@ -170,10 +169,14 @@ end
 -- creates all permission groups and links them
 script.on_event('on_init',function(event)
     for name,group in pairs(Group.groups) do
-		group._raw_group = game.permissions.create_group(name)
-		for _,to_remove in pairs(group.disallow) do
-			group._raw_group.set_allows_action(defines.input_action[to_remove],false)
-		end
+		local _group = game.permissions.create_group(name)
+        verbose('Created Permission Group: '..name)
+        local count = 0
+        for _,to_remove in pairs(group.disallow) do
+            count=count+1
+			_group.set_allows_action(defines.input_action[to_remove],false)
+        end
+        verbose('Disalowed '..count..' input actions.')
     end
 end)
 
