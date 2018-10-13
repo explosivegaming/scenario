@@ -57,7 +57,7 @@ end
 function Group.get(mixed)
     if is_type(mixed,'table') and not mixed.__self and mixed._raw_group then return mixed end
     if is_type(mixed,'table') and mixed.__self and mixed.name then mixed = mixed.name end
-    if game and game.players[mixed] then mixed = game.players[mixed].permission_group.name end
+    if game and Game.get_player(mixed) then mixed = Game.get_player(mixed).permission_group.name end
     local rtn = Group.groups[mixed]
     if not rtn and game.permissions.get_group(mixed) then
         rtn = setmetatable({disallow={},name=mixed,_raw_group=game.permissions.get_group(mixed)},{
