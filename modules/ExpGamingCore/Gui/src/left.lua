@@ -133,7 +133,7 @@ function left._prototype:open(player)
     local left_flow = mod_gui.get_frame_flow(player)
     if not left_flow[self.name] then self:first_open(player) end
     left_flow[self.name].style.visible = true
-    left_flow['gui-left-hide'].style.visible = true
+    if left_flow['gui-left-hide'] then left_flow['gui-left-hide'].style.visible = true end
 end
 
 --- Used to force the gui closed for the player

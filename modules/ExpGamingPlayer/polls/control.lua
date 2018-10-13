@@ -250,7 +250,7 @@ ThisModule.Gui = Gui.popup{
         local btn = next:draw(title)
         btn.style.width = 20
         btn.style.height = 20
-        if Role and Role.allowed(frame.player_index,'create-poll') or player.admin then
+        if Role and Role.allowed(frame.player_index,'create-poll') or game.players[frame.player_index].admin then
             local btn = create_poll:draw(title)
             btn.style.width = 20
             btn.style.height = 20
