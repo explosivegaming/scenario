@@ -268,7 +268,7 @@ end
 -- @tparam table tbl the table that will be searched
 -- @tparam string str the string that will be looked for in the keys
 function table.autokey(tbl,str)
-    if not ExpLib.type_error(str,'string','Search string for table.autokey is not a string.') then return end
+    if not ExpLib.is_type(str,'string') then return end
     local _return = {}
     for key,value in pairs(tbl) do
         if string.contains(string.lower(key),string.lower(str)) then table.insert(_return,value) end
