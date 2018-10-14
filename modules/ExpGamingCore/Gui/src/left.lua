@@ -161,10 +161,11 @@ function left._prototype:first_open(player)
     if left_flow[self.name] then 
         frame = left_flow[self.name] 
         frame.clear()
-    else 
+    else
+        if not left_flow['gui-left-hide'] then left.hide(left_flow).style.maximal_width=15 end
         frame = left_flow.add{type='frame',name=self.name,style=mod_gui.frame_style,caption=self.caption,direction='vertical'}
         frame.style.visible = false
-        if is_type(self.open_on_join,'boolean') then frame.style.visible = self.open_on_join if left_flow['gui-left-hide'] then left_flow['gui-left-hide'].style.visible = true end end
+        if is_type(self.open_on_join,'boolean') then frame.style.visible = self.open_on_join left_flow['gui-left-hide'].style.visible = true end
     end
     if is_type(self.draw,'function') then self.draw(frame) else frame.style.visible = false error('No Callback On '..self.name) end
     return frame
