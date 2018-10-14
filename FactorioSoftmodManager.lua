@@ -195,7 +195,6 @@ Manager.global=setmetatable({__defaults={},__global={
             for key,value in pairs(Global) do rawset(Global,key,nil) end
             for key,value in pairs(rawget(rawget(tbl,'__defaults'),tostring(module_name))) do rawset(Global,key,deepcopy(value)) end
         end
-        if game then game.write_file('global/'..game.tick,serpent.line(_G.global)) end
         return setmetatable(Global,{
             __call=function(tbl,default) return Manager.global(default,tbl) end,
             __index=function(tbl,key) return rawget(Manager.global(),key) or moduleIndex[key] and Manager.global(key) end,

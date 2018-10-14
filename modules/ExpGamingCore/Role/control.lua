@@ -120,7 +120,7 @@ end
 function Role.assign(player,role,by_player,batch)
     local player = Game.get_player(player)
     if not player then error('Invalid player #1 given to Role.assign.',2) return end
-    if not role then return end
+    verbose('Assigning Roles: '..serpent.line(role)..' to: '..player.name)
     -- this loops over a table of role if given; will return if ipairs returns, else will asume it was ment to be a role and error
     if is_type(role,'table') and not role.name then 
         local ctn = 0 
@@ -146,6 +146,7 @@ end
 function Role.unassign(player,role,by_player,batch)
     local player = Game.get_player(player)
     if not player then error('Invalid player #1 given to Role.unassign.',2) return end
+    verbose('Assigning Roles: '..serpent.line(role)..' to: '..player.name)
     -- this loops over a table of role if given; will return if ipairs returns, else will asume it was ment to be a role and error
     if is_type(role,'table') and not role.name then 
         local ctn = 0 

@@ -45,7 +45,7 @@ global = _global{
 function ThisModule.remove_warp_point(name)
     local warp = global.warps[name]
     if not warp then return end
-    local surface =  warp.surface
+    local surface =  game.surfaces[warp.surface]
     local offset = warp.position
     local tiles = {}
     local tiles = {}
@@ -102,7 +102,7 @@ function ThisModule.make_warp_point(position,surface,force,name)
         text='Warp: '..name,
         icon={type='item',name=warp_item}
     })
-    global.warps[name] = {tag=tag,surface=surface,position=tag.position,old_tile=old_tile}
+    global.warps[name] = {tag=tag,surface=surface.index,position=tag.position,old_tile=old_tile}
     local _temp = {Spawn=global.warps.Spawn}
     global.warps.Spawn = nil
     for name,data in pairs(table.keysort(global.warps)) do _temp[name] = data end
@@ -133,7 +133,7 @@ local go_to_warp = Gui.inputs{
     if player.vehicle then player.vehicle.set_driver(nil) end
     if player.vehicle then player.vehicle.set_passenger(nil) end
     if player.vehicle then return end
-    player.teleport(warp.surface.find_non_colliding_position('player',warp.position,32,1),warp.surface)
+    player.teleport(game.surfaces[warp.surface].find_non_colliding_position('player',warp.position,32,1),game.surfaces[warp.surface])
     if not Role and not player.admin or Role and not Role.allowed(player,'always-warp') then 
         event.element.parent.parent.parent.parent.style.visible = false
         global.cooldowns[event.player_index] = warp_limit
@@ -161,7 +161,7 @@ ThisModule.Gui = Gui.left{
         }
         for name,warp in pairs(global.warps) do
             if not warp.tag or not warp.tag.valid then
-                player.force.add_chart_tag(warp.surface,{
+                player.force.add_chart_tag(game.surfaces[warp.surface],{
                     position=warp.position,
                     text='Warp: '..name,
                     icon={type='item',name=warp_item}
