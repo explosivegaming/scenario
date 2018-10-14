@@ -34,7 +34,8 @@ local global = global{
         _update=0,
         made={0,0,0,0,0,0,0},
         _made={0,0,0,0,0,0,0}
-    }
+    },
+    data={}
 }
 
 -- Function Define
@@ -45,13 +46,14 @@ ThisModule.Gui = Gui.left{
     draw=function(frame)
         local player = Game.get_player(frame.player_index)
         log(serpent.line(global))
-        log(serpent.line(global[player.force.name]))
-        if not global[player.force.name] then
+        log(serpent.line(global.data[player.force.name]))
+        if not global.data[player.force.name] then
             verbose('Added Science Global for: '..player.force.name)
-            global[player.force.name] = table.deepcopy(global._base)
+            global.data[player.force.name] = table.deepcopy(global._base)
         end
-        log(serpent.line(global[player.force.name]))
-        global = global[player.force.name]
+        log(serpent.line(global))
+        log(serpent.line(global.data[player.force.name]))
+        global = global.data[player.force.name]
         frame.caption = {'ExpGamingInfo-Science.name'}
         frame.add{
             type='label',
