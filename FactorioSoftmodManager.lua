@@ -176,6 +176,7 @@ Manager.global=setmetatable({__defaults={},__global={
 }},{
     __call=function(tbl,default,tbl2)
         local Global = _G.global
+        local Globalrtn = {}
         local tbl2 = type(tbl2) == 'table' and getmetatable(tbl2) or nil
         local module_name = type(default) == 'string' and default or tbl2 and tbl2.name or module_name
         local module_path = type(default) == 'string' and moduleIndex[default] or tbl2 and tbl2.path or module_path
@@ -186,16 +187,17 @@ Manager.global=setmetatable({__defaults={},__global={
         for dir in module_path:gmatch('%a+') do
             path = path..'.'..dir
             if not rawget(Global,dir) then new_dir=true Manager.verbose('Added Global Dir: '..path) rawset(Global,dir,{}) end
+            Globalrtn = rawget(Global,dir)
             Global = rawget(Global,dir)
         end
         if (new_dir or default == true) and rawget(rawget(tbl,'__defaults'),tostring(module_name)) then 
             Manager.verbose('Set Global Dir: '..path..' to its default')
             -- cant set it to be equle otherwise it will lose its global propeity 
             local function deepcopy(tbl) if type(tbl) ~= 'table' then return tbl end local rtn = {} for key,value in pairs(tbl) do rtn[key] = deepcopy(value) end return rtn end
-            for key,value in pairs(Global) do rawset(Global,key,nil) end
-            for key,value in pairs(rawget(rawget(tbl,'__defaults'),tostring(module_name))) do rawset(Global,key,deepcopy(value)) end
+            for key,value in pairs(Globalrtn) do rawset(Globalrtn,key,nil) end
+            for key,value in pairs(rawget(rawget(tbl,'__defaults'),tostring(module_name))) do rawset(Globalrtn,key,deepcopy(value)) end
         end
-        return setmetatable(Global,{
+        return setmetatable(Globalrtn,{
             __call=function(tbl,default) return Manager.global(default,tbl) end,
             __index=function(tbl,key) return rawget(Manager.global(),key) or moduleIndex[key] and Manager.global(key) end,
             path=module_path,name=module_name
