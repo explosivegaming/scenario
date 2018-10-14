@@ -132,8 +132,8 @@ script.on_event(defines.events.on_gui_click,function(event)
     if Admin and Admin.allowed(event.player_index) then Admin.btn_flow(flow).caption = event.element.name end
 end)
 
-script.on_event(defines.events.on_player_joined_game,ThisModule.update)
-script.on_event(defines.events.on_player_left_game,ThisModule.update)
+script.on_event(defines.events.on_player_joined_game,function() ThisModule.update() end)
+script.on_event(defines.events.on_player_left_game,function() ThisModule.update() end)
 
 ThisModule.force_update = function() return ThisModule.Gui() end
 -- when called it will queue an update to the player list
