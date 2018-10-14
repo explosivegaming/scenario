@@ -196,7 +196,16 @@ Manager.global=setmetatable({__defaults={},__global={
         end
         return setmetatable(Global,{
             __call=function(tbl,default) return Manager.global(default,tbl) end,
-            __index=function(tbl,key) return rawget(Manager.global(),key) or moduleIndex[key] and Manager.global(key) end,
+            __index=function(tbl,key) return rawget(Manager.global(nil,tbl),key) or moduleIndex[key] and Manager.global(key) end,
+            __newindex=function(tbl,key,value) rawset(Manager.global(nil,tbl),key,value) end,
+            __pairs=function(tbl)
+                local tbl = Manager.global(nil,tbl)
+                local function next_pair(tbl,k)
+                    k, v = next(tbl, k)
+                    if type(v) ~= nil then return k,v end
+                end
+                return next_pair, tbl, nil
+            end,
             path=module_path,name=module_name
         })
     end,
