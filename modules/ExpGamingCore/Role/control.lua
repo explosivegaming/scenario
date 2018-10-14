@@ -390,6 +390,7 @@ function Role._prototype:add_player(player,by_player,batch)
     if not global.roles[self.name] then global.roles[self.name] = {} end
     if not global.players[player.index] then global.players[player.index] = {} end
     local highest = Role.get_highest(player) or Role.meta.default
+    for _,player_index in pairs(global.roles[self.name]) do if player_index == player.index then return end end
     table.insert(global.roles[self.name],player.index)
     table.insert(global.players[player.index],self.name)
     script.raise_event(role_change_event_id,{
