@@ -21,6 +21,7 @@ local module_verbose = false --true|false
 -- @field named  a name index for thread uuids
 -- @field print_to contains players that event details will be printed to
 -- @field uuid contains the random number generator for the uuid system
+local pre_load_uuid = 0
 local global = global{
     all={_n=0},
     queue={},
@@ -38,12 +39,20 @@ local global = global{
 -- @treturn string the new uuid
 Server.uuid = add_metatable({},function()
     -- when it is called as a function
-    global.uuid=global.uuid+1
-    verbose('UUID Created: '..global.uuid)
-    return global.uuid
+    local uuid = 0
+    if game then
+        global.uuid=global.uuid+1
+        uuid=global.uuid+pre_load_uuid
+        verbose('Game UUID Increased: '..uuid)
+    else
+        pre_load_uuid=pre_load_uuid+1
+        uuid=pre_load_uuid
+        verbose('Load UUID Increased: '..uuid)
+    end
+    return add_metatable({uuid},nil,function(tbl) return string.to_hex(tostring(tbl[1])) end)
 end,function()
     -- when it is treated as a string
-    return string.to_hex(tostring(Server.uuid()))
+    return tostring(Server.uuid())
 end)
 
 --- Redirect to the thread index
