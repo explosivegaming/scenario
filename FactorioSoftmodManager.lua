@@ -182,13 +182,12 @@ Manager.global=setmetatable({__defaults={},__global={
         if not module_path or not module_name then return _G.global end
         if type(default) == 'table' then Manager.verbose('Default global has been set for: global'..module_path:gsub('/','.')) rawset(rawget(tbl,'__defaults'),tostring(module_name),default) end
         local path = 'global'
-        local new_dir = false
         for dir in module_path:gmatch('%a+') do
             path = path..'.'..dir
-            if not rawget(Global,dir) then new_dir=true Manager.verbose('Added Global Dir: '..path) rawset(Global,dir,{}) end
+            if not rawget(Global,dir) then Manager.verbose('Added Global Dir: '..path) rawset(Global,dir,{}) end
             Global = rawget(Global,dir)
         end
-        if (new_dir or default == true) and rawget(rawget(tbl,'__defaults'),tostring(module_name)) then 
+        if default == true and rawget(rawget(tbl,'__defaults'),tostring(module_name)) then 
             Manager.verbose('Set Global Dir: '..path..' to its default')
             -- cant set it to be equle otherwise it will lose its global propeity 
             local function deepcopy(tbl) if type(tbl) ~= 'table' then return tbl end local rtn = {} for key,value in pairs(tbl) do rtn[key] = deepcopy(value) end return rtn end
@@ -660,6 +659,7 @@ end)
 
 script.on_load(function(...)
     setmetatable(global,Manager.global.__global)
+    for module_name,default in pairs(Manager.global) do global(module_name) end
     Manager.event(-2,...)
 end)
 --over rides for the base values; can be called though Event

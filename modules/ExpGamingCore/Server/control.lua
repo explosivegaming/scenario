@@ -43,11 +43,11 @@ Server.uuid = add_metatable({},function()
     if game then
         global.uuid=global.uuid+1
         uuid=global.uuid+pre_load_uuid
-        verbose('Game UUID Increased: '..uuid)
+        verbose('Game UUID Increased: '..global.uuid..' ('..uuid..')')
     else
         pre_load_uuid=pre_load_uuid+1
         uuid=pre_load_uuid
-        verbose('Load UUID Increased: '..uuid)
+        verbose('Load UUID Increased: '..pre_load_uuid..' ('..uuid..')')
     end
     return add_metatable({uuid},nil,function(tbl) return string.to_hex(tostring(tbl[1])) end)
 end,function()
