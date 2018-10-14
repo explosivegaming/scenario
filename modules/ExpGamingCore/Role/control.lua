@@ -326,6 +326,7 @@ end
 function Role._prototype:get_players(online)
     if not self_test(self,'role','get_players') then return end
     if online and not type_error(online,'boolean','Invalid argument #1 to role:get_players, online is not a boolean.') then return end
+    log(serpent.line(global))
     if not global.roles[self.name] then global.roles[self.name] = {} end
     local rtn = {}
     for _,player_index in pairs(global.roles[self.name]) do

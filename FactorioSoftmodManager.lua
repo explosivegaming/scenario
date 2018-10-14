@@ -180,7 +180,7 @@ Manager.global=setmetatable({__defaults={},__global={
         local module_name = type(default) == 'string' and default or tbl2 and tbl2.name or module_name
         local module_path = type(default) == 'string' and moduleIndex[default] or tbl2 and tbl2.path or module_path
         if not module_path or not module_name then return _G.global end
-        if type(default) == 'table' then Manager.verbose('Default global has been set for: global'..module_path:gsub('/','.')) rawset(rawget(tbl,'__defaults'),tostring(module_name),default) end
+        if type(default) == 'table' then Manager.verbose('Default global has been set for: global'..string.sub(module_path:gsub('/','.')),2) rawset(rawget(tbl,'__defaults'),tostring(module_name),default) end
         local path = 'global'
         for dir in module_path:gmatch('%a+') do
             path = path..'.'..dir
@@ -188,7 +188,7 @@ Manager.global=setmetatable({__defaults={},__global={
             Global = rawget(Global,dir)
         end
         if default == true and rawget(rawget(tbl,'__defaults'),tostring(module_name)) then 
-            Manager.verbose('Set Global Dir: '..path..' to its default')
+            Manager.verbose('Reset Global Dir to default: '..path)
             -- cant set it to be equle otherwise it will lose its global propeity 
             local function deepcopy(tbl) if type(tbl) ~= 'table' then return tbl end local rtn = {} for key,value in pairs(tbl) do rtn[key] = deepcopy(value) end return rtn end
             for key,value in pairs(Global) do rawset(Global,key,nil) end
@@ -653,14 +653,25 @@ rawset(Manager.event,'names',setmetatable({},{
 }))
 
 script.on_init(function(...)
+    Manager.verbose('____________________| SubStart: script.on_init |____________________')
     setmetatable(global,Manager.global.__global)
+    local names = {}
+    for name,default in pairs(Manager.global.__defaults) do table.insert(names,name) end
+    Manager.verbose('Global Tables: '..table.concat(names,', '))
+    for name,default in pairs(Manager.global.__defaults) do global(name)(true) end
     Manager.event(-1,...) 
+    Manager.verbose('____________________| SubStop: script.on_init |____________________')
 end)
 
 script.on_load(function(...)
+    Manager.verbose('____________________| SubStart: script.on_load |____________________')
     setmetatable(global,Manager.global.__global)
-    for module_name,default in pairs(Manager.global) do global(module_name) end
+    local names = {}
+    for name,default in pairs(Manager.global.__defaults) do table.insert(names,name) end
+    Manager.verbose('Global Tables: '..table.concat(names,', '))
+    for name,default in pairs(Manager.global.__defaults) do Manager.verbose('Global '..name..' = '..serpent.line(Manager.global(name))) end
     Manager.event(-2,...)
+    Manager.verbose('____________________| SubStop: script.on_load |____________________')
 end)
 --over rides for the base values; can be called though Event
 Event=setmetatable({},{__call=Manager.event,__index=function(tbl,key) return Manager.event[key] or script[key] or error('Invalid Index To Table Event') end})
