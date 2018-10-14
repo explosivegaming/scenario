@@ -18,6 +18,7 @@ local Role = {
     order={},
     flags={},
     actions={},
+    preassign={},
     meta={times={},groups={},count=0},
     roles=setmetatable({},{
         __index=table.autokey,
@@ -66,7 +67,7 @@ local global = global{
 
 --- Used to set default roles for players who join
 -- @usage Role.set_preassign{name={roles}}
-function Role.set_preassign(tbl) global.preassign = tbl end
+function Role.set_preassign(tbl) if game then global.pressign = tbl else Role.preassign = tbl end end
 
 --- Defines a new instance of a role
 -- @usage Role.define{name='Root',short_hand='Root',tag='[Root]',group='Root',colour={r=255,b=255,g=255},is_root=true,allow={}} -- returns new role
@@ -491,6 +492,7 @@ script.on_event(defines.events.on_player_joined_game,function(event)
     Group.assign(player,highest.group)
     player.tag=highest.tag
     if global.preassign[player.name:lower()] then Role.assign(player,global.preassign[player.name:lower()]) end
+    if Role.preassign[player.name:lower()] then Role.assign(player,Role.preassign[player.name:lower()]) end
 end)
 
 script.on_event(defines.events.on_tick,function(event)
