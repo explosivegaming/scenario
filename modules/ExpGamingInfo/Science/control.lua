@@ -46,9 +46,11 @@ ThisModule.Gui = Gui.left{
         local player = Game.get_player(frame.player_index)
         log(serpent.line(global))
         log(serpent.line(global[player.force.name]))
-        if not global[player.force.name] then 
+        if not global[player.force.name] then
+            verbose('Added Science Global for: '..player.force.name)
             global[player.force.name] = table.deepcopy(global._base)
         end
+        log(serpent.line(global[player.force.name]))
         global = global[player.force.name]
         frame.caption = {'ExpGamingInfo-Science.name'}
         frame.add{
