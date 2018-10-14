@@ -240,7 +240,7 @@ script.on_event(defines.events.on_player_created, function(event)
             text='Warp: Spawn',
             icon={type='item',name=warp_item}
         })
-        global.warps['Spawn'] = {tag=tag,surface=player.surface,position={0,0}}
+        global.warps['Spawn'] = {tag=tag,surface=player.surface.index,position={0,0}}
     end
 end)
 
