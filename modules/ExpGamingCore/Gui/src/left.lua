@@ -215,7 +215,8 @@ left.on_player_joined_game = function(event)
     -- draws the left guis when a player first joins, fake_event is just because i am lazy
     local player = Game.get_player(event)
     local frames = Gui.data.left or {}
-    if not mod_gui.get_frame_flow(player)['gui-left-hide'] then left.hide(mod_gui.get_frame_flow(player)).style.maximal_width=15 end
+    local left_flow = mod_gui.get_frame_flow(player)
+    if not left_flow['gui-left-hide'] then left.hide(left_flow).style.maximal_width=15 end
     local done = {}
     for _,name in pairs(order_config) do
         local left = Gui.data.left[name]
