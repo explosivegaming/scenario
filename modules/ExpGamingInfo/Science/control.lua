@@ -34,8 +34,7 @@ local global = global{
         _update=0,
         made={0,0,0,0,0,0,0},
         _made={0,0,0,0,0,0,0}
-    },
-    data={}
+    }
 }
 
 -- Function Define
@@ -46,14 +45,14 @@ ThisModule.Gui = Gui.left{
     draw=function(frame)
         local player = Game.get_player(frame.player_index)
         log(serpent.line(global))
-        log(serpent.line(global.data[player.force.name]))
-        if not global.data[player.force.name] then
+        log(serpent.line(global[player.force.name]))
+        if not global[player.force.name] then
             verbose('Added Science Global for: '..player.force.name)
-            global.data[player.force.name] = table.deepcopy(global._base)
+            global[player.force.name] = table.deepcopy(global._base)
         end
         log(serpent.line(global))
-        log(serpent.line(global.data[player.force.name]))
-        global = global.data[player.force.name]
+        log(serpent.line(global[player.force.name]))
+        force_data = global[player.force.name]
         frame.caption = {'ExpGamingInfo-Science.name'}
         frame.add{
             type='label',
@@ -73,22 +72,22 @@ ThisModule.Gui = Gui.left{
             type='flow',
             direction='vertical'
         }
-        if global.update < game.tick-100 then
-            global._update = global.update
-            global._made = table.deepcopy(global.made)
+        if force_data.update < game.tick-100 then
+            force_data._update = force_data.update
+            force_data._made = table.deepcopy(force_data.made)
             for i,name in pairs(science_packs) do
-                global.made[i] = player.force.item_production_statistics.get_input_count(name)
+                force_data.made[i] = player.force.item_production_statistics.get_input_count(name)
             end
-            global.update = game.tick
+            force_data.update = game.tick
         end
         for i,name in pairs(science_packs) do
-            local made = global.made[i]
+            local made = force_data.made[i]
             if made > 0 then
                 totals.add{
                     type='label',
                     caption={'ExpGamingInfo-Science.format',{'ExpGamingInfo-Science.'..name},made}
                 }
-                local _made = string.format('%.2f',(made-global._made[i])/((global.update-global._update)/(3600*game.speed)))
+                local _made = string.format('%.2f',(made-force_data._made[i])/((force_data.update-force_data._update)/(3600*game.speed)))
                 times.add{
                     type='label',
                     caption={'ExpGamingInfo-Science.format',{'ExpGamingInfo-Science.'..name},_made}
