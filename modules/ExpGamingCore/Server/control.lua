@@ -39,6 +39,7 @@ local global = global{
 Server.uuid = add_metatable({},function()
     -- when it is called as a function
     global.uuid=global.uuid+1
+    verbose('UUID Created: '..global.uuid)
     return global.uuid
 end,function()
     -- when it is treated as a string
