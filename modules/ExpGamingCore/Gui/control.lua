@@ -61,6 +61,24 @@ function Gui.bar(frame,width)
     return line
 end
 
+--- Adds a lable that is centered
+-- @usage Gui.centered_label(frane, 'Hello, world!')
+-- @tparam LuaGuiElement frame the parent frame to add the label to
+-- @tparam string string the string that the lable will have
+function Gui.centered_label(frane, string)
+    local flow = frame.add {frame = 'flow'}
+    local flow_style = flow.style
+    flow_style.align = 'center'
+    flow_style.horizontally_stretchable = true
+
+    local label = flow.add {type = 'label', caption = string}
+    local label_style = label.style
+    label_style.align = 'center'
+    label_style.single_line = false
+
+    return label
+end
+
 --- Used to set the index of a drop down to a certian item
 -- @usage Gui.set_dropdown_index(dropdown,player.name) -- will select the index with the players name as the value
 -- @param dropdown the dropdown that is to be effected

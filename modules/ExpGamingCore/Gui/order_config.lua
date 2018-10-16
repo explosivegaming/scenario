@@ -1,4 +1,5 @@
 return {
+    'server-info',
     'readme',
     'science',
     'rockets',

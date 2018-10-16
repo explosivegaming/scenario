@@ -12,6 +12,7 @@ local Gui = require('ExpGamingCore.Gui@^4.0.0')
 local Sync = Sync -- this is to force sync to remain in the ENV
 
 local Sync_gui_functions = {}
+local logo_sprite_path = 'file'..string.sub(module_path,2)..'/src/logo.png'
 
 --- Adds a emeltent to the sever info gui
 -- @usage Sync.add_to_gui('string') -- return true
@@ -43,24 +44,28 @@ end
 -- @gui server-info
 Sync.info_gui = Gui.center{
     name='server-info',
-    caption='Server Info',
+    caption=logo_sprite_path,
     tooltip='Basic info about the current server',
     draw=function(self,frame)
         frame.caption = ''
         local info = Sync.info
         local frame = frame.add{type='flow',direction='vertical'}
-        local _flow = frame.add{type='flow'}
-        Gui.bar(_flow,200)
+        local h_flow = frame.add{type='flow'}
+        h_flow.add{type='sprite',sprite=logo_sprite_path}
+        local v_flow = h_flow.add{type='flow',direction='vertical'}
+        h_flow.add{type='sprite',sprite=logo_sprite_path}
+        local _flow = v_flow.add{type='flow'}
+        label_format(v_flow.add{
+            type='label',
+            caption=info.server_description,style='description_label'
+        },412)
+        Gui.bar(_flow,110)
         label_format(_flow.add{
             type='label',
             caption='Welcome To '..info.server_name,
             style='caption_label'
         },180)
-        Gui.bar(_flow,200)
-        label_format(frame.add{
-            type='label',
-            caption=info.server_description,style='description_label'
-        },600)
+        Gui.bar(_flow,110)
         Gui.bar(frame,600)
         local _frame = frame
         local frame = frame.add{

@@ -309,7 +309,7 @@ script.on_event('on_pre_player_left_game',Sync.emit_update)
 script.on_event('on_rocket_launched',Sync.emit_update)
 
 function Sync:on_init()
-    if loaded_modules['ExpGamingCore.Gui'] then verbose('ExpGamingCore.Gui is installed; Loading gui src') require(module_path..'/src/gui',{Sync=Sync}) end
+    if loaded_modules['ExpGamingCore.Gui'] then verbose('ExpGamingCore.Gui is installed; Loading gui src') require(module_path..'/src/gui',{Sync=Sync,module_path=module_path}) end
     if loaded_modules['ExpGamingCore.Role'] then verbose('ExpGamingCore.Role is installed; Loading role src') require(module_path..'/src/ranking',{Sync=Sync}) end
     if loaded_modules['ExpGamingCore.Server'] then require('ExpGamingCore.Server').add_module_to_interface('Sync','ExpGamingCore.Sync') end
 end
