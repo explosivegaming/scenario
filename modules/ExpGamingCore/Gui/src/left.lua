@@ -28,6 +28,8 @@ left.hide = Gui.inputs{
     end
 end)
 
+local global = self_global
+
 -- used for debugging
 function left.override_open(state)
     global.over_ride_left_can_open = state

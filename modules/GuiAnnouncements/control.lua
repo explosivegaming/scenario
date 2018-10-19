@@ -42,11 +42,16 @@ local send_popup = Gui.inputs{
     local role = Role.get_highest(player)
     local _role = Role.get(event.element.parent.role.caption); if not _role then return end
     local sent_by = {'GuiAnnouncements.sent-by',player.name,role.name}
-    local role_name = _role.name..'s'; if rank_name == Role.meta.default.name..'s' then rank_name = 'Everyone' end
-    local sent_to = {'GuiAnnouncements.sent-to',rank_name}
+    local role_name = _role.name..'s'; if role_name == Role.meta.default.name..'s' then role_name = 'Everyone' end
+    local sent_to = {'GuiAnnouncements.sent-to',role_name}
     local message = event.element.parent.parent.message.text
-    Gui.popup.open('announcements',{sent_by=sent_by,sent_to=sent_to,message=message},_role:get_players(true))
+    local players = _role:get_players(true)
+    if _role.index == Role.meta.default.index then players = game.connected_players end
+    Gui.popup.open('announcements',{sent_by=sent_by,sent_to=sent_to,message=message},players)
+    player_return('Announcement sent to '..#players..' players ('..role_name..')',defines.textcolor.info,player)
+    verbose('Announcement sent to '..#players..' players ('..role_name..') by '..player.name..'('..role.name..') with message: '..message)
     event.element.parent.parent.message.text = ''
+    Gui.left.close('announcements',player)
 end)
 
 ThisModule.Gui = Gui.popup{

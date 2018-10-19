@@ -177,7 +177,7 @@ function Server._thread_handler(event)
         if thread and thread:valid() then
             if is_type(thread._events[event_id],'function') then
                 -- runs the function in the same env it was created (avoids desyncs)
-                local sandbox, success, err = Manager.sandbox(thread._events[event_id],thread._env,thread,event)
+                local success, err = Manager.sandbox(thread._events[event_id],thread._env,thread,event)
                 -- if there is an error it asks the thread to deal with it
                 if not success then thread:error(err) end
             end
@@ -223,11 +223,11 @@ function Server.interface(callback,use_thread,env,...)
             callback = is_type(callback,'function') and callback or loadstring(callback)
             local env = table.remove(thread.data,1)
             if is_type(env,'table') and env._env == true then
-                local sandbox, success, err = Manager.sandbox(callback,env,unpack(thread.data))
+                local success, err = Manager.sandbox(callback,env,unpack(thread.data))
                 if not success then error(err) end
                 return err
             else 
-                local sandbox, success, err = Manager.sandbox(callback,{},env,unpack(thread.data))
+                local success, err = Manager.sandbox(callback,{},env,unpack(thread.data))
                 if not success then error(err) end
                 return err
             end
@@ -243,11 +243,11 @@ function Server.interface(callback,use_thread,env,...)
             _callback = rtn
         end
         if is_type(env,'table') and env._env == true then
-            local sandbox, success, err = Manager.sandbox(_callback,env,...)
+            local success, err = Manager.sandbox(_callback,env,...)
             if not success then return success,err
             else return success, unpack(err) end
         else 
-            local sandbox, success, err = Manager.sandbox(_callback,{},env,...)
+            local success, err = Manager.sandbox(_callback,{},env,...)
             if not success then return success,err
             else return success, unpack(err) end
         end
@@ -392,13 +392,13 @@ function Server._thread:resolve(...)
     local _return = false
     -- checks if the resolve haddler is still present
     if is_type(self._resolve,'function') then 
-        local sandbox, success, err = Manager.sandbox(self._resolve,self._env,self,...)
+        local success, err = Manager.sandbox(self._resolve,self._env,self,...)
         if success then
             -- if it was successful then it will attemp to call the success handler
             if is_type(self._success,'function') then
                 -- interface is used as a way to delay the success call till the next tick
                 Server.interface(function(thread,err)
-                    local sandbox, success, err = Manager.sandbox(thread._success,thread._env,thread,err)
+                    local success, err = Manager.sandbox(thread._success,thread._env,thread,err)
                     if not success then thread:error(err) end
                 end,true,self,err)
                 -- later returns true if there was a call to the success handler

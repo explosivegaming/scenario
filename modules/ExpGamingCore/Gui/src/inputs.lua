@@ -128,7 +128,7 @@ function inputs._event_handler(event)
     if element then
         verbose('There was a gui event ('..Event.names[event.name]..') with element: '..event.element.name)
         if not is_type(element.events[event.name],'function') then return end
-        local success, err = pcall(element.events[event.name],event)
+        local success, err = Manager.sandbox(element.events[event.name],{},event)
         if not success then
             if is_type(element._error,'function') then pcall(element._error) 
             else error(err) end

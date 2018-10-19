@@ -38,7 +38,7 @@ Gui.inputs = require(module_path..'/src/inputs',{Gui=Gui})
 table.merge(events,Gui.inputs._events)
 Gui.inputs._events = nil
 
-Gui.left = require(module_path..'/src/left',{Gui=Gui,order_config=order_config})
+Gui.left = require(module_path..'/src/left',{Gui=Gui,order_config=order_config,self_global=global})
 Gui.popup = require(module_path..'/src/popup',{Gui=Gui})
 Gui.toolbar = require(module_path..'/src/toolbar',{Gui=Gui,order_config=order_config})
 

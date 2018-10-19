@@ -59,7 +59,7 @@ commands.validate = {
     ['string-inf']=function(value,event) return tostring(value) end,
     ['string-len']=function(value,event,max) 
         local rtn = tostring(value) and tostring(value):len() <= max and tostring(value) or nil 
-        if not rtn then return commands.error{'ExpGamingCore_Command.error-string-len'} end return rtn end,
+        if not rtn then return commands.error{'ExpGamingCore_Command.error-string-len',max} end return rtn end,
     ['number']=function(value,event) 
         local rtn = tonumber(value) or nil 
         if not rtn then return commands.error{'ExpGamingCore_Command.error-number'} end return rtn end,
@@ -68,10 +68,10 @@ commands.validate = {
         if not rtn then return commands.error{'ExpGamingCore_Command.error-number'} end return rtn end,
     ['number-range']=function(value,event,min,max) 
         local rtn = tonumber(value) and tonumber(value) > min and tonumber(value) <= max and tonumber(value) or nil
-        if not rtn then return commands.error{'ExpGamingCore_Command.error-number-range'} end return rtn end,
+        if not rtn then return commands.error{'ExpGamingCore_Command.error-number-range',min,max} end return rtn end,
     ['number-range-int']=function(value,event,min,max) 
         local rtn = tonumber(value) and math.floor(tonumber(value)) > min and math.floor(tonumber(value)) <= max and math.floor(tonumber(value)) or nil
-        if not rtn then return commands.error{'ExpGamingCore_Command.error-number-range'} end return rtn end,
+        if not rtn then return commands.error{'ExpGamingCore_Command.error-number-range',min,max} end return rtn end,
     ['player']=function(value,event) 
         local rtn = Game.get_player(value) or nil
         if not rtn then return commands.error{'ExpGamingCore_Command.error-player',value} end return rtn end,
@@ -266,7 +266,7 @@ commands.add_command = function(name, description, inputs, callback)
     or commands.format_inputs(name)
     data[name].help = help
     commands._add_command(name,help,function(...)
-        local success, err = pcall(run_custom_command,...)
+        local success, err = Manager.sandbox(run_custom_command,{},...)
         if not success then error(err) end
     end)
     return data[name]

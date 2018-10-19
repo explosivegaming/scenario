@@ -24,8 +24,8 @@ end
 -- @usage get_env() returns current ENV with _G keys removed
 -- @treturn table the env table with _G keys removed
 -- @warning does not work from console
-function ExpLib.get_env()
-    local level = 2
+function ExpLib.get_env(level)
+    local level = level and level+1 or 2
     local env = setmetatable({},{__index=_G})
     while true do
         if not debug.getinfo(level-1) then break end
@@ -53,7 +53,7 @@ function ExpLib.add_metatable(tbl,callback,string)
     local string = ExpLib.is_type(string,'function') and string or ExpLib.is_type(string,'string') and function() return string end or table.tostring
     return setmetatable(tbl,{
         __tostring=string,
-        __concat=function(val1,val2) return type(val1) == 'string' and val1..string() or string()..val2 end,
+        __concat=function(val1,val2) return type(val1) == 'string' and val1..string(val2) or string(val1)..val2 end,
         __call=callback
     })
 end

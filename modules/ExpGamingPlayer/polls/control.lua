@@ -27,7 +27,7 @@ local global = global{
 
 -- Function Define
 local function _poll_end(self)
-    local uuid = self.data.poll_uuid
+    local uuid = tostring(self.data.poll_uuid)
     local poll = global.active[uuid]
     if not poll then return end
     local highest = {nil,-1}
@@ -37,7 +37,6 @@ local function _poll_end(self)
         if _result > highest[2] then highest = {answer,_result} end
         _votes[answer] = _result
     end
-    local uuid = poll.uuid
     poll.uuid = nil
     poll.votes = _votes
     poll.answers = nil
@@ -46,6 +45,7 @@ local function _poll_end(self)
     global.active[uuid] = nil
     game.print({'ExpGamingPlayer-polls.end',poll.question},defines.textcolor.info)
     game.print({'ExpGamingPlayer-polls.winner',highest[1]},defines.textcolor.info)
+    verbose('Ended Poll: '..poll.question..' ('..uuid..') Highest: '..highest[1])
 end
 
 local function _poll_data(question,answers)
@@ -61,7 +61,8 @@ local function _poll_data(question,answers)
         timeout=poll_time_out*60
     }:on_event('timeout',_poll_end):open()
     -- This time out is known to cause desyncs and so I have moved it to a hard coded function
-    global.active[poll.uuid]=poll
+    global.active[tostring(poll.uuid)]=poll
+    verbose('Created Poll: '..question..' ('..poll.uuid..')')
     return poll.uuid
 end
 
@@ -212,17 +213,17 @@ ThisModule.Gui = Gui.popup{
         frame.style.right_padding = 5
         frame.style.bottom_padding = 5
         local uuid = data.uuid
-        local poll = global.active[uuid]
+        local poll = global.active[tostring(uuid)]
         if not poll then return end
         local flow = frame.add{
             type='flow',
-            name=uuid,
+            name=tostring(uuid),
             direction='vertical'
         }
         flow.add{type='label',caption={'ExpGamingPlayer-polls.time-left',poll_time_out}}
         flow.add{type='label',caption='Question: '..poll.question}
         flow.add{type='label',name='answer',caption='Your Answer: None'}
-        opption_drop_down:draw(flow)
+        opption_drop_down(flow)
     end
 }:add_left{
     caption='utility/item_editor_icon',

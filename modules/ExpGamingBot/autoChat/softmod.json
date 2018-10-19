@@ -12,6 +12,7 @@
     ],
     "dependencies": {
         "FactorioStdLib.Game": "^0.8.0",
+        "ExpGamingCore.Server": "^4.0.0",
         "ExpGamingCore.Role": "?^4.0.0"
     },
     "collection": "ExpGamingBot_4.0.0"

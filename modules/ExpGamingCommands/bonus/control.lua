@@ -33,7 +33,7 @@ script.on_event(defines.events.on_player_respawned,function(event)
     local player = Game.get_player(event)
     local bonus = global[player.index]
     if bonus then
-        for _,setting in pairs(settings) do player[key] = setting*math.floor(bonus)*0.01 end
+        for key,setting in pairs(settings) do player[key] = setting*math.floor(bonus)*0.01 end
     end
 end)
 
