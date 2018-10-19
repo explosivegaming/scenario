@@ -49,7 +49,7 @@ Server.uuid = add_metatable({},function()
         uuid=pre_load_uuid
         verbose('Load UUID Increased: '..pre_load_uuid..' ('..uuid..')')
     end
-    return add_metatable({uuid},nil,function(tbl) return string.to_hex(tostring(tbl[1])) end)
+    return add_metatable({uuid},nil,function(tbl) return string.format("%x", tostring(tbl[1])) end)
 end,function()
     -- when it is treated as a string
     return tostring(Server.uuid())
