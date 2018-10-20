@@ -19,6 +19,7 @@ local warp_tile = 'tutorial-grid'
 local warp_limit = 60
 local warp_item = 'discharge-defense-equipment'
 local global_offset = {x=0,y=0}
+local warp_min_distance = 25
 
 -- Module Define
 local _global = global
@@ -27,7 +28,7 @@ local module_verbose = false
 local ThisModule = {
     on_init=function(self)
         if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
-        if loaded_modules['ExpGamingCore.Command@^4.0.0'] then require(module_path..'/src/commands',{self=self,warps=global}) end
+        if loaded_modules['ExpGamingCore.Command@^4.0.0'] then require(module_path..'/src/commands',{self=self,warps=global,warp_min_distance=warp_min_distance}) end
     end
 }
 
