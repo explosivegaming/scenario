@@ -12,7 +12,7 @@ local function get_allowed_afk_time(player)
     if Role then role = Role.get_highest(player)
     else if player.admin then return else role = Role.meta.default end end
     local count = #game.connected_players
-    local base = role.index or false
+    local base = not role.allow_afk_kick and role.index or false
     if not base then return false end
     return (Role.meta.count/base)*count
 end

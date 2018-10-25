@@ -28,7 +28,7 @@ function ExpLib.get_env(level)
     local level = level and level+1 or 2
     local env = setmetatable({},{__index=_G})
     while true do
-        if not debug.getinfo(level-1) then break end
+        if not debug.getinfo(level) or debug.getinfo(level).namewhat == 'global' then break end
         local i = 1
         while true do
             local name, value = debug.getlocal(level,i)
@@ -36,7 +36,6 @@ function ExpLib.get_env(level)
             i=i+1
         end
         level=level+1
-        if debug.getinfo(level-2).namewhat == 'global' then break end
     end
     return env
 end

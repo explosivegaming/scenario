@@ -4,6 +4,7 @@ Role.add_flag('is_antiroot',function(player,state) player.character.destructible
 Role.add_flag('is_admin',function(player,state) player.admin = state end) -- highly recomented but not required
 Role.add_flag('is_spectator',function(player,state) player.spectator = state end)
 Role.add_flag('is_jail',function(player,state) player.character.active = not state end)
+Role.add_flag('allow_afk_kick')
 Role.add_flag('is_donator')
 Role.add_flag('is_timed')
 Role.add_flag('is_varified')
@@ -139,6 +140,7 @@ Role{
     group='HiMember',
     colour={r=230,g=99,b=34},
     is_donator=true,
+    allow_afk_kick=true,
     allow={
         ['set-home']=true,
         ['home']=true,
@@ -151,6 +153,7 @@ Role{
     tag='[Partner]',
     group='HiMember',
     colour={r=140,g=120,b=200},
+    allow_afk_kick=true,
     allow={
         ['global-chat']=true,
     }
@@ -163,6 +166,7 @@ Role{
     colour={r=140,g=120,b=200},
     is_timed=true,
     is_varified=true,
+    allow_afk_kick=true,
     time=600, -- 10 hours
     allow={
         ['tree-decon']=true,
@@ -179,6 +183,7 @@ Role{
     group='Member',
     colour={r=24,g=172,b=188},
     is_varified=true,
+    allow_afk_kick=true,
     allow={
         ['edit-tasklist']=true,
         ['make-warp']=true,
@@ -192,6 +197,7 @@ Role{
     tag='[Regular]',
     group='Member',
     colour={r=79,g=155,b=163},
+    allow_afk_kick=true,
     is_timed=true,
     time=180, -- 3 hours
     allow={
@@ -208,6 +214,7 @@ Role{
     tag='',
     group='Guest',
     colour={r=185,g=187,b=160},
+    allow_afk_kick=true,
     is_default=true,
     allow={
         ['player-list']=true,
