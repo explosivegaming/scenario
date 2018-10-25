@@ -244,15 +244,18 @@ Manager.sandbox = setmetatable({
             -- creates a new sandbox env
             local sandbox = tbl()
             local env = type(env) == 'table' and env or {}
-            -- new indexs are saved into sandbox and if _G does not have the index then look in sandbox
-            local old_mt = getmetatable(_G) or {}
-            local tmp_env = setmetatable({},{__index=function(tbl,key) return env[key] or sandbox[key] end})
-            setmetatable(_G,{__index=tmp_env,__newindex=sandbox})
+            local _G_mt = getmetatable(_G)
+            -- creates a new ENV where it will look in the provided env then the sand box and then _G, new indexes saved to sandbox
+            local tmp_env = setmetatable({},{__index=function(tbl,key) return env[key] or sandbox[key] or rawget(_G,key) end,newindex=sandbox})
+            tmp_env._ENV = tmp_env
+            tmp_env._G_mt = _G_mt
             -- runs the callback
+            setmetatable(_G,{__index=tmp_env,newindex=sandbox})
+            --debug.setupvalue(callback,1,tmp_env) -- this should set the value of _ENV
             local rtn = {pcall(callback,...)}
             local success = table.remove(rtn,1)
+            setmetatable(_G,_G_mt)
             -- this is to allow modules to be access with out the need of using Mangaer[name] also keeps global clean
-            setmetatable(_G,old_mt)
             if success then return success, rtn, sandbox
             else return success, rtn[1], sandbox end
         else return setmetatable({},{__index=tbl}) end

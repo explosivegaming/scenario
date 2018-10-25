@@ -45,8 +45,9 @@ end
 -- @treturn table the env table with _G keys removed
 -- @warning does not work from console
 function ExpLib.get_upvalues(level)
-    local level = level and level+1 or 2
-    local func = debug.getinfo(level).func
+    local func = level and ExpLib.is_type(level,'function') and level or nil
+    local level = level and ExpLib.is_type(level,'number') and level+1 or 2
+    func = func or debug.getinfo(level).func
     local upvalues = setmetatable({},{__index=_G})
     local i = 1
     while true do
