@@ -263,6 +263,10 @@ end
 -- @field data any data that the thread will beable to access 
 Server._thread = {}
 
+local _env_metatable = {
+    __index=function(tbl,key) if rawget(tbl,'_modules') and tbl._modules[key] then return require(tbl._modules[key]) end end
+}
+
 --- Returns a new thread object
 -- @usage new_thread = thread:create()
 -- @tparam[opt={}] table obj all values are opt {timeout=int,name=str,data=any}
@@ -274,15 +278,11 @@ function Server._thread:create(obj)
     -- creates a varible containg all upvalus for the thread (stops desyncs)
     obj._env = get_upvalues(2)
     obj._env._env = true
+    obj._env._ENV = nil -- provents infinte recusion
     -- removes any modules from the _env to save space in global (less time to serizle)
     obj._env._modules = {}
     for name,value in pairs(obj._env) do if is_type(value,'table') and value._module_name and loaded_modules[value._module_name] == value then obj._env._modules[name] = value._module_name obj._env[name] = nil end end
-    -- metatable allows these modules to be called by there orignial
-    setmetatable(obj._env,{
-        __index=function(tbl,key) verbose(serpent.line(tbl)) verbose(key) if rawget(tbl,'_modules') and tbl._modules[key] then return require(tbl._modules[key]) end end
-    })
-    -- provents infinte recusion
-    obj._env._ENV = nil
+    setmetatable(obj._env,_env_metatable)
     local name = obj.name or 'Anon'
     verbose('Created new thread: '..name..' ('..obj.uuid..')')
     return obj
@@ -492,9 +492,7 @@ script.on_event(-2,function(event)
     -- sets up metatable again so that threads contiune to work
     for uuid,thread in pairs(Server.threads) do 
         setmetatable(thread,{__index=Server._thread}) 
-        setmetatable(thread._env,{
-            __index=function(tbl,key) verbose(serpent.line(tbl)) verbose(key) if rawget(tbl,'_modules') and tbl._modules[key] then return require(tbl._modules[key]) end end
-        })
+        setmetatable(thread._env,_env_metatable)
     end
 end)
 
