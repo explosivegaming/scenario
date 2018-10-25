@@ -246,9 +246,8 @@ Manager.sandbox = setmetatable({
             local env = type(env) == 'table' and env or {}
             -- new indexs are saved into sandbox and if _G does not have the index then look in sandbox
             local old_mt = getmetatable(_G) or {}
-            local env_mt = getmetatable(env) or {}
-            setmetatable(env,{__index=function(tbl,key) return env_mt.__index and env_mt.__index(tbl,key) or sandbox[key] end})
-            setmetatable(_G,{__index=env,__newindex=sandbox})
+            local tmp_env = setmetatable({},{__index=function(tbl,key) return env[key] or sandbox[key] end})
+            setmetatable(_G,{__index=tmp_env,__newindex=sandbox})
             -- runs the callback
             local rtn = {pcall(callback,...)}
             local success = table.remove(rtn,1)
