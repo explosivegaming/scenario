@@ -78,7 +78,7 @@ commands.validate = {
     ['player-online']=function(value,event) 
         local player,err = commands.validate['player'](value) 
         if err then return commands.error(err) end
-        local rtn = player.conected and player or nil
+        local rtn = player.connected and player or nil
         if not rtn then return commands.error{'ExpGamingCore_Command.error-player-online'} end return rtn end,
     ['player-alive']=function(value,event) 
         local player,err = commands.validate['player-online'](value) 

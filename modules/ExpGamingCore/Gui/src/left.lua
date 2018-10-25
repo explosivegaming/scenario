@@ -49,7 +49,7 @@ function left.add(obj)
     return obj
 end
 
---- This is used to update all the guis of conected players, good idea to use our thread system as it as nested for loops
+--- This is used to update all the guis of connected players, good idea to use our thread system as it as nested for loops
 -- @usage Gui.left.update()
 -- @tparam[opt] string frame this is the name of a frame if you only want to update one
 -- @param[opt] players the player to update for, if not given all players are updated, can be one player
