@@ -331,17 +331,9 @@ Manager.loadModules = setmetatable({},
                     -- if you prefere module_exports can be used rather than returning the module
                     if type(tbl[module_name]) == 'nil' then
                         -- if it is a new module then creat the new index
-                        if string.find(module_name,'GlobalLib') then
-                            Manager.verbose('Extracting GlobalLib: '..module_name)
-                            -- if it is named GlobalLib then it will be auto extracted into _G
-                            if sandbox.module_exports and type(sandbox.module_exports) == 'table'
-                            then for key,value in pairs(sandbox.module_exports) do _G[key] = value end
-                            else for key,value in pairs(table.remove(module,1)) do _G[key] = value end end
-                        else
-                            if sandbox.module_exports and type(sandbox.module_exports) == 'table'
-                            then tbl[module_name] = sandbox.module_exports
-                            else tbl[module_name] = table.remove(module,1) end
-                        end
+                        if sandbox.module_exports and type(sandbox.module_exports) == 'table'
+                        then tbl[module_name] = sandbox.module_exports
+                        else tbl[module_name] = table.remove(module,1) end
                     elseif type(tbl[module_name]) == 'table' then
                         -- if this module adds onto an existing one then append the keys
                         if sandbox.module_exports and type(sandbox.module_exports) == 'table'
@@ -362,6 +354,7 @@ Manager.loadModules = setmetatable({},
                     end
                     -- if there is a module by this name in _G ex table then it will be indexed to the new module
                     if rawget(_G,module_name) and type(tbl[module_name]) == 'table' then setmetatable(rawget(_G,module_name),{__index=tbl[module_name]}) end
+                    if type(tbl[module_name]) == 'table' then tbl[module_name]._module_path = path tbl[module_name]._module_name = module_name end
                 else
                     Manager.verbose('Failed load: "'..module_name..'"; path: '..path..' ('..module..')','errorCaught')
                     for event_name,callbacks in pairs(Manager.event) do Manager.verbose('Removed Event Handler: "'..module_name..'/'..Manager.event.names[event_name],'eventRegistered') callbacks[module_name] = nil end
@@ -488,6 +481,7 @@ Manager.error = setmetatable({
     end,
     __index=function(tbl,key)
         -- this allows the __error_handler to be called from many different names
+        if type(key) ~= 'string' then return end
         if key:lower() == 'addhandler' or key:lower() == 'sethandler' or key:lower() == 'handler' or key:lower() == 'register' then return rawget(tbl,'__error_handler')
         else rawget(tbl,'__error_call')('Invalid index for error handler; please use build in methods.') end
     end,

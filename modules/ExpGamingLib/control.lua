@@ -28,16 +28,33 @@ function ExpLib.get_env(level)
     local level = level and level+1 or 2
     local env = setmetatable({},{__index=_G})
     while true do
-        if not debug.getinfo(level) or debug.getinfo(level).namewhat == 'global' then break end
+        if not debug.getinfo(level) then break end
         local i = 1
         while true do
             local name, value = debug.getlocal(level,i)
-            if not name then break else env[name] = value end
+            if not name or _G[name] == value then break else env[name] = value end
             i=i+1
         end
         level=level+1
     end
     return env
+end
+
+--- Used to get the current ENV with all _G keys removed; useful when saving function to global
+-- @usage get_env() returns current ENV with _G keys removed
+-- @treturn table the env table with _G keys removed
+-- @warning does not work from console
+function ExpLib.get_upvalues(level)
+    local level = level and level+1 or 2
+    local func = debug.getinfo(level).func
+    local upvalues = setmetatable({},{__index=_G})
+    local i = 1
+    while true do
+        local name, value = debug.getupvalue(func,i)
+        if not name then break else upvalues[name] = value end
+        i=i+1
+    end
+    return upvalues
 end
 
 --- Creats a table that will act like a string and a function
