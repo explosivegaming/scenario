@@ -11,8 +11,8 @@ commands.add_command('make-warp', 'Make a warp point at your location', {
     if game.player.gui.top[name] then player_return({'WarpPoints.name-used'},defines.textcolor.med) return commands.error end
     if warps.warps[name] then player_return({'WarpPoints.name-used'},defines.textcolor.med) return commands.error end
     for name,warp in pairs(warps.warps) do
-        local dx = position.x-warp.position.x
-        local dy = position.y-warp.position.y
+        local dx = position.x-warp.position[1]
+        local dy = position.y-warp.position[2]
         if dx^2 + dy^2 < warp_min_distance then player_return({'WarpPoints.too-close'},defines.textcolor.med) return commands.error end
     end
     -- to do add a test for all warps
