@@ -206,21 +206,21 @@ end
 -- @tparam table command the event rasied by the command
 local function run_custom_command(command)
     local data = commands.data[command.name]
-    local player_name = Game.get_player(command) and Game.get_player(command).name or 'server'
+    local player = Game.get_player(command) or SERVER
     -- runs all middle ware if any, if there is no middle where then it relyis on .default_admin_only
     if #middleware > 0 then for _,callback in pairs(middleware) do
         local success, err = pcall(callback,player_name,command.name,command)
         if not success then error(err)
         elseif not err then
             player_return({'ExpGamingCore_Command.unauthorized'},defines.textcolor.crit)
-            logMessage(player_name,command,'Failed to use command (Unauthorized)',commands.validate_args(command))
-            if game.player then game.player.play_sound{path='utility/cannot_build'} end
+            logMessage(player.name,command,'Failed to use command (Unauthorized)',commands.validate_args(command))
+            game.player.play_sound{path='utility/cannot_build'}
             return
         end
-    end elseif data.default_admin_only == true and game.player and not game.player.admin then
+    end elseif data.default_admin_only == true and player and not player.admin then
         player_return({'ExpGamingCore_Command.unauthorized'},defines.textcolor.crit)
-        logMessage(player_name,command,'Failed to use command (Unauthorized)',commands.validate_args(command))
-        if game.player then game.player.play_sound{path='utility/cannot_build'} end
+        logMessage(player.name,command,'Failed to use command (Unauthorized)',commands.validate_args(command))
+        game.player.play_sound{path='utility/cannot_build'}
         return
     end
     -- gets the args for the command
@@ -228,15 +228,15 @@ local function run_custom_command(command)
     if args == commands.error then
         if is_type(err,'table') then table.insert(err,command.name) table.insert(err,commands.format_inputs(data))
         player_return(err,defines.textcolor.high) else player_return({'ExpGamingCore_Command.invalid-inputs',command.name,commands.format_inputs(data)},defines.textcolor.high) end
-        logMessage(player_name,command,'Failed to use command (Invalid Args)',args)
-        if game.player then game.player.play_sound{path='utility/deconstruct_big'} end
+        logMessage(player.name,command,'Failed to use command (Invalid Args)',args)
+        player.play_sound{path='utility/deconstruct_big'}
         return
     end
     -- runs the command
     local success, err = pcall(data.callback,command,args)
     if not success then error(err) end
-    if err ~= commands.error and player_name ~= 'server' then player_return({'ExpGamingCore_Command.command-ran'},defines.textcolor.info) end
-    logMessage(player_name,command,'Used command',args)
+    if err ~= commands.error and player ~= SERVER then player_return({'ExpGamingCore_Command.command-ran'},defines.textcolor.info) end
+    logMessage(player.name,command,'Used command',args)
 end
 
 --- Used to define commands

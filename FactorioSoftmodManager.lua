@@ -7,7 +7,7 @@ local moduleIndex = require("/modules/index")
 local Manager = {}
 
 -- this is a constant that is used to represent the server
-SERVER = setmetatable({index=0,name='<server>',online_time=0,afk_time=0,print=print},{__index=function(tbl,key) if type(game.player[key]) == 'function' then return function() end else return nil end end})
+SERVER = setmetatable({index=0,name='<server>',online_time=0,afk_time=0,print=print,admin=true},{__index=function(tbl,key) if type(game.players[1][key]) == 'function' then return function() end else return nil end end})
 
 --- Setup for metatable of the Manager to force read only nature
 -- @usage Manager() -- runs Manager.loadModdules()
