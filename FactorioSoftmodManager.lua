@@ -249,9 +249,15 @@ Manager.sandbox = setmetatable({
             local tmp_env = setmetatable({},{__index=function(tbl,key) return env[key] or sandbox[key] or rawget(_G,key) end,newindex=sandbox})
             tmp_env._ENV = tmp_env
             tmp_env._G_mt = _G_mt
+            -- sets the upvalues for the function
+            local i = 1
+            while true do
+                local name, value = debug.getupvalue(callback,i)
+                if not name then break else if not value and tmp_env[name] then debug.setupvalue(callback,i,tmp_env[name]) end end
+                i=i+1
+            end
             -- runs the callback
             setmetatable(_G,{__index=tmp_env,newindex=sandbox})
-            --debug.setupvalue(callback,1,tmp_env) -- this should set the value of _ENV
             local rtn = {pcall(callback,...)}
             local success = table.remove(rtn,1)
             setmetatable(_G,_G_mt)

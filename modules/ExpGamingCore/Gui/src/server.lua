@@ -39,5 +39,18 @@ return function(event)
             end
         end
         self.data.cam_index = self.data.cam_index+update
-    end):on_event(defines.events.on_player_respawned,on_player_respawned):open()
+    end):on_event(defines.events.on_player_respawned,function(self,event)
+        -- the _env should be auto loaded but does not, so to prevent desyncs it cant be an anon function
+        if self.data.players[event.player_index] then
+            local remove = {}
+            local player = Game.get_player(event)
+            for index,cam in pairs(self.data.players[event.player_index]) do
+                if cam.valid then table.insert(self.data.cams,{cam=cam,entity=player.character,surface=player.surface})
+                else table.insert(remove,index) end
+            end
+            for n,index in pairs(remove) do
+                table.remove(self.data.players[event.player_index],index-n+1)
+            end
+        end
+    end):open()
 end

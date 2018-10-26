@@ -48,11 +48,11 @@ function ExpLib.get_upvalues(level)
     local func = level and ExpLib.is_type(level,'function') and level or nil
     local level = level and ExpLib.is_type(level,'number') and level+1 or 2
     func = func or debug.getinfo(level).func
-    local upvalues = setmetatable({_order={}},{__index=_G})
+    local upvalues = setmetatable({},{__index=_G})
     local i = 1
     while true do
         local name, value = debug.getupvalue(func,i)
-        if not name then break else upvalues[name] = value; table.insert(upvalues._order,name) end
+        if not name then break else upvalues[name] = value end
         i=i+1
     end
     return upvalues
