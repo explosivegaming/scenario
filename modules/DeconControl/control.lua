@@ -33,7 +33,6 @@ Event.register(-1,function(event)
             if tree and tree.valid then tree.destroy() end
         end
     end):on_event(defines.events.on_marked_for_deconstruction,function(self,event)
-        -- the _env should be auto loaded but does not, so to prevent desyncs it cant be an anon function
         local chache = self.data.chache[event.player_index]
         if not chache then
             local player = Game.get_player(event)

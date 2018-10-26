@@ -85,34 +85,9 @@ function popup.open(style,data,players)
             else error('No Draw On Popup '.._popup.name) end
         end
     else
-        local function on_tick(self)
-            -- the _env should be auto loaded but does not, so to prevent desyncs it cant be an anon function
-            if #self.data.players == 0 then self:close() return end
-            local player = table.remove(self.data.players,1)
-            if self.data.popup.left then self.data.popup.left:close(player) end
-            local flow = popup.flow(player)
-            flow.style.visible=true
-            local _frame = flow.add{
-                type='frame',
-                direction='horizontal',
-                style=mod_gui.frame_style
-            }
-            local frame = _frame.add{
-                type='frame',
-                name='inner_frame',
-                direction='vertical',
-                style='image_frame'
-            }
-            self.data.popup.close(_frame)
-            if is_type(self.data.popup.draw,'function') then
-                local success, err = pcall(self.data.popup.draw,frame,self.data.data)
-                if not success then error(err) end
-            else error('No Draw On Popup '..self.data.popup.name) end
-        end
         Server.new_thread{
             data={players=players,popup=_popup,data=data}
         }:on_event('tick',function(self)
-            -- the _env should be auto loaded but does not, so to prevent desyncs it cant be an anon function
             if #self.data.players == 0 then self:close() return end
             local player = table.remove(self.data.players,1)
             if self.data.popup.left then self.data.popup.left:close(player) end

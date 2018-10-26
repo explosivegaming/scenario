@@ -67,12 +67,12 @@ function left.update(frame,players)
         local frames = Gui.data.left or {}
         if frame then frames = {[frame]=frames[frame]} or {} end
         local players = is_type(players,'table') and #players > 0 and {unpack(players)} or is_type(players,'table') and {players} or Game.get_player(players) and {Game.get_player(players)} or game.connected_players
-        Server.new_thread{
+        
             data={players=players,frames=frames}
         }:on_event('tick',function(thread)
             if #thread.data.players == 0 then thread:close() return end
             local player = table.remove(thread.data.players,1)
-            Server.new_thread{
+            
                 data={player=player,frames=thread.data.frames}
             }:on_event('resolve',function(thread)
                 for name,left in pairs(thread.data.frames) do
@@ -94,7 +94,7 @@ function left.open(left_name,player)
     if not Server or not Server._thread then
         for _,player in pairs(players) do _left:open(player) end
     else
-        Server.new_thread{
+        
             data={players=players}
         }:on_event('tick',function(thread)
             if #thread.data.players == 0 then thread:close() return end
@@ -115,7 +115,7 @@ function left.close(left_name,player)
     if not Server or not Server._thread or player then
         for _,player in pairs(players) do _left:close(player) end
     else
-        Server.new_thread{
+        
             data={players=players}
         }:on_event('tick',function(thread)
             if #thread.data.players == 0 then thread:close() return end

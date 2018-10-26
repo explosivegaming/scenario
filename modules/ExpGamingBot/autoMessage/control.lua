@@ -24,32 +24,6 @@ local ThisModule = {
     end
 }
 
-local function on_player_joined_game(self,event)
-    -- the _env should be auto loaded but does not, so to prevent desyncs it cant be an anon function
-    local player = Game.get_player(event)
-    if not player then return end
-    local data = self.data
-    if not data.high_role or not data.low_role
-    or not data.low then self.reopen = false return end
-    -- idk but this stoped working for no appent reason so i added more checks for nil values  
-    if Role and Role.get_highest(player).index <= Role.get(data.low_role).index or player.admin then return end
-    for _,message in pairs(data.low) do
-        player_return({'ExpGamingBot-autoMessage.message',message},nil,player)
-    end
-end
-
-local function on_error(self,err)
-    -- the _env should be auto loaded but does not, so to prevent desyncs it cant be an anon function
-    if Sync then Sync.emit_embeded{
-        title='Auto Message Error',
-        color=Color.to_hex(defines.textcolor.bg),
-        description='Auto Message Error - Closed Thread',
-        Error=err
-    } end
-    self.reopen = false
-    self:close()
-end
-
 -- Event Handlers Define
 script.on_init(function(event)
     Server.new_thread{
@@ -75,7 +49,6 @@ script.on_init(function(event)
         game.print{'ExpGamingBot-autoMessage.message',{'ExpGamingBot-autoMessage.map-time',tick_to_display_format(game.tick)}}
         self.reopen = true
     end):on_event(defines.events.on_player_joined_game,function(self,event)
-        -- the _env should be auto loaded but does not, so to prevent desyncs it cant be an anon function
         local player = Game.get_player(event)
         if not player then return end
         local data = self.data
@@ -87,7 +60,6 @@ script.on_init(function(event)
             player_return({'ExpGamingBot-autoMessage.message',message},nil,player)
         end
     end):on_event('error',function(self,err)
-        -- the _env should be auto loaded but does not, so to prevent desyncs it cant be an anon function
         if Sync then Sync.emit_embeded{
             title='Auto Message Error',
             color=Color.to_hex(defines.textcolor.bg),
