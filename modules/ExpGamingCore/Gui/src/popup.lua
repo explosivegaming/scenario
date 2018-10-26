@@ -85,14 +85,11 @@ function popup.open(style,data,players)
             else error('No Draw On Popup '.._popup.name) end
         end
     else
-        Server.new_thread{
-            data={players=players,popup=_popup,data=data}
-        }:on_event('tick',function(thread)
-            -- the _env should be auto loaded but it does not for some reasonm this is an attempt to repair the upvalues
-        for index,name in pairs(self._env._order) do self._env.debug.setupvalue(1,index,self._env[name]) end
-            if #thread.data.players == 0 then thread:close() return end
-            local player = table.remove(thread.data.players,1)
-            if thread.data.popup.left then thread.data.popup.left:close(player) end
+        local function on_tick(self)
+            -- the _env should be auto loaded but does not, so to prevent desyncs it cant be an anon function
+            if #self.data.players == 0 then self:close() return end
+            local player = table.remove(self.data.players,1)
+            if self.data.popup.left then self.data.popup.left:close(player) end
             local flow = popup.flow(player)
             flow.style.visible=true
             local _frame = flow.add{
@@ -106,12 +103,15 @@ function popup.open(style,data,players)
                 direction='vertical',
                 style='image_frame'
             }
-            thread.data.popup.close(_frame)
-            if is_type(thread.data.popup.draw,'function') then
-                local success, err = pcall(thread.data.popup.draw,frame,thread.data.data)
+            self.data.popup.close(_frame)
+            if is_type(self.data.popup.draw,'function') then
+                local success, err = pcall(self.data.popup.draw,frame,self.data.data)
                 if not success then error(err) end
-            else error('No Draw On Popup '..thread.data.popup.name) end
-        end):open()
+            else error('No Draw On Popup '..self.data.popup.name) end
+        end
+        Server.new_thread{
+            data={players=players,popup=_popup,data=data}
+        }:on_event('tick',on_tick):open()
     end
 end
 

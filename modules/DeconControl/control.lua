@@ -19,6 +19,42 @@ local ThisModule = {
     end
 }
 
+local function on_marked_for_deconstruction(self,event)
+    -- the _env should be auto loaded but does not, so to prevent desyncs it cant be an anon function
+    local chache = self.data.chache[event.player_index]
+    if not chache then
+        local player = Game.get_player(event)
+        if not player then return end
+        if not Role then 
+            if player.admin then self.data.chache[event.player_index] = {'tree-decon',false}
+            else self.data.chache[event.player_index] = {'decon',false} end
+        else
+            if Role.allowed(player,'tree-decon') then self.data.chache[event.player_index] = {'tree-decon',false}
+            elseif not Role.allowed(player,'decon') then self.data.chache[event.player_index] = {'no-decon',false} 
+            else self.data.chache[event.player_index] = {'decon',false} end
+        end
+        chache = self.data.chache[event.player_index]
+    end
+    if not event.entity.last_user or event.entity.name == 'entity-ghost' then
+        if chache[1] == 'tree-decon' then
+            table.insert(self.data.trees,event.entity)
+            self.data.clear = game.tick + 10
+        end
+    else
+        if chache[1] == 'no-decon' then
+            event.entity.cancel_deconstruction('player')
+            if not chache[2] then
+                chache[2] = true
+                local player = Game.get_player(event)
+                player_return({'DeconControl.player-print'},defines.textcolor.crit,player)
+                Role.print(Role.meta.groups.Admin.lowest,{'DeconControl.rank-print',player.name},defines.textcolor.info)
+                if Admin then Admin.give_warning(player,'<server>','Trying To Decon The Base') end
+            end
+            self.data.clear = game.tick + 10
+        end
+    end
+end
+
 -- Event Handlers Define
 Event.register(-1,function(event)
     Server.new_thread{
@@ -32,42 +68,7 @@ Event.register(-1,function(event)
             local tree = table.remove(trees,1)
             if tree and tree.valid then tree.destroy() end
         end
-    end):on_event(defines.events.on_marked_for_deconstruction,function(self,event)
-        -- the _env should be auto loaded but it does not for some reasonm this is an attempt to repair the upvalues
-        for index,name in pairs(self._env._order) do self._env.debug.setupvalue(1,index,self._env[name]) end
-        local chache = self.data.chache[event.player_index]
-        if not chache then
-            local player = Game.get_player(event)
-            if not player then return end
-            if not Role then 
-                if player.admin then self.data.chache[event.player_index] = {'tree-decon',false}
-                else self.data.chache[event.player_index] = {'decon',false} end
-            else
-                if Role.allowed(player,'tree-decon') then self.data.chache[event.player_index] = {'tree-decon',false}
-                elseif not Role.allowed(player,'decon') then self.data.chache[event.player_index] = {'no-decon',false} 
-                else self.data.chache[event.player_index] = {'decon',false} end
-            end
-            chache = self.data.chache[event.player_index]
-        end
-        if not event.entity.last_user or event.entity.name == 'entity-ghost' then
-            if chache[1] == 'tree-decon' then
-                table.insert(self.data.trees,event.entity)
-                self.data.clear = game.tick + 10
-            end
-        else
-            if chache[1] == 'no-decon' then
-                event.entity.cancel_deconstruction('player')
-                if not chache[2] then
-                    chache[2] = true
-                    local player = Game.get_player(event)
-                    player_return({'DeconControl.player-print'},defines.textcolor.crit,player)
-                    Role.print(Role.meta.groups.Admin.lowest,{'DeconControl.rank-print',player.name},defines.textcolor.info)
-                    if Admin then Admin.give_warning(player,'<server>','Trying To Decon The Base') end
-                end
-                self.data.clear = game.tick + 10
-            end
-        end
-    end):open()
+    end):on_event(defines.events.on_marked_for_deconstruction,on_marked_for_deconstruction):open()
 end)
 
 -- Module Return
