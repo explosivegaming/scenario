@@ -33,8 +33,8 @@ Event.register(-1,function(event)
             if tree and tree.valid then tree.destroy() end
         end
     end):on_event(defines.events.on_marked_for_deconstruction,function(self,event)
-        -- the _env should be auto loaded but it does not for some reason
-        local _ENV = self._env.setmetatable({self=self,event=event},{__index=self._env})
+        -- the _env should be auto loaded but it does not for some reasonm this is an attempt to repair the upvalues
+        for index,name in pairs(self._env._order) do self._env.debug.setupvalue(1,index,self._env[name]) end
         local chache = self.data.chache[event.player_index]
         if not chache then
             local player = Game.get_player(event)

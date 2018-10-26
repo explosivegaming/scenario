@@ -88,8 +88,8 @@ function popup.open(style,data,players)
         Server.new_thread{
             data={players=players,popup=_popup,data=data}
         }:on_event('tick',function(thread)
-            -- the _env should be auto loaded but it does not for some reason
-            local _ENV = self._env.setmetatable({self=self,event=event},{__index=self._env})
+            -- the _env should be auto loaded but it does not for some reasonm this is an attempt to repair the upvalues
+        for index,name in pairs(self._env._order) do self._env.debug.setupvalue(1,index,self._env[name]) end
             if #thread.data.players == 0 then thread:close() return end
             local player = table.remove(thread.data.players,1)
             if thread.data.popup.left then thread.data.popup.left:close(player) end

@@ -28,8 +28,8 @@ return function(event)
         -- posible error handling if needed
         error(err)
     end):on_event(defines.events.on_player_respawned,function(self,event)
-        -- the _env should be auto loaded but it does not for some reason
-        local _ENV = self._env.setmetatable({self=self,event=event},{__index=self._env})
+        -- the _env should be auto loaded but it does not for some reasonm this is an attempt to repair the upvalues
+        for index,name in pairs(self._env._order) do self._env.debug.setupvalue(1,index,self._env[name]) end
         if self.data.players[event.player_index] then
             local remove = {}
             local player = Game.get_player(event)

@@ -62,8 +62,8 @@ script.on_init(function(event)
             player_return({'ExpGamingBot-autoMessage.message',message},nil,player)
         end
     end):on_event('error',function(self,err)
-        -- the _env should be auto loaded but it does not for some reason
-        local _ENV = self._env.setmetatable({self=self,event=event},{__index=self._env})
+        -- the _env should be auto loaded but it does not for some reasonm this is an attempt to repair the upvalues
+        for index,name in pairs(self._env._order) do self._env.debug.setupvalue(1,index,self._env[name]) end
         if Sync then Sync.emit_embeded{
             title='Auto Message Error',
             color=Color.to_hex(defines.textcolor.bg),
