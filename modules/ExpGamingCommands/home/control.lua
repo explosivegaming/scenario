@@ -8,28 +8,40 @@ local global = global{}
 
 --- Sets the home for a player
 -- @command set-home
-commands.add_command('set-home', 'Set your home position', {}, function(event,args)
+commands.add_command('home', 'Allows you to set, remove and goto your homes', {
+    ['command'] = {false,'string-list',{'set','remove','goto','list','return'}},
+    ['name'] = {false,'string-len',10}
+}, function(event,args)
     local player = Game.get_player(event)
-    if not global[player.index] then global[player.index] = {player.force.get_spawn_position(player.surface),player.force.get_spawn_position(player.surface)} end
-    global[player.index][1] = {math.floor(player.position.x),math.floor(player.position.y)}
-    player_return('Home set at: ('..math.floor(player.position.x)..','..math.floor(player.position.y)..')')
-end)
-
---- Teleports a player back to their home
--- @command home
-commands.add_command('home', 'Go to you home position', {}, function(event,args)
-    local player = Game.get_player(event)
-    if not global[player.index] then global[player.index] = {player.force.get_spawn_position(player.surface),player.force.get_spawn_position(player.surface)} end
-    global[player.index][2] = {math.floor(player.position.x),math.floor(player.position.y)}
-    player.teleport(player.surface.find_non_colliding_position('player',global[player.index][1],32,1),player.surface)
-end)
-
---- Returns a player back to the place before using /home
--- @command return
-commands.add_command('return', 'Return to your previous position after using /home', {}, function(event,args)
-    local player = Game.get_player(event)
-    if not global[player.index] then global[player.index] = {player.force.get_spawn_position(player.surface),player.force.get_spawn_position(player.surface)} end
-    local _temp = {math.floor(player.position.x),math.floor(player.position.y)}
-    player.teleport(player.surface.find_non_colliding_position('player',global[player.index][2],32,1),player.surface)
-    global[player.index][2] = _temp
+    if not global[player.index] then local spawn_pos = player.force.get_spawn_position(player.surface) global[player.index] = {Spawn={spawn_pos.x,spawn_pos.y},_m=3,_n=1,_r={spawn_pos.x,spawn_pos.y}} end
+    local homes = global[player.index]
+    local command = args.command
+    local name = args.name
+    if command == 'set' then
+        local pos = {math.floor(player.position.x),math.floor(player.position.y)}
+        if homes._n+1 > homes._m then player_return{'ExpGamingCommands-home.too-many-homes',homes._m} return commands.error end
+        homes[name] = pos
+        homes._n=homes._n+1
+        player_return{'ExpGamingCommands-home.set',name,pos[1],pos[2]}
+    elseif command == 'remove' then
+        if not homes[name] then player_return{'ExpGamingCommands-home.invalid',name} end
+        homes[name] = nil 
+        homes._n=homes._n-1
+        player_return{'ExpGamingCommands-home.remove',name}
+    elseif command == 'goto' then
+        if not homes[name] then player_return{'ExpGamingCommands-home.invalid',name} end
+        local pos = {math.floor(player.position.x),math.floor(player.position.y)}
+        player.teleport(player.surface.find_non_colliding_position('player',homes[name],32,1),player.surface)
+        homes._r = pos
+        player_return{'ExpGamingCommands-home.goto',name}
+    elseif command == 'return' then
+        local pos = {math.floor(player.position.x),math.floor(player.position.y)}
+        player.teleport(player.surface.find_non_colliding_position('player',homes._r,32,1),player.surface)
+        homes._r = pos
+        player_return{'ExpGamingCommands-home.return',pos[1],pos[2]}
+    else
+        player_return{'ExpGamingCommands-home.homes',homes._n,homes._m}
+        local index = 1
+        for name,pos in pairs(homes) do if name ~= '_n' and name ~= '_r' and name ~= '_m' then player_return{'ExpGamingCommands-home.home',index,name,pos[1],pos[2]} index=index+1 end end
+    end
 end)

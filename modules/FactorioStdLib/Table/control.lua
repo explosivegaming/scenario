@@ -66,6 +66,35 @@ function table.find(tbl, func, ...)
     return nil
 end
 
+--- Finds the first index at which the value appears in the table
+-- @usage table.index({'foo','bar','baz'},'bar') -- retuns 2,'bar'
+-- @tparam table tbl the table to search though
+-- @param value the value you want the index of
+-- @treturn number the index that the value apeears at
+-- @return the value in that possition
+function table.index(tbl, value)
+    for k, v in pairs(tbl) do
+        if v == value then
+            return k, v
+        end
+    end
+    return nil
+end
+
+--- Returns a boolean on weather the table includes the value or not
+-- @usage table.includes({'foo','bar','baz'},'bar') -- retuns true
+-- @tparam table tbl the table to search though
+-- @param value the value you want the index of
+-- @treturn boolean if the table includes the value
+function table.includes(tbl, value)
+    for k, v in pairs(tbl) do
+        if v == value then
+            return true
+        end
+    end
+    return false
+end
+
 --- Given a candidate search function, iterates over the table, calling the function
 -- for each element in the table, and returns true if search function returned true.
 -- Passes the index as second argument to the function.

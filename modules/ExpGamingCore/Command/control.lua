@@ -57,6 +57,9 @@ commands.validate = {
     ['boolean']=function(value,event) local value = value.lower() if value == 'true' or valule == 'yes' or value == 'y' or value == '1' then return true else return false end end,
     ['string']=function(value,event) return tostring(value) end,
     ['string-inf']=function(value,event) return tostring(value) end,
+    ['string-list']=function(value,event,list) 
+        local rtn = tostring(value) and table.includes(list,tostring(value)) and tostring(value) or nil
+        if not rtn then return commands.error{'ExpGamingCore_Command.error-string-list',table.concat(list,', ')} end return rtn end,
     ['string-len']=function(value,event,max) 
         local rtn = tostring(value) and tostring(value):len() <= max and tostring(value) or nil 
         if not rtn then return commands.error{'ExpGamingCore_Command.error-string-len',max} end return rtn end,
@@ -159,13 +162,13 @@ function commands.validate_args(event)
     for name,data in pairs(command.inputs) do
         index = index+1
         local arg = words[index]
-        if not arg and not data[1] then return commands.error('invalid-inputs') end
+        if not arg and data[1] then return commands.error('invalid-inputs') end
         if data[2] == 'string-inf' then rtn[name] = table.concat(words,' ',index) break end
         local valid = is_type(data[2],'function') and data[2] or commands.validate[data[2]] or error('Invalid type for command: "'..command.name..'/'..name..'"')
         local temp_tbl = table.deepcopy(data) table.remove(temp_tbl,1) table.remove(temp_tbl,1)
         local value, err = valid(arg,event,unpack(temp_tbl))
         if value == commands.error then return value, err end
-        rtn[name] = value
+        rtn[name] = is_type(value,'string') and value:gsub('"','') or value
     end
     return rtn
 end
