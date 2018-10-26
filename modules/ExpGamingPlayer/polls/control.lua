@@ -26,28 +26,6 @@ local global = global{
 }
 
 -- Function Define
-local function _poll_end(self)
-    local uuid = tostring(self.data.poll_uuid)
-    local poll = global.active[uuid]
-    if not poll then return end
-    local highest = {nil,-1}
-    local _votes = {}
-    for index,answer in pairs(poll.answers) do
-        local _result = poll.votes[index] or 0
-        if _result > highest[2] then highest = {answer,_result} end
-        _votes[answer] = _result
-    end
-    poll.uuid = nil
-    poll.votes = _votes
-    poll.answers = nil
-    poll.voted = nil
-    table.insert(global.old,poll)
-    global.active[uuid] = nil
-    game.print({'ExpGamingPlayer-polls.end',poll.question},defines.textcolor.info)
-    game.print({'ExpGamingPlayer-polls.winner',highest[1]},defines.textcolor.info)
-    verbose('Ended Poll: '..poll.question..' ('..uuid..') Highest: '..highest[1])
-end
-
 local function _poll_data(question,answers)
     local poll = {
         uuid=Server.uuid(),
@@ -59,8 +37,27 @@ local function _poll_data(question,answers)
     Server.new_thread{
         data={poll_uuid=poll.uuid},
         timeout=poll_time_out*60
-    }:on_event('timeout',_poll_end):open()
-    -- This time out is known to cause desyncs and so I have moved it to a hard coded function
+    }:on_event('timeout',function(self)
+        local uuid = tostring(self.data.poll_uuid)
+        local poll = global.active[uuid]
+        if not poll then return end
+        local highest = {nil,-1}
+        local _votes = {}
+        for index,answer in pairs(poll.answers) do
+            local _result = poll.votes[index] or 0
+            if _result > highest[2] then highest = {answer,_result} end
+            _votes[answer] = _result
+        end
+        poll.uuid = nil
+        poll.votes = _votes
+        poll.answers = nil
+        poll.voted = nil
+        table.insert(global.old,poll)
+        global.active[uuid] = nil
+        game.print({'ExpGamingPlayer-polls.end',poll.question},defines.textcolor.info)
+        game.print({'ExpGamingPlayer-polls.winner',highest[1]},defines.textcolor.info)
+        verbose('Ended Poll: '..poll.question..' ('..uuid..') Highest: '..highest[1])
+    end):open()
     global.active[tostring(poll.uuid)]=poll
     verbose('Created Poll: '..question..' ('..poll.uuid..')')
     return poll.uuid
