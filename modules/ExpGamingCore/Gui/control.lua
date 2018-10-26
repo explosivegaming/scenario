@@ -180,6 +180,7 @@ script.on_event('on_tick', function(event)
 end)
 
 script.on_event('on_player_respawned',function(event)
+    if Gui.center then Gui.center.clear() end
     if loaded_modules['ExpGamingCore.Server'] then return end
     if global.players and is_type(global.players,'table') and #global.players > 0 and global.players[event.player_index] then
         local remove = {}

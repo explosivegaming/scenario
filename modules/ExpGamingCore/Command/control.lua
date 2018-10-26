@@ -146,7 +146,8 @@ function commands.validate_args(event)
         index = index+1
         if not word then break end
         local pos, _pos = word:find('"')
-        while pos and pos == _pos do
+        local hasSecond = pos and word:find('"',pos+1) or nil
+        while not hasSecond and pos and pos == _pos do
             local next = table.remove(words,index+1)
             if not next then return commands.error('invalid-parse') end
             words[index] = words[index]..' '..next
