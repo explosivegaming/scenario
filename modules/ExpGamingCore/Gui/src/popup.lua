@@ -88,9 +88,12 @@ function popup.open(style,data,players)
         Server.new_thread{
             data={players=players,popup=_popup,data=data}
         }:on_event('tick',function(thread)
+            -- the _env should be auto loaded but it does not for some reason
+            local _ENV = _ENV or setmetatable({},{__index=_G})
+            _ENV.popup = self._env.popup
             if #thread.data.players == 0 then thread:close() return end
             local player = table.remove(thread.data.players,1)
-            if _popup.left then _popup.left:close(player) end
+            if thread.data.popup.left then thread.data.popup.left:close(player) end
             local flow = popup.flow(player)
             flow.style.visible=true
             local _frame = flow.add{

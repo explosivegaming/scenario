@@ -6,6 +6,9 @@ script.on_init(function(event)
     Server.new_thread{
         name='afk-kick',
     }:on_event('tick',function(self)
+        -- the _env should be auto loaded but it does not for some reason
+        local _ENV = _ENV or setmetatable({},{__index=_G})
+        _ENV.get_allowed_afk_time = self._env.get_allowed_afk_time
         if (game.tick%3600) ~= 0 then return end
         for _,player in pairs(game.connected_players) do
             local afk = #game.connected_players < 3 and 10 or get_allowed_afk_time(player)
@@ -14,6 +17,9 @@ script.on_init(function(event)
             end
         end
     end):on_event('error',function(self,err)
+        -- the _env should be auto loaded but it does not for some reason
+        local _ENV = _ENV or setmetatable({},{__index=_G})
+        _ENV.Sync = self._env.Sync
         if Sync then
             Sync.emit_embeded{
                 title='Auto Kick Error',

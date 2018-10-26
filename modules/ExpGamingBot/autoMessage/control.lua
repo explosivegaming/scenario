@@ -49,6 +49,10 @@ script.on_init(function(event)
         game.print{'ExpGamingBot-autoMessage.message',{'ExpGamingBot-autoMessage.map-time',tick_to_display_format(game.tick)}}
         self.reopen = true
     end):on_event(defines.events.on_player_joined_game,function(self,event)
+        -- the _env should be auto loaded but it does not for some reason
+        local _ENV = _ENV or setmetatable({},{__index=_G})
+        _ENV.Game = self._env.Game
+        _ENV.Role = self._env.Role
         local player = Game.get_player(event)
         if not player then return end
         local data = self.data
@@ -60,6 +64,9 @@ script.on_init(function(event)
             player_return({'ExpGamingBot-autoMessage.message',message},nil,player)
         end
     end):on_event('error',function(self,err)
+        -- the _env should be auto loaded but it does not for some reason
+        local _ENV = _ENV or setmetatable({},{__index=_G})
+        _ENV.Sync = self._env.Sync
         if Sync then Sync.emit_embeded{
             title='Auto Message Error',
             color=Color.to_hex(defines.textcolor.bg),

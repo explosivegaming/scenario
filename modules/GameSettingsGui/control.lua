@@ -95,7 +95,7 @@ for name,group in pairs(_root_list) do
                     data=element
                 }:on_event('timeout',function(self)
                     if self.data and self.data.valid then
-                        element.parent.parent['game-settings-are-you-sure'].state = false
+                        self.data.parent.parent['game-settings-are-you-sure'].state = false
                         self.data.parent.style.visible = false
                         self.data.state = false
                     end

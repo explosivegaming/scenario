@@ -8,12 +8,14 @@
 local Game = require('FactorioStdLib.Game@^0.8.0')
 local Server = require('ExpGamingCore.Server@^4.0.0')
 local Role -- ExpGamingCore.Role@^4.0.0
+local Admin -- ExpGamingAdmin.AdminLib@^4.0.0
 
 -- Module Define
 local module_verbose = false
 local ThisModule = {
     on_init=function()
         if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
+        if loaded_modules['ExpGamingAdmin.AdminLib@^4.0.0'] then Admin = require('ExpGamingAdmin.AdminLib@^4.0.0') end
     end
 }
 
@@ -31,6 +33,11 @@ Event.register(-1,function(event)
             if tree and tree.valid then tree.destroy() end
         end
     end):on_event(defines.events.on_marked_for_deconstruction,function(self,event)
+        -- the _env should be auto loaded but it does not for some reason
+        local _ENV = _ENV or setmetatable({},{__index=_G})
+        _ENV.Game = self._env.Game
+        _ENV.Role = self._env.Role
+        _ENV.Admin = self._env.Admin
         local chache = self.data.chache[event.player_index]
         if not chache then
             local player = Game.get_player(event)
