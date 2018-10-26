@@ -50,9 +50,7 @@ script.on_init(function(event)
         self.reopen = true
     end):on_event(defines.events.on_player_joined_game,function(self,event)
         -- the _env should be auto loaded but it does not for some reason
-        local _ENV = _ENV or setmetatable({},{__index=_G})
-        _ENV.Game = self._env.Game
-        _ENV.Role = self._env.Role
+        local _ENV = self._env.setmetatable({self=self,event=event},{__index=self._env})
         local player = Game.get_player(event)
         if not player then return end
         local data = self.data
@@ -65,8 +63,7 @@ script.on_init(function(event)
         end
     end):on_event('error',function(self,err)
         -- the _env should be auto loaded but it does not for some reason
-        local _ENV = _ENV or setmetatable({},{__index=_G})
-        _ENV.Sync = self._env.Sync
+        local _ENV = self._env.setmetatable({self=self,event=event},{__index=self._env})
         if Sync then Sync.emit_embeded{
             title='Auto Message Error',
             color=Color.to_hex(defines.textcolor.bg),

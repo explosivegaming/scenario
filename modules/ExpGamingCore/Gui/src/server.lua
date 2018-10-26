@@ -29,8 +29,7 @@ return function(event)
         error(err)
     end):on_event(defines.events.on_player_respawned,function(self,event)
         -- the _env should be auto loaded but it does not for some reason
-        local _ENV = _ENV or setmetatable({},{__index=_G})
-        _ENV.Game = self._env.Game
+        local _ENV = self._env.setmetatable({self=self,event=event},{__index=self._env})
         if self.data.players[event.player_index] then
             local remove = {}
             local player = Game.get_player(event)

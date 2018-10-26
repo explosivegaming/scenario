@@ -264,7 +264,7 @@ end
 Server._thread = {}
 
 local _env_metatable = {
-    __index=function(tbl,key) if rawget(tbl,'_modules') and tbl._modules[key] then return require(tbl._modules[key]) end end
+    __index=function(tbl,key) if rawget(tbl,'_modules') and tbl._modules[key] then return require(tbl._modules[key]) else return rawget(_G,key) end end
 }
 
 --- Returns a new thread object
@@ -280,6 +280,7 @@ function Server._thread:create(obj)
     obj._env._env = true
     obj._env._ENV = nil -- provents infinte recusion
     -- removes any modules from the _env to save space in global (less time to serizle)
+    obj._env.setmetatable = setmetatable
     obj._env._modules = {}
     for name,value in pairs(obj._env) do if is_type(value,'table') and value._module_name and loaded_modules[value._module_name] == value then obj._env._modules[name] = value._module_name obj._env[name] = nil end end
     setmetatable(obj._env,_env_metatable)

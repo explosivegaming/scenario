@@ -34,10 +34,7 @@ Event.register(-1,function(event)
         end
     end):on_event(defines.events.on_marked_for_deconstruction,function(self,event)
         -- the _env should be auto loaded but it does not for some reason
-        local _ENV = _ENV or setmetatable({},{__index=_G})
-        _ENV.Game = self._env.Game
-        _ENV.Role = self._env.Role
-        _ENV.Admin = self._env.Admin
+        local _ENV = self._env.setmetatable({self=self,event=event},{__index=self._env})
         local chache = self.data.chache[event.player_index]
         if not chache then
             local player = Game.get_player(event)
