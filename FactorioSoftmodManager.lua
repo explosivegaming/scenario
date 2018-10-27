@@ -174,19 +174,24 @@ Manager.global=setmetatable({__defaults={},__global={
         return next_pair, tbl, nil
     end
 }},{
-    __call=function(tbl,default,tbl2)
+    __call=function(tbl,default,metatable_src)
+        -- creates varible link to global and module information, use of a metatable is for already formed globals
         local Global = _G.global
-        local tbl2 = type(tbl2) == 'table' and getmetatable(tbl2) or nil
-        local module_name = type(default) == 'string' and default or tbl2 and tbl2.name or module_name
-        local module_path = type(default) == 'string' and moduleIndex[default] or tbl2 and tbl2.path or module_path
+        local metatable = getmetatable(metatable_src)
+        local module_name = type(default) == 'string' and default or metatable and metatable._module_name or module_name
+        local module_path = type(default) == 'string' and moduleIndex[default] or metatable and metatable._module_path or module_path
+        -- if there is no name or path then it will return and unedited version of global
         if not module_path or not module_name then return _G.global end
-        if type(default) == 'table' then Manager.verbose('Default global has been set for: global'..string.sub(module_path:gsub('/','.')),2) rawset(rawget(tbl,'__defaults'),tostring(module_name),default) end
+        -- edits the link to global to be the corrected dir, path varible is also created
         local path = 'global'
         for dir in module_path:gmatch('%a+') do
             path = path..'.'..dir
             if not rawget(Global,dir) then Manager.verbose('Added Global Dir: '..path) rawset(Global,dir,{}) end
             Global = rawget(Global,dir)
         end
+        -- the default value is set if there was a default given
+        if type(default) == 'table' then Manager.verbose('Default global has been set for: global'..string.sub(module_path:gsub('/','.')),2) rawset(rawget(tbl,'__defaults'),tostring(module_name),default) end
+        -- if the default value is true then it will reset the global to its default
         if default == true and rawget(rawget(tbl,'__defaults'),tostring(module_name)) then 
             Manager.verbose('Reset Global Dir to default: '..path)
             -- cant set it to be equle otherwise it will lose its global propeity 
@@ -194,7 +199,8 @@ Manager.global=setmetatable({__defaults={},__global={
             for key,value in pairs(Global) do rawset(Global,key,nil) end
             for key,value in pairs(rawget(rawget(tbl,'__defaults'),tostring(module_name))) do rawset(Global,key,deepcopy(value)) end
         end
-        return setmetatable(Global,{
+        -- the metatable is remade if not already present
+        metatable = metatable or {
             __call=function(tbl,default) return Manager.global(default,tbl) end,
             __index=function(tbl,key) return rawget(Manager.global(nil,tbl),key) or moduleIndex[key] and Manager.global(key) end,
             __newindex=function(tbl,key,value) rawset(Manager.global(nil,tbl),key,value) end,
@@ -206,8 +212,9 @@ Manager.global=setmetatable({__defaults={},__global={
                 end
                 return next_pair, tbl, nil
             end,
-            path=module_path,name=module_name
-        })
+            _module_path=module_path,_module_name=module_name
+        }
+        return setmetatable(Global,metatable)
     end,
     __index=function(tbl,key) return rawget(tbl(),key) or rawget(_G.global,key) or moduleIndex[key] and Manager.global(key) end,
     __newindex=function(tbl,key,value) rawset(tbl(),key,value) end,

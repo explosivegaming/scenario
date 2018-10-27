@@ -23,6 +23,6 @@ commands.add_validation('player-rank-alive',function(value,event)
     return player
 end)
 
-commands.add_middleware(function(player_name,command_name,event)
-    return Role.allowed(player_name,command_name)
+commands.add_middleware(function(player,command_name,event)
+    return Role.allowed(player,command_name)
 end)

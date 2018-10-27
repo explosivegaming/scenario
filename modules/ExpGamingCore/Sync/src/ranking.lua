@@ -25,10 +25,12 @@ function Sync.count_roles()
     local _roles = {}
     for name,role in pairs(Role.roles) do
         local players = role:get_players()
-        for k,player in pairs(players) do players[k] = player.name end
+        local _players = {}
+        for k,player in pairs(players) do _players[k] = player.name end
         local online = role:get_players(true)
-        for k,player in pairs(online) do online[k] = player.name end
-        _roles[role.name] = {players=players,online=online,n_players=#players,n_online=#online}
+        local _online = {}
+        for k,player in pairs(online) do _online[k] = player.name end
+        _roles[role.name] = {players=_players,online=_online,n_players=#_players,n_online=#_online}
     end
     return _roles
 end

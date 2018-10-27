@@ -209,7 +209,7 @@ local function run_custom_command(command)
     local player = Game.get_player(command) or SERVER
     -- runs all middle ware if any, if there is no middle where then it relyis on .default_admin_only
     if #middleware > 0 then for _,callback in pairs(middleware) do
-        local success, err = pcall(callback,player_name,command.name,command)
+        local success, err = pcall(callback,player,command.name,command)
         if not success then error(err)
         elseif not err then
             player_return({'ExpGamingCore_Command.unauthorized'},defines.textcolor.crit)
