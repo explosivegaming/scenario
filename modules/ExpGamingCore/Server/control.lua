@@ -488,7 +488,7 @@ script.on_event(defines.events.on_tick,function(event)
     end
 end)
 
-script.on_event(-2,function(event)
+script.on_load(function(event)
     -- sets up metatable again so that threads contiune to work
     for uuid,thread in pairs(Server.threads) do 
         setmetatable(thread,{__index=Server._thread}) 
