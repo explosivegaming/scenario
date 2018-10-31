@@ -301,6 +301,7 @@ Ranking._base_preset{
     ['arty714']='Community Manager',
     ['cooldude2606']='Developer',
     ['mark9064']='Admin',
+    ['Drahc_pro']='Admin',
     ['propangaseddy']='Admin',
     ['aldldl']='Admin'
 }
