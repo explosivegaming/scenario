@@ -7,14 +7,14 @@
 --- This file will be loaded when ExpGamingCore.Role is present
 -- @function _comment
 
-local Game = require('FactorioStdLib.Game')
-local Color = require('FactorioStdLib.Color')
-local Role = require('ExpGamingCore.Role')
+local Game = require('FactorioStdLib.Game@^0.8.0')
+local Color = require('FactorioStdLib.Color@^0.8.0')
+local Role = require('ExpGamingCore.Role@^4.0.0')
 
 --- Used as a redirect to Role._base_preset that will set the rank given to a player apon joining
 -- @usage Sync.set_roles{player_name=rank_name,...}
 function Sync.set_roles(...)
-    Role._base_preset(...)
+    Role.set_preassign(...)
 end
 
 --- Used to get the number of players in each rank and currently online
