@@ -129,7 +129,7 @@ script.on_event(defines.events.on_gui_click,function(event)
     back_btn:draw(flow)
     playerInfo(event.element.name,flow,true)
     if Game.get_player(event.element.name) and event.player_index == Game.get_player(event.element.name).index then return end
-    if Admin and Admin.allowed(event.player_index) then Admin.btn_flow(flow).caption = event.element.name end
+    if Admin and Admin.allowed(event.player_index) then Admin.button_flow(flow).caption = event.element.name end
 end)
 
 script.on_event(defines.events.on_player_joined_game,function() ThisModule.update() end)
