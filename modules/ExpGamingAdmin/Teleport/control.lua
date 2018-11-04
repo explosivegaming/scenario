@@ -21,7 +21,7 @@ AdminGui.add_button('bring','utility/import_slot',{'ExpGamingAdmin.tooltip-bring
     Admin.bring(player,byPlayer)
 end)
 
-function Admin.tp(from_playaer, to_player)
+function Admin.tp(from_player, to_player)
     local _from_player = Game.get_player(from_player)
     local _to_player = Game.get_player(to_player)
     if not _from_player or not _to_player then return end
