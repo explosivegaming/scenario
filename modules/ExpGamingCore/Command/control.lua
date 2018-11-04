@@ -212,13 +212,13 @@ local function run_custom_command(command)
         local success, err = pcall(callback,player,command.name,command)
         if not success then error(err)
         elseif not err then
-            player_return({'ExpGamingCore_Command.unauthorized'},defines.textcolor.crit)
+            player_return({'ExpGamingCore_Command.command-fail',{'ExpGamingCore_Command.unauthorized'}},defines.textcolor.crit)
             logMessage(player.name,command,'Failed to use command (Unauthorized)',commands.validate_args(command))
             game.player.play_sound{path='utility/cannot_build'}
             return
         end
     end elseif data.default_admin_only == true and player and not player.admin then
-        player_return({'ExpGamingCore_Command.unauthorized'},defines.textcolor.crit)
+        player_return({'ExpGamingCore_Command.command-fail',{'ExpGamingCore_Command.unauthorized'}},defines.textcolor.crit)
         logMessage(player.name,command,'Failed to use command (Unauthorized)',commands.validate_args(command))
         game.player.play_sound{path='utility/cannot_build'}
         return
@@ -227,7 +227,7 @@ local function run_custom_command(command)
     local args, err = commands.validate_args(command)
     if args == commands.error then
         if is_type(err,'table') then table.insert(err,command.name) table.insert(err,commands.format_inputs(data))
-        player_return(err,defines.textcolor.high) else player_return({'ExpGamingCore_Command.invalid-inputs',command.name,commands.format_inputs(data)},defines.textcolor.high) end
+        player_return({'ExpGamingCore_Command.command-fail',err},defines.textcolor.high) else player_return({'ExpGamingCore_Command.command-fail',{'ExpGamingCore_Command.invalid-inputs',command.name,commands.format_inputs(data)}},defines.textcolor.high) end
         logMessage(player.name,command,'Failed to use command (Invalid Args)',args)
         player.play_sound{path='utility/deconstruct_big'}
         return
