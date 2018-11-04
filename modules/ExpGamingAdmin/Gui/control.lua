@@ -89,7 +89,7 @@ local player_drop_down = Gui.inputs.add_drop_down('player-drop-down-admin-comman
     local player_info_flow = element.parent.parent.info_flow
     player_info_flow.clear()
     if selected == 'Select Player' then return
-    else get_player_info(selected,player_info_flow,true) end
+    else playerInfo(selected,player_info_flow,true) end
     local role = Role.get_highest(player)
     local _role = Role.get(selected)
     if role.index >= _role.index then element.parent.warning.caption = {'ExpGamingAdmin.warning'}
@@ -184,7 +184,7 @@ Admin.center = Gui.center{
         if pre_select_action == 'Jail' or pre_select_action == 'Kick' or pre_select_action == 'Ban' then 
             _text.style.visible = true else _text.style.visible = false 
         end
-        if pre_select_player then get_player_info(pre_select_player,player_info_flow,true) end
+        if pre_select_player then playerInfo(pre_select_player,player_info_flow,true) end
         _text.style.width = 200
         local label = dropdowns.add{
             name='warning',
