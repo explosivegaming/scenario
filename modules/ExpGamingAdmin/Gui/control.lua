@@ -91,7 +91,7 @@ local player_drop_down = Gui.inputs.add_drop_down('player-drop-down-admin-comman
     if selected == 'Select Player' then return
     else playerInfo(selected,player_info_flow,true) end
     local role = Role.get_highest(player)
-    local _role = Role.get(selected)
+    local _role = Role.get_highest(selected)
     if role.index >= _role.index then element.parent.warning.caption = {'ExpGamingAdmin.warning'}
     else element.parent.warning.caption = '' end
 end)
