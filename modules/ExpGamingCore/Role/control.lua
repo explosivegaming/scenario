@@ -69,7 +69,7 @@ RoleGlobal = global
 
 --- Used to set default roles for players who join
 -- @usage Role.set_preassign{name={roles}}
-function Role.set_preassign(tbl) if game then global.pressign = tbl else Role.preassign = tbl end end
+function Role.set_preassign(tbl) if game then global.preassign = tbl else Role.preassign = tbl end end
 
 --- Defines a new instance of a role
 -- @usage Role.define{name='Root',short_hand='Root',tag='[Root]',group='Root',colour={r=255,b=255,g=255},is_root=true,allow={}} -- returns new role
