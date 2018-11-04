@@ -35,7 +35,7 @@ Group{
 }
 
 Group{
-    name='Guest',
+    name='User',
     disallow={
         'edit_permission_group',
         'delete_permission_group',

@@ -28,6 +28,11 @@ local AdminGui = {
     buttons={}
 }
 
+function Admin.open(player,pre_select_player,pre_select_action)
+    Gui.center.clear(player)
+    Admin.center.open(player,pre_select_player,pre_select_action)
+end
+
 -- Function Define
 function AdminGui.add_button(name,caption,tooltip,callback)
     AdminGui.buttons[name] = Gui.inputs.add{
@@ -212,5 +217,4 @@ Admin.center = Gui.center{
 
 -- Module Return
 -- calling will draw the admin buttons to that frame
-Admin.button_flow = AdminGui
 return setmetatable(AdminGui,{__call=function(self,...) self.draw(...) end})

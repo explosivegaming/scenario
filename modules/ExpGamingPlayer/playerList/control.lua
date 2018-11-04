@@ -6,6 +6,7 @@
 local Game = require('FactorioStdLib.Game@^0.8.0')
 local Gui = require('ExpGamingCore.Gui@^4.0.0')
 local Admin -- ExpGamingAdmin.AdminLib@^4.0.0
+local AdminGui -- ExpGamingAdmin.Gui@^4.0.0
 
 -- Local Varibles
 local playerInfo = function(player,frame)
@@ -31,6 +32,7 @@ local ThisModule = {
         if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer.playerInfo') end
         if loaded_modules['ExpGamingCore.Role@^4.0.0'] then getPlayers = require(module_path..'/src/ranking',{self=self}) end
         if loaded_modules['ExpGamingAdmin.AdminLib@^4.0.0'] then Admin = require('ExpGamingAdmin.AdminLib@^4.0.0') end
+        if loaded_modules['ExpGamingAdmin.Gui@^4.0.0'] then AdminGui = require('ExpGamingAdmin.Gui@^4.0.0') end
     end
 }
 
@@ -129,7 +131,7 @@ script.on_event(defines.events.on_gui_click,function(event)
     back_btn:draw(flow)
     playerInfo(event.element.name,flow,true)
     if Game.get_player(event.element.name) and event.player_index == Game.get_player(event.element.name).index then return end
-    if Admin and Admin.allowed(event.player_index) then Admin.button_flow(flow).caption = event.element.name end
+    if Admin and AdminGui and Admin.allowed(event.player_index) then AdminGui(flow).caption = event.element.name end
 end)
 
 script.on_event(defines.events.on_player_joined_game,function() ThisModule.update() end)

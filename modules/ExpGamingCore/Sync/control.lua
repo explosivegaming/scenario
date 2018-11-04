@@ -185,15 +185,15 @@ function Sync.count_roles()
     local _rtn = {admin={online={},players={}},user={online={},players={}}}
     for index,player in pairs(game.players) do
         if player.admin then
-            table.insert(_roles.admin.players,player.name)
-            if player.connected then table.insert(_roles.admin.online,player.name) end
+            table.insert(_rtn.admin.players,player.name)
+            if player.connected then table.insert(_rtn.admin.online,player.name) end
         else
-            table.insert(_roles.user.players,player.name)
-            if player.connected then table.insert(_roles.user.online,player.name) end
+            table.insert(_rtn.user.players,player.name)
+            if player.connected then table.insert(_rtn.user.online,player.name) end
         end
     end
-    _rtn.admin.n_players,_roles.admin.n_online=#_rtn.admin.players,#_rtn.admin.online
-    _rtn.user.n_players,_roles.user.n_online=#_rtn.user.players,#_rtn.user.online
+    _rtn.admin.n_players,_rtn.admin.n_online=#_rtn.admin.players,#_rtn.admin.online
+    _rtn.user.n_players,_rtn.user.n_online=#_rtn.user.players,#_rtn.user.online
     return _rtn
 end
 

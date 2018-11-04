@@ -39,7 +39,6 @@ function Admin.jail(player,by_player,reason)
         ['By:']='<<inline>>'..by_player_name,
         ['Reason:']=reason
     } end
-    if Admin.move_inventory then Admin.move_inventory(player) end
     Role.meta.last_jail = player.name
     Server.interface(Role.unassign,true,player,Role.get(player),by_player_name)
     Server.interface(Role.assign,true,player,'Jail',by_player_name)

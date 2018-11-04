@@ -35,10 +35,6 @@ function Admin.create_reason(reason,name)
     return reason
 end
 
-function Admin.open(player,pre_select_player,pre_select_action)
-    if Admin.center then Gui.center.clear(player) Admin.center.open(player,pre_select_player,pre_select_action) end
-end
-
 function Admin.allowed(player)
     local player = Game.get_player(player)
     if Role then
