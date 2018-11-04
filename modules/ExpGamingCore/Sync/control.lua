@@ -177,12 +177,12 @@ function Sync.count_afk_times(time)
     return rtn
 end
 
---- Used to get the number of players in each rank and currently online; if ExpGamingCore/Role is present then it will give more than admin and user
+--- Used to get the number of players in each rank and currently online
 -- @usage Sync.count_roles()
 -- @treturn table contains the ranks and the players in that rank
 function Sync.count_roles()
     if not game then return {'Offline'} end
-    local _roles = {admin={online={},players={}},user={online={},players={}}}
+    local _rtn = {admin={online={},players={}},user={online={},players={}}}
     for index,player in pairs(game.players) do
         if player.admin then
             table.insert(_roles.admin.players,player.name)
@@ -192,9 +192,9 @@ function Sync.count_roles()
             if player.connected then table.insert(_roles.user.online,player.name) end
         end
     end
-    _roles.admin.n_players,_roles.admin.n_online=#_roles.admin.players,#_roles.admin.online
-    _roles.user.n_players,_roles.user.n_online=#_roles.user.players,#_roles.user.online
-    return _roles
+    _rtn.admin.n_players,_roles.admin.n_online=#_rtn.admin.players,#_rtn.admin.online
+    _rtn.user.n_players,_roles.user.n_online=#_rtn.user.players,#_rtn.user.online
+    return _rtn
 end
 
 --- Used to get a list of every player name with the option to limit to only online players
@@ -310,7 +310,6 @@ script.on_event('on_rocket_launched',Sync.emit_update)
 
 function Sync:on_init()
     if loaded_modules['ExpGamingCore.Gui@^4.0.0'] then verbose('ExpGamingCore.Gui is installed; Loading gui src') require(module_path..'/src/gui',{Sync=Sync,module_path=module_path}) end
-    if loaded_modules['ExpGamingCore.Role@^4.0.0'] then verbose('ExpGamingCore.Role is installed; Loading role src') require(module_path..'/src/ranking',{Sync=Sync}) end
     if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require('ExpGamingCore.Server@^4.0.0').add_module_to_interface('Sync','ExpGamingCore.Sync') end
 end
 

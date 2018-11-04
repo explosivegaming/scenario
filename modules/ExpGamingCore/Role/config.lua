@@ -262,5 +262,9 @@ Role.order = {
 }
 
 Role.set_preassign{
-    cooldude2606={'Root','Developer','Administrator','Moderator'}
+    ["cooldude2606"]={"Developer","Admin","Mod"},
+    ["aldldl"]={"Sponsor","Admin","Donator","Sponsor","Member","Mod"},
+    ["arty714"]={"Admin","Community Manager","Member","Mod"},
+    ["drahc_pro"]={"Admin","Member","Mod"},
+    ["mark9064"]={"Admin","Member","Mod"}
 }

@@ -10,6 +10,7 @@ local Game = require('FactorioStdLib.Game@^0.8.0')
 
 -- Local Varibles
 local role_change_event_id = script.generate_event_name('on_role_change')
+local RoleGlobal
 
 -- Module Define
 local module_verbose = false
@@ -29,6 +30,7 @@ local Role = {
     on_init=function(self)
         if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require('ExpGamingCore.Server@^4.0.0').add_module_to_interface('Role','ExpGamingCore.Role') end
         if loaded_modules['ExpGamingCore.Command@^4.0.0'] then require(module_path..'/src/commands',{self=self}) end
+        if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then require(module_path..'/src/sync',{self=self,RoleGlobal=RoleGlobal}) end
     end,
     on_post=function(self)
         -- loads the roles in config
@@ -62,7 +64,7 @@ local global = global{
     players={},
     roles={}
 }
-
+RoleGlobal = global
 -- Function Define
 
 --- Used to set default roles for players who join
@@ -488,7 +490,7 @@ script.on_event(role_change_event_id,function(event)
     end
 end)
 
-script.on_event(defines.events.on_player_joined_game,function(event)
+script.on_event(defines.events.on_player_created,function(event)
     local player = Game.get_player(event)
     local highest = Role.get_highest(player) or Role.meta.default
     Group.assign(player,highest.group)

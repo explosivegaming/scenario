@@ -1,28 +1,38 @@
---- Allows syncing with an outside server and info panle.
--- @submodule ExpGamingCore.Sync
--- @alias Sync
--- @author Cooldude2606
--- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
-
---- This file will be loaded when ExpGamingCore.Role is present
--- @function _comment
-
+local Role = self
+local RoleGlobal = RoleGlobal
+local Sync = require('ExpGamingCore.Sync@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
 local Color = require('FactorioStdLib.Color@^0.8.0')
-local Role = require('ExpGamingCore.Role@^4.0.0')
 
---- Used as a redirect to Role._base_preset that will set the rank given to a player apon joining
--- @usage Sync.set_roles{player_name=rank_name,...}
+-- just to hard reset the role sync
 function Sync.set_roles(...)
     Role.set_preassign(...)
 end
 
---- Used to get the number of players in each rank and currently online
--- @usage Sync.count_roles()
--- @treturn table contains the ranks and the players in that rank
-function Sync.count_roles()
+-- used to assign the role if the player is online, or add to the the preassign
+function Sync.assign_role(player_name,role_name,by_player_name)
+    if not game then return end
+    local preassign = RoleGlobal.preassign
+    local player_roles = preassign[player_name]
+    if not player_roles then preassign[player_name] = {role_name} return end
+    if not table.includes(player_roles,role_name) then table.insert(player_roles,role_name) end
+    if Game.get_player(player_name) then Role.assign(player_name,role_name,by_player_name) end
+end
+
+-- used to unassign the role if the player is online, or removes the preassign
+function Sync.unassign_role(player_name,role_name,by_player_name)
+    if not game then return end
+    local preassign = RoleGlobal.preassign
+    local player_roles = preassign[player_name]
+    if not player_roles then preassign[player_name] = {} return end
+    local index = table.index(player_roles,role_name)
+    table.remove(player_roles,index)
+    if Game.get_player(player_name) then Role.unassign(player_name,role_name,by_player_name) end
+end
+
+Sync.add_update('roles',function()
     if not game then return {'Offline'} end
-    local _roles = {}
+    local _rtn = {}
     for name,role in pairs(Role.roles) do
         local players = role:get_players()
         local _players = {}
@@ -30,10 +40,10 @@ function Sync.count_roles()
         local online = role:get_players(true)
         local _online = {}
         for k,player in pairs(online) do _online[k] = player.name end
-        _roles[role.name] = {players=_players,online=_online,n_players=#_players,n_online=#_online}
+        _rtn[role.name] = {players=_players,online=_online,n_players=#_players,n_online=#_online}
     end
-    return _roles
-end
+    return _rtn
+end)
 
 -- Adds a caption to the info gui that shows the rank given to the player
 if Sync.add_to_gui then
@@ -49,8 +59,7 @@ script.on_event('on_role_change',function(event)
     local role = Role.get(event.role_name)
     local player = Game.get_player(event)
     local by_player = Game.get_player(event.by_player_index) or SERVER
-    local global = global['ExpGamingCore.Role^4.0.0']
-    if role.is_jail == 'Jail' and global.last_change[1] ~= player.index then
+    if role.is_jail and RoleGlobal.last_change[1] ~= player.index then
         Sync.emit_embeded{
             title='Player Jail',
             color=Color.to_hex(defines.textcolor.med),
