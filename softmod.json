@@ -28,6 +28,5 @@
         "SpawnArea": "^4.0.0",
         "WarpPoints": "^4.0.0",
         "WornPaths": "^4.0.0"
-    },
-    "dependencies": {}
+    }
 }
