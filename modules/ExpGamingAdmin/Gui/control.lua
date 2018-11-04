@@ -9,14 +9,14 @@ local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
 local Gui = require('ExpGamingCore.Gui@^4.0.0')
 local Role = require('ExpGamingCore.Role@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
-local playerInfo -- ExpGamingPlayer@^4.0.0
+local playerInfo -- ExpGamingPlayer.playerInfo@^4.0.0
 local mod_gui = require('mod-gui')
 
 -- Module Define
 local module_verbose = false
 local AdminGui = {
     on_init=function()
-        if loaded_modules['ExpGamingPlayer@^4.0.0'] then playerInfo = require('ExpGamingPlayer@^4.0.0')
+        if loaded_modules['ExpGamingPlayer.playerInfo@^4.0.0'] then playerInfo = require('ExpGamingPlayer@^4.0.0')
         else playerInfo = function(player,frame)
             frame.add{
                 type='label',
