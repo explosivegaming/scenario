@@ -1,9 +1,9 @@
 Role.add_flag('is_default') -- this must be included in atleast one role
-Role.add_flag('is_root',function(player,state) player.character.destructible = not state end) -- not required but setting true will allow everythin for that role
-Role.add_flag('is_antiroot',function(player,state) player.character.destructible = not state end) -- not required but setting true will disallow everythin for that role
+Role.add_flag('is_root',function(player,state) if player.character then player.character.destructible = not state end end) -- not required but setting true will allow everythin for that role
+Role.add_flag('is_antiroot',function(player,state) if player.character then player.character.destructible = not state end end) -- not required but setting true will disallow everythin for that role
 Role.add_flag('is_admin',function(player,state) player.admin = state end) -- highly recomented but not required
 Role.add_flag('is_spectator',function(player,state) player.spectator = state end)
-Role.add_flag('is_jail',function(player,state) player.character.active = not state end)
+Role.add_flag('is_jail',function(player,state) if player.character then player.character.active = not state end end)
 Role.add_flag('allow_afk_kick')
 Role.add_flag('is_donator')
 Role.add_flag('is_timed')
