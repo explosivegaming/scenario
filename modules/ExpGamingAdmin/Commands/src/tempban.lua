@@ -1,4 +1,4 @@
-local Admin = Admin
+local Admin = self
 
 --- Used to temp ban a player and give a reason
 -- @command temp-ban

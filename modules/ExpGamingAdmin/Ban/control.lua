@@ -22,8 +22,8 @@ local ThisModule = {
 }
 
 -- Function Define
-AdminGui.add_button('ban','utility/danger_icon',{'ExpGamingAdmin.tooltip-ban'},function(player,byPlayer)
-    Admin.open(byPlayer,player,'ban')
+AdminGui.add_button('Ban','utility/danger_icon',{'ExpGamingAdmin.tooltip-ban'},function(player,byPlayer)
+    Admin.open(byPlayer,player,'Ban')
 end)
 
 function Admin.ban(player,by_player,reason)

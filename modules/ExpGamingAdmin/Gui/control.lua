@@ -131,7 +131,7 @@ local take_action = Gui.inputs{
     local _role = Role.get_highest(_player)
     if role.index >= _role.index then dropdowns.warning.caption = {'ExpGamingAdmin.rank-high'} return end
     local _reason = dropdowns['reason-input-admin-commands'] and dropdowns['reason-input-admin-commands'].text
-    if (_action == 'Jail' or _action == 'Kick' or _action == 'Ban' or _action == 'Temp Ban') and (_reason == 'Enter Reason' or string.len(_reason) < 20) then return end
+    if (_action == 'Jail' or _action == 'Kick' or _action == 'Ban' or _action == 'Temp Ban') and (_reason == 'Enter Reason' or string.len(_reason) < 10) then return end
     Admin.take_action(_action,_player,event.player_index,_reason)
     Gui.center.clear(event)
 end)

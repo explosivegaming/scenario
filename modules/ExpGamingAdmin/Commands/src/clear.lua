@@ -1,4 +1,4 @@
-local Admin = Admin
+local Admin = self
 
 --- Clears a players inventory and moves it to chests in spawn
 -- @command clear-inv

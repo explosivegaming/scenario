@@ -14,10 +14,10 @@ local module_verbose = false
 local ThisModule = {}
 
 -- Function Define
-AdminGui.add_button('goto','utility/export_slot',{'ExpGamingAdmin.tooltip-go-to'},function(player,byPlayer)
+AdminGui.add_button('Go To','utility/export_slot',{'ExpGamingAdmin.tooltip-go-to'},function(player,byPlayer)
     Admin.go_to(player,byPlayer)
 end)
-AdminGui.add_button('bring','utility/import_slot',{'ExpGamingAdmin.tooltip-bring'},function(player,byPlayer)
+AdminGui.add_button('Bring','utility/import_slot',{'ExpGamingAdmin.tooltip-bring'},function(player,byPlayer)
     Admin.bring(player,byPlayer)
 end)
 

@@ -24,7 +24,7 @@ local ThisModule = {
 
 -- Function Define
 AdminGui.add_button('jail','utility/clock',{'ExpGamingAdmin.tooltip-jail'},function(player,byPlayer)
-    Admin.open(byPlayer,player,'jail')
+    Admin.open(byPlayer,player,'Jail')
 end)
 
 function Admin.jail(player,by_player,reason)
