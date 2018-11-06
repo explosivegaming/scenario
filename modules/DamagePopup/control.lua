@@ -36,7 +36,7 @@ Event.register(defines.events.on_entity_damaged, function(event)
     entity.surface.create_entity{
       name="flying-text",
       color=defines.textcolor.med,
-      text='-'..damage,
+      text='-'..math.floor(damage), -- cooldude2606 added floor for damage ammount
       position=entity.position
     }
   end
