@@ -1,5 +1,6 @@
 local Admin = self
 local Role = require('ExpGamingCore.Role@^4.0.0')
+local Game = require('FactorioStdLib.Game@^0.8.0')
 
 --- Reports a player
 -- @command report
