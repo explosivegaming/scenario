@@ -17,7 +17,7 @@ local playerInfo = function(player,frame)
 end
 
 local getPlayers = function()
-    local rtn = {{{r=233,g=63,b=233},'Admin',{}},{{r=255,g=159,b=27},'',{}}}
+    local rtn = {{{r=233,g=63,b=233},'Admin',{},true},{{r=255,g=159,b=27},'',{},false}}
     for _,player in pairs(game.connected_players) do
         if player.admin then table.insert(rtn[2][3],player)
         else table.insert(rtn[1][3],player) end

@@ -222,7 +222,7 @@ function Server.interface(callback,use_thread,env,...)
             local callback = table.remove(thread.data,1)
             callback = is_type(callback,'function') and callback or loadstring(callback)
             local env = table.remove(thread.data,1)
-            if is_type(env,'table') and env._env == true then
+            if is_type(env,'table') and not is_type(env.__self,'userdata') and env._env == true then
                 local success, err = Manager.sandbox(callback,env,unpack(thread.data))
                 if not success then error(err) end
                 return err
@@ -242,7 +242,7 @@ function Server.interface(callback,use_thread,env,...)
             if err then return false, err end
             _callback = rtn
         end
-        if is_type(env,'table') and env._env == true then
+        if is_type(env,'table') and not is_type(env.__self,'userdata') and env._env == true then
             local success, err = Manager.sandbox(_callback,env,...)
             if not success then return success,err
             else return success, unpack(err) end

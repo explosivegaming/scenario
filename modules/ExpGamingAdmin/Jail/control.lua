@@ -28,21 +28,21 @@ AdminGui.add_button('jail','utility/clock',{'ExpGamingAdmin.tooltip-jail'},funct
 end)
 
 function Admin.jail(player,by_player,reason)
-    local player = Game.get_player(player)
-    local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or '<server>'
-    local reason = Admin.create_reason(reason,by_player_name)
+    local player, by_player = Admin.valid_players(player,by_player)
+    if not player then return end
+    local reason = Admin.create_reason(reason,by_player.name)
     Admin.set_banned(player,'jail')
     if Sync then Sync.emit_embeded{
         title='Player Jail',
         color=Color.to_hex(defines.textcolor.med),
         description='There was a player jailed.',
         ['Player:']='<<inline>>'..player.name,
-        ['By:']='<<inline>>'..by_player_name,
+        ['By:']='<<inline>>'..by_player.name,
         ['Reason:']=reason
     } end
     Role.meta.last_jail = player.name
-    Server.interface(Role.unassign,true,player,Role.get(player),by_player_name)
-    Server.interface(Role.assign,true,player,'Jail',by_player_name)
+    Server.interface(Role.assign,true,player,'Jail',by_player.name)
+    Server.interface(Role.unassign,true,player,Role.get(player),by_player.name)
 end
 
 Admin.add_action('Jail',Admin.jail)
