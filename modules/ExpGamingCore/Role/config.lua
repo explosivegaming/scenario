@@ -213,7 +213,7 @@ Role{
     name='Guest',
     short_hand='',
     tag='',
-    group='Guest',
+    group='User',
     colour={r=185,g=187,b=160},
     allow_afk_kick=true,
     is_default=true,

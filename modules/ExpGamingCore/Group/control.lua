@@ -58,7 +58,7 @@ function Group.get(mixed)
     if is_type(mixed,'table') and mixed.name then mixed = mixed.name end
     if game and Game.get_player(mixed) then mixed = Game.get_player(mixed).permission_group.name end
     local rtn = Group.groups[mixed]
-    if not rtn and is_type(mixed,'string') and game.permissions.get_group(mixed) then
+    if not rtn and game and is_type(mixed,'string') and game.permissions.get_group(mixed) then
         rtn = setmetatable({disallow={},name=mixed},{
             __index=function(tbl,key) return Group._prototype[key] or game and game.permissions.get_group(tbl.name)[key] or nil end
         })
