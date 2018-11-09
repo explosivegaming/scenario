@@ -61,7 +61,7 @@ end
 
 function Admin.add_action(action,callback)
     verbose('Added admin action: '..action)
-    Admin.acctions[string.lower(action)] = table.insert(Admin.action_names,action)
+    Admin.actions[string.lower(action)] = table.insert(Admin.action_names,action)
     Admin.action_functions[string.lower(action)] = callback
 end
 
