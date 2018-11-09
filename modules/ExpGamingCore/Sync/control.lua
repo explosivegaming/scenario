@@ -234,6 +234,14 @@ Sync.info = setmetatable({},{
         if not is_type(set,'table') then return false end
         for key,value in pairs(set) do global[key] = value end
         return true
+    end,
+    __pairs=function(tbl)
+        local tbl = global
+        local function next_pair(tbl,k)
+            k, v = next(tbl, k)
+            if type(v) ~= nil then return k,v end
+        end
+        return next_pair, tbl, nil
     end
 })
 
