@@ -28,6 +28,12 @@ local global = global{
 }
 
 -- Function Define
+function Admin.valid_players(player,by_player)
+    local player = Game.get_player(player)
+    local by_player = Game.get_player(by_player) or SERVER
+    return player, by_player
+end
+
 function Admin.create_reason(reason,name)
     local reason = reason or 'No Reason'
     if not string.find(string.lower(reason),string.lower(name)) then reason = reason..' - '..name end
@@ -71,7 +77,7 @@ function Admin.take_action(action,player,by_player,reason)
 end
 
 function Admin.clear_player(player,by_player)
-    local player, by_player_name = valid_players(player,by_player)
+    local player, by_player = Admin.valid_players(player,by_player)
     if not player then return end
     if Admin.is_banned(player,true) == true then Server.interface(game.unban_player,true,player,by_player) end
     if Admin.clear_warings then Admin.clear_warings(player,by_player,true) end
@@ -82,7 +88,7 @@ function Admin.clear_player(player,by_player)
         color=Color.to_hex(defines.textcolor.low),
         description='A player had their reports and warnings cleared.',
         ['Player:']='<<inline>>'..player.name,
-        ['By:']='<<inline>>'..by_player_name,
+        ['By:']='<<inline>>'..by_player.name,
     } end
     Admin.set_banned(player,false)
 end

@@ -33,24 +33,18 @@ local varified_to_warings = 3 -- used in count_reports
 local reports_needed_for_jail = 6
 
 -- Function Define
-local function valid_players(player,by_player)
-    local player = Game.get_player(player)
-    local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or '<server>'
-    return player, by_player_name
-end
-
 local function report_message(player,by_player,reason)
-    local player, by_player_name = valid_players(player,by_player)
+    local player, by_player = Admin.valid_players(player,by_player)
     if not player then return end
     if Admin.is_banned(player,true) == 'report' then return end
     Role.print(Role.meta.groups.User.lowest,{'ExpGamingAdmin.low-print',player.name,reason},defines.textcolor.info,true)
-    Role.print(Role.meta.groups.Admin.lowest,{'ExpGamingAdmin.high-print',player.name,by_player_name,reason},defines.textcolor.med)
+    Role.print(Role.meta.groups.Admin.lowest,{'ExpGamingAdmin.high-print',player.name,by_player.name,reason},defines.textcolor.med)
     if Sync then Sync.emit_embeded{
         title='Player Report',
         color=Color.to_hex(defines.textcolor.med),
         description='A player was reported.',
         ['Player:']='<<inline>>'..player.name,
-        ['By:']='<<inline>>'..by_player_name,
+        ['By:']='<<inline>>'..by_player.name,
         ['Reason:']=reason
     } end
 end
@@ -82,30 +76,30 @@ function Admin.count_reports(player)
 end
 
 function Admin.report(player,by_player,reason)
-    local player, by_player_name = valid_players(player,by_player)
+    local player, by_player = Admin.valid_players(player,by_player)
     if not player or Role.has_flag(player,'not_reportable') then return end
     if Admin.is_banned(by_player) or Role.has_flag(by_player,'is_jail') then return end
     if Role.has_flag(by_player,'is_varified') then 
         global.varified[player.name] = global.varified[player.name] or {} 
         local reports = global.varified[player.name]
         for _,value in pairs(reports) do
-            if value[1] == by_player_name then return end
+            if value[1] == by_player.name then return end
         end
-        table.insert(reports,{by_player_name,reason})
+        table.insert(reports,{by_player.name,reason})
     else
         global.reports[player.name] = global.reports[player.name] or {}
         local reports = global.reports[player.name]
         for _,value in pairs(reports) do
-            if value[1] == by_player_name then return end
+            if value[1] == by_player.name then return end
         end
-        table.insert(reports,{by_player_name,reason}) 
+        table.insert(reports,{by_player.name,reason}) 
     end
     report_message(player,by_player,reason)
     cheak_reports(player)
 end
 
 function Admin.clear_reports(player,by_player,no_emit)
-    local player, by_player_name = valid_players(player,by_player)
+    local player, by_player = Admin.valid_players(player,by_player)
     if not player then return end
     global.reports[player.name]={}
     global.varified[player.name]={}
@@ -115,7 +109,7 @@ function Admin.clear_reports(player,by_player,no_emit)
             color=Color.to_hex(defines.textcolor.low),
             description='A player had their reports cleared.',
             ['Player:']='<<inline>>'..player.name,
-            ['By:']='<<inline>>'..by_player_name,
+            ['By:']='<<inline>>'..by_player.name,
         }
     end
 end

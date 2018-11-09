@@ -59,14 +59,8 @@ local ThisModule = {
 local global = global{}
 
 -- Function Define
-local function valid_players(player,by_player)
-    local player = Game.get_player(player)
-    local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or '<server>'
-    return player, by_player_name
-end
-
 local function give_punishment(player,by_player,reason)
-    local player, by_player_name = valid_players(player,by_player)
+    local player, by_player = Admin.valid_players(player,by_player)
     local warnings = Admin.get_warnings(player)
     local punishment = punishments[warnings]
     local reason = reason or 'No Other Reason'
@@ -95,7 +89,7 @@ function Admin.get_warnings(player)
 end
 
 function Admin.give_warning(player,by_player,reason,min)
-    local player, by_player_name = valid_players(player,by_player)
+    local player, by_player = Admin.valid_players(player,by_player)
     if not player then return end
     local min = Game.get_player(by_player) and take_action or min or 0
     local warnings = Admin.get_warnings(player)
@@ -103,14 +97,14 @@ function Admin.give_warning(player,by_player,reason,min)
     warnings = warnings+1
     global[player.name] = warnings
     if warnings > take_action then 
-        player_return({'ExpGamingAdmin-Warnings@4-0-0.warning-given-by',by_player_name},defines.textcolor.info,player)
-        game.print({'ExpGamingAdmin-Warnings@4-0-0.player-warning',player.name,by_player_name,reason})
+        player_return({'ExpGamingAdmin-Warnings@4-0-0.warning-given-by',by_player.name},defines.textcolor.info,player)
+        game.print({'ExpGamingAdmin-Warnings@4-0-0.player-warning',player.name,by_player.name,reason})
     end
     give_punishment(player,by_player,reason)
 end
 
 function Admin.clear_warings(player,by_player,no_emit)
-    local player, by_player_name = valid_players(player,by_player)
+    local player, by_player = Admin.valid_players(player,by_player)
     if not player then return end
     global[player.name]=nil
     if not no_emit and Sync then
@@ -119,7 +113,7 @@ function Admin.clear_warings(player,by_player,no_emit)
             color=Color.to_hex(defines.textcolor.low),
             description='A player had their warnings cleared.',
             ['Player:']='<<inline>>'..player.name,
-            ['By:']='<<inline>>'..by_player_name,
+            ['By:']='<<inline>>'..by_player.name,
         }
     end
 end
