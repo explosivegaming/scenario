@@ -14,7 +14,6 @@ return {
     ['FactorioStdLib.Game@0.8.0']='./modules/FactorioStdLib/Game',
     ['WornPaths@4.0.0']='./modules/WornPaths',
     ['SpawnArea@4.0.0']='./modules/SpawnArea',
-    ['HealthIndicator@1.0.1']='./modules/HealthIndicator',
     ['FactorioStdLib@^0.8.0']='./modules/FactorioStdLib',
     ['FactorioStdLib@0.8.0']='./modules/FactorioStdLib',
     ['ExpGamingLib@^4.0.0']='./modules/ExpGamingLib',
