@@ -9,7 +9,7 @@ local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
 local Server = require('ExpGamingCore.Server@^4.0.0')
 local Role = require('ExpGamingCore.Role@^4.0.0')
 local Game = require('FactorioStdLib.Game@^0.8.0')
-local Color = require('FactorioStdLib.Color@^0.8.0')
+local Color -- FactorioStdLib.Color@^0.8.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
 
 -- Local Varibles
@@ -22,14 +22,14 @@ local punishments = {
     {'nothing'},
     {'nothing'},
     {'nothing'},
-    {'message',{'ExpGamingAdmin-Warnings@4-0-0.message'},defines.textcolor.info},
-    {'message',{'ExpGamingAdmin-Warnings@4-0-0.message'},defines.textcolor.info},
-    {'message',{'ExpGamingAdmin-Warnings@4-0-0.kick-warn'},defines.textcolor.med}, 
+    {'message',{'ExpGamingAdmin-Warnings.message'},defines.textcolor.info},
+    {'message',{'ExpGamingAdmin-Warnings.message'},defines.textcolor.info},
+    {'message',{'ExpGamingAdmin-Warnings.kick-warn'},defines.textcolor.med}, 
     {'kick'},
-    {'message',{'ExpGamingAdmin-Warnings@4-0-0.temp-warn'},defines.textcolor.high},
+    {'message',{'ExpGamingAdmin-Warnings.temp-warn'},defines.textcolor.high},
     {'temp-ban'},
-    {'message',{'ExpGamingAdmin-Warnings@4-0-0.ban-warn'},defines.textcolor.high},
-    {'message',{'ExpGamingAdmin-Warnings@4-0-0.last-warn'},defines.textcolor.crit},
+    {'message',{'ExpGamingAdmin-Warnings.ban-warn'},defines.textcolor.high},
+    {'message',{'ExpGamingAdmin-Warnings.last-warn'},defines.textcolor.crit},
     {'ban'}
 }
 
@@ -38,9 +38,10 @@ local module_verbose = false
 local ThisModule = {
     on_init=function()
         if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then Sync = require('ExpGamingCore.Sync@^4.0.0') end
+        if loaded_modules['FactorioStdLib.Color@^0.8.0'] then Color = require('FactorioStdLib.Color@^0.8.0') end
         if loaded_modules['ExpGamingAdmin.Reports@^4.0.0'] then
             take_action = take_action + 1
-            table.insert(punishments,take_action,{'report',{'ExpGamingAdmin-Warnings@4-0-0.reported'},defines.textcolor.med})
+            table.insert(punishments,take_action,{'report',{'ExpGamingAdmin-Warnings.reported'},defines.textcolor.med})
         end
     end,
     on_post=function()
@@ -97,8 +98,8 @@ function Admin.give_warning(player,by_player,reason,min)
     warnings = warnings+1
     global[player.name] = warnings
     if warnings > take_action then 
-        player_return({'ExpGamingAdmin-Warnings@4-0-0.warning-given-by',by_player.name},defines.textcolor.info,player)
-        game.print({'ExpGamingAdmin-Warnings@4-0-0.player-warning',player.name,by_player.name,reason})
+        player_return({'ExpGamingAdmin-Warnings.warning-given-by',by_player.name},defines.textcolor.info,player)
+        game.print({'ExpGamingAdmin-Warnings.player-warning',player.name,by_player.name,reason})
     end
     give_punishment(player,by_player,reason)
 end
@@ -123,12 +124,12 @@ script.on_event(defines.events.on_tick,function(event)
     if (game.tick % min_time_to_remove_warning) == 0 then
         for name,warnings in pairs(global) do
             if warnings > 0 then
-                local role = Role.get(name)
+                local role = Role.get_highest(name)
                 local time_to_remove = remove_warnings_time[role.index]
                 if (game.tick % time_to_remove) == 0 then
                     global[name]=warnings-1
                     if global.warnings[name] > 5 then
-                        player_return({'ExpGamingAdmin-Warnings@4-0-0.remove-warn',global[name],tick_to_display_format(time_to_remove)},defines.textcolor.low,name)
+                        player_return({'ExpGamingAdmin-Warnings.remove-warn',global[name],tick_to_display_format(time_to_remove)},defines.textcolor.low,name)
                     end
                 end
             end

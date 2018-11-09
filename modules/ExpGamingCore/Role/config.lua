@@ -102,7 +102,7 @@ Role{
         ['admin-commands']=true,
         ['warn']=true,
         ['temp-ban']=true,
-        ['clear-warings']=true,
+        ['clear-warnings']=true,
         ['clear-reports']=true,
         ['clear-all']=true,
         ['clear-inv']=true,

@@ -217,4 +217,4 @@ Admin.center = Gui.center{
 
 -- Module Return
 -- calling will draw the admin buttons to that frame
-return setmetatable(AdminGui,{__call=function(self,...) self.draw(...) end})
+return setmetatable(AdminGui,{__call=function(self,...) return self.draw(...) end})

@@ -164,7 +164,7 @@ function commands.validate_args(event)
         local arg = words[index]
         if not arg and data[1] then return commands.error('invalid-inputs') end
         if data[2] == 'string-inf' then rtn[name] = table.concat(words,' ',index) break end
-        local valid = is_type(data[2],'function') and data[2] or commands.validate[data[2]] or error('Invalid type for command: "'..command.name..'/'..name..'"')
+        local valid = is_type(data[2],'function') and data[2] or commands.validate[data[2]] or error('Invalid validation ("'..tostring(data[2])..'") for command: "'..command.name..'/'..name..'"')
         local temp_tbl = table.deepcopy(data) table.remove(temp_tbl,1) table.remove(temp_tbl,1)
         local value, err = valid(arg,event,unpack(temp_tbl))
         if value == commands.error then return value, err end

@@ -17,7 +17,7 @@ local module_verbose = false
 local ThisModule = {
     on_init=function()
         if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then Sync = require('ExpGamingCore.Sync@^4.0.0') end
-        if loaded_modules['FactorioStdLib.Color@^0.8.0'] then Sync = require('FactorioStdLib.Color@^0.8.0') end
+        if loaded_modules['FactorioStdLib.Color@^0.8.0'] then Color = require('FactorioStdLib.Color@^0.8.0') end
     end
 }
 
