@@ -10,6 +10,6 @@ commands.add_command('temp-ban', 'Temporarily ban a player', {
 }, function(event,args)
     local player = args.player
     local reason = args.reason
-    if Admin.is_banned(player) and Admin.is_banned(player,true) ~= 'jail' then player_return({'ExpGamingAdmin.cant-report-ban',args.player}) return commands.error end
+    if Admin.is_banned(player) and Admin.is_banned(player,true) ~= 'jail' then player_return({'ExpGamingAdmin.cant-report-ban',args.player.name}) return commands.error end
     Admin.temp_ban(player,event.player_index,reason)
 end)
