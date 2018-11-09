@@ -18,6 +18,7 @@ local Admin = {
         if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require('ExpGamingCore.Server@^4.0.0').add_module_to_interface('Admin','ExpGamingAdmin.AdminLib') end
     end,
     actions={},
+    action_functions={},
     action_names={}
 }
 
@@ -60,13 +61,13 @@ end
 
 function Admin.add_action(action,callback)
     verbose('Added admin action: '..action)
-    table.insert(Admin.action_names,action)
-    Admin.actions[string.lower(action)] = callback
+    Admin.acctions[string.lower(action)] = table.insert(Admin.action_names,action)
+    Admin.action_functions[string.lower(action)] = callback
 end
 
 function Admin.take_action(action,player,by_player,reason)
     if Admin[action] then Admin[action](player,by_player,reason) end
-    if Admin.actions[string.lower(action)] then Admin.actions[string.lower(action)](player,by_player,reason) end
+    if Admin.action_functions[string.lower(action)] then Admin.action_functions[string.lower(action)](player,by_player,reason) end
 end
 
 function Admin.clear_player(player,by_player)

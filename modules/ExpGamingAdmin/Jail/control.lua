@@ -31,6 +31,7 @@ function Admin.jail(player,by_player,reason)
     local player = Game.get_player(player)
     local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or '<server>'
     local reason = Admin.create_reason(reason,by_player_name)
+    Admin.set_banned(player,'jail')
     if Sync then Sync.emit_embeded{
         title='Player Jail',
         color=Color.to_hex(defines.textcolor.med),

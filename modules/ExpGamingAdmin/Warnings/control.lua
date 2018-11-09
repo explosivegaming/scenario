@@ -81,12 +81,10 @@ local function give_punishment(player,by_player,reason)
         player_return(message,colour,player)
         Admin.report(player,'<server>',reason)
     elseif punishment[1] == 'kick' then
-        global.actions[player.name] = actions.kick
         Admin.kick(player,by_player,'Too Many Warnings: '..warnings-(take_action-1)..' Also: '..reason)
     elseif punishment[1] == 'temp-ban' then
         Admin.temp_ban(player,by_player,'Too Many Warnings: '..warnings-(take_action-1)..' Also: '..reason)
     elseif punishment[1] == 'ban' then
-        global.actions[player.name] = actions.ban
         Admin.ban(player,by_player,'Too Many Warnings: '..warnings-(take_action-1)..' Also: '..reason)
     end
 end
@@ -114,7 +112,7 @@ end
 function Admin.clear_warings(player,by_player,no_emit)
     local player, by_player_name = valid_players(player,by_player)
     if not player then return end
-    global[player.name]=0
+    global[player.name]=nil
     if not no_emit and Sync then
         Sync.emit_embeded{
             title='Player Clear',

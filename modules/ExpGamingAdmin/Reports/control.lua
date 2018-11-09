@@ -59,8 +59,7 @@ local function cheak_reports(player)
     local player = Game.get_player(player)
     if not player then return end
     local reports = Admin.count_reports(player)
-    if reports >= reports_needed_for_jail and global.actions[player.name] ~= 'report-jail' and Role.get_highest(player).group.name ~= 'Jail' then
-        global.actions[player.name] = actions.report
+    if reports >= reports_needed_for_jail and Role.get_highest(player).group.name ~= 'Jail' then
         Admin.jail(player,'<server>','Too many user reports. Contact an Admin to be unjailed.')
     end
 end
@@ -84,7 +83,7 @@ end
 
 function Admin.report(player,by_player,reason)
     local player, by_player_name = valid_players(player,by_player)
-    if not player or Role.allowed(player,'no-report') then return end
+    if not player or Role.has_flag(player,'not_reportable') then return end
     if Admin.is_banned(by_player) or Role.has_flag(by_player,'is_jail') then return end
     if Role.has_flag(by_player,'is_varified') then 
         global.varified[player.name] = global.varified[player.name] or {} 

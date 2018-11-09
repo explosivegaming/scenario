@@ -12,7 +12,7 @@ commands.add_command('warn', 'Gives a player a warning', {
     local player = args.player
     local reason = args.reason
     if Admin.is_banned(player) then player_return{'ExpGamingAdmin.cant-report-ban',args.player} return commands.error end
-    if Role.allowed(player,'no-report') then player_return{'ExpGamingAdmin.cant-report',args.player} return commands.error end
+    if Role.has_flag(player,'not_reportable') then player_return{'ExpGamingAdmin.cant-report',args.player} return commands.error end
     Admin.give_warning(player,event.player_index,reason)
 end)
 

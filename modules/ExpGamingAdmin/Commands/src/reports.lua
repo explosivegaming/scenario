@@ -13,7 +13,7 @@ commands.add_command('report', 'Reports a player', {
     local player = args.player
     local reason = args.reason
     if Admin.is_banned(player) then player_return({'ExpGamingAdmin.cant-report-ban',args.player}) return commands.error end
-    if Role.allowed(player,'no-report') then player_return({'ExpGamingAdmin.cant-report',args.player}) return commands.error end
+    if Role.has_flag(player,'not_reportable') then player_return({'ExpGamingAdmin.cant-report',args.player}) return commands.error end
     for _,report in pairs(global.addons.reports.reports) do if report[1] == _player.name then player_return({'ExpGamingAdmin.cant-report',args.player}) return commands.error end end
     for _,report in pairs(global.addons.reports.varified) do if report[1] == _player.name then player_return({'ExpGamingAdmin.cant-report',args.player}) return commands.error end end
     Admin.report(player,event.player_index,reason)

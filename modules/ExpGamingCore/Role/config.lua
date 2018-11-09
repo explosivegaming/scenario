@@ -32,6 +32,7 @@ Role{
     is_admin=true,
     is_spectator=true,
     is_donator=true,
+    not_reportable=true,
     allow={}
 }
 Role{
@@ -43,6 +44,7 @@ Role{
     is_admin=true,
     is_spectator=true,
     is_donator=true,
+    not_reportable=true,
     allow={
         ['interface']=true,
         ['cheat-mode']=true
@@ -93,7 +95,6 @@ Role{
     allow={
         ['go-to']=true,
         ['bring']=true,
-        ['no-report']=true,
         ['set-home']=false,
         ['home']=false,
         ['return']=false,
