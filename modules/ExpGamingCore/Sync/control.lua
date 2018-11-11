@@ -116,7 +116,7 @@ function Sync.emit_embeded(args)
     -- creates the first field given for every emit
     local done, fields = {title=true,color=true,description=true,server_detail=true}, {{
         name='Server Details',
-        value='Server Name: {{ serverName }} Online Players: '..#game.connected_players..' '..mods_online..' Server Time: '..tick_to_display_format(game.tick)..' '..server_detail
+        value='Server Name: ${serverName} Online Players: '..#game.connected_players..' '..mods_online..' Server Time: '..tick_to_display_format(game.tick)..' '..server_detail
     }}
     -- for each value given in args it will create a new field for the embed
     for key, value in pairs(args) do
