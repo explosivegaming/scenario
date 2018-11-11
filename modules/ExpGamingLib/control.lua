@@ -254,24 +254,21 @@ end
 -- @tparam table lua_table the table to convert
 -- @treturn string the table in a json format
 function table.json(lua_table)
+    if game and game.table_to_json then return game.table_to_json(lua_table) end
     local result, done, only_indexs = {}, {}, true
     for key,value in ipairs(lua_table) do
         done[key] = true
         if type(value) == 'table' then table.insert(result,table.json(value,true))
-        elseif type(value) == 'string' then table.insert(result,'"'..value..'"')
-        elseif type(value) == 'number' then table.insert(result,value)
-        elseif type(value) == 'boolean' then table.insert(result,tostring(value))
-        else table.insert(result,'null') 
+        elseif not vlaue then table.insert(result,'null') 
+        else table.insert(result,table.val_to_str(value))
         end
     end
     for key,value in pairs(lua_table) do
       if not done[key] then
         only_indexs = false
-        if type(value) == 'table' then table.insert(result,'"'..key..'":'..table.json(value,true))
-        elseif type(value) == 'string' then table.insert(result,'"'..key..'":"'..value..'"')
-        elseif type(value) == 'number' then table.insert(result,'"'..key..'":'..value)
-        elseif type(value) == 'boolean' then table.insert(result,'"'..key..'":'..tostring(value))
-        else table.insert(result,'"'..key..'":null') 
+        if type(value) == 'table' then table.insert(result,table.val_to_str(key)..':'..table.json(value,true))
+        elseif not value then table.insert(result,table.val_to_str(key)..':null')
+        else table.insert(result,table.val_to_str(key)..':'..table.val_to_str(value))
         end
       end
     end
