@@ -1,4 +1,28 @@
-## ExpGaming Repository [![CodeFactor](https://www.codefactor.io/repository/github/badgamernl/explosivegaming-main/badge)](https://www.codefactor.io/repository/github/badgamernl/explosivegaming-main) [![dev chat](https://discordapp.com/api/guilds/260843215836545025/widget.png?style=shield)](https://discord.explosivegaming.nl)
+<p align="center">
+  <img alt="logo" src="https://avatars2.githubusercontent.com/u/39745392?s=200&v=4" width="120">
+  <br>
+  <a href="https://github.com/explosivegaming/scenario/tags">
+    <img src="https://img.shields.io/github/tag/explosivegaming/scenario.svg?label=Release" alt="Release">
+  </a>
+  <a href="https://github.com/explosivegaming/scenario/archive/master.zip">
+    <img src="https://img.shields.io/github/downloads/explosivegaming/scenario/total.svg?label=Downloads" alt="Downloads">
+  </a>
+  <a href="https://github.com/explosivegaming/scenario/stargazers">
+    <img src="https://img.shields.io/github/stars/explosivegaming/scenario.svg?label=Stars" alt="Star">
+  </a>
+  <a href="http://github.com/explosivegaming/scenario/fork">
+    <img src="https://img.shields.io/github/forks/explosivegaming/scenario.svg?label=Forks" alt="Fork">
+  </a>
+  <a href="https://www.codefactor.io/repository/github/explosivegaming/scenario">
+    <img src="https://www.codefactor.io/repository/github/explosivegaming/scenario/badge" alt="CodeFactor">
+  </a>
+  <a href="https://discord.me/explosivegaming">
+    <img src="https://discordapp.com/api/guilds/260843215836545025/widget.png?style=shield" alt="Discord">
+  </a>
+</p>
+<h2 align="center">ExpGaming Scenario Repository</h2>
+
+*This is an archieve branch for v3.6.0 the latest version before the v4.0.0 overhaul*
 
 #### Using The Core Files
 1. Copy the core folder and the StdLib File 
