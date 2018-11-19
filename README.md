@@ -1,5 +1,7 @@
 <p align="center">
-  <img alt="logo" src="https://avatars2.githubusercontent.com/u/39745392?s=200&v=4" width="120">
+  <a href="https://explosivegaming.nl/">
+    <img alt="logo" src="https://avatars2.githubusercontent.com/u/39745392?s=200&v=4" width="120">
+  </a>
   <br>
   <a href="https://github.com/explosivegaming/scenario/tags">
     <img src="https://img.shields.io/github/tag/explosivegaming/scenario.svg?label=Release" alt="Release">
