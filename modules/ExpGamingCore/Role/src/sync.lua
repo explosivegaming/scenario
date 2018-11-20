@@ -10,24 +10,34 @@ function Sync.set_roles(...)
 end
 
 -- used to assign the role if the player is online, or add to the the preassign
-function Sync.assign_role(player_name,role_name,by_player_name)
+function Sync.assign_role(player_name,roles,by_player_name)
     if not game then return end
     local preassign = RoleGlobal.preassign
     local player_roles = preassign[player_name]
-    if not player_roles then preassign[player_name] = {role_name} return end
-    if not table.includes(player_roles,role_name) then table.insert(player_roles,role_name) end
-    if Game.get_player(player_name) then Role.assign(player_name,role_name,by_player_name) end
+    if Game.get_player(player_name) then Role.assign(player_name,roles,by_player_name)
+    else
+        if not is_type(roles,'table') then roles = {roles} end
+        if not player_roles then preassign[player_name] = roles return end
+        for _,role_name in pairs(roles) do
+            if not table.includes(player_roles,role_name) then table.insert(player_roles,role_name) end
+        end
+    end
 end
 
 -- used to unassign the role if the player is online, or removes the preassign
-function Sync.unassign_role(player_name,role_name,by_player_name)
+function Sync.unassign_role(player_name,roles,by_player_name)
     if not game then return end
     local preassign = RoleGlobal.preassign
     local player_roles = preassign[player_name]
-    if not player_roles then preassign[player_name] = {} return end
-    local index = table.index(player_roles,role_name)
-    table.remove(player_roles,index)
-    if Game.get_player(player_name) then Role.unassign(player_name,role_name,by_player_name) end
+    if Game.get_player(player_name) then Role.unassign(player_name,roles,by_player_name)
+    else
+        if not is_type(roles,'table') then roles = {roles} end
+        if not player_roles then preassign[player_name] = nil return end
+        for _,role_name in pairs(roles) do
+            local index = table.index(player_roles,role_name)
+            if index then table.remove(player_roles,index) end
+        end
+    end
 end
 
 Sync.add_update('roles',function()
