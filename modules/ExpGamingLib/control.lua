@@ -254,7 +254,7 @@ end
 -- @tparam table lua_table the table to convert
 -- @treturn string the table in a json format
 function table.json(lua_table)
-    if game and game.table_to_json then return game.table_to_json(lua_table) end
+    --if game and game.table_to_json then return game.table_to_json(lua_table) end
     local result, done, only_indexs = {}, {}, true
     for key,value in ipairs(lua_table) do
         done[key] = true
