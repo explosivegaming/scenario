@@ -1,10 +1,5 @@
 -- defines for groups
 Group{
-    name='Root',
-    disallow={}
-}
-
-Group{
     name='Admin',
     disallow={
         'edit_permission_group',

@@ -1,6 +1,10 @@
 Role.add_flag('is_default') -- this must be included in atleast one role
-Role.add_flag('is_root',function(player,state) if player.character then player.character.destructible = not state end end) -- not required but setting true will allow everythin for that role
-Role.add_flag('is_antiroot',function(player,state) if player.character then player.character.destructible = not state end end) -- not required but setting true will disallow everythin for that role
+Role.add_flag('is_root',function(player,state) 
+    if state then game.print('--- !!!ALERT!!! --- '..player.name..' has been given a role with ROOT ACCESS --- !!!ALERT!!! ---') end
+    if player.character then player.character.destructible = not state end 
+end) -- the SERVER role will have root but you may assign this to other roles
+-- the two above and used internaly and should NOT have their names changed and should NOT be removed but the state function MAY be changed
+Role.add_flag('is_antiroot',function(player,state) if player.character then player.character.destructible = not state end end) -- not required but setting true will disallow everything for that role
 Role.add_flag('is_admin',function(player,state) player.admin = state end) -- highly recomented but not required
 Role.add_flag('is_spectator',function(player,state) player.spectator = state end)
 Role.add_flag('is_jail',function(player,state) if player.character then player.character.active = not state end end)

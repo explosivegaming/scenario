@@ -33,15 +33,17 @@ local Role = {
         if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then require(module_path..'/src/sync',{self=self,RoleGlobal=RoleGlobal}) end
     end,
     on_post=function(self)
+        -- creates a server role with root access
+        self.meta.server = self{name='SERVER',group='Root',is_root=true,allow={}}
         -- loads the roles in config
         require(module_path..'/config',{Role=self})
+        self.order[0] = 'SERVER'
         -- joins role allows into a chain
         local previous
         for index,role_name in pairs(self.order) do
             local role = self.get(role_name)
             if not role then error('Invalid role name in order listing: '..role_name) return end
             if role.is_default then self.meta.default = role end
-            if role.is_root then self.meta.root = role end
             if role.is_timed then self.meta.times[role.name] = {index,role.time*3600} end
             if not self.meta.groups[role.group.name] then self.meta.groups[role.group.name] = {lowest=index,highest=index} end
             if self.meta.groups[role.group.name].highest > index then self.meta.groups[role.group.name].highest = index end
@@ -82,7 +84,7 @@ function Role.define(obj)
     if not type_error(obj.name,'string','Role creation is invalid: role.name is not a string') then return end
     if not is_type(obj.short_hand,'string') then obj.short_hand = obj.name:sub(1,3) end
     if not is_type(obj.tag,'string') then obj.tag = '['..obj.short_hand..']' end
-    if not type_error(obj.colour,'table','Role creation is invalid: role.colour is not a table') then return end
+    if not is_type(obj.colour,'table') then obj.colour = {r=255,b=255,g=255} end
     if not type_error(obj.allow,'table','Role creation is invalid: role.allow is not a table') then return end
     obj.group = Group.get(obj.group)
     if not type_error(obj.group,'table','Role creation is invalid: role.group is invalid') then return end
@@ -103,7 +105,7 @@ end
 -- @treturn table the group which was found or nil
 function Role.get(mixed)
     local player = game and Game.get_player(mixed)
-    if player == SERVER then return {Role.meta.root} end
+    if player == SERVER then return {Role.meta.server} end
     if player then 
         local rtn = {}
         if not global.players[player.index] then return Role.meta.default and {Role.meta.default} or {} end

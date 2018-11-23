@@ -26,6 +26,8 @@ local Group = {
         if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require('ExpGamingCore.Server@^4.0.0').add_module_to_interface('Group','ExpGamingCore.Group') end
     end,
     on_post = function(self)
+        -- creats a root role that the server can use
+        self{name='Root',disallow={}}
         -- loads the groups in config
         require(module_path..'/config',{Group=self})
     end
