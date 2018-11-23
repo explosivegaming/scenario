@@ -41,6 +41,7 @@ local Role = {
             local role = self.get(role_name)
             if not role then error('Invalid role name in order listing: '..role_name) return end
             if role.is_default then self.meta.default = role end
+            if role.is_root then self.meta.root = role end
             if role.is_timed then self.meta.times[role.name] = {index,role.time*3600} end
             if not self.meta.groups[role.group.name] then self.meta.groups[role.group.name] = {lowest=index,highest=index} end
             if self.meta.groups[role.group.name].highest > index then self.meta.groups[role.group.name].highest = index end
@@ -102,6 +103,7 @@ end
 -- @treturn table the group which was found or nil
 function Role.get(mixed)
     local player = game and Game.get_player(mixed)
+    if player == SERVER then return {Role.meta.root} end
     if player then 
         local rtn = {}
         if not global.players[player.index] then return Role.meta.default and {Role.meta.default} or {} end
