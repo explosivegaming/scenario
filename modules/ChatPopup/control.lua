@@ -5,8 +5,8 @@
 -- @alais ChatPopup 
 
 -- Module Require
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Color = require('FactorioStdLib.Color@^0.8.0')
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
 
 local ChatPopup = {}
 

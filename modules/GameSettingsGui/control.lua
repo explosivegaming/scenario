@@ -4,8 +4,8 @@
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
 -- Module Require
-local Server = require('ExpGamingCore.Server@^4.0.0')
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
+local Server = require('ExpGamingCore.Server')
+local Gui = require('ExpGamingCore.Gui')
 
 -- Local Varibles
 --{type='slider',object='',key='',name='',min=x,max=y}

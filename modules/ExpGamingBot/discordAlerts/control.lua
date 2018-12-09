@@ -5,9 +5,9 @@
 -- @alais ThisModule 
 
 -- Module Require
-local Sync = require('ExpGamingCore.Sync@^4.0.0')
-local Color = require('FactorioStdLib.Color@^0.8.0')
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Sync = require('ExpGamingCore.Sync')
+local Color = require('FactorioStdLib.Color')
+local Game = require('FactorioStdLib.Game')
 
 -- Module Define
 local module_verbose = false

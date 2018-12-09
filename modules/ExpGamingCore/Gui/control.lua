@@ -173,8 +173,8 @@ script.on_event('on_player_respawned',function(event)
 end)
 
 function Gui:on_init()
-    if loaded_modules['ExpGamingCore.Server@^4.0.0'] then 
-        Server = require('ExpGamingCore.Server@^4.0.0') 
+    if loaded_modules['ExpGamingCore.Server'] then 
+        Server = require('ExpGamingCore.Server') 
         verbose('ExpGamingCore.Server is installed; Loading server src') 
         script.on_init(require(module_path..'/src/server',{Gui=self})) 
     end

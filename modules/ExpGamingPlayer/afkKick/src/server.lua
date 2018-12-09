@@ -1,6 +1,6 @@
 local Sync = Sync
 local get_allowed_afk_time = self
-local Server = require('ExpGamingCore.Server@^4.0.0')
+local Server = require('ExpGamingCore.Server')
 Event[defines.events.on_tick] = nil
 
 script.on_init(function(event)

@@ -3,7 +3,7 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Game = require('FactorioStdLib.Game')
 local Role -- ExpGamingCore.Role@^4.0.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
 
@@ -30,8 +30,8 @@ end)
 return setmetatable({
     get_allowed_afk_time=get_allowed_afk_time,
     on_init=function(self)
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
-        if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then Sync = require('ExpGamingCore.Sync@^4.0.0') end
-        if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require(module_path..'/src/server',Sync,self) end
+        if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
+        if loaded_modules['ExpGamingCore.Sync'] then Sync = require('ExpGamingCore.Sync') end
+        if loaded_modules['ExpGamingCore.Server'] then require(module_path..'/src/server',Sync,self) end
     end
 },{__call=function(self,...) self.get_allowed_afk_time(...) end})

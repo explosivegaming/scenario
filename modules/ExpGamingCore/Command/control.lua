@@ -4,8 +4,8 @@
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alias commands
 
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Color = require('FactorioStdLib.Color@^0.8.0')
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
 
 --- Used as an error constant for validation
 -- @field commands.error

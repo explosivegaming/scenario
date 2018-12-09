@@ -7,8 +7,8 @@
 --- This file will be loaded when ExpGamingCore.Gui is present
 -- @function _comment
 
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
+local Game = require('FactorioStdLib.Game')
+local Gui = require('ExpGamingCore.Gui')
 local Sync = Sync -- this is to force sync to remain in the ENV
 
 local Sync_gui_functions = {}

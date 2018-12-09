@@ -1,8 +1,8 @@
 local Role = self
 local RoleGlobal = RoleGlobal
-local Sync = require('ExpGamingCore.Sync@^4.0.0')
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Color = require('FactorioStdLib.Color@^0.8.0')
+local Sync = require('ExpGamingCore.Sync')
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
 
 -- just to hard reset the role sync
 function Sync.set_roles(...)

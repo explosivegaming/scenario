@@ -5,7 +5,7 @@
 -- @alais ThisModule 
 
 -- Module Require
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Game = require('FactorioStdLib.Game')
 
 -- Local Varibles
 local entites = require(module_path..'/src/entites')

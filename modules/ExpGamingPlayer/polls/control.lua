@@ -4,8 +4,8 @@
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
 -- Module Require
-local Server = require('ExpGamingCore.Server@^4.0.0')
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
+local Server = require('ExpGamingCore.Server')
+local Gui = require('ExpGamingCore.Gui')
 local Role -- ExpGamingCore.Server@^4.0.0
 
 -- Local Varibles
@@ -15,7 +15,7 @@ local poll_time_out = 90 -- In seconds
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
     end
 }
 

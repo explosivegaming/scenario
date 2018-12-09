@@ -1,4 +1,4 @@
-local Role = require('ExpGamingCore.Role@^4.0.0')
+local Role = require('ExpGamingCore.Role')
 
 script.on_event(defines.events.on_role_change,self.update)
 

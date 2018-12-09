@@ -3,8 +3,8 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
+local Game = require('FactorioStdLib.Game')
+local Gui = require('ExpGamingCore.Gui')
 local Role -- ExpGamingCore.Role@^4.0.0
 local Group -- ExpGamingCore.Group@^4.0.0
 
@@ -50,8 +50,8 @@ end
 return setmetatable({
     get_player_info=get_player_info,
     on_init=function(self)
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
-        if loaded_modules['ExpGamingCore.Group@^4.0.0'] then Group = require('ExpGamingCore.Group@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
+        if loaded_modules['ExpGamingCore.Group'] then Group = require('ExpGamingCore.Group') end
     end
 },{
     __call=function(self,...) self.get_player_info(...) end

@@ -3,7 +3,7 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Game = require('FactorioStdLib.Game')
 local global = global{}
 
 --- Sets the home for a player

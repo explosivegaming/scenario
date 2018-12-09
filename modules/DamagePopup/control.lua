@@ -5,7 +5,7 @@
 -- @alais DamagePopup 
 
 -- Module Require
-local Color = require('FactorioStdLib.Color@^0.8.0')
+local Color = require('FactorioStdLib.Color')
 
 local DamagePopup = {}
 

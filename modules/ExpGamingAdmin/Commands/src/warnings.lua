@@ -1,5 +1,5 @@
 local Admin = self
-local Role = require('ExpGamingCore.Role@^4.0.0')
+local Role = require('ExpGamingCore.Role')
 
 --- Gives a warning to a player
 -- @command warn

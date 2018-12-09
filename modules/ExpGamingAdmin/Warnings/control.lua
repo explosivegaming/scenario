@@ -5,10 +5,10 @@
 -- @alais ThisModule 
 
 -- Module Require
-local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
-local Server = require('ExpGamingCore.Server@^4.0.0')
-local Role = require('ExpGamingCore.Role@^4.0.0')
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Admin = require('ExpGamingAdmin.AdminLib')
+local Server = require('ExpGamingCore.Server')
+local Role = require('ExpGamingCore.Role')
+local Game = require('FactorioStdLib.Game')
 local Color -- FactorioStdLib.Color@^0.8.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
 
@@ -37,9 +37,9 @@ local punishments = {
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then Sync = require('ExpGamingCore.Sync@^4.0.0') end
-        if loaded_modules['FactorioStdLib.Color@^0.8.0'] then Color = require('FactorioStdLib.Color@^0.8.0') end
-        if loaded_modules['ExpGamingAdmin.Reports@^4.0.0'] then
+        if loaded_modules['ExpGamingCore.Sync'] then Sync = require('ExpGamingCore.Sync') end
+        if loaded_modules['FactorioStdLib.Color'] then Color = require('FactorioStdLib.Color') end
+        if loaded_modules['ExpGamingAdmin.Reports'] then
             take_action = take_action + 1
             table.insert(punishments,take_action,{'report',{'ExpGamingAdmin-Warnings.reported'},defines.textcolor.med})
         end

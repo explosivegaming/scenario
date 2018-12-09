@@ -1,8 +1,8 @@
 --- This file will be loaded when ExpGamingCore.Server is present
 -- @function _comment
 
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Server = require('ExpGamingCore.Server@^4.0.0')
+local Game = require('FactorioStdLib.Game')
+local Server = require('ExpGamingCore.Server')
 
 Server.add_module_to_interface('ExpGui','ExpGamingCore.Gui')
 

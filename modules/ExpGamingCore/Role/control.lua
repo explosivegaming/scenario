@@ -5,8 +5,8 @@
 -- @alais Role 
 
 -- Module Require
-local Group = require('ExpGamingCore.Group@^4.0.0')
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Group = require('ExpGamingCore.Group')
+local Game = require('FactorioStdLib.Game')
 
 -- Local Varibles
 local role_change_event_id = script.generate_event_name('on_role_change')
@@ -28,9 +28,9 @@ local Role = {
         end
     }),
     on_init=function(self)
-        if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require('ExpGamingCore.Server@^4.0.0').add_module_to_interface('Role','ExpGamingCore.Role') end
-        if loaded_modules['ExpGamingCore.Command@^4.0.0'] then require(module_path..'/src/commands',{self=self}) end
-        if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then require(module_path..'/src/sync',{self=self,RoleGlobal=RoleGlobal}) end
+        if loaded_modules['ExpGamingCore.Server'] then require('ExpGamingCore.Server') end
+        if loaded_modules['ExpGamingCore.Command'] then require(module_path..'/src/commands',{self=self}) end
+        if loaded_modules['ExpGamingCore.Sync'] then require(module_path..'/src/sync',{self=self,RoleGlobal=RoleGlobal}) end
     end,
     on_post=function(self)
         -- creates a server role with root access

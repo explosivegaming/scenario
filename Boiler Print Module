@@ -5,8 +5,8 @@
 -- @alais ThisModule 
 
 -- Module Require
-local Module = require('Module@>X.Y.Z')
-local SubModule = require('Collection.Submodule@^X.Y.Z')
+local Module = require('Module')
+local SubModule = require('Collection.Submodule')
 local OptModule -- OptModule@^X.Y.Z
 
 -- Local Varibles
@@ -15,8 +15,8 @@ local OptModule -- OptModule@^X.Y.Z
 local module_verbose = false
 local ThisModule = {
     on_init=function(self)
-        if loaded_modules['OptModule@^X.Y.Z'] then OptModule = require('OptModule@^X.Y.Z') end
-        if loaded_modules['OptModule2@^X.Y.Z'] then require(module_path..'/src/module2',{self=self}) end
+        if loaded_modules['OptModule'] then OptModule = require('OptModule') end
+        if loaded_modules['OptModule2'] then require(module_path..'/src/module2',{self=self}) end
         --code
     end,
     on_post=function()

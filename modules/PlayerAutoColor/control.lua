@@ -5,7 +5,7 @@
 -- @alais ThisModule 
 
 -- Module Require
-local Color = require('FactorioStdLib.Color@^0.8.0')
+local Color = require('FactorioStdLib.Color')
 
 -- Module Define
 local module_verbose = false

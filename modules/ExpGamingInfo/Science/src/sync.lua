@@ -1,5 +1,5 @@
-local Sync = require('ExpGamingCore.Sync@^4.0.0')
-local data = global['ExpGamingInfo.Science@^4.0.0']
+local Sync = require('ExpGamingCore.Sync')
+local data = global['ExpGamingInfo.Science']
 
 Sync.add_update('science',function()
     local _return = {}

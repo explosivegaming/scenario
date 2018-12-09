@@ -5,8 +5,8 @@
 -- @alais ThisModule 
 
 -- Module Require
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Gui = require('ExpGamingCore.Gui')
+local Game = require('FactorioStdLib.Game')
 local Role -- ExpGamingCore.Role@^4.0.0
 
 -- Local Varibles
@@ -27,8 +27,8 @@ local global
 local module_verbose = false
 local ThisModule = {
     on_init=function(self)
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
-        if loaded_modules['ExpGamingCore.Command@^4.0.0'] then require(module_path..'/src/commands',{self=self,warps=global,warp_min_distance=warp_min_distance}) end
+        if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
+        if loaded_modules['ExpGamingCore.Command'] then require(module_path..'/src/commands',{self=self,warps=global,warp_min_distance=warp_min_distance}) end
     end
 }
 

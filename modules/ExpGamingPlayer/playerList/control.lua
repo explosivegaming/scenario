@@ -3,8 +3,8 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
+local Game = require('FactorioStdLib.Game')
+local Gui = require('ExpGamingCore.Gui')
 local Admin -- ExpGamingAdmin.AdminLib@^4.0.0
 local AdminGui -- ExpGamingAdmin.Gui@^4.0.0
 
@@ -30,9 +30,9 @@ local module_verbose = false
 local ThisModule = {
     on_init=function(self)
         if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer.playerInfo') end
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then getPlayers = require(module_path..'/src/ranking',{self=self}) end
-        if loaded_modules['ExpGamingAdmin.AdminLib@^4.0.0'] then Admin = require('ExpGamingAdmin.AdminLib@^4.0.0') end
-        if loaded_modules['ExpGamingAdmin.Gui@^4.0.0'] then AdminGui = require('ExpGamingAdmin.Gui@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role'] then getPlayers = require(module_path..'/src/ranking',{self=self}) end
+        if loaded_modules['ExpGamingAdmin.AdminLib'] then Admin = require('ExpGamingAdmin.AdminLib') end
+        if loaded_modules['ExpGamingAdmin.Gui'] then AdminGui = require('ExpGamingAdmin.Gui') end
     end
 }
 

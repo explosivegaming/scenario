@@ -23,7 +23,7 @@ local Group = {
         end
     }),
     on_init = function()
-        if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require('ExpGamingCore.Server@^4.0.0').add_module_to_interface('Group','ExpGamingCore.Group') end
+        if loaded_modules['ExpGamingCore.Server'] then require('ExpGamingCore.Server') end
     end,
     on_post = function(self)
         -- creats a root role that the server can use

@@ -5,9 +5,9 @@
 -- @alais ThisModule 
 
 -- Module Require
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
-local Role = require('ExpGamingCore.Role@^4.0.0')
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Gui = require('ExpGamingCore.Gui')
+local Role = require('ExpGamingCore.Role')
+local Game = require('FactorioStdLib.Game')
 
 -- Module Define
 local module_verbose = false

@@ -1,5 +1,5 @@
 local Admin = self
-local Role = require('ExpGamingCore.Role@^4.0.0')
+local Role = require('ExpGamingCore.Role')
 
 --- Used to jail a player which stops them from moving
 -- @command jail

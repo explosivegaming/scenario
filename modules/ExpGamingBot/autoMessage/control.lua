@@ -16,8 +16,8 @@ local Sync -- ExpGamingCore.Sync@4.0.0
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
-        if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then Sync = require('ExpGamingCore.Sync@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
+        if loaded_modules['ExpGamingCore.Sync'] then Sync = require('ExpGamingCore.Sync') end
     end,
     on_post=function()
         --code
