@@ -12,8 +12,8 @@
   "contact": "Discord: Cooldude2606#5241",
   "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
   "dependencies": {
-    "FactorioStdLib.Game": "*",
-    "FactorioStdLib.Color": "*",
+    "FactorioStdLib.Game": "^0.8.0",
+    "FactorioStdLib.Color": "^0.8.0",
     "FactorioStdLib.Table": "^0.8.0"
   },
   "submodules": {}

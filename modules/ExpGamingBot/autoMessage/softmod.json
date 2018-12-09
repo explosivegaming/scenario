@@ -11,8 +11,8 @@
     "Message"
   ],
   "dependencies": {
-    "ExpGamingCore.Server": "*",
-    "FactorioStdLib.Game": "*",
+    "ExpGamingCore.Server": "^4.0.0",
+    "FactorioStdLib.Game": "^0.8.0",
     "ExpGamingCore.Role": "^4.0.0",
     "ExpGamingCore.Sync": "^4.0.0"
   },

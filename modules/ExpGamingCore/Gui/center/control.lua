@@ -1,16 +1,13 @@
 --- Adds a uniform preset for guis in the center of the screen which allow for different tabs to be opened
--- @module ExpGamingCore.Gui.Center
+-- @module ExpGamingCore.Gui.center
 -- @alias center
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
---- This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module
--- @function _comment
-
 local Game = require('FactorioStdLib.Game')
 local Color = require('FactorioStdLib.Color')
-local mod_gui = require("mod-gui")
-local Gui = Gui -- this is to force gui to remain in the ENV
+local Gui = require('ExpGamingCore.Gui')
+local mod_gui = require('mod-gui')
 
 local center = {}
 center._prototype = {}
@@ -28,7 +25,7 @@ function center.add(obj)
     obj.tabs = {}
     obj._tabs = {}
     Gui.data('center',obj.name,obj)
-    Gui.toolbar(obj.name,obj.caption,obj.tooltip,obj.open)
+    if Gui.toolbar then Gui.toolbar(obj.name,obj.caption,obj.tooltip,obj.open) end
     return obj
 end
 
@@ -206,10 +203,14 @@ function center._prototype:add_tab(name,caption,tooltip,callback)
 end
 
 -- used so that when gui close key is pressed this will close the gui
-center._events = {[defines.events.on_gui_closed]=function(event)
+script.on_event(defines.events.on_gui_closed,function(event)
     if event.element and event.element.valid then event.element.destroy() end
-end}
+end)
 
-center.on_role_change = center.clear
+script.on_event(defines.events.on_player_respawned,center.clear)
+
+function center:on_init()
+    if loaded_modules['ExpGamingCore.Role'] then script.on_event(defines.events.on_role_change,center.clear) end
+end
 -- calling will attempt to add a new gui
 return setmetatable(center,{__call=function(self,...) return self.add(...) end})

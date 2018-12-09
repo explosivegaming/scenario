@@ -9,14 +9,14 @@
 
 local Game = require('FactorioStdLib.Game')
 local Color = require('FactorioStdLib.Color')
-local mod_gui = require("mod-gui")
-local Gui = Gui -- this is to force gui to remain in the ENV
+local mod_gui = require('mod-gui')
+local Gui = require('ExpGamingCore.Gui')
 
 local inputs = {}
 inputs._prototype = {}
 -- these are just so you can have short cuts to this
 inputs.events = {
-    error='error',
+    --error={}, -- this is added after event calls are added as it is not a script event
     state=defines.events.on_gui_checked_state_changed,
     click=defines.events.on_gui_click,
     elem=defines.events.on_gui_elem_changed,
@@ -33,7 +33,7 @@ inputs.events = {
 function inputs._prototype:on_event(event,callback)
     if not is_type(callback,'function') then return self end
     if inputs.events[event] then event = inputs.events[event] end
-    if event == 'error' then self._error = callback return self end
+    if event == inputs.events.error then self._error = callback return self end
     self.events[event] = callback
     return self
 end
@@ -136,15 +136,8 @@ function inputs._event_handler(event)
     end
 end
 
-inputs._events = {
-    [inputs.events.state]=inputs._event_handler,
-    [inputs.events.click]=inputs._event_handler,
-    [inputs.events.elem]=inputs._event_handler,
-    [inputs.events.state]=inputs._event_handler,
-    [inputs.events.text]=inputs._event_handler,
-    [inputs.events.slider]=inputs._event_handler,
-    [inputs.events.selection]=inputs._event_handler
-}
+script.on_event(inputs.events,inputs._event_handler)
+inputs.events.error = {}
 
 -- the folwing functions are just to make inputs easier but if what you want is not include use inputs.add(obj)
 --- Used to define a button, can have many function
@@ -381,5 +374,3 @@ end
 
 -- calling will attempt to add a new input
 return setmetatable(inputs,{__call=function(self,...) return self.add(...) end})
-
--- to see examples look at GuiParts/test.lua

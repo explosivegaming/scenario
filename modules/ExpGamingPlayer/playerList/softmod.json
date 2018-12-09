@@ -17,7 +17,7 @@
     "ExpGamingAdmin.AdminLib": "^4.0.0",
     "ExpGamingAdmin.buttonFlow": "?^4.0.0",
     "ExpGamingAdmin.reports": "?^4.0.0",
-    "ExpGamingPlayer.playerInfo": "?*",
+    "ExpGamingPlayer.playerInfo": "?^4.0.0",
     "ExpGamingAdmin.Gui": "^4.0.0"
   },
   "collection": "ExpGamingPlayer@4.0.0",

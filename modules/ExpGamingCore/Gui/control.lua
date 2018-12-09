@@ -27,23 +27,6 @@ Gui.data = setmetatable({},{
     end
 })
 
-local events = {}
-local order_config = require(module_path..'/order_config')
-
-Gui.center = require(module_path..'/src/center',{Gui=Gui})
-table.merge(events,Gui.center._events)
-Gui.center._events = nil
-
-Gui.inputs = require(module_path..'/src/inputs',{Gui=Gui})
-table.merge(events,Gui.inputs._events)
-Gui.inputs._events = nil
-
-Gui.left = require(module_path..'/src/left',{Gui=Gui,order_config=order_config,self_global=global})
-Gui.popup = require(module_path..'/src/popup',{Gui=Gui})
-Gui.toolbar = require(module_path..'/src/toolbar',{Gui=Gui,order_config=order_config})
-
-for event,callback in pairs(events) do script.on_event(event,callback) end
-
 --- Add a white bar to any gui frame
 -- @usage Gui.bar(frame,100)
 -- @param frame the frame to draw the line to
@@ -158,11 +141,7 @@ function Gui.cam_link(data)
 end
 
 script.on_event('on_tick', function(event)
-	if Gui.left and ((event.tick+10)/(3600*game.speed)) % 15 == 0 then
-		Gui.left.update()
-    end
     if loaded_modules['ExpGamingCore.Server'] then return end
-
     if global.cams and is_type(global.cams,'table') and #global.cams > 0 then
         local update = 4
         if global.cam_index >= #global.cams then global.cam_index = 1 end
@@ -180,7 +159,6 @@ script.on_event('on_tick', function(event)
 end)
 
 script.on_event('on_player_respawned',function(event)
-    if Gui.center then Gui.center.clear() end
     if loaded_modules['ExpGamingCore.Server'] then return end
     if global.players and is_type(global.players,'table') and #global.players > 0 and global.players[event.player_index] then
         local remove = {}
@@ -195,26 +173,15 @@ script.on_event('on_player_respawned',function(event)
 end)
 
 function Gui:on_init()
-    self.left:on_init(); self.left.on_init = nil
-    self.toolbar:on_init(); self.toolbar.on_init = nil
-    if loaded_modules['ExpGamingCore.Server@^4.0.0'] then Server = require('ExpGamingCore.Server@^4.0.0') verbose('ExpGamingCore.Server is installed; Loading server src') script.on_init(require(module_path..'/src/server',{Gui=self})) end
-    if loaded_modules['ExpGamingCore.Role@^4.0.0'] then
-        verbose('ExpGamingCore.Role is installed; Loading ranking src')
-        script.on_event('on_role_change',function(event)
-            self.toolbar.on_role_change(event)
-            self.center.on_role_change(event)
-        end)
+    if loaded_modules['ExpGamingCore.Server@^4.0.0'] then 
+        Server = require('ExpGamingCore.Server@^4.0.0') 
+        verbose('ExpGamingCore.Server is installed; Loading server src') 
+        script.on_init(require(module_path..'/src/server',{Gui=self})) 
     end
-    script.on_event('on_player_joined_game',function(event)
-        self.toolbar.on_player_joined_game(event)
-        self.popup.on_player_joined_game(event)
-        self.left.on_player_joined_game(event)
-    end) 
 end
 
 function Gui:on_post()
     Gui.test = require(module_path..'/src/test',{Gui=Gui})
-    Gui.popup.load() Gui.popup.load = nil
 end
 
 

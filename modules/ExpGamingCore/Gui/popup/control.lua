@@ -8,24 +8,12 @@
 -- @function _comment
 
 local Game = require('FactorioStdLib.Game')
-local mod_gui = require("mod-gui")
-local Gui = Gui -- this is to force gui to remain in the ENV
+local mod_gui = require('mod-gui')
+local Gui = require('ExpGamingCore.Gui')
+local Server -- loaded on_init
 
 local popup = {}
 popup._prototype = {}
-
-function popup.load()
-    popup._prototype.close = Gui.inputs.add{
-        type='button',
-        name='popup-close',
-        caption='utility/set_bar_slot',
-        tooltip='Close This Popup'
-    }:on_event('click',function(event)
-        local frame = event.element.parent
-        local parent = frame.parent
-        if frame and frame.valid then frame.destroy() if #parent.children == 0 then parent.style.visible = false end end
-    end)
-end
 
 --- Used to add a popup gui style
 -- @usage Gui.left.add{name='foo',caption='Foo',draw=function}
@@ -113,12 +101,30 @@ function popup.open(style,data,players)
     end
 end
 
-function popup._prototype:add_left(obj)
-    obj.name = obj.name or self.name
-    self.left = Gui.left(obj)
+function popup:on_init()
+    if loaded_modules['ExpGamingCore.Server'] then Server = require('ExpGamingCore.Server') end
+    if loaded_modules['ExpGamingCore.Gui.left'] then
+        function popup._prototype:add_left(obj)
+            obj.name = obj.name or self.name
+            self.left = Gui.left(obj)
+        end
+    end
 end
 
-popup.on_player_joined_game = popup.flow
+function popup:on_post()
+    popup._prototype.close = Gui.inputs.add{
+        type='button',
+        name='popup-close',
+        caption='utility/set_bar_slot',
+        tooltip='Close This Popup'
+    }:on_event('click',function(event)
+        local frame = event.element.parent
+        local parent = frame.parent
+        if frame and frame.valid then frame.destroy() if #parent.children == 0 then parent.style.visible = false end end
+    end)
+end
+
+script.on_event(defines.events.on_player_joined_game,popup.flow)
 
 -- calling will attempt to add a new popup style
 return setmetatable(popup,{__call=function(self,...) return self.add(...) end})
