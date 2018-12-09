@@ -1,20 +1,21 @@
 {
-    "name": "GuiAnnouncements",
-    "version": "4.0.0",
-    "type": "Module",
-    "description": "Creates a gui for making and reciving announcements",
-    "location": "<blank>",
-    "keywords": [
-        "Announcements",
-        "Gui",
-        "Admin"
-    ],
-    "author": "Cooldude2606",
-    "contact": "Discord: Cooldude2606#5241",
-    "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
-    "dependencies": {
-        "FactorioStdLib.Game": "^0.8.0",
-        "ExpGamingCore.Role": "^4.0.0",
-        "ExpGamingCore.Gui": "^4.0.0"
-    }
+  "name": "GuiAnnouncements",
+  "version": "4.0.0",
+  "type": "Module",
+  "description": "Creates a gui for making and reciving announcements",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Announcements",
+    "Gui",
+    "Admin"
+  ],
+  "author": "Cooldude2606",
+  "contact": "Discord: Cooldude2606#5241",
+  "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+  "dependencies": {
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingCore.Role": "^4.0.0",
+    "ExpGamingCore.Gui": "^4.0.0"
+  },
+  "submodules": {}
 }

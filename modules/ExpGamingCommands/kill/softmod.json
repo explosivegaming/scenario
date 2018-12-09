@@ -1,21 +1,22 @@
 {
-    "name": "kill",
-    "version": "4.0.0",
-    "type": "Submodule",
-    "description": "Adds a command which can be used to kill a player or yourself.",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingAdmin.Commands_4.0.0.zip",
-    "keywords": [
-        "Command",
-        "ExpGaming",
-        "Kill",
-        "Death",
-        "Admin",
-        "Tool"
-    ],
-    "dependencies": {
-        "ExpGamingCore.Command": "^4.0.0",
-        "ExpGamingCore.Role": "^4.0.0",
-        "FactorioStdLib.Game": "^0.8.0"
-    },
-    "collection": "ExpGamingCommands_4.0.0"
+  "name": "ExpGamingCommands.kill",
+  "version": "4.0.0",
+  "type": "Submodule",
+  "description": "Adds a command which can be used to kill a player or yourself.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Command",
+    "ExpGaming",
+    "Kill",
+    "Death",
+    "Admin",
+    "Tool"
+  ],
+  "dependencies": {
+    "ExpGamingCore.Command": "^4.0.0",
+    "ExpGamingCore.Role": "^4.0.0",
+    "FactorioStdLib.Game": "^4.0.0"
+  },
+  "collection": "ExpGamingCommands@4.0.0",
+  "submodules": {}
 }

@@ -1,19 +1,20 @@
 {
-    "name": "ExpGamingLib",
-    "version": "4.0.0",
-    "type": "Module",
-    "description": "Adds some common functions used though out all ExpGaming modules",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingLib_4.0.0.zip",
-    "keywords": [
-        "ExpGaming",
-        "Lib"
-    ],
-    "author": "Cooldude2606",
-    "contact": "Discord: Cooldude2606#5241",
-    "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
-    "dependencies": {
-        "FactorioStdLib.Game": "^0.8.0",
-        "FactorioStdLib.Color": "^0.8.0",
-        "FactorioStdLib.Table": "^0.8.0"
-    }
+  "name": "ExpGamingLib",
+  "version": "4.0.0",
+  "type": "Module",
+  "description": "Adds some common functions used though out all ExpGaming modules",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "ExpGaming",
+    "Lib"
+  ],
+  "author": "Cooldude2606",
+  "contact": "Discord: Cooldude2606#5241",
+  "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+  "dependencies": {
+    "FactorioStdLib.Game": "*",
+    "FactorioStdLib.Color": "*",
+    "FactorioStdLib.Table": "^0.8.0"
+  },
+  "submodules": {}
 }

@@ -1,19 +1,20 @@
 {
-    "name": "cheatMode",
-    "version": "4.0.0",
-    "type": "Submodule",
-    "description": "Adds a command which allow you to toggle cheatmode",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.cheatMode_4.0.0.zip",
-    "keywords": [
-        "Cheat",
-        "Commands",
-        "Admin",
-        "ExpGaming",
-        "Cheat Mode",
-        "Hacks"
-    ],
-    "dependencies": {
-        "ExpGamingCore.Command": "^4.0.0"
-    },
-    "collection": "ExpGamingCommands_4.0.0"
+  "name": "ExpGamingCommands.cheatMode",
+  "version": "4.0.0",
+  "type": "Submodule",
+  "description": "Adds a command which allow you to toggle cheatmode",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Cheat",
+    "Commands",
+    "Admin",
+    "ExpGaming",
+    "Cheat Mode",
+    "Hacks"
+  ],
+  "dependencies": {
+    "ExpGamingCore.Command": "^4.0.0"
+  },
+  "collection": "ExpGamingCommands@4.0.0",
+  "submodules": {}
 }

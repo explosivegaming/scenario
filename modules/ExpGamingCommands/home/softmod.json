@@ -1,20 +1,21 @@
 {
-    "name": "home",
-    "version": "4.0.0",
-    "type": "Submodule",
-    "description": "Allows players to set homes and then return to them later.",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.home_4.0.0.zip",
-    "keywords": [
-        "Teleport",
-        "ExpGaming",
-        "Home",
-        "Return",
-        "Set Home",
-        "Commands"
-    ],
-    "dependencies": {
-        "FactorioStdLib.Game": "^0.8.0",
-        "ExpGamingCore.Command": "^4.0.0"
-    },
-    "collection": "ExpGamingCommands_4.0.0"
+  "name": "ExpGamingCommands.home",
+  "version": "4.0.0",
+  "type": "Submodule",
+  "description": "Allows players to set homes and then return to them later.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Teleport",
+    "ExpGaming",
+    "Home",
+    "Return",
+    "Set Home",
+    "Commands"
+  ],
+  "dependencies": {
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingCore.Command": "^4.0.0"
+  },
+  "collection": "ExpGamingCommands@4.0.0",
+  "submodules": {}
 }

@@ -3,13 +3,20 @@
   "version": "4.0.0",
   "type": "Module",
   "description": "Creates flying text above player when they send a message.",
-  "location": "<blank>",
-  "keywords": ["Chat", "Popup", "Mention", "Floating", "Text"],
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Chat",
+    "Popup",
+    "Mention",
+    "Floating",
+    "Text"
+  ],
   "author": "badgamernl",
   "contact": "badgamernl@gmail.com",
   "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
   "dependencies": {
-    "FactorioStdLib.Game": "0.8.0",
+    "FactorioStdLib.Game": "^0.8.0",
     "FactorioStdLib.Color": "^0.8.0"
-  }
+  },
+  "submodules": {}
 }

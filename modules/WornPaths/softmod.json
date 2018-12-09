@@ -1,19 +1,20 @@
 {
-    "name": "WornPaths",
-    "version": "4.0.0",
-    "type": "Module",
-    "description": "Makes paths which wear down and paths where entites are placed.",
-    "location": "<blank>",
-    "keywords": [
-        "Paths",
-        "Worn",
-        "Decay",
-        "Degrade"
-    ],
-    "author": "Cooldude2606",
-    "contact": "Discord: Cooldude2606#5241",
-    "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
-    "dependencies": {
-        "FactorioStdLib.Game": "^0.8.0"
-    }
+  "name": "WornPaths",
+  "version": "4.0.0",
+  "type": "Module",
+  "description": "Makes paths which wear down and paths where entites are placed.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Paths",
+    "Worn",
+    "Decay",
+    "Degrade"
+  ],
+  "author": "Cooldude2606",
+  "contact": "Discord: Cooldude2606#5241",
+  "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+  "dependencies": {
+    "FactorioStdLib.Game": "^0.8.0"
+  },
+  "submodules": {}
 }

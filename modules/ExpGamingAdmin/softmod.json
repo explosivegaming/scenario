@@ -1,275 +1,33 @@
 {
-    "name": "ExpGamingAdmin",
-    "version": "4.0.0",
-    "type": "Collection",
-    "description": "A set of useful admin commands and functions that can be used by other modules.",
-    "location": "<blank>",
-    "keywords": [
-        "Admin",
-        "ExpGaming",
-        "Set",
-        "Commands",
-        "Functions",
-        "Scripts",
-        "Useful"
-    ],
-    "author": "Cooldude2606",
-    "contact": "Discord: Cooldude2606#5241",
-    "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
-    "submodules": {
-        "AdminLib": {
-            "name": "AdminLib",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "The base functions required to make the others work.",
-            "location": "<blank>",
-            "keywords": [
-                "lib",
-                "ExpGaming",
-                "Admin"
-            ],
-            "dependencies": {
-                "FactorioStdLib": "^0.8.0",
-                "ExpGamingCore.Role": "?^4.0.0",
-                "ExpGamingCore.Sync": "?^4.0.0"
-            },
-            "collection": "ExpGamingAdmin_4.0.0"
-        },
-        "Ban": {
-            "name": "Ban",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Adds a custom ban function to the admin command set.",
-            "location": "<blank>",
-            "keywords": [
-                "Ban",
-                "Admin",
-                "Set",
-                "ExpGaming"
-            ],
-            "dependencies": {
-                "ExpGamingAdmin.AdminLib": "^4.0.0",
-                "ExpGamingAdmin.Gui": "^4.0.0",
-                "ExpGamingCore.Server": "^4.0.0",
-                "FactorioStdLib.Game": "^0.8.0",
-                "FactorioStdLib.Color": "?^0.8.0",
-                "ExpGamingCore.Sync": "?^4.0.0",
-                "ExpGamingAdmin.ClearInventory": "?^4.0.0"
-            },
-            "collection": "ExpGamingAdmin_4.0.0"
-        },
-        "ClearInventory": {
-            "name": "ClearInventory",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Adds a function to clear a players inventoy and move the items to spawn.",
-            "location": "<blank>",
-            "keywords": [
-                "Spawn",
-                "Items",
-                "Admin",
-                "Move",
-                "Clear",
-                "Inventory"
-            ],
-            "dependencies": {
-                "ExpGamingAdmin.AdminLib": "^4.0.0",
-                "FactorioStdLib.Game": "^0.8.0"
-            },
-            "collection": "ExpGamingAdmin_4.0.0"
-        },
-        "Gui": {
-            "name": "Gui",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Adds a gui that can be used to access all the admin commands.",
-            "location": "<blank>",
-            "keywords": [
-                "Admin",
-                "ExpGaming",
-                "Commands",
-                "Gui"
-            ],
-            "dependencies": {
-                "ExpGamingAdmin.AdminLib": "^4.0.0",
-                "ExpGamingCore.Gui": "^4.0.0",
-                "ExpGamingCore.Role": "^4.0.0",
-                "FactorioStdLib.Game": "^0.8.0",
-                "ExpGamingPlayer": "?^4.0.0"
-            },
-            "collection": "ExpGamingAdmin_4.0.0"
-        },
-        "Jail": {
-            "name": "Jail",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Adds a jail function to the admin set, require ExpGamingCore.Role to work.",
-            "location": "<blank>",
-            "keywords": [
-                "Jail",
-                "Roles",
-                "Admin",
-                "ExpGaming"
-            ],
-            "dependencies": {
-                "ExpGamingAdmin.AdminLib": "^4.0.0",
-                "ExpGamingAdmin.Gui": "^4.0.0",
-                "ExpGamingCore.Server": "^4.0.0",
-                "ExpGamingCore.Role": "^4.0.0",
-                "FactorioStdLib.Game": "^0.8.0",
-                "FactorioStdLib.Color": "?^0.8.0",
-                "ExpGamingCore.Sync": "?^4.0.0",
-                "ExpGamingAdmin.ClearInventory": "?^4.0.0"
-            },
-            "collection": "ExpGamingAdmin_4.0.0"
-        },
-        "Kick": {
-            "name": "Kick",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Adds a kick function to the admin function set.",
-            "location": "<blank>",
-            "keywords": [
-                "Admin",
-                "ExpGaming",
-                "Kick",
-                "Commands"
-            ],
-            "dependencies": {
-                "ExpGamingAdmin.AdminLib": "^4.0.0",
-                "ExpGamingAdmin.Gui": "^4.0.0",
-                "ExpGamingCore.Server": "^4.0.0",
-                "FactorioStdLib.Game": "^0.8.0",
-                "FactorioStdLib.Color": "?^0.8.0",
-                "ExpGamingCore.Sync": "?^4.0.0",
-                "ExpGamingAdmin.ClearInventory": "?^4.0.0"
-            },
-            "collection": "ExpGamingAdmin_4.0.0"
-        },
-        "Reports": {
-            "name": "Reports",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Adds a report system into the game that can also push notifactions to discord.",
-            "location": "<blank>",
-            "keywords": [
-                "Report",
-                "Player",
-                "Admin",
-                "ExpGaming",
-                "Player List",
-                "Commands"
-            ],
-            "dependencies": {
-                "ExpGamingAdmin.AdminLib": "^4.0.0",
-                "ExpGamingCore.Server": "^4.0.0",
-                "ExpGamingCore.Role": "^4.0.0",
-                "FactorioStdLib.Game": "^0.8.0",
-                "FactorioStdLib.Color": "^0.8.0",
-                "ExpGamingCore.Sync": "?^4.0.0"
-            },
-            "collection": "ExpGamingAdmin_4.0.0"
-        },
-        "Teleport": {
-            "name": "Teleport",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Adds three function to admin: tp, bring and go to, these all move the player.",
-            "location": "<blank>",
-            "keywords": [
-                "Tp",
-                "Bring",
-                "Go To",
-                "Admin",
-                "ExpGaming",
-                "Teleport",
-                "Commands"
-            ],
-            "dependencies": {
-                "ExpGamingAdmin.AdminLib": "^4.0.0",
-                "ExpGamingAdmin.Gui": "^4.0.0",
-                "FactorioStdLib.Game": "^0.8.0"
-            },
-            "collection": "ExpGamingAdmin_4.0.0"
-        },
-        "TempBan": {
-            "name": "TempBan",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Adds a temp ban function to the admin set, requires ExpGamingCore.Role to work.",
-            "location": "<blank>",
-            "keywords": [
-                "Jail",
-                "Temp Ban",
-                "Admin",
-                "ExpGaming",
-                "Roles"
-            ],
-            "dependencies": {
-                "ExpGamingAdmin.AdminLib": "^4.0.0",
-                "ExpGamingCore.Server": "^4.0.0",
-                "ExpGamingCore.Role": "^4.0.0",
-                "FactorioStdLib.Game": "^0.8.0",
-                "FactorioStdLib.Color": "^0.8.0",
-                "ExpGamingCore.Sync": "?^4.0.0",
-                "ExpGamingAdmin.ClearInventory": "?^4.0.0"
-            },
-            "collection": "ExpGamingAdmin_4.0.0"
-        },
-        "Warnings": {
-            "name": "Warnings",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Adds a warning system into the admin set which can be used by admins and the script.",
-            "location": "<blank>",
-            "keywords": [
-                "Warning",
-                "Admin",
-                "ExpGaming",
-                "Report",
-                "Kick",
-                "Punishments",
-                "Ban"
-            ],
-            "dependencies": {
-                "ExpGamingAdmin.AdminLib": "^4.0.0",
-                "ExpGamingCore.Server": "^4.0.0",
-                "ExpGamingCore.Role": "^4.0.0",
-                "FactorioStdLib.Game": "^0.8.0",
-                "FactorioStdLib.Color": "^0.8.0",
-                "ExpGamingAdmin.Reports": "?^4.0.0",
-                "ExpGamingCore.Sync": "?^4.0.0"
-            },
-            "collection": "ExpGamingAdmin_4.0.0"
-        },
-        "Commands": {
-            "name": "Commands",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Admins many of the admin featues which the script can use as in game commands.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.admin_4.0.0.zip",
-            "keywords": [
-                "ExpGaming",
-                "Admin",
-                "Tools",
-                "Commands",
-                "Temp ban",
-                "Jail",
-                "Clear Inventory",
-                "Report",
-                "Warnings"
-            ],
-            "dependencies": {
-                "ExpGamingLib": "^4.0.0",
-                "ExpGamingCore.Command": "^4.0.0",
-                "ExpGamingAdmin.TempBan": "?^4.0.0",
-                "ExpGamingAdmin.Jail": "?^4.0.0",
-                "ExpGamingAdmin.Warnings": "?^4.0.0",
-                "ExpGamingAdmin.Reports": "^?4.0.0",
-                "ExpGamingAdmin.ClearInventory": "?^4.0.0"
-            },
-            "collection": "ExpGamingAdmin_4.0.0"
-        }
-    },
-    "dependencies": {}
+  "name": "ExpGamingAdmin",
+  "version": "4.0.0",
+  "type": "Collection",
+  "description": "A set of useful admin commands and functions that can be used by other modules.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Admin",
+    "ExpGaming",
+    "Set",
+    "Commands",
+    "Functions",
+    "Scripts",
+    "Useful"
+  ],
+  "author": "Cooldude2606",
+  "contact": "Discord: Cooldude2606#5241",
+  "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+  "submodules": {
+    "ExpGamingAdmin.AdminLib": "4.0.0",
+    "ExpGamingAdmin.Ban": "4.0.0",
+    "ExpGamingAdmin.ClearInventory": "4.0.0",
+    "ExpGamingAdmin.Gui": "4.0.0",
+    "ExpGamingAdmin.Jail": "4.0.0",
+    "ExpGamingAdmin.Kick": "4.0.0",
+    "ExpGamingAdmin.Reports": "4.0.0",
+    "ExpGamingAdmin.Teleport": "4.0.0",
+    "ExpGamingAdmin.TempBan": "4.0.0",
+    "ExpGamingAdmin.Warnings": "4.0.0",
+    "ExpGamingAdmin.Commands": "4.0.0"
+  },
+  "dependencies": {}
 }

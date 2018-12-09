@@ -1,159 +1,25 @@
 {
-    "name": "ExpGamingCore",
-    "version": "4.0.0",
-    "type": "Collection",
-    "description": "Explosive Gaming Core Files",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore_4.0.0.zip",
-    "keywords": [
-        "Library",
-        "Lib",
-        "ExpGaming",
-        "Core"
-    ],
-    "author": "Cooldude2606",
-    "contact": "Discord: Cooldude2606#5241",
-    "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
-    "submodules": {
-        "Gui": {
-            "name": "Gui",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Adds a objective version to custom guis.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Gui_4.0.0.zip",
-            "keywords": [
-                "Library",
-                "Lib",
-                "ExpGaming",
-                "Core",
-                "Gui",
-                "ExpGui"
-            ],
-            "dependencies": {
-                "ExpGamingLib": "^4.0.0",
-                "FactorioStdLib.Table": "^0.8.0",
-                "FactorioStdLib.Color": "^0.8.0",
-                "FactorioStdLib.Game": "^0.8.0",
-                "ExpGamingCore.Role": "?^4.0.0",
-                "ExpGamingCore.Server": "?^4.0.0"
-            },
-            "collection": "ExpGamingCore_4.0.0"
-        },
-        "Server": {
-            "name": "Server",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Adds a thread system and event listening and a admin bypass (recommend to disable /c and use optional /interface)",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Server_4.0.0.zip",
-            "keywords": [
-                "Library",
-                "Lib",
-                "ExpGaming",
-                "Core",
-                "Server",
-                "Thread",
-                "Interface",
-                "Events"
-            ],
-            "dependencies": {
-                "ExpGamingLib": "^4.0.0",
-                "FactorioStdLib.Table": "^0.8.0",
-                "FactorioStdLib.Color": "^0.8.0",
-                "FactorioStdLib.String": "^0.8.0",
-                "FactorioStdLib.Game": "^0.8.0",
-                "ExpGamingCore.Command": "?^4.0.0"
-            },
-            "collection": "ExpGamingCore_4.0.0"
-        },
-        "Sync": {
-            "name": "Sync",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Allows syncing with an outside server and info panle.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Sync_4.0.0.zip",
-            "keywords": [
-                "Library",
-                "Lib",
-                "ExpGaming",
-                "Core",
-                "Info",
-                "Sync",
-                "External",
-                "Discord"
-            ],
-            "dependencies": {
-                "ExpGamingLib": "^4.0.0",
-                "FactorioStdLib.Color": "^0.8.0",
-                "FactorioStdLib.Game": "^0.8.0",
-                "FactorioStdLib.Table": "^0.8.0",
-                "ExpGamingCore.Role": "?^4.0.0",
-                "ExpGamingCore.Gui": "?^4.0.0"
-            },
-            "collection": "ExpGamingCore_4.0.0"
-        },
-        "Command": {
-            "name": "Command",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "A better command handler than the base game.",
-            "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Command_4.0.0.zip",
-            "keywords": [
-                "Library",
-                "Lib",
-                "ExpGaming",
-                "Core",
-                "Commands"
-            ],
-            "dependencies": {
-                "ExpGamingLib": "^4.0.0",
-                "FactorioStdLib.Table": "^0.8.0",
-                "FactorioStdLib.Color": "^0.8.0",
-                "FactorioStdLib.Game": "^0.8.0"
-            },
-            "collection": "ExpGamingCore_4.0.0"
-        },
-        "Group": {
-            "name": "Group",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Adds a system to manage and auto-create permission groups.",
-            "location": "<blank>",
-            "keywords": [
-                "Groups",
-                "ExpGaming",
-                "System",
-                "Management",
-                "Manage",
-                "Permissions"
-            ],
-            "dependencies": {
-                "FactorioStdLib": "^0.8.0",
-                "ExpGamingLib": "^4.0.0"
-            },
-            "collection": "ExpGamingCore_4.0.0"
-        },
-        "Role": {
-            "name": "Role",
-            "version": "4.0.0",
-            "type": "Submodule",
-            "description": "Adds roles where a player can have more than one role",
-            "location": "<blank>",
-            "keywords": [
-                "Role",
-                "Ranks",
-                "Permissions",
-                "Alowed",
-                "Admin"
-            ],
-            "dependencies": {
-                "ExpGamingLib": "^4.0.0",
-                "FactorioStdLib.Table": "^0.8.0",
-                "FactorioStdLib.Game": "^0.8.0",
-                "ExpGamingCore.Group": "^4.0.0",
-                "ExpGamingCore.Server": "?^4.0.0",
-                "ExpGamingCore.Command": "?^4.0.0"
-            },
-            "collection": "ExpGamingCore_4.0.0"
-        }
-    },
-    "dependencies": {}
+  "name": "ExpGamingCore",
+  "version": "4.0.0",
+  "type": "Collection",
+  "description": "Explosive Gaming Core Files",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Library",
+    "Lib",
+    "ExpGaming",
+    "Core"
+  ],
+  "author": "Cooldude2606",
+  "contact": "Discord: Cooldude2606#5241",
+  "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+  "submodules": {
+    "ExpGamingCore.Gui": "4.0.0",
+    "ExpGamingCore.Server": "4.0.0",
+    "ExpGamingCore.Sync": "4.0.0",
+    "ExpGamingCore.Command": "4.0.0",
+    "ExpGamingCore.Group": "4.0.0",
+    "ExpGamingCore.Role": "4.0.0"
+  },
+  "dependencies": {}
 }

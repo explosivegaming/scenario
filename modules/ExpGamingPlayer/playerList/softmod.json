@@ -1,23 +1,25 @@
 {
-    "name": "playerList",
-    "version": "4.0.0",
-    "type": "Submodule",
-    "description": "Used to display player names and online time on the top left.",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingPlayer.playerList_4.0.0.zip",
-    "keywords": [
-        "Player List",
-        "List",
-        "Gui",
-        "Names"
-    ],
-    "dependencies": {
-        "FactorioStdLib.Game": "^0.8.0",
-        "ExpGamingCore.Gui": "^4.0.0",
-        "ExpGamingCore.Role": "?^4.0.0",
-        "ExpGamingAdmin.AdminLib": "?^4.0.0",
-        "ExpGamingAdmin.buttonFlow": "?^4.0.0",
-        "ExpGamingAdmin.reports": "?^4.0.0",
-        "ExpGamingPlayer.playerInfo": "?^4.0.0"
-    },
-    "collection": "ExpGamingPlayer_4.0.0"
+  "name": "ExpGamingPlayer.playerList",
+  "version": "4.0.0",
+  "type": "Submodule",
+  "description": "Used to display player names and online time on the top left.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Player List",
+    "List",
+    "Gui",
+    "Names"
+  ],
+  "dependencies": {
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingCore.Gui": "^4.0.0",
+    "ExpGamingCore.Role": "^4.0.0",
+    "ExpGamingAdmin.AdminLib": "^4.0.0",
+    "ExpGamingAdmin.buttonFlow": "?^4.0.0",
+    "ExpGamingAdmin.reports": "?^4.0.0",
+    "ExpGamingPlayer.playerInfo": "?*",
+    "ExpGamingAdmin.Gui": "^4.0.0"
+  },
+  "collection": "ExpGamingPlayer@4.0.0",
+  "submodules": {}
 }
