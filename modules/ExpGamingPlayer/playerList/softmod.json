@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingPlayer.playerList",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Used to display player names and online time on the top left.",
   "location": "FSM_ARCHIVE",
   "keywords": [

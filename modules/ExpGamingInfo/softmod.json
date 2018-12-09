@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingInfo",
   "version": "4.0.0",
-  "type": "Collection",
   "description": "Adds info guis to the game for different production areas",
   "location": "FSM_ARCHIVE",
   "keywords": [

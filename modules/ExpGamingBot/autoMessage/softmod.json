@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingBot.autoMessage",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Prints a message every 15 minutes to chat.",
   "location": "FSM_ARCHIVE",
   "keywords": [

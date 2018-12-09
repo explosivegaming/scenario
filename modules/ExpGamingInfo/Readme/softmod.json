@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingInfo.Readme",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a readme gui to the game that contains useful information",
   "location": "FSM_ARCHIVE",
   "keywords": [

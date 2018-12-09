@@ -1,7 +1,6 @@
 {
   "name": "FactorioStdLib",
   "version": "0.8.0",
-  "type": "Collection",
   "description": "Factorio Standard Library Projects",
   "location": "FSM_ARCHIVE",
   "keywords": [

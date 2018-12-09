@@ -1,7 +1,6 @@
 {
   "name": "DeathMarkers",
   "version": "4.0.0",
-  "type": "Module",
   "description": "Adds markers to the map when a player dies and removes it when the body is removed.",
   "location": "FSM_ARCHIVE",
   "keywords": [

@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingCommands.home",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Allows players to set homes and then return to them later.",
   "location": "FSM_ARCHIVE",
   "keywords": [

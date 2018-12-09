@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingCore.Role",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds roles where a player can have more than one role",
   "location": "FSM_ARCHIVE",
   "keywords": [

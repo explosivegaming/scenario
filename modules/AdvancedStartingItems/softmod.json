@@ -1,7 +1,6 @@
 {
   "name": "AdvancedStartingItems",
   "version": "4.0.0",
-  "type": "Module",
   "description": "Adds a better method of player starting items based on production levels.",
   "location": "FSM_ARCHIVE",
   "keywords": [

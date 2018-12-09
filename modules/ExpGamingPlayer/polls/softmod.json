@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingPlayer.polls",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a poll gui into the game for quick polls (default 90 seconds)",
   "location": "FSM_ARCHIVE",
   "keywords": [

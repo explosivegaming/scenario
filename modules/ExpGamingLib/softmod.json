@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingLib",
   "version": "4.0.0",
-  "type": "Module",
   "description": "Adds some common functions used though out all ExpGaming modules",
   "location": "FSM_ARCHIVE",
   "keywords": [

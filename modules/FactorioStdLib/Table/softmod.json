@@ -1,7 +1,6 @@
 {
   "name": "FactorioStdLib.Table",
   "version": "0.8.0",
-  "type": "Submodule",
   "description": "Extends Lua 5.2 table.",
   "location": "FSM_ARCHIVE",
   "keywords": [

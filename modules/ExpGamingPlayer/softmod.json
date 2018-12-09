@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingPlayer",
   "version": "4.0.0",
-  "type": "Collection",
   "description": "Useful collection of modules for displaying player infomation.",
   "location": "FSM_ARCHIVE",
   "keywords": [

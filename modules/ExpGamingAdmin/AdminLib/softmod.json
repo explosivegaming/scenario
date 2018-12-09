@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingAdmin.AdminLib",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "The base functions required to make the others work.",
   "location": "FSM_ARCHIVE",
   "keywords": [

@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingAdmin.Reports",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a report system into the game that can also push notifactions to discord.",
   "location": "FSM_ARCHIVE",
   "keywords": [

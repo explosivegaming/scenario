@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingCore.Sync",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Allows syncing with an outside server and info panle.",
   "location": "FSM_ARCHIVE",
   "keywords": [

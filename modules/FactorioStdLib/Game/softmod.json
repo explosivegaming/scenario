@@ -1,7 +1,6 @@
 {
   "name": "FactorioStdLib.Game",
   "version": "0.8.0",
-  "type": "Submodule",
   "description": "The game module.",
   "location": "FSM_ARCHIVE",
   "keywords": [

@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingAdmin.Kick",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a kick function to the admin function set.",
   "location": "FSM_ARCHIVE",
   "keywords": [

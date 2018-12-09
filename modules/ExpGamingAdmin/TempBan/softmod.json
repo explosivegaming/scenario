@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingAdmin.TempBan",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a temp ban function to the admin set, requires ExpGamingCore.Role to work.",
   "location": "FSM_ARCHIVE",
   "keywords": [

@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingAdmin",
   "version": "4.0.0",
-  "type": "Collection",
   "description": "A set of useful admin commands and functions that can be used by other modules.",
   "location": "FSM_ARCHIVE",
   "keywords": [

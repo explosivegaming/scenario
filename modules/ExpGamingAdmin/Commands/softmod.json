@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingAdmin.Commands",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Admins many of the admin featues which the script can use as in game commands.",
   "location": "FSM_ARCHIVE",
   "keywords": [

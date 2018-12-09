@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingCommands.bonus",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Allows a bonus to be applied to players and instant respawn.",
   "location": "FSM_ARCHIVE",
   "keywords": [

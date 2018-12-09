@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingAdmin.Jail",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a jail function to the admin set, require ExpGamingRole to work.",
   "location": "FSM_ARCHIVE",
   "keywords": [

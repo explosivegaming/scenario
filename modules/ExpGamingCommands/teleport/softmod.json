@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingCommands.teleport",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a few commands used to teleport players.",
   "location": "FSM_ARCHIVE",
   "keywords": [

@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingCommands",
   "version": "4.0.0",
-  "type": "Collection",
   "description": "A Collection of all of the custom commands used on ExpGaming servers.",
   "location": "FSM_ARCHIVE",
   "keywords": [

@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingPlayer.inventorySearch",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds an inventory search that is proformed on a random player every 15 seconds.",
   "location": "FSM_ARCHIVE",
   "keywords": [

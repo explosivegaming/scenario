@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingInfo.Tasklist",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a task list gui which acts like a bulletin board for the current tasks",
   "location": "FSM_ARCHIVE",
   "keywords": [

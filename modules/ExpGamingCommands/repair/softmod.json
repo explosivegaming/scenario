@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingCommands.repair",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Allows items to be healed and repaired with a command",
   "location": "FSM_ARCHIVE",
   "keywords": [

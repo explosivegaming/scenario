@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingBot",
   "version": "4.0.0",
-  "type": "Collection",
   "description": "Different parts of a useful bot to help run a server. Discord Bot Not Included.",
   "location": "FSM_ARCHIVE",
   "keywords": [

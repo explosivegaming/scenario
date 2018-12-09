@@ -1,7 +1,6 @@
 {
   "name": "GuiAnnouncements",
   "version": "4.0.0",
-  "type": "Module",
   "description": "Creates a gui for making and reciving announcements",
   "location": "FSM_ARCHIVE",
   "keywords": [

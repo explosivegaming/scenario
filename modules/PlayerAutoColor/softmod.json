@@ -1,7 +1,6 @@
 {
   "name": "PlayerAutoColor",
   "version": "4.0.0",
-  "type": "Module",
   "description": "Assigns random colours to players (larger range than default) and allows predefined colours for users.",
   "location": "FSM_ARCHIVE",
   "keywords": [

@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingPlayer.afkKick",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a varible amount of time before a user is kicked based on the current player count.",
   "location": "FSM_ARCHIVE",
   "keywords": [

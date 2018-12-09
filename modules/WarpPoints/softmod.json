@@ -1,7 +1,6 @@
 {
   "name": "WarpPoints",
   "version": "4.0.0",
-  "type": "Module",
   "description": "Creates a warp point system which makes moving around large maps easier.",
   "location": "FSM_ARCHIVE",
   "keywords": [

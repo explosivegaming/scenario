@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingAdmin.Warnings",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a warning system into the admin set which can be used by admins and the script.",
   "location": "FSM_ARCHIVE",
   "keywords": [

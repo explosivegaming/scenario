@@ -1,7 +1,6 @@
 {
   "name": "GameSettingsGui",
   "version": "4.0.0",
-  "type": "Module",
   "description": "A gui for controlling game settings with sliders as well as some global commands.",
   "location": "FSM_ARCHIVE",
   "keywords": [

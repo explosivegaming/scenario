@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingCommands.tags",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Allows tags to be used by users.",
   "location": "FSM_ARCHIVE",
   "keywords": [

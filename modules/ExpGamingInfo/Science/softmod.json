@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingInfo.Science",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a science count gui to the game that shows toatal made and per minute",
   "location": "FSM_ARCHIVE",
   "keywords": [

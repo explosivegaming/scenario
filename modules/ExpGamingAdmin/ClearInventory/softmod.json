@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingAdmin.ClearInventory",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a function to clear a players inventoy and move the items to spawn.",
   "location": "FSM_ARCHIVE",
   "keywords": [

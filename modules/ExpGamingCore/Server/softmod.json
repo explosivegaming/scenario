@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingCore.Server",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a thread system and event listening and a admin bypass (recommend to disable /c and use optional /interface)",
   "location": "FSM_ARCHIVE",
   "keywords": [

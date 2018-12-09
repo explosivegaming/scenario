@@ -1,7 +1,6 @@
 {
   "name": "ChatPopup",
   "version": "4.0.0",
-  "type": "Module",
   "description": "Creates flying text above player when they send a message.",
   "location": "FSM_ARCHIVE",
   "keywords": [

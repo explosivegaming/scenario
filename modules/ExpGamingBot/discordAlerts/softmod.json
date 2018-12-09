@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingBot.discordAlerts",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Sends alerts to discord once there is a bot set up to read the alerts.",
   "location": "FSM_ARCHIVE",
   "keywords": [

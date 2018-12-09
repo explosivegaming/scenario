@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingCore.Gui",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a objective version to custom guis.",
   "location": "FSM_ARCHIVE",
   "keywords": [

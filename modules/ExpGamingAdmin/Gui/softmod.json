@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingAdmin.Gui",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Adds a gui that can be used to access all the admin commands.",
   "location": "FSM_ARCHIVE",
   "keywords": [

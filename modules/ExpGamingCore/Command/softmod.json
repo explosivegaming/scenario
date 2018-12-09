@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingCore.Command",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "A better command handler than the base game.",
   "location": "FSM_ARCHIVE",
   "keywords": [

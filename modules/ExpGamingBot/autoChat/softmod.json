@@ -1,7 +1,6 @@
 {
   "name": "ExpGamingBot.autoChat",
   "version": "4.0.0",
-  "type": "Submodule",
   "description": "Sends messages in chat based on what has been said by other players",
   "location": "FSM_ARCHIVE",
   "keywords": [

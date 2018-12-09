@@ -1,7 +1,6 @@
 {
   "name": "WornPaths",
   "version": "4.0.0",
-  "type": "Module",
   "description": "Makes paths which wear down and paths where entites are placed.",
   "location": "FSM_ARCHIVE",
   "keywords": [

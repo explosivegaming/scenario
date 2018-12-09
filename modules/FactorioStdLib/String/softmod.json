@@ -1,7 +1,6 @@
 {
   "name": "FactorioStdLib.String",
   "version": "0.8.0",
-  "type": "Submodule",
   "description": "Extends Lua 5.2 string.",
   "location": "FSM_ARCHIVE",
   "keywords": [
