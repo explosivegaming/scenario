@@ -16,7 +16,7 @@
   "dependencies": {
     "ExpGamingCore.Gui": "^4.0.0",
     "FactorioStdLib.Game": "^0.8.0",
-    "ExpGamingCore.Sync": "^4.0.0"
+    "ExpGamingCore.Sync": "?^4.0.0"
   },
   "submodules": {},
   "collection": "ExpGamingInfo@4.0.0"

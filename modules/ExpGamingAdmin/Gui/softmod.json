@@ -15,7 +15,7 @@
     "ExpGamingCore.Role": "^4.0.0",
     "FactorioStdLib.Game": "^0.8.0",
     "ExpGamingPlayer": "?^4.0.0",
-    "ExpGamingPlayer.playerInfo": "^4.0.0",
+    "ExpGamingPlayer.playerInfo": "?^4.0.0",
     "mod-gui": "*"
   },
   "collection": "ExpGamingAdmin@4.0.0",

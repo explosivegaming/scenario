@@ -101,14 +101,14 @@ function popup.open(style,data,players)
     end
 end
 
+function popup._prototype:add_left(obj)
+    if not Gui.left then return end
+    obj.name = obj.name or self.name
+    self.left = Gui.left(obj)
+end
+
 function popup:on_init()
     if loaded_modules['ExpGamingCore.Server'] then Server = require('ExpGamingCore.Server') end
-    if loaded_modules['ExpGamingCore.Gui.left'] then
-        function popup._prototype:add_left(obj)
-            obj.name = obj.name or self.name
-            self.left = Gui.left(obj)
-        end
-    end
 end
 
 function popup:on_post()
