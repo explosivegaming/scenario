@@ -5,7 +5,7 @@
 
 local Game = require('FactorioStdLib.Game')
 local Gui = require('ExpGamingCore.Gui')
-local Admin -- ExpGamingAdmin.AdminLib@^4.0.0
+local Admin -- ExpGamingAdmin@^4.0.0
 local AdminGui -- ExpGamingAdmin.Gui@^4.0.0
 
 -- Local Varibles
@@ -31,7 +31,7 @@ local ThisModule = {
     on_init=function(self)
         if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer.playerInfo') end
         if loaded_modules['ExpGamingCore.Role'] then getPlayers = require(module_path..'/src/ranking',{self=self}) end
-        if loaded_modules['ExpGamingAdmin.AdminLib'] then Admin = require('ExpGamingAdmin.AdminLib') end
+        if loaded_modules['ExpGamingAdmin'] then Admin = require('ExpGamingAdmin') end
         if loaded_modules['ExpGamingAdmin.Gui'] then AdminGui = require('ExpGamingAdmin.Gui') end
     end
 }

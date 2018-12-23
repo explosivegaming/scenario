@@ -8,13 +8,13 @@ local Role -- ExpGamingCore.Role@^4.0.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
 
 local function get_allowed_afk_time(player)
-    local role
-    if Role then role = Role.get_highest(player)
-    else if player.admin then return else role = Role.meta.default end end
-    local count = #game.connected_players
-    local base = not role.allow_afk_kick and role.index or false
+    local player = Game.get_player(player)
+    local role = Role and Role.get_highest(player) or {index=1,allow_afk_kick=not player.admin}
+    local player_count = #game.connected_players
+    local role_count = Role and Role.meta.count or 1
+    local role_index = role.allow_afk_kick and role.index or false
     if not base then return false end
-    return (Role.meta.count/base)*count
+    return (role_count/role_index)*count
 end
 
 script.on_event(defines.events.on_tick,function(event)

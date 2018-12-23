@@ -5,7 +5,7 @@
 -- @alais ThisModule 
 
 -- Module Require
-local Admin = require('ExpGamingAdmin.AdminLib')
+local Admin = require('ExpGamingAdmin')
 local Server = require('ExpGamingCore.Server')
 local Role = require('ExpGamingCore.Role')
 local Gui = require('ExpGamingCore.Gui')

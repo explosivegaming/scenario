@@ -28,7 +28,7 @@ local Role = {
         end
     }),
     on_init=function(self)
-        if loaded_modules['ExpGamingCore.Server'] then require('ExpGamingCore.Server') end
+        if loaded_modules['ExpGamingCore.Server'] then require('ExpGamingCore.Server').add_module_to_interface('Role','ExpGamingCore.Role') end
         if loaded_modules['ExpGamingCore.Command'] then require(module_path..'/src/commands',{self=self}) end
         if loaded_modules['ExpGamingCore.Sync'] then require(module_path..'/src/sync',{self=self,RoleGlobal=RoleGlobal}) end
     end,
@@ -112,7 +112,12 @@ function Role.get(mixed)
         for _,role in pairs(global.players[player.index]) do table.insert(rtn,Role.get(role)) end
         return rtn
     elseif is_type(mixed,'table') and mixed.group then return mixed
-    elseif is_type(mixed,'string') then return Role.roles[mixed] end
+    elseif is_type(mixed,'string') then return Role.roles[mixed]
+    elseif is_type(mixed,'number') then 
+        for _,role in pairs(Role.roles) do
+            if role.index == mixed then return role end
+        end
+    end
 end
 
 --- Used to place a player into a role(s)

@@ -5,7 +5,7 @@
 -- @alais AdminGui 
 
 -- Module Require
-local Admin = require('ExpGamingAdmin.AdminLib')
+local Admin = require('ExpGamingAdmin')
 local Gui = require('ExpGamingCore.Gui')
 local Role = require('ExpGamingCore.Role')
 local Game = require('FactorioStdLib.Game')

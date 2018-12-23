@@ -1,5 +1,5 @@
 --- The base functions required to make the others work.
--- @module ExpGamingAdmin.AdminLib@4.0.0
+-- @module ExpGamingAdmin@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alais Admin 
@@ -15,7 +15,7 @@ local Admin = {
     on_init=function()
         if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
         if loaded_modules['ExpGamingCore.Sync'] then Sync = require('ExpGamingCore.Sync') end
-        if loaded_modules['ExpGamingCore.Server'] then require('ExpGamingCore.Server') end
+        if loaded_modules['ExpGamingCore.Server'] then require('ExpGamingCore.Server').add_module_to_interface('Admin','ExpGamingAdmin') end
     end,
     actions={},
     action_functions={},

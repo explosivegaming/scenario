@@ -22,7 +22,7 @@
     "ExpGamingAdmin.Warnings": "?^4.0.0",
     "ExpGamingAdmin.Reports": "?^4.0.0",
     "ExpGamingAdmin.ClearInventory": "?^4.0.0",
-    "ExpGamingAdmin.AdminLib": "^4.0.0"
+    "ExpGamingAdmin": "^4.0.0"
   },
   "collection": "ExpGamingAdmin@4.0.0",
   "submodules": {}

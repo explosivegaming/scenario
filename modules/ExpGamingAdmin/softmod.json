@@ -16,7 +16,7 @@
   "contact": "Discord: Cooldude2606#5241",
   "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
   "submodules": {
-    "ExpGamingAdmin.AdminLib": "4.0.0",
+    "ExpGamingAdmin": "4.0.0",
     "ExpGamingAdmin.Ban": "4.0.0",
     "ExpGamingAdmin.ClearInventory": "4.0.0",
     "ExpGamingAdmin.Gui": "4.0.0",
@@ -28,5 +28,10 @@
     "ExpGamingAdmin.Warnings": "4.0.0",
     "ExpGamingAdmin.Commands": "4.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "ExpGamingCore.Role": "?^4.0.0",
+    "ExpGamingCore.Sync": "?^4.0.0",
+    "ExpGamingCore.Server": "?^4.0.0",
+    "FactorioStdLib.Game": "^0.8.0"
+  }
 }

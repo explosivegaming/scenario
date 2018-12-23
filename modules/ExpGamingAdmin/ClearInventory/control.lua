@@ -5,7 +5,7 @@
 -- @alais ThisModule 
 
 -- Module Require
-local Admin = require('ExpGamingAdmin.AdminLib')
+local Admin = require('ExpGamingAdmin')
 local Game = require('FactorioStdLib.Game')
 
 -- Module Define

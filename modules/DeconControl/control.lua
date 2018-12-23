@@ -8,14 +8,14 @@
 local Game = require('FactorioStdLib.Game')
 local Server = require('ExpGamingCore.Server')
 local Role -- ExpGamingCore.Role@^4.0.0
-local Admin -- ExpGamingAdmin.AdminLib@^4.0.0
+local Admin -- ExpGamingAdmin@^4.0.0
 
 -- Module Define
 local module_verbose = false
 local ThisModule = {
     on_init=function()
         if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
-        if loaded_modules['ExpGamingAdmin.AdminLib'] then Admin = require('ExpGamingAdmin.AdminLib') end
+        if loaded_modules['ExpGamingAdmin'] then Admin = require('ExpGamingAdmin') end
     end
 }
 

@@ -12,8 +12,8 @@
     "Inventory"
   ],
   "dependencies": {
-    "ExpGamingAdmin.AdminLib": "^4.0.0",
-    "FactorioStdLib.Game": "^0.8.0"
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingAdmin": "^4.0.0"
   },
   "collection": "ExpGamingAdmin@4.0.0",
   "submodules": {}

@@ -16,7 +16,7 @@
   "dependencies": {
     "ExpGamingCore.Command": "^4.0.0",
     "ExpGamingAdmin.Teleport": "^4.0.0",
-    "ExpGamingAdmin.AdminLib": "^4.0.0"
+    "ExpGamingAdmin": "^4.0.0"
   },
   "collection": "ExpGamingCommands@4.0.0",
   "submodules": {}
