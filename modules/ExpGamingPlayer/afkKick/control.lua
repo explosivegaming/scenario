@@ -32,6 +32,6 @@ return setmetatable({
     on_init=function(self)
         if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
         if loaded_modules['ExpGamingCore.Sync'] then Sync = require('ExpGamingCore.Sync') end
-        if loaded_modules['ExpGamingCore.Server'] then require(module_path..'/src/server',Sync,self) end
+        if loaded_modules['ExpGamingCore.Server'] then require(module_path..'/src/server',{Sync=Sync,self=self}) end
     end
-},{__call=function(self,...) self.get_allowed_afk_time(...) end})
+},{__call=function(self,...) return self.get_allowed_afk_time(...) end})
