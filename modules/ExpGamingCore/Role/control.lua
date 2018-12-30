@@ -303,7 +303,7 @@ function Role.debug_output(role,player)
     end
     if role then
         local role = Role.get(mixed)
-        if not type_error(roles,'table','Invalid argument #1 to Role.print, role is invalid.') then return end
+        if not type_error(role,'table','Invalid argument #1 to Role.print, role is invalid.') then return end
         _output(role)
     else for index,_role in pairs(Role.roles) do _output(_role) end end
 end
@@ -520,4 +520,4 @@ end)
 
 -- Module Return
 -- calling will attempt to define a new role
-return setmetatable(Role,{__call=function(tbl,...) tbl.define(...) end}) 
+return setmetatable(Role,{__call=function(tbl,...) return tbl.define(...) end}) 
