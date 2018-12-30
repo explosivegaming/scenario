@@ -123,7 +123,7 @@ function Server.run_tick_threads()
     table.each(global.tick,function(uuid)
         local next_thread = Server.get_thread(uuid)
         if next_thread and next_thread:valid() and next_thread._tick then
-            local success, err = pcall(next_thread._tick,next_thread)
+            local success, err = Manager.sandbox(next_thread._tick,next_thread._env,next_thread)
             if not success then next_thread:error(err) end
         end
     end)
@@ -361,7 +361,7 @@ function Server._thread:close()
     local uuid = self.uuid
     local _return = false
     -- if there is a call to the threads on close event, will later return true
-    if is_type(self._close,'function') then pcall(self._close,self) _return = true end
+    if is_type(self._close,'function') then Manager.sandbox(self._close,self._env,self) _return = true end
     -- will search every possible location for this thread and remove it
     local value,key = table.find(global.queue,function(v,k,uuid) return v == uuid end,uuid)
     if key then table.remove(global.queue,key) end -- queue
@@ -449,7 +449,7 @@ end
 function Server._thread:error(err)
     local _return = false
     if is_type(self._error,'function') then
-        pcall(self._error,self,err)
+        Manager.sandbox(self._error,self._env,self,err)
         _return = true
     else error(err) end
     return _return
