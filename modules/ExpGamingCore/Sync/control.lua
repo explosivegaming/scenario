@@ -318,7 +318,7 @@ script.on_event('on_rocket_launched',Sync.emit_update)
 
 function Sync:on_init()
     if loaded_modules['ExpGamingCore.Gui'] then verbose('ExpGamingCore.Gui is installed; Loading gui src') require(module_path..'/src/gui',{Sync=Sync,module_path=module_path}) end
-    if loaded_modules['ExpGamingCore.Server'] then require('ExpGamingCore.Server') end
+    if loaded_modules['ExpGamingCore.Server'] then require('ExpGamingCore.Server').add_module_to_interface('Sync','ExpGamingCore.Sync') end
 end
 
 function Sync:on_post()
