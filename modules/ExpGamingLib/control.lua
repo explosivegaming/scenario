@@ -259,7 +259,7 @@ function table.json(lua_table)
     for key,value in ipairs(lua_table) do
         done[key] = true
         if type(value) == 'table' then table.insert(result,table.json(value,true))
-        elseif not vlaue then table.insert(result,'null') 
+        elseif not value then table.insert(result,'null') 
         else table.insert(result,table.val_to_str(value))
         end
     end

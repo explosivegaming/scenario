@@ -35,15 +35,15 @@ local global = global{
     time_period={18000,'5.00M'},
     game_speed=1.0,
     players={
-        online={'Offline'},
+        online={},
         n_online=0,
-        all={'Offline'},
+        all={},
         n_all=0,
         admins_online=0,
         afk_players={},
-        times={'Offline'} 
+        times={} 
     },
-    ranks={'Offline'},
+    roles={admin={online={},players={},n_online=0,n_players=0},user={online={},players={},n_online=0,n_players=0}},
     rockets=0,
     mods={'Offline'}
 }
@@ -242,6 +242,15 @@ Sync.info = setmetatable({},{
             if type(v) ~= nil then return k,v end
         end
         return next_pair, tbl, nil
+    end,
+    __ipairs=function(tbl)
+        local tbl = global
+        local function next_pair(tbl, i)
+            i = i + 1
+            local v = tbl[i]
+            if v then return i, v end
+        end
+        return next_pair, tbl, 0
     end
 })
 
@@ -263,7 +272,7 @@ function Sync.update()
         afk_players=Sync.count_afk_times(),
         times=Sync.count_player_times()
     }
-    info.ranks = Sync.count_roles()
+    info.roles = Sync.count_roles()
     info.rockets = game.forces['player'].get_item_launched('satellite')
     for key,callback in pairs(Sync_updates) do info[key] = callback() end
     return info
