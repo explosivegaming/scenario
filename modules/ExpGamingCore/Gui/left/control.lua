@@ -168,7 +168,7 @@ function left._prototype:first_open(player)
         frame.style.visible = false
         if is_type(self.open_on_join,'boolean') then frame.style.visible = self.open_on_join left_flow['gui-left-hide'].style.visible = true end
     end
-    if is_type(self.draw,'function') then self.draw(frame) else frame.style.visible = false error('No Callback On '..self.name) end
+    if is_type(self.draw,'function') then self:draw(frame) else frame.style.visible = false error('No Callback On '..self.name) end
     return frame
 end
 

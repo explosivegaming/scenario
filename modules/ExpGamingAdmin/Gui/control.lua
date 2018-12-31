@@ -16,7 +16,7 @@ local mod_gui = require('mod-gui')
 local module_verbose = false
 local AdminGui = {
     on_init=function()
-        if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer')
+        if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer.playerInfo')
         else playerInfo = function(player,frame)
             frame.add{
                 type='label',
@@ -30,7 +30,7 @@ local AdminGui = {
 
 function Admin.open(player,pre_select_player,pre_select_action)
     Gui.center.clear(player)
-    Admin.center.open(player,pre_select_player,pre_select_action)
+    Admin.center(player,pre_select_player,pre_select_action)
 end
 
 -- Function Define
@@ -140,24 +140,7 @@ Admin.center = Gui.center{
     name='admin-commands',
     caption='utility/danger_icon',
     tooltip={'ExpGamingAdmin.tooltip'},
-    open=function(event,pre_select_player,pre_select_action)
-        local _player = Game.get_player(pre_select_player)
-        local player = Game.get_player(event)
-        local _center = Gui.data.center['admin-commands']
-        local center_flow = Gui.center.get_flow(player)
-        if center_flow[_center.name] then Gui.center.clear(player) return end
-        local center_frame = center_flow.add{
-            name=_center.name,
-            type='frame',
-            direction='vertical',
-            style=mod_gui.frame_style
-        }
-        -- only edit i made was passing diffrent arguments to the draw function, try to avoid this
-        local success, err = pcall(_center.draw,center_frame,_player,pre_select_action)
-        if not success then error(err) end
-        player.opened=center_frame
-    end,
-    draw=function(frame,pre_select_player,pre_select_action)
+    draw=function(self,frame,pre_select_player,pre_select_action)
         frame.caption={'ExpGamingAdmin.name'}
         local frame = frame.add{
             type='flow',

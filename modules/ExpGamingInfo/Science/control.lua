@@ -42,7 +42,7 @@ ThisModule.Gui = Gui.left{
     name='science',
     caption='item/lab',
     tooltip={'ExpGamingInfo-Science.tooltip'},
-    draw=function(frame)
+    draw=function(self,frame)
         local player = Game.get_player(frame.player_index)
         if not global[player.force.name] then
             verbose('Added Science Global for: '..player.force.name)

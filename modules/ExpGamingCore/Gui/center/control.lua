@@ -21,11 +21,11 @@ function center.add(obj)
     if not is_type(obj,'table') then return end    
     if not is_type(obj.name,'string') then return end 
     verbose('Created Center Gui: '..obj.name)
-    setmetatable(obj,{__index=center._prototype,__call=function(self,player) return center.open(player,self.name) end})
+    setmetatable(obj,{__index=center._prototype,__call=function(self,player,...) return center.open(player,self.name,...) end})
     obj.tabs = {}
     obj._tabs = {}
     Gui.data('center',obj.name,obj)
-    if Gui.toolbar then Gui.toolbar(obj.name,obj.caption,obj.tooltip,obj.open) end
+    if Gui.toolbar then Gui.toolbar(obj.name,obj.caption,obj.tooltip,function(event) return obj:open(event.player_index) end) end
     return obj
 end
 
@@ -39,21 +39,29 @@ function center.get_flow(player)
     return player.gui.center.exp_center or player.gui.center.add{name='exp_center',type='flow'}
 end
 
---- Used to open a center frame for a player
+--- Used to open a center frame for a player, extra params are sent to open event
 -- @usage Gui.center.open(player,'server-info') -- return true
 -- @param player a player indifier to get the flow for
 -- @tparam string center the name of the center frame to open
 -- @treturn boelon based on if it successed or not
-function center.open(player,center)
+function center.open(player,center,...)
     local player = Game.get_player(player)
     if not player then error('Invalid player',2) return false end
     Gui.center.clear(player)
     if not Gui.data.center[center] then return false end
-    Gui.data.center[center].open{
-        element={name=center},
-        player_index=player.index
-    }
+    local self = Gui.data.center[center]
+    -- this function is the draw function passed to the open event
+    self:open(player,function(...) Gui.center._draw(self,...) end,...)
     return true
+end
+
+-- used as a pice of middle ware for the open event
+function center._draw(self,frame,...)
+    game.players[frame.player_index].opened=frame
+    if is_type(self.draw,'function') then
+        local success, err = pcall(self.draw,self,frame,...)
+        if not success then error(err) end
+    else error('No Callback on center frame '..self.name) end 
 end
 
 --- Used to open a center frame for a player
@@ -82,27 +90,24 @@ function center.clear(player)
     center.get_flow(player).clear()
 end
 
--- used on the button press when the toolbar button is press, can be overriden
--- not recomented for direct use see Gui.center.open
-function center._prototype.open(event)
-    local player = Game.get_player(event)
-    local _center = Gui.data.center[event.element.name]
+-- opens this gui for this player, draw is the draw function when event is called from center.open
+-- this is the default function it can be overriden when the gui is defined, simply call draw on the frame you create
+-- extra values passed to draw will also be passed to the draw event
+-- extra values from center.draw and passed to the open event
+function center._prototype:open(player,draw,...)
+    local player = Game.get_player(player)
+    local draw = draw or function(...) center._draw(self,...) end
     local center_flow = center.get_flow(player)
-    if center_flow[_center.name] then Gui.center.clear(player) return end
+    if center_flow[self.name] then Gui.center.clear(player) return end
     local center_frame = center_flow.add{
-        name=_center.name,
+        name=self.name,
         type='frame',
-        caption=_center.caption,
+        caption=self.caption,
         direction='vertical',
         style=mod_gui.frame_style
     }
     if is_type(center_frame.caption,'string') and player.gui.is_valid_sprite_path(center_frame.caption) then center_frame.caption = '' end
-    if is_type(_center.draw,'function') then
-        local success, err = pcall(_center.draw,_center,center_frame)
-        if not success then error(err) end
-    else error('No Callback on center frame '.._center.name)
-    end
-    player.opened=center_frame
+    draw(center_frame,...)
 end
 
 -- this is the default draw function if one is not provided, can be overriden

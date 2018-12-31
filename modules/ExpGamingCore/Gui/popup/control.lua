@@ -68,7 +68,7 @@ function popup.open(style,data,players)
             }
             _popup.close(_frame)
             if is_type(_popup.draw,'function') then
-                local success, err = pcall(_popup.draw,frame,data)
+                local success, err = pcall(_popup.draw,_popup,frame,data)
                 if not success then error(err) end
             else error('No Draw On Popup '.._popup.name) end
         end
@@ -94,7 +94,7 @@ function popup.open(style,data,players)
             }
             self.data.popup.close(_frame)
             if is_type(self.data.popup.draw,'function') then
-                local success, err = pcall(self.data.popup.draw,frame,self.data.data)
+                local success, err = pcall(self.data.popup.draw,self.data.popup,frame,self.data.data)
                 if not success then error(err) end
             else error('No Draw On Popup '..self.data.popup.name) end
         end):open()

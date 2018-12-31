@@ -206,7 +206,7 @@ end)
 ThisModule.Gui = Gui.popup{
     name='polls',
     caption={'ExpGamingPlayer-polls.name'},
-    draw=function(frame,data)
+    draw=function(self,frame,data)
         frame.style.right_padding = 5
         frame.style.bottom_padding = 5
         local uuid = data.uuid
@@ -225,7 +225,7 @@ ThisModule.Gui = Gui.popup{
 }:add_left{
     caption='utility/item_editor_icon',
     tooltip={'ExpGamingPlayer-polls.tooltip'},
-    draw=function(frame)
+    draw=function(self,frame)
         frame.caption={'ExpGamingPlayer-polls.name'}
         frame.add{
             type='label',

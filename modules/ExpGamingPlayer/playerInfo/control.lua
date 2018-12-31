@@ -54,5 +54,5 @@ return setmetatable({
         if loaded_modules['ExpGamingCore.Group'] then Group = require('ExpGamingCore.Group') end
     end
 },{
-    __call=function(self,...) self.get_player_info(...) end
+    __call=function(self,...) return self.get_player_info(...) end
 })

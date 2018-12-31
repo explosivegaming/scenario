@@ -143,7 +143,7 @@ Gui.left{
     name='test-left',
     caption='Gui Left',
     tooltip='just testing',
-    draw=function(frame)
+    draw=function(self,frame)
         for _,player in pairs(game.connected_players) do
             frame.add{type='label',caption=player.name}
         end
@@ -166,14 +166,14 @@ end)
 Gui.popup{
     name='test-popup',
     caption='Gui Popup',
-    draw=function(frame,data)
+    draw=function(self,frame,data)
         frame.add{type='label',caption='Opened by: '..data.player}
         frame.add{type='label',caption='Message: '..data.message}
     end
 }:add_left{
     caption='Gui Left w/ Popup',
     tooltip='Send a message',
-    draw=function(frame)
+    function(self,frame)
         text_popup:draw(frame)
         send_popup:draw(frame)
     end

@@ -57,7 +57,7 @@ end)
 ThisModule.Gui = Gui.popup{
     name='announcements',
     caption={'GuiAnnouncements.name'},
-    draw=function(frame,data)
+    draw=function(self,frame,data)
         frame.style.right_padding = 5
         frame.style.bottom_padding = 5
         frame.add{type='label',caption=data.sent_by,style='caption_label'}
@@ -72,7 +72,7 @@ ThisModule.Gui = Gui.popup{
 }:add_left{
     caption='item/programmable-speaker',
     tooltip={'GuiAnnouncements.tooltip'},
-    draw=function(frame)
+    draw=function(self,frame)
         frame.caption = {'GuiAnnouncements.name'}
         local frame = frame.add{
             type='flow',

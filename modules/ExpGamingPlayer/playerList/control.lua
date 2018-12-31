@@ -63,7 +63,7 @@ ThisModule.Gui = Gui.left{
     name='player-list',
     caption='entity/player',
     tooltip={'ExpGamingPlayer-playerList.tooltip'},
-    draw=function(frame)
+    draw=function(self,frame)
         frame.caption = ''
         local player_list = frame.add{
             name='scroll',
@@ -125,6 +125,8 @@ script.on_event(defines.events.on_gui_click,function(event)
     -- must be a right click
     if event.button == defines.mouse_button_type.right then else return end
     local player_list = event.element.parent.parent.parent
+    -- must be a valid player which is clicked
+    if not Game.get_player(event.element.name) then return end
     -- hides the player list to show the info
     player_list.scroll.style.visible = false
     local flow = player_list.add{type='flow',direction='vertical'}
