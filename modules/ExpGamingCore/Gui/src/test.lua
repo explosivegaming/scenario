@@ -173,7 +173,7 @@ Gui.popup{
 }:add_left{
     caption='Gui Left w/ Popup',
     tooltip='Send a message',
-    function(self,frame)
+    draw=function(self,frame)
         text_popup:draw(frame)
         send_popup:draw(frame)
     end
