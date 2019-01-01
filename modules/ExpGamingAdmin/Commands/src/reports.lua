@@ -24,7 +24,12 @@ end)
 -- @command clear-reports
 -- @param player the player to clear the reports of
 commands.add_command('clear-reports', 'Clears a player\'s reports', {
-    ['player'] = {true,Admin.is_not_banned}
+    ['player'] = {true,function(value)
+        local player,err = commands.validate['player'](value) 
+        if err then return commands.error(err) end
+        local rtn = not Admin.is_banned(player) and player
+        if not rtn then return commands.error{'ExpGamingAdmin.cant-report-ban',value} end return rtn
+    end}
 }, function(event,args)
     Admin.clear_reports(args.player,event.player_index)
 end)

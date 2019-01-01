@@ -6,6 +6,7 @@
 
 -- Module Require
 local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
 local Role -- ExpGamingCore.Role@^4.0.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
 local Server -- ExpGamingCore.Server@^4.0.0

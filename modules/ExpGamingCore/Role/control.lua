@@ -210,8 +210,9 @@ function Role.revert(player,by_player,count)
     for i = 1,count do
         local change = table.remove(changes)
         if not change then break end
-        if change[1] == 'assign' then Role.unassign(player,change[2],by_player,true) end
-        if change[1] == 'unassign' then Role.assign(player,change[2],by_player,true) end
+        local batch = is_type(change[2],'table') and change[2] or {change[2]}
+        if change[1] == 'assign' then Role.unassign(player,change[2],by_player,batch) end
+        if change[1] == 'unassign' then Role.assign(player,change[2],by_player,batch) end
         ctn=ctn+1
     end
     return ctn
@@ -285,7 +286,7 @@ function Role.print(role,rtn,colour,inv)
     local i = role.index
     while true do
         local _role = Role.get(i,true)
-        if not role then break end
+        if not _role then break end
         ctn=ctn+_role:print(message,colour)
         i=i+change
     end
