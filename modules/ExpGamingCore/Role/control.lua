@@ -103,10 +103,10 @@ end
 -- @usage Role.get(player) -- returns group of player
 -- @tparam ?LuaPlayer|pointerToPlayer|string mixed can either be the name of the role or a player indenifier
 -- @treturn table the group which was found or nil
-function Role.get(mixed)
+function Role.get(mixed,forceIsRole)
     local player = game and Game.get_player(mixed)
     if player == SERVER then return {Role.meta.server} end
-    if player then 
+    if not forceIsRole and player then 
         local rtn = {}
         if not global.players[player.index] then return Role.meta.default and {Role.meta.default} or {} end
         for _,role in pairs(global.players[player.index]) do table.insert(rtn,Role.get(role)) end
@@ -275,16 +275,19 @@ end
 -- @tparam[opt=false] boolean inv true to print to roles below, false to print to roles above
 -- @treturn number the number of players who recived the message 
 function Role.print(role,rtn,colour,inv)
-    local role = Role.get(role)
+    local role = Role.get(role,true)
     if not type_error(role,'table','Invalid argument #1 to Role.print, role is invalid.') then return end
     if colour and not type_error(colour,'table','Invalid argument #3 to Role.print, colour is not a table.') then return end
     if inv and not type_error(inv,'boolean','Invalid argument #4 to Role.print, inv is not a boolean.') then return end
     local message = inv and {'ExpGamingCore-Role.default-print',rtn} or {'ExpGamingCore-Role.print',role.name,rtn}
-    local print = inv or false
+    local change = inv and -1 or 1
     local ctn = 0
-    for index,_role in pairs(Role.roles) do
-        if print or _role == role then ctn=ctn+_role:print(message,colour) end
-        if _role == role then if print then break else print = true end end
+    local i = role.index
+    while true do
+        local _role = Role.get(i,true)
+        if not role then break end
+        ctn=ctn+_role:print(message,colour)
+        i=i+change
     end
     return ctn
 end

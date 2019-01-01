@@ -8,6 +8,7 @@
 local Game = require('FactorioStdLib.Game')
 local Role -- ExpGamingCore.Role@^4.0.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
+local Server -- ExpGamingCore.Server@^4.0.0
 
 -- Module Define
 local module_verbose = false
@@ -15,7 +16,10 @@ local Admin = {
     on_init=function()
         if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
         if loaded_modules['ExpGamingCore.Sync'] then Sync = require('ExpGamingCore.Sync') end
-        if loaded_modules['ExpGamingCore.Server'] then require('ExpGamingCore.Server').add_module_to_interface('Admin','ExpGamingAdmin') end
+        if loaded_modules['ExpGamingCore.Server'] then 
+            Server = require('ExpGamingCore.Server')
+            Server.add_module_to_interface('Admin','ExpGamingAdmin') 
+        end
     end,
     actions={},
     action_functions={},
@@ -79,10 +83,10 @@ end
 function Admin.clear_player(player,by_player)
     local player, by_player = Admin.valid_players(player,by_player)
     if not player then return end
-    if Admin.is_banned(player,true) == true then Server.interface(game.unban_player,true,player,by_player) end
+    if Server and Admin.is_banned(player,true) == true then Server.interface(game.unban_player,true,player,by_player) end
     if Admin.clear_warings then Admin.clear_warings(player,by_player,true) end
     if Admin.clear_reports then Admin.clear_reports(player,by_player,true) end
-    if Role.has_flag(player,'is_jail') then Server.interface(Role.revert,true,player,by_player,2) end
+    if Server and Role.has_flag(player,'is_jail') then Server.interface(Role.revert,true,player,by_player,2) end
     if Sync then Sync.emit_embeded{
         title='Player Clear',
         color=Color.to_hex(defines.textcolor.low),

@@ -128,7 +128,7 @@ script.on_event(defines.events.on_tick,function(event)
                 local time_to_remove = remove_warnings_time[role.index]
                 if (game.tick % time_to_remove) == 0 then
                     global[name]=warnings-1
-                    if global.warnings[name] > 5 then
+                    if global[name] > 5 then
                         player_return({'ExpGamingAdmin-Warnings.remove-warn',global[name],tick_to_display_format(time_to_remove)},defines.textcolor.low,name)
                     end
                 end
