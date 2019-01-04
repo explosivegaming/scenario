@@ -84,7 +84,7 @@ end
 function Admin.clear_player(player,by_player)
     local player, by_player = Admin.valid_players(player,by_player)
     if not player then return end
-    if Server and Admin.is_banned(player,true) == true then Server.interface(game.unban_player,true,player,by_player) end
+    if Server and Admin.is_banned(player,true) == true then Server.interface(game.unban_player,true,player) end
     if Admin.clear_warings then Admin.clear_warings(player,by_player,true) end
     if Admin.clear_reports then Admin.clear_reports(player,by_player,true) end
     if Server and Role.has_flag(player,'is_jail') then Server.interface(Role.revert,true,player,by_player,2) end

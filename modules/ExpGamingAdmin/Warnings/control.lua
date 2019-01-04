@@ -13,7 +13,7 @@ local Color -- FactorioStdLib.Color@^0.8.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
 
 -- Local Varibles
-local take_action = 8 -- below this number no action is taken, the first admin given warning jumps to this number
+local take_action = 7 -- the first admin given warning jumps to this number, this case kick-warn is giving
 local remove_warnings_time = {}
 local min_time_to_remove_warning = 18000 -- this is in ticks
 local punishments = {

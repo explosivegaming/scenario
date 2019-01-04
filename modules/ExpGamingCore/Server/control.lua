@@ -451,7 +451,10 @@ function Server._thread:error(err)
     if is_type(self._error,'function') then
         Manager.sandbox(self._error,self._env,self,err)
         _return = true
-    else error(err) end
+    else 
+        self:close() -- no matter what happens next this thread will be closed
+        error('Thread Error (no handler): '..err) 
+    end
     return _return
 end
 
