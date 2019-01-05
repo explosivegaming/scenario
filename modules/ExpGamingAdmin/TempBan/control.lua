@@ -45,4 +45,4 @@ end
 Admin.add_action('Temp Ban',Admin.temp_ban)
 
 -- Module Return
-return ThisModule 
+return setmetatable(ThisModule,{__call=Admin.temp_ban})

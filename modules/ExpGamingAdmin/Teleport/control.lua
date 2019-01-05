@@ -40,4 +40,4 @@ Admin.add_action('Go To',Admin.go_to)
 Admin.add_action('Bring',Admin.bring)
 
 -- Module Return
-return ThisModule 
+return setmetatable(ThisModule,{__call=Admin.tp})

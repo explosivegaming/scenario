@@ -46,4 +46,4 @@ end
 Admin.add_action('Ban',Admin.ban)
 
 -- Module Return
-return ThisModule 
+return setmetatable(ThisModule,{__call=Admin.ban})

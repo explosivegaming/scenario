@@ -44,4 +44,4 @@ end
 Admin.add_action('Kick',Admin.kick)
 
 -- Module Return
-return ThisModule 
+return setmetatable(ThisModule,{__call=Admin.kick})

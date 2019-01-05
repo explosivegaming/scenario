@@ -48,4 +48,4 @@ end
 Admin.add_action('Jail',Admin.jail)
 
 -- Module Return
-return ThisModule 
+return setmetatable(ThisModule,{__call=Admin.jail})

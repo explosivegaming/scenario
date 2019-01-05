@@ -13,7 +13,7 @@ local Color -- FactorioStdLib.Color@^0.8.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
 
 -- Local Varibles
-local take_action = 7 -- the first admin given warning jumps to this number, this case kick-warn is giving
+local take_action = 8 -- the first admin given warning jumps to this number, this case kick-warn is giving
 local remove_warnings_time = {}
 local min_time_to_remove_warning = 18000 -- this is in ticks
 local punishments = {
@@ -92,9 +92,9 @@ end
 function Admin.give_warning(player,by_player,reason,min)
     local player, by_player = Admin.valid_players(player,by_player)
     if not player then return end
-    local min = Game.get_player(by_player) and take_action or min or 0
+    local min = Game.get_player(by_player) and Game.get_player(by_player) ~= SERVER and take_action or min or 0
     local warnings = Admin.get_warnings(player)
-    if warnings < min then warnings = min end
+    if warnings < min then warnings = min-1 end
     warnings = warnings+1
     global[player.name] = warnings
     if warnings > take_action then 

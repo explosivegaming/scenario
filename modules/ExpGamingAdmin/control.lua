@@ -77,8 +77,8 @@ function Admin.add_action(action,callback)
 end
 
 function Admin.take_action(action,player,by_player,reason)
-    if Admin[action] then Admin[action](player,by_player,reason) end
     if Admin.action_functions[string.lower(action)] then Admin.action_functions[string.lower(action)](player,by_player,reason) end
+    if Admin[action] then Admin[action](player,by_player,reason) end
 end
 
 function Admin.clear_player(player,by_player)

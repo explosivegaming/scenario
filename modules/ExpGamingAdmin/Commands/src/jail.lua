@@ -25,5 +25,6 @@ commands.add_command('unjail', 'Returns a player\'s old rank', {
 }, function(event,args)
     local player = args.player
     if Admin.is_banned(player,true) ~= 'jail' then player_return({'ExpGamingAdmin.cant-report-ban',args.player.name}) return commands.error end
+    Admin.set_banned(player,false)
     Server.interface(Role.revert,true,player,event.player_index,2)
 end)

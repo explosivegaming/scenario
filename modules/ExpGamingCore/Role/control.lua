@@ -281,7 +281,7 @@ function Role.print(role,rtn,colour,inv)
     if colour and not type_error(colour,'table','Invalid argument #3 to Role.print, colour is not a table.') then return end
     if inv and not type_error(inv,'boolean','Invalid argument #4 to Role.print, inv is not a boolean.') then return end
     local message = inv and {'ExpGamingCore-Role.default-print',rtn} or {'ExpGamingCore-Role.print',role.name,rtn}
-    local change = inv and -1 or 1
+    local change = inv and 1 or -1
     local ctn = 0
     local i = role.index
     while true do

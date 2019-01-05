@@ -55,4 +55,4 @@ end
 
 Admin.add_action('Clear Inventory',Admin.move_inventory)
 -- Module Return
-return ThisModule 
+return setmetatable(ThisModule,{__call=Admin.move_inventory})
