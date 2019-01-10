@@ -64,6 +64,7 @@ Role{
     colour={r=233,g=63,b=233},
     is_admin=true,
     is_spectator=true,
+    is_varified=true,
     not_reportable=true,
     allow={
         ['game-settings']=true,
@@ -79,6 +80,7 @@ Role{
     colour={r=0,g=170,b=0},
     is_admin=true,
     is_spectator=true,
+    is_varified=true,
     not_reportable=true,
     allow={
         ['set-home']=true,
@@ -95,6 +97,7 @@ Role{
     group='Admin',
     colour={r=0,g=196,b=137},
     is_spectator=true,
+    is_varified=true,
     not_reportable=true,
     allow={
         ['go-to']=true,
