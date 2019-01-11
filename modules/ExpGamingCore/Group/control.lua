@@ -2,7 +2,7 @@
 -- @module ExpGamingCore@Group
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais Group 
+-- @alias Group 
 
 -- Module Require
 local Game = require('FactorioStdLib.Game')
@@ -14,24 +14,26 @@ local module_verbose = false
 -- @type Group
 -- @field _prototype the prototype of this class
 -- @field groups a table of all groups, includes auto complete on the indexing
+local _GroupSelfRef
 local Group = {
     _prototype = {},
     groups = setmetatable({},{
         __index=table.autokey,
         __newindex=function(tbl,key,value)
-            rawset(tbl,key,Group.define(value))
+            rawset(tbl,key,_GroupSelfRef.define(value))
         end
     }),
     on_init = function()
         if loaded_modules['ExpGamingCore.Server'] then require('ExpGamingCore.Server') end
     end,
     on_post = function(self)
-        -- creats a root role that the server can use
+        -- creates a root role that the server can use
         self{name='Root',disallow={}}
         -- loads the groups in config
         require(module_path..'/config',{Group=self})
     end
 }
+_GroupSelfRef=Group
 
 -- Function Define
 
@@ -75,9 +77,9 @@ end
 -- @tparam ?string|LuaPermissionGroup the group to add the player to
 -- @treturn boolean was the player assigned
 function Group.assign(player,group)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then error('Invalid player #1 given to Group.assign.',2) return end
-    local group = Group.get(group)
+    group = Group.get(group)
     if not group then error('Invalid group #2 given to Group.assign.',2) return end
     return group:add_player(player)
 end
@@ -98,7 +100,7 @@ end
 -- @treturn boolean if the player was added
 function Group._prototype:add_player(player)
     if not self_test(self,'group','add_player') then return end
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then error('Invalid player #1 given to group.add_player.',2) return end
     local raw_group = self:get_raw()
     return raw_group.add_player(player)
@@ -110,7 +112,7 @@ end
 -- @treturn boolean if the player was removed
 function Group._prototype:remove_player(player)
     if not self_test(self,'group','remove_player') then return end
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then error('Invalid player #1 given to group.remove_player.',2) return end
     local raw_group = self:get_raw()
     return raw_group.remove_player(player)
@@ -134,18 +136,18 @@ end
 -- this is used to create a connected_players table
 Group._prototype.connected_players_mt = {
     __call=function(tbl) return tbl.self:get_players(true) end,
-    __pairs=function(tbl) 
-        local players = tbl.self:get_players(true) 
-        local function next_pair(tbl,k)
-            k, v = next(players, k)
+    __pairs=function(self) 
+        local players = self.self:get_players(true)
+        local function next_pair(tbl,key)
+            local k, v = next(players, key)
             if v then return k,v end
         end
         return next_pair, players, nil
     end,
-    __ipairs=function(tbl) 
-        local players = tbl.self:get_players(true) 
-        local function next_pair(tbl,k)
-            k, v = next(players, k)
+    __ipairs=function(self)
+        local players = self.self:get_players(true)
+        local function next_pair(tbl,key)
+            local k, v = next(players, key)
             if v then return k,v end
         end
         return next_pair, players, nil
@@ -156,7 +158,7 @@ Group._prototype.connected_players_mt = {
 -- @usage group.print('Hello, World!')
 -- @param rtn any value you wish to print, string not required
 -- @param colour the colour to print the message in
--- @treturn number the number of players who recived the message
+-- @treturn number the number of players who received the message
 function Group._prototype:print(rtn,colour)
     if not self_test(self,'group','print') then return end
     if colour and not type_error(colour,'table','Invalid argument #2 to group:print, colour is not a table.') then return end
@@ -169,7 +171,7 @@ end
 -- Event Handlers Define
 
 -- creates all permission groups and links them
-script.on_event('on_init',function(event)
+script.on_event('on_init',function()
     for name,group in pairs(Group.groups) do
 		local _group = game.permissions.create_group(name)
         verbose('Created Permission Group: '..name)

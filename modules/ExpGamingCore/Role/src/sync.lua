@@ -43,7 +43,7 @@ end
 Sync.add_update('roles',function()
     if not game then return {'Offline'} end
     local _rtn = {}
-    for name,role in pairs(Role.roles) do
+    for _,role in pairs(Role.roles) do
         local players = role:get_players()
         local _players = {}
         for k,player in pairs(players) do _players[k] = player.name end
@@ -57,20 +57,20 @@ end)
 
 -- Adds a caption to the info gui that shows the rank given to the player
 if Sync.add_to_gui then
-    Sync.add_to_gui(function(player,frame)
+    Sync.add_to_gui(function(player)
         local names = {}
         for _,role in pairs(Role.get(player)) do table.insert(names,role.name) end
         return 'You have been assigned the roles: '..table.concat(names,', ')
     end)
 end
 
--- adds a discord emit for rank chaning
+-- adds a discord emit for rank changing
 script.on_event('on_role_change',function(event)
     local role = Role.get(event.role_name)
     local player = Game.get_player(event)
     local by_player = Game.get_player(event.by_player_index) or SERVER
     if role.is_jail and RoleGlobal.last_change[1] ~= player.index then
-        Sync.emit_embeded{
+        Sync.emit_embedded{
             title='Player Jail',
             color=Color.to_hex(defines.textcolor.med),
             description='There was a player jailed.',

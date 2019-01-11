@@ -2,7 +2,7 @@
 -- @module ExpGamingAdmin.Warnings@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
 local Admin = require('ExpGamingAdmin')
@@ -12,7 +12,7 @@ local Game = require('FactorioStdLib.Game')
 local Color -- FactorioStdLib.Color@^0.8.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
 
--- Local Varibles
+-- Local Variables
 local take_action = 8 -- the first admin given warning jumps to this number, this case kick-warn is giving
 local remove_warnings_time = {}
 local min_time_to_remove_warning = 18000 -- this is in ticks
@@ -61,10 +61,10 @@ local global = global{}
 
 -- Function Define
 local function give_punishment(player,by_player,reason)
-    local player, by_player = Admin.valid_players(player,by_player)
+    player, by_player = Admin.valid_players(player,by_player)
+    reason = reason or 'No Other Reason'
     local warnings = Admin.get_warnings(player)
     local punishment = punishments[warnings]
-    local reason = reason or 'No Other Reason'
     if not punishment or punishment[1] == 'nothing' then return
     elseif punishment[1] == 'message' then
         local message = punishment[2]
@@ -85,14 +85,14 @@ local function give_punishment(player,by_player,reason)
 end
 
 function Admin.get_warnings(player)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     return global[player.name] or 0
 end
 
 function Admin.give_warning(player,by_player,reason,min)
-    local player, by_player = Admin.valid_players(player,by_player)
+    player, by_player = Admin.valid_players(player,by_player)
     if not player then return end
-    local min = Game.get_player(by_player) and Game.get_player(by_player) ~= SERVER and take_action or min or 0
+    min = Game.get_player(by_player) and Game.get_player(by_player) ~= SERVER and take_action or min or 0
     local warnings = Admin.get_warnings(player)
     if warnings < min then warnings = min-1 end
     warnings = warnings+1
@@ -104,12 +104,12 @@ function Admin.give_warning(player,by_player,reason,min)
     give_punishment(player,by_player,reason)
 end
 
-function Admin.clear_warings(player,by_player,no_emit)
-    local player, by_player = Admin.valid_players(player,by_player)
+function Admin.clear_warnings(player,by_player,no_emit)
+    player, by_player = Admin.valid_players(player,by_player)
     if not player then return end
     global[player.name]=nil
     if not no_emit and Sync then
-        Sync.emit_embeded{
+        Sync.emit_embedded{
             title='Player Clear',
             color=Color.to_hex(defines.textcolor.low),
             description='A player had their warnings cleared.',
@@ -138,4 +138,4 @@ script.on_event(defines.events.on_tick,function(event)
 end)
 
 -- Module Return
-return ThisModule 
+return ThisModule

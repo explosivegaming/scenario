@@ -7,7 +7,7 @@ local Server = require('ExpGamingCore.Server')
 Server.add_module_to_interface('ExpGui','ExpGamingCore.Gui')
 
 --- Adds a server thread that allows the camera follows to be toggled off and on
-return function(event)
+return function()
     Server.new_thread{
         name='camera-follow',
         data={cams={},cam_index=1,players={}}

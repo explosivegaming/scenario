@@ -25,7 +25,7 @@ commands.add_command('home', 'Allows you to set, remove and goto your homes', {
         player_return{'ExpGamingCommands-home.set',name,pos[1],pos[2]}
     elseif command == 'remove' then
         if not homes[name] then player_return{'ExpGamingCommands-home.invalid',name} end
-        homes[name] = nil 
+        homes[name] = nil
         homes._n=homes._n-1
         player_return{'ExpGamingCommands-home.remove',name}
     elseif command == 'goto' then
@@ -42,6 +42,6 @@ commands.add_command('home', 'Allows you to set, remove and goto your homes', {
     else
         player_return{'ExpGamingCommands-home.homes',homes._n,homes._m}
         local index = 1
-        for name,pos in pairs(homes) do if name ~= '_n' and name ~= '_r' and name ~= '_m' then player_return{'ExpGamingCommands-home.home',index,name,pos[1],pos[2]} index=index+1 end end
+        for home_name,pos in pairs(homes) do if home_name ~= '_n' and home_name ~= '_r' and home_name ~= '_m' then player_return{'ExpGamingCommands-home.home',index,home_name,pos[1],pos[2]} index=index+1 end end
     end
 end)

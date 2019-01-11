@@ -2,17 +2,18 @@
 -- @module ExpGamingCore.Role@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais Role 
+-- @alias Role 
 
 -- Module Require
 local Group = require('ExpGamingCore.Group')
 local Game = require('FactorioStdLib.Game')
 
--- Local Varibles
+-- Local Variables
 local role_change_event_id = script.generate_event_name('on_role_change')
 local RoleGlobal
 
 -- Module Define
+local _RoleSelfReference
 local module_verbose = false
 local Role = {
     _prototype={},
@@ -24,7 +25,7 @@ local Role = {
     roles=setmetatable({},{
         __index=table.autokey,
         __newindex=function(tbl,key,value)
-            rawset(tbl,key,Role.define(value))
+            rawset(tbl,key,_RoleSelfReference.define(value))
         end
     }),
     on_init=function(self)
@@ -57,10 +58,11 @@ local Role = {
         else error('Invalid roles, no roles to load.') end
     end
 }
+_RoleSelfReference=Role
 
 -- Global Define
 local global = global{
-    change_chache_length=15,
+    change_cache_length=15,
     changes={},
     latest_change={},
     preassign={},
@@ -79,7 +81,7 @@ function Role.set_preassign(tbl) if game then global.preassign = tbl else Role.p
 -- @usage Role{name='Root',short_hand='Root',tag='[Root]',group='Root',colour={r=255,b=255,g=255},is_root=true,allow={}} -- returns new role
 -- @tparam table obj contains the strings: name,short_hand,tag a table called allow a table called colour and a pointer to a permission group
 -- @treturn Role the role which has been made
-function Role.define(obj) 
+function Role.define(obj)
     if not type_error(game,nil,'Cant define Role during runtime.') then return end
     if not type_error(obj.name,'string','Role creation is invalid: role.name is not a string') then return end
     if not is_type(obj.short_hand,'string') then obj.short_hand = obj.name:sub(1,3) end
@@ -101,19 +103,19 @@ end
 --- Used to get the role of a player or the role by name
 -- @usage Role.get('foo') -- returns group foo
 -- @usage Role.get(player) -- returns group of player
--- @tparam ?LuaPlayer|pointerToPlayer|string mixed can either be the name of the role or a player indenifier
+-- @tparam ?LuaPlayer|pointerToPlayer|string mixed can either be the name of the role or a player identifier
 -- @treturn table the group which was found or nil
 function Role.get(mixed,forceIsRole)
     local player = game and Game.get_player(mixed)
     if player == SERVER then return {Role.meta.server} end
-    if not forceIsRole and player then 
+    if not forceIsRole and player then
         local rtn = {}
         if not global.players[player.index] then return Role.meta.default and {Role.meta.default} or {} end
         for _,role in pairs(global.players[player.index]) do table.insert(rtn,Role.get(role)) end
         return rtn
     elseif is_type(mixed,'table') and mixed.group then return mixed
     elseif is_type(mixed,'string') then return Role.roles[mixed]
-    elseif is_type(mixed,'number') then 
+    elseif is_type(mixed,'number') then
         for _,role in pairs(Role.roles) do
             if role.index == mixed then return role end
         end
@@ -124,25 +126,25 @@ end
 -- @usage Role.assign(player,'Root')
 -- @usage Role.assign(player,{'Root','Foo'})
 -- @tparam ?LuaPlayer|pointerToPlayer player the player to assign the role to
--- @tparam ?string|role|table the role to add the player to, if its a table then it will act recursly though the table
+-- @tparam ?string|role|table the role to add the player to, if its a table then it will act recursively though the table
 -- @tparam[opt='<server>'] ?LuaPlayer|pointerToPlayer by_player the player who assigned the roles to the player
--- @tparam[opt] table batch this is used internally to provent multiple event calls, conatins {role_index_in_batch,batch}
+-- @tparam[opt] table batch this is used internally to prevent multiple event calls, contains {role_index_in_batch,batch}
 -- @treturn boolean was the player assigned the roles
 function Role.assign(player,role,by_player,batch)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then error('Invalid player #1 given to Role.assign.',2) return end
     verbose('Assigning Roles: '..serpent.line(role)..' to: '..player.name)
-    -- this loops over a table of role if given; will return if ipairs returns, else will asume it was ment to be a role and error
-    if is_type(role,'table') and not role.name then 
-        local ctn = 0 
+    -- this loops over a table of role if given; will return if ipairs returns, else will assume it was meant to be a role and error
+    if is_type(role,'table') and not role.name then
+        local ctn = 0
         for n,_role in ipairs(role) do ctn=ctn+1 Role.assign(player,_role,by_player,{n,role}) end 
-        if ctn > 0 then if not batch then table.insert(global.changes[player.index],{'assign',role}) global.latest_change = {player.index,'assign',role} end return end 
+        if ctn > 0 then if not batch then table.insert(global.changes[player.index],{'assign',role}) global.latest_change = {player.index,'assign',role} end return end
     end
-    local role = Role.get(role)
+    role = Role.get(role)
     if not role then error('Invalid role #2 given to Role.assign.',2) return end
-    -- this acts as a way to provent the global table getting too full
+    -- this acts as a way to prevent the global table getting too full
     if not global.changes[player.index] then global.changes[player.index]={} end
-    if #global.changes[player.index] > global.change_chache_length then table.remove(global.changes[player.index],1) end
+    if #global.changes[player.index] > global.change_cache_length then table.remove(global.changes[player.index],1) end
     if not batch then table.insert(global.changes[player.index],{'assign',role.name}) global.latest_change = {player.index,'assign',role.name} end
     return role:add_player(player,by_player,batch)
 end
@@ -150,31 +152,31 @@ end
 --- Used to remove a player from a role(s)
 -- @usage Role.unassign(player,'Root')
 -- @tparam ?LuaPlayer|pointerToPlayer player the player to unassign the role to
--- @tparam ?string|role|table role the role to remove the player from, if its a table then it will act recursly though the table
+-- @tparam ?string|role|table role the role to remove the player from, if its a table then it will act recursively though the table
 -- @tparam[opt='<server>'] ?LuaPlayer|pointerToPlayer by_player the player who unassigned the roles from the player
--- @tparam[opt] table batch this is used internally to provent multiple event calls
+-- @tparam[opt] table batch this is used internally to prevent multiple event calls
 -- @treturn boolean was the player unassigned the roles
 function Role.unassign(player,role,by_player,batch)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then error('Invalid player #1 given to Role.unassign.',2) return end
     verbose('Assigning Roles: '..serpent.line(role)..' to: '..player.name)
-    -- this loops over a table of role if given; will return if ipairs returns, else will asume it was ment to be a role and error
+    -- this loops over a table of role if given; will return if ipairs returns, else will assume it was meant to be a role and error
     if is_type(role,'table') and not role.name then 
         local ctn = 0 
         for n,_role in ipairs(role) do ctn=ctn+1 Role.unassign(player,_role,by_player,{n,role}) end  
         if ctn > 0 then if not batch then table.insert(global.changes[player.index],{'unassign',role}) global.latest_change = {player.index,'unassign',role} end return end 
     end
-    local role = Role.get(role)
+    role = Role.get(role)
     if not role then error('Invalid role #2 given to Role.unassign.',2) return end
     if not global.changes[player.index] then global.changes[player.index]={} end
-    -- this acts as a way to provent the global table getting too full
-    if #global.changes[player.index] > global.change_chache_length then table.remove(global.changes[player.index],1) end
+    -- this acts as a way to prevent the global table getting too full
+    if #global.changes[player.index] > global.change_cache_length then table.remove(global.changes[player.index],1) end
     if not batch then table.insert(global.changes[player.index],{'unassign',role.name}) global.latest_change = {player.index,'unassign',role.name} end
     return role:remove_player(player,by_player,batch)
 end
 
 --- Returns the highest role given in a list, if a player is passed then it returns the highest role of the player
--- @usage Role.get_highest{'Root','Admin','Mod'} -- retuns Root (given that root is highest)
+-- @usage Role.get_highest{'Root','Admin','Mod'} -- returns Root (given that root is highest)
 -- @usage Role.get_highest(player) -- returns the players highest role
 -- @tparam ?table|LuaPlayer|pointerToPlayer options table of options or a player
 -- @treturn role the highest role given in the options
@@ -192,19 +194,19 @@ function Role.get_highest(options)
     return highest
 end
 
---- Uses the change chache to revert changes to players roles
+--- Uses the change cache to revert changes to players roles
 -- @usage Role.revert(player) -- reverts the last change to the players roles
 -- @tparam ?LuaPlayer|pointerToPlayer player the player to revert the changes of
--- @tparam[opt] ?LuaPlayer|pointerToPlayer the player who proformed the role revert
--- @tparam[opt=1] count the number of reverts to do, if 0 all changes chached are reverted
--- @treturn number the number of changes that occured
+-- @tparam[opt] ?LuaPlayer|pointerToPlayer the player who preformed the role revert
+-- @tparam[opt=1] count the number of reverts to do, if 0 all changes cached are reverted
+-- @treturn number the number of changes that occurred
 function Role.revert(player,by_player,count)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then error('Invalid player #1 given to Role.revert.',2) return end
     if count and not type_error(count,'number','Invalid argument #2 to Role.revert, count is not a number.') then return end
     local changes = global.changes[player.index] or {}
     if #changes == 0  then error('Player has no role changes logged, can not revert.') end
-    local count = count or 1
+    count = count or 1
     local ctn = 0
     if count > #changes or count == 0 then count = #changes end
     for i = 1,count do
@@ -220,7 +222,7 @@ end
 
 --- Adds a flag which can be set on roles; these flags act as a quick way to access general role changes
 -- @usage Role.add_flag('is_admin',function(player,state) player.admin = state end) -- the function is passed player and if the flag is true or false
--- @tparam string flag the name of the falg that is being added
+-- @tparam string flag the name of the flag that is being added
 -- @tparam[opt] function callback the function(player,state) which is called when a player loses or gains a flag, if nil no function is called
 function Role.add_flag(flag,callback)
     if not type_error(flag,'string','Invalid argument #1 to Role.add_flag, flag is not a string.') then return end
@@ -229,7 +231,7 @@ function Role.add_flag(flag,callback)
     Role.flags[flag] = callback or true
 end
 
---- Checks if a player or role has the requested flag, if player all roles of player are checked (true has pirortiy)
+--- Checks if a player or role has the requested flag, if player all roles of player are checked (true has priority)
 -- @usage Role.has_flag(role,'is_admin') -- returns true if this role has is_admin set
 -- @tparam role|LuaPlayer|pointerToPlayer mixed the player or role that will be tested
 -- @tparam string flag the flag to test for
@@ -253,7 +255,7 @@ function Role.add_action(action)
     table.insert(Role.actions,action)
 end
 
---- Checks if a player or role is allowed the requested action, if player all roles of player are checked (true has pirortiy)
+--- Checks if a player or role is allowed the requested action, if player all roles of player are checked (true has priority)
 -- @usage Role.allowed(role,'foo') -- returns true if this role is allowed 'foo'
 -- @tparam ?role|LuaPlayer|pointerToPlayer mixed the player or role that will be tested
 -- @tparam string action the action to test for
@@ -269,14 +271,14 @@ function Role.allowed(mixed,action)
 end
 
 --- Prints to all roles and players of those roles which are greater than the given role (or if inv then all below)
--- @usage Role.print('Admin','Hello, World!') -- returns the number of players who recived the message
+-- @usage Role.print('Admin','Hello, World!') -- returns the number of players who received the message
 -- @tparam ?role|string role the role which acts as the turning point of the print (always included regardless of inv value)
 -- @param rtn the value that will be returned to the players
 -- @tparam[opt] table colour the colour that you want the message printed in
 -- @tparam[opt=false] boolean inv true to print to roles below, false to print to roles above
--- @treturn number the number of players who recived the message 
+-- @treturn number the number of players who received the message
 function Role.print(role,rtn,colour,inv)
-    local role = Role.get(role,true)
+    role = Role.get(role,true)
     if not type_error(role,'table','Invalid argument #1 to Role.print, role is invalid.') then return end
     if colour and not type_error(colour,'table','Invalid argument #3 to Role.print, colour is not a table.') then return end
     if inv and not type_error(inv,'boolean','Invalid argument #4 to Role.print, inv is not a boolean.') then return end
@@ -293,11 +295,11 @@ function Role.print(role,rtn,colour,inv)
     return ctn
 end
 
---- Prints all registed roles and there important infomation (debug)
+--- Prints all registered roles and there important information (debug)
 -- @tparam[opt] ?role|string the role to print the info of, if nil then all roles are printed in order of power
 -- @tparam[opt=game.player] ?LuaPlayer|pointerToPlayer the player to print the info to, default the player who ran command
 function Role.debug_output(role,player)
-    local player = Game.get_player(player) or game.player
+    player = Game.get_player(player) or game.player
     if not player then error('Invalid player #2 given to Role.debug_output.',2) return end
     local function _output(_role)
         local flags = {};for flag in pairs(Role.flags) do if _role:has_flag(flag) then table.insert(flags,flag) end end
@@ -306,7 +308,7 @@ function Role.debug_output(role,player)
         player_return(rtn,_role.colour,player)
     end
     if role then
-        local role = Role.get(mixed)
+        role = Role.get(role)
         if not type_error(role,'table','Invalid argument #1 to Role.print, role is invalid.') then return end
         _output(role)
     else for index,_role in pairs(Role.roles) do _output(_role) end end
@@ -354,18 +356,18 @@ end
 -- this is used to create a connected_players table
 Role._prototype.players_mt = {
     __call=function(tbl) return tbl.self:get_players(tbl.connected) end,
-    __pairs=function(tbl) 
-        local players = tbl.self:get_players(tbl.connected) 
-        local function next_pair(tbl,k)
-            k, v = next(players, k)
+    __pairs=function(tbl)
+        local players = tbl.self:get_players(tbl.connected)
+        local function next_pair(tbl,key)
+            local k, v = next(players, key)
             if v then return k,v end
         end
         return next_pair, players, nil
     end,
     __ipairs=function(tbl) 
-        local players = tbl.self:get_players(tbl.connected) 
-        local function next_pair(tbl,k)
-            k, v = next(players, k)
+        local players = tbl.self:get_players(tbl.connected)
+        local function next_pair(tbl,key)
+            local k, v = next(players, key)
             if v then return k,v end
         end
         return next_pair, players, nil
@@ -374,10 +376,10 @@ Role._prototype.players_mt = {
 
 
 --- Prints a message to all players who have this role
--- @usage role:print('Hello, World!') -- retuns number of players who recived the message
+-- @usage role:print('Hello, World!') -- returns number of players who received the message
 -- @param rtn the message to print to the players
 -- @tparam[opt] table colour the colour to print the message in
--- @treturn number the number of players who recived the message
+-- @treturn number the number of players who received the message
 function Role._prototype:print(rtn,colour)
     if not self_test(self,'role','print') then return end
     if colour and not type_error(colour,'table','Invalid argument #2 to Role.print, colour is not a table.') then return end
@@ -387,8 +389,8 @@ function Role._prototype:print(rtn,colour)
 end
 
 --- Returns a table that describes all the permissions and which this role is allowed
--- @usage role:get_permissions() -- retuns table of permissions
--- @treturn table a table of permisions, only includes ones which were defined with Role.add_action
+-- @usage role:get_permissions() -- returns table of permissions
+-- @treturn table a table of permissions, only includes ones which were defined with Role.add_action
 function Role._prototype:get_permissions()
     if not self_test(self,'role','get_permissions') then return end
     local rtn = {}
@@ -400,12 +402,12 @@ end
 -- @usage role:add_player(player)
 -- @tparam ?LuaPlayer|PointerToPlayer player the player to add
 -- @tparam[opt] ?LuaPlayer|PointerToPlayer by_player the player who ran the command
--- @tparam[opt] table batch this is used internally to provent multiple event calls
+-- @tparam[opt] table batch this is used internally to prevent multiple event calls
 function Role._prototype:add_player(player,by_player,batch)
     if not self_test(self,'role','add_player') then return end
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then error('Invalid player #1 given to role:add_player.',2) return end
-    local by_player = Game.get_player(by_player) or SERVER
+    by_player = Game.get_player(by_player) or SERVER
     if not global.roles[self.name] then global.roles[self.name] = {} end
     if not global.players[player.index] then global.players[player.index] = {} end
     local highest = Role.get_highest(player) or Role.meta.default
@@ -429,12 +431,12 @@ end
 -- @usage role:remove_player(player)
 -- @tparam ?LuaPlayer|PointerToPlayer player the player to remove
 -- @tparam[opt] ?LuaPlayer|PointerToPlayer by_player the player who ran the command
--- @tparam[opt] table batch this is used internally to provent multiple event calls
+-- @tparam[opt] table batch this is used internally to prevent multiple event calls
 function Role._prototype:remove_player(player,by_player,batch)
     if not self_test(self,'role','add_player') then return end
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then error('Invalid player #1 given to role:remove_player.',2) return end
-    local by_player = Game.get_player(by_player) or SERVER
+    by_player = Game.get_player(by_player) or SERVER
     if not global.roles[self.name] then global.roles[self.name] = {} end
     if not global.players[player.index] then global.players[player.index] = {} end
     local highest = Role.get_highest(player) or Role.meta.default
@@ -458,13 +460,13 @@ end
 
 -- Event Handlers Define
 script.on_event(role_change_event_id,function(event)
-    -- varible init
+    -- variable init
     local player = Game.get_player(event)
     local by_player = Game.get_player(event.by_player_index) or SERVER
-    local role = Role.get(event.role_name)    
+    local role = Role.get(event.role_name)
     local highest = Role.get_highest(player)
     if not highest then Role.meta.default:add_player(player) highest = Role.meta.default end
-    -- gets the falgs the player currently has
+    -- gets the flags the player currently has
     for flag,callback in pairs(Role.flags) do if is_type(callback,'function') then callback(player,Role.has_flag(player,flag)) end end
     -- assign new tag and group of highest role
     Group.assign(player,highest.group)
@@ -476,7 +478,7 @@ script.on_event(role_change_event_id,function(event)
         -- send a message to other players
         if event.batch_index == 1 then
             local names = {}
-            for _,name in pairs(event.batch) do local role = Role.get(name) if role then table.insert(names,role.name) end end
+            for _,name in pairs(event.batch) do local next_role = Role.get(name) if next_role then table.insert(names,next_role.name) end end
             if event.effect == 'assign' then
                 if not role.is_jail then player.play_sound{path='utility/achievement_unlocked'} end
                 game.print{'ExpGamingCore-Role.default-print',{'ExpGamingCore-Role.assign',player.name,table.concat(names,', '),by_player.name}}
@@ -524,4 +526,4 @@ end)
 
 -- Module Return
 -- calling will attempt to define a new role
-return setmetatable(Role,{__call=function(tbl,...) return tbl.define(...) end}) 
+return setmetatable(Role,{__call=function(tbl,...) return tbl.define(...) end})

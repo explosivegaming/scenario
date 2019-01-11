@@ -33,7 +33,7 @@ end
 
 -- this is used by the script to find the popup flow
 function popup.flow(player)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then error('Invalid Player',2) end
     local flow = mod_gui.get_frame_flow(player).popups 
     if not flow then flow = mod_gui.get_frame_flow(player).add{name='popups',type='flow',direction='vertical'} flow.style.visible=false end
@@ -47,8 +47,8 @@ end
 -- @tparam[opt=game.connected_players] table players the players to open the popup for
 function popup.open(style,data,players)
     local _popup = Gui.data.popup[style]
-    local players = players or game.connected_players
-    local data = data or {}
+    players = players or game.connected_players
+    data = data or {}
     if not _popup then return end
     if not Server or not Server._thread then
         for _,player in pairs(players) do
@@ -107,11 +107,11 @@ function popup._prototype:add_left(obj)
     self.left = Gui.left(obj)
 end
 
-function popup:on_init()
+function popup.on_init()
     if loaded_modules['ExpGamingCore.Server'] then Server = require('ExpGamingCore.Server') end
 end
 
-function popup:on_post()
+function popup.on_post()
     popup._prototype.close = Gui.inputs.add{
         type='button',
         name='popup-close',

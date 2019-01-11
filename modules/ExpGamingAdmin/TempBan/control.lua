@@ -2,7 +2,7 @@
 -- @module ExpGamingAdmin.KicTempBan@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
 local Admin = require('ExpGamingAdmin')
@@ -27,7 +27,7 @@ function Admin.temp_ban(player,by_player,reason)
     local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or '<server>'
     if not player or Admin.is_banned(player) then return end
     Admin.set_banned(player,'temp')
-    if Sync then Sync.emit_embeded{
+    if Sync then Sync.emit_embedded{
         title='Player Temp-Ban',
         color=Color.to_hex(defines.textcolor.high),
         description='A player was jailed.',

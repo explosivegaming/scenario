@@ -2,7 +2,7 @@
 -- @module ExpGamingBot.discordAlerts@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
 local Sync = require('ExpGamingCore.Sync')
@@ -23,7 +23,7 @@ script.on_event(defines.events.on_console_command,function(event)
     data.by = event.player_index and game.players[event.player_index].name or '<server>'
     if data.by == '<server>' then return end
     if command == 'config' or command == 'banlist' then
-        Sync.emit_embeded{
+        Sync.emit_embedded{
             title='Edit To '..data.title,
             color=Color.to_hex(defines.textcolor.bg),
             description='A player edited the '..command..'.',
@@ -48,7 +48,7 @@ script.on_event(defines.events.on_console_command,function(event)
         if not Game.get_player(data.username) then return end
         if string.sub(command,-1) == 'e' then data.command = command..'d' else  data.command = command..'ed' end
         data.reason = data.reason and data.reason ~= '' and data.reason or 'No Reason Required'
-        Sync.emit_embeded{
+        Sync.emit_embedded{
             title='Player '..data.title,
             color=data.colour,
             description='There was a player '..data.command..'.',
@@ -60,4 +60,4 @@ script.on_event(defines.events.on_console_command,function(event)
 end)
 
 -- Module Return
-return ThisModule 
+return ThisModule

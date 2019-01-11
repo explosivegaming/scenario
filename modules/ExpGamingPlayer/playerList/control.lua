@@ -8,7 +8,7 @@ local Gui = require('ExpGamingCore.Gui')
 local Admin -- ExpGamingAdmin@^4.0.0
 local AdminGui -- ExpGamingAdmin.Gui@^4.0.0
 
--- Local Varibles
+-- Local Variables
 local playerInfo = function(player,frame)
     frame.add{
         type='label',
@@ -40,12 +40,12 @@ local ThisModule = {
 local global = global{
     update=0,
     delay=10,
-    intervial=54000
+    interval=54000
 }
 
 function ThisModule.update(tick)
     local tick = is_type(tick,'table') and tick.tick or is_type(tick,'number') and tick or game.tick
-    if tick + global.delay > global.update - global.intervial then
+    if tick + global.delay > global.update - global.interval then
         global.update = tick + global.delay
     end
 end
@@ -113,7 +113,7 @@ ThisModule.Gui = Gui.left{
 script.on_event(defines.events.on_tick,function(event)
     if event.tick > global.update then
         ThisModule.Gui()
-        global.update = event.tick + global.intervial
+        global.update = event.tick + global.interval
     end
 end)
 

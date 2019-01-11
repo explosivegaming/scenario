@@ -1,10 +1,10 @@
---- Creates a gui for making and reciving announcements
+--- Creates a gui for making and receiving announcements
 -- @module GuiAnnouncements@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
--- maybe make this not require Role and have it optinal
+-- maybe make this not require Role and have it optional
 
 -- Module Require
 local Game = require('FactorioStdLib.Game')
@@ -27,15 +27,15 @@ local function _roles(player)
     return roles
 end
 
-local role_drop_down = Gui.inputs.add_drop_down('rank-drop-down-annoncements',_roles,1,function(player,selected,items,element)
+local role_drop_down = Gui.inputs.add_drop_down('rank-drop-down-announcements',_roles,1,function(player,selected,items,element)
     element.parent.role.caption = selected
-    if selected == 'Select Role' then element.parent['send-annoncement'].style.visible = false
-    else element.parent['send-annoncement'].style.visible = true end
+    if selected == 'Select Role' then element.parent['send-announcement'].style.visible = false
+    else element.parent['send-announcement'].style.visible = true end
 end)
 
 local send_popup = Gui.inputs{
     type='button',
-    name='send-annoncement',
+    name='send-announcement',
     caption='utility/export_slot'
 }:on_event('click',function(event)
     local player = Game.get_player(event)
@@ -74,7 +74,7 @@ ThisModule.Gui = Gui.popup{
     tooltip={'GuiAnnouncements.tooltip'},
     draw=function(self,frame)
         frame.caption = {'GuiAnnouncements.name'}
-        local frame = frame.add{
+        frame = frame.add{
             type='flow',
             direction='vertical'
         }

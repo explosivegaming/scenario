@@ -2,7 +2,7 @@
 -- @module ExpGamingAdmin@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais Admin 
+-- @alias Admin
 
 -- Module Require
 local Game = require('FactorioStdLib.Game')
@@ -34,13 +34,13 @@ local global = global{
 
 -- Function Define
 function Admin.valid_players(player,by_player)
-    local player = Game.get_player(player)
-    local by_player = Game.get_player(by_player) or SERVER
+    player = Game.get_player(player)
+    by_player = Game.get_player(by_player) or SERVER
     return player, by_player
 end
 
 function Admin.create_reason(reason,name)
-    local reason = reason or 'No Reason'
+    reason = reason or 'No Reason'
     if not string.find(string.lower(reason),string.lower(name)) then reason = reason..' - '..name end
     if Sync and Sync.info.date ~= '0000/00/00' and not string.find(string.lower(reason),Sync.info.date) then reason = reason..' - '..Sync.info.date end
     if not string.find(string.lower(reason),'appeal') then reason = reason..' - Vist www.explosivegaming.nl to appeal.' end
@@ -48,20 +48,20 @@ function Admin.create_reason(reason,name)
 end
 
 function Admin.allowed(player)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if Role then
         return Role.allowed(player,'admin-commands')
     else return player.admin end
 end
 
 function Admin.set_banned(player,set)
-    local player=Game.get_player(player)
+    player = Game.get_player(player)
     if not player then return false end
     global.banned[player.name] = set
 end
 
 function Admin.is_banned(player,detail)
-    local player=Game.get_player(player)
+    player = Game.get_player(player)
     if not player then return false end
     local banned = global.banned[player.name]
     if banned == true then return true end
@@ -82,13 +82,13 @@ function Admin.take_action(action,player,by_player,reason)
 end
 
 function Admin.clear_player(player,by_player)
-    local player, by_player = Admin.valid_players(player,by_player)
+    player, by_player = Admin.valid_players(player,by_player)
     if not player then return end
     if Server and Admin.is_banned(player,true) == true then Server.interface(game.unban_player,true,player) end
-    if Admin.clear_warings then Admin.clear_warings(player,by_player,true) end
+    if Admin.clear_warnings then Admin.clear_warnings(player,by_player,true) end
     if Admin.clear_reports then Admin.clear_reports(player,by_player,true) end
     if Server and Role.has_flag(player,'is_jail') then Server.interface(Role.revert,true,player,by_player,2) end
-    if Sync then Sync.emit_embeded{
+    if Sync then Sync.emit_embedded{
         title='Player Clear',
         color=Color.to_hex(defines.textcolor.low),
         description='A player had their reports and warnings cleared.',

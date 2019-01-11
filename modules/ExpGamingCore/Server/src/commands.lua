@@ -7,7 +7,6 @@
 --- This file will be loaded when ExpGamingCore.Command is present
 -- @function _comment
 
-local Game = require('FactorioStdLib.Game')
 local Server = Server
 
 Server.interfaceCallbacks = {}
@@ -40,7 +39,7 @@ commands.add_command('interface','Runs the given input from the script', {
         env.tile = game.player.surface.get_tile(game.player.position)
     end
     -- adds custom callbacks to the interface
-    for name,callback in pairs(Server.interfaceCallbacks) do env[name] = callback() end
+    for name,custom_callback in pairs(Server.interfaceCallbacks) do env[name] = custom_callback() end
     -- runs the function
     local success, err = Server.interface(callback,false,env)
     -- if there is an error then it will remove the stacktrace and return the error

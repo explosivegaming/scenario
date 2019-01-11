@@ -78,8 +78,8 @@ function inputs._prototype:draw(root)
         local success, err = pcall(self.data._items,player,root)
         if success then data.items = err else error(err) end
         if is_type(self.data._index,'function') then
-            local success, err = pcall(self.data._index,player,root)
-            if success then data.selected_index = err else error(err) end
+            local _success, _err = pcall(self.data._index,player,root)
+            if _success then data.selected_index = _err else error(_err) end
         end
         return root.add(data)
     else
@@ -87,25 +87,25 @@ function inputs._prototype:draw(root)
     end
 end
 
---- Add a new input, this is the same as doing frame.add{} but returns a diffrent object
+--- Add a new input, this is the same as doing frame.add{} but returns a different object
 -- @usage Gui.inputs.add{type='button',name='test',caption='Test'}
 -- @usage return_value(frame) -- draws the button onto that frame
 -- @tparam table obj the new element to add if caption is a sprite path then sprite is used
--- @treturn table the custom input object, calling the returned calue will draw the button
+-- @treturn table the custom input object, calling the returned value will draw the button
 function inputs.add(obj)
     if not is_type(obj,'table') then return end
     if not is_type(obj.type,'string') then return end
     local type = obj.type
-    if type == 'button' or 
-    type == 'sprite-button' or 
-    type == 'choose-elem-button' or
-    type == 'checkbox' or 
-    type == 'radiobutton' or
-    type == 'textfield' or
-    type == 'text-box'  or
-    type == 'slider' or
-    type == 'drop-down'
-    then else return end
+    if type ~= 'button'
+    and type ~= 'sprite-button'
+    and type ~= 'choose-elem-button'
+    and type ~= 'checkbox'
+    and type ~= 'radiobutton'
+    and type ~= 'textfield'
+    and type ~= 'text-box'
+    and type ~= 'slider'
+    and type ~= 'drop-down'
+    then return end
     verbose('Created Input: '..obj.name..' ('..obj.type..')')
     if obj.type == 'button' or obj.type == 'sprite-button' then obj.style = mod_gui.button_style end
     obj.draw_data = table.deepcopy(obj)
@@ -139,23 +139,23 @@ end
 script.on_event(inputs.events,inputs._event_handler)
 inputs.events.error = {}
 
--- the folwing functions are just to make inputs easier but if what you want is not include use inputs.add(obj)
+-- the following functions are just to make inputs easier but if what you want is not include use inputs.add(obj)
 --- Used to define a button, can have many function
 -- @usage Gui.inputs.add_button('test','Test','Just for testing',{{condition,callback},...})
 -- @tparam string name the name of this button
 -- @tparam string the display for this button, either text or sprite path
 -- @tparam string tooltip the tooltip to show on the button
--- @param callbacks can either be a single function or a list of function pairs see exaplmes at bottom
+-- @param callbacks can either be a single function or a list of function pairs see examples at bottom
 -- @treturn table the button object that was made, to allow a custom error event if wanted
 function inputs.add_button(name,display,tooltip,callbacks)
-    local button = inputs.add{
+    local rtn_button = inputs.add{
         type='button',
         name=name,
         caption=display,
         tooltip=tooltip
     }
-    button.data._callbacks = callbacks
-    button:on_event('click',function(event)
+    rtn_button.data._callbacks = callbacks
+    rtn_button:on_event('click',function(event)
         local elements = Gui.data['inputs_'..event.element.type] or {}
         local button = elements[event.element.name]
         if not button and event.element.type == 'sprite-button' then 
@@ -166,19 +166,19 @@ function inputs.add_button(name,display,tooltip,callbacks)
         local mouse = event.button
         local keys = {alt=event.alt,ctrl=event.control,shift=event.shift}
         local element = event.element
-        local callbacks = button.data._callbacks
-        if is_type(callbacks,'function') then callbacks = {{function(...) return true end,callbacks}} end
-        for _,data in pairs(callbacks) do
+        local btn_callbacks = button.data._callbacks
+        if is_type(btn_callbacks,'function') then btn_callbacks = {{function() return true end,btn_callbacks}} end
+        for _,data in pairs(btn_callbacks) do
             if is_type(data[1],'function') and is_type(data[2],'function') then
                 local success, err = pcall(data[1],player,mouse,keys,event)
                 if success and err == true then
-                    local success, err = pcall(data[2],player,element,event)
-                    if not success then error(err) end
+                    local _success, _err = pcall(data[2],player,element,event)
+                    if not _success then error(_err) end
                 elseif not success then error(err) end
             else error('Invalid Callback Condition Format') end
-        end 
+        end
     end)
-    return button
+    return rtn_button
 end
 
 --- Used to define a choose-elem-button callback only on elem_changed
@@ -221,20 +221,19 @@ end
 function inputs.add_checkbox(name,radio,display,default,callback_true,callback_false)
     local type = 'checkbox'; if radio then type='radiobutton' end
     local state = false; if is_type(default,'boolean') then state = default end
-    local checkbox = inputs.add{
+    local rtn_checkbox = inputs.add{
         type=type,
         name=name,
         caption=display,
         state=state
     }
-    if is_type(default,'function') then checkbox.data._state = default end
-    checkbox.data._true = callback_true
-    checkbox.data._false = callback_false
-    checkbox:on_event('state',function(event)
+    if is_type(default,'function') then rtn_checkbox.data._state = default end
+    rtn_checkbox.data._true = callback_true
+    rtn_checkbox.data._false = callback_false
+    rtn_checkbox:on_event('state',function(event)
         local checkbox = Gui.data['inputs_'..event.element.type][event.element.name]
         local player = Game.get_player(event)
-        local state = event.element.state
-        if state then
+        if event.element.state then
             if is_type(checkbox.data._true,'function') then
                 local success, err = pcall(checkbox.data._true,player,event.element)
                 if not success then error(err) end
@@ -246,10 +245,10 @@ function inputs.add_checkbox(name,radio,display,default,callback_true,callback_f
             else error('Invalid Callback') end
         end
     end)
-    return checkbox
+    return rtn_checkbox
 end
 
---- Used to reset the state of radio buttons, recomened to be called on_state_change to reset any radio buttons it is ment to work with.
+--- Used to reset the state of radio buttons, recommended to be called on_state_change to reset any radio buttons it is meant to work with.
 -- @usage Gui.inputs.reset_radio{radio1,radio2,...}
 -- @param elements can be a list of elements or a single element
 function inputs.reset_radio(elements)
@@ -287,23 +286,23 @@ end
 -- @treturn table the text object that was made, to allow a custom error event if wanted
 function inputs.add_text(name,box,text,callback)
     local type = 'textfield'; if box then type='text-box' end
-    local textbox = inputs.add{
+    local rtn_textbox = inputs.add{
         type=type,
         name=name,
         text=text
     }
-    textbox.data._callback = callback
-    textbox:on_event('text',function(event)
+    rtn_textbox.data._callback = callback
+    rtn_textbox:on_event('text',function(event)
         local textbox = Gui.data['inputs_'..event.element.type][event.element.name]
         local player = Game.get_player(event)
         local element = event.element
-        local callback = textbox.data._callback
-        if is_type(callback,'function') then
-            local success, err = pcall(callback,player,element.text,element)
+        local event_callback = textbox.data._callback
+        if is_type(event_callback,'function') then
+            local success, err = pcall(event_callback,player,element.text,element)
             if not success then error(err) end
         else error('Invalid Callback Condition Format') end
     end)
-    return textbox
+    return rtn_textbox
 end
 
 --- Used to define a slider callback only on value_changed
@@ -348,28 +347,28 @@ end
 -- @tparam function callback the callback which is called when a new index is selected function(player,selected,items,element)
 -- @treturn table the drop-down object that was made, to allow a custom error event if wanted
 function inputs.add_drop_down(name,items,index,callback)
-    local drop_down = inputs.add{
+    local rtn_dropdown = inputs.add{
         type='drop-down',
         name=name,
         items=items,
         selected_index=index
     }
-    drop_down.data._items = items
-    drop_down.data._index = index
-    drop_down.data._callback = callback
-    drop_down:on_event('selection',function(event)
-        local drop_down = Gui.data['inputs_'..event.element.type][event.element.name]
+    rtn_dropdown.data._items = items
+    rtn_dropdown.data._index = index
+    rtn_dropdown.data._callback = callback
+    rtn_dropdown:on_event('selection',function(event)
+        local dropdown = Gui.data['inputs_'..event.element.type][event.element.name]
         local player = Game.get_player(event)
         local element = event.element
-        local items = element.items
-        local selected = items[element.selected_index]
-        local callback = drop_down.data._callback
-        if is_type(callback,'function') then
-            local success, err = pcall(callback,player,selected,items,element)
+        local drop_items = element.items
+        local selected = drop_items[element.selected_index]
+        local drop_callback = dropdown.data._callback
+        if is_type(drop_callback,'function') then
+            local success, err = pcall(drop_callback,player,selected,drop_items,element)
             if not success then error(err) end
         else error('Invalid Callback Condition Format') end
     end)
-    return drop_down
+    return rtn_dropdown
 end
 
 -- calling will attempt to add a new input

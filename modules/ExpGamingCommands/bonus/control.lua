@@ -37,7 +37,7 @@ script.on_event(defines.events.on_player_respawned,function(event)
     end
 end)
 
--- overided by ExpGamingCore.Role if present
+-- overridden by ExpGamingCore.Role if present
 script.on_event(defines.events.on_pre_player_died,function(event)
     local player = Game.get_player(event)
     if player.admin then
@@ -74,10 +74,10 @@ return {
             script.on_event(defines.events.role_change,function(event)
                 local player = Game.get_player(event)
                 if Role.allowed(player,'bonus') then
-                    for _,setting in pairs(settings) do player[key] = setting*0.2 end
+                    for key,setting in pairs(settings) do player[key] = setting*0.2 end
                     global[player.index]=20
                 else
-                    for _,setting in pairs(settings) do player[key] = 0 end
+                    for key in pairs(settings) do player[key] = 0 end
                     global[player.index]=nil
                 end
             end)

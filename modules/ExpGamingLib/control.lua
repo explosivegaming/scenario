@@ -10,7 +10,7 @@ local Color = require('FactorioStdLib.Color')
 local module_verbose = false -- there is no verbose in this file so true will do nothing
 local ExpLib = {}
 
---- Loads a table into _G even when sandboxed; will not overwrite values or append to tables; will not work during runtime to avoid desyncs
+--- Loads a table into _G even when sandboxes; will not overwrite values or append to tables; will not work during runtime to avoid desyncs
 -- @usage unpack_to_G{key1='foo',key2='bar'}
 -- @tparam table tbl table to be unpacked
 function ExpLib.unpack_to_G(tbl)
@@ -25,7 +25,7 @@ end
 -- @treturn table the env table with _G keys removed
 -- @warning does not work from console
 function ExpLib.get_env(level)
-    local level = level and level+1 or 2
+    level = level and level+1 or 2
     local env = setmetatable({},{__index=_G})
     while true do
         if not debug.getinfo(level) then break end
@@ -46,7 +46,7 @@ end
 -- @warning does not work from console
 function ExpLib.get_upvalues(level)
     local func = level and ExpLib.is_type(level,'function') and level or nil
-    local level = level and ExpLib.is_type(level,'number') and level+1 or 2
+    level = level and ExpLib.is_type(level,'number') and level+1 or 2
     func = func or debug.getinfo(level).func
     local upvalues = setmetatable({},{__index=_G})
     local i = 1
@@ -58,7 +58,7 @@ function ExpLib.get_upvalues(level)
     return upvalues
 end
 
---- Creats a table that will act like a string and a function
+--- Creates a table that will act like a string and a function
 -- @usage add_metatable({},function) -- returns table
 -- @tparam table tbl the table that will have its metatable set
 -- @tparam[opt=tostring] function callback the function that will be used for the call
@@ -66,8 +66,8 @@ end
 -- @treturn table the new table with its metatable set
 function ExpLib.add_metatable(tbl,callback,string)
     if not ExpLib.is_type(tbl,'table') then error('No table given to add_metatable',2) end
-    local callback = ExpLib.is_type(callback,'function') and callback or tostring
-    local string = ExpLib.is_type(string,'function') and string or ExpLib.is_type(string,'string') and function() return string end or table.tostring
+    callback = ExpLib.is_type(callback,'function') and callback or tostring
+    string = ExpLib.is_type(string,'function') and string or ExpLib.is_type(string,'string') and function() return string end or table.tostring
     return setmetatable(tbl,{
         __tostring=string,
         __concat=function(val1,val2) return type(val1) == 'string' and val1..string(val2) or string(val1)..val2 end,
@@ -75,17 +75,17 @@ function ExpLib.add_metatable(tbl,callback,string)
     })
 end
 
---- Compear types faster for faster valadation of prams
+--- Compare types faster for faster validation of prams
 -- @usage is_type('foo','string') -- return true
 -- @usage is_type('foo') -- return false
 -- @param v the value to be tested
 -- @tparam[opt=nil] string test_type the type to test for if not given then it tests for nil
--- @treturn bolean is v of type test_type
+-- @treturn boolean is v of type test_type
 function ExpLib.is_type(v,test_type)
     return test_type and v and type(v) == test_type or not test_type and not v or false 
 end
 
---- Compear types faster for faster valadation of prams, including giving an error if incorrect
+--- Compare types faster for faster validation of prams, including giving an error if incorrect
 -- @usage type_error('foo','string','Value is not a string') -- return true
 -- @usage type_error('foo','table','Value is not a string') -- return error
 -- @param value the value to be tested
@@ -96,7 +96,7 @@ function ExpLib.type_error(value,type,error_message)
     return ExpLib.is_type(value,type) or error(error_message,3)
 end
 
---- A speailsied verion of type_error to test for self
+--- A specialised version of type_error to test for self
 -- @usage self_test(self,'Object','get_name')
 -- @tparam table self the table that is the object
 -- @tparam string prototype_name the name of the class
@@ -110,11 +110,11 @@ end
 -- @usage player_return('Hello, World!','green') -- returns 'Hello, World!' to game.player with colour green or server console
 -- @usage player_return('Hello, World!',nil,player) -- returns 'Hello, World!' to the given player
 -- @param rtn any value of any type that will be returned to the player or console
--- @tparam[opt=defines.colour.white] ?defines.color|string colour the colour of the text for the player, ingroned when printing to console
+-- @tparam[opt=defines.colour.white] ?defines.color|string colour the colour of the text for the player, ignored when printing to console
 -- @tparam[opt=game.player] LuaPlayer player  the player that return will go to, if no game.player then returns to server
 function ExpLib.player_return(rtn,colour,player)
-    local colour = ExpLib.is_type(colour,'table') and colour or defines.textcolor[colour] ~= defines.color.white and defines.textcolor[colour] or defines.color[colour]
-    local player = player or game.player
+    colour = ExpLib.is_type(colour,'table') and colour or defines.textcolor[colour] ~= defines.color.white and defines.textcolor[colour] or defines.color[colour]
+    player = player or game.player
     local function _return(callback,rtn)
         if ExpLib.is_type(rtn,'table') then 
             -- test for: userdata, locale string, table with __tostring meta method, any other table
@@ -128,8 +128,8 @@ function ExpLib.player_return(rtn,colour,player)
         else callback(tostring(rtn),colour) end
     end
     if player then
-        -- allows any vaild player identifier to be used
-        local player = Game.get_player(player)
+        -- allows any valid player identifier to be used
+        player = Game.get_player(player)
         if not player then error('Invalid Player given to player_return',2) end
         -- plays a nice sound that is different to normal message sound
         player.play_sound{path='utility/scenario_message'}
@@ -175,8 +175,8 @@ function ExpLib.tick_to_display_format(tick)
 	end
 end
 
---- Used as a way to view the structure of a gui, used for debuging
--- @usage Gui_tree(root) returns all children of gui recusivly
+--- Used as a way to view the structure of a gui, used for debugging
+-- @usage Gui_tree(root) returns all children of gui recursively
 -- @tparam LuaGuiElement root the root to start the tree from
 -- @treturn table the table that describes the gui
 function ExpLib.gui_tree(root)
@@ -249,13 +249,13 @@ function table.tostring(tbl)
     return "{"..table.concat(result,",") .."}"
 end
 
---- Simmilar to table.tostring but converts a lua table to a json one
--- @usage talbe.json{k1='foo',k2='bar'} -- return '{"k1":"foo","k2":"bar"}'
+--- Similar to table.tostring but converts a lua table to a json one
+-- @usage table.json{k1='foo',k2='bar'} -- return '{"k1":"foo","k2":"bar"}'
 -- @tparam table lua_table the table to convert
 -- @treturn string the table in a json format
 function table.json(lua_table)
     --if game and game.table_to_json then return game.table_to_json(lua_table) end
-    local result, done, only_indexs = {}, {}, true
+    local result, done, only_indexes = {}, {}, true
     for key,value in ipairs(lua_table) do
         done[key] = true
         if type(value) == 'table' then table.insert(result,table.json(value,true))
@@ -265,14 +265,14 @@ function table.json(lua_table)
     end
     for key,value in pairs(lua_table) do
       if not done[key] then
-        only_indexs = false
+        only_indexes = false
         if type(value) == 'table' then table.insert(result,table.val_to_str(key)..':'..table.json(value,true))
         elseif not value then table.insert(result,table.val_to_str(key)..':null')
         else table.insert(result,table.val_to_str(key)..':'..table.val_to_str(value))
         end
       end
     end
-    if only_indexs then return "["..table.concat(result,",").."]"
+    if only_indexes then return "["..table.concat(result,",").."]"
     else return "{"..table.concat(result,",").."}" 
     end
 end

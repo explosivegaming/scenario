@@ -594,7 +594,7 @@ Manager.event = setmetatable({
     __load=script.on_load,
     __config=script.on_configuration_changed,
     events=defines.events,
-    error_chache={}
+    error_cache={}
 },{
     __metatable=false,
     __call=function(tbl,event_name,new_callback,...)
@@ -619,14 +619,14 @@ Manager.event = setmetatable({
                 if type(callback) ~= 'function' then error('Invalid Event Callback: "'..event_name..'/'..moduleName..'"') end
                 local success, err = Manager.sandbox(callback,{moduleName=setupModuleName(moduleName),module_path=Manager.loadModules.__load[tostring(moduleName)]},new_callback,...)
                 if not success then 
-                    local chache = tbl.error_chache
+                    local cache = tbl.error_cache
                     local error_message = 'Event Failed: "'..moduleName..'/'..tbl.names[event_name]..'" ('..err..')'
-                    if not chache[error_message] then Manager.verbose(error_message,'errorCaught') error(error_message) end
+                    if not cache[error_message] then Manager.verbose(error_message,'errorCaught') error(error_message) end
                     if tbl.names[event_name] == 'on_tick' then 
-                        if not chache[error_message] then chache[error_message] = {game.tick,1} end
-                        if chache[error_message][1] >= game.tick-10 then chache[error_message] = {game.tick,chache[error_message][2]+1}
-                        else chache[error_message] = nil end
-                        if chache[error_message] and chache[error_message][2] > 100 then
+                        if not cache[error_message] then cache[error_message] = {game.tick,1} end
+                        if cache[error_message][1] >= game.tick-10 then cache[error_message] = {game.tick,cache[error_message][2]+1}
+                        else cache[error_message] = nil end
+                        if cache[error_message] and cache[error_message][2] > 100 then
                             Manager.verbose('There was an error happening every tick for 100 ticks, the event handler has been removed!','errorCaught')
                             event_functions[moduleName] = nil
                         end
@@ -694,7 +694,7 @@ Manager.event = setmetatable({
 rawset(Manager.event,'names',setmetatable({},{
     __index=function(tbl,key)
         if type(key) == 'number' or tonumber(key) then
-            -- if it is a number then it will first look in the chache
+            -- if it is a number then it will first look in the cache
             if rawget(tbl,key) then return rawget(tbl,key) end
             -- if it is a core event then it will simply return
             if key == -1 then rawset(tbl,key,'__init')
@@ -706,7 +706,7 @@ rawset(Manager.event,'names',setmetatable({},{
                     if id == key then rawset(tbl,key,event) end
                 end
             end
-            -- returns the value from the chache after being loaded in
+            -- returns the value from the cache after being loaded in
             return rawget(tbl,key)
             -- if it is a string then no reverse look up is required
         else

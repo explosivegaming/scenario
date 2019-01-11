@@ -1,20 +1,20 @@
---- When a entibty is damaged y a player it will show how much damage you've dealth, When a player gets attacked by a entity it will popup the player's health in color.
+--- When a entity is damaged y a player it will show how much damage you've death, When a player gets attacked by a entity it will popup the player's health in color.
 -- @module DamagePopup@4.0.0
 -- @author badgamernl
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais DamagePopup 
+-- @alias DamagePopup 
 
 -- Module Require
 local Color = require('FactorioStdLib.Color')
 
 local DamagePopup = {}
 
-Event.register(defines.events.on_entity_damaged, function(event)
+script.on_event(defines.events.on_entity_damaged, function(event)
   local entity = event.entity
   local cause = event.cause
   local damage = event.original_damage_amount
   local health = entity.health
-  -- local pre_attack_health = health + damage -- Didn't use it after all, maybe usefull later
+  -- local pre_attack_health = health + damage -- Didn't use it after all, maybe useful later
 
   local color = defines.textcolor.crit
 
@@ -36,7 +36,7 @@ Event.register(defines.events.on_entity_damaged, function(event)
     entity.surface.create_entity{
       name="flying-text",
       color=defines.textcolor.med,
-      text='-'..math.floor(damage), -- cooldude2606 added floor for damage ammount
+      text='-'..math.floor(damage), -- cooldude2606 added floor for damage amount
       position=entity.position
     }
   end

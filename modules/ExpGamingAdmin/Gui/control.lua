@@ -2,7 +2,7 @@
 -- @module ExpGamingAdmin.Gui@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais AdminGui 
+-- @alias AdminGui 
 
 -- Module Require
 local Admin = require('ExpGamingAdmin')
@@ -10,7 +10,6 @@ local Gui = require('ExpGamingCore.Gui')
 local Role = require('ExpGamingCore.Role')
 local Game = require('FactorioStdLib.Game')
 local playerInfo -- ExpGamingPlayer.playerInfo@^4.0.0
-local mod_gui = require('mod-gui')
 
 -- Module Define
 local module_verbose = false
@@ -42,7 +41,7 @@ function AdminGui.add_button(name,caption,tooltip,callback)
         tooltip=tooltip
     }:on_event('click',function(event)
         local parent = event.element.parent
-        pre_select_player = parent.player and parent.player.caption or nil
+        local pre_select_player = parent.player and parent.player.caption or nil
         callback(pre_select_player,event.player_index)
     end)
 end
@@ -68,12 +67,12 @@ function AdminGui.draw(frame,filter_buttons)
 end
 
 -- Gui Define
-local function _players(_player,root_frame,state)
+local function get_players(_player,root_frame,state)
     local players = {'Select Player'}
     local _players = state and game.players or game.connected_players
     for _,player in pairs(_players) do
         if player.name ~= _player.name then
-            if Admin.is_banned and Admin.is_banned(player) then else
+            if not Admin.is_banned or not Admin.is_banned(player) then
                 table.insert(players,player.name)
             end
         end
@@ -82,14 +81,14 @@ local function _players(_player,root_frame,state)
 end
 
 local online_check = Gui.inputs.add_checkbox('online-check-admin-commands',false,'Show Offline',false,function(player,element) 
-    element.parent['player-drop-down-admin-commands'].items = _players(player,element.parent,true)
+    element.parent['player-drop-down-admin-commands'].items = get_players(player,element.parent,true)
     element.parent['player-drop-down-admin-commands'].selected_index = 1
 end,function(player,element)
-    element.parent['player-drop-down-admin-commands'].items = _players(player,element.parent,false)
+    element.parent['player-drop-down-admin-commands'].items = get_players(player,element.parent,false)
     element.parent['player-drop-down-admin-commands'].selected_index = 1
 end)
 
-local player_drop_down = Gui.inputs.add_drop_down('player-drop-down-admin-commands',_players,1,function(player,selected,items,element)
+local player_drop_down = Gui.inputs.add_drop_down('player-drop-down-admin-commands',get_players,1,function(player,selected,items,element)
     element.parent.parent.player.caption = selected
     local player_info_flow = element.parent.parent.info_flow
     player_info_flow.clear()
@@ -142,7 +141,7 @@ Admin.center = Gui.center{
     tooltip={'ExpGamingAdmin.tooltip'},
     draw=function(self,frame,pre_select_player,pre_select_action)
         frame.caption={'ExpGamingAdmin.name'}
-        local frame = frame.add{
+        frame = frame.add{
             type='flow',
             direction='horizontal'
         }
@@ -166,7 +165,7 @@ Admin.center = Gui.center{
         online_check:draw(dropdowns)
         local _drop = player_drop_down:draw(dropdowns)
         if pre_select_player then Gui.set_dropdown_index(_drop,pre_select_player.name) end
-        local _drop = action_drop_down:draw(dropdowns)
+        _drop = action_drop_down:draw(dropdowns)
         Gui.set_dropdown_index(_drop,pre_select_action)
         local _text =  reason_input:draw(dropdowns)
         if pre_select_action == 'Jail' or pre_select_action == 'Kick' or pre_select_action == 'Ban' then 
@@ -174,7 +173,7 @@ Admin.center = Gui.center{
         end
         if pre_select_player then playerInfo(pre_select_player,player_info_flow,true) end
         _text.style.width = 200
-        local label = dropdowns.add{
+        label = dropdowns.add{
             name='warning',
             type='label',
             caption='',
@@ -183,17 +182,17 @@ Admin.center = Gui.center{
         label.style.single_line = false
         label.style.width = 200
         take_action:draw(dropdowns)
-        local _caption = pre_select_player and pre_select_player.name or ''
+        local caption = pre_select_player and pre_select_player.name or ''
         frame.add{
             name='player',
             type='label',
-            caption=_caption
+            caption=caption
         }.style.visible = false
-        local _caption = pre_select_action or ''
+        caption = pre_select_action or ''
         frame.add{
             name='action',
             type='label',
-            caption=_caption
+            caption=caption
         }.style.visible = false
     end
 }

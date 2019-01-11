@@ -13,8 +13,8 @@ Sync.add_update('rockets',function()
     _return.time = Sync.tick_format(time)
     _return.fastest = Sync.tick_format(global.fastest)
     _return.milestones = {}
-    for milestone,time in pairs(global.milestones) do
-        _return.milestones[milestone] = Sync.tick_format(time)
+    for milestone,next_time in pairs(global.milestones) do
+        _return.milestones[milestone] = Sync.tick_format(next_time)
     end
     return _return
 end)

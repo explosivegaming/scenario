@@ -2,7 +2,7 @@
 -- @module ExpGamingInfo.Tasklist
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
 local Gui = require('ExpGamingCore.Gui')
@@ -102,26 +102,26 @@ local add = Gui.inputs{
 end)
 
 local function _tasks(player)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     local data = global._edit[player.index]
     if not data then return global.tasks end
-    local _edit = false
+    local editing = false
     for _,v in pairs(data._editing) do
         if v == true then
-            _edit = true
+            editing = true
             break
         end
     end
-    if data._edit and not _edit then
+    if data._edit and not editing then
         global.tasks = table.deepcopy(data._tasks)
         global._edit[player.index] = table.deepcopy(global._base)
         Gui.left.update('tasklist')
         return global.tasks
-    elseif not data._edit and _edit then
+    elseif not data._edit and editing then
         data._edit = true
         for key,_ in pairs(data._tasks) do if not data._editing[key] then data._editing[key] = false end end
         return data._tasks
-    elseif _edit then return data._tasks
+    elseif editing then return data._tasks
     else return global.tasks
     end
 end

@@ -11,7 +11,7 @@ local Game = require('FactorioStdLib.Game')
 local mod_gui = require('mod-gui')
 local Gui = require('ExpGamingCore.Gui')
 local order_config = require(module_path..'/order_config')
-local Role -- this is optional and is hanndled by it being present, it is loaded on init
+local Role -- this is optional and is handled by it being present, it is loaded on init
 
 local toolbar = {}
 
@@ -52,7 +52,7 @@ end
 -- @usage toolbar.draw(1)
 -- @param player the player to draw the tool bar of
 function toolbar.draw(player)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then return end
 	local toolbar_frame = mod_gui.get_button_flow(player)
     toolbar_frame.clear()
@@ -81,7 +81,7 @@ function toolbar.draw(player)
 	end
 end
 
-function toolbar:on_init()
+function toolbar.on_init()
     if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
 end
 

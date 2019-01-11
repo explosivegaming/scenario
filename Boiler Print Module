@@ -2,14 +2,14 @@
 -- @module ThisModule@X.Y.Z
 -- @author <get from json>
 -- @license <get from json>
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
 local Module = require('Module')
 local SubModule = require('Collection.Submodule')
 local OptModule -- OptModule@^X.Y.Z
 
--- Local Varibles
+-- Local Variables
 
 -- Module Define
 local module_verbose = false
@@ -34,4 +34,4 @@ local global = global{
 -- Event Handlers Define
 
 -- Module Return
-return ThisModule 
+return ThisModule

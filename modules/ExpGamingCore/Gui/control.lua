@@ -16,7 +16,7 @@ local global = global()
 -- @tparam string location the location to get/set the data, center left etc...
 -- @tparam[opt] string key the name of the gui to set the value of
 -- @param[opt] value the data that will be set can be any value but table advised
--- @treturn[1] table all the gui data that is locationed in that location
+-- @treturn[1] table all the gui data that is located in that location
 Gui.data = setmetatable({},{
     __call=function(tbl,location,key,value)
         if not location then return tbl end
@@ -31,7 +31,7 @@ Gui.data = setmetatable({},{
 -- @usage Gui.bar(frame,100)
 -- @param frame the frame to draw the line to
 -- @param[opt=10] width the width of the bar
--- @return the line that was made type is progressbar
+-- @return the line that was made type is progress bar
 function Gui.bar(frame,width)
     local line = frame.add{
         type='progressbar',
@@ -44,11 +44,11 @@ function Gui.bar(frame,width)
     return line
 end
 
---- Adds a lable that is centered
--- @usage Gui.centered_label(frane, 'Hello, world!')
+--- Adds a label that is centered
+-- @usage Gui.centered_label(frame, 'Hello, world!')
 -- @tparam LuaGuiElement frame the parent frame to add the label to
--- @tparam string string the string that the lable will have
-function Gui.centered_label(frane, string)
+-- @tparam string string the string that the label will have
+function Gui.centered_label(frame, string)
     local flow = frame.add {frame = 'flow'}
     local flow_style = flow.style
     flow_style.align = 'center'
@@ -62,13 +62,13 @@ function Gui.centered_label(frane, string)
     return label
 end
 
---- Used to set the index of a drop down to a certian item
+--- Used to set the index of a drop down to a certain item
 -- @usage Gui.set_dropdown_index(dropdown,player.name) -- will select the index with the players name as the value
 -- @param dropdown the dropdown that is to be effected
 -- @param _item this is the item to look for
 -- @return returns the dropdown if it was successful
 function Gui.set_dropdown_index(dropdown,_item)
-    if dropdown and dropdown.valid and dropdown.items and _item then else return end
+    if not dropdown or not dropdown.valid or not dropdown.items or not _item then return end
     local _index = 1
     for index, item in pairs(dropdown.items) do
         if item == _item then _index = index break end
@@ -88,7 +88,7 @@ end
 -- @field surface this will over ride the surface that the camera follows on, allowing for a 'ghost surface' while keeping same position
 -- @field respawn_open if set to true then the camera will auto re link to the player after a respawn
 
---- Adds a camera that updates every tick (or less depeading on how many are opening) it will move to follow an entity
+--- Adds a camera that updates every tick (or less depending on how many are opening) it will move to follow an entity
 -- @usage Gui.cam_link{entity=game.player.character,frame=frame,width=50,hight=50,zoom=1}
 -- @usage Gui.cam_link{entity=game.player.character,cam=frame.camera,surface=game.surfaces['testing']}
 -- @tparam table data contains all other params given below
@@ -103,7 +103,7 @@ function Gui.cam_link(data)
         data.cam.name='camera'
         data.cam.position= data.entity.position
         data.cam.surface_index= data.surface and data.surface.index or data.entity.surface.index
-        data.cam.zomm = data.zoom
+        data.cam.zoom = data.zoom
         data.cam = data.frame.add(data.cam)
         data.cam.style.width = data.width or 100
         data.cam.style.height = data.height or 100
@@ -147,7 +147,7 @@ script.on_event('on_tick', function(event)
         if global.cam_index >= #global.cams then global.cam_index = 1 end
         if update > #global.cams then update = #global.cams end
         for cam_offset = 0,update do
-            local _cam = global.cams[global.cam_index]
+            local _cam = global.cams[global.cam_index+cam_offset]
             if not _cam then break end
             if not _cam.cam.valid then table.remove(global.cams,global.cam_index)
             elseif not _cam.entity.valid then table.remove(global.cams,global.cam_index)
@@ -162,6 +162,7 @@ script.on_event('on_player_respawned',function(event)
     if loaded_modules['ExpGamingCore.Server'] then return end
     if global.players and is_type(global.players,'table') and #global.players > 0 and global.players[event.player_index] then
         local remove = {}
+        local player = Game.get_player(event)
         for index,cam in pairs(global.players[event.player_index]) do
             if cam.valid then table.insert(global.cams,{cam=cam,entity=player.character,surface=player.surface})
             else table.insert(remove,index) end
@@ -173,14 +174,14 @@ script.on_event('on_player_respawned',function(event)
 end)
 
 function Gui:on_init()
-    if loaded_modules['ExpGamingCore.Server'] then 
-        Server = require('ExpGamingCore.Server') 
-        verbose('ExpGamingCore.Server is installed; Loading server src') 
-        script.on_init(require(module_path..'/src/server',{Gui=self})) 
+    if loaded_modules['ExpGamingCore.Server'] then
+        Server = require('ExpGamingCore.Server')
+        verbose('ExpGamingCore.Server is installed; Loading server src')
+        script.on_init(require(module_path..'/src/server',{Gui=self}))
     end
 end
 
-function Gui:on_post()
+function Gui.on_post()
     Gui.test = require(module_path..'/src/test',{Gui=Gui})
 end
 

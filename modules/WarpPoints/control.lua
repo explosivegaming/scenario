@@ -2,14 +2,14 @@
 -- @module WarpPoints@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
 local Gui = require('ExpGamingCore.Gui')
 local Game = require('FactorioStdLib.Game')
 local Role -- ExpGamingCore.Role@^4.0.0
 
--- Local Varibles
+-- Local Variables
 local warp_tiles = require(module_path..'/src/warp_tiles')
 local warp_entities = require(module_path..'/src/warp_entities')
 
@@ -49,7 +49,6 @@ function ThisModule.remove_warp_point(name)
     local surface =  game.surfaces[warp.surface]
     local offset = warp.position
     local tiles = {}
-    local tiles = {}
     -- clears the area where the warp was
     for x = -warp_radius, warp_radius do
         for y = -warp_radius, warp_radius do
@@ -72,9 +71,9 @@ end
 -- @tparam surface surface the surface that the warp point is on
 -- @tparam force force the force that the warp point will belong to
 -- @tparam string name the name of the warp point to be made
-function ThisModule.make_warp_point(position,surface,force,name)
-    local warp = global.warps[name]
-    if warp then return end; warp = nil
+function ThisModule.make_warp_point(position,surface,force,warpName)
+    local warp = global.warps[warpName]
+    if warp then return end
     local offset = {x=math.floor(position.x),y=math.floor(position.y)}
     local old_tile = surface.get_tile(offset).name
     local base_tiles = {}
@@ -88,22 +87,22 @@ function ThisModule.make_warp_point(position,surface,force,name)
         end
     end
     surface.set_tiles(base_tiles)
-    -- this adds the patern and entities
-    for _,position in pairs(warp_tiles) do
-        table.insert(tiles,{name=warp_tile,position={position[1]+offset.x+global_offset.x,position[2]+offset.y+global_offset.y}})
+    -- this adds the pattern and entities
+    for _,pos in pairs(warp_tiles) do
+        table.insert(tiles,{name=warp_tile,position={pos[1]+offset.x+global_offset.x,pos[2]+offset.y+global_offset.y}})
     end
     surface.set_tiles(tiles)
     for _,entity in pairs(warp_entities) do
-        local entity = surface.create_entity{name=entity[1],position={entity[2]+offset.x+global_offset.x,entity[3]+offset.y+global_offset.y},force='neutral'}
+        entity = surface.create_entity{name=entity[1],position={entity[2]+offset.x+global_offset.x,entity[3]+offset.y+global_offset.y},force='neutral'}
         entity.destructible = false; entity.health = 0; entity.minable = false; entity.rotatable = false
     end
     -- creates a tag on the map for the wap point
     local tag = force.add_chart_tag(surface,{
         position={offset.x+0.5,offset.y+0.5},
-        text='Warp: '..name,
+        text='Warp: '..warpName,
         icon={type='item',name=warp_item}
     })
-    global.warps[name] = {tag=tag,surface=surface.index,position=tag.position,old_tile=old_tile}
+    global.warps[warpName] = {tag=tag,surface=surface.index,position=tag.position,old_tile=old_tile}
     local _temp = {Spawn=global.warps.Spawn}
     global.warps.Spawn = nil
     for name,data in pairs(table.keysort(global.warps)) do _temp[name] = data end
@@ -190,7 +189,7 @@ ThisModule.Gui = Gui.left{
         if cooldown > 0 then frame.style.visible = false return
         elseif not Role and player.admin or Role and Role.allowed(player,'always-warp') then return
         elseif player.surface.get_tile(player.position).name == warp_tile
-            and player.surface.name == 'nauvis' 
+            and player.surface.name == 'nauvis'
             then return
         elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then return
         else frame.style.visible = false end
@@ -199,7 +198,7 @@ ThisModule.Gui = Gui.left{
         local cooldown = global.cooldowns[player.index] or 0
         if not Role and player.admin or Role and Role.allowed(player,'always-warp') then return true
         elseif player.surface.get_tile(player.position).name == warp_tile
-        and player.surface.name == 'nauvis' 
+        and player.surface.name == 'nauvis'
         then return true
         elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then return true
         elseif cooldown > 0 then return {'WarpPoints.cooldown',cooldown}
@@ -213,7 +212,7 @@ script.on_event(defines.events.on_tick,function(event)
     if not (event.tick % 60 == 0) then return end
     for index,time in pairs(global.cooldowns) do
         if time > 0 then
-            global.cooldowns[index] = time-1 
+            global.cooldowns[index] = time-1
             if global.cooldowns[index] == 0 then player_return({'WarpPoints.cooldown-zero'},defines.textcolor.low,index) end
         end
     end
@@ -224,9 +223,9 @@ script.on_event(defines.events.on_player_changed_position, function(event)
     local cooldown = global.cooldowns[player.index] or 0
     local tile = player.surface.get_tile(player.position).name
     if not Role and player.admin or Role and not Role.allowed(player,'always-warp') and cooldown == 0 then
-        if tile == warp_tile and player.surface.name == 'nauvis' then 
+        if tile == warp_tile and player.surface.name == 'nauvis' then
             ThisModule.Gui:open(player)
-        elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then 
+        elseif player.position.x^2+player.position.y^2 < (warp_radius*spawn_warp_scale)^2 then
             ThisModule.Gui:open(player)
         else ThisModule.Gui:close(player) end
     end
@@ -246,4 +245,4 @@ script.on_event(defines.events.on_player_created, function(event)
 end)
 
 -- Module Return
-return ThisModule 
+return ThisModule

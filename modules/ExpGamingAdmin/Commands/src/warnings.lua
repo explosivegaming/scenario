@@ -24,5 +24,5 @@ commands.add_command('clear-warnings', 'Clears a player\'s warnings', {
 }, function(event,args)
     local player = args.player
     if Admin.is_banned(player) then player_return({'ExpGamingAdmin.cant-report-ban',args.player.name}) return commands.error end
-    Admin.clear_warings(player,event.player_index)
+    Admin.clear_warnings(player,event.player_index)
 end)

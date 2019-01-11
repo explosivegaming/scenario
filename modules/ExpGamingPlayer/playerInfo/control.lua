@@ -9,7 +9,7 @@ local Role -- ExpGamingCore.Role@^4.0.0
 local Group -- ExpGamingCore.Group@^4.0.0
 
 local function get_player_info(player,frame,add_cam)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then return {} end
     local _player = {}
     _player.index = player.index
@@ -26,7 +26,7 @@ local function get_player_info(player,frame,add_cam)
         _player.roles = roles
     end
     if frame then
-        local frame = frame.add{type='frame',direction='vertical',style='image_frame'}
+        frame = frame.add{type='frame',direction='vertical',style='image_frame'}
         frame.style.width = 200
         if Role then frame.style.height = 300
         else frame.style.height = 260 end

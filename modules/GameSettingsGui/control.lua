@@ -7,7 +7,7 @@
 local Server = require('ExpGamingCore.Server')
 local Gui = require('ExpGamingCore.Gui')
 
--- Local Varibles
+-- Local Variables
 --{type='slider',object='',key='',name='',min=x,max=y}
 --{type='function',object='',key='',name='',param={}}
 local basic_settings = {
@@ -122,8 +122,7 @@ local are_you_sure = Gui.inputs.add_checkbox('game-settings-are-you-sure',true,n
 end)
 
 local function _draw_setting(frame,setting)
-    local frame = frame.add{type='flow'}
-    local frame = frame.add{
+    frame = frame.add{type='flow'}.add{
         type='flow',
         name=setting._group
     }

@@ -53,30 +53,30 @@ local input_test = Gui.inputs.add_button('test-inputs','Try RMB','alt,ctrl,shift
         function(player,mouse,keys) return mouse == defines.mouse_button_type.right and keys.shift end,
         function(player,element) player_return('Right: Shift',nil,player) end
     }
-}):on_event('error',function(err) game.print('this is error handliling') end)
+}):on_event('error',function(err) game.print('this is error handling') end)
 
 local elem_test = Gui.inputs.add_elem_button('test-elem','item','Testing Elems',function(player,element,elem)
     player_return(elem.type..' '..elem.value,nil,player)
 end)
 
-local check_test = Gui.inputs.add_checkbox('test-check',false,'Cheat Mode',function(player,parent) 
-    return game.players[parent.player_index].cheat_mode 
-end,function(player,element) 
-    player.cheat_mode = true 
+local check_test = Gui.inputs.add_checkbox('test-check',false,'Cheat Mode',function(player,parent)
+    return game.players[parent.player_index].cheat_mode
+end,function(player,element)
+    player.cheat_mode = true
 end,function(player,element)
     player.cheat_mode = false
 end)
 
-local radio_test = Gui.inputs.add_checkbox('test-radio',true,'Kill Self',function(player,parent) 
+local radio_test = Gui.inputs.add_checkbox('test-radio',true,'Kill Self',function(player,parent)
     return false
-end,function(player,element) 
+end,function(player,element)
     if player.character then player.character.die() end
     Gui.inputs.reset_radio(element.parent['test-radio-reset'])
 end)
 
-local radio_test_reset = Gui.inputs.add_checkbox('test-radio-reset',true,'Reset Kill Self',function(player,parent) 
+local radio_test_reset = Gui.inputs.add_checkbox('test-radio-reset',true,'Reset Kill Self',function(player,parent)
     return not parent['test-radio'].state
-end,function(player,element) 
+end,function(player,element)
     Gui.inputs.reset_radio(element.parent['test-radio'])
 end)
 

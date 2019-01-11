@@ -17,7 +17,7 @@ script.on_init(function(event)
         end
     end):on_event('error',function(self,err)
         if Sync then
-            Sync.emit_embeded{
+            Sync.emit_embedded{
                 title='Auto Kick Error',
                 color=Color.to_hex(defines.textcolor.bg),
                 description='Auto Kick Error - Closed Thread',

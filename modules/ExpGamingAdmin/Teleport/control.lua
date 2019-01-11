@@ -2,7 +2,7 @@
 -- @module ExpGamingAdmin.Teleport@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
 local Admin = require('ExpGamingAdmin')

@@ -2,7 +2,7 @@
 -- @module ExpGamingInfo.Rockets
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
 local Gui = require('ExpGamingCore.Gui')
@@ -74,20 +74,20 @@ ThisModule.Gui = Gui.left{
             type='flow',
             direction='vertical'
         }
-        for milestone,time in pairs(global.milestones) do
-            local milestone = tonumber(milestone:match('%d+'))
-            if time == 0 and satellites == milestone then
+        for milestone,next_time in pairs(global.milestones) do
+            milestone = tonumber(milestone:match('%d+'))
+            if next_time == 0 and satellites == milestone then
                 global.milestones['m'..milestone] = global.last
-                time = global.last
+                next_time = global.last
                 Gui.left.open('rockets')
             end
             local _time = {'ExpGamingInfo-Rockets.nan'}
-            if time > 0 then _time = tick_to_display_format(time) end
+            if next_time > 0 then _time = tick_to_display_format(next_time) end
             milestones.add{
                 type='label',
                 caption={'ExpGamingInfo-Rockets.format',tostring(milestone),_time}
             }
-            if time == 0 then break end
+            if next_time == 0 then break end
         end
     end,
     can_open=function(player) 

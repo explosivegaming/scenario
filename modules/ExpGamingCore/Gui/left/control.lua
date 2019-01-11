@@ -1,4 +1,4 @@
---- Adds a organiser for left gui ellements which will automaticaly update there information and have open requirements
+--- Adds a organiser for left gui elements which will automatically update there information and have open requirements
 -- @module ExpGamingCore.Gui.Left
 -- @alias left
 -- @author Cooldude2606
@@ -12,7 +12,7 @@ local Color = require('FactorioStdLib.Color')
 local mod_gui = require('mod-gui')
 local Gui = require('ExpGamingCore.Gui')
 local order_config = require(module_path..'/order_config')
-local Role -- this is optional and is hanndled by it being present, it is loaded on init
+local Role -- this is optional and is handled by it being present, it is loaded on init
 
 local left = {}
 left._prototype = {}
@@ -35,11 +35,11 @@ function left.override_open(state)
 end
 --- Used to add a left gui frame
 -- @usage Gui.left.add{name='foo',caption='Foo',tooltip='just testing',open_on_join=true,can_open=function,draw=function}
--- @usage return_value(player) -- toggles visiblity for that player, if no player then updates for all players
--- @param obj this is what will be made, needs a name and a draw function(root_frame), open_on_join can be used to set the deaful state true/false, can_open is a test to block it from opening but is not needed
--- @return the object that is made, calling the returned value with out a param will update the gui, else will toggle visiblity for that player
+-- @usage return_value(player) -- toggles visibility for that player, if no player then updates for all players
+-- @param obj this is what will be made, needs a name and a draw function(root_frame), open_on_join can be used to set the default state true/false, can_open is a test to block it from opening but is not needed
+-- @return the object that is made, calling the returned value with out a param will update the gui, else will toggle visibility for that player
 function left.add(obj)
-    if not is_type(obj,'table') then return end    
+    if not is_type(obj,'table') then return end
     if not is_type(obj.name,'string') then return end
     verbose('Created Left Gui: '..obj.name)
     setmetatable(obj,{__index=left._prototype,__call=function(self,player) if player then return self:toggle(player) else return left.update(self.name) end end})
@@ -54,18 +54,18 @@ end
 -- @param[opt] players the player to update for, if not given all players are updated, can be one player
 function left.update(frame,players)
     if not Server or not Server._thread then
-        local players = is_type(players,'table') and #players > 0 and {unpack(players)} or is_type(players,'table') and {players} or Game.get_player(players) and {Game.get_player(players)} or game.connected_players
+        players = is_type(players,'table') and #players > 0 and {unpack(players)} or is_type(players,'table') and {players} or Game.get_player(players) and {Game.get_player(players)} or game.connected_players
         for _,player in pairs(players) do
             local frames = Gui.data.left or {}
             if frame then frames = {[frame]=frames[frame]} or {} end
-            for name,left in pairs(frames) do
-                if _left then left:first_open(player) end
+            for _,left_frame in pairs(frames) do
+                if left_frame then left_frame:first_open(player) end
             end
         end
     else
         local frames = Gui.data.left or {}
         if frame then frames = {[frame]=frames[frame]} or {} end
-        local players = is_type(players,'table') and #players > 0 and {unpack(players)} or is_type(players,'table') and {players} or Game.get_player(players) and {Game.get_player(players)} or game.connected_players
+        players = is_type(players,'table') and #players > 0 and {unpack(players)} or is_type(players,'table') and {players} or Game.get_player(players) and {Game.get_player(players)} or game.connected_players
         Server.new_thread{
             data={players=players,frames=frames}
         }:on_event('tick',function(thread)
@@ -74,8 +74,8 @@ function left.update(frame,players)
             Server.new_thread{
                 data={player=player,frames=thread.data.frames}
             }:on_event('resolve',function(thread)
-                for name,left in pairs(thread.data.frames) do
-                    if left then left:first_open(thread.data.player) end
+                for _,left_frame in pairs(thread.data.frames) do
+                    if left_frame then left_frame:first_open(thread.data.player) end
                 end
             end):queue()
         end):open()
@@ -91,14 +91,14 @@ function left.open(left_name,player)
     local _left = Gui.data.left[left_name]
     if not _left then return end
     if not Server or not Server._thread then
-        for _,player in pairs(players) do _left:open(player) end
+        for _,next_player in pairs(players) do _left:open(next_player) end
     else
         Server.new_thread{
             data={players=players}
         }:on_event('tick',function(thread)
             if #thread.data.players == 0 then thread:close() return end
-            local player = table.remove(thread.data.players,1)
-            _left:open(player)
+            local next_player = table.remove(thread.data.players,1)
+            _left:open(next_player)
         end):open()
     end
 end
@@ -112,14 +112,14 @@ function left.close(left_name,player)
     local _left = Gui.data.left[left_name]
     if not _left then return end
     if not Server or not Server._thread or player then
-        for _,player in pairs(players) do _left:close(player) end
+        for _,next_player in pairs(players) do _left:close(next_player) end
     else
         Server.new_thread{
             data={players=players}
         }:on_event('tick',function(thread)
             if #thread.data.players == 0 then thread:close() return end
-            local player = table.remove(thread.data.players,1)
-            _left:close(player)
+            local next_player = table.remove(thread.data.players,1)
+            _left:close(next_player)
         end):open()
     end
 end
@@ -129,7 +129,7 @@ end
 -- @usage left:open(player)
 -- @tparam luaPlayer player the player to open the gui for
 function left._prototype:open(player)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then error('Invalid Player') end
     local left_flow = mod_gui.get_frame_flow(player)
     if not left_flow[self.name] then self:first_open(player) end
@@ -141,7 +141,7 @@ end
 -- @usage left:open(player)
 -- @tparam luaPlayer player the player to close the gui for
 function left._prototype:close(player)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then error('Invalid Player') end
     local left_flow = mod_gui.get_frame_flow(player)
     if not left_flow[self.name] then self:first_open(player) end
@@ -156,11 +156,11 @@ end
 -- @tparam LuaPlayer player the player to draw the gui for
 -- @treturn LuaFrame the frame made/updated
 function left._prototype:first_open(player)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     local left_flow = mod_gui.get_frame_flow(player)
-    local frame = nil
-    if left_flow[self.name] then 
-        frame = left_flow[self.name] 
+    local frame
+    if left_flow[self.name] then
+        frame = left_flow[self.name]
         frame.clear()
     else
         if not left_flow['gui-left-hide'] then left.hide(left_flow).style.maximal_width=15 end
@@ -172,15 +172,15 @@ function left._prototype:first_open(player)
     return frame
 end
 
---- Toggles the visiblity of the gui based on some conditions
+--- Toggles the visibility of the gui based on some conditions
 -- @usage left:toggle(player) -- returns new state
 -- @tparam LuaPlayer player the player to toggle the gui for, remember there are condition which need to be met
 -- @treturn boolean the new state that the gui is in
 function left._prototype:toggle(player)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     local left_flow = mod_gui.get_frame_flow(player)
     if not left_flow[self.name] then self:first_open(player) end
-    local left = left_flow[self.name]
+    local left_frame = left_flow[self.name]
     local open = false
     if is_type(self.can_open,'function') then
         local success, err = pcall(self.can_open,player)
@@ -198,18 +198,18 @@ function left._prototype:toggle(player)
             else open = {'ExpGamingCore_Gui.unauthorized'} end
         else open = true end
     end
-    if open == true and left.style.visible ~= true then
-        left.style.visible = true
+    if open == true and left_frame.style.visible ~= true then
+        left_frame.style.visible = true
         left_flow['gui-left-hide'].style.visible = true
     else
-        left.style.visible = false
+        left_frame.style.visible = false
         local count = 0
         for _,child in pairs(left_flow.children) do if child.style.visible then count = count+1 end if count > 1 then break end end
         if count == 1 and left_flow['gui-left-hide'] then left_flow['gui-left-hide'].style.visible = false end
     end
     if open == false then player_return({'ExpGamingCore_Gui.cant-open-no-reason'},defines.textcolor.crit,player) player.play_sound{path='utility/cannot_build'} 
     elseif open ~= true then player_return({'ExpGamingCore_Gui.cant-open',open},defines.textcolor.crit,player) player.play_sound{path='utility/cannot_build'} end
-    return left.style.visible
+    return left_frame.style.visible
 end
 
 script.on_event(defines.events.on_player_joined_game,function(event)
@@ -220,14 +220,14 @@ script.on_event(defines.events.on_player_joined_game,function(event)
     if not left_flow['gui-left-hide'] then left.hide(left_flow).style.maximal_width=15 end
     local done = {}
     for _,name in pairs(order_config) do
-        local left = Gui.data.left[name]
-        if left then
+        local left_frame = Gui.data.left[name]
+        if left_frame then
             done[name] = true
-            left:first_open(player)
+            left_frame:first_open(player)
         end
     end
-    for name,left in pairs(frames) do
-        if not done[name] then left:first_open(player) end
+    for name,left_frame in pairs(frames) do
+        if not done[name] then left_frame:first_open(player) end
     end
 end)
 
@@ -237,7 +237,7 @@ script.on_event(defines.events.on_tick,function(event)
     end
 end)
 
-function left:on_init()
+function left.on_init()
     if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
 end
 

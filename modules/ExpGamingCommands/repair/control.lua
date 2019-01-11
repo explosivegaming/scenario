@@ -28,7 +28,7 @@ local ThisModule = {
     end
 }
 
---- Used so that the value can be overriden if tempban is present
+--- Used so that the value can be overridden if tempban is present
 -- @local
 -- @function repairDisallow
 -- @param player the player who called the command
@@ -41,7 +41,7 @@ end
 --- Used to repair and heal items in an area, different ranks get different size areas
 -- @command repair
 -- @param range the range that items are repaired in
-commands.add_command('repair', 'Repairs all destoryed and damaged entites in an area.', {
+commands.add_command('repair', 'Repairs all destroyed and damaged entities in an area.', {
     ['range']={true,'number-int'}
 }, function(event,args)
     local range = args.range
