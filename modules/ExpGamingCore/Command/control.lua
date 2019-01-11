@@ -4,8 +4,8 @@
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 -- @alias commands
 
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Color = require('FactorioStdLib.Color@^0.8.0')
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
 
 --- Used as an error constant for validation
 -- @field commands.error
@@ -13,7 +13,7 @@ local Color = require('FactorioStdLib.Color@^0.8.0')
 -- @usage return commands.error('err message')
 commands.error = setmetatable({},{__call=function(...) return ... end})
 commands._add_command = commands.add_command
-local data = {}
+local commandDataStore = {}
 local middleware = {}
 
 --- Used to add middle ware to the command handler, functions should return true or false
@@ -27,10 +27,10 @@ function commands.add_middleware(callback) if not is_type(callback,'function') t
 -- @tparam ?string|table|event key the command that will be returned: string is the name, table is the command data, event is event from add_command
 -- @treturn table the command data
 setmetatable(commands,{
-    __index=function(tbl,key) return is_type(key,'table') and (key.command and rawget(data,key.name) or key) or key == 'data' and data or rawget(data,key) end
+    __index=function(tbl,key) return is_type(key,'table') and (key.command and rawget(commandDataStore,key.name) or key) or key == 'data' and commandDataStore or rawget(commandDataStore,key) end
 })
 
---- Collection of funcations that can be used to validate inputs
+--- Collection of functions that can be used to validate inputs
 -- @table commands.validate
 -- @usage commands.validate[type](value,event,...)
 -- @tparam string type the type that the value should be
@@ -40,11 +40,11 @@ setmetatable(commands,{
 -- @return[2] error constant
 -- @return[2] the err message
 -- @field __comment replace _ with - the ldoc did not like me using - in the names
--- @field string basicly does nothing but a type filed is required
--- @field string_inf same as string but is infite in length, must be last arg
--- @field string_len same as string but can define a max lengh
+-- @field string basically does nothing but a type filed is required
+-- @field string_inf same as string but is infinite in length, must be last arg
+-- @field string_len same as string but can define a max length
 -- @field number converts the input into a number
--- @field number_int conerts the input to a number and floors it
+-- @field number_int converts the input to a number and floors it
 -- @field number_range allows a number in a range min < X <= max
 -- @field number_range allows a number in a range after it has been floored min < math.floor(X) <= max
 -- @field player converts the input into a valid player
@@ -54,54 +54,54 @@ setmetatable(commands,{
 -- @field player_role-online converts the input to a player if the player is a lower rank than the user and online
 -- @field player_role_alive converts the input to a player if the player is a lower rank than the user and online and alive
 commands.validate = {
-    ['boolean']=function(value,event) local value = value.lower() if value == 'true' or valule == 'yes' or value == 'y' or value == '1' then return true else return false end end,
-    ['string']=function(value,event) return tostring(value) end,
-    ['string-inf']=function(value,event) return tostring(value) end,
-    ['string-list']=function(value,event,list) 
+    ['boolean']=function(value) value = value.lower() if value == 'true' or value == 'yes' or value == 'y' or value == '1' then return true else return false end end,
+    ['string']=function(value) return tostring(value) end,
+    ['string-inf']=function(value) return tostring(value) end,
+    ['string-list']=function(value,event,list)
         local rtn = tostring(value) and table.includes(list,tostring(value)) and tostring(value) or nil
         if not rtn then return commands.error{'ExpGamingCore_Command.error-string-list',table.concat(list,', ')} end return rtn end,
-    ['string-len']=function(value,event,max) 
+    ['string-len']=function(value,event,max)
         local rtn = tostring(value) and tostring(value):len() <= max and tostring(value) or nil 
         if not rtn then return commands.error{'ExpGamingCore_Command.error-string-len',max} end return rtn end,
-    ['number']=function(value,event) 
-        local rtn = tonumber(value) or nil 
+    ['number']=function(value)
+        local rtn = tonumber(value) or nil
         if not rtn then return commands.error{'ExpGamingCore_Command.error-number'} end return rtn end,
-    ['number-int']=function(value,event) 
-        local rtn = tonumber(value) and math.floor(tonumber(value)) or nil 
+    ['number-int']=function(value)
+        local rtn = tonumber(value) and math.floor(tonumber(value)) or nil
         if not rtn then return commands.error{'ExpGamingCore_Command.error-number'} end return rtn end,
-    ['number-range']=function(value,event,min,max) 
+    ['number-range']=function(value,event,min,max)
         local rtn = tonumber(value) and tonumber(value) > min and tonumber(value) <= max and tonumber(value) or nil
         if not rtn then return commands.error{'ExpGamingCore_Command.error-number-range',min,max} end return rtn end,
-    ['number-range-int']=function(value,event,min,max) 
+    ['number-range-int']=function(value,event,min,max)
         local rtn = tonumber(value) and math.floor(tonumber(value)) > min and math.floor(tonumber(value)) <= max and math.floor(tonumber(value)) or nil
         if not rtn then return commands.error{'ExpGamingCore_Command.error-number-range',min,max} end return rtn end,
-    ['player']=function(value,event) 
+    ['player']=function(value)
         local rtn = Game.get_player(value) or nil
         if not rtn then return commands.error{'ExpGamingCore_Command.error-player',value} end return rtn end,
-    ['player-online']=function(value,event) 
-        local player,err = commands.validate['player'](value) 
+    ['player-online']=function(value)
+        local player,err = commands.validate['player'](value)
         if err then return commands.error(err) end
         local rtn = player.connected and player or nil
         if not rtn then return commands.error{'ExpGamingCore_Command.error-player-online'} end return rtn end,
-    ['player-alive']=function(value,event) 
-        local player,err = commands.validate['player-online'](value) 
+    ['player-alive']=function(value)
+        local player,err = commands.validate['player-online'](value)
         if err then return commands.error(err) end
         local rtn = player.character and player.character.health > 0 and player or nil
         if not rtn then return commands.error{'ExpGamingCore_Command.error-player-alive'} end return rtn end,
-    ['player-rank']=function(value,event) 
-        local player,err = commands.validate['player'](value) 
-        if err then return commands.error(err) end 
+    ['player-rank']=function(value,event)
+        local player,err = commands.validate['player'](value)
+        if err then return commands.error(err) end
         local rtn = player.admin and Game.get_player(event).admin and player or nil
         if not rtn then return commands.error{'ExpGamingCore_Command.error-player-rank'} end return rtn end,
-    ['player-rank-online']=function(value,event) 
-        local player,err = commands.validate['player-online'](value) 
-        if err then return commands.error(err) end 
-        local player,err = commands.validate['player-rank'](player) 
+    ['player-rank-online']=function(value)
+        local player,err = commands.validate['player-online'](value)
+        if err then return commands.error(err) end
+        local player,err = commands.validate['player-rank'](player)
         if err then return commands.error(err) end return player end,
-    ['player-rank-alive']=function(value,event) 
-        local player,err = commands.validate['player-alive'](value) 
-        if err then return commands.error(err) end 
-        local player,err = commands.validate['player-rank'](player) 
+    ['player-rank-alive']=function(value)
+        local player,err = commands.validate['player-alive'](value)
+        if err then return commands.error(err) end
+        local player,err = commands.validate['player-rank'](player)
         if err then return commands.error(err) end return player end,
 }
 --- Adds a function to the validation list
@@ -114,7 +114,7 @@ function commands.add_validation(name,callback) if not is_type(callback,'functio
 -- @tparam ?string|table|event command the command to get the inputs of
 -- @treturn string the formated string for the inputs
 function commands.format_inputs(command)
-    local command = commands[command]
+    command = commands[command]
     if not is_type(command,'table') then error('Command is not valid',2) end
     local rtn = ''
     for name,data in pairs(command.inputs) do
@@ -136,13 +136,13 @@ function commands.validate_args(event)
     local rtn = {}
     local count = 0
     local count_opt = 0
-    for name,data in pairs(command.inputs) do count = count + 1 if data[1] == false then count_opt = count_opt + 1 end end
-    -- checks that there is some args given if there is ment to be
+    for _,data in pairs(command.inputs) do count = count + 1 if data[1] == false then count_opt = count_opt + 1 end end
+    -- checks that there is some args given if there is meant to be
     if not event.parameter then
         if count == count_opt then return rtn
         else return commands.error('invalid-inputs') end
     end
-    -- splits the args into words so that it can be used to asign values
+    -- splits the args into words so that it can be used to assign values
     local words = string.split(event.parameter,' ')
     local index = 0
     for _,word in pairs(words) do
@@ -158,13 +158,13 @@ function commands.validate_args(event)
         end
     end
     -- assigns the values from the words to the args
-    local index = 0
+    index = 0
     for name,data in pairs(command.inputs) do
         index = index+1
         local arg = words[index]
         if not arg and data[1] then return commands.error('invalid-inputs') end
         if data[2] == 'string-inf' then rtn[name] = table.concat(words,' ',index) break end
-        local valid = is_type(data[2],'function') and data[2] or commands.validate[data[2]] or error('Invalid type for command: "'..command.name..'/'..name..'"')
+        local valid = is_type(data[2],'function') and data[2] or commands.validate[data[2]] or error('Invalid validation ("'..tostring(data[2])..'") for command: "'..command.name..'/'..name..'"')
         local temp_tbl = table.deepcopy(data) table.remove(temp_tbl,1) table.remove(temp_tbl,1)
         local value, err = valid(arg,event,unpack(temp_tbl))
         if value == commands.error then return value, err end
@@ -178,10 +178,10 @@ end
 -- @tparam ?index|name|player| player the player to test as
 -- @treturn table a table containg all the commands the player can use
 function commands.get_commands(player)
+    player = Game.get_player(player)
     local commands = {}
-    local player = Game.get_player(player)
     if not player then return error('Invalid player',2) end
-    for name,data in pairs(data) do
+    for name,data in pairs(commandDataStore) do
         if #middleware > 0 then for _,callback in pairs(middleware) do
             local success, err = pcall(callback,player,name,data)
             if not success then error(err)
@@ -207,7 +207,7 @@ end
 local function run_custom_command(command)
     local data = commands.data[command.name]
     local player = Game.get_player(command) or SERVER
-    -- runs all middle ware if any, if there is no middle where then it relyis on .default_admin_only
+    -- runs all middle ware if any, if there is no middle where then it relies on .default_admin_only
     if #middleware > 0 then for _,callback in pairs(middleware) do
         local success, err = pcall(callback,player,command.name,command)
         if not success then error(err)
@@ -243,7 +243,7 @@ end
 -- @usage --see examples in file
 -- @tparam string name the name of the command
 -- @tparam[opt='No Description'] string description the description of the command
--- @tparam[opt=an infite string] table inputs a table of the inputs to be used, last index being true makes the last parameter open ended (longer than one word)
+-- @tparam[opt=an infinite string] table inputs a table of the inputs to be used, last index being true makes the last parameter open ended (longer than one word)
 -- @tparam function callback the function to call on the event
 commands.add_command = function(name, description, inputs, callback)
     if commands[name] then error('That command is already registered',2) end
@@ -254,11 +254,11 @@ commands.add_command = function(name, description, inputs, callback)
     end
     verbose('Created Command: '..name)
     -- test for string and then test for locale string
-    local description = is_type(description,'string') and description 
+    description = is_type(description,'string') and description
     or is_type(description,'table') and is_type(description[1],'string') and string.find(description[1],'.+[.].+') and {description,''}
     or 'No Description'
-    local inputs = is_type(inputs,'table') and inputs or {['param']={false,'string-inf'}}
-    data[name] = {
+    inputs = is_type(inputs,'table') and inputs or {['param']={false,'string-inf'}}
+    commandDataStore[name] = {
         name=name,
         description=description,
         inputs=inputs,
@@ -268,12 +268,12 @@ commands.add_command = function(name, description, inputs, callback)
     local help = is_type(description,'string') and commands.format_inputs(name)..'- '..description
     or is_type(description,'table') and is_type(description[1],'string') and string.find(description[1],'.+[.].+') and {description,commands.format_inputs(name)..'- '}
     or commands.format_inputs(name)
-    data[name].help = help
+    commandDataStore[name].help = help
     commands._add_command(name,help,function(...)
         local success, err = Manager.sandbox(run_custom_command,{},...)
         if not success then error(err) end
     end)
-    return data[name]
+    return commandDataStore[name]
 end
 
 return commands
@@ -289,8 +289,8 @@ return commands
     commands.add_command('foo',{'foo.description'},{
         ['player']={true,'player'}, -- a required arg that must be a valid player
         ['number']={true,'number-range',0,10}, -- a required arg that must be a number 0<X<=10
-        ['pwd']={true,function(value,event) if value == 'password123' then return true else return commands.error('Invalid Password') end} -- a requireed arg pwd that has custom validation
-        ['reason']={false,'string-inf'} -- an optinal arg that is and infite lengh (useful for reasons)
+        ['pwd']={true,function(value,event) if value == 'password123' then return true else return commands.error('Invalid Password') end} -- a required arg pwd that has custom validation
+        ['reason']={false,'string-inf'} -- an optional arg that is and infinite length (useful for reasons)
     },function(event,args)
         args.player.print(args.number)
         if args.reasons then args.player.print(args.reason) end

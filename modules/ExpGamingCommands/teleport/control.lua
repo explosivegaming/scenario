@@ -3,7 +3,7 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
+local Admin = require('ExpGamingAdmin')
 
 --- Teleports the user to the player given
 -- @command go-to

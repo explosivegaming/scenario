@@ -1,21 +1,22 @@
 {
-    "name": "Tasklist",
-    "version": "4.0.0",
-    "type": "Submodule",
-    "description": "Adds a task list gui which acts like a bulletin board for the current tasks",
-    "location": "<blank>",
-    "keywords": [
-        "Gui",
-        "Info",
-        "ExpGaming",
-        "Tasks"
-    ],
-    "author": "<blank>",
-    "contact": "<blank>",
-    "license": "<blank>",
-    "dependencies": {
-        "ExpGamingCore.Gui": "^4.0.0",
-        "ExpGamingCore.Role": "^4.0.0",
-        "FactorioStdLib.Game": "^0.8.0"
-    }
+  "name": "ExpGamingInfo.Tasklist",
+  "version": "4.0.0",
+  "description": "Adds a task list gui which acts like a bulletin board for the current tasks",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Gui",
+    "Info",
+    "ExpGaming",
+    "Tasks"
+  ],
+  "author": "<blank>",
+  "contact": "<blank>",
+  "license": "<blank>",
+  "dependencies": {
+    "ExpGamingCore.Gui": "^4.0.0",
+    "ExpGamingCore.Role": "^4.0.0",
+    "FactorioStdLib.Game": "^0.8.0"
+  },
+  "submodules": {},
+  "collection": "ExpGamingInfo@4.0.0"
 }

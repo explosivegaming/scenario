@@ -2,17 +2,16 @@
 -- @module ExpGamingInfo.Readme
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Gui = require('ExpGamingCore.Gui')
 
 -- Module Define
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then require(module_path..'/src/sync') end
+        if loaded_modules['ExpGamingCore.Sync'] then require(module_path..'/src/sync') end
     end
 }
 
@@ -65,12 +64,12 @@ end):add_tab('commands',{'ExpGamingInfo-Readme.commands-name'},{'ExpGamingInfo-R
             type='label',
             caption='/'..command.name
         }
-        local discription = table.add{
+        local description = table.add{
             type='label',
             caption=command.description,
         }
-        discription.style.maximal_width = 400
-        discription.style.single_line = false
+        description.style.maximal_width = 400
+        description.style.single_line = false
     end
 end):add_tab('links',{'ExpGamingInfo-Readme.links-name'},{'ExpGamingInfo-Readme.links-tooltip'},function(frame)
     local links={
@@ -87,7 +86,7 @@ end):add_tab('links',{'ExpGamingInfo-Readme.links-name'},{'ExpGamingInfo-Readme.
 	    text_box.selectable = true
     end
     for i,link in pairs(links) do
-    	frame.add{
+        frame.add{
             type="label",
             caption={'ExpGamingInfo-Readme.links-cap'..tostring(i)},
             style='caption_label'

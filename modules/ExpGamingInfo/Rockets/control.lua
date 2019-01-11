@@ -2,11 +2,11 @@
 -- @module ExpGamingInfo.Rockets
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Gui = require('ExpGamingCore.Gui')
+local Game = require('FactorioStdLib.Game')
 
 -- Module Define
 local module_verbose = false
@@ -31,7 +31,7 @@ ThisModule.Gui = Gui.left{
     name='rockets',
     caption='item/rocket-silo',
     tooltip={'ExpGamingInfo-Rockets.tooltip'},
-    draw=function(frame)
+    draw=function(self,frame)
         frame.caption = {'ExpGamingInfo-Rockets.name'}
         local player = Game.get_player(frame.player_index)
         local satellites = player.force.get_item_launched('satellite')
@@ -74,20 +74,20 @@ ThisModule.Gui = Gui.left{
             type='flow',
             direction='vertical'
         }
-        for milestone,time in pairs(global.milestones) do
-            local milestone = tonumber(milestone:match('%d+'))
-            if time == 0 and satellites == milestone then
+        for milestone,next_time in pairs(global.milestones) do
+            milestone = tonumber(milestone:match('%d+'))
+            if next_time == 0 and satellites == milestone then
                 global.milestones['m'..milestone] = global.last
-                time = global.last
+                next_time = global.last
                 Gui.left.open('rockets')
             end
             local _time = {'ExpGamingInfo-Rockets.nan'}
-            if time > 0 then _time = tick_to_display_format(time) end
+            if next_time > 0 then _time = tick_to_display_format(next_time) end
             milestones.add{
                 type='label',
                 caption={'ExpGamingInfo-Rockets.format',tostring(milestone),_time}
             }
-            if time == 0 then break end
+            if next_time == 0 then break end
         end
     end,
     can_open=function(player) 

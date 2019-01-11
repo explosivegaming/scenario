@@ -4,7 +4,7 @@
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
 local global = global{}
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Game = require('FactorioStdLib.Game')
 
 -- these are the settings which are changed with scale being as +100%
 local settings = {
@@ -37,7 +37,7 @@ script.on_event(defines.events.on_player_respawned,function(event)
     end
 end)
 
--- overided by ExpGamingCore.Role if present
+-- overridden by ExpGamingCore.Role if present
 script.on_event(defines.events.on_pre_player_died,function(event)
     local player = Game.get_player(event)
     if player.admin then
@@ -54,8 +54,8 @@ end)
 
 return {
     on_init= function(self)
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then
-            local Role = require('ExpGamingCore.Role@^4.0.0')
+        if loaded_modules['ExpGamingCore.Role'] then
+            local Role = require('ExpGamingCore.Role')
             -- instant respawn
             script.on_event(defines.events.on_pre_player_died,function(event)
                 local player = Game.get_player(event)
@@ -74,10 +74,10 @@ return {
             script.on_event(defines.events.role_change,function(event)
                 local player = Game.get_player(event)
                 if Role.allowed(player,'bonus') then
-                    for _,setting in pairs(settings) do player[key] = setting*0.2 end
+                    for key,setting in pairs(settings) do player[key] = setting*0.2 end
                     global[player.index]=20
                 else
-                    for _,setting in pairs(settings) do player[key] = 0 end
+                    for key in pairs(settings) do player[key] = 0 end
                     global[player.index]=nil
                 end
             end)

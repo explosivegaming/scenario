@@ -1,26 +1,26 @@
 {
-    "name": "Server",
-    "version": "4.0.0",
-    "type": "Submodule",
-    "description": "Adds a thread system and event listening and a admin bypass (recommend to disable /c and use optional /interface)",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCore.Server_4.0.0.zip",
-    "keywords": [
-        "Library",
-        "Lib",
-        "ExpGaming",
-        "Core",
-        "Server",
-        "Thread",
-        "Interface",
-        "Events"
-    ],
-    "dependencies": {
-        "ExpGamingLib": "^4.0.0",
-        "FactorioStdLib.Table": "^0.8.0",
-        "FactorioStdLib.Color": "^0.8.0",
-        "FactorioStdLib.String": "^0.8.0",
-        "FactorioStdLib.Game": "^0.8.0",
-        "ExpGamingCore.Command": "?^4.0.0"
-    },
-    "collection": "ExpGamingCore_4.0.0"
+  "name": "ExpGamingCore.Server",
+  "version": "4.0.0",
+  "description": "Adds a thread system and event listening and a admin bypass (recommend to disable /c and use optional /interface)",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Library",
+    "Lib",
+    "ExpGaming",
+    "Core",
+    "Server",
+    "Thread",
+    "Interface",
+    "Events"
+  ],
+  "dependencies": {
+    "ExpGamingLib": "^4.0.0",
+    "FactorioStdLib.Table": "^0.8.0",
+    "FactorioStdLib.Color": "^0.8.0",
+    "FactorioStdLib.String": "^0.8.0",
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingCore.Command": "?^4.0.0"
+  },
+  "collection": "ExpGamingCore@4.0.0",
+  "submodules": {}
 }

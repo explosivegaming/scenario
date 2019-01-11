@@ -1,22 +1,22 @@
 {
-    "name": "WarpPoints",
-    "version": "4.0.0",
-    "type": "Module",
-    "description": "Creates a warp point system which makes moving around large maps easier.",
-    "location": "<blank>",
-    "keywords": [
-        "Warps",
-        "System",
-        "Teleport",
-        "PAX"
-    ],
-    "author": "Cooldude2606",
-    "contact": "Discord: Cooldude2606#5241",
-    "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
-    "dependencies": {
-        "FactorioStdLib.Game": "^0.8.0",
-        "ExpGamingCore.Role": "?^4.0.0",
-        "ExpGamingCore.Command": "?^4.0.0",
-        "ExpGamingCore.Gui": "^4.0.0"
-    }
+  "name": "WarpPoints",
+  "version": "4.0.0",
+  "description": "Creates a warp point system which makes moving around large maps easier.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Warps",
+    "System",
+    "Teleport",
+    "PAX"
+  ],
+  "author": "Cooldude2606",
+  "contact": "Discord: Cooldude2606#5241",
+  "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+  "dependencies": {
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingCore.Role": "?^4.0.0",
+    "ExpGamingCore.Command": "?^4.0.0",
+    "ExpGamingCore.Gui": "^4.0.0"
+  },
+  "submodules": {}
 }

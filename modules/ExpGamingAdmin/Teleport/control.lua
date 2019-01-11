@@ -2,22 +2,22 @@
 -- @module ExpGamingAdmin.Teleport@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
-local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
-local AdminGui = require('ExpGamingAdmin.Gui@^4.0.0')
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Admin = require('ExpGamingAdmin')
+local AdminGui = require('ExpGamingAdmin.Gui')
+local Game = require('FactorioStdLib.Game')
 
 -- Module Define
 local module_verbose = false
 local ThisModule = {}
 
 -- Function Define
-AdminGui.add_button('goto','utility/export_slot',{'ExpGamingAdmin.tooltip-go-to'},function(player,byPlayer)
+AdminGui.add_button('Go To','utility/export_slot',{'ExpGamingAdmin.tooltip-go-to'},function(player,byPlayer)
     Admin.go_to(player,byPlayer)
 end)
-AdminGui.add_button('bring','utility/import_slot',{'ExpGamingAdmin.tooltip-bring'},function(player,byPlayer)
+AdminGui.add_button('Bring','utility/import_slot',{'ExpGamingAdmin.tooltip-bring'},function(player,byPlayer)
     Admin.bring(player,byPlayer)
 end)
 
@@ -40,4 +40,4 @@ Admin.add_action('Go To',Admin.go_to)
 Admin.add_action('Bring',Admin.bring)
 
 -- Module Return
-return ThisModule 
+return setmetatable(ThisModule,{__call=Admin.tp})

@@ -1,6 +1,7 @@
 local Sync = Sync
 local get_allowed_afk_time = self
-local Server = require('ExpGamingCore.Server@^4.0.0')
+local Server = require('ExpGamingCore.Server')
+local Color = require('FactorioStdLib.Color')
 Event[defines.events.on_tick] = nil
 
 script.on_init(function(event)
@@ -16,7 +17,7 @@ script.on_init(function(event)
         end
     end):on_event('error',function(self,err)
         if Sync then
-            Sync.emit_embeded{
+            Sync.emit_embedded{
                 title='Auto Kick Error',
                 color=Color.to_hex(defines.textcolor.bg),
                 description='Auto Kick Error - Closed Thread',

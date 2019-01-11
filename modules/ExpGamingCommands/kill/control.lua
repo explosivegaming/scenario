@@ -3,7 +3,7 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-local Game = require('FactorioStdLib.Game@^4.0.0')
+local Game = require('FactorioStdLib.Game')
 
 --- Kills a player of a lower rank
 -- @command kill

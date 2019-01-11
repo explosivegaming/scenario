@@ -4,18 +4,18 @@
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
 -- Module Require
-local Server = require('ExpGamingCore.Server@^4.0.0')
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
+local Server = require('ExpGamingCore.Server')
+local Gui = require('ExpGamingCore.Gui')
 local Role -- ExpGamingCore.Server@^4.0.0
 
--- Local Varibles
+-- Local Variables
 local poll_time_out = 90 -- In seconds
 
 -- Module Define
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
     end
 }
 
@@ -27,7 +27,7 @@ local global = global{
 
 -- Function Define
 local function _poll_data(question,answers)
-    local poll = {
+    local rtn_poll = {
         uuid=Server.uuid(),
         question=question,
         answers=answers or {'None'},
@@ -35,7 +35,7 @@ local function _poll_data(question,answers)
         voted={}
     }
     Server.new_thread{
-        data={poll_uuid=poll.uuid},
+        data={poll_uuid=rtn_poll.uuid},
         timeout=poll_time_out*60
     }:on_event('timeout',function(self)
         local uuid = tostring(self.data.poll_uuid)
@@ -58,9 +58,9 @@ local function _poll_data(question,answers)
         game.print({'ExpGamingPlayer-polls.winner',highest[1]},defines.textcolor.info)
         verbose('Ended Poll: '..poll.question..' ('..uuid..') Highest: '..highest[1])
     end):open()
-    global.active[tostring(poll.uuid)]=poll
-    verbose('Created Poll: '..question..' ('..poll.uuid..')')
-    return poll.uuid
+    global.active[tostring(rtn_poll.uuid)]=rtn_poll
+    verbose('Created Poll: '..question..' ('..rtn_poll.uuid..')')
+    return rtn_poll.uuid
 end
 
 local function draw_poll(frame)
@@ -86,18 +86,18 @@ local function draw_poll(frame)
     end
 end
 
-local function _opptions(player,root_frame)
-    local opptions = {'Please Select An Opption'}
+local function _options(player,root_frame)
+    local options = {'Please Select An option'}
     local uuid = root_frame.name
     local poll = global.active[uuid]
     if not poll then return {'Invalid Poll'} end
     for _,answer in pairs(poll.answers) do
-        table.insert(opptions,answer)
+        table.insert(options,answer)
     end
-    return opptions
+    return options
 end
 
-local opption_drop_down = Gui.inputs.add_drop_down('opption-drop-down-polls',_opptions,1,function(player,selected,items,element)
+local option_drop_down = Gui.inputs.add_drop_down('option-drop-down-polls',_options,1,function(player,selected,items,element)
     local uuid = element.parent.name
     local poll = global.active[uuid]
     if not poll then return end
@@ -146,17 +146,17 @@ local poll_question_input = Gui.inputs.add_text('poll-question-input',true,'Ques
     else options.question.caption = text end
 end)
 
-local _self_referace_poll_option_input = nil
+local _self_reference_poll_option_input = nil
 local poll_option_input = Gui.inputs.add_text('poll-option-input',true,'Enter Option',function(player,text,element)
     local options = element.parent.parent.parent.options
     if not options[element.parent.name] then options.add{type='label',name=element.parent.name,caption=text} 
     else options[element.parent.name].caption = text end
     if options.last.caption == element.parent.name then
         options.last.caption = tonumber(options.last.caption)+1
-        _self_referace_poll_option_input(element.parent.parent.add{type='flow',name=options.last.caption}).style.minimal_width = 200
+        _self_reference_poll_option_input(element.parent.parent.add{type='flow',name=options.last.caption}).style.minimal_width = 200
     end
 end)
-_self_referace_poll_option_input = poll_option_input
+_self_reference_poll_option_input = poll_option_input
 
 local function poll_assembler(frame)
     frame.clear()
@@ -206,7 +206,7 @@ end)
 ThisModule.Gui = Gui.popup{
     name='polls',
     caption={'ExpGamingPlayer-polls.name'},
-    draw=function(frame,data)
+    draw=function(self,frame,data)
         frame.style.right_padding = 5
         frame.style.bottom_padding = 5
         local uuid = data.uuid
@@ -220,12 +220,12 @@ ThisModule.Gui = Gui.popup{
         flow.add{type='label',caption={'ExpGamingPlayer-polls.time-left',poll_time_out}}
         flow.add{type='label',caption='Question: '..poll.question}
         flow.add{type='label',name='answer',caption='Your Answer: None'}
-        opption_drop_down(flow)
+        option_drop_down(flow)
     end
 }:add_left{
     caption='utility/item_editor_icon',
     tooltip={'ExpGamingPlayer-polls.tooltip'},
-    draw=function(frame)
+    draw=function(self,frame)
         frame.caption={'ExpGamingPlayer-polls.name'}
         frame.add{
             type='label',
@@ -245,11 +245,11 @@ ThisModule.Gui = Gui.popup{
             caption='Viewing Poll: 1',
             style='caption_label'
         }
-        local btn = next:draw(title)
+        btn = next:draw(title)
         btn.style.width = 20
         btn.style.height = 20
         if Role and Role.allowed(frame.player_index,'create-poll') or game.players[frame.player_index].admin then
-            local btn = create_poll:draw(title)
+            btn = create_poll:draw(title)
             btn.style.width = 20
             btn.style.height = 20
         end
@@ -269,5 +269,5 @@ ThisModule.Gui = Gui.popup{
 -- Event Handlers Define
 
 -- Module Return
--- when called it will toogle the left gui for this player
+-- when called it will toggle the left gui for this player
 return setmetatable(ThisModule,{__call=function(self,...) self.Gui(...) end})

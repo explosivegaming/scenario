@@ -2,11 +2,11 @@
 -- @module ChatPopup@4.0.0
 -- @author badgamernl
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ChatPopup 
+-- @alias ChatPopup 
 
 -- Module Require
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Color = require('FactorioStdLib.Color@^0.8.0')
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
 
 local ChatPopup = {}
 
@@ -19,7 +19,7 @@ function ChatPopup.sendFlyingText(player, text)
 	for i=1, #text, chunkSize do
 		chunks[#chunks+1] = text:sub(i,i+chunkSize - 1)
 	end
-  -- Itterate over text chunks and create them as floating text centered above the player
+  -- Iterate over text chunks and create them as floating text centered above the player
   -- Disabled false centering because of not being able to disable scaling: (1 / 7.9 * #value)
 	for i,value in ipairs(chunks) do
 		_player.surface.create_entity{
@@ -31,11 +31,11 @@ function ChatPopup.sendFlyingText(player, text)
 	end
 end
 
-Event.register(defines.events.on_console_chat, function(event)
+script.on_event(defines.events.on_console_chat, function(event)
   local player = game.players[event.player_index]
   if not player then return end
   if not event.message then return end
-  
+
   -- Send message player send to player itself
   local message = player.name .. ': ' .. event.message
   ChatPopup.sendFlyingText(player, message)
@@ -50,7 +50,7 @@ Event.register(defines.events.on_console_chat, function(event)
       end
     end
   end
-  
+
 end)
 
 return ChatPopup

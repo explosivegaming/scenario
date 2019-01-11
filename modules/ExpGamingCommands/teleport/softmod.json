@@ -1,22 +1,23 @@
 {
-    "name": "teleport",
-    "version": "4.0.0",
-    "type": "Submodule",
-    "description": "Adds a few commands used to teleport players.",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingCommands.teleport_4.0.0.zip",
-    "keywords": [
-        "Teleport",
-        "Tp",
-        "Bring",
-        "GoTo",
-        "ExpGaming",
-        "Command",
-        "Admin",
-        "Tools"
-    ],
-    "dependencies": {
-        "ExpGamingCore.Command": "^4.0.0",
-        "ExpGamingAdmin.Teleport": "^4.0.0"
-    },
-    "collection": "ExpGamingCommands_4.0.0"
+  "name": "ExpGamingCommands.teleport",
+  "version": "4.0.0",
+  "description": "Adds a few commands used to teleport players.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Teleport",
+    "Tp",
+    "Bring",
+    "GoTo",
+    "ExpGaming",
+    "Command",
+    "Admin",
+    "Tools"
+  ],
+  "dependencies": {
+    "ExpGamingCore.Command": "^4.0.0",
+    "ExpGamingAdmin.Teleport": "^4.0.0",
+    "ExpGamingAdmin": "^4.0.0"
+  },
+  "collection": "ExpGamingCommands@4.0.0",
+  "submodules": {}
 }

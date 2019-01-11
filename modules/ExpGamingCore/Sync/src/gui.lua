@@ -1,4 +1,4 @@
---- Allows syncing with an outside server and info panle.
+--- Allows syncing with an outside server and info panel.
 -- @submodule ExpGamingCore.Sync
 -- @alias Sync
 -- @author Cooldude2606
@@ -7,17 +7,16 @@
 --- This file will be loaded when ExpGamingCore.Gui is present
 -- @function _comment
 
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
+local Gui = require('ExpGamingCore.Gui')
 local Sync = Sync -- this is to force sync to remain in the ENV
 
 local Sync_gui_functions = {}
 local logo_sprite_path = 'file'..string.sub(module_path,2)..'/src/logo.png'
 
---- Adds a emeltent to the sever info gui
+--- Adds a element to the sever info gui
 -- @usage Sync.add_to_gui('string') -- return true
 -- @param element see examples before for what can be used, it can also be a return from Gui.inputs.add
--- @treturn bolean based on weather it was successful or not
+-- @treturn boolean based on weather it was successful or not
 function Sync.add_to_gui(element,...)
     if game then return false end
     if is_type(element,'function') then
@@ -29,10 +28,10 @@ function Sync.add_to_gui(element,...)
     return true
 end
 
-Sync.add_to_gui('Welcome to the Explosive Gaming comunity! This is one of many servers which we host.')
+Sync.add_to_gui('Welcome to the Explosive Gaming community! This is one of many servers which we host.')
 Sync.add_to_gui(function(player,frame) return 'This server\'s next reset: '..Sync.info.reset_time end)
 
---- Formats a lable to be a certain format
+--- Formats a label to be a certain format
 -- @local label_format
 local function label_format(label,width)
     label.style.width = width
@@ -49,7 +48,7 @@ Sync.info_gui = Gui.center{
     draw=function(self,frame)
         frame.caption = ''
         local info = Sync.info
-        local frame = frame.add{type='flow',direction='vertical'}
+        frame = frame.add{type='flow',direction='vertical'}
         local h_flow = frame.add{type='flow'}
         h_flow.add{type='sprite',sprite=logo_sprite_path}
         local v_flow = h_flow.add{type='flow',direction='vertical'}
@@ -68,7 +67,7 @@ Sync.info_gui = Gui.center{
         Gui.bar(_flow,110)
         Gui.bar(frame,600)
         local _frame = frame
-        local frame = frame.add{
+        frame = frame.add{
             type='frame',
             direction='vertical',
             style='image_frame'

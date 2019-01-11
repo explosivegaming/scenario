@@ -1,13 +1,17 @@
-Role.add_flag('is_default') -- this must be included in atleast one role
-Role.add_flag('is_root',function(player,state) player.character.destructible = not state end) -- not required but setting true will allow everythin for that role
-Role.add_flag('is_antiroot',function(player,state) player.character.destructible = not state end) -- not required but setting true will disallow everythin for that role
-Role.add_flag('is_admin',function(player,state) player.admin = state end) -- highly recomented but not required
+Role.add_flag('is_default') -- this must be included in at least one role
+Role.add_flag('is_root',function(player,state) 
+    if state then game.print('--- !!!ALERT!!! --- '..player.name..' has been given a role with ROOT ACCESS --- !!!ALERT!!! ---') end
+    if player.character then player.character.destructible = not state end 
+end) -- the SERVER role will have root but you may assign this to other roles
+-- the two above and used internally and should NOT have their names changed and should NOT be removed but the state function MAY be changed
+Role.add_flag('is_antiroot',function(player,state) if player.character then player.character.destructible = not state end end) -- not required but setting true will disallow everything for that role
+Role.add_flag('is_admin',function(player,state) player.admin = state end) -- highly recommenced but not required
 Role.add_flag('is_spectator',function(player,state) player.spectator = state end)
-Role.add_flag('is_jail',function(player,state) player.character.active = not state end)
+Role.add_flag('is_jail',function(player,state) if player.character then player.character.active = not state end end)
 Role.add_flag('allow_afk_kick')
 Role.add_flag('is_donator')
 Role.add_flag('is_timed')
-Role.add_flag('is_varified')
+Role.add_flag('is_verified')
 Role.add_flag('not_reportable')
 
 -- Root
@@ -32,6 +36,7 @@ Role{
     is_admin=true,
     is_spectator=true,
     is_donator=true,
+    not_reportable=true,
     allow={}
 }
 Role{
@@ -43,6 +48,7 @@ Role{
     is_admin=true,
     is_spectator=true,
     is_donator=true,
+    not_reportable=true,
     allow={
         ['interface']=true,
         ['cheat-mode']=true
@@ -58,6 +64,7 @@ Role{
     colour={r=233,g=63,b=233},
     is_admin=true,
     is_spectator=true,
+    is_verified=true,
     not_reportable=true,
     allow={
         ['game-settings']=true,
@@ -73,6 +80,7 @@ Role{
     colour={r=0,g=170,b=0},
     is_admin=true,
     is_spectator=true,
+    is_verified=true,
     not_reportable=true,
     allow={
         ['set-home']=true,
@@ -89,11 +97,11 @@ Role{
     group='Admin',
     colour={r=0,g=196,b=137},
     is_spectator=true,
+    is_verified=true,
     not_reportable=true,
     allow={
         ['go-to']=true,
         ['bring']=true,
-        ['no-report']=true,
         ['set-home']=false,
         ['home']=false,
         ['return']=false,
@@ -101,7 +109,7 @@ Role{
         ['admin-commands']=true,
         ['warn']=true,
         ['temp-ban']=true,
-        ['clear-warings']=true,
+        ['clear-warnings']=true,
         ['clear-reports']=true,
         ['clear-all']=true,
         ['clear-inv']=true,
@@ -165,7 +173,7 @@ Role{
     group='HiMember',
     colour={r=140,g=120,b=200},
     is_timed=true,
-    is_varified=true,
+    is_verified=true,
     allow_afk_kick=true,
     time=600, -- 10 hours
     allow={
@@ -182,13 +190,13 @@ Role{
     tag='[Member]',
     group='Member',
     colour={r=24,g=172,b=188},
-    is_varified=true,
+    is_verified=true,
     allow_afk_kick=true,
     allow={
         ['edit-tasklist']=true,
         ['make-warp']=true,
         ['nuke']=true,
-        ['varified']=true
+        ['verified']=true
     }
 }
 Role{
@@ -212,7 +220,7 @@ Role{
     name='Guest',
     short_hand='',
     tag='',
-    group='Guest',
+    group='User',
     colour={r=185,g=187,b=160},
     allow_afk_kick=true,
     is_default=true,

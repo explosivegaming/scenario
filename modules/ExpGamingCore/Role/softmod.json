@@ -1,23 +1,24 @@
 {
-    "name": "Role",
-    "version": "4.0.0",
-    "type": "Submodule",
-    "description": "Adds roles where a player can have more than one role",
-    "location": "<blank>",
-    "keywords": [
-        "Role",
-        "Ranks",
-        "Permissions",
-        "Alowed",
-        "Admin"
-    ],
-    "dependencies": {
-        "ExpGamingLib": "^4.0.0",
-        "FactorioStdLib.Table": "^0.8.0",
-        "FactorioStdLib.Game": "^0.8.0",
-        "ExpGamingCore.Group": "^4.0.0",
-        "ExpGamingCore.Server": "?^4.0.0",
-        "ExpGamingCore.Command": "?^4.0.0"
-    },
-    "collection": "ExpGamingCore_4.0.0"
+  "name": "ExpGamingCore.Role",
+  "version": "4.0.0",
+  "description": "Adds roles where a player can have more than one role",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Role",
+    "Ranks",
+    "Permissions",
+    "Alowed",
+    "Admin"
+  ],
+  "dependencies": {
+    "ExpGamingLib": "^4.0.0",
+    "FactorioStdLib.Table": "^0.8.0",
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingCore.Group": "^4.0.0",
+    "ExpGamingCore.Server": "?^4.0.0",
+    "ExpGamingCore.Command": "?^4.0.0",
+    "ExpGamingCore.Sync": "?^4.0.0"
+  },
+  "collection": "ExpGamingCore@4.0.0",
+  "submodules": {}
 }

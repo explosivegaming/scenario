@@ -6,7 +6,7 @@
 --- This is a submodule of ExpGamingCore.Gui but for ldoc reasons it is under its own module
 -- @function _comment
 
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Game = require('FactorioStdLib.Game')
 local Gui = Gui -- this is to force gui to remain in the ENV
 local mod_gui = require("mod-gui")
 
@@ -53,30 +53,30 @@ local input_test = Gui.inputs.add_button('test-inputs','Try RMB','alt,ctrl,shift
         function(player,mouse,keys) return mouse == defines.mouse_button_type.right and keys.shift end,
         function(player,element) player_return('Right: Shift',nil,player) end
     }
-}):on_event('error',function(err) game.print('this is error handliling') end)
+}):on_event('error',function(err) game.print('this is error handling') end)
 
 local elem_test = Gui.inputs.add_elem_button('test-elem','item','Testing Elems',function(player,element,elem)
     player_return(elem.type..' '..elem.value,nil,player)
 end)
 
-local check_test = Gui.inputs.add_checkbox('test-check',false,'Cheat Mode',function(player,parent) 
-    return game.players[parent.player_index].cheat_mode 
-end,function(player,element) 
-    player.cheat_mode = true 
+local check_test = Gui.inputs.add_checkbox('test-check',false,'Cheat Mode',function(player,parent)
+    return game.players[parent.player_index].cheat_mode
+end,function(player,element)
+    player.cheat_mode = true
 end,function(player,element)
     player.cheat_mode = false
 end)
 
-local radio_test = Gui.inputs.add_checkbox('test-radio',true,'Kill Self',function(player,parent) 
+local radio_test = Gui.inputs.add_checkbox('test-radio',true,'Kill Self',function(player,parent)
     return false
-end,function(player,element) 
+end,function(player,element)
     if player.character then player.character.die() end
     Gui.inputs.reset_radio(element.parent['test-radio-reset'])
 end)
 
-local radio_test_reset = Gui.inputs.add_checkbox('test-radio-reset',true,'Reset Kill Self',function(player,parent) 
+local radio_test_reset = Gui.inputs.add_checkbox('test-radio-reset',true,'Reset Kill Self',function(player,parent)
     return not parent['test-radio'].state
-end,function(player,element) 
+end,function(player,element)
     Gui.inputs.reset_radio(element.parent['test-radio'])
 end)
 
@@ -143,7 +143,7 @@ Gui.left{
     name='test-left',
     caption='Gui Left',
     tooltip='just testing',
-    draw=function(frame)
+    draw=function(self,frame)
         for _,player in pairs(game.connected_players) do
             frame.add{type='label',caption=player.name}
         end
@@ -166,14 +166,14 @@ end)
 Gui.popup{
     name='test-popup',
     caption='Gui Popup',
-    draw=function(frame,data)
+    draw=function(self,frame,data)
         frame.add{type='label',caption='Opened by: '..data.player}
         frame.add{type='label',caption='Message: '..data.message}
     end
 }:add_left{
     caption='Gui Left w/ Popup',
     tooltip='Send a message',
-    draw=function(frame)
+    draw=function(self,frame)
         text_popup:draw(frame)
         send_popup:draw(frame)
     end

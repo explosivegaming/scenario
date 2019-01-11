@@ -8,24 +8,12 @@
 -- @function _comment
 
 local Game = require('FactorioStdLib.Game')
-local mod_gui = require("mod-gui")
-local Gui = Gui -- this is to force gui to remain in the ENV
+local mod_gui = require('mod-gui')
+local Gui = require('ExpGamingCore.Gui')
+local Server -- loaded on_init
 
 local popup = {}
 popup._prototype = {}
-
-function popup.load()
-    popup._prototype.close = Gui.inputs.add{
-        type='button',
-        name='popup-close',
-        caption='utility/set_bar_slot',
-        tooltip='Close This Popup'
-    }:on_event('click',function(event)
-        local frame = event.element.parent
-        local parent = frame.parent
-        if frame and frame.valid then frame.destroy() if #parent.children == 0 then parent.style.visible = false end end
-    end)
-end
 
 --- Used to add a popup gui style
 -- @usage Gui.left.add{name='foo',caption='Foo',draw=function}
@@ -45,7 +33,7 @@ end
 
 -- this is used by the script to find the popup flow
 function popup.flow(player)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then error('Invalid Player',2) end
     local flow = mod_gui.get_frame_flow(player).popups 
     if not flow then flow = mod_gui.get_frame_flow(player).add{name='popups',type='flow',direction='vertical'} flow.style.visible=false end
@@ -59,8 +47,8 @@ end
 -- @tparam[opt=game.connected_players] table players the players to open the popup for
 function popup.open(style,data,players)
     local _popup = Gui.data.popup[style]
-    local players = players or game.connected_players
-    local data = data or {}
+    players = players or game.connected_players
+    data = data or {}
     if not _popup then return end
     if not Server or not Server._thread then
         for _,player in pairs(players) do
@@ -80,7 +68,7 @@ function popup.open(style,data,players)
             }
             _popup.close(_frame)
             if is_type(_popup.draw,'function') then
-                local success, err = pcall(_popup.draw,frame,data)
+                local success, err = pcall(_popup.draw,_popup,frame,data)
                 if not success then error(err) end
             else error('No Draw On Popup '.._popup.name) end
         end
@@ -106,7 +94,7 @@ function popup.open(style,data,players)
             }
             self.data.popup.close(_frame)
             if is_type(self.data.popup.draw,'function') then
-                local success, err = pcall(self.data.popup.draw,frame,self.data.data)
+                local success, err = pcall(self.data.popup.draw,self.data.popup,frame,self.data.data)
                 if not success then error(err) end
             else error('No Draw On Popup '..self.data.popup.name) end
         end):open()
@@ -114,11 +102,29 @@ function popup.open(style,data,players)
 end
 
 function popup._prototype:add_left(obj)
+    if not Gui.left then return end
     obj.name = obj.name or self.name
     self.left = Gui.left(obj)
 end
 
-popup.on_player_joined_game = popup.flow
+function popup.on_init()
+    if loaded_modules['ExpGamingCore.Server'] then Server = require('ExpGamingCore.Server') end
+end
+
+function popup.on_post()
+    popup._prototype.close = Gui.inputs.add{
+        type='button',
+        name='popup-close',
+        caption='utility/set_bar_slot',
+        tooltip='Close This Popup'
+    }:on_event('click',function(event)
+        local frame = event.element.parent
+        local parent = frame.parent
+        if frame and frame.valid then frame.destroy() if #parent.children == 0 then parent.style.visible = false end end
+    end)
+end
+
+script.on_event(defines.events.on_player_joined_game,popup.flow)
 
 -- calling will attempt to add a new popup style
 return setmetatable(popup,{__call=function(self,...) return self.add(...) end})

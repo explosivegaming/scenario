@@ -2,7 +2,7 @@
 -- @module DeathMarkers@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Define
 local module_verbose = false
@@ -14,7 +14,7 @@ local global = global{
 }
 
 -- Event Handlers Define
-Event.register(defines.events.on_player_died, function(event)
+script.on_event(defines.events.on_player_died, function(event)
     local player = game.players[event.player_index]
     local tag = player.force.add_chart_tag(player.surface,{
         position=player.position,
@@ -24,7 +24,7 @@ Event.register(defines.events.on_player_died, function(event)
     table.insert(global.corpses,tag)
 end)
 
-Event.register(defines.events.on_tick, function(event)
+script.on_event(defines.events.on_tick, function(event)
     if (game.tick%3600) ~= 0 then return end
     if not global.corpses then global.corpses = {} end
     local key = 1
@@ -42,4 +42,4 @@ Event.register(defines.events.on_tick, function(event)
 end)
 
 -- Module Return
-return ThisModule 
+return ThisModule

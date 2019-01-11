@@ -1,15 +1,15 @@
---- Sends messages in chat in resposce to other messages
+--- Sends messages in chat in response to other messages
 -- @module ExpGamingBot.autoChat
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Server = require('ExpGamingCore.Server@^4.0.0')
+local Game = require('FactorioStdLib.Game')
+local Server = require('ExpGamingCore.Server')
 local Role -- ExpGamingCore.Role@^4.0.0
 
--- Local Varibles
+-- Local Variables
 -- lots of these are jokes, but some have uses
 
 -- white spaces removed and made into lower
@@ -34,12 +34,12 @@ local messages = {
 }
 -- white spaces removed and made into lower
 -- these are global chat commands that can be used
--- comands start with ! (all messages are also commands)
+-- commands start with ! (all messages are also commands)
 local command_syntax = '!'
 local commands = {
-    ['online']=function(player) return {'ExpGamingBot-autoChat.players-online',#game.connected_players} end,
-    ['playtime']=function(player) return {'ExpGamingBot-autoChat.map-time',tick_to_display_format(game.tick)} end,
-    ['players']=function(player) return {'ExpGamingBot-autoChat.players',#game.players} end,
+    ['online']=function() return {'ExpGamingBot-autoChat.players-online',#game.connected_players} end,
+    ['playtime']=function() return {'ExpGamingBot-autoChat.map-time',tick_to_display_format(game.tick)} end,
+    ['players']=function() return {'ExpGamingBot-autoChat.players',#game.players} end,
     ['dev']={'ExpGamingBot-autoChat.not-real-dev'},
     ['blame']=function(player) local names = {'Cooldude2606','arty714','badgamernl',player.name} return {'ExpGamingBot-autoChat.blame',names[math.random(#names)]} end,
     ['readme']={'ExpGamingBot-autoChat.read-readme'},
@@ -49,15 +49,17 @@ local commands = {
     ['lenny']={'ExpGamingBot-autoChat.lenny'},
     ['feedback']={'ExpGamingBot-autoChat.feedback'},
     ['wiki']={'ExpGamingBot-autoChat.wiki'},
-    ['hodor']=function(player) local options = {'?','.','!','!!!'} return {'ExpGamingBot-autoChat.hodor',options[math.random(#options)]} end,
-    ['evolution']=function(player) return {'ExpGamingBot-autoChat.current-evolution',string.format('%.2f',game.forces['enemy'].evolution_factor)} end,
+    ['hodor']=function() local options = {'?','.','!','!!!'} return {'ExpGamingBot-autoChat.hodor',options[math.random(#options)]} end,
+    ['evolution']=function() return {'ExpGamingBot-autoChat.current-evolution',string.format('%.2f',game.forces['enemy'].evolution_factor)} end,
     --Jokes about food and drink
     ['whattoeat']={'ExpGamingBot-autoChat.food'},
+
     ['makepopcorn']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
         if self.data then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.get-popcorn-2',self.data}} end
     end):open() return {'ExpGamingBot-autoChat.get-popcorn-1'} end,    
+
     ['orderpizza']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data={player.name,0}, reopen=true
     }:on_event('timeout',function(self)
@@ -66,6 +68,7 @@ local commands = {
         end
         self.data[2]=self.data[2]+1
     end):open() return {'ExpGamingBot-autoChat.order-pizza-1'} end,
+
     ['passsomesnaps']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data={player.name,0}, reopen=true
     }:on_event('timeout',function(self)
@@ -74,6 +77,7 @@ local commands = {
         end
         self.data[2]=self.data[2]+1
     end):open() return {'ExpGamingBot-autoChat.get-snaps-1'} end,
+
     ['makecocktail']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data={player.name,0}, reopen=true
     }:on_event('timeout',function(self)
@@ -82,11 +86,13 @@ local commands = {
         end
         self.data[2]=self.data[2]+1
     end):open() return {'ExpGamingBot-autoChat.get-cocktail-1'} end,
+
     ['makecoffee']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
         if self.data then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.make-coffee-2',self.data}} end
     end):open() return {'ExpGamingBot-autoChat.make-coffee-1'} end,
+
     ['orderpizza']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data={player.name,0}, reopen=true
     }:on_event('timeout',function(self)
@@ -95,21 +101,25 @@ local commands = {
         end
         self.data[2]=self.data[2] + 1
     end):open() return {'ExpGamingBot-autoChat.order-pizza-1'} end,
+
     ['maketea']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
         if self.data then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.make-tea-2',self.data}} end
     end):open() return {'ExpGamingBot-autoChat.make-tea-1'} end,
+
     ['popcorn']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
         if self.data then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.get-popcorn-2',self.data}} end
     end):open() return {'ExpGamingBot-autoChat.get-popcorn-1'} end,
+
     ['meadplease']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
         if self.data then game.print{'ExpGamingBot-autoChat.message',{'ExpGamingBot-autoChat.get-mead-2',self.data}} end
     end):open() return {'ExpGamingBot-autoChat.get-mead-1'} end,
+
     ['passabeer']=function(player) Server.new_thread{
         timeout=math.floor(180*(math.random()+0.5)),data=player.name
     }:on_event('timeout',function(self)
@@ -121,7 +131,7 @@ local commands = {
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
     end
 }
 
@@ -153,4 +163,4 @@ script.on_event(defines.events.on_console_chat,function(event)
 end)
 
 -- Module Return
-return ThisModule 
+return ThisModule

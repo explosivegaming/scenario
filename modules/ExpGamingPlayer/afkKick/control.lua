@@ -3,18 +3,18 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Game = require('FactorioStdLib.Game')
 local Role -- ExpGamingCore.Role@^4.0.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
 
 local function get_allowed_afk_time(player)
-    local role
-    if Role then role = Role.get_highest(player)
-    else if player.admin then return else role = Role.meta.default end end
-    local count = #game.connected_players
-    local base = not role.allow_afk_kick and role.index or false
-    if not base then return false end
-    return (Role.meta.count/base)*count
+    player = Game.get_player(player)
+    local role = Role and Role.get_highest(player) or {index=1,allow_afk_kick=not player.admin}
+    local player_count = #game.connected_players
+    local role_count = Role and Role.meta.count or 1
+    local role_index = role.allow_afk_kick and role.index or false
+    if not role_index then return false end
+    return (role_count/role_index)*player_count
 end
 
 script.on_event(defines.events.on_tick,function(event)
@@ -30,8 +30,8 @@ end)
 return setmetatable({
     get_allowed_afk_time=get_allowed_afk_time,
     on_init=function(self)
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
-        if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then Sync = require('ExpGamingCore.Sync@^4.0.0') end
-        if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require(module_path..'/src/server',Sync,self) end
+        if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
+        if loaded_modules['ExpGamingCore.Sync'] then Sync = require('ExpGamingCore.Sync') end
+        if loaded_modules['ExpGamingCore.Server'] then require(module_path..'/src/server',{Sync=Sync,self=self}) end
     end
-},{__call=function(self,...) self.get_allowed_afk_time(...) end})
+},{__call=function(self,...) return self.get_allowed_afk_time(...) end})

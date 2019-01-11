@@ -2,7 +2,7 @@
 -- @module ExpGamingBot.autoMessage
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
 local Server = require('ExpGamingCore.Server')
@@ -10,14 +10,14 @@ local Game = require('FactorioStdLib.Game')
 local Role -- ExpGamingCore.Role@4.0.0
 local Sync -- ExpGamingCore.Sync@4.0.0
 
--- Local Varibles
+-- Local Variables
 
 -- Module Define
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
-        if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then Sync = require('ExpGamingCore.Sync@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
+        if loaded_modules['ExpGamingCore.Sync'] then Sync = require('ExpGamingCore.Sync') end
     end,
     on_post=function()
         --code
@@ -25,7 +25,7 @@ local ThisModule = {
 }
 
 -- Event Handlers Define
-script.on_init(function(event)
+script.on_init(function()
     Server.new_thread{
         name='auto-message',
         timeout=54000, -- 3240000 = 15 hours dont make the mistake i did, 54000 is 15 minutes
@@ -54,13 +54,12 @@ script.on_init(function(event)
         local data = self.data
         if not data.high_role or not data.low_role
         or not data.low then self.reopen = false return end
-        -- idk but this stoped working for no appent reason so i added more checks for nil values  
         if Role and Role.get_highest(player).index <= Role.get(data.low_role).index or player.admin then return end
         for _,message in pairs(data.low) do
             player_return({'ExpGamingBot-autoMessage.message',message},nil,player)
         end
     end):on_event('error',function(self,err)
-        if Sync then Sync.emit_embeded{
+        if Sync then Sync.emit_embedded{
             title='Auto Message Error',
             color=Color.to_hex(defines.textcolor.bg),
             description='Auto Message Error - Closed Thread',
@@ -72,4 +71,4 @@ script.on_init(function(event)
 end)
 
 -- Module Return
-return ThisModule 
+return ThisModule

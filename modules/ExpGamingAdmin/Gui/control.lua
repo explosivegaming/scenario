@@ -2,21 +2,20 @@
 -- @module ExpGamingAdmin.Gui@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais AdminGui 
+-- @alias AdminGui 
 
 -- Module Require
-local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
-local Role = require('ExpGamingCore.Role@^4.0.0')
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Admin = require('ExpGamingAdmin')
+local Gui = require('ExpGamingCore.Gui')
+local Role = require('ExpGamingCore.Role')
+local Game = require('FactorioStdLib.Game')
 local playerInfo -- ExpGamingPlayer.playerInfo@^4.0.0
-local mod_gui = require('mod-gui')
 
 -- Module Define
 local module_verbose = false
 local AdminGui = {
     on_init=function()
-        if loaded_modules['ExpGamingPlayer.playerInfo@^4.0.0'] then playerInfo = require('ExpGamingPlayer@^4.0.0')
+        if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer.playerInfo')
         else playerInfo = function(player,frame)
             frame.add{
                 type='label',
@@ -30,7 +29,7 @@ local AdminGui = {
 
 function Admin.open(player,pre_select_player,pre_select_action)
     Gui.center.clear(player)
-    Admin.center.open(player,pre_select_player,pre_select_action)
+    Admin.center(player,pre_select_player,pre_select_action)
 end
 
 -- Function Define
@@ -42,7 +41,7 @@ function AdminGui.add_button(name,caption,tooltip,callback)
         tooltip=tooltip
     }:on_event('click',function(event)
         local parent = event.element.parent
-        pre_select_player = parent.player and parent.player.caption or nil
+        local pre_select_player = parent.player and parent.player.caption or nil
         callback(pre_select_player,event.player_index)
     end)
 end
@@ -68,12 +67,12 @@ function AdminGui.draw(frame,filter_buttons)
 end
 
 -- Gui Define
-local function _players(_player,root_frame,state)
+local function get_players(_player,root_frame,state)
     local players = {'Select Player'}
     local _players = state and game.players or game.connected_players
     for _,player in pairs(_players) do
         if player.name ~= _player.name then
-            if Admin.is_banned and Admin.is_banned(player) then else
+            if not Admin.is_banned or not Admin.is_banned(player) then
                 table.insert(players,player.name)
             end
         end
@@ -82,14 +81,14 @@ local function _players(_player,root_frame,state)
 end
 
 local online_check = Gui.inputs.add_checkbox('online-check-admin-commands',false,'Show Offline',false,function(player,element) 
-    element.parent['player-drop-down-admin-commands'].items = _players(player,element.parent,true)
+    element.parent['player-drop-down-admin-commands'].items = get_players(player,element.parent,true)
     element.parent['player-drop-down-admin-commands'].selected_index = 1
 end,function(player,element)
-    element.parent['player-drop-down-admin-commands'].items = _players(player,element.parent,false)
+    element.parent['player-drop-down-admin-commands'].items = get_players(player,element.parent,false)
     element.parent['player-drop-down-admin-commands'].selected_index = 1
 end)
 
-local player_drop_down = Gui.inputs.add_drop_down('player-drop-down-admin-commands',_players,1,function(player,selected,items,element)
+local player_drop_down = Gui.inputs.add_drop_down('player-drop-down-admin-commands',get_players,1,function(player,selected,items,element)
     element.parent.parent.player.caption = selected
     local player_info_flow = element.parent.parent.info_flow
     player_info_flow.clear()
@@ -131,7 +130,7 @@ local take_action = Gui.inputs{
     local _role = Role.get_highest(_player)
     if role.index >= _role.index then dropdowns.warning.caption = {'ExpGamingAdmin.rank-high'} return end
     local _reason = dropdowns['reason-input-admin-commands'] and dropdowns['reason-input-admin-commands'].text
-    if (_action == 'Jail' or _action == 'Kick' or _action == 'Ban' or _action == 'Temp Ban') and (_reason == 'Enter Reason' or string.len(_reason) < 20) then return end
+    if (_action == 'Jail' or _action == 'Kick' or _action == 'Ban' or _action == 'Temp Ban') and (_reason == 'Enter Reason' or string.len(_reason) < 10) then return end
     Admin.take_action(_action,_player,event.player_index,_reason)
     Gui.center.clear(event)
 end)
@@ -140,26 +139,9 @@ Admin.center = Gui.center{
     name='admin-commands',
     caption='utility/danger_icon',
     tooltip={'ExpGamingAdmin.tooltip'},
-    open=function(event,pre_select_player,pre_select_action)
-        local _player = Game.get_player(pre_select_player)
-        local player = Game.get_player(event)
-        local _center = Gui.data.center['admin-commands']
-        local center_flow = Gui.center.get_flow(player)
-        if center_flow[_center.name] then Gui.center.clear(player) return end
-        local center_frame = center_flow.add{
-            name=_center.name,
-            type='frame',
-            direction='vertical',
-            style=mod_gui.frame_style
-        }
-        -- only edit i made was passing diffrent arguments to the draw function, try to avoid this
-        local success, err = pcall(_center.draw,center_frame,_player,pre_select_action)
-        if not success then error(err) end
-        player.opened=center_frame
-    end,
-    draw=function(frame,pre_select_player,pre_select_action)
+    draw=function(self,frame,pre_select_player,pre_select_action)
         frame.caption={'ExpGamingAdmin.name'}
-        local frame = frame.add{
+        frame = frame.add{
             type='flow',
             direction='horizontal'
         }
@@ -183,7 +165,7 @@ Admin.center = Gui.center{
         online_check:draw(dropdowns)
         local _drop = player_drop_down:draw(dropdowns)
         if pre_select_player then Gui.set_dropdown_index(_drop,pre_select_player.name) end
-        local _drop = action_drop_down:draw(dropdowns)
+        _drop = action_drop_down:draw(dropdowns)
         Gui.set_dropdown_index(_drop,pre_select_action)
         local _text =  reason_input:draw(dropdowns)
         if pre_select_action == 'Jail' or pre_select_action == 'Kick' or pre_select_action == 'Ban' then 
@@ -191,7 +173,7 @@ Admin.center = Gui.center{
         end
         if pre_select_player then playerInfo(pre_select_player,player_info_flow,true) end
         _text.style.width = 200
-        local label = dropdowns.add{
+        label = dropdowns.add{
             name='warning',
             type='label',
             caption='',
@@ -200,21 +182,21 @@ Admin.center = Gui.center{
         label.style.single_line = false
         label.style.width = 200
         take_action:draw(dropdowns)
-        local _caption = pre_select_player and pre_select_player.name or ''
+        local caption = pre_select_player and pre_select_player.name or ''
         frame.add{
             name='player',
             type='label',
-            caption=_caption
+            caption=caption
         }.style.visible = false
-        local _caption = pre_select_action or ''
+        caption = pre_select_action or ''
         frame.add{
             name='action',
             type='label',
-            caption=_caption
+            caption=caption
         }.style.visible = false
     end
 }
 
 -- Module Return
 -- calling will draw the admin buttons to that frame
-return setmetatable(AdminGui,{__call=function(self,...) self.draw(...) end})
+return setmetatable(AdminGui,{__call=function(self,...) return self.draw(...) end})

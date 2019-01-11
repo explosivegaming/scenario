@@ -1,11 +1,11 @@
---- Allows syncing with an outside server and info panle.
+--- Allows syncing with an outside server and info panel.
 -- @module ExpGamingCore.Sync
 -- @alias Sync
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Color = require('FactorioStdLib.Color@^0.8.0')
+local Game = require('FactorioStdLib.Game')
+local Color = require('FactorioStdLib.Color')
 
 local Sync = {}
 local Sync_updates = {}
@@ -16,10 +16,10 @@ local module_verbose = false --true|false
 -- @field server_name the server name
 -- @field server_description a short description of the server
 -- @field reset_time the reset time of the server
--- @field time the last knowen irl time
+-- @field time the last known irl time
 -- @field time_set the last in game time that the time was set
 -- @field last_update the last time that this info was updated
--- @field time_period how often this infomation is updated
+-- @field time_period how often this information is updated
 -- @field players a list of different player related states
 -- @field ranks a list of player ranks
 -- @field rockets the number of rockets launched
@@ -35,15 +35,15 @@ local global = global{
     time_period={18000,'5.00M'},
     game_speed=1.0,
     players={
-        online={'Offline'},
+        online={},
         n_online=0,
-        all={'Offline'},
+        all={},
         n_all=0,
         admins_online=0,
         afk_players={},
-        times={'Offline'} 
+        times={} 
     },
-    ranks={'Offline'},
+    roles={admin={online={},players={},n_online=0,n_players=0},user={online={},players={},n_online=0,n_players=0}},
     rockets=0,
     mods={'Offline'}
 }
@@ -58,9 +58,9 @@ local global = global{
 -- @field afk_players the number of afk players
 -- @field times the play times of every player
 
---- Used to standidise the tick format for any sync info
+--- Used to standardise the tick format for any sync info
 -- @usage Sync.tick_format(60) -- return {60,'1.00M'}
--- @treturn {number,string} table containg both the raw number and clean version of a time
+-- @treturn {number,string} table containing both the raw number and clean version of a time
 function Sync.tick_format(tick)
     if not is_type(tick,'number') then error('Tick was not given to Sync.tick_format',2) end
     return {tick,tick_to_display_format(tick)}
@@ -70,7 +70,7 @@ end
 -- @usage Sync.print('Test','Cooldude2606')
 -- @tparam string player_message the message to be printed in chat
 -- @tparam string player_name the name of the player sending the message
--- @tparam[opt] string player_tag the tag apllied to the player's name
+-- @tparam[opt] string player_tag the tag applied to the player's name
 -- @tparam[opt] string player_colour the colour of the message, either hex or named colour
 -- @tparam[opt] string prefix add a prefix before the chat eg [IRC]
 function Sync.print(player_message,player_name,player_tag,player_colour,prefix)
@@ -78,8 +78,8 @@ function Sync.print(player_message,player_name,player_tag,player_colour,prefix)
     local player = game.player or game.players[player_name]
     local tag = player_tag and player_tag ~= '' and ' '..player_tag or ''
     local colour = type(player_colour) == 'string' and player_colour or '#FFFFFF'
-    local prefix = prefix and prefix..' ' or ''
-    -- if it is an ingame player it will over ride the given params
+    prefix = prefix and prefix..' ' or ''
+    -- if it is an in game player it will over ride the given params
     if player then
         tag = ' '..player.tag
         colour = player.chat_color
@@ -92,7 +92,7 @@ function Sync.print(player_message,player_name,player_tag,player_colour,prefix)
     game.print(prefix..player_name..tag..': '..player_message,colour)
 end
 
---- Outline of the paramaters accepted by Sync.emit_embeded
+--- Outline of the parameters accepted by Sync.emit_embedded
 -- @table EmitEmbededParamaters
 -- @field title the tile of the embed
 -- @field color the color given in hex you can use Color.to_hex{r=0,g=0,b=0}
@@ -102,11 +102,11 @@ end
 -- @field fieldtwo the filed to add to the embed (key is name) (value is text) (start value with &lt;&lt;inline&gt;&gt; to make inline)
 
 --- Logs an embed to the json.data we use a js script to add things we cant here
--- @usage Sync.emit_embeded{title='BAN',color='0x0',description='A player was banned' ... }
--- @tparam table args a table which contains everything that the embeded will use
+-- @usage Sync.emit_embedded{title='BAN',color='0x0',description='A player was banned' ... }
+-- @tparam table args a table which contains everything that the embedded will use
 -- @see EmitEmbededParamaters
-function Sync.emit_embeded(args)
-    if not is_type(args,'table') then error('Args table not given to Sync.emit_embeded',2) end
+function Sync.emit_embedded(args)
+    if not is_type(args,'table') then error('Args table not given to Sync.emit_embedded',2) end
     if not game then error('Game has not loaded',2) end
     local title = is_type(args.title,'string') and args.title or ''
     local color = is_type(args.color,'string') and args.color:find("0x") and args.color or '0x0'
@@ -116,7 +116,7 @@ function Sync.emit_embeded(args)
     -- creates the first field given for every emit
     local done, fields = {title=true,color=true,description=true,server_detail=true}, {{
         name='Server Details',
-        value='Server Name: {{ serverName }} Online Players: '..#game.connected_players..' '..mods_online..' Server Time: '..tick_to_display_format(game.tick)..' '..server_detail
+        value='Server Name: ${serverName} Online Players: '..#game.connected_players..' '..mods_online..' Server Time: '..tick_to_display_format(game.tick)..' '..server_detail
     }}
     -- for each value given in args it will create a new field for the embed
     for key, value in pairs(args) do
@@ -130,14 +130,14 @@ function Sync.emit_embeded(args)
             table.insert(fields,f)
         end
     end
-    -- forms the data that will be emited to the file
+    -- forms the data that will be emitted to the file
     local log_data = {
         title=title,
         description=description,
         color=color,
         fields=fields
     }
-    game.write_file('embeded.json',table.json(log_data)..'\n',true,0)
+    game.write_file('embedded.json',table.json(log_data)..'\n',true,0)
 end
 
 --- The error handle setup by sync to emit a discord embed for any errors
@@ -147,7 +147,7 @@ end
 error.addHandler('Discord Emit',function(err)
     if not game then return error(error()) end
     local color = Color and Color.to_hex(defines.textcolor.bg) or '0x0'
-    Sync.emit_embeded{title='SCRIPT ERROR',color=color,description='There was an error in the script @Developers ',Error=err}
+    Sync.emit_embedded{title='SCRIPT ERROR',color=color,description='There was an error in the script @Developers ',Error=err}
 end)
 
 --- Used to get the number of admins currently online
@@ -169,7 +169,7 @@ end
 -- @treturn number the number of afk players
 function Sync.count_afk_times(time)
     if not game then return 0 end
-    local time = time or 7200
+    time = time or 7200
     local rtn = {}
     for _,player in pairs(game.connected_players) do 
         if player.afk_time > time then rtn[player.name] = Sync.tick_format(player.afk_time) end
@@ -234,6 +234,23 @@ Sync.info = setmetatable({},{
         if not is_type(set,'table') then return false end
         for key,value in pairs(set) do global[key] = value end
         return true
+    end,
+    __pairs=function(tbl)
+        tbl = global
+        local function next_pair(tbl,key)
+            local k, v = next(tbl, key)
+            if type(v) ~= nil then return k,v end
+        end
+        return next_pair, tbl, nil
+    end,
+    __ipairs=function(tbl)
+        tbl = global
+        local function next_pair(tbl, i)
+            i = i + 1
+            local v = tbl[i]
+            if v then return i, v end
+        end
+        return next_pair, tbl, 0
     end
 })
 
@@ -255,7 +272,7 @@ function Sync.update()
         afk_players=Sync.count_afk_times(),
         times=Sync.count_player_times()
     }
-    info.ranks = Sync.count_roles()
+    info.roles = Sync.count_roles()
     info.rockets = game.forces['player'].get_item_launched('satellite')
     for key,callback in pairs(Sync_updates) do info[key] = callback() end
     return info
@@ -288,7 +305,7 @@ end
 -- @usage Sync.time('Sun Apr  1 18:44:30 UTC 2018')
 -- @usage Sync.time -- string
 -- @tparam[opt=nil] string set the date time to be set
--- @treturn boolean if the datetime set was successful
+-- @treturn boolean if the date time set was successful
 Sync.time=add_metatable({},function(full,date)
     local info = Sync.info
     if not is_type(full,'string') then return false end
@@ -309,8 +326,8 @@ script.on_event('on_pre_player_left_game',Sync.emit_update)
 script.on_event('on_rocket_launched',Sync.emit_update)
 
 function Sync:on_init()
-    if loaded_modules['ExpGamingCore.Gui@^4.0.0'] then verbose('ExpGamingCore.Gui is installed; Loading gui src') require(module_path..'/src/gui',{Sync=Sync,module_path=module_path}) end
-    if loaded_modules['ExpGamingCore.Server@^4.0.0'] then require('ExpGamingCore.Server@^4.0.0').add_module_to_interface('Sync','ExpGamingCore.Sync') end
+    if loaded_modules['ExpGamingCore.Gui'] then verbose('ExpGamingCore.Gui is installed; Loading gui src') require(module_path..'/src/gui',{Sync=Sync,module_path=module_path}) end
+    if loaded_modules['ExpGamingCore.Server'] then require('ExpGamingCore.Server').add_module_to_interface('Sync','ExpGamingCore.Sync') end
 end
 
 function Sync:on_post()

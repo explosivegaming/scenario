@@ -3,12 +3,12 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
-local Admin -- ExpGamingAdmin.AdminLib@^4.0.0
+local Game = require('FactorioStdLib.Game')
+local Gui = require('ExpGamingCore.Gui')
+local Admin -- ExpGamingAdmin@^4.0.0
 local AdminGui -- ExpGamingAdmin.Gui@^4.0.0
 
--- Local Varibles
+-- Local Variables
 local playerInfo = function(player,frame)
     frame.add{
         type='label',
@@ -17,7 +17,7 @@ local playerInfo = function(player,frame)
 end
 
 local getPlayers = function()
-    local rtn = {{{r=233,g=63,b=233},'Admin',{}},{{r=255,g=159,b=27},'',{}}}
+    local rtn = {{{r=233,g=63,b=233},'Admin',{},true},{{r=255,g=159,b=27},'',{},false}}
     for _,player in pairs(game.connected_players) do
         if player.admin then table.insert(rtn[2][3],player)
         else table.insert(rtn[1][3],player) end
@@ -30,9 +30,9 @@ local module_verbose = false
 local ThisModule = {
     on_init=function(self)
         if loaded_modules['ExpGamingPlayer.playerInfo'] then playerInfo = require('ExpGamingPlayer.playerInfo') end
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then getPlayers = require(module_path..'/src/ranking',{self=self}) end
-        if loaded_modules['ExpGamingAdmin.AdminLib@^4.0.0'] then Admin = require('ExpGamingAdmin.AdminLib@^4.0.0') end
-        if loaded_modules['ExpGamingAdmin.Gui@^4.0.0'] then AdminGui = require('ExpGamingAdmin.Gui@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role'] then getPlayers = require(module_path..'/src/ranking',{self=self}) end
+        if loaded_modules['ExpGamingAdmin'] then Admin = require('ExpGamingAdmin') end
+        if loaded_modules['ExpGamingAdmin.Gui'] then AdminGui = require('ExpGamingAdmin.Gui') end
     end
 }
 
@@ -40,12 +40,12 @@ local ThisModule = {
 local global = global{
     update=0,
     delay=10,
-    intervial=54000
+    interval=54000
 }
 
 function ThisModule.update(tick)
     local tick = is_type(tick,'table') and tick.tick or is_type(tick,'number') and tick or game.tick
-    if tick + global.delay > global.update - global.intervial then
+    if tick + global.delay > global.update - global.interval then
         global.update = tick + global.delay
     end
 end
@@ -63,7 +63,7 @@ ThisModule.Gui = Gui.left{
     name='player-list',
     caption='entity/player',
     tooltip={'ExpGamingPlayer-playerList.tooltip'},
-    draw=function(frame)
+    draw=function(self,frame)
         frame.caption = ''
         local player_list = frame.add{
             name='scroll',
@@ -113,7 +113,7 @@ ThisModule.Gui = Gui.left{
 script.on_event(defines.events.on_tick,function(event)
     if event.tick > global.update then
         ThisModule.Gui()
-        global.update = event.tick + global.intervial
+        global.update = event.tick + global.interval
     end
 end)
 
@@ -125,6 +125,8 @@ script.on_event(defines.events.on_gui_click,function(event)
     -- must be a right click
     if event.button == defines.mouse_button_type.right then else return end
     local player_list = event.element.parent.parent.parent
+    -- must be a valid player which is clicked
+    if not Game.get_player(event.element.name) then return end
     -- hides the player list to show the info
     player_list.scroll.style.visible = false
     local flow = player_list.add{type='flow',direction='vertical'}

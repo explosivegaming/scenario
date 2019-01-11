@@ -4,8 +4,8 @@
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
 
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Role = require('ExpGamingCore.Role@^4.0.0')
+local Game = require('FactorioStdLib.Game')
+local Role = require('ExpGamingCore.Role')
 
 -- Set an item to true to disallow it from being repaired
 local disallow = {
@@ -24,11 +24,11 @@ local repairDisallow
 local module_verbose = false
 local ThisModule = {
     on_init = function(self) 
-        if loaded_modules['ExpGamingAdmin.TempBan@^4.0.0'] then verbose('ExpGamingAdmin.TempBan is installed; Loading tempban src') repairDisallow = require(module_path..'/src/tempban') end
+        if loaded_modules['ExpGamingAdmin.TempBan'] then verbose('ExpGamingAdmin.TempBan is installed; Loading tempban src') repairDisallow = require(module_path..'/src/tempban') end
     end
 }
 
---- Used so that the value can be overriden if tempban is present
+--- Used so that the value can be overridden if tempban is present
 -- @local
 -- @function repairDisallow
 -- @param player the player who called the command
@@ -41,7 +41,7 @@ end
 --- Used to repair and heal items in an area, different ranks get different size areas
 -- @command repair
 -- @param range the range that items are repaired in
-commands.add_command('repair', 'Repairs all destoryed and damaged entites in an area.', {
+commands.add_command('repair', 'Repairs all destroyed and damaged entities in an area.', {
     ['range']={true,'number-int'}
 }, function(event,args)
     local range = args.range

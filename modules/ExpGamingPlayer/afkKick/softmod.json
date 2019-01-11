@@ -1,22 +1,22 @@
 {
-    "name": "afkKick",
-    "version": "4.0.0",
-    "type": "Submodule",
-    "description": "Adds a varible amount of time before a user is kicked based on the current player count.",
-    "location": "https://github.com/explosivegaming/scenario/releases/download/v4.0-core/ExpGamingPlayer.afkKick_4.0.0.zip",
-    "keywords": [
-        "Kick",
-        "AFK",
-        "Players",
-        "Smart",
-        "Varible"
-    ],
-    "dependencies": {
-        "FactorioStdLib.Game": "^0.8.0",
-        "ExpGamingCore.Gui": "^4.0.0",
-        "ExpGamingCore.Role": "?^4.0.0",
-        "ExpGamingCore.Sync": "?^4.0.0",
-        "ExpGamingCore.Server": "?^4.0.0"
-    },
-    "collection": "ExpGamingPlayer_4.0.0"
+  "name": "ExpGamingPlayer.afkKick",
+  "version": "4.0.0",
+  "description": "Adds a varible amount of time before a user is kicked based on the current player count.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Kick",
+    "AFK",
+    "Players",
+    "Smart",
+    "Varible"
+  ],
+  "dependencies": {
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingCore.Gui": "^4.0.0",
+    "ExpGamingCore.Role": "?^4.0.0",
+    "ExpGamingCore.Sync": "?^4.0.0",
+    "ExpGamingCore.Server": "?^4.0.0"
+  },
+  "collection": "ExpGamingPlayer@4.0.0",
+  "submodules": {}
 }

@@ -7,14 +7,13 @@
 --- This file will be loaded when ExpGamingCore.Command is present
 -- @function _comment
 
-local Game = require('FactorioStdLib.Game')
 local Server = Server
 
 Server.interfaceCallbacks = {}
 function Server.add_to_interface(loadAs,callback) Server.interfaceCallbacks[loadAs] = callback end
 
-function Server.add_module_to_interface(loadAs,moduleName,version)
-    local moduleName = _G.moduleName or version and moduleName..'@'..version or moduleName or nil
+function Server.add_module_to_interface(loadAs,moduleName)
+    local moduleName = moduleName or tostring(_G.moduleName) or nil
     if not moduleName then error('No module name supplied for: '..loadAs,2) return end
     Server.add_to_interface(loadAs,function() return require(moduleName) end)
 end
@@ -40,7 +39,7 @@ commands.add_command('interface','Runs the given input from the script', {
         env.tile = game.player.surface.get_tile(game.player.position)
     end
     -- adds custom callbacks to the interface
-    for name,callback in pairs(Server.interfaceCallbacks) do env[name] = callback() end
+    for name,custom_callback in pairs(Server.interfaceCallbacks) do env[name] = custom_callback() end
     -- runs the function
     local success, err = Server.interface(callback,false,env)
     -- if there is an error then it will remove the stacktrace and return the error

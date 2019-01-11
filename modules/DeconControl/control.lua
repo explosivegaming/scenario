@@ -2,20 +2,20 @@
 -- @module DeconControl@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Server = require('ExpGamingCore.Server@^4.0.0')
+local Game = require('FactorioStdLib.Game')
+local Server = require('ExpGamingCore.Server')
 local Role -- ExpGamingCore.Role@^4.0.0
-local Admin -- ExpGamingAdmin.AdminLib@^4.0.0
+local Admin -- ExpGamingAdmin@^4.0.0
 
 -- Module Define
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
-        if loaded_modules['ExpGamingAdmin.AdminLib@^4.0.0'] then Admin = require('ExpGamingAdmin.AdminLib@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
+        if loaded_modules['ExpGamingAdmin'] then Admin = require('ExpGamingAdmin') end
     end
 }
 
@@ -23,40 +23,40 @@ local ThisModule = {
 Event.register(-1,function(event)
     Server.new_thread{
         name='tree-decon',
-        data={trees={},chache={},clear=0}
+        data={trees={},cache={},clear=0}
     }:on_event('tick',function(self)
         local trees = self.data.trees
-        if self.data.clear ~= 0 and self.data.clear < game.tick then self.data.chache = {} self.data.clear = 0 end
+        if self.data.clear ~= 0 and self.data.clear < game.tick then self.data.cache = {} self.data.clear = 0 end
         if #trees == 0 then return end
         for i = 0,math.ceil(#trees/10) do
             local tree = table.remove(trees,1)
             if tree and tree.valid then tree.destroy() end
         end
     end):on_event(defines.events.on_marked_for_deconstruction,function(self,event)
-        local chache = self.data.chache[event.player_index]
-        if not chache then
+        local cache = self.data.cache[event.player_index]
+        if not cache then
             local player = Game.get_player(event)
             if not player then return end
             if not Role then 
-                if player.admin then self.data.chache[event.player_index] = {'tree-decon',false}
-                else self.data.chache[event.player_index] = {'decon',false} end
+                if player.admin then self.data.cache[event.player_index] = {'tree-decon',false}
+                else self.data.cache[event.player_index] = {'decon',false} end
             else
-                if Role.allowed(player,'tree-decon') then self.data.chache[event.player_index] = {'tree-decon',false}
-                elseif not Role.allowed(player,'decon') then self.data.chache[event.player_index] = {'no-decon',false} 
-                else self.data.chache[event.player_index] = {'decon',false} end
+                if Role.allowed(player,'tree-decon') then self.data.cache[event.player_index] = {'tree-decon',false}
+                elseif not Role.allowed(player,'decon') then self.data.cache[event.player_index] = {'no-decon',false} 
+                else self.data.cache[event.player_index] = {'decon',false} end
             end
-            chache = self.data.chache[event.player_index]
+            cache = self.data.cache[event.player_index]
         end
         if not event.entity.last_user or event.entity.name == 'entity-ghost' then
-            if chache[1] == 'tree-decon' then
+            if cache[1] == 'tree-decon' then
                 table.insert(self.data.trees,event.entity)
                 self.data.clear = game.tick + 10
             end
         else
-            if chache[1] == 'no-decon' then
+            if cache[1] == 'no-decon' then
                 event.entity.cancel_deconstruction('player')
-                if not chache[2] then
-                    chache[2] = true
+                if not cache[2] then
+                    cache[2] = true
                     local player = Game.get_player(event)
                     player_return({'DeconControl.player-print'},defines.textcolor.crit,player)
                     Role.print(Role.meta.groups.Admin.lowest,{'DeconControl.rank-print',player.name},defines.textcolor.info)
@@ -69,4 +69,4 @@ Event.register(-1,function(event)
 end)
 
 -- Module Return
-return ThisModule 
+return ThisModule

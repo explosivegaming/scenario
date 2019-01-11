@@ -1,15 +1,14 @@
---- Adds an inventory search that is proformed on a random player every 15 seconds
+--- Adds an inventory search that is preformed on a random player every 15 seconds
 -- @module ExpGamingPlayer.inventorySearch@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
-local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
-local Game = require('FactorioStdLib.Game@^0.8.0')
+local Admin = require('ExpGamingAdmin')
 local Role -- ExpGamingCore.Role@^4.0.0
 
--- Local Varibles
+-- Local Variables
 -- removed from none admin ranks, no further action
 local low_items = {
     'loader',
@@ -36,7 +35,7 @@ local high_items = {
 }
 
 -- inventories which are searched
-local inventorys = {
+local inventories = {
     defines.inventory.player_main,
     defines.inventory.player_quickbar,
     defines.inventory.player_trash
@@ -48,7 +47,7 @@ local _root_tree = {low_items=low_items,med_items=med_items,high_items=high_item
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Role@^4.0.0'] then Role = require('ExpGamingCore.Role@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
     end
 }
 
@@ -63,7 +62,7 @@ end
 function ThisModule.search_player(player)
     for category,items in pairs(_root_tree) do
         if not Role or category ~= 'low_items' and not Role.allowed(player,'admin-items') then
-            for _,_inventory in pairs(inventorys) do
+            for _,_inventory in pairs(inventories) do
                 local inventory = player.get_inventory(_inventory)
                 if inventory then
                     for _,item in pairs(items) do

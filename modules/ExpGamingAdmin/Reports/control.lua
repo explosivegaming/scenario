@@ -2,121 +2,114 @@
 -- @module ExpGamingAdmin.Reports@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
-local Admin = require('ExpGamingAdmin.AdminLib@^4.0.0')
-local Server = require('ExpGamingCore.Server@^4.0.0')
-local Role = require('ExpGamingCore.Role@^4.0.0')
-local Gui = require('ExpGamingCore.Gui@^4.0.0')
-local Game = require('FactorioStdLib.Game@^0.8.0')
-local Color = require('FactorioStdLib.Color@^0.8.0')
+local Admin = require('ExpGamingAdmin')
+local Role = require('ExpGamingCore.Role')
+local Gui = require('ExpGamingCore.Gui')
+local Game = require('FactorioStdLib.Game')
+local Color -- FactorioStdLib.Color@^0.8.0
 local Sync -- ExpGamingCore.Sync@^4.0.0
 
 -- Module Define
 local module_verbose = false
 local ThisModule = {
     on_init=function()
-        if loaded_modules['ExpGamingCore.Sync@^4.0.0'] then Sync = require('ExpGamingCore.Sync@^4.0.0') end
+        if loaded_modules['ExpGamingCore.Sync'] then Sync = require('ExpGamingCore.Sync') end
+        if loaded_modules['FactorioStdLib.Color'] then Color = require('FactorioStdLib.Color') end
     end
 }
 
 -- Global Define
 local global = global{
     reports={},
-    varified={}
+    verified={}
 }
 
--- Local Varibles
+-- Local Variables
 local report_to_warnings = 1 -- used in count_reports
-local varified_to_warings = 3 -- used in count_reports
+local verified_to_warnings = 3 -- used in count_reports
 local reports_needed_for_jail = 6
 
 -- Function Define
-local function valid_players(player,by_player)
-    local player = Game.get_player(player)
-    local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or '<server>'
-    return player, by_player_name
-end
-
 local function report_message(player,by_player,reason)
-    local player, by_player_name = valid_players(player,by_player)
+    player, by_player = Admin.valid_players(player,by_player)
     if not player then return end
     if Admin.is_banned(player,true) == 'report' then return end
     Role.print(Role.meta.groups.User.lowest,{'ExpGamingAdmin.low-print',player.name,reason},defines.textcolor.info,true)
-    Role.print(Role.meta.groups.Admin.lowest,{'ExpGamingAdmin.high-print',player.name,by_player_name,reason},defines.textcolor.med)
-    if Sync then Sync.emit_embeded{
+    Role.print(Role.meta.groups.Admin.lowest,{'ExpGamingAdmin.high-print',player.name,by_player.name,reason},defines.textcolor.med)
+    if Sync then Sync.emit_embedded{
         title='Player Report',
         color=Color.to_hex(defines.textcolor.med),
         description='A player was reported.',
         ['Player:']='<<inline>>'..player.name,
-        ['By:']='<<inline>>'..by_player_name,
+        ['By:']='<<inline>>'..by_player.name,
         ['Reason:']=reason
     } end
 end
 
 local function cheak_reports(player)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then return end
     local reports = Admin.count_reports(player)
-    if reports >= reports_needed_for_jail and global.actions[player.name] ~= 'report-jail' and Role.get_highest(player).group.name ~= 'Jail' then
-        global.actions[player.name] = actions.report
+    if reports >= reports_needed_for_jail and Role.get_highest(player).group.name ~= 'Jail' then
         Admin.jail(player,'<server>','Too many user reports. Contact an Admin to be unjailed.')
     end
 end
 
 function Admin.count_reports(player)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then return 0 end
     local _count = 0
     if global.reports[player.name] then
-        for _,report in pairs(global.reports[player.name]) do
+        for _ in pairs(global.reports[player.name]) do
             _count=_count+report_to_warnings
         end
     end
-    if global.varified[player.name] then
-        for _,report in pairs(global.varified[player.name]) do
-            _count=_count+varified_to_warings
+    if global.verified[player.name] then
+        for _ in pairs(global.verified[player.name]) do
+            _count=_count+verified_to_warnings
         end
     end
     return _count
 end
 
 function Admin.report(player,by_player,reason)
-    local player, by_player_name = valid_players(player,by_player)
-    if not player or Role.allowed(player,'no-report') then return end
+    player, by_player = Admin.valid_players(player,by_player)
+    if not player or Role.has_flag(player,'not_reportable') then return end
     if Admin.is_banned(by_player) or Role.has_flag(by_player,'is_jail') then return end
-    if Role.has_flag(by_player,'is_varified') then 
-        global.varified[player.name] = global.varified[player.name] or {} 
-        local reports = global.varified[player.name]
+    if Role.has_flag(by_player,'is_verified') then 
+        global.verified[player.name] = global.verified[player.name] or {} 
+        local reports = global.verified[player.name]
         for _,value in pairs(reports) do
-            if value[1] == by_player_name then return end
+            if value[1] == by_player.name then return end
         end
-        table.insert(reports,{by_player_name,reason})
+        table.insert(reports,{by_player.name,reason})
     else
         global.reports[player.name] = global.reports[player.name] or {}
         local reports = global.reports[player.name]
         for _,value in pairs(reports) do
-            if value[1] == by_player_name then return end
+            if value[1] == by_player.name then return end
         end
-        table.insert(reports,{by_player_name,reason}) 
+        table.insert(reports,{by_player.name,reason}) 
     end
     report_message(player,by_player,reason)
     cheak_reports(player)
 end
 
 function Admin.clear_reports(player,by_player,no_emit)
-    local player, by_player_name = valid_players(player,by_player)
+    player, by_player = Admin.valid_players(player,by_player)
     if not player then return end
     global.reports[player.name]={}
-    global.varified[player.name]={}
+    global.verified[player.name]={}
     if not no_emit and Sync then
-        Sync.emit_embeded{
+        Sync.emit_embedded{
             title='Player Clear',
             color=Color.to_hex(defines.textcolor.low),
             description='A player had their reports cleared.',
             ['Player:']='<<inline>>'..player.name,
-            ['By:']='<<inline>>'..by_player_name,
+            ['By:']='<<inline>>'..by_player.name,
         }
     end
 end
@@ -166,4 +159,4 @@ Admin.report_btn = Gui.inputs{
 end)
 
 -- Module Return
-return ThisModule 
+return ThisModule

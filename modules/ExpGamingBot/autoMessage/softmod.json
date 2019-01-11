@@ -1,20 +1,20 @@
 {
-    "name": "autoMessage",
-    "version": "4.0.0",
-    "type": "Submodule",
-    "description": "Prints a message every 15 minutes to chat.",
-    "location": "<blank>",
-    "keywords": [
-        "Bot",
-        "Chat",
-        "Auto Message",
-        "Message"
-    ],
-    "dependencies": {
-        "ExpGamingCore.Server": "^4.0.0",
-        "FactorioStdLib.Game": "^0.8.0",
-        "ExpGamingCore.Role": "?^4.0.0",
-        "ExpGamingCore.Sync": "?^4.0.0"
-    },
-    "collection": "ExpGamingBot_4.0.0"
+  "name": "ExpGamingBot.autoMessage",
+  "version": "4.0.0",
+  "description": "Prints a message every 15 minutes to chat.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Bot",
+    "Chat",
+    "Auto Message",
+    "Message"
+  ],
+  "dependencies": {
+    "ExpGamingCore.Server": "^4.0.0",
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingCore.Role": "?^4.0.0",
+    "ExpGamingCore.Sync": "?^4.0.0"
+  },
+  "collection": "ExpGamingBot@4.0.0",
+  "submodules": {}
 }

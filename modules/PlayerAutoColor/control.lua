@@ -2,10 +2,10 @@
 -- @module PlayerAutoColor@4.0.0
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
--- @alais ThisModule 
+-- @alias ThisModule
 
 -- Module Require
-local Color = require('FactorioStdLib.Color@^0.8.0')
+local Color = require('FactorioStdLib.Color')
 
 -- Module Define
 local module_verbose = false
@@ -28,7 +28,7 @@ local global = global{
 }
 
 -- Event Handlers Define
-Event.register(defines.events.on_player_created, function(event)
+script.on_event(defines.events.on_player_created, function(event)
     local player = game.players[event.player_index]
 	local colours = table.keys(defines.color)
 	player.color = defines.color.black
@@ -44,4 +44,4 @@ Event.register(defines.events.on_player_created, function(event)
 end)
 
 -- Module Return
-return ThisModule 
+return ThisModule

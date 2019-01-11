@@ -1,0 +1,3 @@
+[submodule "Factorio-luacheckrc"]
+	path = Factorio-luacheckrc
+	url = https://github.com/Nexela/Factorio-luacheckrc

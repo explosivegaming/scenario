@@ -3,7 +3,7 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
---- Toogles cheat mode for a player
+--- Toggles cheat mode for a player
 -- @command cheat-mode
 -- @param[opt] player the player to toggle if nil then the player using the command
 commands.add_command('cheat-mode', 'Toggles cheat mode for a player', {

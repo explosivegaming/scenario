@@ -8,10 +8,10 @@
 -- @function _comment
 
 local Game = require('FactorioStdLib.Game')
-local Role -- this is optional and is hanndled by it being present, it is loaded on init
-local mod_gui = require("mod-gui")
-local Gui = Gui -- this is to force gui to remain in the ENV
-local order_config = order_config
+local mod_gui = require('mod-gui')
+local Gui = require('ExpGamingCore.Gui')
+local order_config = require(module_path..'/order_config')
+local Role -- this is optional and is handled by it being present, it is loaded on init
 
 local toolbar = {}
 
@@ -52,7 +52,7 @@ end
 -- @usage toolbar.draw(1)
 -- @param player the player to draw the tool bar of
 function toolbar.draw(player)
-    local player = Game.get_player(player)
+    player = Game.get_player(player)
     if not player then return end
 	local toolbar_frame = mod_gui.get_button_flow(player)
     toolbar_frame.clear()
@@ -81,11 +81,10 @@ function toolbar.draw(player)
 	end
 end
 
-function toolbar:on_init()
+function toolbar.on_init()
     if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
 end
 
-toolbar.on_role_change = toolbar.draw
-toolbar.on_player_joined_game = toolbar.draw
+script.on_event({defines.events.on_role_change,defines.events.on_player_joined_game},toolbar.draw)
 -- calling with only a player will draw the toolbar for that player, more params will attempt to add a button
 return setmetatable(toolbar,{__call=function(self,player,extra,...) if extra then return self.add(player,extra,...) else self.draw(player) end end})

@@ -87,7 +87,7 @@
 	<td class="summary">Prints to chat as if it were a player</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#emit_embeded">emit_embeded (args)</a></td>
+	<td class="name" nowrap><a href="#emit_embedded">emit_embedded (args)</a></td>
 	<td class="summary">Logs an embed to the json.data we use a js script to add things we cant here</td>
 	</tr>
 	<tr>
@@ -135,7 +135,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#EmitEmbededParamaters">EmitEmbededParamaters</a></td>
-	<td class="summary">Outline of the paramaters accepted by Sync.emit_embeded</td>
+	<td class="summary">Outline of the paramaters accepted by Sync.emit_embedded</td>
 	</tr>
 </table>
 <h2><a href="#Fields">Fields</a></h2>
@@ -262,8 +262,8 @@
 
 </dd>
     <dt>
-    <a name = "emit_embeded"></a>
-    <strong>emit_embeded (args)</strong>
+    <a name = "emit_embedded"></a>
+    <strong>emit_embedded (args)</strong>
     </dt>
     <dd>
     Logs an embed to the json.data we use a js script to add things we cant here
@@ -273,7 +273,7 @@
     <ul>
         <li><span class="parameter">args</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
-         a table which contains everything that the embeded will use
+         a table which contains everything that the embedded will use
         </li>
     </ul>
 
@@ -286,7 +286,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">Sync.emit_embeded{title=<span class="string">'BAN'</span>,color=<span class="string">'0x0'</span>,description=<span class="string">'A player was banned'</span> ... }</pre>
+        <pre class="example">Sync.emit_embedded{title=<span class="string">'BAN'</span>,color=<span class="string">'0x0'</span>,description=<span class="string">'A player was banned'</span> ... }</pre>
     </ul>
 
 </dd>
@@ -592,7 +592,7 @@
     <strong>EmitEmbededParamaters</strong>
     </dt>
     <dd>
-    Outline of the paramaters accepted by Sync.emit_embeded
+    Outline of the paramaters accepted by Sync.emit_embedded
 
 
     <h3>Fields:</h3>

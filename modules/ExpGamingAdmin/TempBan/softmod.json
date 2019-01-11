@@ -1,24 +1,24 @@
 {
-    "name": "TempBan",
-    "version": "4.0.0",
-    "type": "Submodule",
-    "description": "Adds a temp ban function to the admin set, requires ExpGamingCore.Role to work.",
-    "location": "<blank>",
-    "keywords": [
-        "Jail",
-        "Temp Ban",
-        "Admin",
-        "ExpGaming",
-        "Roles"
-    ],
-    "dependencies": {
-        "ExpGamingAdmin.AdminLib": "^4.0.0",
-        "ExpGamingCore.Server": "^4.0.0",
-        "ExpGamingCore.Role": "^4.0.0",
-        "FactorioStdLib.Game": "^0.8.0",
-        "FactorioStdLib.Color": "^0.8.0",
-        "ExpGamingCore.Sync": "?^4.0.0",
-        "ExpGamingAdmin.ClearInventory": "?^4.0.0"
-    },
-    "collection": "ExpGamingAdmin_4.0.0"
+  "name": "ExpGamingAdmin.TempBan",
+  "version": "4.0.0",
+  "description": "Adds a temp ban function to the admin set, requires ExpGamingCore.Role to work.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Jail",
+    "Temp Ban",
+    "Admin",
+    "ExpGaming",
+    "Roles"
+  ],
+  "dependencies": {
+    "ExpGamingCore.Server": "^4.0.0",
+    "ExpGamingCore.Role": "^4.0.0",
+    "FactorioStdLib.Game": "^0.8.0",
+    "FactorioStdLib.Color": "?^0.8.0",
+    "ExpGamingCore.Sync": "?^4.0.0",
+    "ExpGamingAdmin.ClearInventory": "?^4.0.0",
+    "ExpGamingAdmin": "^4.0.0"
+  },
+  "collection": "ExpGamingAdmin@4.0.0",
+  "submodules": {}
 }
