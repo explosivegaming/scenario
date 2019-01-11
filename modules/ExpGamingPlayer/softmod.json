@@ -1,0 +1,23 @@
+{
+  "name": "ExpGamingPlayer",
+  "version": "4.0.0",
+  "description": "Useful collection of modules for displaying player infomation.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "ExpGaming",
+    "Player",
+    "Information",
+    "AFK"
+  ],
+  "author": "Cooldude2606",
+  "contact": "Discord: Cooldude2606#5241",
+  "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+  "submodules": {
+    "ExpGamingPlayer.afkKick": "4.0.0",
+    "ExpGamingPlayer.playerInfo": "4.0.0",
+    "ExpGamingPlayer.playerList": "4.0.0",
+    "ExpGamingPlayer.inventorySearch": "4.0.0",
+    "ExpGamingPlayer.polls": "4.0.0"
+  },
+  "dependencies": {}
+}

@@ -1,0 +1,21 @@
+{
+  "name": "ExpGamingInfo",
+  "version": "4.0.0",
+  "description": "Adds info guis to the game for different production areas",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Gui",
+    "Info",
+    "ExpGaming",
+    "Production"
+  ],
+  "author": "Cooldude2606",
+  "contact": "Discord: Cooldude2606@5241",
+  "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+  "submodules": {
+    "ExpGamingInfo.Readme": "4.0.0",
+    "ExpGamingInfo.Rockets": "4.0.0",
+    "ExpGamingInfo.Science": "4.0.0",
+    "ExpGamingInfo.Tasklist": "4.0.0"
+  }
+}

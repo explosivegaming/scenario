@@ -1,0 +1,366 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Fields">Fields</a></li>
+<li><a href="#modules_expgamingcore_gui_src_server_Functions">modules.expgamingcore.gui.src.server Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/FSM.html">FSM</a></li>
+  <li><a href="../modules/ExpGamingCore.Command.html">ExpGamingCore.Command</a></li>
+  <li><strong>ExpGamingCore.Gui</strong></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Center.html">ExpGamingCore.Gui.Center</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Inputs.html">ExpGamingCore.Gui.Inputs</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Left.html">ExpGamingCore.Gui.Left</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Popup.html">ExpGamingCore.Gui.Popup</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Test.html">ExpGamingCore.Gui.Test</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Toolbar.html">ExpGamingCore.Gui.Toolbar</a></li>
+  <li><a href="../modules/ExpGamingCore.Role.html">ExpGamingCore.Role</a></li>
+  <li><a href="../modules/ExpGamingCore.Server.html">ExpGamingCore.Server</a></li>
+  <li><a href="../modules/ExpGamingCore.Sync.html">ExpGamingCore.Sync</a></li>
+  <li><a href="../modules/ExpGamingLib.html">ExpGamingLib</a></li>
+  <li><a href="../modules/StdLib.Color.html">StdLib.Color</a></li>
+  <li><a href="../modules/StdLib.Game.html">StdLib.Game</a></li>
+  <li><a href="../modules/StdLib.String.html">StdLib.String</a></li>
+  <li><a href="../modules/StdLib.Table.html">StdLib.Table</a></li>
+  <li><a href="../modules/StdLib.Time.html">StdLib.Time</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>ExpGamingCore.Gui</code></h1>
+<p>Adds a objective version to custom guis.</p>
+<p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>License</strong>: https://github.com/explosivegaming/scenario/blob/master/LICENSE</li>
+        <li><strong>Author</strong>: Cooldude2606</li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#bar">bar (frame[, width=10])</a></td>
+	<td class="summary">Add a white bar to any gui frame</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set_dropdown_index">set_dropdown_index (dropdown, _item)</a></td>
+	<td class="summary">Used to set the index of a drop down to a certian item</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cam_link">cam_link (data)</a></td>
+	<td class="summary">Adds a camera that updates every tick (or less depeading on how many are opening) it will move to follow an entity</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#events">events</a></td>
+	<td class="summary">Stores all the on_player_joined_game event handlers for the guis</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ParametersForCamLink">ParametersForCamLink</a></td>
+	<td class="summary">Prams for Gui.cam_link</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#data">data</a></td>
+	<td class="summary">Used to set and get data about different guis</td>
+	</tr>
+</table>
+<h2><a href="#modules_expgamingcore_gui_src_server_Functions">modules.expgamingcore.gui.src.server Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#_comment">_comment ()</a></td>
+	<td class="summary">This file will be loaded when ExpGamingCore.Command is present</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#__comment">__comment ()</a></td>
+	<td class="summary">Adds a server thread that allows the camera follows to be toggled off and on</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "bar"></a>
+    <strong>bar (frame[, width=10])</strong>
+    </dt>
+    <dd>
+    Add a white bar to any gui frame
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">frame</span>
+         the frame to draw the line to
+        </li>
+        <li><span class="parameter">width</span>
+         the width of the bar
+         (<em>default</em> 10)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        the line that was made type is progressbar
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Gui.bar(frame,<span class="number">100</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "set_dropdown_index"></a>
+    <strong>set_dropdown_index (dropdown, _item)</strong>
+    </dt>
+    <dd>
+    Used to set the index of a drop down to a certian item
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dropdown</span>
+         the dropdown that is to be effected
+        </li>
+        <li><span class="parameter">_item</span>
+         this is the item to look for
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        returns the dropdown if it was successful
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Gui.set_dropdown_index(dropdown,player.name) <span class="comment">-- will select the index with the players name as the value</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "cam_link"></a>
+    <strong>cam_link (data)</strong>
+    </dt>
+    <dd>
+    Adds a camera that updates every tick (or less depeading on how many are opening) it will move to follow an entity
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">data</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         contains all other params given below
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        the camera that the function used be it made or given as a param
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">Gui.cam_link{entity=game.player.character,frame=frame,width=<span class="number">50</span>,hight=<span class="number">50</span>,zoom=<span class="number">1</span>}</pre></li>
+        <li><pre class="example">Gui.cam_link{entity=game.player.character,cam=frame.camera,surface=game.surfaces[<span class="string">'testing'</span>]}</pre></li>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "events"></a>
+    <strong>events</strong>
+    </dt>
+    <dd>
+    Stores all the on_player_joined_game event handlers for the guis
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ParametersForCamLink"></a>
+    <strong>ParametersForCamLink</strong>
+    </dt>
+    <dd>
+    Prams for Gui.cam_link
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">entity</span>
+         this is the entity that the camera will follow
+        </li>
+        <li><span class="parameter">cam</span>
+         a camera that you already have in the gui
+        </li>
+        <li><span class="parameter">frame</span>
+         the frame to add the camera to, no effect if cam param is given
+        </li>
+        <li><span class="parameter">zoom</span>
+         the zoom to give the new camera
+        </li>
+        <li><span class="parameter">width</span>
+         the width to give the new camera
+        </li>
+        <li><span class="parameter">height</span>
+         the height to give the new camera
+        </li>
+        <li><span class="parameter">surface</span>
+         this will over ride the surface that the camera follows on, allowing for a 'ghost surface' while keeping same position
+        </li>
+        <li><span class="parameter">respawn_open</span>
+         if set to true then the camera will auto re link to the player after a respawn
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Fields"></a>Fields</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "data"></a>
+    <strong>data</strong>
+    </dt>
+    <dd>
+    Used to set and get data about different guis
+
+
+    <ul>
+        <li><span class="parameter">location</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the location to get/set the data, center left etc...
+        </li>
+        <li><span class="parameter">key</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the name of the gui to set the value of
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">value</span>
+         the data that will be set can be any value but table advised
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">Gui.data[location] <span class="comment">-- returns the gui data for that gui location ex center</span></pre></li>
+        <li><pre class="example">Gui.data(location,gui_name,gui_data) <span class="comment">-- adds gui data for a gui at a location</span></pre></li>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="modules_expgamingcore_gui_src_server_Functions"></a>modules.expgamingcore.gui.src.server Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "_comment"></a>
+    <strong>_comment ()</strong>
+    </dt>
+    <dd>
+    This file will be loaded when ExpGamingCore.Command is present
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "__comment"></a>
+    <strong>__comment ()</strong>
+    </dt>
+    <dd>
+    Adds a server thread that allows the camera follows to be toggled off and on
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-06-07 12:58:23 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

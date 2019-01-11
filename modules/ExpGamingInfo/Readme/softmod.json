@@ -1,0 +1,23 @@
+{
+  "name": "ExpGamingInfo.Readme",
+  "version": "4.0.0",
+  "description": "Adds a readme gui to the game that contains useful information",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Gui",
+    "Info",
+    "ExpGaming",
+    "Readme",
+    "New Player"
+  ],
+  "author": "<blank>",
+  "contact": "<blank>",
+  "license": "<blank>",
+  "dependencies": {
+    "ExpGamingCore.Gui": "^4.0.0",
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingCore.Sync": "?^4.0.0"
+  },
+  "submodules": {},
+  "collection": "ExpGamingInfo@4.0.0"
+}

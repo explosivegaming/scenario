@@ -1,0 +1,21 @@
+{
+  "name": "ExpGamingPlayer.playerInfo",
+  "version": "4.0.0",
+  "description": "Used to give so common info on a player as a lua table or a frame.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Cam",
+    "Follow",
+    "Player",
+    "Info",
+    "Useful"
+  ],
+  "dependencies": {
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingCore.Gui": "^4.0.0",
+    "ExpGamingCore.Role": "?^4.0.0",
+    "ExpGamingCore.Group": "?^4.0.0"
+  },
+  "collection": "ExpGamingPlayer@4.0.0",
+  "submodules": {}
+}

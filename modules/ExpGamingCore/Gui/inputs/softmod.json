@@ -1,0 +1,23 @@
+{
+  "name": "ExpGamingCore.Gui.inputs",
+  "version": "4.0.0",
+  "description": "Addds an event manager for gui inputs and easy input creation",
+  "author": "Cooldude2606",
+  "contact": "Discord: Cooldude2606#5241",
+  "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Gui",
+    "Inputs",
+    "Buttons",
+    "Text Fields"
+  ],
+  "collection": "ExpGamingCore.Gui@4.0.0",
+  "dependencies": {
+    "mod-gui": "*",
+    "FactorioStdLib.Color": "^0.8.0",
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingCore.Gui": "^4.0.0"
+  },
+  "submodules": {}
+}

@@ -1,0 +1,25 @@
+{
+  "name": "ExpGamingCommands",
+  "version": "4.0.0",
+  "description": "A Collection of all of the custom commands used on ExpGaming servers.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Commands",
+    "ExpGaming",
+    "Admin",
+    "Tools"
+  ],
+  "author": "Cooldude2606",
+  "contact": "Discord: Cooldude2606#5241",
+  "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+  "submodules": {
+    "ExpGamingCommands.bonus": "4.0.0",
+    "ExpGamingCommands.cheatMode": "4.0.0",
+    "ExpGamingCommands.home": "4.0.0",
+    "ExpGamingCommands.kill": "4.0.0",
+    "ExpGamingCommands.repair": "4.0.0",
+    "ExpGamingCommands.tags": "4.0.0",
+    "ExpGamingCommands.teleport": "4.0.0"
+  },
+  "dependencies": {}
+}

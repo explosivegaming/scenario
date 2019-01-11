@@ -1,0 +1,37 @@
+--- Desction <get from json>
+-- @module ThisModule@X.Y.Z
+-- @author <get from json>
+-- @license <get from json>
+-- @alias ThisModule
+
+-- Module Require
+local Module = require('Module')
+local SubModule = require('Collection.Submodule')
+local OptModule -- OptModule@^X.Y.Z
+
+-- Local Variables
+
+-- Module Define
+local module_verbose = false
+local ThisModule = {
+    on_init=function(self)
+        if loaded_modules['OptModule'] then OptModule = require('OptModule') end
+        if loaded_modules['OptModule2'] then require(module_path..'/src/module2',{self=self}) end
+        --code
+    end,
+    on_post=function()
+        --code
+    end
+}
+
+-- Global Define
+local global = global{
+    key='value'
+}
+
+-- Function Define
+
+-- Event Handlers Define
+
+-- Module Return
+return ThisModule

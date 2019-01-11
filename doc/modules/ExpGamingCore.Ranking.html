@@ -1,0 +1,883 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Events">Events</a></li>
+<li><a href="#Class_Rank">Class Rank </a></li>
+<li><a href="#Class_Group">Class Group </a></li>
+<li><a href="#modules_expgamingcore_ranking_src_server_Functions">modules.expgamingcore.ranking.src.server Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/FSM.html">FSM</a></li>
+  <li><a href="../modules/ExpGamingCore.Command.html">ExpGamingCore.Command</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.html">ExpGamingCore.Gui</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Center.html">ExpGamingCore.Gui.Center</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Inputs.html">ExpGamingCore.Gui.Inputs</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Left.html">ExpGamingCore.Gui.Left</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Popup.html">ExpGamingCore.Gui.Popup</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Test.html">ExpGamingCore.Gui.Test</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Toolbar.html">ExpGamingCore.Gui.Toolbar</a></li>
+  <li><strong>ExpGamingCore.Role</strong></li>
+  <li><a href="../modules/ExpGamingCore.Server.html">ExpGamingCore.Server</a></li>
+  <li><a href="../modules/ExpGamingCore.Sync.html">ExpGamingCore.Sync</a></li>
+  <li><a href="../modules/ExpGamingLib.html">ExpGamingLib</a></li>
+  <li><a href="../modules/StdLib.Color.html">StdLib.Color</a></li>
+  <li><a href="../modules/StdLib.Game.html">StdLib.Game</a></li>
+  <li><a href="../modules/StdLib.String.html">StdLib.String</a></li>
+  <li><a href="../modules/StdLib.Table.html">StdLib.Table</a></li>
+  <li><a href="../modules/StdLib.Time.html">StdLib.Time</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>ExpGamingCore.Role</code></h1>
+<p>A full ranking system for factorio.</p>
+<p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>License</strong>: https://github.com/explosivegaming/scenario/blob/master/LICENSE</li>
+        <li><strong>Author</strong>: Cooldude2606</li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#output_ranks">output_ranks ([player=server])</a></td>
+	<td class="summary">Outputs as a string all the ranks and the loaded order</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#_base_preset">_base_preset (ranks)</a></td>
+	<td class="summary">Used to set the prset ranks that will be given to players</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_rank">get_rank (mixed)</a></td>
+	<td class="summary">Returns a rank object given a player or rank name</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_group">get_group (mixed)</a></td>
+	<td class="summary">Returns the group object used to sort ranks given group name or rank</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#print">print (rank_base, rtn[, colour=defines.color.white[, below=false]])</a></td>
+	<td class="summary">Prints to all rank of greater/lower power of the rank given</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#give_rank">give_rank (player[, rank=default[, by_player='server'[, tick=game.tick]]])</a></td>
+	<td class="summary">Gives a user a rank</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#revert">revert (player[, by_player=nil])</a></td>
+	<td class="summary">Revert the last change to a players rank</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#find_preset">find_preset (player[, tick=nil])</a></td>
+	<td class="summary">Given that the player has a rank in the preset table it is given; also will attempt to promote players if a time requirement is met</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#global">global</a></td>
+	<td class="summary">Global Table</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ranks">ranks</a></td>
+	<td class="summary">Contains the location of all the ranks, readonly during runtime</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ranks">ranks</a></td>
+	<td class="summary">Contains the location of all the rank groups, readonly during runtime</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#meta">meta</a></td>
+	<td class="summary">Contains some meta data about the ranks</td>
+	</tr>
+</table>
+<h2><a href="#Events">Events</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#on_rank_change">on_rank_change</a></td>
+	<td class="summary">Called when there is a rank change for a user</td>
+	</tr>
+</table>
+<h2><a href="#Class_Rank">Class Rank </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Ranking._rank:allowed">Ranking._rank:allowed (action)</a></td>
+	<td class="summary">Is this rank allowed to open this gui or use this command etc.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Ranking._rank:get_players">Ranking._rank:get_players ([online=false])</a></td>
+	<td class="summary">Get all the players in this rank</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Ranking._rank:print">Ranking._rank:print (rtn[, colour=defines.color.white[, show_default=false]])</a></td>
+	<td class="summary">Print a message to all players of this rank</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Ranking._rank:edit">Ranking._rank:edit (key, value)</a></td>
+	<td class="summary">Allows for a clean way to edit rank objects</td>
+	</tr>
+</table>
+<h2><a href="#Class_Group">Class Group </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Ranking._group:create">Ranking._group:create (obj)</a></td>
+	<td class="summary">Creates a new group</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Ranking._group:add_rank">Ranking._group:add_rank (obj)</a></td>
+	<td class="summary">Creats a new rank with this group as its group</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Ranking._group:edit">Ranking._group:edit (key, value)</a></td>
+	<td class="summary">Allows for a clean way to edit rank group objects</td>
+	</tr>
+</table>
+<h2><a href="#modules_expgamingcore_ranking_src_server_Functions">modules.expgamingcore.ranking.src.server Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#_comment">_comment ()</a></td>
+	<td class="summary">This file will be loaded when ExpGamingCore.Server is present</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Ranking._rank:print">Ranking._rank:print (rtn[, colour=defines.color.white[, show_default=false]])</a></td>
+	<td class="summary">Print a message to all players of this rank</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "output_ranks"></a>
+    <strong>output_ranks ([player=server])</strong>
+    </dt>
+    <dd>
+    Outputs as a string all the ranks and the loaded order
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+            <span class="types"><span class="type">player_name</span>, <span class="type">player_index</span> or <span class="type">LuaPlayer</span></span>
+         the player that the info will be printed to, nil will print to server
+         (<em>default</em> server)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Ranking.output_ranks(player) <span class="comment">-- prints to player</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "_base_preset"></a>
+    <strong>_base_preset (ranks)</strong>
+    </dt>
+    <dd>
+    Used to set the prset ranks that will be given to players
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">ranks</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         table of player names with the player name as the key and rank name as the value
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Ranking._base_preset{name=rank_name,nameTwo=rank_name_two} <span class="comment">-- sets player name to have rank rank_name on join</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "get_rank"></a>
+    <strong>get_rank (mixed)</strong>
+    </dt>
+    <dd>
+    Returns a rank object given a player or rank name
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mixed</span>
+            <span class="types"><span class="type">player</span>, <span class="type">player_index</span>, <span class="type">player_name</span>, <span class="type">rank_name</span>, <span class="type">Ranking._rank</span>, <span class="type">'server'</span> or <span class="type">'root'</span></span>
+         what rank to get
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        the rank that is linked to mixed
+    </ol>
+     <h3>Or</h3>
+    <ol>
+
+           <span class="types"><span class="type">nil</span></span>
+        there was no rank found
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">Ranking.get_rank(game.player) <span class="comment">-- returns player's rank</span></pre></li>
+        <li><pre class="example">Ranking.get_rank(<span class="string">'admin'</span>) <span class="comment">-- returns rank by the name of admin</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "get_group"></a>
+    <strong>get_group (mixed)</strong>
+    </dt>
+    <dd>
+    Returns the group object used to sort ranks given group name or rank
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mixed</span>
+            <span class="types"><span class="type">player</span>, <span class="type">player_index</span>, <span class="type">player_name</span>, <span class="type">rank_name</span>, <span class="type">rank</span>, <span class="type">'server'</span>, <span class="type">'root'</span>, <span class="type">group_name</span> or <span class="type">group</span></span>
+         what group to get
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        the group that is linked to mixed
+    </ol>
+     <h3>Or</h3>
+    <ol>
+
+           <span class="types"><span class="type">nil</span></span>
+        there was no rank group found
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/ExpGamingCore.Role.html#get_rank">Ranking.get_rank</a>
+    </ul>
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">Ranking.get_group(game.player) <span class="comment">-- returns player's rank group</span></pre></li>
+        <li><pre class="example">Ranking.get_group(<span class="string">'root'</span>) <span class="comment">-- returns group by name of root</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "print"></a>
+    <strong>print (rank_base, rtn[, colour=defines.color.white[, below=false]])</strong>
+    </dt>
+    <dd>
+    Prints to all rank of greater/lower power of the rank given
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">rank_base</span>
+            <span class="types"><span class="type">Ranking._rank</span> or <span class="type">pointerToRank</span></span>
+         the rank that acts as the cut off point (rank is always included)
+        </li>
+        <li><span class="parameter">rtn</span>
+         what do you want to return to the players
+        </li>
+        <li><span class="parameter">colour</span>
+            <span class="types"><span class="type">defines.color</span></span>
+         the colour that will be used to print
+         (<em>default</em> defines.color.white)
+        </li>
+        <li><span class="parameter">below</span>
+            <span class="types"><span class="type">boolean</span></span>
+         if true print to children rather than parents
+         (<em>default</em> false)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Ranking.<span class="global">print</span>(<span class="string">'admin'</span>,<span class="string">'We got a grifer'</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "give_rank"></a>
+    <strong>give_rank (player[, rank=default[, by_player='server'[, tick=game.tick]]])</strong>
+    </dt>
+    <dd>
+    Gives a user a rank
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+            <span class="types"><span class="type">LuaPlayer</span> or <span class="type">pointerToPlayer</span></span>
+         the player to give the rank to
+        </li>
+        <li><span class="parameter">rank</span>
+            <span class="types"><span class="type">Ranking._rank</span> or <span class="type">pointerToRank</span></span>
+         the rank to give to the player
+         (<em>default</em> default)
+        </li>
+        <li><span class="parameter">by_player</span>
+            <span class="types"><span class="type">LuaPlayer</span> or <span class="type">pointerToPlayer</span></span>
+         the player who is giving the rank
+         (<em>default</em> 'server')
+        </li>
+        <li><span class="parameter">tick</span>
+            <span class="types"><span class="type">number</span></span>
+         the tick that the rank is being given on, used as pass though
+         (<em>default</em> game.tick)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Ranking.give_rank(<span class="number">1</span>,<span class="string">'admin'</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "revert"></a>
+    <strong>revert (player[, by_player=nil])</strong>
+    </dt>
+    <dd>
+    Revert the last change to a players rank
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+            <span class="types"><span class="type">LuaPlayer</span> or <span class="type">pointerToPlayer</span></span>
+         the player to revert the rank of
+        </li>
+        <li><span class="parameter">by_player</span>
+         the player who is doing the revert
+         (<em>default</em> nil)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Ranking.revert(<span class="number">1</span>) <span class="comment">-- reverts the rank of player with index 1</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "find_preset"></a>
+    <strong>find_preset (player[, tick=nil])</strong>
+    </dt>
+    <dd>
+    Given that the player has a rank in the preset table it is given; also will attempt to promote players if a time requirement is met
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+            <span class="types"><span class="type">LuaPlayer</span> or <span class="type">pointerToPlayer</span></span>
+         the player to test for an auto rank
+        </li>
+        <li><span class="parameter">tick</span>
+            <span class="types"><span class="type">number</span></span>
+         the tick it happens on
+         (<em>default</em> nil)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Ranking.find_preset(<span class="number">1</span>) <span class="comment">-- attemps to find the preset for player with index 1</span></pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "global"></a>
+    <strong>global</strong>
+    </dt>
+    <dd>
+    Global Table
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">old</span>
+         contains the previous rank a use had before a rank change
+        </li>
+        <li><span class="parameter">preset</span>
+         contains the preset ranks that users will recive apon joining
+        </li>
+        <li><span class="parameter">last_change</span>
+         contains the name of the player who last had there rank chagned
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ranks"></a>
+    <strong>ranks</strong>
+    </dt>
+    <dd>
+    Contains the location of all the ranks, readonly during runtime
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ranks"></a>
+    <strong>ranks</strong>
+    </dt>
+    <dd>
+    Contains the location of all the rank groups, readonly during runtime
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "meta"></a>
+    <strong>meta</strong>
+    </dt>
+    <dd>
+    Contains some meta data about the ranks
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">default</span>
+         this is the name of the default rank
+        </li>
+        <li><span class="parameter">root</span>
+         this is the name of the root rank
+        </li>
+        <li><span class="parameter">time_ranks</span>
+         a list of all ranks which have a time requirement
+        </li>
+        <li><span class="parameter">time_highest</span>
+         the power of the highest rank that has a time requirement
+        </li>
+        <li><span class="parameter">time_lowest</span>
+         the lowest amount of time required for a time rank
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Events"></a>Events</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "on_rank_change"></a>
+    <strong>on_rank_change</strong>
+    </dt>
+    <dd>
+    Called when there is a rank change for a user
+
+
+    <h3>field:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+         the rank id
+        </li>
+        <li><span class="parameter">tick</span>
+         the tick which the event was raised on
+        </li>
+        <li><span class="parameter">player_index</span>
+         the player whos rank was changed
+        </li>
+        <li><span class="parameter">by_player_index</span>
+         the player who changed the rank, 0 means server
+        </li>
+        <li><span class="parameter">new_rank</span>
+         the name of the rank that was given
+        </li>
+        <li><span class="parameter">old_rank</span>
+         the name of the rank the player had
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_Rank"></a>Class Rank </h2>
+
+          <div class="section-description">
+          The class for the ranks
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "Ranking._rank:allowed"></a>
+    <strong>Ranking._rank:allowed (action)</strong>
+    </dt>
+    <dd>
+    Is this rank allowed to open this gui or use this command etc.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><span class="type">teh</span></span>
+         to test for
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        is it allowed
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">rank:allowed(<span class="string">'interface'</span>) <span class="comment">-- does the rank have permision for 'interface'</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Ranking._rank:get_players"></a>
+    <strong>Ranking._rank:get_players ([online=false])</strong>
+    </dt>
+    <dd>
+    Get all the players in this rank
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">online</span>
+            <span class="types"><span class="type">boolean</span></span>
+         get only online players
+         (<em>default</em> false)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        a table of all players in this rank
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">rank:get_players()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Ranking._rank:print"></a>
+    <strong>Ranking._rank:print (rtn[, colour=defines.color.white[, show_default=false]])</strong>
+    </dt>
+    <dd>
+    Print a message to all players of this rank
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">rtn</span>
+         any value you want to return
+        </li>
+        <li><span class="parameter">colour</span>
+            <span class="types"><span class="type">define.color</span></span>
+         the colour that will be used to print
+         (<em>default</em> defines.color.white)
+        </li>
+        <li><span class="parameter">show_default</span>
+            <span class="types"><span class="type">boolean</span></span>
+         weather to use the default rank name for the print, used as a pass though
+         (<em>default</em> false)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">rank:<span class="global">print</span>(<span class="string">'foo'</span>) <span class="comment">-- prints to all members of this rank</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Ranking._rank:edit"></a>
+    <strong>Ranking._rank:edit (key, value)</strong>
+    </dt>
+    <dd>
+    Allows for a clean way to edit rank objects
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">key</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the key to edit, often allow or disallow
+        </li>
+        <li><span class="parameter">value</span>
+         the new value to be set
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">rank:edit(<span class="string">'allow'</span>,{<span class="string">'interface'</span>}) <span class="comment">-- allows this rank to use 'interface'</span></pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_Group"></a>Class Group </h2>
+
+          <div class="section-description">
+          The class for the rank groups, the way to allow modules to idex a group that is always present, ranks will always look to there group as a parent
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "Ranking._group:create"></a>
+    <strong>Ranking._group:create (obj)</strong>
+    </dt>
+    <dd>
+    Creates a new group
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">obj</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         the fields for this object
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Ranking._group</span></span>
+        returns the object to allow chaining
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Ranking._group:create{name=<span class="string">'root'</span>} <span class="comment">-- returns group with name root</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Ranking._group:add_rank"></a>
+    <strong>Ranking._group:add_rank (obj)</strong>
+    </dt>
+    <dd>
+    Creats a new rank with this group as its group
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">obj</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+         the fields for this object
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Ranking._group</span></span>
+        returns the object to allow chaining
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">group:add_rank{name=<span class="string">'root'</span>} <span class="comment">-- returns self</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Ranking._group:edit"></a>
+    <strong>Ranking._group:edit (key, value)</strong>
+    </dt>
+    <dd>
+    Allows for a clean way to edit rank group objects
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">key</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the key to edit, often allow or disallow
+        </li>
+        <li><span class="parameter">value</span>
+         the new value to be set
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">group:edit(<span class="string">'allow'</span>,{<span class="string">'interface'</span>}) <span class="comment">-- allows this rank to use 'interface'</span></pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="modules_expgamingcore_ranking_src_server_Functions"></a>modules.expgamingcore.ranking.src.server Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "_comment"></a>
+    <strong>_comment ()</strong>
+    </dt>
+    <dd>
+    This file will be loaded when ExpGamingCore.Server is present
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Ranking._rank:print"></a>
+    <strong>Ranking._rank:print (rtn[, colour=defines.color.white[, show_default=false]])</strong>
+    </dt>
+    <dd>
+    Print a message to all players of this rank
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">rtn</span>
+         any value you want to return
+        </li>
+        <li><span class="parameter">colour</span>
+            <span class="types"><span class="type">define.color</span></span>
+         the colour that will be used to print
+         (<em>default</em> defines.color.white)
+        </li>
+        <li><span class="parameter">show_default</span>
+            <span class="types"><span class="type">boolean</span></span>
+         weather to use the default rank name for the print, used as a pass though
+         (<em>default</em> false)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">rank:<span class="global">print</span>(<span class="string">'foo'</span>) <span class="comment">-- prints to all members of this rank</span></pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-06-07 12:58:23 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

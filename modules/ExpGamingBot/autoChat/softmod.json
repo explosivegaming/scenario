@@ -1,0 +1,19 @@
+{
+  "name": "ExpGamingBot.autoChat",
+  "version": "4.0.0",
+  "description": "Sends messages in chat based on what has been said by other players",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Chat",
+    "Bot",
+    "Jokes",
+    "Fun"
+  ],
+  "dependencies": {
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingCore.Server": "^4.0.0",
+    "ExpGamingCore.Role": "?^4.0.0"
+  },
+  "collection": "ExpGamingBot@4.0.0",
+  "submodules": {}
+}

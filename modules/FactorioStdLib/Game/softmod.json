@@ -1,0 +1,16 @@
+{
+  "name": "FactorioStdLib.Game",
+  "version": "0.8.0",
+  "description": "The game module.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Standard Library",
+    "Lib",
+    "StdLib",
+    "Game",
+    "Extends"
+  ],
+  "dependencies": {},
+  "collection": "FactorioStdLib@0.8.0",
+  "submodules": {}
+}

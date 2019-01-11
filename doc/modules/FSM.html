@@ -1,0 +1,455 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Fields">Fields</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>FSM</strong></li>
+  <li><a href="../modules/ExpGamingCore.Command.html">ExpGamingCore.Command</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.html">ExpGamingCore.Gui</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Center.html">ExpGamingCore.Gui.Center</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Inputs.html">ExpGamingCore.Gui.Inputs</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Left.html">ExpGamingCore.Gui.Left</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Popup.html">ExpGamingCore.Gui.Popup</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Test.html">ExpGamingCore.Gui.Test</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Toolbar.html">ExpGamingCore.Gui.Toolbar</a></li>
+  <li><a href="../modules/ExpGamingCore.Role.html">ExpGamingCore.Role</a></li>
+  <li><a href="../modules/ExpGamingCore.Server.html">ExpGamingCore.Server</a></li>
+  <li><a href="../modules/ExpGamingCore.Sync.html">ExpGamingCore.Sync</a></li>
+  <li><a href="../modules/ExpGamingLib.html">ExpGamingLib</a></li>
+  <li><a href="../modules/StdLib.Color.html">StdLib.Color</a></li>
+  <li><a href="../modules/StdLib.Game.html">StdLib.Game</a></li>
+  <li><a href="../modules/StdLib.String.html">StdLib.String</a></li>
+  <li><a href="../modules/StdLib.Table.html">StdLib.Table</a></li>
+  <li><a href="../modules/StdLib.Time.html">StdLib.Time</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>FSM</code></h1>
+<p>Factorio Softmod Manager</p>
+<p></p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Manager = require(&quot;FactorioSoftmodManager&quot;)
+</pre>
+    </ul>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Author</strong>: Cooldude2606</li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#_verbose">_verbose (rtn)</a></td>
+	<td class="summary">Default output for the verbose</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#verbose">verbose (rtn, action)</a></td>
+	<td class="summary">Used to call the output of the verbose when the current state allows it</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#setVerbose">setVerbose (settings)</a></td>
+	<td class="summary">Main logic for allowing verbose at different stages though out the script</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#sandbox">sandbox (callback[, env])</a></td>
+	<td class="summary">Creates a sand box envorment and runs a callback in that sand box; provents global pollution</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#loadModules">loadModules ()</a></td>
+	<td class="summary">Loads the modules that are present in the index list</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#error">error (err, callback)</a></td>
+	<td class="summary">A more detailed replacement for the lua error function to allow for handlers to be added; repleaces default error so error can be used instead of Manager.error</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#event">event (event_name, callback)</a></td>
+	<td class="summary">Event handler that modules can use, each module can register one function per event</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#verboseSettings">verboseSettings</a></td>
+	<td class="summary">Different verbose settings used for setVerbose</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Manager.event.names">Manager.event.names</a></td>
+	<td class="summary">Sub set to Manger.event and acts as a coverter between event_name and event_id</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#global">global</a></td>
+	<td class="summary">Used to avoid conflicts in the global table</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "_verbose"></a>
+    <strong>_verbose (rtn)</strong>
+    </dt>
+    <dd>
+    Default output for the verbose
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">rtn</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the value that will be returned though verbose output
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Manager.verbose(<span class="string">'Hello, World!'</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "verbose"></a>
+    <strong>verbose (rtn, action)</strong>
+    </dt>
+    <dd>
+    Used to call the output of the verbose when the current state allows it
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">rtn</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the value that will be returned though verbose output
+        </li>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         is used to decide which verbose this is error || event etc
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Manager.verbose(<span class="string">'Hello, World!'</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "setVerbose"></a>
+    <strong>setVerbose (settings)</strong>
+    </dt>
+    <dd>
+    Main logic for allowing verbose at different stages though out the script
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">settings</span>
+            <span class="types"><span class="type">newTbl</span></span>
+         the table that will be searched for settings to be updated
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">Manager.setVerbose{output=log}</pre></li>
+        <li><pre class="example">Manager.setVerbose[setting] <span class="comment">-- returns the value of that setting</span></pre></li>
+        <li><pre class="example"><span class="global">tostring</span>(Manager.setVerbose) <span class="comment">-- returns a formated list of the current settings</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "sandbox"></a>
+    <strong>sandbox (callback[, env])</strong>
+    </dt>
+    <dd>
+    Creates a sand box envorment and runs a callback in that sand box; provents global pollution
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+         the function that will be ran in the sandbox
+        </li>
+        <li><span class="parameter">env</span>
+         any other params that the function will use
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">Manager.sandbox(callback) <span class="comment">-- return sandbox, success, other returns from callback</span></pre></li>
+        <li><pre class="example">Manager.sandbox() <span class="comment">-- returns and empty sandbox</span></pre></li>
+        <li><pre class="example">Manager.sandbox[key] <span class="comment">-- returns the sand box value in that key</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "loadModules"></a>
+    <strong>loadModules ()</strong>
+    </dt>
+    <dd>
+    Loads the modules that are present in the index list
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">Manager.loadModules() <span class="comment">-- loads all moddules in the index list</span></pre></li>
+        <li><pre class="example">#Manager.loadModules <span class="comment">-- returns the number of modules loaded</span></pre></li>
+        <li><pre class="example"><span class="global">tostring</span>(Manager.loadModules) <span class="comment">-- returns a formatted list of all modules loaded</span></pre></li>
+        <li><pre class="example"><span class="global">pairs</span>(Manager.loadModules) <span class="comment">-- loops over the loaded modules moduleName, module</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "error"></a>
+    <strong>error (err, callback)</strong>
+    </dt>
+    <dd>
+    A more detailed replacement for the lua error function to allow for handlers to be added; repleaces default error so error can be used instead of Manager.error
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">err</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a> or <span class="type">fucntion</span></span>
+         the string to be passed to handlers; if a function it will register a handler
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+         if given the err param will be used to given the handler a name
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">Manager.<span class="global">error</span>(err) <span class="comment">-- calls all error handlers that are set or if none then prints to game and if that fails crashs game</span></pre></li>
+        <li><pre class="example">Manager.<span class="global">error</span>() <span class="comment">-- returns an error constant that can be used to crash game</span></pre></li>
+        <li><pre class="example">Manager.<span class="global">error</span>(Manager.<span class="global">error</span>()) <span class="comment">-- crashs the game</span></pre></li>
+        <li><pre class="example">Manager.<span class="global">error</span>.addHandler(name,callback) <span class="comment">-- adds a new handler if handler returns Manager.error() then game will crash</span></pre></li>
+        <li><pre class="example">Manager.<span class="global">error</span>[name] <span class="comment">-- returns the handler of that name if present</span></pre></li>
+        <li><pre class="example">#Manager.<span class="global">error</span> <span class="comment">-- returns the number of error handlers that are present</span></pre></li>
+        <li><pre class="example"><span class="global">pairs</span>(Manager.<span class="global">error</span>) <span class="comment">-- loops over only the error handlers handler_name,hander</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "event"></a>
+    <strong>event (event_name, callback)</strong>
+    </dt>
+    <dd>
+    Event handler that modules can use, each module can register one function per event
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">event_name</span>
+            <span class="types"><span class="type">int</span> or <a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         that referes to an event
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+         the function that will be set for that event
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">Manager.event[event_name] = callback <span class="comment">-- sets the callback for that event</span></pre></li>
+        <li><pre class="example">Manager.event[event_name] = <span class="keyword">nil</span> <span class="comment">-- clears the callback for that event</span></pre></li>
+        <li><pre class="example">Manager.event(event_name,callback) <span class="comment">-- sets the callback for that event</span></pre></li>
+        <li><pre class="example">Manager.event[event_name] <span class="comment">-- returns the callback for that event or the event id if not registered</span></pre></li>
+        <li><pre class="example">Manager.event(event_name) <span class="comment">-- runs all the call backs for that event</span></pre></li>
+        <li><pre class="example">Manager.event() <span class="comment">-- returns the stop value for the event proccessor, if returned during an event will stop all other callbacks</span></pre></li>
+        <li><pre class="example">#Manager.event <span class="comment">-- returns the number of callbacks that are registered</span></pre></li>
+        <li><pre class="example"><span class="global">pairs</span>(Manager.events) <span class="comment">-- returns event_id,table of callbacks</span></pre></li>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "verboseSettings"></a>
+    <strong>verboseSettings</strong>
+    </dt>
+    <dd>
+    Different verbose settings used for setVerbose
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">selfInit</span>
+            <span class="types"><span class="type">boolean</span></span>
+         called while the manager is being set up
+        </li>
+        <li><span class="parameter">moduleLoad</span>
+            <span class="types"><span class="type">boolean</span></span>
+         when a module is required by the manager
+        </li>
+        <li><span class="parameter">moduleInit</span>
+            <span class="types"><span class="type">boolean</span></span>
+         when and within the initation of a module
+        </li>
+        <li><span class="parameter">moduleEnv</span>
+            <span class="types"><span class="type">boolean</span></span>
+         during module runtime, this is a global option set within each module(module_verbose=true ln:1) for fine control
+        </li>
+        <li><span class="parameter">eventRegistered</span>
+            <span class="types"><span class="type">boolean</span></span>
+         when a module registers its event handlers
+        </li>
+        <li><span class="parameter">errorCaught</span>
+            <span class="types"><span class="type">boolean</span></span>
+         when an error is caught during runtime
+        </li>
+        <li><span class="parameter">output</span>
+            <span class="types"><span class="type">function</span></span>
+         can be: print || log || or other function
+        </li>
+        <li><span class="parameter">_output</span>
+         a constant value that can used to store output data
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Manager.event.names"></a>
+    <strong>Manager.event.names</strong>
+    </dt>
+    <dd>
+    Sub set to Manger.event and acts as a coverter between event_name and event_id
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Manager.event[event_name]</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Fields"></a>Fields</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "global"></a>
+    <strong>global</strong>
+    </dt>
+    <dd>
+    Used to avoid conflicts in the global table
+
+
+    <ul>
+        <li><span class="parameter">if</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a>, <a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a> or <span class="type">true</span></span>
+         table then the default for the global, if a string then the module to get the global of, if true then reset the global to default
+         (<em>default</em> {})
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">global[key] <span class="comment">-- used like the normal global table</span></pre></li>
+        <li><pre class="example">global{<span class="string">'foo'</span>,<span class="string">'bar'</span>} <span class="comment">-- sets the default value</span></pre></li>
+        <li><pre class="example">global(<span class="keyword">true</span>) <span class="comment">-- restores global to default</span></pre></li>
+        <li><pre class="example">global(mopdule_name) <span class="comment">-- returns that module's global</span></pre></li>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-06-07 12:58:23 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

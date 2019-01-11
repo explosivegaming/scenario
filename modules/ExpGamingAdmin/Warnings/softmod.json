@@ -1,0 +1,26 @@
+{
+  "name": "ExpGamingAdmin.Warnings",
+  "version": "4.0.0",
+  "description": "Adds a warning system into the admin set which can be used by admins and the script.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Warning",
+    "Admin",
+    "ExpGaming",
+    "Report",
+    "Kick",
+    "Punishments",
+    "Ban"
+  ],
+  "dependencies": {
+    "ExpGamingCore.Server": "^4.0.0",
+    "ExpGamingCore.Role": "^4.0.0",
+    "FactorioStdLib.Game": "^0.8.0",
+    "FactorioStdLib.Color": "?^0.8.0",
+    "ExpGamingAdmin.Reports": "?^4.0.0",
+    "ExpGamingCore.Sync": "?^4.0.0",
+    "ExpGamingAdmin": "^4.0.0"
+  },
+  "collection": "ExpGamingAdmin@4.0.0",
+  "submodules": {}
+}

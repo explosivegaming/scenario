@@ -1,0 +1,21 @@
+{
+  "name": "ExpGamingCommands.kill",
+  "version": "4.0.0",
+  "description": "Adds a command which can be used to kill a player or yourself.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Command",
+    "ExpGaming",
+    "Kill",
+    "Death",
+    "Admin",
+    "Tool"
+  ],
+  "dependencies": {
+    "ExpGamingCore.Command": "^4.0.0",
+    "ExpGamingCore.Role": "^4.0.0",
+    "FactorioStdLib.Game": "^0.8.0"
+  },
+  "collection": "ExpGamingCommands@4.0.0",
+  "submodules": {}
+}

@@ -1,0 +1,23 @@
+{
+  "name": "ExpGamingInfo.Rockets",
+  "version": "4.0.0",
+  "description": "Adds a rocket count gui to the game that shows milestones and average rocket time",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Gui",
+    "Info",
+    "ExpGaming",
+    "Rockets"
+  ],
+  "author": "<blank>",
+  "contact": "<blank>",
+  "license": "<blank>",
+  "dependencies": {
+    "ExpGamingCore.Gui": "^4.0.0",
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingCore.Sync": "?^4.0.0",
+    "ExpGamingCore.Sync^4.0.0": "?*"
+  },
+  "submodules": {},
+  "collection": "ExpGamingInfo@4.0.0"
+}

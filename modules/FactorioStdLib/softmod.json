@@ -1,0 +1,21 @@
+{
+  "name": "FactorioStdLib",
+  "version": "0.8.0",
+  "description": "Factorio Standard Library Projects",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Standard Library",
+    "Lib",
+    "StdLib"
+  ],
+  "author": "Afforess",
+  "contact": "https://github.com/Afforess/Factorio-Stdlib/issues",
+  "license": "https://github.com/Afforess/Factorio-Stdlib/blob/master/LICENSE",
+  "submodules": {
+    "FactorioStdLib.Color": "0.8.0",
+    "FactorioStdLib.Game": "0.8.0",
+    "FactorioStdLib.String": "0.8.0",
+    "FactorioStdLib.Table": "0.8.0"
+  },
+  "dependencies": {}
+}

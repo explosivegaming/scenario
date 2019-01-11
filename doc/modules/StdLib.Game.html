@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/FSM.html">FSM</a></li>
+  <li><a href="../modules/ExpGamingCore.Command.html">ExpGamingCore.Command</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.html">ExpGamingCore.Gui</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Center.html">ExpGamingCore.Gui.Center</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Inputs.html">ExpGamingCore.Gui.Inputs</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Left.html">ExpGamingCore.Gui.Left</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Popup.html">ExpGamingCore.Gui.Popup</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Test.html">ExpGamingCore.Gui.Test</a></li>
+  <li><a href="../modules/ExpGamingCore.Gui.Toolbar.html">ExpGamingCore.Gui.Toolbar</a></li>
+  <li><a href="../modules/ExpGamingCore.Role.html">ExpGamingCore.Role</a></li>
+  <li><a href="../modules/ExpGamingCore.Server.html">ExpGamingCore.Server</a></li>
+  <li><a href="../modules/ExpGamingCore.Sync.html">ExpGamingCore.Sync</a></li>
+  <li><a href="../modules/ExpGamingLib.html">ExpGamingLib</a></li>
+  <li><a href="../modules/StdLib.Color.html">StdLib.Color</a></li>
+  <li><strong>StdLib.Game</strong></li>
+  <li><a href="../modules/StdLib.String.html">StdLib.String</a></li>
+  <li><a href="../modules/StdLib.Table.html">StdLib.Table</a></li>
+  <li><a href="../modules/StdLib.Time.html">StdLib.Time</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>StdLib.Game</code></h1>
+<p>The game module.</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#fail_if_missing">fail_if_missing (var[, msg="missing value"])</a></td>
+	<td class="summary">Print msg if specified var evaluates to false.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_player">get_player (mixed)</a></td>
+	<td class="summary">Return a valid player object from event, index, string, or userdata</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_force">get_force (mixed)</a></td>
+	<td class="summary">Return a valid force object from event, string, or userdata</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#print_all">print_all (msg[, condition])</a></td>
+	<td class="summary">Messages all players currently connected to the game.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "fail_if_missing"></a>
+    <strong>fail_if_missing (var[, msg="missing value"])</strong>
+    </dt>
+    <dd>
+    Print msg if specified var evaluates to false.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">var</span>
+            <span class="types"><span class="type">Mixed</span></span>
+         variable to evaluate
+        </li>
+        <li><span class="parameter">msg</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         message
+         (<em>default</em> "missing value")
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_player"></a>
+    <strong>get_player (mixed)</strong>
+    </dt>
+    <dd>
+    Return a valid player object from event, index, string, or userdata
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mixed</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a>, <span class="type">number</span>, <span class="type">LuaPlayer</span> or <span class="type">event</span></span>
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">LuaPlayer</span></span>
+        a valid player or nil
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_force"></a>
+    <strong>get_force (mixed)</strong>
+    </dt>
+    <dd>
+    Return a valid force object from event, string, or userdata
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mixed</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a>, <span class="type">LuaForce</span> or <span class="type">event</span></span>
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">LuaForce</span></span>
+        a valid force or nil
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "print_all"></a>
+    <strong>print_all (msg[, condition])</strong>
+    </dt>
+    <dd>
+    Messages all players currently connected to the game.
+> Offline players are not counted as having received the message.
+ If no players exist msg is stored in the `global._print_queue` table.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">msg</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the message to send to players
+        </li>
+        <li><span class="parameter">condition</span>
+            <span class="types"><span class="type">nil</span> or <span class="type">boolean</span></span>
+         the condition to be true for a player to be messaged
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uint</span></span>
+        the number of players who received the message.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-06-07 12:58:23 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

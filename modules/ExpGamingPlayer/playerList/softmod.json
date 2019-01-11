@@ -1,0 +1,24 @@
+{
+  "name": "ExpGamingPlayer.playerList",
+  "version": "4.0.0",
+  "description": "Used to display player names and online time on the top left.",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "Player List",
+    "List",
+    "Gui",
+    "Names"
+  ],
+  "dependencies": {
+    "FactorioStdLib.Game": "^0.8.0",
+    "ExpGamingCore.Gui": "^4.0.0",
+    "ExpGamingCore.Role": "?^4.0.0",
+    "ExpGamingAdmin": "?^4.0.0",
+    "ExpGamingAdmin.buttonFlow": "?^4.0.0",
+    "ExpGamingAdmin.reports": "?^4.0.0",
+    "ExpGamingPlayer.playerInfo": "?^4.0.0",
+    "ExpGamingAdmin.Gui": "?^4.0.0"
+  },
+  "collection": "ExpGamingPlayer@4.0.0",
+  "submodules": {}
+}
