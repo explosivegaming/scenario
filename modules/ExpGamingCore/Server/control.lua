@@ -81,7 +81,7 @@ Server.threads = setmetatable({},{
 -- @usage Server.new_thread{name='foo',data={}}
 -- @tparam table obj the attributes to give to the thread
 -- @treturn Server._thread the new thread created
-function Server.new_thread(obj) return Server._thread:create(obj) end
+function Server.new_thread(obj) return Server._thread.create(obj) end
 
 --- Used to get a thread via uuid or name (if one is assigned)
 -- @usage Server.get_thread('decon') -- return thread
@@ -281,7 +281,11 @@ function Server._thread.create(obj)
     obj._env._ENV = nil -- prevents infinite recursion
     -- removes any modules from the _env to save space in global (less time to serialize)
     obj._env._modules = {}
-    for name,value in pairs(obj._env) do if is_type(value,'table') and value._moduleName and loaded_modules[value._moduleName] == value then obj._env._modules[name] = value._moduleName obj._env[name] = nil end end
+    for name,value in pairs(obj._env) do
+        if is_type(value,'table') and value._moduleName and loaded_modules[value._moduleName] == value then 
+            obj._env._modules[name] = value._moduleName obj._env[name] = nil 
+        end
+    end
     setmetatable(obj._env,_env_metatable)
     local name = obj.name or 'Anon'
     verbose('Created new thread: '..name..' ('..obj.uuid..')')
