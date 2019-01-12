@@ -129,12 +129,14 @@ local go_to_warp = Gui.inputs{
     local player = Game.get_player(event)
     local cooldown = global.cooldowns[event.player_index] or 0
     local warp = global.warps[event.element.parent.name]
+    if not warp then return end
     if cooldown > 0 then player_return({'WarpPoints.cooldown',cooldown},nil,event) return end
     if player.vehicle then player.vehicle.set_driver(nil) end
     if player.vehicle then player.vehicle.set_passenger(nil) end
     if player.vehicle then return end
-    player.teleport(game.surfaces[warp.surface].find_non_colliding_position('player',warp.position,32,1),game.surfaces[warp.surface])
-    if not Role and not player.admin or Role and not Role.allowed(player,'always-warp') then 
+    local surface = game.surfaces[warp.surface]
+    player.teleport(surface.find_non_colliding_position('player',warp.position,32,1),surface)
+    if not Role and not player.admin or Role and not Role.allowed(player,'always-warp') then
         event.element.parent.parent.parent.parent.style.visible = false
         global.cooldowns[event.player_index] = warp_limit
     end
