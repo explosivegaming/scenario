@@ -24,12 +24,12 @@ commands.add_command('home', 'Allows you to set, remove and goto your homes', {
         homes._n=homes._n+1
         player_return{'ExpGamingCommands-home.set',name,pos[1],pos[2]}
     elseif command == 'remove' then
-        if not homes[name] then player_return{'ExpGamingCommands-home.invalid',name} end
+        if not homes[name] then player_return{'ExpGamingCommands-home.invalid',name} return commands.error end
         homes[name] = nil
         homes._n=homes._n-1
         player_return{'ExpGamingCommands-home.remove',name}
     elseif command == 'goto' then
-        if not homes[name] then player_return{'ExpGamingCommands-home.invalid',name} end
+        if not homes[name] then player_return{'ExpGamingCommands-home.invalid',name} return commands.error end
         local pos = {math.floor(player.position.x),math.floor(player.position.y)}
         player.teleport(player.surface.find_non_colliding_position('player',homes[name],32,1),player.surface)
         homes._r = pos

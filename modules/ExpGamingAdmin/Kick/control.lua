@@ -27,8 +27,8 @@ end)
 
 function Admin.kick(player,by_player,reason)
     player = Game.get_player(player)
-    reason = Admin.create_reason(reason,by_player_name)
     local by_player_name = Game.get_player(by_player) and Game.get_player(by_player).name or '<server>'
+    reason = Admin.create_reason(reason,by_player_name)
     if Sync then Sync.emit_embedded{
         title='Player Kick',
         color=Color.to_hex(defines.textcolor.high),
