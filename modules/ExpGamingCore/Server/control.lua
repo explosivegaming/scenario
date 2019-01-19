@@ -457,7 +457,8 @@ function Server._thread:error(err)
         _return = true
     else 
         self:close() -- no matter what happens next this thread will be closed
-        error('Thread Error (no handler): '..err)
+        local name = self.name or self.uuid
+        error('Thread Error (no handler) on <'..name..'>: '..err)
     end
     return _return
 end
