@@ -86,6 +86,7 @@ Role{
         ['set-home']=true,
         ['home']=true,
         ['return']=true,
+        ['bonus']=true,
         ['announcements']=true,
         ['rank-changer']=true,
     }

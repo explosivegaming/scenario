@@ -103,8 +103,8 @@ function ThisModule.make_warp_point(position,surface,force,warpName)
         icon={type='item',name=warp_item}
     })
     global.warps[warpName] = {tag=tag,surface=surface.index,position=tag.position,old_tile=old_tile}
-    local _temp = {Spawn=global.warps.Spawn}
-    global.warps.Spawn = nil
+    local _temp = {spawn=global.warps.spawn}
+    global.warps.spawn = nil
     for name,data in pairs(table.keysort(global.warps)) do _temp[name] = data end
     global.warps = _temp
     ThisModule.Gui()
@@ -163,7 +163,7 @@ ThisModule.Gui = Gui.left{
         }
         for name,warp in pairs(global.warps) do
             if not warp.tag or not warp.tag.valid then
-                player.force.add_chart_tag(game.surfaces[warp.surface],{
+                warp.tag = player.force.add_chart_tag(game.surfaces[warp.surface],{
                     position=warp.position,
                     text='Warp: '..name,
                     icon={type='item',name=warp_item}
@@ -181,7 +181,7 @@ ThisModule.Gui = Gui.left{
             local btn = go_to_warp(_flow)
             btn.style.height = 20
             btn.style.width = 20
-            if not Role and player.admin and name ~= 'Spawn' or Role and Role.allowed(player,'make-warp') and name ~= 'Spawn' then
+            if not Role and player.admin and name ~= 'spawn' or Role and Role.allowed(player,'make-warp') and name ~= 'spawn' then
                 local btn = remove_warp(_flow)
                 btn.style.height = 20
                 btn.style.width = 20
@@ -239,10 +239,10 @@ script.on_event(defines.events.on_player_created, function(event)
         player.force.chart(player.surface, {{player.position.x - 20, player.position.y - 20}, {player.position.x + 20, player.position.y + 20}})
         local tag = player.force.add_chart_tag(player.surface,{
             position={0,0},
-            text='Warp: Spawn',
+            text='Warp: spawn',
             icon={type='item',name=warp_item}
         })
-        global.warps['Spawn'] = {tag=tag,surface=player.surface.index,position={x=0,y=0}}
+        global.warps['spawn'] = {tag=tag,surface=player.surface.index,position={x=0,y=0}}
     end
 end)
 
