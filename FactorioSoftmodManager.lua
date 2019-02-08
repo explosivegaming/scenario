@@ -735,7 +735,7 @@ script.on_load(function(...)
     local names = {}
     for name,default in pairs(Manager.global.__defaults) do table.insert(names,name) end
     Manager.verbose('Global Tables: '..table.concat(names,', '))
-    for name,default in pairs(Manager.global.__defaults) do Manager.verbose('Global '..name..' = '..serpent.line(Manager.global(name))) end
+    --for name,default in pairs(Manager.global.__defaults) do Manager.verbose('Global '..name..' = '..serpent.line(Manager.global(name))) end
     Manager.event(-2,...)
     Manager.verbose('____________________| SubStop: script.on_load |____________________')
 end)

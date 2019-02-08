@@ -40,6 +40,7 @@ function Admin.jail(player,by_player,reason)
         ['Reason:']=reason
     } end
     Role.meta.last_jail = player.name
+    player.vehicle = nil
     Server.interface(Role.assign,true,player,'Jail',by_player.name)
     Server.interface(Role.unassign,true,player,Role.get(player),by_player.name)
 end

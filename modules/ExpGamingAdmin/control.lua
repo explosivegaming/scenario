@@ -43,7 +43,7 @@ function Admin.create_reason(reason,name)
     reason = reason or 'No Reason'
     if not string.find(string.lower(reason),string.lower(name)) then reason = reason..' - '..name end
     if Sync and Sync.info.date ~= '0000/00/00' and not string.find(string.lower(reason),Sync.info.date) then reason = reason..' - '..Sync.info.date end
-    if not string.find(string.lower(reason),'appeal') then reason = reason..' - Vist www.explosivegaming.nl to appeal.' end
+    if not string.find(string.lower(reason),'appeal') then reason = reason..' - Visit www.explosivegaming.nl to appeal.' end
     return reason
 end
 
