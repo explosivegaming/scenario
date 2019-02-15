@@ -115,8 +115,8 @@ end
 function ExpLib.player_return(rtn,colour,player)
     colour = ExpLib.is_type(colour,'table') and colour or defines.textcolor[colour] ~= defines.color.white and defines.textcolor[colour] or defines.color[colour]
     player = player or game.player
-    local function _return(callback,rtn)
-        if ExpLib.is_type(rtn,'table',use_colour) then 
+    local function returnWith(callback,use_colour)
+        if ExpLib.is_type(rtn,'table',use_colour) then
             -- test for: userdata, locale string, table with __tostring meta method, any other table
             if ExpLib.is_type(rtn.__self,'userdata') then callback('Cant Display Userdata',use_colour)
             elseif ExpLib.is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then callback(rtn,use_colour)
@@ -133,8 +133,8 @@ function ExpLib.player_return(rtn,colour,player)
         if not player then error('Invalid Player given to player_return',2) end
         -- plays a nice sound that is different to normal message sound
         player.play_sound{path='utility/scenario_message'}
-        _return(player.print,rtn,colour)
-    else _return(rcon.print,rtn) end
+        returnWith(player.print,colour)
+    else returnWith(rcon.print) end
 end
 
 --- Convert ticks to hours
