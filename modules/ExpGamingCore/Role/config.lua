@@ -162,7 +162,8 @@ Role{
     tag='[Partner]',
     group='HiMember',
     colour={r=140,g=120,b=200},
-    allow_afk_kick=true,
+    allow_afk_kick=false,
+    is_spectator=true,
     allow={
         ['global-chat']=true,
     }
