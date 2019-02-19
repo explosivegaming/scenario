@@ -235,7 +235,7 @@ local function run_custom_command(command)
     -- runs the command
     local success, err = pcall(data.callback,command,args)
     if not success then error(err) end
-    if err ~= commands.error and player ~= SERVER then player_return({'ExpGamingCore_Command.command-ran'},defines.textcolor.info) end
+    if err ~= commands.error then player_return({'ExpGamingCore_Command.command-ran'},defines.textcolor.info) end
     logMessage(player.name,command,'Used command',args)
 end
 
