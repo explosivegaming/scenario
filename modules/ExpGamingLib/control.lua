@@ -115,17 +115,17 @@ end
 function ExpLib.player_return(rtn,colour,player)
     colour = ExpLib.is_type(colour,'table') and colour or defines.textcolor[colour] ~= defines.color.white and defines.textcolor[colour] or defines.color[colour]
     player = player or game.player
-    local function returnWith(callback,use_colour)
-        if ExpLib.is_type(rtn,'table',use_colour) then
+    local function returnWith(callback)
+        if ExpLib.is_type(rtn,'table') then
             -- test for: userdata, locale string, table with __tostring meta method, any other table
-            if ExpLib.is_type(rtn.__self,'userdata') then callback('Cant Display Userdata',use_colour)
-            elseif ExpLib.is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then callback(rtn,use_colour)
-            elseif getmetatable(rtn) ~= nil and not tostring(rtn):find('table: 0x') then callback(tostring(rtn),use_colour)
-            else callback(table.tostring(rtn),use_colour) end
+            if ExpLib.is_type(rtn.__self,'userdata') then callback('Cant Display Userdata')
+            elseif ExpLib.is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then callback(rtn)
+            elseif getmetatable(rtn) ~= nil and not tostring(rtn):find('table: 0x') then callback(tostring(rtn))
+            else callback(table.tostring(rtn)) end
             -- test for: function
-        elseif ExpLib.is_type(rtn,'function') then callback('Cant Display Functions',use_colour)
+        elseif ExpLib.is_type(rtn,'function') then callback('Cant Display Functions')
         -- else just call tostring
-        else callback(tostring(rtn),use_colour) end
+        else callback(tostring(rtn)) end
     end
     if player then
         -- allows any valid player identifier to be used
@@ -133,7 +133,7 @@ function ExpLib.player_return(rtn,colour,player)
         if not player then error('Invalid Player given to player_return',2) end
         -- plays a nice sound that is different to normal message sound
         player.play_sound{path='utility/scenario_message'}
-        returnWith(player.print,colour)
+        returnWith(function() player.print(rtn,colour) end)
     else returnWith(rcon.print) end
 end
 
