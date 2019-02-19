@@ -82,7 +82,7 @@ end
 -- @tparam[opt=nil] string test_type the type to test for if not given then it tests for nil
 -- @treturn boolean is v of type test_type
 function ExpLib.is_type(v,test_type)
-    return test_type and v and type(v) == test_type or not test_type and not v or false 
+    return test_type and v and type(v) == test_type or not test_type and not v or false
 end
 
 --- Compare types faster for faster validation of prams, including giving an error if incorrect
@@ -115,26 +115,35 @@ end
 function ExpLib.player_return(rtn,colour,player)
     colour = ExpLib.is_type(colour,'table') and colour or defines.textcolor[colour] ~= defines.color.white and defines.textcolor[colour] or defines.color[colour]
     player = player or game.player
-    local function returnWith(callback)
-        if ExpLib.is_type(rtn,'table') then
-            -- test for: userdata, locale string, table with __tostring meta method, any other table
-            if ExpLib.is_type(rtn.__self,'userdata') then callback('Cant Display Userdata')
-            elseif ExpLib.is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then callback(rtn)
-            elseif getmetatable(rtn) ~= nil and not tostring(rtn):find('table: 0x') then callback(tostring(rtn))
-            else callback(table.tostring(rtn)) end
-            -- test for: function
-        elseif ExpLib.is_type(rtn,'function') then callback('Cant Display Functions')
-        -- else just call tostring
-        else callback(tostring(rtn)) end
-    end
+    -- converts the value to a string
+    local returnAsString
+    if ExpLib.is_type(rtn,'table') then
+        if ExpLib.is_type(rtn.__self,'userdata') then
+            -- value is userdata
+            returnAsString = 'Cant Display Userdata'
+        elseif ExpLib.is_type(rtn[1],'string') and string.find(rtn[1],'.+[.].+') and not string.find(rtn[1],'%s') then
+            -- value is a locale string
+            returnAsString = rtn
+        elseif getmetatable(rtn) ~= nil and not tostring(rtn):find('table: 0x') then
+            -- value has a tostring meta method
+            returnAsString = tostring(rtn)
+        else
+            -- value is a table
+            returnAsString = table.tostring(rtn)
+        end
+    elseif ExpLib.is_type(rtn,'function') then
+        -- value is a function
+        returnAsString = 'Cant Display Functions'
+    else returnAsString = tostring(rtn) end
+    -- returns to the player or the server
     if player then
         -- allows any valid player identifier to be used
         player = Game.get_player(player)
         if not player then error('Invalid Player given to player_return',2) end
         -- plays a nice sound that is different to normal message sound
         player.play_sound{path='utility/scenario_message'}
-        returnWith(function(newRtn) player.print(newRtn,colour) end)
-    else returnWith(function(newRtn) rcon.print(newRtn) end) end
+        player.print(returnAsString,colour)
+    else rcon.print(returnAsString) end
 end
 
 --- Convert ticks to hours
