@@ -133,8 +133,8 @@ function ExpLib.player_return(rtn,colour,player)
         if not player then error('Invalid Player given to player_return',2) end
         -- plays a nice sound that is different to normal message sound
         player.play_sound{path='utility/scenario_message'}
-        returnWith(function() player.print(rtn,colour) end)
-    else returnWith(rcon.print) end
+        returnWith(function(newRtn) player.print(newRtn,colour) end)
+    else returnWith(function(newRtn) rcon.print(newRtn) end) end
 end
 
 --- Convert ticks to hours
