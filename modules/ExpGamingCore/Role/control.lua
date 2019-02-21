@@ -516,10 +516,12 @@ end)
 
 script.on_event(defines.events.on_tick,function(event)
     if game.tick%(3600*5) ~= 0 then return end -- every 5 minutes
-    for role_name, time in pairs(Role.meta.times) do
-        for _,player in pairs(game.connected_players) do
+    for _,player in pairs(game.connected_players) do
+        if not Role.has_flag(player,'block_auto_promote') then
             local highest = Role.get_highest(player)
-            if highest.index > time[1] and (player.online_time) > time[2] then Role.assign(player,role_name) end
+            for role_name, time in pairs(Role.meta.times) do
+                if highest.index > time[1] and (player.online_time) > time[2] then Role.assign(player,role_name) end
+            end
         end
     end
 end)
