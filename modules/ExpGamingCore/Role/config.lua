@@ -1,10 +1,13 @@
+-- the two below are used internally by the role system and should not be REMOVED, name must be kept the same and used at least once
 Role.add_flag('is_default') -- this must be included in at least one role
-Role.add_flag('is_root',function(player,state) 
+Role.add_flag('is_root',function(player,state)
     if state then game.print('--- !!!ALERT!!! --- '..player.name..' has been given a role with ROOT ACCESS --- !!!ALERT!!! ---') end
     if player.character then player.character.destructible = not state end 
 end) -- the SERVER role will have root but you may assign this to other roles
--- the two above and used internally and should NOT have their names changed and should NOT be removed but the state function MAY be changed
+-- the two below are ised internally by the role system and should not be RENAMED, name must be kept the same but does not need to be used
+Role.add_flag('block_auto_promote') -- is not required but name is used internally to block time based promotions
 Role.add_flag('is_antiroot',function(player,state) if player.character then player.character.destructible = not state end end) -- not required but setting true will disallow everything for that role
+-- all below are not required and are not used internally
 Role.add_flag('is_admin',function(player,state) player.admin = state end) -- highly recommenced but not required
 Role.add_flag('is_spectator',function(player,state) player.spectator = state end)
 Role.add_flag('is_jail',function(player,state) if player.character then player.character.active = not state end end)
@@ -250,6 +253,7 @@ Role{
     colour={r=50,g=50,b=50},
     is_jail=true,
     is_antiroot=true,
+    block_auto_promote=true,
     allow={}
 }
 
