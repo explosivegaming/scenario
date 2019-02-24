@@ -12,3 +12,20 @@ Manager.setVerbose{
     output=Manager._verbose -- can be: can be: print || log || other function
 }
 Manager() -- can be Manager.loadModules() if called else where
+
+--[[
+Container = require 'container'
+Container.handlers = {
+    --event
+    --global
+    error=error,
+    log=function(...) _R.log(...) end,
+    --debug
+    tableToString=serpent.line
+}
+Container.loadHandlers()
+Container.files = {
+    'modules.test'
+}
+Container.loadFiles()
+]]
