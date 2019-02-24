@@ -28,22 +28,22 @@ local Container = {
 }
 
 function Container.log(level,...)
-    if level >= Container.logLevel then Container.stdout(...) end
+    if level <= Container.logLevel then Container.stdout(...) end
 end
 function Container.stdout(...)
     local msg = ''
     for _,value in pairs({...}) do
         msg = msg..' '..Container.tostring(value)
     end
-    if Container.handlers.log then
-        Container.handlers.log(msg)
+    if Container.handlers.logging then
+        Container.handlers.logging(msg)
     else
         log(msg)
     end
 end
 
 function Container.error(...)
-    if Container.safeError then Container.stdout(...) else Container.stderr(...) end
+    if Container.safeError then Container.stdout('ERROR',...) else Container.stderr(...) end
 end
 function Container.stderr(type,...)
     local msg = 'ERROR: '..type
@@ -110,7 +110,7 @@ function Container.loadFile(filePath)
     local success,file = pcall(require,filePath)
     if not success then return Container.error(Container.defines.errorLoad,file) end
     if not file then return Container.error(Container.defines.errorNotFound) end
-    Container.log(Container.defines.logDebug,'Loaded file: ',filePath)
+    Container.log(Container.defines.logDebug,'Loaded file:',filePath)
     return file
 end
 

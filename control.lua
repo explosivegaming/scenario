@@ -1,4 +1,4 @@
--- not_luadoc=true
+--[[ not_luadoc=true
 function _log(...) log(...) end -- do not remove this is used for smaller verbose lines
 Manager = require("FactorioSoftmodManager")
 Manager.setVerbose{
@@ -12,14 +12,14 @@ Manager.setVerbose{
     output=Manager._verbose -- can be: can be: print || log || other function
 }
 Manager() -- can be Manager.loadModules() if called else where
+]]
 
---[[
-Container = require 'container'
+local Container = require 'container'
 Container.handlers = {
     --event
     --global
     error=error,
-    log=function(...) _R.log(...) end,
+    logging=function(...) log(...) end,
     --debug
     tableToString=serpent.line
 }
@@ -28,4 +28,3 @@ Container.files = {
     'modules.test'
 }
 Container.loadFiles()
-]]
