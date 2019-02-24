@@ -10,6 +10,7 @@ local Container = {
         --tableToString=serpent.line
     },
     _raw={}, -- any values that are replaced by handlers are moved here
+    _loaded={},
     defines={
         errorLoad='ERRLOAD', -- error when loading a file
         errorNotFound='ERRNOTFOUND', -- error when file not found
@@ -18,7 +19,7 @@ local Container = {
         logDebug=2, -- longer logs of debugging
         logEvents=3, -- logs which take place very often such as frequent event triggers if no other filters
         logVerbose=4, -- basically a log of any thing useful
-        logMax=5 -- what ever is left to log weather you see a current need or not
+        logAll=5 -- what ever is left to log weather you see a current need or not
     },
     -- to prevent desyncs during on_load any change to the following must be updated
     -- example: runtime change to logLevel must be applied during on_load to avoid desyncs
@@ -46,7 +47,7 @@ function Container.error(...)
     if Container.safeError then Container.stdout('ERROR',...) else Container.stderr(...) end
 end
 function Container.stderr(type,...)
-    local msg = 'ERROR: '..type
+    local msg = 'ERROR: '..tostring(type)
     for _,value in pairs({...}) do
         msg = msg..' '..Container.tostring(value)
     end
@@ -106,11 +107,60 @@ function Container.tostring(value)
     end
 end
 
+--- Sandboxs a function into the container and the given env, will load upvalues if provied in the given env
+-- @usage container:sandbox(print,{},'hello from the sandbox')
+-- @tparam callback function the function that will be run in the sandbox
+-- @tparam env table the env which the function will run in, place upvalues in this table
+-- @param[opt] any args you want to pass to the function
+-- @treturn boolean did the function run without error
+-- @treturn string|table returns error message or the returns from the function
+-- @treturn table returns back the env as new values may have been saved
+function Container.sandbox(callback,env,...)
+    -- creates a sandbox env which will later be loaded onto _G
+    local sandbox_env = setmetatable(env,{
+        __index=function(tbl,key)
+                return rawget(_G,key)
+        end
+    })
+    sandbox_env._ENV = sandbox_env
+    sandbox_env._MT_G = getmetatable(_G)
+    -- sets any upvalues on the callback
+    local i = 1
+    while true do
+        local name, value = debug.getupvalue(callback,i)
+        if not name then break end
+        if not value and sandbox_env[name] then
+            debug.setupvalue(callback,i,sandbox_env[name])
+        end
+        i=i+1
+    end
+    -- adds the sandbox to _G
+    setmetatable(_G,{__index=sandbox_env,__newindex=sandbox_env})
+    local rtn = {pcall(callback,...)}
+    local success = table.remove(rtn,1)
+    setmetatable(_G,_MT_G)
+    -- returns values from the callback, if error then it returns the error
+    if success then return success, rtn, sandbox_env
+    else return success, rtn[1], sandbox_env end
+end
+
 function Container.loadFile(filePath)
+    if Container._loaded[filePath] then return Container._loaded[filePath] end
     local success,file = pcall(require,filePath)
-    if not success then return Container.error(Container.defines.errorLoad,file) end
-    if not file then return Container.error(Container.defines.errorNotFound) end
+    if not success then return Container.error(Container.defines.errorLoad,filePath,file) end
+    -- if the file was not found then it returns an error from require which does not trip pcall, tested for here
+    if Container.type(file,'string') and file:find('no such file') then
+        -- tries with modules. appended to the front of the path and .control on the end
+        local success,_file = pcall(require,'modules.'..filePath..'.control')
+        if not success then return Container.error(Container.defines.errorLoad,filePath,_file) end
+        -- again tests for the error not caught by pcall
+        if Container.type(_file,'string') and _file:find('no such file') then return Container.error(Container.defines.errorNotFound,filePath) end
+        Container.log(Container.defines.logDebug,'Loaded file:',filePath)
+        Container._loaded[filePath] = _file
+        return _file
+    end
     Container.log(Container.defines.logDebug,'Loaded file:',filePath)
+    Container._loaded[filePath] = file
     return file
 end
 
@@ -136,6 +186,26 @@ function Container.loadFiles()
     Container.log(Container.defines.logAlways,'Loading Container Files')
     for _,filePath in pairs(Container.files) do
         Container.loadFile(filePath)
+    end
+end
+
+function Container.initFiles()
+    Container.log(Container.defines.logAlways,'Initiating Container Files')
+    for filePath,file in pairs(Container._loaded) do
+        if file.on_init then
+            file.on_init()
+            Container.log(Container.defines.logDebug,'Initiated file:',filePath)
+        end
+    end
+end
+
+function Container.postFiles()
+    Container.log(Container.defines.logAlways,'POSTing Container Files')
+    for filePath,file in pairs(Container._loaded) do
+        if file.on_post then
+            file.on_post()
+            Container.log(Container.defines.logDebug,'POSTed file:',filePath)
+        end
     end
 end
 
