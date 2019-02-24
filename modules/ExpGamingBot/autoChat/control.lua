@@ -136,7 +136,7 @@ local ThisModule = {
 }
 
 -- Event Handlers Define
-script.on_event(defines.events.on_console_chat,function(event)
+Event.add(defines.events.on_console_chat,function(event)
     local player = Game.get_player(event)
     if not player then return end
     local player_message = event.message:lower():gsub("%s+", "")

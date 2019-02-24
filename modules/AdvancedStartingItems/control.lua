@@ -28,7 +28,7 @@ local module_verbose = false
 local ThisModule = {}
 
 -- Event Handlers Define
-script.on_event(defines.events.on_player_created, function(event)
+Event.add(defines.events.on_player_created, function(event)
     local player = game.players[event.player_index]
     if event.player_index == 1 then
         player.force.friendly_fire = false

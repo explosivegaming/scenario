@@ -14,7 +14,7 @@ local module_verbose = false
 local ThisModule = {}
 
 -- Event Handlers Define
-script.on_event(defines.events.on_console_command,function(event)
+Event.add(defines.events.on_console_command,function(event)
     local command = event.command
     local args = {}
     if event.parameters then for word in event.parameters:gmatch('%S+') do table.insert(args,word) end end

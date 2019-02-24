@@ -171,7 +171,7 @@ end
 -- Event Handlers Define
 
 -- creates all permission groups and links them
-script.on_event('on_init',function()
+Event.add('on_init',function()
     for name,group in pairs(Group.groups) do
 		local _group = game.permissions.create_group(name)
         verbose('Created Permission Group: '..name)

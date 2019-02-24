@@ -61,7 +61,7 @@ local Role = {
 _RoleSelfReference=Role
 
 -- Global Define
-local global = global{
+local global = {
     change_cache_length=15,
     changes={},
     latest_change={},
@@ -69,7 +69,8 @@ local global = global{
     players={},
     roles={}
 }
-RoleGlobal = global
+Global.register(global,function(tbl) RoleGlobal = tbl end)
+
 -- Function Define
 
 --- Used to set default roles for players who join
@@ -459,7 +460,7 @@ function Role._prototype:remove_player(player,by_player,batch)
 end
 
 -- Event Handlers Define
-script.on_event(role_change_event_id,function(event)
+Event.add(role_change_event_id,function(event)
     -- variable init
     local player = Game.get_player(event)
     local by_player = Game.get_player(event.by_player_index) or SERVER
@@ -505,7 +506,7 @@ script.on_event(role_change_event_id,function(event)
     end
 end)
 
-script.on_event(defines.events.on_player_created,function(event)
+Event.add(defines.events.on_player_created,function(event)
     local player = Game.get_player(event)
     local highest = Role.get_highest(player) or Role.meta.default
     Group.assign(player,highest.group)
@@ -514,7 +515,7 @@ script.on_event(defines.events.on_player_created,function(event)
     if Role.preassign[player.name:lower()] then Role.assign(player,Role.preassign[player.name:lower()]) end
 end)
 
-script.on_event(defines.events.on_tick,function(event)
+Event.add(defines.events.on_tick,function(event)
     if game.tick%(3600*5) ~= 0 then return end -- every 5 minutes
     for _,player in pairs(game.connected_players) do
         if not Role.has_flag(player,'block_auto_promote') then

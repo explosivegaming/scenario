@@ -85,6 +85,6 @@ function toolbar.on_init()
     if loaded_modules['ExpGamingCore.Role'] then Role = require('ExpGamingCore.Role') end
 end
 
-script.on_event({defines.events.on_role_change,defines.events.on_player_joined_game},toolbar.draw)
+Event.add({defines.events.on_role_change,defines.events.on_player_joined_game},toolbar.draw)
 -- calling with only a player will draw the toolbar for that player, more params will attempt to add a button
 return setmetatable(toolbar,{__call=function(self,player,extra,...) if extra then return self.add(player,extra,...) else self.draw(player) end end})

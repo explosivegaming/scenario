@@ -12,7 +12,7 @@ local module_verbose = false
 local ThisModule = {}
 
 -- Global Define
-local global = global{
+local global = {
 	BADgamerNL={r=255,g=20,b=147},
 	arty714={r=150,g=68,b=161},
 	Cooldude2606={r=57,g=192,b=207},
@@ -26,9 +26,10 @@ local global = global{
 	cydes={r=82,g=249,b=155},
 	UUBlueFire={r=0,g=204,b=255}
 }
+Global.register(global,function(tbl) global = tbl end)
 
 -- Event Handlers Define
-script.on_event(defines.events.on_player_created, function(event)
+Event.add(defines.events.on_player_created, function(event)
     local player = game.players[event.player_index]
 	local colours = table.keys(defines.color)
 	player.color = defines.color.black

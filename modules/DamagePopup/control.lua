@@ -9,7 +9,7 @@ local Color = require('FactorioStdLib.Color')
 
 local DamagePopup = {}
 
-script.on_event(defines.events.on_entity_damaged, function(event)
+Event.add(defines.events.on_entity_damaged, function(event)
   local entity = event.entity
   local cause = event.cause
   local damage = event.original_damage_amount

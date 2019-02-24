@@ -65,7 +65,7 @@ if Sync.add_to_gui then
 end
 
 -- adds a discord emit for rank changing
-script.on_event('on_role_change',function(event)
+Event.add('on_role_change',function(event)
     local role = Role.get(event.role_name)
     local player = Game.get_player(event)
     local by_player = Game.get_player(event.by_player_index) or SERVER

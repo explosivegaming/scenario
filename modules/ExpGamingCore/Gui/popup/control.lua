@@ -124,7 +124,7 @@ function popup.on_post()
     end)
 end
 
-script.on_event(defines.events.on_player_joined_game,popup.flow)
+Event.add(defines.events.on_player_joined_game,popup.flow)
 
 -- calling will attempt to add a new popup style
 return setmetatable(popup,{__call=function(self,...) return self.add(...) end})

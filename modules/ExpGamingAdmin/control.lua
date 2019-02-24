@@ -28,9 +28,10 @@ local Admin = {
 }
 
 -- Global Define
-local global = global{
+local global = {
     banned = {}
 }
+Global.register(global,function(tbl) global = tbl end)
 
 -- Function Define
 function Admin.valid_players(player,by_player)

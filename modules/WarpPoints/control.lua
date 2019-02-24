@@ -22,7 +22,6 @@ local global_offset = {x=0,y=0}
 local warp_min_distance = 25
 
 -- Module Define
-local _global = global
 local global
 local module_verbose = false
 local ThisModule = {
@@ -33,10 +32,11 @@ local ThisModule = {
 }
 
 -- Global Define
-global = _global{
+global = {
     warps={}, -- 0,0 is always a warp
     cooldowns={}
 }
+Global.register(global,function(tbl) global = tbl end)
 
 -- Function Define
 
@@ -210,7 +210,7 @@ ThisModule.Gui = Gui.left{
 }
 
 -- Event Handlers Define
-script.on_event(defines.events.on_tick,function(event)
+Event.add(defines.events.on_tick,function(event)
     if not (event.tick % 60 == 0) then return end
     for index,time in pairs(global.cooldowns) do
         if time > 0 then
@@ -220,7 +220,7 @@ script.on_event(defines.events.on_tick,function(event)
     end
 end)
 
-script.on_event(defines.events.on_player_changed_position, function(event)
+Event.add(defines.events.on_player_changed_position, function(event)
     local player = Game.get_player(event)
     local cooldown = global.cooldowns[player.index] or 0
     local tile = player.surface.get_tile(player.position).name
@@ -233,7 +233,7 @@ script.on_event(defines.events.on_player_changed_position, function(event)
     end
 end)
 
-script.on_event(defines.events.on_player_created, function(event)
+Event.add(defines.events.on_player_created, function(event)
     if event.player_index == 1 then
         local player = Game.get_player(event)
         player.force.chart(player.surface, {{player.position.x - 20, player.position.y - 20}, {player.position.x + 20, player.position.y + 20}})

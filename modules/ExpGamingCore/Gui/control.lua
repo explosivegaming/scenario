@@ -9,7 +9,8 @@ local Color = require('FactorioStdLib.Color')
 local Server -- ExpGamingCore.Server@?^4.0.0
 
 local Gui = {}
-local global = global()
+local global = {}
+Global.register(global,function(tbl) global = tbl end)
 --- Used to set and get data about different guis
 -- @usage Gui.data[location] -- returns the gui data for that gui location ex center
 -- @usage Gui.data(location,gui_name,gui_data) -- adds gui data for a gui at a location
@@ -140,7 +141,7 @@ function Gui.cam_link(data)
     return data.cam
 end
 
-script.on_event('on_tick', function(event)
+Event.add('on_tick', function(event)
     if loaded_modules['ExpGamingCore.Server'] then return end
     if global.cams and is_type(global.cams,'table') and #global.cams > 0 then
         local update = 4
@@ -158,7 +159,7 @@ script.on_event('on_tick', function(event)
     end
 end)
 
-script.on_event('on_player_respawned',function(event)
+Event.add('on_player_respawned',function(event)
     if loaded_modules['ExpGamingCore.Server'] then return end
     if global.players and is_type(global.players,'table') and #global.players > 0 and global.players[event.player_index] then
         local remove = {}

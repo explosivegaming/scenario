@@ -28,7 +28,7 @@ local ThisModule = {
 }
 
 -- Global Define
-local global = global{
+local global = {
     _base={
         update=0,
         _update=0,
@@ -36,6 +36,7 @@ local global = global{
         _made={0,0,0,0,0,0,0}
     }
 }
+Global.register(global,function(tbl) global = tbl end)
 
 -- Function Define
 ThisModule.Gui = Gui.left{
@@ -98,7 +99,7 @@ ThisModule.Gui = Gui.left{
 }
 
 -- Event Define
-script.on_event(defines.events.on_research_finished,function(event) Gui.left.update('science') end)
+Event.add(defines.events.on_research_finished,function(event) Gui.left.update('science') end)
 
 -- Module Return
 -- when called will toggle the gui for that player, if no player it will update the gui

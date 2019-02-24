@@ -208,14 +208,14 @@ function center._prototype:add_tab(name,caption,tooltip,callback)
 end
 
 -- used so that when gui close key is pressed this will close the gui
-script.on_event(defines.events.on_gui_closed,function(event)
+Event.add(defines.events.on_gui_closed,function(event)
     if event.element and event.element.valid then event.element.destroy() end
 end)
 
-script.on_event(defines.events.on_player_respawned,center.clear)
+Event.add(defines.events.on_player_respawned,center.clear)
 
 function center.on_init()
-    if loaded_modules['ExpGamingCore.Role'] then script.on_event(defines.events.on_role_change,center.clear) end
+    if loaded_modules['ExpGamingCore.Role'] then Event.add(defines.events.on_role_change,center.clear) end
 end
 -- calling will attempt to add a new gui
 return setmetatable(center,{__call=function(self,...) return self.add(...) end})

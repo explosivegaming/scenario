@@ -3,7 +3,8 @@
 -- @author Cooldude2606
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
-local global = global{}
+local global = {}
+Global.register(global,function(tbl) global = tbl end)
 local Game = require('FactorioStdLib.Game')
 
 -- these are the settings which are changed with scale being as +100%
@@ -29,7 +30,7 @@ commands.add_command('bonus', 'Set your player bonus (default is 20, guest has 0
     player_return('Bonus set to: '..math.floor(bonus)..'%')
 end).default_admin_only = true
 
-script.on_event(defines.events.on_player_respawned,function(event)
+Event.add(defines.events.on_player_respawned,function(event)
     local player = Game.get_player(event)
     local bonus = global[player.index]
     if bonus then
@@ -38,7 +39,7 @@ script.on_event(defines.events.on_player_respawned,function(event)
 end)
 
 -- overridden by ExpGamingCore.Role if present
-script.on_event(defines.events.on_pre_player_died,function(event)
+Event.add(defines.events.on_pre_player_died,function(event)
     local player = Game.get_player(event)
     if player.admin then
         player.ticks_to_respawn = 120
@@ -57,7 +58,7 @@ return {
         if loaded_modules['ExpGamingCore.Role'] then
             local Role = require('ExpGamingCore.Role')
             -- instant respawn
-            script.on_event(defines.events.on_pre_player_died,function(event)
+            Event.add(defines.events.on_pre_player_died,function(event)
                 local player = Game.get_player(event)
                 if Role.allowed(player,'bonus-respawn') then
                     player.ticks_to_respawn = 120
@@ -71,7 +72,7 @@ return {
                 end
             end)
             -- either clears or adds default when rank changed
-            script.on_event(defines.events.role_change,function(event)
+            Event.add(defines.events.role_change,function(event)
                 local player = Game.get_player(event)
                 if Role.allowed(player,'bonus') then
                     for key,setting in pairs(settings) do player[key] = setting*0.2 end

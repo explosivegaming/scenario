@@ -57,7 +57,8 @@ local ThisModule = {
 }
 
 -- Global Define
-local global = global{}
+local global = {}
+Global.register(global,function(tbl) global = tbl end)
 
 -- Function Define
 local function give_punishment(player,by_player,reason)
@@ -120,7 +121,7 @@ function Admin.clear_warnings(player,by_player,no_emit)
 end
 
 -- Event Handlers Define
-script.on_event(defines.events.on_tick,function(event)
+Event.add(defines.events.on_tick,function(event)
     if (game.tick % min_time_to_remove_warning) == 0 then
         for name,warnings in pairs(global) do
             if warnings > 0 then

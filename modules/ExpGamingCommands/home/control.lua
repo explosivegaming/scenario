@@ -4,7 +4,8 @@
 -- @license https://github.com/explosivegaming/scenario/blob/master/LICENSE
 
 local Game = require('FactorioStdLib.Game')
-local global = global{}
+local global = {}
+Global.register(global,function(tbl) global = tbl end)
 
 --- Sets the home for a player
 -- @command set-home

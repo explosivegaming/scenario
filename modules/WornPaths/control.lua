@@ -21,7 +21,8 @@ local module_verbose = false
 local ThisModule = {}
 
 -- Global Define
-local global = global()
+local global = {}
+Global.register(global,function(tbl) global = tbl end)
 
 -- Function Define
 local function global_key(surface,pos)
@@ -42,7 +43,7 @@ function ThisModule.down_grade(surface,pos)
 end
 
 -- Event Handlers Define
-script.on_event({defines.events.on_player_built_tile,defines.events.on_robot_built_tile}, function(event)
+Event.add({defines.events.on_player_built_tile,defines.events.on_robot_built_tile}, function(event)
     local surface = event.surface_index and game.surfaces[event.surface_index] or event.robot and event.robot.surface
     local old_tiles = event.tiles
     for _,old_tile in pairs(old_tiles) do
@@ -52,7 +53,7 @@ script.on_event({defines.events.on_player_built_tile,defines.events.on_robot_bui
     end
 end)
 
-script.on_event(defines.events.on_player_changed_position, function(event)
+Event.add(defines.events.on_player_changed_position, function(event)
     local player = Game.get_player(event)
     if not player or not player.valid or game.tick < 10 then return end
     if player.afk_time > 300 then return end
@@ -73,7 +74,7 @@ script.on_event(defines.events.on_player_changed_position, function(event)
     end
 end)
 
-script.on_event({defines.events.on_built_entity,on_robot_built_entity}, function(event)
+Event.add({defines.events.on_built_entity,on_robot_built_entity}, function(event)
     local entity = event.created_entity
     local surface = entity.surface
     if entities[entity.name] then

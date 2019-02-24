@@ -31,7 +31,7 @@ function ChatPopup.sendFlyingText(player, text)
 	end
 end
 
-script.on_event(defines.events.on_console_chat, function(event)
+Event.add(defines.events.on_console_chat, function(event)
   if not event.player_index then return end
   local player = game.players[event.player_index]
   if not player then return end

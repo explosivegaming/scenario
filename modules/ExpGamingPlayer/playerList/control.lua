@@ -37,11 +37,12 @@ local ThisModule = {
 }
 
 -- Global Define
-local global = global{
+local global = {
     update=0,
     delay=10,
     interval=54000
 }
+Global.register(global,function(tbl) global = tbl end)
 
 function ThisModule.update(tick)
     local tick = is_type(tick,'table') and tick.tick or is_type(tick,'number') and tick or game.tick
@@ -110,14 +111,14 @@ ThisModule.Gui = Gui.left{
     open_on_join=true
 }
 
-script.on_event(defines.events.on_tick,function(event)
+Event.add(defines.events.on_tick,function(event)
     if event.tick > global.update then
         ThisModule.Gui()
         global.update = event.tick + global.interval
     end
 end)
 
-script.on_event(defines.events.on_gui_click,function(event)
+Event.add(defines.events.on_gui_click,function(event)
     -- lots of checks for it being valid
     if event.element and event.element.valid 
     and event.element.parent and event.element.parent.parent and event.element.parent.parent.parent 
@@ -136,8 +137,8 @@ script.on_event(defines.events.on_gui_click,function(event)
     if Admin and AdminGui and Admin.allowed(event.player_index) then AdminGui(flow).caption = event.element.name end
 end)
 
-script.on_event(defines.events.on_player_joined_game,function() ThisModule.update() end)
-script.on_event(defines.events.on_player_left_game,function() ThisModule.update() end)
+Event.add(defines.events.on_player_joined_game,function() ThisModule.update() end)
+Event.add(defines.events.on_player_left_game,function() ThisModule.update() end)
 
 ThisModule.force_update = function() return ThisModule.Gui() end
 -- when called it will queue an update to the player list

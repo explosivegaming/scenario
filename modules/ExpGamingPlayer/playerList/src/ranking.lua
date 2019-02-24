@@ -1,6 +1,6 @@
 local Role = require('ExpGamingCore.Role')
 
-script.on_event(defines.events.on_role_change,self.update)
+Event.add(defines.events.on_role_change,self.update)
 
 return function()
     local rtn = {}

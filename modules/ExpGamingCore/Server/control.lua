@@ -22,7 +22,7 @@ local module_verbose = false --true|false
 -- @field print_to contains players that event details will be printed to
 -- @field uuid contains the random number generator for the uuid system
 local pre_load_uuid = 0
-local global = global{
+local global = {
     all={_n=0},
     queue={},
     tick={},
@@ -33,6 +33,7 @@ local global = global{
     print_to={},
     uuid=0
 }
+Global.register(global,function(tbl) global = tbl end)
 
 --- Used to generate a new uuid for the thread system
 -- @usage local uuid = tostring(Server.uuid) -- calling tostring locks the value
@@ -155,9 +156,9 @@ function Server._thread_debuger(player,event,state)
     else print_to[player.index][event] = true end
 end
 
---- Calls all threads on a certain game event (used with script.on_event)
+--- Calls all threads on a certain game event (used with Event.add)
 -- @local Server._thread_handler
--- @usage script.on_event(defines.events,Server._thread_handler) -- adds this handler
+-- @usage Event.add(defines.events,Server._thread_handler) -- adds this handler
 -- @tparam table event the event that is called
 function Server._thread_handler(event)
     -- returns to players who have set _thread_debuger to true
@@ -195,7 +196,7 @@ function Server.add_thread_handler(event)
     local threads = global
     if not threads.events[event] then 
         threads.events[event] = {}
-        script.on_event(event,Server._thread_handler)
+        Event.add(event,Server._thread_handler)
         return true
     end
     return false
@@ -485,7 +486,7 @@ function Server._thread:on_event(event,callback)
     return self
 end
 
-script.on_event(defines.events.on_tick,function(event)
+Event.add(defines.events.on_tick,function(event)
     -- uses its own on_tick event so that other actions can be tested for
     if event.tick < 10 then return end
     if #global.tick > 0 then Server.run_tick_threads() end -- on tick events
@@ -505,7 +506,7 @@ script.on_load(function(event)
 end)
 
 function Server:on_init()
-    for name,id in pairs(defines.events) do if not script.get_event_handler(id) then script.on_event(id,Server._thread_handler) end end
+    for name,id in pairs(defines.events) do if not script.get_event_handler(id) then Event.add(id,Server._thread_handler) end end
     if loaded_modules['ExpGamingCore.Command'] then verbose('ExpGamingCore.Command is installed; Loading commands src') require(module_path..'/src/commands',{Server=Server}) end
 end
 

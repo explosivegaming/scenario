@@ -76,7 +76,7 @@ function ThisModule.search_player(player)
 end
 
 -- Event Handlers Define
-script.on_event(defines.events.on_tick,function(event)
+Event.add(defines.events.on_tick,function(event)
     if (game.tick%900) == 0 then
         local players = game.connected_players
         if #players == 0 then return end

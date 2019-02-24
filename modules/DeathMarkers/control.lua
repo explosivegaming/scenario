@@ -9,12 +9,13 @@ local module_verbose = false
 local ThisModule = {}
 
 -- Global Define
-local global = global{
+local global = {
     corpses={}
 }
+Global.register(global,function(tbl) global = tbl end)
 
 -- Event Handlers Define
-script.on_event(defines.events.on_player_died, function(event)
+Event.add(defines.events.on_player_died, function(event)
     local player = game.players[event.player_index]
     local tag = player.force.add_chart_tag(player.surface,{
         position=player.position,
@@ -24,7 +25,7 @@ script.on_event(defines.events.on_player_died, function(event)
     table.insert(global.corpses,tag)
 end)
 
-script.on_event(defines.events.on_tick, function(event)
+Event.add(defines.events.on_tick, function(event)
     if (game.tick%3600) ~= 0 then return end
     if not global.corpses then global.corpses = {} end
     local key = 1

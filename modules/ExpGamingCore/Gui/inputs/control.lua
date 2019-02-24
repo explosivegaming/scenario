@@ -136,7 +136,7 @@ function inputs._event_handler(event)
     end
 end
 
-script.on_event(inputs.events,inputs._event_handler)
+Event.add(inputs.events,inputs._event_handler)
 inputs.events.error = {}
 
 -- the following functions are just to make inputs easier but if what you want is not include use inputs.add(obj)

@@ -22,10 +22,11 @@ local ThisModule = {
 }
 
 -- Global Define
-local global = global{
+local global = {
     reports={},
     verified={}
 }
+Global.register(global,function(tbl) global = tbl end)
 
 -- Local Variables
 local report_to_warnings = 1 -- used in count_reports

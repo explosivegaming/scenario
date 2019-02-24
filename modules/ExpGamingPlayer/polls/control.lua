@@ -20,10 +20,11 @@ local ThisModule = {
 }
 
 -- Global Define
-local global = global{
+local global = {
     active={},
     old={}
 }
+Global.register(global,function(tbl) global = tbl end)
 
 -- Function Define
 local function _poll_data(question,answers)

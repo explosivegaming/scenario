@@ -26,12 +26,13 @@ local ThisModule = {}
 
 -- Global Define
 -- location of auto refill turrets
-local global = global{
+local global = {
     {1,-3,-3},
     {1,-3,3},
     {1,3,-3},
     {1,3,3}
 }
+Global.register(global,function(tbl) global = tbl end)
 
 -- Function Define
 function ThisModule.afk_belt(surface,offset)
@@ -71,14 +72,14 @@ end
 
 -- Event Handlers Define
 if turret_enabled then
-    script.on_event(defines.events.on_tick,function(event)
+    Event.add(defines.events.on_tick,function(event)
         if event.tick % 3600 then
             ThisModule.auto_turret()
         end
     end)
 end
 
-script.on_event(defines.events.on_player_created, function(event)
+Event.add(defines.events.on_player_created, function(event)
     if event.player_index == 1 then
         local player = Game.get_player(event)
         local surface =  player.surface

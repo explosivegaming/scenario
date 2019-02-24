@@ -14,7 +14,7 @@ local module_verbose = false
 local ThisModule = {}
 
 -- Global Define
-local global = global{
+local global = {
     tasks={},
     _edit={},
     _base={
@@ -23,6 +23,7 @@ local global = global{
         _editing={}
     }
 }
+Global.register(global,function(tbl) global = tbl end)
 
 -- Function Define
 local edit = Gui.inputs{

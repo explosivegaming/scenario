@@ -17,7 +17,7 @@ local function get_allowed_afk_time(player)
     return (role_count/role_index)*player_count
 end
 
-script.on_event(defines.events.on_tick,function(event)
+Event.add(defines.events.on_tick,function(event)
     if (game.tick%3600) ~= 0 then return end
     for _,player in pairs(game.connected_players) do
         local afk = #game.connected_players < 3 and 10 or get_allowed_afk_time(player)

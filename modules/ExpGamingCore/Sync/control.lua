@@ -24,7 +24,7 @@ local module_verbose = false --true|false
 -- @field ranks a list of player ranks
 -- @field rockets the number of rockets launched
 -- @field mods the mods which are loaded
-local global = global{
+local global = {
     server_name='Factorio Server',
     server_description='A factorio server for everyone',
     reset_time='On Demand',
@@ -47,6 +47,7 @@ local global = global{
     rockets=0,
     mods={'Offline'}
 }
+Global.register(global,function(tbl) global = tbl end)
 
 --- Player sub-table
 -- @table global.players
@@ -316,14 +317,14 @@ Sync.time=add_metatable({},function(full,date)
 end,function() local info = Sync.info return info.time..' (+'..(game.tick-info.time_set[1])..' Ticks)' end)
 
 -- will auto replace the file every 5 min by default
-script.on_event('on_tick',function(event)
+Event.add('on_tick',function(event)
     local time = Sync.info.time_period[1]
     if (event.tick%time)==0 then Sync.emit_update() end
 end)
 
-script.on_event('on_player_joined_game',Sync.emit_update)
-script.on_event('on_pre_player_left_game',Sync.emit_update)
-script.on_event('on_rocket_launched',Sync.emit_update)
+Event.add('on_player_joined_game',Sync.emit_update)
+Event.add('on_pre_player_left_game',Sync.emit_update)
+Event.add('on_rocket_launched',Sync.emit_update)
 
 function Sync:on_init()
     if loaded_modules['ExpGamingCore.Gui'] then verbose('ExpGamingCore.Gui is installed; Loading gui src') require(module_path..'/src/gui',{Sync=Sync,module_path=module_path}) end

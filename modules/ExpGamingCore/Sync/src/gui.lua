@@ -96,11 +96,11 @@ Sync.info_gui = Gui.center{
         }.style.font='default-small'
 end}
 
-script.on_event(defines.events.on_gui_click,function(event)
+Event.add(defines.events.on_gui_click,function(event)
     local element = event.element
     if element and element.valid and element.caption and element.caption == 'Press Ecs or E to close; this is only visible once!' then
         Gui.center.clear(event)
     end
 end)
 
-script.on_event(defines.events.on_player_joined_game,function(event) Sync.info_gui(event) end)
+Event.add(defines.events.on_player_joined_game,function(event) Sync.info_gui(event) end)

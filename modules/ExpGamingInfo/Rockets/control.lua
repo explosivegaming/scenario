@@ -17,7 +17,7 @@ local ThisModule = {
 }
 
 -- Global Define
-local global = global{
+local global = {
     update=0,
     first=0,
     _last=0,
@@ -25,6 +25,7 @@ local global = global{
     fastest=0,
     milestones={m1=0,m2=0,m5=0,m10=0,m20=0,m50=0,m100=0,m200=0,m500=0,m1000=0,m2000=0,m5000=0}
 }
+Global.register(global,function(tbl) global = tbl end)
 
 -- Function Define
 ThisModule.Gui = Gui.left{
@@ -97,7 +98,7 @@ ThisModule.Gui = Gui.left{
 }
 
 -- Event Define
-script.on_event(defines.events.on_rocket_launched,function(event) Gui.left.update('rockets') end)
+Event.add(defines.events.on_rocket_launched,function(event) Gui.left.update('rockets') end)
 
 -- Module Return
 -- when called will toggle the gui for that player, updates gui if no player given
