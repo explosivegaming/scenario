@@ -1,103 +1,38 @@
---[[ not_luadoc=true
-function _log(...) log(...) end -- do not remove this is used for smaller verbose lines
-Manager = require("FactorioSoftmodManager")
-Manager.setVerbose{
-    selfInit=true, -- called while the manager is being set up
-    moduleLoad=false, -- when a module is required by the manager
-    moduleInit=false, -- when and within the initation of a module
-    modulePost=false, -- when and within the post of a module
-    moduleEnv=false, -- during module runtime, this is a global option set within each module for fine control
-    eventRegistered=false, -- when a module registers its event handlers
-    errorCaught=true, -- when an error is caught during runtime
-    output=Manager._verbose -- can be: can be: print || log || other function
-}
-Manager() -- can be Manager.loadModules() if called else where
-]]
+-- If you're looking to configure anything, you want config.lua. Nearly everything in this file is dictated by the config.
 
+-- Info on the data lifecycle and how we use it: https://github.com/Refactorio/RedMew/wiki/The-data-lifecycle
+require 'resources.data_stages'
+_LIFECYCLE = _STAGE.control -- Control stage
 
-require 'utils.data_stages'
-Container = require 'container'
-Container.debug=false
-Container.logLevel=Container.defines.logAll
-Container.safeError=true
-Container.handlers = {
-    require=function(path,env,...)
-        env = env or {}
-        local success, rtn, sandbox_env = Container.sandbox(_R.require,env,path,...)
-        return rtn
-    end,
-    Event='utils.event',
-    Global='utils.global',
-    --error=error,
-    logging=function(...) log(...) end,
-    tableToString=serpent.line
+-- Overrides the _G.print function
+require 'utils.print_override'
+
+-- Omitting the math library is a very bad idea
+require 'utils.math'
+
+-- Global Debug and make sure our version file is registered
+Debug = require 'utils.debug'
+require 'resources.version'
+
+local files = {
+    'modules.test'
 }
-Container.loadHandlers()
-Container.files = {
-    'AdvancedStartingItems',
-    'ChatPopup',
-    'DamagePopup',
-    'DeathMarkers',
-    'DeconControl',
-    'ExpGamingAdmin',
-    'ExpGamingBot',
-    'ExpGamingCommands',
-    'ExpGamingCore',
-    'ExpGamingInfo',
-    'ExpGamingLib',
-    'ExpGamingPlayer',
-    'FactorioStdLib',
-    'GameSettingsGui',
-    'GuiAnnouncements',
-    'PlayerAutoColor',
-    'SpawnArea',
-    'WarpPoints',
-    'WornPaths',
-    'ExpGamingAdmin.Gui',
-    'ExpGamingAdmin.Ban',
-    'ExpGamingAdmin.Reports',
-    'ExpGamingAdmin.ClearInventory',
-    'ExpGamingAdmin.TempBan',
-    'ExpGamingAdmin.Teleport',
-    'ExpGamingAdmin.Commands',
-    'ExpGamingAdmin.Jail',
-    'ExpGamingAdmin.Warnings',
-    'ExpGamingAdmin.Kick',
-    'ExpGamingBot.autoMessage',
-    'ExpGamingBot.discordAlerts',
-    'ExpGamingBot.autoChat',
-    'ExpGamingCommands.cheatMode',
-    'ExpGamingCommands.repair',
-    'ExpGamingCommands.tags',
-    'ExpGamingCommands.home',
-    'ExpGamingCore.Command',
-    'ExpGamingCommands.teleport',
-    'ExpGamingCommands.bonus',
-    'ExpGamingCommands.kill',
-    'ExpGamingCore.Server',
-    'ExpGamingCore.Gui',
-    'ExpGamingInfo.Science',
-    'ExpGamingPlayer.playerList',
-    'ExpGamingCore.Sync',
-    'ExpGamingCore.Role',
-    'ExpGamingInfo.Readme',
-    'ExpGamingInfo.Rockets',
-    'ExpGamingCore.Group',
-    'ExpGamingInfo.Tasklist',
-    'ExpGamingPlayer.playerInfo',
-    'ExpGamingPlayer.afkKick',
-    'FactorioStdLib.Table',
-    'ExpGamingPlayer.polls',
-    'FactorioStdLib.Color',
-    'FactorioStdLib.Game',
-    'FactorioStdLib.String',
-    'ExpGamingPlayer.inventorySearch',
-    'ExpGamingCore.Gui.center',
-    'ExpGamingCore.Gui.popup',
-    'ExpGamingCore.Gui.toolbar',
-    'ExpGamingCore.Gui.left',
-    'ExpGamingCore.Gui.inputs'
-}
-Container.loadFiles()
-Container.initFiles()
-Container.postFiles()
+
+-- Loads all files in array above and logs progress
+local total_files = string.format('%3d',#files)
+local errors = {}
+for index,path in pairs(files) do
+    log(string.format('[INFO] Loading files %3d/%s',index,total_files))
+    local success,file = pcall(require,path)
+    -- error checking
+    if not success then
+        log('[ERROR] Failed to load file: '..path)
+        log('[ERROR] '..file)
+        table.insert(errors,'[ERROR] '..path..' :: '..file)
+    elseif type(file) == 'string' and file:find('not found') then
+        log('[ERROR] File not found: '..path)
+        table.insert(errors,'[ERROR] '..path..' :: Not Found')
+    end
+end
+log('[INFO] All files loaded with '..#errors..' errors:')
+for _,error in pairs(errors) do log(error) end -- logs all errors again to make it make it easy to find

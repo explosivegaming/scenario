@@ -10,4 +10,3 @@ _STAGE = {
     --config_change = 7,
     runtime = 8
 }
-_LIFECYCLE = _STAGE.control
