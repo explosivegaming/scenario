@@ -210,6 +210,7 @@ end
 -- @treturn[2] string|locale_string the reason given by the authenticator
 function Commands.authorize(player,command_name)
     local failed
+    if not player then return true end
     local command_data = Commands.commands[command_name]
     if not command_data then return false end
 
