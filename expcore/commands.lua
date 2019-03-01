@@ -246,6 +246,52 @@ function Commands.authorize(player,command_name)
     end
 end
 
+--- Gets all commands that a player is allowed to use, game commands not included
+-- @tparam[opt] player LuaPlayer the player that you want to get commands of, nil will return all commands
+-- @treturn table all commands that that player is allowed to use, or all commands
+function Commands.get(player)
+    player = Game.get_player_from_any(player)
+    if not player then return Commands.commands end
+    local allowed = {}
+    for name,command_data in pairs(Commands.commands) do
+        if Commands.authorize(player,name) then
+            allowed[name]=command_data
+        end
+    end
+    return allowed
+end
+
+--- Searches command names and help messages to find possible commands, game commands included
+-- @tparam keyword string the word which you are trying to find
+-- @tparam[opt] allowed_player LuaPlayer the player to get allowed commands of, if nil all commands are searched
+-- @treturn table all commands that contain the key word, and allowed by player if player given
+function Commands.search(keyword,allowed_player)
+    local custom_commands = Commands.get(allowed_player)
+    local matches = {}
+    keyword = keyword:lower()
+    -- loops over custom commands
+    for name,command_data in pairs(custom_commands) do
+        -- combines name help and aliases into one message to be searched
+        local search = string.format('%s %s %s',name,command_data.help,table.concat(command_data.aliases,' '))
+        if search:lower():match(keyword) then
+            matches[name] = command_data
+        end
+    end
+    -- loops over the names of game commands
+    for name,description in pairs(commands.game_commands) do
+        if name:lower():match(keyword) then
+            -- because game commands lack some stuff that the custom ones have they are formated
+            matches[name] = {
+                name=name,
+                help=description,
+                description=description,
+                aliases={}
+            }
+        end
+    end
+    return matches
+end
+
 --- Adds a common parse that can be called by name when it wants to be used
 -- nb: this is not needed as you can use the callback directly this just allows it to be called by name
 -- @tparam name string the name of the parse, should be the type like player or player_alive, must be unique
