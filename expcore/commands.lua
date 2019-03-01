@@ -2,7 +2,7 @@
 -- @author Cooldude2606
 -- @module Commands
 --[[
->>>>Example Authenticator
+>>>>Example Authenticator:
 
     -- adds an admin only authenticator where if a command has the tag admin_only: true
     -- then will only allow admins to use this command
@@ -24,7 +24,7 @@
         end
     end)
 
->>>>Example Parse
+>>>>Example Parse:
 
     -- adds a parse that will cover numbers within the given range
     -- input, player and reject are common to all parse functions
@@ -45,7 +45,7 @@
         end
     end)
 
->>>>Example Command
+>>>>Example Command:
 
     -- adds a command that will print the players name a given number of times
     -- and can only be used by admin to show how auth works
@@ -86,7 +86,7 @@
         -- return Commands.success('optional message here') -- prints your message and then the success message
     end)
 
->>>>Examples With No Comments (for example formatting)
+>>>>Examples With No Comments (for example formatting):
 
     Commands.add_authenticator(function(player,command,tags,reject)
         if tags.admin_only then
@@ -132,32 +132,48 @@
             Commands.print(i..msg)
         end
     end)
+
+>>>>Functions List (see function for more detail):
+    Commands.add_authenticator(callback) --- Adds an authorization callback, function used to check if a player if allowed to use a command
+    Commands.remove_authenticator(callback) --- Removes an authorization callback, see add_authenticator for adding them
+    Commands.authorize(player,command_name) --- Mostly used internally, calls all authorization callbacks, returns if the player is authorized
+
+    Commands.get(player) --- Gets all commands that a player is allowed to use, game commands not included
+    Commands.search(keyword,allowed_player) --- Searches command names and help messages to find possible commands, game commands included
+
+    Commands.add_parse(name,callback) --- Adds a parse function which can be called by name rather than callback (used in add_param)
+    Commands.remove_parse(name) --- Removes a parse function, see add_parse for adding them
+
+    Commands.add_command(name,help) --- Creates a new command object to added details to, note this does not register the command to the game
+    Commands._prototype:add_param(name,optional,parse,...) --- Adds a new param to the command this will be displayed in the help and used to parse the input
+    Commands._prototype:add_tag(name,value) --- Adds a tag to the command which is passed via the tags param to the authenticators, can be used to assign command roles or type
+    Commands._prototype:add_alias(...) --- Adds an alias or multiple that will also be registered with the same callback, eg /teleport can be /tp with both working
+    Commands._prototype:auto_concat() --- Enables auto concatenation of any params on the end so quotes are not needed for last param
+    Commands._prototype:register(callback) --- Adds the callback to the command and registers all aliases, params and help message with the game
+
+    Commands.error(error_message,play_sound) --- Sends an error message to the player and returns a constant to return to command handler to exit execution
+    Commands.internal_error(success,command_name,error_message) --- Sends an error to the player and logs the error, used with pcall within command handler please avoid direct use
+    Commands.success(value) --- Sends a value to the player, followed by a command complete message
+    Commands.print(value) --- Short cut for player_return, will return any value given to it (not just strings) in a string format to the player/server
+
+    Commands.run_command(command_event) --- Main event function that is ran for all commands, used internally please avoid direct use
 ]]
 
 local Game = require 'utils.game'
 local player_return = require('expcore.common').player_return
 
 local Commands = {
-    defines={
-        -- common values are stored error like signals
+    defines={ -- common values are stored error like signals
         error='CommandError',
         unauthorized='CommandErrorUnauthorized',
         success='CommandSuccess'
     },
-    commands={
-        -- custom command data will be stored here
-    },
-    authorization_fail_on_error=false, -- set due to have authorize fail if a callback fails to run, more secure
-    authorization={
-        -- custom function are stored here which control who can use what commands
-    },
-    _prototype={
-        -- used to store functions which gets added to new custom commands
-    },
-    parse={
-        -- used to store default functions which are common parse function such as player or number in range
-    },
-    print=player_return -- short cut so player_return does not need to be required in every module
+    commands={}, -- custom command data will be stored here
+    authorization_fail_on_error=false, -- set true to have authorize fail if a callback fails to run, more secure
+    authorization={}, -- custom function are stored here which control who can use what commands
+    parse={}, -- used to store default functions which are common parse function such as player or number in range
+    print=player_return, -- short cut so player_return does not need to be required in every module
+    _prototype={}, -- used to store functions which gets added to new custom commands
 }
 
 --- Adds an authorization callback, function used to check if a player if allowed to use a command
@@ -292,7 +308,7 @@ function Commands.search(keyword,allowed_player)
     return matches
 end
 
---- Adds a common parse that can be called by name when it wants to be used
+--- Adds a parse function which can be called by name rather than callback (used in add_param)
 -- nb: this is not needed as you can use the callback directly this just allows it to be called by name
 -- @tparam name string the name of the parse, should be the type like player or player_alive, must be unique
 -- @tparam callback function the callback that is ran to prase the input
@@ -308,6 +324,12 @@ function Commands.add_parse(name,callback)
         Commands.parse[name] = callback
         return true
     end
+end
+
+--- Removes a parse function, see add_parse for adding them
+-- @tparam name string the name of the parse to remove
+function Commands.remove_parse(name)
+    Commands.parse[name] = nil
 end
 
 --- Creates a new command object to added details to, note this does not register the command to the game
