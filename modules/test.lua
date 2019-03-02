@@ -33,7 +33,7 @@ Commands.add_parse('number_range_int',function(input,player,reject,range_min,ran
     end
 end)
 
-Commands.add_command('repeat-name','Will repeat you name a number of times in chat.')
+Commands.new_command('repeat-name','Will repeat you name a number of times in chat.')
     :add_param('repeat-count',false,'number_range_int',1,5)
     :add_param('smiley',true,function(input,player,reject)
     if not input then return end
@@ -54,5 +54,5 @@ end)
     end
     for i = 1,repeat_count do
         Commands.print(i..msg)
-end
+    end
 end)

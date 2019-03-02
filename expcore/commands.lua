@@ -29,7 +29,7 @@
     -- adds a parse that will cover numbers within the given range
     -- input, player and reject are common to all parse functions
     -- range_min and range_max are passed to the function from add_param
-    Commands.add_parse('number_range_int',function(input,player,reject,range_min,range_max)
+    Commands.add_parse('number-range-int',function(input,player,reject,range_min,range_max)
         local rtn = tonumber(input) and math.floor(tonumber(input)) or nil -- converts input to number
         if not rtn or rtn < range_min or rtn > range_max then -- check if it is nil or out of the range
             -- invalid input for we will reject the input, they are a few ways to do this:
@@ -48,8 +48,8 @@
 
     -- adds a command that will print the players name a given number of times
     -- and can only be used by admin to show how auth works
-    Commands.add_command('repeat-name','Will repeat you name a number of times in chat.') -- creates the new command with the name "repeat-name" and a help message
-    :add_param('repeat-count',false,'number_range_int',1,5) -- adds a new param called "repeat-count" that is required and is type "number_range_int" the name can be used here as add_parse was used
+    Commands.new_command('repeat-name','Will repeat you name a number of times in chat.') -- creates the new command with the name "repeat-name" and a help message
+    :add_param('repeat-count',false,'number-range-int',1,5) -- adds a new param called "repeat-count" that is required and is type "number_range_int" the name can be used here as add_parse was used
     :add_param('smiley',true,function(input,player,reject) -- this param is optional and has a custom parse function where add_parse was not used before hand
         if not input then return end -- when they is an optional param input may be nil, you can return a default value here, but using nil will allow add_defaults to pick a default
         if input:lower() == 'true' or input:lower() == 'yes' then
@@ -109,7 +109,7 @@
         end
     end)
 
-    Commands.add_command('repeat-name','Will repeat you name a number of times in chat.')
+    Commands.new_command('repeat-name','Will repeat you name a number of times in chat.')
     :add_param('repeat-count',false,'number_range_int',1,5)
     :add_param('smiley',true,function(input,player,reject)
         if not input then return end
@@ -143,6 +143,7 @@
 
     Commands.add_parse(name,callback) --- Adds a parse function which can be called by name rather than callback (used in add_param)
     Commands.remove_parse(name) --- Removes a parse function, see add_parse for adding them
+    Commands.parse(name,input,player,reject,...) --- Intended to be used within other parse functions, runs a parse and returns success and new value
 
     Commands.add_command(name,help) --- Creates a new command object to added details to, note this does not register the command to the game
     Commands._prototype:add_param(name,optional,parse,...) --- Adds a new param to the command this will be displayed in the help and used to parse the input
@@ -233,7 +234,7 @@ function Commands.authorize(player,command_name)
 
     -- function passed to authorization callback to make it simpler to use
     local auth_fail = function(error_message)
-        failed = error_message or {'ExpGamingCore_Command.unauthorized'}
+        failed = error_message or {'expcore-commands.unauthorized'}
         return Commands.defines.unauthorized
     end
 
@@ -250,7 +251,7 @@ function Commands.authorize(player,command_name)
             end
         elseif rtn == false or rtn == Commands.defines.unauthorized or rtn == auth_fail or failed then
             -- the callback returned unauthorized, failed be now be set if no value returned
-            failed = failed or {'ExpGamingCore_Command.unauthorized'}
+            failed = failed or {'expcore-commands.unauthorized'}
             break
         end
     end
@@ -333,11 +334,24 @@ function Commands.remove_parse(name)
     Commands.parse[name] = nil
 end
 
+--- Intended to be used within other parse functions, runs a parse and returns success and new value
+-- @tparam name string the name of the parse to call, must be registered and cant be a function
+-- @tparam input string the input to pass to the parse, will always be a string but might not be the orginal input
+-- @treturn any the new value for the input, may be nil, if nil then either there was an error or input was nil
+function Commands.parse(name,input,player,reject,...)
+    if not Commands.parse[name] then return end
+    local success,rtn = pcall(Commands.parse[name],input,player,reject,...)
+    if not success then error(rtn,2) return end
+    if not rtn then return end
+    if rtn == Commands.defines.error then return end
+    return rtn
+end
+
 --- Creates a new command object to added details to, note this does not register the command to the game
 -- @tparam name string the name of the command to be created
 -- @tparam help string the help message for the command
 -- @treturn Commands._prototype this will be used with other functions to generate the command functions
-function Commands.add_command(name,help)
+function Commands.new_command(name,help)
     local command = setmetatable({
         name=name,
         help=help,
@@ -474,7 +488,7 @@ end
 -- @treturn Commands.defines.error return this to command handler to exit execution
 function Commands.error(error_message,play_sound)
     error_message = error_message or ''
-    player_return({'ExpGamingCore_Command.command-fail',error_message},'orange_red')
+    player_return({'expcore-commands.command-fail',error_message},'orange_red')
     if play_sound ~= false then
         play_sound = play_sound or 'utility/wire_pickup'
         if game.player then game.player.play_sound{path=play_sound} end
@@ -502,7 +516,7 @@ end
 -- @treturn Commands.defines.success return this to the command handler to prevent two success messages
 function Commands.success(value)
     if value then player_return(value) end
-    player_return({'ExpGamingCore_Command.command-ran'},'cyan')
+    player_return({'expcore-commands.command-ran'},'cyan')
     return Commands.defines.success
 end
 
@@ -521,7 +535,7 @@ function Commands.run_command(command_event)
 
     -- null param check
     if command_data.min_param_count > 0 and not command_event.parameter then
-        Commands.error({'ExpGamingCore_Command.invalid-inputs',command_data.name,command_data.description})
+        Commands.error({'expcore-commands.invalid-inputs',command_data.name,command_data.description})
         return
     end
 
@@ -549,7 +563,7 @@ function Commands.run_command(command_event)
             -- there are too many params given to the command
             if not command_data.auto_concat then
                 -- error as they should not be more
-                Commands.error({'ExpGamingCore_Command.invalid-inputs',command_data.name,command_data.description})
+                Commands.error({'expcore-commands.invalid-inputs',command_data.name,command_data.description})
                 return
             else
                 -- concat to the last param
@@ -575,7 +589,7 @@ function Commands.run_command(command_event)
     -- checks param count
     local param_count = #raw_params
     if param_count < command_data.min_param_count then
-        Commands.error({'ExpGamingCore_Command.invalid-inputs',command_data.name,command_data.description})
+        Commands.error({'expcore-commands.invalid-inputs',command_data.name,command_data.description})
         return
     end
 
@@ -628,4 +642,5 @@ function Commands.run_command(command_event)
     if err ~= Commands.defines.error and err ~= Commands.defines.success then Commands.success(err) end
 end
 
+require 'expcore.parse.command' -- loads some common parse types
 return Commands

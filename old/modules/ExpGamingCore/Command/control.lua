@@ -59,40 +59,40 @@ commands.validate = {
     ['string-inf']=function(value) return tostring(value) end,
     ['string-list']=function(value,event,list)
         local rtn = tostring(value) and table.includes(list,tostring(value)) and tostring(value) or nil
-        if not rtn then return commands.error{'ExpGamingCore_Command.error-string-list',table.concat(list,', ')} end return rtn end,
+        if not rtn then return commands.error{'expcore-commands.error-string-list',table.concat(list,', ')} end return rtn end,
     ['string-len']=function(value,event,max)
         local rtn = tostring(value) and tostring(value):len() <= max and tostring(value) or nil 
-        if not rtn then return commands.error{'ExpGamingCore_Command.error-string-len',max} end return rtn end,
+        if not rtn then return commands.error{'expcore-commands.error-string-len',max} end return rtn end,
     ['number']=function(value)
         local rtn = tonumber(value) or nil
-        if not rtn then return commands.error{'ExpGamingCore_Command.error-number'} end return rtn end,
+        if not rtn then return commands.error{'expcore-commands.error-number'} end return rtn end,
     ['number-int']=function(value)
         local rtn = tonumber(value) and math.floor(tonumber(value)) or nil
-        if not rtn then return commands.error{'ExpGamingCore_Command.error-number'} end return rtn end,
+        if not rtn then return commands.error{'expcore-commands.error-number'} end return rtn end,
     ['number-range']=function(value,event,min,max)
         local rtn = tonumber(value) and tonumber(value) > min and tonumber(value) <= max and tonumber(value) or nil
-        if not rtn then return commands.error{'ExpGamingCore_Command.error-number-range',min,max} end return rtn end,
+        if not rtn then return commands.error{'expcore-commands.error-number-range',min,max} end return rtn end,
     ['number-range-int']=function(value,event,min,max)
         local rtn = tonumber(value) and math.floor(tonumber(value)) > min and math.floor(tonumber(value)) <= max and math.floor(tonumber(value)) or nil
-        if not rtn then return commands.error{'ExpGamingCore_Command.error-number-range',min,max} end return rtn end,
+        if not rtn then return commands.error{'expcore-commands.error-number-range',min,max} end return rtn end,
     ['player']=function(value)
         local rtn = Game.get_player(value) or nil
-        if not rtn then return commands.error{'ExpGamingCore_Command.error-player',value} end return rtn end,
+        if not rtn then return commands.error{'expcore-commands.error-player',value} end return rtn end,
     ['player-online']=function(value)
         local player,err = commands.validate['player'](value)
         if err then return commands.error(err) end
         local rtn = player.connected and player or nil
-        if not rtn then return commands.error{'ExpGamingCore_Command.error-player-online'} end return rtn end,
+        if not rtn then return commands.error{'expcore-commands.error-player-online'} end return rtn end,
     ['player-alive']=function(value)
         local player,err = commands.validate['player-online'](value)
         if err then return commands.error(err) end
         local rtn = player.character and player.character.health > 0 and player or nil
-        if not rtn then return commands.error{'ExpGamingCore_Command.error-player-alive'} end return rtn end,
+        if not rtn then return commands.error{'expcore-commands.error-player-alive'} end return rtn end,
     ['player-rank']=function(value,event)
         local player,err = commands.validate['player'](value)
         if err then return commands.error(err) end
         local rtn = player.admin and Game.get_player(event).admin and player or nil
-        if not rtn then return commands.error{'ExpGamingCore_Command.error-player-rank'} end return rtn end,
+        if not rtn then return commands.error{'expcore-commands.error-player-rank'} end return rtn end,
     ['player-rank-online']=function(value)
         local player,err = commands.validate['player-online'](value)
         if err then return commands.error(err) end
@@ -212,13 +212,13 @@ local function run_custom_command(command)
         local success, err = pcall(callback,player,command.name,command)
         if not success then error(err)
         elseif not err then
-            player_return({'ExpGamingCore_Command.command-fail',{'ExpGamingCore_Command.unauthorized'}},defines.textcolor.crit)
+            player_return({'expcore-commands.command-fail',{'expcore-commands.unauthorized'}},defines.textcolor.crit)
             logMessage(player.name,command,'Failed to use command (Unauthorized)',commands.validate_args(command))
             game.player.play_sound{path='utility/cannot_build'}
             return
         end
     end elseif data.default_admin_only == true and player and not player.admin then
-        player_return({'ExpGamingCore_Command.command-fail',{'ExpGamingCore_Command.unauthorized'}},defines.textcolor.crit)
+        player_return({'expcore-commands.command-fail',{'expcore-commands.unauthorized'}},defines.textcolor.crit)
         logMessage(player.name,command,'Failed to use command (Unauthorized)',commands.validate_args(command))
         game.player.play_sound{path='utility/cannot_build'}
         return
@@ -227,7 +227,7 @@ local function run_custom_command(command)
     local args, err = commands.validate_args(command)
     if args == commands.error then
         if is_type(err,'table') then table.insert(err,command.name) table.insert(err,commands.format_inputs(data))
-        player_return({'ExpGamingCore_Command.command-fail',err},defines.textcolor.high) else player_return({'ExpGamingCore_Command.command-fail',{'ExpGamingCore_Command.invalid-inputs',command.name,commands.format_inputs(data)}},defines.textcolor.high) end
+        player_return({'expcore-commands.command-fail',err},defines.textcolor.high) else player_return({'expcore-commands.command-fail',{'expcore-commands.invalid-inputs',command.name,commands.format_inputs(data)}},defines.textcolor.high) end
         logMessage(player.name,command,'Failed to use command (Invalid Args)',args)
         player.play_sound{path='utility/deconstruct_big'}
         return
@@ -235,7 +235,7 @@ local function run_custom_command(command)
     -- runs the command
     local success, err = pcall(data.callback,command,args)
     if not success then error(err) end
-    if err ~= commands.error then player_return({'ExpGamingCore_Command.command-ran'},defines.textcolor.info) end
+    if err ~= commands.error then player_return({'expcore-commands.command-ran'},defines.textcolor.info) end
     logMessage(player.name,command,'Used command',args)
 end
 
