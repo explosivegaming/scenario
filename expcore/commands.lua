@@ -63,7 +63,7 @@
     :add_defaults{smiley=false} -- adds false as the default for smiley
     :add_tag('admin_only',true) -- adds the tag admin_only: true which because of the above authenticator means you must be added to use this command
     :add_alias('name','rname') -- adds two aliases "name" and "rname" for this command which will work as if the ordinal name was used
-    --:auto_concat() -- cant be used due to optional param here, but this will make all user input params after the last expected one be added to the last expected one
+    --:enable_auto_concat() -- cant be used due to optional param here, but this will make all user input params after the last expected one be added to the last expected one
     :register(function(player,repeat_count,smiley,raw) -- this registers the command to the game, notice the params are what were defined above
         -- prints the raw input to show that it can be used
         game.print(player.name..' used a command with input: '..raw)
@@ -150,7 +150,7 @@
     Commands._prototype:add_defaults(defaults) --- Adds default values to params only matters if the param is optional
     Commands._prototype:add_tag(name,value) --- Adds a tag to the command which is passed via the tags param to the authenticators, can be used to assign command roles or type
     Commands._prototype:add_alias(...) --- Adds an alias or multiple that will also be registered with the same callback, eg /teleport can be /tp with both working
-    Commands._prototype:auto_concat() --- Enables auto concatenation of any params on the end so quotes are not needed for last param
+    Commands._prototype:enable_auto_concat() --- Enables auto concatenation of any params on the end so quotes are not needed for last param
     Commands._prototype:register(callback) --- Adds the callback to the command and registers all aliases, params and help message with the game
 
     Commands.error(error_message,play_sound) --- Sends an error message to the player and returns a constant to return to command handler to exit execution
@@ -173,7 +173,7 @@ local Commands = {
     commands={}, -- custom command data will be stored here
     authorization_fail_on_error=false, -- set true to have authorize fail if a callback fails to run, more secure
     authorization={}, -- custom function are stored here which control who can use what commands
-    parse={}, -- used to store default functions which are common parse function such as player or number in range
+    parse_functions={}, -- used to store default functions which are common parse function such as player or number in range
     print=player_return, -- short cut so player_return does not need to be required in every module
     _prototype={}, -- used to store functions which gets added to new custom commands
 }
@@ -187,7 +187,8 @@ local Commands = {
 -- callback param - reject: function(error_message?: string) - call to fail authorize with optional error message
 -- @treturn number the index it was inserted at use to remove the callback, if anon function used
 function Commands.add_authenticator(callback)
-    return table.insert(Commands.authorization,callback)
+    table.insert(Commands.authorization,callback)
+    return #Commands.authorization
 end
 
 --- Removes an authorization callback
@@ -320,10 +321,10 @@ end
 -- parse return - the value that will be passed to the command callback, must not be nil and if reject then command is not run
 -- @treturn boolean was the parse added will be false if the name is already used
 function Commands.add_parse(name,callback)
-    if Commands.parse[name] then
+    if Commands.parse_functions[name] then
         return false
     else
-        Commands.parse[name] = callback
+        Commands.parse_functions[name] = callback
         return true
     end
 end
@@ -331,7 +332,7 @@ end
 --- Removes a parse function, see add_parse for adding them
 -- @tparam name string the name of the parse to remove
 function Commands.remove_parse(name)
-    Commands.parse[name] = nil
+    Commands.parse_functions[name] = nil
 end
 
 --- Intended to be used within other parse functions, runs a parse and returns success and new value
@@ -339,8 +340,8 @@ end
 -- @tparam input string the input to pass to the parse, will always be a string but might not be the orginal input
 -- @treturn any the new value for the input, may be nil, if nil then either there was an error or input was nil
 function Commands.parse(name,input,player,reject,...)
-    if not Commands.parse[name] then return end
-    local success,rtn = pcall(Commands.parse[name],input,player,reject,...)
+    if not Commands.parse_functions[name] then return end
+    local success,rtn = pcall(Commands.parse_functions[name],input,player,reject,...)
     if not success then error(rtn,2) return end
     if not rtn then return end
     if rtn == Commands.defines.error then return end
@@ -439,7 +440,7 @@ end
 -- nb: this will disable max param checking as they will be concated onto the end of that last param
 -- this can be useful for reasons or longs text, can only have one per command
 -- @treturn Commands._prototype pass through to allow more functions to be called
-function Commands._prototype:auto_concat()
+function Commands._prototype:enable_auto_concat()
     self.auto_concat = true
     return self
 end
@@ -544,12 +545,12 @@ function Commands.run_command(command_event)
     local quote_params = {} -- stores any " " params
     input_string = input_string:gsub('"[^"]-"',function(w)
         -- finds all " " params are removes spaces for the next part
+        local no_spaces = w:gsub('%s','_')
         local no_quotes = w:sub(2,-2)
-        local no_spaces = no_quotes:gsub('%s','_')
         quote_params[no_spaces]=no_quotes
         if command_data.auto_concat then
             -- if auto concat then dont remove quotes as it should be included later
-            quote_params[w:gsub('%s','_')]=w
+            quote_params[no_spaces]=w
         end
         return no_spaces
     end)
@@ -579,9 +580,11 @@ function Commands.run_command(command_event)
             -- all words are added to an array
             if quote_params[word] then
                 -- if it was a " " param then the spaces are re added now
-                last_index = table.insert(raw_params,quote_params[word])
+                table.insert(raw_params,quote_params[word])
+                last_index = last_index + 1
             else
-                last_index = table.insert(raw_params,word)
+                table.insert(raw_params,word)
+                last_index = last_index + 1
             end
         end
     end
@@ -600,7 +603,7 @@ function Commands.run_command(command_event)
         local parse_callback = param_data.parse
         if type(parse_callback) == 'string' then
             -- if its a string this allows it to be pulled from the common store
-            parse_callback = Commands.parse[parse_callback]
+            parse_callback = Commands.parse_functions[parse_callback]
         end
         if not type(parse_callback) == 'function' then
             -- if its not a function throw and error
@@ -642,5 +645,4 @@ function Commands.run_command(command_event)
     if err ~= Commands.defines.error and err ~= Commands.defines.success then Commands.success(err) end
 end
 
-require 'expcore.parse.command' -- loads some common parse types
 return Commands

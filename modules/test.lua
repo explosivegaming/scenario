@@ -8,8 +8,6 @@ Event.add(defines.events.on_console_chat,function(event)
     if event.player_index then game.print('Message: '..event.message) end
 end)
 
-
-
 local Commands = require 'expcore.commands' -- require the Commands module
 
 Commands.add_authenticator(function(player,command,tags,reject)

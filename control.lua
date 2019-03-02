@@ -15,7 +15,8 @@ Debug = require 'utils.debug'
 require 'resources.version'
 
 local files = {
-    'modules.test'
+    'modules.test',
+    'modules.commands.me'
 }
 
 -- Loads all files in array above and logs progress
