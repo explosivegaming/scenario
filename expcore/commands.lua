@@ -30,8 +30,7 @@
     -- input, player and reject are common to all parse functions
     -- range_min and range_max are passed to the function from add_param
     Commands.add_parse('number_range_int',function(input,player,reject,range_min,range_max)
-        local rtn = tonumber(input) or nil -- converts input to number
-        rtn = type(rtn) == 'number' and math.floor(rtn) or nil -- floor the number
+        local rtn = tonumber(input) and math.floor(tonumber(input)) or nil -- converts input to number
         if not rtn or rtn < range_min or rtn > range_max then -- check if it is nil or out of the range
             -- invalid input for we will reject the input, they are a few ways to do this:
             -- dont return anything -- will print generic input error
@@ -52,7 +51,7 @@
     Commands.add_command('repeat-name','Will repeat you name a number of times in chat.') -- creates the new command with the name "repeat-name" and a help message
     :add_param('repeat-count',false,'number_range_int',1,5) -- adds a new param called "repeat-count" that is required and is type "number_range_int" the name can be used here as add_parse was used
     :add_param('smiley',true,function(input,player,reject) -- this param is optional and has a custom parse function where add_parse was not used before hand
-        if not input then return false end -- here you can see the default check
+        if not input then return end -- when they is an optional param input may be nil, you can return a default value here, but using nil will allow add_defaults to pick a default
         if input:lower() == 'true' or input:lower() == 'yes' then
             return true -- the value is truthy so true is returned
         else
@@ -61,6 +60,7 @@
             return false -- false is returned other wise
         end
     end)
+    :add_defaults{smiley=false} -- adds false as the default for smiley
     :add_tag('admin_only',true) -- adds the tag admin_only: true which because of the above authenticator means you must be added to use this command
     :add_alias('name','rname') -- adds two aliases "name" and "rname" for this command which will work as if the ordinal name was used
     --:auto_concat() -- cant be used due to optional param here, but this will make all user input params after the last expected one be added to the last expected one
@@ -101,8 +101,7 @@
     end)
 
     Commands.add_parse('number_range_int',function(input,player,reject,range_min,range_max)
-        local rtn = tonumber(input) or nil
-        rtn = type(rtn) == 'number' and math.floor(rtn) or nil
+        local rtn = tonumber(input) and math.floor(tonumber(input)) or nil
         if not rtn or rtn < range_min or rtn > range_max then
             return reject('Number entered is not in range: '..range_min..', '..range_max)
         else
@@ -113,13 +112,14 @@
     Commands.add_command('repeat-name','Will repeat you name a number of times in chat.')
     :add_param('repeat-count',false,'number_range_int',1,5)
     :add_param('smiley',true,function(input,player,reject)
-        if not input then return false end
+        if not input then return end
         if input:lower() == 'true' or input:lower() == 'yes' then
             return true
         else
             return false
         end
     end)
+    :add_defaults{smiley=false}
     :add_tag('admin_only',true)
     :add_alias('name','rname')
     :register(function(player,repeat_count,smiley,raw)
@@ -146,6 +146,7 @@
 
     Commands.add_command(name,help) --- Creates a new command object to added details to, note this does not register the command to the game
     Commands._prototype:add_param(name,optional,parse,...) --- Adds a new param to the command this will be displayed in the help and used to parse the input
+    Commands._prototype:add_defaults(defaults) --- Adds default values to params only matters if the param is optional
     Commands._prototype:add_tag(name,value) --- Adds a tag to the command which is passed via the tags param to the authenticators, can be used to assign command roles or type
     Commands._prototype:add_alias(...) --- Adds an alias or multiple that will also be registered with the same callback, eg /teleport can be /tp with both working
     Commands._prototype:auto_concat() --- Enables auto concatenation of any params on the end so quotes are not needed for last param
@@ -311,7 +312,7 @@ end
 --- Adds a parse function which can be called by name rather than callback (used in add_param)
 -- nb: this is not needed as you can use the callback directly this just allows it to be called by name
 -- @tparam name string the name of the parse, should be the type like player or player_alive, must be unique
--- @tparam callback function the callback that is ran to prase the input
+-- @tparam callback function the callback that is ran to parse the input
 -- parse param - input: string - the input given by the user for this param
 -- parse param - player: LuaPlayer - the player who is using the command
 -- parse param - reject: function(error_message) - use this function to send a error to the user and fail running
@@ -344,15 +345,9 @@ function Commands.add_command(name,help)
         auto_concat=false,
         min_param_count=0,
         max_param_count=0,
-        tags={
-            -- stores tags that can be used by auth
-        },
-        aliases={
-            -- n = name: string
-        },
-        params={
-            -- [param_name] = {optional: boolean, parse: function}
-        }
+        tags={}, -- stores tags that can be used by auth
+        aliases={}, -- n = name: string
+        params={}, -- [param_name] = {optional: boolean, default: any, parse: function, parse_args: table}
     }, {
         __index= Commands._prototype
     })
@@ -381,6 +376,19 @@ function Commands._prototype:add_param(name,optional,parse,...)
     self.max_param_count = self.max_param_count+1
     if not optional then
         self.min_param_count = self.min_param_count+1
+    end
+    return self
+end
+
+--- Adds default values to params only matters if the param is optional, if default value is a function it is called with param player
+-- @tparam defaults table a table keyed by the name of the param with the value as the default value {paramName=defaultValue}
+-- callback param - player: LuaPlayer - the player using the command, default value does not need to be a function callback
+-- @treturn Commands._prototype pass through to allow more functions to be called
+function Commands._prototype:add_defaults(defaults)
+    for name,value in pairs(defaults) do
+        if self.params[name] then
+            self.params[name].default = value
+        end
     end
     return self
 end
@@ -431,7 +439,6 @@ end
 function Commands._prototype:register(callback)
     -- generates a description to be used
     self.callback = callback
-    local params = self.params
     local description = ''
     for param_name,param_details in pairs(self.params) do
         if param_details.optional then
@@ -523,9 +530,9 @@ function Commands.run_command(command_event)
     local quote_params = {} -- stores any " " params
     input_string = input_string:gsub('"[^"]-"',function(w)
         -- finds all " " params are removes spaces for the next part
-        local no_qoutes = w:sub(2,-2)
-        local no_spaces = no_qoutes:gsub('%s','_')
-        quote_params[no_spaces]=no_qoutes
+        local no_quotes = w:sub(2,-2)
+        local no_spaces = no_quotes:gsub('%s','_')
+        quote_params[no_spaces]=no_quotes
         if command_data.auto_concat then
             -- if auto concat then dont remove quotes as it should be included later
             quote_params[w:gsub('%s','_')]=w
@@ -583,7 +590,7 @@ function Commands.run_command(command_event)
         end
         if not type(parse_callback) == 'function' then
             -- if its not a function throw and error
-            Commands.internal_error(success,command_data.name,'Invalid param parse '..tostring(param_data.parse))
+            Commands.internal_error(false,command_data.name,'Invalid param parse '..tostring(param_data.parse))
             return
         end
         -- used below as the reject function
@@ -595,9 +602,16 @@ function Commands.run_command(command_event)
         -- input: string, player: LuaPlayer, reject: function, ... extra args
         local success,param_parsed = pcall(parse_callback,raw_params[index],player,parse_fail,unpack(param_data.parse_args))
         if Commands.internal_error(success,command_data.name,param_parsed) then return end
-        -- param_data.optional == false is so that optional parses are still ran even when not present
-        if (param_data.optional == false and param_parsed == nil) or param_parsed == Commands.defines.error or param_parsed == parse_fail then
-            -- no value was returned or error was returned, if nil then give error
+        if param_data.optional == true and param_parsed == nil then
+            -- if it is optional and param is nil then it is set to default
+            param_parsed = param_data.default
+            if type(param_parsed) == 'function' then
+                -- player: LuaPlayer
+                success,param_parsed = pcall(param_parsed,player)
+                if Commands.internal_error(success,command_data.name,param_parsed) then return end
+            end
+        elseif param_parsed == nil or param_parsed == Commands.defines.error or param_parsed == parse_fail then
+            -- no value was returned or error was returned, if nil then give generic error
             if not param_parsed == Commands.defines.error then Commands.error('Invalid Param "'..param_name..'"; please make sure it is the correct type') end
             return
         end
