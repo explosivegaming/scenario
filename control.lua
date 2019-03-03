@@ -16,7 +16,9 @@ require 'resources.version'
 
 local files = {
     'modules.test',
-    'modules.commands.me'
+    'modules.commands.me',
+    'modules.commands.kill',
+    'modules.commands.admin-chat'
 }
 
 -- Loads all files in array above and logs progress

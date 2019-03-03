@@ -541,7 +541,7 @@ function Commands.run_command(command_event)
     end
 
     -- splits the arguments
-    local input_string = command_event.parameter
+    local input_string = command_event.parameter or ''
     local quote_params = {} -- stores any " " params
     input_string = input_string:gsub('"[^"]-"',function(w)
         -- finds all " " params are removes spaces for the next part
@@ -642,7 +642,7 @@ function Commands.run_command(command_event)
     table.insert(params,input_string)
     local success, err = pcall(command_data.callback,player,unpack(params))
     if Commands.internal_error(success,command_data.name,err) then return end
-    if err ~= Commands.defines.error and err ~= Commands.defines.success then Commands.success(err) end
+    if err ~= Commands.defines.error and err ~= Commands.defines.success and err ~= Commands.error and err ~= Commands.success then Commands.success(err) end
 end
 
 return Commands
