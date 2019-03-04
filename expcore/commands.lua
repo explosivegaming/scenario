@@ -506,7 +506,7 @@ end
 function Commands.internal_error(success,command_name,error_message)
     if not success then
         Commands.error('Internal Error, Please contact an admin','utility/cannot_build')
-        log('[ERROR] command/'..command_name..' :: '..error_message)
+        log{'expcore-commands.command-error-log-format',command_name,error_message}
     end
     return not success
 end
@@ -613,8 +613,7 @@ function Commands.run_command(command_event)
         -- used below as the reject function
         local parse_fail = function(error_message)
             error_message = error_message or ''
-            Commands.error('Invalid Param "'..param_name..'"; '..error_message)
-            return
+            return Commands.error{'expcore-commands.invalid-param',param_name,error_message}
         end
         -- input: string, player: LuaPlayer, reject: function, ... extra args
         local success,param_parsed = pcall(parse_callback,raw_params[index],player,parse_fail,unpack(param_data.parse_args))
@@ -629,7 +628,9 @@ function Commands.run_command(command_event)
             end
         elseif param_parsed == nil or param_parsed == Commands.defines.error or param_parsed == parse_fail then
             -- no value was returned or error was returned, if nil then give generic error
-            if not param_parsed == Commands.defines.error then Commands.error('Invalid Param "'..param_name..'"; please make sure it is the correct type') end
+            if not param_parsed == Commands.defines.error then
+                Commands.error{'expcore-commands.command-error-param-format',param_name,'please make sure it is the correct type'}
+            end
             return
         end
         -- adds the param to the table to be passed to the command callback

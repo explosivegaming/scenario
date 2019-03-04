@@ -94,7 +94,7 @@ end)
 Commands.add_parse('player',function(input,player,reject)
     if not input then return end -- nil check
     local input_player = Game.get_player_from_any(input)
-    if not player then
+    if not input_player then
         return reject{'expcore-commands.reject-player',input}
     else
         return input_player

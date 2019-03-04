@@ -18,7 +18,8 @@ local files = {
     'modules.test',
     'modules.commands.me',
     'modules.commands.kill',
-    'modules.commands.admin-chat'
+    'modules.commands.admin-chat',
+    'modules.commands.tag',
 }
 
 -- Loads all files in array above and logs progress

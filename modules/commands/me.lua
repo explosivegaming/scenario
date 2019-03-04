@@ -1,5 +1,4 @@
 local Commands = require 'expcore.commands'
-require 'expcore.common_parse'
 
 Commands.new_command('me','Sends an action message in the chat')
 :add_param('action',false)
