@@ -114,7 +114,7 @@ end)
 Commands.add_parse('player-alive',function(input,player,reject)
     local input_player = Commands.parse('player-online',input,player,reject)
     if not input_player then return end -- nil check
-    if not input_player.character or not input_player.character.health > 0 then
+    if not input_player.character or not input_player.character.health or input_player.character.health <= 0 then
         return reject{'expcore-commands.reject-player-alive'}
     else
         return input_player

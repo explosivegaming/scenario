@@ -20,6 +20,7 @@ local files = {
     'modules.commands.kill',
     'modules.commands.admin-chat',
     'modules.commands.tag',
+    'modules.commands.teleport',
 }
 
 -- Loads all files in array above and logs progress

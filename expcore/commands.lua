@@ -464,14 +464,14 @@ function Commands._prototype:register(callback)
     end
     self.description = description
     -- registers the command under its own name
-    commands.add_command(self.name,description..' '..self.help,function(command_event)
+    commands.add_command(self.name,{'expcore-commands.command-help',description,self.help},function(command_event)
         local success, err = pcall(Commands.run_command,command_event)
         if not success then log('[ERROR] command/'..self.name..' :: '..err) end
     end)
     -- adds any aliases that it has
     for _,alias in pairs(self.aliases) do
         if not commands.commands[alias] and not commands.game_commands[alias] then
-            commands.add_command(alias,description..' '..self.help,function(command_event)
+            commands.add_command(alias,{'expcore-commands.command-help',description,self.help},function(command_event)
                 command_event.name = self.name
                 local success, err = pcall(Commands.run_command,command_event)
                 Commands.internal_error(success,self.name,err)
