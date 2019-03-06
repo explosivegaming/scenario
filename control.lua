@@ -21,6 +21,8 @@ local files = {
     'modules.commands.admin-chat',
     'modules.commands.tag',
     'modules.commands.teleport',
+    'modules.commands.cheat-mode',
+    'modules.commands.interface',
 }
 
 -- Loads all files in array above and logs progress
