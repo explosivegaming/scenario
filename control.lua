@@ -23,6 +23,7 @@ local files = {
     'modules.commands.teleport',
     'modules.commands.cheat-mode',
     'modules.commands.interface',
+    'modules.commands.help',
 }
 
 -- Loads all files in array above and logs progress

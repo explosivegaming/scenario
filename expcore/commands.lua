@@ -303,7 +303,7 @@ function Commands.search(keyword,allowed_player)
             matches[name] = {
                 name=name,
                 help=description,
-                description=description,
+                description='',
                 aliases={}
             }
         end
