@@ -49,12 +49,6 @@ Event.add(defines.events.on_player_respawned, function(event)
   silo_script.on_event(event)
 end)
 
-Event.on_configuration_changed(function(event)
-  global.created_items = global.created_items or created_items()
-  global.respawn_items = global.respawn_items or respawn_items()
-  silo_script.on_configuration_changed(event)
-end)
-
 Event.on_load(function()
   silo_script.on_load()
 end)
