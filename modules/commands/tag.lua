@@ -5,7 +5,7 @@ Commands.new_command('tag','Sets your player tag.')
 :add_param('tag',false,'string-max-length',20) -- new tag for your player max 20 char
 :enable_auto_concat()
 :register(function(player,tag,raw)
-    player.tag = ' - '..tag
+    player.tag = '- '..tag
 end)
 
 Commands.new_command('tag-clear','Clears your tag. Or another player if you are admin.')
