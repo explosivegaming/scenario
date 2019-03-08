@@ -1,5 +1,6 @@
 local Commands = require 'expcore.commands'
 require 'expcore.common_parse'
+require 'modules.commands.admin-only-auth'
 
 local function teleport(from_player,to_player)
     local surface = to_player.surface

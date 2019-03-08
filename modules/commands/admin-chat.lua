@@ -1,5 +1,6 @@
 local Commands = require 'expcore.commands'
 require 'expcore.common_parse'
+require 'modules.commands.admin-only-auth'
 
 Commands.new_command('admin-chat','Sends a message in chat that only admins can see.')
 :add_param('message',false) -- the message to send in the admin chat

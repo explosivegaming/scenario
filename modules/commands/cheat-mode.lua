@@ -1,5 +1,6 @@
 local Commands = require 'expcore.commands'
 require 'expcore.common_parse'
+require 'modules.commands.admin-only-auth'
 
 Commands.new_command('toggle-cheat-mode','Toggles cheat mode for your player, or another player.')
 :add_param('player',true,'player') -- player to toggle chest mode of, can be nil for self
