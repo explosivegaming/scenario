@@ -15,6 +15,7 @@ Debug = require 'utils.debug'
 require 'resources.version'
 
 local files = {
+    'modules.factorio-control',
     'modules.commands.me',
     'modules.commands.kill',
     'modules.commands.admin-chat',
