@@ -15,7 +15,6 @@ Debug = require 'utils.debug'
 require 'resources.version'
 
 local files = {
-    'modules.test',
     'modules.commands.me',
     'modules.commands.kill',
     'modules.commands.admin-chat',
