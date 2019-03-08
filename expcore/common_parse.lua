@@ -67,7 +67,7 @@ Commands.add_parse('integer',function(input,player,reject)
     if not number then
         return reject{'expcore-commands.reject-number'}
     else
-        return number:floor()
+        return math.floor(number)
     end
 end)
 
