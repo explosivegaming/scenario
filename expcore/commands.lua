@@ -521,6 +521,18 @@ function Commands.success(value)
     return Commands.defines.success
 end
 
+-- logs command usage to file
+local function command_log(player,command,comment,params,raw,details)
+    game.write_file('log/commands.log',game.table_to_json{
+        player_name=player.name,
+        command_name=command.name,
+        comment=comment,
+        details=details,
+        params=params,
+        raw=raw
+    }..'\n',true,0)
+end
+
 --- Main event function that is ran for all commands, used internally please avoid direct use
 -- @tparam command_event table passed directly from command event from the add_command function
 function Commands.run_command(command_event)
@@ -530,12 +542,14 @@ function Commands.run_command(command_event)
     -- checks if player is allowed to use the command
     local authorized, auth_fail = Commands.authorize(player,command_data.name)
     if not authorized then
+        command_log(player,command_data,'Failed Auth',{},command_event.parameter)
         Commands.error(auth_fail,'utility/cannot_build')
         return
     end
 
     -- null param check
     if command_data.min_param_count > 0 and not command_event.parameter then
+        command_log(player,command_data,'No Params Given',{},command_event.parameter)
         Commands.error({'expcore-commands.invalid-inputs',command_data.name,command_data.description})
         return
     end
@@ -564,6 +578,7 @@ function Commands.run_command(command_event)
             -- there are too many params given to the command
             if not command_data.auto_concat then
                 -- error as they should not be more
+                command_log(player,command_data,'Invalid Input: Too Many Params',raw_params,input_string)
                 Commands.error({'expcore-commands.invalid-inputs',command_data.name,command_data.description})
                 return
             else
@@ -592,6 +607,7 @@ function Commands.run_command(command_event)
     -- checks param count
     local param_count = #raw_params
     if param_count < command_data.min_param_count then
+        command_log(player,command_data,'Invalid Input: Not Enough Params',raw_params,input_string)
         Commands.error({'expcore-commands.invalid-inputs',command_data.name,command_data.description})
         return
     end
@@ -608,27 +624,34 @@ function Commands.run_command(command_event)
         if not type(parse_callback) == 'function' then
             -- if its not a function throw and error
             Commands.internal_error(false,command_data.name,'Invalid param parse '..tostring(param_data.parse))
+            command_log(player,command_data,'Internal Error: Invalid Param Parse',params,command_event.parameter,tostring(param_data.parse))
             return
         end
         -- used below as the reject function
         local parse_fail = function(error_message)
             error_message = error_message or ''
+            command_log(player,command_data,'Invalid Param Given',raw_params,input_string)
             return Commands.error{'expcore-commands.invalid-param',param_name,error_message}
         end
         -- input: string, player: LuaPlayer, reject: function, ... extra args
         local success,param_parsed = pcall(parse_callback,raw_params[index],player,parse_fail,unpack(param_data.parse_args))
-        if Commands.internal_error(success,command_data.name,param_parsed) then return end
+        if Commands.internal_error(success,command_data.name,param_parsed) then
+            return command_log(player,command_data,'Internal Error: Param Parse Fail',params,command_event.parameter,param_parsed)
+        end
         if param_data.optional == true and param_parsed == nil then
             -- if it is optional and param is nil then it is set to default
             param_parsed = param_data.default
             if type(param_parsed) == 'function' then
                 -- player: LuaPlayer
                 success,param_parsed = pcall(param_parsed,player)
-                if Commands.internal_error(success,command_data.name,param_parsed) then return end
+                if Commands.internal_error(success,command_data.name,param_parsed) then
+                    return command_log(player,command_data,'Internal Error: Default Value Fail',params,command_event.parameter,param_parsed)
+                end
             end
         elseif param_parsed == nil or param_parsed == Commands.defines.error or param_parsed == parse_fail then
             -- no value was returned or error was returned, if nil then give generic error
             if not param_parsed == Commands.defines.error then
+                command_log(player,command_data,'Invalid Param Given',raw_params,input_string,param_name)
                 Commands.error{'expcore-commands.command-error-param-format',param_name,'please make sure it is the correct type'}
             end
             return
@@ -642,8 +665,13 @@ function Commands.run_command(command_event)
     -- player: LuaPlayer, ... command params, raw: string
     table.insert(params,input_string)
     local success, err = pcall(command_data.callback,player,unpack(params))
-    if Commands.internal_error(success,command_data.name,err) then return end
-    if err ~= Commands.defines.error and err ~= Commands.defines.success and err ~= Commands.error and err ~= Commands.success then Commands.success(err) end
+    if Commands.internal_error(success,command_data.name,err) then
+        return command_log(player,command_data,'Internal Error: Command Callback Fail',params,command_event.parameter,err)
+    end
+    if err ~= Commands.defines.error and err ~= Commands.defines.success and err ~= Commands.error and err ~= Commands.success then
+        Commands.success(err)
+    end
+    command_log(player,command_data,'Success',raw_params,input_string)
 end
 
 return Commands
