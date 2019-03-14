@@ -7,7 +7,8 @@ require 'config.command_auth_admin'
 local interface_modules = {
     ['Game']='utils.game',
     ['Commands']=Commands,
-    ['output']=Common.player_return
+    ['output']=Common.player_return,
+    ['Group']='expcore.permission_groups'
 }
 
 -- loads all the modules given in the above table

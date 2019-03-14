@@ -1,11 +1,13 @@
+local Event = require 'utils.event'
+local Game = require 'utils.game'
 local Permission_Groups = require 'expcore.permission_groups'
 
-Permission_Groups.new_group('admin')
+Permission_Groups.new_group('Admin')
 :allow_all()
 :disallow{
     'add_permission_group', -- admin
     'delete_permission_group',
-    'edit_permission_group',
+    --'edit_permission_group', -- removed for admin till role script added
     'import_permissions_string',
     'map_editor_action',
     'toggle_map_editor',
@@ -17,7 +19,7 @@ Permission_Groups.new_group('admin')
     'set_infinity_pipe_filter'
 }
 
-Permission_Groups.new_group('trusted')
+Permission_Groups.new_group('Trusted')
 :allow_all()
 :disallow{
     'add_permission_group', -- admin
@@ -35,7 +37,7 @@ Permission_Groups.new_group('trusted')
     'admin_action' -- trusted
 }
 
-Permission_Groups.new_group('standard')
+Permission_Groups.new_group('Standard')
 :allow_all()
 :disallow{
     'add_permission_group', -- admin
@@ -58,7 +60,7 @@ Permission_Groups.new_group('standard')
     'cancel_research'
 }
 
-Permission_Groups.new_group('guest')
+Permission_Groups.new_group('Guest')
 :allow_all()
 :disallow{
     'add_permission_group', -- admin
@@ -90,6 +92,39 @@ Permission_Groups.new_group('guest')
     'launch_rocket'
 }
 
-Permission_Groups.new_group('restricted')
+Permission_Groups.new_group('Restricted')
 :disallow_all()
 :allow('write_to_console')
+
+--- These events are used until a role system is added to make it easier for our admins
+
+local trusted_time = 60*60*60*10 -- 10 hour
+local standard_time = 60*60*60*3 -- 3 hour
+local function assign_group(player)
+    if player.admin then
+        Permission_Groups.set_player_group(player,'Admin')
+    elseif player.online_time > trusted_time then
+        Permission_Groups.set_player_group(player,'Trusted')
+    elseif player.online_time > standard_time then
+        Permission_Groups.set_player_group(player,'Standard')
+    else
+        Permission_Groups.set_player_group(player,'Guest')
+    end
+end
+
+Event.add('on_player_joined_game',function(event)
+    local player = Game.get_player_by_index(event.player_index)
+    assign_group(player)
+end)
+
+Event.add({'on_player_promoted','on_player_demoted'},function(event)
+    local player = Game.get_player_by_index(event.player_index)
+    assign_group(player)
+end)
+
+local check_interval = 60*60*15 -- 15 minutes
+Event.on_nth_tick(check_interval,function(event)
+    for _,player in pairs(game.connected_players) do
+        assign_group(player)
+    end
+end)

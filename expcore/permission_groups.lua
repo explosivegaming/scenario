@@ -48,7 +48,7 @@ function Permissions_Groups.lockdown_permissions(exempt)
         end
     end
     for _,group in pairs(game.permissions.groups) do
-        if not exempt(group.name:lower()) then
+        if not exempt[group.name:lower()] then
             for _,action in pairs(defines.input_action) do
                 group.set_allows_action(action,false)
             end
