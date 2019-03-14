@@ -24,6 +24,7 @@ local files = {
     'modules.commands.cheat-mode',
     'modules.commands.interface',
     'modules.commands.help',
+    'config.permission_groups'
 }
 
 -- Loads all files in array above and logs progress
