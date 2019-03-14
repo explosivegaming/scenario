@@ -63,6 +63,9 @@ function Permissions_Groups.set_player_group(player,group)
 end
 
 function Permissions_Groups._prototype:set_action(action,state)
+    if type(action) == 'string' then
+        action = defines.input_action[action]
+    end
     self.actions[action] = state
     return self
 end
@@ -98,6 +101,9 @@ function Permissions_Groups._prototype:disallow_all()
 end
 
 function Permissions_Groups._prototype:is_allowed(action)
+    if type(action) == 'string' then
+        action = defines.input_action[action]
+    end
     local state = self.actions[action]
     if state == nil then
         state = self.allow_all_actions
