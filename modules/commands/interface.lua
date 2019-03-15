@@ -1,13 +1,14 @@
 local Commands = require 'expcore.commands'
 local Global = require 'utils.global'
 local Common = require 'expcore.common'
-require 'modules.commands.admin-only-auth'
+require 'config.command_auth_admin'
 
 -- modules that are loaded into the interface env to be accessed
 local interface_modules = {
     ['Game']='utils.game',
     ['Commands']=Commands,
-    ['output']=Common.player_return
+    ['output']=Common.player_return,
+    ['Group']='expcore.permission_groups'
 }
 
 -- loads all the modules given in the above table

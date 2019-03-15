@@ -1,6 +1,6 @@
 local Commands = require 'expcore.commands'
 local Global = require 'utils.global'
-require 'expcore.common_parse'
+require 'config.command_parse_general'
 
 local results_per_page = 5
 
