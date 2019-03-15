@@ -23,7 +23,30 @@
     :allow('write_to_console') -- here we allow them to chat, {} can be used here if we had more than one action
 
 >>>>Functions List (see function for more detail):
+    Permissions_Groups.new_group(name) --- Defines a new permission group that can have it actions set in the config
+    Permissions_Groups.get_group_by_name(name) --- Returns the group with the given name, case sensitive
+    Permissions_Groups.get_group_from_player(player) --- Returns the group that a player is in
 
+    Permissions_Groups.reload_permissions() --- Reloads/creates all permission groups and sets them to they configured state
+    Permissions_Groups.lockdown_permissions(exempt) --- Removes all permissions from every permission group except for "Default" and any passed as exempt
+
+    Permissions_Groups.set_player_group(player,group) --- Sets a player's group to the one given, a player can only have one group at a time
+
+    Permissions_Groups._prototype:set_action(action,state) --- Sets the allow state of an action for this group, used internally but is safe to use else where
+    Permissions_Groups._prototype:allow(actions) --- Sets an action or actions to be allowed for this group even with disallow_all triggered, Do not use in runtime
+    Permissions_Groups._prototype:disallow(actions) --- Sets an action or actions to be disallowed for this group even with allow_all triggered, Do not use in runtime
+    Permissions_Groups._prototype:allow_all() --- Sets the default state for any actions not given to be allowed, useful with :disallow
+    Permissions_Groups._prototype:disallow_all() --- Sets the default state for any action not given to be disallowed, useful with :allow
+    Permissions_Groups._prototype:is_allowed(action) --- Returns if an input action is allowed for this group
+
+    Permissions_Groups._prototype:get_raw() --- Returns the LuaPermissionGroup that was created with this group object, used internally
+    Permissions_Groups._prototype:create() --- Creates or updates the permission group with the configured actions, used internally
+
+    Permissions_Groups._prototype:add_player(player) --- Adds a player to this group
+    Permissions_Groups._prototype:remove_player(player) --- Removes a player from this group
+    Permissions_Groups._prototype:get_players(online) --- Returns all player that are in this group with the option to filter to online/offline only
+
+    Permissions_Groups._prototype:print(message) --- Prints a message to every player in this group
 ]]
 
 
@@ -62,6 +85,7 @@ end
 -- @treturn ?Permissions_Groups._prototype|nil the group with that player or nil if non found
 function Permissions_Groups.get_group_from_player(player)
     player = Game.get_player_from_any(player)
+    if not player then return end
     local group = player.permission_group
     if group then
         return Permissions_Groups.groups[group.name]
