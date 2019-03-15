@@ -1,11 +1,28 @@
+--- Adds some commonly used functions used in many modules
+-- @author cooldude2606
+-- @module Public
+--[[
+>>>>Functions List (see function for more detail):
+    Public.type_check(value,test_type) --- Compare types faster for faster validation of prams
+    Public.type_check_error(value,test_type,error_message,level) --- Raises an error if the value is of the incorrect type
+    Public.param_check(value,test_type,param_name,param_number) --- Raises an error when the value is the incorrect type, uses a consistent error message format
+
+    Public.extract_keys(tbl,...) --- Extracts certain keys from a table
+
+    Public.player_return(value,colour,player) --- Will return a value of any type to the player/server console, allows colour for in-game players
+
+    Public.opt_require(path) --- Calls a require that will not error if the file is not found
+    Public.ext_require(path,...) --- Calls a require and returns only the keys given, file must return a table
+]]
+
 local Colours = require 'resources.color_presets'
 local Game = require 'utils.game'
 
 local Public = {}
 
---- Compare types faster for faster validation of prams
--- @usage is_type('foo','string') -- return true
--- @usage is_type('foo') -- return false
+--- Compare types faster for faster validation of params
+-- @usage type_check('foo','string') -- return true
+-- @usage type_check('foo') -- return false
 -- @param v the value to be tested
 -- @tparam[opt=nil] string test_type the type to test for if not given then it tests for nil
 -- @treturn boolean is v of type test_type
@@ -13,7 +30,8 @@ function Public.type_check(value,test_type)
     return test_type and value and type(value) == test_type or not test_type and not value or false
 end
 
---- Raises an error if invalid type is given
+--- Raises an error if the value is of the wrong type
+-- @usage type_check_error('foo','number','Value must be a number') -- will raise error "Value must be a number"
 -- @tparam value any the value that you want to test the type of
 -- @tparam test_type string the type that the value should be
 -- @tparam error_message string the error message that is returned
@@ -24,7 +42,8 @@ function Public.type_check_error(value,test_type,error_message,level)
     return Public.test_type(value,test_type) or error(error_message,level)
 end
 
---- Raises an error with type error with a consistent error message
+--- Raises an error when the value is the incorrect type, uses a consistent error message format
+-- @usage param_check('foo','number','repeat_count',2) -- will raise error "Invalid param #02 given to <anon>; repeat_count is not of type number"
 -- @tparam value any the value that you want to test the type of
 -- @tparam test_type string the type that the value should be
 -- @tparam param_name string the name of the param
@@ -40,6 +59,7 @@ function Public.param_check(value,test_type,param_name,param_number)
 end
 
 --- Extracts certain keys from a table
+-- @usage local key_three, key_one = extract({key_one='foo',key_two='bar',key_three=true},'key_three','key_one')
 -- @tparam tbl table the table which contains the keys
 -- @tparam ... string the names of the keys you want extracted
 -- @return the keys in the order given
@@ -93,6 +113,7 @@ function Public.player_return(value,colour,player)
 end
 
 --- Calls a require that will not error if the file is not found
+-- @usage local file = opt_require('file.not.present') -- will not cause any error
 -- @tparam path string the path that you want to require
 -- @return the returns from that file or nil, error if not loaded
 function Public.opt_require(path)
@@ -102,6 +123,7 @@ function Public.opt_require(path)
 end
 
 --- Calls a require and returns only the keys given, file must return a table
+-- @useage local extract, param_check = ext_require('expcore.common','extract','param_check')
 -- @tparam path string the path that you want to require
 -- @tparam ... string the name of the keys that you want returned
 -- @return the keys in the order given
