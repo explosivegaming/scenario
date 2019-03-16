@@ -56,10 +56,12 @@ Commands.new_command('interface','Sends an innovation to be ran and returns the 
     end
     -- temp_env will index to interface_env and interface_modules if value not found
     local temp_env = setmetatable({},{__index=get_index})
-    for name,callback in pairs(interface_callbacks) do
-        -- loops over callbacks and loads the values returned
-        local success, rtn = pcall(callback,player)
-        temp_env[name]=rtn
+    if player then -- player can be nil when it is the server
+        for name,callback in pairs(interface_callbacks) do
+            -- loops over callbacks and loads the values returned
+            local success, rtn = pcall(callback,player)
+            temp_env[name]=rtn
+        end
     end
     -- sets the global metatable to prevent new values being made
     -- global will index to temp_env and new indexs saved to interface_sandbox
