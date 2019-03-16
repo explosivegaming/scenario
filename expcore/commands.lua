@@ -523,8 +523,9 @@ end
 
 -- logs command usage to file
 local function command_log(player,command,comment,params,raw,details)
+    local player_name = player and player.name or '<Server>'
     game.write_file('log/commands.log',game.table_to_json{
-        player_name=player.name,
+        player_name=player_name,
         command_name=command.name,
         comment=comment,
         details=details,
@@ -537,7 +538,11 @@ end
 -- @tparam command_event table passed directly from command event from the add_command function
 function Commands.run_command(command_event)
     local command_data = Commands.commands[command_event.name]
-    local player = Game.get_player_by_index(command_event.player_index)
+    -- player can be nil when it is the server
+    local player
+    if command_event.player_index and command_event.player_index > 0 then
+        player = Game.get_player_by_index(command_event.player_index)
+    end
 
     -- checks if player is allowed to use the command
     local authorized, auth_fail = Commands.authorize(player,command_data.name)

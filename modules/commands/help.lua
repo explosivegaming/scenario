@@ -14,6 +14,7 @@ Commands.new_command('chelp','Searches for a keyword in all commands you are all
 :add_param('page',true,'integer') -- the keyword that will be looked for
 :add_defaults{keyword='',page=1}
 :register(function(player,keyword,page,raw)
+    local player_index = player and player.index or 0
     -- if keyword is a number then treat it as page number
     if tonumber(keyword) then
         page = math.floor(tonumber(keyword))
@@ -22,9 +23,9 @@ Commands.new_command('chelp','Searches for a keyword in all commands you are all
     -- gets a value for pages, might have result in cache
     local pages
     local found = 0
-    if search_cache[player.index] and search_cache[player.index].keyword == keyword:lower() then
-        pages = search_cache[player.index].pages
-        found = search_cache[player.index].found
+    if search_cache[player_index] and search_cache[player_index].keyword == keyword:lower() then
+        pages = search_cache[player_index].pages
+        found = search_cache[player_index].found
     else
         pages = {{}}
         local current_page = 1
@@ -51,7 +52,7 @@ Commands.new_command('chelp','Searches for a keyword in all commands you are all
             })
         end
         -- adds the result to the cache
-        search_cache[player.index] = {
+        search_cache[player_index] = {
             keyword=keyword:lower(),
             pages=pages,
             found=found
