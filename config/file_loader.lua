@@ -16,6 +16,7 @@ return {
     'modules.commands.help',
     -- QoL Addons
     'modules.addons.chat-popups',
+    'modules.addons.damage-popups',
     -- Config Files
     'config.command_auth_admin', -- commands tags with admin_only are blocked for non admins
     'config.permission_groups', -- loads some predefined permission groups
