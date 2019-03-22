@@ -1,6 +1,5 @@
 local Commands = require 'expcore.commands'
 require 'config.command_parse_general'
-require 'config.command_auth_admin'
 
 Commands.new_command('kill','Kills yourself or another player.')
 :add_param('player',true,'player-alive') -- the player to kill, must be alive to be valid

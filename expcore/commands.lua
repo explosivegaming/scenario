@@ -162,7 +162,7 @@
 ]]
 
 local Game = require 'utils.game'
-local player_return = require('expcore.common').player_return
+local player_return = ext_require('expcore.common','player_return')
 
 local Commands = {
     defines={ -- common values are stored error like signals

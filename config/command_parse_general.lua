@@ -1,8 +1,13 @@
+--- This file contains some common command param parse functions
+-- this file is less of a config and more of a requirement but you may wish to change how some behave
+-- as such you need to be confident with lua but you edit this config file
+-- use Commands.add_parse('name',function(input,player,reject) end) to add a parse
+-- see ./expcore/commands.lua for more details
 local Commands = require 'expcore.commands'
 local Game = require 'utils.game'
 
 --[[
->>>>Adds parses:
+>>>>Adds Parses:
     boolean
     string-options - options: array
     string-max-length - max_length: number
