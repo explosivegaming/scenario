@@ -104,9 +104,9 @@ local function assign_group(player)
     local current_group_name = player.permission_group and player.permission_group.name or 'None'
     if player.admin then
         Permission_Groups.set_player_group(player,'Admin')
-    elseif player.online_time > trusted_time and current_group_name == 'Trusted' then
+    elseif player.online_time > trusted_time or current_group_name == 'Trusted' then
         Permission_Groups.set_player_group(player,'Trusted')
-    elseif player.online_time > standard_time and current_group_name == 'Guest' then
+    elseif player.online_time > standard_time or current_group_name == 'Standard' then
         Permission_Groups.set_player_group(player,'Standard')
     else
         Permission_Groups.set_player_group(player,'Guest')
