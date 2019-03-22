@@ -6,6 +6,7 @@ local function teleport(from_player,to_player)
     local surface = to_player.surface
     local position = surface.find_non_colliding_position('player',to_player.position,32,1)
     if not position then return false end -- return false if no new position
+    if from_player.driving then from_player.driving = false end -- kicks a player out a vehicle if in one
     from_player.teleport(position,surface)
     return true
 end
