@@ -135,64 +135,75 @@ function Public.ext_require(path,...)
     return Public.extract_keys(rtn,...)
 end
 
---- Formats ticks into a time format - this is alot of work and will do later
--- time denominations: D,H,M,S,T days,hours,minutes,seconds,ticks
--- time prefixes (minutes as example): %m,%m,%M,%MM just the value, value with short tag, value with long tag
--- adding a number after the prefix AND denomination will show that many decimal palaces
--- examples: '%H %M' => '0H 0M'; '%MM and %SS3' => '0 Minutes and 0.000 Seconds'
-function Public.format_time(ticks,format)
-    local has_days, has_hours, has_minutes, has_seconds, has_ticks = false,false,false,false,false
-    local max_days, max_hours = ticks/5184000, ticks/216000
-    local max_minutes, max_seconds, max_ticks = ticks/3600, ticks/60, ticks
-    local days, hours = max_days, max_hours-math.floor(max_days)*5184000
-    local minutes, seconds = max_minutes-math.floor(max_hours)*216000, max_seconds-math.floor(max_minutes)*3600
-    local tags = {}
-    return 'Use format_time_simple currently WIP'
-end
-
---- Formats tick into a time format, this format is predefined to either H:M:S; HH MM SS or H Hours M Minutes S seconds
--- seconds are not required to be shown with option show_seconds = false, true to show them, default false
--- show_sub_seconds will show three decimal places for the seconds
--- long_format will use words rather than letters
--- tagged is default to true when false it will remove all letters and use :
+--- Formats tick into a clean format, denominations from highest to lowest
+-- long will use words rather than letters
+-- time will use : separates
+-- when a denomination is false it will overflow into the next one
 -- @tparam ticks number the number of ticks that represents a time
 -- @tparam options table a table of options to use for the format
-function Public.format_time_simple(ticks,options)
+-- @treturn string a locale string that can be used
+function Public.format_time(ticks,options)
     -- Sets up the options
-    options = {
-        show_seconds = options.show_seconds or false,
-        show_sub_seconds = options.show_sub_seconds or false,
-        long_format = options.long_format or false,
-        tagged = options.tagged or true
+    options = options or {
+        days=false,
+        hours=true,
+        minutes=true,
+        seconds=false,
+        long=false,
+        time=false
     }
     -- Basic numbers that are used in calculations
-    local max_hours, max_minutes, max_seconds = ticks/216000, ticks/3600, ticks/60
-    local hours, minutes, seconds = max_hours, max_minutes-math.floor(max_hours)*216000, max_seconds-math.floor(max_minutes)*3600
+    local max_days, max_hours, max_minutes, max_seconds = ticks/5184000, ticks/216000, ticks/3600, ticks/60
+    local days, hours = max_days, max_hours-math.floor(max_days)*24
+    local minutes, seconds = max_minutes-math.floor(max_hours)*60, max_seconds-math.floor(max_minutes)*60
+    -- Handles overflow of disabled denominations
+    local rtn_days, rtn_hours, rtn_minutes, rtn_seconds = math.floor(days), math.floor(hours), math.floor(minutes), math.floor(seconds)
+    if not options.days then
+        rtn_hours = rtn_hours + rtn_days*24
+    end
+    if not options.hours then
+        rtn_minutes = rtn_minutes + rtn_hours*60
+    end
+    if not options.minutes then
+        rtn_seconds = rtn_seconds + rtn_minutes*60
+    end
     -- Format options
-    local suffix = 'time-format.short-'
-    if options.long_format then
-        suffix = 'time-format.long-'
+    local suffix = 'time-symbol-'
+    local suffix_2 = '-short'
+    if options.long then
+        suffix = ''
+        suffix_2 = ''
     end
     local div = 'time-format.simple-format-tagged'
-    if options.tagged then
+    if options.time then
         div = 'time-format.simple-format-div'
         suffix = false
     end
-    -- The returned numbers in the right format
-    local rtn_hours, rtn_minutes, rtn_seconds = math.floor(hours), math.floor(minutes), math.floor(seconds)
-    if suffix then
-        rtn_hours = {suffix..'hours',rtn_hours}
-        rtn_minutes = {suffix..'minutes',rtn_minutes}
-        if options.show_sub_seconds then
-            rtn_seconds = {suffix..'seconds',string.format('%d03',seconds)}
-        else
-            rtn_seconds = {suffix..'seconds',rtn_seconds}
-        end
+    -- Adds formatting
+    if suffix ~= false then
+        rtn_days = {suffix..'days'..suffix_2,rtn_days}
+        rtn_hours = {suffix..'hours'..suffix_2,rtn_hours}
+        rtn_minutes = {suffix..'minutes'..suffix_2,rtn_minutes}
+        rtn_seconds = {suffix..'seconds'..suffix_2,rtn_seconds}
+    else
+        rtn_days = string.format('%02d',rtn_days)
+        rtn_hours = string.format('%02d',rtn_hours)
+        rtn_minutes = string.format('%02d',rtn_minutes)
+        rtn_seconds = string.format('%02d',rtn_seconds)
     end
     -- The final return is construed
-    local rtn = {div,rtn_hours,rtn_minutes}
-    if options.show_seconds then
-        rtn = {div,rtn,rtn_seconds}
+    local rtn
+    if options.days then
+        rtn = rtn_days
+    end
+    if options.hours then
+        rtn = rtn and {div,rtn,rtn_hours} or rtn_hours
+    end
+    if options.minutes then
+        rtn = rtn and {div,rtn,rtn_minutes} or rtn_minutes
+    end
+    if options.seconds then
+        rtn = rtn and {div,rtn,rtn_seconds} or rtn_seconds
     end
     return rtn
 end
