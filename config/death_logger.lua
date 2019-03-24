@@ -8,5 +8,5 @@ return {
     auto_collect_bodies=false, -- enables items being returned to the spawn point in chests upon death
     show_map_markers=true, -- shows markers on the map where bodies are
     include_time_of_death=true, -- weather to include the time of death on the map marker
-    map_icon='' -- the icon that the map marker shows '' means no icon
+    map_icon=nil -- the icon that the map marker shows; nil means no icon; format as a SingleID
 }

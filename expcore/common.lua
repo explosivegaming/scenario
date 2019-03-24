@@ -138,6 +138,7 @@ end
 --- Formats tick into a clean format, denominations from highest to lowest
 -- long will use words rather than letters
 -- time will use : separates
+-- string will return a string not a locale string
 -- when a denomination is false it will overflow into the next one
 -- @tparam ticks number the number of ticks that represents a time
 -- @tparam options table a table of options to use for the format
@@ -150,7 +151,8 @@ function Public.format_time(ticks,options)
         minutes=true,
         seconds=false,
         long=false,
-        time=false
+        time=false,
+        string=false
     }
     -- Basic numbers that are used in calculations
     local max_days, max_hours, max_minutes, max_seconds = ticks/5184000, ticks/216000, ticks/3600, ticks/60
@@ -174,18 +176,28 @@ function Public.format_time(ticks,options)
         suffix = ''
         suffix_2 = ''
     end
-    local div = 'time-format.simple-format-tagged'
+    local div = options.string and ' ' or 'time-format.simple-format-tagged'
     if options.time then
-        div = 'time-format.simple-format-div'
+        div = options.string and ':' or 'time-format.simple-format-div'
         suffix = false
     end
     -- Adds formatting
     if suffix ~= false then
-        rtn_days = {suffix..'days'..suffix_2,rtn_days}
-        rtn_hours = {suffix..'hours'..suffix_2,rtn_hours}
-        rtn_minutes = {suffix..'minutes'..suffix_2,rtn_minutes}
-        rtn_seconds = {suffix..'seconds'..suffix_2,rtn_seconds}
+        if options.string then
+            -- format it as a string
+            local long = suffix == ''
+            rtn_days = long and rtn_days..' days' or rtn_days..'d'
+            rtn_hours = long and rtn_hours..' hours' or rtn_hours..'h'
+            rtn_minutes = long and rtn_minutes..' minutes' or rtn_minutes..'m'
+            rtn_seconds = long and rtn_seconds..' seconds' or rtn_seconds..'s'
+        else
+            rtn_days = {suffix..'days'..suffix_2,rtn_days}
+            rtn_hours = {suffix..'hours'..suffix_2,rtn_hours}
+            rtn_minutes = {suffix..'minutes'..suffix_2,rtn_minutes}
+            rtn_seconds = {suffix..'seconds'..suffix_2,rtn_seconds}
+        end
     else
+        -- weather string or not it has same format
         rtn_days = string.format('%02d',rtn_days)
         rtn_hours = string.format('%02d',rtn_hours)
         rtn_minutes = string.format('%02d',rtn_minutes)
@@ -193,18 +205,17 @@ function Public.format_time(ticks,options)
     end
     -- The final return is construed
     local rtn
-    if options.days then
-        rtn = rtn_days
+    local append = function(dom,value)
+        if dom and options.string then
+            rtn = rtn and rtn..div..value or value
+        elseif dom then
+            rtn = rtn and {div,rtn,value} or value
+        end
     end
-    if options.hours then
-        rtn = rtn and {div,rtn,rtn_hours} or rtn_hours
-    end
-    if options.minutes then
-        rtn = rtn and {div,rtn,rtn_minutes} or rtn_minutes
-    end
-    if options.seconds then
-        rtn = rtn and {div,rtn,rtn_seconds} or rtn_seconds
-    end
+    append(options.day,rtn_days)
+    append(options.hours,rtn_hours)
+    append(options.minutes,rtn_minutes)
+    append(options.seconds,rtn_seconds)
     return rtn
 end
 
