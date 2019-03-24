@@ -5,6 +5,7 @@ local Common = require 'expcore.common'
 -- modules that are loaded into the interface env to be accessed
 local interface_modules = {
     ['Game']='utils.game',
+    ['_C']=Common,
     ['Commands']=Commands,
     ['output']=Common.player_return,
     ['Group']='expcore.permission_groups'
