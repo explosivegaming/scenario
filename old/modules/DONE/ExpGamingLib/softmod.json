@@ -1,0 +1,19 @@
+{
+  "name": "ExpGamingLib",
+  "version": "4.0.0",
+  "description": "Adds some common functions used though out all ExpGaming modules",
+  "location": "FSM_ARCHIVE",
+  "keywords": [
+    "ExpGaming",
+    "Lib"
+  ],
+  "author": "Cooldude2606",
+  "contact": "Discord: Cooldude2606#5241",
+  "license": "https://github.com/explosivegaming/scenario/blob/master/LICENSE",
+  "dependencies": {
+    "FactorioStdLib.Game": "^0.8.0",
+    "FactorioStdLib.Color": "^0.8.0",
+    "FactorioStdLib.Table": "^0.8.0"
+  },
+  "submodules": {}
+}
