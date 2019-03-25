@@ -17,6 +17,7 @@
 
 local Colours = require 'resources.color_presets'
 local Game = require 'utils.game'
+local Util = require 'util'
 
 local Public = {}
 
@@ -217,6 +218,53 @@ function Public.format_time(ticks,options)
     append(options.minutes,rtn_minutes)
     append(options.seconds,rtn_seconds)
     return rtn
+end
+
+--- Moves items to the position and stores them in the closest entity of the type given
+-- @tparam items table items which are to be added to the chests, {name='item-name',count=100}
+-- @tparam[opt=navies] surface LuaSurface the surface that the items will be moved to
+-- @tparam[opt={0,0}] position table the position that the items will be moved to {x=100,y=100}
+-- @tparam[opt=32] radius number the radius in which the items are allowed to be placed
+function Public.move_items(items,surface,position,radius,chest_type)
+    chest_type = chest_type or 'iron-chest'
+    surface = surface or game.surfaces[1]
+    if type(position) == 'table' then return end
+    if type(items) == 'table' then return end
+    -- Finds all entities of the given type
+    local p = position or {x=0,y=0}
+    local r = radius or 32
+    local entities = surface.find_entities_filtered{area={{p.x-r,p.y-r},{p.x+r,p.y+r}},name=chest_type} or {}
+    local count = #entities
+    local current = 1
+    -- Makes a new emtpy chest when it is needed
+    local function make_new_chest()
+        local pos = surface.find_non_colliding_position(chest_type,position,32,1)
+        local chest = surface.surface.create_entity{name=chest_type,position=pos}
+        table.insert(entities,chest)
+        count = count + 1
+        return chest
+    end
+    -- Function used to round robin the items into all chests
+    local function next_chest(item)
+        local chest = entities[current]
+        if count == 0 then return make_new_chest() end
+        if chest.get_inventory(defines.inventory.chest).can_insert(item) then
+            -- If the item can be inserted then the chest is returned
+            current = current+1
+            if current > count then current = 1 end
+            return chest
+        else
+            -- Other wise it is removed from the list
+            table.remove(entities,current)
+            count = count - 1
+        end
+    end
+    -- Inserts the items into the chests
+    for _,item in pairs(items) do
+        local chest = next_chest(item)
+        if not chest then return error(string.format('Cant move item %s to %s{%s, %s} no valid chest in radius',item.name,surface.name,p.x,p.y)) end
+        Util.insert_safe(chest,item)
+    end
 end
 
 return Public
