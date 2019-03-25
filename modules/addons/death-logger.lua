@@ -2,7 +2,7 @@ local Event = require 'utils.event'
 local Game = require 'utils.game'
 local Global = require 'utils.global'
 local config = require 'config.death_logger'
-local  format_time = ext_require('expcore.common','format_time')
+local format_time,move_items = ext_require('expcore.common','format_time','move_items')
 
 local deaths = {
     archive={} -- deaths moved here after body is gone
@@ -75,6 +75,14 @@ if config.show_map_markers then
     local check_period = 60*60*5 -- five minutes
     Event.on_nth_tick(check_period,function(event)
         check_map_tags()
+    end)
+end
+
+if config.auto_collect_bodies then
+    Event.add(defines.events.on_character_corpse_expired,function(event)
+        local corpse = event.corpse
+        local items = corpse.get_inventory(defines.inventory.character_corpse).get_contents()
+        move_items(items,corpse.surface,{x=0,y=0})
     end)
 end
 

@@ -221,15 +221,15 @@ function Public.format_time(ticks,options)
 end
 
 --- Moves items to the position and stores them in the closest entity of the type given
--- @tparam items table items which are to be added to the chests, {name='item-name',count=100}
+-- @tparam items table items which are to be added to the chests, ['name']=count
 -- @tparam[opt=navies] surface LuaSurface the surface that the items will be moved to
 -- @tparam[opt={0,0}] position table the position that the items will be moved to {x=100,y=100}
 -- @tparam[opt=32] radius number the radius in which the items are allowed to be placed
 function Public.move_items(items,surface,position,radius,chest_type)
     chest_type = chest_type or 'iron-chest'
     surface = surface or game.surfaces[1]
-    if type(position) == 'table' then return end
-    if type(items) == 'table' then return end
+    if type(position) ~= 'table' then return end
+    if type(items) ~= 'table' then return end
     -- Finds all entities of the given type
     local p = position or {x=0,y=0}
     local r = radius or 32
@@ -260,10 +260,10 @@ function Public.move_items(items,surface,position,radius,chest_type)
         end
     end
     -- Inserts the items into the chests
-    for _,item in pairs(items) do
-        local chest = next_chest(item)
+    for item_name,item_count in pairs(items) do
+        local chest = next_chest{name=item_name,count=item_count}
         if not chest then return error(string.format('Cant move item %s to %s{%s, %s} no valid chest in radius',item.name,surface.name,p.x,p.y)) end
-        Util.insert_safe(chest,item)
+        Util.insert_safe(chest,{[item_name]=item_count})
     end
 end
 
