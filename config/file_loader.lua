@@ -19,6 +19,7 @@ return {
     'modules.addons.damage-popups',
     'modules.addons.death-logger',
     'modules.addons.advanced-starting-items',
+    'modules.addons.spawn-area',
     -- Config Files
     'config.command_auth_admin', -- commands tagged with admin_only are blocked for non admins
     'config.command_auth_runtime_disable', -- allows commands to be enabled and disabled during runtime
