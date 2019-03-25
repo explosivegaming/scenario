@@ -58,6 +58,13 @@ end
 Event.add(defines.events.on_player_died,function(event)
     local player = Game.get_player_by_index(event.player_index)
     local corpse = player.surface.find_entity('character-corpse',player.position)
+    if config.use_chests_as_bodies then
+        local items = corpse.get_inventory(defines.inventory.character_corpse).get_contents()
+        local chest = move_items(items,corpse.surface,corpse.position)
+        chest.destructible = false
+        corpse.destroy()
+        corpse = chest
+    end
     local death = {
         player_name = player.name,
         time_of_death = event.tick,

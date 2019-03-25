@@ -239,7 +239,7 @@ function Public.move_items(items,surface,position,radius,chest_type)
     -- Makes a new emtpy chest when it is needed
     local function make_new_chest()
         local pos = surface.find_non_colliding_position(chest_type,position,32,1)
-        local chest = surface.surface.create_entity{name=chest_type,position=pos}
+        local chest = surface.create_entity{name=chest_type,position=pos,force='neutral'}
         table.insert(entities,chest)
         count = count + 1
         return chest
@@ -260,11 +260,14 @@ function Public.move_items(items,surface,position,radius,chest_type)
         end
     end
     -- Inserts the items into the chests
+    local last_chest
     for item_name,item_count in pairs(items) do
         local chest = next_chest{name=item_name,count=item_count}
         if not chest then return error(string.format('Cant move item %s to %s{%s, %s} no valid chest in radius',item.name,surface.name,p.x,p.y)) end
         Util.insert_safe(chest,{[item_name]=item_count})
+        last_chest = chest
     end
+    return last_chest
 end
 
 return Public
