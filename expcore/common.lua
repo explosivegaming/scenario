@@ -270,4 +270,154 @@ function Public.move_items(items,surface,position,radius,chest_type)
     return last_chest
 end
 
+--[[-- https://github.com/Refactorio/RedMew/blob/9184b2940f311d8c9c891e83429fc57ec7e0c4a2/map_gen/maps/diggy/debug.lua#L31
+    Prints a colored value on a location.
+    @param value between -1 and 1
+    @param surface LuaSurface
+    @param position Position {x, y}
+    @param scale float
+    @param offset float
+    @param immutable bool if immutable, only set, never do a surface lookup, values never change
+]]
+function Public.print_grid_value(value, surface, position, scale, offset, immutable)
+    local is_string = type(value) == 'string'
+    local color = Colours.white
+    local text = value
+
+    if type(immutable) ~= 'boolean' then
+        immutable = false
+    end
+
+    if not is_string then
+        scale = scale or 1
+        offset = offset or 0
+        position = {x = position.x + offset, y = position.y + offset}
+        local r = math.max(1, value) / scale
+        local g = 1 - math.abs(value) / scale
+        local b = math.min(1, value) / scale
+
+        if (r > 0) then
+            r = 0
+        end
+
+        if (b < 0) then
+            b = 0
+        end
+
+        if (g < 0) then
+            g = 0
+        end
+
+        r = math.abs(r)
+
+        color = { r = r, g = g, b = b}
+
+        -- round at precision of 2
+        text = math.floor(100 * value) * 0.01
+
+        if (0 == text) then
+            text = '0.00'
+        end
+    end
+
+    if not immutable then
+        local text_entity = surface.find_entity('flying-text', position)
+
+        if text_entity then
+            text_entity.text = text
+            text_entity.color = color
+            return
+        end
+    end
+
+    surface.create_entity{
+        name = 'flying-text',
+        color = color,
+        text = text,
+        position = position
+    }.active = false
+end
+
+--[[--
+    Prints a colored value on a location. When given a color_value and a delta_color,
+    will change the color of the text from the base to base + value * delta. This will
+    make the color of the text range from 'base_color' to 'base_color + delta_color'
+    as the color_value ranges from 0 to 1
+    @param value of number to be displayed
+    @param surface LuaSurface
+    @param position Position {x, y}
+    @param offset float position offset
+    @param immutable bool if immutable, only set, never do a surface lookup, values never change
+    @param color_value float How far along the range of values of colors the value is to be displayed
+    @param base_color {r,g,b} The color for the text to be if color_value is 0
+    @param delta_color {r,g,b} The amount to correct the base_color if color_value is 1
+    @param under_bound {r,g,b} The color to be used if color_value < 0
+    @param over_bound {r,g,b} The color to be used if color_value > 1
+]]
+function Public.print_colored_grid_value(value, surface, position, offset, immutable,
+        color_value, base_color, delta_color, under_bound, over_bound)
+    local is_string = type(value) == 'string'
+    -- default values:
+    local color = base_color or Colours.white
+    local d_color = delta_color or Colours.black
+    local u_color = under_bound or color
+    local o_color = over_bound or color
+
+    if (color_value < 0) then
+        color = u_color
+    elseif (color_value > 1) then
+        color = o_color
+    else
+        color = {
+            r = color.r + color_value * d_color.r,
+            g = color.g + color_value * d_color.g,
+            b = color.b + color_value * d_color.b
+        }
+    end
+
+    local text = value
+
+    if type(immutable) ~= 'boolean' then
+        immutable = false
+    end
+
+    if not is_string then
+        offset = offset or 0
+        position = {x = position.x + offset, y = position.y + offset}
+
+        -- round at precision of 2
+        text = math.floor(100 * value) * 0.01
+
+        if (0 == text) then
+            text = '0.00'
+        end
+    end
+
+    if not immutable then
+        local text_entity = surface.find_entity('flying-text', position)
+
+        if text_entity then
+            text_entity.text = text
+            text_entity.color = color
+            return
+        end
+    end
+
+    surface.create_entity{
+        name = 'flying-text',
+        color = color,
+        text = text,
+        position = position
+    }.active = false
+end
+
+function Public.clear_flying_text(surface)
+    local entities = surface.find_entities_filtered{name ='flying-text'}
+    for _,entity in pairs(entities) do
+        if entity and entity.valid then
+            entity.destroy()
+        end
+    end
+end
+
 return Public
