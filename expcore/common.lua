@@ -17,6 +17,7 @@
 
 local Colours = require 'resources.color_presets'
 local Game = require 'utils.game'
+local Util = require 'util'
 
 local Public = {}
 
@@ -133,6 +134,290 @@ function Public.ext_require(path,...)
         error('File did not return a table, can not extract keys.',2)
     end
     return Public.extract_keys(rtn,...)
+end
+
+--- Formats tick into a clean format, denominations from highest to lowest
+-- long will use words rather than letters
+-- time will use : separates
+-- string will return a string not a locale string
+-- when a denomination is false it will overflow into the next one
+-- @tparam ticks number the number of ticks that represents a time
+-- @tparam options table a table of options to use for the format
+-- @treturn string a locale string that can be used
+function Public.format_time(ticks,options)
+    -- Sets up the options
+    options = options or {
+        days=false,
+        hours=true,
+        minutes=true,
+        seconds=false,
+        long=false,
+        time=false,
+        string=false
+    }
+    -- Basic numbers that are used in calculations
+    local max_days, max_hours, max_minutes, max_seconds = ticks/5184000, ticks/216000, ticks/3600, ticks/60
+    local days, hours = max_days, max_hours-math.floor(max_days)*24
+    local minutes, seconds = max_minutes-math.floor(max_hours)*60, max_seconds-math.floor(max_minutes)*60
+    -- Handles overflow of disabled denominations
+    local rtn_days, rtn_hours, rtn_minutes, rtn_seconds = math.floor(days), math.floor(hours), math.floor(minutes), math.floor(seconds)
+    if not options.days then
+        rtn_hours = rtn_hours + rtn_days*24
+    end
+    if not options.hours then
+        rtn_minutes = rtn_minutes + rtn_hours*60
+    end
+    if not options.minutes then
+        rtn_seconds = rtn_seconds + rtn_minutes*60
+    end
+    -- Format options
+    local suffix = 'time-symbol-'
+    local suffix_2 = '-short'
+    if options.long then
+        suffix = ''
+        suffix_2 = ''
+    end
+    local div = options.string and ' ' or 'time-format.simple-format-tagged'
+    if options.time then
+        div = options.string and ':' or 'time-format.simple-format-div'
+        suffix = false
+    end
+    -- Adds formatting
+    if suffix ~= false then
+        if options.string then
+            -- format it as a string
+            local long = suffix == ''
+            rtn_days = long and rtn_days..' days' or rtn_days..'d'
+            rtn_hours = long and rtn_hours..' hours' or rtn_hours..'h'
+            rtn_minutes = long and rtn_minutes..' minutes' or rtn_minutes..'m'
+            rtn_seconds = long and rtn_seconds..' seconds' or rtn_seconds..'s'
+        else
+            rtn_days = {suffix..'days'..suffix_2,rtn_days}
+            rtn_hours = {suffix..'hours'..suffix_2,rtn_hours}
+            rtn_minutes = {suffix..'minutes'..suffix_2,rtn_minutes}
+            rtn_seconds = {suffix..'seconds'..suffix_2,rtn_seconds}
+        end
+    else
+        -- weather string or not it has same format
+        rtn_days = string.format('%02d',rtn_days)
+        rtn_hours = string.format('%02d',rtn_hours)
+        rtn_minutes = string.format('%02d',rtn_minutes)
+        rtn_seconds = string.format('%02d',rtn_seconds)
+    end
+    -- The final return is construed
+    local rtn
+    local append = function(dom,value)
+        if dom and options.string then
+            rtn = rtn and rtn..div..value or value
+        elseif dom then
+            rtn = rtn and {div,rtn,value} or value
+        end
+    end
+    append(options.day,rtn_days)
+    append(options.hours,rtn_hours)
+    append(options.minutes,rtn_minutes)
+    append(options.seconds,rtn_seconds)
+    return rtn
+end
+
+--- Moves items to the position and stores them in the closest entity of the type given
+-- @tparam items table items which are to be added to the chests, ['name']=count
+-- @tparam[opt=navies] surface LuaSurface the surface that the items will be moved to
+-- @tparam[opt={0,0}] position table the position that the items will be moved to {x=100,y=100}
+-- @tparam[opt=32] radius number the radius in which the items are allowed to be placed
+function Public.move_items(items,surface,position,radius,chest_type)
+    chest_type = chest_type or 'iron-chest'
+    surface = surface or game.surfaces[1]
+    if type(position) ~= 'table' then return end
+    if type(items) ~= 'table' then return end
+    -- Finds all entities of the given type
+    local p = position or {x=0,y=0}
+    local r = radius or 32
+    local entities = surface.find_entities_filtered{area={{p.x-r,p.y-r},{p.x+r,p.y+r}},name=chest_type} or {}
+    local count = #entities
+    local current = 1
+    -- Makes a new emtpy chest when it is needed
+    local function make_new_chest()
+        local pos = surface.find_non_colliding_position(chest_type,position,32,1)
+        local chest = surface.create_entity{name=chest_type,position=pos,force='neutral'}
+        table.insert(entities,chest)
+        count = count + 1
+        return chest
+    end
+    -- Function used to round robin the items into all chests
+    local function next_chest(item)
+        local chest = entities[current]
+        if count == 0 then return make_new_chest() end
+        if chest.get_inventory(defines.inventory.chest).can_insert(item) then
+            -- If the item can be inserted then the chest is returned
+            current = current+1
+            if current > count then current = 1 end
+            return chest
+        else
+            -- Other wise it is removed from the list
+            table.remove(entities,current)
+            count = count - 1
+        end
+    end
+    -- Inserts the items into the chests
+    local last_chest
+    for item_name,item_count in pairs(items) do
+        local chest = next_chest{name=item_name,count=item_count}
+        if not chest then return error(string.format('Cant move item %s to %s{%s, %s} no valid chest in radius',item.name,surface.name,p.x,p.y)) end
+        Util.insert_safe(chest,{[item_name]=item_count})
+        last_chest = chest
+    end
+    return last_chest
+end
+
+--[[-- https://github.com/Refactorio/RedMew/blob/9184b2940f311d8c9c891e83429fc57ec7e0c4a2/map_gen/maps/diggy/debug.lua#L31
+    Prints a colored value on a location.
+    @param value between -1 and 1
+    @param surface LuaSurface
+    @param position Position {x, y}
+    @param scale float
+    @param offset float
+    @param immutable bool if immutable, only set, never do a surface lookup, values never change
+]]
+function Public.print_grid_value(value, surface, position, scale, offset, immutable)
+    local is_string = type(value) == 'string'
+    local color = Colours.white
+    local text = value
+
+    if type(immutable) ~= 'boolean' then
+        immutable = false
+    end
+
+    if not is_string then
+        scale = scale or 1
+        offset = offset or 0
+        position = {x = position.x + offset, y = position.y + offset}
+        local r = math.max(1, value) / scale
+        local g = 1 - math.abs(value) / scale
+        local b = math.min(1, value) / scale
+
+        if (r > 0) then
+            r = 0
+        end
+
+        if (b < 0) then
+            b = 0
+        end
+
+        if (g < 0) then
+            g = 0
+        end
+
+        r = math.abs(r)
+
+        color = { r = r, g = g, b = b}
+
+        -- round at precision of 2
+        text = math.floor(100 * value) * 0.01
+
+        if (0 == text) then
+            text = '0.00'
+        end
+    end
+
+    if not immutable then
+        local text_entity = surface.find_entity('flying-text', position)
+
+        if text_entity then
+            text_entity.text = text
+            text_entity.color = color
+            return
+        end
+    end
+
+    surface.create_entity{
+        name = 'flying-text',
+        color = color,
+        text = text,
+        position = position
+    }.active = false
+end
+
+--[[--
+    Prints a colored value on a location. When given a color_value and a delta_color,
+    will change the color of the text from the base to base + value * delta. This will
+    make the color of the text range from 'base_color' to 'base_color + delta_color'
+    as the color_value ranges from 0 to 1
+    @param value of number to be displayed
+    @param surface LuaSurface
+    @param position Position {x, y}
+    @param offset float position offset
+    @param immutable bool if immutable, only set, never do a surface lookup, values never change
+    @param color_value float How far along the range of values of colors the value is to be displayed
+    @param base_color {r,g,b} The color for the text to be if color_value is 0
+    @param delta_color {r,g,b} The amount to correct the base_color if color_value is 1
+    @param under_bound {r,g,b} The color to be used if color_value < 0
+    @param over_bound {r,g,b} The color to be used if color_value > 1
+]]
+function Public.print_colored_grid_value(value, surface, position, offset, immutable,
+        color_value, base_color, delta_color, under_bound, over_bound)
+    local is_string = type(value) == 'string'
+    -- default values:
+    local color = base_color or Colours.white
+    local d_color = delta_color or Colours.black
+    local u_color = under_bound or color
+    local o_color = over_bound or color
+
+    if (color_value < 0) then
+        color = u_color
+    elseif (color_value > 1) then
+        color = o_color
+    else
+        color = {
+            r = color.r + color_value * d_color.r,
+            g = color.g + color_value * d_color.g,
+            b = color.b + color_value * d_color.b
+        }
+    end
+
+    local text = value
+
+    if type(immutable) ~= 'boolean' then
+        immutable = false
+    end
+
+    if not is_string then
+        offset = offset or 0
+        position = {x = position.x + offset, y = position.y + offset}
+
+        -- round at precision of 2
+        text = math.floor(100 * value) * 0.01
+
+        if (0 == text) then
+            text = '0.00'
+        end
+    end
+
+    if not immutable then
+        local text_entity = surface.find_entity('flying-text', position)
+
+        if text_entity then
+            text_entity.text = text
+            text_entity.color = color
+            return
+        end
+    end
+
+    surface.create_entity{
+        name = 'flying-text',
+        color = color,
+        text = text,
+        position = position
+    }.active = false
+end
+
+function Public.clear_flying_text(surface)
+    local entities = surface.find_entities_filtered{name ='flying-text'}
+    for _,entity in pairs(entities) do
+        if entity and entity.valid then
+            entity.destroy()
+        end
+    end
 end
 
 return Public

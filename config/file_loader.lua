@@ -14,7 +14,16 @@ return {
     'modules.commands.cheat-mode',
     'modules.commands.interface',
     'modules.commands.help',
+    -- QoL Addons
+    'modules.addons.chat-popups',
+    'modules.addons.damage-popups',
+    'modules.addons.death-logger',
+    'modules.addons.advanced-starting-items',
+    'modules.addons.spawn-area',
+    'modules.addons.compilatron',
+    'modules.addons.worn-paths',
     -- Config Files
-    'config.command_auth_admin', -- commands tags with admin_only are blocked for non admins
+    'config.command_auth_admin', -- commands tagged with admin_only are blocked for non admins
+    'config.command_auth_runtime_disable', -- allows commands to be enabled and disabled during runtime
     'config.permission_groups', -- loads some predefined permission groups
 }
