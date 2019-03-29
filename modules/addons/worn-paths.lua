@@ -4,6 +4,7 @@ local Global = require 'utils.global'
 local print_grid_value, clear_flying_text = ext_require('expcore.common','print_grid_value','clear_flying_text')
 local config = require 'config.worn_paths'
 
+-- Loops over the config and finds the wile which has the highest value for strength
 local max_strength = 0
 for _,strength in pairs(config.strengths) do
     if strength > max_strength then
@@ -11,11 +12,13 @@ for _,strength in pairs(config.strengths) do
     end
 end
 
+-- Used for debugging the degrade chances
 local debug_players = {}
 Global.register(debug_players, function(tbl)
     debug_players = tbl
 end)
 
+-- Will degrade a tile down to the next tile when called
 local function degrade(surface,position)
     local tile = surface.get_tile(position)
     local tile_name = tile.name
@@ -24,6 +27,7 @@ local function degrade(surface,position)
     surface.set_tiles{{name=degrade_tile_name,position=position}}
 end
 
+-- Same as degrade but will degrade all tiles that are under an entity
 local function degrade_entity(entity)
     local surface = entity.surface
     local position = entity.position
@@ -46,6 +50,7 @@ local function degrade_entity(entity)
     surface.set_tiles(tiles)
 end
 
+-- Turns the strength of a tile into a probability (0 = impossible, 1 = certain)
 local function get_probability(strength)
     local v1 = strength/max_strength
     local dif = 1 - v1
@@ -53,6 +58,7 @@ local function get_probability(strength)
     return (1-v1+v2)/config.weakness_value
 end
 
+-- Gets the mean of the strengths around a tile to give the strength at that position
 local function get_tile_strength(surface,position)
     local tile = surface.get_tile(position)
     local tile_name = tile.name
@@ -70,6 +76,7 @@ local function get_tile_strength(surface,position)
     return strength/9
 end
 
+-- Same as get_tile_strength but returns to a in game text rather than as a value
 local function debug_get_tile_strength(surface,position)
     for x = -3,3 do -- x loop
         local px = position.x+x
@@ -82,6 +89,7 @@ local function debug_get_tile_strength(surface,position)
     end
 end
 
+-- When the player changes position the tile will have a chance to downgrade, debug check is here
 Event.add(defines.events.on_player_changed_position, function(event)
     local player = Game.get_player_by_index(event.player_index)
     local surface = player.surface
@@ -96,6 +104,7 @@ Event.add(defines.events.on_player_changed_position, function(event)
     end
 end)
 
+-- When an entity is build there is a much higher chance that the tiles will degrade
 Event.add(defines.events.on_built_entity, function(event)
     local entity = event.created_entity
     local surface = entity.surface
@@ -107,6 +116,7 @@ Event.add(defines.events.on_built_entity, function(event)
     end
 end)
 
+-- Same as above but with robots
 Event.add(defines.events.on_robot_built_entity, function(event)
     local entity = event.created_entity
     local surface = entity.surface
@@ -118,6 +128,7 @@ Event.add(defines.events.on_robot_built_entity, function(event)
     end
 end)
 
+-- Used as a way to access the global table
 return function(player_name,state)
     local player = Game.get_player_from_any(player_name)
     clear_flying_text(player.surface)

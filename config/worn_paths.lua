@@ -37,8 +37,8 @@ return {
         ["dirt-6"]=40,
         --["dirt-7"]=0, -- last tile, nothing to degrade to
         -- land fill chain
-        ["landfill"]=95,
-        ["water-shallow"]=90,
+        ["landfill"]=50,
+        --["water-shallow"]=90,
         --["water-mud"]=0, -- last tile, nothing to degrade to
     },
     degrade_order={ -- when a tile degrades it will turn into the next tile given here
@@ -74,8 +74,8 @@ return {
         ["dirt-6"]='dirt-7',
         --["dirt-7"]=0, -- last tile, nothing to degrade to
         -- land fill chain
-        ["landfill"]='water-shallow',
-        ["water-shallow"]='water-mud',
+        ["landfill"]='grass-2', -- 'water-shallow'
+        --["water-shallow"]='water-mud',
         --["water-mud"]=0, -- last tile, nothing to degrade to
     },
     entities={ -- entities in this list will degrade the tiles under them when they are placed
