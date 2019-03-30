@@ -1,8 +1,9 @@
 --- This file controls the placement/degrading of tiles as players build and walk
 return {
-    weakness_value=1000, -- lower value will make tiles more likely to degrade
+    weakness_value=50, -- lower value will make tiles more likely to degrade
     strengths={ -- this decides how "strong" a tile is, bigger number means less likely to degrade
-        -- note: tiles are effected by the tiles around them, a two wide path of the highest value will not degrade (for weakness 6)
+        -- debug: /interface require('modules.addons.worn-paths')(player.name,true)
+        -- note: tiles are effected by the tiles around them, so player paths will not degrade as fast when made wider
         -- note: values are relative to the tile with the highest value, recommended to keep highest tile as a "nice" number
         -- note: tiles not in list will never degrade under any conditions (which is why some are omitted such as water)
         ["refined-concrete"]=100,
