@@ -130,7 +130,7 @@ Event.on_nth_tick(refill_time,function()
 end)
 
 Event.add(defines.events.on_player_created, function(event)
-    if not event.player_index == 1 then return end
+    if event.player_index ~= 1 then return end
     local player = Game.get_player_by_index(event.player_index)
     local p = {x=0,y=0}
     local s = player.surface
