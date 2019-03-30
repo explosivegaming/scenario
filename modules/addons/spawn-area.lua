@@ -38,11 +38,11 @@ local function spawn_turrets()
     if config.infinite_ammo_turrets.enabled then
         for _,turret_pos in pairs(turrets) do
             local surface = game.surfaces[turret_pos.surface]
-            local p = turret_pos.position
-            local turret = surface.find_entity('gun-turret',p)
+            local pos = turret_pos.position
+            local turret = surface.find_entity('gun-turret',pos)
             -- Makes a new turret if it is not found
             if not turret or not turret.valid then
-                turret = surface.create_entity{name='gun-turret',position=p,force='Spawn'}
+                turret = surface.create_entity{name='gun-turret',position=pos,force='Spawn'}
                 protect_entity(turret,true)
             end
             -- adds ammo to the turret
@@ -55,13 +55,14 @@ local function spawn_turrets()
 end
 
 -- makes a 2x2 afk belt where set in config
-local function spawn_belts(surface)
+local function spawn_belts(surface,position)
     local belt_details = {{-0.5,-0.5,2},{0.5,-0.5,4},{-0.5,0.5,0},{0.5,0.5,6}} -- x,y,dir
     for _,belt_set in pairs(belts) do
-        local o = belt_set
+        local o = position
+        local p = belt_set
         for _,belt in pairs(belt_details) do
-            local p = {x=o.x+belt[1],y=o.y+belt[2]}
-            local belt_entity = surface.create_entity{name='transport-belt',position=p,force='neutral',direction=belt[3]}
+            local pos = {x=o.x+p.x+belt[1],y=o.y+p.y+belt[2]}
+            local belt_entity = surface.create_entity{name='transport-belt',position=pos,force='neutral',direction=belt[3]}
             protect_entity(belt_entity)
         end
     end
@@ -131,10 +132,13 @@ end)
 Event.add(defines.events.on_player_created, function(event)
     if not event.player_index == 1 then return end
     local player = Game.get_player_by_index(event.player_index)
-    spawn_base(player.surface,player.position)
-    spawn_pattern(player.surface,player.position)
+    local p = {x=0,y=0}
+    local s = player.surface
+    spawn_base(s,p)
+    spawn_pattern(s,p)
     get_spawn_force()
-    spawn_entities(player.surface,player.position)
+    spawn_entities(s,p)
+    spawn_belts(s,p)
     spawn_turrets()
-    spawn_belts(player.surface)
+    player.teleport(s,p)
 end)
