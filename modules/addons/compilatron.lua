@@ -88,9 +88,9 @@ function Public.spawn_compilatron(surface,location)
     Public.add_compilatron(compi,location)
 end
 
--- When the first player is created this will create all comilatrons that are resisted in the config
+-- When the first player is created this will create all compilatrons that are resisted in the config
 Event.add(defines.events.on_player_created,function(event)
-    if not event.player_index == 1 then return end
+    if event.player_index ~= 1 then return end
     local player = Game.get_player_by_index(event.player_index)
     for location,pos in pairs(locations) do
         Public.spawn_compilatron(player.surface,location)
