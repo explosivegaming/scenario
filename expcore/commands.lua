@@ -643,7 +643,7 @@ function Commands.run_command(command_event)
         if Commands.internal_error(success,command_data.name,param_parsed) then
             return command_log(player,command_data,'Internal Error: Param Parse Fail',params,command_event.parameter,param_parsed)
         end
-        if param_data.optional == true and param_parsed == nil then
+        if param_data.optional == true and raw_params[index] == nil then
             -- if it is optional and param is nil then it is set to default
             param_parsed = param_data.default
             if type(param_parsed) == 'function' then

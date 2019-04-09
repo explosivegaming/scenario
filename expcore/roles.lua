@@ -104,7 +104,7 @@ function Roles.get_player_roles(player)
 end
 
 function Roles.get_player_highest_role(player)
-    local roles = Roles.get_player_roels(player)
+    local roles = Roles.get_player_roles(player)
     if not roles then return end
     local highest
     for _,role in pairs(roles) do

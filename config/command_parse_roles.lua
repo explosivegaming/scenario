@@ -4,7 +4,7 @@ local Roles = require 'expcore.roles'
 require 'config.command_parse_general'
 
 Commands.add_parse('role',function(input,player,reject)
-    if not role then return end
+    if not input then return end
     local role = Roles.get_role_from_any(input)
     if not role then
         return reject{'expcore-role.reject-role'}
@@ -17,8 +17,8 @@ Commands.add_parse('player-role',function(input,player,reject)
     local input_player = Commands.parse('player',input,player,reject)
     if not input_player then return end -- nil check
     local player_highest = Roles.get_player_highest_role(player)
-    local action_player_highest = Roles.get_player_highest_role(input_player)
-    if player_highest.index < action_player_highest.index then
+    local input_player_highest = Roles.get_player_highest_role(input_player)
+    if player_highest.index < input_player_highest.index then
         return input_player
     else
         return reject{'expcore-roles.reject-player-role'}
@@ -26,13 +26,13 @@ Commands.add_parse('player-role',function(input,player,reject)
 end)
 
 Commands.add_parse('player-role-online',function(input,player,reject)
-    local input_player = Commands.parse('player-rank',input,player,reject)
+    local input_player = Commands.parse('player-role',input,player,reject)
     if not input_player then return end -- nil check
     return Commands.parse('player-online',input_player,player,reject)
 end)
 
 Commands.add_parse('player-role-alive',function(input,player,reject)
-    local input_player = Commands.parse('player-rank',input,player,reject)
+    local input_player = Commands.parse('player-role',input,player,reject)
     if not input_player then return end -- nil check
     return Commands.parse('player-alive',input_player,player,reject)
 end)

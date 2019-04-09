@@ -1,7 +1,7 @@
 local Commands = require 'expcore.commands'
 local Roles = require 'expcore.roles'
 require 'config.command_parse_general'
-require 'config.command_parse_role'
+require 'config.command_parse_roles'
 
 Commands.new_command('tag','Sets your player tag.')
 :add_param('tag',false,'string-max-length',20) -- new tag for your player max 20 char
