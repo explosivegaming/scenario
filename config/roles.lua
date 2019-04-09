@@ -67,7 +67,9 @@ Roles.new_role('Trainee','TrMod')
     'command/admin-chat',
     'command/teleport',
     'command/bring',
-    'command/goto'
+    'command/goto',
+    'command/kill/always',
+    'command/tag-clear/always',
 }
 
 Roles.new_role('Sponsor','Spon')
@@ -122,6 +124,7 @@ Roles.new_role('Regular','Reg')
 :set_permission_group('Standard')
 :set_parent('Guest')
 :allow{
+    'command/kill'
 }
 :set_auto_promote_condition(playtime(3*hours))
 

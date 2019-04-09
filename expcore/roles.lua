@@ -103,6 +103,18 @@ function Roles.get_player_roles(player)
     return rtn
 end
 
+function Roles.get_player_highest_role(player)
+    local roles = Roles.get_player_roels(player)
+    if not roles then return end
+    local highest
+    for _,role in pairs(roles) do
+        if not highest or role.index < highest.index then
+            highest = role
+        end
+    end
+    return highest
+end
+
 function Roles.assign_player(player,roles,by_player_name)
     player = Game.get_player_from_any(player)
     if not player then return end
@@ -410,13 +422,7 @@ local function role_update(event)
         end
     end
     -- Updates the players permission group
-    local highest
-    local roles = Roles.get_player_roles(player)
-    for _,role in pairs(roles) do
-        if not highest or role.index < highest.index then
-            highest = role
-        end
-    end
+    local highest = Roles.get_player_highest_role(player)
     if highest.permission_group then
         if highest.permission_group[1] then
             local group = game.permissions.get_group(highest.permission_group[2])
