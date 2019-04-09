@@ -18,6 +18,7 @@ local Roles = {
 }
 
 local function emit_player_roles_updated(player,type,roles,by_player_name)
+    by_player_name = game.player and game.player.name or by_player_name or '<server>'
     local event = Roles.player_role_assigned
     if type == 'unassign' then
         event = Roles.player_role_unassigned
@@ -26,9 +27,12 @@ local function emit_player_roles_updated(player,type,roles,by_player_name)
     local by_player_index = by_player and by_player.index or 0
     local role_names = {}
     for _,role in pairs(roles) do
-        table.insert(role_names,role.name)
+        role = Roles.get_role_from_any(role)
+        if role then
+            table.insert(role_names,role.name)
+        end
     end
-    game.print({'expcore-roles.game-message-'..type,player.name,role_names.join(', '),by_player_name or '<server>'},Colours.cyan)
+    game.print({'expcore-roles.game-message-'..type,player.name,table.concat(role_names,', '),by_player_name},Colours.cyan)
     script.raise_event(event,{
         name=Roles.player_roles_updated,
         tick=game.tick,
@@ -38,7 +42,7 @@ local function emit_player_roles_updated(player,type,roles,by_player_name)
     })
     game.write_file('log/roles.log',game.table_to_json{
         player_name=player.name,
-        by_player_name=by_player_name or '<server>',
+        by_player_name=by_player_name,
         type=type,
         roles_changed=roles
     }..'\n',true,0)
@@ -50,10 +54,21 @@ Global.register(Roles.config,function(tbl)
         setmetatable(role,{__index=Roles._prototype})
         local parent = Roles.config.roles[role.parent]
         if parent then
-            setmetatable(role.allow, {__index=parent.allow})
+            setmetatable(role.allowed_actions, {__index=parent.allowed_actions})
         end
     end
 end)
+
+function Roles.debug()
+    local output = ''
+    for index,role_name in pairs(Roles.config.order) do
+        local role = Roles.config.roles[role_name]
+        local color = role.custom_color or Colours.white
+        color = string.format('[color=%d,%d,%d]',color.r,color.g,color.b)
+        output = output..string.format('\n%s %s) %s',color,index,serpent.line(role))
+    end
+    return output
+end
 
 function Roles.get_role_by_name(name)
     return Roles.config.roles[name]
@@ -80,11 +95,12 @@ function Roles.get_player_roles(player)
     player = Game.get_player_from_any(player)
     if not player then return end
     local roles = Roles.config.players[player.name] or {}
-    table.insert(roles,Roles.config.internal.default)
-    for index,role_name in pairs(roles) do
-        roles[index] = Roles.config.roles[role_name]
+    local default = Roles.config.roles[Roles.config.internal.default]
+    local rtn = {default}
+    for _,role_name in pairs(roles) do
+        table.insert(rtn,Roles.config.roles[role_name])
     end
-    return roles
+    return rtn
 end
 
 function Roles.assign_player(player,roles,by_player_name)
@@ -127,7 +143,7 @@ function Roles.player_has_role(player,search_role)
     search_role = Roles.get_role_from_any(search_role)
     if not search_role then return end
     for _,role in pairs(roles) do
-        if role == search_role.name then return true end
+        if role.name == search_role.name then return true end
     end
     return false
 end
@@ -147,7 +163,7 @@ function Roles.player_allowed(player,action)
     local roles = Roles.get_player_roles(player)
     if not roles then return end
     for _,role in pairs(roles) do
-        if role:allowed(action) then
+        if role:is_allowed(action) then
             return true
         end
     end
@@ -155,19 +171,20 @@ function Roles.player_allowed(player,action)
 end
 
 function Roles.define_role_order(order)
-    local sanitized = {}
+    Roles.config.order = {}
     for _,role in ipairs(order) do
         if type(role) == 'table' and role.name then
-            table.insert(sanitized,role.name)
+            table.insert(Roles.config.order,role.name)
         else
-            table.insert(sanitized,role)
+            table.insert(Roles.config.order,role)
         end
     end
-    Roles.config.order = sanitized
-    for index,role in pairs(sanitized) do
-        Roles.config.roles[role].index = index
-        if role.parent then
-            setmetatable(role.allow, Roles.config.roles[role.parent].allow)
+    for index,role in pairs(Roles.config.order) do
+        role = Roles.config.roles[role]
+        role.index = index
+        local parent = Roles.config.roles[role.parent]
+        if parent then
+            setmetatable(role.allowed_actions,{__index=parent.allowed_actions})
         end
     end
 end
@@ -193,7 +210,7 @@ function Roles.new_role(name,short_hand)
     local role = setmetatable({
         name=name,
         short_hand=short_hand or name,
-        allow={},
+        allowed_actions={},
         allow_all_actions=false,
         flags={}
     },{__index=Roles._prototype})
@@ -211,7 +228,7 @@ function Roles._prototype:allow(actions)
         actions = {actions}
     end
     for _,action in pairs(actions) do
-        self.allow[action]=true
+        self.allowed_actions[action]=true
     end
     return self
 end
@@ -221,14 +238,14 @@ function Roles._prototype:disallow(actions)
         actions = {actions}
     end
     for _,action in pairs(actions) do
-        self.allow[action]=false
+        self.allowed_actions[action]=false
     end
     return self
 end
 
 function Roles._prototype:is_allowed(action)
     local is_root = Roles.config.internal.root.name == self.name
-    return self.allowed[action] or self.allow_all_actions or is_root
+    return self.allowed_actions[action] or self.allow_all_actions or is_root
 end
 
 function Roles._prototype:set_flag(name,value)
@@ -250,8 +267,16 @@ function Roles._prototype:set_custom_tag(tag)
     return self
 end
 
+function Roles._prototype:set_custom_color(color)
+    if type(color) ~= 'table' then
+        color = Colours[color]
+    end
+    self.custom_color = color
+    return self
+end
+
 function Roles._prototype:set_permission_group(name,use_factorio_api)
-    if not use_factorio_api then
+    if use_factorio_api then
         self.permission_group = {true,name}
     else
         local group = Groups.get_group_by_name(name)
@@ -262,10 +287,10 @@ function Roles._prototype:set_permission_group(name,use_factorio_api)
 end
 
 function Roles._prototype:set_parent(role)
-    role = Role.get_role_from_any(role)
-    if not role then return end
-    self.parent = role.name
-    setmetatable(self.allow, {__index=role.allow})
+    self.parent = role
+    role = Roles.get_role_from_any(role)
+    if not role then return self end
+    setmetatable(self.allowed_actions, {__index=role.allowed_actions})
     return self
 end
 
@@ -296,9 +321,7 @@ function Roles._prototype:add_player(player,skip_check,skip_event)
     end
     -- Emits event if required
     if not skip_event then
-        local by_player_name
-        if game.player then by_player_name = game.player.name end
-        emit_player_roles_updated(player,'assign',{self},by_player_name)
+        emit_player_roles_updated(player,'assign',{self})
     end
     return true
 end
@@ -330,9 +353,7 @@ function Roles._prototype:remove_player(player,skip_check,skip_event)
     end
     -- Emits event if required
     if not skip_event then
-        local by_player_name
-        if game.player then by_player_name = game.player.name end
-        emit_player_roles_updated(player,'unassign',{self},by_player_name)
+        emit_player_roles_updated(player,'unassign',{self})
     end
     return rtn
 end
@@ -374,10 +395,10 @@ function Roles._prototype:print(message)
 end
 
 local function role_update(event)
-    local player = Game.get_player_by_idnex(event.player_index)
+    local player = Game.get_player_by_index(event.player_index)
     -- Updates flags given to the player
-    for flag,callback in pairs(Role.config.flags) do
-        local state = Role.player_has_flag(player,flag)
+    for flag,callback in pairs(Roles.config.flags) do
+        local state = Roles.player_has_flag(player,flag)
         local success,err = pcall(callback,player,state)
         if not success then
             log{'expcore-roles.error-log-format-flag',flag,err}
@@ -392,12 +413,20 @@ local function role_update(event)
         end
     end
     if highest.permission_group then
-        Groups.set_player_group(player,highest.permission_group)
+        if highest.permission_group[1] then
+            local group = game.permissions.get_group(highest.permission_group[2])
+            if group then
+                group.add_player(player)
+            end
+        else
+            Groups.set_player_group(player,highest.permission_group)
+        end
     end
 end
 
 Event.add(Roles.player_role_assigned,role_update)
 Event.add(Roles.player_role_unassigned,role_update)
+Event.add(defines.events.on_player_joined_game,role_update)
 Event.on_nth_tick(300,function()
     local promotes = {}
     for _,player in pairs(game.connected_players) do
@@ -407,7 +436,7 @@ Event.on_nth_tick(300,function()
                 if not success then
                     log{'expcore-roles.error-log-format-promote',role.name,err}
                 else
-                    if err == true then
+                    if err == true and not Roles.player_has_role(player,role) then
                         if promotes[player.name] then
                             table.insert(promotes[player.name],role.name)
                         else
@@ -419,7 +448,7 @@ Event.on_nth_tick(300,function()
         end
     end
     for player_name,roles in pairs(promotes) do
-        Roles.assign(player_name,roles)
+        Roles.assign_player(player_name,roles)
     end
 end)
 

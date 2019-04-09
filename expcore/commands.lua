@@ -516,7 +516,7 @@ end
 -- @tparam[opt] value any the value to return to the player, if nil then only success message returned
 -- @treturn Commands.defines.success return this to the command handler to prevent two success messages
 function Commands.success(value)
-    if value then player_return(value) end
+    if value ~= nil then player_return(value) end
     player_return({'expcore-commands.command-ran'},'cyan')
     return Commands.defines.success
 end
