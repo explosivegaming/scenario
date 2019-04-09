@@ -26,4 +26,5 @@ return {
     'config.command_auth_admin', -- commands tagged with admin_only are blocked for non admins
     'config.command_auth_runtime_disable', -- allows commands to be enabled and disabled during runtime
     'config.permission_groups', -- loads some predefined permission groups
+    'config.roles', -- loads some predefined roles
 }
