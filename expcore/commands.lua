@@ -60,8 +60,8 @@
             return false -- false is returned other wise
         end
     end)
-    :add_defaults{smiley=false} -- adds false as the default for smiley
-    :add_tag('admin_only',true) -- adds the tag admin_only: true which because of the above authenticator means you must be added to use this command
+    :set_defaults{smiley=false} -- adds false as the default for smiley
+    :set_flag('admin_only',true) -- adds the tag admin_only: true which because of the above authenticator means you must be added to use this command
     :add_alias('name','rname') -- adds two aliases "name" and "rname" for this command which will work as if the ordinal name was used
     --:enable_auto_concat() -- cant be used due to optional param here, but this will make all user input params after the last expected one be added to the last expected one
     :register(function(player,repeat_count,smiley,raw) -- this registers the command to the game, notice the params are what were defined above
@@ -119,8 +119,8 @@
             return false
         end
     end)
-    :add_defaults{smiley=false}
-    :add_tag('admin_only',true)
+    :set_defaults{smiley=false}
+    :set_flag('admin_only',true)
     :add_alias('name','rname')
     :register(function(player,repeat_count,smiley,raw)
         game.print(player.name..' used a command with input: '..raw)
@@ -147,8 +147,8 @@
 
     Commands.add_command(name,help) --- Creates a new command object to added details to, note this does not register the command to the game
     Commands._prototype:add_param(name,optional,parse,...) --- Adds a new param to the command this will be displayed in the help and used to parse the input
-    Commands._prototype:add_defaults(defaults) --- Adds default values to params only matters if the param is optional
-    Commands._prototype:add_tag(name,value) --- Adds a tag to the command which is passed via the tags param to the authenticators, can be used to assign command roles or type
+    Commands._prototype:set_defaults(defaults) --- Adds default values to params only matters if the param is optional
+    Commands._prototype:set_flag(name,value) --- Adds a tag to the command which is passed via the tags param to the authenticators, can be used to assign command roles or type
     Commands._prototype:add_alias(...) --- Adds an alias or multiple that will also be registered with the same callback, eg /teleport can be /tp with both working
     Commands._prototype:enable_auto_concat() --- Enables auto concatenation of any params on the end so quotes are not needed for last param
     Commands._prototype:register(callback) --- Adds the callback to the command and registers all aliases, params and help message with the game
@@ -399,7 +399,7 @@ end
 -- @tparam defaults table a table keyed by the name of the param with the value as the default value {paramName=defaultValue}
 -- callback param - player: LuaPlayer - the player using the command, default value does not need to be a function callback
 -- @treturn Commands._prototype pass through to allow more functions to be called
-function Commands._prototype:add_defaults(defaults)
+function Commands._prototype:set_defaults(defaults)
     for name,value in pairs(defaults) do
         if self.params[name] then
             self.params[name].default = value
@@ -413,7 +413,7 @@ end
 -- @tparam value any the tag that you want can be anything that the authenticators are expecting
 -- nb: if value is nil then name will be assumed as the value and added at a numbered index
 -- @treturn Commands._prototype pass through to allow more functions to be called
-function Commands._prototype:add_tag(name,value)
+function Commands._prototype:set_flag(name,value)
     if not value then
         -- value not given so name is the value
         table.insert(self.tags,name)

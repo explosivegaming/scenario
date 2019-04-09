@@ -10,7 +10,7 @@ end)
 
 Commands.new_command('tag-clear','Clears your tag. Or another player if you are admin.')
 :add_param('player',true,'player') -- player to remove the tag of, nil to apply to self
-:add_defaults{player=function(player)
+:set_defaults{player=function(player)
     return player -- default is the user using the command
 end}
 :register(function(player,action_player,raw)
