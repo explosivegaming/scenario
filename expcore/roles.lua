@@ -299,6 +299,11 @@ function Roles._prototype:set_auto_promote_condition(callback)
     return self
 end
 
+function Roles._prototype:set_block_auto_promote(state)
+    self.block_auto_promote = state
+    return self
+end
+
 function Roles._prototype:add_player(player,skip_check,skip_event)
     player = Game.get_player_from_any(player)
     -- Check the player is valid, can be skipped but a name must be given
