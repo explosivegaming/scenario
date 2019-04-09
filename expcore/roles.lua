@@ -17,6 +17,7 @@ local Roles = {
     _prototype={}
 }
 
+--- Internal function used to trigger a few different things when roles are changed
 local function emit_player_roles_updated(player,type,roles,by_player_name)
     by_player_name = game.player and game.player.name or by_player_name or '<server>'
     local event = Roles.player_role_assigned
@@ -48,6 +49,7 @@ local function emit_player_roles_updated(player,type,roles,by_player_name)
     }..'\n',true,0)
 end
 
+--- When global is loaded it will have the metatable re-assigned to the roles
 Global.register(Roles.config,function(tbl)
     Roles.config = tbl
     for _,role in pairs(Roles.config.roles) do
@@ -59,6 +61,8 @@ Global.register(Roles.config,function(tbl)
     end
 end)
 
+--- Returns a string which contains all roles in index order displaying all data for them
+-- @treturn string the debug output string
 function Roles.debug()
     local output = ''
     for index,role_name in pairs(Roles.config.order) do
@@ -70,15 +74,25 @@ function Roles.debug()
     return output
 end
 
+--- Get a role for the given name
+-- @tparam name string the name of the role to get
+-- @treturn Roles._prototype the role with that name or nil
 function Roles.get_role_by_name(name)
     return Roles.config.roles[name]
 end
 
+--- Get a role with the given order index
+-- @tparam index number the place in the oder list of the role to get
+-- @treturn Roles._prototype the role with that index in the order list or nil
 function Roles.get_role_by_order(index)
     local name = Roles.config.order[index]
     return Roles.config.roles[name]
 end
 
+--- Gets a role from a name,index or role object (where it is just returned)
+-- nb: this function is used for the input for most outward facing functions
+-- @tparam any ?number|string|table the value used to find the role
+-- @treturn Roles._prototype the role that was found or nil see above
 function Roles.get_role_from_any(any)
     local tany = type(any)
     if tany == 'number' or tonumber(any) then
@@ -91,6 +105,9 @@ function Roles.get_role_from_any(any)
     end
 end
 
+--- Gets all the roles of the given player, this will always contain the default role
+-- @tparam player LuaPlayer the player to get the roles of
+-- @treturn table a table where the values are the roles which the player has
 function Roles.get_player_roles(player)
     player = Game.get_player_from_any(player)
     if not player then return end
@@ -103,6 +120,9 @@ function Roles.get_player_roles(player)
     return rtn
 end
 
+--- Gets the highest role which the player has, can be used to compeer one player to another
+-- @tparam player LuaPlayer the player to get the highest role of
+-- @treturn the role with the highest order index which this player has
 function Roles.get_player_highest_role(player)
     local roles = Roles.get_player_roles(player)
     if not roles then return end
@@ -115,6 +135,10 @@ function Roles.get_player_highest_role(player)
     return highest
 end
 
+--- Gives a player the given role(s) with an option to pass a by player name used in the log
+-- @tparam player LuaPlayer the player that will be assigned the roles
+-- @tparam role table a table of roles that the player will be given, can be one role and can be role names
+-- @tparam[opt=<server>] by_player_name string the name of the player that will be shown in the log
 function Roles.assign_player(player,roles,by_player_name)
     player = Game.get_player_from_any(player)
     if not player then return end
@@ -130,6 +154,10 @@ function Roles.assign_player(player,roles,by_player_name)
     emit_player_roles_updated(player,'assign',roles,by_player_name)
 end
 
+--- Removes a player from the given role(s) with an option to pass a by player name used in the log
+-- @tparam player LuaPlayer the player that will have the roles removed
+-- @tparam roles table a table of roles to be removed from the player, can be one role and can be role names
+-- @tparam[opt=<server>] by_player_name string the name of the player that will be shown in the logs
 function Roles.unassign_player(player,roles,by_player_name)
     player = Game.get_player_from_any(player)
     if not player then return end
@@ -145,10 +173,16 @@ function Roles.unassign_player(player,roles,by_player_name)
     emit_player_roles_updated(player,'unassign',roles,by_player_name)
 end
 
+--- Overrides all player roles with the given table of roles, useful to mass set roles on game start
+-- @tparam roles table a table which is indexed by case sensitive player names and has the value of a table of role names
 function Roles.override_player_roles(roles)
     Roles.config.players = roles
 end
 
+--- A test for weather a player has the given role
+-- @tparam player LuaPlayer the player to test the roles of
+-- @tparam search_role ?string|number|table a pointer to the role that is being searched for
+-- @treturn boolean true if the player has the role, false otherwise, nil for errors
 function Roles.player_has_role(player,search_role)
     local roles = Roles.get_player_roles(player)
     if not roles then return end
@@ -160,6 +194,10 @@ function Roles.player_has_role(player,search_role)
     return false
 end
 
+--- A test for weather a player has the given flag true for at least one of they roles
+-- @tparam player LuaPlayer the player to test the roles of
+-- @tparam flag_name string the name of the flag that is being looked for
+-- @treturn boolean true if the player has at least one role which has the flag set to true, false otherwise, nil for errors
 function Roles.player_has_flag(player,flag_name)
     local roles = Roles.get_player_roles(player)
     if not roles then return end
@@ -171,6 +209,10 @@ function Roles.player_has_flag(player,flag_name)
     return false
 end
 
+--- A test for weather a player has at least one role which is allowed the given action
+-- @tparam player LuaPlayer the player to test the roles of
+-- @tparam action string the name of the action that is being tested for
+-- @treturn boolean true if the player has at least one role which is allowed this action, false otherwise, nil for errors
 function Roles.player_allowed(player,action)
     local roles = Roles.get_player_roles(player)
     if not roles then return end
@@ -182,7 +224,11 @@ function Roles.player_allowed(player,action)
     return false
 end
 
+--- Used to set the role order, higher in the list is better, must be called at least once in config
+-- nb: function also re links parents due to expected position in the config file
+-- @tparam order table a table which is keyed only by numbers (start 1) and values are roles in order with highest first
 function Roles.define_role_order(order)
+    -- Clears and then rebuilds the order table
     Roles.config.order = {}
     for _,role in ipairs(order) do
         if type(role) == 'table' and role.name then
@@ -191,6 +237,7 @@ function Roles.define_role_order(order)
             table.insert(Roles.config.order,role)
         end
     end
+    -- Re-links roles to they parents as this is called at the end of the config
     for index,role in pairs(Roles.config.order) do
         role = Roles.config.roles[role]
         role.index = index
@@ -201,22 +248,36 @@ function Roles.define_role_order(order)
     end
 end
 
+--- Defines a new trigger for when a tag is added or removed from a player
+-- @tparam name string the name of the flag which the roles will have
+-- @tparam callback function the function that is called when roles are assigned
+-- flag param - player - the player that has had they roles changed
+-- flag param - state - the state of the flag, aka if the flag is present
 function Roles.define_flag_trigger(name,callback)
     Roles.config.flags[name] = callback -- this can desync if there are upvalues
 end
 
+--- Sets the default role which every player will have, this needs to be called at least once
+-- @tparam name string the name of the default role
 function Roles.set_default(name)
     local role = Roles.config.roles[name]
     if not role then return end
     Roles.config.internal.default = name
 end
 
+--- Sets the root role which will always have all permissions, any server actions act from this role
+-- @tparam name string the name of the root role
 function Roles.set_root(name)
     local role = Roles.config.roles[name]
     if not role then return end
+    role:set_allow_all(true)
     Roles.config.internal.root = name
 end
 
+--- Defines a new role and returns the prototype to allow configuration
+-- @tparam name string the name of the new role, must be unique
+-- @tparam[opt=name] shirt_hand string the shortened version of the name
+-- @treturn Roles._prototype the start of the config chain for this role
 function Roles.new_role(name,short_hand)
     if Roles.config.roles[name] then return error('Role name is non unique') end
     local role = setmetatable({
@@ -230,11 +291,18 @@ function Roles.new_role(name,short_hand)
     return role
 end
 
+--- Sets the default allow state of the role, true will allow all actions
+-- @tparam[opt=true] strate boolean true will allow all actions
+-- @treturn Roles._prototype allows chaining
 function Roles._prototype:set_allow_all(state)
-    self.allow_all_actions = not not state
+    if state == nil then state = true end
+    self.allow_all_actions = not not state -- not not forces a boolean value
     return self
 end
 
+--- Sets the allow actions for this role, actions in this list will be allowed for this role
+-- @tparam actions table indexed with numbers and is an array of action names, order has no effect
+-- @treturn Roles._prototype allows chaining
 function Roles._prototype:allow(actions)
     if type(actions) ~= 'table' then
         actions = {actions}
@@ -245,6 +313,9 @@ function Roles._prototype:allow(actions)
     return self
 end
 
+--- Sets the disallow actions for this role, will prevent actions from being allowed regardless of inheritance
+-- @tparam actions table indexed with numbers and is an array of action names, order has no effect
+-- @treturn Roles._prototype allows chaining
 function Roles._prototype:disallow(actions)
     if type(actions) ~= 'table' then
         actions = {actions}
@@ -255,30 +326,49 @@ function Roles._prototype:disallow(actions)
     return self
 end
 
+--- Test for if a role is allowed the given action, mostly internal see Roles.player_allowed
+-- @tparam action string the name of the action to test if it is allowed
+-- @treturn boolean true if action is allowed, false otherwise
 function Roles._prototype:is_allowed(action)
     local is_root = Roles.config.internal.root.name == self.name
     return self.allowed_actions[action] or self.allow_all_actions or is_root
 end
 
+--- Sets the state of a flag for a role, flags can be used to apply effects to players
+-- @tparam name string the name of the flag to set the value of
+-- @tparam[opt=true] value boolean the state to set the flag to
+-- @treturn Roles._prototype allows chaining
 function Roles._prototype:set_flag(name,value)
-    self.flags[name] = value
+    if value == nil then value = true end
+    self.flags[name] = not not value -- not not forces a boolean value
     return self
 end
 
+--- Clears all flags from this role, individual flags can be removed with set_flag(name,false)
+-- @treturn Roles._prototype allows chaining
 function Roles._prototype:clear_flags()
     self.flags = {}
     return self
 end
 
+--- A test for if the role has a flag set
+-- @tparam name string the name of the flag to test for
+-- @treturn boolean true if the flag is set, false otherwise
 function Roles._prototype:has_flag(name)
     return self.flags[name] or false
 end
 
+--- Sets a custom player tag for the role, can be accessed by other code
+-- @tparam tag string the value that the tag will be
+-- @treturn Roles._prototype allows chaining
 function Roles._prototype:set_custom_tag(tag)
     self.custom_tag = tag
     return self
 end
 
+--- Sets a custom colour for the role, can be accessed by other code
+-- @tparam color ?string|table can either be and rgb colour table or the name of a colour defined in the presets
+-- @treturn Roles._prototype allows chaining
 function Roles._prototype:set_custom_color(color)
     if type(color) ~= 'table' then
         color = Colours[color]
@@ -287,6 +377,10 @@ function Roles._prototype:set_custom_color(color)
     return self
 end
 
+--- Sets the permission group for this role, players will be moved to the group of they highest role
+-- @tparam name string the name of the permission group to have players moved to
+-- @tparam[opt=false] use_factorio_api boolean when true the custom permission group module is ignored
+-- @treturn Roles._prototype allows chaining
 function Roles._prototype:set_permission_group(name,use_factorio_api)
     if use_factorio_api then
         self.permission_group = {true,name}
@@ -298,6 +392,10 @@ function Roles._prototype:set_permission_group(name,use_factorio_api)
     return self
 end
 
+--- Sets the parent for a role, any action not in allow or disallow will be looked for in its parents
+-- nb: this is a recursive action, and changing the allows and disallows will effect all children roles
+-- @tparam role string the name of the role that will be the parent; has imminent effect if role is already defined
+-- @treturn Roles._prototype allows chaining
 function Roles._prototype:set_parent(role)
     self.parent = role
     role = Roles.get_role_from_any(role)
@@ -306,16 +404,29 @@ function Roles._prototype:set_parent(role)
     return self
 end
 
+--- Sets an auto promote condition that is checked every 5 seconds, if true is returned then the player will recive the role
+-- nb: this is one way, failing false after already gaining the role will not revoke the role
+-- @tparam callback function receives only one param which is player to promote, return true to promote the player
+-- @treturn Roles._prototype allows chaining
 function Roles._prototype:set_auto_promote_condition(callback)
     self.auto_promote_condition = callback
     return self
 end
 
+--- Sets the role to not allow players to have auto promote effect them, useful to keep people locked to a punishment
+-- @tparam[opt=true] state boolean when true the players with this role will not be auto promoted
+-- @treturn Roles._prototype allows chaining
 function Roles._prototype:set_block_auto_promote(state)
-    self.block_auto_promote = state
+    if state == nil then state = true end
+    self.block_auto_promote = not not state -- forces a boolean value
     return self
 end
 
+--- Adds a player to this role, players can have more than one role at a time, used internally see Roles.assign
+-- @tparam player LuaPlayer the player that will be given this role
+-- @tparam skip_check boolean when true player will be taken as the player name (use when player has not yet joined)
+-- @tparam skip_event boolean when true the event emit will be skipped, this is used internally with Roles.assign
+-- @treturn boolean true if the player was added successfully
 function Roles._prototype:add_player(player,skip_check,skip_event)
     player = Game.get_player_from_any(player)
     -- Check the player is valid, can be skipped but a name must be given
@@ -343,6 +454,11 @@ function Roles._prototype:add_player(player,skip_check,skip_event)
     return true
 end
 
+--- Removes a player from this role, players can have more than one role at a time, used internally see Roles.unassign
+-- @tparam player LuaPlayer the player that will lose this role
+-- @tparam skip_check boolean when true player will be taken as the player name (use when player has not yet joined)
+-- @tparam skip_event boolean when true the event emit will be skipped, this is used internally with Roles.unassign
+-- @treturn boolean true if the player was removed successfully
 function Roles._prototype:remove_player(player,skip_check,skip_event)
     player = Game.get_player_from_any(player)
     -- Check the player is valid, can be skipped but a name must be given
@@ -375,6 +491,9 @@ function Roles._prototype:remove_player(player,skip_check,skip_event)
     return rtn
 end
 
+--- Returns an array of all the players who have this role, can be filtered by online status
+-- @tparam[opt=nil] online boolean when given will filter by this online state, nil will return all players
+-- @treturn table all the players who have this role, indexed order is meaningless
 function Roles._prototype:get_players(online)
     local players = {}
     -- Gets all players that have this role
@@ -403,6 +522,9 @@ function Roles._prototype:get_players(online)
     end
 end
 
+--- Will print a message to all players with this role
+-- @tparam message string the message that will be printed to the players
+-- @treturn number the number of players who received the message
 function Roles._prototype:print(message)
     local players = self:get_players(true)
     for _,player in pairs(players) do
@@ -411,6 +533,7 @@ function Roles._prototype:print(message)
     return #players
 end
 
+--- Used internally to be the first trigger on an event change, would be messy to include this in 4 different places
 local function role_update(event)
     local player = Game.get_player_by_index(event.player_index)
     -- Updates flags given to the player
@@ -435,9 +558,11 @@ local function role_update(event)
     end
 end
 
+--- When a player joined or has a role change then the update is triggered
 Event.add(Roles.player_role_assigned,role_update)
 Event.add(Roles.player_role_unassigned,role_update)
 Event.add(defines.events.on_player_joined_game,role_update)
+-- Every 5 seconds the auto promote check is preformed
 Event.on_nth_tick(300,function()
     local promotes = {}
     for _,player in pairs(game.connected_players) do
@@ -463,4 +588,5 @@ Event.on_nth_tick(300,function()
     end
 end)
 
+-- Return Roles
 return Roles

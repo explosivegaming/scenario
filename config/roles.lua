@@ -1,3 +1,4 @@
+--- This is the main config file for the role system; file includes defines for roles and role flags and default values
 local Roles = require 'expcore.roles'
 
 -- Use these to adjust for ticks ie game.tick < 5*minutes
@@ -11,6 +12,7 @@ local function playtime(time_required)
     end
 end
 
+--- Role flags that will run when a player changes roles
 Roles.define_flag_trigger('is_admin',function(player,state)
     player.admin = state
 end)
@@ -23,6 +25,7 @@ Roles.define_flag_trigger('is_jail',function(player,state)
     end
 end)
 
+--- Admin Roles
 Roles.new_role('System','SYS')
 :set_allow_all(true)
 :set_flag('is_admin',true)
@@ -72,6 +75,7 @@ Roles.new_role('Trainee','TrMod')
     'command/tag-clear/always',
 }
 
+--- Trusted Roles
 Roles.new_role('Sponsor','Spon')
 :set_flag('is_spectator',true)
 :set_custom_color{r=247,g=246,b=54}
@@ -112,6 +116,7 @@ Roles.new_role('Veteran','Vet')
 }
 :set_auto_promote_condition(playtime(10*hours))
 
+--- Standard User Roles
 Roles.new_role('Member','Mem')
 :set_custom_color{r=24,g=172,b=188}
 :set_permission_group('Standard')
@@ -128,6 +133,7 @@ Roles.new_role('Regular','Reg')
 }
 :set_auto_promote_condition(playtime(3*hours))
 
+--- Guest/Default role
 Roles.new_role('Guest','')
 :set_custom_color{r=185,g=187,b=160}
 :set_permission_group('Guest')
@@ -138,6 +144,7 @@ Roles.new_role('Guest','')
     'command/chelp'
 }
 
+--- Jail role
 Roles.new_role('Jail')
 :set_custom_color{r=50,g=50,b=50}
 :set_permission_group('Restricted')
@@ -145,6 +152,7 @@ Roles.new_role('Jail')
 :allow{
 }
 
+--- System defaults which are required to be set
 Roles.set_root('System')
 Roles.set_default('Guest')
 
