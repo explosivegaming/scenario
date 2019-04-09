@@ -166,6 +166,9 @@ function Roles.define_role_order(order)
     Roles.config.order = sanitized
     for index,role in pairs(sanitized) do
         Roles.config.roles[role].index = index
+        if role.parent then
+            setmetatable(role.allow, Roles.config.roles[role.parent].allow)
+        end
     end
 end
 
@@ -388,7 +391,9 @@ local function role_update(event)
             highest = role
         end
     end
-    Groups.set_player_group(player,highest.permission_group)
+    if highest.permission_group then
+        Groups.set_player_group(player,highest.permission_group)
+    end
 end
 
 Event.add(Roles.player_role_assigned,role_update)

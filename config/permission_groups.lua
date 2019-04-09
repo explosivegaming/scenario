@@ -100,7 +100,7 @@ Permission_Groups.new_group('Restricted')
 :disallow_all()
 :allow('write_to_console')
 
---- These events are used until a role system is added to make it easier for our admins
+--[[ These events are used until a role system is added to make it easier for our admins
 
 local trusted_time = 60*60*60*10 -- 10 hour
 local standard_time = 60*60*60*3 -- 3 hour
@@ -137,4 +137,4 @@ Event.on_nth_tick(check_interval,function(event)
     for _,player in pairs(game.connected_players) do
         assign_group(player)
     end
-end)
+end)]]
