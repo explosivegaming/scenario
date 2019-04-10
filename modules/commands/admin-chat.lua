@@ -4,7 +4,7 @@ require 'config.command_parse_general'
 Commands.new_command('admin-chat','Sends a message in chat that only admins can see.')
 :add_param('message',false) -- the message to send in the admin chat
 :enable_auto_concat()
-:add_tag('admin_only',true)
+:set_flag('admin_only',true)
 :add_alias('ac')
 :register(function(player,message,raw)
     local pcc = player and player.chat_color or {r=255,g=255,b=255}

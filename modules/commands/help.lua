@@ -12,7 +12,7 @@ end)
 Commands.new_command('chelp','Searches for a keyword in all commands you are allowed to use.')
 :add_param('keyword',true) -- the keyword that will be looked for
 :add_param('page',true,'integer') -- the keyword that will be looked for
-:add_defaults{keyword='',page=1}
+:set_defaults{keyword='',page=1}
 :register(function(player,keyword,page,raw)
     local player_index = player and player.index or 0
     -- if keyword is a number then treat it as page number
