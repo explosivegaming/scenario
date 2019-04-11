@@ -22,7 +22,7 @@ return {
     'modules.addons.advanced-starting-items',
     'modules.addons.spawn-area',
     'modules.addons.compilatron',
-    'modules.addons.worn-paths',
+    'modules.addons.scorched-earth',
     -- Config Files
     'config.command_auth_admin', -- commands tagged with admin_only are blocked for non admins
     'config.command_auth_roles', -- commands must be allowed via the role config
