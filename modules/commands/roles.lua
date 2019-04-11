@@ -31,9 +31,13 @@ Commands.new_command('unassign-role','Unassigns a role from a player')
 end)
 
 Commands.new_command('list-roles','Lists all roles in they correct order')
+:add_param('player',true,'player')
 :add_alias('lroles','roles')
-:register(function(player,raw)
+:register(function(player,action_player,raw)
     local roles = Roles.config.order
+    if action_player then
+        roles = Roles.get_player_roles(action_player)
+    end
     local message = {'exp-commands.roles-list'}
     for _,role_name in pairs(roles) do
         local role = Roles.get_role_by_name(role_name)
