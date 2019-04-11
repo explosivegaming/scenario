@@ -8,7 +8,8 @@ local interface_modules = {
     ['_C']=Common,
     ['Commands']=Commands,
     ['output']=Common.player_return,
-    ['Group']='expcore.permission_groups'
+    ['Group']='expcore.permission_groups',
+    ['Roles']='expcore.roles'
 }
 
 -- loads all the modules given in the above table
@@ -48,7 +49,7 @@ end
 Commands.new_command('interface','Sends an innovation to be ran and returns the result.')
 :add_param('innovation',false) -- the message to send in the admin chat
 :enable_auto_concat()
-:add_tag('admin_only',true)
+:set_flag('admin_only',true)
 :register(function(player,innovation,raw)
     if not innovation:find('%s') and not innovation:find('return') then
         -- if there are no spaces and return is not present then return is appended to the start
