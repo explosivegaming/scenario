@@ -58,6 +58,8 @@ Roles.new_role('Moderator','Mod')
 :set_flag('is_spectator')
 :set_parent('Trainee')
 :allow{
+    'command/assign-role',
+    'command/unassign-role'
 }
 
 Roles.new_role('Trainee','TrMod')
@@ -141,7 +143,8 @@ Roles.new_role('Guest','')
     'command/me',
     'command/tag',
     'command/tag-clear',
-    'command/chelp'
+    'command/chelp',
+    'command/list-roles'
 }
 
 --- Jail role

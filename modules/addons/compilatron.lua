@@ -20,6 +20,8 @@ Global.register(
     end
 )
 
+local Public = {}
+
 --- This will re-create the speech bubble after it de-spawns called with set_timeout
 local callback =
     Token.register(
@@ -38,6 +40,9 @@ local callback =
 --- This will move the messages onto the next message in the loop
 local function circle_messages()
     for name, ent in pairs(compilatrons) do
+        if not ent.valid then
+            Public.spawn_compilatron(game.players[1].surface,name)
+        end
         local current_message = current_messages[name]
         local msg_number
         local message
@@ -57,8 +62,6 @@ local function circle_messages()
 end
 
 Event.on_nth_tick(config.message_cycle, circle_messages)
-
-local Public = {}
 
 --- This will add a compilatron to the global and start his message cycle
 -- @tparam entity LuaEntity the compilatron entity that moves around

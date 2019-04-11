@@ -14,6 +14,7 @@ return {
     'modules.commands.cheat-mode',
     'modules.commands.interface',
     'modules.commands.help',
+    'modules.commands.roles',
     -- QoL Addons
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',
