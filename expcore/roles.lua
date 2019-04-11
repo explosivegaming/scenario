@@ -715,8 +715,8 @@ end
 Event.add(Roles.player_role_assigned,role_update)
 Event.add(Roles.player_role_unassigned,role_update)
 Event.add(defines.events.on_player_joined_game,role_update)
--- Every 5 seconds the auto promote check is preformed
-Event.on_nth_tick(300,function()
+-- Every 60 seconds the auto promote check is preformed
+Event.on_nth_tick(3600,function()
     local promotes = {}
     for _,player in pairs(game.connected_players) do
         for _,role in pairs(Roles.config.roles) do

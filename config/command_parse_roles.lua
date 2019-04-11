@@ -1,11 +1,13 @@
 --- Adds some parse functions that can be used with the role system
 local Commands = require 'expcore.commands'
 local Roles = require 'expcore.roles'
+local auto_complete = ext_require('expcore.common','auto_complete')
 require 'config.command_parse_general'
 
 Commands.add_parse('role',function(input,player,reject)
     if not input then return end
-    local role = Roles.get_role_from_any(input)
+    local roles = Roles.config.roles
+    local role = auto_complete(roles,input,true)
     if not role then
         return reject{'expcore-role.reject-role'}
     else

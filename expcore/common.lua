@@ -420,4 +420,79 @@ function Public.clear_flying_text(surface)
     end
 end
 
+--- Tests if a string contains a given substring.
+-- @tparam string s the string to check for the substring
+-- @tparam string contains the substring to test for
+-- @treturn boolean true if the substring was found in the string
+function Public.string_contains(s, contains)
+    return s and string.find(s, contains) ~= nil
+end
+
+--- Returns the closest match to a key
+-- @tparam options table a table of options for the auto complete
+-- @tparam input string the input string that will be completed
+-- @tparam[opt=false] use_key boolean when true the keys of options will be used as the options
+-- @tparam[opt=false] rtn_key boolean when true the the key will be returned rather than the value
+-- @return the list item found that matches the input
+function Public.auto_complete(options,input,use_key,rtn_key)
+    local rtn = {}
+    if type(input)~= 'string' then return end
+    input = input:lower()
+    for key,value in pairs(options) do
+        local check = use_key and key or value
+        if Public.string_contains(string.lower(check),input) then
+            local result = rtn_key and key or value
+            table.insert(rtn,result)
+        end
+    end
+    return rtn[1]
+end
+
+--- Returns all the keys of a table
+-- @tparam tbl table the table to get the keys of
+-- @treturn table an array of the table keys
+function Public.table_keys(tbl)
+    local rtn = {}
+    for key,_ in pairs(tbl) do
+        table.insert(rtn,key)
+    end
+    return rtn
+end
+
+--- Returns all the values of a table
+-- @tparam tbl table the table to get the values of
+-- @treturn table an array of the table values
+function Public.table_values(tbl)
+    local rtn = {}
+    for _,value in pairs(tbl) do
+        table.insert(rtn,value)
+    end
+    return rtn
+end
+
+--- Returns the list is a sorted way that would be expected by people (this is by key)
+-- @tparam table tbl the table to be sorted
+-- @treturn table the sorted table
+function Public.table_alphanumsort(tbl)
+    local o = Public.table_keys(tbl)
+    local function padnum(d) local dec, n = string.match(d, "(%.?)0*(.+)")
+        return #dec > 0 and ("%.12f"):format(d) or ("%s%03d%s"):format(dec, #n, n) end
+    table.sort(o, function(a,b)
+        return tostring(a):gsub("%.?%d+",padnum)..("%3d"):format(#b)
+           < tostring(b):gsub("%.?%d+",padnum)..("%3d"):format(#a) end)
+    local _tbl = {}
+    for _,k in pairs(o) do _tbl[k] = tbl[k] end
+    return _tbl
+end
+
+--- Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
+-- @tparam table tbl the table to be sorted
+-- @treturn table the sorted table
+function Public.table_keysort(tbl)
+    local o = Public.table_keys(tbl,true)
+    local _tbl = {}
+    for _,k in pairs(o) do _tbl[k] = tbl[k] end
+    return _tbl
+end
+
 return Public

@@ -4,13 +4,16 @@ local Roles = require 'expcore.roles'
 -- Use these to adjust for ticks ie game.tick < 5*minutes
 local seconds, minutes, hours = 60, 3600, 216000
 
-local function playtime(time_required)
-    return function(player)
-        if player.online_time > time_required then
-            return true
+--[[
+    -- cant use a factory as it has upvalues ;-;
+    local function playtime(time_required)
+        return function(player)
+            if player.online_time > time_required then
+                return true
+            end
         end
     end
-end
+]]
 
 --- Role flags that will run when a player changes roles
 Roles.define_flag_trigger('is_admin',function(player,state)
@@ -116,7 +119,11 @@ Roles.new_role('Veteran','Vet')
 :set_parent('Member')
 :allow{
 }
-:set_auto_promote_condition(playtime(10*hours))
+:set_auto_promote_condition(function(player)
+    if player.online_time > 10*hours then
+        return true
+    end
+end)
 
 --- Standard User Roles
 Roles.new_role('Member','Mem')
@@ -133,7 +140,11 @@ Roles.new_role('Regular','Reg')
 :allow{
     'command/kill'
 }
-:set_auto_promote_condition(playtime(3*hours))
+:set_auto_promote_condition(function(player)
+    if player.online_time > 3*hours then
+        return true
+    end
+end)
 
 --- Guest/Default role
 Roles.new_role('Guest','')
