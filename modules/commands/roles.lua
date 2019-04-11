@@ -8,7 +8,7 @@ Commands.new_command('assign-role','Assigns a role to a player')
 :set_flag('admin-only',true)
 :add_alias('rpromote','assign','role','add-role')
 :register(function(player,action_player,role,raw)
-    local player_highest = Roles.get_player_highest(player)
+    local player_highest = Roles.get_player_highest_role(player)
     if player_highest.index < role.index then
         Roles.assign_player(action_player,role,player.name)
     else
@@ -22,7 +22,7 @@ Commands.new_command('unassign-role','Unassigns a role from a player')
 :set_flag('admin-only',true)
 :add_alias('rdemote','unassign','remove-role')
 :register(function(player,action_player,role,raw)
-    local player_highest = Roles.get_player_highest(player)
+    local player_highest = Roles.get_player_highest_role(player)
     if player_highest.index < role.index then
         Roles.unassign_player(action_player,role,player.name)
     else
