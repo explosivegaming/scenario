@@ -15,6 +15,7 @@ return {
     'modules.commands.interface',
     'modules.commands.help',
     'modules.commands.roles',
+    'modules.commands.rainbow',
     -- QoL Addons
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',
@@ -23,6 +24,7 @@ return {
     'modules.addons.spawn-area',
     'modules.addons.compilatron',
     'modules.addons.scorched-earth',
+    'modules.addons.pollution-grading',
     -- Config Files
     'config.command_auth_admin', -- commands tagged with admin_only are blocked for non admins
     'config.command_auth_roles', -- commands must be allowed via the role config
