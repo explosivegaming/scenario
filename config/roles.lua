@@ -120,7 +120,7 @@ Roles.new_role('Veteran','Vet')
 :allow{
 }
 :set_auto_promote_condition(function(player)
-    if player.online_time > 10*hours then
+    if player.online_time > 10*216000 then
         return true
     end
 end)
@@ -141,7 +141,7 @@ Roles.new_role('Regular','Reg')
     'command/kill'
 }
 :set_auto_promote_condition(function(player)
-    if player.online_time > 3*hours then
+    if player.online_time > 3*216000 then
         return true
     end
 end)
@@ -155,7 +155,8 @@ Roles.new_role('Guest','')
     'command/tag',
     'command/tag-clear',
     'command/chelp',
-    'command/list-roles'
+    'command/list-roles',
+    'command/rainbow'
 }
 
 --- Jail role

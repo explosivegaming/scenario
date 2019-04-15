@@ -180,9 +180,10 @@ local function emit_player_roles_updated(player,type,roles,by_player_name)
     local by_player = Game.get_player_from_any(by_player_name)
     local by_player_index = by_player and by_player.index or 0
     local role_names = {}
-    for _,role in pairs(roles) do
+    for index,role in pairs(roles) do
         role = Roles.get_role_from_any(role)
         if role then
+            roles[index] = role
             table.insert(role_names,role.name)
         end
     end
@@ -198,7 +199,7 @@ local function emit_player_roles_updated(player,type,roles,by_player_name)
         player_name=player.name,
         by_player_name=by_player_name,
         type=type,
-        roles_changed=roles
+        roles_changed=role_names
     }..'\n',true,0)
 end
 
@@ -222,7 +223,7 @@ function Roles.debug()
         local role = Roles.config.roles[role_name]
         local color = role.custom_color or Colours.white
         color = string.format('[color=%d,%d,%d]',color.r,color.g,color.b)
-        output = output..string.format('\n%s %s) %s',color,index,serpent.line(role))
+        output = output..string.format('\n%s %s) %s[/color]',color,index,serpent.line(role))
     end
     return output
 end
