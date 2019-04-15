@@ -222,7 +222,7 @@ function Roles.debug()
         local role = Roles.config.roles[role_name]
         local color = role.custom_color or Colours.white
         color = string.format('[color=%d,%d,%d]',color.r,color.g,color.b)
-        output = output..string.format('\n%s %s) %s',color,index,serpent.line(role))
+        output = output..string.format('\n%s %s) %s[/color]',color,index,serpent.line(role))
     end
     return output
 end
