@@ -180,9 +180,10 @@ local function emit_player_roles_updated(player,type,roles,by_player_name)
     local by_player = Game.get_player_from_any(by_player_name)
     local by_player_index = by_player and by_player.index or 0
     local role_names = {}
-    for _,role in pairs(roles) do
+    for index,role in pairs(roles) do
         role = Roles.get_role_from_any(role)
         if role then
+            roles[index] = role
             table.insert(role_names,role.name)
         end
     end
@@ -198,7 +199,7 @@ local function emit_player_roles_updated(player,type,roles,by_player_name)
         player_name=player.name,
         by_player_name=by_player_name,
         type=type,
-        roles_changed=roles
+        roles_changed=role_names
     }..'\n',true,0)
 end
 
