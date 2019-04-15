@@ -730,7 +730,7 @@ function Commands.run_command(command_event)
         return command_log(player,command_data,'Internal Error: Command Callback Fail',params,command_event.parameter,err)
     end
     if err == Commands.defines.error or err == Commands.error then
-        return command_log(player,command_data,'Error',raw_params,input_string)
+        return command_log(player,command_data,'Custom Error',raw_params,input_string)
     elseif err ~= Commands.defines.success and err ~= Commands.success then
         -- in this case the user has not received any output
         Commands.success(err)
