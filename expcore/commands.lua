@@ -162,6 +162,7 @@
     return Commands.error(message[opt]) -- this returns an error to the user, and will halt the command execution, ie no success message is returned
     Commands.success(message[opt]) -- used to return a success message however dont use this method see below
     return Commands.success(message[opt]) -- will return the success message to the user and your given message, halts execution
+    return <any> if any value is returned then it will be returned to the player via a Commands.success call
 
     Example Code:
     Commands.new_command('repeat-name','Will repeat you name a number of times in chat.')
@@ -728,7 +729,10 @@ function Commands.run_command(command_event)
     if Commands.internal_error(success,command_data.name,err) then
         return command_log(player,command_data,'Internal Error: Command Callback Fail',params,command_event.parameter,err)
     end
-    if err ~= Commands.defines.error and err ~= Commands.defines.success and err ~= Commands.error and err ~= Commands.success then
+    if err == Commands.defines.error or err == Commands.error then
+        return command_log(player,command_data,'Error',raw_params,input_string)
+    elseif err ~= Commands.defines.success and err ~= Commands.success then
+        -- in this case the user has not received any output
         Commands.success(err)
     end
     command_log(player,command_data,'Success',raw_params,input_string)
