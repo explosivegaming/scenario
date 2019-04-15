@@ -15,6 +15,7 @@ return {
     'modules.commands.interface',
     'modules.commands.help',
     'modules.commands.roles',
+    'modules.commands.rainbow',
     -- QoL Addons
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',

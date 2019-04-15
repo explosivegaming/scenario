@@ -19,6 +19,7 @@ local Colours = require 'resources.color_presets'
 local Game = require 'utils.game'
 local Util = require 'util'
 require 'utils.table'
+require 'utils.math'
 
 local Public = {}
 
@@ -494,6 +495,12 @@ function Public.table_keysort(tbl)
     local _tbl = {}
     for _,k in pairs(o) do _tbl[k] = tbl[k] end
     return _tbl
+end
+
+function Public.format_chat_colour(message,color)
+    color = color or Colours.white
+    local color_tag = '[color='..math.round(color.r,3)..','..math.round(color.g,3)..','..math.round(color.b,3)..']'
+    return string.format('%s%s[/color]',color_tag,message)
 end
 
 return Public

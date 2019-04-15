@@ -155,7 +155,8 @@ Roles.new_role('Guest','')
     'command/tag',
     'command/tag-clear',
     'command/chelp',
-    'command/list-roles'
+    'command/list-roles',
+    'command/rainbow'
 }
 
 --- Jail role
