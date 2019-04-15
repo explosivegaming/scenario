@@ -18,6 +18,7 @@
 local Colours = require 'resources.color_presets'
 local Game = require 'utils.game'
 local Util = require 'util'
+require 'utils.table'
 
 local Public = {}
 
@@ -96,7 +97,7 @@ function Public.player_return(value,colour,player)
             returnAsString = tostring(value)
         else
             -- value is a table
-            returnAsString = serpent.block(value)
+            returnAsString = table.inspect(value,{depth=5,indent=' ',newline='\n'})
         end
     elseif Public.type_check(value,'function') then
         -- value is a function
