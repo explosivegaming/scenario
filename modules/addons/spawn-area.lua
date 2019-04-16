@@ -142,3 +142,6 @@ Event.add(defines.events.on_player_created, function(event)
     spawn_turrets()
     player.teleport(p,s)
 end)
+
+-- Way to access global table
+return turrets

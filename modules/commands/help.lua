@@ -73,3 +73,6 @@ Commands.new_command('chelp','Searches for a keyword in all commands you are all
     -- blocks command complete message
     return Commands.success
 end)
+
+-- way to access global
+return search_cache

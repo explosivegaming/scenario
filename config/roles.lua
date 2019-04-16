@@ -147,7 +147,7 @@ Roles.new_role('Regular','Reg')
 end)
 
 --- Guest/Default role
-Roles.new_role('Guest','')
+local default = Roles.new_role('Guest','')
 :set_permission_group('Guest')
 :set_custom_color{r=185,g=187,b=160}
 :allow{
@@ -164,15 +164,14 @@ Roles.new_role('Jail')
 :set_permission_group('Restricted')
 :set_custom_color{r=50,g=50,b=50}
 :set_block_auto_promote(true)
-:allow{
-}
+:disallow(default.allowed)
 
 --- System defaults which are required to be set
 Roles.set_root('System')
 Roles.set_default('Guest')
 
 Roles.define_role_order{
-    'System',
+    'System', -- Best to keep root at top
     'Senior Administrator',
     'Administrator',
     'Moderator',
@@ -184,8 +183,8 @@ Roles.define_role_order{
     'Veteran',
     'Member',
     'Regular',
-    'Guest',
-    'Jail'
+    'Jail',
+    'Guest' -- Default must be last if you want to apply restrictions to other roles
 }
 
 Roles.override_player_roles{

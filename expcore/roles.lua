@@ -114,8 +114,8 @@
     Roles.get_player_roles(player) --- Gets all the roles of the given player, this will always contain the default role
     Roles.get_player_highest_role(player) --- Gets the highest role which the player has, can be used to compeer one player to another
 
-    Roles.assign_player(player,roles,by_player_name) --- Gives a player the given role(s) with an option to pass a by player name used in the log
-    Roles.unassign_player(player,roles,by_player_name) --- Removes a player from the given role(s) with an option to pass a by player name used in the log
+    Roles.assign_player(player,roles,by_player_name,silent) --- Gives a player the given role(s) with an option to pass a by player name used in the log
+    Roles.unassign_player(player,roles,by_player_name,silent) --- Removes a player from the given role(s) with an option to pass a by player name used in the log
     Roles.override_player_roles(roles) --- Overrides all player roles with the given table of roles, useful to mass set roles on game start
 
     Roles.player_has_role(player,search_role) --- A test for weather a player has the given role
@@ -170,15 +170,31 @@ local Roles = {
     _prototype={}
 }
 
+--- When global is loaded it will have the metatable re-assigned to the roles
+Global.register(Roles.config,function(tbl)
+    Roles.config = tbl
+    for _,role in pairs(Roles.config.roles) do
+        setmetatable(role,{__index=Roles._prototype})
+        local parent = Roles.config.roles[role.parent]
+        if parent then
+            setmetatable(role.allowed_actions, {__index=parent.allowed_actions})
+        end
+    end
+end)
+
 --- Internal function used to trigger a few different things when roles are changed
-local function emit_player_roles_updated(player,type,roles,by_player_name)
+-- this is the raw internal trigger as the other function is called at other times
+-- there is a second half called role_update which triggers after the event call, it also is called when a player joins
+local function emit_player_roles_updated(player,type,roles,by_player_name,skip_game_print)
     by_player_name = game.player and game.player.name or by_player_name or '<server>'
+    local by_player = Game.get_player_from_any(by_player_name)
+    local by_player_index = by_player and by_player.index or 0
+    -- get the event id from the type of emit
     local event = Roles.player_role_assigned
     if type == 'unassign' then
         event = Roles.player_role_unassigned
     end
-    local by_player = Game.get_player_from_any(by_player_name)
-    local by_player_index = by_player and by_player.index or 0
+    -- convert the roles to objects and get the names of the roles
     local role_names = {}
     for index,role in pairs(roles) do
         role = Roles.get_role_from_any(role)
@@ -187,7 +203,15 @@ local function emit_player_roles_updated(player,type,roles,by_player_name)
             table.insert(role_names,role.name)
         end
     end
-    game.print({'expcore-roles.game-message-'..type,player.name,table.concat(role_names,', '),by_player_name},Colours.cyan)
+    -- output to all the different locations: game print, player sound, event trigger and role log
+    if not skip_game_print then
+        game.print({'expcore-roles.game-message-'..type,player.name,table.concat(role_names,', '),by_player_name},Colours.cyan)
+    end
+    if type == 'assign' then
+        player.play_sound{path='utility/achievement_unlocked'}
+    else
+        player.play_sound{path='utility/game_lost'}
+    end
     script.raise_event(event,{
         name=Roles.player_roles_updated,
         tick=game.tick,
@@ -202,18 +226,6 @@ local function emit_player_roles_updated(player,type,roles,by_player_name)
         roles_changed=role_names
     }..'\n',true,0)
 end
-
---- When global is loaded it will have the metatable re-assigned to the roles
-Global.register(Roles.config,function(tbl)
-    Roles.config = tbl
-    for _,role in pairs(Roles.config.roles) do
-        setmetatable(role,{__index=Roles._prototype})
-        local parent = Roles.config.roles[role.parent]
-        if parent then
-            setmetatable(role.allowed_actions, {__index=parent.allowed_actions})
-        end
-    end
-end)
 
 --- Returns a string which contains all roles in index order displaying all data for them
 -- @treturn string the debug output string
@@ -293,7 +305,8 @@ end
 -- @tparam player LuaPlayer the player that will be assigned the roles
 -- @tparam role table a table of roles that the player will be given, can be one role and can be role names
 -- @tparam[opt=<server>] by_player_name string the name of the player that will be shown in the log
-function Roles.assign_player(player,roles,by_player_name)
+-- @tparam[opt=false] silent boolean when true there will be no game message printed
+function Roles.assign_player(player,roles,by_player_name,silent)
     player = Game.get_player_from_any(player)
     if not player then return end
     if type(roles) ~= 'table' or roles.name then
@@ -305,14 +318,15 @@ function Roles.assign_player(player,roles,by_player_name)
             role:add_player(player,false,true)
         end
     end
-    emit_player_roles_updated(player,'assign',roles,by_player_name)
+    emit_player_roles_updated(player,'assign',roles,by_player_name,silent)
 end
 
 --- Removes a player from the given role(s) with an option to pass a by player name used in the log
 -- @tparam player LuaPlayer the player that will have the roles removed
 -- @tparam roles table a table of roles to be removed from the player, can be one role and can be role names
 -- @tparam[opt=<server>] by_player_name string the name of the player that will be shown in the logs
-function Roles.unassign_player(player,roles,by_player_name)
+-- @tparam[opt=false] silent boolean when true there will be no game message printed
+function Roles.unassign_player(player,roles,by_player_name,silent)
     player = Game.get_player_from_any(player)
     if not player then return end
     if type(roles) ~= 'table' or roles.name then
@@ -324,7 +338,7 @@ function Roles.unassign_player(player,roles,by_player_name)
             role:remove_player(player,false,true)
         end
     end
-    emit_player_roles_updated(player,'unassign',roles,by_player_name)
+    emit_player_roles_updated(player,'unassign',roles,by_player_name,silent)
 end
 
 --- Overrides all player roles with the given table of roles, useful to mass set roles on game start
