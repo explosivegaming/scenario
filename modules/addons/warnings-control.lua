@@ -141,6 +141,7 @@ Event.on_nth_tick(temp_warning_cool_down/4,function()
         for index,time in pairs(temp_warnings) do
             if time <= check_time then
                 table.remove(temp_warnings,index)
+                player.print{'warnings.script-warning-removed',#temp_warnings,config.temp_warning_limit}
                 event_emit(Public.player_temp_warning_removed,player,'<server>')
             end
         end
@@ -210,11 +211,6 @@ Event.add(Public.player_temp_warning_added,function(event)
     else
         player.print{'warnings.script-warning',event.temp_warning_count,config.temp_warning_limit}
     end
-end)
-
-Event.add(Public.player_temp_warning_removed,function(event)
-    local player = Game.get_player_by_index(event.player_index)
-    player.print{'warnings.script-warning-removed',event.temp_warning_count,config.temp_warning_limit}
 end)
 
 return Public
