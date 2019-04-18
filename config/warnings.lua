@@ -14,6 +14,6 @@ return {
             game.ban_player(player,{'warnings.received',by_player_name,number_of_warnings,{'warnings.ban',{'info.website-link'}}})
         end
     },
-    temp_warning_cool_down=30, -- time for a temp warning (given by script) to be removed
+    temp_warning_cool_down=30, -- time for a temp warning (given by script) to be removed (in minutes)
     temp_warning_limit=5 -- the number of temp warnings (given by script) that are allowed before full warnings are given
 }
