@@ -1,6 +1,10 @@
 local Commands = require 'expcore.commands'
 local Roles = require 'expcore.roles'
 local Colours = require 'resources.color_presets'
+local format_chat_player_name, format_chat_colour_localized = ext_require('expcore.common',
+    'format_chat_player_name',
+    'format_chat_colour_localized'
+)
 
 Commands.new_command('assign-role','Assigns a role to a player')
 :add_param('player',false,'player-role')
@@ -42,16 +46,15 @@ Commands.new_command('list-roles','Lists all roles in they correct order')
     for index,role in pairs(roles) do
         role = Roles.get_role_from_any(role)
         local colour = role.custom_color or Colours.white
-        colour = string.format('%d,%d,%d',colour.r,colour.g,colour.b)
+        local role_name = format_chat_colour_localized(role.name,colour)
         if index == 1 then
-            message = {'exp-commands.roles-list',colour,role.name}
+            message = {'exp-commands.roles-list',role_name}
             if action_player ~= '' then
-                local player_colour = action_player.color
-                player_colour = string.format('%d,%d,%d',player_colour.r*255,player_colour.g*255,player_colour.b*255)
-                message = {'exp-commands.roles-list-player',player_colour,action_player.name,colour,role.name}
+                local player_name_colour = format_chat_player_name(action_player)
+                message = {'exp-commands.roles-list-player',player_name_colour,role_name}
             end
         else
-            message = {'exp-commands.roles-list-element',message,colour,role.name}
+            message = {'exp-commands.roles-list-element',message,role_name}
         end
     end
     return Commands.success(message)

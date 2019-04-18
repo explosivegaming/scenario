@@ -497,10 +497,39 @@ function Public.table_keysort(tbl)
     return _tbl
 end
 
+--- Returns a message with valid chat tags to change its colour
+-- @tparam message string the message that will be in the output
+-- @tparam color table a color which contains r,g,b as its keys
+-- @treturn string the message with the color tags included
 function Public.format_chat_colour(message,color)
     color = color or Colours.white
     local color_tag = '[color='..math.round(color.r,3)..','..math.round(color.g,3)..','..math.round(color.b,3)..']'
     return string.format('%s%s[/color]',color_tag,message)
+end
+
+--- Returns a message with valid chat tags to change its colour, using localization
+-- @tparam message ?string|table the message that will be in the output
+-- @tparam color table a color which contains r,g,b as its keys
+-- @treturn table the message with the color tags included
+function Public.format_chat_colour_localized(message,color)
+    color = color or Colours.white
+    color = math.round(color.r,3)..','..math.round(color.g,3)..','..math.round(color.b,3)
+    return {'color-tag',color,message}
+end
+
+--- Returns the players name in the players color
+-- @tparam player LuaPlayer the player to use the name and color of
+-- @tparam[opt=false] raw_string boolean when true a string is returned rather than a localized string
+-- @treturn table the players name with tags for the players color
+function Public.format_chat_player_name(player,raw_string)
+    player = Game.get_player_from_any(player)
+    local player_name = player and player.name or '<Server>'
+    local player_chat_colour = player and player.chat_color or Colors.white
+    if raw_string then
+        return Public.format_chat_colour(player_name,player_chat_colour)
+    else
+        return Public.format_chat_colour_localized(player_name,player_chat_colour)
+    end
 end
 
 return Public
