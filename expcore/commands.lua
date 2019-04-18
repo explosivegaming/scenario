@@ -724,10 +724,10 @@ function Commands.run_command(command_event)
 
     -- runs the command
     -- player: LuaPlayer, ... command params, raw: string
-    table.insert(params,input_string)
+    table.insert(params,command_data.max_param_count+1,input_string)
     local success, err = pcall(command_data.callback,player,unpack(params))
     if Commands.internal_error(success,command_data.name,err) then
-        return command_log(player,command_data,'Internal Error: Command Callback Fail',params,command_event.parameter,err)
+        return command_log(player,command_data,'Internal Error: Command Callback Fail',raw_params,command_event.parameter,err)
     end
     if err == Commands.defines.error or err == Commands.error then
         return command_log(player,command_data,'Custom Error',raw_params,input_string)

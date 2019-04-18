@@ -9,7 +9,7 @@ Commands.new_command('report','Reports a player and notifies moderators')
     input = Commands.parse('player',input,player,reject)
     if not input then return end
     if Roles.player_has_flag(player,'report-immune') then
-        return reject{'exp-command.report-player-immune'}
+        return reject{'exp-commands.report-player-immune'}
     else
         return input
     end

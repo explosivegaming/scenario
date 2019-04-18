@@ -524,7 +524,7 @@ end
 function Public.format_chat_player_name(player,raw_string)
     player = Game.get_player_from_any(player)
     local player_name = player and player.name or '<Server>'
-    local player_chat_colour = player and player.chat_color or Colors.white
+    local player_chat_colour = player and player.chat_color or Colours.white
     if raw_string then
         return Public.format_chat_colour(player_name,player_chat_colour)
     else

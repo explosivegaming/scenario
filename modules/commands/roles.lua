@@ -40,7 +40,7 @@ Commands.new_command('list-roles','Lists all roles in they correct order')
 :register(function(player,action_player,raw)
     local roles = Roles.config.order
     local message = {'exp-commands.roles-list'}
-    if action_player ~= '' then
+    if action_player then
         roles = Roles.get_player_roles(action_player)
     end
     for index,role in pairs(roles) do
@@ -49,7 +49,7 @@ Commands.new_command('list-roles','Lists all roles in they correct order')
         local role_name = format_chat_colour_localized(role.name,colour)
         if index == 1 then
             message = {'exp-commands.roles-list',role_name}
-            if action_player ~= '' then
+            if action_player then
                 local player_name_colour = format_chat_player_name(action_player)
                 message = {'exp-commands.roles-list-player',player_name_colour,role_name}
             end
