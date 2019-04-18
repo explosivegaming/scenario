@@ -11,6 +11,7 @@ local Public = {
     player_temp_banned=script.generate_event_name(),
     player_clear_temp_ban=script.generate_event_name()
 }
+
 Global.register({
     Public.old_roles,
     Public.temp_bans
