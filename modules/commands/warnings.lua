@@ -46,7 +46,7 @@ Commands.new_command('get-warnings','Gets the number of warnings a player has. I
     end
 end)
 
-Commands.new_command('clear-warnigns','Clears all warnings (and script warnings) from a player')
+Commands.new_command('clear-warnings','Clears all warnings (and script warnings) from a player')
 :add_param('player',false,'player')
 :register(function(player,action_player,raw)
     WarningsControl.clear_warnings(player,player.name)
