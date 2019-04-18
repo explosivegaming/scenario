@@ -20,6 +20,7 @@ end)
 
 Commands.new_command('unjail','Puts a player into jail and removes all other roles.')
 :add_param('player',false,'player-role')
+:add_alias('clear-jail','remove-jail')
 :enable_auto_concat()
 :register(function(player,action_player,raw)
     local action_player_name_color = format_chat_player_name(action_player)
@@ -45,9 +46,10 @@ Commands.new_command('temp-ban','Temp bans a player until the next reset; this r
     end
 end)
 
-Commands.new_command('remove-temp-ban','Removes temp ban from a player; this will not restore they items.')
+Commands.new_command('clear-temp-ban','Removes temp ban from a player; this will not restore they items.')
 :add_param('player',false,'player-role')
 :add_param('reason',false)
+:add_alias('untemp-ban','remove-temp-ban')
 :enable_auto_concat()
 :register(function(player,action_player,reason,raw)
     local action_player_name_color = format_chat_player_name(action_player)

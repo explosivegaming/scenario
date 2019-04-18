@@ -108,6 +108,10 @@
 >>>>Functions List (see function for more detail):
     Roles.debug() --- Returns a string which contains all roles in index order displaying all data for them
 
+    Roles.print_to_roles(roles,message) --- Prints a message to all players in the given roles, may send duplicate message however factorio blocks spam
+    Roles.print_to_roles_higher(role,message) --- Prints a message to all players who have the given role or one which is higher (excluding default)
+    Roles.print_to_roles_lower(role,message) --- Prints a message to all players who have the given role or one which is lower (excluding default)
+
     Roles.get_role_by_name(name) --- Get a role for the given name
     Roles.get_role_by_order(index) --- Get a role with the given order index
     Roles.get_role_from_any(any) --- Gets a role from a name,index or role object (where it is just returned)
@@ -238,6 +242,46 @@ function Roles.debug()
         output = output..string.format('\n%s %s) %s[/color]',color,index,serpent.line(role))
     end
     return output
+end
+
+--- Prints a message to all players in the given roles, may send duplicate message however factorio blocks spam
+-- @tparam roles table a table of roles which to send the message to
+-- @tparam message string the message to send to the players
+function Roles.print_to_roles(roles,message)
+    for _,role in pairs(roles) do
+        role = Roles.get_role_from_any(role)
+        if role then role:print(message) end
+    end
+end
+
+--- Prints a message to all players who have the given role or one which is higher (excluding default)
+-- @tparam role string the name of the role to send the message to
+-- @tparam message string the message to send to the players
+function Roles.print_to_roles_higher(role,message)
+    role = Roles.get_role_from_any(role)
+    if not role then return end
+    local roles = {}
+    for index,role_name in pairs(Roles.config.order) do
+        if index <= role.index and role_name ~= Roles.config.internal.default then
+            table.insert(roles,role_name)
+        end
+    end
+    Roles.print_to_roles(roles,message)
+end
+
+--- Prints a message to all players who have the given role or one which is lower (excluding default)
+-- @tparam role string the name of the role to send the message to
+-- @tparam message string the message to send to the players
+function Roles.print_to_roles_lower(role,message)
+    role = Roles.get_role_from_any(role)
+    if not role then return end
+    local roles = {}
+    for index,role_name in pairs(Roles.config.order) do
+        if index >= role.index and role_name ~= Roles.config.internal.default then
+            table.insert(roles,role_name)
+        end
+    end
+    Roles.print_to_roles(roles,message)
 end
 
 --- Get a role for the given name
