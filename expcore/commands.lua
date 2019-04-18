@@ -201,7 +201,7 @@
     Commands.remove_parse(name) --- Removes a parse function, see add_parse for adding them
     Commands.parse(name,input,player,reject,...) --- Intended to be used within other parse functions, runs a parse and returns success and new value
 
-    Commands.add_command(name,help) --- Creates a new command object to added details to, note this does not register the command to the game
+    Commands.new_command(name,help) --- Creates a new command object to added details to, note this does not register the command to the game
     Commands._prototype:add_param(name,optional,parse,...) --- Adds a new param to the command this will be displayed in the help and used to parse the input
     Commands._prototype:set_defaults(defaults) --- Adds default values to params only matters if the param is optional
     Commands._prototype:set_flag(name,value) --- Adds a tag to the command which is passed via the flags param to the authenticators, can be used to assign command roles or type

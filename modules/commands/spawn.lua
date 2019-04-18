@@ -13,7 +13,7 @@ end
 
 Commands.new_command('go-to-spawn','Teleport to spawn')
 :add_param('player',true,'player-role-alive')
-:add_defaults{
+:set_defaults{
     player=function(player)
         if player.connected and player.character and player.character.health > 0 then
             return player

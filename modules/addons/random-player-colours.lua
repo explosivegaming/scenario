@@ -1,4 +1,4 @@
-local Colours = require 'resources.colour_presets'
+local Colours = require 'resources.color_presets'
 local Game = require 'utils.game'
 local Event = require 'utils.events'
 local config = require 'config.preset_player_colours'

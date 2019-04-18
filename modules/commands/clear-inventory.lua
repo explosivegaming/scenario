@@ -1,4 +1,4 @@
-local Commands = 'expcore.commands'
+local Commands = require 'expcore.commands'
 local move_items = ext_require('expcore.common','move_items')
 require 'config.command_parse_roles'
 
