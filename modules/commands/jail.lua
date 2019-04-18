@@ -45,7 +45,7 @@ Commands.new_command('temp-ban','Temp bans a player until the next reset; this r
     end
 end)
 
-Commands.new_command('remove-temp-ban','Removes temp ban from a player; this will not restore they items.')
+Commands.new_command('clear-temp-ban','Removes temp ban from a player; this will not restore they items.')
 :add_param('player',false,'player-role')
 :add_param('reason',false)
 :enable_auto_concat()
