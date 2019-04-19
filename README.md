@@ -22,7 +22,10 @@
 </p>
 <h2 align="center">ExpGaming Scenario Repository</h2>
 
+<p align="center"><font size="-2">Out Dated; Will be updated in the future</font></p>
+
 #### Use and Installation
+
 * Download the git repo
 * Move files into the scenario folder (C:\Users\User\AppData\Roaming\Factorio\scenarios\ExpGamingScenario)
 * Make edits to role and group configs as well as any other configs that you want
@@ -30,9 +33,11 @@
 * All modules will be loaded if you have not removed any, any problems see log file
 
 #### Creation of new modules
+
 * Please see [FactorioSoftmodManager](https://github.com/explosivegaming/FactorioSoftmodManager) for making new modules
 
 #### Forks and Pull Requests
+
 * We are happy for people to make pull requests if you wish to help make our server better
 * Your server is a community server, it is all about the people and feedback is good
 * Dont be afraid to make a pull request as if it fixes something then its a good change

@@ -33,12 +33,14 @@ Roles.new_role('System','SYS')
 :set_permission_group('Admin')
 :set_flag('is_admin')
 :set_flag('is_spectator')
+:set_flag('report-immune')
 :set_allow_all()
 
 Roles.new_role('Senior Administrator','SAdmin')
 :set_permission_group('Admin')
 :set_flag('is_admin')
 :set_flag('is_spectator')
+:set_flag('report-immune')
 :set_parent('Administrator')
 :allow{
     'command/interface',
@@ -50,6 +52,7 @@ Roles.new_role('Administrator','Admin')
 :set_custom_color{r=233,g=63,b=233}
 :set_flag('is_admin')
 :set_flag('is_spectator')
+:set_flag('report-immune')
 :set_parent('Moderator')
 :allow{
 }
@@ -59,10 +62,19 @@ Roles.new_role('Moderator','Mod')
 :set_custom_color{r=0,g=170,b=0}
 :set_flag('is_admin')
 :set_flag('is_spectator')
+:set_flag('report-immune')
 :set_parent('Trainee')
 :allow{
     'command/assign-role',
-    'command/unassign-role'
+    'command/unassign-role',
+    'command/repair',
+    'command/kill/always',
+    'command/tag-clear/always',
+    'command/go-to-spawn/always',
+    'command/clear-reports',
+    'command/clear-warnings',
+    'command/clear-temp-ban',
+    'command/clear-inventory',
 }
 
 Roles.new_role('Trainee','TrMod')
@@ -70,14 +82,17 @@ Roles.new_role('Trainee','TrMod')
 :set_custom_color{r=0,g=170,b=0}
 :set_flag('is_admin')
 :set_flag('is_spectator')
+:set_flag('report-immune')
 :set_parent('Donator')
 :allow{
     'command/admin-chat',
     'command/teleport',
     'command/bring',
     'command/goto',
-    'command/kill/always',
-    'command/tag-clear/always',
+    'command/temp-ban',
+    'command/give-warning',
+    'command/get-warnings',
+    'command/get-reports',
 }
 
 --- Trusted Roles
@@ -85,6 +100,7 @@ Roles.new_role('Sponsor','Spon')
 :set_permission_group('Trusted')
 :set_custom_color{r=247,g=246,b=54}
 :set_flag('is_spectator')
+:set_flag('report-immune')
 :set_parent('Pay to Win')
 :allow{
 }
@@ -93,6 +109,7 @@ Roles.new_role('Pay to Win','P2W')
 :set_permission_group('Trusted')
 :set_custom_color{r=238,g=172,b=44}
 :set_flag('is_spectator')
+:set_flag('report-immune')
 :set_parent('Donator')
 :allow{
 }
@@ -103,6 +120,8 @@ Roles.new_role('Donator','Don')
 :set_flag('is_spectator')
 :set_parent('Veteran')
 :allow{
+    'command/jail',
+    'command/unjail'
 }
 
 Roles.new_role('Partner','Part')
@@ -111,6 +130,8 @@ Roles.new_role('Partner','Part')
 :set_flag('is_spectator')
 :set_parent('Veteran')
 :allow{
+    'command/jail',
+    'command/unjail'
 }
 
 Roles.new_role('Veteran','Vet')
@@ -138,7 +159,10 @@ Roles.new_role('Regular','Reg')
 :set_custom_color{r=79,g=155,b=163}
 :set_parent('Guest')
 :allow{
-    'command/kill'
+    'command/kill',
+    'command/rainbow',
+    'command/go-to-spawn',
+    'command/me',
 }
 :set_auto_promote_condition(function(player)
     if player.online_time > 3*216000 then
@@ -147,16 +171,15 @@ Roles.new_role('Regular','Reg')
 end)
 
 --- Guest/Default role
-Roles.new_role('Guest','')
+local default = Roles.new_role('Guest','')
 :set_permission_group('Guest')
 :set_custom_color{r=185,g=187,b=160}
 :allow{
-    'command/me',
     'command/tag',
     'command/tag-clear',
     'command/chelp',
     'command/list-roles',
-    'command/rainbow'
+    'command/report',
 }
 
 --- Jail role
@@ -164,15 +187,14 @@ Roles.new_role('Jail')
 :set_permission_group('Restricted')
 :set_custom_color{r=50,g=50,b=50}
 :set_block_auto_promote(true)
-:allow{
-}
+:disallow(default.allowed)
 
 --- System defaults which are required to be set
 Roles.set_root('System')
 Roles.set_default('Guest')
 
 Roles.define_role_order{
-    'System',
+    'System', -- Best to keep root at top
     'Senior Administrator',
     'Administrator',
     'Moderator',
@@ -184,8 +206,8 @@ Roles.define_role_order{
     'Veteran',
     'Member',
     'Regular',
-    'Guest',
-    'Jail'
+    'Jail',
+    'Guest' -- Default must be last if you want to apply restrictions to other roles
 }
 
 Roles.override_player_roles{

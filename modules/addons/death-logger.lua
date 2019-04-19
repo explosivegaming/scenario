@@ -94,6 +94,4 @@ if config.auto_collect_bodies then
 end
 
 -- this is so other modules can access the logs
-return function()
-    return deaths
-end
+return deaths
