@@ -57,6 +57,9 @@ function Public.remove_player_report(player,by_player_name)
     if reports and reports[by_player_name] then
         event_emit(Public.player_report_removed,player,by_player_name)
         reports[by_player_name] = nil
+        if Public.count_player_reports(player) == 0 then
+            Public.user_reports[player.name] = nil
+        end
         return true
     end
     return false
@@ -115,7 +118,11 @@ function Public.count_player_reports(player,count_callback)
     if not player then return end
     local reports = Public.user_reports[player.name] or {}
     if not count_callback then
-        return #reports
+        local ctn = 0
+        for _ in pairs(reports) do
+            ctn=ctn+1
+        end
+        return ctn
     else
         local ctn = 0
         for player_name,reason in pairs(reports) do

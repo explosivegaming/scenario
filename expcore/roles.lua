@@ -641,6 +641,8 @@ end
 -- @treturn boolean true if the player was added successfully
 function Roles._prototype:add_player(player,skip_check,skip_event)
     player = Game.get_player_from_any(player)
+    -- Default role cant have players added or removed
+    if self.name == Roles.config.internal.default then return end
     -- Check the player is valid, can be skipped but a name must be given
     if not player then
         if skip_check then
@@ -673,6 +675,8 @@ end
 -- @treturn boolean true if the player was removed successfully
 function Roles._prototype:remove_player(player,skip_check,skip_event)
     player = Game.get_player_from_any(player)
+    -- Default role cant have players added or removed
+    if self.name == Roles.config.internal.default then return end
     -- Check the player is valid, can be skipped but a name must be given
     if not player then
         if skip_check then

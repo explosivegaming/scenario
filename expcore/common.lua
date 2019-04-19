@@ -230,7 +230,7 @@ end
 function Public.move_items(items,surface,position,radius,chest_type)
     chest_type = chest_type or 'iron-chest'
     surface = surface or game.surfaces[1]
-    if type(position) ~= 'table' then return end
+    if position and type(position) ~= 'table' then return end
     if type(items) ~= 'table' then return end
     -- Finds all entities of the given type
     local p = position or {x=0,y=0}
@@ -438,7 +438,7 @@ end
 -- @return the list item found that matches the input
 function Public.auto_complete(options,input,use_key,rtn_key)
     local rtn = {}
-    if type(input)~= 'string' then return end
+    if type(input) ~= 'string' then return end
     input = input:lower()
     for key,value in pairs(options) do
         local check = use_key and key or value

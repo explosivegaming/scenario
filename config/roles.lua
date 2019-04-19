@@ -91,7 +91,7 @@ Roles.new_role('Trainee','TrMod')
     'command/goto',
     'command/temp-ban',
     'command/give-warning',
-    'command/get-warning',
+    'command/get-warnings',
     'command/get-reports',
 }
 
@@ -120,6 +120,8 @@ Roles.new_role('Donator','Don')
 :set_flag('is_spectator')
 :set_parent('Veteran')
 :allow{
+    'command/jail',
+    'command/unjail'
 }
 
 Roles.new_role('Partner','Part')
