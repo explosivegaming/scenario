@@ -46,11 +46,11 @@ Commands.new_command('get-warnings','Gets the number of warnings a player has. I
     end
 end)
 
-Commands.new_command('clear-warnigns','Clears all warnings (and script warnings) from a player')
+Commands.new_command('clear-warnings','Clears all warnings (and script warnings) from a player')
 :add_param('player',false,'player')
 :register(function(player,action_player,raw)
-    WarningsControl.clear_warnings(player,player.name)
-    WarningsControl.clear_temp_warnings(player,player.name)
+    WarningsControl.clear_warnings(action_player,player.name)
+    WarningsControl.clear_temp_warnings(action_player,player.name)
     local action_player_name_color = format_chat_player_name(action_player)
     local by_player_name_color = format_chat_player_name(player)
     game.print{'exp-commands.warnings-cleared',action_player_name_color,by_player_name_color}

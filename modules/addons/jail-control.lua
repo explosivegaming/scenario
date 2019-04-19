@@ -11,6 +11,7 @@ local Public = {
     player_temp_banned=script.generate_event_name(),
     player_clear_temp_ban=script.generate_event_name()
 }
+
 Global.register({
     Public.old_roles,
     Public.temp_bans
@@ -37,7 +38,7 @@ function Public.jail_player(player,by_player_name)
     player = Game.get_player_from_any(player)
     if not player then return end
     if Roles.player_has_role(player,'Jail') then return end
-    local old_roles = Role.get_player_roles(player)
+    local old_roles = Roles.get_player_roles(player)
     Public.old_roles[player.name] = old_roles
     Roles.unassign_player(player,old_roles,by_player_name,true)
     Roles.assign_player(player,'Jail',by_player_name,true)

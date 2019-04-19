@@ -31,17 +31,17 @@ local callback =
             ent.surface.create_entity(
             {name = 'compi-speech-bubble', text = messages[name][msg_number], position = {0, 0}, source = ent}
         )
-        Public.global.current_messages[name] = {message = message, msg_number = msg_number}
+        Public.current_messages[name] = {message = message, msg_number = msg_number}
     end
 )
 
 --- This will move the messages onto the next message in the loop
 local function circle_messages()
-    for name, ent in pairs(Public.global.compilatrons) do
+    for name, ent in pairs(Public.compilatrons) do
         if not ent.valid then
             Public.spawn_compilatron(game.players[1].surface,name)
         end
-        local current_message = Public.global.current_messages[name]
+        local current_message = Public.current_messages[name]
         local msg_number
         local message
         if current_message ~= nil then
@@ -71,12 +71,12 @@ function Public.add_compilatron(entity, name)
     if name == nil then
         return
     end
-    Public.global.compilatrons[name] = entity
+    Public.compilatrons[name] = entity
     local message =
         entity.surface.create_entity(
         {name = 'compi-speech-bubble', text = messages[name][1], position = {0, 0}, source = entity}
     )
-    Public.global.current_messages[name] = {message = message, msg_number = 1}
+    Public.current_messages[name] = {message = message, msg_number = 1}
 end
 
 --- This spawns a new compilatron on a surface with the given location tag (not a position)

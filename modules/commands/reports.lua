@@ -8,8 +8,8 @@ Commands.new_command('report','Reports a player and notifies moderators')
 :add_param('player',false,function(input,player,reject)
     input = Commands.parse('player',input,player,reject)
     if not input then return end
-    if Roles.player_has_flag(player,'report-immune') then
-        return reject{'exp-command.report-player-immune'}
+    if Roles.player_has_flag(input,'report-immune') then
+        return reject{'exp-commands.report-player-immune'}
     else
         return input
     end
@@ -45,7 +45,8 @@ Commands.new_command('get-reports','Gets a list of all reports that a player has
         Commands.print{'exp-commands.report-player-count-title'}
         for player_name,reports in pairs(user_reports) do
             local player_name_color = format_chat_player_name(player_name)
-            Commands.print{'exp-commands.report-list',player_name_color,#reports}
+            local report_count = ReportsControl.count_player_reports(player_name)
+            Commands.print{'exp-commands.report-list',player_name_color,report_count}
         end
     end
 end)
@@ -55,7 +56,7 @@ Commands.new_command('clear-reports','Clears all reports from a player or just t
 :add_param('from-player',true,'player')
 :register(function(player,action_player,from_player,raw)
     if from_player then
-        if not ReportsControl.remove_player_report(action_player,from_player) then
+        if not ReportsControl.remove_player_report(action_player,from_player.name) then
             return Commands.error{'exp-commands.report-not-reported'}
         end
     else

@@ -6,8 +6,13 @@ require 'config.command_parse_general'
 
 Commands.add_parse('role',function(input,player,reject)
     if not input then return end
-    local roles = Roles.config.roles
-    local role = auto_complete(roles,input,true)
+    local roles = Roles.config.order
+    local rev_roles = {}
+    for i=#roles,1,-1 do
+        table.insert(rev_roles,roles[i])
+    end
+    local role = auto_complete(rev_roles,input)
+    role = Roles.get_role_by_name(role)
     if not role then
         return reject{'expcore-role.reject-role'}
     else

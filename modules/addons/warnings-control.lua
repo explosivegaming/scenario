@@ -2,6 +2,7 @@ local Game = require 'utils.game'
 local Global = require 'utils.global'
 local Event = require 'utils.event'
 local config = require 'config.warnings'
+local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
 require 'utils.table'
 
 local Public = {
@@ -195,8 +196,8 @@ Event.add(Public.player_warning_added,function(event)
     elseif type(action) == 'table' then
         -- {locale,by_player_name,number_of_warning,...}
         local current_action = table.deep_copy(action)
-        table.insert(current_action,1,event.by_player_name)
-        table.insert(current_action,1,event.warning_count)
+        table.insert(current_action,2,event.by_player_name)
+        table.insert(current_action,3,event.warning_count)
         player.print(current_action)
     elseif type(action) == 'string' then
         player.print(action)
@@ -208,6 +209,8 @@ Event.add(Public.player_temp_warning_added,function(event)
     local player = Game.get_player_by_index(event.player_index)
     if event.temp_warning_count > config.temp_warning_limit then
         Public.add_warnings(event.player_index,event.by_player_name)
+        local player_name_color = format_chat_player_name(player)
+        game.print{'warnings.script-warning-limit',player_name_color}
     else
         player.print{'warnings.script-warning',event.temp_warning_count,config.temp_warning_limit}
     end

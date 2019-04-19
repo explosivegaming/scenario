@@ -201,7 +201,7 @@
     Commands.remove_parse(name) --- Removes a parse function, see add_parse for adding them
     Commands.parse(name,input,player,reject,...) --- Intended to be used within other parse functions, runs a parse and returns success and new value
 
-    Commands.add_command(name,help) --- Creates a new command object to added details to, note this does not register the command to the game
+    Commands.new_command(name,help) --- Creates a new command object to added details to, note this does not register the command to the game
     Commands._prototype:add_param(name,optional,parse,...) --- Adds a new param to the command this will be displayed in the help and used to parse the input
     Commands._prototype:set_defaults(defaults) --- Adds default values to params only matters if the param is optional
     Commands._prototype:set_flag(name,value) --- Adds a tag to the command which is passed via the flags param to the authenticators, can be used to assign command roles or type
@@ -724,10 +724,10 @@ function Commands.run_command(command_event)
 
     -- runs the command
     -- player: LuaPlayer, ... command params, raw: string
-    table.insert(params,input_string)
+    table.insert(params,command_data.max_param_count+1,input_string)
     local success, err = pcall(command_data.callback,player,unpack(params))
     if Commands.internal_error(success,command_data.name,err) then
-        return command_log(player,command_data,'Internal Error: Command Callback Fail',params,command_event.parameter,err)
+        return command_log(player,command_data,'Internal Error: Command Callback Fail',raw_params,command_event.parameter,err)
     end
     if err == Commands.defines.error or err == Commands.error then
         return command_log(player,command_data,'Custom Error',raw_params,input_string)
