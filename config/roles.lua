@@ -232,7 +232,7 @@ Roles.override_player_roles{
     ['7h3w1z4rd']={'Moderator','Member'},
     AssemblyStorm={'Moderator','Member'},
     bombershark={'Moderator','Member'},
-    CmonMate467={'Moderator','Member'},
+    CmonMate497={'Moderator','Member'},
     facere={'Moderator','Member'},
     FlipHalfling90={'Moderator','Member'},
     Gizan={'Pay to Win','Moderator','Member'},
