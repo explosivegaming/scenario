@@ -217,7 +217,7 @@ Roles.override_player_roles{
     Drahc_pro={'Administrator','Moderator','Member'},
     aldldl={'Sponsor','Administrator','Moderator','Member'},
     LoicB={'Sponsor','Trainee','Member'},
-    Ookl={'Sponsor','Moderator','Member'},
+    ookl={'Sponsor','Moderator','Member'},
     cydes={'Pay to Win','Moderator','Member'},
     darklich14={'Pay to Win','Moderator','Member'},
     porelos={'Pay to Win','Moderator','Member'},
