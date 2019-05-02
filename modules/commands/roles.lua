@@ -24,7 +24,7 @@ Commands.new_command('unassign-role','Unassigns a role from a player')
 :add_param('player',false,'player-role')
 :add_param('role',false,'role')
 :set_flag('admin-only',true)
-:add_alias('rdemote','unassign','remove-role')
+:add_alias('rdemote','unassign','rerole','remove-role')
 :register(function(player,action_player,role,raw)
     local player_highest = Roles.get_player_highest_role(player)
     if player_highest.index < role.index then

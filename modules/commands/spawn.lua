@@ -4,7 +4,7 @@ local Roles = require 'expcore.roles'
 local function teleport(player)
     local surface = player.surface
     local spawn = player.force.get_spawn_position(surface)
-    local position = surface.find_non_colliding_position('player',spawn,32,1)
+    local position = surface.find_non_colliding_position('character',spawn,32,1)
     if not position then return false end
     if player.driving then player.driving = false end -- kicks a player out a vehicle if in one
     player.teleport(position,surface)
