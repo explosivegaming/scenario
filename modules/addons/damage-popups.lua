@@ -21,9 +21,9 @@ Event.add(defines.events.on_entity_damaged, function(event)
 
     -- Sets the message
     local message
-    if entity.name == 'player' and config.show_player_health then
+    if entity.name == 'character' and config.show_player_health then
         message = {'damage-popup.player-health',health}
-    elseif entity.name ~= 'player' and cause and cause.name == 'player' and config.show_player_damage then
+    elseif entity.name ~= 'character' and cause and cause.name == 'character' and config.show_player_damage then
         message = {'damage-popup.player-damage',damage}
     end
 

@@ -89,7 +89,7 @@ local function spawn_base(surface,position)
                 table.insert(tiles_to_make,{name=dtile,position=p})
                 local entities_to_remove = surface.find_entities_filtered{area={{p.x-1,p.y-1},{p.x,p.y}}}
                 for _,entity in pairs(entities_to_remove) do
-                    if entity.name ~= 'player' then entity.destroy() end
+                    if entity.name ~= 'character' then entity.destroy() end
                 end
             elseif prod < pr2 then
                 -- if it is inside the pattern radius
