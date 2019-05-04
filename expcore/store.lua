@@ -1,3 +1,63 @@
+--- This module is for storing and watching values for updates, useful for config settings or limiting what can be changed
+--[[
+>>>> When to use this system
+    This system is to be used when you want to store a value and watch when it is changed or watch any value for changes.
+    Examples would include runtime config settings where something needs to change when the value is updated or when you have
+    values entered in a gui and you want them to be persistent between players like a force modifer gui
+
+>>>> What store type to use
+    There are different types of store that can be used each is designed to be used in a certain situation:
+    local - this store type doesnt actually store any data and it has its use in only triggering the setter function when you use
+        the set function rather than watching for updates, this might be used as an interface between modules where when you change the
+        local varible you dont want it to trigger but when an outside source uses set it will trigger the setter.
+    player - this will use the sub_location as a player so each player will have they own entry in the store location, this can be used
+        with player modifiers where even if set is not used the update will still be detected.
+    force - this will use the sub_location as a force so each force will have its own entry in the store location, this can be used to store
+        custom settings for a force where if a player uses a gui to edit the setting it will detect the update and call the setter where you
+        can update the value on the gui for other players.
+    surface - this will use the sub_location as a surface so each surface will have its own entry in the store location, this will have the
+        same use case as force but for a surface rather than a force.
+    game - this will store all a single value so any sub_location string can be used, this is the general case so you really can store what
+        ever values you want to in this and watch for external updates, this would be used when its not a local varible for example if you are
+        watching the number of online players.
+    global - WIP this will store all of its data in an external source indepentent of the lua code, this means that you can store data between
+        maps and even instances, when the value is updated it will trigger an emit where some external code should send a message to the other
+        connected instances to update they value. lcoal set -> emit update -> local setter -> remote set -> remote setter
+
+>>>> Force mining speed example:
+    For this will print a message when the force mining speed has been updated, we will use the force type since each force will have its own
+    mining speed and our getter will just return the current minning speed of the force.
+
+    Store.register('force.mining_speed','force',function(force)
+        return force.manual_mining_speed_modifier
+    end,function(force,value)
+        force.manual_mining_speed_modifier = value
+        game.print(force.name..' how has '..value..' mining speed')
+    end)
+
+    Note that because we used type force the getter and setter are passed the force which the current check/update effects; if we used player or surface
+    the same would be true. However for local, game and global they are passed the sub_location string which allows you to store multiple things in the same
+    location; however one limitation is that a sub_location is required even if you only plan to store one value.
+
+    Store.set('force.mining_speed','player',2)
+    game.forces.player.manual_mining_speed_modifier = 2
+
+    The two cases above will have the effect of both setting the minning speed and outputing the update message. This can be quite useful when you start to
+    indroduce custom settings or do more than just output that the value was updated.
+
+    Store.get('force.mining_speed','player')
+
+    In a similar way get can be used to get the current value that is stored, if no value is stored then the getter function is called to get the value, this
+    function is more useful when you have custom settings since they would be no other way to access them.
+
+>>>> Functions:
+    Store.register(location,store_type,getter,setter,no_error) --- Register a new location to store a value, the valu returned from getter will be watched for updates
+    Store.set(location,sub_location,value) --- Sets the stored values at the location, will call the setter function
+    Store.get(location,sub_location) --- Gets the value at the location, if the value is nil then the getter function is called
+    Store.check(location,sub_location) --- Checks if the store value needs updating, and if true will update it calling the setter function
+]]
+
+
 local Global = require 'utils.global'
 local Event = require 'utils.event'
 local Game = require 'utils.game'
