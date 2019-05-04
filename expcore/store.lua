@@ -43,6 +43,10 @@ function Store.register_location(location,store_type,update_callback)
 end
 
 --- Sets a new value for a location, will trigger the update callback
+-- @tparam location string the location to set the data at, must be registed
+-- @tparam[opt] sub_location string a second location value that can be a player's name force name etc
+-- @tparam value any the value to be stored, passed via sublocation if sub_location is not required
+-- @tparam[opt] ... any any more values that you want to pass to the update callback
 function Store.set_location(location,sub_location,value,...)
     if not Store.locations[location] then
         return error('Invalid store location: '..location,2)
@@ -57,9 +61,13 @@ function Store.set_location(location,sub_location,value,...)
 end
 
 --- Gets the value for a location
-function Store.get_location(location,sub_location)
+-- @tparam location string the location to set the data at, must be registed
+-- @tparam[opt] sub_location string a second location value that can be a player's name force name etc
+-- @tparam[opt=false] allow_invalid_location boolean when true will not error when location is invalid
+-- @treturn any the value found at that location
+function Store.get_location(location,sub_location,allow_invalid_location)
     if not Store.locations[location] then
-        return error('Invalid store location: '..location,2)
+        return not allow_invalid_location and error('Invalid store location: '..location,2) or nil
     end
     location = Store.locations[location]
     if location.type == Store.types.game then
