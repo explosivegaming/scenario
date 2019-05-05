@@ -7,12 +7,34 @@
     Public.type_check_error(value,test_type,error_message,level) --- Raises an error if the value is of the incorrect type
     Public.param_check(value,test_type,param_name,param_number) --- Raises an error when the value is the incorrect type, uses a consistent error message format
 
-    Public.extract_keys(tbl,...) --- Extracts certain keys from a table
-
     Public.player_return(value,colour,player) --- Will return a value of any type to the player/server console, allows colour for in-game players
+    Public.write_json(path,tbl) --- Writes a table object to a file in json format
 
     Public.opt_require(path) --- Calls a require that will not error if the file is not found
     Public.ext_require(path,...) --- Calls a require and returns only the keys given, file must return a table
+
+    Public.format_time(ticks,options) --- Formats tick into a clean format, denominations from highest to lowest
+
+    Public.move_items(items,surface,position,radius,chest_type) --- Moves items to the position and stores them in the closest entity of the type given
+
+    Public.print_grid_value(value, surface, position, scale, offset, immutable) --- Prints a colored value on a location.
+    Public.print_colored_grid_value(value, surface, position, offset, immutable,
+        color_value, base_color, delta_color, under_bound, over_bound) --- Prints a colored value on a location. with extra settings.
+    Public.clear_flying_text(surface) --- Clears all flying text entites on a surface
+
+    Public.string_contains(s, contains) --- Tests if a string contains a given substring.
+
+    Public.extract_keys(tbl,...) --- Extracts certain keys from a table
+    Public.enum(tbl) --- Converts a table to an enum
+    Public.auto_complete(options,input,use_key,rtn_key) --- Returns the closest match to the input
+    Public.table_keys(tbl) --- Returns all the keys of a table
+    Public.table_values(tbl) --- Returns all the values of a table
+    Public.table_alphanumsort(tbl) --- Returns the list is a sorted way that would be expected by people (this is by key)
+    Public.table_keysort(tbl) --- Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
+
+    Public.format_chat_colour(message,color) --- Returns a message with valid chat tags to change its colour
+    Public.format_chat_colour_localized(message,color) --- Returns a message with valid chat tags to change its colour, using localization
+    Public.format_chat_player_name(player,raw_string) --- Returns the players name in the players color
 ]]
 
 local Colours = require 'resources.color_presets'
@@ -61,19 +83,6 @@ function Public.param_check(value,test_type,param_name,param_number)
     return true
 end
 
---- Extracts certain keys from a table
--- @usage local key_three, key_one = extract({key_one='foo',key_two='bar',key_three=true},'key_three','key_one')
--- @tparam tbl table the table which contains the keys
--- @tparam ... string the names of the keys you want extracted
--- @return the keys in the order given
-function Public.extract_keys(tbl,...)
-    local values = {}
-    for _,key in pairs({...}) do
-        table.insert(values,tbl[key])
-    end
-    return unpack(values)
-end
-
 --- Will return a value of any type to the player/server console, allows colour for in-game players
 -- @usage player_return('Hello, World!') -- returns 'Hello, World!' to game.player or server console
 -- @usage player_return('Hello, World!','green') -- returns 'Hello, World!' to game.player with colour green or server console
@@ -86,8 +95,8 @@ function Public.player_return(value,colour,player)
     player = player or game.player
     -- converts the value to a string
     local returnAsString
-    if Public.type_check(value,'table') then
-        if Public.type_check(value.__self,'userdata') then
+    if Public.type_check(value,'table') or type(value) == 'userdata' then
+        if Public.type_check(value.__self,'userdata') or type(value) == 'userdata' then
             -- value is userdata
             returnAsString = 'Cant Display Userdata'
         elseif Public.type_check(value[1],'string') and string.find(value[1],'.+[.].+') and not string.find(value[1],'%s') then
@@ -113,6 +122,13 @@ function Public.player_return(value,colour,player)
         player.play_sound{path='utility/scenario_message'}
         player.print(returnAsString,colour)
     else rcon.print(returnAsString) end
+end
+
+--- Writes a table object to a file in json format
+-- @tparam path string the path of the file to write include / to use dir
+-- @tpatam tbl table the table that will be converted to a json string and wrote to file
+function Public.write_json(path,tbl)
+    game.write_file(path,game.table_to_json(tbl)..'\n',true,0)
 end
 
 --- Calls a require that will not error if the file is not found
@@ -413,6 +429,8 @@ function Public.print_colored_grid_value(value, surface, position, offset, immut
     }.active = false
 end
 
+--- Clears all flying text entites on a surface
+-- @tparam surface LuaSurface the surface to clear
 function Public.clear_flying_text(surface)
     local entities = surface.find_entities_filtered{name ='flying-text'}
     for _,entity in pairs(entities) do
@@ -430,7 +448,41 @@ function Public.string_contains(s, contains)
     return s and string.find(s, contains) ~= nil
 end
 
---- Returns the closest match to a key
+--- Extracts certain keys from a table
+-- @usage local key_three, key_one = extract({key_one='foo',key_two='bar',key_three=true},'key_three','key_one')
+-- @tparam tbl table the table which contains the keys
+-- @tparam ... string the names of the keys you want extracted
+-- @return the keys in the order given
+function Public.extract_keys(tbl,...)
+    local values = {}
+    for _,key in pairs({...}) do
+        table.insert(values,tbl[key])
+    end
+    return unpack(values)
+end
+
+--- Converts a table to an enum
+-- @tparam tbl table the table that will be converted
+-- @treturn table the new table that acts like an enum
+function Public.enum(tbl)
+    local rtn = {}
+    for k,v in pairs(tbl) do
+        if type(k) ~= 'number' then
+            rtn[v]=k
+        end
+    end
+    for k,v in pairs(tbl) do
+        if type(k) == 'number' then
+            table.insert(rtn,v)
+        end
+    end
+    for k,v in pairs(rtn) do
+        rtn[v]=k
+    end
+    return rtn
+end
+
+--- Returns the closest match to the input
 -- @tparam options table a table of options for the auto complete
 -- @tparam input string the input string that will be completed
 -- @tparam[opt=false] use_key boolean when true the keys of options will be used as the options

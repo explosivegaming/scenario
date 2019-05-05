@@ -160,6 +160,7 @@ local Global = require 'utils.global'
 local Event = require 'utils.event'
 local Groups = require 'expcore.permission_groups'
 local Colours = require 'resources.color_presets'
+local write_json = ext_require('expcore.common','write_json')
 
 local Roles = {
     config={
@@ -223,12 +224,12 @@ local function emit_player_roles_updated(player,type,roles,by_player_name,skip_g
         by_player_index=by_player_index,
         roles=roles
     })
-    game.write_file('log/roles.log',game.table_to_json{
+    write_json('log/roles.log',{
         player_name=player.name,
         by_player_name=by_player_name,
         type=type,
         roles_changed=role_names
-    }..'\n',true,0)
+    })
 end
 
 --- Returns a string which contains all roles in index order displaying all data for them

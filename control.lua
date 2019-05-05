@@ -30,7 +30,7 @@ local errors = {}
 for index,path in pairs(files) do
 
     -- Loads the next file in the list
-    log(string.format('[INFO] Loading files %3d/%s',index,total_file_count))
+    log(string.format('[INFO] Loading files %3d/%s (%s)',index,total_file_count,path))
     local success,file = pcall(require,path)
 
     -- Error Checking

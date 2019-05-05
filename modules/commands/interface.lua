@@ -9,7 +9,8 @@ local interface_modules = {
     ['Commands']=Commands,
     ['output']=Common.player_return,
     ['Group']='expcore.permission_groups',
-    ['Roles']='expcore.roles'
+    ['Roles']='expcore.roles',
+    ['Store']='expcore.store'
 }
 
 -- loads all the modules given in the above table
