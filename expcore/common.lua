@@ -8,6 +8,7 @@
     Public.param_check(value,test_type,param_name,param_number) --- Raises an error when the value is the incorrect type, uses a consistent error message format
 
     Public.player_return(value,colour,player) --- Will return a value of any type to the player/server console, allows colour for in-game players
+    Public.write_json(path,tbl) --- Writes a table object to a file in json format
 
     Public.opt_require(path) --- Calls a require that will not error if the file is not found
     Public.ext_require(path,...) --- Calls a require and returns only the keys given, file must return a table
@@ -94,8 +95,8 @@ function Public.player_return(value,colour,player)
     player = player or game.player
     -- converts the value to a string
     local returnAsString
-    if Public.type_check(value,'table') then
-        if Public.type_check(value.__self,'userdata') then
+    if Public.type_check(value,'table') or type(value) == 'userdata' then
+        if Public.type_check(value.__self,'userdata') or type(value) == 'userdata' then
             -- value is userdata
             returnAsString = 'Cant Display Userdata'
         elseif Public.type_check(value[1],'string') and string.find(value[1],'.+[.].+') and not string.find(value[1],'%s') then
@@ -474,6 +475,9 @@ function Public.enum(tbl)
         if type(k) == 'number' then
             table.insert(rtn,v)
         end
+    end
+    for k,v in pairs(rtn) do
+        rtn[v]=k
     end
     return rtn
 end

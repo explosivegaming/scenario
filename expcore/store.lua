@@ -50,10 +50,21 @@
     In a similar way get can be used to get the current value that is stored, if no value is stored then the getter function is called to get the value, this
     function is more useful when you have custom settings since they would be no other way to access them.
 
+>>>> Optimise the watching
+    When you use player,force or surface you will be checking alot of values for updates for this reason you might want to limit which sub_locations are checked
+    for updates because by default every player/force/surface is checked. You might also want to do this if you want a sub_location that is nil but still want to
+    check for it being updated (because by deafult it only checks non nil sub_locations). To do both these things you will use Store.watch
+
+    Store.watch('force.mining_speed','player')
+    For our force example we dont care about the enemy or neutral force only the player force, so we tell it to watch player and these means that the values for
+    the other forces are not be watched for updates (although Store.get and Store.set will still work). Store.watch will also accept a table of sub_locations in
+    case you want more than one thing to be watch.
+
 >>>> Functions:
     Store.register(location,store_type,getter,setter,no_error) --- Register a new location to store a value, the valu returned from getter will be watched for updates
     Store.set(location,sub_location,value) --- Sets the stored values at the location, will call the setter function
     Store.get(location,sub_location) --- Gets the value at the location, if the value is nil then the getter function is called
+    Store.watch(location,sub_location,state) --- If used then only sub_locations marked to be watched will be watched for updates, this will also midigate the nil value problem
     Store.check(location,sub_location) --- Checks if the store value needs updating, and if true will update it calling the setter function
 ]]
 
@@ -61,10 +72,11 @@
 local Global = require 'utils.global'
 local Event = require 'utils.event'
 local Game = require 'utils.game'
-local Enum,write_json = ext_require('expcore.common','enum','write_json')
+local Enum,write_json,table_keys = ext_require('expcore.common','enum','write_json','table_keys')
 
 local Store = {
     data={},
+    watching={},
     locations={},
     types = Enum{
         'local', -- data is not stored with any sub_location, updates caused only by set
@@ -75,8 +87,9 @@ local Store = {
         'global' -- data is stored externaly with any sub_location, updates casued by watch, set and the external source
     }
 }
-Global.register(Store.data,function(tbl)
-    Store.data = table
+Global.register({Store.data,Store.watching},function(tbl)
+    Store.data = tbl[1]
+    Store.watching = tbl[2]
 end)
 
 --- Returns a factorio object for the sub_location
@@ -94,6 +107,14 @@ local function get_sub_location_object(store_type,sub_location)
         if not sub_location then return error('Invalid surface for sub_location',3) end
         return sub_location
     end
+end
+
+--- Returns three common parts that are used
+local function get_location_parts(location,sub_location)
+    location = Store.locations[location]
+    local sub_location_object = get_sub_location_object(location.store_type,sub_location)
+    sub_location = sub_location_object and sub_location_object.name or sub_location
+    return location, sub_location, sub_location_object
 end
 
 --- Emits an event to the external store that a value was updated
@@ -132,8 +153,7 @@ function Store.set(location,sub_location,value)
     if not Store.locations[location] then
         return error('The location is not registed: '..location)
     end
-    location = Store.locations[location]
-    local sub_location_object = get_sub_location_object(location.store_type,sub_location)
+    local location, sub_location, sub_location_object = get_location_parts(location,sub_location)
     if location.store_type ~= Store.types['local'] then
         if not Store.data[location.location] then Store.data[location.location] = {} end
         Store.data[location.location][sub_location] = value
@@ -142,6 +162,7 @@ function Store.set(location,sub_location,value)
         set_global_location_value(location.location,value)
     end
     location.setter(sub_location_object or sub_location,value)
+    return true
 end
 
 --- Gets the value at the location, if the value is nil then the getter function is called
@@ -150,11 +171,31 @@ end
 -- @treturn any the value that was at this location
 function Store.get(location,sub_location)
     if not Store.locations[location] then return end
-    location = Store.locations[location]
-    local sub_location_object = get_sub_location_object(location.store_type,sub_location)
+    local location, sub_location, sub_location_object = get_location_parts(location,sub_location)
     local rtn = Store.data[location.location][sub_location]
-    if rtn == nil then rtn = location.getter(sub_location_object or sub_location) end
+    if rtn == nil or Store.watching[location.location] and not Store.watching[location.location][sub_location] then
+        rtn = location.getter(sub_location_object or sub_location)
+    end
     return rtn
+end
+
+--- If used then only sub_locations marked to be watched will be watched for updates, this will also midigate the nil value problem
+-- @tparam location string the location to be returned, must be registed
+-- @tparam sub_location string sub_location to watch, either string,player,force or surface depending on store type, can be a table of sub_locations
+-- @tparam[opt=true] state boolean when true it will be marked to be watched, when false it will be removed
+function Store.watch(location,sub_location,state)
+    if not Store.locations[location] then
+        return error('The location is not registed: '..location)
+    end
+    if type(sub_location) ~= 'table' or type(sub_location.__self) == 'userdata' then
+        sub_location = {sub_location}
+    end
+    for _,v in pairs(sub_location) do
+        if not Store.watching[location] then Store.watching[location] = {} end
+        if state == false then Store.watching[location][v] = nil
+        else Store.watching[location][v] = true end
+    end
+    if #table_keys(Store.watching[location]) == 0 then Store.watching[location] = nil end
 end
 
 --- Checks if the store value needs updating, and if true will update it calling the setter function
@@ -165,6 +206,7 @@ function Store.check(location,sub_location)
     if not Store.locations[location] then return false end
     location = Store.locations[location]
     local sub_location_object = get_sub_location_object(location.store_type,sub_location)
+    sub_location = sub_location_object and sub_location_object.name or sub_location
     local store,getter = Store.data[location.location][sub_location],location.getter(sub_location_object or sub_location)
     if store ~= getter then
         if not Store.data[location.location] then Store.data[location.location] = {} end
@@ -177,11 +219,36 @@ end
 
 --- Checks once per second for changes to the store values
 Event.on_nth_tick(60,function()
+    local types = {}
     for _,location in pairs(Store.locations) do
         if location.store_type ~= Store.types['local'] then
-            if not Store.data[location.location] then Store.data[location.location] = {} end
-            for sub_location,_ in pairs(Store.data[location.location]) do
-                Store.check(location,sub_location)
+            if not types[location.store_type] then types[location.store_type] = {} end
+            table.insert(types[location.store_type],location)
+        end
+    end
+    for store_type,locations in pairs(types) do
+        local keys
+        if store_type == Store.types.player then keys = game.players
+        elseif store_type == Store.types.force then keys = game.forces
+        elseif store_type == Store.types.surface then keys = game.surfaces
+        end
+        if keys then
+            for _,sub_location in pairs(keys) do
+                for _,location in pairs(locations) do
+                    if not Store.watching[location.location] or Store.watching[location.location][sub_location.name] then
+                        if not Store.data[location.location] then Store.data[location.location] = {} end
+                        Store.check(location.location,sub_location)
+                    end
+                end
+            end
+        else
+            for _,location in pairs(locations) do
+                if not Store.data[location.location] then Store.data[location.location] = {} end
+                if Store.watching[location.location] then keys = Store.watching[location.location]
+                else keys = table_keys(Store.data[location.location]) end
+                for _,sub_location in pairs(keys) do
+                    Store.check(location.location,sub_location)
+                end
             end
         end
     end
