@@ -123,6 +123,13 @@ function Public.player_return(value,colour,player)
     else rcon.print(returnAsString) end
 end
 
+--- Writes a table object to a file in json format
+-- @tparam path string the path of the file to write include / to use dir
+-- @tpatam tbl table the table that will be converted to a json string and wrote to file
+function Public.write_json(path,tbl)
+    game.write_file(path,game.table_to_json(tbl)..'\n',true,0)
+end
+
 --- Calls a require that will not error if the file is not found
 -- @usage local file = opt_require('file.not.present') -- will not cause any error
 -- @tparam path string the path that you want to require

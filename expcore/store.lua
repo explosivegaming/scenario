@@ -20,7 +20,7 @@
     game - this will store all a single value so any sub_location string can be used, this is the general case so you really can store what
         ever values you want to in this and watch for external updates, this would be used when its not a local varible for example if you are
         watching the number of online players.
-    global - WIP this will store all of its data in an external source indepentent of the lua code, this means that you can store data between
+    global - this will store all of its data in an external source indepentent of the lua code, this means that you can store data between
         maps and even instances, when the value is updated it will trigger an emit where some external code should send a message to the other
         connected instances to update they value. lcoal set -> emit update -> local setter -> remote set -> remote setter
 
@@ -61,7 +61,7 @@
 local Global = require 'utils.global'
 local Event = require 'utils.event'
 local Game = require 'utils.game'
-local Enum = ext_require('expcore.common','enum')
+local Enum,write_json = ext_require('expcore.common','enum','write_json')
 
 local Store = {
     data={},
@@ -98,7 +98,11 @@ end
 
 --- Emits an event to the external store that a value was updated
 local function set_global_location_value(location,sub_location,value)
-    -- not yet impimented, this will emit to a file in some way to set the value in an external database
+    write_json('log/store.log',{
+        location=location,
+        sub_location=sub_location,
+        value=value
+    })
 end
 
 --- Register a new location to store a value, the valu returned from getter will be watched for updates

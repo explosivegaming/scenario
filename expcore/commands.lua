@@ -218,7 +218,7 @@
 ]]
 
 local Game = require 'utils.game'
-local player_return = ext_require('expcore.common','player_return')
+local player_return,write_json = ext_require('expcore.common','player_return','write_json')
 
 local Commands = {
     defines={ -- common values are stored error like signals
@@ -580,14 +580,14 @@ end
 -- logs command usage to file
 local function command_log(player,command,comment,params,raw,details)
     local player_name = player and player.name or '<Server>'
-    game.write_file('log/commands.log',game.table_to_json{
+    write_json('log/commands.log',{
         player_name=player_name,
         command_name=command.name,
         comment=comment,
         details=details,
         params=params,
         raw=raw
-    }..'\n',true,0)
+    })
 end
 
 --- Main event function that is ran for all commands, used internally please avoid direct use
