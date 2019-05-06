@@ -1,257 +1,264 @@
---- This module is for storing and watching values for updates, useful for config settings or limiting what can be changed
+--- Adds an easy way to store and watch for updates to a value
 --[[
->>>> When to use this system
-    This system is to be used when you want to store a value and watch when it is changed or watch any value for changes.
-    Examples would include runtime config settings where something needs to change when the value is updated or when you have
-    values entered in a gui and you want them to be persistent between players like a force modifer gui
+>>>> Basic Use
+    At the most basic level this allows for the naming of locations to store in the global table, the second feature is that you are
+    able to listen for updates of this value, which means that when ever the set function is called it will trigger the update callback.
 
->>>> What store type to use
-    There are different types of store that can be used each is designed to be used in a certain situation:
-    local - this store type doesnt actually store any data and it has its use in only triggering the setter function when you use
-        the set function rather than watching for updates, this might be used as an interface between modules where when you change the
-        local varible you dont want it to trigger but when an outside source uses set it will trigger the setter.
-    player - this will use the sub_location as a player so each player will have they own entry in the store location, this can be used
-        with player modifiers where even if set is not used the update will still be detected.
-    force - this will use the sub_location as a force so each force will have its own entry in the store location, this can be used to store
-        custom settings for a force where if a player uses a gui to edit the setting it will detect the update and call the setter where you
-        can update the value on the gui for other players.
-    surface - this will use the sub_location as a surface so each surface will have its own entry in the store location, this will have the
-        same use case as force but for a surface rather than a force.
-    game - this will store all a single value so any sub_location string can be used, this is the general case so you really can store what
-        ever values you want to in this and watch for external updates, this would be used when its not a local varible for example if you are
-        watching the number of online players.
-    global - this will store all of its data in an external source indepentent of the lua code, this means that you can store data between
-        maps and even instances, when the value is updated it will trigger an emit where some external code should send a message to the other
-        connected instances to update they value. lcoal set -> emit update -> local setter -> remote set -> remote setter
+    This may be useful when storing config values and when they get set you want to make sure it is taken care of, or maybe you want
+    to have a value that you can trigger an update of from different places.
 
->>>> Force mining speed example:
-    For this will print a message when the force mining speed has been updated, we will use the force type since each force will have its own
-    mining speed and our getter will just return the current minning speed of the force.
+    -- this will register a new location called 'scenario.dificutly' and the start value is 'normal'
+    -- note that setting a start value is optional and we could take nil to mean normal
+    Store.register('scenario.dificutly',function(value)
+        game.print('The scenario dificulty has be set to: '..value)
+    end,'normal')
 
-    Store.register('force.mining_speed','force',function(force)
-        return force.manual_mining_speed_modifier
-    end,function(force,value)
-        force.manual_mining_speed_modifier = value
-        game.print(force.name..' how has '..value..' mining speed')
+    -- this will return 'normal' as we have not set the value anywhere else
+    Store.get('scenario.dificutly')
+
+    -- this will set the value in the store to 'hard' and will trigger the update callback which will print a message to the game
+    Store.set('scenario.dificutly','hard')
+
+>>>> Using Children
+    One limitation of store is that all lcoations must be registered to avoid desyncs, to get round this issue "children" can be used.
+    When you set the value of a child it does not have its own update callback so rather the "partent" location which has been registerd
+    will have its update value called with a second param of the name of that child.
+
+    This may be useful when you want a value of each player or force and since you cant regisier every player at the start you must use
+    the players name as the child name.
+
+    -- this will register the lcoation 'scenario.score' where we plan to use force names as the child
+    -- here we have not set a start value since it will be an empty location
+    Store.register('scenario.score',function(value,child)
+        game.print(child..' now has a score of '..value)
     end)
 
-    Note that because we used type force the getter and setter are passed the force which the current check/update effects; if we used player or surface
-    the same would be true. However for local, game and global they are passed the sub_location string which allows you to store multiple things in the same
-    location; however one limitation is that a sub_location is required even if you only plan to store one value.
+    -- this will return nil, but will not error as children dont need to be registerd
+    Store.get_child('scenario.score','player')
 
-    Store.set('force.mining_speed','player',2)
-    game.forces.player.manual_mining_speed_modifier = 2
+    -- this will set 'player' to have a value of 10 for 'scenario.score' and trigger the game message print
+    Store.set_child('scenario.score','player',10)
 
-    The two cases above will have the effect of both setting the minning speed and outputing the update message. This can be quite useful when you start to
-    indroduce custom settings or do more than just output that the value was updated.
+    -- this would be the same as Store.get however this will return an empty table rather than nil
+    Store.get_children('scenario.score')
 
-    Store.get('force.mining_speed','player')
+>>>> Using Sync
+    There is the option to use Store.register_synced which is the same as Store.register however you can combine this with an external script
+    which can read the output from 'script-output/log/store.log' and have it send rcon commands back to the game allowing for cross instance
+    syncing of values.
 
-    In a similar way get can be used to get the current value that is stored, if no value is stored then the getter function is called to get the value, this
-    function is more useful when you have custom settings since they would be no other way to access them.
+    This may be useful when you want to have a value change effect multiple instances or even if you just want a database to store values so
+    you can sync data between map resets.
 
->>>> Optimise the watching
-    When you use player,force or surface you will be checking alot of values for updates for this reason you might want to limit which sub_locations are checked
-    for updates because by default every player/force/surface is checked. You might also want to do this if you want a sub_location that is nil but still want to
-    check for it being updated (because by deafult it only checks non nil sub_locations). To do both these things you will use Store.watch
+    -- this example will register the location 'stastics.total-play-time' where we plan to use plan names as the child
+    -- note that the location must be the same across instances
+    Store.register_synced('stastics.total-play-time',function(value,child)
+        game.print(child..' now has now played for '..value)
+    end)
 
-    Store.watch('force.mining_speed','player')
-    For our force example we dont care about the enemy or neutral force only the player force, so we tell it to watch player and these means that the values for
-    the other forces are not be watched for updates (although Store.get and Store.set will still work). Store.watch will also accept a table of sub_locations in
-    case you want more than one thing to be watch.
+    -- use of set,get,set_child and get_chlid are all the same as non synced
 
->>>> Functions:
-    Store.register(location,store_type,getter,setter,no_error) --- Register a new location to store a value, the valu returned from getter will be watched for updates
-    Store.set(location,sub_location,value) --- Sets the stored values at the location, will call the setter function
-    Store.get(location,sub_location) --- Gets the value at the location, if the value is nil then the getter function is called
-    Store.watch(location,sub_location,state) --- If used then only sub_locations marked to be watched will be watched for updates, this will also midigate the nil value problem
-    Store.check(location,sub_location) --- Checks if the store value needs updating, and if true will update it calling the setter function
+>>>> Using a watch function
+    Some times the value that you want is not some made up value that you have but rather a factorio value or something similar, in order to recive
+    updates on these values (if the factorio api does not provide an event for it) you will need to add a watch function to update the store when the
+    values changes. You will want to keep these watch functions small since they run every tick.
+
+    -- this will register a location 'game.speed', note that the lcoation can be anything but we chose 'game.speed' to match what we are watching
+    -- also note that we do not need a start value here since it will be set on the first tick, but you may want a start value to avoid a trigger of the callback
+    Store.register('game.speed',function(value)
+        game.print('The game speed has been set to: '..value)
+    end)
+
+    -- this will add the watch function to the lcoation, every tick the function is ran and the value returned in compeared to the stored value
+    -- if the two values are different then the store is overriden and the update function is called
+    Store.add_watch('game.speed',function()
+        return game.speed
+    end)
 ]]
 
-
-local Global = require 'utils.global'
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local Enum,write_json,table_keys = ext_require('expcore.common','enum','write_json','table_keys')
+local Global = require 'util.global'
+local Event = require 'util.event'
+local write_json,table_keys = ext_require('expcore.common','write_json','table_keys')
 
 local Store = {
     data={},
-    watching={},
-    locations={},
-    types = Enum{
-        'local', -- data is not stored with any sub_location, updates caused only by set
-        'player', -- data is stroed per player, updates caused by watch and set
-        'force', -- data is stroed per force, updates caused by watch and set
-        'surface', -- data is stroed per surface, updates caused by watch and set
-        'game', -- data is stored with any sub_location, updates caused by watch and set
-        'global' -- data is stored externaly with any sub_location, updates casued by watch, set and the external source
-    }
+    callbacks={},
+    synced={},
+    watchers={}
 }
-Global.register({Store.data,Store.watching},function(tbl)
-    Store.data = tbl[1]
-    Store.watching = tbl[2]
+Global.register(Store.data,function(tbl)
+    Store.data = tbl
 end)
 
---- Returns a factorio object for the sub_location
-local function get_sub_location_object(store_type,sub_location)
-    if store_type == Store.types.player then
-        sub_location = Game.get_player_from_any(sub_location)
-        if not sub_location then return error('Invalid player for sub_location',3) end
-        return sub_location
-    elseif store_type == Store.types.force then
-        sub_location = type(sub_location) == 'table' and type(sub_location.__self) == 'userdata' and sub_location or game.forces[sub_location]
-        if not sub_location then return error('Invalid force for sub_location',3) end
-        return sub_location
-    elseif store_type == Store.types.surface then
-        sub_location = type(sub_location) == 'table' and type(sub_location.__self) == 'userdata' and sub_location or game.surfaces[sub_location]
-        if not sub_location then return error('Invalid surface for sub_location',3) end
-        return sub_location
+--- Registers a new location with an update callback which is triggered when the value updates
+-- @tparam location string a unique string that points to the data, string used rather than token to allow migration
+-- @tparam callback function this callback will be called when the stored value is set to a new value
+-- @tparam[opt] start_value any this value will be the inital value that is stored at this location
+function Store.register(location,callback,start_value)
+    if _LIFECYCLE ~= _STAGE.control then
+        return error('Can only be called during the control stage', 2)
+    end
+
+    if Store.callbacks[location] then
+        return error('Location is already registered', 2)
+    end
+
+    if type(callback) ~= 'function' then
+        return error('Callback must be a function', 2)
+    end
+
+    Store.data[location] = start_value
+    Store.callbacks[location] = callback
+end
+
+--- Registers a new cross server synced location with an update callback, and external script is required for cross server
+-- @tparam location string a unique string that points to the data, string used rather than token to allow migration
+-- @tparam callback function this callback will be called when the stored value is set to a new value
+-- @tparam[opt] start_value any this value will be the inital value that is stored at this location
+function Store.register_synced(location,callback,start_value)
+    if _LIFECYCLE ~= _STAGE.control then
+        return error('Can only be called during the control stage', 2)
+    end
+
+    if Store.callbacks[location] then
+        return error('Location is already registered', 2)
+    end
+
+    if type(callback) ~= 'function' then
+        return error('Callback must be a function', 2)
+    end
+
+    Store.data[location] = start_value
+    Store.callbacks[location] = callback
+    Store.synced[location] = true
+end
+
+--- Adds a function that will be checked every tick for a change in the returned value, when the value changes it will be saved in the store
+-- @tparam location string the location where the data will be saved and compeared to, must already be a registered location
+-- @tparam callback function this function will be called every tick to check for a change in value
+function Store.add_watch(location,callback)
+    if _LIFECYCLE ~= _STAGE.control then
+        return error('Can only be called during the control stage', 2)
+    end
+
+    if Store.callbacks[location] then
+        return error('Location is already being watched', 2)
+    end
+
+    if type(callback) ~= 'function' then
+        return error('Callback must be a function', 2)
+    end
+
+    Store.watchers[location] = callback
+end
+
+--- Gets the value stored at a location, this location must be registered
+-- @tparam location string the location to get the data from
+-- @tparam[opt=false] no_error boolean when true no error is returned if the location is not registered
+-- @treturn any the data which was stored at the location
+function Store.get(location,no_error)
+    if not Store.callbacks[location] and not no_error then
+        return error('Location is not registered', 2)
+    end
+
+    return Store.data[location]
+end
+
+--- Sets the value at a location, this location must be registered, if server synced it will emit the change to file
+-- @tparam location string the location to set the data to
+-- @tparam value any the new value to set at the location, value may be reverted if there is a watch callback
+function Store.set(location,value)
+    if not Store.callbacks[location] and not no_error then
+        return error('Location is not registered', 2)
+    end
+
+    Store.data[location] = value
+    Store.callbacks[location](value)
+
+    if Store.synced[location] then
+        write_json('log/store.log',{
+            location=location,
+            value=value
+        })
     end
 end
 
---- Returns three common parts that are used
-local function get_location_parts(location,sub_location)
-    location = Store.locations[location]
-    local sub_location_object = get_sub_location_object(location.store_type,sub_location)
-    sub_location = sub_location_object and sub_location_object.name or sub_location
-    return location, sub_location, sub_location_object
+--- Gets all non nil children at a location, children can be added and removed during runtime
+-- this is similar to Store.get but will always return a table even if it is empty
+-- @tparam location string the location to get the children of
+-- @treturn table a table containg all the children and they values
+function Store.get_children(location)
+    local store = Store.get(location)
+
+    if type(store) ~= 'table' and table ~= nil then
+        return error('Location has a non table value', 2)
+    end
+
+    return store or {}
 end
 
---- Emits an event to the external store that a value was updated
-local function set_global_location_value(location,sub_location,value)
-    write_json('log/store.log',{
-        location=location,
-        sub_location=sub_location,
-        value=value
-    })
+--- Gets the value of the child to a location, children can be added and removed during runtime
+-- @tparam location string the location of which the child is located
+-- @tparam child string the child element to get the value of
+-- @treturn any the value which was stored at that location
+function Store.get_child(location,child)
+    local store = Store.get(location)
+
+    if type(store) ~= 'table' and table ~= nil then
+        return error('Location has a non table value', 2)
+    end
+
+    return store[child]
 end
 
---- Register a new location to store a value, the valu returned from getter will be watched for updates
--- @tparam location string the location path for the data must be unqiue
--- @tparam store_type string the type of store this is, see Store.types
--- @tparam getter function will be called to get the value for the store, the value is watched for updates
--- @tparam setter function when the store value changes the setter will be called
--- @tparam[opt=false] no_error boolean when true will skip check for location already registered
-function Store.register(location,store_type,getter,setter,no_error)
-    if not no_error and Store.locations[location] then
-        return error('The location is already registed: '..location,2)
+--- Sets the value of the chlid to a location, children can be added and removed during runtime
+-- when a child is set it will call the update handler of the parent allowing children be to added at runtime
+-- this may be used when a player joins the game and the child is the players name
+-- @tparam location string the location of which the child is located
+-- @tparam child string the child element to set the value of
+-- @tparam value any the value to set at this location
+function Store.set_child(location,child,value)
+    local store = Store.get(location)
+
+    if type(store) ~= 'table' and table ~= nil then
+        return error('Location has a non table value', 2)
     end
-    store_type = type(store_type) == 'string' and Store.types[store_type] or store_type
-    Store.locations[location] = {
-        location=location,
-        store_type=store_type,
-        getter=getter,
-        setter=setter
-    }
+
+    if not store then
+        Store.data[location] = {}
+    end
+
+    Store.data[location][child] = value
+    Store.callbacks[location](value,child)
+
+    if Store.synced[location] then
+        write_json('log/store.log',{
+            location=location,
+            child=child,
+            value=value
+        })
+    end
 end
 
---- Sets the stored values at the location, will call the setter function
--- @tparam location string the location to be updated, must be registed
--- @tparam sub_location string sub_location to set, either string,player,force or surface depending on store type
--- @tparam value any the value to set at the location
-function Store.set(location,sub_location,value)
-    if not Store.locations[location] then
-        return error('The location is not registed: '..location)
-    end
-    local location, sub_location, sub_location_object = get_location_parts(location,sub_location)
-    if location.store_type ~= Store.types['local'] then
-        if not Store.data[location.location] then Store.data[location.location] = {} end
-        Store.data[location.location][sub_location] = value
-    end
-    if location.store_type == Store.types.global then
-        set_global_location_value(location.location,value)
-    end
-    location.setter(sub_location_object or sub_location,value)
-    return true
-end
+-- Event handler for the watcher callbacks
+Event.add(defines.events.on_tick,function()
+    local errors = {}
 
---- Gets the value at the location, if the value is nil then the getter function is called
--- @tparam location string the location to be returned, must be registed
--- @tparam sub_location string sub_location to get, either string,player,force or surface depending on store type
--- @treturn any the value that was at this location
-function Store.get(location,sub_location)
-    if not Store.locations[location] then return end
-    local location, sub_location, sub_location_object = get_location_parts(location,sub_location)
-    local rtn = Store.data[location.location][sub_location]
-    if rtn == nil or Store.watching[location.location] and not Store.watching[location.location][sub_location] then
-        rtn = location.getter(sub_location_object or sub_location)
-    end
-    return rtn
-end
+    for location,callback in pairs(Store.watchers) do
+        local store_old = Store.data[location]
+        local success,store_new = pcall(callback)
 
---- If used then only sub_locations marked to be watched will be watched for updates, this will also midigate the nil value problem
--- @tparam location string the location to be returned, must be registed
--- @tparam sub_location string sub_location to watch, either string,player,force or surface depending on store type, can be a table of sub_locations
--- @tparam[opt=true] state boolean when true it will be marked to be watched, when false it will be removed
-function Store.watch(location,sub_location,state)
-    if not Store.locations[location] then
-        return error('The location is not registed: '..location)
-    end
-    if type(sub_location) ~= 'table' or type(sub_location.__self) == 'userdata' then
-        sub_location = {sub_location}
-    end
-    for _,v in pairs(sub_location) do
-        if not Store.watching[location] then Store.watching[location] = {} end
-        if state == false then Store.watching[location][v] = nil
-        else Store.watching[location][v] = true end
-    end
-    if #table_keys(Store.watching[location]) == 0 then Store.watching[location] = nil end
-end
-
---- Checks if the store value needs updating, and if true will update it calling the setter function
--- @tparam location string the location to be check, must be registed
--- @tparam sub_location string sub_location to check, either string,player,force or surface depending on store type
--- @treturn boolean if the value was updated and setter function called
-function Store.check(location,sub_location)
-    if not Store.locations[location] then return false end
-    location = Store.locations[location]
-    local sub_location_object = get_sub_location_object(location.store_type,sub_location)
-    sub_location = sub_location_object and sub_location_object.name or sub_location
-    local store,getter = Store.data[location.location][sub_location],location.getter(sub_location_object or sub_location)
-    if store ~= getter then
-        if not Store.data[location.location] then Store.data[location.location] = {} end
-        Store.data[location.location][sub_location] = getter
-        location.setter(sub_location_object or sub_location,getter)
-        return true
-    end
-    return false
-end
-
---- Checks once per second for changes to the store values
-Event.on_nth_tick(60,function()
-    local types = {}
-    for _,location in pairs(Store.locations) do
-        if location.store_type ~= Store.types['local'] then
-            if not types[location.store_type] then types[location.store_type] = {} end
-            table.insert(types[location.store_type],location)
-        end
-    end
-    for store_type,locations in pairs(types) do
-        local keys
-        if store_type == Store.types.player then keys = game.players
-        elseif store_type == Store.types.force then keys = game.forces
-        elseif store_type == Store.types.surface then keys = game.surfaces
-        end
-        if keys then
-            for _,sub_location in pairs(keys) do
-                for _,location in pairs(locations) do
-                    if not Store.watching[location.location] or Store.watching[location.location][sub_location.name] then
-                        if not Store.data[location.location] then Store.data[location.location] = {} end
-                        Store.check(location.location,sub_location)
-                    end
-                end
-            end
+        if not success then
+            table.insert(errors,store_new)
         else
-            for _,location in pairs(locations) do
-                if not Store.data[location.location] then Store.data[location.location] = {} end
-                if Store.watching[location.location] then keys = Store.watching[location.location]
-                else keys = table_keys(Store.data[location.location]) end
-                for _,sub_location in pairs(keys) do
-                    Store.check(location.location,sub_location)
-                end
+            if store_old ~= store_new then
+                Store.data[location] = store_new
+                Store.callbacks[location](store_new)
             end
         end
     end
+
+    error(errors)
 end)
 
 return Store
