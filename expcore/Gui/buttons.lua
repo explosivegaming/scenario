@@ -5,7 +5,7 @@ local Gui = require './core'
 local Button = {
     config={},
     clean_names={},
-    _prototype = Gui._set_up_prototype{}
+    _prototype = Gui._extend_prototype{}
 }
 
 function Button.new_button(name)
@@ -31,15 +31,25 @@ function Button.draw_button(name,element)
             button = Button.config[button]
         end
     end
-    button:draw_to(element)
+    return button:draw_to(element)
 end
 
 function Button._prototype:draw_to(element)
     if element.children[self.name] then return end
-    local self_element = element.add(self)
+    local draw = table.deep_copy(self)
+    draw.authenticator = nil
+    draw.clean_name = nil
+    draw.raw_mouse_button_filter = nil
+    draw.key_button_filter = nil
+    draw._on_click = nil
+    draw._on_left_click = nil
+    draw._on_right_click = nil
+    draw.has_handler = nil
+    local self_element = element.add(draw)
     if self.authenticator then
         self_element.enabled = not not self.authenticator(element.player,self.clean_name or self.name)
     end
+    return self_element
 end
 
 function Button._prototype:set_sprites(sprite,hovered_sprite,clicked_sprite)
@@ -90,7 +100,7 @@ function Button._prototype:on_click(callback)
     if type(callback) ~= 'function' then
         return error('Event callback must be a function')
     end
-    self.on_click = callback
+    self._on_click = callback
     self:_add_handler()
     return self
 end
@@ -99,7 +109,7 @@ function Button._prototype:on_left_click(callback)
     if type(callback) ~= 'function' then
         return error('Event callback must be a function')
     end
-    self.on_left_click = callback
+    self._on_left_click = callback
     self:_add_handler()
     return self
 end
@@ -108,7 +118,7 @@ function Button._prototype:on_right_click(callback)
     if type(callback) ~= 'function' then
         return error('Event callback must be a function')
     end
-    self.on_right_click = callback
+    self._on_right_click = callback
     self:_add_handler()
     return self
 end
@@ -125,9 +135,9 @@ function Button._prototype:_add_handler()
             if not self.authenticator(event.player,self.clean_name or self.name) then return end
         end
 
-        if mosue_button == defines.mouse_button_type.left and self.on_left_click then
+        if mosue_button == defines.mouse_button_type.left and self._on_left_click then
             self.on_left_click(event.player,event.element,event)
-        elseif mosue_button == defines.mouse_button_type.right and self.on_right_click then
+        elseif mosue_button == defines.mouse_button_type.right and self._on_right_click then
             self.on_right_click(event.player,event.element,event)
         end
 
@@ -138,7 +148,7 @@ function Button._prototype:_add_handler()
             end
         end
 
-        self.on_click(event.player,event.element,event)
+        self._on_click(event.player,event.element,event)
     end)
 end
 

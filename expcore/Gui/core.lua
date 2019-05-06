@@ -9,16 +9,19 @@ function Gui._extend_prototype(tbl)
     for k,v in pairs(Gui._prototype) do
         if not tbl[k] then tbl[k] = v end
     end
+    return tbl
 end
 
 --- Sets the caption for the element config
 function Gui._prototype:set_caption(caption)
     self.caption = caption
+    return self
 end
 
 --- Sets the tooltip for the element config
 function Gui._prototype:set_tooltip(tooltip)
     self.tooltip = tooltip
+    return self
 end
 
 function Gui.toggle_enable(element)
