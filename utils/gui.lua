@@ -180,7 +180,7 @@ Gui.on_player_show_top = custom_handler_factory(on_visible_handlers)
 Gui.on_pre_player_hide_top = custom_handler_factory(on_pre_hidden_handlers)
 
 --- Allows the player to show / hide this element.
--- The element must be in Gui.get_top_element_flow(player).
+-- The element must be in Gui.get_top_element_flow(player)
 -- This function must be called in the control stage, i.e not inside an event.
 -- @param element_name<string> This name must be globally unique.
 function Gui.allow_player_to_toggle_top_element_visibility(element_name)
@@ -210,13 +210,14 @@ Event.add(
             return
         end
 
-        local b =
-            Gui.get_top_element_flow(player).add {
+        local top = Gui.get_top_element_flow(player)
+
+        local b = top.add {
             type = 'button',
             name = toggle_button_name,
+            style = mod_gui.button_style,
             caption = '<',
-            style=mod_gui.button_style,
-            tooltip = 'Shows / hides the Redmew Gui buttons.'
+            tooltip = {'gui_util.button_tooltip'}
         }
         local style = b.style
         style.width = 18
