@@ -5,8 +5,18 @@ local Gui = require './core'
 local Button = {
     config={},
     clean_names={},
-    _prototype = Gui._extend_prototype{}
+    _prototype=Gui._extend_prototype{}
 }
+
+local function get_config(name)
+    local config = Button.config[name]
+    if not config and Button.clean_names[name] then
+        return Button.config[Button.clean_names[name]]
+    elseif not config then
+        return error('Invalid name for checkbox, name not found.',3)
+    end
+    return config
+end
 
 function Button.new_button(name)
     local uid = Gui.uid_name()
@@ -16,21 +26,15 @@ function Button.new_button(name)
         style=mod_gui.button_style,
         type='button'
     },{__index=Button._prototype})
-    Button.clean_names[uid]=name
-    Button.clean_names[name]=uid
+    if name then
+        Button.clean_names[uid]=name
+        Button.clean_names[name]=uid
+    end
     return Button.config[uid]
 end
 
 function Button.draw_button(name,element)
-    local button = Button.config[name]
-    if not button then
-        button = Button.clean_names[name]
-        if not button then
-            return error('Button with uid: '..name..' does not exist')
-        else
-            button = Button.config[button]
-        end
-    end
+    local button = get_config(name)
     return button:draw_to(element)
 end
 
