@@ -78,7 +78,7 @@
 
 local Global = require 'util.global'
 local Event = require 'util.event'
-local write_json,table_keys = ext_require('expcore.common','write_json','table_keys')
+local write_json = ext_require('expcore.common','write_json','table_keys')
 
 local Store = {
     data={},
@@ -167,6 +167,7 @@ end
 --- Sets the value at a location, this location must be registered, if server synced it will emit the change to file
 -- @tparam location string the location to set the data to
 -- @tparam value any the new value to set at the location, value may be reverted if there is a watch callback
+-- @treturn boolean true if it was successful
 function Store.set(location,value)
     if not Store.callbacks[location] and not no_error then
         return error('Location is not registered', 2)
@@ -181,6 +182,8 @@ function Store.set(location,value)
             value=value
         })
     end
+
+    return true
 end
 
 --- Gets all non nil children at a location, children can be added and removed during runtime
@@ -217,6 +220,7 @@ end
 -- @tparam location string the location of which the child is located
 -- @tparam child string the child element to set the value of
 -- @tparam value any the value to set at this location
+-- @treturn boolean true if it was successful
 function Store.set_child(location,child,value)
     local store = Store.get(location)
 
@@ -238,6 +242,8 @@ function Store.set_child(location,child,value)
             value=value
         })
     end
+
+    return true
 end
 
 -- Event handler for the watcher callbacks

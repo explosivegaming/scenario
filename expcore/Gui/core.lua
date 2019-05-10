@@ -1,13 +1,13 @@
 local Gui = require 'utils.gui'
 
-Gui._prototype = {}
+Gui._prototype = {_draw={}}
 Gui.inputs = {}
 Gui.structure = {}
 Gui.outputs = {}
 
 function Gui._extend_prototype(tbl)
     for k,v in pairs(Gui._prototype) do
-        if not tbl[k] then tbl[k] = v end
+        if not tbl[k] then tbl[k] = table.deep_copy(v) end
     end
     return tbl
 end
@@ -22,6 +22,38 @@ end
 function Gui._prototype:set_tooltip(tooltip)
     self.tooltip = tooltip
     return self
+end
+
+--- Sets an authenticator that blocks the draw function if check fails
+function Gui._prototype:set_pre_authenticator(callback)
+    if type(callback) ~= 'function' then
+        return error('Pre authenticator callback must be a function')
+    end
+    self.pre_authenticator = callback
+    return self
+end
+
+--- Sets an authenticator that disables the element if check fails
+function Gui._prototype:set_authenticator(callback)
+    if type(callback) ~= 'function' then
+        return error('Authenicater callback must be a function')
+    end
+    self.authenticator = callback
+    return self
+end
+
+--- Draws the element using what is in the _draw table, allows use of authenticator if present
+function Gui._prototype:draw_to(element)
+    if element.children[self.name] then return end
+    if self.pre_authenticator then
+        if not self.pre_authenticator(element.player,self.clean_name or self.name) then return end
+    end
+    local _element = element.add(self._draw)
+    if self.authenticator then
+        _element.enabled = not not self.authenticator(element.player,self.clean_name or self.name)
+    end
+    if self._post_draw then self._post_draw(_element) end
+    return _element
 end
 
 function Gui.toggle_enable(element)
