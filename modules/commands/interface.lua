@@ -96,5 +96,6 @@ add_interface_callback('tile',function(player) return player.surface.get_tile(pl
 return {
     add_interface_callback=add_interface_callback,
     interface_env=interface_env,
-    interface_callbacks=interface_callbacks
+    interface_callbacks=interface_callbacks,
+    clean_stack_trace=function(str) return str:gsub('%.%.%..-/temp/currently%-playing','') end
 }

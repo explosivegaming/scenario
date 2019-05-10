@@ -44,6 +44,7 @@ Roles.new_role('Senior Administrator','SAdmin')
 :set_parent('Administrator')
 :allow{
     'command/interface',
+    'command/debug',
     'command/toggle-cheat-mode'
 }
 

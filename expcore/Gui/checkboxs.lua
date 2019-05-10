@@ -30,9 +30,10 @@ end
 
 local function get_instances(checkbox,category)
     if not Checkbox.instances[checkbox.name] then return end
-    local instances = Checkbox.instances
+    local instances = Checkbox.instances[checkbox.name]
     if checkbox.categorize then
-        instances = instances[category]
+        if not instances[category] then instances[category] = {} end
+        return instances[category]
     end
     return instances
 end
@@ -43,9 +44,12 @@ function Checkbox.new_checkbox(name)
     local self = setmetatable({
         name=uid,
         clean_name=name,
+        _draw={
+            name=uid,
+            type='checkbox',
+            state=false
+        }
     },{__index=Checkbox._prototype_checkbox})
-    self._draw.name = uid
-    self._draw.type = 'checkbox'
 
     self._post_draw = function(element)
         local category = self.categorize and self.categorize(element) or nil
@@ -53,6 +57,8 @@ function Checkbox.new_checkbox(name)
         if instances then
             table.insert(instances,element)
         end
+        local state = self:get_store_state(category)
+        if state then element.state = true end
     end
 
     Checkbox.config[uid] = self
@@ -66,7 +72,7 @@ function Checkbox.new_checkbox(name)
         local element = event.element
         if self.store then
             if self.categorize then
-                Store.set_chlid(self.store,self.categorize(element),element.state)
+                Store.set_child(self.store,self.categorize(element),element.state)
             else
                 Store.set(self.store,element.state)
             end
@@ -87,11 +93,12 @@ function Checkbox._prototype_checkbox:add_store(categorize)
     if self.store then return end
     self.store = get_store_location(self)
     self.categorize = categorize
+    Checkbox.instances[self.name]={}
     Store.register(self.store,function(value,category)
         local instances = get_instances(self,category)
         if instances then
             for k,element in pairs(instances) do
-                if element.valid then
+                if element and element.valid then
                     element.state = value
                     if self._on_state_change then
                         local player = Game.get_player_by_index(element.player_index)
@@ -109,7 +116,7 @@ end
 function Checkbox._prototype_checkbox:get_store_state(category)
     if not self.store then return end
     if self.categorize then
-        return Store.get_chlid(self.store,category)
+        return Store.get_child(self.store,category)
     else
         return Store.get(self.store)
     end
@@ -119,9 +126,9 @@ function Checkbox._prototype_checkbox:set_store_state(category,state)
     if not self.store then return end
     state = not not state
     if self.categorize then
-        return Store.set_chlid(self.store,category,state)
+        return Store.set_child(self.store,category,state)
     else
-        return Store.set(self.store,state)
+        return Store.set(self.store,category)
     end
 end
 
@@ -151,11 +158,11 @@ function Checkbox._prototype_radiobutton:add_store(categorize)
 
 end
 
-function Checkbox._prototype_radiobutton:get_store_value(category)
+function Checkbox._prototype_radiobutton:get_store_state(category)
 
 end
 
-function Checkbox._prototype_radiobutton:set_store_value(category,value)
+function Checkbox._prototype_radiobutton:set_store_state(category,value)
 
 end
 
@@ -171,12 +178,14 @@ function Checkbox._prototype_radiobutton:on_state_change(callback)
 
 end
 
-function Checkbox.get_stored_value(name,category)
-
+function Checkbox.get_stored_state(name,category)
+    local checkbox = get_config(name)
+    return checkbox:get_store_state(category)
 end
 
-function Checkbox.set_stored_value(name,category,value)
-
+function Checkbox.set_stored_state(name,category,value)
+    local checkbox = get_config(name)
+    return checkbox:set_store_state(category,value)
 end
 
 return Checkbox

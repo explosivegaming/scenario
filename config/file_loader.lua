@@ -32,6 +32,8 @@ return {
     'modules.addons.scorched-earth',
     'modules.addons.pollution-grading',
     'modules.addons.random-player-colours',
+    -- GUI
+    'modules.commands.debug',
     -- Config Files
     'config.command_auth_admin', -- commands tagged with admin_only are blocked for non admins
     'config.command_auth_roles', -- commands must be allowed via the role config

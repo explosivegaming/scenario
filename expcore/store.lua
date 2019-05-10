@@ -76,8 +76,8 @@
     end)
 ]]
 
-local Global = require 'util.global'
-local Event = require 'util.event'
+local Global = require 'utils.global'
+local Event = require 'utils.event'
 local write_json = ext_require('expcore.common','write_json','table_keys')
 
 local Store = {
@@ -169,7 +169,7 @@ end
 -- @tparam value any the new value to set at the location, value may be reverted if there is a watch callback
 -- @treturn boolean true if it was successful
 function Store.set(location,value)
-    if not Store.callbacks[location] and not no_error then
+    if not Store.callbacks[location] then
         return error('Location is not registered', 2)
     end
 
@@ -193,7 +193,7 @@ end
 function Store.get_children(location)
     local store = Store.get(location)
 
-    if type(store) ~= 'table' and table ~= nil then
+    if type(store) ~= 'table' and store ~= nil then
         return error('Location has a non table value', 2)
     end
 
@@ -207,11 +207,11 @@ end
 function Store.get_child(location,child)
     local store = Store.get(location)
 
-    if type(store) ~= 'table' and table ~= nil then
+    if type(store) ~= 'table' and store ~= nil then
         return error('Location has a non table value', 2)
     end
 
-    return store[child]
+    return store and store[child]
 end
 
 --- Sets the value of the chlid to a location, children can be added and removed during runtime
@@ -224,7 +224,7 @@ end
 function Store.set_child(location,child,value)
     local store = Store.get(location)
 
-    if type(store) ~= 'table' and table ~= nil then
+    if type(store) ~= 'table' and store ~= nil then
         return error('Location has a non table value', 2)
     end
 
@@ -257,14 +257,18 @@ Event.add(defines.events.on_tick,function()
         if not success then
             table.insert(errors,store_new)
         else
-            if store_old ~= store_new then
+            if type(store_old) ~= type(store_new)
+            or type(store_old) == 'table' and not table.compare(store_new,store_new)
+            or store_old ~= store_new then
                 Store.data[location] = store_new
                 Store.callbacks[location](store_new)
             end
         end
     end
 
-    error(errors)
+    if #errors > 0 then
+        error(table.concat(errors,'; '))
+    end
 end)
 
 return Store

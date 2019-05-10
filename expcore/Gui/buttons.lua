@@ -23,12 +23,13 @@ function Button.new_button(name)
     local uid = Gui.uid_name()
     local self = setmetatable({
         name=uid,
-        clean_name=name
+        clean_name=name,
+        _draw={
+            name=uid,
+            style=mod_gui.button_style,
+            type='button'
+        }
     },{__index=Button._prototype})
-
-    self._draw.name = uid
-    self._draw.style = mod_gui.button_style
-    self._draw.type = 'button'
     Button.config[uid] = self
 
     if name then
