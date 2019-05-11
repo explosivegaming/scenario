@@ -74,11 +74,27 @@
     Store.add_watch('game.speed',function()
         return game.speed
     end)
+
+>>>> Alternative method
+    Some people may prefer to use a varible rather than a string for formating reasons here is an example. Also for any times when
+    there will be little external input Store.uid_location() can be used to generate non conflicting locations.
+
+    local store_game_speed = Store.uid_location()
+
+    Store.register(store_game_speed,function(value)
+        game.print('The game speed has been set to: '..value)
+    end)
+
+    Store.add_watch(store_game_speed,function()
+        return game.speed
+    end)
+
 ]]
 
 local Global = require 'utils.global'
 local Event = require 'utils.event'
 local write_json = ext_require('expcore.common','write_json','table_keys')
+local Token = require 'utils.token'
 
 local Store = {
     data={},
@@ -95,6 +111,12 @@ end)
 -- @treturn boolean true if registered
 function Store.is_registered(location)
     return not not Store.callbacks[location]
+end
+
+--- Returns a unqiue name that can be used for a store
+-- @treturn string a unqiue name
+function Store.uid_location()
+    return tostring(Token.uid())
 end
 
 --- Registers a new location with an update callback which is triggered when the value updates

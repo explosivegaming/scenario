@@ -11,7 +11,7 @@ local Toolbar = {
 function Toolbar.new_button(name)
     name = name or #Toolbar.buttons+1
     local button = Buttons.new_button('toolbar/'..name)
-    button:set_authenticator(Roles.player_allowed)
+    button:set_post_authenticator(Roles.player_allowed)
     Toolbar.add_button(button)
     return button
 end
@@ -20,12 +20,12 @@ function Toolbar.add_button(button)
     table.insert(Toolbar.buttons,button)
     Gui.allow_player_to_toggle_top_element_visibility(button.name)
     Gui.on_player_show_top(button.name,function(event)
-        if not button.authenticator(player,button.clean_name or button.name) then
+        if not button.post_authenticator(event.player,button.clean_name or button.name) then
             event.element.visible = false
         end
     end)
-    if not button.authenticator then
-        button:set_authenticator(function() return true end)
+    if not button.post_authenticator then
+        button:set_post_authenticator(function() return true end)
     end
 end
 
@@ -36,7 +36,7 @@ function Toolbar.update(player)
         local element
         if top[button.name] then element = top[button.name]
         else element = button:draw_to(top) end
-        if button.authenticator(player,button.clean_name or button.name) then
+        if button.post_authenticator(player,button.clean_name or button.name) then
             element.visible = true
             element.enabled = true
         else

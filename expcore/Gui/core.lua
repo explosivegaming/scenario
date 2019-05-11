@@ -13,15 +13,30 @@ function Gui._extend_prototype(tbl)
     return tbl
 end
 
+function Gui._new_event_adder(name)
+    return function(self,callback)
+        if type(callback) ~= 'function' then
+            return error('Event callback must be a function',2)
+        end
+        self.events[name] = callback
+        return self
+    end
+end
+
+--- Gets the uid for the config
+function Gui._prototype:uid()
+    return self.name
+end
+
 --- Sets the caption for the element config
 function Gui._prototype:set_caption(caption)
-    self._draw.caption = caption
+    self.draw_data.caption = caption
     return self
 end
 
 --- Sets the tooltip for the element config
 function Gui._prototype:set_tooltip(tooltip)
-    self._draw.tooltip = tooltip
+    self.draw_data.tooltip = tooltip
     return self
 end
 
@@ -35,24 +50,24 @@ function Gui._prototype:set_pre_authenticator(callback)
 end
 
 --- Sets an authenticator that disables the element if check fails
-function Gui._prototype:set_authenticator(callback)
+function Gui._prototype:set_post_authenticator(callback)
     if type(callback) ~= 'function' then
         return error('Authenicater callback must be a function')
     end
-    self.authenticator = callback
+    self.post_authenticator = callback
     return self
 end
 
---- Draws the element using what is in the _draw table, allows use of authenticator if present
+--- Draws the element using what is in the draw_data table, allows use of authenticator if present
 function Gui._prototype:draw_to(element)
     if element[self.name] then return end
     local player = Game.get_player_by_index(element.player_index)
     if self.pre_authenticator then
         if not self.pre_authenticator(player,self.clean_name or self.name) then return end
     end
-    local _element = element.add(self._draw)
-    if self.authenticator then
-        _element.enabled = not not self.authenticator(player,self.clean_name or self.name)
+    local _element = element.add(self.draw_data)
+    if self.post_authenticator then
+        _element.enabled = not not self.post_authenticator(player,self.clean_name or self.name)
     end
     if self._post_draw then self._post_draw(_element) end
     return _element

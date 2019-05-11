@@ -3,6 +3,7 @@ local format_chat_colour = ext_require('expcore.common','format_chat_colour')
 local Colors = require 'resources.color_presets'
 local Game = require 'utils.game'
 local clean_stack_trace = ext_require('modules.commands.interface','clean_stack_trace')
+local Store = require 'expcore.store'
 
 local tests = {}
 
@@ -12,7 +13,7 @@ local function categozie_by_player(element)
 end
 
 Gui.new_toolbar_button('click-1')
-:set_authenticator(function(player,button_name)
+:set_post_authenticator(function(player,button_name)
     return global.click_one
 end)
 :on_click(function(player,element,event)
@@ -21,7 +22,7 @@ end)
 
 Gui.new_toolbar_button('click-2')
 :set_caption('Click Two')
-:set_authenticator(function(player,button_name)
+:set_post_authenticator(function(player,button_name)
     return global.click_two
 end)
 :on_click(function(player,element,event)
@@ -30,7 +31,7 @@ end)
 
 Gui.new_toolbar_button('click-3')
 :set_sprites('utility/questionmark')
-:set_authenticator(function(player,button_name)
+:set_post_authenticator(function(player,button_name)
     return global.click_three
 end)
 :on_click(function(player,element,event)
@@ -39,7 +40,7 @@ end)
 
 Gui.new_toolbar_button('gui-test-open')
 :set_caption('Open Test Gui')
-:set_authenticator(function(player,button_name)
+:set_post_authenticator(function(player,button_name)
     return global.show_test_gui
 end)
 :on_click(function(player,_element,event)
@@ -69,14 +70,14 @@ tests['Button caption'] = Gui.new_button('test button caption')
     player.print('Button caption')
 end)
 
-tests['Button icon'] = Gui.new_button('test Bbutton icon')
+tests['Button icon'] = Gui.new_button('test button icon')
 :set_sprites('utility/warning_icon','utility/warning','utility/warning_white')
 :on_click(function(player,element,event)
     player.print('Button icon')
 end)
 
 tests['Button auth'] = Gui.new_button('test button auth')
-:set_authenticator(function(player,button_name)
+:set_post_authenticator(function(player,button_name)
     return global.test_auth_button
 end)
 :on_click(function(player,element,event)
@@ -126,27 +127,27 @@ tests['Radiobutton store player'] = Gui.new_radiobutton('test radiobutton store 
     player.print('Radiobutton store player: '..tostring(element.state))
 end)
 
-local test_share = Gui.new_radiobutton_option_set('gui.test.share',function(value,category)
-    game.print('Radiobutton share: '..category..' is now: '..tostring(value))
+local test_option_set = Gui.new_radiobutton_option_set('gui.test.share',function(value,category)
+    game.print('Radiobutton option set for: '..category..' is now: '..tostring(value))
 end,categozie_by_player)
 
-tests['Radiobutton share one'] = Gui.new_radiobutton('test radiobutton share one')
-:set_caption('Radiobutton Share One')
-:share_store(test_share,'One')
+tests['Radiobutton option one'] = Gui.new_radiobutton('test radiobutton option one')
+:set_caption('Radiobutton Option One')
+:add_as_option(test_option_set,'One')
 :on_state_change(function(player,element)
-    player.print('Radiobutton share one: '..tostring(element.state))
+    player.print('Radiobutton option one: '..tostring(element.state))
 end)
 
-tests['Radiobutton share two'] = Gui.new_radiobutton('test radiobutton share two')
-:set_caption('Radiobutton Share Two')
-:share_store(test_share,'Two')
+tests['Radiobutton option two'] = Gui.new_radiobutton('test radiobutton option two')
+:set_caption('Radiobutton Option Two')
+:add_as_option(test_option_set,'Two')
 :on_state_change(function(player,element)
-    player.print('Radiobutton share two: '..tostring(element.state))
+    player.print('Radiobutton option two: '..tostring(element.state))
 end)
 
-tests['Radiobutton share three'] = Gui.new_radiobutton('test radiobutton share three')
-:set_caption('Radiobutton Share Three')
-:share_store(test_share,'Three')
+tests['Radiobutton option three'] = Gui.new_radiobutton('test radiobutton option three')
+:set_caption('Radiobutton Option Three')
+:add_as_option(test_option_set,'Three')
 :on_state_change(function(player,element)
-    player.print('Radiobutton share three: '..tostring(element.state))
+    player.print('Radiobutton option three: '..tostring(element.state))
 end)

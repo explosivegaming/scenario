@@ -5,7 +5,11 @@ local Gui = require './core'
 local Button = {
     config={},
     clean_names={},
-    _prototype=Gui._extend_prototype{}
+    _prototype=Gui._extend_prototype{
+        on_click = Gui._new_event_adder('on_click'),
+        on_left_click = Gui._new_event_adder('on_left_click'),
+        on_right_click = Gui._new_event_adder('on_right_click'),
+    }
 }
 
 local function get_config(name)
@@ -24,7 +28,8 @@ function Button.new_button(name)
     local self = setmetatable({
         name=uid,
         clean_name=name,
-        _draw={
+        events={},
+        draw_data={
             name=uid,
             style=mod_gui.button_style,
             type='button'
@@ -41,45 +46,45 @@ function Button.new_button(name)
     end
 
     Gui.on_click(self.name,function(event)
-        local mosue_button = event.button
+        local mouse_button = event.button
         local keys = {alt=event.alt,control=event.control,shift=event.shift}
         event.keys = keys
 
-        if self.authenticator then
-            if not self.authenticator(event.player,self.clean_name or self.name) then return end
+        if self.post_authenticator then
+            if not self.post_authenticator(event.player,self.clean_name or self.name) then return end
         end
 
-        if mosue_button == defines.mouse_button_type.left and self._on_left_click then
-            self.on_left_click(event.player,event.element,event)
-        elseif mosue_button == defines.mouse_button_type.right and self._on_right_click then
-            self.on_right_click(event.player,event.element,event)
+        if mouse_button == defines.mouse_button_type.left and self.events.on_left_click then
+            self.events.on_left_click(event.player,event.element,event)
+        elseif mouse_button == defines.mouse_button_type.right and self.events.on_right_click then
+            self.events.on_right_click(event.player,event.element,event)
         end
 
-        if self.mouse_button_filter and not self.mouse_button_filter[mosue_button] then return end
+        if self.mouse_button_filter and not self.mouse_button_filter[mouse_button] then return end
         if self.key_button_filter then
             for key,state in pairs(self.key_button_filter) do
                 if state and not keys[key] then return end
             end
         end
 
-        if self._on_click then
-            self._on_click(event.player,event.element,event)
+        if self.events.on_click then
+            self.events.on_click(event.player,event.element,event)
         end
     end)
 
-    return Button.config[uid]
+    return self
 end
 
 function Button.draw_button(name,element)
-    local button = get_config(name)
-    return button:draw_to(element)
+    local config = get_config(name)
+    return config:draw_to(element)
 end
 
 function Button._prototype:set_sprites(sprite,hovered_sprite,clicked_sprite)
-    self._draw.type = 'sprite-button'
-    self._draw.sprite = sprite
-    self._draw.hovered_sprite = hovered_sprite
-    self._draw.clicked_sprite = clicked_sprite
+    self.draw_data.type = 'sprite-button'
+    self.draw_data.sprite = sprite
+    self.draw_data.hovered_sprite = hovered_sprite
+    self.draw_data.clicked_sprite = clicked_sprite
     return self
 end
 
@@ -107,30 +112,6 @@ function Button._prototype:set_key_filter(filter,...)
         end
     end
     self.key_button_filter = filter
-    return self
-end
-
-function Button._prototype:on_click(callback)
-    if type(callback) ~= 'function' then
-        return error('Event callback must be a function')
-    end
-    self._on_click = callback
-    return self
-end
-
-function Button._prototype:on_left_click(callback)
-    if type(callback) ~= 'function' then
-        return error('Event callback must be a function')
-    end
-    self._on_left_click = callback
-    return self
-end
-
-function Button._prototype:on_right_click(callback)
-    if type(callback) ~= 'function' then
-        return error('Event callback must be a function')
-    end
-    self._on_right_click = callback
     return self
 end
 

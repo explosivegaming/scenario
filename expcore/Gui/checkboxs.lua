@@ -7,10 +7,14 @@ local Checkbox = {
     config={},
     clean_names={},
     instances={},
-    option_mapping={},
+    option_sets={},
     option_categorize={},
-    _prototype_checkbox=Gui._extend_prototype{},
-    _prototype_radiobutton=Gui._extend_prototype{}
+    _prototype_checkbox=Gui._extend_prototype{
+        on_state_change = Gui._new_event_adder('on_state_change')
+    },
+    _prototype_radiobutton=Gui._extend_prototype{
+        on_state_change = Gui._new_event_adder('on_state_change')
+    }
 }
 setmetatable(Checkbox._prototype_radiobutton,{__index=Checkbox._prototype_checkbox})
 Global.register(Checkbox.instances,function(tbl)
@@ -25,10 +29,6 @@ local function get_config(name)
         return error('Invalid name for checkbox, name not found.',3) or nil
     end
     return config
-end
-
-local function get_store_location(checkbox)
-    return 'gui.inputs.checkbox.'..(checkbox.clean_name or checkbox.name)
 end
 
 local function get_instances(checkbox,category)
@@ -56,7 +56,8 @@ function Checkbox.new_checkbox(name)
     local self = setmetatable({
         name=uid,
         clean_name=name,
-        _draw={
+        events={},
+        draw_data={
             name=uid,
             type='checkbox',
             state=false
@@ -85,12 +86,12 @@ function Checkbox.new_checkbox(name)
 
     Gui.on_checked_state_changed(self.name,function(event)
         local element = event.element
-        if self.share_store_location then
-            set_store(self,self.share_store_location,element,Checkbox.option_mapping[self.share_store_location][element.name])
+        if self.option_set then
+            set_store(self,self.option_set,element,Checkbox.option_sets[self.option_set][element.name])
         elseif self.store then
             set_store(self,self.store,element,element.state)
-        elseif self._on_state_change then
-            self._on_state_change(event.player,element)
+        elseif self.events.on_state_change then
+            self.events.on_state_change(event.player,element)
         end
     end)
 
@@ -98,31 +99,36 @@ function Checkbox.new_checkbox(name)
 end
 
 function Checkbox.draw_checkbox(name,element)
-    local checkbox = get_config(name)
-    return checkbox:draw_to(element)
+    local config = get_config(name)
+    return config:draw_to(element)
 end
 
 function Checkbox._prototype_checkbox:add_store(categorize)
     if self.store then return end
-    self.store = get_store_location(self)
+
+    self.store = Store.uid_location()
     self.categorize = categorize
     Checkbox.instances[self.name]={}
+
     Store.register(self.store,function(value,category)
         local instances = get_instances(self,category)
         if instances then
+
             for k,element in pairs(instances) do
                 if element and element.valid then
                     element.state = value
-                    if self._on_state_change then
+                    if self.events.on_state_change then
                         local player = Game.get_player_by_index(element.player_index)
-                        self._on_state_change(player,element)
+                        self.events.on_state_change(player,element)
                     end
                 else
                     instances[k] = nil
                 end
             end
+
         end
     end)
+
     return self
 end
 
@@ -137,21 +143,13 @@ end
 
 function Checkbox._prototype_checkbox:set_store_state(category,state)
     if not self.store then return end
-    state = not not state
-    set_store(self,self.store,category,state)
-end
-
-function Checkbox._prototype_checkbox:on_state_change(callback)
-    if type(callback) ~= 'function' then
-        return error('Event callback must be a function')
-    end
-    self._on_state_change = callback
-    return self
+    set_store(self,self.store,category,not not state)
 end
 
 function Checkbox.reset_radiobutton(element,exclude,recursive)
     if not element or not element.valid then return end
     exclude = type(exclude) == 'table' and exclude or exclude ~= nil and {[exclude]=true} or {}
+
     for _,child in pairs(element.children) do
         if child and child.valid and child.type == 'radiobutton' then
             child.state = exclude[child.name] or false
@@ -163,13 +161,14 @@ function Checkbox.reset_radiobutton(element,exclude,recursive)
             Checkbox.reset_radiobutton(child,exclude,recursive)
         end
     end
+
     return true
 end
 
 function Checkbox.new_radiobutton(name)
     local self = Checkbox.new_checkbox(name)
     local uid = self.name
-    self._draw.type = 'radiobutton'
+    self.draw_data.type = 'radiobutton'
 
     setmetatable(self,{
         __index=Checkbox._prototype_radiobutton,
@@ -179,53 +178,56 @@ function Checkbox.new_radiobutton(name)
     return self
 end
 
-function Checkbox.new_share_store(location,callback,categorize)
-    Store.register(location,function(value,category)
-        local options = Checkbox.option_mapping[location]
-        for opt_name,name in pairs(options) do
-            if Checkbox.config[name] then
-                get_config(name):set_store_state(category,opt_name == value)
-            end
-        end
-        callback(value,category)
-    end)
-    Checkbox.option_categorize[location] = categorize
-    Checkbox.option_mapping[location] = {}
-    return location
-end
-
 Checkbox.draw_radiobutton = Checkbox.draw_checkbox
 
-function Checkbox._prototype_radiobutton:share_store(location,option_name)
-    self.share_store_location = location
+function Checkbox._prototype_radiobutton:add_as_option(option_set,option_name)
+    self.option_set = option_set
     self.option_name = option_name or self.clean_name or self.name
 
-    Checkbox.option_mapping[location][self.option_name] = self.name
-    Checkbox.option_mapping[location][self.name] = self.option_name
+    Checkbox.option_sets[option_set][self.option_name] = self.name
+    Checkbox.option_sets[option_set][self.name] = self.option_name
 
-    self:add_store(Checkbox.option_categorize[location])
+    self:add_store(Checkbox.option_categorize[option_set])
 
     return self
 end
 
+function Checkbox.new_option_set(name,callback,categorize)
+
+    Store.register(name,function(value,category)
+        local options = Checkbox.option_sets[name]
+        for opt_name,config_name in pairs(options) do
+            if Checkbox.config[config_name] then
+                get_config(config_name):set_store_state(category,opt_name == value)
+            end
+        end
+        callback(value,category)
+    end)
+
+    Checkbox.option_categorize[name] = categorize
+    Checkbox.option_sets[name] = {}
+
+    return name
+end
+
 function Checkbox.get_stored_state(name,category)
-    local checkbox = get_config(name)
-    if checkbox.share_store_location then
-        if checkbox.categorize then
-            return Store.get_child(checkbox.share_store_location,category)
+    local config = get_config(name)
+
+    if config.option_set then
+        if config.categorize then
+            return Store.get_child(config.option_set,category)
         else
-            return Store.get(checkbox.share_store_location)
+            return Store.get(config.option_set)
         end
     end
-    return checkbox:get_store_state(category)
+
+    return config:get_store_state(category)
 end
 
 function Checkbox.set_stored_state(name,category,value)
-    local checkbox = get_config(name)
-    if checkbox.share_store_location then
-        set_store(checkbox,checkbox.share_store_location,category,value)
-    end
-    return checkbox:set_store_state(category,value)
+    local config = get_config(name)
+    local location = config.option_set or config.store
+    set_store(config,location,category,value)
 end
 
 return Checkbox
