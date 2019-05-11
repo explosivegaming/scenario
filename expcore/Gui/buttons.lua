@@ -29,7 +29,10 @@ function Button.new_button(name)
             style=mod_gui.button_style,
             type='button'
         }
-    },{__index=Button._prototype})
+    },{
+        __index=Button._prototype,
+        __call=function(element) return Button.config[uid]:draw_to(element) end
+    })
     Button.config[uid] = self
 
     if name then

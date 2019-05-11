@@ -90,6 +90,13 @@ Global.register(Store.data,function(tbl)
     Store.data = tbl
 end)
 
+--- Check for if a lcoation is registered
+-- @tparam location string the location to test for
+-- @treturn boolean true if registered
+function Store.is_registered(location)
+    return not not Store.callbacks[location]
+end
+
 --- Registers a new location with an update callback which is triggered when the value updates
 -- @tparam location string a unique string that points to the data, string used rather than token to allow migration
 -- @tparam callback function this callback will be called when the stored value is set to a new value
@@ -109,6 +116,8 @@ function Store.register(location,callback,start_value)
 
     Store.data[location] = start_value
     Store.callbacks[location] = callback
+
+    return location
 end
 
 --- Registers a new cross server synced location with an update callback, and external script is required for cross server

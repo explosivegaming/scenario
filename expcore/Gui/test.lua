@@ -6,6 +6,11 @@ local clean_stack_trace = ext_require('modules.commands.interface','clean_stack_
 
 local tests = {}
 
+local function categozie_by_player(element)
+    local player = Game.get_player_by_index(element.player_index)
+    return player.name
+end
+
 Gui.new_toolbar_button('click-1')
 :set_authenticator(function(player,button_name)
     return global.click_one
@@ -93,10 +98,7 @@ end)
 
 tests['Checkbox store player'] = Gui.new_checkbox('test checkbox store player')
 :set_caption('Checkbox Store Player')
-:add_store(function(element)
-    local player = Game.get_player_by_index(element.player_index)
-    return player.name
-end)
+:add_store(categozie_by_player)
 :on_state_change(function(player,element)
     player.print('Checkbox store player: '..tostring(element.state))
 end)
@@ -109,4 +111,42 @@ tests['Checkbox store force'] = Gui.new_checkbox('test checkbox store force')
 end)
 :on_state_change(function(player,element)
     player.print('Checkbox store force: '..tostring(element.state))
+end)
+
+tests['Radiobutton local'] = Gui.new_radiobutton('test radiobutton local')
+:set_caption('Radiobutton Local')
+:on_state_change(function(player,element)
+    player.print('Radiobutton local: '..tostring(element.state))
+end)
+
+tests['Radiobutton store player'] = Gui.new_radiobutton('test radiobutton store player')
+:set_caption('Radiobutton Store Player')
+:add_store(categozie_by_player)
+:on_state_change(function(player,element)
+    player.print('Radiobutton store player: '..tostring(element.state))
+end)
+
+local test_share = Gui.new_radiobutton_option_set('gui.test.share',function(value,category)
+    game.print('Radiobutton share: '..category..' is now: '..tostring(value))
+end,categozie_by_player)
+
+tests['Radiobutton share one'] = Gui.new_radiobutton('test radiobutton share one')
+:set_caption('Radiobutton Share One')
+:share_store(test_share,'One')
+:on_state_change(function(player,element)
+    player.print('Radiobutton share one: '..tostring(element.state))
+end)
+
+tests['Radiobutton share two'] = Gui.new_radiobutton('test radiobutton share two')
+:set_caption('Radiobutton Share Two')
+:share_store(test_share,'Two')
+:on_state_change(function(player,element)
+    player.print('Radiobutton share two: '..tostring(element.state))
+end)
+
+tests['Radiobutton share three'] = Gui.new_radiobutton('test radiobutton share three')
+:set_caption('Radiobutton Share Three')
+:share_store(test_share,'Three')
+:on_state_change(function(player,element)
+    player.print('Radiobutton share three: '..tostring(element.state))
 end)
