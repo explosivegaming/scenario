@@ -12,37 +12,14 @@ local Button = {
     }
 }
 
-local function get_config(name)
-    local config = Button.config[name]
-    if not config and Button.clean_names[name] then
-        return Button.config[Button.clean_names[name]]
-    elseif not config then
-        return error('Invalid name for checkbox, name not found.',3)
-    end
-    return config
-end
-
 function Button.new_button(name)
 
-    local uid = Gui.uid_name()
-    local self = setmetatable({
-        name=uid,
-        clean_name=name,
-        events={},
-        draw_data={
-            name=uid,
-            style=mod_gui.button_style,
-            type='button'
-        }
-    },{
-        __index=Button._prototype,
-        __call=function(element) return Button.config[uid]:draw_to(element) end
-    })
-    Button.config[uid] = self
+    local self = Gui._new_define(Button._prototype)
+    self.draw_data.type = 'button'
+    self.draw_data.style = mod_gui.button_style
 
     if name then
-        Button.clean_names[uid]=name
-        Button.clean_names[name]=uid
+        self:debug_name(name)
     end
 
     Gui.on_click(self.name,function(event)
@@ -73,11 +50,6 @@ function Button.new_button(name)
     end)
 
     return self
-end
-
-function Button.draw_button(name,element)
-    local config = get_config(name)
-    return config:draw_to(element)
 end
 
 function Button._prototype:set_sprites(sprite,hovered_sprite,clicked_sprite)
