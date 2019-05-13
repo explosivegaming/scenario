@@ -6,7 +6,7 @@ local function store_state(self,element,value)
     element.state = value
     if self.events.on_state_change then
         local player = Game.get_player_by_index(element.player_index)
-        self.events.on_state_change(player,element)
+        self.events.on_state_change(player,element,value)
     end
 end
 
@@ -56,7 +56,7 @@ function Checkbox.new_checkbox(name)
             self:set_store(category,value)
 
         elseif self.events.on_state_change then
-            self.events.on_state_change(event.player,element)
+            self.events.on_state_change(event.player,element,element.state)
 
         end
     end)

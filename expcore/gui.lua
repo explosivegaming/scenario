@@ -17,4 +17,9 @@ Gui.new_radiobutton = Checkbox.new_radiobutton
 Gui.new_radiobutton_option_set = Checkbox.new_option_set
 Gui.classes.checkbox = Checkbox
 
+local Dropdown = require('./gui/dropdown')
+Gui.new_dropdown = Dropdown.new_dropdown
+Gui.new_list_box = Dropdown.new_list_box
+Gui.classes.dropdown = Dropdown
+
 return Gui
