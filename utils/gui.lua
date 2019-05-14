@@ -200,6 +200,7 @@ function Gui.get_top_element_flow(player)
 end
 
 local toggle_button_name = Gui.uid_name()
+Gui.top_toggle_button_name = toggle_button_name
 
 Event.add(
     defines.events.on_player_created,

@@ -3,7 +3,6 @@ local format_chat_colour,table_keys = ext_require('expcore.common','format_chat_
 local Colors = require 'resources.color_presets'
 local Game = require 'utils.game'
 local clean_stack_trace = ext_require('modules.commands.interface','clean_stack_trace')
-local Store = require 'expcore.store'
 
 local tests = {}
 
@@ -48,7 +47,8 @@ end)
     local frame = player.gui.center.add{type='frame',caption='Gui Test',name='TestGui'}
     frame = frame.add{type='table',column_count=5}
     for key,element in pairs(tests) do
-        local success,err = pcall(element.draw_to,element,frame)
+        local test_function = type(element) == 'function' and element or element.draw_to
+        local success,err = pcall(test_function,element,frame)
         if success then
             player.print('Drawing: '..key..format_chat_colour(' SUCCESS',Colors.green))
         else
@@ -231,3 +231,59 @@ tests['List box player static general'] = Gui.new_list_box('test list box player
 :on_selection(function(player,element,value)
     player.print('Dropdown player static general: '..tostring(value))
 end)
+
+tests['Slider local default'] = Gui.new_slider('test slider local default')
+:set_tooltip('Silder Local Default')
+:on_change(function(player,element,value,percent)
+    player.print('Slider local default: '..tostring(math.round(value))..' '..tostring(math.round(percent,2)))
+end)
+
+tests['Slider player default'] = Gui.new_slider('test slider player default')
+:set_tooltip('Silder Player Default')
+:add_store(categozie_by_player)
+:on_change(function(player,element,value,percent)
+    player.print('Slider player default: '..tostring(math.round(value))..' '..tostring(math.round(percent,2)))
+end)
+
+tests['Slider static range'] = Gui.new_slider('test slider static range')
+:set_tooltip('Silder Static Range')
+:set_range(5,50)
+:on_change(function(player,element,value,percent)
+    player.print('Slider static range: '..tostring(math.round(value))..' '..tostring(math.round(percent,2)))
+end)
+
+tests['Slider dynamic range'] = Gui.new_slider('test slider dynamic range')
+:set_tooltip('Silder Dynamic Range')
+:set_range(function(player,element)
+    return player.index - 5
+end,function(player,element)
+    return player.index + 4
+end)
+:on_change(function(player,element,value,percent)
+    player.print('Slider static range: '..tostring(math.round(value))..' '..tostring(math.round(percent,2)))
+end)
+
+local label_slider = Gui.new_slider('test slider local lable')
+:set_tooltip('Silder Local label')
+:enable_auto_draw_label()
+:on_change(function(player,element,value,percent)
+    player.print('Slider local label: '..tostring(math.round(value))..' '..tostring(math.round(percent,2)))
+end)
+
+tests['Slider local label'] = function(self,frame)
+    local flow = frame.add{type='flow'}
+    label_slider:draw_to(flow)
+end
+
+local label_slider_player = Gui.new_slider('test slider player lable')
+:set_tooltip('Silder Player label')
+:enable_auto_draw_label()
+:add_store(categozie_by_player)
+:on_change(function(player,element,value,percent)
+    player.print('Slider player label: '..tostring(math.round(value))..' '..tostring(math.round(percent,2)))
+end)
+
+tests['Slider player label'] = function(self,frame)
+    local flow = frame.add{type='flow'}
+    label_slider_player:draw_to(flow)
+end

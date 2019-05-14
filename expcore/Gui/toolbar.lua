@@ -32,12 +32,13 @@ end
 function Toolbar.update(player)
     local top = Gui.get_top_element_flow(player)
     if not top then return end
+    local visible = top[Gui.top_toggle_button_name].caption == '<'
     for _,button in pairs(Toolbar.buttons) do
         local element
         if top[button.name] then element = top[button.name]
         else element = button:draw_to(top) end
         if button.post_authenticator(player,button.clean_name or button.name) then
-            element.visible = true
+            element.visible = visible
             element.enabled = true
         else
             element.visible = false

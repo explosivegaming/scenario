@@ -22,4 +22,8 @@ Gui.new_dropdown = Dropdown.new_dropdown
 Gui.new_list_box = Dropdown.new_list_box
 Gui.classes.dropdown = Dropdown
 
+local Slider = require('./gui/slider')
+Gui.new_slider = Slider.new_slider
+Gui.classes.slider = Slider
+
 return Gui

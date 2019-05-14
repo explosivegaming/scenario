@@ -31,11 +31,9 @@ function Dropdown.new_dropdown(name)
         if self.dynamic_options then
             local player = Game.get_player_by_index(element.player_index)
             local dynamic_options = self.dynamic_options(player,element)
-            local items = element.items
             for _,v in pairs(dynamic_options) do
-                table.insert(items,v)
+                element.add_item(v)
             end
-            element.items = items
         end
         if self.store then
             local category = self.categorize and self.categorize(element) or nil

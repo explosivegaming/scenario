@@ -33,7 +33,6 @@ function Gui.get_instances(self,category)
     return instances
 end
 
-
 function Gui._extend_prototype(tbl)
     for k,v in pairs(Gui._prototype) do
         if not tbl[k] then tbl[k] = v end
@@ -105,6 +104,7 @@ end
 function Gui._prototype:debug_name(name)
     self.debug_name = name
     Gui.names[name] = self.name
+    Gui.names[self.name] = name
     return self
 end
 
