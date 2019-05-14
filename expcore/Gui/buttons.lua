@@ -67,11 +67,13 @@ function Button._prototype:set_click_filter(filter,...)
             filter[v] = true
         end
     end
+
     for k,v in pairs(filter) do
         if type(v) == 'string' then
             filter[k] = defines.mouse_button_type[v]
         end
     end
+
     self.mouse_button_filter = filter
     return self
 end
@@ -83,6 +85,7 @@ function Button._prototype:set_key_filter(filter,...)
             filter[v] = true
         end
     end
+
     self.key_button_filter = filter
     return self
 end

@@ -12,27 +12,6 @@ Global.register(Gui.instances,function(tbl)
     Gui.instances = tbl
 end)
 
-
-function Gui.get_define(name,internal)
-    local define = Gui.defines[name]
-    if not define and Gui.names[name] then
-        return Gui.defines[Gui.names[name]]
-    elseif not define then
-        return error('Invalid name for checkbox, name not found.',internal and 3 or 2) or nil
-    end
-    return define
-end
-
-function Gui.get_instances(self,category)
-    if not Gui.instances[self.name] then return end
-    local instances = Gui.instances[self.name]
-    if self.categorize then
-        if not instances[category] then instances[category] = {} end
-        return instances[category]
-    end
-    return instances
-end
-
 function Gui._extend_prototype(tbl)
     for k,v in pairs(Gui._prototype) do
         if not tbl[k] then tbl[k] = v end
@@ -45,6 +24,7 @@ function Gui._new_event_adder(name)
         if type(callback) ~= 'function' then
             return error('Event callback must be a function',2)
         end
+
         self.events[name] = callback
         return self
     end
@@ -59,6 +39,37 @@ function Gui._new_store_adder(callback)
         Gui.instances[self.name]={}
 
         Store.register(self.store,function(value,category)
+            local instances = Gui.get_instances(self,category)
+            if instances then
+
+                for k,element in pairs(instances) do
+                    if element and element.valid then
+                        callback(self,element,value)
+                    else
+                        instances[k] = nil
+                    end
+                end
+
+            end
+        end)
+
+        return self
+    end
+end
+
+function Gui._new_sync_store_adder(callback)
+    return function(self,location,categorize)
+        if self.store then return end
+
+        if Store.is_registered(location) then
+            return error('Location for store is already registered: '..location,2)
+        end
+
+        self.store = location
+        self.categorize = categorize
+        Gui.instances[self.name]={}
+
+        Store.register_synced(self.store,function(value,category)
             local instances = Gui.get_instances(self,category)
             if instances then
 
@@ -125,6 +136,7 @@ function Gui._prototype:set_pre_authenticator(callback)
     if type(callback) ~= 'function' then
         return error('Pre authenticator callback must be a function')
     end
+
     self.pre_authenticator = callback
     return self
 end
@@ -134,6 +146,7 @@ function Gui._prototype:set_post_authenticator(callback)
     if type(callback) ~= 'function' then
         return error('Authenicater callback must be a function')
     end
+
     self.post_authenticator = callback
     return self
 end
@@ -186,6 +199,33 @@ function Gui._prototype:set_store(category,value)
     end
 end
 
+function Gui.get_define(name,internal)
+    local define = Gui.defines[name]
+
+    if not define and Gui.names[name] then
+        return Gui.defines[Gui.names[name]]
+
+    elseif not define then
+        return error('Invalid name for checkbox, name not found.',internal and 3 or 2) or nil
+
+    end
+
+    return define
+end
+
+function Gui.get_instances(self,category)
+    if not Gui.instances[self.name] then return end
+
+    local instances = Gui.instances[self.name]
+    if self.categorize then
+        if not instances[category] then instances[category] = {} end
+        return instances[category]
+
+    end
+
+    return instances
+end
+
 function Gui.get_store(name,category)
     local define = Gui.get_define(name,true)
     return define:get_store(category)
@@ -204,7 +244,6 @@ end
 function Gui.toggle_enable(element)
     if not element or not element.valid then return end
     if not element.enabled then
-        -- this way round so if its nil it will become false
         element.enabled = true
     else
         element.enabled = false
@@ -214,7 +253,6 @@ end
 function Gui.toggle_visible(element)
     if not element or not element.valid then return end
     if not element.visible then
-        -- this way round so if its nil it will become false
         element.visible = true
     else
         element.visible = false

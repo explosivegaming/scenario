@@ -2,12 +2,16 @@ local Gui = require './core'
 local Store = require 'expcore.store'
 local Game = require 'utils.game'
 
-local function store_state(self,element,value)
-    element.state = value
+local function event_call(self,element,value)
     if self.events.on_state_change then
         local player = Game.get_player_by_index(element.player_index)
         self.events.on_state_change(player,element,value)
     end
+end
+
+local function store_call(self,element,value)
+    element.state = value
+    event_call(self,element,value)
 end
 
 local Checkbox = {
@@ -15,14 +19,15 @@ local Checkbox = {
     option_categorize={},
     _prototype_checkbox=Gui._extend_prototype{
         on_state_change = Gui._new_event_adder('on_state_change'),
-        add_store = Gui._new_store_adder(store_state)
+        add_store = Gui._new_store_adder(store_call),
+        add_sync_store = Gui._new_sync_store_adder(store_call)
     },
     _prototype_radiobutton=Gui._extend_prototype{
         on_state_change = Gui._new_event_adder('on_state_change'),
-        add_store = Gui._new_store_adder(store_state)
+        add_store = Gui._new_store_adder(store_call),
+        add_sync_store = Gui._new_sync_store_adder(store_call)
     }
 }
-setmetatable(Checkbox._prototype_radiobutton,{__index=Checkbox._prototype_checkbox})
 
 function Checkbox.new_checkbox(name)
 
@@ -55,8 +60,9 @@ function Checkbox.new_checkbox(name)
             local category = self.categorize and self.categorize(element) or value
             self:set_store(category,value)
 
-        elseif self.events.on_state_change then
-            self.events.on_state_change(event.player,element,element.state)
+        else
+            local value = element.state
+            event_call(self,element,value)
 
         end
     end)
@@ -72,14 +78,19 @@ function Checkbox.reset_radiobutton(element,exclude,recursive)
         if child and child.valid and child.type == 'radiobutton' then
             local state = exclude[child.name] or false
             local define = Gui.defines[child.name]
+
             if define then
                 local category = define.categorize and define.categorize(child) or state
                 define:set_store(category,state)
+
             else
                 child.state = state
+
             end
+
         elseif child.children and (type(recursive) == 'number' and recursive > 0 or recursive == true) then
             Checkbox.reset_radiobutton(child,exclude,recursive)
+
         end
     end
 

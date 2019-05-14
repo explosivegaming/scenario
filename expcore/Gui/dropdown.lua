@@ -1,20 +1,29 @@
 local Gui = require './core'
 local Game = require 'utils.game'
 
+local function event_call(define,element,value)
+    local player = Game.get_player_by_index(element.player_index)
+
+    if define.events.on_selection then
+        define.events.on_selection(player,element,value)
+    end
+
+    if define.option_callbacks and define.option_callbacks[value] then
+        define.option_callbacks[value](player,element,value)
+    end
+end
+
 local _select_value
+local function store_call(self,element,value)
+    _select_value(element,value)
+    event_call(self,element,value)
+end
+
 local Dropdown = {
     _prototype=Gui._extend_prototype{
         on_selection = Gui._new_event_adder('on_selection'),
-        add_store = Gui._new_store_adder(function(self,element,value)
-            _select_value(element,value)
-            local player = Game.get_player_by_index(element.player_index)
-            if self.events.on_selection then
-                self.events.on_selection(player,element,value)
-            end
-            if self.option_callbacks and self.option_callbacks[value] then
-                self.option_callbacks[value](player,element,value)
-            end
-        end)
+        add_store = Gui._new_store_adder(store_call),
+        add_sync_store = Gui._new_sync_store_adder(store_call)
     }
 }
 
@@ -35,6 +44,7 @@ function Dropdown.new_dropdown(name)
                 element.add_item(v)
             end
         end
+
         if self.store then
             local category = self.categorize and self.categorize(element) or nil
             local value = self:get_store(category)
@@ -49,15 +59,10 @@ function Dropdown.new_dropdown(name)
         if self.store then
             local category = self.categorize and self.categorize(element) or value
             self:set_store(category,value)
-            return
-        end
 
-        if self.events.on_selection then
-            self.events.on_selection(event.player,element,value)
-        end
+        else
+            event_call(self,element,value)
 
-        if self.option_callbacks and self.option_callbacks[value] then
-            self.option_callbacks[value](event.player,element,value)
         end
 
     end)
@@ -72,6 +77,7 @@ function Dropdown._prototype:new_static_options(options,...)
             table.insert(options,v)
         end
     end
+
     self.options = options
     self.draw_data.items = options
     return self
@@ -90,10 +96,12 @@ Dropdown._prototype.add_dynamic = Dropdown._prototype.new_dynamic_options
 function Dropdown._prototype:add_option_callback(option,callback)
     if not self.option_callbacks then self.option_callbacks = {} end
     if not self.options then self.options = {} end
+
     self.option_callbacks[option] = callback
     if not table.contains(self.options,option) then
         table.insert(self.options,option)
     end
+
     return self
 end
 
