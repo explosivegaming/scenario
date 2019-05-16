@@ -77,7 +77,8 @@
 
 >>>> Alternative method
     Some people may prefer to use a varible rather than a string for formating reasons here is an example. Also for any times when
-    there will be little external input Store.uid_location() can be used to generate non conflicting locations.
+    there will be little external input Store.uid_location() can be used to generate non conflicting locations, use of register_synced will
+    still require a name other wise there may be mirgration issuses.
 
     local store_game_speed = Store.uid_location()
 

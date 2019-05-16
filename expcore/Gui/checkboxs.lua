@@ -3,9 +3,9 @@ local Store = require 'expcore.store'
 local Game = require 'utils.game'
 
 local function event_call(self,element,value)
-    if self.events.on_state_change then
+    if self.events.on_change then
         local player = Game.get_player_by_index(element.player_index)
-        self.events.on_state_change(player,element,value)
+        self.events.on_change(player,element,value)
     end
 end
 
@@ -17,21 +17,21 @@ end
 local Checkbox = {
     option_sets={},
     option_categorize={},
-    _prototype_checkbox=Gui._extend_prototype{
-        on_state_change = Gui._new_event_adder('on_state_change'),
-        add_store = Gui._new_store_adder(store_call),
-        add_sync_store = Gui._new_sync_store_adder(store_call)
+    _prototype_checkbox=Gui._prototype_factory{
+        on_change = Gui._event_factory('on_change'),
+        add_store = Gui._store_factory(store_call),
+        add_sync_store = Gui._sync_store_factory(store_call)
     },
-    _prototype_radiobutton=Gui._extend_prototype{
-        on_state_change = Gui._new_event_adder('on_state_change'),
-        add_store = Gui._new_store_adder(store_call),
-        add_sync_store = Gui._new_sync_store_adder(store_call)
+    _prototype_radiobutton=Gui._prototype_factory{
+        on_change = Gui._event_factory('on_change'),
+        add_store = Gui._store_factory(store_call),
+        add_sync_store = Gui._sync_store_factory(store_call)
     }
 }
 
 function Checkbox.new_checkbox(name)
 
-    local self = Gui._new_define(Checkbox._prototype_checkbox)
+    local self = Gui._define_factory(Checkbox._prototype_checkbox)
     self.draw_data.type = 'checkbox'
     self.draw_data.state = false
 
@@ -159,6 +159,18 @@ function Checkbox.new_option_set(name,callback,categorize)
     Checkbox.option_sets[name] = {}
 
     return name
+end
+
+function Checkbox.draw_option_set(name,element)
+    if not Checkbox.option_sets[name] then return end
+    local options = Checkbox.option_sets[name]
+
+    for _,option in pairs(options) do
+        if Gui.defines[option] then
+            Gui.defines[option]:draw_to(element)
+        end
+    end
+
 end
 
 return Checkbox

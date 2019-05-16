@@ -12,14 +12,14 @@ Global.register(Gui.instances,function(tbl)
     Gui.instances = tbl
 end)
 
-function Gui._extend_prototype(tbl)
+function Gui._prototype_factory(tbl)
     for k,v in pairs(Gui._prototype) do
         if not tbl[k] then tbl[k] = v end
     end
     return tbl
 end
 
-function Gui._new_event_adder(name)
+function Gui._event_factory(name)
     return function(self,callback)
         if type(callback) ~= 'function' then
             return error('Event callback must be a function',2)
@@ -30,7 +30,7 @@ function Gui._new_event_adder(name)
     end
 end
 
-function Gui._new_store_adder(callback)
+function Gui._store_factory(callback)
     return function(self,categorize)
         if self.store then return end
 
@@ -57,7 +57,7 @@ function Gui._new_store_adder(callback)
     end
 end
 
-function Gui._new_sync_store_adder(callback)
+function Gui._sync_store_factory(callback)
     return function(self,location,categorize)
         if self.store then return end
 
@@ -88,7 +88,7 @@ function Gui._new_sync_store_adder(callback)
     end
 end
 
-function Gui._new_define(prototype)
+function Gui._define_factory(prototype)
     local uid = Gui.uid_name()
     local define = setmetatable({
         name=uid,
@@ -113,9 +113,13 @@ end
 
 --- Sets an alias to the uid
 function Gui._prototype:debug_name(name)
-    self.debug_name = name
-    Gui.names[name] = self.name
-    Gui.names[self.name] = name
+    if name then
+        self.debug_name = name
+        Gui.names[name] = self.name
+        Gui.names[self.name] = name
+    else
+        return self.debug_name
+    end
     return self
 end
 

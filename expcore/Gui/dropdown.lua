@@ -4,8 +4,8 @@ local Game = require 'utils.game'
 local function event_call(define,element,value)
     local player = Game.get_player_by_index(element.player_index)
 
-    if define.events.on_selection then
-        define.events.on_selection(player,element,value)
+    if define.events.on_change then
+        define.events.on_change(player,element,value)
     end
 
     if define.option_callbacks and define.option_callbacks[value] then
@@ -20,16 +20,16 @@ local function store_call(self,element,value)
 end
 
 local Dropdown = {
-    _prototype=Gui._extend_prototype{
-        on_selection = Gui._new_event_adder('on_selection'),
-        add_store = Gui._new_store_adder(store_call),
-        add_sync_store = Gui._new_sync_store_adder(store_call)
+    _prototype=Gui._prototype_factory{
+        on_change = Gui._event_factory('on_change'),
+        add_store = Gui._store_factory(store_call),
+        add_sync_store = Gui._sync_store_factory(store_call)
     }
 }
 
 function Dropdown.new_dropdown(name)
 
-    local self = Gui._new_define(Dropdown._prototype)
+    local self = Gui._define_factory(Dropdown._prototype)
     self.draw_data.type = 'drop-down'
 
     if name then
@@ -40,9 +40,11 @@ function Dropdown.new_dropdown(name)
         if self.dynamic_options then
             local player = Game.get_player_by_index(element.player_index)
             local dynamic_options = self.dynamic_options(player,element)
+            local items = element.items
             for _,v in pairs(dynamic_options) do
-                element.add_item(v)
+                table.insert(items,v)
             end
+            element.items = items
         end
 
         if self.store then

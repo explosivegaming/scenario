@@ -5,16 +5,16 @@ local Gui = require './core'
 local Button = {
     config={},
     clean_names={},
-    _prototype=Gui._extend_prototype{
-        on_click = Gui._new_event_adder('on_click'),
-        on_left_click = Gui._new_event_adder('on_left_click'),
-        on_right_click = Gui._new_event_adder('on_right_click'),
+    _prototype=Gui._prototype_factory{
+        on_click = Gui._event_factory('on_click'),
+        on_left_click = Gui._event_factory('on_left_click'),
+        on_right_click = Gui._event_factory('on_right_click'),
     }
 }
 
 function Button.new_button(name)
 
-    local self = Gui._new_define(Button._prototype)
+    local self = Gui._define_factory(Button._prototype)
     self.draw_data.type = 'button'
     self.draw_data.style = mod_gui.button_style
 

@@ -11,7 +11,7 @@ local function get_labels(define,element)
 
     local categorize = define.categorize or not define.store and cat
     local category = categorize and categorize(element) or nil
-    local instances = Gui.get_labels({
+    local instances = Gui.get_instances({
         name=name,
         categorize=categorize
     },category)
@@ -53,16 +53,16 @@ local function store_call(self,element,value)
 end
 
 local Slider = {
-    _prototype=Gui._extend_prototype{
-        on_change = Gui._new_event_adder('on_change'),
-        add_store = Gui._new_store_adder(store_call),
-        add_sync_store = Gui._new_sync_store_adder(store_call)
+    _prototype=Gui._prototype_factory{
+        on_change = Gui._event_factory('on_change'),
+        add_store = Gui._store_factory(store_call),
+        add_sync_store = Gui._sync_store_factory(store_call)
     }
 }
 
 function Slider.new_slider(name)
 
-    local self = Gui._new_define(Slider._prototype)
+    local self = Gui._define_factory(Slider._prototype)
     self.draw_data.type = 'slider'
 
     if name then
@@ -145,8 +145,8 @@ function Slider._prototype:draw_label(element)
 
     if not Gui.instances[name] then Gui.instances[name] = {} end
 
-    local instances = get_labels(self,element)
-    table.insert(instances,new_element)
+    local labels = get_labels(self,element)
+    table.insert(labels,new_element)
 
     return new_element
 end
