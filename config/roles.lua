@@ -238,7 +238,7 @@ Roles.override_player_roles{
     FlipHalfling90={'Moderator','Member'},
     Gizan={'Pay to Win','Moderator','Member'},
     Hobbitkicker={'Moderator','Member'},
-    jess_gaming={'Trainee','Member'},
+    jessi_gaming={'Trainee','Member'},
     Koroto={'Moderator','Member'},
     mafisch3={'Moderator','Member'},
     maplesyrup01={'Moderator','Member'},

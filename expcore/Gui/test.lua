@@ -8,11 +8,6 @@ local Game = require 'utils.game'
 
 local tests = {}
 
-local function categozie_by_player(element)
-    local player = Game.get_player_by_index(element.player_index)
-    return player.name
-end
-
 --[[
     Toolbar Tests
     > No display - Toolbar button with no display
@@ -25,7 +20,7 @@ Gui.new_toolbar_button('click-1')
 :set_post_authenticator(function(player,button_name)
     return global.click_one
 end)
-:on_click(function(player,element,event)
+:on_click(function(player,element)
     player.print('CLICK 1')
 end)
 
@@ -34,7 +29,7 @@ Gui.new_toolbar_button('click-2')
 :set_post_authenticator(function(player,button_name)
     return global.click_two
 end)
-:on_click(function(player,element,event)
+:on_click(function(player,element)
     player.print('CLICK 2')
 end)
 
@@ -43,7 +38,7 @@ Gui.new_toolbar_button('click-3')
 :set_post_authenticator(function(player,button_name)
     return global.click_three
 end)
-:on_click(function(player,element,event)
+:on_click(function(player,element)
     player.print('CLICK 3')
 end)
 
@@ -52,7 +47,7 @@ Gui.new_toolbar_button('gui-test-open')
 :set_post_authenticator(function(player,button_name)
     return global.show_test_gui
 end)
-:on_click(function(player,_element,event)
+:on_click(function(player,_element)
     if player.gui.center.TestGui then player.gui.center.TestGui.destroy() return end
 
     local frame = player.gui.center.add{
@@ -108,7 +103,7 @@ end)
 local button_no_display =
 Gui.new_button('test-button-no-display')
 :set_tooltip('Button no display')
-:on_click(function(player,element,event)
+:on_click(function(player,element)
     player.print('Button no display')
     global.test_auth_button = not global.test_auth_button
     player.print('Auth Button auth state: '..tostring(global.test_auth_button))
@@ -118,7 +113,7 @@ local button_with_caption =
 Gui.new_button('test-button-with-caption')
 :set_tooltip('Button with caption')
 :set_caption('Button Caption')
-:on_click(function(player,element,event)
+:on_click(function(player,element)
     player.print('Button with caption')
 end)
 
@@ -126,7 +121,7 @@ local button_with_icon =
 Gui.new_button('test-button-with-icon')
 :set_tooltip('Button with icons')
 :set_sprites('utility/warning_icon','utility/warning','utility/warning_white')
-:on_click(function(player,element,event)
+:on_click(function(player,element)
     player.print('Button with icons')
 end)
 
@@ -136,7 +131,7 @@ Gui.new_button('test-button-with-auth')
 :set_post_authenticator(function(player,button_name)
     return global.test_auth_button
 end)
-:on_click(function(player,element,event)
+:on_click(function(player,element)
     player.print('Button with auth')
 end)
 
@@ -159,7 +154,7 @@ local checkbox_local =
 Gui.new_checkbox('test-checkbox-local')
 :set_tooltip('Checkbox local')
 :set_caption('Checkbox Local')
-:on_change(function(player,element,state)
+:on_element_update(function(player,element,state)
     player.print('Checkbox local: '..tostring(state))
 end)
 
@@ -168,7 +163,7 @@ Gui.new_checkbox('test-checkbox-store-game')
 :set_tooltip('Checkbox store game')
 :set_caption('Checkbox Store Game')
 :add_store()
-:on_change(function(player,element,state)
+:on_element_update(function(player,element,state)
     player.print('Checkbox store game: '..tostring(state))
 end)
 
@@ -176,11 +171,8 @@ local checkbox_force =
 Gui.new_checkbox('test-checkbox-store-force')
 :set_tooltip('Checkboc store force')
 :set_caption('Checkbox Store Force')
-:add_store(function(element)
-    local player = Game.get_player_by_index(element.player_index)
-    return player.force.name
-end)
-:on_change(function(player,element,state)
+:add_store(Gui.force_store)
+:on_element_update(function(player,element,state)
     player.print('Checkbox store force: '..tostring(state))
 end)
 
@@ -188,8 +180,8 @@ local checkbox_player =
 Gui.new_checkbox('test-checkbox-store-player')
 :set_tooltip('Checkbox store player')
 :set_caption('Checkbox Store Player')
-:add_store(categozie_by_player)
-:on_change(function(player,element,state)
+:add_store(Gui.player_store)
+:on_element_update(function(player,element,state)
     player.print('Checkbox store player: '..tostring(state))
 end)
 
@@ -211,7 +203,7 @@ local radiobutton_local =
 Gui.new_radiobutton('test-radiobutton-local')
 :set_tooltip('Radiobutton local')
 :set_caption('Radiobutton Local')
-:on_change(function(player,element,state)
+:on_element_update(function(player,element,state)
     player.print('Radiobutton local: '..tostring(state))
 end)
 
@@ -219,22 +211,22 @@ local radiobutton_player =
 Gui.new_radiobutton('test-radiobutton-store')
 :set_tooltip('Radiobutton store')
 :set_caption('Radiobutton Store')
-:add_store(categozie_by_player)
-:on_change(function(player,element,state)
+:add_store(Gui.player_store)
+:on_element_update(function(player,element,state)
     player.print('Radiobutton store: '..tostring(state))
 end)
 
 local radiobutton_option_set =
 Gui.new_radiobutton_option_set('gui.test.share',function(value,category)
     game.print('Radiobutton option set for: '..category..' is now: '..tostring(value))
-end,categozie_by_player)
+end,Gui.player_store)
 
 local radiobutton_option_one =
 Gui.new_radiobutton('test-radiobutton-option-one')
 :set_tooltip('Radiobutton option set')
 :set_caption('Radiobutton Option One')
 :add_as_option(radiobutton_option_set,'One')
-:on_change(function(player,element,state)
+:on_element_update(function(player,element,state)
     player.print('Radiobutton option one: '..tostring(state))
 end)
 
@@ -243,7 +235,7 @@ Gui.new_radiobutton('test-radiobutton-option-two')
 :set_tooltip('Radiobutton option set')
 :set_caption('Radiobutton Option Two')
 :add_as_option(radiobutton_option_set,'Two')
-:on_change(function(player,element,state)
+:on_element_update(function(player,element,state)
     player.print('Radiobutton option two: '..tostring(state))
 end)
 
@@ -252,7 +244,7 @@ Gui.new_radiobutton('test-radiobutton-option-three')
 :set_tooltip('Radiobutton option set')
 :set_caption('Radiobutton Option Three')
 :add_as_option(radiobutton_option_set,'Three')
-:on_change(function(player,element,state)
+:on_element_update(function(player,element,state)
     player.print('Radiobutton option three: '..tostring(state))
 end)
 
@@ -278,7 +270,7 @@ local dropdown_local_static_general =
 Gui.new_dropdown('test-dropdown-local-static-general')
 :set_tooltip('Dropdown local static general')
 :add_options('One','Two','Three','Four')
-:on_change(function(player,element,value)
+:on_element_update(function(player,element,value)
     player.print('Dropdown local static general: '..tostring(value))
 end)
 
@@ -286,8 +278,8 @@ local dropdown_player_static_general =
 Gui.new_dropdown('test-dropdown-store-static-general')
 :set_tooltip('Dropdown store static general')
 :add_options('One','Two','Three','Four')
-:add_store(categozie_by_player)
-:on_change(function(player,element,value)
+:add_store(Gui.player_store)
+:on_element_update(function(player,element,value)
     player.print('Dropdown store static general: '..tostring(value))
 end)
 
@@ -303,7 +295,7 @@ Gui.new_dropdown('test-dropdown-local-static-case')
 :add_option_callback('Two',print_option_selected_1)
 :add_option_callback('Three',print_option_selected_1)
 :add_option_callback('Four',print_option_selected_1)
-:on_change(function(player,element,value)
+:on_element_update(function(player,element,value)
     player.print('Dropdown local static case (general): '..tostring(value))
 end)
 
@@ -314,13 +306,13 @@ end
 local dropdown_player_static_case =
 Gui.new_dropdown('test-dropdown-store-static-case')
 :set_tooltip('Dropdown store static case')
-:add_store(categozie_by_player)
+:add_store(Gui.player_store)
 :add_options('One','Two')
 :add_option_callback('One',print_option_selected_2)
 :add_option_callback('Two',print_option_selected_2)
 :add_option_callback('Three',print_option_selected_2)
 :add_option_callback('Four',print_option_selected_2)
-:on_change(function(player,element,value)
+:on_element_update(function(player,element,value)
     player.print('Dropdown store static case (general): '..tostring(value))
 end)
 
@@ -331,7 +323,7 @@ Gui.new_dropdown('test-dropdown-local-dynamic')
 :add_dynamic(function(player,element)
     return table_keys(Colors)
 end)
-:on_change(function(player,element,value)
+:on_element_update(function(player,element,value)
     player.print('Dropdown local dynamic: '..tostring(value))
 end)
 
@@ -342,8 +334,8 @@ Gui.new_dropdown('test-dropdown-store-dynamic')
 :add_dynamic(function(player,element)
     return table_keys(Colors)
 end)
-:add_store(categozie_by_player)
-:on_change(function(player,element,value)
+:add_store(Gui.player_store)
+:on_element_update(function(player,element,value)
     player.print('Dropdown store dynamic: '..tostring(value))
 end)
 
@@ -366,7 +358,7 @@ local list_box_local =
 Gui.new_list_box('test-list-box-local')
 :set_tooltip('List box local')
 :add_options('One','Two','Three','Four')
-:on_change(function(player,element,value)
+:on_element_update(function(player,element,value)
     player.print('Dropdown local: '..tostring(value))
 end)
 
@@ -374,8 +366,8 @@ local list_box_player =
 Gui.new_list_box('test-list-box-store')
 :set_tooltip('List box store')
 :add_options('One','Two','Three','Four')
-:add_store(categozie_by_player)
-:on_change(function(player,element,value)
+:add_store(Gui.player_store)
+:on_element_update(function(player,element,value)
     player.print('Dropdown store: '..tostring(value))
 end)
 
@@ -397,15 +389,15 @@ tests["List Boxs"] = {
 local slider_local_default =
 Gui.new_slider('test-slider-local-default')
 :set_tooltip('Silder local default')
-:on_change(function(player,element,value,percent)
+:on_element_update(function(player,element,value,percent)
     player.print('Slider local default: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
 end)
 
 local slider_player_default =
 Gui.new_slider('test-slider-store-default')
 :set_tooltip('Silder store default')
-:add_store(categozie_by_player)
-:on_change(function(player,element,value,percent)
+:add_store(Gui.player_store)
+:on_element_update(function(player,element,value,percent)
     player.print('Slider store default: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
 end)
 
@@ -413,7 +405,7 @@ local slider_static =
 Gui.new_slider('test-slider-static-range')
 :set_tooltip('Silder static range')
 :set_range(5,50)
-:on_change(function(player,element,value,percent)
+:on_element_update(function(player,element,value,percent)
     player.print('Slider static range: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
 end)
 
@@ -425,7 +417,7 @@ Gui.new_slider('test-slider-dynamic-range')
 end,function(player,element)
     return player.index + 4
 end)
-:on_change(function(player,element,value,percent)
+:on_element_update(function(player,element,value,percent)
     player.print('Slider dynamic range: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
 end)
 
@@ -433,7 +425,7 @@ local label_slider_local =
 Gui.new_slider('test-slider-local-label')
 :set_tooltip('Silder local label')
 :enable_auto_draw_label()
-:on_change(function(player,element,value,percent)
+:on_element_update(function(player,element,value,percent)
     player.print('Slider local label: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
 end)
 
@@ -441,8 +433,8 @@ local label_slider_player =
 Gui.new_slider('test-slider-store-label')
 :set_tooltip('Silder store label')
 :enable_auto_draw_label()
-:add_store(categozie_by_player)
-:on_change(function(player,element,value,percent)
+:add_store(Gui.player_store)
+:on_element_update(function(player,element,value,percent)
     player.print('Slider store label: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
 end)
 
@@ -472,22 +464,22 @@ tests.Sliders = {
 local text_filed_local =
 Gui.new_text_filed('test-text-field-local')
 :set_tooltip('Text field local')
-:on_change(function(player,element,value)
+:on_element_update(function(player,element,value)
     player.print('Text field local: '..value)
 end)
 
 local text_filed_store =
 Gui.new_text_filed('test-text-field-store')
 :set_tooltip('Text field store')
-:add_store(categozie_by_player)
-:on_change(function(player,element,value)
+:add_store(Gui.player_store)
+:on_element_update(function(player,element,value)
     player.print('Text field store: '..value)
 end)
 
 local text_box_local =
 Gui.new_text_box('test-text-box-local')
 :set_tooltip('Text box local')
-:on_change(function(player,element,value)
+:on_element_update(function(player,element,value)
     player.print('Text box local: '..value)
 end)
 
@@ -496,7 +488,7 @@ Gui.new_text_box('test-text-box-wrap')
 :set_tooltip('Text box wrap')
 :set_selectable(false)
 :set_word_wrap()
-:on_change(function(player,element,value)
+:on_element_update(function(player,element,value)
     player.print('Text box wrap: '..value)
 end)
 
@@ -519,7 +511,7 @@ local elem_local =
 Gui.new_elem_button('test-elem-local')
 :set_tooltip('Elem')
 :set_type('item')
-:on_change(function(player,element,value)
+:on_element_update(function(player,element,value)
     player.print('Elem: '..value)
 end)
 
@@ -528,7 +520,7 @@ Gui.new_elem_button('test-elem-default')
 :set_tooltip('Elem default')
 :set_type('item')
 :set_default('iron-plate')
-:on_change(function(player,element,value)
+:on_element_update(function(player,element,value)
     player.print('Elem default: '..value)
 end)
 
@@ -539,7 +531,7 @@ Gui.new_elem_button('test-elem-function')
 :set_default(function(player,element)
     return 'iron-plate'
 end)
-:on_change(function(player,element,value)
+:on_element_update(function(player,element,value)
     player.print('Elem function: '..value)
 end)
 
@@ -547,8 +539,8 @@ local elem_store =
 Gui.new_elem_button('test-elem-store')
 :set_tooltip('Elem store')
 :set_type('item')
-:add_store(categozie_by_player)
-:on_change(function(player,element,value)
+:add_store(Gui.player_store)
+:on_element_update(function(player,element,value)
     player.print('Elem store: '..value)
 end)
 
