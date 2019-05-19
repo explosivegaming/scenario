@@ -153,8 +153,9 @@ function Slider._prototype:draw_label(element)
     }
 
     local categorise = self.categorise or Gui.player_store
+    local category = categorise(new_element)
 
-    Instances.unregistered_add_element(name,categorise,new_element)
+    Instances.unregistered_add_element(name,category,new_element)
 
     return new_element
 end
