@@ -36,6 +36,13 @@ local Gui = require('./gui/core')
     Gui.toggle_visible(element) --- Will toggle the visiblity of an element
 ]]
 
+local Instances = require('./gui/instances')
+Gui.new_instance_group = Instances.registers
+Gui.get_instances = Instances.get_elements
+Gui.add_instance = Instances.get_elements
+Gui.update_instances = Instances.apply_to_elements
+Gui.classes.instances = Instances
+
 local Button = require('./gui/buttons')
 Gui.new_button = Button.new_button
 Gui.classes.button = Button

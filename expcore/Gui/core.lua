@@ -152,17 +152,13 @@
 ]]
 local Gui = require 'utils.gui'
 local Game = require 'utils.game'
-local Global = require 'utils.global'
 local Store = require 'expcore.store'
+local Instances = require 'expcore.gui.instances'
 
 Gui._prototype = {} -- Stores the base prototype of all element defines
 Gui.classes = {} -- Stores the class definations used to create element defines
 Gui.defines = {} -- Stores the indivdual element definations
 Gui.names = {} -- Stores debug names to link to gui uids
-Gui.instances = {} -- Stores runtime data of all active instances of an element define
-Global.register(Gui.instances,function(tbl)
-    Gui.instances = tbl
-end)
 
 --- Used internally to create new prototypes for element defines
 -- @tparam tbl table a table that will have functions added to it
@@ -211,24 +207,18 @@ function Gui._store_factory(callback)
 
         self.store = Store.uid_location()
         self.categorize = categorize
-        Gui.instances[self.name]={}
+
+        Instances.register(self.name,self.categorize)
 
         Store.register(self.store,function(value,category)
             if self.events.on_store_update then
                 self.events.on_store_update(value,category)
             end
 
-            local instances = Gui.get_instances(self,category)
-            if instances then
-
-                for k,element in pairs(instances) do
-                    if element and element.valid then
-                        callback(self,element,value)
-                    else
-                        instances[k] = nil
-                    end
-                end
-
+            if Instances.is_registered(self.name) then
+                Instances.apply_to_elements(self.name,category,function(element)
+                    callback(self,element,value)
+                end)
             end
         end)
 
@@ -256,24 +246,18 @@ function Gui._sync_store_factory(callback)
 
         self.store = location
         self.categorize = categorize
-        Gui.instances[self.name]={}
+
+        Instances.register(self.name,self.categorize)
 
         Store.register_synced(self.store,function(value,category)
             if self.events.on_store_update then
                 self.events.on_store_update(value,category)
             end
 
-            local instances = Gui.get_instances(self,category)
-            if instances then
-
-                for k,element in pairs(instances) do
-                    if element and element.valid then
-                        callback(self,element,value)
-                    else
-                        instances[k] = nil
-                    end
-                end
-
+            if Instances.is_registered(self.name) then
+                Instances.apply_to_elements(self,category,function(element)
+                    callback(self,element,value)
+                end)
             end
         end)
 
@@ -380,12 +364,8 @@ function Gui._prototype:draw_to(element)
         new_element.enabled = self.post_authenticator(player,self.name)
     end
 
-    if self.store then
-        local category = self.categorize and self.categorize(element) or nil
-        local instances = Gui.get_instances(self,category)
-        if instances then
-            table.insert(instances,new_element)
-        end
+    if Instances.is_registered(self.name) then
+        Instances.add_element(self.name,new_element)
     end
 
     if self.post_draw then self.post_draw(new_element) end
@@ -440,24 +420,6 @@ function Gui.get_define(name,internal)
     end
 
     return define
-end
-
---- Gets all instances of the element define, mostly internal use and note invalid elements may be present in the return
--- @tparam name string the uid or debug name for the define to get the instances for
--- @tparam[opt] category string the category to get the instances for
--- @treturn table a table of LuaGuiElements that might be invalid which belong to this define
-function Gui.get_instances(name,category)
-    local define = Gui.get_define(name,true)
-    if not Gui.instances[define.name] then return end
-
-    local instances = Gui.instances[define.name]
-    if define.categorize then
-        if not instances[category] then instances[category] = {} end
-        return instances[category]
-
-    end
-
-    return instances
 end
 
 --- Gets the value that is stored for a given element define, category needed if categorize function used

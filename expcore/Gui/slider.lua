@@ -13,46 +13,8 @@
     Other functions present from expcore.gui.core
 ]]
 local Gui = require './core'
+local Instances = require './instances'
 local Game = require 'utils.game'
-
---- Gets the active lables for a define
--- @tparam define table the define to get the labels for
--- @tparam element LuaGuiElement the element that will be used to get the category
--- @treturn table the table of active instances for the slider lables
-local function get_labels(define,element)
-    local function cat(e)
-        return e.player_index
-    end
-
-    local name = define.name..'-label'
-    if not Gui.instances[name] then return end
-
-    local categorize = define.categorize or not define.store and cat
-    local category = categorize and categorize(element) or nil
-    local instances = Gui.get_instances({
-        name=name,
-        categorize=categorize
-    },category)
-
-    return instances
-end
-
---- Gets and updates the label values
--- @tparam define table the define to get the labels for
--- @tparam element LuaGuiElement the element that will be used to get the category
-local function update_lables(define,element)
-    local instances = get_labels(define,element)
-    local value = element.slider_value
-    if instances then
-        for k,instance in pairs(instances) do
-            if instance and instance.valid then
-                instance.caption = tostring(math.round(value,2))
-            else
-                instances[k]=nil
-            end
-        end
-    end
-end
 
 --- Event call for on_value_changed and store update
 -- @tparam define table the define that this is acting on
@@ -69,7 +31,14 @@ local function event_call(define,element,value)
         define.events.on_element_update(player,element,value,percent)
     end
 
-    update_lables(define,element)
+    local category = player.name
+    if define.categorize then
+        category = define.categorize(element)
+    end
+
+    Instances.unregistered_get_elements(define.name..'-label',category,function(label)
+        label.caption = tostring(math.round(value,2))
+    end)
 end
 
 --- Store call for store update
@@ -183,10 +152,9 @@ function Slider._prototype:draw_label(element)
         caption=tostring(math.round(value,2))
     }
 
-    if not Gui.instances[name] then Gui.instances[name] = {} end
+    local categorise = self.categorise or Gui.player_store
 
-    local labels = get_labels(self,element)
-    table.insert(labels,new_element)
+    Instances.unregistered_add_element(name,categorise,new_element)
 
     return new_element
 end
