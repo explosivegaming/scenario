@@ -74,11 +74,28 @@
     Store.add_watch('game.speed',function()
         return game.speed
     end)
+
+>>>> Alternative method
+    Some people may prefer to use a varible rather than a string for formating reasons here is an example. Also for any times when
+    there will be little external input Store.uid_location() can be used to generate non conflicting locations, use of register_synced will
+    still require a name other wise there may be mirgration issuses.
+
+    local store_game_speed = Store.uid_location()
+
+    Store.register(store_game_speed,function(value)
+        game.print('The game speed has been set to: '..value)
+    end)
+
+    Store.add_watch(store_game_speed,function()
+        return game.speed
+    end)
+
 ]]
 
-local Global = require 'util.global'
-local Event = require 'util.event'
-local write_json,table_keys = ext_require('expcore.common','write_json','table_keys')
+local Global = require 'utils.global'
+local Event = require 'utils.event'
+local write_json = ext_require('expcore.common','write_json','table_keys')
+local Token = require 'utils.token'
 
 local Store = {
     data={},
@@ -89,6 +106,19 @@ local Store = {
 Global.register(Store.data,function(tbl)
     Store.data = tbl
 end)
+
+--- Check for if a lcoation is registered
+-- @tparam location string the location to test for
+-- @treturn boolean true if registered
+function Store.is_registered(location)
+    return not not Store.callbacks[location]
+end
+
+--- Returns a unqiue name that can be used for a store
+-- @treturn string a unqiue name
+function Store.uid_location()
+    return tostring(Token.uid())
+end
 
 --- Registers a new location with an update callback which is triggered when the value updates
 -- @tparam location string a unique string that points to the data, string used rather than token to allow migration
@@ -109,6 +139,8 @@ function Store.register(location,callback,start_value)
 
     Store.data[location] = start_value
     Store.callbacks[location] = callback
+
+    return location
 end
 
 --- Registers a new cross server synced location with an update callback, and external script is required for cross server
@@ -167,8 +199,9 @@ end
 --- Sets the value at a location, this location must be registered, if server synced it will emit the change to file
 -- @tparam location string the location to set the data to
 -- @tparam value any the new value to set at the location, value may be reverted if there is a watch callback
+-- @treturn boolean true if it was successful
 function Store.set(location,value)
-    if not Store.callbacks[location] and not no_error then
+    if not Store.callbacks[location] then
         return error('Location is not registered', 2)
     end
 
@@ -181,6 +214,8 @@ function Store.set(location,value)
             value=value
         })
     end
+
+    return true
 end
 
 --- Gets all non nil children at a location, children can be added and removed during runtime
@@ -190,7 +225,7 @@ end
 function Store.get_children(location)
     local store = Store.get(location)
 
-    if type(store) ~= 'table' and table ~= nil then
+    if type(store) ~= 'table' and store ~= nil then
         return error('Location has a non table value', 2)
     end
 
@@ -204,11 +239,11 @@ end
 function Store.get_child(location,child)
     local store = Store.get(location)
 
-    if type(store) ~= 'table' and table ~= nil then
+    if type(store) ~= 'table' and store ~= nil then
         return error('Location has a non table value', 2)
     end
 
-    return store[child]
+    return store and store[child]
 end
 
 --- Sets the value of the chlid to a location, children can be added and removed during runtime
@@ -217,10 +252,11 @@ end
 -- @tparam location string the location of which the child is located
 -- @tparam child string the child element to set the value of
 -- @tparam value any the value to set at this location
+-- @treturn boolean true if it was successful
 function Store.set_child(location,child,value)
     local store = Store.get(location)
 
-    if type(store) ~= 'table' and table ~= nil then
+    if type(store) ~= 'table' and store ~= nil then
         return error('Location has a non table value', 2)
     end
 
@@ -238,6 +274,8 @@ function Store.set_child(location,child,value)
             value=value
         })
     end
+
+    return true
 end
 
 -- Event handler for the watcher callbacks
@@ -251,14 +289,18 @@ Event.add(defines.events.on_tick,function()
         if not success then
             table.insert(errors,store_new)
         else
-            if store_old ~= store_new then
+            if type(store_old) ~= type(store_new)
+            or type(store_old) == 'table' and not table.compare(store_new,store_new)
+            or store_old ~= store_new then
                 Store.data[location] = store_new
                 Store.callbacks[location](store_new)
             end
         end
     end
 
-    error(errors)
+    if #errors > 0 then
+        error(table.concat(errors,'; '))
+    end
 end)
 
 return Store

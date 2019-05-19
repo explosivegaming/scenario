@@ -36,7 +36,7 @@ function Global.register_init(tbl, init_handler, callback)
     )
 end
 
-if _DEBUG then
+if _DEBUG or true then
     local concat = table.concat
 
     local names = {}

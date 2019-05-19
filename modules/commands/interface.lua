@@ -10,7 +10,8 @@ local interface_modules = {
     ['output']=Common.player_return,
     ['Group']='expcore.permission_groups',
     ['Roles']='expcore.roles',
-    ['Store']='expcore.store'
+    ['Store']='expcore.store',
+    ['Gui']='expcore.gui'
 }
 
 -- loads all the modules given in the above table
@@ -95,5 +96,6 @@ add_interface_callback('tile',function(player) return player.surface.get_tile(pl
 return {
     add_interface_callback=add_interface_callback,
     interface_env=interface_env,
-    interface_callbacks=interface_callbacks
+    interface_callbacks=interface_callbacks,
+    clean_stack_trace=function(str) return str:gsub('%.%.%..-/temp/currently%-playing','') end
 }
