@@ -58,17 +58,6 @@ Gui.classes.button = Button
     Button._prototype:set_key_filter(filter,...) --- Adds a control key filter to the button
 ]]
 
-local Toolbar = require('./gui/toolbar')
-Gui.new_toolbar_button = Toolbar.new_button
-Gui.add_button_to_toolbar = Toolbar.add_button
-Gui.update_toolbar = Toolbar.update
-Gui.classes.toolbar = Toolbar
---[[
-    Toolbar.new_button(name) --- Adds a new button to the toolbar
-    Toolbar.add_button(button) --- Adds an existing buttton to the toolbar
-    Toolbar.update(player) --- Updates the player's toolbar with an new buttons or expected change in auth return
-]]
-
 local Checkbox = require('./gui/checkboxs')
 Gui.new_checkbox = Checkbox.new_checkbox
 Gui.new_radiobutton = Checkbox.new_radiobutton
@@ -153,5 +142,24 @@ Gui.classes.elem_button = ElemButton
     ElemButton._prototype:set_type(type) --- Sets the type of the elem button, the type is required so this must be called at least once
     ElemButton._prototype:set_default(value) --- Sets the default value for the elem button, this may be a function or a string
 ]]
+
+local Toolbar = require('./gui/toolbar')
+Gui.new_toolbar_button = Toolbar.new_button
+Gui.add_button_to_toolbar = Toolbar.add_button
+Gui.update_toolbar = Toolbar.update
+Gui.classes.toolbar = Toolbar
+--[[
+    Toolbar.new_button(name) --- Adds a new button to the toolbar
+    Toolbar.add_button(button) --- Adds an existing buttton to the toolbar
+    Toolbar.update(player) --- Updates the player's toolbar with an new buttons or expected change in auth return
+]]
+
+local LeftFrames = require('./gui/left')
+Gui.new_left_frame = LeftFrames.new_frame
+Gui.add_frame_to_left_frames = LeftFrames.add_frame
+Gui.set_left_open_by_default = LeftFrames.set_open_by_default
+Gui.on_left_frame_update = LeftFrames.on_update
+Gui.update_left_frames = LeftFrames.update_all_frames
+Gui.update_left_frame = LeftFrames.update
 
 return Gui

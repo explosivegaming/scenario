@@ -12,17 +12,27 @@ local Event = require 'utils.event'
 local Game = require 'utils.game'
 
 local Toolbar = {
+    permisison_names = {},
     buttons = {}
 }
+
+local function toolbar_allow(player,define_name)
+    local permisison_name = Toolbar.permisison_names[define_name] or define_name
+    return Roles.player_allowed(player,permisison_name)
+end
+
+function Toolbar.permission_alias(define_name,permisison_name)
+    Toolbar.permisison_names[define_name] = permisison_name
+end
 
 --- Adds a new button to the toolbar
 -- @tparam[opt] name string the name of the button to be added
 -- @treturn table the button define
 function Toolbar.new_button(name)
-    name = name or #Toolbar.buttons+1
-    local button = Buttons.new_button('toolbar/'..name)
-    button:set_post_authenticator(Roles.player_allowed)
+    local button = Buttons.new_button()
+    button:set_post_authenticator(toolbar_allow)
     Toolbar.add_button(button)
+    Toolbar.permission_alias(button.name,name)
     return button
 end
 
