@@ -4,7 +4,7 @@
 local Gui = require 'expcore.gui'
 local format_chat_colour,table_keys = ext_require('expcore.common','format_chat_colour','table_keys')
 local Colors = require 'resources.color_presets'
-local Game = require 'utils.game'
+local Event = require 'utils.event'
 
 local tests = {}
 
@@ -91,6 +91,35 @@ end)
 
     end
 end)
+
+--[[
+    Left Frame Test
+    > Left frame which holds all online player names, updates when player leaves or joins
+]]
+
+local left_frame_name,left_gui_button =
+Gui.new_left_frame('test-left-frame')
+
+Gui.set_left_open_by_default(left_frame_name,true)
+
+Gui.on_left_update(left_frame_name,function(frame,_player)
+    for _,player in pairs(game.connected_players) do
+        frame.add{
+            type='label',
+            caption=player.name
+        }
+    end
+end)
+
+left_gui_button
+:set_caption('Test Left Gui')
+:set_post_authenticator(function(player,button_name)
+    return global.show_test_gui
+end)
+
+local update_left_frame = Gui.left_update_factory(left_frame_name)
+Event.add(defines.events.on_player_joined_game,update_left_frame)
+Event.add(defines.events.on_player_left_game,update_left_frame)
 
 --[[
     Button Tests

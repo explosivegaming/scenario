@@ -11,7 +11,7 @@
 
     Other functions present from expcore.gui.core
 ]]
-local Gui = require './core'
+local Gui = require 'expcore.gui.core'
 local Game = require 'utils.game'
 
 --- Event call for on_elem_changed and store update

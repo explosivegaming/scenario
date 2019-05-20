@@ -14,7 +14,7 @@
     Other functions present from expcore.gui.core
 ]]
 local mod_gui = require 'mod-gui'
-local Gui = require './core'
+local Gui = require 'expcore.gui.core'
 
 local Button = {
     config={},

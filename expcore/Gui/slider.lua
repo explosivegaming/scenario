@@ -12,8 +12,8 @@
 
     Other functions present from expcore.gui.core
 ]]
-local Gui = require './core'
-local Instances = require './instances'
+local Gui = require 'expcore.gui.core'
+local Instances = require 'expcore.gui.instances'
 local Game = require 'utils.game'
 
 --- Event call for on_value_changed and store update

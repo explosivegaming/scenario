@@ -1,7 +1,7 @@
 --- This file is used to require all the different elements of the gui module
 -- each module has an outline here but for more details see their seperate files in ./gui
 
-local Gui = require('./gui/core')
+local Gui = require('expcore.gui.core')
 --[[
     Gui._prototype_factory(tbl) --- Used internally to create new prototypes for element defines
     Gui._event_factory(name) --- Used internally to create event handler adders for element defines
@@ -36,14 +36,14 @@ local Gui = require('./gui/core')
     Gui.toggle_visible(element) --- Will toggle the visiblity of an element
 ]]
 
-local Instances = require('./gui/instances')
+local Instances = require('expcore.gui.instances')
 Gui.new_instance_group = Instances.registers
 Gui.get_instances = Instances.get_elements
 Gui.add_instance = Instances.get_elements
 Gui.update_instances = Instances.apply_to_elements
 Gui.classes.instances = Instances
 
-local Button = require('./gui/buttons')
+local Button = require('expcore.gui.buttons')
 Gui.new_button = Button.new_button
 Gui.classes.button = Button
 --[[
@@ -58,7 +58,7 @@ Gui.classes.button = Button
     Button._prototype:set_key_filter(filter,...) --- Adds a control key filter to the button
 ]]
 
-local Checkbox = require('./gui/checkboxs')
+local Checkbox = require('expcore.gui.checkboxs')
 Gui.new_checkbox = Checkbox.new_checkbox
 Gui.new_radiobutton = Checkbox.new_radiobutton
 Gui.new_radiobutton_option_set = Checkbox.new_option_set
@@ -80,7 +80,7 @@ Gui.classes.checkbox = Checkbox
     Checkbox.reset_radiobutton(element,exclude,recursive) --- Sets all radiobutotn in a element to false (unless excluded) and can act recursivly
 ]]
 
-local Dropdown = require('./gui/dropdown')
+local Dropdown = require('expcore.gui.dropdown')
 Gui.new_dropdown = Dropdown.new_dropdown
 Gui.new_list_box = Dropdown.new_list_box
 Gui.classes.dropdown = Dropdown
@@ -99,7 +99,7 @@ Gui.classes.dropdown = Dropdown
     Dropdown.get_selected_value(element) --- Returns the currently selected value rather than index
 ]]
 
-local Slider = require('./gui/slider')
+local Slider = require('expcore.gui.slider')
 Gui.new_slider = Slider.new_slider
 Gui.classes.slider = Slider
 --[[
@@ -113,7 +113,7 @@ Gui.classes.slider = Slider
     Slider._prototype:enable_auto_draw_label(state) --- Enables auto draw of the label, the label will share the same parent element as the slider
 ]]
 
-local Text = require('./gui/text')
+local Text = require('expcore.gui.text')
 Gui.new_text_filed = Text.new_text_field
 Gui.new_text_box = Text.new_text_box
 Gui.classes.text = Text
@@ -130,7 +130,7 @@ Gui.classes.text = Text
     Text._prototype_box:set_read_only(state) --- Sets the text box to be read only
 ]]
 
-local ElemButton = require('./gui/elem-button')
+local ElemButton = require('expcore.gui.elem-button')
 Gui.new_elem_button = ElemButton.new_elem_button
 Gui.classes.elem_button = ElemButton
 --[[
@@ -143,7 +143,7 @@ Gui.classes.elem_button = ElemButton
     ElemButton._prototype:set_default(value) --- Sets the default value for the elem button, this may be a function or a string
 ]]
 
-local Toolbar = require('./gui/toolbar')
+local Toolbar = require('expcore.gui.toolbar')
 Gui.new_toolbar_button = Toolbar.new_button
 Gui.add_button_to_toolbar = Toolbar.add_button
 Gui.update_toolbar = Toolbar.update
@@ -154,12 +154,32 @@ Gui.classes.toolbar = Toolbar
     Toolbar.update(player) --- Updates the player's toolbar with an new buttons or expected change in auth return
 ]]
 
-local LeftFrames = require('./gui/left')
+local LeftFrames = require('expcore.gui.left')
 Gui.new_left_frame = LeftFrames.new_frame
 Gui.add_frame_to_left_frames = LeftFrames.add_frame
 Gui.set_left_open_by_default = LeftFrames.set_open_by_default
-Gui.on_left_frame_update = LeftFrames.on_update
+Gui.on_left_update = LeftFrames.on_update
+Gui.left_update_factory = LeftFrames.update_factory
 Gui.update_left_frames = LeftFrames.update_all_frames
 Gui.update_left_frame = LeftFrames.update
+Gui.get_left_frame = LeftFrames.get_frame
+Gui.classes.left_frames = LeftFrames
+--[[
+    LeftFrames.get_flow(player) --- Gets the left frame flow for a player
+    LeftFrames.get_open(player) --- Gets all open frames for a player, if non are open it will remove the close all button
+    LeftFrames.get_frame(player,name) --- Gets one frame from the left flow by its name
+    LeftFrames.toggle_frame(player,name,state) --- Toggles the visiblty of a left frame, or sets its visiblty state
+
+    LeftFrames.new_frame(name) --- Makes a new frame that can be used with on_update and adds a toggle button to the toolbar
+    LeftFrames.add_frame(define_name,permision_name) --- Similar to new_frame but using an already defined name (this will still add a button to the toolbar)
+
+    LeftFrames.set_open_by_default(define_name,state) --- Sets if the frame is visible when a player joins, can also be a function to return a boolean
+    LeftFrames.on_update(define_name,callback) --- Registeres an update function for the gui that will be used to redraw the gui (frame is cleared before call)
+    LeftFrames.update(define_name,player) --- Clears the gui frame for the player and calls the update callback
+
+    LeftFrames.update_all_frames(player) --- Clears all frames and then re-draws all frames
+    LeftFrames.update_all_players(define_name,update_offline) --- Clears and returns the gui frame for all players
+    LeftFrames.update_all(update_offline) --- Clears and updates all frames for all players
+]]
 
 return Gui
