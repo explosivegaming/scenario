@@ -78,7 +78,6 @@ function Toolbar.update(player)
             element.enabled = false
         end
     end
-    log(table.inspect(Toolbar.buttons))
 end
 
 --- When there is a new player they will have the toolbar update

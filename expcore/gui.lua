@@ -155,31 +155,28 @@ Gui.classes.toolbar = Toolbar
 ]]
 
 local LeftFrames = require('expcore.gui.left')
+Gui.get_left_frame_flow = LeftFrames.get_flow
+Gui.toggle_left_frame = LeftFrames.toggle_frame
 Gui.new_left_frame = LeftFrames.new_frame
-Gui.add_frame_to_left_frames = LeftFrames.add_frame
-Gui.set_left_open_by_default = LeftFrames.set_open_by_default
-Gui.on_left_update = LeftFrames.on_update
-Gui.left_update_factory = LeftFrames.update_factory
-Gui.update_left_frames = LeftFrames.update_all_frames
-Gui.update_left_frame = LeftFrames.update
-Gui.get_left_frame = LeftFrames.get_frame
 Gui.classes.left_frames = LeftFrames
 --[[
     LeftFrames.get_flow(player) --- Gets the left frame flow for a player
+    LeftFrames.get_frame(name,player) --- Gets one frame from the left flow by its name
     LeftFrames.get_open(player) --- Gets all open frames for a player, if non are open it will remove the close all button
-    LeftFrames.get_frame(player,name) --- Gets one frame from the left flow by its name
-    LeftFrames.toggle_frame(player,name,state) --- Toggles the visiblty of a left frame, or sets its visiblty state
+    LeftFrames.toggle_frame(name,player,state) --- Toggles the visiblty of a left frame, or sets its visiblty state
 
-    LeftFrames.new_frame(name) --- Makes a new frame that can be used with on_update and adds a toggle button to the toolbar
-    LeftFrames.add_frame(define_name,permision_name) --- Similar to new_frame but using an already defined name (this will still add a button to the toolbar)
+    LeftFrames.new_frame(permision_name) --- Creates a new left frame define
+    LeftFrames._prototype:set_open_by_default(state) --- Sets if the frame is visible when a player joins, can also be a function to return a boolean
+    LeftFrames._prototype:get_frame(player) --- Gets the frame for this define from the left frame flow
+    LeftFrames._prototype:is_open(player) --- Returns if the player currently has this define visible
+    LeftFrames._prototype:toggle(player) --- Toggles the visiblty of the left frame
 
-    LeftFrames.set_open_by_default(define_name,state) --- Sets if the frame is visible when a player joins, can also be a function to return a boolean
-    LeftFrames.on_update(define_name,callback) --- Registeres an update function for the gui that will be used to redraw the gui (frame is cleared before call)
-    LeftFrames.update(define_name,player) --- Clears the gui frame for the player and calls the update callback
+    LeftFrames._prototype:update(player) --- Updates the contents of the left frame, first tries update callback, oter wise will clear and redraw
+    LeftFrames._prototype:update_all(update_offline) --- Updates the frame for all players, see update
+    LeftFrames._prototype:redraw(player) --- Redraws the frame by calling on_draw, will always clear the frame
+    LeftFrames._prototype:redraw_all(update_offline) --- Redraws the frame for all players, see redraw
 
-    LeftFrames.update_all_frames(player) --- Clears all frames and then re-draws all frames
-    LeftFrames.update_all_players(define_name,update_offline) --- Clears and returns the gui frame for all players
-    LeftFrames.update_all(update_offline) --- Clears and updates all frames for all players
+    LeftFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
 
 return Gui

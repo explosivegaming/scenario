@@ -97,12 +97,15 @@ end)
     > Left frame which holds all online player names, updates when player leaves or joins
 ]]
 
-local left_frame_name,left_gui_button =
+local left_frame =
 Gui.new_left_frame('test-left-frame')
+:set_caption('Test Left Gui')
+:set_post_authenticator(function(player,button_name)
+    return global.show_test_gui
+end)
 
-Gui.set_left_open_by_default(left_frame_name,true)
-
-Gui.on_left_update(left_frame_name,function(frame,_player)
+:set_open_by_default()
+:on_draw(function(_player,frame)
     for _,player in pairs(game.connected_players) do
         frame.add{
             type='label',
@@ -111,15 +114,8 @@ Gui.on_left_update(left_frame_name,function(frame,_player)
     end
 end)
 
-left_gui_button
-:set_caption('Test Left Gui')
-:set_post_authenticator(function(player,button_name)
-    return global.show_test_gui
-end)
-
-local update_left_frame = Gui.left_update_factory(left_frame_name)
-Event.add(defines.events.on_player_joined_game,update_left_frame)
-Event.add(defines.events.on_player_left_game,update_left_frame)
+Event.add(defines.events.on_player_joined_game,left_frame 'update_all')
+Event.add(defines.events.on_player_left_game,left_frame 'update_all')
 
 --[[
     Button Tests
