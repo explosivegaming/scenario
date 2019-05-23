@@ -143,6 +143,29 @@ Gui.classes.elem_button = ElemButton
     ElemButton._prototype:set_default(value) --- Sets the default value for the elem button, this may be a function or a string
 ]]
 
+local ProgressBar = require 'expcore.gui.progress-bar'
+Gui.new_progressbar = ProgressBar.new_progressbar
+Gui.set_progressbar_maximum = ProgressBar.set_maximum
+Gui.increment_progressbar = ProgressBar.increment
+Gui.decrement_progressbar = ProgressBar.decrement
+--[[
+    ProgressBar.set_maximum(element,amount,start_full) --- Sets the maximum value that represents the end value of the progress bar
+    ProgressBar.increment(element,amount) --- Increases the value of the progressbar, if a define is given all of its instances are incremented
+    ProgressBar.decrement(element,amount) --- Decreases the value of the progressbar, if a define is given all of its instances are decresed
+
+    ProgressBar.new_progressbar(name) --- Creates a new progressbar element define
+    ProgressBar._prototype:set_maximum(amount,start_full) --- Sets the maximum value that represents the end value of the progress bar
+    ProgressBar._prototype:increment(amount,category) --- Increases the value of the progressbar
+    ProgressBar._prototype:decrement(amount,category) --- Decreases the value of the progressbar
+    ProgressBar._prototype:add_element(element) --- Adds an element into the list of instances that will are waiting to complete, does not work with store
+    ProgressBar._prototype:reset_element(element) --- Resets an element, or its store, to be back at the start, either 1 or 0
+
+    ProgressBar._prototype:on_complete() --- Triggers when a progress bar element compeltes (hits 0 or 1)
+    ProgressBar._prototype:on_complete() --- Triggers when a store value completes (hits 0 or 1)
+    ProgressBar._prototype:event_counter() --- Event handler factory that counts up by 1 every time the event triggeres
+    ProgressBar._prototype:event_countdown() --- Event handler factory that counts down by 1 every time the event triggeres
+]]
+
 local Toolbar = require 'expcore.gui.toolbar'
 Gui.new_toolbar_button = Toolbar.new_button
 Gui.add_button_to_toolbar = Toolbar.add_button
@@ -176,6 +199,8 @@ Gui.classes.left_frames = LeftFrames
     LeftFrames._prototype:redraw(player) --- Redraws the frame by calling on_draw, will always clear the frame
     LeftFrames._prototype:redraw_all(update_offline) --- Redraws the frame for all players, see redraw
 
+    LeftFrames._prototype:on_draw(player,frame) --- Use to draw your elements to the new frame
+    LeftFrames._prototype:on_update(player,frame) --- Use to edit your frame when there is no need to redraw it
     LeftFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
 
@@ -194,6 +219,7 @@ Gui.classes.center_frames = CenterFrames
     CenterFrames.toggle_frame(player,name,state) --- Toggles if the frame is currently open or not, will open if closed and close if open
 
     CenterFrames.new_frame(permision_name) --- Sets the frame to be the current active gui when opened and closes all other frames
+    CenterFrames._prototype:on_draw(player,frame) --- Use to draw your elements onto the new frame
     CenterFrames._prototype:set_auto_focus(state) --- Sets the frame to be the current active gui when opened and closes all other frames
     CenterFrames._prototype:draw_frame(player) --- Draws this frame to the player, if already open does nothing (will call on_draw to draw to the frame)
     CenterFrames._prototype:redraw_frame(player) --- Draws this frame to the player, if already open it will remove it and redraw it (will call on_draw to draw to the frame)

@@ -8,6 +8,7 @@
     CenterFrames.toggle_frame(player,name,state) --- Toggles if the frame is currently open or not, will open if closed and close if open
 
     CenterFrames.new_frame(permision_name) --- Sets the frame to be the current active gui when opened and closes all other frames
+    CenterFrames._prototype:on_draw(player,frame) --- Use to draw your elements onto the new frame
     CenterFrames._prototype:set_auto_focus(state) --- Sets the frame to be the current active gui when opened and closes all other frames
     CenterFrames._prototype:draw_frame(player) --- Draws this frame to the player, if already open does nothing (will call on_draw to draw to the frame)
     CenterFrames._prototype:redraw_frame(player) --- Draws this frame to the player, if already open it will remove it and redraw it (will call on_draw to draw to the frame)

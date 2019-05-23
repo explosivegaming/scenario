@@ -42,6 +42,8 @@
     LeftFrames._prototype:redraw(player) --- Redraws the frame by calling on_draw, will always clear the frame
     LeftFrames._prototype:redraw_all(update_offline) --- Redraws the frame for all players, see redraw
 
+    LeftFrames._prototype:on_draw(player,frame) --- Use to draw your elements to the new frame
+    LeftFrames._prototype:on_update(player,frame) --- Use to edit your frame when there is no need to redraw it
     LeftFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
 local Gui = require 'expcore.gui.core'
