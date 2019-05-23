@@ -1,7 +1,7 @@
 --- This file is used to require all the different elements of the gui module
 -- each module has an outline here but for more details see their seperate files in ./gui
 
-local Gui = require('expcore.gui.core')
+local Gui = require 'expcore.gui.core'
 --[[
     Gui._prototype_factory(tbl) --- Used internally to create new prototypes for element defines
     Gui._event_factory(name) --- Used internally to create event handler adders for element defines
@@ -36,14 +36,14 @@ local Gui = require('expcore.gui.core')
     Gui.toggle_visible(element) --- Will toggle the visiblity of an element
 ]]
 
-local Instances = require('expcore.gui.instances')
+local Instances = require 'expcore.gui.instances'
 Gui.new_instance_group = Instances.registers
 Gui.get_instances = Instances.get_elements
 Gui.add_instance = Instances.get_elements
 Gui.update_instances = Instances.apply_to_elements
 Gui.classes.instances = Instances
 
-local Button = require('expcore.gui.buttons')
+local Button = require 'expcore.gui.buttons'
 Gui.new_button = Button.new_button
 Gui.classes.button = Button
 --[[
@@ -58,7 +58,7 @@ Gui.classes.button = Button
     Button._prototype:set_key_filter(filter,...) --- Adds a control key filter to the button
 ]]
 
-local Checkbox = require('expcore.gui.checkboxs')
+local Checkbox = require 'expcore.gui.checkboxs'
 Gui.new_checkbox = Checkbox.new_checkbox
 Gui.new_radiobutton = Checkbox.new_radiobutton
 Gui.new_radiobutton_option_set = Checkbox.new_option_set
@@ -80,7 +80,7 @@ Gui.classes.checkbox = Checkbox
     Checkbox.reset_radiobutton(element,exclude,recursive) --- Sets all radiobutotn in a element to false (unless excluded) and can act recursivly
 ]]
 
-local Dropdown = require('expcore.gui.dropdown')
+local Dropdown = require 'expcore.gui.dropdown'
 Gui.new_dropdown = Dropdown.new_dropdown
 Gui.new_list_box = Dropdown.new_list_box
 Gui.classes.dropdown = Dropdown
@@ -99,7 +99,7 @@ Gui.classes.dropdown = Dropdown
     Dropdown.get_selected_value(element) --- Returns the currently selected value rather than index
 ]]
 
-local Slider = require('expcore.gui.slider')
+local Slider = require 'expcore.gui.slider'
 Gui.new_slider = Slider.new_slider
 Gui.classes.slider = Slider
 --[[
@@ -113,7 +113,7 @@ Gui.classes.slider = Slider
     Slider._prototype:enable_auto_draw_label(state) --- Enables auto draw of the label, the label will share the same parent element as the slider
 ]]
 
-local Text = require('expcore.gui.text')
+local Text = require 'expcore.gui.text'
 Gui.new_text_filed = Text.new_text_field
 Gui.new_text_box = Text.new_text_box
 Gui.classes.text = Text
@@ -130,7 +130,7 @@ Gui.classes.text = Text
     Text._prototype_box:set_read_only(state) --- Sets the text box to be read only
 ]]
 
-local ElemButton = require('expcore.gui.elem-button')
+local ElemButton = require 'expcore.gui.elem-button'
 Gui.new_elem_button = ElemButton.new_elem_button
 Gui.classes.elem_button = ElemButton
 --[[
@@ -143,7 +143,7 @@ Gui.classes.elem_button = ElemButton
     ElemButton._prototype:set_default(value) --- Sets the default value for the elem button, this may be a function or a string
 ]]
 
-local Toolbar = require('expcore.gui.toolbar')
+local Toolbar = require 'expcore.gui.toolbar'
 Gui.new_toolbar_button = Toolbar.new_button
 Gui.add_button_to_toolbar = Toolbar.add_button
 Gui.update_toolbar = Toolbar.update
@@ -154,7 +154,7 @@ Gui.classes.toolbar = Toolbar
     Toolbar.update(player) --- Updates the player's toolbar with an new buttons or expected change in auth return
 ]]
 
-local LeftFrames = require('expcore.gui.left')
+local LeftFrames = require 'expcore.gui.left'
 Gui.get_left_frame_flow = LeftFrames.get_flow
 Gui.toggle_left_frame = LeftFrames.toggle_frame
 Gui.new_left_frame = LeftFrames.new_frame
@@ -177,6 +177,28 @@ Gui.classes.left_frames = LeftFrames
     LeftFrames._prototype:redraw_all(update_offline) --- Redraws the frame for all players, see redraw
 
     LeftFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
+]]
+
+local CenterFrames = require 'expcore.gui.center'
+Gui.get_center_flow = CenterFrames.get_flow
+Gui.toggle_left_frame = CenterFrames.toggle_frame
+Gui.draw_center_frame = CenterFrames.draw_frame
+Gui.redraw_center_frame = CenterFrames.redraw_frames
+Gui.new_center_frame = CenterFrames.new_frame
+Gui.classes.center_frames = CenterFrames
+--[[
+    CenterFrames.get_flow(player) --- Gets the center flow for a player
+    CenterFrames.clear_flow(player) --- Clears the center flow for a player
+    CenterFrames.draw_frame(player,name) --- Draws the center frame for a player, if already open then will do nothing
+    CenterFrames.redraw_frame(player,name) --- Draws the center frame for a player, if already open then will destory it and redraw
+    CenterFrames.toggle_frame(player,name,state) --- Toggles if the frame is currently open or not, will open if closed and close if open
+
+    CenterFrames.new_frame(permision_name) --- Sets the frame to be the current active gui when opened and closes all other frames
+    CenterFrames._prototype:set_auto_focus(state) --- Sets the frame to be the current active gui when opened and closes all other frames
+    CenterFrames._prototype:draw_frame(player) --- Draws this frame to the player, if already open does nothing (will call on_draw to draw to the frame)
+    CenterFrames._prototype:redraw_frame(player) --- Draws this frame to the player, if already open it will remove it and redraw it (will call on_draw to draw to the frame)
+    CenterFrames._prototype:toggle_frame(player) --- Toggles if the frame is open, if open it will close it and if closed it will open it
+    CenterFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
 
 return Gui

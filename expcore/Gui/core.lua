@@ -415,7 +415,7 @@ function Gui.get_define(name,internal)
         return Gui.defines[Gui.names[name]]
 
     elseif not define then
-        return error('Invalid name for checkbox, name not found.',internal and 3 or 2) or nil
+        return error('Invalid name for element define, name not found.',internal and 3 or 2) or nil
 
     end
 

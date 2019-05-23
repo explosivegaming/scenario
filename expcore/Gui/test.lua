@@ -13,7 +13,6 @@ local tests = {}
     > No display - Toolbar button with no display
     > With caption - Toolbar button with a caption display
     > With icons - Toolbar button with an icon
-    > Main test gui - Main test gui triggers all other tests
 ]]
 
 Gui.new_toolbar_button('click-1')
@@ -42,20 +41,19 @@ end)
     player.print('CLICK 3')
 end)
 
-Gui.new_toolbar_button('gui-test-open')
+--[[
+    Center Frame Tests
+    > Main test gui - Main test gui triggers all other tests
+]]
+
+local test_gui =
+Gui.new_center_frame('gui-test-open')
 :set_caption('Open Test Gui')
 :set_post_authenticator(function(player,button_name)
     return global.show_test_gui
 end)
-:on_click(function(player,_element)
-    if player.gui.center.TestGui then player.gui.center.TestGui.destroy() return end
 
-    local frame = player.gui.center.add{
-        type='frame',
-        caption='Gui Test',
-        name='TestGui'
-    }
-
+:on_draw(function(player,frame)
     for test_group_name,test_group in pairs(tests) do
 
         player.print('Starting tests for: '..format_chat_colour(test_group_name,Colors.cyan))
