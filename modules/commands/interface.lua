@@ -17,7 +17,7 @@ local interface_modules = {
 -- loads all the modules given in the above table
 for key,value in pairs(interface_modules) do
     if type(value) == 'string' then
-        interface_modules[key] = require(value)
+        interface_modules[key] = Common.opt_require(value)
     end
 end
 

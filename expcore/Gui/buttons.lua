@@ -14,10 +14,9 @@
     Other functions present from expcore.gui.core
 ]]
 local mod_gui = require 'mod-gui'
-local Gui = require './core'
+local Gui = require 'expcore.gui.core'
 
 local Button = {
-    config={},
     _prototype=Gui._prototype_factory{
         on_click = Gui._event_factory('on_click'),
         on_left_click = Gui._event_factory('on_left_click'),

@@ -4,7 +4,8 @@
 local Gui = require 'expcore.gui'
 local format_chat_colour,table_keys = ext_require('expcore.common','format_chat_colour','table_keys')
 local Colors = require 'resources.color_presets'
-local Game = require 'utils.game'
+local Event = require 'utils.event'
+local Store = require 'expcore.store'
 
 local tests = {}
 
@@ -13,7 +14,6 @@ local tests = {}
     > No display - Toolbar button with no display
     > With caption - Toolbar button with a caption display
     > With icons - Toolbar button with an icon
-    > Main test gui - Main test gui triggers all other tests
 ]]
 
 Gui.new_toolbar_button('click-1')
@@ -42,20 +42,19 @@ end)
     player.print('CLICK 3')
 end)
 
-Gui.new_toolbar_button('gui-test-open')
+--[[
+    Center Frame Tests
+    > Main test gui - Main test gui triggers all other tests
+]]
+
+local test_gui =
+Gui.new_center_frame('gui-test-open')
 :set_caption('Open Test Gui')
 :set_post_authenticator(function(player,button_name)
     return global.show_test_gui
 end)
-:on_click(function(player,_element)
-    if player.gui.center.TestGui then player.gui.center.TestGui.destroy() return end
 
-    local frame = player.gui.center.add{
-        type='frame',
-        caption='Gui Test',
-        name='TestGui'
-    }
-
+:on_draw(function(player,frame)
     for test_group_name,test_group in pairs(tests) do
 
         player.print('Starting tests for: '..format_chat_colour(test_group_name,Colors.cyan))
@@ -90,6 +89,58 @@ end)
         end
 
     end
+end)
+
+--[[
+    Left Frame Test
+    > Left frame which holds all online player names, updates when player leaves or joins
+]]
+
+local left_frame =
+Gui.new_left_frame('test-left-frame')
+:set_caption('Test Left Gui')
+:set_post_authenticator(function(player,button_name)
+    return global.show_test_gui
+end)
+
+:set_open_by_default()
+:on_draw(function(_player,frame)
+    for _,player in pairs(game.connected_players) do
+        frame.add{
+            type='label',
+            caption=player.name
+        }
+    end
+end)
+
+Event.add(defines.events.on_player_joined_game,left_frame 'update_all')
+Event.add(defines.events.on_player_left_game,left_frame 'update_all')
+
+--[[
+    Popup Test
+    > Allows opening a popup which contains the players name and tick it was opened
+]]
+
+local test_popup =
+Gui.new_popup('test-popup')
+:on_draw(function(player,frame)
+    frame.add{
+        type='label',
+        caption=player.name
+    }
+    frame.add{
+        type='label',
+        caption=game.tick
+    }
+end)
+
+Gui.new_toolbar_button('test-popup-open')
+:set_caption('Test Popup')
+:set_post_authenticator(function(player,button_name)
+    return global.show_test_gui
+end)
+:on_click(function(player,element)
+    test_popup(player,300)
 end)
 
 --[[
@@ -379,6 +430,7 @@ tests["List Boxs"] = {
 --[[
     Slider Tests
     > Local default -- Simple slider with default range
+    > Local notched -- Simple slider with notches
     > Store default -- Slider with default range that stores value between re-draws
     > Static range -- Simple slider with a static range
     > Dynamic range -- Slider with a dynamic range
@@ -391,6 +443,14 @@ Gui.new_slider('test-slider-local-default')
 :set_tooltip('Silder local default')
 :on_element_update(function(player,element,value,percent)
     player.print('Slider local default: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
+end)
+
+local slider_notched_default =
+Gui.new_slider('test-slider-notched-default')
+:set_tooltip('Silder notched default')
+:use_notches()
+:on_element_update(function(player,element,value,percent)
+    player.print('Slider notched default: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
 end)
 
 local slider_player_default =
@@ -440,6 +500,7 @@ end)
 
 tests.Sliders = {
     ['Local default']=slider_local_default,
+    ['Local notched']=slider_notched_default,
     ['Player default']=slider_player_default,
     ['Static range']=slider_static,
     ['Dynamic range']=slider_dynamic,
@@ -549,4 +610,52 @@ tests["Elem Buttons"] = {
     ['Default']=elem_default,
     ['Function']=elem_function,
     ['Store']=elem_store
+}
+
+--[[
+    Progress bar tests
+    > Simple -- Progress bar that fills every 2 seconds
+    > Store -- Progress bar that fills every 5 seconds with synced value
+    > Reverce -- Progress bar that decreases every 2 seconds
+]]
+
+local progressbar_one =
+Gui.new_progressbar('test-prog-one')
+:set_default_maximum(120)
+:on_complete(function(player,element,reset_element)
+    reset_element()
+end)
+
+local progressbar_two =
+Gui.new_progressbar('test-prog-one')
+:set_default_maximum(300)
+:add_store(Gui.force_store)
+:on_complete(function(player,element,reset_element)
+    reset_element()
+end)
+:on_store_complete(function(category,reset_store)
+    reset_store()
+end)
+
+local progressbar_three =
+Gui.new_progressbar('test-prog-one')
+:set_default_maximum(120)
+:use_count_down()
+:on_complete(function(player,element,reset_element)
+    reset_element()
+end)
+
+Event.add(defines.events.on_tick,function()
+    progressbar_one:increment()
+    progressbar_three:decrement()
+    local categories = Store.get_children(progressbar_two.store)
+    for category,_ in pairs(categories) do
+        progressbar_two:increment(1,category)
+    end
+end)
+
+tests["Progress Bars"] = {
+    ['Simple']=progressbar_one,
+    ['Store']=progressbar_two,
+    ['Reverce']=progressbar_three
 }

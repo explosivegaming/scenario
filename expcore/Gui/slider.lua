@@ -6,53 +6,16 @@
     Slider._prototype:on_element_update(callback) --- Registers a handler for when an element instance updates
     Slider._prototype:on_store_update(callback) --- Registers a handler for when the stored value updates
 
+    Slider._prototype:use_notches(state) --- Adds notches to the slider
     Slider._prototype:set_range(min,max) --- Sets the range of a slider, if not used will use default values for a slider
     Slider._prototype:draw_label(element) --- Draws a new label and links its value to the value of this slider, if no store then it will only show one value per player
     Slider._prototype:enable_auto_draw_label(state) --- Enables auto draw of the label, the label will share the same parent element as the slider
 
     Other functions present from expcore.gui.core
 ]]
-local Gui = require './core'
+local Gui = require 'expcore.gui.core'
+local Instances = require 'expcore.gui.instances'
 local Game = require 'utils.game'
-
---- Gets the active lables for a define
--- @tparam define table the define to get the labels for
--- @tparam element LuaGuiElement the element that will be used to get the category
--- @treturn table the table of active instances for the slider lables
-local function get_labels(define,element)
-    local function cat(e)
-        return e.player_index
-    end
-
-    local name = define.name..'-label'
-    if not Gui.instances[name] then return end
-
-    local categorize = define.categorize or not define.store and cat
-    local category = categorize and categorize(element) or nil
-    local instances = Gui.get_instances({
-        name=name,
-        categorize=categorize
-    },category)
-
-    return instances
-end
-
---- Gets and updates the label values
--- @tparam define table the define to get the labels for
--- @tparam element LuaGuiElement the element that will be used to get the category
-local function update_lables(define,element)
-    local instances = get_labels(define,element)
-    local value = element.slider_value
-    if instances then
-        for k,instance in pairs(instances) do
-            if instance and instance.valid then
-                instance.caption = tostring(math.round(value,2))
-            else
-                instances[k]=nil
-            end
-        end
-    end
-end
 
 --- Event call for on_value_changed and store update
 -- @tparam define table the define that this is acting on
@@ -69,7 +32,14 @@ local function event_call(define,element,value)
         define.events.on_element_update(player,element,value,percent)
     end
 
-    update_lables(define,element)
+    local category = player.name
+    if define.categorize then
+        category = define.categorize(element)
+    end
+
+    Instances.unregistered_get_elements(define.name..'-label',category,function(label)
+        label.caption = tostring(math.round(value,2))
+    end)
 end
 
 --- Store call for store update
@@ -145,6 +115,17 @@ function Slider.new_slider(name)
     return self
 end
 
+--- Adds notches to the slider
+-- @tparam[opt] state boolean when true will draw notches onto the slider
+function Slider._prototype:use_notches(state)
+    if state == false then
+        self.draw_data.style = nil
+    else
+        self.draw_data.style = 'notched_slider'
+    end
+    return self
+end
+
 --- Sets the range of a slider, if not used will use default values for a slider
 -- @tparam[opt] min number the minimum value that the slider can take
 -- @tparam[opt] max number the maximum value that the slider can take
@@ -183,10 +164,10 @@ function Slider._prototype:draw_label(element)
         caption=tostring(math.round(value,2))
     }
 
-    if not Gui.instances[name] then Gui.instances[name] = {} end
+    local categorise = self.categorise or Gui.player_store
+    local category = categorise(new_element)
 
-    local labels = get_labels(self,element)
-    table.insert(labels,new_element)
+    Instances.unregistered_add_element(name,category,new_element)
 
     return new_element
 end

@@ -45,7 +45,7 @@
 
     Other functions present from expcore.gui.core
 ]]
-local Gui = require './core'
+local Gui = require 'expcore.gui.core'
 local Store = require 'expcore.store'
 local Game = require 'utils.game'
 
