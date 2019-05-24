@@ -3,13 +3,11 @@
 -- Dependencies
 local Game = require 'utils.game'
 local Color = require 'resources.color_presets'
-local Server = require 'features.server'
 
 -- localized functions
 local random = math.random
 local sqrt = math.sqrt
 local floor = math.floor
-local format = string.format
 local match = string.match
 local insert = table.insert
 local concat = table.concat
@@ -199,27 +197,6 @@ end
 function Module.set_and_return(tbl, key, value)
     tbl[key] = value
     return value
-end
-
---- Takes msg and prints it to all players. Also prints to the log and discord
--- @param msg <string> The message to print
--- @param warning_prefix <string> The name of the module/warning
-function Module.action_warning(warning_prefix, msg)
-    game.print(prefix .. msg, Color.yellow)
-    msg = format('%s %s', warning_prefix, msg)
-    log(msg)
-    Server.to_discord_bold(msg)
-end
-
---- Takes msg and prints it to all players except provided player. Also prints to the log and discord
--- @param msg <string> The message to print
--- @param warning_prefix <string> The name of the module/warning
--- @param player <LuaPlayer> the player not to send the message to
-function Module.silent_action_warning(warning_prefix, msg, player)
-    Module.print_except(prefix .. msg, player, Color.yellow)
-    msg = format('%s %s', warning_prefix, msg)
-    log(msg)
-    Server.to_discord_bold(msg)
 end
 
 -- add utility functions that exist in base factorio/util

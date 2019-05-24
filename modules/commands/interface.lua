@@ -9,13 +9,15 @@ local interface_modules = {
     ['Commands']=Commands,
     ['output']=Common.player_return,
     ['Group']='expcore.permission_groups',
-    ['Roles']='expcore.roles'
+    ['Roles']='expcore.roles',
+    ['Store']='expcore.store',
+    ['Gui']='expcore.gui'
 }
 
 -- loads all the modules given in the above table
 for key,value in pairs(interface_modules) do
     if type(value) == 'string' then
-        interface_modules[key] = require(value)
+        interface_modules[key] = Common.opt_require(value)
     end
 end
 
@@ -94,5 +96,6 @@ add_interface_callback('tile',function(player) return player.surface.get_tile(pl
 return {
     add_interface_callback=add_interface_callback,
     interface_env=interface_env,
-    interface_callbacks=interface_callbacks
+    interface_callbacks=interface_callbacks,
+    clean_stack_trace=function(str) return str:gsub('%.%.%..-/temp/currently%-playing','') end
 }

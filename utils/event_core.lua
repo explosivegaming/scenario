@@ -40,6 +40,7 @@ end
 
 local function on_init()
     _LIFECYCLE = 5 -- on_init
+    log('[INFO] Entering on_init')
     local handlers = event_handlers[init_event_name]
     call_handlers(handlers)
 
@@ -47,10 +48,12 @@ local function on_init()
     event_handlers[load_event_name] = nil
 
     _LIFECYCLE = 8 -- Runtime
+    log('[INFO] Entering runtime')
 end
 
 local function on_load()
     _LIFECYCLE = 6 -- on_load
+    log('[INFO] Entering on_load')
     local handlers = event_handlers[load_event_name]
     call_handlers(handlers)
 
@@ -58,6 +61,7 @@ local function on_load()
     event_handlers[load_event_name] = nil
 
     _LIFECYCLE = 8 -- Runtime
+    log('[INFO] Entering runtime')
 end
 
 local function on_nth_tick_event(event)

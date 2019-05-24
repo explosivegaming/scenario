@@ -4,7 +4,10 @@
 -- all files which are loaded (including the config files) are present in ./config/file_loader.lua
 -- this file is the landing point for all scenarios please DO NOT edit directly, further comments are to aid development
 
+log('[START] -----| Explosive Gaming Scenario Loader |-----')
+
 -- Info on the data lifecycle and how we use it: https://github.com/Refactorio/RedMew/wiki/The-data-lifecycle
+log('[INFO] Setting up lua environment')
 require 'resources.data_stages'
 _LIFECYCLE = _STAGE.control -- Control stage
 
@@ -22,6 +25,7 @@ require 'resources.version'
 ext_require = require('expcore.common').ext_require
 
 -- Please go to config/file_loader.lua to edit the files that are loaded
+log('[INFO] Getting file loader config')
 local files = require 'config.file_loader'
 
 -- Loads all files from the config and logs that they are loaded
@@ -30,7 +34,7 @@ local errors = {}
 for index,path in pairs(files) do
 
     -- Loads the next file in the list
-    log(string.format('[INFO] Loading files %3d/%s',index,total_file_count))
+    log(string.format('[INFO] Loading file %3d/%s (%s)',index,total_file_count,path))
     local success,file = pcall(require,path)
 
     -- Error Checking
@@ -50,3 +54,4 @@ end
 -- Logs all errors again to make it make it easy to find
 log('[INFO] All files loaded with '..#errors..' errors:')
 for _,error in pairs(errors) do log(error) end
+log('[END] -----| Explosive Gaming Scenario Loader |-----')
