@@ -50,6 +50,7 @@ end)
 local test_gui =
 Gui.new_center_frame('gui-test-open')
 :set_caption('Open Test Gui')
+:set_tooltip('Main test gui triggers all other tests')
 :set_post_authenticator(function(player,button_name)
     return global.show_test_gui
 end)
@@ -99,6 +100,7 @@ end)
 local left_frame =
 Gui.new_left_frame('test-left-frame')
 :set_caption('Test Left Gui')
+:set_tooltip('Left frame which holds all online player names, updates when player leaves or joins')
 :set_post_authenticator(function(player,button_name)
     return global.show_test_gui
 end)
@@ -136,6 +138,7 @@ end)
 
 Gui.new_toolbar_button('test-popup-open')
 :set_caption('Test Popup')
+:set_tooltip('Allows opening a popup which contains the players name and tick it was opened')
 :set_post_authenticator(function(player,button_name)
     return global.show_test_gui
 end)
