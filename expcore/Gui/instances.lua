@@ -206,8 +206,8 @@ end
 -- @treturn table the table of element instances with all invalid ones removed
 function Instances.unregistered_get_elements(name,category,callback)
     local elements = Instances.data[name]
-    if category then
-        elements = Instances.data[name][category]
+    if elements and category then
+        elements = elements[category]
     end
 
     if not elements then return {} end

@@ -6,6 +6,7 @@
     Slider._prototype:on_element_update(callback) --- Registers a handler for when an element instance updates
     Slider._prototype:on_store_update(callback) --- Registers a handler for when the stored value updates
 
+    Slider._prototype:use_notches(state) --- Adds notches to the slider
     Slider._prototype:set_range(min,max) --- Sets the range of a slider, if not used will use default values for a slider
     Slider._prototype:draw_label(element) --- Draws a new label and links its value to the value of this slider, if no store then it will only show one value per player
     Slider._prototype:enable_auto_draw_label(state) --- Enables auto draw of the label, the label will share the same parent element as the slider
@@ -111,6 +112,17 @@ function Slider.new_slider(name)
 
     end)
 
+    return self
+end
+
+--- Adds notches to the slider
+-- @tparam[opt] state boolean when true will draw notches onto the slider
+function Slider._prototype:use_notches(state)
+    if state == false then
+        self.draw_data.style = nil
+    else
+        self.draw_data.style = 'notched_slider'
+    end
     return self
 end
 

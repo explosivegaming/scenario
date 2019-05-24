@@ -108,6 +108,7 @@ Gui.classes.slider = Slider
     Slider._prototype:on_element_update(callback) --- Registers a handler for when an element instance updates
     Slider._prototype:on_store_update(callback) --- Registers a handler for when the stored value updates
 
+    Slider._prototype:use_notches(state) --- Adds notches to the slider
     Slider._prototype:set_range(min,max) --- Sets the range of a slider, if not used will use default values for a slider
     Slider._prototype:draw_label(element) --- Draws a new label and links its value to the value of this slider, if no store then it will only show one value per player
     Slider._prototype:enable_auto_draw_label(state) --- Enables auto draw of the label, the label will share the same parent element as the slider
@@ -148,22 +149,26 @@ Gui.new_progressbar = ProgressBar.new_progressbar
 Gui.set_progressbar_maximum = ProgressBar.set_maximum
 Gui.increment_progressbar = ProgressBar.increment
 Gui.decrement_progressbar = ProgressBar.decrement
+Gui.classes.progressbar = ProgressBar
 --[[
-    ProgressBar.set_maximum(element,amount,start_full) --- Sets the maximum value that represents the end value of the progress bar
+    ProgressBar.set_maximum(element,amount,count_down) --- Sets the maximum value that represents the end value of the progress bar
     ProgressBar.increment(element,amount) --- Increases the value of the progressbar, if a define is given all of its instances are incremented
     ProgressBar.decrement(element,amount) --- Decreases the value of the progressbar, if a define is given all of its instances are decresed
 
     ProgressBar.new_progressbar(name) --- Creates a new progressbar element define
-    ProgressBar._prototype:set_maximum(amount,start_full) --- Sets the maximum value that represents the end value of the progress bar
+    ProgressBar._prototype:set_maximum(amount,count_down) --- Sets the maximum value that represents the end value of the progress bar
+    ProgressBar._prototype:use_count_down(state) --- Will set the progress bar to start at 1 and trigger when it hits 0
     ProgressBar._prototype:increment(amount,category) --- Increases the value of the progressbar
+    ProgressBar._prototype:increment_filtered(amount,filter) --- Increases the value of the progressbar, if the filter condition is met, does not work with store
     ProgressBar._prototype:decrement(amount,category) --- Decreases the value of the progressbar
-    ProgressBar._prototype:add_element(element) --- Adds an element into the list of instances that will are waiting to complete, does not work with store
+    ProgressBar._prototype:decrement_filtered(amount,filter) --- Decreases the value of the progressbar, if the filter condition is met, does not work with store
+    ProgressBar._prototype:add_element(element,maximum) --- Adds an element into the list of instances that will are waiting to complete, does not work with store
     ProgressBar._prototype:reset_element(element) --- Resets an element, or its store, to be back at the start, either 1 or 0
 
-    ProgressBar._prototype:on_complete() --- Triggers when a progress bar element compeltes (hits 0 or 1)
-    ProgressBar._prototype:on_complete() --- Triggers when a store value completes (hits 0 or 1)
-    ProgressBar._prototype:event_counter() --- Event handler factory that counts up by 1 every time the event triggeres
-    ProgressBar._prototype:event_countdown() --- Event handler factory that counts down by 1 every time the event triggeres
+    ProgressBar._prototype:on_complete(callback) --- Triggers when a progress bar element compeltes (hits 0 or 1)
+    ProgressBar._prototype:on_complete(callback) --- Triggers when a store value completes (hits 0 or 1)
+    ProgressBar._prototype:event_counter(filter) --- Event handler factory that counts up by 1 every time the event triggeres, can filter which elements are incremented
+    ProgressBar._prototype:event_countdown(filter) --- Event handler factory that counts down by 1 every time the event triggeres, can filter which elements are decremented
 ]]
 
 local Toolbar = require 'expcore.gui.toolbar'
@@ -225,6 +230,23 @@ Gui.classes.center_frames = CenterFrames
     CenterFrames._prototype:redraw_frame(player) --- Draws this frame to the player, if already open it will remove it and redraw it (will call on_draw to draw to the frame)
     CenterFrames._prototype:toggle_frame(player) --- Toggles if the frame is open, if open it will close it and if closed it will open it
     CenterFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
+]]
+
+local PopupFrames = require 'expcore.gui.popups'
+Gui.get_popup_flow = PopupFrames.get_flow
+Gui.open_popup = PopupFrames.open
+Gui.new_popup = PopupFrames.new_popup
+Gui.classes.popup_frames = PopupFrames
+--[[
+    PopupFrames.get_flow(player) --- Gets the left flow that contains the popup frames
+    PopupFrames.open(define_name,player,open_time,...) --- Opens a popup for the player, can give the amount of time it is open as well as params for the draw function
+
+    PopupFrames.close_progress --- Progress bar which when depleaded will close the popup frame
+    PopupFrames.close_button --- A button which can be used to close the gui before the timer runs out
+
+    PopupFrames.new_popup(name) --- Creates a new popup frame define
+    PopupFrames._prototype:set_default_open_time(amount) --- Sets the default open time for the popup, will be used if non is provided with open
+    PopupFrames._prototype:open(player,open_time,...) --- Opens this define for a player, can be given open time and any other params for the draw function
 ]]
 
 return Gui

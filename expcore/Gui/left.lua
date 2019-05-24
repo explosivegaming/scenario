@@ -253,13 +253,11 @@ Event.add(defines.events.on_player_created,function(event)
     local player = Game.get_player_by_index(event.player_index)
     local flow = LeftFrames.get_flow(player)
 
-    local style = LeftFrames.toggle_button(flow).style
+    local close_button = LeftFrames.toggle_button(flow)
+    Gui.set_padding(close_button)
+    local style = close_button.style
     style.width = 18
     style.height = 36
-    style.left_padding = 0
-    style.top_padding = 0
-    style.right_padding = 0
-    style.bottom_padding = 0
     style.font = 'default-small-bold'
 
     for _,define in pairs(LeftFrames.frames) do

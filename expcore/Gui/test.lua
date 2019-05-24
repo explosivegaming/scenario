@@ -117,6 +117,33 @@ Event.add(defines.events.on_player_joined_game,left_frame 'update_all')
 Event.add(defines.events.on_player_left_game,left_frame 'update_all')
 
 --[[
+    Popup Test
+    > Allows opening a popup which contains the players name and tick it was opened
+]]
+
+local test_popup =
+Gui.new_popup('test-popup')
+:on_draw(function(player,frame)
+    frame.add{
+        type='label',
+        caption=player.name
+    }
+    frame.add{
+        type='label',
+        caption=game.tick
+    }
+end)
+
+Gui.new_toolbar_button('test-popup-open')
+:set_caption('Test Popup')
+:set_post_authenticator(function(player,button_name)
+    return global.show_test_gui
+end)
+:on_click(function(player,element)
+    test_popup(player,300)
+end)
+
+--[[
     Button Tests
     > No display - Simple button which has no display
     > Caption - Simple button but has a caption on it
@@ -403,6 +430,7 @@ tests["List Boxs"] = {
 --[[
     Slider Tests
     > Local default -- Simple slider with default range
+    > Local notched -- Simple slider with notches
     > Store default -- Slider with default range that stores value between re-draws
     > Static range -- Simple slider with a static range
     > Dynamic range -- Slider with a dynamic range
@@ -415,6 +443,14 @@ Gui.new_slider('test-slider-local-default')
 :set_tooltip('Silder local default')
 :on_element_update(function(player,element,value,percent)
     player.print('Slider local default: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
+end)
+
+local slider_notched_default =
+Gui.new_slider('test-slider-notched-default')
+:set_tooltip('Silder notched default')
+:use_notches()
+:on_element_update(function(player,element,value,percent)
+    player.print('Slider notched default: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
 end)
 
 local slider_player_default =
@@ -464,6 +500,7 @@ end)
 
 tests.Sliders = {
     ['Local default']=slider_local_default,
+    ['Local notched']=slider_notched_default,
     ['Player default']=slider_player_default,
     ['Static range']=slider_static,
     ['Dynamic range']=slider_dynamic,
@@ -584,14 +621,14 @@ tests["Elem Buttons"] = {
 
 local progressbar_one =
 Gui.new_progressbar('test-prog-one')
-:set_maximum(120)
+:set_default_maximum(120)
 :on_complete(function(player,element,reset_element)
     reset_element()
 end)
 
 local progressbar_two =
 Gui.new_progressbar('test-prog-one')
-:set_maximum(300)
+:set_default_maximum(300)
 :add_store(Gui.force_store)
 :on_complete(function(player,element,reset_element)
     reset_element()
@@ -602,7 +639,8 @@ end)
 
 local progressbar_three =
 Gui.new_progressbar('test-prog-one')
-:set_maximum(120,true)
+:set_default_maximum(120)
+:use_count_down()
 :on_complete(function(player,element,reset_element)
     reset_element()
 end)

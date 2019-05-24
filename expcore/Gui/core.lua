@@ -278,8 +278,8 @@ function Gui._define_factory(prototype)
         }
     },{
         __index=prototype,
-        __call=function(self,element)
-            return self:draw_to(element)
+        __call=function(self,element,...)
+            return self:draw_to(element,...)
         end
     })
     Gui.defines[define.name] = define
@@ -350,7 +350,7 @@ end
 -- the data with in the draw_data is set up through the use of all the other functions
 -- @tparam element LuaGuiElement the element that the define will draw a copy of its self onto
 -- @treturn LuaGuiElement the new element that was drawn so styles can be applied
-function Gui._prototype:draw_to(element)
+function Gui._prototype:draw_to(element,...)
     if element[self.name] then return end
     local player = Game.get_player_by_index(element.player_index)
 
@@ -368,7 +368,7 @@ function Gui._prototype:draw_to(element)
         Instances.add_element(self.name,new_element)
     end
 
-    if self.post_draw then self.post_draw(new_element) end
+    if self.post_draw then self.post_draw(new_element,...) end
 
     return new_element
 end
@@ -469,9 +469,9 @@ end
 -- @tparam name ?string|table the uid, debug name or define for the element define to draw
 -- @tparam element LuaGuiEelement the parent element that it the define will be drawn to
 -- @treturn LuaGuiElement the new element that was created
-function Gui.draw(name,element)
+function Gui.draw(name,element,...)
     local define = Gui.get_define(name,true)
-    return define:draw_to(element)
+    return define:draw_to(element,...)
 end
 
 --- Will toggle the enabled state of an element
@@ -494,6 +494,20 @@ function Gui.toggle_visible(element)
     else
         element.visible = false
     end
+end
+
+--- Sets the padding for a gui element
+-- @tparam element LuaGuiElement the element to set the padding for
+-- @tparam[opt=0] up number the amount of padding on the top
+-- @tparam[opt=0] down number the amount of padding on the bottom
+-- @tparam[opt=0] left number the amount of padding on the left
+-- @tparam[opt=0] right number the amount of padding on the right
+function Gui.set_padding(element,up,down,left,right)
+    local style = element.style
+    style.top_padding = up or 0
+    style.bottom_padding = down or 0
+    style.left_padding = left or 0
+    style.right_padding = right or 0
 end
 
 return Gui
