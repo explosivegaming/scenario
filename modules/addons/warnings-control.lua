@@ -15,11 +15,11 @@ local Public = {
 }
 
 Global.register({
-    Public.user_warnings,
-    Public.user_temp_warnings
+    user_warnings = Public.user_warnings,
+    user_temp_warnings = Public.user_temp_warnings
 },function(tbl)
-    Public.user_warnings = tbl[1]
-    Public.user_temp_warnings = tbl[2]
+    Public.user_warnings = tbl.user_warnings
+    Public.user_temp_warnings = tbl.user_temp_warnings
 end)
 
 local function event_emit(event,player,by_player_name)
