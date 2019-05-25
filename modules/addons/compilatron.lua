@@ -13,11 +13,11 @@ local Public = {
 }
 
 Global.register({
-    Public.compilatrons,
-    Public.current_messages
+    compilatrons = Public.compilatrons,
+    current_messages = Public.current_messages
 },function(tbl)
-    Public.compilatrons=tbl[1]
-    Public.current_messages=tbl[2]
+    Public.compilatrons = tbl.compilatrons
+    Public.current_messages = tbl.current_messages
 end)
 
 --- This will re-create the speech bubble after it de-spawns called with set_timeout

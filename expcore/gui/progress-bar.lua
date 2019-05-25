@@ -63,11 +63,11 @@ local ProgressBar = {
     }
 }
 Global.register({
-    ProgressBar.unregistered,
-    ProgressBar.independent
+    unregistered = ProgressBar.unregistered,
+    independent = ProgressBar.independent
 },function(tbl)
-    ProgressBar.unregistered = tbl[1]
-    ProgressBar.independent = tbl[2]
+    ProgressBar.unregistered = tbl.unregistered
+    ProgressBar.independent = tbl.independent
 end)
 
 --- Gets the define data, cant use Gui.get_define as it would error
