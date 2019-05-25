@@ -13,11 +13,11 @@ local Public = {
 }
 
 Global.register({
-    Public.old_roles,
-    Public.temp_bans
+    old_roles = Public.old_roles,
+    temp_bans = Public.temp_bans
 },function(tbl)
-    Public.old_roles=tbl[1]
-    Public.temp_bans=tbl[2]
+    Public.old_roles = tbl.old_roles
+    Public.temp_bans = tbl.temp_bans
 end)
 
 local function event_emit(event,player,by_player_name,reason)
