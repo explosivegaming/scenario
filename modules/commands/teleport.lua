@@ -1,5 +1,5 @@
 local Commands = require 'expcore.commands'
-require 'config.command_parse_general'
+require 'config.expcore-commands.parse_general'
 
 local function teleport(from_player,to_player)
     local surface = to_player.surface
@@ -18,11 +18,11 @@ Commands.new_command('teleport','Teleports a player to another player.')
 :register(function(player,from_player,to_player,raw)
     if from_player.index == to_player.index then
         -- return if attempting to teleport to self
-        return Commands.error{'exp-commands.tp-to-self'}
+        return Commands.error{'expcom-tp.to-self'}
     end
     if not teleport(from_player,to_player) then
         -- return if the teleport failed
-        return Commands.error{'exp-commands.tp-no-position-found'}
+        return Commands.error{'expcom-tp.no-position-found'}
     end
 end)
 
@@ -32,11 +32,11 @@ Commands.new_command('bring','Teleports a player to you.')
 :register(function(player,from_player,raw)
     if from_player.index == player.index then
         -- return if attempting to teleport to self
-        return Commands.error{'exp-commands.tp-to-self'}
+        return Commands.error{'expcom-tp.to-self'}
     end
     if not teleport(from_player,player) then
         -- return if the teleport failed
-        return Commands.error{'exp-commands.tp-no-position-found'}
+        return Commands.error{'expcom-tp.no-position-found'}
     end
 end)
 
@@ -47,10 +47,10 @@ Commands.new_command('goto','Teleports you to a player.')
 :register(function(player,to_player,raw)
     if to_player.index == player.index then
         -- return if attempting to teleport to self
-        return Commands.error{'exp-commands.tp-to-self'}
+        return Commands.error{'expcom-tp.to-self'}
     end
     if not teleport(player,to_player) then
         -- return if the teleport failed
-        return Commands.error{'exp-commands.tp-no-position-found'}
+        return Commands.error{'expcom-tp.no-position-found'}
     end
 end)

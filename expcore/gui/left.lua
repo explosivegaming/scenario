@@ -239,7 +239,7 @@ end
 
 LeftFrames.toggle_button =
 Buttons.new_button()
-:set_tooltip('Close Windows')
+:set_tooltip{'expcore-gui.left-button-tooltip'}
 :set_caption('<')
 :on_click(function(player,element)
     for _,define in pairs(LeftFrames.frames) do

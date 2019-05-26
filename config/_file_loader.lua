@@ -26,7 +26,7 @@ return {
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',
     'modules.addons.death-logger',
-    'modules.addons.advanced-starting-items',
+    'modules.addons.advanced-start',
     'modules.addons.spawn-area',
     'modules.addons.compilatron',
     'modules.addons.scorched-earth',
@@ -35,10 +35,10 @@ return {
     -- GUI
     'modules.commands.debug',
     -- Config Files
-    'config.command_auth_admin', -- commands tagged with admin_only are blocked for non admins
-    'config.command_auth_roles', -- commands must be allowed via the role config
-    'config.command_auth_runtime_disable', -- allows commands to be enabled and disabled during runtime
+    'config.expcore-commands.auth_admin', -- commands tagged with admin_only are blocked for non admins
+    'config.expcore-commands.auth_roles', -- commands must be allowed via the role config
+    'config.expcore-commands.auth_runtime_disable', -- allows commands to be enabled and disabled during runtime
     'config.permission_groups', -- loads some predefined permission groups
     'config.roles', -- loads some predefined roles
-    'expcore.gui.test'
+    'expcore.gui.test' -- loads multiple gui defines to test the gui system
 }

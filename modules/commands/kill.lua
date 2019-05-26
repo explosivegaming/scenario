@@ -1,7 +1,7 @@
 local Commands = require 'expcore.commands'
 local Roles = require 'expcore.roles'
-require 'config.command_parse_general'
-require 'config.command_parse_roles'
+require 'config.expcore-commands.parse_general'
+require 'config.expcore-commands.parse_roles'
 
 Commands.new_command('kill','Kills yourself or another player.')
 :add_param('player',true,'player-role-alive') -- the player to kill, must be alive to be valid
@@ -14,7 +14,7 @@ end}
 :register(function(player,action_player,raw)
     if not action_player then
         -- can only be nil if no player given and the user is dead
-        return Commands.error{'exp-commands.kill-already-dead'}
+        return Commands.error{'expcom-kill.already-dead'}
     end
     if player == action_player then
         action_player.character.die()
