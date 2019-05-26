@@ -44,7 +44,7 @@ end)
 end)
 
 --- Button used to confirm a reason
-local reasonc_confirm =
+local reason_confirm =
 Gui.new_button()
 :set_sprites('utility/confirm_slot')
 :set_tooltip{'player-list.reason-confirm'}
@@ -145,7 +145,7 @@ local function generate_container(player,element)
     reason_field.style.height = 28
     reason_field.style.minimal_width = 160
 
-    reasonc_confirm(reason_bar)
+    reason_confirm(reason_bar)
 
     return list_table, action_bar
 end
@@ -194,7 +194,7 @@ local function update_action_bar(player)
         for action_name,buttons in pairs(config) do
             if buttons.auth and not buttons.auth(player,action_player) then
                 element[action_name].visible = false
-            else
+            elseif Roles.player_allowed(player,action_name) then
                 element[action_name].visible = true
             end
         end
