@@ -94,6 +94,8 @@ Roles.new_role('Trainee','TrMod')
     'command/give-warning',
     'command/get-warnings',
     'command/get-reports',
+    'command/kick',
+    'command/ban',
 }
 
 --- Trusted Roles

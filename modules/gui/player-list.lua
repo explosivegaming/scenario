@@ -122,7 +122,7 @@ local function generate_action_bar(player,element)
         end
 
         if buttons.auth and action_player and not buttons.auth(player,action_player) then
-            permission_flow.visible = false
+            --permission_flow.visible = false
         end
     end
 
@@ -144,7 +144,7 @@ local function update_action_bar(player)
         element.visible = true
         for action_name,buttons in pairs(config) do
             if buttons.auth and not buttons.auth(player,action_player) then
-                element[action_name].visible = false
+                --element[action_name].visible = false
             else
                 element[action_name].visible = true
             end
