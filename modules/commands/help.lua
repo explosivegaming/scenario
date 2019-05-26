@@ -1,6 +1,6 @@
 local Commands = require 'expcore.commands'
 local Global = require 'utils.global'
-require 'config.command_parse_general'
+require 'config.expcore-commands.parse_general'
 
 local results_per_page = 5
 
@@ -42,9 +42,9 @@ Commands.new_command('chelp','Searches for a keyword in all commands you are all
             -- adds the new command to the page
             page_count = page_count + 1
             found = found + 1
-            local alias_format = #command_data.aliases > 0 and {'exp-commands.chelp-alias',table.concat(command_data.aliases,', ')} or ''
+            local alias_format = #command_data.aliases > 0 and {'expcom-chelp.alias',table.concat(command_data.aliases,', ')} or ''
             table.insert(pages[current_page],{
-                'exp-commands.chelp-format',
+                'expcom-chelp.format',
                 command_data.name,
                 command_data.description,
                 command_data.help,
@@ -60,15 +60,15 @@ Commands.new_command('chelp','Searches for a keyword in all commands you are all
     end
     -- print the requested page
     keyword = keyword == '' and '<all>' or keyword
-    Commands.print({'exp-commands.chelp-title',keyword},'cyan')
+    Commands.print({'expcom-chelp.title',keyword},'cyan')
     if pages[page] then
         for _,command in pairs(pages[page]) do
             Commands.print(command)
         end
-        Commands.print({'exp-commands.chelp-footer',found,page,#pages},'cyan')
+        Commands.print({'expcom-chelp.footer',found,page,#pages},'cyan')
     else
-        Commands.print({'exp-commands.chelp-footer',found,page,#pages},'cyan')
-        return Commands.error{'exp-commands.chelp-out-of-range',page}
+        Commands.print({'expcom-chelp.footer',found,page,#pages},'cyan')
+        return Commands.error{'expcom-chelp.out-of-range',page}
     end
     -- blocks command complete message
     return Commands.success

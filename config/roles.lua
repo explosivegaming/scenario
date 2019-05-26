@@ -94,6 +94,8 @@ Roles.new_role('Trainee','TrMod')
     'command/give-warning',
     'command/get-warnings',
     'command/get-reports',
+    'command/kick',
+    'command/ban',
 }
 
 --- Trusted Roles
@@ -181,6 +183,7 @@ local default = Roles.new_role('Guest','')
     'command/chelp',
     'command/list-roles',
     'command/report',
+    'gui/player-list',
 }
 
 --- Jail role

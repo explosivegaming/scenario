@@ -128,6 +128,8 @@
     Gui._prototype:debug_name(name) --- Sets a debug alias for the define
     Gui._prototype:set_caption(caption) --- Sets the caption for the element define
     Gui._prototype:set_tooltip(tooltip) --- Sets the tooltip for the element define
+    Gui._prototype:set_style(style,callback) --- Sets the style for the element define
+    Gui._prototype:set_embeded_flow(state) ---  Sets the element to be drawn inside a nameless flow, can be given a name using a function
     Gui._prototype:on_element_update(callback) --- Add a hander to run on the general value update event, different classes will handle this event differently
 
     Gui._prototype:set_pre_authenticator(callback) --- Sets an authenticator that blocks the draw function if check fails
@@ -149,6 +151,8 @@
 
     Gui.toggle_enable(element) --- Will toggle the enabled state of an element
     Gui.toggle_visible(element) --- Will toggle the visiblity of an element
+    Gui.set_padding(element,up,down,left,right) --- Sets the padding for a gui element
+    Gui.set_padding_style(style,up,down,left,right) --- Sets the padding for a gui style
 ]]
 local Gui = require 'utils.gui'
 local Game = require 'utils.game'
@@ -316,6 +320,28 @@ function Gui._prototype:set_tooltip(tooltip)
     return self
 end
 
+--- Sets the style for the element define
+-- @tparam style string the style that will be used for this element when drawn
+-- @tapram[opt] callback function function is called when element is drawn to alter its style
+-- @treturn self the element define to allow chaining
+function Gui._prototype:set_style(style,callback)
+    self.draw_data.style = style
+    self.events.on_style = callback
+    return self
+end
+
+--- Sets the element to be drawn inside a nameless flow, can be given a name using a function
+-- @tparam state ?boolean|function when true a padless flow is created to contain the element
+-- @treturn self the element define to allow chaining
+function Gui._prototype:set_embeded_flow(state)
+    if state == false or type(state) == 'function' then
+        self.embeded_flow = state
+    else
+        self.embeded_flow = true
+    end
+    return self
+end
+
 --- Sets an authenticator that blocks the draw function if check fails
 -- @tparam callback function the function that will be ran to test if the element should be drawn or not
 -- callback param - player LuaPlayer - the player that the element is being drawn to
@@ -358,7 +384,20 @@ function Gui._prototype:draw_to(element,...)
         if not self.pre_authenticator(player,self.name) then return end
     end
 
+    if self.embeded_flow then
+        local embeded_name
+        if type(self.embeded_flow) == 'function' then
+            embeded_name = self.embeded_flow(element,...)
+        end
+        element = element.add{type='flow',name=embeded_name}
+        Gui.set_padding(element)
+    end
+
     local new_element = element.add(self.draw_data)
+
+    if self.events.on_style then
+        self.events.on_style(new_element.style)
+    end
 
     if self.post_authenticator then
         new_element.enabled = self.post_authenticator(player,self.name)
@@ -504,6 +543,19 @@ end
 -- @tparam[opt=0] right number the amount of padding on the right
 function Gui.set_padding(element,up,down,left,right)
     local style = element.style
+    style.top_padding = up or 0
+    style.bottom_padding = down or 0
+    style.left_padding = left or 0
+    style.right_padding = right or 0
+end
+
+--- Sets the padding for a gui style
+-- @tparam element LuaStyle the element to set the padding for
+-- @tparam[opt=0] up number the amount of padding on the top
+-- @tparam[opt=0] down number the amount of padding on the bottom
+-- @tparam[opt=0] left number the amount of padding on the left
+-- @tparam[opt=0] right number the amount of padding on the right
+function Gui.set_padding_style(style,up,down,left,right)
     style.top_padding = up or 0
     style.bottom_padding = down or 0
     style.left_padding = left or 0

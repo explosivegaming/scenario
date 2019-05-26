@@ -1,7 +1,7 @@
 --- Adds a better method of player starting items based on production levels.
 local Event = require 'utils.event'
 local Game = require 'utils.game'
-local config = require 'config.advanced_starting_items'
+local config = require 'config.advanced_start'
 local items = config.items
 
 Event.add(defines.events.on_player_created, function(event)

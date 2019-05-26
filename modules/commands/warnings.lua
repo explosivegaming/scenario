@@ -2,7 +2,7 @@ local Commands = require 'expcore.commands'
 local WarningsControl = require 'modules.addons.warnings-control'
 local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
 local config = require 'config.warnings'
-require 'config.command_parse_roles'
+require 'config.expcore-commands.parse_roles'
 
 Commands.new_command('give-warning','Gives a warning to a player; may lead to automatic script action.')
 :add_param('player',false,'player-role')
@@ -13,7 +13,7 @@ Commands.new_command('give-warning','Gives a warning to a player; may lead to au
     WarningsControl.add_warnings(action_player,player.name)
     local action_player_name_color = format_chat_player_name(action_player)
     local by_player_name_color = format_chat_player_name(player)
-    game.print{'exp-commands.warnings-received',action_player_name_color,by_player_name_color,reason}
+    game.print{'expcom-warnings.received',action_player_name_color,by_player_name_color,reason}
 end)
 
 Commands.new_command('get-warnings','Gets the number of warnings a player has. If no player then lists all players and the number of warnings they have.')
@@ -24,7 +24,7 @@ Commands.new_command('get-warnings','Gets the number of warnings a player has. I
         local warnings = WarningsControl.get_warnings(action_player)
         local script_warnings = WarningsControl.get_temp_warnings(action_player)
         local action_player_name_color = format_chat_player_name(action_player)
-        Commands.print{'exp-commands.warnings-player',action_player_name_color,warnings,script_warnings,config.temp_warning_limit}
+        Commands.print{'expcom-warnings.player',action_player_name_color,warnings,script_warnings,config.temp_warning_limit}
     else
         local rtn = {}
         local user_warnings = WarningsControl.user_warnings
@@ -38,10 +38,10 @@ Commands.new_command('get-warnings','Gets the number of warnings a player has. I
             end
             rtn[player_name][2] = #warnings
         end
-        Commands.print{'exp-commands.warnings-list-tilte'}
+        Commands.print{'expcom-warnings.list-tilte'}
         for player_name,warnings in pairs(rtn) do
             local player_name_color = format_chat_player_name(player_name)
-            Commands.print{'exp-commands.warnings-list',player_name_color,warnings[1],warnings[2],config.temp_warning_limit}
+            Commands.print{'expcom-warnings.list',player_name_color,warnings[1],warnings[2],config.temp_warning_limit}
         end
     end
 end)
@@ -53,5 +53,5 @@ Commands.new_command('clear-warnings','Clears all warnings (and script warnings)
     WarningsControl.clear_temp_warnings(action_player,player.name)
     local action_player_name_color = format_chat_player_name(action_player)
     local by_player_name_color = format_chat_player_name(player)
-    game.print{'exp-commands.warnings-cleared',action_player_name_color,by_player_name_color}
+    game.print{'expcom-warnings.cleared',action_player_name_color,by_player_name_color}
 end)

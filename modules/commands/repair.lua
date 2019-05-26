@@ -1,6 +1,6 @@
 local Commands = require 'expcore.commands'
 local config = require 'config.repair'
-require 'config.command_parse_general'
+require 'config.expcore-commands.parse_general'
 
 local max_time_to_live = 4294967295 -- unit32 max
 Commands.new_command('repair','Repairs entities on your force around you')
@@ -40,5 +40,5 @@ Commands.new_command('repair','Repairs entities on your force around you')
             end
         end
     end
-    return Commands.success{'exp-commands.repair-result',revive_count,heal_count}
+    return Commands.success{'expcom-repair.result',revive_count,heal_count}
 end)

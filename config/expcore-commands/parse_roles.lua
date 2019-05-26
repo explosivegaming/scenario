@@ -2,7 +2,7 @@
 local Commands = require 'expcore.commands'
 local Roles = require 'expcore.roles'
 local auto_complete = ext_require('expcore.common','auto_complete')
-require 'config.command_parse_general'
+require 'config.expcore-commands.parse_general'
 
 Commands.add_parse('role',function(input,player,reject)
     if not input then return end
