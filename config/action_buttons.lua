@@ -3,6 +3,7 @@ local Roles = require 'expcore.roles'
 local Store = require 'expcore.store'
 local Game = require 'utils.game'
 local Reports = require 'modules.addons.reports-control'
+local Warnings = require 'modules.addons.warnings-control'
 local Jail = require 'modules.addons.jail-control'
 local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
 
@@ -88,6 +89,22 @@ local function report_player_callback(player,reason)
     Reports.report_player(action_player,reason,player.name)
 end
 
+local warn_player =
+Gui.new_button()
+:set_sprites('utility/spawn_flag')
+:set_tooltip{'player-list.warn-player'}
+:set_style('tool_button',tool_button_style)
+:on_click(function(player,element)
+    Store.set_child(action_name_store,player.name,'command/give-warning')
+end)
+
+local function warn_player_callback(player,reason)
+    local action_player,action_player_name_color = get_action_player(player)
+    local by_player_name_color = format_chat_player_name(player)
+    game.print{'expcom-warnings.received',action_player_name_color,by_player_name_color,reason}
+    Warnings.add_warnings(action_player,player.name)
+end
+
 local jail_player =
 Gui.new_button()
 :set_sprites('utility/item_editor_icon')
@@ -165,9 +182,18 @@ return {
         kill_player
     },
     ['command/report'] = {
-        auth=auth_lower_role,
+        auth=function(player,action_player_name)
+            if not Roles.player_allowed(player,'command/give-warning') then
+                return auth_lower_role(player,action_player_name)
+            end
+        end,
         reason_callback=report_player_callback,
         report_player
+    },
+    ['command/give-warning'] = {
+        auth=auth_lower_role,
+        reason_callback=warn_player_callback,
+        warn_player
     },
     ['command/jail'] = {
         auth=auth_lower_role,
