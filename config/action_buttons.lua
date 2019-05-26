@@ -15,9 +15,9 @@ local function tool_button_style(style)
     style.width = 28
 end
 
-local function auth_lower_role(player,action_player)
+local function auth_lower_role(player,action_player_name)
     local player_highest = Roles.get_player_highest_role(player)
-    local action_player_highest = Roles.get_player_highest_role(action_player)
+    local action_player_highest = Roles.get_player_highest_role(action_player_name)
     if player_highest.index < action_player_highest.index then
         return true
     end
@@ -42,7 +42,7 @@ end
 local goto_player =
 Gui.new_button()
 :set_sprites('utility/export')
-:set_tooltip('Goto player')
+:set_tooltip{'player-list.goto-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
     local action_player = get_action_player(player)
@@ -52,7 +52,7 @@ end)
 local bring_player =
 Gui.new_button()
 :set_sprites('utility/import')
-:set_tooltip('Bring player')
+:set_tooltip{'player-list.bring-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
     local action_player = get_action_player(player)
@@ -62,7 +62,7 @@ end)
 local kill_player =
 Gui.new_button()
 :set_sprites('utility/too_far')
-:set_tooltip('Kill player')
+:set_tooltip{'player-list.kill-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
     local action_player = get_action_player(player)
@@ -74,7 +74,7 @@ end)
 local report_player =
 Gui.new_button()
 :set_sprites('utility/spawn_flag')
-:set_tooltip('Report player')
+:set_tooltip{'player-list.report-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
     Store.set_child(action_name_store,player.name,'command/report')
@@ -91,7 +91,7 @@ end
 local jail_player =
 Gui.new_button()
 :set_sprites('utility/item_editor_icon')
-:set_tooltip('Jail player')
+:set_tooltip{'player-list.jail-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
     Store.set_child(action_name_store,player.name,'command/jail')
@@ -107,7 +107,7 @@ end
 local temp_ban_player =
 Gui.new_button()
 :set_sprites('utility/clock')
-:set_tooltip('Temp ban player')
+:set_tooltip{'player-list.temp-ban-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
     Store.set_child(action_name_store,player.name,'command/temp-ban')
@@ -121,7 +121,7 @@ end
 local kick_player =
 Gui.new_button()
 :set_sprites('utility/warning_icon')
-:set_tooltip('Kick player')
+:set_tooltip{'player-list.kick-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
     Store.set_child(action_name_store,player.name,'command/kick')
@@ -135,7 +135,7 @@ end
 local ban_player =
 Gui.new_button()
 :set_sprites('utility/danger_icon')
-:set_tooltip('Ban player')
+:set_tooltip{'player-list.ban-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
     Store.set_child(action_name_store,player.name,'command/ban')
@@ -148,11 +148,20 @@ end
 
 return {
     ['command/teleport'] = {
+        auth=function(player,action_player_name)
+            return player.name ~= action_player_name
+        end,
         goto_player,
         bring_player
     },
-    ['command/kill/always'] = {
-        auth=auth_lower_role,
+    ['command/kill'] = {
+        auth=function(player,action_player_name)
+            if player.name == action_player_name then
+                return true
+            elseif Roles.player_allowed(player,'command/kill/always') then
+                return auth_lower_role(player,action_player_name)
+            end
+        end,
         kill_player
     },
     ['command/report'] = {

@@ -15,7 +15,7 @@ local action_name_store = 'gui.left.player-list.action-name'
 local open_action_bar =
 Gui.new_button()
 :set_sprites('utility/expand_dots_white')
-:set_tooltip('Options')
+:set_tooltip{'player-list.open-action-bar'}
 :set_embeded_flow(function(element,action_player_name)
     return action_player_name
 end)
@@ -32,7 +32,7 @@ end)
 local close_action_bar =
 Gui.new_button()
 :set_sprites('utility/close_black')
-:set_tooltip('Close options')
+:set_tooltip{'player-list.close-action-bar'}
 :set_style('tool_button',function(style)
     Gui.set_padding_style(style,-1,-1,-1,-1)
     style.height = 28
@@ -44,10 +44,10 @@ end)
 end)
 
 --- Button used to confirm a reason
-local reason_confrim =
+local reasonc_confirm =
 Gui.new_button()
 :set_sprites('utility/confirm_slot')
-:set_tooltip('Confirm Reason')
+:set_tooltip{'player-list.reason-confirm'}
 :set_style('tool_button',function(style)
     Gui.set_padding_style(style,-1,-1,-1,-1)
     style.height = 28
@@ -60,6 +60,7 @@ end)
     reason_callback(player,reason)
     Store.set_child(action_player_store,player.name,nil)
     Store.set_child(action_name_store,player.name,nil)
+    element.parent.entry.text = ''
 end)
 
 --[[ Creates the main gui areas for the player list
@@ -138,13 +139,13 @@ local function generate_container(player,element)
         name='entry',
         type='textfield',
         style='stretchable_textfield',
-        tooltip='Enter reason'
+        tooltip={'player-list.reason-entry'}
     }
     Gui.set_padding(reason_field)
     reason_field.style.height = 28
     reason_field.style.minimal_width = 160
 
-    reason_confrim(reason_bar)
+    reasonc_confirm(reason_bar)
 
     return list_table, action_bar
 end
@@ -170,7 +171,7 @@ local function generate_action_bar(player,element)
         end
 
         if buttons.auth and action_player and not buttons.auth(player,action_player) then
-            --permission_flow.visible = false
+            permission_flow.visible = false
         end
     end
 
@@ -192,7 +193,7 @@ local function update_action_bar(player)
         element.visible = true
         for action_name,buttons in pairs(config) do
             if buttons.auth and not buttons.auth(player,action_player) then
-                --element[action_name].visible = false
+                element[action_name].visible = false
             else
                 element[action_name].visible = true
             end
@@ -208,7 +209,7 @@ local function add_player(list_table,player,role_name)
     list_table.add{
         type='label',
         caption=player.name,
-        tooltip=role_name
+        tooltip=player.name..' '..player.tag..'\n'..role_name
     }
     Gui.set_padding(player_name,0,0,0,2)
     player_name.style.font_color = player.chat_color
@@ -216,6 +217,7 @@ local function add_player(list_table,player,role_name)
     -- flow which allows right align for the play time
     local time_flow =
     list_table.add{
+        name='player-time-'..player.index,
         type='flow'
     }
     Gui.set_padding(time_flow)
@@ -223,10 +225,14 @@ local function add_player(list_table,player,role_name)
     time_flow.style.horizontally_stretchable = true
 
     -- time given in Xh Ym and is right aligned
+    local tick = game.tick > 0 and game.tick or 1
+    local percent = math.round(player.online_time/tick,3)*100
     local time =
     time_flow.add{
+        name='label',
         type='label',
-        caption=format_time(player.online_time)
+        caption=format_time(player.online_time),
+        tooltip={'player-list.afk-time',percent,format_time(player.afk_time,{minutes=true,long=true})}
     }
     Gui.set_padding(time)
 end
@@ -238,6 +244,7 @@ local function add_fake_players(list_table,count)
         add_player(list_table,{
             name='Player '..i,
             online_time=math.random(0,game.tick),
+            afk_time=math.random(0,game.tick),
             chat_color=table.get_random_dictionary_entry(Colors)
         },role_name)
     end
@@ -270,7 +277,20 @@ Gui.new_left_frame('gui/player-list')
         end
     end
 
-    add_fake_players(list_table,20)
+    --add_fake_players(list_table,20)
+end)
+:on_update(function(player,element)
+    local list = element.container.scroll.table
+    for _,next_player in pairs(game.connected_players) do
+        local time_element_name = 'player-time-'..next_player.index
+        local time_element = list[time_element_name]
+        if time_element and time_element.valid then
+            time_element.label.caption = format_time(next_player.online_time)
+            local tick = game.tick > 0 and game.tick or 1
+            local percent = math.round(player.online_time/tick,3)*100
+            time_element.label.tooltip = {'player-list.afk-time',percent,format_time(player.afk_time,{minutes=true,long=true})}
+        end
+    end
 end)
 
 player_list_name = player_list:uid()
@@ -289,7 +309,8 @@ Store.register(action_name_store,function(value,category)
     element.visible = value ~= nil
 end)
 
---- Many events which trigger the gui to be re drawn
+--- Many events which trigger the gui to be re drawn, it will also update the times every 30 seconds
+Event.on_nth_tick(1800,player_list 'update_all')
 Event.add(defines.events.on_player_joined_game,player_list 'redraw_all')
 Event.add(defines.events.on_player_left_game,player_list 'redraw_all')
 Event.add(Roles.player_role_assigned,player_list 'redraw_all')
