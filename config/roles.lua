@@ -181,6 +181,7 @@ local default = Roles.new_role('Guest','')
     'command/chelp',
     'command/list-roles',
     'command/report',
+    'gui/player-list',
 }
 
 --- Jail role

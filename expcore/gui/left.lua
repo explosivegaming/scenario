@@ -33,6 +33,7 @@
 
     LeftFrames.new_frame(permision_name) --- Creates a new left frame define
     LeftFrames._prototype:set_open_by_default(state) --- Sets if the frame is visible when a player joins, can also be a function to return a boolean
+    LeftFrames._prototype:set_direction(direction) --- Sets the direction of the frame, either vertical or horizontal
     LeftFrames._prototype:get_frame(player) --- Gets the frame for this define from the left frame flow
     LeftFrames._prototype:is_open(player) --- Returns if the player currently has this define visible
     LeftFrames._prototype:toggle(player) --- Toggles the visiblty of the left frame
@@ -159,6 +160,13 @@ function LeftFrames._prototype:set_open_by_default(state)
     return self
 end
 
+--- Sets the direction of the frame, either vertical or horizontal
+-- @tparam direction string the direction to have the elements be added to thef frame
+function LeftFrames._prototype:set_direction(direction)
+    self.direction = direction
+    return self
+end
+
 --- Gets the frame for this define from the left frame flow
 -- @tparam player LuaPlayer the player to get the frame of
 -- @treturn LuaGuiElement the frame in the left frame flow for this define
@@ -212,7 +220,7 @@ end
 -- @tparam player LuaPlayer the player to update the frame of
 function LeftFrames._prototype:redraw(player)
     local frame = self:get_frame(player)
-    frame.claer()
+    frame.clear()
     if self.events.on_draw then
         self.events.on_draw(player,frame)
     end
@@ -263,7 +271,8 @@ Event.add(defines.events.on_player_created,function(event)
     for _,define in pairs(LeftFrames.frames) do
         local frame = flow.add{
             type='frame',
-            name=define.name
+            name=define.name,
+            direction=define.direction
         }
 
         if define.events.on_draw then
