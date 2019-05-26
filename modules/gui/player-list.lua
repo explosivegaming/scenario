@@ -9,6 +9,7 @@ local config = require 'config.action_buttons'
 local Colors = require 'resources.color_presets'
 
 local action_player_store = 'gui.left.player-list.action-player'
+local action_name_store = 'gui.left.player-list.action-name'
 
 --- Button used to open the action bar
 local open_action_bar =
@@ -39,6 +40,26 @@ Gui.new_button()
 end)
 :on_click(function(player,element)
     Store.set_child(action_player_store,player.name,nil)
+    Store.set_child(action_name_store,player.name,nil)
+end)
+
+--- Button used to confirm a reason
+local reason_confrim =
+Gui.new_button()
+:set_sprites('utility/confirm_slot')
+:set_tooltip('Confirm Reason')
+:set_style('tool_button',function(style)
+    Gui.set_padding_style(style,-1,-1,-1,-1)
+    style.height = 28
+    style.width = 28
+end)
+:on_click(function(player,element)
+    local reason = element.parent.entry.text or 'Non Given'
+    local action_name = Store.get_child(action_name_store,player.name)
+    local reason_callback = config[action_name].reason_callback
+    reason_callback(player,reason)
+    Store.set_child(action_player_store,player.name,nil)
+    Store.set_child(action_name_store,player.name,nil)
 end)
 
 --[[ Creates the main gui areas for the player list
@@ -48,7 +69,7 @@ end)
     >>> table
     >> action_bar
 ]]
-local function generate_container(element)
+local function generate_container(player,element)
     Gui.set_padding(element,2,2,2,2)
     element.style.minimal_width = 200
 
@@ -97,6 +118,33 @@ local function generate_container(element)
     Gui.set_padding(action_bar,1,1,3,3)
     action_bar.style.horizontally_stretchable = true
     action_bar.style.height = 35
+
+    -- reason bar which contains the reason text field and confirm button
+    local reason_bar =
+    container.add{
+        name='reason_bar',
+        type='frame',
+        style='subfooter_frame'
+    }
+    Gui.set_padding(reason_bar,-1,-1,3,3)
+    reason_bar.style.horizontally_stretchable = true
+    reason_bar.style.height = 35
+    local action_name = Store.get_child(action_name_store,player.name)
+    reason_bar.visible = action_name ~= nil
+
+    -- text entry for the reason bar
+    local reason_field =
+    reason_bar.add{
+        name='entry',
+        type='textfield',
+        style='stretchable_textfield',
+        tooltip='Enter reason'
+    }
+    Gui.set_padding(reason_field)
+    reason_field.style.height = 28
+    reason_field.style.minimal_width = 160
+
+    reason_confrim(reason_bar)
 
     return list_table, action_bar
 end
@@ -202,7 +250,7 @@ Gui.new_left_frame('gui/player-list')
 :set_open_by_default()
 :set_direction('vertical')
 :on_draw(function(player,element)
-    local list_table,action_bar = generate_container(element)
+    local list_table,action_bar = generate_container(player,element)
     generate_action_bar(player,action_bar)
 
     local players = {}
@@ -231,6 +279,14 @@ player_list_name = player_list:uid()
 Store.register(action_player_store,function(value,category)
     local player = Game.get_player_from_any(category)
     update_action_bar(player)
+end)
+
+--- When the action name is changed the reason input will update
+Store.register(action_name_store,function(value,category)
+    local player = Game.get_player_from_any(category)
+    local frame = Gui.classes.left_frames.get_frame(player_list_name,player)
+    local element = frame.container.reason_bar
+    element.visible = value ~= nil
 end)
 
 --- Many events which trigger the gui to be re drawn

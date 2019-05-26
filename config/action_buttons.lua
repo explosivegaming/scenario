@@ -4,8 +4,10 @@ local Store = require 'expcore.store'
 local Game = require 'utils.game'
 local Reports = require 'modules.addons.reports-control'
 local Jail = require 'modules.addons.jail-control'
+local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
 
 local action_player_store = 'gui.left.player-list.action-player'
+local action_name_store = 'gui.left.player-list.action-name'
 
 local function tool_button_style(style)
     Gui.set_padding_style(style,-1,-1,-1,-1)
@@ -24,7 +26,8 @@ end
 local function get_action_player(player)
     local action_player_name = Store.get_child(action_player_store,player.name)
     local action_player = Game.get_player_from_any(action_player_name)
-    return action_player
+    local action_player_name_color = format_chat_player_name(action_player)
+    return action_player,action_player_name_color
 end
 
 local function teleport(from_player,to_player)
@@ -74,9 +77,16 @@ Gui.new_button()
 :set_tooltip('Report player')
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    local action_player = get_action_player(player)
-    Reports.report_player(action_player,reason,player.name)
+    Store.set_child(action_name_store,player.name,'command/report')
 end)
+
+local function report_player_callback(player,reason)
+    local action_player,action_player_name_color = get_action_player(player)
+    local by_player_name_color = format_chat_player_name(player)
+    game.print{'expcom-report.non-admin',action_player_name_color,reason}
+    Roles.print_to_roles_higher('Trainee',{'expcom-report.admin',action_player_name_color,by_player_name_color,reason})
+    Reports.report_player(action_player,reason,player.name)
+end
 
 local jail_player =
 Gui.new_button()
@@ -84,9 +94,15 @@ Gui.new_button()
 :set_tooltip('Jail player')
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    local action_player = get_action_player(player)
-    Jail.jail_player(action_player,player.name)
+    Store.set_child(action_name_store,player.name,'command/jail')
 end)
+
+local function jail_player_callback(player,reason)
+    local action_player,action_player_name_color = get_action_player(player)
+    local by_player_name_color = format_chat_player_name(player)
+    game.print{'expcom-jail.give',action_player_name_color,by_player_name_color,reason}
+    Jail.jail_player(action_player,player.name)
+end
 
 local temp_ban_player =
 Gui.new_button()
@@ -94,9 +110,13 @@ Gui.new_button()
 :set_tooltip('Temp ban player')
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
+    Store.set_child(action_name_store,player.name,'command/temp-ban')
+end)
+
+local function temp_ban_player_callback(player,reason)
     local action_player = get_action_player(player)
     Jail.temp_ban_player(action_player,player.name,reason)
-end)
+end
 
 local kick_player =
 Gui.new_button()
@@ -104,9 +124,13 @@ Gui.new_button()
 :set_tooltip('Kick player')
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
+    Store.set_child(action_name_store,player.name,'command/kick')
+end)
+
+local function kick_player_callback(player,reason)
     local action_player = get_action_player(player)
     game.kick_player(action_player,reason)
-end)
+end
 
 local ban_player =
 Gui.new_button()
@@ -114,9 +138,13 @@ Gui.new_button()
 :set_tooltip('Ban player')
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
+    Store.set_child(action_name_store,player.name,'command/ban')
+end)
+
+local function ban_player_callback(player,reason)
     local action_player = get_action_player(player)
     game.ban_player(action_player,reason)
-end)
+end
 
 return {
     ['command/teleport'] = {
@@ -129,22 +157,27 @@ return {
     },
     ['command/report'] = {
         auth=auth_lower_role,
+        reason_callback=report_player_callback,
         report_player
     },
     ['command/jail'] = {
         auth=auth_lower_role,
+        reason_callback=jail_player_callback,
         jail_player
     },
     ['command/temp-ban'] = {
         auth=auth_lower_role,
+        reason_callback=temp_ban_player_callback,
         temp_ban_player
     },
     ['command/kick'] = {
         auth=auth_lower_role,
+        reason_callback=kick_player_callback,
         kick_player
     },
     ['command/ban'] = {
         auth=auth_lower_role,
+        reason_callback=ban_player_callback,
         ban_player
     }
 }
