@@ -184,7 +184,7 @@ return {
     ['command/report'] = {
         auth=function(player,action_player_name)
             if not Roles.player_allowed(player,'command/give-warning') then
-                return auth_lower_role(player,action_player_name)
+                return not Roles.player_has_flag(action_player_name,'report-immune')
             end
         end,
         reason_callback=report_player_callback,
