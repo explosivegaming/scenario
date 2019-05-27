@@ -226,7 +226,7 @@ local function add_player(list_table,player,role_name)
         name=zoom_to_map_name,
         type='label',
         caption=player.name,
-        tooltip=player.name..' '..player.tag..'\n'..role_name
+        tooltip={'player-list.open-map',player.name,player.tag,role_name}
     }
     Gui.set_padding(player_name,0,0,0,2)
     player_name.style.font_color = player.chat_color
