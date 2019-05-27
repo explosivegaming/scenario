@@ -182,6 +182,7 @@ local default = Roles.new_role('Guest','')
     'command/tag-clear',
     'command/chelp',
     'command/list-roles',
+    'command/find-on-map',
     'command/report',
     'gui/player-list',
 }

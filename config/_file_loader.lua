@@ -22,6 +22,7 @@ return {
     'modules.commands.reports',
     'modules.commands.spawn',
     'modules.commands.warnings',
+    'modules.commands.find',
     -- QoL Addons
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',

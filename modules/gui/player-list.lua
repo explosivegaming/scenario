@@ -11,6 +11,15 @@ local Colors = require 'resources.color_presets'
 local action_player_store = 'gui.left.player-list.action-player'
 local action_name_store = 'gui.left.player-list.action-name'
 
+--- used on player name label to allow zoom to map
+local zoom_to_map_name = Gui.uid_name()
+Gui.on_click(zoom_to_map_name,function(event)
+    local action_player_name = event.element.caption
+    local action_player = Game.get_player_from_any(action_player_name)
+    local position = action_player.position
+    event.player.zoom_to_world(position,2)
+end)
+
 --- Button used to open the action bar
 local open_action_bar =
 Gui.new_button()
@@ -204,9 +213,17 @@ end
 local function add_player(list_table,player,role_name)
     open_action_bar(list_table,player.name)
 
+    -- flow to contain player_name to allow all to have trigger for zoom to map
+    local player_name_flow =
+    list_table.add{
+        type='flow'
+    }
+    Gui.set_padding(player_name_flow)
+
     -- player name with the tooltip of their highest role and in they colour
     local player_name =
-    list_table.add{
+    player_name_flow.add{
+        name=zoom_to_map_name,
         type='label',
         caption=player.name,
         tooltip=player.name..' '..player.tag..'\n'..role_name
