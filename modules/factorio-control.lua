@@ -1,8 +1,13 @@
 local Event = require 'utils.event'
 local Global = require 'utils.global'
+local config = require 'config.advanced_start'
+local use_silo_script = not config.disable_base_game_silo_script
 
 local util = require("util")
-local silo_script = require("silo-script")
+local silo_script
+if use_silo_script then
+  silo_script = require("silo-script")
+end
 
 local global = {}
 Global.register(global,function(tbl)
@@ -29,8 +34,10 @@ local respawn_items = function()
   }
 end
 
-for k,v in pairs(silo_script.get_events()) do
-    Event.add(k, v)
+if use_silo_script then
+  for k,v in pairs(silo_script.get_events()) do
+      Event.add(k, v)
+  end
 end
 
 Event.add(defines.events.on_player_created, function(event)
@@ -48,27 +55,37 @@ Event.add(defines.events.on_player_created, function(event)
     end
   end
 
-  silo_script.on_event(event)
+  if use_silo_script then
+    silo_script.on_event(event)
+  end
 end)
 
 Event.add(defines.events.on_player_respawned, function(event)
   local player = game.players[event.player_index]
   util.insert_safe(player, global.respawn_items)
-  silo_script.on_event(event)
+  if use_silo_script then
+    silo_script.on_event(event)
+  end
 end)
 
-Event.on_load(function()
-  silo_script.on_load()
-end)
+if use_silo_script then
+  Event.on_load(function()
+    silo_script.on_load()
+  end)
+end
 
 Event.on_init(function()
   global.created_items = created_items()
   global.respawn_items = respawn_items()
-  silo_script.on_init()
+  if use_silo_script then
+    silo_script.on_init()
+  end
 end)
 
-silo_script.add_remote_interface()
-silo_script.add_commands()
+if use_silo_script then
+  silo_script.add_remote_interface()
+  silo_script.add_commands()
+end
 
 remote.add_interface("freeplay",
 {

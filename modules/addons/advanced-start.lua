@@ -31,4 +31,14 @@ Event.on_init(function()
     remote.call('freeplay','set_created_items',{})
     remote.call('freeplay','set_chart_distance',0)
     remote.call('freeplay','set_skip_intro',config.skip_intro)
+    if config.research_queue_from_start then
+        for _,force in pairs(game.forces) do
+            force.research_queue_enabled = true
+        end
+    end
+    if not config.disable_base_game_silo_script then
+        if config.skip_victory then
+            remote.call('silo_script','set_no_victory',true)
+        end
+    end
 end)
