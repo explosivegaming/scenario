@@ -139,7 +139,7 @@ local function create_section(container,section_name,table_size)
         name=section_name..'-header',
         style='subheader_frame',
     }
-    Gui.set_padding(header,1,1,3,3)
+    Gui.set_padding(header,4,1,4,4)
     header.style.horizontally_stretchable = true
 
     --- Caption for the header bar
@@ -413,6 +413,8 @@ local function generate_progress(player,frame)
                 generate_progress_buttons(player,element,rocket_silo_data)
 
                 --- Creats two flows and two labels for the X and Y position
+                local name = config.progress.allow_zoom_to_map and zoom_to_map_name or nil
+                local tooltip = config.progress.allow_zoom_to_map and {'rocket-info.progress-label-tooltip'} or nil
                 local flow_x = element.add{
                     type='flow',
                     name='label-x-'..silo_name,
@@ -421,9 +423,9 @@ local function generate_progress(player,frame)
                 Gui.set_padding(flow_x,0,0,1,2)
                 flow_x.add{
                     type='label',
-                    name=zoom_to_map_name,
+                    name=name,
                     caption={'rocket-info.progress-x-pos',pos.x},
-                    tooltip={'rocket-info.progress-label-tooltip'}
+                    tooltip=tooltip
                 }
 
                 local flow_y = element.add{
@@ -434,9 +436,9 @@ local function generate_progress(player,frame)
                 Gui.set_padding(flow_y,0,0,1,2)
                 flow_y.add{
                     type='label',
-                    name=zoom_to_map_name,
+                    name=name,
                     caption={'rocket-info.progress-y-pos',pos.y},
-                    tooltip={'rocket-info.progress-label-tooltip'}
+                    tooltip=tooltip
                 }
 
                 --- Creates the progress value which is right aligned
@@ -483,7 +485,8 @@ Gui.new_left_frame('gui/rocket-info')
     return player.force.rockets_launched > 0 and Gui.classes.toolbar.allowed(player,define_name)
 end)
 :set_open_by_default(function(player,define_name)
-    return player.force.rockets_launched > 0
+    return true
+    --return player.force.rockets_launched > 0
 end)
 :set_direction('vertical')
 :on_draw(function(player,element)
