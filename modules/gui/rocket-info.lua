@@ -485,8 +485,7 @@ Gui.new_left_frame('gui/rocket-info')
     return player.force.rockets_launched > 0 and Gui.classes.toolbar.allowed(player,define_name)
 end)
 :set_open_by_default(function(player,define_name)
-    return true
-    --return player.force.rockets_launched > 0
+    return player.force.rockets_launched > 0
 end)
 :set_direction('vertical')
 :on_draw(function(player,element)
