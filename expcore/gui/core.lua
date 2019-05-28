@@ -154,6 +154,7 @@
     Gui.set_padding(element,up,down,left,right) --- Sets the padding for a gui element
     Gui.set_padding_style(style,up,down,left,right) --- Sets the padding for a gui style
     Gui.create_right_align(element,flow_name) --- Allows the creation of a right align flow to place elements into
+    Gui.destory_if_valid(element) --- Destroies an element but tests for it being present and valid first
 ]]
 local Gui = require 'utils.gui'
 local Game = require 'utils.game'
@@ -581,6 +582,16 @@ function Gui.create_right_align(element,flow_name)
     right_flow.style.horizontal_align = 'right'
     right_flow.style.horizontally_stretchable = true
     return right_flow
+end
+
+--- Destroies an element but tests for it being present and valid first
+-- @tparam element LuaGuiElement the element to be destroied
+-- @treturn boolean true if it was destoried
+function Gui.destory_if_valid(element)
+    if element and element.valid then
+        element.destroy()
+        return true
+    end
 end
 
 return Gui
