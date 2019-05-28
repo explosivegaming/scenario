@@ -154,6 +154,8 @@ end
 function LeftFrames._prototype:set_open_by_default(state)
     if state == false then
         self.open_by_default = false
+    elseif state == nil then
+        self.open_by_default = true
     else
         self.open_by_default = state
     end
@@ -282,7 +284,7 @@ Event.add(defines.events.on_player_created,function(event)
             define.events.on_draw(player,frame)
         end
 
-        if define.open_by_default == false then
+        if not define.open_by_default then
             frame.visible = false
         elseif type(define.open_by_default) == 'function' then
             if not define.open_by_default(player,define.name) then
