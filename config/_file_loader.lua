@@ -34,8 +34,9 @@ return {
     'modules.addons.pollution-grading',
     'modules.addons.random-player-colours',
     -- GUI
-    'modules.gui.player-list',
     'modules.gui.rocket-info',
+    'modules.gui.science-info',
+    'modules.gui.player-list',
     'modules.commands.debug',
     -- Config Files
     'config.expcore-commands.auth_admin', -- commands tagged with admin_only are blocked for non admins

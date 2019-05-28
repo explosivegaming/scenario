@@ -171,7 +171,8 @@ function Public.format_time(ticks,options)
         seconds=false,
         long=false,
         time=false,
-        string=false
+        string=false,
+        null=false
     }
     -- Basic numbers that are used in calculations
     local max_days, max_hours, max_minutes, max_seconds = ticks/5184000, ticks/216000, ticks/3600, ticks/60
@@ -187,6 +188,13 @@ function Public.format_time(ticks,options)
     end
     if not options.minutes then
         rtn_seconds = rtn_seconds + rtn_minutes*60
+    end
+    -- Creates the null time format, does not work with long
+    if options.null and not options.long then
+        rtn_days='--'
+        rtn_hours='--'
+        rtn_minutes='--'
+        rtn_seconds='--'
     end
     -- Format options
     local suffix = 'time-symbol-'
@@ -215,7 +223,7 @@ function Public.format_time(ticks,options)
             rtn_minutes = {suffix..'minutes'..suffix_2,rtn_minutes}
             rtn_seconds = {suffix..'seconds'..suffix_2,rtn_seconds}
         end
-    else
+    elseif not options.null then
         -- weather string or not it has same format
         rtn_days = string.format('%02d',rtn_days)
         rtn_hours = string.format('%02d',rtn_hours)

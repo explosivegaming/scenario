@@ -190,6 +190,7 @@ local default = Roles.new_role('Guest','')
     'command/report',
     'gui/player-list',
     'gui/rocket-info',
+    'gui/science-info',
 }
 
 --- Jail role
