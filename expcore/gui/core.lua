@@ -153,6 +153,8 @@
     Gui.toggle_visible(element) --- Will toggle the visiblity of an element
     Gui.set_padding(element,up,down,left,right) --- Sets the padding for a gui element
     Gui.set_padding_style(style,up,down,left,right) --- Sets the padding for a gui style
+    Gui.create_right_align(element,flow_name) --- Allows the creation of a right align flow to place elements into
+    Gui.destory_if_valid(element) --- Destroies an element but tests for it being present and valid first
 ]]
 local Gui = require 'utils.gui'
 local Game = require 'utils.game'
@@ -515,6 +517,7 @@ end
 
 --- Will toggle the enabled state of an element
 -- @tparam element LuaGuiElement the gui element to toggle
+-- @treturn boolean the new state that the element has
 function Gui.toggle_enable(element)
     if not element or not element.valid then return end
     if not element.enabled then
@@ -522,10 +525,12 @@ function Gui.toggle_enable(element)
     else
         element.enabled = false
     end
+    return element.enabled
 end
 
 --- Will toggle the visiblity of an element
 -- @tparam element LuaGuiElement the gui element to toggle
+-- @treturn boolean the new state that the element has
 function Gui.toggle_visible(element)
     if not element or not element.valid then return end
     if not element.visible then
@@ -533,6 +538,7 @@ function Gui.toggle_visible(element)
     else
         element.visible = false
     end
+    return element.visible
 end
 
 --- Sets the padding for a gui element
@@ -560,6 +566,32 @@ function Gui.set_padding_style(style,up,down,left,right)
     style.bottom_padding = down or 0
     style.left_padding = left or 0
     style.right_padding = right or 0
+end
+
+--- Allows the creation of a right align flow to place elements into
+-- @tparam element LuaGuiElement the element to add this flow to,
+-- @tparam[opt] flow_name string the name of the flow can be nil
+-- @treturn LuaGuiElement the flow that was created
+function Gui.create_right_align(element,flow_name)
+    local right_flow =
+    element.add{
+        name=flow_name,
+        type='flow'
+    }
+    Gui.set_padding(right_flow,1,1,2,2)
+    right_flow.style.horizontal_align = 'right'
+    right_flow.style.horizontally_stretchable = true
+    return right_flow
+end
+
+--- Destroies an element but tests for it being present and valid first
+-- @tparam element LuaGuiElement the element to be destroied
+-- @treturn boolean true if it was destoried
+function Gui.destory_if_valid(element)
+    if element and element.valid then
+        element.destroy()
+        return true
+    end
 end
 
 return Gui

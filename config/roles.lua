@@ -76,6 +76,8 @@ Roles.new_role('Moderator','Mod')
     'command/clear-warnings',
     'command/clear-temp-ban',
     'command/clear-inventory',
+    'gui/rocket-info/toggle-active',
+    'gui/rocket-info/remote_launch',
 }
 
 Roles.new_role('Trainee','TrMod')
@@ -115,6 +117,8 @@ Roles.new_role('Pay to Win','P2W')
 :set_flag('report-immune')
 :set_parent('Donator')
 :allow{
+    'gui/rocket-info/toggle-active',
+    'gui/rocket-info/remote_launch',
 }
 
 Roles.new_role('Donator','Don')
@@ -185,6 +189,7 @@ local default = Roles.new_role('Guest','')
     'command/find-on-map',
     'command/report',
     'gui/player-list',
+    'gui/rocket-info',
 }
 
 --- Jail role

@@ -62,6 +62,9 @@ end
 
 return {
     skip_intro=true, -- skips the intro given in the default factorio free play scenario
+    skip_victory=true, -- will skip the victory screen when a rocket is launched
+    disable_base_game_silo_script=true, -- will not load the silo script at all
+    research_queue_from_start=true, -- when true the research queue is useible from the start
     friendly_fire=false, -- weather players will be able to attack each other on the same force
     enemy_expansion=false, -- a catch all for in case the map settings file fails to load
     chart_radius=10*32, -- the number of tiles that will be charted when the map starts

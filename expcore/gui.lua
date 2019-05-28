@@ -37,6 +37,9 @@ local Gui = require 'expcore.gui.core'
     Gui.toggle_enable(element) --- Will toggle the enabled state of an element
     Gui.toggle_visible(element) --- Will toggle the visiblity of an element
     Gui.set_padding(element,up,down,left,right) --- Sets the padding for a gui element
+    Gui.set_padding_style(style,up,down,left,right) --- Sets the padding for a gui style
+    Gui.create_right_align(element,flow_name) --- Allows the creation of a right align flow to place elements into
+    Gui.destory_if_valid(element) --- Destroies an element but tests for it being present and valid first
 ]]
 
 local Instances = require 'expcore.gui.instances'

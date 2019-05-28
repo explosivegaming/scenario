@@ -40,7 +40,7 @@ end)
 --- Button used to close the action bar
 local close_action_bar =
 Gui.new_button()
-:set_sprites('utility/close_black')
+:set_sprites('utility/close_black','utility/close_white')
 :set_tooltip{'player-list.close-action-bar'}
 :set_style('tool_button',function(style)
     Gui.set_padding_style(style,-1,-1,-1,-1)
@@ -232,14 +232,7 @@ local function add_player(list_table,player,role_name)
     player_name.style.font_color = player.chat_color
 
     -- flow which allows right align for the play time
-    local time_flow =
-    list_table.add{
-        name='player-time-'..player.index,
-        type='flow'
-    }
-    Gui.set_padding(time_flow)
-    time_flow.style.horizontal_align = 'right'
-    time_flow.style.horizontally_stretchable = true
+    local time_flow = Gui.create_right_align(list_table,'player-time-'..player.index)
 
     -- time given in Xh Ym and is right aligned
     local tick = game.tick > 0 and game.tick or 1
@@ -271,6 +264,7 @@ end
 local player_list =
 Gui.new_left_frame('gui/player-list')
 :set_sprites('entity/character')
+:set_tooltip{'player-list.main-tooltip'}
 :set_open_by_default()
 :set_direction('vertical')
 :on_draw(function(player,element)
