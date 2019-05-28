@@ -3,33 +3,23 @@ local Event = require 'utils.event'
 local Colors = require 'resources.color_presets'
 local format_time = ext_require('expcore.common','format_time')
 local format_number = ext_require('util','format_number')
+local config = require 'config.science'
 
 local null_time_short = {'science-info.eta-time',format_time(0,{hours=true,minutes=true,seconds=true,time=true,null=true})}
 local null_time_long = format_time(0,{hours=true,minutes=true,seconds=true,long=true,null=true})
 
-local science_packs ={
-    red='automation-science-pack',
-    green='logistic-science-pack',
-    grey='military-science-pack',
-    blue='chemical-science-pack',
-    purple='production-science-pack',
-    yellow='utility-science-pack',
-    white='space-science-pack',
-}
-
 local function get_production_stats(player,science_pack)
-    local item_name = science_packs[science_pack]
     local force = player.force
     local stats = force.item_production_statistics
-    local total_made = stats.get_input_count(item_name)
-    local total_used = stats.get_output_count(item_name)
+    local total_made = stats.get_input_count(science_pack)
+    local total_used = stats.get_output_count(science_pack)
     local minute_made = stats.get_flow_count{
-        name=item_name,
+        name=science_pack,
         input=true,
         precision_index=defines.flow_precision_index.one_minute,
     }
     local minute_used = stats.get_flow_count{
-        name=item_name,
+        name=science_pack,
         input=false,
         precision_index=defines.flow_precision_index.one_minute,
     }
@@ -44,9 +34,9 @@ local function get_production_stats(player,science_pack)
 end
 
 local function get_font_colour(value,secondary)
-    if value > 1 then
+    if value > 5 then
         return Colors.light_green
-    elseif value < -1 then
+    elseif value < -5 then
         return Colors.indian_red
     elseif secondary and secondary > 0 or not secondary and value ~= 0 then
         return Colors.orange
@@ -79,6 +69,7 @@ local function generate_container(player,element)
     }
     Gui.set_padding(header,2,2,4,4)
     header.style.horizontally_stretchable = true
+    header.style.use_header_filler = false
 
     -- main flow for the data
     local flow =
@@ -93,6 +84,16 @@ local function generate_container(player,element)
     flow.style.horizontally_stretchable = true
     flow.style.maximal_height = 185
 
+    -- message to say that you have not made any packs yet
+    local non_made =
+    flow.add{
+        name='non_made',
+        type='label',
+        caption={'science-info.no-packs'}
+    }
+    non_made.style.width = 200
+    non_made.style.single_line = false
+
     -- table that stores all the data
     local flow_table =
     flow.add{
@@ -104,35 +105,38 @@ local function generate_container(player,element)
     flow_table.style.horizontally_stretchable = true
     flow_table.style.vertical_align = 'center'
 
-    -- footer used to store the eta
-    local footer =
-    container.add{
-        name='footer',
-        type='frame',
-        style='subheader_frame'
-    }
-    Gui.set_padding(footer,2,2,4,4)
-    footer.style.horizontally_stretchable = true
+    local eta
+    if config.show_eta then
+        -- footer used to store the eta
+        local footer =
+        container.add{
+            name='footer',
+            type='frame',
+            style='subheader_frame'
+        }
+        Gui.set_padding(footer,2,2,4,4)
+        footer.style.horizontally_stretchable = true
 
-    -- label for the footer
-    footer.add{
-        name='eta-label',
-        type='label',
-        caption={'science-info.eta-caption'},
-        tooltip={'science-info.eta-tooltip'},
-        style='heading_1_label'
-    }
+        -- label for the footer
+        footer.add{
+            name='eta-label',
+            type='label',
+            caption={'science-info.eta-caption'},
+            tooltip={'science-info.eta-tooltip'},
+            style='heading_1_label'
+        }
 
-    -- data for the footer
-    local right_align = Gui.create_right_align(footer,'eta')
-    local eta =
-    right_align.add{
-        name='label',
-        type='label',
-        caption=null_time_short,
-        tooltip=null_time_long,
-        style='heading_1_label'
-    }
+        -- data for the footer
+        local right_align = Gui.create_right_align(footer,'eta')
+        eta =
+        right_align.add{
+            name='label',
+            type='label',
+            caption=null_time_short,
+            tooltip=null_time_long,
+            style='heading_1_label'
+        }
+    end
 
     return flow_table, eta
 end
@@ -188,10 +192,11 @@ local function add_data_pair(element,name,value,secondary,tooltip)
     end
 end
 
-local function generate_science_pack(player,element,pack_name)
-    local stats = get_production_stats(player,pack_name)
-    local item_name = science_packs[pack_name]
+local function generate_science_pack(player,element,science_pack)
+    local stats = get_production_stats(player,science_pack)
     if stats.total_made > 0 then
+        element.parent.non_made.visible = false
+
         local icon_style = 'quick_bar_slot_button'
         if stats.minute_net > 1 then
             icon_style = 'green_slot_button'
@@ -201,7 +206,7 @@ local function generate_science_pack(player,element,pack_name)
             icon_style = 'selected_slot_button'
         end
 
-        local icon = element['icon-'..pack_name]
+        local icon = element['icon-'..science_pack]
 
         if icon then
             icon.style = icon_style
@@ -214,10 +219,10 @@ local function generate_science_pack(player,element,pack_name)
         else
             icon =
             element.add{
-                name='icon-'..pack_name,
+                name='icon-'..science_pack,
                 type='sprite-button',
-                sprite='item/'..item_name,
-                tooltip={'item-name.'..item_name},
+                sprite='item/'..science_pack,
+                tooltip={'item-name.'..science_pack},
                 style=icon_style
             }
             icon.style.height = 55
@@ -228,12 +233,12 @@ local function generate_science_pack(player,element,pack_name)
 
         end
 
-        local delta = element['delta-'..pack_name]
+        local delta = element['delta-'..science_pack]
 
         if not delta then
             delta =
             element.add{
-                name='delta-'..pack_name,
+                name='delta-'..science_pack,
                 type='frame',
                 style='bordered_frame'
             }
@@ -248,13 +253,14 @@ local function generate_science_pack(player,element,pack_name)
             Gui.set_padding(delta_table)
         end
 
-        add_data_pair(delta.table,'pos-'..pack_name,stats.minute_made,nil,{'science-info.pos-tooltip',stats.total_made})
-        add_data_pair(delta.table,'neg-'..pack_name,-stats.minute_used,nil,{'science-info.neg-tooltip',stats.total_used})
-        add_data_pair(element,'net-'..pack_name,stats.minute_net,stats.minute_made,{'science-info.net-tooltip',stats.total_net})
+        add_data_pair(delta.table,'pos-'..science_pack,stats.minute_made,nil,{'science-info.pos-tooltip',stats.total_made})
+        add_data_pair(delta.table,'neg-'..science_pack,-stats.minute_used,nil,{'science-info.neg-tooltip',stats.total_used})
+        add_data_pair(element,'net-'..science_pack,stats.minute_net,stats.minute_made,{'science-info.net-tooltip',stats.total_net})
     end
 end
 
 local function generate_eta(player,element)
+    if not config.show_eta then return end
     local force = player.force
     local research = force.current_research
     if not research then
@@ -306,8 +312,8 @@ Gui.new_left_frame('gui/science-info')
 :on_draw(function(player,element)
     local table, eta = generate_container(player,element)
 
-    for pack_name,item_name in pairs(science_packs) do
-        generate_science_pack(player,table,pack_name)
+    for _,science_pack in ipairs(config) do
+        generate_science_pack(player,table,science_pack)
     end
 
     generate_eta(player,eta)
@@ -317,8 +323,8 @@ end)
     local table = container.scroll.table
     local eta = container.footer.eta.label
 
-    for pack_name,item_name in pairs(science_packs) do
-        generate_science_pack(player,table,pack_name)
+    for _,science_pack in ipairs(config) do
+        generate_science_pack(player,table,science_pack)
     end
 
     generate_eta(player,eta)
