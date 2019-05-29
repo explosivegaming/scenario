@@ -19,6 +19,7 @@ local Gui = require 'expcore.gui.core'
 local Roles = require 'expcore.roles'
 local Event = require 'utils.event'
 local Game = require 'utils.game'
+local mod_gui = require 'mod-gui'
 
 local Toolbar = {
     permisison_names = {},
@@ -38,8 +39,12 @@ end
 -- @tparam[opt] name string when given allows an alias to the button for the permission system
 -- @treturn table the button define
 function Toolbar.new_button(name)
-    local button = Buttons.new_button()
-    button:set_post_authenticator(Toolbar.allowed)
+    local button =
+    Buttons.new_button()
+    :set_post_authenticator(Toolbar.allowed)
+    :set_style(mod_gui.button_style,function(style)
+        Gui.set_padding_style(style,-2,-2,-2,-2)
+    end)
     Toolbar.add_button(button)
     Toolbar.permission_alias(button.name,name)
     return button
