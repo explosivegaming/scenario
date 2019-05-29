@@ -1,3 +1,4 @@
+-- preset colours that players get when they join the server, if not in the list then will be given a random colour (which isnt disallowed)
 return {
 	players={
 		BADgamerNL={r=255,g=20,b=147},

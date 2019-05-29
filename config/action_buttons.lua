@@ -1,3 +1,8 @@
+--- Config for the different action buttons that show on the player list
+-- each button has the button define(s) given along side an auth function, and optional reason callback
+-- if a reason callback is used then Store.set_child(action_name_store,player.name,'BUTTON_NAME') should be called during on_click
+-- buttons can be removed from the gui by commenting them out of the config at the bottom of this file
+-- the key used for the name of the button is the permision name used by the role system
 local Gui = require 'expcore.gui'
 local Roles = require 'expcore.roles'
 local Store = require 'expcore.store'
@@ -10,12 +15,14 @@ local format_chat_player_name = ext_require('expcore.common','format_chat_player
 local action_player_store = 'gui.left.player-list.action-player'
 local action_name_store = 'gui.left.player-list.action-name'
 
+-- common style used by all action buttons
 local function tool_button_style(style)
     Gui.set_padding_style(style,-1,-1,-1,-1)
     style.height = 28
     style.width = 28
 end
 
+-- auth that will only allow when on player's of lower roles
 local function auth_lower_role(player,action_player_name)
     local player_highest = Roles.get_player_highest_role(player)
     local action_player_highest = Roles.get_player_highest_role(action_player_name)
@@ -24,6 +31,7 @@ local function auth_lower_role(player,action_player_name)
     end
 end
 
+-- gets the action player and a coloured name for the action to be used on
 local function get_action_player(player)
     local action_player_name = Store.get_child(action_player_store,player.name)
     local action_player = Game.get_player_from_any(action_player_name)
@@ -31,6 +39,7 @@ local function get_action_player(player)
     return action_player,action_player_name_color
 end
 
+-- telports one player to another
 local function teleport(from_player,to_player)
     local surface = to_player.surface
     local position = surface.find_non_colliding_position('character',to_player.position,32,1)
@@ -40,6 +49,7 @@ local function teleport(from_player,to_player)
     return true
 end
 
+-- teleports the user to the action player
 local goto_player =
 Gui.new_button()
 :set_sprites('utility/export')
@@ -50,6 +60,7 @@ Gui.new_button()
     teleport(player,action_player)
 end)
 
+-- teleports the action player to the user
 local bring_player =
 Gui.new_button()
 :set_sprites('utility/import')
@@ -60,6 +71,7 @@ Gui.new_button()
     teleport(action_player,player)
 end)
 
+-- kills the action player, if there are alive
 local kill_player =
 Gui.new_button()
 :set_sprites('utility/too_far')
@@ -72,6 +84,7 @@ Gui.new_button()
     end
 end)
 
+-- reports the action player, requires a reason to be given
 local report_player =
 Gui.new_button()
 :set_sprites('utility/spawn_flag')
@@ -89,6 +102,7 @@ local function report_player_callback(player,reason)
     Reports.report_player(action_player,reason,player.name)
 end
 
+-- gives the action player a warning, requires a reason
 local warn_player =
 Gui.new_button()
 :set_sprites('utility/spawn_flag')
@@ -105,6 +119,7 @@ local function warn_player_callback(player,reason)
     Warnings.add_warnings(action_player,player.name)
 end
 
+-- jails the action player, requires a reason
 local jail_player =
 Gui.new_button()
 :set_sprites('utility/item_editor_icon')
@@ -121,6 +136,7 @@ local function jail_player_callback(player,reason)
     Jail.jail_player(action_player,player.name)
 end
 
+-- temp bans the action player, requires a reason
 local temp_ban_player =
 Gui.new_button()
 :set_sprites('utility/clock')
@@ -135,6 +151,7 @@ local function temp_ban_player_callback(player,reason)
     Jail.temp_ban_player(action_player,player.name,reason)
 end
 
+-- kicks the action player, requires a reason
 local kick_player =
 Gui.new_button()
 :set_sprites('utility/warning_icon')
@@ -149,6 +166,7 @@ local function kick_player_callback(player,reason)
     game.kick_player(action_player,reason)
 end
 
+-- bans the action player, requires a reason
 local ban_player =
 Gui.new_button()
 :set_sprites('utility/danger_icon')
@@ -167,7 +185,7 @@ return {
     ['command/teleport'] = {
         auth=function(player,action_player_name)
             return player.name ~= action_player_name
-        end,
+        end, -- cant teleport to your self
         goto_player,
         bring_player
     },
@@ -178,7 +196,7 @@ return {
             elseif Roles.player_allowed(player,'command/kill/always') then
                 return auth_lower_role(player,action_player_name)
             end
-        end,
+        end, -- player must be lower role, or your self
         kill_player
     },
     ['command/report'] = {
@@ -186,12 +204,12 @@ return {
             if not Roles.player_allowed(player,'command/give-warning') then
                 return not Roles.player_has_flag(action_player_name,'report-immune')
             end
-        end,
+        end, -- can report any player that isnt immune and you arnt able to give warnings
         reason_callback=report_player_callback,
         report_player
     },
     ['command/give-warning'] = {
-        auth=auth_lower_role,
+        auth=auth_lower_role, -- warn a lower user, replaces report
         reason_callback=warn_player_callback,
         warn_player
     },
