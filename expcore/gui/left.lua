@@ -243,7 +243,7 @@ function LeftFrames._prototype:event_handler(action)
     action = action or 'update'
     return function(event)
         local player
-        if event.player_index then
+        if event and event.player_index then
             player = Game.get_player_by_index(event.player_index)
         end
         self[action](self,player)

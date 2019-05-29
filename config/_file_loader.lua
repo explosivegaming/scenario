@@ -36,6 +36,7 @@ return {
     -- GUI
     'modules.gui.rocket-info',
     'modules.gui.science-info',
+    'modules.gui.task-list',
     'modules.gui.player-list',
     'modules.commands.debug',
     -- Config Files
