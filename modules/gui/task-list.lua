@@ -18,6 +18,7 @@ Global.register({
     force_tasks = tbl.force_tasks
 end)
 
+--- Adds a new task for this force with this players name attached
 local function add_task(player,task_number)
     local task_id = tostring(Token.uid())
 
@@ -41,6 +42,7 @@ local function add_task(player,task_number)
     Store.set_child(task_store,task_id,'test')
 end
 
+--- Removes all refrences to a task
 local function remove_task(task_id)
     local force_name = task_details[task_id].force
     Store.set_child(task_store,task_id)
@@ -48,6 +50,7 @@ local function remove_task(task_id)
     table.remove_element(force_tasks[force_name],task_id)
 end
 
+--- If a player is allowed to use the edit buttons
 local function player_allowed_edit(player)
     if config.only_admins_can_edit and not player.admin then
         return false
@@ -60,8 +63,9 @@ local function player_allowed_edit(player)
     return true
 end
 
+--- Button in the header to add a new task
 local update_all
-local add_new_task_end =
+local add_new_task =
 Gui.new_button()
 :set_sprites('utility/add')
 :set_tooltip{'task-list.add-tooltip'}
@@ -74,6 +78,7 @@ end)
     add_task(player)
 end)
 
+--- Used to save changes to a task
 local confirm_edit =
 Gui.new_button()
 :set_sprites('utility/downloaded')
@@ -91,6 +96,7 @@ end)
     Store.set_child(task_store,task_id,task)
 end)
 
+--- Used to cancel any changes you made to a task
 local generate_task
 local cancel_edit =
 Gui.new_button()
@@ -108,6 +114,7 @@ end)
     generate_task(player,element.parent.parent,task_id)
 end)
 
+--- Removes the task from the list
 local discard_task =
 Gui.new_button()
 :set_sprites('utility/trash')
@@ -123,6 +130,7 @@ end)
     update_all()
 end)
 
+--- Opens edit mode for the task
 local edit_task =
 Gui.new_button()
 :set_sprites('utility/rename_icon_normal')
@@ -139,6 +147,18 @@ end)
     generate_task(player,element.parent.parent,task_id)
 end)
 
+--[[ Generates each task, handles both view and edit mode
+    element
+    > count-"task_id"
+    >> label
+    > "task_id"
+    >> task
+    >> cancel_edit (edit mode)
+    >> confirm_edit (edit mode)
+    > edit-"task_id"
+    >> edit_task
+    >> discard_task
+]]
 function generate_task(player,element,task_id)
     local task = Store.get_child(task_store,task_id)
     local details = task_details[task_id]
@@ -149,6 +169,7 @@ function generate_task(player,element,task_id)
     local task_number = table.index_of(tasks, task_id)
 
     if not task then
+        -- task is nil so remove it from the list
         element.parent.no_tasks.visible = #tasks == 01
         Gui.destory_if_valid(element['count-'..task_id])
         Gui.destory_if_valid(element['edit-'..task_id])
@@ -156,6 +177,7 @@ function generate_task(player,element,task_id)
 
     else
         element.parent.no_tasks.visible = false
+        -- if it is not already present then add it now
         local task_area = element[task_id]
         if not task_area then
             -- label to show the task number
@@ -170,6 +192,7 @@ function generate_task(player,element,task_id)
                 type='label',
                 caption=task_number..')'
             }
+
             -- area which stores the task and buttons
             task_area =
             element.add{
@@ -179,6 +202,7 @@ function generate_task(player,element,task_id)
             Gui.set_padding(task_area)
             task_area.style.vertical_align = 'top'
 
+            -- if the player can edit then it adds the edit and delete button
             if player_allowed_edit(player) then
                 local flow = Gui.create_right_align(element,'edit-'..task_id)
                 flow.caption = task_id
@@ -191,6 +215,7 @@ function generate_task(player,element,task_id)
 
         end
 
+        -- update the number indexes and the current editing players
         element['count-'..task_id].label.caption = task_number..')'
         if element['edit-'..task_id] then
             local players = table_keys(details.editing)
@@ -201,6 +226,7 @@ function generate_task(player,element,task_id)
             end
         end
 
+        -- draws/updates the task area
         local element_type = task_area.task and task_area.task.type or nil
         if not editing and element_type == 'label' then
             -- update the label already present
@@ -208,7 +234,7 @@ function generate_task(player,element,task_id)
             task_area.task.tooltip = {'task-list.last-edit',last_edit_player,format_time(last_edit_time)}
 
         elseif not editing then
-            -- create the label
+            -- create the label, view mode
             if element['edit-'..task_id] then
                 element['edit-'..task_id][edit_task.name].enabled = true
             end
@@ -226,7 +252,7 @@ function generate_task(player,element,task_id)
             label.style.maximal_width = 150
 
         elseif editing and element_type ~= 'textfield' then
-            -- create the text field
+            -- create the text field, edit mode, update it omited as value is being edited
             if element['edit-'..task_id] then
                 element['edit-'..task_id][edit_task.name].enabled = false
             end
@@ -251,6 +277,15 @@ function generate_task(player,element,task_id)
 
 end
 
+--[[ generates the main gui structure
+    element
+    > container
+    >> header
+    >>> right aligned add_new_task
+    >> scroll
+    >>> no_tasks
+    >>> table
+]]
 local function generate_container(player,element)
     Gui.set_padding(element,2,2,2,2)
     element.style.minimal_width = 200
@@ -287,7 +322,7 @@ local function generate_container(player,element)
 
     --- Right aligned button to toggle the section
     local right_align = Gui.create_right_align(header)
-    add_new_task_end(right_align)
+    add_new_task(right_align)
 
     -- main flow for the data
     local flow =
