@@ -37,9 +37,9 @@ end
 
 --- Gets the font colour for a certain level of production
 local function get_font_colour(value,secondary)
-    if value > 5 then
+    if value > config.required_for_green then
         return Colors.light_green
-    elseif value < -5 then
+    elseif value < config.required_for_red then
         return Colors.indian_red
     elseif secondary and secondary > 0 or not secondary and value ~= 0 then
         return Colors.orange
@@ -228,9 +228,9 @@ local function generate_science_pack(player,element,science_pack)
         element.parent.non_made.visible = false
 
         local icon_style = 'quick_bar_slot_button'
-        if stats.minute_net > 1 then
+        if stats.minute_net > config.required_for_green then
             icon_style = 'green_slot_button'
-        elseif stats.minute_net < -1 then
+        elseif stats.minute_net < config.required_for_red then
             icon_style = 'red_slot_button'
         elseif stats.minute_made > 0 then
             icon_style = 'selected_slot_button'
