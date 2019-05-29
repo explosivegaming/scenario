@@ -38,7 +38,7 @@ end)
 -- @tparam string name the name of the button
 -- @tparam string caption can be a sprite path or text to show
 -- @tparam string tooltip the help to show for the button
--- @tparam function callback the function which is called on_click
+-- @tparam function function callback the which is called on_click
 -- @treturn table the button object that was made, calling the returned value will draw the toolbar button added
 function toolbar.add(name,caption,tooltip,callback)
     verbose('Created Toolbar Button: '..name)

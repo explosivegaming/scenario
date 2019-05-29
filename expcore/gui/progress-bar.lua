@@ -25,8 +25,8 @@ local Global = require 'utils.global'
 local Game = require 'utils.game'
 
 --- Event call for when the value is outside the range 0-1
--- @tparam define table the define that this is acting on
--- @tparam element LuaGuiElement the element that triggered the event
+-- @tparam table define the define that this is acting on
+-- @tparam LuaGuiElement element the element that triggered the event
 local function event_call(define,element)
     local player = Game.get_player_by_index(element.player_index)
 
@@ -39,8 +39,9 @@ local function event_call(define,element)
 end
 
 --- Store call for store update
--- @tparam define table the define that this is acting on
--- @tparam element LuaGuiElement the element that triggered the event
+-- @tparam table define the define that this is acting on
+-- @tparam LuaGuiElement element the element that triggered the event
+-- @tparam number value the new value for the progress bar
 local function store_call(define,element,value)
     if value then
         element.value = value
@@ -71,7 +72,7 @@ Global.register({
 end)
 
 --- Gets the define data, cant use Gui.get_define as it would error
--- @tparam define ?table|string the define to get
+-- @tparam ?table|string define the define to get
 -- @treturn table the define or nil
 local function get_define(define)
     if type(define) == 'table' then
@@ -84,7 +85,7 @@ local function get_define(define)
 end
 
 --- Gets the element data, used when there is no define
--- @tparam element LuaGuiElement
+-- @tparam LuaGuiElement element the element to get the data of
 -- @treturn table the element data simialr to define
 local function get_element(element)
     if not element.valid then return end
@@ -96,8 +97,8 @@ local function get_element(element)
 end
 
 --- Sets the maximum value that represents the end value of the progress bar
--- @tparam element ?LuaGuiElement|string either a gui element or a registered define
--- @tparam amount number the amount to have set as the maximum
+-- @tparam ?LuaGuiElement|string element either a gui element or a registered define
+-- @tparam number amount the amount to have set as the maximum
 function ProgressBar.set_maximum(element,amount)
     amount = amount > 0 and amount or error('amount must be greater than 0')
 
@@ -124,8 +125,8 @@ function ProgressBar.set_maximum(element,amount)
 end
 
 --- Increases the value of the progressbar, if a define is given all of its instances are incremented
--- @tapram element ?LuaGuiElement|string either a gui element or a registered define
--- @tparam[opt=1] amount number the amount to increase the progressbar by
+-- @tparam ?LuaGuiElement|string element either a gui element or a registered define
+-- @tparam[opt=1] number amount the amount to increase the progressbar by
 function ProgressBar.increment(element,amount)
     amount = type(amount) == 'number' and amount or 1
 
@@ -151,8 +152,8 @@ function ProgressBar.increment(element,amount)
 end
 
 --- Decreases the value of the progressbar, if a define is given all of its instances are decresed
--- @tapram element ?LuaGuiElement|string either a gui element or a registered define
--- @tparam[opt=1] amount number the amount to decrease the progressbar by
+-- @tparam ?LuaGuiElement|string element either a gui element or a registered define
+-- @tparam[opt=1] number amount the amount to decrease the progressbar by
 function ProgressBar.decrement(element,amount)
     amount = type(amount) == 'number' and amount or 1
 
@@ -178,7 +179,7 @@ function ProgressBar.decrement(element,amount)
 end
 
 --- Creates a new progressbar element define
--- @tparam[opt] name string the optional debug name that can be added
+-- @tparam[opt] string name the optional debug name that can be added
 -- @treturn table the new progressbar elemente define
 function ProgressBar.new_progressbar(name)
     local self = Gui._define_factory(ProgressBar._prototype)
@@ -220,7 +221,7 @@ function ProgressBar.new_progressbar(name)
 end
 
 --- Sets the maximum value that represents the end value of the progress bar
--- @tparam amount number the amount to have set as the maximum
+-- @tparam number amount the amount to have set as the maximum
 -- @treturn table the define to allow chaining
 function ProgressBar._prototype:set_default_maximum(amount)
     amount = amount > 0 and amount or error('amount must be greater than 0')
@@ -229,7 +230,7 @@ function ProgressBar._prototype:set_default_maximum(amount)
 end
 
 --- Will set the progress bar to start at 1 and trigger when it hits 0
--- @tparam[opt=true] state boolean when true the bar will start filled, to be used with decrease
+-- @tparam[opt=true] boolean state when true the bar will start filled, to be used with decrease
 -- @treturn table the define to allow chaining
 function ProgressBar._prototype:use_count_down(state)
 	if state == false then
@@ -241,9 +242,10 @@ function ProgressBar._prototype:use_count_down(state)
 end
 
 --- Main logic for changing the value of a progress bar, this only applies when its a registered define
--- @tparam self table the define that is being changed
--- @tparam amount number the amount which it is being changed by, may be negative
--- @tparam[opt] category string the category to use with store
+-- @tparam table self the define that is being changed
+-- @tparam number amount the amount which it is being changed by, may be negative
+-- @tparam[opt] string category the category to use with store
+-- @tparam[opt] function filter when given the filter must return true for the value of the element to be changed
 local function change_value_prototype(self,amount,category,filter)
 
     local function reset_store()
@@ -298,32 +300,32 @@ local function change_value_prototype(self,amount,category,filter)
 end
 
 --- Increases the value of the progressbar
--- @tparam[opt=1] amount number the amount to increase the progressbar by
--- @tparam[opt] category string the category that is used with a store
+-- @tparam[opt=1] number amount the amount to increase the progressbar by
+-- @tparam[opt] string category the category that is used with a store
 function ProgressBar._prototype:increment(amount,category)
     amount = type(amount) == 'number' and amount or 1
     change_value_prototype(self,amount,category)
 end
 
 --- Increases the value of the progressbar, if the filter condition is met, does not work with store
--- @tparam[opt=1] amount number the amount to increase the progressbar by
--- @tparam[opt] category string the category that is used with a store
+-- @tparam[opt=1] number amount the amount to increase the progressbar by
+-- @tparam function filter the filter to be used
 function ProgressBar._prototype:increment_filtered(amount,filter)
     amount = type(amount) == 'number' and amount or 1
     change_value_prototype(self,amount,nil,filter)
 end
 
 --- Decreases the value of the progressbar
--- @tparam[opt=1] amount number the amount to decrease the progressbar by
--- @tparam[opt] category string the category that is used with a store
+-- @tparam[opt=1] number amount the amount to decrease the progressbar by
+-- @tparam[opt] string category the category that is used with a store
 function ProgressBar._prototype:decrement(amount,category)
     amount = type(amount) == 'number' and amount or 1
     change_value_prototype(self,-amount,category)
 end
 
 --- Decreases the value of the progressbar, if the filter condition is met, does not work with store
--- @tparam[opt=1] amount number the amount to decrease the progressbar by
--- @tparam[opt] category string the category that is used with a store
+-- @tparam[opt=1] number amount the amount to decrease the progressbar by
+-- @tparam function filter the filter to be used
 function ProgressBar._prototype:decrement_filtered(amount,filter)
     amount = type(amount) == 'number' and amount or 1
     change_value_prototype(self,-amount,nil,filter)
@@ -331,8 +333,8 @@ end
 
 --- Adds an element into the list of instances that will are waiting to complete, does not work with store
 -- note use store if you want persistent data, this only stores the elements not the values which they have
--- @tparam element LuaGuiElement the element that you want to add into the waiting to complete list
--- @tparam[opt] maximum number the maximum for this element if not given the default for this define is used
+-- @tparam LuaGuiElement element the element that you want to add into the waiting to complete list
+-- @tparam[opt] number maximum the maximum for this element if not given the default for this define is used
 function ProgressBar._prototype:add_element(element,maximum)
     if self.store then return end
     if not ProgressBar.independent[self.name] then
@@ -345,7 +347,7 @@ function ProgressBar._prototype:add_element(element,maximum)
 end
 
 --- Resets an element, or its store, to be back at the start, either 1 or 0
--- @tparam element LuaGuiElement the element that you want to reset the progress of
+-- @tparam LuaGuiElement element the element that you want to reset the progress of
 function ProgressBar._prototype:reset_element(element)
     if not element or not element.valid then return end
     local value = self.count_down and 1 or 0
@@ -358,7 +360,7 @@ function ProgressBar._prototype:reset_element(element)
 end
 
 --- Event handler factory that counts up by 1 every time the event triggeres, can filter which elements are incremented
--- @tparam[opt] filter function when given will use filtered incerement
+-- @tparam[opt] function filter when given will use filtered incerement
 -- @treturn function the event handler
 function ProgressBar._prototype:event_counter(filter)
     if type(filter) == 'function' then
@@ -373,7 +375,7 @@ function ProgressBar._prototype:event_counter(filter)
 end
 
 --- Event handler factory that counts down by 1 every time the event triggeres, can filter which elements are decremented
--- @tparam[opt] filter function when given will use filtered decerement
+-- @tparam[opt] function filter when given will use filtered decerement
 -- @treturn function the event handler
 function ProgressBar._prototype:event_countdown(filter)
     if type(filter) == 'function' then

@@ -5,14 +5,14 @@
 -- luacheck: globals string (Allow mutating string)
 
 --- Returns a copy of the string with any leading or trailing whitespace from the string removed.
--- @tparam string s the string to remove leading or trailing whitespace from
+-- @tparam string string s the to remove leading or trailing whitespace from
 -- @treturn string a copy of the string without leading or trailing whitespace
 function string.trim(s)
     return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
 --- Tests if a string starts with a given substring.
--- @tparam string s the string to check for the start substring
+-- @tparam string string s the to check for the start substring
 -- @tparam string start the substring to test for
 -- @treturn boolean true if the start substring was found in the string
 function string.starts_with(s, start)
@@ -20,7 +20,7 @@ function string.starts_with(s, start)
 end
 
 --- Tests if a string ends with a given substring.
--- @tparam string s the string to check for the end substring
+-- @tparam string string s the to check for the end substring
 -- @tparam string ends the substring to test for
 -- @treturn boolean true if the end substring was found in the string
 function string.ends_with(s, ends)
@@ -28,7 +28,7 @@ function string.ends_with(s, ends)
 end
 
 --- Tests if a string contains a given substring.
--- @tparam string s the string to check for the substring
+-- @tparam string string s the to check for the substring
 -- @tparam string contains the substring to test for
 -- @treturn boolean true if the substring was found in the string
 function string.contains(s, contains)
@@ -36,7 +36,7 @@ function string.contains(s, contains)
 end
 
 --- Tests whether a string is empty.
--- @tparam string s the string to test
+-- @tparam string string s the to test
 -- @treturn boolean true if the string is empty
 function string.is_empty(s)
     return s == nil or s == ''
@@ -45,9 +45,9 @@ end
 --- Splits a string into an array.
 -- *Note:* Empty split substrings are not included in the resulting table.
 -- <p>For example, `string.split("foo.bar...", ".", false)` results in the table `{"foo", "bar"}`.
--- @tparam string s the string to split
+-- @tparam string string s the to split
 -- @tparam[opt="."] string sep the separator to use.
--- @tparam[opt=false] boolean pattern whether to interpret the separator as a lua pattern or plaintext for the string split
+-- @tparam[opt=false] string boolean pattern whether to interpret the separator as a lua pattern or plaintext for the split
 -- @treturn {string,...} an array of strings
 function string.split(s, sep, pattern)
     sep = sep or "."
@@ -76,7 +76,7 @@ end
 --- Returns a string as a hex format (also a string)
 -- @usage a = 'foo'
 -- string.to_hex(a) -- return '666f6f'
--- @tparam string str the string to encode
+-- @tparam string string str the to encode
 -- @treturn string the hex format of the string
 function string.to_hex(str)
     if not is_type(str,'string') then return '' end

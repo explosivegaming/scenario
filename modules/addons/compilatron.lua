@@ -63,7 +63,7 @@ Event.on_nth_tick(config.message_cycle, circle_messages)
 
 --- This will add a compilatron to the global and start his message cycle
 -- @tparam entity LuaEntity the compilatron entity that moves around
--- @tparam name string the name of the location that the complitron is at
+-- @tparam string name the name of the location that the complitron is at
 function Public.add_compilatron(entity, name)
     if not entity and not entity.valid then
         return
@@ -80,8 +80,8 @@ function Public.add_compilatron(entity, name)
 end
 
 --- This spawns a new compilatron on a surface with the given location tag (not a position)
--- @tparam surface LuaSurface the surface to spawn the compilatron on
--- @tparam location string the location tag that is in the config file
+-- @tparam LuaSurface surface the surface to spawn the compilatron on
+-- @tparam string location the location tag that is in the config file
 function Public.spawn_compilatron(surface,location)
     local position = locations[location]
     local pos = surface.find_non_colliding_position('compilatron', position, 1.5, 0.5)

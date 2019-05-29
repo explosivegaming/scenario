@@ -59,7 +59,7 @@ local Permissions_Groups = {
 }
 
 --- Defines a new permission group that can have it actions set in the config
--- @tparam name string the name of the new group
+-- @tparam string name the name of the new group
 -- @treturn Permissions_Groups._prototype the new group made with function to allow and disallow actions
 function Permissions_Groups.new_group(name)
     local group = setmetatable({
@@ -74,14 +74,14 @@ function Permissions_Groups.new_group(name)
 end
 
 --- Returns the group with the given name, case sensitive
--- @tparam name string the name of the group to get
+-- @tparam string name the name of the group to get
 -- @treturn ?Permissions_Groups._prototype|nil the group with that name or nil if non found
 function Permissions_Groups.get_group_by_name(name)
     return Permissions_Groups.groups[name]
 end
 
 --- Returns the group that a player is in
--- @tparam LuaPlayer the player to get the group of can be LuaPlayer name index etc
+-- @tparam LuaPlayer player the player to get the group of can be name index etc
 -- @treturn ?Permissions_Groups._prototype|nil the group with that player or nil if non found
 function Permissions_Groups.get_group_from_player(player)
     player = Game.get_player_from_any(player)
@@ -100,7 +100,7 @@ function Permissions_Groups.reload_permissions()
 end
 
 --- Removes all permissions from every permission group except for "Default" and any passed as exempt
--- @tparam string|Array<string> any groups that you want to be except, "Default" is always exempt
+-- @tparam ?string|Array<string> exempt groups that you want to be except, "Default" is always exempt
 -- @treturn number the number of groups that had they permissions removed
 function Permissions_Groups.lockdown_permissions(exempt)
     local count = 0
@@ -126,8 +126,8 @@ function Permissions_Groups.lockdown_permissions(exempt)
 end
 
 --- Sets a player's group to the one given, a player can only have one group at a time
--- @tparam LuaPlayer the player to effect can be LuaPlayer name index etc
--- @tparam string the name of the group to give to the player
+-- @tparam LuaPlayer player the player to effect can be name index etc
+-- @tparam string group the name of the group to give to the player
 -- @treturn boolean true if the player was added successfully, false other wise
 function Permissions_Groups.set_player_group(player,group)
     player = Game.get_player_from_any(player)
@@ -138,8 +138,8 @@ function Permissions_Groups.set_player_group(player,group)
 end
 
 --- Sets the allow state of an action for this group, used internally but is safe to use else where
--- @tparam action ?string|defines.input_action the action that you want to set the state of
--- @tparam state boolean the state that you want to set it to, true = allow, false = disallow
+-- @tparam ?string|defines.input_action action the action that you want to set the state of
+-- @tparam boolean state the state that you want to set it to, true = allow, false = disallow
 -- @treturn Permissions_Groups._prototype returns self so function can be chained
 function Permissions_Groups._prototype:set_action(action,state)
     if type(action) == 'string' then
@@ -150,7 +150,7 @@ function Permissions_Groups._prototype:set_action(action,state)
 end
 
 --- Sets an action or actions to be allowed for this group even with disallow_all triggered, Do not use in runtime
--- @tparam string|Array<string> the action or actions that you want to allow for this group
+-- @tparam string|Array<string> actions the action or actions that you want to allow for this group
 -- @treturn Permissions_Groups._prototype returns self so function can be chained
 function Permissions_Groups._prototype:allow(actions)
     if type(actions) ~= 'table' then
@@ -163,7 +163,7 @@ function Permissions_Groups._prototype:allow(actions)
 end
 
 --- Sets an action or actions to be disallowed for this group even with allow_all triggered, Do not use in runtime
--- @tparam string|Array<string> the action or actions that you want to disallow for this group
+-- @tparam string|Array<string> actions the action or actions that you want to disallow for this group
 -- @treturn Permissions_Groups._prototype returns self so function can be chained
 function Permissions_Groups._prototype:disallow(actions)
     if type(actions) ~= 'table' then
@@ -190,7 +190,7 @@ function Permissions_Groups._prototype:disallow_all()
 end
 
 --- Returns if an input action is allowed for this group
--- @tparam action ?string|defines.input_action the action that you want to test for
+-- @tparam ?string|defines.input_action action the action that you want to test for
 -- @treturn boolean true if the group is allowed the action, false other wise
 function Permissions_Groups._prototype:is_allowed(action)
     if type(action) == 'string' then
@@ -223,7 +223,7 @@ function Permissions_Groups._prototype:create()
 end
 
 --- Adds a player to this group
--- @tparam player LuaPlayer the player you want to add to this group can be LuaPlayer name or index etc
+-- @tparam LuaPlayer player LuaPlayer the player you want to add to this group can be name or index etc
 -- @treturn boolean true if the player was added successfully, false other wise
 function Permissions_Groups._prototype:add_player(player)
     player = Game.get_player_from_any(player)
@@ -234,7 +234,7 @@ function Permissions_Groups._prototype:add_player(player)
 end
 
 --- Removes a player from this group
--- @tparam player LuaPlayer the player you want to remove from this group can be LuaPlayer name or index etc
+-- @tparam LuaPlayer player LuaPlayer the player you want to remove from this group can be name or index etc
 -- @treturn boolean true if the player was removed successfully, false other wise
 function Permissions_Groups._prototype:remove_player(player)
     player = Game.get_player_from_any(player)
@@ -245,7 +245,7 @@ function Permissions_Groups._prototype:remove_player(player)
 end
 
 --- Returns all player that are in this group with the option to filter to online/offline only
--- @tparam[opt] online boolean if nil returns all players, if true online players only, if false returns online players only
+-- @tparam[opt] boolean online if nil returns all players, if true online players only, if false returns online players only
 -- @treturn table a table of players that are in this group; filtered if online param is given
 function Permissions_Groups._prototype:get_players(online)
     local players = {}
@@ -265,7 +265,7 @@ function Permissions_Groups._prototype:get_players(online)
 end
 
 --- Prints a message to every player in this group
--- @tparam message string the message that you want to send to the players
+-- @tparam string message the message that you want to send to the players
 -- @treturn number the number of players that received the message
 function Permissions_Groups._prototype:print(message)
     local players = self:get_players(true)

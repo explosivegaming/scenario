@@ -26,7 +26,7 @@ local CenterFrames = {
 }
 
 --- Gets the center flow for a player
--- @tparam player LuapPlayer the player to get the flow for
+-- @tparam LuaPlayer player the player to get the flow for
 -- @treturn LuaGuiElement the center flow
 function CenterFrames.get_flow(player)
     player = Game.get_player_from_any(player)
@@ -34,15 +34,15 @@ function CenterFrames.get_flow(player)
 end
 
 --- Clears the center flow for a player
--- @tparam player LuapPlayer the player to clear the flow for
+-- @tparam LuaPlayer player the player to clear the flow for
 function CenterFrames.clear_flow(player)
     local flow = CenterFrames.get_flow(player)
     flow.clear()
 end
 
 --- Draws the center frame for a player, if already open then will do nothing
--- @tparam player LuapPlayer the player that will have the frame drawn
--- @tparam name string the name of the hui that will drawn
+-- @tparam LuaPlayer player the player that will have the frame drawn
+-- @tparam string name the name of the hui that will drawn
 -- @treturn LuaGuiElement the new frame that was made
 function CenterFrames.draw_frame(player,name)
     local define = Gui.get_define(name,true)
@@ -52,8 +52,8 @@ function CenterFrames.draw_frame(player,name)
 end
 
 --- Draws the center frame for a player, if already open then will destroy it and redraw
--- @tparam player LuapPlayer the player that will have the frame drawn
--- @tparam name string the name of the hui that will drawn
+-- @tparam LuaPlayer player the player that will have the frame drawn
+-- @tparam string name the name of the hui that will drawn
 -- @treturn LuaGuiElement the new frame that was made
 function CenterFrames.redraw_frame(player,name)
     local define = Gui.get_define(name,true)
@@ -63,9 +63,9 @@ function CenterFrames.redraw_frame(player,name)
 end
 
 --- Toggles if the frame is currently open or not, will open if closed and close if open
--- @tparam player LuapPlayer the player that will have the frame toggled
--- @tparam name string the name of the hui that will be toggled
--- @tparam[opt] state boolean when set will force a state for the frame
+-- @tparam LuaPlayer player the player that will have the frame toggled
+-- @tparam string name the name of the hui that will be toggled
+-- @tparam[opt] boolean state when set will force a state for the frame
 -- @treturn boolean if the frame if no open or closed
 function CenterFrames.toggle_frame(player,name,state)
     local define = Gui.get_define(name,true)
@@ -86,7 +86,7 @@ function CenterFrames.toggle_frame(player,name,state)
 end
 
 --- Creates a new center frame define
--- @tparam permision_name string the name that can be used with the permision system
+-- @tparam string permision_name the name that can be used with the permision system
 -- @treturn table the new center frame define
 function CenterFrames.new_frame(permision_name)
 	local self = Toolbar.new_button(permision_name)
@@ -108,7 +108,7 @@ function CenterFrames.new_frame(permision_name)
 end
 
 --- Sets the frame to be the current active gui when opened and closes all other frames
--- @tparam[opt=true] state boolean when true will auto close other frames and set this frame as player.opened
+-- @tparam[opt=true] boolean state when true will auto close other frames and set this frame as player.opened
 function CenterFrames._prototype:set_auto_focus(state)
     if state == false then
         self.auto_focus = false
@@ -118,7 +118,7 @@ function CenterFrames._prototype:set_auto_focus(state)
 end
 
 --- Draws this frame to the player, if already open does nothing (will call on_draw to draw to the frame)
--- @tparam player LuaPlayer the player to draw the frame for
+-- @tparam LuaPlayer player the player to draw the frame for
 -- @treturn LuaGuiElement the new frame that was drawn
 function CenterFrames._prototype:draw_frame(player)
     player = Game.get_player_from_any(player)
@@ -149,7 +149,7 @@ function CenterFrames._prototype:draw_frame(player)
 end
 
 --- Draws this frame to the player, if already open it will remove it and redraw it (will call on_draw to draw to the frame)
--- @tparam player LuaPlayer the player to draw the frame for
+-- @tparam LuaPlayer player the player to draw the frame for
 -- @treturn LuaGuiElement the new frame that was drawn
 function CenterFrames._prototype:redraw_frame(player)
     player = Game.get_player_from_any(player)
@@ -163,7 +163,7 @@ function CenterFrames._prototype:redraw_frame(player)
 end
 
 --- Toggles if the frame is open, if open it will close it and if closed it will open it
--- @tparam player LuaPlayer the player to draw the frame for
+-- @tparam LuaPlayer player the player to draw the frame for
 -- @treturn boolean with the gui frame is now open
 function CenterFrames._prototype:toggle_frame(player)
     player = Game.get_player_from_any(player)
@@ -179,7 +179,7 @@ function CenterFrames._prototype:toggle_frame(player)
 end
 
 --- Creates an event handler that will trigger one of its functions, use with Event.add
--- @tparam[opt=update] action string the action to take on this event
+-- @tparam[opt=update] string action the action to take on this event
 function CenterFrames._prototype:event_handler(action)
     action = action or 'update'
     return function(event)

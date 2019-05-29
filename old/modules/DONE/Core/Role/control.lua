@@ -80,7 +80,7 @@ function Role.set_preassign(tbl) if game then global.preassign = tbl else Role.p
 --- Defines a new instance of a role
 -- @usage Role.define{name='Root',short_hand='Root',tag='[Root]',group='Root',colour={r=255,b=255,g=255},is_root=true,allow={}} -- returns new role
 -- @usage Role{name='Root',short_hand='Root',tag='[Root]',group='Root',colour={r=255,b=255,g=255},is_root=true,allow={}} -- returns new role
--- @tparam table obj contains the strings: name,short_hand,tag a table called allow a table called colour and a pointer to a permission group
+-- @tparam table table obj contains the strings: name,short_hand,tag a called allow a table called colour and a pointer to a permission group
 -- @treturn Role the role which has been made
 function Role.define(obj)
     if not type_error(game,nil,'Cant define Role during runtime.') then return end
@@ -127,7 +127,7 @@ end
 -- @usage Role.assign(player,'Root')
 -- @usage Role.assign(player,{'Root','Foo'})
 -- @tparam ?LuaPlayer|pointerToPlayer player the player to assign the role to
--- @tparam ?string|role|table the role to add the player to, if its a table then it will act recursively though the table
+-- @tparam table ?string|role|table the role to add the player to, if its a then it will act recursively though the table
 -- @tparam[opt='<server>'] ?LuaPlayer|pointerToPlayer by_player the player who assigned the roles to the player
 -- @tparam[opt] table batch this is used internally to prevent multiple event calls, contains {role_index_in_batch,batch}
 -- @treturn boolean was the player assigned the roles
@@ -153,7 +153,7 @@ end
 --- Used to remove a player from a role(s)
 -- @usage Role.unassign(player,'Root')
 -- @tparam ?LuaPlayer|pointerToPlayer player the player to unassign the role to
--- @tparam ?string|role|table role the role to remove the player from, if its a table then it will act recursively though the table
+-- @tparam table ?string|role|table role the role to remove the player from, if its a then it will act recursively though the table
 -- @tparam[opt='<server>'] ?LuaPlayer|pointerToPlayer by_player the player who unassigned the roles from the player
 -- @tparam[opt] table batch this is used internally to prevent multiple event calls
 -- @treturn boolean was the player unassigned the roles
@@ -179,7 +179,7 @@ end
 --- Returns the highest role given in a list, if a player is passed then it returns the highest role of the player
 -- @usage Role.get_highest{'Root','Admin','Mod'} -- returns Root (given that root is highest)
 -- @usage Role.get_highest(player) -- returns the players highest role
--- @tparam ?table|LuaPlayer|pointerToPlayer options table of options or a player
+-- @tparam table ?table|LuaPlayer|pointerToPlayer options of options or a player
 -- @treturn role the highest role given in the options
 function Role.get_highest(options)
     local player = Game.get_player(options)
@@ -199,7 +199,7 @@ end
 -- @usage Role.revert(player) -- reverts the last change to the players roles
 -- @tparam ?LuaPlayer|pointerToPlayer player the player to revert the changes of
 -- @tparam[opt] ?LuaPlayer|pointerToPlayer the player who preformed the role revert
--- @tparam[opt=1] count the number of reverts to do, if 0 all changes cached are reverted
+-- @tparam[opt=1] number count the of reverts to do, if 0 all changes cached are reverted
 -- @treturn number the number of changes that occurred
 function Role.revert(player,by_player,count)
     player = Game.get_player(player)
@@ -224,7 +224,7 @@ end
 --- Adds a flag which can be set on roles; these flags act as a quick way to access general role changes
 -- @usage Role.add_flag('is_admin',function(player,state) player.admin = state end) -- the function is passed player and if the flag is true or false
 -- @tparam string flag the name of the flag that is being added
--- @tparam[opt] function callback the function(player,state) which is called when a player loses or gains a flag, if nil no function is called
+-- @tparam[opt] function function callback the function(player,state) which is called when a player loses or gains a flag, if nil no is called
 function Role.add_flag(flag,callback)
     if not type_error(flag,'string','Invalid argument #1 to Role.add_flag, flag is not a string.') then return end
     if callback and not type_error(callback,'function','Invalid argument #2 to Role.add_flag, callback is not a function.') then return end

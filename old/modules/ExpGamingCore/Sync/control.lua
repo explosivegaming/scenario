@@ -104,7 +104,7 @@ end
 
 --- Logs an embed to the json.data we use a js script to add things we cant here
 -- @usage Sync.emit_embedded{title='BAN',color='0x0',description='A player was banned' ... }
--- @tparam table args a table which contains everything that the embedded will use
+-- @tparam table table args a which contains everything that the embedded will use
 -- @see EmitEmbededParamaters
 function Sync.emit_embedded(args)
     if not is_type(args,'table') then error('Args table not given to Sync.emit_embedded',2) end
@@ -282,7 +282,7 @@ end
 --- Adds a callback to be called when the info is updated
 -- @usage Sync.add_update('players',function() return #game.players end)
 -- @tparam string key the key that the value will be stored in
--- @tparam function callback the function which will return this value
+-- @tparam function function callback the which will return this value
 function Sync.add_update(key,callback)
     if game then return end
     if not is_type(callback,'function') then return end
