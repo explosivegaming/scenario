@@ -1,40 +1,40 @@
 --- Adds some commonly used functions used in many modules
 -- @author cooldude2606
--- @module Public
+-- @module Common
 --[[
 >>>>Functions List (see function for more detail):
-    Public.type_check(value,test_type) --- Compare types faster for faster validation of prams
-    Public.type_check_error(value,test_type,error_message,level) --- Raises an error if the value is of the incorrect type
-    Public.param_check(value,test_type,param_name,param_number) --- Raises an error when the value is the incorrect type, uses a consistent error message format
+    Common.type_check(value,test_type) --- Compare types faster for faster validation of prams
+    Common.type_check_error(value,test_type,error_message,level) --- Raises an error if the value is of the incorrect type
+    Common.param_check(value,test_type,param_name,param_number) --- Raises an error when the value is the incorrect type, uses a consistent error message format
 
-    Public.player_return(value,colour,player) --- Will return a value of any type to the player/server console, allows colour for in-game players
-    Public.write_json(path,tbl) --- Writes a table object to a file in json format
+    Common.player_return(value,colour,player) --- Will return a value of any type to the player/server console, allows colour for in-game players
+    Common.write_json(path,tbl) --- Writes a table object to a file in json format
 
-    Public.opt_require(path) --- Calls a require that will not error if the file is not found
-    Public.ext_require(path,...) --- Calls a require and returns only the keys given, file must return a table
+    Common.opt_require(path) --- Calls a require that will not error if the file is not found
+    Common.ext_require(path,...) --- Calls a require and returns only the keys given, file must return a table
 
-    Public.format_time(ticks,options) --- Formats tick into a clean format, denominations from highest to lowest
+    Common.format_time(ticks,options) --- Formats tick into a clean format, denominations from highest to lowest
 
-    Public.move_items(items,surface,position,radius,chest_type) --- Moves items to the position and stores them in the closest entity of the type given
+    Common.move_items(items,surface,position,radius,chest_type) --- Moves items to the position and stores them in the closest entity of the type given
 
-    Public.print_grid_value(value, surface, position, scale, offset, immutable) --- Prints a colored value on a location.
-    Public.print_colored_grid_value(value, surface, position, offset, immutable,
+    Common.print_grid_value(value, surface, position, scale, offset, immutable) --- Prints a colored value on a location.
+    Common.print_colored_grid_value(value, surface, position, offset, immutable,
         color_value, base_color, delta_color, under_bound, over_bound) --- Prints a colored value on a location. with extra settings.
-    Public.clear_flying_text(surface) --- Clears all flying text entites on a surface
+    Common.clear_flying_text(surface) --- Clears all flying text entites on a surface
 
-    Public.string_contains(s, contains) --- Tests if a string contains a given substring.
+    Common.string_contains(s, contains) --- Tests if a string contains a given substring.
 
-    Public.extract_keys(tbl,...) --- Extracts certain keys from a table
-    Public.enum(tbl) --- Converts a table to an enum
-    Public.auto_complete(options,input,use_key,rtn_key) --- Returns the closest match to the input
-    Public.table_keys(tbl) --- Returns all the keys of a table
-    Public.table_values(tbl) --- Returns all the values of a table
-    Public.table_alphanumsort(tbl) --- Returns the list is a sorted way that would be expected by people (this is by key)
-    Public.table_keysort(tbl) --- Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
+    Common.extract_keys(tbl,...) --- Extracts certain keys from a table
+    Common.enum(tbl) --- Converts a table to an enum
+    Common.auto_complete(options,input,use_key,rtn_key) --- Returns the closest match to the input
+    Common.table_keys(tbl) --- Returns all the keys of a table
+    Common.table_values(tbl) --- Returns all the values of a table
+    Common.table_alphanumsort(tbl) --- Returns the list is a sorted way that would be expected by people (this is by key)
+    Common.table_keysort(tbl) --- Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
 
-    Public.format_chat_colour(message,color) --- Returns a message with valid chat tags to change its colour
-    Public.format_chat_colour_localized(message,color) --- Returns a message with valid chat tags to change its colour, using localization
-    Public.format_chat_player_name(player,raw_string) --- Returns the players name in the players color
+    Common.format_chat_colour(message,color) --- Returns a message with valid chat tags to change its colour
+    Common.format_chat_colour_localized(message,color) --- Returns a message with valid chat tags to change its colour, using localization
+    Common.format_chat_player_name(player,raw_string) --- Returns the players name in the players color
 ]]
 
 local Colours = require 'resources.color_presets'
@@ -43,7 +43,7 @@ local Util = require 'util'
 require 'utils.table'
 require 'utils.math'
 
-local Public = {}
+local Common = {}
 
 --- Compare types faster for faster validation of params
 -- @usage type_check('foo','string') -- return true
@@ -51,7 +51,7 @@ local Public = {}
 -- @tparam any value the value to be tested
 -- @tparam[opt=nil] string test_type the type to test for if not given then it tests for nil
 -- @treturn boolean is v of type test_type
-function Public.type_check(value,test_type)
+function Common.type_check(value,test_type)
     return test_type and value and type(value) == test_type or not test_type and not value or false
 end
 
@@ -62,9 +62,9 @@ end
 -- @tparam string error_message the error message that is returned
 -- @tparam number level the level to call the error on (level = 1 means the caller)
 -- @treturn boolean true if no error was called
-function Public.type_check_error(value,test_type,error_message,level)
+function Common.type_check_error(value,test_type,error_message,level)
     level = level and level+1 or 2
-    return Public.test_type(value,test_type) or error(error_message,level)
+    return Common.test_type(value,test_type) or error(error_message,level)
 end
 
 --- Raises an error when the value is the incorrect type, uses a consistent error message format
@@ -74,8 +74,8 @@ end
 -- @tparam string param_name the name of the param
 -- @tparam number param_number the number param it is
 -- @treturn boolean true if no error was raised
-function Public.param_check(value,test_type,param_name,param_number)
-    if not Public.test_type(value,test_type) then
+function Common.param_check(value,test_type,param_name,param_number)
+    if not Common.test_type(value,test_type) then
         local function_name = debug.getinfo(2,'n').name or '<anon>'
         local error_message = string.format('Invalid param #%2d given to %s; %s is not of type %s',param_number,function_name,param_name,test_type)
         return error(error_message,3)
@@ -90,16 +90,16 @@ end
 -- @param value any value of any type that will be returned to the player or console
 -- @tparam[opt=defines.colour.white] ?defines.color|string colour the colour of the text for the player, ignored when printing to console
 -- @tparam[opt=game.player] LuaPlayer player  the player that return will go to, if no game.player then returns to server
-function Public.player_return(value,colour,player)
-    colour = Public.type_check(colour,'table') and colour or Colours[colour] ~= Colours.white and Colours[colour] or Colours.white
+function Common.player_return(value,colour,player)
+    colour = Common.type_check(colour,'table') and colour or Colours[colour] ~= Colours.white and Colours[colour] or Colours.white
     player = player or game.player
     -- converts the value to a string
     local returnAsString
-    if Public.type_check(value,'table') or type(value) == 'userdata' then
-        if Public.type_check(value.__self,'userdata') or type(value) == 'userdata' then
+    if Common.type_check(value,'table') or type(value) == 'userdata' then
+        if Common.type_check(value.__self,'userdata') or type(value) == 'userdata' then
             -- value is userdata
             returnAsString = 'Cant Display Userdata'
-        elseif Public.type_check(value[1],'string') and string.find(value[1],'.+[.].+') and not string.find(value[1],'%s') then
+        elseif Common.type_check(value[1],'string') and string.find(value[1],'.+[.].+') and not string.find(value[1],'%s') then
             -- value is a locale string
             returnAsString = value
         elseif getmetatable(value) ~= nil and not tostring(value):find('table: 0x') then
@@ -109,7 +109,7 @@ function Public.player_return(value,colour,player)
             -- value is a table
             returnAsString = table.inspect(value,{depth=5,indent=' ',newline='\n'})
         end
-    elseif Public.type_check(value,'function') then
+    elseif Common.type_check(value,'function') then
         -- value is a function
         returnAsString = 'Cant Display Functions'
     else returnAsString = tostring(value) end
@@ -127,7 +127,7 @@ end
 --- Writes a table object to a file in json format
 -- @tparam string path the path of the file to write include / to use dir
 -- @tparam table tbl the table that will be converted to a json string and wrote to file
-function Public.write_json(path,tbl)
+function Common.write_json(path,tbl)
     game.write_file(path,game.table_to_json(tbl)..'\n',true,0)
 end
 
@@ -135,7 +135,7 @@ end
 -- @usage local file = opt_require('file.not.present') -- will not cause any error
 -- @tparam string path the path that you want to require
 -- @return the returns from that file or nil, error if not loaded
-function Public.opt_require(path)
+function Common.opt_require(path)
     local success, rtn = pcall(require,path)
     if success then return rtn
     else return nil,rtn end
@@ -146,12 +146,12 @@ end
 -- @tparam string path the path that you want to require
 -- @tparam string ... the name of the keys that you want returned
 -- @return the keys in the order given
-function Public.ext_require(path,...)
+function Common.ext_require(path,...)
     local rtn = require(path)
     if type(rtn) ~= 'table' then
         error('File did not return a table, can not extract keys.',2)
     end
-    return Public.extract_keys(rtn,...)
+    return Common.extract_keys(rtn,...)
 end
 
 --- Formats tick into a clean format, denominations from highest to lowest
@@ -162,7 +162,7 @@ end
 -- @tparam number ticks the number of ticks that represents a time
 -- @tparam table options table a of options to use for the format
 -- @treturn string a locale string that can be used
-function Public.format_time(ticks,options)
+function Common.format_time(ticks,options)
     -- Sets up the options
     options = options or {
         days=false,
@@ -252,7 +252,7 @@ end
 -- @tparam[opt={0,0}] table position the position that the items will be moved to {x=100,y=100}
 -- @tparam[opt=32] number radius the radius in which the items are allowed to be placed
 -- @tparam[opt=iron-chest] string chest_type the chest type that the items should be moved into
-function Public.move_items(items,surface,position,radius,chest_type)
+function Common.move_items(items,surface,position,radius,chest_type)
     chest_type = chest_type or 'iron-chest'
     surface = surface or game.surfaces[1]
     if position and type(position) ~= 'table' then return end
@@ -306,7 +306,7 @@ end
     @param offset float
     @param immutable bool if immutable, only set, never do a surface lookup, values never change
 ]]
-function Public.print_grid_value(value, surface, position, scale, offset, immutable)
+function Common.print_grid_value(value, surface, position, scale, offset, immutable)
     local is_string = type(value) == 'string'
     local color = Colours.white
     local text = value
@@ -381,7 +381,7 @@ end
     @param under_bound {r,g,b} The color to be used if color_value < 0
     @param over_bound {r,g,b} The color to be used if color_value > 1
 ]]
-function Public.print_colored_grid_value(value, surface, position, offset, immutable,
+function Common.print_colored_grid_value(value, surface, position, offset, immutable,
         color_value, base_color, delta_color, under_bound, over_bound)
     local is_string = type(value) == 'string'
     -- default values:
@@ -440,7 +440,7 @@ end
 
 --- Clears all flying text entites on a surface
 -- @tparam LuaSurface surface the surface to clear
-function Public.clear_flying_text(surface)
+function Common.clear_flying_text(surface)
     local entities = surface.find_entities_filtered{name ='flying-text'}
     for _,entity in pairs(entities) do
         if entity and entity.valid then
@@ -453,7 +453,7 @@ end
 -- @tparam string s the string to check for the substring
 -- @tparam string contains the substring to test for
 -- @treturn boolean true if the substring was found in the string
-function Public.string_contains(s, contains)
+function Common.string_contains(s, contains)
     return s and string.find(s, contains) ~= nil
 end
 
@@ -462,7 +462,7 @@ end
 -- @tparam table tbl table the which contains the keys
 -- @tparam string ... the names of the keys you want extracted
 -- @return the keys in the order given
-function Public.extract_keys(tbl,...)
+function Common.extract_keys(tbl,...)
     local values = {}
     for _,key in pairs({...}) do
         table.insert(values,tbl[key])
@@ -473,7 +473,7 @@ end
 --- Converts a table to an enum
 -- @tparam table tbl table the that will be converted
 -- @treturn table the new table that acts like an enum
-function Public.enum(tbl)
+function Common.enum(tbl)
     local rtn = {}
     for k,v in pairs(tbl) do
         if type(k) ~= 'number' then
@@ -497,13 +497,13 @@ end
 -- @tparam[opt=false] boolean use_key when true the keys of options will be used as the options
 -- @tparam[opt=false] boolean rtn_key when true the the key will be returned rather than the value
 -- @return the list item found that matches the input
-function Public.auto_complete(options,input,use_key,rtn_key)
+function Common.auto_complete(options,input,use_key,rtn_key)
     local rtn = {}
     if type(input) ~= 'string' then return end
     input = input:lower()
     for key,value in pairs(options) do
         local check = use_key and key or value
-        if Public.string_contains(string.lower(check),input) then
+        if Common.string_contains(string.lower(check),input) then
             local result = rtn_key and key or value
             table.insert(rtn,result)
         end
@@ -514,7 +514,7 @@ end
 --- Returns all the keys of a table
 -- @tparam table tbl table the to get the keys of
 -- @treturn table an array of the table keys
-function Public.table_keys(tbl)
+function Common.table_keys(tbl)
     local rtn = {}
     for key,_ in pairs(tbl) do
         table.insert(rtn,key)
@@ -525,7 +525,7 @@ end
 --- Returns all the values of a table
 -- @tparam table tbl table the to get the values of
 -- @treturn table an array of the table values
-function Public.table_values(tbl)
+function Common.table_values(tbl)
     local rtn = {}
     for _,value in pairs(tbl) do
         table.insert(rtn,value)
@@ -536,8 +536,8 @@ end
 --- Returns the list is a sorted way that would be expected by people (this is by key)
 -- @tparam table tbl the table to be sorted
 -- @treturn table the sorted table
-function Public.table_alphanumsort(tbl)
-    local o = Public.table_keys(tbl)
+function Common.table_alphanumsort(tbl)
+    local o = Common.table_keys(tbl)
     local function padnum(d) local dec, n = string.match(d, "(%.?)0*(.+)")
         return #dec > 0 and ("%.12f"):format(d) or ("%s%03d%s"):format(dec, #n, n) end
     table.sort(o, function(a,b)
@@ -551,8 +551,8 @@ end
 --- Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
 -- @tparam table tbl the table to be sorted
 -- @treturn table the sorted table
-function Public.table_keysort(tbl)
-    local o = Public.table_keys(tbl,true)
+function Common.table_keysort(tbl)
+    local o = Common.table_keys(tbl,true)
     local _tbl = {}
     for _,k in pairs(o) do _tbl[k] = tbl[k] end
     return _tbl
@@ -562,7 +562,7 @@ end
 -- @tparam string message the message that will be in the output
 -- @tparam table color a color which contains r,g,b as its keys
 -- @treturn string the message with the color tags included
-function Public.format_chat_colour(message,color)
+function Common.format_chat_colour(message,color)
     color = color or Colours.white
     local color_tag = '[color='..math.round(color.r,3)..','..math.round(color.g,3)..','..math.round(color.b,3)..']'
     return string.format('%s%s[/color]',color_tag,message)
@@ -572,7 +572,7 @@ end
 -- @tparam ?string|table message the message that will be in the output
 -- @tparam table color a color which contains r,g,b as its keys
 -- @treturn table the message with the color tags included
-function Public.format_chat_colour_localized(message,color)
+function Common.format_chat_colour_localized(message,color)
     color = color or Colours.white
     color = math.round(color.r,3)..','..math.round(color.g,3)..','..math.round(color.b,3)
     return {'color-tag',color,message}
@@ -582,15 +582,15 @@ end
 -- @tparam LuaPlayer player the player to use the name and color of
 -- @tparam[opt=false] boolean raw_string when true a is returned rather than a localized string
 -- @treturn table the players name with tags for the players color
-function Public.format_chat_player_name(player,raw_string)
+function Common.format_chat_player_name(player,raw_string)
     player = Game.get_player_from_any(player)
     local player_name = player and player.name or '<Server>'
     local player_chat_colour = player and player.chat_color or Colours.white
     if raw_string then
-        return Public.format_chat_colour(player_name,player_chat_colour)
+        return Common.format_chat_colour(player_name,player_chat_colour)
     else
-        return Public.format_chat_colour_localized(player_name,player_chat_colour)
+        return Common.format_chat_colour_localized(player_name,player_chat_colour)
     end
 end
 
-return Public
+return Common
