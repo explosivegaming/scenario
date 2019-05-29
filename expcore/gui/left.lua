@@ -174,8 +174,8 @@ end
 -- @treturn LuaGuiElement the frame in the left frame flow for this define
 function LeftFrames._prototype:get_frame(player)
     local flow = LeftFrames.get_flow(player)
-    if flow[self.name] and flow[self.name].valid then
-        return flow[self.name]
+    if flow[self.name..'-frame'] and flow[self.name..'-frame'].valid then
+        return flow[self.name..'-frame']
     end
 end
 
@@ -276,7 +276,7 @@ Event.add(defines.events.on_player_created,function(event)
     for _,define in pairs(LeftFrames.frames) do
         local frame = flow.add{
             type='frame',
-            name=define.name,
+            name=define.name..'-frame',
             direction=define.direction
         }
 

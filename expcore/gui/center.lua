@@ -75,8 +75,8 @@ function CenterFrames.toggle_frame(player,name,state)
             return true
         elseif state == false then
             local flow = CenterFrames.get_flow(player)
-            if flow[define.name] then
-                flow[define.name].destroy()
+            if flow[define.name..'-frame'] then
+                flow[define.name..'-frame'].destroy()
             end
             return false
         else
@@ -99,7 +99,7 @@ function CenterFrames.new_frame(permision_name)
     mt.__index = CenterFrames._prototype
 	mt.__call = self.event_handler
 
-    Gui.on_custom_close(self.name,function(event)
+    Gui.on_custom_close(self.name..'-frame',function(event)
         local element = event.element
         if element and element.valid then element.destroy() end
     end)
@@ -124,8 +124,8 @@ function CenterFrames._prototype:draw_frame(player)
     player = Game.get_player_from_any(player)
     local flow = CenterFrames.get_flow(player)
 
-    if flow[self.name] then
-        return flow[self.name]
+    if flow[self.name..'-frame'] then
+        return flow[self.name..'-frame']
     end
 
     if self.auto_focus then
@@ -134,7 +134,7 @@ function CenterFrames._prototype:draw_frame(player)
 
     local frame = flow.add{
         type='frame',
-        name=self.name
+        name=self.name..'-frame'
     }
 
     if self.auto_focus then
@@ -155,8 +155,8 @@ function CenterFrames._prototype:redraw_frame(player)
     player = Game.get_player_from_any(player)
     local flow = CenterFrames.get_flow(player)
 
-    if flow[self.name] then
-        flow[self.name].destroy()
+    if flow[self.name..'-frame'] then
+        flow[self.name..'-frame'].destroy()
     end
 
     return self:draw_frame(player)
@@ -169,8 +169,8 @@ function CenterFrames._prototype:toggle_frame(player)
     player = Game.get_player_from_any(player)
     local flow = CenterFrames.get_flow(player)
 
-    if flow[self.name] then
-        flow[self.name].destroy()
+    if flow[self.name..'-frame'] then
+        flow[self.name..'-frame'].destroy()
         return false
     else
         self:draw_frame(player)
