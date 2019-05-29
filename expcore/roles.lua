@@ -321,7 +321,7 @@ end
 -- @treturn table a table where the values are the roles which the player has
 function Roles.get_player_roles(player)
     player = Game.get_player_from_any(player)
-    if not player then return end
+    if not player then return {Roles.config.internal.root} end
     local roles = Roles.config.players[player.name] or {}
     local default = Roles.config.roles[Roles.config.internal.default]
     local rtn = {default}
