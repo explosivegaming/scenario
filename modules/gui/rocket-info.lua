@@ -7,6 +7,13 @@ local Global = require 'utils.global'
 local format_time = ext_require('expcore.common','format_time')
 local Colors = require 'resources.color_presets'
 
+local largest_rolling_avg = 0
+for _,avg_over in pairs(config.stats.rolling_avg) do
+    if avg_over > largest_rolling_avg then
+        largest_rolling_avg = avg_over
+    end
+end
+
 local rocket_times = {}
 local rocket_stats = {}
 local rocket_silos = {}
@@ -548,13 +555,21 @@ Event.add(defines.events.on_rocket_launched,function(event)
 
     rocket_times[force_name][rockets_launched] = event.tick
 
+    local remove_rocket = rockets_launched-largest_rolling_avg
+    if remove_rocket > 0 and not table.includes(config.milestones,remove_rocket) then
+        rocket_times[force_name][remove_rocket] = nil
+    end
+
     --- Adds this 1 to the launch count for this silo
     force_silo_data[silo_name].launched = force_silo_data[silo_name].launched+1
 
     --- Updates all the guis (and toolbar since the button may now be visible)
     for _,player in pairs(force.players) do
         rocket_info:update(player)
-        if first_rocket then Gui.update_toolbar(player) end
+        if first_rocket then
+            Gui.update_toolbar(player)
+            rocket_info:toggle(player)
+        end
     end
 end)
 
