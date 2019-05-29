@@ -1,3 +1,4 @@
+--- Adds a rocket infomation gui which shows general stats, milestones and build progress of rockets
 local Gui = require 'expcore.gui'
 local Roles = require 'expcore.roles'
 local Event = require 'utils.event'
@@ -240,7 +241,12 @@ local function generate_container(player,element)
 
 end
 
---- Creates a text label followed by a data label, or updates them if already present
+--[[ Creates a text label followed by a data label, or updates them if already present
+    element
+    > "data_name_extra"-label
+    > "data_name_extra"
+    >> label
+]]
 local function create_label_value_pair(element,data_name,value,tooltip,extra)
     local data_name_extra = extra and data_name..extra or data_name
     if element[data_name_extra] then
@@ -272,7 +278,7 @@ local function create_label_value_pair_time(element,data_name,raw_value,no_hours
     create_label_value_pair(element,data_name,value,tooltip,extra)
 end
 
---- Adds the data to the stats section
+--- Adds the different data values to the stats section
 local function generate_stats(player,frame)
     if not config.stats.show_stats then return end
     local element = frame.container.stats.table
@@ -338,7 +344,7 @@ local function generate_milestones(player,frame)
     end
 end
 
---- Creats the different action buttons
+--- Creats the different buttons used with the rocket silos
 local function generate_progress_buttons(player,element,rocket_silo_data)
     local silo_name = rocket_silo_data.name
     local status = rocket_silo_data.entity.status == 21
@@ -379,7 +385,17 @@ local function generate_progress_buttons(player,element,rocket_silo_data)
 
 end
 
---- Creates build progress section
+--[[ Creates build progress section
+    element
+    > toggle-"silo_name" (generate_progress_buttons)
+    > launch-"silo_name" (generate_progress_buttons)
+    > label-x-"silo_name"
+    >> "silo_name"
+    > label-y-"silo_name"
+    >> "silo_name"
+    > "silo_name"
+    >> label
+]]
 local function generate_progress(player,frame)
     if not config.progress.show_progress then return end
     local element = frame.container.progress.table
@@ -478,6 +494,7 @@ local function generate_progress(player,frame)
     end
 end
 
+--- Registers the new left gui
 local rocket_info =
 Gui.new_left_frame('gui/rocket-info')
 :set_sprites('entity/rocket-silo')
@@ -500,6 +517,7 @@ end)
     generate_progress(player,element)
 end)
 
+--- Event used to update the stats and the hui when a rocket is launched
 Event.add(defines.events.on_rocket_launched,function(event)
     local entity = event.rocket_silo
     local silo_name = get_silo_name(entity)

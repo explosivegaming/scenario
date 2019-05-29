@@ -1,3 +1,4 @@
+--- Adds a science info gui that shows production usage and net for the different science packs as well as an eta
 local Gui = require 'expcore.gui'
 local Event = require 'utils.event'
 local Colors = require 'resources.color_presets'
@@ -8,6 +9,7 @@ local config = require 'config.science'
 local null_time_short = {'science-info.eta-time',format_time(0,{hours=true,minutes=true,seconds=true,time=true,null=true})}
 local null_time_long = format_time(0,{hours=true,minutes=true,seconds=true,long=true,null=true})
 
+--- Gets the production stats for a certain science pack
 local function get_production_stats(player,science_pack)
     local force = player.force
     local stats = force.item_production_statistics
@@ -33,6 +35,7 @@ local function get_production_stats(player,science_pack)
     }
 end
 
+--- Gets the font colour for a certain level of production
 local function get_font_colour(value,secondary)
     if value > 5 then
         return Colors.light_green
@@ -45,6 +48,18 @@ local function get_font_colour(value,secondary)
     end
 end
 
+--[[ Generates the main structure for the gui
+    element
+    > container
+    >> header
+    >> scroll
+    >>> non_made
+    >>> table
+    >> footer (when eta is enabled)
+    >>> eta-label
+    >>> eta
+    >>>> label
+]]
 local function generate_container(player,element)
     Gui.set_padding(element,1,2,2,2)
     element.style.minimal_width = 200
@@ -141,7 +156,13 @@ local function generate_container(player,element)
     return flow_table, eta
 end
 
-local function add_data_pair(element,name,value,secondary,tooltip)
+--[[ Adds two labels where one is right aligned and the other is a unit
+    element
+    > "name"
+    >> label
+    > spm-"name"
+]]
+local function add_data_label(element,name,value,secondary,tooltip)
     local data_colour = get_font_colour(value,secondary)
     local caption = format_number(math.round(value,1),true)
 
@@ -192,6 +213,15 @@ local function add_data_pair(element,name,value,secondary,tooltip)
     end
 end
 
+--[[ Adds a science pack to the list
+    element
+    > icon-"science_pack"
+    > delta-"science_pack"
+    >> table
+    >>> pos-"science_pack" (add_data_label)
+    >>> neg-"science_pack" (add_data_label)
+    > net-"science_pack" (add_data_label)
+]]
 local function generate_science_pack(player,element,science_pack)
     local stats = get_production_stats(player,science_pack)
     if stats.total_made > 0 then
@@ -253,13 +283,14 @@ local function generate_science_pack(player,element,science_pack)
             Gui.set_padding(delta_table)
         end
 
-        add_data_pair(delta.table,'pos-'..science_pack,stats.minute_made,nil,{'science-info.pos-tooltip',stats.total_made})
-        add_data_pair(delta.table,'neg-'..science_pack,-stats.minute_used,nil,{'science-info.neg-tooltip',stats.total_used})
-        add_data_pair(element,'net-'..science_pack,stats.minute_net,stats.minute_made,{'science-info.net-tooltip',stats.total_net})
+        add_data_label(delta.table,'pos-'..science_pack,stats.minute_made,nil,{'science-info.pos-tooltip',stats.total_made})
+        add_data_label(delta.table,'neg-'..science_pack,-stats.minute_used,nil,{'science-info.neg-tooltip',stats.total_used})
+        add_data_label(element,'net-'..science_pack,stats.minute_net,stats.minute_made,{'science-info.net-tooltip',stats.total_net})
     end
 end
 
-local function generate_eta(player,element)
+--- Updates the eta label that was created with generate_container
+local function update_eta(player,element)
     if not config.show_eta then return end
     local force = player.force
     local research = force.current_research
@@ -304,6 +335,7 @@ local function generate_eta(player,element)
     end
 end
 
+--- Registerse the new science info gui
 local science_info =
 Gui.new_left_frame('gui/science-info')
 :set_sprites('entity/lab')
@@ -316,7 +348,7 @@ Gui.new_left_frame('gui/science-info')
         generate_science_pack(player,table,science_pack)
     end
 
-    generate_eta(player,eta)
+    update_eta(player,eta)
 end)
 :on_update(function(player,element)
     local container = element.container
@@ -327,9 +359,10 @@ end)
         generate_science_pack(player,table,science_pack)
     end
 
-    generate_eta(player,eta)
+    update_eta(player,eta)
 end)
 
+--- Updates the gui every 1 second
 Event.on_nth_tick(60,science_info 'update_all')
 
 return science_info

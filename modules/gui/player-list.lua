@@ -210,6 +210,7 @@ local function update_action_bar(player)
     end
 end
 
+--- Adds a player to the player list
 local function add_player(list_table,player,role_name)
     open_action_bar(list_table,player.name)
 
