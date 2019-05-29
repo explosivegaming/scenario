@@ -81,6 +81,9 @@ end)
     if rocket_silo_data.entity.launch_rocket() then
         rocket_silo_data.awaiting_reset = true
         element.enabled = false
+        local progress_label = element.parent.parent[rocket_silo_name].label
+        progress_label.caption = {'rocket-info.progress-launched'}
+        progress_label.style.font_color = Colors.green
     end
 end)
 
