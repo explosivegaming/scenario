@@ -1,6 +1,5 @@
 --- Adds some commonly used functions used in many modules
 -- @author cooldude2606
--- @module Common
 --[[
 >>>>Functions List (see function for more detail):
     Common.type_check(value,test_type) --- Compare types faster for faster validation of prams

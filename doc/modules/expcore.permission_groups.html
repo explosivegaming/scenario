@@ -55,8 +55,8 @@
   <li><a href="../modules/config.spawn_area.html">config.spawn_area</a></li>
   <li><a href="../modules/config.warnings.html">config.warnings</a></li>
   <li><a href="../modules/control.html">control</a></li>
-  <li><a href="../modules/Commands.html">Commands</a></li>
-  <li><a href="../modules/Common.html">Common</a></li>
+  <li><a href="../modules/expcore.commands.html">expcore.commands</a></li>
+  <li><a href="../modules/expcore.common.html">expcore.common</a></li>
   <li><a href="../modules/expcore.gui.html">expcore.gui</a></li>
   <li><a href="../modules/expcore.gui.buttons.html">expcore.gui.buttons</a></li>
   <li><a href="../modules/expcore.gui.center.html">expcore.gui.center</a></li>
@@ -72,8 +72,8 @@
   <li><a href="../modules/expcore.gui.test.html">expcore.gui.test</a></li>
   <li><a href="../modules/expcore.gui.text.html">expcore.gui.text</a></li>
   <li><a href="../modules/expcore.gui.toolbar.html">expcore.gui.toolbar</a></li>
-  <li><strong>Permissions_Groups</strong></li>
-  <li><a href="../modules/Commands.html">Commands</a></li>
+  <li><strong>expcore.permission_groups</strong></li>
+  <li><a href="../modules/expcore.roles.html">expcore.roles</a></li>
   <li><a href="../modules/expcore.store.html">expcore.store</a></li>
   <li><a href="../modules/modules.addons.advanced-start.html">modules.addons.advanced-start</a></li>
   <li><a href="../modules/modules.addons.chat-popups.html">modules.addons.chat-popups</a></li>
@@ -99,7 +99,7 @@
 
 <div id="content">
 
-<h1>Module <code>Permissions_Groups</code></h1>
+<h1>Module <code>expcore.permission_groups</code></h1>
 <p>Permission group making for factorio so you never have to make one by hand again</p>
 <p>
 [[</p>
@@ -112,27 +112,27 @@
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#new_group">new_group (name)</a></td>
+	<td class="name" nowrap><a href="#Permissions_Groups.new_group">Permissions_Groups.new_group (name)</a></td>
 	<td class="summary">Defines a new permission group that can have it actions set in the config</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#get_group_by_name">get_group_by_name (name)</a></td>
+	<td class="name" nowrap><a href="#Permissions_Groups.get_group_by_name">Permissions_Groups.get_group_by_name (name)</a></td>
 	<td class="summary">Returns the group with the given name, case sensitive</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#get_group_from_player">get_group_from_player (player)</a></td>
+	<td class="name" nowrap><a href="#Permissions_Groups.get_group_from_player">Permissions_Groups.get_group_from_player (player)</a></td>
 	<td class="summary">Returns the group that a player is in</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#reload_permissions">reload_permissions ()</a></td>
+	<td class="name" nowrap><a href="#Permissions_Groups.reload_permissions">Permissions_Groups.reload_permissions ()</a></td>
 	<td class="summary">Reloads/creates all permission groups and sets them to they configured state</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#lockdown_permissions">lockdown_permissions (exempt)</a></td>
+	<td class="name" nowrap><a href="#Permissions_Groups.lockdown_permissions">Permissions_Groups.lockdown_permissions (exempt)</a></td>
 	<td class="summary">Removes all permissions from every permission group except for "Default" and any passed as exempt</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#set_player_group">set_player_group (player, group)</a></td>
+	<td class="name" nowrap><a href="#Permissions_Groups.set_player_group">Permissions_Groups.set_player_group (player, group)</a></td>
 	<td class="summary">Sets a player's group to the one given, a player can only have one group at a time</td>
 	</tr>
 	<tr>
@@ -193,8 +193,8 @@
 
     <dl class="function">
     <dt>
-    <a name = "new_group"></a>
-    <strong>new_group (name)</strong>
+    <a name = "Permissions_Groups.new_group"></a>
+    <strong>Permissions_Groups.new_group (name)</strong>
     </dt>
     <dd>
     Defines a new permission group that can have it actions set in the config
@@ -220,8 +220,8 @@
 
 </dd>
     <dt>
-    <a name = "get_group_by_name"></a>
-    <strong>get_group_by_name (name)</strong>
+    <a name = "Permissions_Groups.get_group_by_name"></a>
+    <strong>Permissions_Groups.get_group_by_name (name)</strong>
     </dt>
     <dd>
     Returns the group with the given name, case sensitive
@@ -247,8 +247,8 @@
 
 </dd>
     <dt>
-    <a name = "get_group_from_player"></a>
-    <strong>get_group_from_player (player)</strong>
+    <a name = "Permissions_Groups.get_group_from_player"></a>
+    <strong>Permissions_Groups.get_group_from_player (player)</strong>
     </dt>
     <dd>
     Returns the group that a player is in
@@ -274,8 +274,8 @@
 
 </dd>
     <dt>
-    <a name = "reload_permissions"></a>
-    <strong>reload_permissions ()</strong>
+    <a name = "Permissions_Groups.reload_permissions"></a>
+    <strong>Permissions_Groups.reload_permissions ()</strong>
     </dt>
     <dd>
     Reloads/creates all permission groups and sets them to they configured state
@@ -288,8 +288,8 @@
 
 </dd>
     <dt>
-    <a name = "lockdown_permissions"></a>
-    <strong>lockdown_permissions (exempt)</strong>
+    <a name = "Permissions_Groups.lockdown_permissions"></a>
+    <strong>Permissions_Groups.lockdown_permissions (exempt)</strong>
     </dt>
     <dd>
     Removes all permissions from every permission group except for "Default" and any passed as exempt
@@ -315,8 +315,8 @@
 
 </dd>
     <dt>
-    <a name = "set_player_group"></a>
-    <strong>set_player_group (player, group)</strong>
+    <a name = "Permissions_Groups.set_player_group"></a>
+    <strong>Permissions_Groups.set_player_group (player, group)</strong>
     </dt>
     <dd>
     Sets a player's group to the one given, a player can only have one group at a time
@@ -653,7 +653,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2019-05-29 22:26:12 </i>
+<i style="float:right;">Last updated 2019-05-29 22:30:49 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

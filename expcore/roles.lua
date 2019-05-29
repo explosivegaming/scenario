@@ -1,6 +1,5 @@
 --- Factorio role system to manage custom permissions
 -- @author Cooldude2606
--- @module Commands
 --[[
 >>>>Using Role System (Frontend):
     When a map first starts you will want to define on mass all the players you expect to join and the roles to give them:

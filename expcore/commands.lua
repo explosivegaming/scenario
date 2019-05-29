@@ -1,6 +1,5 @@
 --- Factorio command making module that makes commands with better parse and more modularity
 -- @author Cooldude2606
--- @module Commands
 --[[
 >>>>Example Authenticator:
     The command system is most useful when you can control who can use commands; to do this would would need to

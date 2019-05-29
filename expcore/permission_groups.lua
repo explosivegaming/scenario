@@ -1,6 +1,5 @@
 --- Permission group making for factorio so you never have to make one by hand again
 -- @author Cooldude2606
--- @module Permissions_Groups
 --[[
 >>>>Example Group (Allow All)
 
