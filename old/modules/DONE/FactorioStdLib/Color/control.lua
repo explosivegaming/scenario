@@ -177,7 +177,7 @@ end
 
 --- Get a color table with a hexadecimal string.
 -- Optionally provide the value for the alpha channel.
--- @tparam string hex hexadecimal color string (#ffffff, not #fff)
+-- @tparam string string hex hexadecimal color (#ffffff, not #fff)
 -- @tparam[opt=1] float alpha the alpha value to set; such that ***[ 0 &#8924; value &#8924; 1 ]***
 -- @treturn a color table with RGB converted from Hex and with alpha
 function Color.from_hex(hex, alpha)

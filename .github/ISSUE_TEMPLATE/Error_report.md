@@ -1,33 +1,35 @@
 ---
-name: Error/Desync Report
-about: Create a report on a bug which gives an error or desync
+name: Error report
+about: Report a bug which cases the game to crash, any bug from the latest major scenario version
 
 ---
 
-**Error Message**
-Error: insert error message
+**Factorio version**
+Version number: X.Y.Z
 
-**Known Causes**
-Know causes that will result in error:
- - Cause 1
- - Cause 2
+**Scenario version**
+Version number: X.Y.Z
 
-**To Reproduce (please give for each cause outlined above)**
+**Error message**
+```
+error message and stacktrace back
+```
+
+**Error description**
+A clear and concise description of what you believe causes the crash.
+
+**Reproduction method**
 Steps to reproduce the behavior:
- - Cause 1
-    1. Go to '...'
-    2. Click on '....'
-    3. Scroll down to '....'
-    4. See error
- - Cause 2
-    1. Go to '...'
-    2. Click on '....'
-    3. Scroll down to '....'
-    4. See error
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error in log
 
-**Other information (please complete the following information):**
- - OS: [e.g. iOS, Windows, Linux]
- - Factorio Version: [e.g. 0.16.30]
+**Expected behavior**
+A clear and concise description of what you expected to happen.
+
+**Screenshots**
+If applicable, add screenshots to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.

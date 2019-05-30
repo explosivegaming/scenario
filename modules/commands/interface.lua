@@ -33,8 +33,8 @@ end)
 
 --- Adds a callback function when the interface command is used
 -- nb: returned value is saved in the env that the interface uses
--- @tparam name string the name that the value is loaded under, cant use upvalues
--- @tparam callback function the function that will run whent he command is used
+-- @tparam string name the name that the value is loaded under, cant use upvalues
+-- @tparam function callback the function that will run whent he command is used
 -- callback param - player: LuaPlayer - the player who used the command
 local function add_interface_callback(name,callback)
     if type(callback) == 'function' then

@@ -1,3 +1,4 @@
+-- config file for the compliatrons including where they spawn and what messages they show
 return {
     message_cycle=60*15, -- 15 seconds default, how often (in ticks) the messages will cycle
     locations={ -- defines the spawn locations for all compilatrons

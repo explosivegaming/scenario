@@ -34,22 +34,22 @@ Global.register(PopupFrames.paused_popups,function(tbl)
 end)
 
 --- Sets the state of the element in the pasued list, nil or true
--- @tparam element LuaGuiElement the element to set the state of
--- @tparam[opt] state boolean the state to set it to, true will pause the the progress bar
+-- @tparam LuaGuiElement element the element to set the state of
+-- @tparam[opt] boolean state the state to set it to, true will pause the the progress bar
 local function set_pasued_state(element,state)
     local name = element.player_index..':'..element.index
     PopupFrames.paused_popups[name] = state
 end
 
 --- Gets the state of the element in the pasued list, nil or true
--- @tparam element LuaGuiElement the element to get the state of
+-- @tparam LuaGuiElement element the element to get the state of
 local function get_pasued_state(element)
     local name = element.player_index..':'..element.index
     return PopupFrames.paused_popups[name]
 end
 
 --- Gets the left flow that contains the popup frames
--- @tparam player LuaPlayer the player to get the flow for
+-- @tparam LuaPlayer player the player to get the flow for
 -- @treturn LuaGuiElement the left flow that contains the popup frames
 function PopupFrames.get_flow(player)
     player = Game.get_player_from_any(player)
@@ -58,10 +58,10 @@ function PopupFrames.get_flow(player)
 end
 
 --- Opens a popup for the player, can give the amount of time it is open as well as params for the draw function
--- @tparam define_name string the name of the define that you want to open for the player
--- @tparam player LuaPlayer the player to open the popup for
--- @tparam[opt] open_time number the minimum number of ticks you want the popup open for, 0 means no limit, nil will take default
--- @tparam ... any the other params that you want to pass to your on_draw event
+-- @tparam string define_name the name of the define that you want to open for the player
+-- @tparam LuaPlayer player the player to open the popup for
+-- @tparam[opt] number open_time the minimum number of ticks you want the popup open for, 0 means no limit, nil will take default
+-- @tparam any ... the other params that you want to pass to your on_draw event
 -- @treturn LuaGuiElement the frame that was drawn, the inner gui flow which contains the content
 function PopupFrames.open(define_name,player,open_time,...)
     local define = Gui.get_define(define_name,true)
@@ -70,7 +70,7 @@ function PopupFrames.open(define_name,player,open_time,...)
 end
 
 --- Closes the popup, is called by progress bar and close button
--- @tparam element LuaGuiElement either the progress bar or the close button
+-- @tparam LuaGuiElement element either the progress bar or the close button
 local function close_popup(element)
 	local frame = element.parent.parent.parent
     if not frame or not frame.valid then return end
@@ -117,7 +117,7 @@ Gui.on_click(PopupFrames.close_frame_name,function(event)
 end)
 
 --- Creates a new popup frame define
--- @tparam[opt] name string the optional debug name that can be added
+-- @tparam[opt] string name the optional debug name that can be added
 -- @treturn table the new popup frame define
 function PopupFrames.new_popup(name)
 	local self = Gui._define_factory(PopupFrames._prototype)
@@ -182,7 +182,7 @@ function PopupFrames.new_popup(name)
 end
 
 --- Sets the default open time for the popup, will be used if non is provided with open
--- @tparam amount number the number of ticks, by default, the popup will be open for
+-- @tparam number amount the number of ticks, by default, the popup will be open for
 -- @treturn table the define to allow for chaining
 function PopupFrames._prototype:set_default_open_time(amount)
 	self.default_open_time = amount
@@ -190,9 +190,9 @@ function PopupFrames._prototype:set_default_open_time(amount)
 end
 
 --- Opens this define for a player, can be given open time and any other params for the draw function
--- @tparam player LuaPlayer the player to open the popup for
--- @tparam[opt] open_time number the minimum number of ticks you want the popup open for, 0 means no limit, nil will take default
--- @tparam ... any the other params that you want to pass to your on_draw event
+-- @tparam LuaPlayer player the player to open the popup for
+-- @tparam[opt] number open_time the minimum number of ticks you want the popup open for, 0 means no limit, nil will take default
+-- @tparam any ... the other params that you want to pass to your on_draw event
 -- @treturn LuaGuiElement the frame that was drawn, the inner gui flow which contains the content
 function PopupFrames._prototype:open(player,open_time,...)
     open_time = open_time or self.default_open_time or 0

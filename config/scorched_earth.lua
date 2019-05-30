@@ -108,6 +108,7 @@ return {
         ['rocket-silo']=true,
         ['pumpjack']=true,
         ['electric-mining-drill']=true,
-        ['roboport']=true
+        ['roboport']=true,
+        ['accumulator']=true
     }
 }

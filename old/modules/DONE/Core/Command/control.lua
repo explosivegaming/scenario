@@ -24,7 +24,7 @@ function commands.add_middleware(callback) if not is_type(callback,'function') t
 -- @field commands.data
 -- @usage commands.command_name -- returns command data
 -- @usage commands.data -- returns all data
--- @tparam ?string|table|event key the command that will be returned: string is the name, table is the command data, event is event from add_command
+-- @tparam string table ?string|table|event key the command that will be returned: is the name, is the command data, event is event from add_command
 -- @treturn table the command data
 setmetatable(commands,{
     __index=function(tbl,key) return is_type(key,'table') and (key.command and rawget(commandDataStore,key.name) or key) or key == 'data' and commandDataStore or rawget(commandDataStore,key) end
@@ -242,9 +242,9 @@ end
 --- Used to define commands
 -- @usage --see examples in file
 -- @tparam string name the name of the command
--- @tparam[opt='No Description'] string description the description of the command
--- @tparam[opt=an infinite string] table inputs a table of the inputs to be used, last index being true makes the last parameter open ended (longer than one word)
--- @tparam function callback the function to call on the event
+-- @tparam[opt='No string Description'] description the description of the command
+-- @tparam[opt=an table table infinite string] inputs a of the inputs to be used, last index being true makes the last parameter open ended (longer than one word)
+-- @tparam function function callback the to call on the event
 commands.add_command = function(name, description, inputs, callback)
     if commands[name] then error('That command is already registered',2) end
     if not is_type(name,'string') then error('Command name has not been given') end

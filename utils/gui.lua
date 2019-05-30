@@ -192,7 +192,7 @@ end
 
 --- Returns the flow where top elements can be added and will be effected by google visibility
 -- For the toggle to work it must be registed with Gui.allow_player_to_toggle_top_element_visibility(element_name)
--- @tparam player LuaPlayer pointer to the player who has the gui
+-- @tparam LuaPlayer player pointer to the player who has the gui
 -- @treturn LuaGuiEelement the top element flow
 function Gui.get_top_element_flow(player)
     player = Game.get_player_from_any(player)

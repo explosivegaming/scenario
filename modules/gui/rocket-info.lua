@@ -1,3 +1,4 @@
+--- Adds a rocket infomation gui which shows general stats, milestones and build progress of rockets
 local Gui = require 'expcore.gui'
 local Roles = require 'expcore.roles'
 local Event = require 'utils.event'
@@ -5,6 +6,13 @@ local config = require 'config.rockets'
 local Global = require 'utils.global'
 local format_time = ext_require('expcore.common','format_time')
 local Colors = require 'resources.color_presets'
+
+local largest_rolling_avg = 0
+for _,avg_over in pairs(config.stats.rolling_avg) do
+    if avg_over > largest_rolling_avg then
+        largest_rolling_avg = avg_over
+    end
+end
 
 local rocket_times = {}
 local rocket_stats = {}
@@ -73,6 +81,11 @@ end)
     if rocket_silo_data.entity.launch_rocket() then
         rocket_silo_data.awaiting_reset = true
         element.enabled = false
+        local progress_label = element.parent.parent[rocket_silo_name].label
+        progress_label.caption = {'rocket-info.progress-launched'}
+        progress_label.style.font_color = Colors.green
+    else
+        player.print({'rocket-info.launch-failed'},Colors.orange_red)
     end
 end)
 
@@ -91,18 +104,17 @@ end)
 end)
 :on_click(function(player,element)
     local force = player.force
-    local rocket_silo_name = element.parent.name:sub(7)
-    local rocket_silo = rocket_silos[force.name][rocket_silo_name]
-    local active = true -- need to test for auto launch
+    local rocket_silo_name = element.parent.name:sub(8)
+    local rocket_silo_data = rocket_silos[force.name][rocket_silo_name]
+    local active = rocket_silo_data.entity.auto_launch -- need to test for auto launch
     if active then
-        player.print('WIP; We currently have no way to test or set the auto launch of a rocket so this button does not work!')
         element.sprite = 'utility/play'
         element.tooltip = {'rocket-info.toggle-rocket-tooltip'}
-        -- insert function to disable auto launch
+        rocket_silo_data.entity.auto_launch = false
     else
         element.sprite = 'utility/stop'
         element.tooltip = {'rocket-info.toggle-rocket-tooltip-disabled'}
-        -- insert function to enable auto launch
+        rocket_silo_data.entity.auto_launch = true
     end
 end)
 
@@ -240,7 +252,12 @@ local function generate_container(player,element)
 
 end
 
---- Creates a text label followed by a data label, or updates them if already present
+--[[ Creates a text label followed by a data label, or updates them if already present
+    element
+    > "data_name_extra"-label
+    > "data_name_extra"
+    >> label
+]]
 local function create_label_value_pair(element,data_name,value,tooltip,extra)
     local data_name_extra = extra and data_name..extra or data_name
     if element[data_name_extra] then
@@ -272,7 +289,7 @@ local function create_label_value_pair_time(element,data_name,raw_value,no_hours
     create_label_value_pair(element,data_name,value,tooltip,extra)
 end
 
---- Adds the data to the stats section
+--- Adds the different data values to the stats section
 local function generate_stats(player,frame)
     if not config.stats.show_stats then return end
     local element = frame.container.stats.table
@@ -338,11 +355,11 @@ local function generate_milestones(player,frame)
     end
 end
 
---- Creats the different action buttons
+--- Creats the different buttons used with the rocket silos
 local function generate_progress_buttons(player,element,rocket_silo_data)
     local silo_name = rocket_silo_data.name
-    local status = rocket_silo_data.entity.status == 21
-    local active = false -- need way to check this
+    local status = rocket_silo_data.entity.status == defines.entity_status.waiting_to_launch_rocket
+    local active = rocket_silo_data.entity.auto_launch
 
     if player_allowed(player,'toggle_active') then
         local button_element = element['toggle-'..silo_name]
@@ -353,10 +370,11 @@ local function generate_progress_buttons(player,element,rocket_silo_data)
             button_element = toggle_rocket(element,silo_name)
         end
 
-        button_element.enabled = false -- remove once check is added
         if active then
+            button_element.tooltip = {'rocket-info.toggle-rocket-tooltip'}
             button_element.sprite = 'utility/stop'
         else
+            button_element.tooltip = {'rocket-info.toggle-rocket-tooltip-disabled'}
             button_element.sprite = 'utility/play'
         end
     end
@@ -379,7 +397,17 @@ local function generate_progress_buttons(player,element,rocket_silo_data)
 
 end
 
---- Creates build progress section
+--[[ Creates build progress section
+    element
+    > toggle-"silo_name" (generate_progress_buttons)
+    > launch-"silo_name" (generate_progress_buttons)
+    > label-x-"silo_name"
+    >> "silo_name"
+    > label-y-"silo_name"
+    >> "silo_name"
+    > "silo_name"
+    >> label
+]]
 local function generate_progress(player,frame)
     if not config.progress.show_progress then return end
     local element = frame.container.progress.table
@@ -478,6 +506,7 @@ local function generate_progress(player,frame)
     end
 end
 
+--- Registers the new left gui
 local rocket_info =
 Gui.new_left_frame('gui/rocket-info')
 :set_sprites('entity/rocket-silo')
@@ -500,6 +529,7 @@ end)
     generate_progress(player,element)
 end)
 
+--- Event used to update the stats and the hui when a rocket is launched
 Event.add(defines.events.on_rocket_launched,function(event)
     local entity = event.rocket_silo
     local silo_name = get_silo_name(entity)
@@ -530,13 +560,21 @@ Event.add(defines.events.on_rocket_launched,function(event)
 
     rocket_times[force_name][rockets_launched] = event.tick
 
+    local remove_rocket = rockets_launched-largest_rolling_avg
+    if remove_rocket > 0 and not table.includes(config.milestones,remove_rocket) then
+        rocket_times[force_name][remove_rocket] = nil
+    end
+
     --- Adds this 1 to the launch count for this silo
     force_silo_data[silo_name].launched = force_silo_data[silo_name].launched+1
 
     --- Updates all the guis (and toolbar since the button may now be visible)
     for _,player in pairs(force.players) do
         rocket_info:update(player)
-        if first_rocket then Gui.update_toolbar(player) end
+        if first_rocket then
+            Gui.update_toolbar(player)
+            rocket_info:toggle(player)
+        end
     end
 end)
 
@@ -591,5 +629,9 @@ Event.on_nth_tick(150,function()
         end
     end
 end)
+
+--- Makes sure the right buttons are present when role changes
+Event.add(Roles.player_role_assigned,rocket_info 'redraw')
+Event.add(Roles.player_role_unassigned,rocket_info 'redraw')
 
 return rocket_info

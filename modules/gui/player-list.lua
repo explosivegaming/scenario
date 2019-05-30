@@ -194,22 +194,29 @@ local player_list_name
 local function update_action_bar(player)
     local frame = Gui.classes.left_frames.get_frame(player_list_name,player)
     local element = frame.container.action_bar
-    local action_player = Store.get_child(action_player_store,player.name)
+    local action_player_name = Store.get_child(action_player_store,player.name)
 
-    if not action_player then
+    if not action_player_name then
         element.visible = false
     else
-        element.visible = true
-        for action_name,buttons in pairs(config) do
-            if buttons.auth and not buttons.auth(player,action_player) then
-                element[action_name].visible = false
-            elseif Roles.player_allowed(player,action_name) then
-                element[action_name].visible = true
+        local action_player = Game.get_player_from_any(action_player_name)
+        if not action_player.connected then
+            element.visible = false
+            Store.set(action_player_store,player.name) -- clears store if player is offline
+        else
+            element.visible = true
+            for action_name,buttons in pairs(config) do
+                if buttons.auth and not buttons.auth(player,action_player) then
+                    element[action_name].visible = false
+                elseif Roles.player_allowed(player,action_name) then
+                    element[action_name].visible = true
+                end
             end
         end
     end
 end
 
+--- Adds a player to the player list
 local function add_player(list_table,player,role_name)
     open_action_bar(list_table,player.name)
 
@@ -317,7 +324,16 @@ Store.register(action_name_store,function(value,category)
     local player = Game.get_player_from_any(category)
     local frame = Gui.classes.left_frames.get_frame(player_list_name,player)
     local element = frame.container.reason_bar
-    element.visible = value ~= nil
+    if value then
+        local action_player = Game.get_player_from_any(value)
+        if action_player.connected then
+            element.visible = true
+        else
+            Store.set_child(action_name_store,category) -- clears store if player is offline
+        end
+    else
+        element.visible = false
+    end
 end)
 
 --- Many events which trigger the gui to be re drawn, it will also update the times every 30 seconds

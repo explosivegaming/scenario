@@ -1,6 +1,5 @@
 --- Factorio command making module that makes commands with better parse and more modularity
 -- @author Cooldude2606
--- @module Commands
 --[[
 >>>>Example Authenticator:
     The command system is most useful when you can control who can use commands; to do this would would need to
@@ -235,8 +234,7 @@ local Commands = {
 }
 
 --- Adds an authorization callback, function used to check if a player if allowed to use a command
--- @see Commands.authorize
--- @tparam callback function the callback you want to register as an authenticator
+-- @tparam function callback the callback you want to register as an authenticator
 -- callback param - player: LuaPlayer - the player who is trying to use the command
 -- callback param - command: string - the name of the command which is being used
 -- callback param - flags: table - any flags which have been set for the command
@@ -248,8 +246,7 @@ function Commands.add_authenticator(callback)
 end
 
 --- Removes an authorization callback
--- @see Commands.add_authenticator
--- @tparam callback function|number the callback to remove, an index returned by add_authenticator can be passed
+-- @tparam function|number callback the callback to remove, an index returned by add_authenticator can be passed
 -- @treturn boolean was the callback found and removed
 function Commands.remove_authenticator(callback)
     if type(callback) == 'number' then
@@ -277,8 +274,8 @@ function Commands.remove_authenticator(callback)
 end
 
 --- Mostly used internally, calls all authorization callbacks, returns if the player is authorized
--- @tparam player LuaPlayer the player that is using the command, passed to callbacks
--- @tparam command_name string the command that is being used, passed to callbacks
+-- @tparam LuaPlayer player the player that is using the command, passed to callbacks
+-- @tparam string command_name the command that is being used, passed to callbacks
 -- @treturn[1] boolean true player is authorized
 -- @treturn[1] string commands const for success
 -- @treturn[2] boolean false player is unauthorized
@@ -322,7 +319,7 @@ function Commands.authorize(player,command_name)
 end
 
 --- Gets all commands that a player is allowed to use, game commands not included
--- @tparam[opt] player LuaPlayer the player that you want to get commands of, nil will return all commands
+-- @tparam[opt] LuaPlayer player the player that you want to get commands of, nil will return all commands
 -- @treturn table all commands that that player is allowed to use, or all commands
 function Commands.get(player)
     player = Game.get_player_from_any(player)
@@ -337,8 +334,8 @@ function Commands.get(player)
 end
 
 --- Searches command names and help messages to find possible commands, game commands included
--- @tparam keyword string the word which you are trying to find
--- @tparam[opt] allowed_player LuaPlayer the player to get allowed commands of, if nil all commands are searched
+-- @tparam string keyword the word which you are trying to find
+-- @tparam[opt] LuaPlayer allowed_player the player to get allowed commands of, if nil all commands are searched
 -- @treturn table all commands that contain the key word, and allowed by player if player given
 function Commands.search(keyword,allowed_player)
     local custom_commands = Commands.get(allowed_player)
@@ -369,8 +366,8 @@ end
 
 --- Adds a parse function which can be called by name rather than callback (used in add_param)
 -- nb: this is not needed as you can use the callback directly this just allows it to be called by name
--- @tparam name string the name of the parse, should be the type like player or player_alive, must be unique
--- @tparam callback function the callback that is ran to parse the input
+-- @tparam string name the name of the parse, should be the type like player or player_alive, must be unique
+-- @tparam function callback the callback that is ran to parse the input
 -- parse param - input: string - the input given by the user for this param
 -- parse param - player: LuaPlayer - the player who is using the command
 -- parse param - reject: function(error_message) - use this function to send a error to the user and fail running
@@ -386,14 +383,16 @@ function Commands.add_parse(name,callback)
 end
 
 --- Removes a parse function, see add_parse for adding them
--- @tparam name string the name of the parse to remove
+-- @tparam string name the name of the parse to remove
 function Commands.remove_parse(name)
     Commands.parse_functions[name] = nil
 end
 
 --- Intended to be used within other parse functions, runs a parse and returns success and new value
--- @tparam name string the name of the parse to call, must be registered and cant be a function
--- @tparam input string the input to pass to the parse, will always be a string but might not be the orginal input
+-- @tparam string name the name of the parse to call, must be registered and cant be a function
+-- @tparam string input string the input to pass to the parse, will always be a but might not be the orginal input
+-- @tparam LuaPlayer player the player that is calling using the command
+-- @tparam function reject the reject function that was passed by the command hander
 -- @treturn any the new value for the input, may be nil, if nil then either there was an error or input was nil
 function Commands.parse(name,input,player,reject,...)
     if not Commands.parse_functions[name] then return end
@@ -405,8 +404,8 @@ function Commands.parse(name,input,player,reject,...)
 end
 
 --- Creates a new command object to added details to, note this does not register the command to the game
--- @tparam name string the name of the command to be created
--- @tparam help string the help message for the command
+-- @tparam string name the name of the command to be created
+-- @tparam string help the help message for the command
 -- @treturn Commands._prototype this will be used with other functions to generate the command functions
 function Commands.new_command(name,help)
     local command = setmetatable({
@@ -427,9 +426,9 @@ function Commands.new_command(name,help)
 end
 
 --- Adds a new param to the command this will be displayed in the help and used to parse the input
--- @tparam name string the name of the new param that is being added to the command
--- @tparam[opt=true] optional is this param required for this command, these must be after all required params
--- @tparam[opt=pass through] parse function this function will take the input and return a new (or same) value
+-- @tparam string name the name of the new param that is being added to the command
+-- @tparam[opt=true] boolean optional is this param required for this command, these must be after all required params
+-- @tparam[opt=pass function through] ?string|function parse this function will take the input and return a new (or same) value
 -- @param[opt] ... extra args you want to pass to the parse function; for example if the parse is general use
 -- parse param - input: string - the input given by the user for this param
 -- parse param - player: LuaPlayer - the player who is using the command
@@ -452,7 +451,7 @@ function Commands._prototype:add_param(name,optional,parse,...)
 end
 
 --- Adds default values to params only matters if the param is optional, if default value is a function it is called with param player
--- @tparam defaults table a table keyed by the name of the param with the value as the default value {paramName=defaultValue}
+-- @tparam table defaults table a keyed by the name of the param with the value as the default value {paramName=defaultValue}
 -- callback param - player: LuaPlayer - the player using the command, default value does not need to be a function callback
 -- @treturn Commands._prototype pass through to allow more functions to be called
 function Commands._prototype:set_defaults(defaults)
@@ -465,8 +464,8 @@ function Commands._prototype:set_defaults(defaults)
 end
 
 --- Adds a tag to the command which is passed via the flags param to the authenticators, can be used to assign command roles or type
--- @tparam name string the name of the tag to be added; used to keep flags separate
--- @tparam value any the tag that you want can be anything that the authenticators are expecting
+-- @tparam string name the name of the tag to be added; used to keep flags separate
+-- @tparam any value the tag that you want can be anything that the authenticators are expecting
 -- nb: if value is nil then name will be assumed as the value and added at a numbered index
 -- @treturn Commands._prototype pass through to allow more functions to be called
 function Commands._prototype:set_flag(name,value)
@@ -482,7 +481,7 @@ end
 
 --- Adds an alias or multiple that will also be registered with the same callback, eg /teleport can be /tp with both working
 -- @usage command:add_alias('aliasOne','aliasTwo','etc')
--- @tparam ... string any amount of aliases that you want this command to be callable with
+-- @tparam string any ... amount of aliases that you want this command to be callable with
 -- @treturn Commands._prototype pass through to allow more functions to be called
 function Commands._prototype:add_alias(...)
     for _,alias in pairs({...}) do
@@ -503,7 +502,7 @@ end
 
 --- Adds the callback to the command and registers all aliases, params and help message with the game
 -- nb: this must be the last function ran on the command and must be done for the command to work
--- @tparam callback function the callback for the command, will receive the player running command, and params added with add_param
+-- @tparam function callback the callback for the command, will receive the player running command, and params added with add_param
 -- callback param - player: LuaPlayer - the player who used the command
 -- callback param - ... - any params which were registered with add_param in the order they where registered
 -- callback param - raw: string - the raw input from the user, comes after every param added with add_param
@@ -540,8 +539,8 @@ end
 -- nb: this is for non fatal errors meaning there is no log of this event
 -- nb: if reject is giving as a param to the callback use that instead
 -- @usage return Commands.error()
--- @tparam[opt] error_message string an optional error message that can be sent to the user
--- @tparam[opt] play_sound string the sound to play for the error
+-- @tparam[opt] string error_message an optional error message that can be sent to the user
+-- @tparam[opt] string play_sound the sound to play for the error
 -- @treturn Commands.defines.error return this to command handler to exit execution
 function Commands.error(error_message,play_sound)
     error_message = error_message or ''
@@ -555,9 +554,9 @@ end
 
 --- Sends an error to the player and logs the error, used with pcall within command handler please avoid direct use
 -- nb: use error(error_message) within your callback to trigger do not trigger directly as the handler may still continue
--- @tparam success boolean the success value returned from pcall, or just false to trigger error
--- @tparam command_name string the name of the command this is used within the log
--- @tparam error_message string the error returned by pcall or some other error, this is logged and not returned to player
+-- @tparam boolean success the success value returned from pcall, or just false to trigger error
+-- @tparam string command_name the name of the command this is used within the log
+-- @tparam string error_message the error returned by pcall or some other error, this is logged and not returned to player
 -- @treturn boolean the opposite of success so true means to cancel execution, used internally
 function Commands.internal_error(success,command_name,error_message)
     if not success then
@@ -569,7 +568,7 @@ end
 
 --- Sends a value to the player, followed by a command complete message
 -- nb: either return a value from your callback to trigger or return the return of this to prevent two messages
--- @tparam[opt] value any the value to return to the player, if nil then only success message returned
+-- @tparam[opt] any value the value to return to the player, if nil then only success message returned
 -- @treturn Commands.defines.success return this to the command handler to prevent two success messages
 function Commands.success(value)
     if value ~= nil then player_return(value) end
@@ -591,7 +590,7 @@ local function command_log(player,command,comment,params,raw,details)
 end
 
 --- Main event function that is ran for all commands, used internally please avoid direct use
--- @tparam command_event table passed directly from command event from the add_command function
+-- @tparam table command_event passed directly from command event from the add_command function
 function Commands.run_command(command_event)
     local command_data = Commands.commands[command_event.name]
     -- player can be nil when it is the server

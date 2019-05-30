@@ -11,8 +11,8 @@
 ---table.map(a, function(v) return v * 10 end) --produces: { 10, 20, 30, 40, 50 }
 --- @usage a = {1, 2, 3, 4, 5}
 ---table.map(a, function(v, k, x) return v * k + x end, 100) --produces { 101, 104, 109, 116, 125}
--- @tparam table tbl the table to be mapped to the transform
--- @tparam function func the function to transform values
+-- @tparam table table tbl the to be mapped to the transform
+-- @tparam function function func the to transform values
 -- @param[opt] ... additional arguments passed to the function
 -- @treturn table a new table containing the keys and mapped values
 function table.map(tbl, func, ...)
@@ -30,8 +30,8 @@ end
 ---table.filter(a, function(v) return v % 2 == 0 end) --produces: { 2, 4 }
 --- @usage a = {1, 2, 3, 4, 5}
 ---table.filter(a, function(v, k, x) return k % 2 == 1 end) --produces: { 1, 3, 5 }
--- @tparam table tbl the table to be filtered
--- @tparam function func the function to filter values
+-- @tparam table table tbl the to be filtered
+-- @tparam function function func the to filter values
 -- @param[opt] ... additional arguments passed to the function
 -- @treturn table a new table containing the filtered key-value pairs
 function table.filter(tbl, func, ...)
@@ -53,8 +53,8 @@ end
 ---table.find(a, function(v) return v % 2 == 0 end) --produces: 2
 --- @usage a = {1, 2, 3, 4, 5}
 ---table.find(a, function(v, k, x) return k % 2 == 1 end) --produces: 1
--- @tparam table tbl the table to be searched
--- @tparam function func the function to use to search for any matching element
+-- @tparam table table tbl the to be searched
+-- @tparam function any func the function to use to search for matching element
 -- @param[opt] ... additional arguments passed to the function
 -- @treturn ?|nil|Mixed the first found value, or nil if none was found
 function table.find(tbl, func, ...)
@@ -68,7 +68,7 @@ end
 
 --- Finds the first index at which the value appears in the table
 -- @usage table.index({'foo','bar','baz'},'bar') -- retuns 2,'bar'
--- @tparam table tbl the table to search though
+-- @tparam table table tbl the to search though
 -- @param value the value you want the index of
 -- @treturn number the index that the value apeears at
 -- @return the value in that possition
@@ -83,7 +83,7 @@ end
 
 --- Returns a boolean on weather the table includes the value or not
 -- @usage table.includes({'foo','bar','baz'},'bar') -- retuns true
--- @tparam table tbl the table to search though
+-- @tparam table table tbl the to search though
 -- @param value the value you want the index of
 -- @treturn boolean if the table includes the value
 function table.includes(tbl, value)
@@ -100,8 +100,8 @@ end
 -- Passes the index as second argument to the function.
 -- @usage a= { 1, 2, 3, 4, 5} table.any(a, function(v) return v % 2 == 0 end) --produces: true
 -- @usage a = {1, 2, 3, 4, 5} table.any(a, function(v, k, x) return k % 2 == 1 end) --produces: true
--- @tparam table tbl the table to be searched
--- @tparam function func the function to use to search for any matching element
+-- @tparam table table tbl the to be searched
+-- @tparam function any func the function to use to search for matching element
 -- @param[opt] ... additional arguments passed to the function
 -- @treturn boolean true if an element was found, false if none was found
 function table.any(tbl, func, ...)
@@ -114,8 +114,8 @@ end
 -- @usage
 -- a = {10, 20, 30, 40}
 -- table.each(a, function(v) game.print(v) end) --prints 10, 20, 30, 40, 50
--- @tparam table tbl the table to be iterated
--- @tparam function func the function to apply to elements
+-- @tparam table table tbl the to be iterated
+-- @tparam function function func the to apply to elements
 -- @param[opt] ... additional arguments passed to the function
 -- @treturn table the table where the given function has been applied to its elements
 function table.each(tbl, func, ...)
@@ -250,7 +250,7 @@ end
 
 --- Creates a deep copy of table without copying Factorio objects.
 -- @usage local copy = table.deepcopy[data.raw.["stone-furnace"]["stone-furnace"]] -- returns a copy of the stone furnace entity
--- @tparam table object the table to copy
+-- @tparam table table object the to copy
 -- @treturn table a copy of the table
 function table.deepcopy(object)
     local lookup_table = {}
@@ -294,7 +294,7 @@ local function sortFunc(x, y) --sorts tables with mixed index types.
 end
 
 --- Returns a copy of all of the values in the table.
--- @tparam table tbl the table to copy the keys from, or an empty table if tbl is nil
+-- @tparam table table tbl the to copy the keys from, or an empty table if tbl is nil
 -- @tparam[opt] boolean sorted whether to sort the keys (slower) or keep the random order from pairs()
 -- @tparam[opt] boolean as_string whether to try and parse the values as strings, or leave them as their existing type
 -- @treturn array an array with a copy of all the values in the table
@@ -320,7 +320,7 @@ function table.values(tbl, sorted, as_string)
 end
 
 --- Returns a copy of all of the keys in the table.
--- @tparam table tbl the table to copy the keys from, or an empty table if tbl is nil
+-- @tparam table table tbl the to copy the keys from, or an empty table if tbl is nil
 -- @tparam[opt] boolean sorted whether to sort the keys (slower) or keep the random order from pairs()
 -- @tparam[opt] boolean as_string whether to try and parse the keys as strings, or leave them as their existing type
 -- @treturn array an array with a copy of all the keys in the table
@@ -350,7 +350,7 @@ end
 --table.remove_keys(a, {1,3}) --returns {nil, 2, nil, 4}
 -- @usage local b = {k1 = 1, k2 = 'foo', old_key = 'bar'}
 --table.remove_keys(b, {'old_key'}) --returns {k1 = 1, k2 = 'foo'}
--- @tparam table tbl the table to remove the keys from
+-- @tparam table table tbl the to remove the keys from
 -- @tparam {Mixed,...} keys an array of keys that exist in the given table
 -- @treturn table tbl without the specified keys
 function table.remove_keys(tbl, keys)
@@ -391,7 +391,7 @@ end
 --table.invert(a) --returns {'foo' = k1, 'bar' = k2}
 -- @usage local b = {k1 = 'foo', k2 = 'bar', k3 = 'bar'}
 --table.invert(b) --returns {'foo' = k1, 'bar' = ?}
--- @tparam table tbl the table to invert
+-- @tparam table table tbl the to invert
 -- @treturn table a new table with inverted mapping
 function table.invert(tbl)
     local inverted = {}
@@ -410,7 +410,7 @@ table.size = table_size
 --- For all string or number values in an array map them to a key = true table
 -- @usage local a = {"v1", "v2"}
 -- table.array_to_dict_bool(a) -- return {["v1"] = true, ["v2"]= true}
--- @tparam table tbl the table to convert
+-- @tparam table table tbl the to convert
 -- @treturn table the converted table
 function table.arr_to_bool(tbl)
     local newtbl = {}

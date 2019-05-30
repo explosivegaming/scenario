@@ -12,7 +12,7 @@ local ExpLib = {}
 
 --- Loads a table into _G even when sandboxes; will not overwrite values or append to tables; will not work during runtime to avoid desyncs
 -- @usage unpack_to_G{key1='foo',key2='bar'}
--- @tparam table tbl table to be unpacked
+-- @tparam table table tbl to be unpacked
 function ExpLib.unpack_to_G(tbl)
     if not type(tbl) == 'table' or game then return end
     for key,value in pairs(tbl) do
@@ -60,9 +60,9 @@ end
 
 --- Creates a table that will act like a string and a function
 -- @usage add_metatable({},function) -- returns table
--- @tparam table tbl the table that will have its metatable set
--- @tparam[opt=tostring] function callback the function that will be used for the call
--- @tparam[opt=table.tostring] ?function|string string a function that resolves to a string or a string
+-- @tparam table table tbl the that will have its metatable set
+-- @tparam[opt=tostring] function function callback the that will be used for the call
+-- @tparam[opt=table.tostring] function string string ?function|string a that resolves to a or a string
 -- @treturn table the new table with its metatable set
 function ExpLib.add_metatable(tbl,callback,string)
     if not ExpLib.is_type(tbl,'table') then error('No table given to add_metatable',2) end
@@ -98,7 +98,7 @@ end
 
 --- A specialised version of type_error to test for self
 -- @usage self_test(self,'Object','get_name')
--- @tparam table self the table that is the object
+-- @tparam table table self the that is the object
 -- @tparam string prototype_name the name of the class
 -- @tparam string function_name the name of the function
 function ExpLib.self_test(self,prototype_name,function_name)
@@ -240,7 +240,7 @@ end
 
 --- Returns a table in a form able to be read as a table
 -- @usage table.tostring{k1='foo',k2='bar'} -- return '{["k1"]="foo",["k2"]="bar"}'
--- @tparam table tbl table to convert
+-- @tparam table table tbl to convert
 -- @treturn string the converted table
 function table.tostring(tbl)
     if type(tbl) ~= 'table' then return tostring(tbl) end
@@ -260,7 +260,7 @@ end
 
 --- Similar to table.tostring but converts a lua table to a json one
 -- @usage table.json{k1='foo',k2='bar'} -- return '{"k1":"foo","k2":"bar"}'
--- @tparam table lua_table the table to convert
+-- @tparam table table lua_table the to convert
 -- @treturn string the table in a json format
 function table.json(lua_table)
     --if game and game.table_to_json then return game.table_to_json(lua_table) end
@@ -288,8 +288,8 @@ end
 
 --- Returns the closest match to a key
 -- @usage table.autokey({foo=1,bar=2},'f') -- return 1 
--- @tparam table tbl the table that will be searched
--- @tparam string str the string that will be looked for in the keys
+-- @tparam table table tbl the that will be searched
+-- @tparam string string str the that will be looked for in the keys
 function table.autokey(tbl,str)
     if not ExpLib.is_type(str,'string') then return end
     local _return = {}
@@ -301,7 +301,7 @@ end
 
 --- Returns the list is a sorted way that would be expected by people (this is by key)
 -- @usage tbl = table.alphanumsort(tbl)
--- @tparam table tbl the table to be sorted
+-- @tparam table table tbl the to be sorted
 -- @treturn table the sorted table
 function table.alphanumsort(tbl)
     local o = table.keys(tbl)
@@ -317,7 +317,7 @@ end
 
 --- Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
 -- @usage tbl = table.alphanumsort(tbl)
--- @tparam table tbl the table to be sorted
+-- @tparam table table tbl the to be sorted
 -- @treturn table the sorted table
 function table.keysort(tbl)
     local o = table.keys(tbl,true)

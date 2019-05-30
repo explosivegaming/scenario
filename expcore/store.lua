@@ -108,7 +108,7 @@ Global.register(Store.data,function(tbl)
 end)
 
 --- Check for if a lcoation is registered
--- @tparam location string the location to test for
+-- @tparam string location the location to test for
 -- @treturn boolean true if registered
 function Store.is_registered(location)
     return not not Store.callbacks[location]
@@ -121,9 +121,9 @@ function Store.uid_location()
 end
 
 --- Registers a new location with an update callback which is triggered when the value updates
--- @tparam location string a unique string that points to the data, string used rather than token to allow migration
--- @tparam callback function this callback will be called when the stored value is set to a new value
--- @tparam[opt] start_value any this value will be the inital value that is stored at this location
+-- @tparam string location string a unique that points to the data, string used rather than token to allow migration
+-- @tparam function callback this callback will be called when the stored value is set to a new value
+-- @tparam[opt] any start_value this value will be the inital value that is stored at this location
 function Store.register(location,callback,start_value)
     if _LIFECYCLE ~= _STAGE.control then
         return error('Can only be called during the control stage', 2)
@@ -144,9 +144,9 @@ function Store.register(location,callback,start_value)
 end
 
 --- Registers a new cross server synced location with an update callback, and external script is required for cross server
--- @tparam location string a unique string that points to the data, string used rather than token to allow migration
--- @tparam callback function this callback will be called when the stored value is set to a new value
--- @tparam[opt] start_value any this value will be the inital value that is stored at this location
+-- @tparam string location string a unique that points to the data, string used rather than token to allow migration
+-- @tparam function callback this callback will be called when the stored value is set to a new value
+-- @tparam[opt] any start_value this value will be the inital value that is stored at this location
 function Store.register_synced(location,callback,start_value)
     if _LIFECYCLE ~= _STAGE.control then
         return error('Can only be called during the control stage', 2)
@@ -166,8 +166,8 @@ function Store.register_synced(location,callback,start_value)
 end
 
 --- Adds a function that will be checked every tick for a change in the returned value, when the value changes it will be saved in the store
--- @tparam location string the location where the data will be saved and compeared to, must already be a registered location
--- @tparam callback function this function will be called every tick to check for a change in value
+-- @tparam string location the location where the data will be saved and compeared to, must already be a registered location
+-- @tparam function callback this function will be called every tick to check for a change in value
 function Store.add_watch(location,callback)
     if _LIFECYCLE ~= _STAGE.control then
         return error('Can only be called during the control stage', 2)
@@ -185,8 +185,8 @@ function Store.add_watch(location,callback)
 end
 
 --- Gets the value stored at a location, this location must be registered
--- @tparam location string the location to get the data from
--- @tparam[opt=false] no_error boolean when true no error is returned if the location is not registered
+-- @tparam string location the location to get the data from
+-- @tparam[opt=false] boolean no_error when true no error is returned if the location is not registered
 -- @treturn any the data which was stored at the location
 function Store.get(location,no_error)
     if not Store.callbacks[location] and not no_error then
@@ -197,8 +197,8 @@ function Store.get(location,no_error)
 end
 
 --- Sets the value at a location, this location must be registered, if server synced it will emit the change to file
--- @tparam location string the location to set the data to
--- @tparam value any the new value to set at the location, value may be reverted if there is a watch callback
+-- @tparam string location the location to set the data to
+-- @tparam any value the new value to set at the location, value may be reverted if there is a watch callback
 -- @treturn boolean true if it was successful
 function Store.set(location,value)
     if not Store.callbacks[location] then
@@ -220,7 +220,7 @@ end
 
 --- Gets all non nil children at a location, children can be added and removed during runtime
 -- this is similar to Store.get but will always return a table even if it is empty
--- @tparam location string the location to get the children of
+-- @tparam string location the location to get the children of
 -- @treturn table a table containg all the children and they values
 function Store.get_children(location)
     local store = Store.get(location)
@@ -233,8 +233,8 @@ function Store.get_children(location)
 end
 
 --- Gets the value of the child to a location, children can be added and removed during runtime
--- @tparam location string the location of which the child is located
--- @tparam child string the child element to get the value of
+-- @tparam string location the location of which the child is located
+-- @tparam string child the child element to get the value of
 -- @treturn any the value which was stored at that location
 function Store.get_child(location,child)
     local store = Store.get(location)
@@ -249,9 +249,9 @@ end
 --- Sets the value of the chlid to a location, children can be added and removed during runtime
 -- when a child is set it will call the update handler of the parent allowing children be to added at runtime
 -- this may be used when a player joins the game and the child is the players name
--- @tparam location string the location of which the child is located
--- @tparam child string the child element to set the value of
--- @tparam value any the value to set at this location
+-- @tparam string location the location of which the child is located
+-- @tparam string child the child element to set the value of
+-- @tparam any value the value to set at this location
 -- @treturn boolean true if it was successful
 function Store.set_child(location,child,value)
     local store = Store.get(location)

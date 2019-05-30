@@ -56,7 +56,8 @@ All are welcome to make pull requests and issues for this scenario, if you are i
 
 | Scenario Version* | Version Name | Factorio Version** |
 |---|---|---|
-| [v5.5](s5.5) | Gui System | [v0.17.35](f0.17.35) |
+| [v5.6](s5.6) | Information Guis | [v0.17.44](f0.17.44) |
+| [v5.5](s5.5) | Gui System | [v0.17.43](f0.17.43) |
 | [v5.4](s5.4) | Admin Controls | [v0.17.32](f0.17.32) |
 | [v5.3](s5.3) | Custom Roles | [v0.17.28](f0.17.28) |
 | [v5.2](s5.2) | Quality of life | [v0.17.22](f0.17.22) |
@@ -71,6 +72,7 @@ All are welcome to make pull requests and issues for this scenario, if you are i
 
 \** Factorio versions show the version they were made for, often the minimum requirement.
 
+[s5.6]: https://github.com/explosivegaming/scenario/releases/tag/5.6.0
 [s5.5]: https://github.com/explosivegaming/scenario/releases/tag/5.5.0
 [s5.4]: https://github.com/explosivegaming/scenario/releases/tag/5.4.0
 [s5.3]: https://github.com/explosivegaming/scenario/releases/tag/5.3.0
@@ -83,7 +85,7 @@ All are welcome to make pull requests and issues for this scenario, if you are i
 [s1.0]: https://github.com/explosivegaming/scenario/releases/tag/v1.0
 [s0.1]: https://github.com/explosivegaming/scenario/releases/tag/v0.1
 
-[f0.17.35]: https://wiki.factorio.com/Version_history/0.17.0#0.17.35
+[f0.17.44]: https://wiki.factorio.com/Version_history/0.17.0#0.17.44
 [f0.17.32]: https://wiki.factorio.com/Version_history/0.17.0#0.17.32
 [f0.17.28]: https://wiki.factorio.com/Version_history/0.17.0#0.17.28
 [f0.17.22]: https://wiki.factorio.com/Version_history/0.17.0#0.17.22

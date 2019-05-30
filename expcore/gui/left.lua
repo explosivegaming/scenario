@@ -66,7 +66,7 @@ setmetatable(LeftFrames._prototype, {
 })
 
 --- Gets the left frame flow for a player
--- @tparam player LuaPlayer the player to get the flow of
+-- @tparam LuaPlayer player the player to get the flow of
 -- @treturn LuaGuiElement the left frame flow for the player
 function LeftFrames.get_flow(player)
     player = Game.get_player_from_any(player)
@@ -74,8 +74,8 @@ function LeftFrames.get_flow(player)
 end
 
 --- Gets one frame from the left flow by its name
--- @tparam name string the name of the gui frame to get
--- @tparam player LuaPlayer the player to get the frame of
+-- @tparam string name the name of the gui frame to get
+-- @tparam LuaPlayer player the player to get the frame of
 -- @treturn LuaGuiElement the frame in the left frame flow with that name
 function LeftFrames.get_frame(name,player)
     local define = LeftFrames.frames[name]
@@ -86,7 +86,7 @@ function LeftFrames.get_frame(name,player)
 end
 
 --- Gets all open frames for a player, if non are open it will remove the close all button
--- @tparam player LuaPlayer the player to get the flow of
+-- @tparam LuaPlayer player the player to get the flow of
 -- @treturn table contains all the open (and registered) frames for the player
 function LeftFrames.get_open(player)
     local open = {}
@@ -104,9 +104,9 @@ function LeftFrames.get_open(player)
 end
 
 --- Toggles the visiblty of a left frame, or sets its visiblty state
--- @tparam name string the name of the gui frame to toggle
--- @tparam player LuaPlayer the player to get the frame of
--- @tparam[opt] state boolean when given will be the state that the visiblty is set to
+-- @tparam string name the name of the gui frame to toggle
+-- @tparam LuaPlayer player the player to get the frame of
+-- @tparam[opt] boolean state when given will be the state that the visiblty is set to
 -- @treturn boolean the new state of the visiblity
 function LeftFrames.toggle_frame(name,player,state)
     local define = LeftFrames.frames[name]
@@ -127,7 +127,7 @@ function LeftFrames.toggle_frame(name,player,state)
 end
 
 --- Creates a new left frame define
--- @tparam permision_name string the name that can be used with the permision system
+-- @tparam string permision_name the name that can be used with the permision system
 -- @treturn table the new left frame define
 function LeftFrames.new_frame(permision_name)
 
@@ -147,7 +147,7 @@ function LeftFrames.new_frame(permision_name)
 end
 
 --- Sets if the frame is visible when a player joins, can also be a function to return a boolean
--- @tparam[opt=true] state ?boolean|function the default state of the visiblty, can be a function
+-- @tparam[opt=true] ?boolean|function state the default state of the visiblty, can be a function
 -- state param - player LuaPlayer - the player that has joined the game
 -- state param - define_name string - the define name for the frame
 -- state return - boolean - false will hide the frame
@@ -163,24 +163,24 @@ function LeftFrames._prototype:set_open_by_default(state)
 end
 
 --- Sets the direction of the frame, either vertical or horizontal
--- @tparam direction string the direction to have the elements be added to thef frame
+-- @tparam string direction the direction to have the elements be added to thef frame
 function LeftFrames._prototype:set_direction(direction)
     self.direction = direction
     return self
 end
 
 --- Gets the frame for this define from the left frame flow
--- @tparam player LuaPlayer the player to get the frame of
+-- @tparam LuaPlayer player the player to get the frame of
 -- @treturn LuaGuiElement the frame in the left frame flow for this define
 function LeftFrames._prototype:get_frame(player)
     local flow = LeftFrames.get_flow(player)
-    if flow[self.name] and flow[self.name].valid then
-        return flow[self.name]
+    if flow[self.name..'-frame'] and flow[self.name..'-frame'].valid then
+        return flow[self.name..'-frame']
     end
 end
 
 --- Returns if the player currently has this define visible
--- @tparam player LuaPlayer the player to get the frame of
+-- @tparam LuaPlayer player the player to get the frame of
 -- @treturn boolean true if it is open/visible
 function LeftFrames._prototype:is_open(player)
     local frame = self:get_frame(player)
@@ -188,7 +188,7 @@ function LeftFrames._prototype:is_open(player)
 end
 
 --- Toggles the visiblty of the left frame
--- @tparam player LuaPlayer the player to toggle the frame of
+-- @tparam LuaPlayer player the player to toggle the frame of
 -- @treturn boolean the new state of the visiblity
 function LeftFrames._prototype:toggle(player)
     local frame = self:get_frame(player)
@@ -198,7 +198,7 @@ function LeftFrames._prototype:toggle(player)
 end
 
 --- Updates the contents of the left frame, first tries update callback, oter wise will clear and redraw
--- @tparam player LuaPlayer the player to update the frame of
+-- @tparam LuaPlayer player the player to update the frame of
 function LeftFrames._prototype:update(player)
     local frame = self:get_frame(player)
     if self.events.on_update then
@@ -210,7 +210,7 @@ function LeftFrames._prototype:update(player)
 end
 
 --- Updates the frame for all players, see update
--- @tparam[opt=false] update_offline boolean when true will update the frame for offline players
+-- @tparam[opt=false] boolean update_offline when true will update the frame for offline players
 function LeftFrames._prototype:update_all(update_offline)
     local players = update_offline == true and game.players or game.connected_players
     for _,player in pairs(players) do
@@ -219,7 +219,7 @@ function LeftFrames._prototype:update_all(update_offline)
 end
 
 --- Redraws the frame by calling on_draw, will always clear the frame
--- @tparam player LuaPlayer the player to update the frame of
+-- @tparam LuaPlayer player the player to update the frame of
 function LeftFrames._prototype:redraw(player)
     local frame = self:get_frame(player)
     frame.clear()
@@ -229,7 +229,7 @@ function LeftFrames._prototype:redraw(player)
 end
 
 --- Redraws the frame for all players, see redraw
--- @tparam[opt=false] update_offline boolean when true will update the frame for offline players
+-- @tparam[opt=false] boolean update_offline when true will update the frame for offline players
 function LeftFrames._prototype:redraw_all(update_offline)
     local players = update_offline == true and game.players or game.connected_players
     for _,player in pairs(players) do
@@ -238,7 +238,7 @@ function LeftFrames._prototype:redraw_all(update_offline)
 end
 
 --- Creates an event handler that will trigger one of its functions, use with Event.add
--- @tparam[opt=update] action string the action to take on this event
+-- @tparam[opt=update] string action the action to take on this event
 function LeftFrames._prototype:event_handler(action)
     action = action or 'update'
     return function(event)
@@ -276,7 +276,7 @@ Event.add(defines.events.on_player_created,function(event)
     for _,define in pairs(LeftFrames.frames) do
         local frame = flow.add{
             type='frame',
-            name=define.name,
+            name=define.name..'-frame',
             direction=define.direction
         }
 

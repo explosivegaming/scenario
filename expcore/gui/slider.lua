@@ -18,9 +18,9 @@ local Instances = require 'expcore.gui.instances'
 local Game = require 'utils.game'
 
 --- Event call for on_value_changed and store update
--- @tparam define table the define that this is acting on
--- @tparam element LuaGuiElement the element that triggered the event
--- @tparam value number the new value for the slider
+-- @tparam table define the define that this is acting on
+-- @tparam LuaGuiElement element the element that triggered the event
+-- @tparam number value the new value for the slider
 local function event_call(define,element,value)
     local player = Game.get_player_by_index(element.player_index)
 
@@ -43,9 +43,9 @@ local function event_call(define,element,value)
 end
 
 --- Store call for store update
--- @tparam define table the define that this is acting on
--- @tparam element LuaGuiElement the element that triggered the event
--- @tparam value number the new value for the slider
+-- @tparam table define the define that this is acting on
+-- @tparam LuaGuiElement element the element that triggered the event
+-- @tparam number value the new value for the slider
 local function store_call(define,element,value)
     element.slider_value = value
     event_call(define,element,value)
@@ -61,7 +61,7 @@ local Slider = {
 }
 
 --- Creates a new slider element define
--- @tparam[opt] name string the optional debug name that can be added
+-- @tparam[opt] string name the optional debug name that can be added
 -- @treturn table the new slider element define
 function Slider.new_slider(name)
 
@@ -116,7 +116,7 @@ function Slider.new_slider(name)
 end
 
 --- Adds notches to the slider
--- @tparam[opt] state boolean when true will draw notches onto the slider
+-- @tparam[opt] boolean state when true will draw notches onto the slider
 function Slider._prototype:use_notches(state)
     if state == false then
         self.draw_data.style = nil
@@ -127,8 +127,8 @@ function Slider._prototype:use_notches(state)
 end
 
 --- Sets the range of a slider, if not used will use default values for a slider
--- @tparam[opt] min number the minimum value that the slider can take
--- @tparam[opt] max number the maximum value that the slider can take
+-- @tparam[opt] number min the minimum value that the slider can take
+-- @tparam[opt] number max the maximum value that the slider can take
 -- @treturn self the define to allow chaining
 function Slider._prototype:set_range(min,max)
     self.min = min
@@ -146,7 +146,7 @@ function Slider._prototype:set_range(min,max)
 end
 
 --- Draws a new label and links its value to the value of this slider, if no store then it will only show one value per player
--- @tparam element LuaGuiElement the parent element that the lable will be drawn to
+-- @tparam LuaGuiElement element the parent element that the lable will be drawn to
 -- @treturn LuaGuiElement the new label element so that styles can be applied
 function Slider._prototype:draw_label(element)
     local name = self.name..'-label'
@@ -173,7 +173,7 @@ function Slider._prototype:draw_label(element)
 end
 
 --- Enables auto draw of the label, the label will share the same parent element as the slider
--- @tparam[opt=true] state boolean when false will disable the auto draw of the label
+-- @tparam[opt=true] boolean state when false will disable the auto draw of the label
 -- @treturn self the define to allow chaining
 function Slider._prototype:enable_auto_draw_label(state)
     if state == false then

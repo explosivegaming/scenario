@@ -1,6 +1,8 @@
+--- Adds a task list to the game which players can add remove and edit items on
 local Gui = require 'expcore.gui'
 local Store = require 'expcore.store'
 local Global = require 'utils.global'
+local Event = require 'utils.event'
 local Roles = require 'expcore.roles'
 local Token = require 'utils.token'
 local config = require 'config.tasks'
@@ -181,14 +183,8 @@ function generate_task(player,element,task_id)
         local task_area = element[task_id]
         if not task_area then
             -- label to show the task number
-            local top_align = element.add{
+            element.add{
                 name='count-'..task_id,
-                type='flow'
-            }
-            top_align.style.vertical_align = 'top'
-            top_align.style.vertically_stretchable = true
-            top_align.add{
-                name='label',
                 type='label',
                 caption=task_number..')'
             }
@@ -200,14 +196,11 @@ function generate_task(player,element,task_id)
                 type='flow',
             }
             Gui.set_padding(task_area)
-            task_area.style.vertical_align = 'top'
 
             -- if the player can edit then it adds the edit and delete button
             if player_allowed_edit(player) then
                 local flow = Gui.create_right_align(element,'edit-'..task_id)
                 flow.caption = task_id
-                flow.style.vertical_align = 'top'
-                flow.style.vertically_stretchable = true
 
                 edit_task(flow)
                 discard_task(flow)
@@ -216,7 +209,7 @@ function generate_task(player,element,task_id)
         end
 
         -- update the number indexes and the current editing players
-        element['count-'..task_id].label.caption = task_number..')'
+        element['count-'..task_id].caption = task_number..')'
         if element['edit-'..task_id] then
             local players = table_keys(details.editing)
             if #players > 0 then
@@ -355,7 +348,8 @@ local function generate_container(player,element)
         name='table',
         type='table',
         column_count=col_count,
-        draw_horizontal_lines=true
+        draw_horizontal_lines=true,
+        vertical_centering=false
     }
     Gui.set_padding(flow_table)
     flow_table.style.horizontally_stretchable = true
@@ -365,6 +359,7 @@ local function generate_container(player,element)
     return flow_table
 end
 
+--- Registeres the task list
 local task_list =
 Gui.new_left_frame('gui/task-list')
 :set_sprites('utility/not_enough_repair_packs_icon')
@@ -392,6 +387,7 @@ end)
 
 update_all = task_list 'update_all'
 
+--- When a new task is added it will udpate the task list for everyone on that force
 Store.register(task_store,function(value,task_id)
     local details = task_details[task_id]
     local force = game.forces[details.force]
@@ -402,5 +398,9 @@ Store.register(task_store,function(value,task_id)
         generate_task(player,element,task_id)
     end
 end)
+
+--- Makess sure the right buttons are present when roles change
+Event.add(Roles.player_role_assigned,task_list 'redraw')
+Event.add(Roles.player_role_unassigned,task_list 'redraw')
 
 return task_list

@@ -40,7 +40,7 @@ _GroupSelfRef=Group
 --- Defines a new instance of a group
 -- @usage Group.define{name='foo',disallow={'edit_permission_group','delete_permission_group','add_permission_group'}} -- returns new group
 -- @usage Group{name='foo',disallow={'edit_permission_group','delete_permission_group','add_permission_group'}} -- returns new group
--- @tparam table obj contains string name and table disallow of defines.input_action
+-- @tparam string table table obj contains name and disallow of defines.input_action
 -- @treturn Group the group which has been made
 function Group.define(obj)
     if not type_error(game,nil,'Cant define Group during runtime.') then return end

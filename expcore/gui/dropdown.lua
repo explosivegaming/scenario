@@ -20,9 +20,9 @@ local Gui = require 'expcore.gui.core'
 local Game = require 'utils.game'
 
 --- Event call for on_selection_state_changed and store update
--- @tparam define table the define that this is acting on
--- @tparam element LuaGuiElement the element that triggered the event
--- @tparam value string the new option for the dropdown
+-- @tparam table define the define that this is acting on
+-- @tparam LuaGuiElement element the element that triggered the event
+-- @tparam string value the new option for the dropdown
 local function event_call(define,element,value)
     local player = Game.get_player_by_index(element.player_index)
 
@@ -35,11 +35,11 @@ local function event_call(define,element,value)
     end
 end
 
---- Store call for store update
--- @tparam define table the define that this is acting on
--- @tparam element LuaGuiElement the element that triggered the event
--- @tparam value string the new option for the dropdown
 local _select_value
+--- Store call for store update
+-- @tparam table define the define that this is acting on
+-- @tparam LuaGuiElement element the element that triggered the event
+-- @tparam string value the new option for the dropdown
 local function store_call(define,element,value)
     _select_value(element,value)
     event_call(define,element,value)
@@ -55,7 +55,7 @@ local Dropdown = {
 }
 
 --- Creates a new dropdown element define
--- @tparam[opt] name string the optional debug name that can be added
+-- @tparam[opt] string name the optional debug name that can be added
 -- @treturn table the new dropdown element define
 function Dropdown.new_dropdown(name)
 
@@ -103,7 +103,7 @@ function Dropdown.new_dropdown(name)
 end
 
 --- Creates a new list box element define
--- @tparam[opt] name string the optional debug name that can be added
+-- @tparam[opt] string name the optional debug name that can be added
 -- @treturn table the new list box element define
 function Dropdown.new_list_box(name)
     local self = Dropdown.new_dropdown(name)
@@ -113,8 +113,8 @@ function Dropdown.new_list_box(name)
 end
 
 --- Adds new static options to the dropdown which will trigger the general callback
--- @tparam options ?string|table either a table of option strings or the first option string, with a table values are the options
--- @tparam[opt] ... when options is not a table you can add the options one after each other
+-- @tparam table options ?string|table either a of option strings or the first option string, with a table values are the options
+-- @tparam[opt] table ... when options is not a you can add the options one after each other
 -- @tparam self the define to allow chaining
 function Dropdown._prototype:new_static_options(options,...)
     if type(options) == 'string' then
@@ -131,11 +131,11 @@ end
 Dropdown._prototype.add_options = Dropdown._prototype.new_static_options
 
 --- Adds a callback which should return a table of values to be added as options for the dropdown (appended after static options)
--- @tparam callback function the function that will run to get the options for the dropdown
+-- @tparam function callback the function that will run to get the options for the dropdown
 -- callback param - player LuaPlayer - the player that the element is being drawn to
 -- callback param - element LuaGuiElement - the element that is being drawn
 -- callback return - table - the values of this table will be appended to the static options of the dropdown
--- @tparam self the define to allow chaining
+-- @treturn self the define to allow chaining
 function Dropdown._prototype:new_dynamic_options(callback)
     if type(callback) ~= 'function' then
         return error('Dynamic options callback must be a function',2)
@@ -146,12 +146,12 @@ end
 Dropdown._prototype.add_dynamic = Dropdown._prototype.new_dynamic_options
 
 --- Adds a case specific callback which will only run when that option is selected (general case still triggered)
--- @tparam option string the name of the option to trigger the callback on; if not already added then will be added as an option
--- @tparam callback function the function that will be called when that option is selected
+-- @tparam string option the name of the option to trigger the callback on; if not already added then will be added as an option
+-- @tparam function callback the function that will be called when that option is selected
 -- callback param - player LuaPlayer - the player who owns the gui element
 -- callback param - element LuaGuiElement - the element which is being effected
 -- callback param - value string - the new option that has been selected
--- @tparam self the define to allow chaining
+-- @treturn self the define to allow chaining
 function Dropdown._prototype:add_option_callback(option,callback)
     if not self.option_callbacks then self.option_callbacks = {} end
     if not self.options then self.options = {} end
@@ -165,8 +165,8 @@ function Dropdown._prototype:add_option_callback(option,callback)
 end
 
 --- Selects the option from a dropdown or list box given the value rather than key
--- @tparam element LuaGuiElement the element that contains the option
--- @tparam value string the option to select from the dropdown
+-- @tparam LuaGuiElement element the element that contains the option
+-- @tparam string value the option to select from the dropdown
 -- @treturn number the key where the value was
 function Dropdown.select_value(element,value)
     for k,item in pairs(element.items) do
@@ -179,7 +179,7 @@ end
 _select_value = Dropdown.select_value
 
 --- Returns the currently selected value rather than index
--- @tparam element LuaGuiElement the gui element that you want to get the value of
+-- @tparam LuaGuiElement element the gui element that you want to get the value of
 -- @treturn string the value that is currently selected
 function Dropdown.get_selected_value(element)
     local index = element.selected_index

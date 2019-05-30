@@ -86,22 +86,22 @@ Global.register(Instances.data,function(tbl)
 end)
 
 --- Returns if a instnace group has a categorise function; must be registerd
--- @tparam name string the name of the instance group
+-- @tparam string name the name of the instance group
 -- @treturn boolean true if there is a categorise function
 function Instances.has_categories(name)
     return type(Instances.categorise[name]) == 'function'
 end
 
 --- Returns if the given name is a registered instance group
--- @tparam name string the name of the instance group you are testing
+-- @tparam string name the name of the instance group you are testing
 -- @treturn boolean true if the name is registered
 function Instances.is_registered(name)
     return Instances.categorise[name] ~= nil
 end
 
 --- Registers the name of an instance group to allow for storing element instances
--- @tparam name string the name of the instance group; must to unique
--- @tparam[opt] categorise function function used to turn the element into a string
+-- @tparam string name the name of the instance group; must to unique
+-- @tparam[opt] function categorise function used to turn the element into a string
 -- categorise param - element LuaGuiElement - the gui element to be turned into a string
 -- categorise return - string - the category that the element will be added to like the player's name or force's name
 -- @treturn string the name that was added so it can be used as a varible
@@ -123,8 +123,8 @@ function Instances.register(name,categorise)
 end
 
 --- Adds an element to the instance group under the correct category; must be registered
--- @tparam name string the name of the instance group to add the element to
--- @tparam element LuaGuiElement the element to add the the instance group
+-- @tparam string name the name of the instance group to add the element to
+-- @tparam LuaGuiElement element the element to add the the instance group
 function Instances.add_element(name,element)
     if not Instances.categorise[name] then
         return error('Inavlid name for instance group: '..name,2)
@@ -140,8 +140,8 @@ function Instances.add_element(name,element)
 end
 
 --- Gets all element instances without first removing any invalid ones; used internally and must be registered
--- @tparam name string the name of the instance group to get the instances of
--- @tparam[opt] category string the category to get the instance from, not needed when no categorise function
+-- @tparam string name the name of the instance group to get the instances of
+-- @tparam[opt] string category the category to get the instance from, not needed when no categorise function
 -- @treturn table the table of element instances of which some may be invalid
 function Instances.get_elements_raw(name,category)
     if not Instances.categorise[name] then
@@ -156,8 +156,8 @@ function Instances.get_elements_raw(name,category)
 end
 
 --- Gets all valid element instances and has the option of running a callback on those that are valid
--- @tparam name string the name of the instance group to get the instances of
--- @tparam[opt] category string the category to get the instances of, not needed when no categorise function
+-- @tparam string name the name of the instance group to get the instances of
+-- @tparam[opt] string category the category to get the instances of, not needed when no categorise function
 -- @tparan[opt] callback function when given the callback will be ran on all valid elements
 -- callback param - element LuaGuiElement - the current valid element
 -- @treturn table the table of element instances with all invalid ones removed
@@ -185,9 +185,9 @@ Instances.get_elements = Instances.get_valid_elements
 Instances.apply_to_elements = Instances.get_valid_elements
 
 --- A version of add_element that does not require the group to be registered
--- @tparam name string the name of the instance group to add the element to
+-- @tparam string name the name of the instance group to add the element to
 -- @tparam category ?string|nil the category to add the element to, can be nil but must still be given
--- @tparam element LuaGuiElement the element to add to the instance group
+-- @tparam LuaGuiElement element the element to add to the instance group
 function Instances.unregistered_add_element(name,category,element)
     if not Instances.data[name] then Instances.data[name] = {} end
     if category then
@@ -199,9 +199,9 @@ function Instances.unregistered_add_element(name,category,element)
 end
 
 --- A version of get_elements that does not require the group to be registered
--- @tparam name string the name of the instance group to get the instances of
+-- @tparam string name the name of the instance group to get the instances of
 -- @tparam category ?string|nil the category to get the instances of, can be nil but must still be given
--- @tparam[opt] callback function when given will be called on all valid instances
+-- @tparam[opt] function callback when given will be called on all valid instances
 -- callback param - element LuaGuiElement - the current valid element
 -- @treturn table the table of element instances with all invalid ones removed
 function Instances.unregistered_get_elements(name,category,callback)

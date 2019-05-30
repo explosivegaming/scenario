@@ -1,3 +1,4 @@
+--non-luadoc=true
 local Gui = require 'utils.gui'
 local Model = require 'modules.gui.debug.model'
 local Color = require 'resources.color_presets'

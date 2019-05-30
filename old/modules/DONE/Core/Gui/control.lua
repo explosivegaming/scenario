@@ -48,7 +48,7 @@ end
 --- Adds a label that is centered
 -- @usage Gui.centered_label(frame, 'Hello, world!')
 -- @tparam LuaGuiElement frame the parent frame to add the label to
--- @tparam string string the string that the label will have
+-- @tparam string string string the that the label will have
 function Gui.centered_label(frame, string)
     local flow = frame.add {frame = 'flow'}
     local flow_style = flow.style

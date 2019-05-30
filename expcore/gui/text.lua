@@ -18,9 +18,9 @@ local Gui = require 'expcore.gui.core'
 local Game = require 'utils.game'
 
 --- Event call for on_text_changed and store update
--- @tparam define table the define that this is acting on
--- @tparam element LuaGuiElement the element that triggered the event
--- @tparam value string the new text for the text field
+-- @tparam table define the define that this is acting on
+-- @tparam LuaGuiElement element the element that triggered the event
+-- @tparam string value the new text for the text field
 local function event_call(define,element,value)
     local player = Game.get_player_by_index(element.player_index)
 
@@ -31,12 +31,12 @@ local function event_call(define,element,value)
 end
 
 --- Store call for store update
--- @tparam define table the define that this is acting on
--- @tparam element LuaGuiElement the element that triggered the event
--- @tparam value string the new text for the text field
-local function store_call(self,element,value)
+-- @tparam table define the define that this is acting on
+-- @tparam LuaGuiElement element the element that triggered the event
+-- @tparam string value the new text for the text field
+local function store_call(define,element,value)
     element.text = value
-    event_call(self,element,value)
+    event_call(define,element,value)
 end
 
 local Text = {
@@ -55,7 +55,7 @@ local Text = {
 }
 
 --- Creates a new text field element define
--- @tparam[opt] name string the optional debug name that can be added
+-- @tparam[opt] string name the optional debug name that can be added
 -- @treturn table the new text field element define
 function Text.new_text_field(name)
 
@@ -105,7 +105,7 @@ function Text.new_text_field(name)
 end
 
 --- Creates a new text box element define
--- @tparam[opt] name string the optional debug name that can be added
+-- @tparam[opt] string name the optional debug name that can be added
 -- @treturn table the new text box element define
 function Text.new_text_box(name)
     local self = Text.new_text_field(name)
@@ -118,7 +118,7 @@ function Text.new_text_box(name)
 end
 
 --- Sets the text box to be selectable
--- @tparam[opt=true] state boolean when false will set the state to false
+-- @tparam[opt=true] boolean state when false will set the state to false
 -- @treturn self table the define to allow for chaining
 function Text._prototype_box:set_selectable(state)
     if state == false then
@@ -130,7 +130,7 @@ function Text._prototype_box:set_selectable(state)
 end
 
 --- Sets the text box to have word wrap
--- @tparam[opt=true] state boolean when false will set the state to false
+-- @tparam[opt=true] boolean state when false will set the state to false
 -- @treturn self table the define to allow for chaining
 function Text._prototype_box:set_word_wrap(state)
     if state == false then
@@ -142,7 +142,7 @@ function Text._prototype_box:set_word_wrap(state)
 end
 
 --- Sets the text box to be read only
--- @tparam[opt=true] state boolean when false will set the state to false
+-- @tparam[opt=true] boolean state when false will set the state to false
 -- @treturn self table the define to allow for chaining
 function Text._prototype_box:set_read_only(state)
     if state == false then

@@ -25,7 +25,7 @@ local Button = {
 }
 
 --- Creates a new button element define
--- @tparam[opt] name string the optional debug name that can be added
+-- @tparam[opt] string name the optional debug name that can be added
 -- @treturn table the new button element define
 function Button.new_button(name)
 
@@ -68,9 +68,9 @@ function Button.new_button(name)
 end
 
 --- Adds sprites to a button making it a spirte button
--- @tparam sprite SpritePath the sprite path for the default sprite for the button
--- @tparam[opt] hovered_sprite SpritePath the sprite path for the sprite when the player hovers over the button
--- @tparam[opt] clicked_sprite SpritePath the sprite path for the sprite when the player clicks the button
+-- @tparam SpritePath sprite the sprite path for the default sprite for the button
+-- @tparam[opt] SpritePath hovered_sprite the sprite path for the sprite when the player hovers over the button
+-- @tparam[opt] SpritePath clicked_sprite the sprite path for the sprite when the player clicks the button
 -- @treturn self returns the button define to allow chaining
 function Button._prototype:set_sprites(sprite,hovered_sprite,clicked_sprite)
     self.draw_data.type = 'sprite-button'
@@ -81,8 +81,8 @@ function Button._prototype:set_sprites(sprite,hovered_sprite,clicked_sprite)
 end
 
 --- Adds a click / mouse button filter to the button
--- @tparam filter ?string|table either a table of mouse buttons or the first mouse button to filter, with a table true means allowed
--- @tparam[opt] ... when filter is not a table you can add the mouse buttons one after each other
+-- @tparam table filter ?string|table either a of mouse buttons or the first mouse button to filter, with a table true means allowed
+-- @tparam[opt] table ... when filter is not a you can add the mouse buttons one after each other
 -- @treturn self returns the button define to allow chaining
 function Button._prototype:set_click_filter(filter,...)
     if type(filter) == 'string' then
@@ -103,8 +103,8 @@ function Button._prototype:set_click_filter(filter,...)
 end
 
 --- Adds a control key filter to the button
--- @tparam filter ?string|table either a table of control keys or the first control keys to filter, with a table true means allowed
--- @tparam[opt] ... when filter is not a table you can add the control keyss one after each other
+-- @tparam table filter ?string|table either a of control keys or the first control keys to filter, with a table true means allowed
+-- @tparam[opt] table ... when filter is not a you can add the control keyss one after each other
 -- @treturn self returns the button define to allow chaining
 function Button._prototype:set_key_filter(filter,...)
     if type(filter) == 'string' then
