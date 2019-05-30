@@ -238,7 +238,7 @@ function Common.format_time(ticks,options)
             rtn = rtn and {div,rtn,value} or value
         end
     end
-    append(options.day,rtn_days)
+    append(options.days,rtn_days)
     append(options.hours,rtn_hours)
     append(options.minutes,rtn_minutes)
     append(options.seconds,rtn_seconds)
