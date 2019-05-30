@@ -2,6 +2,7 @@
 local Gui = require 'expcore.gui'
 local Store = require 'expcore.store'
 local Global = require 'utils.global'
+local Event = require 'utils.event'
 local Roles = require 'expcore.roles'
 local Token = require 'utils.token'
 local config = require 'config.tasks'
