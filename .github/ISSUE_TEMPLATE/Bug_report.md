@@ -1,28 +1,30 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Report a bug which does not crash the game, any bug from the latest major scenario version
 
 ---
 
-**Describe the bug**
+**Factorio version**
+Version number: X.Y.Z
+
+**Scenario version**
+Version number: X.Y.Z
+
+**Bug description**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+**Reproduction method**
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
-4. See error
+4. See error in log
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
-
-**Other information (please complete the following information):**
- - OS: [e.g. iOS, Windows, Linux]
- - Factorio Version: [e.g. 0.16.30]
 
 **Additional context**
 Add any other context about the problem here.

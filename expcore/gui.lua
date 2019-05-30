@@ -13,6 +13,8 @@ local Gui = require 'expcore.gui.core'
     Gui._prototype:debug_name(name) --- Sets a debug alias for the define
     Gui._prototype:set_caption(caption) --- Sets the caption for the element define
     Gui._prototype:set_tooltip(tooltip) --- Sets the tooltip for the element define
+    Gui._prototype:set_style(style,callback) --- Sets the style for the element define
+    Gui._prototype:set_embeded_flow(state) ---  Sets the element to be drawn inside a nameless flow, can be given a name using a function
     Gui._prototype:on_element_update(callback) --- Add a hander to run on the general value update event, different classes will handle this event differently
 
     Gui._prototype:set_pre_authenticator(callback) --- Sets an authenticator that blocks the draw function if check fails
@@ -34,6 +36,10 @@ local Gui = require 'expcore.gui.core'
 
     Gui.toggle_enable(element) --- Will toggle the enabled state of an element
     Gui.toggle_visible(element) --- Will toggle the visiblity of an element
+    Gui.set_padding(element,up,down,left,right) --- Sets the padding for a gui element
+    Gui.set_padding_style(style,up,down,left,right) --- Sets the padding for a gui style
+    Gui.create_right_align(element,flow_name) --- Allows the creation of a right align flow to place elements into
+    Gui.destory_if_valid(element) --- Destroies an element but tests for it being present and valid first
 ]]
 
 local Instances = require 'expcore.gui.instances'
@@ -195,6 +201,7 @@ Gui.classes.left_frames = LeftFrames
 
     LeftFrames.new_frame(permision_name) --- Creates a new left frame define
     LeftFrames._prototype:set_open_by_default(state) --- Sets if the frame is visible when a player joins, can also be a function to return a boolean
+    LeftFrames._prototype:set_direction(direction) --- Sets the direction of the frame, either vertical or horizontal
     LeftFrames._prototype:get_frame(player) --- Gets the frame for this define from the left frame flow
     LeftFrames._prototype:is_open(player) --- Returns if the player currently has this define visible
     LeftFrames._prototype:toggle(player) --- Toggles the visiblty of the left frame

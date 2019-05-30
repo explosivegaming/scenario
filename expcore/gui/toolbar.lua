@@ -19,6 +19,7 @@ local Gui = require 'expcore.gui.core'
 local Roles = require 'expcore.roles'
 local Event = require 'utils.event'
 local Game = require 'utils.game'
+local mod_gui = require 'mod-gui'
 
 local Toolbar = {
     permisison_names = {},
@@ -35,18 +36,22 @@ function Toolbar.permission_alias(define_name,permisison_name)
 end
 
 --- Adds a new button to the toolbar
--- @tparam[opt] name string when given allows an alias to the button for the permission system
+-- @tparam[opt] string name when given allows an alias to the button for the permission system
 -- @treturn table the button define
 function Toolbar.new_button(name)
-    local button = Buttons.new_button()
-    button:set_post_authenticator(Toolbar.allowed)
+    local button =
+    Buttons.new_button()
+    :set_post_authenticator(Toolbar.allowed)
+    :set_style(mod_gui.button_style,function(style)
+        Gui.set_padding_style(style,-2,-2,-2,-2)
+    end)
     Toolbar.add_button(button)
     Toolbar.permission_alias(button.name,name)
     return button
 end
 
 --- Adds an existing buttton to the toolbar
--- @tparam button table the button define for the button to be added
+-- @tparam table button the button define for the button to be added
 function Toolbar.add_button(button)
     table.insert(Toolbar.buttons,button)
     Gui.allow_player_to_toggle_top_element_visibility(button.name)
@@ -61,7 +66,7 @@ function Toolbar.add_button(button)
 end
 
 --- Updates the player's toolbar with an new buttons or expected change in auth return
--- @tparam player LuaPlayer the player to update the toolbar for
+-- @tparam LuaPlayer player the player to update the toolbar for
 function Toolbar.update(player)
     local top = Gui.get_top_element_flow(player)
     if not top then return end

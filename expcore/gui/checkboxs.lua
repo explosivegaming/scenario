@@ -50,9 +50,9 @@ local Store = require 'expcore.store'
 local Game = require 'utils.game'
 
 --- Event call for on_checked_state_changed and store update
--- @tparam define table the define that this is acting on
--- @tparam element LuaGuiElement the element that triggered the event
--- @tparam value boolean the new state of the checkbox
+-- @tparam table define the define that this is acting on
+-- @tparam LuaGuiElement element the element that triggered the event
+-- @tparam boolean value the new state of the checkbox
 local function event_call(define,element,value)
     if define.events.on_element_update then
         local player = Game.get_player_by_index(element.player_index)
@@ -61,9 +61,9 @@ local function event_call(define,element,value)
 end
 
 --- Store call for store update
--- @tparam define table the define that this is acting on
--- @tparam element LuaGuiElement the element that triggered the event
--- @tparam value boolean the new state of the checkbox
+-- @tparam table define the define that this is acting on
+-- @tparam LuaGuiElement element the element that triggered the event
+-- @tparam boolean value the new state of the checkbox
 local function store_call(define,element,value)
     element.state = value
     event_call(define,element,value)
@@ -87,7 +87,7 @@ local Checkbox = {
 }
 
 --- Creates a new checkbox element define
--- @tparam[opt] name string the optional debug name that can be added
+-- @tparam[opt] string name the optional debug name that can be added
 -- @treturn table the new checkbox element define
 function Checkbox.new_checkbox(name)
 
@@ -131,7 +131,7 @@ function Checkbox.new_checkbox(name)
 end
 
 --- Creates a new radiobutton element define, has all functions checkbox has
--- @tparam[opt] name string the optional debug name that can be added
+-- @tparam[opt] string name the optional debug name that can be added
 -- @treturn table the new button element define
 function Checkbox.new_radiobutton(name)
     local self = Checkbox.new_checkbox(name)
@@ -144,9 +144,9 @@ function Checkbox.new_radiobutton(name)
 end
 
 --- Adds this radiobutton to be an option in the given option set (only one can be true at a time)
--- @tparam option_set string the name of the option set to add this element to
--- @tparam option_name string the name of this option that will be used to idenitife it
--- @tparam self the define to allow chaining
+-- @tparam string option_set the name of the option set to add this element to
+-- @tparam string option_name the name of this option that will be used to idenitife it
+-- @treturn self the define to allow chaining
 function Checkbox._prototype_radiobutton:add_as_option(option_set,option_name)
     self.option_set = option_set
     self.option_name = option_name or self.name
@@ -160,7 +160,8 @@ function Checkbox._prototype_radiobutton:add_as_option(option_set,option_name)
 end
 
 --- Gets the stored value of the radiobutton or the option set if present
--- @tparam category[opt] string the category to get such as player name or force name
+-- @tparam string category[opt] the category to get such as player name or force name
+-- @tparam boolean internal used to prevent stackover flow
 -- @treturn any the value that is stored for this define
 function Checkbox._prototype_radiobutton:get_store(category,internal)
     if not self.store then return end
@@ -174,8 +175,9 @@ function Checkbox._prototype_radiobutton:get_store(category,internal)
 end
 
 --- Sets the stored value of the radiobutton or the option set if present
--- @tparam category[opt] string the category to get such as player name or force name
--- @tparam value any the value to set for this define, must be valid for its type ie boolean for checkbox etc
+-- @tparam string category[opt] the category to get such as player name or force name
+-- @tparam boolean value the value to set for this define, must be valid for its type ie for checkbox etc
+-- @tparam boolean internal used to prevent stackover flow
 -- @treturn boolean true if the value was set
 function Checkbox._prototype_radiobutton:set_store(category,value,internal)
     if not self.store then return end
@@ -189,11 +191,11 @@ function Checkbox._prototype_radiobutton:set_store(category,value,internal)
 end
 
 --- Registers a new option set that can be linked to radiobutotns (only one can be true at a time)
--- @tparam name string the name of the option set, must be unique
--- @tparam callback function the update callback when the value of the option set chagnes
+-- @tparam string name the name of the option set, must be unique
+-- @tparam function callback the update callback when the value of the option set chagnes
 -- callback param - value string - the new selected option for this option set
 -- callback param - category string - the category that updated if categorize was used
--- @tpram categorize function the function used to convert an element into a string
+-- @tparam function categorize the function used to convert an element into a string
 -- @treturn string the name of this option set to be passed to add_as_option
 function Checkbox.new_option_set(name,callback,categorize)
 
@@ -216,8 +218,8 @@ function Checkbox.new_option_set(name,callback,categorize)
 end
 
 --- Draws all radiobuttons that are part of an option set at once (Gui.draw will not work)
--- @tparam name string the name of the option set to draw the radiobuttons of
--- @tparam element LuaGuiElement the parent element that the radiobuttons will be drawn to
+-- @tparam string name the name of the option set to draw the radiobuttons of
+-- @tparam LuaGuiElement element the parent element that the radiobuttons will be drawn to
 function Checkbox.draw_option_set(name,element)
     if not Checkbox.option_sets[name] then return end
     local options = Checkbox.option_sets[name]
@@ -231,9 +233,9 @@ function Checkbox.draw_option_set(name,element)
 end
 
 --- Sets all radiobutotn in a element to false (unless excluded) and can act recursivly
--- @tparam element LuaGuiElement the root gui element to start setting radio buttons from
--- @tparam[opt] exclude ?string|table the name of the radiobutton to exclude or a table of radiobuttons where true will set the state true
--- @tparam[opt=false] recursive boolean if true will recur as much as possible, if a number will recur that number of times
+-- @tparam LuaGuiElement element the root gui element to start setting radio buttons from
+-- @tparam[opt] table exclude ?string|table the name of the radiobutton to exclude or a of radiobuttons where true will set the state true
+-- @tparam[opt=false] ?number|boolean recursive if true will recur as much as possible, if a will recur that number of times
 -- @treturn boolean true if successful
 function Checkbox.reset_radiobuttons(element,exclude,recursive)
     if not element or not element.valid then return end

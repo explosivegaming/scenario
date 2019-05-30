@@ -76,6 +76,8 @@ Roles.new_role('Moderator','Mod')
     'command/clear-warnings',
     'command/clear-temp-ban',
     'command/clear-inventory',
+    'gui/rocket-info/toggle-active',
+    'gui/rocket-info/remote_launch',
 }
 
 Roles.new_role('Trainee','TrMod')
@@ -94,6 +96,8 @@ Roles.new_role('Trainee','TrMod')
     'command/give-warning',
     'command/get-warnings',
     'command/get-reports',
+    'command/kick',
+    'command/ban',
 }
 
 --- Trusted Roles
@@ -113,6 +117,8 @@ Roles.new_role('Pay to Win','P2W')
 :set_flag('report-immune')
 :set_parent('Donator')
 :allow{
+    'gui/rocket-info/toggle-active',
+    'gui/rocket-info/remote_launch',
 }
 
 Roles.new_role('Donator','Don')
@@ -153,6 +159,7 @@ Roles.new_role('Member','Mem')
 :set_custom_color{r=24,g=172,b=188}
 :set_parent('Regular')
 :allow{
+    'gui/task-list/edit'
 }
 
 Roles.new_role('Regular','Reg')
@@ -180,7 +187,12 @@ local default = Roles.new_role('Guest','')
     'command/tag-clear',
     'command/chelp',
     'command/list-roles',
+    'command/find-on-map',
     'command/report',
+    'gui/player-list',
+    'gui/rocket-info',
+    'gui/science-info',
+    'gui/task-list',
 }
 
 --- Jail role

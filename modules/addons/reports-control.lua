@@ -24,9 +24,9 @@ local function event_emit(event,player,by_player_name)
 end
 
 --- Adds a report to a player, reports are stored in global table and can be accessed later
--- @tparam player LuaPlayer the player that will be reported
--- @tparam[opt='Non Given.'] reason string the reason that the player is being reported
--- @tparam[opt='<server>'] by_player_name string the name of the player doing the action
+-- @tparam LuaPlayer player the player that will be reported
+-- @tparam[opt='Non string Given.'] reason the reason that the player is being reported
+-- @tparam[opt='<server>'] string by_player_name the name of the player doing the action
 -- @treturn boolean true if the report was added, nil if there is an error
 function Public.report_player(player,reason,by_player_name)
     player = Game.get_player_from_any(player)
@@ -46,8 +46,8 @@ function Public.report_player(player,reason,by_player_name)
 end
 
 --- Removes a report from a player by the given player, see clear_player_reports to remove all
--- @tparam player LuaPlayer the player that will have the report removed
--- @tparam[opt='<server>'] by_player_name string the name of the player doing the action
+-- @tparam LuaPlayer player the player that will have the report removed
+-- @tparam[opt='<server>'] string by_player_name the name of the player doing the action
 -- @treturn boolean true if the report was removed, nil if there was an error
 function Public.remove_player_report(player,by_player_name)
     player = Game.get_player_from_any(player)
@@ -66,7 +66,7 @@ function Public.remove_player_report(player,by_player_name)
 end
 
 --- Clears all reports from a player, will emit an event for each individual report as if remove_player_report was used
--- @tparam player LuaPlayer the player to clear the reports of
+-- @tparam LuaPlayer player the player to clear the reports of
 -- @treturn boolean true if the reports were cleared, nil if error
 function Public.clear_player_reports(player)
     player = Game.get_player_from_any(player)
@@ -83,9 +83,9 @@ function Public.clear_player_reports(player)
 end
 
 --- Test for if a player has been reported by another player, can also return the reason from that player
--- @tparam player LuaPlayer the player to check the reports of
--- @tparam by_player_name string the player that made if the report if present (note server is not default here)
--- @tparam[opt=false] rtn_reason boolean true will return the reason for the report rather than a boolean
+-- @tparam LuaPlayer player the player to check the reports of
+-- @tparam string by_player_name the player that made if the report if present (note server is not default here)
+-- @tparam[opt=false] boolean rtn_reason true will return the reason for the report rather than a boolean
 -- @treturn boolean true if a report from the player is present unless rtn_reason is true when a string is returned (or false)
 function Public.player_is_reported_by(player,by_player_name,rtn_reason)
     player = Game.get_player_from_any(player)
@@ -98,7 +98,7 @@ function Public.player_is_reported_by(player,by_player_name,rtn_reason)
 end
 
 --- Gets all the reports that are on a player
--- @tparam player LuaPlayer the player to get the reports of
+-- @tparam LuaPlayer player the player to get the reports of
 -- @treturn table a table of all the reports for this player, empty table if no reports
 function Public.get_player_reports(player)
     player = Game.get_player_from_any(player)
@@ -107,8 +107,8 @@ function Public.get_player_reports(player)
 end
 
 --- Counts all reports on a player returning a number, a custom count function can be given which should return a number
--- @tparam player LuaPlayer the player to count the reports of
--- @tparam[opt] count_callback function should return a number or true (for 1) this will be passed every report on the player
+-- @tparam LuaPlayer player the player to count the reports of
+-- @tparam[opt] number function count_callback should return a or true (for 1) this will be passed every report on the player
 -- count_callback param - player_name string - the name of the player who made the report
 -- count_callback param - reason string - the reason the reason was made
 -- count_callback return - number or boolean - if number then this will be added to the count, if boolean then false = 0 and true = 1

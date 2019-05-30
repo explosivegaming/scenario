@@ -28,7 +28,7 @@ inputs.events = {
 --- Sets the input to trigger on an certain event
 -- @usage button:on_event(defines.events.on_gui_click,player_return)
 -- @param event the event to raise callback on | can be number of the event | can be a key of inputs.events
--- @tparam function callback the function you want to run on the event
+-- @tparam function function callback the you want to run on the event
 -- @treturn table returns self so you can chain together
 function inputs._prototype:on_event(event,callback)
     if not is_type(callback,'function') then return self end
@@ -311,8 +311,8 @@ end
 -- @tparam string orientation direction of the slider
 -- @tparam number min the lowest number
 -- @tparam number max the highest number
--- @tparam function start_callback either a number or a function to return a number
--- @tparam function callback the function to be called on value_changed function(player,value,percent,element)
+-- @tparam number function function start_callback either a or a to return a number
+-- @tparam function function callback the to be called on value_changed function(player,value,percent,element)
 -- @treturn table the slider object that was made, to allow a custom error event if wanted
 function inputs.add_slider(name,orientation,min,max,start_callback,callback)
     local slider = inputs.add{

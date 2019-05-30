@@ -206,7 +206,7 @@ end
 --- Acts as a bypass for running functions, can accept a string
 -- @usage Server.interface('local x = 1+1 print(x) return x') -- return 2
 -- @usage Server.interface('local x = 1+1 print(x)',true) -- will create a thread to run as root (this is the bypass)
--- @tparam ?string|function callback function to be ran
+-- @tparam function ?string|function callback to be ran
 -- @tparam[opt] ?Server._thread|true use_thread run the command on a pre-made thread or let it make its own
 -- @tparam[opt] table env run the env to run the command in must have _env key as true to be
 -- @param[opt] ... any args you want to pass to the function
@@ -467,8 +467,8 @@ end
 --- Set function to run then an event is triggered, none of them are 'needed' but you are advised to have at least one
 -- @usage thread:on_event('close',function) -- if event is not one below then a game event is used
 -- @usage thread_only_events = ['close','timeout','tick','resolve','success','error']
--- @tparam ?string|index event the name of the event that the function should be called on
--- @tparam function callback the function which is called by the event trigger
+-- @tparam function ?string|index event the name of the event that the should be called on
+-- @tparam function function callback the which is called by the event trigger
 -- @treturn table returns self so that they can be chained together
 function Server._thread:on_event(event,callback)
     local events = {'close','timeout','tick','resolve','success','error'}

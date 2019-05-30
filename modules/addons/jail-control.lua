@@ -31,8 +31,8 @@ local function event_emit(event,player,by_player_name,reason)
 end
 
 --- Jails a player, this is only the logic there is no output to players
--- @tparam player LuaPlayer the player that will be jailed, must not be in jail
--- @tparam[opt='<server>'] by_player_name string the name of the player doing the action used in logs
+-- @tparam LuaPlayer player the player that will be jailed, must not be in jail
+-- @tparam[opt='<server>'] string by_player_name the name of the player doing the action used in logs
 -- @treturn the number of roles that were removed, nil if there was an error
 function Public.jail_player(player,by_player_name)
     player = Game.get_player_from_any(player)
@@ -47,8 +47,8 @@ function Public.jail_player(player,by_player_name)
 end
 
 --- Unjails a player, this is only the logic there is no output to players
--- @tparam player LuaPlayer the player that will be unjailed, must be in jail
--- @tparam[opt='<server>'] by_player_name string string the name of the player who is doing the action
+-- @tparam LuaPlayer player the player that will be unjailed, must be in jail
+-- @tparam[opt='<server>'] string string by_player_name the name of the player who is doing the action
 -- @treturn the number of roles that were added, nil if there was an error
 function Public.unjail_player(player,by_player_name)
     player = Game.get_player_from_any(player)
@@ -62,9 +62,9 @@ function Public.unjail_player(player,by_player_name)
 end
 
 --- Temp bans a player which is similar to jail but will store the reason for the action and clears items
--- @tparam player LuaPlayer the player that will be temp baned, must not be temp banned
--- @tparam[opt='<server>'] by_player_name string the name of the player that is doing the action
--- @tparam[opt='None Given.'] reason string the reason that will be stored for this temp ban
+-- @tparam LuaPlayer player the player that will be temp baned, must not be temp banned
+-- @tparam[opt='<server>'] string by_player_name the name of the player that is doing the action
+-- @tparam[opt='None string Given.'] reason the reason that will be stored for this temp ban
 -- @treturn boolean true if successful else will return nil
 function Public.temp_ban_player(player,by_player_name,reason)
     player = Game.get_player_from_any(player)
@@ -81,8 +81,8 @@ function Public.temp_ban_player(player,by_player_name,reason)
 end
 
 --- Removes temp ban from a player, note this does not restore the items
--- @tparam player LuaPlayer the player that will be cleared from temp baned, must be temp banned
--- @tparam[opt='<server>'] by_player_name string the name of the player that is doing the action
+-- @tparam LuaPlayer player the player that will be cleared from temp baned, must be temp banned
+-- @tparam[opt='<server>'] string by_player_name the name of the player that is doing the action
 -- @treturn boolean true if successful else will return nil
 function Public.clear_temp_ban_player(player,by_player_name)
     player = Game.get_player_from_any(player)

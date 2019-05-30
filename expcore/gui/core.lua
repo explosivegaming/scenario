@@ -128,6 +128,8 @@
     Gui._prototype:debug_name(name) --- Sets a debug alias for the define
     Gui._prototype:set_caption(caption) --- Sets the caption for the element define
     Gui._prototype:set_tooltip(tooltip) --- Sets the tooltip for the element define
+    Gui._prototype:set_style(style,callback) --- Sets the style for the element define
+    Gui._prototype:set_embeded_flow(state) ---  Sets the element to be drawn inside a nameless flow, can be given a name using a function
     Gui._prototype:on_element_update(callback) --- Add a hander to run on the general value update event, different classes will handle this event differently
 
     Gui._prototype:set_pre_authenticator(callback) --- Sets an authenticator that blocks the draw function if check fails
@@ -149,6 +151,10 @@
 
     Gui.toggle_enable(element) --- Will toggle the enabled state of an element
     Gui.toggle_visible(element) --- Will toggle the visiblity of an element
+    Gui.set_padding(element,up,down,left,right) --- Sets the padding for a gui element
+    Gui.set_padding_style(style,up,down,left,right) --- Sets the padding for a gui style
+    Gui.create_right_align(element,flow_name) --- Allows the creation of a right align flow to place elements into
+    Gui.destory_if_valid(element) --- Destroies an element but tests for it being present and valid first
 ]]
 local Gui = require 'utils.gui'
 local Game = require 'utils.game'
@@ -161,7 +167,7 @@ Gui.defines = {} -- Stores the indivdual element definations
 Gui.names = {} -- Stores debug names to link to gui uids
 
 --- Used internally to create new prototypes for element defines
--- @tparam tbl table a table that will have functions added to it
+-- @tparam table tbl table a that will have functions added to it
 -- @treturn table the new table with the keys added to it
 function Gui._prototype_factory(tbl)
     for k,v in pairs(Gui._prototype) do
@@ -171,12 +177,12 @@ function Gui._prototype_factory(tbl)
 end
 
 --- Used internally to create event handler adders for element defines
--- @tparam name string the key that the event will be stored under, should be the same as the event name
+-- @tparam string name the key that the event will be stored under, should be the same as the event name
 -- @treturn function the function that can be used to add an event handler
 function Gui._event_factory(name)
     --- Gui._prototype:on_event(callback)
     --- Add a hander to run on this event, replace event with the event, different classes have different events
-    -- @tparam callback function the function that will be called on the event
+    -- @tparam function callback the function that will be called on the event
     -- callback param - player LuaPlayer - the player who owns the gui element
     -- callback param - element LuaGuiElement - the element that caused the event
     -- callback param - value any - (not always present) the updated value for the element
@@ -198,7 +204,7 @@ end
 function Gui._store_factory(callback)
     --- Gui._prototype:add_store(categorize)
     --- Adds a store location for the define that will save the state of the element, categorize is a function that returns a string
-    -- @tparam[opt] categorize function if present will be called to convert an element into a category string
+    -- @tparam[opt] function categorize if present will be called to convert an element into a category string
     -- categorize param - element LuaGuiElement - the element that needs to be converted
     -- categorize return - string - a determistic string that referses to a category such as player name or force name
     -- @treturn self the element define to allow chaining
@@ -232,8 +238,8 @@ end
 function Gui._sync_store_factory(callback)
     --- Gui._prototype:add_sync_store(location,categorize)
     --- Adds a store location for the define that will sync between games, categorize is a function that returns a string
-    -- @tparam location string a unique string location, unlike add_store a uid location should not be used to avoid migration problems
-    -- @tparam[opt] categorize function if present will be called to convert an element into a category string
+    -- @tparam string location string a unique location, unlike add_store a uid location should not be used to avoid migration problems
+    -- @tparam[opt] function categorize if present will be called to convert an element into a category string
     -- categorize param - element LuaGuiElement - the element that needs to be converted
     -- categorize return - string - a determistic string that referses to a category such as player name or force name
     -- @treturn self the element define to allow chaining
@@ -266,7 +272,7 @@ function Gui._sync_store_factory(callback)
 end
 
 --- Used internally to create new element defines from a class prototype
--- @tparam prototype table the class prototype that will be used for the element define
+-- @tparam table prototype the class prototype that will be used for the element define
 -- @treturn table the new element define with all functions accessed via __index metamethod
 function Gui._define_factory(prototype)
     local uid = Gui.uid_name()
@@ -293,7 +299,7 @@ function Gui._prototype:uid()
 end
 
 --- Sets a debug alias for the define
--- @tparam name string the debug name for the element define that can be used to get this element define
+-- @tparam string name the debug name for the element define that can be used to get this element define
 -- @treturn self the element define to allow chaining
 function Gui._prototype:debug_name(name)
     self.debug_name = name
@@ -301,7 +307,7 @@ function Gui._prototype:debug_name(name)
 end
 
 --- Sets the caption for the element define
--- @tparam caption string the caption that will be drawn with the element
+-- @tparam string caption the caption that will be drawn with the element
 -- @treturn self the element define to allow chaining
 function Gui._prototype:set_caption(caption)
     self.draw_data.caption = caption
@@ -309,15 +315,37 @@ function Gui._prototype:set_caption(caption)
 end
 
 --- Sets the tooltip for the element define
--- @tparam tooltip string the tooltip that will be displayed for this element when drawn
+-- @tparam string tooltip the tooltip that will be displayed for this element when drawn
 -- @treturn self the element define to allow chaining
 function Gui._prototype:set_tooltip(tooltip)
     self.draw_data.tooltip = tooltip
     return self
 end
 
+--- Sets the style for the element define
+-- @tparam string style the style that will be used for this element when drawn
+-- @tparam[opt] callback function function is called when element is drawn to alter its style
+-- @treturn self the element define to allow chaining
+function Gui._prototype:set_style(style,callback)
+    self.draw_data.style = style
+    self.events.on_style = callback
+    return self
+end
+
+--- Sets the element to be drawn inside a nameless flow, can be given a name using a function
+-- @tparam state ?boolean|function when true a padless flow is created to contain the element
+-- @treturn self the element define to allow chaining
+function Gui._prototype:set_embeded_flow(state)
+    if state == false or type(state) == 'function' then
+        self.embeded_flow = state
+    else
+        self.embeded_flow = true
+    end
+    return self
+end
+
 --- Sets an authenticator that blocks the draw function if check fails
--- @tparam callback function the function that will be ran to test if the element should be drawn or not
+-- @tparam function callback the function that will be ran to test if the element should be drawn or not
 -- callback param - player LuaPlayer - the player that the element is being drawn to
 -- callback param - define_name string - the name of the define that is being drawn
 -- callback return - boolean - false will stop the element from being drawn
@@ -332,7 +360,7 @@ function Gui._prototype:set_pre_authenticator(callback)
 end
 
 --- Sets an authenticator that disables the element if check fails
--- @tparam callback function the function that will be ran to test if the element should be enabled or not
+-- @tparam function callback the function that will be ran to test if the element should be enabled or not
 -- callback param - player LuaPlayer - the player that the element is being drawn to
 -- callback param - define_name string - the name of the define that is being drawn
 -- callback return - boolean - false will disable the element
@@ -348,7 +376,7 @@ end
 
 --- Draws the element using what is in the draw_data table, allows use of authenticator if present, registers new instances if store present
 -- the data with in the draw_data is set up through the use of all the other functions
--- @tparam element LuaGuiElement the element that the define will draw a copy of its self onto
+-- @tparam LuaGuiElement element the element that the define will draw a copy of its self onto
 -- @treturn LuaGuiElement the new element that was drawn so styles can be applied
 function Gui._prototype:draw_to(element,...)
     if element[self.name] then return end
@@ -358,7 +386,20 @@ function Gui._prototype:draw_to(element,...)
         if not self.pre_authenticator(player,self.name) then return end
     end
 
+    if self.embeded_flow then
+        local embeded_name
+        if type(self.embeded_flow) == 'function' then
+            embeded_name = self.embeded_flow(element,...)
+        end
+        element = element.add{type='flow',name=embeded_name}
+        Gui.set_padding(element)
+    end
+
     local new_element = element.add(self.draw_data)
+
+    if self.events.on_style then
+        self.events.on_style(new_element.style)
+    end
 
     if self.post_authenticator then
         new_element.enabled = self.post_authenticator(player,self.name)
@@ -374,7 +415,7 @@ function Gui._prototype:draw_to(element,...)
 end
 
 --- Gets the value in this elements store, category needed if categorize function used
--- @tparam category[opt] string the category to get such as player name or force name
+-- @tparam string category[opt] the category to get such as player name or force name
 -- @treturn any the value that is stored for this define
 function Gui._prototype:get_store(category)
     if not self.store then return end
@@ -386,8 +427,8 @@ function Gui._prototype:get_store(category)
 end
 
 --- Sets the value in this elements store, category needed if categorize function used
--- @tparam category[opt] string the category to get such as player name or force name
--- @tparam value any the value to set for this define, must be valid for its type ie boolean for checkbox etc
+-- @tparam string category[opt] the category to get such as player name or force name
+-- @tparam boolean any value the value to set for this define, must be valid for its type ie for checkbox etc
 -- @treturn boolean true if the value was set
 function Gui._prototype:set_store(category,value)
     if not self.store then return end
@@ -400,7 +441,7 @@ end
 
 --- Gets an element define give the uid, debug name or a copy of the element define
 -- @tparam name ?string|table the uid, debug name or define for the element define to get
--- @tparam[opt] internal boolean when true the error trace is one level higher (used internally)
+-- @tparam[opt] boolean internal when true the error trace is one level higher (used internally)
 -- @treturn table the element define that was found or an error
 function Gui.get_define(name,internal)
     if type(name) == 'table' then
@@ -424,7 +465,7 @@ end
 
 --- Gets the value that is stored for a given element define, category needed if categorize function used
 -- @tparam name ?string|table the uid, debug name or define for the element define to get
--- @tparam[opt] category string the category to get the value for
+-- @tparam[opt] string category the category to get the value for
 -- @treturn any the value that is stored for this define
 function Gui.get_store(name,category)
     local define = Gui.get_define(name,true)
@@ -433,8 +474,8 @@ end
 
 --- Sets the value stored for a given element define, category needed if categorize function used
 -- @tparam name ?string|table the uid, debug name or define for the element define to set
--- @tparam[opt] category string the category to set the value for
--- @tparam value any the value to set for the define, must be valid for its type ie boolean for a checkbox
+-- @tparam[opt] string category the category to set the value for
+-- @tparam boolean any value the value to set for the define, must be valid for its type ie for a checkbox
 -- @treturn boolean true if the value was set
 function Gui.set_store(name,category,value)
     local define = Gui.get_define(name,true)
@@ -442,7 +483,7 @@ function Gui.set_store(name,category,value)
 end
 
 --- A categorize function to be used with add_store, each player has their own value
--- @tparam element LuaGuiElement the element that will be converted to a string
+-- @tparam LuaGuiElement element the element that will be converted to a string
 -- @treturn string the player's name who owns this element
 function Gui.player_store(element)
     local player = Game.get_player_by_index(element.player_index)
@@ -450,7 +491,7 @@ function Gui.player_store(element)
 end
 
 --- A categorize function to be used with add_store, each force has its own value
--- @tparam element LuaGuiElement the element that will be converted to a string
+-- @tparam LuaGuiElement element the element that will be converted to a string
 -- @treturn string the player's force name who owns this element
 function Gui.force_store(element)
     local player = Game.get_player_by_index(element.player_index)
@@ -458,7 +499,7 @@ function Gui.force_store(element)
 end
 
 --- A categorize function to be used with add_store, each surface has its own value
--- @tparam element LuaGuiElement the element that will be converted to a string
+-- @tparam LuaGuiElement element the element that will be converted to a string
 -- @treturn string the player's surface name who owns this element
 function Gui.surface_store(element)
     local player = Game.get_player_by_index(element.player_index)
@@ -475,7 +516,8 @@ function Gui.draw(name,element,...)
 end
 
 --- Will toggle the enabled state of an element
--- @tparam element LuaGuiElement the gui element to toggle
+-- @tparam LuaGuiElement element the gui element to toggle
+-- @treturn boolean the new state that the element has
 function Gui.toggle_enable(element)
     if not element or not element.valid then return end
     if not element.enabled then
@@ -483,10 +525,12 @@ function Gui.toggle_enable(element)
     else
         element.enabled = false
     end
+    return element.enabled
 end
 
 --- Will toggle the visiblity of an element
--- @tparam element LuaGuiElement the gui element to toggle
+-- @tparam LuaGuiElement element the gui element to toggle
+-- @treturn boolean the new state that the element has
 function Gui.toggle_visible(element)
     if not element or not element.valid then return end
     if not element.visible then
@@ -494,20 +538,60 @@ function Gui.toggle_visible(element)
     else
         element.visible = false
     end
+    return element.visible
 end
 
 --- Sets the padding for a gui element
--- @tparam element LuaGuiElement the element to set the padding for
--- @tparam[opt=0] up number the amount of padding on the top
--- @tparam[opt=0] down number the amount of padding on the bottom
--- @tparam[opt=0] left number the amount of padding on the left
--- @tparam[opt=0] right number the amount of padding on the right
+-- @tparam LuaGuiElement element the element to set the padding for
+-- @tparam[opt=0] number up the amount of padding on the top
+-- @tparam[opt=0] number down the amount of padding on the bottom
+-- @tparam[opt=0] number left the amount of padding on the left
+-- @tparam[opt=0] number right the amount of padding on the right
 function Gui.set_padding(element,up,down,left,right)
     local style = element.style
     style.top_padding = up or 0
     style.bottom_padding = down or 0
     style.left_padding = left or 0
     style.right_padding = right or 0
+end
+
+--- Sets the padding for a gui style
+-- @tparam element LuaStyle the element to set the padding for
+-- @tparam[opt=0] number up the amount of padding on the top
+-- @tparam[opt=0] number down the amount of padding on the bottom
+-- @tparam[opt=0] number left the amount of padding on the left
+-- @tparam[opt=0] number right the amount of padding on the right
+function Gui.set_padding_style(style,up,down,left,right)
+    style.top_padding = up or 0
+    style.bottom_padding = down or 0
+    style.left_padding = left or 0
+    style.right_padding = right or 0
+end
+
+--- Allows the creation of a right align flow to place elements into
+-- @tparam LuaGuiElement element the element to add this flow to,
+-- @tparam[opt] string flow_name the name of the flow can be nil
+-- @treturn LuaGuiElement the flow that was created
+function Gui.create_right_align(element,flow_name)
+    local right_flow =
+    element.add{
+        name=flow_name,
+        type='flow'
+    }
+    Gui.set_padding(right_flow,1,1,2,2)
+    right_flow.style.horizontal_align = 'right'
+    right_flow.style.horizontally_stretchable = true
+    return right_flow
+end
+
+--- Destroies an element but tests for it being present and valid first
+-- @tparam LuaGuiElement element the element to be destroied
+-- @treturn boolean true if it was destoried
+function Gui.destory_if_valid(element)
+    if element and element.valid then
+        element.destroy()
+        return true
+    end
 end
 
 return Gui

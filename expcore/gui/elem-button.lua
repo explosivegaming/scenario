@@ -15,9 +15,9 @@ local Gui = require 'expcore.gui.core'
 local Game = require 'utils.game'
 
 --- Event call for on_elem_changed and store update
--- @tparam define table the define that this is acting on
--- @tparam element LuaGuiElement the element that triggered the event
--- @tparam value string the new value for the elem button
+-- @tparam table define the define that this is acting on
+-- @tparam LuaGuiElement element the element that triggered the event
+-- @tparam string value the new value for the elem button
 local function event_call(define,element,value)
     local player = Game.get_player_by_index(element.player_index)
 
@@ -28,12 +28,12 @@ local function event_call(define,element,value)
 end
 
 --- Store call for store update
--- @tparam define table the define that this is acting on
--- @tparam element LuaGuiElement the element that triggered the event
--- @tparam value string the new value for the elem button
-local function store_call(self,element,value)
+-- @tparam table define the define that this is acting on
+-- @tparam LuaGuiElement element the element that triggered the event
+-- @tparam string value the new value for the elem button
+local function store_call(define,element,value)
     element.elem_value = value
-    event_call(self,element,value)
+    event_call(define,element,value)
 end
 
 local ElemButton = {
@@ -46,7 +46,7 @@ local ElemButton = {
 }
 
 --- Creates a new elem button element define
--- @tparam[opt] name string the optional debug name that can be added
+-- @tparam[opt] string name the optional debug name that can be added
 -- @treturn table the new elem button element define
 function ElemButton.new_elem_button(name)
 
@@ -90,7 +90,7 @@ function ElemButton.new_elem_button(name)
 end
 
 --- Sets the type of the elem button, the type is required so this must be called at least once
--- @tparam type string the type that this elem button is see factorio api
+-- @tparam string type the type that this elem button is see factorio api
 -- @treturn the element define to allow for chaining
 function ElemButton._prototype:set_type(type)
     self.draw_data.elem_type = type
@@ -98,7 +98,7 @@ function ElemButton._prototype:set_type(type)
 end
 
 --- Sets the default value for the elem button, this may be a function or a string
--- @tparam value ?string|function a string will be a static default and a function will be called when drawn to get the default
+-- @tparam ?string|function value string a will be a static default and a function will be called when drawn to get the default
 -- @treturn the element define to allow for chaining
 function ElemButton._prototype:set_default(value)
     self.default = value

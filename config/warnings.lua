@@ -2,8 +2,8 @@
 return {
     actions = { -- what actions are taking at number of warnings
         -- if a localized string is used then __1__ will by_player_name and __2__ will be the current warning count (auto inserted)
-        {'warnings.received'},
-        {'warnings.received'},
+        {'warnings.received',''},
+        {'warnings.received',''},
         {'warnings.received',{'warnings.pre-kick'}},
         function(player,by_player_name,number_of_warnings)
             game.kick_player(player,{'warnings.received',by_player_name,number_of_warnings,{'warnings.kick'}})
