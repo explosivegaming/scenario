@@ -104,18 +104,17 @@ end)
 end)
 :on_click(function(player,element)
     local force = player.force
-    local rocket_silo_name = element.parent.name:sub(7)
-    local rocket_silo = rocket_silos[force.name][rocket_silo_name]
-    local active = true -- need to test for auto launch
+    local rocket_silo_name = element.parent.name:sub(8)
+    local rocket_silo_data = rocket_silos[force.name][rocket_silo_name]
+    local active = rocket_silo_data.entity.auto_launch -- need to test for auto launch
     if active then
-        player.print('WIP; We currently have no way to test or set the auto launch of a rocket so this button does not work!')
         element.sprite = 'utility/play'
         element.tooltip = {'rocket-info.toggle-rocket-tooltip'}
-        -- insert function to disable auto launch
+        rocket_silo_data.entity.auto_launch = false
     else
         element.sprite = 'utility/stop'
         element.tooltip = {'rocket-info.toggle-rocket-tooltip-disabled'}
-        -- insert function to enable auto launch
+        rocket_silo_data.entity.auto_launch = true
     end
 end)
 
@@ -359,8 +358,8 @@ end
 --- Creats the different buttons used with the rocket silos
 local function generate_progress_buttons(player,element,rocket_silo_data)
     local silo_name = rocket_silo_data.name
-    local status = rocket_silo_data.entity.status == 21
-    local active = false -- need way to check this
+    local status = rocket_silo_data.entity.status == defines.entity_status.waiting_to_launch_rocket
+    local active = rocket_silo_data.entity.auto_launch
 
     if player_allowed(player,'toggle_active') then
         local button_element = element['toggle-'..silo_name]
@@ -371,10 +370,11 @@ local function generate_progress_buttons(player,element,rocket_silo_data)
             button_element = toggle_rocket(element,silo_name)
         end
 
-        button_element.enabled = false -- remove once check is added
         if active then
+            button_element.tooltip = {'rocket-info.toggle-rocket-tooltip'}
             button_element.sprite = 'utility/stop'
         else
+            button_element.tooltip = {'rocket-info.toggle-rocket-tooltip-disabled'}
             button_element.sprite = 'utility/play'
         end
     end
