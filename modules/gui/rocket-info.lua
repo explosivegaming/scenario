@@ -628,4 +628,8 @@ Event.on_nth_tick(150,function()
     end
 end)
 
+--- Makes sure the right buttons are present when role changes
+Event.add(Roles.player_role_assigned,rocket_info 'redraw')
+Event.add(Roles.player_role_unassigned,rocket_info 'redraw')
+
 return rocket_info
