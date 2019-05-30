@@ -33,7 +33,7 @@ local function auth_lower_role(player,action_player_name)
 end
 
 -- gets the action player and a coloured name for the action to be used on
-local function get_action_player(player)
+local function get_action_player_name(player)
     local action_player_name = Store.get_child(action_player_store,player.name)
     local action_player = Game.get_player_from_any(action_player_name)
     local action_player_name_color = format_chat_player_name(action_player)
@@ -57,7 +57,7 @@ Gui.new_button()
 :set_tooltip{'player-list.goto-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    local action_player_name = get_action_player(player)
+    local action_player_name = get_action_player_name(player)
     local action_player = Game.get_player_from_any(action_player_name)
     if not player.character or not action_player.character then
         player.print({'expcore-commands.reject-player-alive'},Colors.orange_red)
@@ -73,7 +73,7 @@ Gui.new_button()
 :set_tooltip{'player-list.bring-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    local action_player_name = get_action_player(player)
+    local action_player_name = get_action_player_name(player)
     local action_player = Game.get_player_from_any(action_player_name)
     if not player.character or not action_player.character then
         player.print({'expcore-commands.reject-player-alive'},Colors.orange_red)
@@ -89,7 +89,7 @@ Gui.new_button()
 :set_tooltip{'player-list.kill-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    local action_player_name = get_action_player(player)
+    local action_player_name = get_action_player_name(player)
     local action_player = Game.get_player_from_any(action_player_name)
     if action_player.character then
         action_player.character.die()
@@ -105,8 +105,8 @@ Gui.new_button()
 :set_tooltip{'player-list.report-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    local action_player = get_action_player(player)
-    if Reports.player_is_reported_by(action_player,player.name) then
+    local action_player_name = get_action_player_name(player)
+    if Reports.player_is_reported_by(action_player_name,player.name) then
         player.print({'expcom-report.already-reported'},Colors.orange_red)
     else
         Store.set_child(action_name_store,player.name,'command/report')
@@ -114,11 +114,11 @@ Gui.new_button()
 end)
 
 local function report_player_callback(player,reason)
-    local action_player,action_player_name_color = get_action_player(player)
+    local action_player_name,action_player_name_color = get_action_player_name(player)
     local by_player_name_color = format_chat_player_name(player)
     game.print{'expcom-report.non-admin',action_player_name_color,reason}
     Roles.print_to_roles_higher('Trainee',{'expcom-report.admin',action_player_name_color,by_player_name_color,reason})
-    Reports.report_player(action_player,reason,player.name)
+    Reports.report_player(action_player_name,reason,player.name)
 end
 
 -- gives the action player a warning, requires a reason
@@ -132,10 +132,10 @@ Gui.new_button()
 end)
 
 local function warn_player_callback(player,reason)
-    local action_player,action_player_name_color = get_action_player(player)
+    local action_player_name,action_player_name_color = get_action_player_name(player)
     local by_player_name_color = format_chat_player_name(player)
     game.print{'expcom-warnings.received',action_player_name_color,by_player_name_color,reason}
-    Warnings.add_warnings(action_player,player.name)
+    Warnings.add_warnings(action_player_name,player.name)
 end
 
 -- jails the action player, requires a reason
@@ -145,8 +145,8 @@ Gui.new_button()
 :set_tooltip{'player-list.jail-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    local action_player,action_player_name_color = get_action_player(player)
-    if Roles.player_has_role(action_player,'Jail') then
+    local action_player_name,action_player_name_color = get_action_player_name(player)
+    if Roles.player_has_role(action_player_name,'Jail') then
         player.print({'expcom-jail.already-jailed',action_player_name_color},Colors.orange_red)
     else
         Store.set_child(action_name_store,player.name,'command/jail')
@@ -154,10 +154,10 @@ Gui.new_button()
 end)
 
 local function jail_player_callback(player,reason)
-    local action_player,action_player_name_color = get_action_player(player)
+    local action_player_name,action_player_name_color = get_action_player_name(player)
     local by_player_name_color = format_chat_player_name(player)
     game.print{'expcom-jail.give',action_player_name_color,by_player_name_color,reason}
-    Jail.jail_player(action_player,player.name)
+    Jail.jail_player(action_player_name,player.name)
 end
 
 -- temp bans the action player, requires a reason
@@ -167,8 +167,8 @@ Gui.new_button()
 :set_tooltip{'player-list.temp-ban-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    local action_player,action_player_name_color = get_action_player(player)
-    if Roles.player_has_role(action_player,'Jail') then
+    local action_player_name,action_player_name_color = get_action_player_name(player)
+    if Roles.player_has_role(action_player_name,'Jail') then
         player.print({'expcom-jail.already-banned',action_player_name_color},Colors.orange_red)
     else
         Store.set_child(action_name_store,player.name,'command/temp-ban')
@@ -176,7 +176,7 @@ Gui.new_button()
 end)
 
 local function temp_ban_player_callback(player,reason)
-    local action_player,action_player_name_color = get_action_player(player)
+    local action_player,action_player_name_color = get_action_player_name(player)
     local by_player_name_color = format_chat_player_name(player)
     game.print{'expcom-jail.temp-ban',action_player_name_color,by_player_name_color,reason}
     Jail.temp_ban_player(action_player,player.name,reason)
@@ -193,7 +193,7 @@ Gui.new_button()
 end)
 
 local function kick_player_callback(player,reason)
-    local action_player = get_action_player(player)
+    local action_player = get_action_player_name(player)
     game.kick_player(action_player,reason)
 end
 
@@ -208,32 +208,32 @@ Gui.new_button()
 end)
 
 local function ban_player_callback(player,reason)
-    local action_player = get_action_player(player)
+    local action_player = get_action_player_name(player)
     game.ban_player(action_player,reason)
 end
 
 return {
     ['command/teleport'] = {
-        auth=function(player,action_player_name)
-            return player.name ~= action_player_name
+        auth=function(player,action_player)
+            return player.name ~= action_player.name
         end, -- cant teleport to your self
         goto_player,
         bring_player
     },
     ['command/kill'] = {
-        auth=function(player,action_player_name)
-            if player.name == action_player_name then
+        auth=function(player,action_player)
+            if player.name == action_player.name then
                 return true
             elseif Roles.player_allowed(player,'command/kill/always') then
-                return auth_lower_role(player,action_player_name)
+                return auth_lower_role(player,action_player)
             end
         end, -- player must be lower role, or your self
         kill_player
     },
     ['command/report'] = {
-        auth=function(player,action_player_name)
+        auth=function(player,action_player)
             if not Roles.player_allowed(player,'command/give-warning') then
-                return not Roles.player_has_flag(action_player_name,'report-immune')
+                return not Roles.player_has_flag(action_player,'report-immune')
             end
         end, -- can report any player that isnt immune and you arnt able to give warnings
         reason_callback=report_player_callback,
