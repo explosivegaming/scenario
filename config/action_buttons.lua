@@ -10,6 +10,7 @@ local Game = require 'utils.game'
 local Reports = require 'modules.addons.reports-control'
 local Warnings = require 'modules.addons.warnings-control'
 local Jail = require 'modules.addons.jail-control'
+local Colors = require 'resources.color_presets'
 local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
 
 local action_player_store = 'gui.left.player-list.action-player'
@@ -56,8 +57,13 @@ Gui.new_button()
 :set_tooltip{'player-list.goto-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    local action_player = get_action_player(player)
-    teleport(player,action_player)
+    local action_player_name = get_action_player(player)
+    local action_player = Game.get_player_from_any(action_player_name)
+    if not player.character or not action_player.character then
+        player.print({'expcore-commands.reject-player-alive'},Colors.orange_red)
+    else
+        teleport(player,action_player)
+    end
 end)
 
 -- teleports the action player to the user
@@ -67,8 +73,13 @@ Gui.new_button()
 :set_tooltip{'player-list.bring-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    local action_player = get_action_player(player)
-    teleport(action_player,player)
+    local action_player_name = get_action_player(player)
+    local action_player = Game.get_player_from_any(action_player_name)
+    if not player.character or not action_player.character then
+        player.print({'expcore-commands.reject-player-alive'},Colors.orange_red)
+    else
+        teleport(action_player,player)
+    end
 end)
 
 -- kills the action player, if there are alive
@@ -78,9 +89,12 @@ Gui.new_button()
 :set_tooltip{'player-list.kill-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    local action_player = get_action_player(player)
+    local action_player_name = get_action_player(player)
+    local action_player = Game.get_player_from_any(action_player_name)
     if action_player.character then
         action_player.character.die()
+    else
+        player.print({'expcom-kill.already-dead'},Colors.orange_red)
     end
 end)
 
@@ -91,7 +105,12 @@ Gui.new_button()
 :set_tooltip{'player-list.report-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    Store.set_child(action_name_store,player.name,'command/report')
+    local action_player = get_action_player(player)
+    if Reports.player_is_reported_by(action_player,player.name) then
+        player.print({'expcom-report.already-reported'},Colors.orange_red)
+    else
+        Store.set_child(action_name_store,player.name,'command/report')
+    end
 end)
 
 local function report_player_callback(player,reason)
@@ -126,7 +145,12 @@ Gui.new_button()
 :set_tooltip{'player-list.jail-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    Store.set_child(action_name_store,player.name,'command/jail')
+    local action_player,action_player_name_color = get_action_player(player)
+    if Roles.player_has_role(action_player,'Jail') then
+        player.print({'expcom-jail.already-jailed',action_player_name_color},Colors.orange_red)
+    else
+        Store.set_child(action_name_store,player.name,'command/jail')
+    end
 end)
 
 local function jail_player_callback(player,reason)
@@ -143,11 +167,18 @@ Gui.new_button()
 :set_tooltip{'player-list.temp-ban-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    Store.set_child(action_name_store,player.name,'command/temp-ban')
+    local action_player,action_player_name_color = get_action_player(player)
+    if Roles.player_has_role(action_player,'Jail') then
+        player.print({'expcom-jail.already-banned',action_player_name_color},Colors.orange_red)
+    else
+        Store.set_child(action_name_store,player.name,'command/temp-ban')
+    end
 end)
 
 local function temp_ban_player_callback(player,reason)
-    local action_player = get_action_player(player)
+    local action_player,action_player_name_color = get_action_player(player)
+    local by_player_name_color = format_chat_player_name(player)
+    game.print{'expcom-jail.temp-ban',action_player_name_color,by_player_name_color,reason}
     Jail.temp_ban_player(action_player,player.name,reason)
 end
 

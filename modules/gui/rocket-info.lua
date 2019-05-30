@@ -84,6 +84,8 @@ end)
         local progress_label = element.parent.parent[rocket_silo_name].label
         progress_label.caption = {'rocket-info.progress-launched'}
         progress_label.style.font_color = Colors.green
+    else
+        player.print({'rocket-info.launch-failed'},Colors.orange_red)
     end
 end)
 
