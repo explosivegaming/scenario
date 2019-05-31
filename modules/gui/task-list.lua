@@ -53,7 +53,18 @@ local function remove_task(task_id)
 end
 
 --- If a player is allowed to use the edit buttons
-local function player_allowed_edit(player)
+local function player_allowed_edit(player,task_id)
+    if task_id then
+        local details = task_details[task_id]
+        if config.user_can_edit_own_tasks and details.last_edit_player == player.name then
+            return true
+        end
+    else
+        if config.any_user_can_add_new_task then
+            return true
+        end
+    end
+
     if config.only_admins_can_edit and not player.admin then
         return false
     end
@@ -200,7 +211,7 @@ function generate_task(player,element,task_id)
             Gui.set_padding(task_area)
 
             -- if the player can edit then it adds the edit and delete button
-            if player_allowed_edit(player) then
+            if player_allowed_edit(player,task_id) then
                 local flow = Gui.create_right_align(element,'edit-'..task_id)
                 flow.caption = task_id
 
@@ -316,8 +327,10 @@ local function generate_container(player,element)
     }
 
     --- Right aligned button to toggle the section
-    local right_align = Gui.create_right_align(header)
-    add_new_task(right_align)
+    if player_allowed_edit(player) then
+        local right_align = Gui.create_right_align(header)
+        add_new_task(right_align)
+    end
 
     -- main flow for the data
     local flow =
