@@ -24,7 +24,7 @@
 
 ## Explosive Gaming
 
-Explosive Gaming (often ExpGaming) is a server hosting community with a strong focus on Factorio and games that follow similar ideas. Our factorio server are known for hosting large maps with the main goal of being a "mega base" which can produce as much as possible with in our reset schedule. Although these server tend to the more experienced players our server are open to everyone. You can find us through our [website](website), [discord](discord), [wiki](wiki), or in the public games tab in factorio (ExpGaming S1).
+Explosive Gaming (often ExpGaming) is a server hosting community with a strong focus on Factorio and games that follow similar ideas. Our factorio server are known for hosting large maps with the main goal of being a "mega base" which can produce as much as possible with in our reset schedule. Although these server tend to the more experienced players our server are open to everyone. You can find us through our [website], [discord], [wiki], or in the public games tab in factorio (ExpGaming S1).
 
 ## Use and Installation
 
@@ -44,7 +44,7 @@ Explosive Gaming (often ExpGaming) is a server hosting community with a strong f
 
 ## Contributing
 
-All are welcome to make pull requests and issues for this scenario, if you are in any doubt please ask someone in our [discord](discord). If you do not know lua and don't feel like learning you can always make a [feature request](issues). Please keep in mind while making code changes:
+All are welcome to make pull requests and issues for this scenario, if you are in any doubt please ask someone in our [discord]. If you do not know lua and don't feel like learning you can always make a [feature request]. Please keep in mind while making code changes:
 
 * New features should have the branch names: `feature/feature-name`
 * New features are merged into `dev` after it has been completed.
@@ -56,21 +56,22 @@ All are welcome to make pull requests and issues for this scenario, if you are i
 
 | Scenario Version* | Version Name | Factorio Version** |
 |---|---|---|
-| [v5.6](s5.6) | Information Guis | [v0.17.44](f0.17.44) |
-| [v5.5](s5.5) | Gui System | [v0.17.43](f0.17.43) |
-| [v5.4](s5.4) | Admin Controls | [v0.17.32](f0.17.32) |
-| [v5.3](s5.3) | Custom Roles | [v0.17.28](f0.17.28) |
-| [v5.2](s5.2) | Quality of life | [v0.17.22](f0.17.22) |
-| [v5.1](s5.1) | Permission Groups | [v0.17.13](f0.17.13) |
-| [v5.0](s5.0) | 0.17 Overhaul| [v0.17](f0.17.9) |
-| [v4.0](s4.0) | Softmod Manager | [v0.16.51](f0.16.51) |
-| [v3.0](s3.0) | 0.16 Overhaul | [v0.16](f0.16) |
-| [v2.0](s2.0) | Localization and clean up | [v0.15](f0.15) |
-| [v1.0](s1.0) | Modulation | [v0.15](f0.15) |
-| [v0.1](s0.1) | First Tracked Version | [v0.14](f0.14) |
+| [v5.6][s5.6] | Information Guis | [v0.17.44][f0.17.44] |
+| [v5.5][s5.5] | Gui System | [v0.17.43][f0.17.43] |
+| [v5.4][s5.4] | Admin Controls | [v0.17.32][f0.17.32] |
+| [v5.3][s5.3] | Custom Roles | [v0.17.28][f0.17.28] |
+| [v5.2][s5.2] | Quality of life | [v0.17.22][f0.17.22] |
+| [v5.1][s5.1] | Permission Groups | [v0.17.13][f0.17.13] |
+| [v5.0][s5.0] | 0.17 Overhaul| [v0.17][f0.17.9] |
+| [v4.0][s4.0] | Softmod Manager | [v0.16.51][f0.16.51] |
+| [v3.0][s3.0] | 0.16 Overhaul | [v0.16][f0.16] |
+| [v2.0][s2.0] | Localization and clean up | [v0.15][f0.15] |
+| [v1.0][s1.0] | Modulation | [v0.15][f0.15] |
+| [v0.1][s0.1] | First Tracked Version | [v0.14][f0.14] |
+
 \* Scenario patch versions have been omitted.
 
-\** Factorio versions show the version they were made for, often the minimum requirement.
+\*\* Factorio versions show the version they were made for, often the minimum requirement.
 
 [s5.6]: https://github.com/explosivegaming/scenario/releases/tag/5.6.0
 [s5.5]: https://github.com/explosivegaming/scenario/releases/tag/5.5.0
@@ -86,6 +87,7 @@ All are welcome to make pull requests and issues for this scenario, if you are i
 [s0.1]: https://github.com/explosivegaming/scenario/releases/tag/v0.1
 
 [f0.17.44]: https://wiki.factorio.com/Version_history/0.17.0#0.17.44
+[f0.17.43]: https://wiki.factorio.com/Version_history/0.17.0#0.17.43
 [f0.17.32]: https://wiki.factorio.com/Version_history/0.17.0#0.17.32
 [f0.17.28]: https://wiki.factorio.com/Version_history/0.17.0#0.17.28
 [f0.17.22]: https://wiki.factorio.com/Version_history/0.17.0#0.17.22
@@ -98,7 +100,7 @@ All are welcome to make pull requests and issues for this scenario, if you are i
 
 ## License
 
-The Explosive Gaming codebase is licensed under the [GNU General Public License v3.0](https://github.com/explosivegaming/scenario/blob/master/LICENSE)
+The Explosive Gaming codebase is licensed under the [GNU General Public License v3.0](LICENSE)
 
 [issues]: https://github.com/explosivegaming/scenario/issues/new/choose
 [website]: https://explosivegaming.nl

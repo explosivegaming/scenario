@@ -95,6 +95,8 @@ end)
     local task = element.parent.task.text
     local details = task_details[task_id]
     details.editing[player.name] = nil
+    details.last_edit_player = player.name
+    details.last_edit_time = game.tick
     Store.set_child(task_store,task_id,task)
 end)
 
