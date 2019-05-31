@@ -16,8 +16,20 @@ local zoom_to_map_name = Gui.uid_name()
 Gui.on_click(zoom_to_map_name,function(event)
     local action_player_name = event.element.caption
     local action_player = Game.get_player_from_any(action_player_name)
-    local position = action_player.position
-    event.player.zoom_to_world(position,2)
+    if event.button == defines.mouse_button_type.left then
+        -- lmb will zoom to map
+        local position = action_player.position
+        event.player.zoom_to_world(position,2)
+    else
+        -- rmb will open settings
+        local player_name = event.player.name
+        local old_action_player_name = Store.get_child(action_player_store,player_name)
+        if action_player_name == old_action_player_name then
+            Store.set_child(action_player_store,player_name) -- will close if already open
+        else
+            Store.set_child(action_player_store,player_name,action_player_name)
+        end
+    end
 end)
 
 --- Button used to open the action bar
@@ -34,7 +46,13 @@ end)
     style.height = 14
 end)
 :on_click(function(player,element)
-    Store.set_child(action_player_store,player.name,element.parent.name)
+    local new_action_player_name = element.parent.name
+    local action_player_name = Store.get_child(action_player_store,player.name)
+    if action_player_name == new_action_player_name then
+        Store.set_child(action_player_store,player.name) -- will close if already open
+    else
+        Store.set_child(action_player_store,player.name,element.parent.name)
+    end
 end)
 
 --- Button used to close the action bar
