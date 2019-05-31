@@ -122,7 +122,7 @@ local function generate_container(player,element)
     }
     Gui.set_padding(list_scroll,1,1,2,2)
     list_scroll.style.horizontally_stretchable = true
-    list_scroll.style.maximal_height = 200
+    list_scroll.style.maximal_height = 188
 
     -- 3 wide table to contain: action button, player name, and play time
     local list_table =
@@ -279,6 +279,8 @@ local function add_fake_players(list_table,count)
     for i = 1,count do
         add_player(list_table,{
             name='Player '..i,
+            index=0-i,
+            tag='',
             online_time=math.random(0,game.tick),
             afk_time=math.random(0,game.tick),
             chat_color=table.get_random_dictionary_entry(Colors)
@@ -314,6 +316,7 @@ Gui.new_left_frame('gui/player-list')
         end
     end
 
+    --add_fake_players(list_table,6)
     --add_fake_players(list_table,20)
 end)
 :on_update(function(player,element)
