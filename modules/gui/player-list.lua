@@ -306,7 +306,7 @@ end)
         if time_element and time_element.valid then
             time_element.label.caption = format_time(next_player.online_time)
             local tick = game.tick > 0 and game.tick or 1
-            local percent = math.round(player.online_time/tick,3)*100
+            local percent = math.round(next_player.online_time/tick,3)*100
             time_element.label.tooltip = {'player-list.afk-time',percent,format_time(player.afk_time,{minutes=true,long=true})}
         end
     end
