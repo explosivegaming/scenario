@@ -47,9 +47,23 @@ end
 local uid_counter = 0
 
 function Token.uid()
+    if _LIFECYCLE == 8 then
+        return Token.runtime_uid()
+    end
+
     uid_counter = uid_counter + 1
 
     return uid_counter
+end
+
+function Token.runtime_uid()
+    if not global.uid_counter then
+        global.uid_counter = 0
+    end
+
+    global.uid_counter = global.uid_counter + 1
+
+    return global.uid_counter+uid_counter
 end
 
 return Token
