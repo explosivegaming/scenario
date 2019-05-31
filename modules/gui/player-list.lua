@@ -16,8 +16,20 @@ local zoom_to_map_name = Gui.uid_name()
 Gui.on_click(zoom_to_map_name,function(event)
     local action_player_name = event.element.caption
     local action_player = Game.get_player_from_any(action_player_name)
-    local position = action_player.position
-    event.player.zoom_to_world(position,2)
+    if event.button == defines.mouse_button_type.left then
+        -- lmb will zoom to map
+        local position = action_player.position
+        event.player.zoom_to_world(position,2)
+    else
+        -- rmb will open settings
+        local player_name = event.player.name
+        local old_action_player_name = Store.get_child(action_player_store,player_name)
+        if action_player_name == old_action_player_name then
+            Store.set_child(action_player_store,player_name) -- will close if already open
+        else
+            Store.set_child(action_player_store,player_name,action_player_name)
+        end
+    end
 end)
 
 --- Button used to open the action bar
@@ -34,7 +46,13 @@ end)
     style.height = 14
 end)
 :on_click(function(player,element)
-    Store.set_child(action_player_store,player.name,element.parent.name)
+    local new_action_player_name = element.parent.name
+    local action_player_name = Store.get_child(action_player_store,player.name)
+    if action_player_name == new_action_player_name then
+        Store.set_child(action_player_store,player.name) -- will close if already open
+    else
+        Store.set_child(action_player_store,player.name,element.parent.name)
+    end
 end)
 
 --- Button used to close the action bar
@@ -104,7 +122,7 @@ local function generate_container(player,element)
     }
     Gui.set_padding(list_scroll,1,1,2,2)
     list_scroll.style.horizontally_stretchable = true
-    list_scroll.style.maximal_height = 200
+    list_scroll.style.maximal_height = 188
 
     -- 3 wide table to contain: action button, player name, and play time
     local list_table =
@@ -203,6 +221,7 @@ local function update_action_bar(player)
         if not action_player.connected then
             element.visible = false
             Store.set(action_player_store,player.name) -- clears store if player is offline
+            Store.set_child(action_name_store,player.name)
         else
             element.visible = true
             for action_name,buttons in pairs(config) do
@@ -260,6 +279,8 @@ local function add_fake_players(list_table,count)
     for i = 1,count do
         add_player(list_table,{
             name='Player '..i,
+            index=0-i,
+            tag='',
             online_time=math.random(0,game.tick),
             afk_time=math.random(0,game.tick),
             chat_color=table.get_random_dictionary_entry(Colors)
@@ -295,6 +316,7 @@ Gui.new_left_frame('gui/player-list')
         end
     end
 
+    --add_fake_players(list_table,6)
     --add_fake_players(list_table,20)
 end)
 :on_update(function(player,element)
@@ -305,8 +327,8 @@ end)
         if time_element and time_element.valid then
             time_element.label.caption = format_time(next_player.online_time)
             local tick = game.tick > 0 and game.tick or 1
-            local percent = math.round(player.online_time/tick,3)*100
-            time_element.label.tooltip = {'player-list.afk-time',percent,format_time(player.afk_time,{minutes=true,long=true})}
+            local percent = math.round(next_player.online_time/tick,3)*100
+            time_element.label.tooltip = {'player-list.afk-time',percent,format_time(next_player.afk_time,{minutes=true,long=true})}
         end
     end
 end)
@@ -325,11 +347,13 @@ Store.register(action_name_store,function(value,category)
     local frame = Gui.classes.left_frames.get_frame(player_list_name,player)
     local element = frame.container.reason_bar
     if value then
-        local action_player = Game.get_player_from_any(value)
+        local action_player_name = Store.get_child(action_player_store,category)
+        local action_player = Game.get_player_from_any(action_player_name)
         if action_player.connected then
             element.visible = true
         else
-            Store.set_child(action_name_store,category) -- clears store if player is offline
+            Store.set_child(action_player_store,category) -- clears store if player is offline
+            Store.set_child(action_name_store,category)
         end
     else
         element.visible = false

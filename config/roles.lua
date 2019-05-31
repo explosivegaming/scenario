@@ -70,7 +70,7 @@ Roles.new_role('Moderator','Mod')
     'command/unassign-role',
     'command/repair',
     'command/kill/always',
-    'command/tag-clear/always',
+    'command/clear-tag/always',
     'command/go-to-spawn/always',
     'command/clear-reports',
     'command/clear-warnings',
