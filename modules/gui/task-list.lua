@@ -41,7 +41,7 @@ local function add_task(player,task_number)
         editing={[player.name]=true}
     }
 
-    Store.set_child(task_store,task_id,'test')
+    Store.set_child(task_store,task_id,'New task')
 end
 
 --- Removes all refrences to a task
