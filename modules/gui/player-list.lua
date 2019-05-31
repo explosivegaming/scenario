@@ -19,7 +19,7 @@ Gui.on_click(zoom_to_map_name,function(event)
     if event.button == defines.mouse_button_type.left then
         -- lmb will zoom to map
         local position = action_player.position
-        event.player.zoom_to_world(position,2)
+        event.player.zoom_to_world(position,1.75)
     else
         -- rmb will open settings
         local player_name = event.player.name
