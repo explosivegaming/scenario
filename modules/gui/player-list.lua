@@ -203,6 +203,7 @@ local function update_action_bar(player)
         if not action_player.connected then
             element.visible = false
             Store.set(action_player_store,player.name) -- clears store if player is offline
+            Store.set_child(action_name_store,player.name)
         else
             element.visible = true
             for action_name,buttons in pairs(config) do
@@ -325,11 +326,13 @@ Store.register(action_name_store,function(value,category)
     local frame = Gui.classes.left_frames.get_frame(player_list_name,player)
     local element = frame.container.reason_bar
     if value then
-        local action_player = Game.get_player_from_any(value)
+        local action_player_name = Store.get_child(action_player_store,category)
+        local action_player = Game.get_player_from_any(action_player_name)
         if action_player.connected then
             element.visible = true
         else
-            Store.set_child(action_name_store,category) -- clears store if player is offline
+            Store.set_child(action_player_store,category) -- clears store if player is offline
+            Store.set_child(action_name_store,category)
         end
     else
         element.visible = false
