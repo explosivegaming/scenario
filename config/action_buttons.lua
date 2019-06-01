@@ -1,6 +1,6 @@
 --- Config for the different action buttons that show on the player list
 -- each button has the button define(s) given along side an auth function, and optional reason callback
--- if a reason callback is used then Store.set_child(action_name_store,player.name,'BUTTON_NAME') should be called during on_click
+-- if a reason callback is used then Store.set(action_name_store,player.name,'BUTTON_NAME') should be called during on_click
 -- buttons can be removed from the gui by commenting them out of the config at the bottom of this file
 -- the key used for the name of the button is the permision name used by the role system
 local Gui = require 'expcore.gui'
@@ -34,7 +34,7 @@ end
 
 -- gets the action player and a coloured name for the action to be used on
 local function get_action_player_name(player)
-    local action_player_name = Store.get_child(action_player_store,player.name)
+    local action_player_name = Store.get(action_player_store,player.name)
     local action_player = Game.get_player_from_any(action_player_name)
     local action_player_name_color = format_chat_player_name(action_player)
     return action_player,action_player_name_color
@@ -109,7 +109,7 @@ Gui.new_button()
     if Reports.player_is_reported_by(action_player_name,player.name) then
         player.print({'expcom-report.already-reported'},Colors.orange_red)
     else
-        Store.set_child(action_name_store,player.name,'command/report')
+        Store.set(action_name_store,player.name,'command/report')
     end
 end)
 
@@ -128,7 +128,7 @@ Gui.new_button()
 :set_tooltip{'player-list.warn-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    Store.set_child(action_name_store,player.name,'command/give-warning')
+    Store.set(action_name_store,player.name,'command/give-warning')
 end)
 
 local function warn_player_callback(player,reason)
@@ -149,7 +149,7 @@ Gui.new_button()
     if Roles.player_has_role(action_player_name,'Jail') then
         player.print({'expcom-jail.already-jailed',action_player_name_color},Colors.orange_red)
     else
-        Store.set_child(action_name_store,player.name,'command/jail')
+        Store.set(action_name_store,player.name,'command/jail')
     end
 end)
 
@@ -171,7 +171,7 @@ Gui.new_button()
     if Roles.player_has_role(action_player_name,'Jail') then
         player.print({'expcom-jail.already-banned',action_player_name_color},Colors.orange_red)
     else
-        Store.set_child(action_name_store,player.name,'command/temp-ban')
+        Store.set(action_name_store,player.name,'command/temp-ban')
     end
 end)
 
@@ -189,7 +189,7 @@ Gui.new_button()
 :set_tooltip{'player-list.kick-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    Store.set_child(action_name_store,player.name,'command/kick')
+    Store.set(action_name_store,player.name,'command/kick')
 end)
 
 local function kick_player_callback(player,reason)
@@ -204,7 +204,7 @@ Gui.new_button()
 :set_tooltip{'player-list.ban-player'}
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
-    Store.set_child(action_name_store,player.name,'command/ban')
+    Store.set(action_name_store,player.name,'command/ban')
 end)
 
 local function ban_player_callback(player,reason)

@@ -285,7 +285,7 @@ local function generate_science_pack(player,element,science_pack)
 
         add_data_label(delta.table,'pos-'..science_pack,stats.minute_made,nil,{'science-info.pos-tooltip',stats.total_made})
         add_data_label(delta.table,'neg-'..science_pack,-stats.minute_used,nil,{'science-info.neg-tooltip',stats.total_used})
-        add_data_label(element,'net-'..science_pack,stats.minute_net,stats.minute_made,{'science-info.net-tooltip',stats.total_net})
+        add_data_label(element,'net-'..science_pack,stats.minute_net,stats.minute_made+stats.minute_used,{'science-info.net-tooltip',stats.total_net})
     end
 end
 
