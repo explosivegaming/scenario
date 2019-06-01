@@ -255,7 +255,7 @@ function Gui._sync_store_factory(callback)
 
         Instances.register(self.name,self.categorize)
 
-        Store.register_synced(self.store,function(value,category)
+        Store.register(self.store,true,function(value,category)
             if self.events.on_store_update then
                 self.events.on_store_update(value,category)
             end
@@ -419,24 +419,24 @@ end
 -- @treturn any the value that is stored for this define
 function Gui._prototype:get_store(category)
     if not self.store then return end
-    if self.categorize then
-        return Store.get_child(self.store,category)
-    else
-        return Store.get(self.store)
-    end
+    return Store.get(self.store,category)
 end
 
 --- Sets the value in this elements store, category needed if categorize function used
 -- @tparam string category[opt] the category to get such as player name or force name
--- @tparam boolean any value the value to set for this define, must be valid for its type ie for checkbox etc
+-- @tparam any value the value to set for this define, must be valid for its type ie for checkbox etc
 -- @treturn boolean true if the value was set
 function Gui._prototype:set_store(category,value)
     if not self.store then return end
-    if self.categorize then
-        return Store.set_child(self.store,category,value)
-    else
-        return Store.set(self.store,category)
-    end
+    return Store.set(self.store,category,value)
+end
+
+--- Sets the value in this elements store to nil, category needed if categorize function used
+-- @tparam[opt] string category the category to get such as player name or force name
+-- @treturn boolean true if the value was set
+function Gui._prototype:clear_store(category)
+    if not self.store then return end
+    return Store.clear(self.store,category)
 end
 
 --- Gets an element define give the uid, debug name or a copy of the element define

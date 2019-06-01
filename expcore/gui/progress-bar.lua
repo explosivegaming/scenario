@@ -250,8 +250,7 @@ local function change_value_prototype(self,amount,category,filter)
 
     local function reset_store()
         local value = self.count_down and 1 or 0
-        local _category = category or value
-        self:set_store(_category,value)
+        self:set_store(category,value)
     end
 
     if self.store then
@@ -261,15 +260,13 @@ local function change_value_prototype(self,amount,category,filter)
 
         if self.count_down and new_value <= 0
 		or not self.count_down and new_value >= 1 then
-            self:set_store(category)
+            self:clear_store(category)
 
             if self.events.on_store_complete then
-                category = category or reset_store
                 self.events.on_store_complete(category,reset_store)
             end
         end
 
-        category = category or new_value
         self:set_store(category,new_value)
 
         return

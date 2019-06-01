@@ -23,11 +23,11 @@ Gui.on_click(zoom_to_map_name,function(event)
     else
         -- rmb will open settings
         local player_name = event.player.name
-        local old_action_player_name = Store.get_child(action_player_store,player_name)
+        local old_action_player_name = Store.get(action_player_store,player_name)
         if action_player_name == old_action_player_name then
-            Store.set_child(action_player_store,player_name) -- will close if already open
+            Store.clear(action_player_store,player_name) -- will close if already open
         else
-            Store.set_child(action_player_store,player_name,action_player_name)
+            Store.set(action_player_store,player_name,action_player_name)
         end
     end
 end)
@@ -47,11 +47,11 @@ end)
 end)
 :on_click(function(player,element)
     local new_action_player_name = element.parent.name
-    local action_player_name = Store.get_child(action_player_store,player.name)
+    local action_player_name = Store.get(action_player_store,player.name)
     if action_player_name == new_action_player_name then
-        Store.set_child(action_player_store,player.name) -- will close if already open
+        Store.clear(action_player_store,player.name) -- will close if already open
     else
-        Store.set_child(action_player_store,player.name,element.parent.name)
+        Store.set(action_player_store,player.name,new_action_player_name)
     end
 end)
 
@@ -66,8 +66,8 @@ Gui.new_button()
     style.width = 28
 end)
 :on_click(function(player,element)
-    Store.set_child(action_player_store,player.name,nil)
-    Store.set_child(action_name_store,player.name,nil)
+    Store.clear(action_player_store,player.name)
+    Store.clear(action_name_store,player.name)
 end)
 
 --- Button used to confirm a reason
@@ -85,8 +85,8 @@ end)
     local action_name = Store.get_child(action_name_store,player.name)
     local reason_callback = config[action_name].reason_callback
     reason_callback(player,reason)
-    Store.set_child(action_player_store,player.name,nil)
-    Store.set_child(action_name_store,player.name,nil)
+    Store.clear(action_player_store,player.name)
+    Store.clear(action_name_store,player.name)
     element.parent.entry.text = ''
 end)
 
@@ -157,7 +157,7 @@ local function generate_container(player,element)
     Gui.set_padding(reason_bar,-1,-1,3,3)
     reason_bar.style.horizontally_stretchable = true
     reason_bar.style.height = 35
-    local action_name = Store.get_child(action_name_store,player.name)
+    local action_name = Store.get(action_name_store,player.name)
     reason_bar.visible = action_name ~= nil
 
     -- text entry for the reason bar
@@ -180,7 +180,7 @@ end
 --- Adds buttons and permission flows to the action bar
 local function generate_action_bar(player,element)
     close_action_bar(element)
-    local action_player = Store.get_child(action_player_store,player.name)
+    local action_player = Store.get(action_player_store,player.name)
 
     for action_name,buttons in pairs(config) do
         local permission_flow =
@@ -212,7 +212,7 @@ local player_list_name
 local function update_action_bar(player)
     local frame = Gui.classes.left_frames.get_frame(player_list_name,player)
     local element = frame.container.action_bar
-    local action_player_name = Store.get_child(action_player_store,player.name)
+    local action_player_name = Store.get(action_player_store,player.name)
 
     if not action_player_name then
         element.visible = false
@@ -220,8 +220,8 @@ local function update_action_bar(player)
         local action_player = Game.get_player_from_any(action_player_name)
         if not action_player.connected then
             element.visible = false
-            Store.set(action_player_store,player.name) -- clears store if player is offline
-            Store.set_child(action_name_store,player.name)
+            Store.clear(action_player_store,player.name) -- clears store if player is offline
+            Store.clear(action_name_store,player.name)
         else
             element.visible = true
             for action_name,buttons in pairs(config) do
@@ -347,13 +347,13 @@ Store.register(action_name_store,function(value,category)
     local frame = Gui.classes.left_frames.get_frame(player_list_name,player)
     local element = frame.container.reason_bar
     if value then
-        local action_player_name = Store.get_child(action_player_store,category)
+        local action_player_name = Store.get(action_player_store,category)
         local action_player = Game.get_player_from_any(action_player_name)
         if action_player.connected then
             element.visible = true
         else
-            Store.set_child(action_player_store,category) -- clears store if player is offline
-            Store.set_child(action_name_store,category)
+            Store.clear(action_player_store,category) -- clears store if player is offline
+            Store.clear(action_name_store,category)
         end
     else
         element.visible = false
