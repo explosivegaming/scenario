@@ -211,25 +211,27 @@ function generate_task(player,element,task_id)
             Gui.set_padding(task_area)
 
             -- if the player can edit then it adds the edit and delete button
-            if player_allowed_edit(player,task_id) then
-                local flow = Gui.create_right_align(element,'edit-'..task_id)
-                flow.caption = task_id
+            local flow = Gui.create_right_align(element,'edit-'..task_id)
+            flow.caption = task_id
 
-                edit_task(flow)
-                discard_task(flow)
-            end
+            edit_task(flow)
+            discard_task(flow)
 
         end
 
         -- update the number indexes and the current editing players
         element['count-'..task_id].caption = task_number..')'
-        if element['edit-'..task_id] then
-            local players = table_keys(details.editing)
-            if #players > 0 then
-                element['edit-'..task_id][edit_task.name].tooltip = {'task-list.edit-tooltip',table.concat(players,', ')}
-            else
-                element['edit-'..task_id][edit_task.name].tooltip = {'task-list.edit-tooltip-none'}
-            end
+
+        local edit_area = element['edit-'..task_id]
+        local players = table_keys(details.editing)
+        local allowed = player_allowed_edit(player,task_id)
+
+        edit_area.visible = allowed
+
+        if #players > 0 then
+            edit_area[edit_task.name].tooltip = {'task-list.edit-tooltip',table.concat(players,', ')}
+        else
+            edit_area[edit_task.name].tooltip = {'task-list.edit-tooltip-none'}
         end
 
         -- draws/updates the task area
@@ -356,13 +358,11 @@ local function generate_container(player,element)
     non_made.style.single_line = false
 
     -- table that stores all the data
-    local col_count = 2
-    if player_allowed_edit(player) then col_count = col_count+1 end
     local flow_table =
     flow.add{
         name='table',
         type='table',
-        column_count=col_count,
+        column_count=3,
         draw_horizontal_lines=true,
         vertical_centering=false
     }
