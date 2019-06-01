@@ -41,13 +41,13 @@ local function add_task(player,task_number)
         editing={[player.name]=true}
     }
 
-    Store.set_child(task_store,task_id,'New task')
+    Store.set(task_store,task_id,'New task')
 end
 
 --- Removes all refrences to a task
 local function remove_task(task_id)
     local force_name = task_details[task_id].force
-    Store.set_child(task_store,task_id)
+    Store.clear(task_store,task_id)
     task_details[task_id] = nil
     table.remove_element(force_tasks[force_name],task_id)
 end
@@ -108,7 +108,7 @@ end)
     details.editing[player.name] = nil
     details.last_edit_player = player.name
     details.last_edit_time = game.tick
-    Store.set_child(task_store,task_id,task)
+    Store.set(task_store,task_id,task)
 end)
 
 --- Used to cancel any changes you made to a task
@@ -175,7 +175,7 @@ end)
     >> discard_task
 ]]
 function generate_task(player,element,task_id)
-    local task = Store.get_child(task_store,task_id)
+    local task = Store.get(task_store,task_id)
     local details = task_details[task_id]
     local editing = details.editing[player.name]
     local last_edit_player = details.last_edit_player

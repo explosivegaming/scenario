@@ -112,12 +112,12 @@ function Checkbox.new_checkbox(name)
 
         if self.option_set then
             local value = Checkbox.option_sets[self.option_set][element.name]
-            local category = self.categorize and self.categorize(element) or value
+            local category = self.categorize and self.categorize(element)
             self:set_store(category,value)
 
         elseif self.store then
             local value = element.state
-            local category = self.categorize and self.categorize(element) or value
+            local category = self.categorize and self.categorize(element)
             self:set_store(category,value)
 
         else
@@ -166,12 +166,7 @@ end
 function Checkbox._prototype_radiobutton:get_store(category,internal)
     if not self.store then return end
     local location = not internal and self.option_set or self.store
-
-    if self.categorize then
-        return Store.get_child(location,category)
-    else
-        return Store.get(location)
-    end
+    return Store.get(location,category)
 end
 
 --- Sets the stored value of the radiobutton or the option set if present
@@ -182,12 +177,7 @@ end
 function Checkbox._prototype_radiobutton:set_store(category,value,internal)
     if not self.store then return end
     local location = not internal and self.option_set or self.store
-
-    if self.categorize then
-        return Store.set_child(location,category,value)
-    else
-        return Store.set(location,category)
-    end
+    return Store.set(location,category,value)
 end
 
 --- Registers a new option set that can be linked to radiobutotns (only one can be true at a time)
