@@ -1,4 +1,20 @@
 --- Config file used to enable and disable different push messages for discord
 return {
-
+    player_reports=true,
+    player_warnings=true,
+    player_bans=true,
+    player_mutes=true,
+    player_kicks=true,
+    player_promotes=false,
+    config=true,
+    purge=true,
+    c=true,
+    command=true,
+    ['silent-command']=true,
+    ['measured-command']=true,
+    ['banlist']=true,
+    ['permissions']=true,
+    ['editor']=true,
+    ['cheat']=true,
+    ['open']=false,
 }
