@@ -119,6 +119,7 @@ Roles.new_role('Pay to Win','P2W')
 :allow{
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
+    'command/bonus',
 }
 
 Roles.new_role('Donator','Don')
