@@ -33,6 +33,7 @@ return {
     'modules.addons.scorched-earth',
     'modules.addons.pollution-grading',
     'modules.addons.random-player-colours',
+    'modules.addons.discord-alerts',
     -- GUI
     'modules.gui.rocket-info',
     'modules.gui.science-info',
