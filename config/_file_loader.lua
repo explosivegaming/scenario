@@ -23,6 +23,7 @@ return {
     'modules.commands.spawn',
     'modules.commands.warnings',
     'modules.commands.find',
+    'modules.commands.bonus',
     -- QoL Addons
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',
