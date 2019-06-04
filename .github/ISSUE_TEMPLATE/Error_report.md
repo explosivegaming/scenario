@@ -1,6 +1,10 @@
 ---
 name: Error report
-about: Report a bug which cases the game to crash, any bug from the latest major scenario version
+about: Report a bug which cases the game to crash, any bug from the latest major scenario
+  version
+title: ''
+labels: Bug
+assignees: ''
 
 ---
 

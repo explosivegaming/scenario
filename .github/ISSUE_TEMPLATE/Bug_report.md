@@ -1,6 +1,10 @@
 ---
 name: Bug report
-about: Report a bug which does not crash the game, any bug from the latest major scenario version
+about: Report a bug which does not crash the game, any bug from the latest major scenario
+  version
+title: ''
+labels: Bug
+assignees: ''
 
 ---
 
