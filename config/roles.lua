@@ -159,7 +159,8 @@ Roles.new_role('Member','Mem')
 :set_custom_color{r=24,g=172,b=188}
 :set_parent('Regular')
 :allow{
-    'gui/task-list/edit'
+    'gui/task-list/edit',
+    'gui/warp-list/edit'
 }
 
 Roles.new_role('Regular','Reg')
