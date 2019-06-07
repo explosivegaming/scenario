@@ -258,6 +258,8 @@ local function change_value_prototype(self,amount,category,filter)
 		local maximum = self.default_maximum or 1
         local new_value = value + (amount/maximum)
 
+        self:set_store(category,new_value)
+
         if self.count_down and new_value <= 0
 		or not self.count_down and new_value >= 1 then
             self:clear_store(category)
@@ -265,9 +267,9 @@ local function change_value_prototype(self,amount,category,filter)
             if self.events.on_store_complete then
                 self.events.on_store_complete(category,reset_store)
             end
-        end
 
-        self:set_store(category,new_value)
+            return
+        end
 
         return
     end

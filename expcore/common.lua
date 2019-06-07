@@ -510,26 +510,77 @@ function Common.auto_complete(options,input,use_key,rtn_key)
     return rtn[1]
 end
 
---- Returns all the keys of a table
--- @tparam table tbl table the to get the keys of
--- @treturn table an array of the table keys
-function Common.table_keys(tbl)
-    local rtn = {}
-    for key,_ in pairs(tbl) do
-        table.insert(rtn,key)
+--- Default table comparator sort function.
+-- @local
+-- @param x one comparator operand
+-- @param y the other comparator operand
+-- @return true if x logically comes before y in a list, false otherwise
+local function sortFunc(x, y) --sorts tables with mixed index types.
+    local tx = type(x)
+    local ty = type(y)
+    if tx == ty then
+        if type(x) == 'string' then
+            return string.lower(x) < string.lower(y)
+        else
+            return x < y
+        end
+    elseif tx == 'number' then
+        return true --only x is a number and goes first
+    else
+        return false --only y is a number and goes first
     end
-    return rtn
 end
 
---- Returns all the values of a table
--- @tparam table tbl table the to get the values of
--- @treturn table an array of the table values
-function Common.table_values(tbl)
-    local rtn = {}
-    for _,value in pairs(tbl) do
-        table.insert(rtn,value)
+--- Returns a copy of all of the values in the table.
+-- @tparam table table tbl the to copy the keys from, or an empty table if tbl is nil
+-- @tparam[opt] boolean sorted whether to sort the keys (slower) or keep the random order from pairs()
+-- @tparam[opt] boolean as_string whether to try and parse the values as strings, or leave them as their existing type
+-- @treturn array an array with a copy of all the values in the table
+function Common.table_values(tbl, sorted, as_string)
+    if not tbl then return {} end
+    local valueset = {}
+    local n = 0
+    if as_string then --checking as_string /before/ looping is faster
+        for _, v in pairs(tbl) do
+            n = n + 1
+            valueset[n] = tostring(v)
+        end
+    else
+        for _, v in pairs(tbl) do
+            n = n + 1
+            valueset[n] = v
+        end
     end
-    return rtn
+    if sorted then
+        table.sort(valueset,sortFunc)
+    end
+    return valueset
+end
+
+--- Returns a copy of all of the keys in the table.
+-- @tparam table table tbl the to copy the keys from, or an empty table if tbl is nil
+-- @tparam[opt] boolean sorted whether to sort the keys (slower) or keep the random order from pairs()
+-- @tparam[opt] boolean as_string whether to try and parse the keys as strings, or leave them as their existing type
+-- @treturn array an array with a copy of all the keys in the table
+function Common.table_keys(tbl, sorted, as_string)
+    if not tbl then return {} end
+    local keyset = {}
+    local n = 0
+    if as_string then --checking as_string /before/ looping is faster
+        for k, _ in pairs(tbl) do
+            n = n + 1
+            keyset[n] = tostring(k)
+        end
+    else
+        for k, _ in pairs(tbl) do
+            n = n + 1
+            keyset[n] = k
+        end
+    end
+    if sorted then
+        table.sort(keyset,sortFunc)
+    end
+    return keyset
 end
 
 --- Returns the list is a sorted way that would be expected by people (this is by key)

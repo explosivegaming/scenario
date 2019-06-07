@@ -56,6 +56,7 @@ Roles.new_role('Administrator','Admin')
 :set_flag('report-immune')
 :set_parent('Moderator')
 :allow{
+    'gui/warp-list/no-limit',
 }
 
 Roles.new_role('Moderator','Mod')
