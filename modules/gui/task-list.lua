@@ -133,14 +133,14 @@ end)
 local discard_task =
 Gui.new_button()
 :set_sprites('utility/trash')
-:set_tooltip{'task-list.discord-tooltip'}
+:set_tooltip{'task-list.discard-tooltip'}
 :set_style('tool_button',function(style)
     Gui.set_padding_style(style,-2,-2,-2,-2)
     style.height = 20
     style.width = 20
 end)
 :on_click(function(player,element)
-    local task_id = element.parent.caption
+    local task_id = element.parent.name
     remove_task(task_id)
     update_all()
 end)
@@ -156,10 +156,10 @@ Gui.new_button()
     style.width = 20
 end)
 :on_click(function(player,element)
-    local task_id = element.parent.caption
+    local task_id = element.parent.name
     local details = task_details[task_id]
     details.editing[player.name] = true
-    generate_task(player,element.parent.parent,task_id)
+    generate_task(player,element.parent.parent.parent,task_id)
 end)
 
 --[[ Generates each task, handles both view and edit mode
@@ -212,17 +212,17 @@ function generate_task(player,element,task_id)
 
             -- if the player can edit then it adds the edit and delete button
             local flow = Gui.create_right_align(element,'edit-'..task_id)
-            flow.caption = task_id
+            local sub_flow = flow.add{type='flow',name=task_id}
 
-            edit_task(flow)
-            discard_task(flow)
+            edit_task(sub_flow)
+            discard_task(sub_flow)
 
         end
 
         -- update the number indexes and the current editing players
         element['count-'..task_id].caption = task_number..')'
 
-        local edit_area = element['edit-'..task_id]
+        local edit_area = element['edit-'..task_id][task_id]
         local players = table_keys(details.editing)
         local allowed = player_allowed_edit(player,task_id)
 
@@ -243,8 +243,8 @@ function generate_task(player,element,task_id)
 
         elseif not editing then
             -- create the label, view mode
-            if element['edit-'..task_id] then
-                element['edit-'..task_id][edit_task.name].enabled = true
+            if edit_area then
+                edit_area[edit_task.name].enabled = true
             end
 
             task_area.clear()
@@ -261,8 +261,8 @@ function generate_task(player,element,task_id)
 
         elseif editing and element_type ~= 'textfield' then
             -- create the text field, edit mode, update it omited as value is being edited
-            if element['edit-'..task_id] then
-                element['edit-'..task_id][edit_task.name].enabled = false
+            if edit_area then
+                edit_area[edit_task.name].enabled = false
             end
 
             task_area.clear()

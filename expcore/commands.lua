@@ -622,7 +622,7 @@ function Commands.run_command(command_event)
     -- splits the arguments
     local input_string = command_event.parameter or ''
     local quote_params = {} -- stores any " " params
-    input_string = input_string:gsub('"[^"]-"',function(w)
+    input_string = input_string:gsub(' "[^"]-"',function(w)
         -- finds all " " params are removes spaces for the next part
         local no_spaces = w:gsub('%s','_')
         local no_quotes = w:sub(2,-2)
