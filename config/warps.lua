@@ -6,7 +6,8 @@ return {
     activation_range = 4, -- The distance the player must be to a warp in order to use the warp gui, gui can still be viewd but not used
     spawn_activation_range = 20, -- A second activation range which is used for the forces spawn point
     default_icon = 'discharge-defense-equipment', -- The deafult icon which is used by warps; must be an item name
-    user_can_edit_own_warps = true, -- When true the user can always edit warps which they created regaudless of other settings
+    user_can_edit_own_warps = false, -- When true the user can always edit warps which they created regaudless of other settings
+    any_user_can_add_new_warp = false, -- When true any user is able to create new warps, however editing may still be restricted
     only_admins_can_edit = false, -- When true only admins can edit warps
     edit_warps_role_permision = 'gui/warp-list/edit', -- Role permission used by the role system to allow editing warps
     bypass_warp_limits_permision = 'gui/warp-list/no-limit', -- Role permission used by the role system to allow bypassing the time and distance restrctions

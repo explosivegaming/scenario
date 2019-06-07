@@ -240,8 +240,13 @@ Event.add(Store.on_value_update,function(event)
         Store.callbacks[event.location](event.value,event.child)
     end
 
-    if not event.from_sync then
-        write_json('log/store.log',event)
+    if not event.from_sync and Store.synced[event.location] then
+        write_json('log/store.log',{
+            tick=event.tick,
+            location=event.location,
+            child=event.child,
+            value=event.value,
+        })
     end
 end)
 
