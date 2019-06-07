@@ -427,7 +427,7 @@ end
 
 --- Adds a new param to the command this will be displayed in the help and used to parse the input
 -- @tparam string name the name of the new param that is being added to the command
--- @tparam[opt=true] boolean optional is this param required for this command, these must be after all required params
+-- @tparam[opt=false] boolean optional is this param required for this command, these must be after all required params
 -- @tparam[opt=pass function through] ?string|function parse this function will take the input and return a new (or same) value
 -- @param[opt] ... extra args you want to pass to the parse function; for example if the parse is general use
 -- parse param - input: string - the input given by the user for this param
@@ -436,12 +436,17 @@ end
 -- parse return - the value that will be passed to the command callback, must not be nil and if reject then command is not run
 -- @treturn Commands._prototype pass through to allow more functions to be called
 function Commands._prototype:add_param(name,optional,parse,...)
-    if optional ~= false then optional = true end
+    local parse_args = {...}
+    if type(optional) ~= 'boolean' then
+        parse_args = {parse,...}
+        parse = optional
+        optional = false
+    end
     parse = parse or function(string) return string end
     self.params[name] = {
         optional=optional,
         parse=parse,
-        parse_args={...}
+        parse_args=parse_args
     }
     self.max_param_count = self.max_param_count+1
     if not optional then
