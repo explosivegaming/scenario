@@ -35,7 +35,7 @@ local function player_allowed_edit(player,warp_id)
             return true
         end
     else
-        if config.any_user_can_add_new_task then
+        if config.any_user_can_add_new_warp then
             return true
         end
     end
