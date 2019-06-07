@@ -561,7 +561,7 @@ Event.add(defines.events.on_rocket_launched,function(event)
     rocket_times[force_name][rockets_launched] = event.tick
 
     local remove_rocket = rockets_launched-largest_rolling_avg
-    if remove_rocket > 0 and not table.includes(config.milestones,remove_rocket) then
+    if remove_rocket > 0 and not table.contains(config.milestones,remove_rocket) then
         rocket_times[force_name][remove_rocket] = nil
     end
 
