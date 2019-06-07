@@ -34,6 +34,7 @@ Roles.new_role('System','SYS')
 :set_flag('is_admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
+:set_flag('instance-respawn')
 :set_allow_all()
 
 Roles.new_role('Senior Administrator','SAdmin')
@@ -41,6 +42,7 @@ Roles.new_role('Senior Administrator','SAdmin')
 :set_flag('is_admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
+:set_flag('instance-respawn')
 :set_parent('Administrator')
 :allow{
     'command/interface',
@@ -54,8 +56,10 @@ Roles.new_role('Administrator','Admin')
 :set_flag('is_admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
+:set_flag('instance-respawn')
 :set_parent('Moderator')
 :allow{
+    'gui/warp-list/no-limit',
 }
 
 Roles.new_role('Moderator','Mod')
@@ -64,6 +68,7 @@ Roles.new_role('Moderator','Mod')
 :set_flag('is_admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
+:set_flag('instance-respawn')
 :set_parent('Trainee')
 :allow{
     'command/assign-role',
@@ -76,6 +81,7 @@ Roles.new_role('Moderator','Mod')
     'command/clear-warnings',
     'command/clear-temp-ban',
     'command/clear-inventory',
+    'command/bonus',
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
 }
@@ -106,6 +112,7 @@ Roles.new_role('Sponsor','Spon')
 :set_custom_color{r=247,g=246,b=54}
 :set_flag('is_spectator')
 :set_flag('report-immune')
+:set_flag('instance-respawn')
 :set_parent('Pay to Win')
 :allow{
 }
@@ -115,10 +122,12 @@ Roles.new_role('Pay to Win','P2W')
 :set_custom_color{r=238,g=172,b=44}
 :set_flag('is_spectator')
 :set_flag('report-immune')
+:set_flag('instance-respawn')
 :set_parent('Donator')
 :allow{
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
+    'command/bonus',
 }
 
 Roles.new_role('Donator','Don')
@@ -159,7 +168,8 @@ Roles.new_role('Member','Mem')
 :set_custom_color{r=24,g=172,b=188}
 :set_parent('Regular')
 :allow{
-    'gui/task-list/edit'
+    'gui/task-list/edit',
+    'gui/warp-list/edit'
 }
 
 Roles.new_role('Regular','Reg')
@@ -193,6 +203,7 @@ local default = Roles.new_role('Guest','')
     'gui/rocket-info',
     'gui/science-info',
     'gui/task-list',
+    'gui/warp-list',
 }
 
 --- Jail role

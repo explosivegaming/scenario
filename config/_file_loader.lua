@@ -23,6 +23,7 @@ return {
     'modules.commands.spawn',
     'modules.commands.warnings',
     'modules.commands.find',
+    'modules.commands.bonus',
     -- QoL Addons
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',
@@ -33,9 +34,11 @@ return {
     'modules.addons.scorched-earth',
     'modules.addons.pollution-grading',
     'modules.addons.random-player-colours',
+    'modules.addons.discord-alerts',
     -- GUI
     'modules.gui.rocket-info',
     'modules.gui.science-info',
+    'modules.gui.warp-list',
     'modules.gui.task-list',
     'modules.gui.player-list',
     'modules.commands.debug',
