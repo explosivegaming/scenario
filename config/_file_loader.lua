@@ -37,6 +37,7 @@ return {
     -- GUI
     'modules.gui.rocket-info',
     'modules.gui.science-info',
+    'modules.gui.warp-list',
     'modules.gui.task-list',
     'modules.gui.player-list',
     'modules.commands.debug',
