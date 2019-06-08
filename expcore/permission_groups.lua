@@ -51,6 +51,7 @@
 
 local Game = require 'utils.game'
 local Event = require 'utils.event'
+local Sudo = require 'expcore.sudo'
 
 local Permissions_Groups = {
     groups={}, -- store for the different groups that are created
@@ -130,7 +131,7 @@ end
 -- @treturn boolean true if the player was added successfully, false other wise
 function Permissions_Groups.set_player_group(player,group)
     player = Game.get_player_from_any(player)
-    local group = Permissions_Groups.get_group_by_name(group)
+    group = Permissions_Groups.get_group_by_name(group)
     if not group or not player then return false end
     group:add_player(player)
     return true
@@ -228,7 +229,7 @@ function Permissions_Groups._prototype:add_player(player)
     player = Game.get_player_from_any(player)
     local group = self:get_raw()
     if not group or not player then return false end
-    group.add_player(player)
+    Sudo('add-player-to-permission-group',group,player)
     return true
 end
 
@@ -239,7 +240,7 @@ function Permissions_Groups._prototype:remove_player(player)
     player = Game.get_player_from_any(player)
     local group = self:get_raw()
     if not group or not player then return false end
-    group.remove_player(player)
+    Sudo('remove-player-from-permission-group',group,player)
     return true
 end
 
@@ -277,6 +278,13 @@ end
 -- when the game starts it will make the permission groups
 Event.on_init(function()
     Permissions_Groups.reload_permissions()
+end)
+
+Sudo.register('add-player-to-permission-group',function(permission_group,player)
+    permission_group.add_player(player)
+end)
+Sudo.register('remove-player-from-permission-group',function(permission_group,player)
+    permission_group.remove_player(player)
 end)
 
 return Permissions_Groups
