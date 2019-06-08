@@ -12,16 +12,19 @@ local format_time,table_keys,table_values,table_keysort = ext_require('expcore.c
 local warp_list
 local warp_name_store = 'gui.left.warps.names'
 local warp_icon_store = 'gui.left.warps.tags'
-local warp_player_in_range_store = 'gui.left.warps.allowed'
+local warp_player_in_range_store = 'gui.left.warps.in_range'
 
 local warp_details = {}
 local force_warps = {}
+local keep_open = {}
 Global.register({
     warp_details=warp_details,
-    force_warps=force_warps
+    force_warps=force_warps,
+    keep_open=keep_open
 },function(tbl)
     force_warps = tbl.force_warps
     warp_details = tbl.warp_details
+    keep_open = tbl.keep_open
 end)
 
 --- Returns if a player is allowed to edit the given warp
@@ -236,6 +239,16 @@ local function remove_warp(warp_id)
     warp_details[warp_id] = nil
 end
 
+--- Used on the name label to allow zoom to map
+local zoom_to_map_name = Gui.uid_name()
+Gui.on_click(zoom_to_map_name,function(event)
+    local warp_id = event.element.parent.name
+    local warp = warp_details[warp_id]
+    local position = warp.position
+    event.player.zoom_to_world(position,1.5)
+end)
+
+
 --- This timer controls when a player is able to warp, eg every 60 seconds
 local warp_timer =
 Gui.new_progressbar()
@@ -247,7 +260,9 @@ Gui.new_progressbar()
     style.color = Colors.light_blue
 end)
 :on_store_complete(function(player_name,reset)
-    Store.set(warp_player_in_range_store,player_name,true)
+    -- this is to force an update of the button
+    local in_range = Store.get(warp_player_in_range_store,player_name)
+    Store.set(warp_player_in_range_store,player_name,in_range)
 end)
 
 --- When the button is clicked it will teleport the player
@@ -274,7 +289,9 @@ end)
 
     if config.bypass_warp_limits_permision and not Roles.player_allowed(player,config.bypass_warp_limits_permision) then
         warp_timer:set_store(player.name,0)
-        Store.set(warp_player_in_range_store,player.name,false)
+        -- this is to force an update of the buttons
+        local in_range = Store.get(warp_player_in_range_store,player.name)
+        Store.set(warp_player_in_range_store,player.name,in_range)
     end
 end)
 
@@ -453,11 +470,12 @@ function generate_warp(player,element,warp_id)
         end
 
         -- draws/updates the warp area
-        local element_type = warp_area.warp and warp_area.warp.type or nil
+        local label_element = warp_area.warp or warp_area[zoom_to_map_name] or nil
+        local element_type = label_element and label_element.type or nil
         if not editing and element_type == 'label' then
             -- update the label already present
-            warp_area.warp.caption = warp_name
-            warp_area.warp.tooltip = {'warp-list.last-edit',last_edit_player,format_time(last_edit_time)}
+            label_element.caption = warp_name
+            label_element.tooltip = {'warp-list.last-edit',last_edit_player,format_time(last_edit_time)}
             icon_area[goto_warp.name].sprite = 'item/'..warp_icon
 
         elseif not editing then
@@ -485,7 +503,7 @@ function generate_warp(player,element,warp_id)
 
             local label =
             warp_area.add{
-                name='warp',
+                name=zoom_to_map_name,
                 type='label',
                 caption=warp_name,
                 tooltip={'warp-list.last-edit',last_edit_player,format_time(last_edit_time)}
@@ -639,6 +657,9 @@ end)
         generate_warp(player,data_table,warp_id)
     end
 end)
+:on_player_toggle(function(player,element,visible)
+    keep_open[player.name] = visible
+end)
 
 --- When the name of a warp is updated this is triggered
 Store.register(warp_name_store,function(value,warp_id)
@@ -691,6 +712,10 @@ Store.register(warp_player_in_range_store,function(value,player_name)
     local timer = warp_timer:get_store(player_name)
     local state = not timer and value
 
+    if not keep_open[player.name] then
+        Gui.toggle_left_frame(warp_list.name,player,value)
+    end
+
     if force_warps[force.name] then
         for _,warp_id in pairs(force_warps[force.name]) do
             local element = table_area['icon-'..warp_id][goto_warp.name]
@@ -717,34 +742,32 @@ Event.on_nth_tick(math.floor(60/config.update_smothing),function()
     end
 
     for _,player in pairs(game.connected_players) do
-        local timer = warp_timer:get_store(player.name)
-        local role = config.bypass_warp_limits_permision and Roles.player_allowed(player,config.bypass_warp_limits_permision)
+        local was_in_range = Store.get(warp_player_in_range_store,player.name)
+        local force = player.force
+        local warps = force_warps[force.name]
 
-        if not timer and not role then
-            local force = player.force
-            local warps = force_warps[force.name]
-
-            if warps then
-                local surface = player.surface.index
-                local pos = player.position
-                local px,py = pos.x,pos.y
-
-                for _,warp_id in pairs(warps) do
-                    local warp = warp_details[warp_id]
-                    local wpos = warp.position
-                    if warp.surface.index == surface then
-                        local dx,dy = px-wpos.x,py-wpos.y
-                        if not warp.editing and (dx*dx)+(dy*dy) < rs2 or (dx*dx)+(dy*dy) < r2 then
+        if warps then
+            local surface = player.surface.index
+            local pos = player.position
+            local px,py = pos.x,pos.y
+            for _,warp_id in pairs(warps) do
+                local warp = warp_details[warp_id]
+                local wpos = warp.position
+                if warp.surface.index == surface then
+                    local dx,dy = px-wpos.x,py-wpos.y
+                    if not warp.editing and (dx*dx)+(dy*dy) < rs2 or (dx*dx)+(dy*dy) < r2 then
+                        if not was_in_range then
                             Store.set(warp_player_in_range_store,player.name,true)
-                            return
                         end
+                        return
                     end
                 end
-
+            end
+            if was_in_range then
                 Store.set(warp_player_in_range_store,player.name,false)
             end
-
         end
+
 
     end
 
@@ -757,6 +780,9 @@ Event.add(defines.events.on_player_created,function(event)
 
     local allowed = config.bypass_warp_limits_permision and Roles.player_allowed(player,config.bypass_warp_limits_permision) or false
     Store.set(warp_player_in_range_store,player.name,allowed)
+    if allowed then
+        warp_timer:set_store(player.name,1)
+    end
 
     if not force_warps[force_name] then
         add_spawn(player)

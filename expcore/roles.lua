@@ -158,6 +158,7 @@ local Game = require 'utils.game'
 local Global = require 'utils.global'
 local Event = require 'utils.event'
 local Groups = require 'expcore.permission_groups'
+local Sudo = require 'expcore.sudo'
 local Colours = require 'resources.color_presets'
 local write_json = ext_require('expcore.common','write_json')
 
@@ -466,7 +467,9 @@ end
 -- flag param - player - the player that has had they roles changed
 -- flag param - state - the state of the flag, aka if the flag is present
 function Roles.define_flag_trigger(name,callback)
-    Roles.config.flags[name] = callback -- this can desync if there are upvalues
+    local sudo_name = 'role-flag-'..name
+    Roles.config.flags[name] = sudo_name
+    Sudo.register(sudo_name,callback)
 end
 
 --- Sets the default role which every player will have, this needs to be called at least once
@@ -753,12 +756,9 @@ end
 local function role_update(event)
     local player = Game.get_player_by_index(event.player_index)
     -- Updates flags given to the player
-    for flag,callback in pairs(Roles.config.flags) do
+    for flag,sudo_name in pairs(Roles.config.flags) do
         local state = Roles.player_has_flag(player,flag)
-        local success,err = pcall(callback,player,state)
-        if not success then
-            log{'expcore-roles.error-log-format-flag',flag,err}
-        end
+        Sudo(sudo_name,player,state)
     end
     -- Updates the players permission group
     local highest = Roles.get_player_highest_role(player)
@@ -766,7 +766,7 @@ local function role_update(event)
         if highest.permission_group[1] then
             local group = game.permissions.get_group(highest.permission_group[2])
             if group then
-                group.add_player(player)
+                Sudo('add-player-to-permission-group',group,player)
             end
         else
             Groups.set_player_group(player,highest.permission_group)
