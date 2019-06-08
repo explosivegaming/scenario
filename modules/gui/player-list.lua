@@ -339,6 +339,20 @@ player_list_name = player_list:uid()
 Store.register(action_player_store,function(value,category)
     local player = Game.get_player_from_any(category)
     update_action_bar(player)
+
+    local frame = player_list:get_frame(player)
+    local data_table = frame.container.scroll.table
+    for _,next_player in pairs(game.connected_players) do
+        local element = data_table[next_player.name][open_action_bar.name]
+        local style = 'frame_button'
+        if next_player.name == value then
+            style = 'tool_button'
+        end
+        element.style = style
+        Gui.set_paddinge(element,-2,-2,-2,-2)
+        element.style.width = 8
+        element.style.height = 14
+    end
 end)
 
 --- When the action name is changed the reason input will update
