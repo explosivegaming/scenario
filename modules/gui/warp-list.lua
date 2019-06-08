@@ -239,6 +239,16 @@ local function remove_warp(warp_id)
     warp_details[warp_id] = nil
 end
 
+--- Used on the name label to allow zoom to map
+local zoom_to_map_name = Gui.uid_name()
+Gui.on_click(zoom_to_map_name,function(event)
+    local warp_id = event.element.parent.name
+    local warp = warp_details[warp_id]
+    local position = warp.position
+    event.player.zoom_to_world(position,1.5)
+end)
+
+
 --- This timer controls when a player is able to warp, eg every 60 seconds
 local warp_timer =
 Gui.new_progressbar()
@@ -460,11 +470,12 @@ function generate_warp(player,element,warp_id)
         end
 
         -- draws/updates the warp area
-        local element_type = warp_area.warp and warp_area.warp.type or nil
+        local label_element = warp_area.warp or warp_area[zoom_to_map_name] or nil
+        local element_type = label_element and label_element.type or nil
         if not editing and element_type == 'label' then
             -- update the label already present
-            warp_area.warp.caption = warp_name
-            warp_area.warp.tooltip = {'warp-list.last-edit',last_edit_player,format_time(last_edit_time)}
+            label_element.caption = warp_name
+            label_element.tooltip = {'warp-list.last-edit',last_edit_player,format_time(last_edit_time)}
             icon_area[goto_warp.name].sprite = 'item/'..warp_icon
 
         elseif not editing then
@@ -492,7 +503,7 @@ function generate_warp(player,element,warp_id)
 
             local label =
             warp_area.add{
-                name='warp',
+                name=zoom_to_map_name,
                 type='label',
                 caption=warp_name,
                 tooltip={'warp-list.last-edit',last_edit_player,format_time(last_edit_time)}
@@ -769,6 +780,9 @@ Event.add(defines.events.on_player_created,function(event)
 
     local allowed = config.bypass_warp_limits_permision and Roles.player_allowed(player,config.bypass_warp_limits_permision) or false
     Store.set(warp_player_in_range_store,player.name,allowed)
+    if allowed then
+        warp_timer:set_store(player.name,1)
+    end
 
     if not force_warps[force_name] then
         add_spawn(player)
