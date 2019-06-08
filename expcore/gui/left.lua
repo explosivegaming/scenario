@@ -45,6 +45,7 @@
 
     LeftFrames._prototype:on_draw(player,frame) --- Use to draw your elements to the new frame
     LeftFrames._prototype:on_update(player,frame) --- Use to edit your frame when there is no need to redraw it
+    LeftFrames._prototype:on_player_toggle(player,frame) --- Is triggered when the player presses the toggle button
     LeftFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
 local Gui = require 'expcore.gui.core'
@@ -58,7 +59,8 @@ local LeftFrames = {
     frames={},
     _prototype=Gui._prototype_factory{
         on_draw = Gui._event_factory('on_draw'),
-        on_update = Gui._event_factory('on_update')
+        on_update = Gui._event_factory('on_update'),
+        on_player_toggle = Gui._event_factory('on_player_toggle')
     }
 }
 setmetatable(LeftFrames._prototype, {
@@ -138,7 +140,12 @@ function LeftFrames.new_frame(permision_name)
     mt.__call = self.event_handler
 
     self:on_click(function(player,_element)
-        self:toggle(player)
+        local visible = self:toggle(player)
+
+        if self.events.on_player_toggle then
+            local frame = self:get_frame(player)
+            self.events.on_player_toggle(player,frame,visible)
+        end
     end)
 
     LeftFrames.frames[self.name] = self
@@ -258,6 +265,10 @@ Buttons.new_button()
     for _,define in pairs(LeftFrames.frames) do
         local frame = LeftFrames.get_frame(define.name,player)
         frame.visible = false
+
+        if define.events.on_player_toggle then
+            define.events.on_player_toggle(player,frame,false)
+        end
     end
     element.visible = false
 end)

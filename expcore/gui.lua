@@ -213,12 +213,13 @@ Gui.classes.left_frames = LeftFrames
 
     LeftFrames._prototype:on_draw(player,frame) --- Use to draw your elements to the new frame
     LeftFrames._prototype:on_update(player,frame) --- Use to edit your frame when there is no need to redraw it
+    LeftFrames._prototype:on_player_toggle(player,frame) --- Triggered when the player toggle the left frame
     LeftFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
 
 local CenterFrames = require 'expcore.gui.center'
 Gui.get_center_flow = CenterFrames.get_flow
-Gui.toggle_left_frame = CenterFrames.toggle_frame
+Gui.toggle_center_frame = CenterFrames.toggle_frame
 Gui.draw_center_frame = CenterFrames.draw_frame
 Gui.redraw_center_frame = CenterFrames.redraw_frames
 Gui.new_center_frame = CenterFrames.new_frame

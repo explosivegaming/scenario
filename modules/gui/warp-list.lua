@@ -12,16 +12,19 @@ local format_time,table_keys,table_values,table_keysort = ext_require('expcore.c
 local warp_list
 local warp_name_store = 'gui.left.warps.names'
 local warp_icon_store = 'gui.left.warps.tags'
-local warp_player_in_range_store = 'gui.left.warps.allowed'
+local warp_player_in_range_store = 'gui.left.warps.in_range'
 
 local warp_details = {}
 local force_warps = {}
+local keep_open = {}
 Global.register({
     warp_details=warp_details,
-    force_warps=force_warps
+    force_warps=force_warps,
+    keep_open=keep_open
 },function(tbl)
     force_warps = tbl.force_warps
     warp_details = tbl.warp_details
+    keep_open = tbl.keep_open
 end)
 
 --- Returns if a player is allowed to edit the given warp
@@ -247,7 +250,9 @@ Gui.new_progressbar()
     style.color = Colors.light_blue
 end)
 :on_store_complete(function(player_name,reset)
-    Store.set(warp_player_in_range_store,player_name,true)
+    -- this is to force an update of the button
+    local in_range = Store.get(warp_player_in_range_store,player_name)
+    Store.set(warp_player_in_range_store,player_name,in_range)
 end)
 
 --- When the button is clicked it will teleport the player
@@ -274,7 +279,9 @@ end)
 
     if config.bypass_warp_limits_permision and not Roles.player_allowed(player,config.bypass_warp_limits_permision) then
         warp_timer:set_store(player.name,0)
-        Store.set(warp_player_in_range_store,player.name,false)
+        -- this is to force an update of the buttons
+        local in_range = Store.get(warp_player_in_range_store,player.name)
+        Store.set(warp_player_in_range_store,player.name,in_range)
     end
 end)
 
@@ -639,6 +646,9 @@ end)
         generate_warp(player,data_table,warp_id)
     end
 end)
+:on_player_toggle(function(player,element,visible)
+    keep_open[player.name] = visible
+end)
 
 --- When the name of a warp is updated this is triggered
 Store.register(warp_name_store,function(value,warp_id)
@@ -691,6 +701,10 @@ Store.register(warp_player_in_range_store,function(value,player_name)
     local timer = warp_timer:get_store(player_name)
     local state = not timer and value
 
+    if not keep_open[player.name] then
+        Gui.toggle_left_frame(warp_list.name,player,value)
+    end
+
     if force_warps[force.name] then
         for _,warp_id in pairs(force_warps[force.name]) do
             local element = table_area['icon-'..warp_id][goto_warp.name]
@@ -717,34 +731,32 @@ Event.on_nth_tick(math.floor(60/config.update_smothing),function()
     end
 
     for _,player in pairs(game.connected_players) do
-        local timer = warp_timer:get_store(player.name)
-        local role = config.bypass_warp_limits_permision and Roles.player_allowed(player,config.bypass_warp_limits_permision)
+        local was_in_range = Store.get(warp_player_in_range_store,player.name)
+        local force = player.force
+        local warps = force_warps[force.name]
 
-        if not timer and not role then
-            local force = player.force
-            local warps = force_warps[force.name]
-
-            if warps then
-                local surface = player.surface.index
-                local pos = player.position
-                local px,py = pos.x,pos.y
-
-                for _,warp_id in pairs(warps) do
-                    local warp = warp_details[warp_id]
-                    local wpos = warp.position
-                    if warp.surface.index == surface then
-                        local dx,dy = px-wpos.x,py-wpos.y
-                        if not warp.editing and (dx*dx)+(dy*dy) < rs2 or (dx*dx)+(dy*dy) < r2 then
+        if warps then
+            local surface = player.surface.index
+            local pos = player.position
+            local px,py = pos.x,pos.y
+            for _,warp_id in pairs(warps) do
+                local warp = warp_details[warp_id]
+                local wpos = warp.position
+                if warp.surface.index == surface then
+                    local dx,dy = px-wpos.x,py-wpos.y
+                    if not warp.editing and (dx*dx)+(dy*dy) < rs2 or (dx*dx)+(dy*dy) < r2 then
+                        if not was_in_range then
                             Store.set(warp_player_in_range_store,player.name,true)
-                            return
                         end
+                        return
                     end
                 end
-
+            end
+            if was_in_range then
                 Store.set(warp_player_in_range_store,player.name,false)
             end
-
         end
+
 
     end
 
