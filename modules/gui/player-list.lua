@@ -82,7 +82,7 @@ Gui.new_button()
 end)
 :on_click(function(player,element)
     local reason = element.parent.entry.text or 'Non Given'
-    local action_name = Store.get_child(action_name_store,player.name)
+    local action_name = Store.get(action_name_store,player.name)
     local reason_callback = config[action_name].reason_callback
     reason_callback(player,reason)
     Store.clear(action_player_store,player.name)
