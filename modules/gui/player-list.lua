@@ -349,7 +349,7 @@ Store.register(action_player_store,function(value,category)
             style = 'tool_button'
         end
         element.style = style
-        Gui.set_paddinge(element,-2,-2,-2,-2)
+        Gui.set_padding(element,-2,-2,-2,-2)
         element.style.width = 8
         element.style.height = 14
     end
