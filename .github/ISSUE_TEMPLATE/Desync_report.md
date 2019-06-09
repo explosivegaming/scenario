@@ -1,6 +1,9 @@
 ---
 name: Desync report
 about: Report a desync, latest version of scenario only including patches
+title: ''
+labels: Bug
+assignees: ''
 
 ---
 

@@ -1,6 +1,9 @@
 ---
 name: Feature request
 about: Suggest a new idea to be worked on
+title: ''
+labels: Feature Request
+assignees: ''
 
 ---
 
