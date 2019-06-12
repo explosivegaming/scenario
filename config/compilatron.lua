@@ -6,17 +6,17 @@ return {
     },
     messages={ -- the messages that each one will say, must be same name as its location
         ['Spawn']={
-            {'info.website-message'},
+            {'info.website'},
             {'info.read-readme'},
-            {'info.discord-message'},
+            {'info.discord'},
             {'info.softmod'},
-            {'info.wiki-message'},
+            {'info.wiki'},
             {'info.redmew'},
-            {'info.feedback-message'},
+            {'info.feedback'},
             {'info.custom-commands'},
-            {'info.status-message'},
+            {'info.status'},
             {'info.lhd'},
-            {'info.github-message'},
+            {'info.github'},
         }
     }
 }

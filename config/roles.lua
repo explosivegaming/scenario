@@ -155,6 +155,7 @@ Roles.new_role('Veteran','Vet')
 :set_custom_color{r=140,g=120,b=200}
 :set_parent('Member')
 :allow{
+    'command/chat-bot',
 }
 :set_auto_promote_condition(function(player)
     if player.online_time > 10*216000 then

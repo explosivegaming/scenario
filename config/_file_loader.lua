@@ -35,6 +35,7 @@ return {
     'modules.addons.pollution-grading',
     'modules.addons.random-player-colours',
     'modules.addons.discord-alerts',
+    'modules.addons.chat-reply',
     -- GUI
     'modules.gui.rocket-info',
     'modules.gui.science-info',
