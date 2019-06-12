@@ -82,6 +82,10 @@ Roles.new_role('Moderator','Mod')
     'command/clear-temp-ban',
     'command/clear-inventory',
     'command/bonus',
+    'command/home',
+    'command/home-set',
+    'command/home-get',
+    'command/return',
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
 }
@@ -128,6 +132,10 @@ Roles.new_role('Pay to Win','P2W')
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
     'command/bonus',
+    'command/home',
+    'command/home-set',
+    'command/home-get',
+    'command/return',
 }
 
 Roles.new_role('Donator','Don')

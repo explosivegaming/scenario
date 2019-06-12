@@ -1,0 +1,70 @@
+local Commands = require 'expcore.commands'
+local Global = require 'utils.global'
+require 'config.expcore-commands.parse_general'
+
+local homes = {}
+Global.register(homes,function(tbl)
+    homes = tbl
+end)
+
+local function teleport(player,position)
+    local surface = player.surface
+    local pos = surface.find_non_colliding_position('character',position,32,1)
+    if not position then return false end
+    if player.driving then player.driving = false end -- kicks a player out a vehicle if in one
+    player.teleport(pos,surface)
+    return true
+end
+
+local function floor_pos(position)
+    return {
+        x=math.floor(position.x),
+        y=math.floor(position.y)
+    }
+end
+
+Commands.new_command('home','Teleports you to your home location')
+:register(function(player,raw)
+    local home = homes[player.index]
+    if not home or not home[1] then
+        return Commands.error{'expcom-home.no-home'}
+    end
+    local rtn = floor_pos(player.position)
+    teleport(player,home[1])
+    home[2] = rtn
+    Commands.print{'expcom-home.return-set',rtn.x,rtn.y}
+end)
+
+Commands.new_command('home-set','Sets your home location to your current position')
+:register(function(player,raw)
+    local home = homes[player.index]
+    if not home then
+        home = {}
+        homes[player.index] = home
+    end
+    local pos = floor_pos(player.position)
+    home[1] = pos
+    Commands.print{'expcom-home.home-set',pos.x,pos.y}
+end)
+
+Commands.new_command('home-get','Returns your current home location')
+:register(function(player,raw)
+    local home = homes[player.index]
+    if not home or not home[1] then
+        return Commands.error{'expcom-home.no-home'}
+    end
+    local pos = home[1]
+    Commands.print{'expcom-home.home-get',pos.x,pos.y}
+end)
+
+Commands.new_command('return','Teleports you to previous location')
+:register(function(player,raw)
+    local home = homes[player.index]
+    if not home or not home[2] then
+        return Commands.error{'expcom-home.no-return'}
+    end
+    local rtn = floor_pos(player.position)
+    teleport(player,home[2])
+    home[2] = rtn
+    Commands.print{'expcom-home.return-set',rtn.x,rtn.y}
+end)
