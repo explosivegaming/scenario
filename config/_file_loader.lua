@@ -24,6 +24,7 @@ return {
     'modules.commands.warnings',
     'modules.commands.find',
     'modules.commands.bonus',
+    'modules.commands.home',
     -- QoL Addons
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',
