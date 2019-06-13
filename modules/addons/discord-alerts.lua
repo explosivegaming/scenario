@@ -13,7 +13,7 @@ local function to_hex(color)
     local hex_digits = '0123456789ABCDEF'
     local function hex(bit)
         local major, minor = math.modf(bit/16)
-        minor = minor*16
+        major,minor = major+1,minor*16+1
         return hex_digits:sub(major,major)..hex_digits:sub(minor,minor)
     end
 
