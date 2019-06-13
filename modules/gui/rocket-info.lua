@@ -347,9 +347,9 @@ local function generate_milestones(player,frame)
     for _,milestone in ipairs(config.milestones) do
         if milestone <= force_rockets then
             local time = rocket_times[player.force.name][milestone]
-            create_label_value_pair_time(element,'milstone-n',time,true,milestone)
+            create_label_value_pair_time(element,'milstone-n',time,false,milestone)
         else
-            create_label_value_pair_time(element,'milstone-n',0,true,milestone)
+            create_label_value_pair_time(element,'milstone-n',0,false,milestone)
             break
         end
     end
