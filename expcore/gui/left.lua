@@ -176,6 +176,36 @@ function LeftFrames._prototype:set_direction(direction)
     return self
 end
 
+--- Creates the gui for the first time, used internally
+-- @tparam LuaPlayer player the player to draw the frame to
+-- @treturn LuaGuiElement the frame that was made
+function LeftFrames._prototype:_internal_draw(player)
+    local flow = LeftFrames.get_flow(player)
+    local frame = flow.add{
+        type='frame',
+        name=self.name..'-frame',
+        direction=self.direction
+    }
+
+    if self.events.on_draw then
+        self.events.on_draw(player,frame)
+    end
+
+    if not self.open_by_default then
+        frame.visible = false
+    elseif type(self.open_by_default) == 'function' then
+        if not self.open_by_default(player,self.name) then
+            frame.visible = false
+        end
+    end
+
+    if not Toolbar.allowed(player,self.name) then
+        frame.visible = false
+    end
+
+    return frame
+end
+
 --- Gets the frame for this define from the left frame flow
 -- @tparam LuaPlayer player the player to get the frame of
 -- @treturn LuaGuiElement the frame in the left frame flow for this define
@@ -184,27 +214,7 @@ function LeftFrames._prototype:get_frame(player)
     if flow[self.name..'-frame'] and flow[self.name..'-frame'].valid then
         return flow[self.name..'-frame']
     else
-        local frame = flow.add{
-            type='frame',
-            name=self.name..'-frame',
-            direction=self.direction
-        }
-
-        if self.events.on_draw then
-            self.events.on_draw(player,frame)
-        end
-
-        if not self.open_by_default then
-            frame.visible = false
-        elseif type(self.open_by_default) == 'function' then
-            if not self.open_by_default(player,self.name) then
-                frame.visible = false
-            end
-        end
-
-        if not Toolbar.allowed(player,self.name) then
-            frame.visible = false
-        end
+        return self:_internal_draw(player)
     end
 end
 
@@ -307,28 +317,7 @@ Event.add(defines.events.on_player_created,function(event)
     style.font = 'default-small-bold'
 
     for _,define in pairs(LeftFrames.frames) do
-        local frame = flow.add{
-            type='frame',
-            name=define.name..'-frame',
-            direction=define.direction
-        }
-
-        if define.events.on_draw then
-            define.events.on_draw(player,frame)
-        end
-
-        if not define.open_by_default then
-            frame.visible = false
-        elseif type(define.open_by_default) == 'function' then
-            if not define.open_by_default(player,define.name) then
-                frame.visible = false
-            end
-        end
-
-        if not Toolbar.allowed(player,define.name) then
-            frame.visible = false
-        end
-
+        define:_internal_draw(player)
     end
 
     LeftFrames.get_open(player)
