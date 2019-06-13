@@ -655,6 +655,7 @@ end)
     local warps = force_warps[force_name] or {}
     for _,warp_id in pairs(warps) do
         generate_warp(player,data_table,warp_id)
+        make_warp_tag(warp_id)
     end
 end)
 :on_player_toggle(function(player,element,visible)

@@ -183,6 +183,28 @@ function LeftFrames._prototype:get_frame(player)
     local flow = LeftFrames.get_flow(player)
     if flow[self.name..'-frame'] and flow[self.name..'-frame'].valid then
         return flow[self.name..'-frame']
+    else
+        local frame = flow.add{
+            type='frame',
+            name=self.name..'-frame',
+            direction=self.direction
+        }
+
+        if self.events.on_draw then
+            self.events.on_draw(player,frame)
+        end
+
+        if not self.open_by_default then
+            frame.visible = false
+        elseif type(self.open_by_default) == 'function' then
+            if not self.open_by_default(player,self.name) then
+                frame.visible = false
+            end
+        end
+
+        if not Toolbar.allowed(player,self.name) then
+            frame.visible = false
+        end
     end
 end
 
