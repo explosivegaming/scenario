@@ -328,7 +328,7 @@ local function generate_stats(player,frame)
         local rocket_count = avg_over
         local first_rocket = 0
         if avg_over < force_rockets then
-            first_rocket = rocket_times[player.force.name][force_rockets-avg_over]
+            first_rocket = rocket_times[player.force.name][force_rockets-avg_over+1]
         else
             rocket_count = force_rockets
         end
