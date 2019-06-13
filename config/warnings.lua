@@ -11,7 +11,7 @@ return {
         {'warnings.received',{'warnings.pre-pre-ban'}},
         {'warnings.received',{'warnings.pre-ban'}},
         function(player,by_player_name,number_of_warnings)
-            game.ban_player(player,{'warnings.received',by_player_name,number_of_warnings,{'warnings.ban',{'info.website-link'}}})
+            game.ban_player(player,{'warnings.received',by_player_name,number_of_warnings,{'warnings.ban',{'links.website'}}})
         end
     },
     temp_warning_cool_down=30, -- time for a temp warning (given by script) to be removed (in minutes)
