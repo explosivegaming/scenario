@@ -20,6 +20,8 @@ Commands.new_command('bonus','Changes the amount of bonus you receive')
 :register(function(player,amount)
     local percent = amount/100
     Store.set(bonus_store,player.name,percent)
+    Commands.print{'expcom-bonus.set',amount}
+    Commands.print({'expcom-bonus.wip'},'orange')
 end)
 
 Event.add(defines.events.on_player_respawned,function(event)
