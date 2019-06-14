@@ -1,18 +1,20 @@
 local Game = require 'utils.game'
 local Global = require 'utils.global'
 
-local Public = {
+local Reports = {
     user_reports={},
-    player_report_added = script.generate_event_name(),
-    player_report_removed = script.generate_event_name()
+    events = {
+        on_player_reported = script.generate_event_name(),
+        on_player_report_removed = script.generate_event_name()
+    }
 }
 
-Global.register(Public.user_reports,function(tbl)
-    Public.user_reports = tbl
+Global.register(Reports.user_reports,function(tbl)
+    Reports.user_reports = tbl
 end)
 
 local function event_emit(event,player,by_player_name)
-    local reports = Public.user_reports[player.name]
+    local reports = Reports.user_reports[player.name]
     local reason = reports and reports[by_player_name]
     script.raise_event(event,{
         name=event,
@@ -28,20 +30,20 @@ end
 -- @tparam[opt='Non string Given.'] reason the reason that the player is being reported
 -- @tparam[opt='<server>'] string by_player_name the name of the player doing the action
 -- @treturn boolean true if the report was added, nil if there is an error
-function Public.report_player(player,reason,by_player_name)
+function Reports.report_player(player,reason,by_player_name)
     player = Game.get_player_from_any(player)
     if not player then return end
     reason = reason or 'Non Given.'
     by_player_name = by_player_name or '<server>'
-    local reports = Public.user_reports[player.name]
+    local reports = Reports.user_reports[player.name]
     if not reports then
-        Public.user_reports[player.name] = {
+        Reports.user_reports[player.name] = {
             [by_player_name] = reason
         }
     elseif not reports[by_player_name] then
         reports[by_player_name] = reason
     else return false end
-    event_emit(Public.player_report_added,player,by_player_name)
+    event_emit(Reports.events.on_player_reported,player,by_player_name)
     return true
 end
 
@@ -49,16 +51,16 @@ end
 -- @tparam LuaPlayer player the player that will have the report removed
 -- @tparam[opt='<server>'] string by_player_name the name of the player doing the action
 -- @treturn boolean true if the report was removed, nil if there was an error
-function Public.remove_player_report(player,by_player_name)
+function Reports.remove_player_report(player,by_player_name)
     player = Game.get_player_from_any(player)
     if not player then return end
     by_player_name = by_player_name or '<server>'
-    local reports = Public.user_reports[player.name]
+    local reports = Reports.user_reports[player.name]
     if reports and reports[by_player_name] then
-        event_emit(Public.player_report_removed,player,by_player_name)
+        event_emit(Reports.events.on_player_report_removed,player,by_player_name)
         reports[by_player_name] = nil
-        if Public.count_player_reports(player) == 0 then
-            Public.user_reports[player.name] = nil
+        if Reports.count_player_reports(player) == 0 then
+            Reports.user_reports[player.name] = nil
         end
         return true
     end
@@ -68,15 +70,15 @@ end
 --- Clears all reports from a player, will emit an event for each individual report as if remove_player_report was used
 -- @tparam LuaPlayer player the player to clear the reports of
 -- @treturn boolean true if the reports were cleared, nil if error
-function Public.clear_player_reports(player)
+function Reports.clear_player_reports(player)
     player = Game.get_player_from_any(player)
     if not player then return end
-    local reports = Public.user_reports[player.name]
+    local reports = Reports.user_reports[player.name]
     if reports then
         for by_player_name,reason in pairs(reports) do
-            event_emit(Public.player_report_removed,player,by_player_name)
+            event_emit(Reports.events.on_player_report_removed,player,by_player_name)
         end
-        Public.user_reports[player.name] = nil
+        Reports.user_reports[player.name] = nil
         return true
     end
     return false
@@ -87,10 +89,10 @@ end
 -- @tparam string by_player_name the player that made if the report if present (note server is not default here)
 -- @tparam[opt=false] boolean rtn_reason true will return the reason for the report rather than a boolean
 -- @treturn boolean true if a report from the player is present unless rtn_reason is true when a string is returned (or false)
-function Public.player_is_reported_by(player,by_player_name,rtn_reason)
+function Reports.player_is_reported_by(player,by_player_name,rtn_reason)
     player = Game.get_player_from_any(player)
     if not player then return end
-    local reports = Public.user_reports[player.name]
+    local reports = Reports.user_reports[player.name]
     if reports and reports[by_player_name] then
         return rtn_reason and reports[by_player_name] or true
     end
@@ -100,10 +102,10 @@ end
 --- Gets all the reports that are on a player
 -- @tparam LuaPlayer player the player to get the reports of
 -- @treturn table a table of all the reports for this player, empty table if no reports
-function Public.get_player_reports(player)
+function Reports.get_player_reports(player)
     player = Game.get_player_from_any(player)
     if not player then return end
-    return Public.user_reports[player.name] or {}
+    return Reports.user_reports[player.name] or {}
 end
 
 --- Counts all reports on a player returning a number, a custom count function can be given which should return a number
@@ -113,10 +115,10 @@ end
 -- count_callback param - reason string - the reason the reason was made
 -- count_callback return - number or boolean - if number then this will be added to the count, if boolean then false = 0 and true = 1
 -- @treturn number the number of reports on the player
-function Public.count_player_reports(player,count_callback)
+function Reports.count_player_reports(player,count_callback)
     player = Game.get_player_from_any(player)
     if not player then return end
-    local reports = Public.user_reports[player.name] or {}
+    local reports = Reports.user_reports[player.name] or {}
     if not count_callback then
         local ctn = 0
         for _ in pairs(reports) do
@@ -136,4 +138,4 @@ function Public.count_player_reports(player,count_callback)
     end
 end
 
-return Public
+return Reports

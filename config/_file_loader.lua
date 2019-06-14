@@ -24,6 +24,7 @@ return {
     'modules.commands.warnings',
     'modules.commands.find',
     'modules.commands.bonus',
+    'modules.commands.home',
     -- QoL Addons
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',
@@ -35,6 +36,7 @@ return {
     'modules.addons.pollution-grading',
     'modules.addons.random-player-colours',
     'modules.addons.discord-alerts',
+    'modules.addons.chat-reply',
     -- GUI
     'modules.gui.rocket-info',
     'modules.gui.science-info',

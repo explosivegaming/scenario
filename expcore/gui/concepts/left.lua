@@ -49,18 +49,19 @@
     LeftFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
 local Gui = require 'expcore.gui.core'
-local Toolbar = require 'expcore.gui.toolbar'
-local Buttons = require 'expcore.gui.buttons'
+local Prototype = require 'expcore.gui.prototype'
+local Toolbar = require 'expcore.gui.concepts.toolbar'
+local Buttons = require 'expcore.gui.elements.buttons'
 local mod_gui = require 'mod-gui'
 local Game = require 'utils.game'
 local Event = require 'utils.event'
 
 local LeftFrames = {
     frames={},
-    _prototype=Gui._prototype_factory{
-        on_draw = Gui._event_factory('on_draw'),
-        on_update = Gui._event_factory('on_update'),
-        on_player_toggle = Gui._event_factory('on_player_toggle')
+    _prototype=Prototype.extend{
+        on_creation = Prototype.event,
+        on_update = Prototype.event,
+        on_player_toggle = Prototype.event
     }
 }
 setmetatable(LeftFrames._prototype, {
@@ -132,7 +133,6 @@ end
 -- @tparam string permision_name the name that can be used with the permision system
 -- @treturn table the new left frame define
 function LeftFrames.new_frame(permision_name)
-
     local self = Toolbar.new_button(permision_name)
 
     local mt = getmetatable(self)
@@ -141,11 +141,8 @@ function LeftFrames.new_frame(permision_name)
 
     self:on_click(function(player,_element)
         local visible = self:toggle(player)
-
-        if self.events.on_player_toggle then
-            local frame = self:get_frame(player)
-            self.events.on_player_toggle(player,frame,visible)
-        end
+        local frame = self:get_frame(player)
+        self:raise_event('on_player_toggle',player,frame,visible)
     end)
 
     LeftFrames.frames[self.name] = self
@@ -176,6 +173,34 @@ function LeftFrames._prototype:set_direction(direction)
     return self
 end
 
+--- Creates the gui for the first time, used internally
+-- @tparam LuaPlayer player the player to draw the frame to
+-- @treturn LuaGuiElement the frame that was made
+function LeftFrames._prototype:_internal_draw(player)
+    local flow = LeftFrames.get_flow(player)
+    local frame = flow.add{
+        type='frame',
+        name=self.name..'-frame',
+        direction=self.direction
+    }
+
+    self:raise_event('on_creation',player,frame)
+
+    if not self.open_by_default then
+        frame.visible = false
+    elseif type(self.open_by_default) == 'function' then
+        if not self.open_by_default(player,self.name) then
+            frame.visible = false
+        end
+    end
+
+    if not Toolbar.allowed(player,self.name) then
+        frame.visible = false
+    end
+
+    return frame
+end
+
 --- Gets the frame for this define from the left frame flow
 -- @tparam LuaPlayer player the player to get the frame of
 -- @treturn LuaGuiElement the frame in the left frame flow for this define
@@ -183,6 +208,8 @@ function LeftFrames._prototype:get_frame(player)
     local flow = LeftFrames.get_flow(player)
     if flow[self.name..'-frame'] and flow[self.name..'-frame'].valid then
         return flow[self.name..'-frame']
+    else
+        return self:_internal_draw(player)
     end
 end
 
@@ -208,11 +235,9 @@ end
 -- @tparam LuaPlayer player the player to update the frame of
 function LeftFrames._prototype:update(player)
     local frame = self:get_frame(player)
-    if self.events.on_update then
-        self.events.on_update(player,frame)
-    elseif self.events.on_draw then
+    if self:raise_event('on_update',player,frame) == 0 then
         frame.clear()
-        self.events.on_draw(player,frame)
+        self:raise_event('on_creation',player,frame)
     end
 end
 
@@ -230,9 +255,7 @@ end
 function LeftFrames._prototype:redraw(player)
     local frame = self:get_frame(player)
     frame.clear()
-    if self.events.on_draw then
-        self.events.on_draw(player,frame)
-    end
+    self:raise_event('on_creation',player,frame)
 end
 
 --- Redraws the frame for all players, see redraw
@@ -265,10 +288,7 @@ Buttons.new_button()
     for _,define in pairs(LeftFrames.frames) do
         local frame = LeftFrames.get_frame(define.name,player)
         frame.visible = false
-
-        if define.events.on_player_toggle then
-            define.events.on_player_toggle(player,frame,false)
-        end
+        define:raise_event('on_player_toggle',player,frame,false)
     end
     element.visible = false
 end)
@@ -285,28 +305,7 @@ Event.add(defines.events.on_player_created,function(event)
     style.font = 'default-small-bold'
 
     for _,define in pairs(LeftFrames.frames) do
-        local frame = flow.add{
-            type='frame',
-            name=define.name..'-frame',
-            direction=define.direction
-        }
-
-        if define.events.on_draw then
-            define.events.on_draw(player,frame)
-        end
-
-        if not define.open_by_default then
-            frame.visible = false
-        elseif type(define.open_by_default) == 'function' then
-            if not define.open_by_default(player,define.name) then
-                frame.visible = false
-            end
-        end
-
-        if not Toolbar.allowed(player,define.name) then
-            frame.visible = false
-        end
-
+        define:_internal_draw(player)
     end
 
     LeftFrames.get_open(player)

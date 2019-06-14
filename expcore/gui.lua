@@ -3,43 +3,49 @@
 
 local Gui = require 'expcore.gui.core'
 --[[
-    Gui._prototype_factory(tbl) --- Used internally to create new prototypes for element defines
-    Gui._event_factory(name) --- Used internally to create event handler adders for element defines
-    Gui._store_factory(callback) --- Used internally to create store adders for element defines
-    Gui._sync_store_factory(callback) --- Used internally to create synced store adders for element defines
-    Gui._define_factory(prototype) --- Used internally to create new element defines from a class prototype
+    Core
 
-    Gui._prototype:uid() --- Gets the uid for the element define
-    Gui._prototype:debug_name(name) --- Sets a debug alias for the define
-    Gui._prototype:set_caption(caption) --- Sets the caption for the element define
-    Gui._prototype:set_tooltip(tooltip) --- Sets the tooltip for the element define
-    Gui._prototype:set_style(style,callback) --- Sets the style for the element define
-    Gui._prototype:set_embeded_flow(state) ---  Sets the element to be drawn inside a nameless flow, can be given a name using a function
-    Gui._prototype:on_element_update(callback) --- Add a hander to run on the general value update event, different classes will handle this event differently
-
-    Gui._prototype:set_pre_authenticator(callback) --- Sets an authenticator that blocks the draw function if check fails
-    Gui._prototype:set_post_authenticator(callback) --- Sets an authenticator that disables the element if check fails
-    Gui._prototype:draw_to(element) --- Draws the element using what is in the draw_data table, allows use of authenticator if present, registers new instances if store present
+    Gui.new_define(prototype) --- Used internally to create new element defines from a class prototype
     Gui.draw(name,element) --- Draws a copy of the element define to the parent element, see draw_to
 
-    Gui._prototype:add_store(categorize) --- Adds a store location for the define that will save the state of the element, categorize is a function that returns a string
-    Gui._prototype:add_sync_store(location,categorize) --- Adds a store location for the define that will sync between games, categorize is a function that returns a string
-    Gui._prototype:on_store_update(callback) --- Adds a event callback for when the store changes are other events are not gauenteted to be raised
-    Gui.player_store(element) --- A categorize function to be used with add_store, each player has their own value
-    Gui.force_store(element) --- A categorize function to be used with add_store, each force has its own value
-    Gui.surface_store(element) --- A categorize function to be used with add_store, each surface has its own value
+    Gui.categorize_by_player(element) --- A categorize function to be used with add_store, each player has their own value
+    Gui.categorize_by_force(element) --- A categorize function to be used with add_store, each force has its own value
+    Gui.categorize_by_surface(element) --- A categorize function to be used with add_store, each surface has its own value
 
-    Gui._prototype:get_store(category) --- Gets the value in this elements store, category needed if categorize function used
-    Gui._prototype:set_store(category,value) --- Sets the value in this elements store, category needed if categorize function used
-    Gui.get_store(name,category) --- Gets the value that is stored for a given element define, category needed if categorize function used
-    Gui.set_store(name,category,value) --- Sets the value stored for a given element define, category needed if categorize function used
-
-    Gui.toggle_enable(element) --- Will toggle the enabled state of an element
+    Gui.toggle_enabled(element) --- Will toggle the enabled state of an element
     Gui.toggle_visible(element) --- Will toggle the visiblity of an element
     Gui.set_padding(element,up,down,left,right) --- Sets the padding for a gui element
     Gui.set_padding_style(style,up,down,left,right) --- Sets the padding for a gui style
-    Gui.create_right_align(element,flow_name) --- Allows the creation of a right align flow to place elements into
+    Gui.create_alignment(element,flow_name) --- Allows the creation of a right align flow to place elements into
     Gui.destory_if_valid(element) --- Destroies an element but tests for it being present and valid first
+    Gui.create_scroll_table(element,table_size,maximal_height,name) --- Creates a scroll area with a table inside, table can be any size
+    Gui.create_header(element,caption,tooltip,right_align,name) --- Creates a header section with a label and button area
+
+    Prototype Constructor
+
+    Constructor.event(event_name) --- Creates a new function to add functions to an event handler
+    Constructor.extend(new_prototype) --- Extents a prototype with the base functions of all gui prototypes, no metatables
+    Constructor.store(sync,callback) --- Creates a new function which adds a store to a gui define
+    Constructor.setter(value_type,key,second_key) --- Creates a setter function that checks the type when a value is set
+
+    Base Prototype
+
+    Prototype:uid() --- Gets the uid for the element define
+    Prototype:debug_name(value) ---  Sets a debug alias for the define
+    Prototype:set_caption(value) --- Sets the caption for the element define
+    Prototype:set_tooltip(value) --- Sets the tooltip for the element define
+    Prototype:set_style(style,callback) --- Sets the style for the element define
+    Prototype:set_embeded_flow(state) --- Sets the element to be drawn inside a nameless flow, can be given a name using a function
+
+    Prototype:set_pre_authenticator --- Sets an authenticator that blocks the draw function if check fails
+    Prototype:set_post_authenticator --- Sets an authenticator that disables the element if check fails
+
+    Prototype:raise_event(event_name,...) --- Raises a custom event for this define, any number of params can be given
+    Prototype:draw_to(element,...) --- The main function for defines, when called will draw an instance of this define to the given element
+
+    Prototype:get_store(category) --- Gets the value in this elements store, category needed if categorize function used
+    Prototype:set_store(category,value) --- Sets the value in this elements store, category needed if categorize function used
+    Prototype:clear_store(category) --- Sets the value in this elements store to nil, category needed if categorize function used
 ]]
 
 local Instances = require 'expcore.gui.instances'
@@ -48,8 +54,20 @@ Gui.get_instances = Instances.get_elements
 Gui.add_instance = Instances.get_elements
 Gui.update_instances = Instances.apply_to_elements
 Gui.classes.instances = Instances
+--[[
+    Instances.has_categories(name) --- Returns if a instnace group has a categorise function; must be registerd
+    Instances.is_registered(name) --- Returns if the given name is a registered instance group
+    Instances.register(name,categorise) --- Registers the name of an instance group to allow for storing element instances
 
-local Button = require 'expcore.gui.buttons'
+    Instances.add_element(name,element) --- Adds an element to the instance group under the correct category; must be registered
+    Instances.get_elements_raw(name,category) --- Gets all element instances without first removing any invalid ones; used internally and must be registered
+    Instances.get_valid_elements(name,category,callback) --- Gets all valid element instances and has the option of running a callback on those that are valid
+
+    Instances.unregistered_add_element(name,category,element) --- A version of add_element that does not require the group to be registered
+    Instances.unregistered_get_elements(name,category,callback) --- A version of get_elements that does not require the group to be registered
+]]
+
+local Button = require 'expcore.gui.elements.buttons'
 Gui.new_button = Button.new_button
 Gui.classes.button = Button
 --[[
@@ -64,7 +82,7 @@ Gui.classes.button = Button
     Button._prototype:set_key_filter(filter,...) --- Adds a control key filter to the button
 ]]
 
-local Checkbox = require 'expcore.gui.checkboxs'
+local Checkbox = require 'expcore.gui.elements.checkboxs'
 Gui.new_checkbox = Checkbox.new_checkbox
 Gui.new_radiobutton = Checkbox.new_radiobutton
 Gui.new_radiobutton_option_set = Checkbox.new_option_set
@@ -86,7 +104,7 @@ Gui.classes.checkbox = Checkbox
     Checkbox.reset_radiobutton(element,exclude,recursive) --- Sets all radiobutotn in a element to false (unless excluded) and can act recursivly
 ]]
 
-local Dropdown = require 'expcore.gui.dropdown'
+local Dropdown = require 'expcore.gui.elements.dropdown'
 Gui.new_dropdown = Dropdown.new_dropdown
 Gui.new_list_box = Dropdown.new_list_box
 Gui.classes.dropdown = Dropdown
@@ -105,7 +123,7 @@ Gui.classes.dropdown = Dropdown
     Dropdown.get_selected_value(element) --- Returns the currently selected value rather than index
 ]]
 
-local Slider = require 'expcore.gui.slider'
+local Slider = require 'expcore.gui.elements.slider'
 Gui.new_slider = Slider.new_slider
 Gui.classes.slider = Slider
 --[[
@@ -114,13 +132,12 @@ Gui.classes.slider = Slider
     Slider._prototype:on_element_update(callback) --- Registers a handler for when an element instance updates
     Slider._prototype:on_store_update(callback) --- Registers a handler for when the stored value updates
 
-    Slider._prototype:use_notches(state) --- Adds notches to the slider
     Slider._prototype:set_range(min,max) --- Sets the range of a slider, if not used will use default values for a slider
     Slider._prototype:draw_label(element) --- Draws a new label and links its value to the value of this slider, if no store then it will only show one value per player
     Slider._prototype:enable_auto_draw_label(state) --- Enables auto draw of the label, the label will share the same parent element as the slider
 ]]
 
-local Text = require 'expcore.gui.text'
+local Text = require 'expcore.gui.elements.text'
 Gui.new_text_filed = Text.new_text_field
 Gui.new_text_box = Text.new_text_box
 Gui.classes.text = Text
@@ -137,7 +154,7 @@ Gui.classes.text = Text
     Text._prototype_box:set_read_only(state) --- Sets the text box to be read only
 ]]
 
-local ElemButton = require 'expcore.gui.elem-button'
+local ElemButton = require 'expcore.gui.elements.elem-button'
 Gui.new_elem_button = ElemButton.new_elem_button
 Gui.classes.elem_button = ElemButton
 --[[
@@ -150,7 +167,7 @@ Gui.classes.elem_button = ElemButton
     ElemButton._prototype:set_default(value) --- Sets the default value for the elem button, this may be a function or a string
 ]]
 
-local ProgressBar = require 'expcore.gui.progress-bar'
+local ProgressBar = require 'expcore.gui.elements.progress-bar'
 Gui.new_progressbar = ProgressBar.new_progressbar
 Gui.set_progressbar_maximum = ProgressBar.set_maximum
 Gui.increment_progressbar = ProgressBar.increment
@@ -177,7 +194,7 @@ Gui.classes.progressbar = ProgressBar
     ProgressBar._prototype:event_countdown(filter) --- Event handler factory that counts down by 1 every time the event triggeres, can filter which elements are decremented
 ]]
 
-local Toolbar = require 'expcore.gui.toolbar'
+local Toolbar = require 'expcore.gui.concepts.toolbar'
 Gui.new_toolbar_button = Toolbar.new_button
 Gui.add_button_to_toolbar = Toolbar.add_button
 Gui.update_toolbar = Toolbar.update
@@ -188,7 +205,7 @@ Gui.classes.toolbar = Toolbar
     Toolbar.update(player) --- Updates the player's toolbar with an new buttons or expected change in auth return
 ]]
 
-local LeftFrames = require 'expcore.gui.left'
+local LeftFrames = require 'expcore.gui.concepts.left'
 Gui.get_left_frame_flow = LeftFrames.get_flow
 Gui.toggle_left_frame = LeftFrames.toggle_frame
 Gui.new_left_frame = LeftFrames.new_frame
@@ -217,7 +234,7 @@ Gui.classes.left_frames = LeftFrames
     LeftFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
 
-local CenterFrames = require 'expcore.gui.center'
+local CenterFrames = require 'expcore.gui.concepts.center'
 Gui.get_center_flow = CenterFrames.get_flow
 Gui.toggle_center_frame = CenterFrames.toggle_frame
 Gui.draw_center_frame = CenterFrames.draw_frame
@@ -240,7 +257,7 @@ Gui.classes.center_frames = CenterFrames
     CenterFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
 
-local PopupFrames = require 'expcore.gui.popups'
+local PopupFrames = require 'expcore.gui.concepts.popups'
 Gui.get_popup_flow = PopupFrames.get_flow
 Gui.open_popup = PopupFrames.open
 Gui.new_popup = PopupFrames.new_popup

@@ -82,6 +82,10 @@ Roles.new_role('Moderator','Mod')
     'command/clear-temp-ban',
     'command/clear-inventory',
     'command/bonus',
+    'command/home',
+    'command/home-set',
+    'command/home-get',
+    'command/return',
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
 }
@@ -128,6 +132,10 @@ Roles.new_role('Pay to Win','P2W')
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
     'command/bonus',
+    'command/home',
+    'command/home-set',
+    'command/home-get',
+    'command/return',
 }
 
 Roles.new_role('Donator','Don')
@@ -155,6 +163,7 @@ Roles.new_role('Veteran','Vet')
 :set_custom_color{r=140,g=120,b=200}
 :set_parent('Member')
 :allow{
+    'command/chat-bot',
 }
 :set_auto_promote_condition(function(player)
     if player.online_time > 10*216000 then

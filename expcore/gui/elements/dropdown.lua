@@ -17,40 +17,30 @@
     Other functions present from expcore.gui.core
 ]]
 local Gui = require 'expcore.gui.core'
+local Prototype = require 'expcore.gui.prototype'
 local Game = require 'utils.game'
 
---- Event call for on_selection_state_changed and store update
+local select_value
+--- Store call for store update
 -- @tparam table define the define that this is acting on
 -- @tparam LuaGuiElement element the element that triggered the event
 -- @tparam string value the new option for the dropdown
-local function event_call(define,element,value)
+local function store_update(define,element,value)
+    select_value(element,value)
     local player = Game.get_player_by_index(element.player_index)
-
-    if define.events.on_element_update then
-        define.events.on_element_update(player,element,value)
-    end
+    define:raise_event('on_element_update',player,element,value)
 
     if define.option_callbacks and define.option_callbacks[value] then
         define.option_callbacks[value](player,element,value)
     end
 end
 
-local _select_value
---- Store call for store update
--- @tparam table define the define that this is acting on
--- @tparam LuaGuiElement element the element that triggered the event
--- @tparam string value the new option for the dropdown
-local function store_call(define,element,value)
-    _select_value(element,value)
-    event_call(define,element,value)
-end
-
 local Dropdown = {
-    _prototype=Gui._prototype_factory{
-        on_element_update = Gui._event_factory('on_element_update'),
-        on_store_update = Gui._event_factory('on_store_update'),
-        add_store = Gui._store_factory(store_call),
-        add_sync_store = Gui._sync_store_factory(store_call)
+    _prototype=Prototype.extend{
+        on_element_update = Prototype.event,
+        on_store_update = Prototype.event,
+        add_store = Prototype.store(false,store_update),
+        add_sync_store = Prototype.store(true,store_update)
     }
 }
 
@@ -59,16 +49,11 @@ local Dropdown = {
 -- @treturn table the new dropdown element define
 function Dropdown.new_dropdown(name)
 
-    local self = Gui._define_factory(Dropdown._prototype)
+    local self = Gui.new_define(Dropdown._prototype,name)
     self.draw_data.type = 'drop-down'
 
-    if name then
-        self:debug_name(name)
-    end
-
-    self.post_draw = function(element)
+    self:on_draw(function(player,element)
         if self.dynamic_options then
-            local player = Game.get_player_by_index(element.player_index)
             local dynamic_options = self.dynamic_options(player,element)
             local items = element.items
             for _,v in pairs(dynamic_options) do
@@ -82,7 +67,7 @@ function Dropdown.new_dropdown(name)
             local value = self:get_store(category)
             if value then Dropdown.select_value(element,value) end
         end
-    end
+    end)
 
     Gui.on_selection_state_changed(self.name,function(event)
         local element = event.element
@@ -93,7 +78,12 @@ function Dropdown.new_dropdown(name)
             self:set_store(category,value)
 
         else
-            event_call(self,element,value)
+            local player = event.player
+            local option_callbacks = self.option_callbacks 
+            self:raise_event('on_element_update',player,element,value)
+            if option_callbacks and option_callbacks[value] then
+                option_callbacks[value](player,element,value)
+            end
 
         end
 
@@ -176,7 +166,7 @@ function Dropdown.select_value(element,value)
         end
     end
 end
-_select_value = Dropdown.select_value
+select_value = Dropdown.select_value
 
 --- Returns the currently selected value rather than index
 -- @tparam LuaGuiElement element the gui element that you want to get the value of

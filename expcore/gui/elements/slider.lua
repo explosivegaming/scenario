@@ -6,7 +6,6 @@
     Slider._prototype:on_element_update(callback) --- Registers a handler for when an element instance updates
     Slider._prototype:on_store_update(callback) --- Registers a handler for when the stored value updates
 
-    Slider._prototype:use_notches(state) --- Adds notches to the slider
     Slider._prototype:set_range(min,max) --- Sets the range of a slider, if not used will use default values for a slider
     Slider._prototype:draw_label(element) --- Draws a new label and links its value to the value of this slider, if no store then it will only show one value per player
     Slider._prototype:enable_auto_draw_label(state) --- Enables auto draw of the label, the label will share the same parent element as the slider
@@ -14,6 +13,7 @@
     Other functions present from expcore.gui.core
 ]]
 local Gui = require 'expcore.gui.core'
+local Prototype = require 'expcore.gui.prototype'
 local Instances = require 'expcore.gui.instances'
 local Game = require 'utils.game'
 
@@ -28,9 +28,7 @@ local function event_call(define,element,value)
     local delta = max-min
     local percent = delta == 0 and 0 or (value-min)/delta
 
-    if define.events.on_element_update then
-        define.events.on_element_update(player,element,value,percent)
-    end
+    define:raise_event('on_element_update',player,element,value,percent)
 
     local category = player.name
     if define.categorize then
@@ -46,17 +44,17 @@ end
 -- @tparam table define the define that this is acting on
 -- @tparam LuaGuiElement element the element that triggered the event
 -- @tparam number value the new value for the slider
-local function store_call(define,element,value)
+local function store_update(define,element,value)
     element.slider_value = value
     event_call(define,element,value)
 end
 
 local Slider = {
-    _prototype=Gui._prototype_factory{
-        on_element_update = Gui._event_factory('on_element_update'),
-        on_store_update = Gui._event_factory('on_store_update'),
-        add_store = Gui._store_factory(store_call),
-        add_sync_store = Gui._sync_store_factory(store_call)
+    _prototype=Prototype.extend{
+        on_element_update = Prototype.event,
+        on_store_update = Prototype.event,
+        add_store = Prototype.store(false,store_update),
+        add_sync_store = Prototype.store(true,store_update)
     }
 }
 
@@ -65,15 +63,10 @@ local Slider = {
 -- @treturn table the new slider element define
 function Slider.new_slider(name)
 
-    local self = Gui._define_factory(Slider._prototype)
+    local self = Gui.new_define(Slider._prototype,name)
     self.draw_data.type = 'slider'
 
-    if name then
-        self:debug_name(name)
-    end
-
-    self.post_draw = function(element)
-        local player = Game.get_player_by_index(element.player_index)
+    self:on_draw(function(player,element)
         local min,max = element.get_slider_minimum(),element.get_slider_maximum()
 
         if type(self.min) == 'function' then
@@ -95,7 +88,7 @@ function Slider.new_slider(name)
         if self.auto_label then
             self:draw_label(element.parent)
         end
-    end
+    end)
 
     Gui.on_value_changed(self.name,function(event)
         local element = event.element
@@ -112,17 +105,6 @@ function Slider.new_slider(name)
 
     end)
 
-    return self
-end
-
---- Adds notches to the slider
--- @tparam[opt] boolean state when true will draw notches onto the slider
-function Slider._prototype:use_notches(state)
-    if state == false then
-        self.draw_data.style = nil
-    else
-        self.draw_data.style = 'notched_slider'
-    end
     return self
 end
 
@@ -164,7 +146,7 @@ function Slider._prototype:draw_label(element)
         caption=tostring(math.round(value,2))
     }
 
-    local categorise = self.categorise or Gui.player_store
+    local categorise = self.categorise or Gui.categorize_by_player
     local category = categorise(new_element)
 
     Instances.unregistered_add_element(name,category,new_element)

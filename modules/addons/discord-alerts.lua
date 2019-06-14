@@ -13,7 +13,7 @@ local function to_hex(color)
     local hex_digits = '0123456789ABCDEF'
     local function hex(bit)
         local major, minor = math.modf(bit/16)
-        minor = minor*16
+        major,minor = major+1,minor*16+1
         return hex_digits:sub(major,major)..hex_digits:sub(minor,minor)
     end
 
@@ -77,7 +77,7 @@ end
 --- Reports added and removed
 if config.player_reports then
     local Reports = require 'modules.addons.reports-control'
-    Event.add(Reports.player_report_added,function(event)
+    Event.add(Reports.events.on_player_reported,function(event)
         local player_name,by_player_name = get_player_name(event)
         emit_event{
             title='Report',
@@ -88,7 +88,7 @@ if config.player_reports then
             ['Reason:']=event.reason
         }
     end)
-    Event.add(Reports.player_report_removed,function(event)
+    Event.add(Reports.events.on_player_report_removed,function(event)
         local player_name,by_player_name = get_player_name(event)
         emit_event{
             title='Report Removed',
@@ -103,7 +103,7 @@ end
 --- Warnings added and removed
 if config.player_warnings then
     local Warnings = require 'modules.addons.warnings-control'
-    Event.add(Warnings.player_warning_added,function(event)
+    Event.add(Warnings.events.on_player_warned,function(event)
         local player_name,by_player_name = get_player_name(event)
         emit_event{
             title='Warning',
@@ -113,7 +113,7 @@ if config.player_warnings then
             ['By:']='<inline>'..by_player_name
         }
     end)
-    Event.add(Warnings.player_warning_removed,function(event)
+    Event.add(Warnings.events.on_player_warning_removed,function(event)
         local player_name,by_player_name = get_player_name(event)
         emit_event{
             title='Warning Removed',

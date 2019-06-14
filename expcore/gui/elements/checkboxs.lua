@@ -10,7 +10,7 @@
     local example_option_set =
     Gui.new_option_set('example-option-set',function(value,category)
         game.print('Example options set '..category..' is now: '..tostring(value))
-    end,Gui.player_store)
+    end,Gui.categorize_by_player)
 
     Then you must register some radiobutton defines and include them in the option set:
 
@@ -46,43 +46,34 @@
     Other functions present from expcore.gui.core
 ]]
 local Gui = require 'expcore.gui.core'
+local Prototype = require 'expcore.gui.prototype'
 local Store = require 'expcore.store'
 local Game = require 'utils.game'
-
---- Event call for on_checked_state_changed and store update
--- @tparam table define the define that this is acting on
--- @tparam LuaGuiElement element the element that triggered the event
--- @tparam boolean value the new state of the checkbox
-local function event_call(define,element,value)
-    if define.events.on_element_update then
-        local player = Game.get_player_by_index(element.player_index)
-        define.events.on_element_update(player,element,value)
-    end
-end
 
 --- Store call for store update
 -- @tparam table define the define that this is acting on
 -- @tparam LuaGuiElement element the element that triggered the event
 -- @tparam boolean value the new state of the checkbox
-local function store_call(define,element,value)
+local function store_update(define,element,value)
     element.state = value
-    event_call(define,element,value)
+    local player = Game.get_player_by_index(element.player_index)
+    define:raise_event('on_element_update',player,element,value)
 end
 
 local Checkbox = {
     option_sets={},
     option_categorize={},
-    _prototype_checkbox=Gui._prototype_factory{
-        on_element_update = Gui._event_factory('on_element_update'),
-        on_store_update = Gui._event_factory('on_store_update'),
-        add_store = Gui._store_factory(store_call),
-        add_sync_store = Gui._sync_store_factory(store_call)
+    _prototype_checkbox=Prototype.extend{
+        on_element_update = Prototype.event,
+        on_store_update = Prototype.event,
+        add_store = Prototype.store(false,store_update),
+        add_sync_store = Prototype.store(true,store_update)
     },
-    _prototype_radiobutton=Gui._prototype_factory{
-        on_element_update = Gui._event_factory('on_element_update'),
-        on_store_update = Gui._event_factory('on_store_update'),
-        add_store = Gui._store_factory(store_call),
-        add_sync_store = Gui._sync_store_factory(store_call)
+    _prototype_radiobutton=Prototype.extend{
+        on_element_update = Prototype.event,
+        on_store_update = Prototype.event,
+        add_store = Prototype.store(false,store_update),
+        add_sync_store = Prototype.store(true,store_update)
     }
 }
 
@@ -91,21 +82,17 @@ local Checkbox = {
 -- @treturn table the new checkbox element define
 function Checkbox.new_checkbox(name)
 
-    local self = Gui._define_factory(Checkbox._prototype_checkbox)
+    local self = Gui.new_define(Checkbox._prototype_checkbox,name)
     self.draw_data.type = 'checkbox'
     self.draw_data.state = false
 
-    if name then
-        self:debug_name(name)
-    end
-
-    self.post_draw = function(element)
+    self:on_draw(function(player,element)
         if self.store then
             local category = self.categorize and self.categorize(element) or nil
             local state = self:get_store(category,true)
             if state then element.state = true end
         end
-    end
+    end)
 
     Gui.on_checked_state_changed(self.name,function(event)
         local element = event.element
@@ -121,8 +108,7 @@ function Checkbox.new_checkbox(name)
             self:set_store(category,value)
 
         else
-            local value = element.state
-            event_call(self,element,value)
+            self:raise_event('on_element_update',event.player,element,element.state)
 
         end
     end)

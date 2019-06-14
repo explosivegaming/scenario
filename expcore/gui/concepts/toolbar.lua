@@ -14,8 +14,8 @@
     Toolbar.add_button(button) --- Adds an existing buttton to the toolbar
     Toolbar.update(player) --- Updates the player's toolbar with an new buttons or expected change in auth return
 ]]
-local Buttons = require 'expcore.gui.buttons'
 local Gui = require 'expcore.gui.core'
+local Buttons = require 'expcore.gui.elements.buttons'
 local Roles = require 'expcore.roles'
 local Event = require 'utils.event'
 local Game = require 'utils.game'
@@ -92,13 +92,13 @@ Event.add(defines.events.on_player_created,function(event)
 end)
 
 --- When a player gets a new role they will have the toolbar updated
-Event.add(Roles.player_role_assigned,function(event)
+Event.add(Roles.events.on_role_assigned,function(event)
     local player = Game.get_player_by_index(event.player_index)
     Toolbar.update(player)
 end)
 
 --- When a player loses a role they will have the toolbar updated
-Event.add(Roles.player_role_unassigned,function(event)
+Event.add(Roles.events.on_role_unassigned,function(event)
     local player = Game.get_player_by_index(event.player_index)
     Toolbar.update(player)
 end)

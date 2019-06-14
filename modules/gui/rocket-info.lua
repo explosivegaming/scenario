@@ -145,52 +145,21 @@ end)
 --- Used to create the three different sections
 local function create_section(container,section_name,table_size)
     --- Header for the section
-    local header =
-    container.add{
-        type='frame',
-        name=section_name..'-header',
-        style='subheader_frame',
-    }
-    Gui.set_padding(header,4,1,4,4)
-    header.style.horizontally_stretchable = true
-
-    --- Caption for the header bar
-    header.add{
-        type='label',
-        style='heading_1_label',
-        caption={'rocket-info.section-caption-'..section_name},
-        tooltip={'rocket-info.section-tooltip-'..section_name}
-    }
+    local header_area = Gui.create_header(
+        container,
+        {'rocket-info.section-caption-'..section_name},
+        {'rocket-info.section-tooltip-'..section_name},
+        true,
+        section_name..'-header'
+    )
 
     --- Right aligned button to toggle the section
-    local expand_flow = Gui.create_right_align(header,section_name)
-    toggle_section(expand_flow)
-
-    --- The area which contains the section content
-    local flow =
-    container.add{
-        name=section_name,
-        type='scroll-pane',
-        direction='vertical',
-        horizontal_scroll_policy='never',
-        vertical_scroll_policy='auto-and-reserve-space'
-    }
-    Gui.set_padding(flow,1,1,2,2)
-    flow.style.horizontally_stretchable = true
-    flow.style.maximal_height = 215
-    flow.visible = false
+    toggle_section(header_area)
 
     --- Table used to store the data
-    local flow_table =
-    flow.add{
-        name='table',
-        type='table',
-        column_count=table_size
-    }
-    Gui.set_padding(flow_table)
-    flow_table.style.horizontally_stretchable = true
-    flow_table.style.vertical_align = 'center'
-    flow_table.style.cell_padding = 0
+    local flow_table = Gui.create_scroll_table(container,table_size,215,section_name)
+    flow_table.parent.visible = false
+
 end
 
 --[[ Creates the main structure for the gui
@@ -272,7 +241,7 @@ local function create_label_value_pair(element,data_name,value,tooltip,extra)
             tooltip={'rocket-info.data-tooltip-'..data_name,extra}
         }
         --- Right aligned label to store the data
-        local right_flow = Gui.create_right_align(element,data_name_extra)
+        local right_flow = Gui.create_alignment(element,data_name_extra)
         right_flow.add{
             type='label',
             name='label',
@@ -328,7 +297,7 @@ local function generate_stats(player,frame)
         local rocket_count = avg_over
         local first_rocket = 0
         if avg_over < force_rockets then
-            first_rocket = rocket_times[player.force.name][force_rockets-avg_over]
+            first_rocket = rocket_times[player.force.name][force_rockets-avg_over+1]
         else
             rocket_count = force_rockets
         end
@@ -347,9 +316,9 @@ local function generate_milestones(player,frame)
     for _,milestone in ipairs(config.milestones) do
         if milestone <= force_rockets then
             local time = rocket_times[player.force.name][milestone]
-            create_label_value_pair_time(element,'milstone-n',time,true,milestone)
+            create_label_value_pair_time(element,'milstone-n',time,false,milestone)
         else
-            create_label_value_pair_time(element,'milstone-n',0,true,milestone)
+            create_label_value_pair_time(element,'milstone-n',0,false,milestone)
             break
         end
     end
@@ -470,7 +439,7 @@ local function generate_progress(player,frame)
                 }
 
                 --- Creates the progress value which is right aligned
-                local right_flow = Gui.create_right_align(element,silo_name)
+                local right_flow = Gui.create_alignment(element,silo_name)
                 right_flow.add{
                     type='label',
                     name='label',
@@ -517,7 +486,7 @@ end)
     return player.force.rockets_launched > 0
 end)
 :set_direction('vertical')
-:on_draw(function(player,element)
+:on_creation(function(player,element)
     generate_container(player,element)
     generate_stats(player,element)
     generate_milestones(player,element)
@@ -631,7 +600,7 @@ Event.on_nth_tick(150,function()
 end)
 
 --- Makes sure the right buttons are present when role changes
-Event.add(Roles.player_role_assigned,rocket_info 'redraw')
-Event.add(Roles.player_role_unassigned,rocket_info 'redraw')
+Event.add(Roles.events.on_role_assigned,rocket_info 'redraw')
+Event.add(Roles.events.on_role_unassigned,rocket_info 'redraw')
 
 return rocket_info

@@ -254,7 +254,7 @@ local warp_timer =
 Gui.new_progressbar()
 :set_tooltip{'warp-list.timer-tooltip',config.recharge_time}
 :set_default_maximum(math.floor(config.recharge_time*config.update_smothing))
-:add_store(Gui.player_store)
+:add_store(Gui.categorize_by_player)
 :set_style(nil,function(style)
     style.horizontally_stretchable = true
     style.color = Colors.light_blue
@@ -449,7 +449,7 @@ function generate_warp(player,element,warp_id)
             Gui.set_padding(warp_area)
 
             -- if the player can edit then it adds the edit and delete button
-            local flow = Gui.create_right_align(element,'edit-'..warp_id)
+            local flow = Gui.create_alignment(element,'edit-'..warp_id)
             local sub_flow = flow.add{type='flow',name=warp_id}
 
             edit_warp(sub_flow)
@@ -493,6 +493,7 @@ function generate_warp(player,element,warp_id)
 
             local timer = warp_timer:get_store(player.name)
             local enabled = not timer and Store.get(warp_player_in_range_store,player.name)
+            or Roles.player_allowed(player,config.bypass_warp_limits_permision)
             if not enabled then
                 btn.enabled = false
                 btn.tooltip = {'warp-list.goto-disabled'}
@@ -577,52 +578,20 @@ local function generate_container(player,element)
     container.style.vertically_stretchable = false
 
     -- main header for the gui
-    local header =
-    container.add{
-        name='header',
-        type='frame',
-        style='subheader_frame'
-    }
-    Gui.set_padding(header,2,2,4,4)
-    header.style.horizontally_stretchable = true
-    header.style.use_header_filler = false
-
-    --- Caption for the header bar
-    header.add{
-        type='label',
-        style='heading_1_label',
-        caption={'warp-list.main-caption'},
-        tooltip={'warp-list.sub-tooltip',config.recharge_time,config.activation_range}
-    }
+    local header_area = Gui.create_header(
+        container,
+        {'warp-list.main-caption'},
+        {'warp-list.sub-tooltip',config.recharge_time,config.activation_range},
+        true
+    )
 
     --- Right aligned button to toggle the section
     if player_allowed_edit(player) then
-        local right_align = Gui.create_right_align(header)
-        add_new_warp(right_align)
+        add_new_warp(header_area)
     end
 
-    -- main flow for the data
-    local flow =
-    container.add{
-        name='scroll',
-        type='scroll-pane',
-        direction='vertical',
-        horizontal_scroll_policy='never',
-        vertical_scroll_policy='auto-and-reserve-space'
-    }
-    Gui.set_padding(flow,1,1,2,2)
-    flow.style.horizontally_stretchable = true
-    flow.style.maximal_height = 258
-
     -- table that stores all the data
-    local flow_table =
-    flow.add{
-        name='table',
-        type='table',
-        column_count=3
-    }
-    Gui.set_padding(flow_table)
-    flow_table.style.horizontally_stretchable = true
+    local flow_table = Gui.create_scroll_table(container,3,258)
     flow_table.style.top_cell_padding = 3
     flow_table.style.bottom_cell_padding = 3
 
@@ -637,7 +606,7 @@ Gui.new_left_frame('gui/warp-list')
 :set_sprites('item/'..config.default_icon)
 :set_tooltip{'warp-list.main-tooltip',config.activation_range}
 :set_direction('vertical')
-:on_draw(function(player,element)
+:on_creation(function(player,element)
     local data_table = generate_container(player,element)
     local force_name = player.force.name
 
@@ -716,6 +685,10 @@ Store.register(warp_player_in_range_store,function(value,player_name)
         Gui.toggle_left_frame(warp_list.name,player,value)
     end
 
+    if Roles.player_allowed(player,config.bypass_warp_limits_permision) then
+        return
+    end
+
     if force_warps[force.name] then
         for _,warp_id in pairs(force_warps[force.name]) do
             local element = table_area['icon-'..warp_id][goto_warp.name]
@@ -788,5 +761,25 @@ Event.add(defines.events.on_player_created,function(event)
         add_spawn(player)
     end
 end)
+
+local function maintain_tag(event)
+    local tag = event.tag
+    local force = event.force
+    local warps = force_warps[force.name]
+    if warps then
+        for _,warp_id in pairs(warps) do
+            local warp = warp_details[warp_id]
+            if not warp.tag or not warp.tag.valid or warp.tag == tag then
+                if event.name == defines.events.on_chart_tag_removed then
+                    warp.tag = nil
+                end
+                make_warp_tag(warp_id)
+            end
+        end
+    end
+end
+
+Event.add(defines.events.on_chart_tag_modified,maintain_tag)
+Event.add(defines.events.on_chart_tag_removed,maintain_tag)
 
 return warp_list
