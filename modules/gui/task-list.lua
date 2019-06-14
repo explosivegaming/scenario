@@ -334,42 +334,22 @@ local function generate_container(player,element)
         add_new_task(right_align)
     end
 
-    -- main flow for the data
-    local flow =
-    container.add{
-        name='scroll',
-        type='scroll-pane',
-        direction='vertical',
-        horizontal_scroll_policy='never',
-        vertical_scroll_policy='auto-and-reserve-space'
-    }
-    Gui.set_padding(flow,1,1,2,2)
-    flow.style.horizontally_stretchable = true
-    flow.style.maximal_height = 185
+    -- table that stores all the data
+    local flow_table = Gui.create_scroll_table(container,3,185)
+    flow_table.draw_horizontal_lines = true
+    flow_table.vertical_centering = false
+    flow_table.style.top_cell_padding = 3
+    flow_table.style.bottom_cell_padding = 3
 
     -- message to say that you have no tasks
     local non_made =
-    flow.add{
+    flow_table.parent.add{
         name='no_tasks',
         type='label',
         caption={'task-list.no-tasks'}
     }
     non_made.style.width = 200
     non_made.style.single_line = false
-
-    -- table that stores all the data
-    local flow_table =
-    flow.add{
-        name='table',
-        type='table',
-        column_count=3,
-        draw_horizontal_lines=true,
-        vertical_centering=false
-    }
-    Gui.set_padding(flow_table)
-    flow_table.style.horizontally_stretchable = true
-    flow_table.style.top_cell_padding = 3
-    flow_table.style.bottom_cell_padding = 3
 
     return flow_table
 end

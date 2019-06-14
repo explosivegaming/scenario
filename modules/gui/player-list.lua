@@ -111,30 +111,8 @@ local function generate_container(player,element)
     }
     Gui.set_padding(container)
 
-    -- a scroll bar which allows 8 players to be seen at once
-    local list_scroll =
-    container.add{
-        name='scroll',
-        type='scroll-pane',
-        direction='vertical',
-        horizontal_scroll_policy='never',
-        vertical_scroll_policy='auto-and-reserve-space'
-    }
-    Gui.set_padding(list_scroll,1,1,2,2)
-    list_scroll.style.horizontally_stretchable = true
-    list_scroll.style.maximal_height = 188
-
     -- 3 wide table to contain: action button, player name, and play time
-    local list_table =
-    list_scroll.add{
-        name='table',
-        type='table',
-        column_count=3
-    }
-    Gui.set_padding(list_table)
-    list_table.style.horizontally_stretchable = true
-    list_table.style.vertical_align = 'center'
-    list_table.style.cell_padding = 0
+    local list_table = Gui.create_scroll_table(container,3,188)
 
     -- action bar which contains the different action buttons
     local action_bar =

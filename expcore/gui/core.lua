@@ -293,4 +293,37 @@ function Gui.destory_if_valid(element)
     end
 end
 
+--- Creates a scroll area with a table inside, table can be any size
+-- @tparam LuaGuiElement element the element to add this scroll into
+-- @tparam number table_size the number of columns in the table
+-- @tparam number maximal_height the max hieght of the scroll
+-- @tparam[opt='scroll'] string name the name of the scoll element
+-- @treturn LuaGuiElement the table that was made
+function Gui.create_scroll_table(element,table_size,maximal_height,name)
+    local list_scroll =
+    element.add{
+        name=name or 'scroll',
+        type='scroll-pane',
+        direction='vertical',
+        horizontal_scroll_policy='never',
+        vertical_scroll_policy='auto-and-reserve-space'
+    }
+    Gui.set_padding(list_scroll,1,1,2,2)
+    list_scroll.style.horizontally_stretchable = true
+    list_scroll.style.maximal_height = maximal_height
+
+    local list_table =
+    list_scroll.add{
+        name='table',
+        type='table',
+        column_count=table_size
+    }
+    Gui.set_padding(list_table)
+    list_table.style.horizontally_stretchable = true
+    list_table.style.vertical_align = 'center'
+    list_table.style.cell_padding = 0
+
+    return list_table
+end
+
 return Gui

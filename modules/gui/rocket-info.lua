@@ -166,31 +166,10 @@ local function create_section(container,section_name,table_size)
     local expand_flow = Gui.create_alignment(header,section_name)
     toggle_section(expand_flow)
 
-    --- The area which contains the section content
-    local flow =
-    container.add{
-        name=section_name,
-        type='scroll-pane',
-        direction='vertical',
-        horizontal_scroll_policy='never',
-        vertical_scroll_policy='auto-and-reserve-space'
-    }
-    Gui.set_padding(flow,1,1,2,2)
-    flow.style.horizontally_stretchable = true
-    flow.style.maximal_height = 215
-    flow.visible = false
-
     --- Table used to store the data
-    local flow_table =
-    flow.add{
-        name='table',
-        type='table',
-        column_count=table_size
-    }
-    Gui.set_padding(flow_table)
-    flow_table.style.horizontally_stretchable = true
-    flow_table.style.vertical_align = 'center'
-    flow_table.style.cell_padding = 0
+    local flow_table = Gui.create_scroll_table(container,table_size,215,section_name)
+    flow_table.parent.visible = false
+
 end
 
 --[[ Creates the main structure for the gui
