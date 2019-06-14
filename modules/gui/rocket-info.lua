@@ -145,26 +145,16 @@ end)
 --- Used to create the three different sections
 local function create_section(container,section_name,table_size)
     --- Header for the section
-    local header =
-    container.add{
-        type='frame',
-        name=section_name..'-header',
-        style='subheader_frame',
-    }
-    Gui.set_padding(header,4,1,4,4)
-    header.style.horizontally_stretchable = true
-
-    --- Caption for the header bar
-    header.add{
-        type='label',
-        style='heading_1_label',
-        caption={'rocket-info.section-caption-'..section_name},
-        tooltip={'rocket-info.section-tooltip-'..section_name}
-    }
+    local header_area = Gui.create_header(
+        container,
+        {'rocket-info.section-caption-'..section_name},
+        {'rocket-info.section-tooltip-'..section_name},
+        true,
+        section_name..'-header'
+    )
 
     --- Right aligned button to toggle the section
-    local expand_flow = Gui.create_alignment(header,section_name)
-    toggle_section(expand_flow)
+    toggle_section(header_area)
 
     --- Table used to store the data
     local flow_table = Gui.create_scroll_table(container,table_size,215,section_name)

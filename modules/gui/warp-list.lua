@@ -577,28 +577,16 @@ local function generate_container(player,element)
     container.style.vertically_stretchable = false
 
     -- main header for the gui
-    local header =
-    container.add{
-        name='header',
-        type='frame',
-        style='subheader_frame'
-    }
-    Gui.set_padding(header,2,2,4,4)
-    header.style.horizontally_stretchable = true
-    header.style.use_header_filler = false
-
-    --- Caption for the header bar
-    header.add{
-        type='label',
-        style='heading_1_label',
-        caption={'warp-list.main-caption'},
-        tooltip={'warp-list.sub-tooltip',config.recharge_time,config.activation_range}
-    }
+    local header_area = Gui.create_header(
+        container,
+        {'warp-list.main-caption'},
+        {'warp-list.sub-tooltip',config.recharge_time,config.activation_range},
+        true
+    )
 
     --- Right aligned button to toggle the section
     if player_allowed_edit(player) then
-        local right_align = Gui.create_alignment(header)
-        add_new_warp(right_align)
+        add_new_warp(header_area)
     end
 
     -- table that stores all the data

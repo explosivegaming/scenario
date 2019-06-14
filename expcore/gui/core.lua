@@ -326,4 +326,32 @@ function Gui.create_scroll_table(element,table_size,maximal_height,name)
     return list_table
 end
 
+--- Creates a header section with a label and button area
+-- @tparam LuaGuiElement element the element to add this header into
+-- @tparam localeString caption the caption that is used as the title
+-- @tparam[opt] localeString tooltip the tooltip that is shown on the caption
+-- @tparam[opt] boolean right_align when true will include the right align area
+-- @tparam[opt='header'] string name the name of the header area
+-- @treturn LuaGuiElement the header that was made, or the align area if that was created
+function Gui.create_header(element,caption,tooltip,right_align,name)
+    local header =
+    element.add{
+        name=name or 'header',
+        type='frame',
+        style='subheader_frame'
+    }
+    Gui.set_padding(header,2,2,4,4)
+    header.style.horizontally_stretchable = true
+    header.style.use_header_filler = false
+
+    header.add{
+        type='label',
+        style='heading_1_label',
+        caption=caption,
+        tooltip=tooltip
+    }
+
+    return right_align and Gui.create_alignment(header,'header-align') or header
+end
+
 return Gui

@@ -75,16 +75,11 @@ local function generate_container(player,element)
     Gui.set_padding(container)
 
     -- main header for the gui
-    local header =
-    container.add{
-        name='header',
-        type='frame',
-        caption={'science-info.main-caption'},
-        style='subheader_frame'
-    }
-    Gui.set_padding(header,2,2,4,4)
-    header.style.horizontally_stretchable = true
-    header.style.use_header_filler = false
+    Gui.create_header(
+        container,
+        {'science-info.main-caption'},
+        {'science-info.main-tooltip'}
+    )
 
     -- table that stores all the data
     local flow_table = Gui.create_scroll_table(container,4,185)
