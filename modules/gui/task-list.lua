@@ -415,7 +415,7 @@ Store.register(task_store,function(value,task_id)
 end)
 
 --- Makess sure the right buttons are present when roles change
-Event.add(Roles.player_role_assigned,task_list 'redraw')
-Event.add(Roles.player_role_unassigned,task_list 'redraw')
+Event.add(Roles.events.on_role_assigned,task_list 'redraw')
+Event.add(Roles.events.on_role_unassigned,task_list 'redraw')
 
 return task_list

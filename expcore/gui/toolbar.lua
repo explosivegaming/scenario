@@ -92,13 +92,13 @@ Event.add(defines.events.on_player_created,function(event)
 end)
 
 --- When a player gets a new role they will have the toolbar updated
-Event.add(Roles.player_role_assigned,function(event)
+Event.add(Roles.events.on_role_assigned,function(event)
     local player = Game.get_player_by_index(event.player_index)
     Toolbar.update(player)
 end)
 
 --- When a player loses a role they will have the toolbar updated
-Event.add(Roles.player_role_unassigned,function(event)
+Event.add(Roles.events.on_role_unassigned,function(event)
     local player = Game.get_player_by_index(event.player_index)
     Toolbar.update(player)
 end)

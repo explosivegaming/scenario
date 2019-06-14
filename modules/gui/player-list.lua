@@ -378,7 +378,7 @@ end)
 Event.on_nth_tick(1800,player_list 'update_all')
 Event.add(defines.events.on_player_joined_game,player_list 'redraw_all')
 Event.add(defines.events.on_player_left_game,player_list 'redraw_all')
-Event.add(Roles.player_role_assigned,player_list 'redraw_all')
-Event.add(Roles.player_role_unassigned,player_list 'redraw_all')
+Event.add(Roles.events.on_role_assigned,player_list 'redraw_all')
+Event.add(Roles.events.on_role_unassigned,player_list 'redraw_all')
 
 return player_list

@@ -56,5 +56,5 @@ local function role_update(event)
     end
 end
 
-Event.add(Roles.player_role_assigned,role_update)
-Event.add(Roles.player_role_unassigned,role_update)
+Event.add(Roles.events.on_role_assigned,role_update)
+Event.add(Roles.events.on_role_unassigned,role_update)
