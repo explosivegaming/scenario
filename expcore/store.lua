@@ -79,8 +79,11 @@ local Store = {
     registered={},
     synced={},
     callbacks={},
-    on_value_update=script.generate_event_name()
+    events = {
+        on_value_update=script.generate_event_name()
+    }
 }
+
 Global.register(Store.data,function(tbl)
     Store.data = tbl
 end)
@@ -184,7 +187,7 @@ function Store.set(location,child,value,from_sync)
         data[location] = value
     end
 
-    script.raise_event(Store.on_value_update,{
+    script.raise_event(Store.events.on_value_update,{
         tick=game.tick,
         location=location,
         child=child,
@@ -215,7 +218,7 @@ function Store.clear(location,child,from_sync)
         data[location] = nil
     end
 
-    script.raise_event(Store.on_value_update,{
+    script.raise_event(Store.events.on_value_update,{
         tick=game.tick,
         location=location,
         child=child,
@@ -235,7 +238,7 @@ function Store.get_children(location)
 end
 
 -- Handels syncing
-Event.add(Store.on_value_update,function(event)
+Event.add(Store.events.on_value_update,function(event)
     if Store.callbacks[event.location] then
         Store.callbacks[event.location](event.value,event.child)
     end

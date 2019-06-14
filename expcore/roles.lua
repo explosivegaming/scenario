@@ -163,6 +163,7 @@ local Colours = require 'resources.color_presets'
 local write_json = ext_require('expcore.common','write_json')
 
 local Roles = {
+    _prototype={},
     config={
         order={}, -- Contains the order of the roles, lower index is better
         roles={}, -- Contains the raw info for the roles, indexed by role name
@@ -170,9 +171,10 @@ local Roles = {
         internal={}, -- Contains all internally accessed roles, such as root, default
         players={}
     },
-    player_role_assigned=script.generate_event_name(),
-    player_role_unassigned=script.generate_event_name(),
-    _prototype={}
+    events = {
+        on_role_assigned=script.generate_event_name(),
+        on_role_unassigned=script.generate_event_name(),
+    }
 }
 
 --- When global is loaded it will have the metatable re-assigned to the roles
@@ -195,9 +197,9 @@ local function emit_player_roles_updated(player,type,roles,by_player_name,skip_g
     local by_player = Game.get_player_from_any(by_player_name)
     local by_player_index = by_player and by_player.index or 0
     -- get the event id from the type of emit
-    local event = Roles.player_role_assigned
+    local event = Roles.events.on_role_assigned
     if type == 'unassign' then
-        event = Roles.player_role_unassigned
+        event = Roles.events.on_role_unassigned
     end
     -- convert the roles to objects and get the names of the roles
     local role_names = {}
@@ -775,8 +777,8 @@ local function role_update(event)
 end
 
 --- When a player joined or has a role change then the update is triggered
-Event.add(Roles.player_role_assigned,role_update)
-Event.add(Roles.player_role_unassigned,role_update)
+Event.add(Roles.events.on_role_assigned,role_update)
+Event.add(Roles.events.on_role_unassigned,role_update)
 Event.add(defines.events.on_player_joined_game,role_update)
 -- Every 60 seconds the auto promote check is preformed
 Event.on_nth_tick(3600,function()

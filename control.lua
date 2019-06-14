@@ -41,7 +41,6 @@ for index,path in pairs(files) do
     if not success then
         -- Failed to load a file
         log('[ERROR] Failed to load file: '..path)
-        log('[ERROR] '..file)
         table.insert(errors,'[ERROR] '..path..' :: '..file)
     elseif type(file) == 'string' and file:find('not found') then
         -- Returned a file not found message

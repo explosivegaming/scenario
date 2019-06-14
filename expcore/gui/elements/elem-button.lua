@@ -12,36 +12,25 @@
     Other functions present from expcore.gui.core
 ]]
 local Gui = require 'expcore.gui.core'
+local Prototype = require 'expcore.gui.prototype'
 local Game = require 'utils.game'
-
---- Event call for on_elem_changed and store update
--- @tparam table define the define that this is acting on
--- @tparam LuaGuiElement element the element that triggered the event
--- @tparam string value the new value for the elem button
-local function event_call(define,element,value)
-    local player = Game.get_player_by_index(element.player_index)
-
-    if define.events.on_element_update then
-        define.events.on_element_update(player,element,value)
-    end
-
-end
 
 --- Store call for store update
 -- @tparam table define the define that this is acting on
 -- @tparam LuaGuiElement element the element that triggered the event
 -- @tparam string value the new value for the elem button
-local function store_call(define,element,value)
+local function store_update(define,element,value)
     element.elem_value = value
-    event_call(define,element,value)
+    local player = Game.get_player_by_index(element.player_index)
+    define:raise_event('on_element_update',player,element,value)
 end
 
 local ElemButton = {
-    _prototype=Gui._prototype_factory{
-        on_element_update = Gui._event_factory('on_element_update'),
-        on_store_update = Gui._event_factory('on_store_update'),
-        add_store = Gui._store_factory(store_call),
-        add_sync_store = Gui._sync_store_factory(store_call)
+    _prototype=Prototype.extend{
+        on_element_update = Prototype.event,
+        on_store_update = Prototype.event,
+        add_store = Prototype.store(false,store_update),
+        add_sync_store = Prototype.store(true,store_update)
     }
 }
 
@@ -50,16 +39,10 @@ local ElemButton = {
 -- @treturn table the new elem button element define
 function ElemButton.new_elem_button(name)
 
-    local self = Gui._define_factory(ElemButton._prototype)
+    local self = Gui.new_define(ElemButton._prototype,name)
     self.draw_data.type = 'choose-elem-button'
 
-    if name then
-        self:debug_name(name)
-    end
-
-    self.post_draw = function(element)
-        local player = Game.get_player_by_index(element.player_index)
-
+    self:on_draw(function(player,element)
         if type(self.default) == 'function' then
             element.elem_value = self.default(player,element)
         end
@@ -69,7 +52,7 @@ function ElemButton.new_elem_button(name)
             local value = self:get_store(category)
             if value then element.elem_value = value end
         end
-    end
+    end)
 
     Gui.on_elem_changed(self.name,function(event)
         local element = event.element
@@ -80,7 +63,7 @@ function ElemButton.new_elem_button(name)
             self:set_store(category,value)
 
         else
-            event_call(self,element,value)
+            self:raise_event('on_element_update',event.player,element,value)
 
         end
 
@@ -92,10 +75,7 @@ end
 --- Sets the type of the elem button, the type is required so this must be called at least once
 -- @tparam string type the type that this elem button is see factorio api
 -- @treturn the element define to allow for chaining
-function ElemButton._prototype:set_type(type)
-    self.draw_data.elem_type = type
-    return self
-end
+ElemButton._prototype.set_type = Prototype.setter('string','draw_data','elem_type')
 
 --- Sets the default value for the elem button, this may be a function or a string
 -- @tparam ?string|function value string a will be a static default and a function will be called when drawn to get the default

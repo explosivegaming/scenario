@@ -211,7 +211,7 @@ function generate_task(player,element,task_id)
             Gui.set_padding(task_area)
 
             -- if the player can edit then it adds the edit and delete button
-            local flow = Gui.create_right_align(element,'edit-'..task_id)
+            local flow = Gui.create_alignment(element,'edit-'..task_id)
             local sub_flow = flow.add{type='flow',name=task_id}
 
             edit_task(sub_flow)
@@ -310,66 +310,34 @@ local function generate_container(player,element)
     container.style.vertically_stretchable = false
 
     -- main header for the gui
-    local header =
-    container.add{
-        name='header',
-        type='frame',
-        style='subheader_frame'
-    }
-    Gui.set_padding(header,2,2,4,4)
-    header.style.horizontally_stretchable = true
-    header.style.use_header_filler = false
-
-    --- Caption for the header bar
-    header.add{
-        type='label',
-        style='heading_1_label',
-        caption={'task-list.main-caption'},
-        tooltip={'task-list.sub-tooltip'}
-    }
+    local header_area = Gui.create_header(
+        container,
+        {'task-list.main-caption'},
+        {'task-list.sub-tooltip'},
+        true
+    )
 
     --- Right aligned button to toggle the section
     if player_allowed_edit(player) then
-        local right_align = Gui.create_right_align(header)
-        add_new_task(right_align)
+        add_new_task(header_area)
     end
 
-    -- main flow for the data
-    local flow =
-    container.add{
-        name='scroll',
-        type='scroll-pane',
-        direction='vertical',
-        horizontal_scroll_policy='never',
-        vertical_scroll_policy='auto-and-reserve-space'
-    }
-    Gui.set_padding(flow,1,1,2,2)
-    flow.style.horizontally_stretchable = true
-    flow.style.maximal_height = 185
+    -- table that stores all the data
+    local flow_table = Gui.create_scroll_table(container,3,185)
+    flow_table.draw_horizontal_lines = true
+    flow_table.vertical_centering = false
+    flow_table.style.top_cell_padding = 3
+    flow_table.style.bottom_cell_padding = 3
 
     -- message to say that you have no tasks
     local non_made =
-    flow.add{
+    flow_table.parent.add{
         name='no_tasks',
         type='label',
         caption={'task-list.no-tasks'}
     }
     non_made.style.width = 200
     non_made.style.single_line = false
-
-    -- table that stores all the data
-    local flow_table =
-    flow.add{
-        name='table',
-        type='table',
-        column_count=3,
-        draw_horizontal_lines=true,
-        vertical_centering=false
-    }
-    Gui.set_padding(flow_table)
-    flow_table.style.horizontally_stretchable = true
-    flow_table.style.top_cell_padding = 3
-    flow_table.style.bottom_cell_padding = 3
 
     return flow_table
 end
@@ -381,7 +349,7 @@ Gui.new_left_frame('gui/task-list')
 :set_direction('vertical')
 :set_tooltip{'task-list.main-tooltip'}
 :set_open_by_default()
-:on_draw(function(player,element)
+:on_creation(function(player,element)
     local data_table = generate_container(player,element)
     local force_name = player.force.name
 
@@ -415,7 +383,7 @@ Store.register(task_store,function(value,task_id)
 end)
 
 --- Makess sure the right buttons are present when roles change
-Event.add(Roles.player_role_assigned,task_list 'redraw')
-Event.add(Roles.player_role_unassigned,task_list 'redraw')
+Event.add(Roles.events.on_role_assigned,task_list 'redraw')
+Event.add(Roles.events.on_role_unassigned,task_list 'redraw')
 
 return task_list

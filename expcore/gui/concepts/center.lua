@@ -16,12 +16,13 @@
     CenterFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
 local Gui = require 'expcore.gui.core'
-local Toolbar = require 'expcore.gui.toolbar'
+local Prototype = require 'expcore.gui.prototype'
+local Toolbar = require 'expcore.gui.concepts.toolbar'
 local Game = require 'utils.game'
 
 local CenterFrames = {
-	_prototype = Gui._prototype_factory{
-		on_draw = Gui._event_factory('on_draw')
+	_prototype = Prototype.extend{
+		on_creation = Prototype.event
 	}
 }
 
@@ -141,9 +142,7 @@ function CenterFrames._prototype:draw_frame(player)
         player.opened = frame
     end
 
-    if self.events.on_draw then
-        self.events.on_draw(player,frame)
-    end
+    self:raise_event('on_creation',player,frame)
 
     return frame
 end

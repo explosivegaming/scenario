@@ -75,50 +75,24 @@ local function generate_container(player,element)
     Gui.set_padding(container)
 
     -- main header for the gui
-    local header =
-    container.add{
-        name='header',
-        type='frame',
-        caption={'science-info.main-caption'},
-        style='subheader_frame'
-    }
-    Gui.set_padding(header,2,2,4,4)
-    header.style.horizontally_stretchable = true
-    header.style.use_header_filler = false
+    Gui.create_header(
+        container,
+        {'science-info.main-caption'},
+        {'science-info.main-tooltip'}
+    )
 
-    -- main flow for the data
-    local flow =
-    container.add{
-        name='scroll',
-        type='scroll-pane',
-        direction='vertical',
-        horizontal_scroll_policy='never',
-        vertical_scroll_policy='auto-and-reserve-space'
-    }
-    Gui.set_padding(flow,1,1,2,2)
-    flow.style.horizontally_stretchable = true
-    flow.style.maximal_height = 185
+    -- table that stores all the data
+    local flow_table = Gui.create_scroll_table(container,4,185)
 
     -- message to say that you have not made any packs yet
     local non_made =
-    flow.add{
+    flow_table.parent.add{
         name='non_made',
         type='label',
         caption={'science-info.no-packs'}
     }
     non_made.style.width = 200
     non_made.style.single_line = false
-
-    -- table that stores all the data
-    local flow_table =
-    flow.add{
-        name='table',
-        type='table',
-        column_count=4
-    }
-    Gui.set_padding(flow_table)
-    flow_table.style.horizontally_stretchable = true
-    flow_table.style.vertical_align = 'center'
 
     local eta
     if config.show_eta then
@@ -142,7 +116,7 @@ local function generate_container(player,element)
         }
 
         -- data for the footer
-        local right_align = Gui.create_right_align(footer,'eta')
+        local right_align = Gui.create_alignment(footer,'eta')
         eta =
         right_align.add{
             name='label',
@@ -191,7 +165,7 @@ local function add_data_label(element,name,value,secondary,tooltip)
 
     else
         -- right aligned number
-        local right_align = Gui.create_right_align(element,name)
+        local right_align = Gui.create_alignment(element,name)
         local data =
         right_align.add{
             name='label',
@@ -341,7 +315,7 @@ Gui.new_left_frame('gui/science-info')
 :set_sprites('entity/lab')
 :set_direction('vertical')
 :set_tooltip{'science-info.main-tooltip'}
-:on_draw(function(player,element)
+:on_creation(function(player,element)
     local table, eta = generate_container(player,element)
 
     for _,science_pack in ipairs(config) do

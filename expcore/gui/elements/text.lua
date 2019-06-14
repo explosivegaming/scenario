@@ -15,42 +15,31 @@
     Other functions present from expcore.gui.core
 ]]
 local Gui = require 'expcore.gui.core'
+local Prototype = require 'expcore.gui.prototype'
 local Game = require 'utils.game'
-
---- Event call for on_text_changed and store update
--- @tparam table define the define that this is acting on
--- @tparam LuaGuiElement element the element that triggered the event
--- @tparam string value the new text for the text field
-local function event_call(define,element,value)
-    local player = Game.get_player_by_index(element.player_index)
-
-    if define.events.on_element_update then
-        define.events.on_element_update(player,element,value)
-    end
-
-end
 
 --- Store call for store update
 -- @tparam table define the define that this is acting on
 -- @tparam LuaGuiElement element the element that triggered the event
 -- @tparam string value the new text for the text field
-local function store_call(define,element,value)
+local function store_update(define,element,value)
     element.text = value
-    event_call(define,element,value)
+    local player = Game.get_player_by_index(element.player_index)
+    define:raise_event('on_element_update',player,element,value)
 end
 
 local Text = {
-    _prototype_field=Gui._prototype_factory{
-        on_element_update = Gui._event_factory('on_element_update'),
-        on_store_update = Gui._event_factory('on_store_update'),
-        add_store = Gui._store_factory(store_call),
-        add_sync_store = Gui._sync_store_factory(store_call)
+    _prototype_field=Prototype.extend{
+        on_element_update = Prototype.event,
+        on_store_update = Prototype.event,
+        add_store = Prototype.store(false,store_update),
+        add_sync_store = Prototype.store(true,store_update)
     },
-    _prototype_box=Gui._prototype_factory{
-        on_element_update = Gui._event_factory('on_element_update'),
-        on_store_update = Gui._event_factory('on_store_update'),
-        add_store = Gui._store_factory(store_call),
-        add_sync_store = Gui._sync_store_factory(store_call)
+    _prototype_box=Prototype.extend{
+        on_element_update = Prototype.event,
+        on_store_update = Prototype.event,
+        add_store = Prototype.store(false,store_update),
+        add_sync_store = Prototype.store(true,store_update)
     }
 }
 
@@ -59,14 +48,10 @@ local Text = {
 -- @treturn table the new text field element define
 function Text.new_text_field(name)
 
-    local self = Gui._define_factory(Text._prototype_field)
+    local self = Gui.new_define(Text._prototype_field,name)
     self.draw_data.type = 'textfield'
 
-    if name then
-        self:debug_name(name)
-    end
-
-    self.post_draw = function(element)
+    self:on_draw(function(player,element)
         if self.selectable then
             element.selectable = true
         end
@@ -84,7 +69,7 @@ function Text.new_text_field(name)
             local value = self:get_store(category)
             if value then element.text = value end
         end
-    end
+    end)
 
     Gui.on_text_changed(self.name,function(event)
         local element = event.element
@@ -95,7 +80,7 @@ function Text.new_text_field(name)
             self:set_store(category,value)
 
         else
-            event_call(self,element,value)
+            self:raise_event('on_element_update',event.player,element,value)
 
         end
 

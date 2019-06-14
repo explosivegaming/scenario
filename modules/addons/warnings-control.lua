@@ -5,26 +5,28 @@ local config = require 'config.warnings'
 local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
 require 'utils.table'
 
-local Public = {
+local Warnings = {
     user_warnings={},
     user_temp_warnings={},
-    player_warning_added = script.generate_event_name(),
-    player_warning_removed = script.generate_event_name(),
-    player_temp_warning_added = script.generate_event_name(),
-    player_temp_warning_removed = script.generate_event_name()
+    events = {
+        on_player_warned = script.generate_event_name(),
+        on_player_warning_removed = script.generate_event_name(),
+        on_temp_warning_added = script.generate_event_name(),
+        on_temp_warning_removed = script.generate_event_name(),
+    }
 }
 
 Global.register({
-    user_warnings = Public.user_warnings,
-    user_temp_warnings = Public.user_temp_warnings
+    user_warnings = Warnings.user_warnings,
+    user_temp_warnings = Warnings.user_temp_warnings
 },function(tbl)
-    Public.user_warnings = tbl.user_warnings
-    Public.user_temp_warnings = tbl.user_temp_warnings
+    Warnings.user_warnings = tbl.user_warnings
+    Warnings.user_temp_warnings = tbl.user_temp_warnings
 end)
 
 local function event_emit(event,player,by_player_name)
-    local warnings = Public.user_warnings[player.name] or {}
-    local temp_warnings = Public.user_temp_warnings[player.name] or {}
+    local warnings = Warnings.user_warnings[player.name] or {}
+    local temp_warnings = Warnings.user_temp_warnings[player.name] or {}
     script.raise_event(event,{
         name=event,
         tick=game.tick,
@@ -40,19 +42,19 @@ end
 -- @tparam[opt='<server>'] string by_player_name the name of the player doing the action
 -- @tparam[opt=1] number count the number of warnings to add
 -- @treturn number the new number of warnings
-function Public.add_warnings(player,by_player_name,count)
+function Warnings.add_warnings(player,by_player_name,count)
     player = Game.get_player_from_any(player)
     if not player then return end
     count = count or 1
     by_player_name = by_player_name or '<server>'
-    local warnings = Public.user_warnings[player.name]
+    local warnings = Warnings.user_warnings[player.name]
     if not warnings then
-        Public.user_warnings[player.name] = {}
-        warnings = Public.user_warnings[player.name]
+        Warnings.user_warnings[player.name] = {}
+        warnings = Warnings.user_warnings[player.name]
     end
     for _=1,count do
         table.insert(warnings,by_player_name)
-        event_emit(Public.player_warning_added,player,by_player_name)
+        event_emit(Warnings.events.on_player_warned,player,by_player_name)
     end
     return #warnings
 end
@@ -62,20 +64,20 @@ end
 -- @tparam[opt='<server>'] string by_playey_name the name of the player doing the action
 -- @tparam[opt=1] number count the number of warnings to remove (if greater than current warning count then all are removed)
 -- @treturn number the new number of warnings
-function Public.remove_warnings(player,by_player_name,count)
+function Warnings.remove_warnings(player,by_player_name,count)
     player = Game.get_player_from_any(player)
     if not player then return end
     count = count or 1
     by_player_name = by_player_name or '<server>'
-    local warnings = Public.user_warnings[player.name]
+    local warnings = Warnings.user_warnings[player.name]
     if not warnings then return end
     for _=1,count do
         if #warnings == 0 then break end
         table.remove(warnings,1)
-        event_emit(Public.player_warning_removed,player,by_player_name)
+        event_emit(Warnings.events.on_player_warning_removed,player,by_player_name)
     end
     if #warnings == 0 then
-        Public.user_warnings[player.name] = nil
+        Warnings.user_warnings[player.name] = nil
         return 0
     end
     return #warnings
@@ -85,16 +87,16 @@ end
 -- @tparam LuaPlayer player the player to clear the warnings of
 -- @tparam[oot='<server>'] string by_player_name the name of the player who is doing the action
 -- @treturn boolean true if the warnings were cleared, nil if error
-function Public.clear_warnings(player,by_player_name)
+function Warnings.clear_warnings(player,by_player_name)
     player = Game.get_player_from_any(player)
     if not player then return end
-    local warnings = Public.user_warnings[player.name]
+    local warnings = Warnings.user_warnings[player.name]
     if not warnings then return end
     by_player_name = by_player_name or '<server>'
     for _=1,#warnings do
-        event_emit(Public.player_warning_removed,player,by_player_name)
+        event_emit(Warnings.events.on_player_warning_removed,player,by_player_name)
     end
-    Public.user_warnings[player.name] = {}
+    Warnings.user_warnings[player.name] = {}
     return true
 end
 
@@ -102,10 +104,10 @@ end
 -- @tparam LuaPlayer player the player to get the warnings of
 -- @tparam[opt=false] table table raw_table when true will return a which contains who gave warnings (the stored in global)
 -- @treturn number the number of warnings a player has, a table if raw_table is true
-function Public.get_warnings(player,raw_table)
+function Warnings.get_warnings(player,raw_table)
     player = Game.get_player_from_any(player)
     if not player then return end
-    local warnings = Public.user_warnings[player.name] or {}
+    local warnings = Warnings.user_warnings[player.name] or {}
     if raw_table then
         return warnings
     else
@@ -117,18 +119,18 @@ end
 -- @tparam LuaPlayer player the player to give the warnings to
 -- @tparam[opt=1] number count the number of warnings to give to the player
 -- @treturn number the new number of warnings
-function Public.add_temp_warnings(player,count)
+function Warnings.add_temp_warnings(player,count)
     player = Game.get_player_from_any(player)
     if not player then return end
     count = count or 1
-    local warnings = Public.user_temp_warnings[player.name]
+    local warnings = Warnings.user_temp_warnings[player.name]
     if not warnings then
-        Public.user_temp_warnings[player.name] = {}
-        warnings = Public.user_temp_warnings[player.name]
+        Warnings.user_temp_warnings[player.name] = {}
+        warnings = Warnings.user_temp_warnings[player.name]
     end
     for _=1,count do
         table.insert(warnings,game.tick)
-        event_emit(Public.player_temp_warning_added,player,'<server>')
+        event_emit(Warnings.events.on_temp_warning_added,player,'<server>')
     end
     return #warnings
 end
@@ -137,17 +139,17 @@ end
 local temp_warning_cool_down = config.temp_warning_cool_down*3600
 Event.on_nth_tick(temp_warning_cool_down/4,function()
     local check_time = game.tick-temp_warning_cool_down
-    for player_name,temp_warnings in pairs(Public.user_temp_warnings) do
+    for player_name,temp_warnings in pairs(Warnings.user_temp_warnings) do
         local player = Game.get_player_from_any(player)
         for index,time in pairs(temp_warnings) do
             if time <= check_time then
                 table.remove(temp_warnings,index)
                 player.print{'warnings.script-warning-removed',#temp_warnings,config.temp_warning_limit}
-                event_emit(Public.player_temp_warning_removed,player,'<server>')
+                event_emit(Warnings.events.on_temp_warning_removed,player,'<server>')
             end
         end
         if #temp_warnings == 0 then
-            Public.user_temp_warnings[player_name] = nil
+            Warnings.user_temp_warnings[player_name] = nil
         end
     end
 end)
@@ -156,16 +158,16 @@ end)
 -- @tparam LuaPlayer player the player to clear the warnings of
 -- @tparam[opt='<server>'] string by_player_name the name of the player doing the action
 -- @treturn boolean true if the warnings were cleared, nil for error
-function Public.clear_temp_warnings(player,by_player_name)
+function Warnings.clear_temp_warnings(player,by_player_name)
     player = Game.get_player_from_any(player)
     if not player then return end
-    local warnings = Public.user_temp_warnings[player.name]
+    local warnings = Warnings.user_temp_warnings[player.name]
     if not warnings then return end
     by_player_name = by_player_name or '<server>'
     for _=1,#warnings do
-        event_emit(Public.player_temp_warning_removed,player,by_player_name)
+        event_emit(Warnings.events.on_temp_warning_removed,player,by_player_name)
     end
-    Public.user_temp_warnings[player.name] = {}
+    Warnings.user_temp_warnings[player.name] = {}
     return true
 end
 
@@ -173,10 +175,10 @@ end
 -- @tparam LuaPlayer player the player to get the warnings of
 -- @tparam[opt=false] table raw_table if true will return a of ticks when warnings were added (the global table)
 -- @treturn number the number of warnings which the player has, a table if raw_table is true
-function Public.get_temp_warnings(player,raw_table)
+function Warnings.get_temp_warnings(player,raw_table)
     player = Game.get_player_from_any(player)
     if not player then return end
-    local warnings = Public.user_temp_warnings[player.name] or {}
+    local warnings = Warnings.user_temp_warnings[player.name] or {}
     if raw_table then
         return warnings
     else
@@ -185,7 +187,7 @@ function Public.get_temp_warnings(player,raw_table)
 end
 
 -- when a player gets a warning the actions in config are ran
-Event.add(Public.player_warning_added,function(event)
+Event.add(Warnings.events.on_player_warned,function(event)
     local action = config.actions[event.warning_count]
     if not action then return end
     local player = Game.get_player_by_index(event.player_index)
@@ -205,10 +207,10 @@ Event.add(Public.player_warning_added,function(event)
 end)
 
 -- when a player gets a tempo warnings it is checked that it is not above the max
-Event.add(Public.player_temp_warning_added,function(event)
+Event.add(Warnings.events.on_temp_warning_added,function(event)
     local player = Game.get_player_by_index(event.player_index)
     if event.temp_warning_count > config.temp_warning_limit then
-        Public.add_warnings(event.player_index,event.by_player_name)
+        Warnings.add_warnings(event.player_index,event.by_player_name)
         local player_name_color = format_chat_player_name(player)
         game.print{'warnings.script-warning-limit',player_name_color}
     else
@@ -216,4 +218,4 @@ Event.add(Public.player_temp_warning_added,function(event)
     end
 end)
 
-return Public
+return Warnings

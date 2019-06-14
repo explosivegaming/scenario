@@ -111,30 +111,8 @@ local function generate_container(player,element)
     }
     Gui.set_padding(container)
 
-    -- a scroll bar which allows 8 players to be seen at once
-    local list_scroll =
-    container.add{
-        name='scroll',
-        type='scroll-pane',
-        direction='vertical',
-        horizontal_scroll_policy='never',
-        vertical_scroll_policy='auto-and-reserve-space'
-    }
-    Gui.set_padding(list_scroll,1,1,2,2)
-    list_scroll.style.horizontally_stretchable = true
-    list_scroll.style.maximal_height = 188
-
     -- 3 wide table to contain: action button, player name, and play time
-    local list_table =
-    list_scroll.add{
-        name='table',
-        type='table',
-        column_count=3
-    }
-    Gui.set_padding(list_table)
-    list_table.style.horizontally_stretchable = true
-    list_table.style.vertical_align = 'center'
-    list_table.style.cell_padding = 0
+    local list_table = Gui.create_scroll_table(container,3,188)
 
     -- action bar which contains the different action buttons
     local action_bar =
@@ -258,7 +236,7 @@ local function add_player(list_table,player,role_name)
     player_name.style.font_color = player.chat_color
 
     -- flow which allows right align for the play time
-    local time_flow = Gui.create_right_align(list_table,'player-time-'..player.index)
+    local time_flow = Gui.create_alignment(list_table,'player-time-'..player.index)
 
     -- time given in Xh Ym and is right aligned
     local tick = game.tick > 0 and game.tick or 1
@@ -295,7 +273,7 @@ Gui.new_left_frame('gui/player-list')
 :set_tooltip{'player-list.main-tooltip'}
 :set_open_by_default()
 :set_direction('vertical')
-:on_draw(function(player,element)
+:on_creation(function(player,element)
     local list_table,action_bar = generate_container(player,element)
     generate_action_bar(player,action_bar)
 
@@ -378,7 +356,7 @@ end)
 Event.on_nth_tick(1800,player_list 'update_all')
 Event.add(defines.events.on_player_joined_game,player_list 'redraw_all')
 Event.add(defines.events.on_player_left_game,player_list 'redraw_all')
-Event.add(Roles.player_role_assigned,player_list 'redraw_all')
-Event.add(Roles.player_role_unassigned,player_list 'redraw_all')
+Event.add(Roles.events.on_role_assigned,player_list 'redraw_all')
+Event.add(Roles.events.on_role_unassigned,player_list 'redraw_all')
 
 return player_list
