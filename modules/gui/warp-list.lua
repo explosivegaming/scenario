@@ -493,6 +493,7 @@ function generate_warp(player,element,warp_id)
 
             local timer = warp_timer:get_store(player.name)
             local enabled = not timer and Store.get(warp_player_in_range_store,player.name)
+            or Roles.player_allowed(player,config.bypass_warp_limits_permision)
             if not enabled then
                 btn.enabled = false
                 btn.tooltip = {'warp-list.goto-disabled'}
@@ -682,6 +683,10 @@ Store.register(warp_player_in_range_store,function(value,player_name)
 
     if not keep_open[player.name] then
         Gui.toggle_left_frame(warp_list.name,player,value)
+    end
+
+    if Roles.player_allowed(player,config.bypass_warp_limits_permision) then
+        return
     end
 
     if force_warps[force.name] then
