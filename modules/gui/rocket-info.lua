@@ -163,7 +163,7 @@ local function create_section(container,section_name,table_size)
     }
 
     --- Right aligned button to toggle the section
-    local expand_flow = Gui.create_right_align(header,section_name)
+    local expand_flow = Gui.create_alignment(header,section_name)
     toggle_section(expand_flow)
 
     --- The area which contains the section content
@@ -272,7 +272,7 @@ local function create_label_value_pair(element,data_name,value,tooltip,extra)
             tooltip={'rocket-info.data-tooltip-'..data_name,extra}
         }
         --- Right aligned label to store the data
-        local right_flow = Gui.create_right_align(element,data_name_extra)
+        local right_flow = Gui.create_alignment(element,data_name_extra)
         right_flow.add{
             type='label',
             name='label',
@@ -470,7 +470,7 @@ local function generate_progress(player,frame)
                 }
 
                 --- Creates the progress value which is right aligned
-                local right_flow = Gui.create_right_align(element,silo_name)
+                local right_flow = Gui.create_alignment(element,silo_name)
                 right_flow.add{
                     type='label',
                     name='label',
@@ -517,7 +517,7 @@ end)
     return player.force.rockets_launched > 0
 end)
 :set_direction('vertical')
-:on_draw(function(player,element)
+:on_creation(function(player,element)
     generate_container(player,element)
     generate_stats(player,element)
     generate_milestones(player,element)

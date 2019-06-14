@@ -15,12 +15,14 @@
 ]]
 local mod_gui = require 'mod-gui'
 local Gui = require 'expcore.gui.core'
+local Prototype = require 'expcore.gui.prototype'
 
 local Button = {
-    _prototype=Gui._prototype_factory{
-        on_click = Gui._event_factory('on_click'),
-        on_left_click = Gui._event_factory('on_left_click'),
-        on_right_click = Gui._event_factory('on_right_click'),
+    _prototype=Prototype.extend{
+        on_raw_click = Prototype.event,
+        on_click = Prototype.event,
+        on_left_click = Prototype.event,
+        on_right_click = Prototype.event,
     }
 }
 
@@ -29,27 +31,26 @@ local Button = {
 -- @treturn table the new button element define
 function Button.new_button(name)
 
-    local self = Gui._define_factory(Button._prototype)
+    local self = Gui.new_define(Button._prototype,name)
     self.draw_data.type = 'button'
     self.draw_data.style = mod_gui.button_style
-
-    if name then
-        self:debug_name(name)
-    end
 
     Gui.on_click(self.name,function(event)
         local mouse_button = event.button
         local keys = {alt=event.alt,control=event.control,shift=event.shift}
+        local player,element = event.player,event.element
         event.keys = keys
+
+        self:raise_event('on_raw_click',event)
 
         if self.post_authenticator then
             if not self.post_authenticator(event.player,self.name) then return end
         end
 
-        if mouse_button == defines.mouse_button_type.left and self.events.on_left_click then
-            self.events.on_left_click(event.player,event.element)
+        if mouse_button == defines.mouse_button_type.left then
+            self:raise_event('on_left_click',player,element)
         elseif mouse_button == defines.mouse_button_type.right and self.events.on_right_click then
-            self.events.on_right_click(event.player,event.element)
+            self:raise_event('on_right_click',player,element)
         end
 
         if self.mouse_button_filter and not self.mouse_button_filter[mouse_button] then return end
@@ -59,9 +60,7 @@ function Button.new_button(name)
             end
         end
 
-        if self.events.on_click then
-            self.events.on_click(event.player,event.element,event)
-        end
+        self:raise_event('on_click',player,element)
     end)
 
     return self

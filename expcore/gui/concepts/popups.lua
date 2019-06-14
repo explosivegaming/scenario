@@ -12,10 +12,11 @@
     PopupFrames._prototype:open(player,open_time,...) --- Opens this define for a player, can be given open time and any other params for the draw function
 ]]
 local Gui = require 'expcore.gui.core'
+local Prototype = require 'expcore.gui.prototype'
 local Game = require 'utils.game'
 local Event = require 'utils.event'
-local ProgressBar = require 'expcore.gui.progress-bar'
-local Button = require 'expcore.gui.buttons'
+local ProgressBar = require 'expcore.gui.elements.progress-bar'
+local Button = require 'expcore.gui.elements.buttons'
 local mod_gui = require 'mod-gui'
 local Color = require 'resources.color_presets'
 local Global = require 'utils.global'
@@ -25,8 +26,8 @@ local PopupFrames = {
 	popup_flow_name = Gui.uid_name(),
 	main_frame_name = Gui.uid_name(),
 	close_frame_name = Gui.uid_name(),
-	_prototype = Gui._prototype_factory{
-		on_draw = Gui._event_factory('on_draw')
+	_prototype = Prototype.extend{
+		on_creation = Prototype.event
 	}
 }
 Global.register(PopupFrames.paused_popups,function(tbl)
@@ -120,20 +121,16 @@ end)
 -- @tparam[opt] string name the optional debug name that can be added
 -- @treturn table the new popup frame define
 function PopupFrames.new_popup(name)
-	local self = Gui._define_factory(PopupFrames._prototype)
+	local self = Gui.new_define(PopupFrames._prototype,name)
     self.draw_data.type = 'flow'
 	self.draw_data.direction = 'vertical'
-
-    if name then
-        self:debug_name(name)
-    end
 
     local mt = getmetatable(self)
     mt.__call = function(tbl,player,open_time,...)
         return tbl:open(player,open_time,...)
     end
 
-    self.post_draw = function(element,maximum,...)
+    self:on_draw(function(player,element,maximum,...)
         -- main content frame
 		local frame = element.add{
             type='flow',
@@ -172,11 +169,8 @@ function PopupFrames.new_popup(name)
         close_button_style.height = 20
 
         -- event trigger to draw the gui content
-        if self.events.on_draw then
-            local player = Game.get_player_by_index(element.player_index)
-            self.events.on_draw(player,frame,...)
-        end
-	end
+        self:raise_event('on_creation',player,frame,...)
+	end)
 
 	return self
 end

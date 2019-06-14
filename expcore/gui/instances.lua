@@ -12,7 +12,7 @@
 
     -- categorise works in the same way as store categorise
     -- so the function will worl here but no value is stored only gui elements
-    Instances.register('score',Gui.force_store)
+    Instances.register('score',Gui.categorize_by_force)
 
     Then when you draw the new element to a gui you will want to add the element to the group:
 
@@ -38,7 +38,7 @@
     instance group would work when registered vs unregistered:
 
     -- Registered with category
-    Instances.register('score',Gui.force_store) -- force_store will return the force name of an element
+    Instances.register('score',Gui.categorize_by_force) -- force_store will return the force name of an element
     Instances.add_element('score',new_element) -- the new element is added to the category based on in force
     Instances.apply_to_elements('score','player',function(element)
         element.caption = '0'

@@ -254,7 +254,7 @@ local warp_timer =
 Gui.new_progressbar()
 :set_tooltip{'warp-list.timer-tooltip',config.recharge_time}
 :set_default_maximum(math.floor(config.recharge_time*config.update_smothing))
-:add_store(Gui.player_store)
+:add_store(Gui.categorize_by_player)
 :set_style(nil,function(style)
     style.horizontally_stretchable = true
     style.color = Colors.light_blue
@@ -449,7 +449,7 @@ function generate_warp(player,element,warp_id)
             Gui.set_padding(warp_area)
 
             -- if the player can edit then it adds the edit and delete button
-            local flow = Gui.create_right_align(element,'edit-'..warp_id)
+            local flow = Gui.create_alignment(element,'edit-'..warp_id)
             local sub_flow = flow.add{type='flow',name=warp_id}
 
             edit_warp(sub_flow)
@@ -597,7 +597,7 @@ local function generate_container(player,element)
 
     --- Right aligned button to toggle the section
     if player_allowed_edit(player) then
-        local right_align = Gui.create_right_align(header)
+        local right_align = Gui.create_alignment(header)
         add_new_warp(right_align)
     end
 
@@ -637,7 +637,7 @@ Gui.new_left_frame('gui/warp-list')
 :set_sprites('item/'..config.default_icon)
 :set_tooltip{'warp-list.main-tooltip',config.activation_range}
 :set_direction('vertical')
-:on_draw(function(player,element)
+:on_creation(function(player,element)
     local data_table = generate_container(player,element)
     local force_name = player.force.name
 
@@ -655,7 +655,6 @@ end)
     local warps = force_warps[force_name] or {}
     for _,warp_id in pairs(warps) do
         generate_warp(player,data_table,warp_id)
-        make_warp_tag(warp_id)
     end
 end)
 :on_player_toggle(function(player,element,visible)
@@ -789,5 +788,25 @@ Event.add(defines.events.on_player_created,function(event)
         add_spawn(player)
     end
 end)
+
+local function maintain_tag(event)
+    local tag = event.tag
+    local force = event.force
+    local warps = force_warps[force.name]
+    if warps then
+        for _,warp_id in pairs(warps) do
+            local warp = warp_details[warp_id]
+            if not warp.tag or not warp.tag.valid or warp.tag == tag then
+                if event.name == defines.events.on_chart_tag_removed then
+                    warp.tag = nil
+                end
+                make_warp_tag(warp_id)
+            end
+        end
+    end
+end
+
+Event.add(defines.events.on_chart_tag_modified,maintain_tag)
+Event.add(defines.events.on_chart_tag_removed,maintain_tag)
 
 return warp_list

@@ -21,6 +21,7 @@
     ProgressBar._prototype:event_countdown(filter) --- Event handler factory that counts down by 1 every time the event triggeres, can filter which elements are decremented
 ]]
 local Gui = require 'expcore.gui.core'
+local Prototype = require 'expcore.gui.prototype'
 local Global = require 'utils.global'
 local Game = require 'utils.game'
 
@@ -29,20 +30,17 @@ local Game = require 'utils.game'
 -- @tparam LuaGuiElement element the element that triggered the event
 local function event_call(define,element)
     local player = Game.get_player_by_index(element.player_index)
-
-    if define.events.on_complete then
-        define.events.on_complete(player,element,function()
-            define:add_element(element)
-            define:reset_element(element)
-        end)
-    end
+    define:raise_event('on_complete',player,element,function()
+        define:add_element(element)
+        define:reset_element(element)
+    end)
 end
 
 --- Store call for store update
 -- @tparam table define the define that this is acting on
 -- @tparam LuaGuiElement element the element that triggered the event
 -- @tparam number value the new value for the progress bar
-local function store_call(define,element,value)
+local function store_update(define,element,value)
     if value then
         element.value = value
         if define.count_down and value <= 0
@@ -55,14 +53,14 @@ end
 local ProgressBar = {
     unregistered={}, -- elements with no callbacks
     independent={}, -- elements with a link to a deinfe
-    _prototype=Gui._prototype_factory{
-        -- note both events will recive a reset function that can be used to reset the progress of the element/store
-        on_complete = Gui._event_factory('on_complete'),
-        on_store_complete = Gui._event_factory('on_store_complete'),
-        add_store = Gui._store_factory(store_call),
-        add_sync_store = Gui._sync_store_factory(store_call)
+    _prototype=Prototype.extend{
+        on_complete = Prototype.event,
+        on_store_complete = Prototype.event,
+        add_store = Prototype.store(false,store_update),
+        add_sync_store = Prototype.store(true,store_update)
     }
 }
+
 Global.register({
     unregistered = ProgressBar.unregistered,
     independent = ProgressBar.independent
@@ -182,14 +180,11 @@ end
 -- @tparam[opt] string name the optional debug name that can be added
 -- @treturn table the new progressbar elemente define
 function ProgressBar.new_progressbar(name)
-    local self = Gui._define_factory(ProgressBar._prototype)
+
+    local self = Gui.new_define(ProgressBar._prototype,name)
     self.draw_data.type = 'progressbar'
 
-    if name then
-        self:debug_name(name)
-    end
-
-    self.post_draw = function(element,maximum)
+    self:on_draw(function(player,element,maximum)
         if self.store then
             local category = self.categorize and self.categorize(element) or nil
             local value = self:get_store(category)
@@ -215,7 +210,7 @@ function ProgressBar.new_progressbar(name)
 
         end
 
-    end
+    end)
 
     return self
 end
@@ -263,11 +258,7 @@ local function change_value_prototype(self,amount,category,filter)
         if self.count_down and new_value <= 0
 		or not self.count_down and new_value >= 1 then
             self:clear_store(category)
-
-            if self.events.on_store_complete then
-                self.events.on_store_complete(category,reset_store)
-            end
-
+            self:raise_event('on_store_complete',category,reset_store)
             return
         end
 

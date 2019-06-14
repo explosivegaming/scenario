@@ -14,8 +14,8 @@
     Toolbar.add_button(button) --- Adds an existing buttton to the toolbar
     Toolbar.update(player) --- Updates the player's toolbar with an new buttons or expected change in auth return
 ]]
-local Buttons = require 'expcore.gui.buttons'
 local Gui = require 'expcore.gui.core'
+local Buttons = require 'expcore.gui.elements.buttons'
 local Roles = require 'expcore.roles'
 local Event = require 'utils.event'
 local Game = require 'utils.game'

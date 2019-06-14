@@ -142,7 +142,7 @@ local function generate_container(player,element)
         }
 
         -- data for the footer
-        local right_align = Gui.create_right_align(footer,'eta')
+        local right_align = Gui.create_alignment(footer,'eta')
         eta =
         right_align.add{
             name='label',
@@ -191,7 +191,7 @@ local function add_data_label(element,name,value,secondary,tooltip)
 
     else
         -- right aligned number
-        local right_align = Gui.create_right_align(element,name)
+        local right_align = Gui.create_alignment(element,name)
         local data =
         right_align.add{
             name='label',
@@ -341,7 +341,7 @@ Gui.new_left_frame('gui/science-info')
 :set_sprites('entity/lab')
 :set_direction('vertical')
 :set_tooltip{'science-info.main-tooltip'}
-:on_draw(function(player,element)
+:on_creation(function(player,element)
     local table, eta = generate_container(player,element)
 
     for _,science_pack in ipairs(config) do

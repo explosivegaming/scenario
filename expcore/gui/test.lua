@@ -55,7 +55,7 @@ Gui.new_center_frame('gui-test-open')
     return global.show_test_gui
 end)
 
-:on_draw(function(player,frame)
+:on_creation(function(player,frame)
     for test_group_name,test_group in pairs(tests) do
 
         player.print('Starting tests for: '..format_chat_colour(test_group_name,Colors.cyan))
@@ -106,7 +106,7 @@ Gui.new_left_frame('test-left-frame')
 end)
 
 :set_open_by_default()
-:on_draw(function(_player,frame)
+:on_creation(function(_player,frame)
     for _,player in pairs(game.connected_players) do
         frame.add{
             type='label',
@@ -125,7 +125,7 @@ Event.add(defines.events.on_player_left_game,left_frame 'update_all')
 
 local test_popup =
 Gui.new_popup('test-popup')
-:on_draw(function(player,frame)
+:on_creation(function(player,frame)
     frame.add{
         type='label',
         caption=player.name
@@ -225,7 +225,7 @@ local checkbox_force =
 Gui.new_checkbox('test-checkbox-store-force')
 :set_tooltip('Checkboc store force')
 :set_caption('Checkbox Store Force')
-:add_store(Gui.force_store)
+:add_store(Gui.categorize_by_force)
 :on_element_update(function(player,element,state)
     player.print('Checkbox store force: '..tostring(state))
 end)
@@ -234,7 +234,7 @@ local checkbox_player =
 Gui.new_checkbox('test-checkbox-store-player')
 :set_tooltip('Checkbox store player')
 :set_caption('Checkbox Store Player')
-:add_store(Gui.player_store)
+:add_store(Gui.categorize_by_player)
 :on_element_update(function(player,element,state)
     player.print('Checkbox store player: '..tostring(state))
 end)
@@ -265,7 +265,7 @@ local radiobutton_player =
 Gui.new_radiobutton('test-radiobutton-store')
 :set_tooltip('Radiobutton store')
 :set_caption('Radiobutton Store')
-:add_store(Gui.player_store)
+:add_store(Gui.categorize_by_player)
 :on_element_update(function(player,element,state)
     player.print('Radiobutton store: '..tostring(state))
 end)
@@ -273,7 +273,7 @@ end)
 local radiobutton_option_set =
 Gui.new_radiobutton_option_set('gui.test.share',function(value,category)
     game.print('Radiobutton option set for: '..category..' is now: '..tostring(value))
-end,Gui.player_store)
+end,Gui.categorize_by_player)
 
 local radiobutton_option_one =
 Gui.new_radiobutton('test-radiobutton-option-one')
@@ -332,7 +332,7 @@ local dropdown_player_static_general =
 Gui.new_dropdown('test-dropdown-store-static-general')
 :set_tooltip('Dropdown store static general')
 :add_options('One','Two','Three','Four')
-:add_store(Gui.player_store)
+:add_store(Gui.categorize_by_player)
 :on_element_update(function(player,element,value)
     player.print('Dropdown store static general: '..tostring(value))
 end)
@@ -360,7 +360,7 @@ end
 local dropdown_player_static_case =
 Gui.new_dropdown('test-dropdown-store-static-case')
 :set_tooltip('Dropdown store static case')
-:add_store(Gui.player_store)
+:add_store(Gui.categorize_by_player)
 :add_options('One','Two')
 :add_option_callback('One',print_option_selected_2)
 :add_option_callback('Two',print_option_selected_2)
@@ -388,7 +388,7 @@ Gui.new_dropdown('test-dropdown-store-dynamic')
 :add_dynamic(function(player,element)
     return table_keys(Colors)
 end)
-:add_store(Gui.player_store)
+:add_store(Gui.categorize_by_player)
 :on_element_update(function(player,element,value)
     player.print('Dropdown store dynamic: '..tostring(value))
 end)
@@ -420,7 +420,7 @@ local list_box_player =
 Gui.new_list_box('test-list-box-store')
 :set_tooltip('List box store')
 :add_options('One','Two','Three','Four')
-:add_store(Gui.player_store)
+:add_store(Gui.categorize_by_player)
 :on_element_update(function(player,element,value)
     player.print('Dropdown store: '..tostring(value))
 end)
@@ -433,7 +433,6 @@ tests["List Boxs"] = {
 --[[
     Slider Tests
     > Local default -- Simple slider with default range
-    > Local notched -- Simple slider with notches
     > Store default -- Slider with default range that stores value between re-draws
     > Static range -- Simple slider with a static range
     > Dynamic range -- Slider with a dynamic range
@@ -448,18 +447,11 @@ Gui.new_slider('test-slider-local-default')
     player.print('Slider local default: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
 end)
 
-local slider_notched_default =
-Gui.new_slider('test-slider-notched-default')
-:set_tooltip('Silder notched default')
-:use_notches()
-:on_element_update(function(player,element,value,percent)
-    player.print('Slider notched default: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
-end)
 
 local slider_player_default =
 Gui.new_slider('test-slider-store-default')
 :set_tooltip('Silder store default')
-:add_store(Gui.player_store)
+:add_store(Gui.categorize_by_player)
 :on_element_update(function(player,element,value,percent)
     player.print('Slider store default: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
 end)
@@ -496,14 +488,13 @@ local label_slider_player =
 Gui.new_slider('test-slider-store-label')
 :set_tooltip('Silder store label')
 :enable_auto_draw_label()
-:add_store(Gui.player_store)
+:add_store(Gui.categorize_by_player)
 :on_element_update(function(player,element,value,percent)
     player.print('Slider store label: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
 end)
 
 tests.Sliders = {
     ['Local default']=slider_local_default,
-    ['Local notched']=slider_notched_default,
     ['Player default']=slider_player_default,
     ['Static range']=slider_static,
     ['Dynamic range']=slider_dynamic,
@@ -535,7 +526,7 @@ end)
 local text_filed_store =
 Gui.new_text_filed('test-text-field-store')
 :set_tooltip('Text field store')
-:add_store(Gui.player_store)
+:add_store(Gui.categorize_by_player)
 :on_element_update(function(player,element,value)
     player.print('Text field store: '..value)
 end)
@@ -603,7 +594,7 @@ local elem_store =
 Gui.new_elem_button('test-elem-store')
 :set_tooltip('Elem store')
 :set_type('item')
-:add_store(Gui.player_store)
+:add_store(Gui.categorize_by_player)
 :on_element_update(function(player,element,value)
     player.print('Elem store: '..value)
 end)
@@ -632,7 +623,7 @@ end)
 local progressbar_two =
 Gui.new_progressbar('test-prog-one')
 :set_default_maximum(300)
-:add_store(Gui.force_store)
+:add_store(Gui.categorize_by_force)
 :on_complete(function(player,element,reset_element)
     reset_element()
 end)

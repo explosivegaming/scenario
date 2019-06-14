@@ -258,7 +258,7 @@ local function add_player(list_table,player,role_name)
     player_name.style.font_color = player.chat_color
 
     -- flow which allows right align for the play time
-    local time_flow = Gui.create_right_align(list_table,'player-time-'..player.index)
+    local time_flow = Gui.create_alignment(list_table,'player-time-'..player.index)
 
     -- time given in Xh Ym and is right aligned
     local tick = game.tick > 0 and game.tick or 1
@@ -295,7 +295,7 @@ Gui.new_left_frame('gui/player-list')
 :set_tooltip{'player-list.main-tooltip'}
 :set_open_by_default()
 :set_direction('vertical')
-:on_draw(function(player,element)
+:on_creation(function(player,element)
     local list_table,action_bar = generate_container(player,element)
     generate_action_bar(player,action_bar)
 

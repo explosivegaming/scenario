@@ -211,7 +211,7 @@ function generate_task(player,element,task_id)
             Gui.set_padding(task_area)
 
             -- if the player can edit then it adds the edit and delete button
-            local flow = Gui.create_right_align(element,'edit-'..task_id)
+            local flow = Gui.create_alignment(element,'edit-'..task_id)
             local sub_flow = flow.add{type='flow',name=task_id}
 
             edit_task(sub_flow)
@@ -330,7 +330,7 @@ local function generate_container(player,element)
 
     --- Right aligned button to toggle the section
     if player_allowed_edit(player) then
-        local right_align = Gui.create_right_align(header)
+        local right_align = Gui.create_alignment(header)
         add_new_task(right_align)
     end
 
@@ -381,7 +381,7 @@ Gui.new_left_frame('gui/task-list')
 :set_direction('vertical')
 :set_tooltip{'task-list.main-tooltip'}
 :set_open_by_default()
-:on_draw(function(player,element)
+:on_creation(function(player,element)
     local data_table = generate_container(player,element)
     local force_name = player.force.name
 
