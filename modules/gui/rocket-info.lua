@@ -129,7 +129,7 @@ Gui.new_button()
     style.width = 20
 end)
 :on_click(function(player,element)
-    local flow_name = element.parent.name
+    local flow_name = element.parent.caption
     local flow = element.parent.parent.parent[flow_name]
     if Gui.toggle_visible(flow) then
         element.sprite = 'utility/collapse_dark'
@@ -154,6 +154,7 @@ local function create_section(container,section_name,table_size)
     )
 
     --- Right aligned button to toggle the section
+    header_area.caption = section_name
     toggle_section(header_area)
 
     --- Table used to store the data
@@ -316,9 +317,9 @@ local function generate_milestones(player,frame)
     for _,milestone in ipairs(config.milestones) do
         if milestone <= force_rockets then
             local time = rocket_times[player.force.name][milestone]
-            create_label_value_pair_time(element,'milstone-n',time,false,milestone)
+            create_label_value_pair_time(element,'milestone-n',time,false,milestone)
         else
-            create_label_value_pair_time(element,'milstone-n',0,false,milestone)
+            create_label_value_pair_time(element,'milestone-n',0,false,milestone)
             break
         end
     end
