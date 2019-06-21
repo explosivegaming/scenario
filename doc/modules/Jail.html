@@ -5,7 +5,7 @@
     <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>expcore.gui.elements.checkboxs module</title>
+    <title>Jail module</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
     <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
@@ -40,7 +40,7 @@
     <li class="nav-item">
     <h2>Modules</h2>
     <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
@@ -72,7 +72,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.concepts.toolbar.html"><span class="module-name-item">expcore.gui.concepts.toolbar</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.core.html"><span class="module-name-item">expcore.gui.core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.buttons.html"><span class="module-name-item">expcore.gui.elements.buttons</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/expcore.gui.elements.checkboxs.html"><span class="module-name-item">expcore.gui.elements.checkboxs</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.checkboxs.html"><span class="module-name-item">expcore.gui.elements.checkboxs</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.dropdown.html"><span class="module-name-item">expcore.gui.elements.dropdown</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.elem-button.html"><span class="module-name-item">expcore.gui.elements.elem-button</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.progress-bar.html"><span class="module-name-item">expcore.gui.elements.progress-bar</span></a></div></li>
@@ -121,9 +121,11 @@
     <!-- list of items in a module -->
     <ul class="nav nav-module-contents">
     <li class="nav-item">
-    <h4>Contents of <strong>expcore.gui.elements.checkboxs</strong></h4>
+    <h4>Contents of <strong>Jail</strong></h4>
     <ul class="nav">
-    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    <li class="nav-item"><a href="#Events"><span class="fragment-hashtag">#</span> Events</a></li>
+    <li class="nav-item"><a href="#Jail_functions"><span class="fragment-hashtag">#</span> Jail functions </a></li>
+    <li class="nav-item"><a href="#Temp_ban_functions"><span class="fragment-hashtag">#</span> Temp ban functions </a></li>
     </ul>
     </li>
     </ul>
@@ -144,9 +146,9 @@
 
     <!-- module content header start -->
 
-    <h2><span class="body-module-name"><strong><em>expcore.gui.elements.checkboxs</em></strong></span> module</h2>
-    <p>Gui class define for checkboxs and radiobuttons
-[[</p>
+    <h2><span class="body-module-name"><strong><em>Jail</em></strong></span> module</h2>
+    <p>Control Module - Jail
+    Adds a way to jail players and temp ban players.</p>
     <p></p>
 
 
@@ -154,6 +156,19 @@
     <!-- module info end -->
 
     <!-- module usage start -->
+    <h3>Usage</h3>
+    <pre class="code" data-lang="Lua"><code>
+    <span class="comment">-- This will move 'MrBiter' to the jail role and remove all other roles from them
+</span>    <span class="comment">-- the player name and reason are only so they can be included in the event for user feedback
+</span>    Jail.jail_player(<span class="string">'MrBiter'</span>,<span class="string">'Cooldude2606'</span>,<span class="string">'Likes biters too much'</span>)
+
+    <span class="comment">-- This will give 'MrBiter' all his roles back and remove him from jail
+</span>    <span class="comment">-- again as above the player name is only used in the event for user feedback
+</span>    Jail.unjail_player(<span class="string">'MrBiter'</span>,<span class="string">'Cooldude2606'</span>)
+
+    <span class="comment">-- Temp ban works the same as jail but will store the reason and move the players items to spawn
+</span>    <span class="comment">-- this is meant to be used as a more permiment jail but not as strong as a ban
+</span>    Jail.temp_ban_player(<span class="string">'MrBiter'</span>,<span class="string">'Cooldude2606'</span>,<span class="string">'Likes biters too much'</span>)</code></pre>
     <!-- module usage end -->
 
     <!-- module content header end -->
@@ -161,41 +176,65 @@
     <!-- module section list start -->
     <table class="section-content-list">
     <thead>
-    <h3><a href="#Functions">Functions</a></h3>
+    <h3><a href="#Events">Events</a></h3>
     <span></span>
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#Checkbox._prototype_radiobutton:add_as_option">Checkbox._prototype_radiobutton:add_as_option (option_set, option_name)</a></td>
-    <td class="summary">Adds this radiobutton to be an option in the given option set (only one can be true at a time)</td>
+    <td class="name"><a href="#on_player_jailed">on_player_jailed</a></td>
+    <td class="summary">When a player is assigned to jail</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Checkbox._prototype_radiobutton:get_store">Checkbox._prototype_radiobutton:get_store (category, internal)</a></td>
-    <td class="summary">Gets the stored value of the radiobutton or the option set if present</td>
+    <td class="name"><a href="#on_player_temp_banned">on_player_temp_banned</a></td>
+    <td class="summary">When a player is temp banned</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Checkbox._prototype_radiobutton:set_store">Checkbox._prototype_radiobutton:set_store (category, value, internal)</a></td>
-    <td class="summary">Sets the stored value of the radiobutton or the option set if present</td>
+    <td class="name"><a href="#on_player_unjailed">on_player_unjailed</a></td>
+    <td class="summary">When a player is unassigned from jail</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Checkbox.draw_option_set">Checkbox.draw_option_set (name, element)</a></td>
-    <td class="summary">Draws all radiobuttons that are part of an option set at once (Gui.draw will not work)</td>
+    <td class="name"><a href="#on_player_untemp_banned">on_player_untemp_banned</a></td>
+    <td class="summary">When a temp ban is removed from a player</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Jail_functions">Jail functions </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#is_jailed">is_jailed (player)</a></td>
+    <td class="summary">Checks if the player is currently in jail</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Checkbox.new_checkbox">Checkbox.new_checkbox ([name])</a></td>
-    <td class="summary">Creates a new checkbox element define</td>
+    <td class="name"><a href="#jail_player">jail_player (player, by_player_name[, reason='Non given.'])</a></td>
+    <td class="summary">Moves a player to jail and removes all other roles</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Checkbox.new_option_set">Checkbox.new_option_set (name, callback, categorize)</a></td>
-    <td class="summary">Registers a new option set that can be linked to radiobutotns (only one can be true at a time)</td>
+    <td class="name"><a href="#unjail_player">unjail_player (player, by_player_name)</a></td>
+    <td class="summary">Moves a player out of jail and restores all roles previously removed</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Temp_ban_functions">Temp ban functions </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#is_temp_banned">is_temp_banned (player)</a></td>
+    <td class="summary">Checks if a player is temp banned</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Checkbox.new_radiobutton">Checkbox.new_radiobutton ([name])</a></td>
-    <td class="summary">Creates a new radiobutton element define, has all functions checkbox has</td>
+    <td class="name"><a href="#temp_ban_player">temp_ban_player (player, by_player_name[, reason='Non given.'])</a></td>
+    <td class="summary">Temp bans a player by moving them to jail, clearing all other roles, storing the reason, and moving their items to spawn</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Checkbox.reset_radiobuttons">Checkbox.reset_radiobuttons (element[, exclude][, recursive=false])</a></td>
-    <td class="summary">Sets all radiobutotn in a element to false (unless excluded) and can act recursivly</td>
+    <td class="name"><a href="#untemp_ban_player">untemp_ban_player (player, by_player_name)</a></td>
+    <td class="summary">Rrmoves a player from temp ban by clearing the stored reason, removing them from jail, and restoring previous roles</td>
     </tr>
     </tbody>
     </table>
@@ -204,23 +243,23 @@
     <br />
 
     <!-- section start -->
-    <h3><span id="Functions" class="section-title"><a href="#Functions">Functions</a></span></h3>
+    <h3><span id="Events" class="section-title"><a href="#Events">Events</a></span></h3>
     <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Checkbox._prototype_radiobutton:add_as_option" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox._prototype_radiobutton:add_as_option">Checkbox._prototype_radiobutton:add_as_option (option_set, option_name)</span>
+    <a href="#on_player_jailed" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="on_player_jailed">on_player_jailed</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Adds this radiobutton to be an option in the given option set (only one can be true at a time)</p>
+    <p class="section-item-summary">When a player is assigned to jail</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
+    <strong>Event Parameters:</strong>
 
     <ul>
 
@@ -230,13 +269,29 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>option_set</em></strong>
+    <strong><em>player_index</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the index of the player who was jailed
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>by_player_name</em></strong>
 
     <strong> : </strong>
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the name of the option set to add this element to
+     the name of the player who jailed the other player
 
     </li>
 
@@ -246,248 +301,13 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>option_name</em></strong>
+    <strong><em>reason</em></strong>
 
     <strong> : </strong>
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the name of this option that will be used to idenitife it
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><span class="type">self</span></span>)
-    <span class="return-text">the define to allow chaining</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Checkbox._prototype_radiobutton:get_store" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox._prototype_radiobutton:get_store">Checkbox._prototype_radiobutton:get_store (category, internal)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Gets the stored value of the radiobutton or the option set if present</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>category</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-    [opt] the category to get such as player name or force name
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>internal</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     used to prevent stackover flow
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><span class="type">any</span></span>)
-    <span class="return-text">the value that is stored for this define</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Checkbox._prototype_radiobutton:set_store" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox._prototype_radiobutton:set_store">Checkbox._prototype_radiobutton:set_store (category, value, internal)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Sets the stored value of the radiobutton or the option set if present</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>category</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-    [opt] the category to get such as player name or force name
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>value</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     the value to set for this define, must be valid for its type ie for checkbox etc
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>internal</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     used to prevent stackover flow
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">true if the value was set</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Checkbox.draw_option_set" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox.draw_option_set">Checkbox.draw_option_set (name, element)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Draws all radiobuttons that are part of an option set at once (Gui.draw will not work)</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name of the option set to draw the radiobuttons of
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>element</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
-
-     the parent element that the radiobuttons will be drawn to
+     the reason that the player was jailed
 
     </li>
 
@@ -510,18 +330,18 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Checkbox.new_checkbox" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox.new_checkbox">Checkbox.new_checkbox ([name])</span>
+    <a href="#on_player_temp_banned" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="on_player_temp_banned">on_player_temp_banned</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Creates a new checkbox element define</p>
+    <p class="section-item-summary">When a player is temp banned</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
+    <strong>Event Parameters:</strong>
 
     <ul>
 
@@ -531,15 +351,46 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>name</em></strong>
+    <strong><em>player_index</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the index of the player who was temp banned
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>by_player_name</em></strong>
 
     <strong> : </strong>
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the optional debug name that can be added
+     the name of the player who temp banned the other player
 
-    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>reason</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the reason that the player was temp banned
+
     </li>
 
 
@@ -548,13 +399,6 @@
     <!-- parameters end -->
 
     <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the new checkbox element define</span>
-    </li>
-    </ul>
     <!-- returns end -->
 
 
@@ -568,18 +412,18 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Checkbox.new_option_set" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox.new_option_set">Checkbox.new_option_set (name, callback, categorize)</span>
+    <a href="#on_player_unjailed" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="on_player_unjailed">on_player_unjailed</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Registers a new option set that can be linked to radiobutotns (only one can be true at a time)</p>
+    <p class="section-item-summary">When a player is unassigned from jail</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
+    <strong>Event Parameters:</strong>
 
     <ul>
 
@@ -589,47 +433,29 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>name</em></strong>
+    <strong><em>player_index</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the index of the player who was unjailed
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>by_player_name</em></strong>
 
     <strong> : </strong>
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the name of the option set, must be unique
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>callback</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
-
-     the update callback when the value of the option set chagnes
- callback param - value string - the new selected option for this option set
- callback param - category string - the category that updated if categorize was used
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>categorize</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
-
-     the function used to convert an element into a string
+     the name of the player who unjailed the other player
 
     </li>
 
@@ -639,13 +465,6 @@
     <!-- parameters end -->
 
     <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-    <span class="return-text">the name of this option set to be passed to add_as_option</span>
-    </li>
-    </ul>
     <!-- returns end -->
 
 
@@ -659,18 +478,18 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Checkbox.new_radiobutton" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox.new_radiobutton">Checkbox.new_radiobutton ([name])</span>
+    <a href="#on_player_untemp_banned" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="on_player_untemp_banned">on_player_untemp_banned</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Creates a new radiobutton element define, has all functions checkbox has</p>
+    <p class="section-item-summary">When a temp ban is removed from a player</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
+    <strong>Event Parameters:</strong>
 
     <ul>
 
@@ -680,15 +499,30 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>name</em></strong>
+    <strong><em>player_index</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the index of the player who was untemp banned
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>by_player_name</em></strong>
 
     <strong> : </strong>
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the optional debug name that can be added
+     the name of the player who untemp banned the other player
 
-    (<em>optional</em>)
     </li>
 
 
@@ -697,13 +531,6 @@
     <!-- parameters end -->
 
     <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the new button element define</span>
-    </li>
-    </ul>
     <!-- returns end -->
 
 
@@ -714,17 +541,20 @@
     <!-- usage end -->
 
     </dd>
+    </dl>
+    <h3><span id="Jail_functions" class="section-title"><a href="#Jail_functions">Jail functions </a></span></h3>
+    <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Checkbox.reset_radiobuttons" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox.reset_radiobuttons">Checkbox.reset_radiobuttons (element[, exclude][, recursive=false])</span>
+    <a href="#is_jailed" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="is_jailed">is_jailed (player)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Sets all radiobutotn in a element to false (unless excluded) and can act recursivly</p>
+    <p class="section-item-summary">Checks if the player is currently in jail</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -738,48 +568,14 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>element</em></strong>
+    <strong><em>player</em></strong>
 
     <strong> : </strong>
 
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
 
-     the root gui element to start setting radio buttons from
+     the player to check if they are in jail
 
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>exclude</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-
-     ?string|table the name of the radiobutton to exclude or a of radiobuttons where true will set the state true
-
-    (<em>optional</em>)
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>recursive</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a> or <a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     if true will recur as much as possible, if a will recur that number of times
-
-    (<em>default</em>: false)
     </li>
 
 
@@ -792,7 +588,393 @@
     <ul>
     <li>
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">true if successful</span>
+    <span class="return-text">whether the player is currently in jail</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#jail_player" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="jail_player">jail_player (player, by_player_name[, reason='Non given.'])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Moves a player to jail and removes all other roles</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player who will be jailed
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>by_player_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the player who is doing the jailing
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>reason</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the reason that the player is being jailed
+
+    (<em>default</em>: 'Non given.')
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">wheather the user was jailed successfully</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#unjail_player" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="unjail_player">unjail_player (player, by_player_name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Moves a player out of jail and restores all roles previously removed</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player that will be unjailed
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>by_player_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the player that is doing the unjail
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">whether the player was unjailed successfully</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Temp_ban_functions" class="section-title"><a href="#Temp_ban_functions">Temp ban functions </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#is_temp_banned" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="is_temp_banned">is_temp_banned (player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Checks if a player is temp banned</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to check if they are temp banned
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">whether the player is temp banned</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#temp_ban_player" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="temp_ban_player">temp_ban_player (player, by_player_name[, reason='Non given.'])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Temp bans a player by moving them to jail, clearing all other roles, storing the reason, and moving their items to spawn</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player that will be temp banned
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>by_player_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the player who is doing the temp ban
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>reason</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the reason that the player is being temp banned
+
+    (<em>default</em>: 'Non given.')
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">whether the player was successfully temp banned</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#untemp_ban_player" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="untemp_ban_player">untemp_ban_player (player, by_player_name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Rrmoves a player from temp ban by clearing the stored reason, removing them from jail, and restoring previous roles</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player who is being removed from temp ban
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>by_player_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the player who is doing the untemp ban
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">whether the player was successfully removed</span>
     </li>
     </ul>
     <!-- returns end -->

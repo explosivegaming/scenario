@@ -9,7 +9,7 @@ local Store = require 'expcore.store'
 local Game = require 'utils.game'
 local Reports = require 'modules.control.reports'
 local Warnings = require 'modules.addons.warnings-control'
-local Jail = require 'modules.addons.jail-control'
+local Jail = require 'modules.control.jail'
 local Colors = require 'resources.color_presets'
 local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
 
@@ -146,7 +146,7 @@ Gui.new_button()
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
     local action_player_name,action_player_name_color = get_action_player_name(player)
-    if Roles.player_has_role(action_player_name,'Jail') then
+    if Jail.is_jailed(action_player_name) then
         player.print({'expcom-jail.already-jailed',action_player_name_color},Colors.orange_red)
     else
         Store.set(action_name_store,player.name,'command/jail')
@@ -157,7 +157,7 @@ local function jail_player_callback(player,reason)
     local action_player_name,action_player_name_color = get_action_player_name(player)
     local by_player_name_color = format_chat_player_name(player)
     game.print{'expcom-jail.give',action_player_name_color,by_player_name_color,reason}
-    Jail.jail_player(action_player_name,player.name)
+    Jail.jail_player(action_player_name,player.name,reason)
 end
 
 -- temp bans the action player, requires a reason
@@ -168,7 +168,7 @@ Gui.new_button()
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
     local action_player_name,action_player_name_color = get_action_player_name(player)
-    if Roles.player_has_role(action_player_name,'Jail') then
+    if Jail.is_jailed(action_player_name) then
         player.print({'expcom-jail.already-banned',action_player_name_color},Colors.orange_red)
     else
         Store.set(action_name_store,player.name,'command/temp-ban')

@@ -119,14 +119,14 @@ end
 --- Adds a report to a player, each player can only report another player once
 -- @tparam LuaPlayer player the player to add the report to
 -- @tparam string by_player_name the name of the player that is making the report
--- @tparam[opt='Non Given.'] string reason the reason that the player is being reported
+-- @tparam[opt='Non given.'] string reason the reason that the player is being reported
 -- @treturn boolean whether the report was added successfully
 function Reports.report_player(player,by_player_name,reason)
     player = valid_player(player)
     if not player then return end
     local player_name = player.name
 
-    reason = reason or 'Non Given.'
+    reason = reason or 'Non given.'
 
     local reports = user_reports[player_name]
     if not reports then

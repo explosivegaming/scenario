@@ -1,5 +1,5 @@
 local Commands = require 'expcore.commands'
-local JailControl = require 'modules.addons.jail-control'
+local Jail = require 'modules.control.jail'
 local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
 require 'config.expcore-commands.parse_roles'
 
@@ -11,7 +11,7 @@ Commands.new_command('jail','Puts a player into jail and removes all other roles
     reason = reason or 'Non Given.'
     local action_player_name_color = format_chat_player_name(action_player)
     local by_player_name_color = format_chat_player_name(player)
-    if JailControl.jail_player(action_player,player.name) then
+    if Jail.jail_player(action_player,player.name,reason) then
         game.print{'expcom-jail.give',action_player_name_color,by_player_name_color,reason}
     else
         return Commands.error{'expcom-jail.already-jailed',action_player_name_color}
@@ -25,7 +25,7 @@ Commands.new_command('unjail','Puts a player into jail and removes all other rol
 :register(function(player,action_player,raw)
     local action_player_name_color = format_chat_player_name(action_player)
     local by_player_name_color = format_chat_player_name(player)
-    if JailControl.unjail_player(action_player,player.name) then
+    if Jail.unjail_player(action_player,player.name) then
         game.print{'expcom-jail.remove',action_player_name_color,by_player_name_color}
     else
         return Commands.error{'expcom-jail.not-jailed',action_player_name_color}
@@ -39,7 +39,7 @@ Commands.new_command('temp-ban','Temp bans a player until the next reset; this r
 :register(function(player,action_player,reason,raw)
     local action_player_name_color = format_chat_player_name(action_player)
     local by_player_name_color = format_chat_player_name(player)
-    if JailControl.temp_ban_player(action_player,player.name,reason) then
+    if Jail.temp_ban_player(action_player,player.name,reason) then
         game.print{'expcom-jail.temp-ban',action_player_name_color,by_player_name_color,reason}
     else
         return Commands.error{'expcom-jail.already-banned',action_player_name_color}
@@ -53,7 +53,7 @@ Commands.new_command('clear-temp-ban','Removes temp ban from a player; this will
 :register(function(player,action_player,raw)
     local action_player_name_color = format_chat_player_name(action_player)
     local by_player_name_color = format_chat_player_name(player)
-    if JailControl.clear_temp_ban_player(action_player,player.name) then
+    if Jail.untemp_ban_player(action_player,player.name) then
         game.print{'expcom-jail.temp-ban-clear',action_player_name_color,by_player_name_color}
     else
         return Commands.error{'expcom-jail.not-temp-banned',action_player_name_color}
