@@ -7,7 +7,7 @@ local Gui = require 'expcore.gui'
 local Roles = require 'expcore.roles'
 local Store = require 'expcore.store'
 local Game = require 'utils.game'
-local Reports = require 'modules.addons.reports-control'
+local Reports = require 'modules.control.reports'
 local Warnings = require 'modules.addons.warnings-control'
 local Jail = require 'modules.addons.jail-control'
 local Colors = require 'resources.color_presets'
@@ -106,7 +106,7 @@ Gui.new_button()
 :set_style('tool_button',tool_button_style)
 :on_click(function(player,element)
     local action_player_name = get_action_player_name(player)
-    if Reports.player_is_reported_by(action_player_name,player.name) then
+    if Reports.is_reported(action_player_name,player.name) then
         player.print({'expcom-report.already-reported'},Colors.orange_red)
     else
         Store.set(action_name_store,player.name,'command/report')
@@ -118,7 +118,7 @@ local function report_player_callback(player,reason)
     local by_player_name_color = format_chat_player_name(player)
     game.print{'expcom-report.non-admin',action_player_name_color,reason}
     Roles.print_to_roles_higher('Trainee',{'expcom-report.admin',action_player_name_color,by_player_name_color,reason})
-    Reports.report_player(action_player_name,reason,player.name)
+    Reports.report_player(action_player_name,player.name,reason)
 end
 
 -- gives the action player a warning, requires a reason

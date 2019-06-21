@@ -1,316 +1,642 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<head>
-    <title>Reference</title>
+
+
+    <!doctype html>
+    <html class="no-js" lang="">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>utils.state_machine module</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
+    <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
     <link rel="stylesheet" href="../ldoc.css" type="text/css" />
-</head>
-<body>
+    </head>
+    <body>
 
-<div id="container">
+    <div class="container grid-1280">
+    <div class="columns">
 
-<div id="product">
-	<div id="product_logo"></div>
-	<div id="product_name"><big><b></b></big></div>
-	<div id="product_description"></div>
-</div> <!-- id="product" -->
+    <!-- sidebar start -->
 
+    <div id="sidebar" class="column col-3 col-sm-12">
 
-<div id="main">
+    <div class="sidebar-custom">
 
+    <div class="project-infobox">
 
-<!-- Menu -->
+    <!-- project title -->
 
-<div id="navigation">
-<br/>
-<h1>ldoc</h1>
+    <a href="../index.html"><h1>ExpGaming Scenario</h1></a>
 
-<ul>
-  <li><a href="../index.html">Index</a></li>
-</ul>
+    <!-- project description -->
+    <p class="project-desc">Explosive Gaming's server scenario for 0.17</p>
 
-<h2>Contents</h2>
-<ul>
-<li><a href="#Functions">Functions</a></li>
-</ul>
+    <!-- project full description -->
+    </div>
 
 
-<h2>Modules</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><a href="../modules/config._file_loader.html">config._file_loader</a></li>
-  <li><a href="../modules/config.action_buttons.html">config.action_buttons</a></li>
-  <li><a href="../modules/config.advanced_start.html">config.advanced_start</a></li>
-  <li><a href="../modules/config.death_logger.html">config.death_logger</a></li>
-  <li><a href="../modules/config.expcore-commands.auth_admin.html">config.expcore-commands.auth_admin</a></li>
-  <li><a href="../modules/config.expcore-commands.auth_roles.html">config.expcore-commands.auth_roles</a></li>
-  <li><a href="../modules/config.expcore-commands.auth_runtime_disable.html">config.expcore-commands.auth_runtime_disable</a></li>
-  <li><a href="../modules/config.expcore-commands.parse_general.html">config.expcore-commands.parse_general</a></li>
-  <li><a href="../modules/config.expcore-commands.parse_roles.html">config.expcore-commands.parse_roles</a></li>
-  <li><a href="../modules/config.permission_groups.html">config.permission_groups</a></li>
-  <li><a href="../modules/config.popup_messages.html">config.popup_messages</a></li>
-  <li><a href="../modules/config.rockets.html">config.rockets</a></li>
-  <li><a href="../modules/config.roles.html">config.roles</a></li>
-  <li><a href="../modules/config.scorched_earth.html">config.scorched_earth</a></li>
-  <li><a href="../modules/config.spawn_area.html">config.spawn_area</a></li>
-  <li><a href="../modules/config.warnings.html">config.warnings</a></li>
-  <li><a href="../modules/control.html">control</a></li>
-  <li><a href="../modules/expcore.commands.html">expcore.commands</a></li>
-  <li><a href="../modules/expcore.common.html">expcore.common</a></li>
-  <li><a href="../modules/expcore.gui.html">expcore.gui</a></li>
-  <li><a href="../modules/expcore.gui.buttons.html">expcore.gui.buttons</a></li>
-  <li><a href="../modules/expcore.gui.center.html">expcore.gui.center</a></li>
-  <li><a href="../modules/expcore.gui.checkboxs.html">expcore.gui.checkboxs</a></li>
-  <li><a href="../modules/expcore.gui.core.html">expcore.gui.core</a></li>
-  <li><a href="../modules/expcore.gui.dropdown.html">expcore.gui.dropdown</a></li>
-  <li><a href="../modules/expcore.gui.elem-button.html">expcore.gui.elem-button</a></li>
-  <li><a href="../modules/expcore.gui.instances.html">expcore.gui.instances</a></li>
-  <li><a href="../modules/expcore.gui.left.html">expcore.gui.left</a></li>
-  <li><a href="../modules/expcore.gui.popups.html">expcore.gui.popups</a></li>
-  <li><a href="../modules/expcore.gui.progress-bar.html">expcore.gui.progress-bar</a></li>
-  <li><a href="../modules/expcore.gui.slider.html">expcore.gui.slider</a></li>
-  <li><a href="../modules/expcore.gui.test.html">expcore.gui.test</a></li>
-  <li><a href="../modules/expcore.gui.text.html">expcore.gui.text</a></li>
-  <li><a href="../modules/expcore.gui.toolbar.html">expcore.gui.toolbar</a></li>
-  <li><a href="../modules/expcore.permission_groups.html">expcore.permission_groups</a></li>
-  <li><a href="../modules/expcore.roles.html">expcore.roles</a></li>
-  <li><a href="../modules/expcore.store.html">expcore.store</a></li>
-  <li><a href="../modules/modules.addons.advanced-start.html">modules.addons.advanced-start</a></li>
-  <li><a href="../modules/modules.addons.chat-popups.html">modules.addons.chat-popups</a></li>
-  <li><a href="../modules/modules.addons.damage-popups.html">modules.addons.damage-popups</a></li>
-  <li><a href="../modules/modules.gui.player-list.html">modules.gui.player-list</a></li>
-  <li><a href="../modules/modules.gui.rocket-info.html">modules.gui.rocket-info</a></li>
-  <li><a href="../modules/modules.gui.science-info.html">modules.gui.science-info</a></li>
-  <li><a href="../modules/modules.gui.task-list.html">modules.gui.task-list</a></li>
-  <li><a href="../modules/utils.alien_evolution_progress.html">utils.alien_evolution_progress</a></li>
-  <li><a href="../modules/utils.core.html">utils.core</a></li>
-  <li><a href="../modules/utils.debug.html">utils.debug</a></li>
-  <li><a href="../modules/utils.event.html">utils.event</a></li>
-  <li><a href="../modules/utils.event_core.html">utils.event_core</a></li>
-  <li><a href="../modules/utils.math.html">utils.math</a></li>
-  <li><a href="../modules/utils.recipe_locker.html">utils.recipe_locker</a></li>
-  <li><strong>utils.state_machine</strong></li>
-  <li><a href="../modules/utils.table.html">utils.table</a></li>
-  <li><a href="../modules/utils.task.html">utils.task</a></li>
-  <li><a href="../modules/utils.timestamp.html">utils.timestamp</a></li>
-</ul>
+    <!-- sidebar navigation -->
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Modules</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.advanced_start.html"><span class="module-name-item">config.advanced_start</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.bonuses.html"><span class="module-name-item">config.bonuses</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.chat_reply.html"><span class="module-name-item">config.chat_reply</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.death_logger.html"><span class="module-name-item">config.death_logger</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.discord_alerts.html"><span class="module-name-item">config.discord_alerts</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.expcore-commands.auth_admin.html"><span class="module-name-item">config.expcore-commands.auth_admin</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.expcore-commands.auth_roles.html"><span class="module-name-item">config.expcore-commands.auth_roles</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.expcore-commands.auth_runtime_disable.html"><span class="module-name-item">config.expcore-commands.auth_runtime_disable</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.expcore-commands.parse_general.html"><span class="module-name-item">config.expcore-commands.parse_general</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.expcore-commands.parse_roles.html"><span class="module-name-item">config.expcore-commands.parse_roles</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.permission_groups.html"><span class="module-name-item">config.permission_groups</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.popup_messages.html"><span class="module-name-item">config.popup_messages</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.rockets.html"><span class="module-name-item">config.rockets</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.roles.html"><span class="module-name-item">config.roles</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.scorched_earth.html"><span class="module-name-item">config.scorched_earth</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.spawn_area.html"><span class="module-name-item">config.spawn_area</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.warnings.html"><span class="module-name-item">config.warnings</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.warps.html"><span class="module-name-item">config.warps</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/control.html"><span class="module-name-item">control</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.commands.html"><span class="module-name-item">expcore.commands</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.common.html"><span class="module-name-item">expcore.common</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.html"><span class="module-name-item">expcore.gui</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.concepts.center.html"><span class="module-name-item">expcore.gui.concepts.center</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.concepts.left.html"><span class="module-name-item">expcore.gui.concepts.left</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.concepts.popups.html"><span class="module-name-item">expcore.gui.concepts.popups</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.concepts.toolbar.html"><span class="module-name-item">expcore.gui.concepts.toolbar</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.core.html"><span class="module-name-item">expcore.gui.core</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.buttons.html"><span class="module-name-item">expcore.gui.elements.buttons</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.checkboxs.html"><span class="module-name-item">expcore.gui.elements.checkboxs</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.dropdown.html"><span class="module-name-item">expcore.gui.elements.dropdown</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.elem-button.html"><span class="module-name-item">expcore.gui.elements.elem-button</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.progress-bar.html"><span class="module-name-item">expcore.gui.elements.progress-bar</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.slider.html"><span class="module-name-item">expcore.gui.elements.slider</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.text.html"><span class="module-name-item">expcore.gui.elements.text</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.instances.html"><span class="module-name-item">expcore.gui.instances</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.prototype.html"><span class="module-name-item">expcore.gui.prototype</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.test.html"><span class="module-name-item">expcore.gui.test</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.permission_groups.html"><span class="module-name-item">expcore.permission_groups</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.roles.html"><span class="module-name-item">expcore.roles</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.store.html"><span class="module-name-item">expcore.store</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.sudo.html"><span class="module-name-item">expcore.sudo</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.addons.advanced-start.html"><span class="module-name-item">modules.addons.advanced-start</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.addons.chat-popups.html"><span class="module-name-item">modules.addons.chat-popups</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.addons.damage-popups.html"><span class="module-name-item">modules.addons.damage-popups</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.gui.player-list.html"><span class="module-name-item">modules.gui.player-list</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.gui.rocket-info.html"><span class="module-name-item">modules.gui.rocket-info</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.gui.science-info.html"><span class="module-name-item">modules.gui.science-info</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.gui.task-list.html"><span class="module-name-item">modules.gui.task-list</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.alien_evolution_progress.html"><span class="module-name-item">utils.alien_evolution_progress</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.core.html"><span class="module-name-item">utils.core</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.debug.html"><span class="module-name-item">utils.debug</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event.html"><span class="module-name-item">utils.event</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event_core.html"><span class="module-name-item">utils.event_core</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.math.html"><span class="module-name-item">utils.math</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.recipe_locker.html"><span class="module-name-item">utils.recipe_locker</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/utils.state_machine.html"><span class="module-name-item">utils.state_machine</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.table.html"><span class="module-name-item">utils.table</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.task.html"><span class="module-name-item">utils.task</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.timestamp.html"><span class="module-name-item">utils.timestamp</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Topics</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/license.html"><span class="module-name-item">license</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
 
-</div>
 
-<div id="content">
 
-<h1>Module <code>utils.state_machine</code></h1>
-<p>This module provides a classical mealy/moore state machine.</p>
-<p>
+    <!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h4>Contents of <strong>utils.state_machine</strong></h4>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    </ul>
+    </li>
+    </ul>
+    </div>
+    <div class="up-to-top">
+    <a href="#">Top <i class="icon icon-upward"></i></a>
+    </div>
+    </div>
+    <!-- sidebar end -->
+
+    <!-- content body start -->
+    <div class="column col-9 col-sm-12">
+
+    <!-- module list on the main page start -->
+    <!-- module list on the main page end -->
+
+    <!-- module contents -->
+
+    <!-- module content header start -->
+
+    <h2><span class="body-module-name"><strong><em>utils.state_machine</em></strong></span> module</h2>
+    <p>This module provides a classical mealy/moore state machine.</p>
+    <p>
  Each machine in constructed by calling new()
  States and Transitions are lazily added to the machine as transition handlers and state tick handlers are registered.
  However the state machine must be fully defined after init is done. Dynamic machine changes are currently unsupported
  An example usage can be found here: map_gen\combined\tetris\control.lua</p>
 
 
-<h2><a href="#Functions">Functions</a></h2>
-<table class="function_list">
-	<tr>
-	<td class="name" nowrap><a href="#Module.transition">Module.transition (self, new_state)</a></td>
-	<td class="summary">Transitions the supplied machine into a given state and executes all transaction_callbacks</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.in_state">Module.in_state (self, state)</a></td>
-	<td class="summary">Is this machine in this state?</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.machine_tick">Module.machine_tick (self)</a></td>
-	<td class="summary">Invoke a machine tick.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.register_state_tick_callback">Module.register_state_tick_callback (self, state, callback)</a></td>
-	<td class="summary">Register a handler that will be invoked by StateMachine.machine_tick
+    <!-- module info start -->
+    <!-- module info end -->
+
+    <!-- module usage start -->
+    <!-- module usage end -->
+
+    <!-- module content header end -->
+
+    <!-- module section list start -->
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Functions">Functions</a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#Module.in_state">Module.in_state (self, state)</a></td>
+    <td class="summary">Is this machine in this state?</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.machine_tick">Module.machine_tick (self)</a></td>
+    <td class="summary">Invoke a machine tick.</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.new">Module.new (init_state)</a></td>
+    <td class="summary">Constructs a new state machine</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.register_state_tick_callback">Module.register_state_tick_callback (self, state, callback)</a></td>
+    <td class="summary">Register a handler that will be invoked by StateMachine.machine_tick
  You may register multiple handlers for the same transition
  NOTICE: This function will invoke an error if called after init.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.register_transition_callback">Module.register_transition_callback (self, state, state, callback)</a></td>
-	<td class="summary">Register a handler that will be invoked by StateMachine.transition
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.register_transition_callback">Module.register_transition_callback (self, state, state, callback)</a></td>
+    <td class="summary">Register a handler that will be invoked by StateMachine.transition
  You may register multiple handlers for the same transition
  NOTICE: This function will invoke an error if called after init.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.new">Module.new (init_state)</a></td>
-	<td class="summary">Constructs a new state machine</td>
-	</tr>
-</table>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.transition">Module.transition (self, new_state)</a></td>
+    <td class="summary">Transitions the supplied machine into a given state and executes all transaction_callbacks</td>
+    </tr>
+    </tbody>
+    </table>
+    <!-- module section list end -->
 
-<br/>
-<br/>
+    <br />
 
-
-    <h2><a name="Functions"></a>Functions</h2>
-
-    <dl class="function">
+    <!-- section start -->
+    <h3><span id="Functions" class="section-title"><a href="#Functions">Functions</a></span></h3>
+    <dl class="section-body-container">
     <dt>
-    <a name = "Module.transition"></a>
-    <strong>Module.transition (self, new_state)</strong>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.in_state" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.in_state">Module.in_state (self, state)</span>
+    </div>
     </dt>
     <dd>
-    Transitions the supplied machine into a given state and executes all transaction_callbacks
+    <div class="section-item-body">
 
+    <p class="section-item-summary">Is this machine in this state?</p>
+    <p class="section-item-description"></p>
 
-    <h3>Parameters:</h3>
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
     <ul>
-        <li><span class="parameter">self</span>
-         StateMachine
-        </li>
-        <li><span class="parameter">new_state</span>
-         number/string The new state to transition to
-        </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>self</em></strong>
+
+    <strong> : </strong>
+
+
+     StateMachine
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>state</em></strong>
+
+    <strong> : </strong>
+
+
+     number/string
+
+    </li>
+
+
     </ul>
 
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    <span class="return-text">boolean</span>
+    </li>
+    </ul>
+    <!-- returns end -->
 
 
+    <!-- see also start -->
+    <!-- see also end -->
 
+    <!-- usage start -->
+    <!-- usage end -->
 
-</dd>
+    </dd>
     <dt>
-    <a name = "Module.in_state"></a>
-    <strong>Module.in_state (self, state)</strong>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.machine_tick" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.machine_tick">Module.machine_tick (self)</span>
+    </div>
     </dt>
     <dd>
-    Is this machine in this state?
+    <div class="section-item-body">
 
+    <p class="section-item-summary">Invoke a machine tick.</p>
+    <p class="section-item-description"> Will execute all in_state_callbacks of the given machine</p>
 
-    <h3>Parameters:</h3>
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
     <ul>
-        <li><span class="parameter">self</span>
-         StateMachine
-        </li>
-        <li><span class="parameter">state</span>
-         number/string
-        </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>self</em></strong>
+
+    <strong> : </strong>
+
+
+     StateMachine the machine, whose handlers will be invoked
+
+    </li>
+
+
     </ul>
 
-    <h3>Returns:</h3>
-    <ol>
+    <!-- parameters end -->
 
-        boolean
-    </ol>
-
+    <!-- returns start -->
+    <!-- returns end -->
 
 
+    <!-- see also start -->
+    <!-- see also end -->
 
-</dd>
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
     <dt>
-    <a name = "Module.machine_tick"></a>
-    <strong>Module.machine_tick (self)</strong>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.new" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.new">Module.new (init_state)</span>
+    </div>
     </dt>
     <dd>
-    Invoke a machine tick.  Will execute all in_state_callbacks of the given machine
+    <div class="section-item-body">
 
+    <p class="section-item-summary">Constructs a new state machine</p>
+    <p class="section-item-description"></p>
 
-    <h3>Parameters:</h3>
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
     <ul>
-        <li><span class="parameter">self</span>
-         StateMachine the machine, whose handlers will be invoked
-        </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>init_state</em></strong>
+
+    <strong> : </strong>
+
+
+     number/string The starting state of the machine
+
+    </li>
+
+
     </ul>
 
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    <span class="return-text">StateMachine The constructed state machine object</span>
+    </li>
+    </ul>
+    <!-- returns end -->
 
 
+    <!-- see also start -->
+    <!-- see also end -->
 
+    <!-- usage start -->
+    <!-- usage end -->
 
-</dd>
+    </dd>
     <dt>
-    <a name = "Module.register_state_tick_callback"></a>
-    <strong>Module.register_state_tick_callback (self, state, callback)</strong>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.register_state_tick_callback" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.register_state_tick_callback">Module.register_state_tick_callback (self, state, callback)</span>
+    </div>
     </dt>
     <dd>
-    Register a handler that will be invoked by StateMachine.machine_tick
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Register a handler that will be invoked by StateMachine.machine_tick
  You may register multiple handlers for the same transition
- NOTICE: This function will invoke an error if called after init.  Dynamic machine changes are currently unsupported
+ NOTICE: This function will invoke an error if called after init.</p>
+    <p class="section-item-description"> Dynamic machine changes are currently unsupported</p>
 
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
 
-    <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">self</span>
-         StateMachine the machine
-        </li>
-        <li><span class="parameter">state</span>
-         number/string The state, that the machine will be in, when callback is invoked
-        </li>
-        <li><span class="parameter">callback</span>
-         function
-        </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>self</em></strong>
+
+    <strong> : </strong>
+
+
+     StateMachine the machine
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>state</em></strong>
+
+    <strong> : </strong>
+
+
+     number/string The state, that the machine will be in, when callback is invoked
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>callback</em></strong>
+
+    <strong> : </strong>
+
+
+     function
+
+    </li>
+
+
     </ul>
 
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
 
 
+    <!-- see also start -->
+    <!-- see also end -->
 
+    <!-- usage start -->
+    <!-- usage end -->
 
-</dd>
+    </dd>
     <dt>
-    <a name = "Module.register_transition_callback"></a>
-    <strong>Module.register_transition_callback (self, state, state, callback)</strong>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.register_transition_callback" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.register_transition_callback">Module.register_transition_callback (self, state, state, callback)</span>
+    </div>
     </dt>
     <dd>
-    Register a handler that will be invoked by StateMachine.transition
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Register a handler that will be invoked by StateMachine.transition
  You may register multiple handlers for the same transition
- NOTICE: This function will invoke an error if called after init.  Dynamic machine changes are currently unsupported
+ NOTICE: This function will invoke an error if called after init.</p>
+    <p class="section-item-description"> Dynamic machine changes are currently unsupported</p>
 
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
 
-    <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">self</span>
-         StateMachine the machine
-        </li>
-        <li><span class="parameter">state</span>
-         number/string entering state
-        </li>
-        <li><span class="parameter">state</span>
-         number/string entering state
-        </li>
-        <li><span class="parameter">callback</span>
-         function
-        </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>self</em></strong>
+
+    <strong> : </strong>
+
+
+     StateMachine the machine
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>state</em></strong>
+
+    <strong> : </strong>
+
+
+     number/string entering state
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>state</em></strong>
+
+    <strong> : </strong>
+
+
+     number/string entering state
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>callback</em></strong>
+
+    <strong> : </strong>
+
+
+     function
+
+    </li>
+
+
     </ul>
 
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
 
 
+    <!-- see also start -->
+    <!-- see also end -->
 
+    <!-- usage start -->
+    <!-- usage end -->
 
-</dd>
+    </dd>
     <dt>
-    <a name = "Module.new"></a>
-    <strong>Module.new (init_state)</strong>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.transition" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.transition">Module.transition (self, new_state)</span>
+    </div>
     </dt>
     <dd>
-    Constructs a new state machine
+    <div class="section-item-body">
 
+    <p class="section-item-summary">Transitions the supplied machine into a given state and executes all transaction_callbacks</p>
+    <p class="section-item-description"></p>
 
-    <h3>Parameters:</h3>
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
     <ul>
-        <li><span class="parameter">init_state</span>
-         number/string The starting state of the machine
-        </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>self</em></strong>
+
+    <strong> : </strong>
+
+
+     StateMachine
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>new_state</em></strong>
+
+    <strong> : </strong>
+
+
+     number/string The new state to transition to
+
+    </li>
+
+
     </ul>
 
-    <h3>Returns:</h3>
-    <ol>
+    <!-- parameters end -->
 
-        StateMachine The constructed state machine object
-    </ol>
-
+    <!-- returns start -->
+    <!-- returns end -->
 
 
+    <!-- see also start -->
+    <!-- see also end -->
 
-</dd>
-</dl>
+    <!-- usage start -->
+    <!-- usage end -->
 
+    </dd>
+    </dl>
 
-</div> <!-- id="content" -->
-</div> <!-- id="main" -->
-<div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2019-05-29 22:30:49 </i>
-</div> <!-- id="about" -->
-</div> <!-- id="container" -->
-</body>
-</html>
+    <!-- section end -->
+
+    </div>
+    </div>
+    </div>
+
+    <div class="footer container grid-1280">
+    <div class="divider divider-custom"></div>
+    <div class="footer-columns columns">
+    <div class="sidebar-footer column col-3 col-sm-12">
+    <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
+    </div>
+    <div class="content-footer column col-9 col-sm-12">
+    <i>Last updated 2019-06-21 21:58:35 UTC</i>
+    </div>
+    </div>
+    </div>
+    </body>
+    </html>

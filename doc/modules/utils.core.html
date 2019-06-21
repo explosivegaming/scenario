@@ -1,452 +1,959 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<head>
-    <title>Reference</title>
+
+
+    <!doctype html>
+    <html class="no-js" lang="">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>utils.core module</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
+    <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
     <link rel="stylesheet" href="../ldoc.css" type="text/css" />
-</head>
-<body>
+    </head>
+    <body>
 
-<div id="container">
+    <div class="container grid-1280">
+    <div class="columns">
 
-<div id="product">
-	<div id="product_logo"></div>
-	<div id="product_name"><big><b></b></big></div>
-	<div id="product_description"></div>
-</div> <!-- id="product" -->
+    <!-- sidebar start -->
 
+    <div id="sidebar" class="column col-3 col-sm-12">
 
-<div id="main">
+    <div class="sidebar-custom">
 
+    <div class="project-infobox">
 
-<!-- Menu -->
+    <!-- project title -->
 
-<div id="navigation">
-<br/>
-<h1>ldoc</h1>
+    <a href="../index.html"><h1>ExpGaming Scenario</h1></a>
 
-<ul>
-  <li><a href="../index.html">Index</a></li>
-</ul>
+    <!-- project description -->
+    <p class="project-desc">Explosive Gaming's server scenario for 0.17</p>
 
-<h2>Contents</h2>
-<ul>
-<li><a href="#Functions">Functions</a></li>
-<li><a href="#Fields">Fields</a></li>
-</ul>
+    <!-- project full description -->
+    </div>
 
 
-<h2>Modules</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><a href="../modules/config._file_loader.html">config._file_loader</a></li>
-  <li><a href="../modules/config.action_buttons.html">config.action_buttons</a></li>
-  <li><a href="../modules/config.advanced_start.html">config.advanced_start</a></li>
-  <li><a href="../modules/config.death_logger.html">config.death_logger</a></li>
-  <li><a href="../modules/config.expcore-commands.auth_admin.html">config.expcore-commands.auth_admin</a></li>
-  <li><a href="../modules/config.expcore-commands.auth_roles.html">config.expcore-commands.auth_roles</a></li>
-  <li><a href="../modules/config.expcore-commands.auth_runtime_disable.html">config.expcore-commands.auth_runtime_disable</a></li>
-  <li><a href="../modules/config.expcore-commands.parse_general.html">config.expcore-commands.parse_general</a></li>
-  <li><a href="../modules/config.expcore-commands.parse_roles.html">config.expcore-commands.parse_roles</a></li>
-  <li><a href="../modules/config.permission_groups.html">config.permission_groups</a></li>
-  <li><a href="../modules/config.popup_messages.html">config.popup_messages</a></li>
-  <li><a href="../modules/config.rockets.html">config.rockets</a></li>
-  <li><a href="../modules/config.roles.html">config.roles</a></li>
-  <li><a href="../modules/config.scorched_earth.html">config.scorched_earth</a></li>
-  <li><a href="../modules/config.spawn_area.html">config.spawn_area</a></li>
-  <li><a href="../modules/config.warnings.html">config.warnings</a></li>
-  <li><a href="../modules/control.html">control</a></li>
-  <li><a href="../modules/expcore.commands.html">expcore.commands</a></li>
-  <li><a href="../modules/expcore.common.html">expcore.common</a></li>
-  <li><a href="../modules/expcore.gui.html">expcore.gui</a></li>
-  <li><a href="../modules/expcore.gui.buttons.html">expcore.gui.buttons</a></li>
-  <li><a href="../modules/expcore.gui.center.html">expcore.gui.center</a></li>
-  <li><a href="../modules/expcore.gui.checkboxs.html">expcore.gui.checkboxs</a></li>
-  <li><a href="../modules/expcore.gui.core.html">expcore.gui.core</a></li>
-  <li><a href="../modules/expcore.gui.dropdown.html">expcore.gui.dropdown</a></li>
-  <li><a href="../modules/expcore.gui.elem-button.html">expcore.gui.elem-button</a></li>
-  <li><a href="../modules/expcore.gui.instances.html">expcore.gui.instances</a></li>
-  <li><a href="../modules/expcore.gui.left.html">expcore.gui.left</a></li>
-  <li><a href="../modules/expcore.gui.popups.html">expcore.gui.popups</a></li>
-  <li><a href="../modules/expcore.gui.progress-bar.html">expcore.gui.progress-bar</a></li>
-  <li><a href="../modules/expcore.gui.slider.html">expcore.gui.slider</a></li>
-  <li><a href="../modules/expcore.gui.test.html">expcore.gui.test</a></li>
-  <li><a href="../modules/expcore.gui.text.html">expcore.gui.text</a></li>
-  <li><a href="../modules/expcore.gui.toolbar.html">expcore.gui.toolbar</a></li>
-  <li><a href="../modules/expcore.permission_groups.html">expcore.permission_groups</a></li>
-  <li><a href="../modules/expcore.roles.html">expcore.roles</a></li>
-  <li><a href="../modules/expcore.store.html">expcore.store</a></li>
-  <li><a href="../modules/modules.addons.advanced-start.html">modules.addons.advanced-start</a></li>
-  <li><a href="../modules/modules.addons.chat-popups.html">modules.addons.chat-popups</a></li>
-  <li><a href="../modules/modules.addons.damage-popups.html">modules.addons.damage-popups</a></li>
-  <li><a href="../modules/modules.gui.player-list.html">modules.gui.player-list</a></li>
-  <li><a href="../modules/modules.gui.rocket-info.html">modules.gui.rocket-info</a></li>
-  <li><a href="../modules/modules.gui.science-info.html">modules.gui.science-info</a></li>
-  <li><a href="../modules/modules.gui.task-list.html">modules.gui.task-list</a></li>
-  <li><a href="../modules/utils.alien_evolution_progress.html">utils.alien_evolution_progress</a></li>
-  <li><strong>utils.core</strong></li>
-  <li><a href="../modules/utils.debug.html">utils.debug</a></li>
-  <li><a href="../modules/utils.event.html">utils.event</a></li>
-  <li><a href="../modules/utils.event_core.html">utils.event_core</a></li>
-  <li><a href="../modules/utils.math.html">utils.math</a></li>
-  <li><a href="../modules/utils.recipe_locker.html">utils.recipe_locker</a></li>
-  <li><a href="../modules/utils.state_machine.html">utils.state_machine</a></li>
-  <li><a href="../modules/utils.table.html">utils.table</a></li>
-  <li><a href="../modules/utils.task.html">utils.task</a></li>
-  <li><a href="../modules/utils.timestamp.html">utils.timestamp</a></li>
-</ul>
+    <!-- sidebar navigation -->
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Modules</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.advanced_start.html"><span class="module-name-item">config.advanced_start</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.bonuses.html"><span class="module-name-item">config.bonuses</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.chat_reply.html"><span class="module-name-item">config.chat_reply</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.death_logger.html"><span class="module-name-item">config.death_logger</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.discord_alerts.html"><span class="module-name-item">config.discord_alerts</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.expcore-commands.auth_admin.html"><span class="module-name-item">config.expcore-commands.auth_admin</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.expcore-commands.auth_roles.html"><span class="module-name-item">config.expcore-commands.auth_roles</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.expcore-commands.auth_runtime_disable.html"><span class="module-name-item">config.expcore-commands.auth_runtime_disable</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.expcore-commands.parse_general.html"><span class="module-name-item">config.expcore-commands.parse_general</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.expcore-commands.parse_roles.html"><span class="module-name-item">config.expcore-commands.parse_roles</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.permission_groups.html"><span class="module-name-item">config.permission_groups</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.popup_messages.html"><span class="module-name-item">config.popup_messages</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.rockets.html"><span class="module-name-item">config.rockets</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.roles.html"><span class="module-name-item">config.roles</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.scorched_earth.html"><span class="module-name-item">config.scorched_earth</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.spawn_area.html"><span class="module-name-item">config.spawn_area</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.warnings.html"><span class="module-name-item">config.warnings</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.warps.html"><span class="module-name-item">config.warps</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/control.html"><span class="module-name-item">control</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.commands.html"><span class="module-name-item">expcore.commands</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.common.html"><span class="module-name-item">expcore.common</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.html"><span class="module-name-item">expcore.gui</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.concepts.center.html"><span class="module-name-item">expcore.gui.concepts.center</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.concepts.left.html"><span class="module-name-item">expcore.gui.concepts.left</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.concepts.popups.html"><span class="module-name-item">expcore.gui.concepts.popups</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.concepts.toolbar.html"><span class="module-name-item">expcore.gui.concepts.toolbar</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.core.html"><span class="module-name-item">expcore.gui.core</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.buttons.html"><span class="module-name-item">expcore.gui.elements.buttons</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.checkboxs.html"><span class="module-name-item">expcore.gui.elements.checkboxs</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.dropdown.html"><span class="module-name-item">expcore.gui.elements.dropdown</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.elem-button.html"><span class="module-name-item">expcore.gui.elements.elem-button</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.progress-bar.html"><span class="module-name-item">expcore.gui.elements.progress-bar</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.slider.html"><span class="module-name-item">expcore.gui.elements.slider</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.text.html"><span class="module-name-item">expcore.gui.elements.text</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.instances.html"><span class="module-name-item">expcore.gui.instances</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.prototype.html"><span class="module-name-item">expcore.gui.prototype</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.test.html"><span class="module-name-item">expcore.gui.test</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.permission_groups.html"><span class="module-name-item">expcore.permission_groups</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.roles.html"><span class="module-name-item">expcore.roles</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.store.html"><span class="module-name-item">expcore.store</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.sudo.html"><span class="module-name-item">expcore.sudo</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.addons.advanced-start.html"><span class="module-name-item">modules.addons.advanced-start</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.addons.chat-popups.html"><span class="module-name-item">modules.addons.chat-popups</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.addons.damage-popups.html"><span class="module-name-item">modules.addons.damage-popups</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.gui.player-list.html"><span class="module-name-item">modules.gui.player-list</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.gui.rocket-info.html"><span class="module-name-item">modules.gui.rocket-info</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.gui.science-info.html"><span class="module-name-item">modules.gui.science-info</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.gui.task-list.html"><span class="module-name-item">modules.gui.task-list</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.alien_evolution_progress.html"><span class="module-name-item">utils.alien_evolution_progress</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/utils.core.html"><span class="module-name-item">utils.core</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.debug.html"><span class="module-name-item">utils.debug</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event.html"><span class="module-name-item">utils.event</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event_core.html"><span class="module-name-item">utils.event_core</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.math.html"><span class="module-name-item">utils.math</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.recipe_locker.html"><span class="module-name-item">utils.recipe_locker</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.state_machine.html"><span class="module-name-item">utils.state_machine</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.table.html"><span class="module-name-item">utils.table</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.task.html"><span class="module-name-item">utils.task</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.timestamp.html"><span class="module-name-item">utils.timestamp</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Topics</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/license.html"><span class="module-name-item">license</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
 
-</div>
-
-<div id="content">
-
-<h1>Module <code>utils.core</code></h1>
-<p>Measures distance between pos1 and pos2</p>
-<p></p>
 
 
-<h2><a href="#Functions">Functions</a></h2>
-<table class="function_list">
-	<tr>
-	<td class="name" nowrap><a href="#Module.print_except">Module.print_except (msg, player, color)</a></td>
-	<td class="summary">Takes msg and prints it to all players except provided player</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.print_admins">Module.print_admins (msg, source)</a></td>
-	<td class="summary">Prints a message to all online admins</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.get_actor">Module.get_actor ()</a></td>
-	<td class="summary">Returns a valid string with the name of the actor of a command.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.format_time">Module.format_time (ticks)</a></td>
-	<td class="summary">Takes a time in ticks and returns a string with the time in format "x hour(s) x minute(s)"</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.cant_run">Module.cant_run (name)</a></td>
-	<td class="summary">Prints a message letting the player know they cannot run a command</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.log_command">Module.log_command (actor, command, parameters)</a></td>
-	<td class="summary">Logs the use of a command and its user</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.verify_mult_types">Module.verify_mult_types (arg, arg_types)</a></td>
-	<td class="summary">Asserts the argument is one of type arg_types</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.random_RGB">Module.random_RGB ()</a></td>
-	<td class="summary">Returns a random RGB color as a table</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.set_and_return">Module.set_and_return (tbl, key, value)</a></td>
-	<td class="summary">Sets a table element to value while also returning value.</td>
-	</tr>
-</table>
-<h2><a href="#Fields">Fields</a></h2>
-<table class="function_list">
-	<tr>
-	<td class="name" nowrap><a href="#Module.move_position">Module.move_position</a></td>
-	<td class="summary">Moves a position according to the parameters given
+    <!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h4>Contents of <strong>utils.core</strong></h4>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    <li class="nav-item"><a href="#Fields"><span class="fragment-hashtag">#</span> Fields</a></li>
+    </ul>
+    </li>
+    </ul>
+    </div>
+    <div class="up-to-top">
+    <a href="#">Top <i class="icon icon-upward"></i></a>
+    </div>
+    </div>
+    <!-- sidebar end -->
+
+    <!-- content body start -->
+    <div class="column col-9 col-sm-12">
+
+    <!-- module list on the main page start -->
+    <!-- module list on the main page end -->
+
+    <!-- module contents -->
+
+    <!-- module content header start -->
+
+    <h2><span class="body-module-name"><strong><em>utils.core</em></strong></span> module</h2>
+    <p>Measures distance between pos1 and pos2</p>
+    <p></p>
+
+
+    <!-- module info start -->
+    <!-- module info end -->
+
+    <!-- module usage start -->
+    <!-- module usage end -->
+
+    <!-- module content header end -->
+
+    <!-- module section list start -->
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Functions">Functions</a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#Module.cant_run">Module.cant_run (name)</a></td>
+    <td class="summary">Prints a message letting the player know they cannot run a command</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.format_time">Module.format_time (ticks)</a></td>
+    <td class="summary">Takes a time in ticks and returns a string with the time in format "x hour(s) x minute(s)"</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.get_actor">Module.get_actor ()</a></td>
+    <td class="summary">Returns a valid string with the name of the actor of a command.</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.log_command">Module.log_command (actor, command, parameters)</a></td>
+    <td class="summary">Logs the use of a command and its user</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.print_admins">Module.print_admins (msg, source)</a></td>
+    <td class="summary">Prints a message to all online admins</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.print_except">Module.print_except (msg, player, color)</a></td>
+    <td class="summary">Takes msg and prints it to all players except provided player</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.random_RGB">Module.random_RGB ()</a></td>
+    <td class="summary">Returns a random RGB color as a table</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.set_and_return">Module.set_and_return (tbl, key, value)</a></td>
+    <td class="summary">Sets a table element to value while also returning value.</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.verify_mult_types">Module.verify_mult_types (arg, arg_types)</a></td>
+    <td class="summary">Asserts the argument is one of type arg_types</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Fields">Fields</a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#Module.is_module_available">Module.is_module_available</a></td>
+    <td class="summary">Takes the string of a module and returns whether is it available or not</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.move_position">Module.move_position</a></td>
+    <td class="summary">Moves a position according to the parameters given
  Notice: only accepts cardinal directions as direction</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.opposite_direction">Module.opposite_direction</a></td>
-	<td class="summary">Takes a direction and gives you the opposite</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Module.is_module_available">Module.is_module_available</a></td>
-	<td class="summary">Takes the string of a module and returns whether is it available or not</td>
-	</tr>
-</table>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.opposite_direction">Module.opposite_direction</a></td>
+    <td class="summary">Takes a direction and gives you the opposite</td>
+    </tr>
+    </tbody>
+    </table>
+    <!-- module section list end -->
 
-<br/>
-<br/>
+    <br />
 
-
-    <h2><a name="Functions"></a>Functions</h2>
-
-    <dl class="function">
+    <!-- section start -->
+    <h3><span id="Functions" class="section-title"><a href="#Functions">Functions</a></span></h3>
+    <dl class="section-body-container">
     <dt>
-    <a name = "Module.print_except"></a>
-    <strong>Module.print_except (msg, player, color)</strong>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.cant_run" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.cant_run">Module.cant_run (name)</span>
+    </div>
     </dt>
     <dd>
-    Takes msg and prints it to all players except provided player
+    <div class="section-item-body">
 
+    <p class="section-item-summary">Prints a message letting the player know they cannot run a command</p>
+    <p class="section-item-description"></p>
 
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">msg</span>
-         <string|table> table if locale is used
-        </li>
-        <li><span class="parameter">player</span>
-         <LuaPlayer> the player not to send the message to
-        </li>
-        <li><span class="parameter">color</span>
-         <table> the color to use for the message, defaults to white
-        </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Module.print_admins"></a>
-    <strong>Module.print_admins (msg, source)</strong>
-    </dt>
-    <dd>
-    Prints a message to all online admins
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">msg</span>
-         <string|table> table if locale is used
-        </li>
-        <li><span class="parameter">source</span>
-         <LuaPlayer|string|nil> string must be the name of a player, nil for server.
-        </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Module.get_actor"></a>
-    <strong>Module.get_actor ()</strong>
-    </dt>
-    <dd>
-    Returns a valid string with the name of the actor of a command.
-
-
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Module.format_time"></a>
-    <strong>Module.format_time (ticks)</strong>
-    </dt>
-    <dd>
-    Takes a time in ticks and returns a string with the time in format "x hour(s) x minute(s)"
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">ticks</span>
-
-        </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Module.cant_run"></a>
-    <strong>Module.cant_run (name)</strong>
-    </dt>
-    <dd>
-    Prints a message letting the player know they cannot run a command
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">name</span>
-         string name of the command
-        </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Module.log_command"></a>
-    <strong>Module.log_command (actor, command, parameters)</strong>
-    </dt>
-    <dd>
-    Logs the use of a command and its user
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">actor</span>
-         string with the actor's name (usually acquired by calling get_actor)
-        </li>
-        <li><span class="parameter">command</span>
-         the command's name as table element
-        </li>
-        <li><span class="parameter">parameters</span>
-         the command's parameters as a table (optional)
-        </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Module.verify_mult_types"></a>
-    <strong>Module.verify_mult_types (arg, arg_types)</strong>
-    </dt>
-    <dd>
-    Asserts the argument is one of type arg_types
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">arg</span>
-         the variable to check
-        </li>
-        <li><span class="parameter">arg_types</span>
-         the type as a table of sings
-        </li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        boolean
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Module.random_RGB"></a>
-    <strong>Module.random_RGB ()</strong>
-    </dt>
-    <dd>
-    Returns a random RGB color as a table
-
-
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Module.set_and_return"></a>
-    <strong>Module.set_and_return (tbl, key, value)</strong>
-    </dt>
-    <dd>
-    Sets a table element to value while also returning value.
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">tbl</span>
-         table to change the element of
-        </li>
-        <li><span class="parameter">key</span>
-         string
-        </li>
-        <li><span class="parameter">value</span>
-         nil|boolean|number|string|table to set the element to
-        </li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        value
-    </ol>
-
-
-
-
-</dd>
-</dl>
-    <h2><a name="Fields"></a>Fields</h2>
-
-    <dl class="function">
-    <dt>
-    <a name = "Module.move_position"></a>
-    <strong>Module.move_position</strong>
-    </dt>
-    <dd>
-    Moves a position according to the parameters given
- Notice: only accepts cardinal directions as direction
-
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
 
     <ul>
-        <li><span class="parameter">position</span>
-         <table> table containing a map position
-        </li>
-        <li><span class="parameter">direction</span>
-         <defines.direction> north, east, south, west
-        </li>
-        <li><span class="parameter">distance</span>
-         <number>
-        </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+
+     string name of the command
+
+    </li>
+
+
     </ul>
 
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
 
 
+    <!-- see also start -->
+    <!-- see also end -->
 
+    <!-- usage start -->
+    <!-- usage end -->
 
-</dd>
+    </dd>
     <dt>
-    <a name = "Module.opposite_direction"></a>
-    <strong>Module.opposite_direction</strong>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.format_time" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.format_time">Module.format_time (ticks)</span>
+    </div>
     </dt>
     <dd>
-    Takes a direction and gives you the opposite
+    <div class="section-item-body">
 
+    <p class="section-item-summary">Takes a time in ticks and returns a string with the time in format "x hour(s) x minute(s)"</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
 
     <ul>
-        <li><span class="parameter">direction</span>
-         <defines.direction> north, east, south, west, northeast, northwest, southeast, southwest
-        </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>ticks</em></strong>
+
+
+
+
+
+    </li>
+
+
     </ul>
 
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
 
 
+    <!-- see also start -->
+    <!-- see also end -->
 
+    <!-- usage start -->
+    <!-- usage end -->
 
-</dd>
+    </dd>
     <dt>
-    <a name = "Module.is_module_available"></a>
-    <strong>Module.is_module_available</strong>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.get_actor" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.get_actor">Module.get_actor ()</span>
+    </div>
     </dt>
     <dd>
-    Takes the string of a module and returns whether is it available or not
+    <div class="section-item-body">
 
+    <p class="section-item-summary">Returns a valid string with the name of the actor of a command.</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.log_command" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.log_command">Module.log_command (actor, command, parameters)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Logs the use of a command and its user</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
 
     <ul>
-        <li><span class="parameter">name</span>
-         <string> the name of the module (ex. 'utils.core')
-        </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>actor</em></strong>
+
+    <strong> : </strong>
+
+
+     string with the actor's name (usually acquired by calling get_actor)
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>command</em></strong>
+
+    <strong> : </strong>
+
+
+     the command's name as table element
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>parameters</em></strong>
+
+    <strong> : </strong>
+
+
+     the command's parameters as a table (optional)
+
+    </li>
+
+
     </ul>
 
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.print_admins" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.print_admins">Module.print_admins (msg, source)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Prints a message to all online admins</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
 
 
 
 
-</dd>
-</dl>
+
+    <li class="section-subitem-li">
+
+    <strong><em>msg</em></strong>
+
+    <strong> : </strong>
 
 
-</div> <!-- id="content" -->
-</div> <!-- id="main" -->
-<div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2019-05-29 22:30:49 </i>
-</div> <!-- id="about" -->
-</div> <!-- id="container" -->
-</body>
-</html>
+     <string|table> table if locale is used
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>source</em></strong>
+
+    <strong> : </strong>
+
+
+     <LuaPlayer|string|nil> string must be the name of a player, nil for server.
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.print_except" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.print_except">Module.print_except (msg, player, color)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Takes msg and prints it to all players except provided player</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>msg</em></strong>
+
+    <strong> : </strong>
+
+
+     <string|table> table if locale is used
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+
+     <LuaPlayer> the player not to send the message to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>color</em></strong>
+
+    <strong> : </strong>
+
+
+     <table> the color to use for the message, defaults to white
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.random_RGB" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.random_RGB">Module.random_RGB ()</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns a random RGB color as a table</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.set_and_return" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.set_and_return">Module.set_and_return (tbl, key, value)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sets a table element to value while also returning value.</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>tbl</em></strong>
+
+    <strong> : </strong>
+
+
+     table to change the element of
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>key</em></strong>
+
+    <strong> : </strong>
+
+
+     string
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>value</em></strong>
+
+    <strong> : </strong>
+
+
+     nil|boolean|number|string|table to set the element to
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    <span class="return-text">value</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.verify_mult_types" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.verify_mult_types">Module.verify_mult_types (arg, arg_types)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Asserts the argument is one of type arg_types</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>arg</em></strong>
+
+    <strong> : </strong>
+
+
+     the variable to check
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>arg_types</em></strong>
+
+    <strong> : </strong>
+
+
+     the type as a table of sings
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    <span class="return-text">boolean</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Fields" class="section-title"><a href="#Fields">Fields</a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.is_module_available" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.is_module_available">Module.is_module_available</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Takes the string of a module and returns whether is it available or not</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-module-field-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+
+     <string> the name of the module (ex. 'utils.core')
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.move_position" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.move_position">Module.move_position</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Moves a position according to the parameters given
+ Notice: only accepts cardinal directions as direction</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-module-field-li">
+
+    <strong><em>position</em></strong>
+
+    <strong> : </strong>
+
+
+     <table> table containing a map position
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-module-field-li">
+
+    <strong><em>direction</em></strong>
+
+    <strong> : </strong>
+
+
+     <defines.direction> north, east, south, west
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-module-field-li">
+
+    <strong><em>distance</em></strong>
+
+    <strong> : </strong>
+
+
+     <number>
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.opposite_direction" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.opposite_direction">Module.opposite_direction</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Takes a direction and gives you the opposite</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-module-field-li">
+
+    <strong><em>direction</em></strong>
+
+    <strong> : </strong>
+
+
+     <defines.direction> north, east, south, west, northeast, northwest, southeast, southwest
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+
+    <!-- section end -->
+
+    </div>
+    </div>
+    </div>
+
+    <div class="footer container grid-1280">
+    <div class="divider divider-custom"></div>
+    <div class="footer-columns columns">
+    <div class="sidebar-footer column col-3 col-sm-12">
+    <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
+    </div>
+    <div class="content-footer column col-9 col-sm-12">
+    <i>Last updated 2019-06-21 21:58:35 UTC</i>
+    </div>
+    </div>
+    </div>
+    </body>
+    </html>
