@@ -8,7 +8,7 @@ local Roles = require 'expcore.roles'
 local Store = require 'expcore.store'
 local Game = require 'utils.game'
 local Reports = require 'modules.control.reports'
-local Warnings = require 'modules.addons.warnings-control'
+local Warnings = require 'modules.addons.warnings'
 local Jail = require 'modules.control.jail'
 local Colors = require 'resources.color_presets'
 local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
@@ -135,7 +135,7 @@ local function warn_player_callback(player,reason)
     local action_player_name,action_player_name_color = get_action_player_name(player)
     local by_player_name_color = format_chat_player_name(player)
     game.print{'expcom-warnings.received',action_player_name_color,by_player_name_color,reason}
-    Warnings.add_warnings(action_player_name,player.name)
+    Warnings.add_warning(action_player_name,player.name,reason)
 end
 
 -- jails the action player, requires a reason

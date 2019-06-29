@@ -5,7 +5,7 @@
     <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>utils.core module</title>
+    <title>Warnings module</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
     <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
@@ -42,7 +42,7 @@
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/Warnings.html"><span class="module-name-item">Warnings</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.advanced_start.html"><span class="module-name-item">config.advanced_start</span></a></div></li>
@@ -94,7 +94,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.gui.science-info.html"><span class="module-name-item">modules.gui.science-info</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.gui.task-list.html"><span class="module-name-item">modules.gui.task-list</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.alien_evolution_progress.html"><span class="module-name-item">utils.alien_evolution_progress</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/utils.core.html"><span class="module-name-item">utils.core</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.core.html"><span class="module-name-item">utils.core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.debug.html"><span class="module-name-item">utils.debug</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event.html"><span class="module-name-item">utils.event</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event_core.html"><span class="module-name-item">utils.event_core</span></a></div></li>
@@ -122,10 +122,10 @@
     <!-- list of items in a module -->
     <ul class="nav nav-module-contents">
     <li class="nav-item">
-    <h4>Contents of <strong>utils.core</strong></h4>
+    <h4>Contents of <strong>Warnings</strong></h4>
     <ul class="nav">
+    <li class="nav-item"><a href="#Events"><span class="fragment-hashtag">#</span> Events</a></li>
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
-    <li class="nav-item"><a href="#Fields"><span class="fragment-hashtag">#</span> Fields</a></li>
     </ul>
     </li>
     </ul>
@@ -146,8 +146,9 @@
 
     <!-- module content header start -->
 
-    <h2><span class="body-module-name"><strong><em>utils.core</em></strong></span> module</h2>
-    <p>Measures distance between pos1 and pos2</p>
+    <h2><span class="body-module-name"><strong><em>Warnings</em></strong></span> module</h2>
+    <p>Control Module - Warnings
+    - Adds a way to give and remove warnings to players.</p>
     <p></p>
 
 
@@ -155,6 +156,20 @@
     <!-- module info end -->
 
     <!-- module usage start -->
+    <h3>Usage</h3>
+    <pre class="code" data-lang="Lua"><code>
+    <span class="comment">-- This will add a warning to the player
+</span>    Warnings.add_warning(<span class="string">'MrBiter'</span>,<span class="string">'Cooldude2606'</span>,<span class="string">'Killed too many biters'</span>)
+
+    <span class="comment">-- This will remove a warning from a player, second name is just who is doing the action
+</span>    Warnings.remove_warning(<span class="string">'MrBiter'</span>,<span class="string">'Cooldude2606'</span>)
+
+    <span class="comment">-- Script warning as similar to normal warning but are designed to have no effect for a short amount of time
+</span>    <span class="comment">-- this is so it can be used for greifer protection without being too agressive
+</span>    Warnings.add_script_warning(<span class="string">'MrBiter'</span>,<span class="string">'Killed too many biters'</span>)
+
+    <span class="comment">-- Both normal and script warnings can also be cleared, this will remove all warnings
+</span>    Warnings.clear_warnings(<span class="string">'MrBiter'</span>,<span class="string">'Cooldude2606'</span>)</code></pre>
     <!-- module usage end -->
 
     <!-- module content header end -->
@@ -162,66 +177,73 @@
     <!-- module section list start -->
     <table class="section-content-list">
     <thead>
-    <h3><a href="#Functions">Functions</a></h3>
+    <h3><a href="#Events">Events</a></h3>
     <span></span>
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#Module.cant_run">Module.cant_run (name)</a></td>
-    <td class="summary">Prints a message letting the player know they cannot run a command</td>
+    <td class="name"><a href="#on_script_warning_added">on_script_warning_added</a></td>
+    <td class="summary">When a warning is added to a player, by the script</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Module.format_time">Module.format_time (ticks)</a></td>
-    <td class="summary">Takes a time in ticks and returns a string with the time in format "x hour(s) x minute(s)"</td>
+    <td class="name"><a href="#on_script_warning_removed">on_script_warning_removed</a></td>
+    <td class="summary">When a warning is remnoved from a player, by the script</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Module.get_actor">Module.get_actor ()</a></td>
-    <td class="summary">Returns a valid string with the name of the actor of a command.</td>
+    <td class="name"><a href="#on_warning_added">on_warning_added</a></td>
+    <td class="summary">When a warning is added to a player</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Module.log_command">Module.log_command (actor, command, parameters)</a></td>
-    <td class="summary">Logs the use of a command and its user</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Module.print_admins">Module.print_admins (msg, source)</a></td>
-    <td class="summary">Prints a message to all online admins</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Module.print_except">Module.print_except (msg, player, color)</a></td>
-    <td class="summary">Takes msg and prints it to all players except provided player</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Module.random_RGB">Module.random_RGB ()</a></td>
-    <td class="summary">Returns a random RGB color as a table</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Module.set_and_return">Module.set_and_return (tbl, key, value)</a></td>
-    <td class="summary">Sets a table element to value while also returning value.</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Module.verify_mult_types">Module.verify_mult_types (arg, arg_types)</a></td>
-    <td class="summary">Asserts the argument is one of type arg_types</td>
+    <td class="name"><a href="#on_warning_removed">on_warning_removed</a></td>
+    <td class="summary">When a warning is removed from a player</td>
     </tr>
     </tbody>
     </table>
     <table class="section-content-list">
     <thead>
-    <h3><a href="#Fields">Fields</a></h3>
+    <h3><a href="#Functions">Functions</a></h3>
     <span></span>
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#Module.is_module_available">Module.is_module_available</a></td>
-    <td class="summary">Takes the string of a module and returns whether is it available or not</td>
+    <td class="name"><a href="#add_script_warning">add_script_warning (player[, reason='Non given.'])</a></td>
+    <td class="summary">Adds a script warning to a player, this may add a full warning if max script warnings is met</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Module.move_position">Module.move_position</a></td>
-    <td class="summary">Moves a position according to the parameters given
- Notice: only accepts cardinal directions as direction</td>
+    <td class="name"><a href="#add_warning">add_warning (player, by_player_name[, reason='Non given.'])</a></td>
+    <td class="summary">Adds a warning to a player, when a warning is added a set action is done based on the number of warnings and the config file</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Module.opposite_direction">Module.opposite_direction</a></td>
-    <td class="summary">Takes a direction and gives you the opposite</td>
+    <td class="name"><a href="#clear_script_warnings">clear_script_warnings (player)</a></td>
+    <td class="summary">Removes all script warnings from a player, emits event for each warning removed</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#clear_warnings">clear_warnings (player, by_player_name)</a></td>
+    <td class="summary">Removes all warnings from a player, will trigger remove event for each warning</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#count_script_warnings">count_script_warnings (player)</a></td>
+    <td class="summary">Gets the number of script warnings that a player has on them</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#count_warnings">count_warnings (player)</a></td>
+    <td class="summary">Gets the number of warnings that a player has on them</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#get_script_warnings">get_script_warnings (player)</a></td>
+    <td class="summary">Gets an array of all the script warnings that a player has</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#get_warnings">get_warnings (player)</a></td>
+    <td class="summary">Gets an array of warnings that the player has, always returns a list even if emtpy</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#remove_script_warning">remove_script_warning (player)</a></td>
+    <td class="summary">Removes a script warning from a player</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#remove_warning">remove_warning (player, by_player_name)</a></td>
+    <td class="summary">Removes a warning from a player, always removes the earlyist warning, fifo</td>
     </tr>
     </tbody>
     </table>
@@ -230,23 +252,23 @@
     <br />
 
     <!-- section start -->
-    <h3><span id="Functions" class="section-title"><a href="#Functions">Functions</a></span></h3>
+    <h3><span id="Events" class="section-title"><a href="#Events">Events</a></span></h3>
     <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Module.cant_run" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.cant_run">Module.cant_run (name)</span>
+    <a href="#on_script_warning_added" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="on_script_warning_added">on_script_warning_added</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Prints a message letting the player know they cannot run a command</p>
+    <p class="section-item-summary">When a warning is added to a player, by the script</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
+    <strong>Event Parameters:</strong>
 
     <ul>
 
@@ -256,12 +278,45 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>name</em></strong>
+    <strong><em>player_index</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
 
-     string name of the command
+     the index of the player who recived the warning
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>reason</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the reason that the player was given a warning
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warning_count</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the new number of warnings that the player has
 
     </li>
 
@@ -284,18 +339,18 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Module.format_time" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.format_time">Module.format_time (ticks)</span>
+    <a href="#on_script_warning_removed" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="on_script_warning_removed">on_script_warning_removed</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Takes a time in ticks and returns a string with the time in format "x hour(s) x minute(s)"</p>
+    <p class="section-item-summary">When a warning is remnoved from a player, by the script</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
+    <strong>Event Parameters:</strong>
 
     <ul>
 
@@ -305,11 +360,29 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>ticks</em></strong>
+    <strong><em>player_index</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the index of the player who is having the warning removed
+
+    </li>
 
 
 
 
+
+    <li class="section-subitem-li">
+
+    <strong><em>warning_count</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the new number of warnings that the player has
 
     </li>
 
@@ -332,45 +405,18 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Module.get_actor" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.get_actor">Module.get_actor ()</span>
+    <a href="#on_warning_added" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="on_warning_added">on_warning_added</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Returns a valid string with the name of the actor of a command.</p>
+    <p class="section-item-summary">When a warning is added to a player</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Module.log_command" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.log_command">Module.log_command (actor, command, parameters)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Logs the use of a command and its user</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
+    <strong>Event Parameters:</strong>
 
     <ul>
 
@@ -380,12 +426,13 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>actor</em></strong>
+    <strong><em>player_index</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
 
-     string with the actor's name (usually acquired by calling get_actor)
+     the index of the player who recived the warning
 
     </li>
 
@@ -395,12 +442,13 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>command</em></strong>
+    <strong><em>by_player_name</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the command's name as table element
+     the name of the player who gave the warning
 
     </li>
 
@@ -410,12 +458,29 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>parameters</em></strong>
+    <strong><em>reason</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the command's parameters as a table (optional)
+     the reason that the player was given a warning
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warning_count</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the new number of warnings that the player has
 
     </li>
 
@@ -438,18 +503,18 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Module.print_admins" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.print_admins">Module.print_admins (msg, source)</span>
+    <a href="#on_warning_removed" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="on_warning_removed">on_warning_removed</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Prints a message to all online admins</p>
+    <p class="section-item-summary">When a warning is removed from a player</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
+    <strong>Event Parameters:</strong>
 
     <ul>
 
@@ -459,12 +524,13 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>msg</em></strong>
+    <strong><em>player_index</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
 
-     <string|table> table if locale is used
+     the index of the player who is having the warning removed
 
     </li>
 
@@ -474,12 +540,45 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>source</em></strong>
+    <strong><em>warning_by_name</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <LuaPlayer|string|nil> string must be the name of a player, nil for server.
+     the name of the player who gave the warning
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>removed_by_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the player who is removing the warning
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warning_count</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the new number of warnings that the player has
 
     </li>
 
@@ -489,267 +588,6 @@
     <!-- parameters end -->
 
     <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Module.print_except" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.print_except">Module.print_except (msg, player, color)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Takes msg and prints it to all players except provided player</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>msg</em></strong>
-
-    <strong> : </strong>
-
-
-     <string|table> table if locale is used
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player</em></strong>
-
-    <strong> : </strong>
-
-
-     <LuaPlayer> the player not to send the message to
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>color</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> the color to use for the message, defaults to white
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Module.random_RGB" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.random_RGB">Module.random_RGB ()</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Returns a random RGB color as a table</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Module.set_and_return" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.set_and_return">Module.set_and_return (tbl, key, value)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Sets a table element to value while also returning value.</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>tbl</em></strong>
-
-    <strong> : </strong>
-
-
-     table to change the element of
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>key</em></strong>
-
-    <strong> : </strong>
-
-
-     string
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>value</em></strong>
-
-    <strong> : </strong>
-
-
-     nil|boolean|number|string|table to set the element to
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    <span class="return-text">value</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Module.verify_mult_types" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.verify_mult_types">Module.verify_mult_types (arg, arg_types)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Asserts the argument is one of type arg_types</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>arg</em></strong>
-
-    <strong> : </strong>
-
-
-     the variable to check
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>arg_types</em></strong>
-
-    <strong> : </strong>
-
-
-     the type as a table of sings
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    <span class="return-text">boolean</span>
-    </li>
-    </ul>
     <!-- returns end -->
 
 
@@ -761,22 +599,23 @@
 
     </dd>
     </dl>
-    <h3><span id="Fields" class="section-title"><a href="#Fields">Fields</a></span></h3>
+    <h3><span id="Functions" class="section-title"><a href="#Functions">Functions</a></span></h3>
     <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Module.is_module_available" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.is_module_available">Module.is_module_available</span>
+    <a href="#add_script_warning" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="add_script_warning">add_script_warning (player[, reason='Non given.'])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Takes the string of a module and returns whether is it available or not</p>
+    <p class="section-item-summary">Adds a script warning to a player, this may add a full warning if max script warnings is met</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
+    <strong>Parameters:</strong>
 
     <ul>
 
@@ -784,14 +623,179 @@
 
 
 
-    <li class="section-subitem-module-field-li">
+    <li class="section-subitem-li">
 
-    <strong><em>name</em></strong>
+    <strong><em>player</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
 
-     <string> the name of the module (ex. 'utils.core')
+     the player to add a script warning to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>reason</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the reason that the player is being warned
+
+    (<em>default</em>: 'Non given.')
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+    <span class="return-text">the number of script warnings that the player has</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#add_warning" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="add_warning">add_warning (player, by_player_name[, reason='Non given.'])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds a warning to a player, when a warning is added a set action is done based on the number of warnings and the config file</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to add a warning to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>by_player_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the player who is doing the action
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>reason</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the reason that the player is being warned
+
+    (<em>default</em>: 'Non given.')
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+    <span class="return-text">the number of warnings that the player has</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#clear_script_warnings" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="clear_script_warnings">clear_script_warnings (player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Removes all script warnings from a player, emits event for each warning removed</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to clear the script warnings from
 
     </li>
 
@@ -814,18 +818,18 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Module.move_position" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.move_position">Module.move_position</span>
+    <a href="#clear_warnings" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="clear_warnings">clear_warnings (player, by_player_name)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Moves a position according to the parameters given
- Notice: only accepts cardinal directions as direction</p>
+    <p class="section-item-summary">Removes all warnings from a player, will trigger remove event for each warning</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
+    <strong>Parameters:</strong>
 
     <ul>
 
@@ -833,14 +837,15 @@
 
 
 
-    <li class="section-subitem-module-field-li">
+    <li class="section-subitem-li">
 
-    <strong><em>position</em></strong>
+    <strong><em>player</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
 
-     <table> table containing a map position
+     the player to clear the warnings from
 
     </li>
 
@@ -848,29 +853,15 @@
 
 
 
-    <li class="section-subitem-module-field-li">
+    <li class="section-subitem-li">
 
-    <strong><em>direction</em></strong>
-
-    <strong> : </strong>
-
-
-     <defines.direction> north, east, south, west
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-module-field-li">
-
-    <strong><em>distance</em></strong>
+    <strong><em>by_player_name</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <number>
+     the name of the player who is doing the action
 
     </li>
 
@@ -880,6 +871,13 @@
     <!-- parameters end -->
 
     <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true when warnings were cleared succesfully</span>
+    </li>
+    </ul>
     <!-- returns end -->
 
 
@@ -893,17 +891,18 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Module.opposite_direction" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.opposite_direction">Module.opposite_direction</span>
+    <a href="#count_script_warnings" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="count_script_warnings">count_script_warnings (player)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Takes a direction and gives you the opposite</p>
+    <p class="section-item-summary">Gets the number of script warnings that a player has on them</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
+    <strong>Parameters:</strong>
 
     <ul>
 
@@ -911,14 +910,15 @@
 
 
 
-    <li class="section-subitem-module-field-li">
+    <li class="section-subitem-li">
 
-    <strong><em>direction</em></strong>
+    <strong><em>player</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
 
-     <defines.direction> north, east, south, west, northeast, northwest, southeast, southwest
+     the player to count the script warnings of
 
     </li>
 
@@ -928,6 +928,314 @@
     <!-- parameters end -->
 
     <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+    <span class="return-text">the number of script warnings that the player has</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#count_warnings" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="count_warnings">count_warnings (player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets the number of warnings that a player has on them</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to count the warnings for
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+    <span class="return-text">the number of warnings that the player has</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#get_script_warnings" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_script_warnings">get_script_warnings (player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets an array of all the script warnings that a player has</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to get the script warnings of
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">a table of all the script warnings a player has, contains tick and reason</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#get_warnings" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_warnings">get_warnings (player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets an array of warnings that the player has, always returns a list even if emtpy</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to get the warning for
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">an array of all the warnings on this player, contains tick, by_player_name and reason</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#remove_script_warning" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="remove_script_warning">remove_script_warning (player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Removes a script warning from a player</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to remove a script warning from
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+    <span class="return-text">the number of script warnings that the player has</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#remove_warning" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="remove_warning">remove_warning (player, by_player_name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Removes a warning from a player, always removes the earlyist warning, fifo</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to remove a warning from
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>by_player_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the player who is doing the action
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+    <span class="return-text">the number of warnings that the player has</span>
+    </li>
+    </ul>
     <!-- returns end -->
 
 

@@ -1,5 +1,5 @@
 --[[-- Control Module - Jail
-    Adds a way to jail players and temp ban players.
+    - Adds a way to jail players and temp ban players.
     @module Jail
     @alias Jail
 

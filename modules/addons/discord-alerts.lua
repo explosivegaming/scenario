@@ -102,18 +102,19 @@ end
 
 --- Warnings added and removed
 if config.player_warnings then
-    local Warnings = require 'modules.addons.warnings-control'
-    Event.add(Warnings.events.on_player_warned,function(event)
+    local Warnings = require 'modules.addons.warnings'
+    Event.add(Warnings.events.on_warning_added,function(event)
         local player_name,by_player_name = get_player_name(event)
         emit_event{
             title='Warning',
             description='A player has been given a warning',
             color=Colors.yellow,
             ['Player:']='<inline>'..player_name,
-            ['By:']='<inline>'..by_player_name
+            ['By:']='<inline>'..by_player_name,
+            ['Reason:']=event.reason
         }
     end)
-    Event.add(Warnings.events.on_player_warning_removed,function(event)
+    Event.add(Warnings.events.on_warning_removed,function(event)
         local player_name,by_player_name = get_player_name(event)
         emit_event{
             title='Warning Removed',

@@ -1,5 +1,5 @@
 --[[-- Control Module - Reports
-    Adds a way to report players and store report messages.
+    - Adds a way to report players and store report messages.
     @module Reports
     @alias Reports
 
