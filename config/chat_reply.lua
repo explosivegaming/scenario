@@ -15,11 +15,11 @@ return {
         ['script']={'info.softmod'},
         ['loop']={'chat-bot.loops'},
         ['loops']={'chat-bot.loops'},
-        ['rhd']={'chat-bot.lhd'},
-        ['lhd']={'chat-bot.lhd'},
+        ['rhd']={'info.lhd'},
+        ['lhd']={'info.lhd'},
         ['roundabout']={'chat-bot.loops'},
         ['roundabouts']={'chat-bot.loops'},
-        ['redmew']={'chat-bot.redmew'},
+        ['redmew']={'info.redmew'},
         ['afk']=function(player)
             local max=player
             for _,next_player in pairs(game.connected_players) do
