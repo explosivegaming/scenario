@@ -40,7 +40,7 @@ return {
         end,
     },
     command_admin_only = false, -- when true will only allow chat commands for admins
-    command_permission = 'command/chat-bot', -- the permision used to allow command prefixs
+    command_permission = 'command/chat-bot', -- the permission used to allow command prefixes
     command_prefix = '!', -- prefix used for commands below and to print to all players (if enabled above)
     commands = { -- will trigger only when command prefix is given
         ['dev']={'chat-bot.not-real-dev'},

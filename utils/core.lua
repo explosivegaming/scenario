@@ -19,7 +19,7 @@ local hours_to_ticks = 60 * 60 * 60
 local ticks_to_minutes = 1 / minutes_to_ticks
 local ticks_to_hours = 1 / hours_to_ticks
 
--- local vars
+-- local variables
 local Module = {}
 
 --- Measures distance between pos1 and pos2

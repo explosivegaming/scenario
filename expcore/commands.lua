@@ -70,7 +70,7 @@
     nb: if you do not return reject after you call it then you are still returning nil so there will be a duplicate message
 
     It should be noted that if you want to expand on an existing parse you can use Commands.parse(type,input,player,reject)
-    and this value will either return a new value for the input or nil, if it is nil you should return nil to prevent dobble
+    and this value will either return a new value for the input or nil, if it is nil you should return nil to prevent double
     messages to the user:
     input = Commands.parse('number-int',input,player,reject)
     if not input then return end -- nil check
@@ -159,7 +159,7 @@
     Commands.print(any,colour[opt]) -- this will return any value value to the user including if it is ran through rcon console
     Commands.error(message[opt]) -- this returns a warning to the user, aka an error that does not prevent execution of the command
     return Commands.error(message[opt]) -- this returns an error to the user, and will halt the command execution, ie no success message is returned
-    Commands.success(message[opt]) -- used to return a success message however dont use this method see below
+    Commands.success(message[opt]) -- used to return a success message however don't use this method see below
     return Commands.success(message[opt]) -- will return the success message to the user and your given message, halts execution
     return <any> if any value is returned then it will be returned to the player via a Commands.success call
 
@@ -390,7 +390,7 @@ end
 
 --- Intended to be used within other parse functions, runs a parse and returns success and new value
 -- @tparam string name the name of the parse to call, must be registered and cant be a function
--- @tparam string input string the input to pass to the parse, will always be a but might not be the orginal input
+-- @tparam string input string the input to pass to the parse, will always be a but might not be the original input
 -- @tparam LuaPlayer player the player that is calling using the command
 -- @tparam function reject the reject function that was passed by the command hander
 -- @treturn any the new value for the input, may be nil, if nil then either there was an error or input was nil
@@ -497,7 +497,7 @@ function Commands._prototype:add_alias(...)
 end
 
 --- Enables auto concatenation of any params on the end so quotes are not needed for last param
--- nb: this will disable max param checking as they will be concated onto the end of that last param
+-- nb: this will disable max param checking as they will be concatenated onto the end of that last param
 -- this can be useful for reasons or longs text, can only have one per command
 -- @treturn Commands._prototype pass through to allow more functions to be called
 function Commands._prototype:enable_auto_concat()
@@ -628,7 +628,7 @@ function Commands.run_command(command_event)
         local no_quotes = w:sub(2,-2)
         quote_params[no_spaces]=no_quotes
         if command_data.auto_concat then
-            -- if auto concat then dont remove quotes as it should be included later
+            -- if auto concat then don't remove quotes as it should be included later
             quote_params[no_spaces]=w
         end
         return no_spaces

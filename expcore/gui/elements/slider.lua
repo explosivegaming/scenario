@@ -1,4 +1,4 @@
---- Gui class define for silders
+--- Gui class define for sliders
 --[[
 >>>> Functions
     Slider.new_slider(name) --- Creates a new slider element define
@@ -128,7 +128,7 @@ function Slider._prototype:set_range(min,max)
 end
 
 --- Draws a new label and links its value to the value of this slider, if no store then it will only show one value per player
--- @tparam LuaGuiElement element the parent element that the lable will be drawn to
+-- @tparam LuaGuiElement element the parent element that the label will be drawn to
 -- @treturn LuaGuiElement the new label element so that styles can be applied
 function Slider._prototype:draw_label(element)
     local name = self.name..'-label'

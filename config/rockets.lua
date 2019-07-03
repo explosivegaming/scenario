@@ -7,11 +7,11 @@ return {
         show_fastest_rocket = true, -- false will not show the time taken for the fastest rocket
         show_total_rockets = true, -- false will not show the total number of rockets launched
         show_game_avg = true, -- false will hide the avg across the entire map time
-        rolling_avg = { -- each number will be one stat; 5 means the avg time taken for the last 5 rockets
+        rolling_avg = { -- each number will be one statistic; 5 means the avg time taken for the last 5 rockets
             5,10,25
         }
     },
-    milestones = { -- each number will be one stat; 5 means the time that the 5th rocket was launched
+    milestones = { -- each number will be one statistic; 5 means the time that the 5th rocket was launched
         show_milestones=true, -- false will hide this section all together
         1,2,5,
         10,20,50,
@@ -25,9 +25,9 @@ return {
         allow_zoom_to_map = true, -- false will disable the zoom to map feature
         allow_remote_launch = true, -- false removes the remote launch button for all players
         remote_launch_admins_only = false, -- true will remove the remote launch button for all non (game) admins
-        remote_launch_role_permision = 'gui/rocket-info/remote_launch', -- value used by custom permission system to allow or disllow the button
+        remote_launch_role_permission = 'gui/rocket-info/remote_launch', -- value used by custom permission system to allow or disallow the button
         allow_toggle_active = true, -- false removes the remote toggle auto launch button for all players
         toggle_active_admins_only = false, -- true will remove the toggle auto launch button for all non (game) admins
-        toggle_active_role_permision = 'gui/rocket-info/toggle-active' -- value used by custom permission system to allow or disllow the button
+        toggle_active_role_permission = 'gui/rocket-info/toggle-active' -- value used by custom permission system to allow or disallow the button
     }
 }

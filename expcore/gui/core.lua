@@ -125,7 +125,7 @@
     Gui.set_padding(element,up,down,left,right) --- Sets the padding for a gui element
     Gui.set_padding_style(style,up,down,left,right) --- Sets the padding for a gui style
     Gui.create_alignment(element,flow_name) --- Allows the creation of a right align flow to place elements into
-    Gui.destory_if_valid(element) --- Destroies an element but tests for it being present and valid first
+    Gui.destroy_if_valid(element) --- Destroies an element but tests for it being present and valid first
     Gui.create_scroll_table(element,table_size,maximal_height,name) --- Creates a scroll area with a table inside, table can be any size
     Gui.create_header(element,caption,tooltip,right_align,name) --- Creates a header section with a label and button area
 ]]
@@ -288,7 +288,7 @@ end
 --- Destroies an element but tests for it being present and valid first
 -- @tparam LuaGuiElement element the element to be destroied
 -- @treturn boolean true if it was destoried
-function Gui.destory_if_valid(element)
+function Gui.destroy_if_valid(element)
     if element and element.valid then
         element.destroy()
         return true

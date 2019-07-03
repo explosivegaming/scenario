@@ -64,7 +64,7 @@
     ...extras...
     :set_allow_all()
 
-    If you dont do this want this as i would advise you do then you will want to define what the role can do; this comes with
+    If you don't do this want this as i would advise you do then you will want to define what the role can do; this comes with
     an optional inheritance system if you like those sort of things in which case disallow may also be of some use to you:
     Roles.new_role('Administrator','Admin')
     ...extras...
@@ -88,7 +88,7 @@
 
 >>>>Example System Define:
     Once all roles are defined these steps must be done to ensure the system is ready to use, this includes setting a default
-    role, assigning a root (all permission) role that the server/system will use and the linier order that the roles fall into:
+    role, assigning a root (all permission) role that the server/system will use and the linear order that the roles fall into:
 
     Roles.set_default('Guest')
     Roles.set_root('System')
@@ -145,7 +145,7 @@
     Roles._prototype:set_custom_color(color) --- Sets a custom colour for the role, can be accessed by other code
     Roles._prototype:set_permission_group(name,use_factorio_api) --- Sets the permission group for this role, players will be moved to the group of they highest role
     Roles._prototype:set_parent(role) --- Sets the parent for a role, any action not in allow or disallow will be looked for in its parents
-    Roles._prototype:set_auto_promote_condition(callback) --- Sets an auto promote condition that is checked every 5 seconds, if true is returned then the player will recive the role
+    Roles._prototype:set_auto_promote_condition(callback) --- Sets an auto promote condition that is checked every 5 seconds, if true is returned then the player will receive the role
     Roles._prototype:set_block_auto_promote(state) --- Sets the role to not allow players to have auto promote effect them, useful to keep people locked to a punishment
 
     Roles._prototype:add_player(player,skip_check,skip_event) --- Adds a player to this role, players can have more than one role at a time, used internally see Roles.assign
@@ -295,7 +295,7 @@ function Roles.get_role_by_name(name)
 end
 
 --- Get a role with the given order index
--- @tparam number index the place in the oder list of the role to get
+-- @tparam number index the place in the order list of the role to get
 -- @treturn Roles._prototype the role with that index in the order list or nil
 function Roles.get_role_by_order(index)
     local name = Roles.config.order[index]
@@ -307,13 +307,13 @@ end
 -- @tparam ?number|string|table any the value used to find the role
 -- @treturn Roles._prototype the role that was found or nil see above
 function Roles.get_role_from_any(any)
-    local tany = type(any)
-    if tany == 'number' or tonumber(any) then
+    local t_any = type(any)
+    if t_any == 'number' or tonumber(any) then
         any = tonumber(any)
         return Roles.get_role_by_order(any)
-    elseif tany == 'string' then
+    elseif t_any == 'string' then
         return Roles.get_role_by_name(any)
-    elseif tany == 'table' then
+    elseif t_any == 'table' then
         return Roles.get_role_by_name(any.name)
     end
 end
@@ -621,7 +621,7 @@ function Roles._prototype:set_parent(role)
     return self
 end
 
---- Sets an auto promote condition that is checked every 5 seconds, if true is returned then the player will recive the role
+--- Sets an auto promote condition that is checked every 5 seconds, if true is returned then the player will receive the role
 -- nb: this is one way, failing false after already gaining the role will not revoke the role
 -- @tparam function callback receives only one param which is player to promote, return true to promote the player
 -- @treturn Roles._prototype allows chaining

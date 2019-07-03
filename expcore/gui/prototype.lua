@@ -11,7 +11,7 @@
     Prototype:set_caption(value) --- Sets the caption for the element define
     Prototype:set_tooltip(value) --- Sets the tooltip for the element define
     Prototype:set_style(style,callback) --- Sets the style for the element define
-    Prototype:set_embeded_flow(state) --- Sets the element to be drawn inside a nameless flow, can be given a name using a function
+    Prototype:set_embedded_flow(state) --- Sets the element to be drawn inside a nameless flow, can be given a name using a function
 
     Prototype:set_pre_authenticator --- Sets an authenticator that blocks the draw function if check fails
     Prototype:set_post_authenticator --- Sets an authenticator that disables the element if check fails
@@ -80,10 +80,10 @@ end
 function Constructor.store(sync,callback)
     --- Adds a store for the define that is shared between all instances of the define in the same category, categorize is a function that returns a string
     -- @tparam self table the gui define being acted on
-    -- @tparam[opt] string location a unique location identifier, when omited a uid location will be used, use when sync is set to true
-    -- @tparam[opt] function categorize function used to determine the category of a LuaGuiElement, when omited all share one single category
+    -- @tparam[opt] string location a unique location identifier, when omitted a uid location will be used, use when sync is set to true
+    -- @tparam[opt] function categorize function used to determine the category of a LuaGuiElement, when omitted all share one single category
     -- categorize param - LuaGuiElement element - the element that needs to be converted
-    -- categorize return - string - a determistic string that referses to a category such as player name or force name
+    -- categorize return - string - a deterministic string that references to a category such as player name or force name
     -- @treturn self the element define to allow chaining
     return function(self,location,categorize)
         if self.store then return end
@@ -134,8 +134,8 @@ function Constructor.setter(value_type,key,second_key)
     end
 
     return function(self,value)
-        local vtype = type(value)
-        if vtype ~= value_type and (not locale or vtype ~= 'string') then
+        local v_type = type(value)
+        if v_type ~= value_type and (not locale or v_type ~= 'string') then
             error(display_message,2)
         end
 
@@ -213,11 +213,11 @@ end
 --- Sets the element to be drawn inside a nameless flow, can be given a name using a function
 -- @tparam state ?boolean|function when true a padless flow is created to contain the element
 -- @treturn self the element define to allow chaining
-function Prototype:set_embeded_flow(state)
+function Prototype:set_embedded_flow(state)
     if state == false or type(state) == 'function' then
-        self.embeded_flow = state
+        self.embedded_flow = state
     else
-        self.embeded_flow = true
+        self.embedded_flow = true
     end
     return self
 end
@@ -249,12 +249,12 @@ function Prototype:draw_to(element,...)
         if not self.pre_authenticator(player,self.name) then return end
     end
 
-    if self.embeded_flow then
-        local embeded_name
-        if type(self.embeded_flow) == 'function' then
-            embeded_name = self.embeded_flow(element,...)
+    if self.embedded_flow then
+        local embedded_name
+        if type(self.embedded_flow) == 'function' then
+            embedded_name = self.embedded_flow(element,...)
         end
-        element = element.add{type='flow',name=embeded_name}
+        element = element.add{type='flow',name=embedded_name}
         element.style.padding = 0
     end
 

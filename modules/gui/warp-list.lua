@@ -422,9 +422,9 @@ function generate_warp(player,element,warp_id)
 
     if not warp_name then
         -- warp is nil so remove it from the list
-        Gui.destory_if_valid(element['icon-'..warp_id])
-        Gui.destory_if_valid(element['edit-'..warp_id])
-        Gui.destory_if_valid(element[warp_id])
+        Gui.destroy_if_valid(element['icon-'..warp_id])
+        Gui.destroy_if_valid(element['edit-'..warp_id])
+        Gui.destroy_if_valid(element[warp_id])
 
     else
         -- if it is not already present then add it now

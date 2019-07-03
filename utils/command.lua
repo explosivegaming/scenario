@@ -27,7 +27,7 @@ local deprecated_command_alternatives = {
 
 local notify_on_commands = {
     ['version'] = 'RedMew has a version as well, accessible via /redmew-version',
-    ['color'] = 'RedMew allows color saving and a color randomizer: check out /redmew-color',
+    ['color'] = 'RedMew allows color saving and a color randomiser: check out /redmew-color',
     ['ban'] = 'In case your forgot: please remember to include a message on how to appeal a ban'
 }
 
@@ -35,7 +35,7 @@ local option_names = {
     ['description'] = 'A description of the command',
     ['arguments'] = 'A table of arguments, example: {"foo", "bar"} would map the first 2 arguments to foo and bar',
     ['default_values'] = 'A default value for a given argument when omitted, example: {bar = false}',
-    ['required_rank'] = 'Set this to determins what rank is required to execute a command',
+    ['required_rank'] = 'Set this to determines what rank is required to execute a command',
     ['donator_only'] = 'Set this to true if only donators may execute this command',
     ['debug_only'] = 'Set this to true if it should be registered when _DEBUG is true',
     ['cheat_only'] = 'Set this to true if it should be registered when _CHEATS is true',

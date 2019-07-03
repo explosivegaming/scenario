@@ -6,7 +6,7 @@
     -- here we will create an admin group however we do not want them to use the map editor or mess with the permission groups
     Permission_Groups.new_group('Admin') -- this defines a new group called "Admin"
     :allow_all() -- this makes the default to allow any input action unless set other wise
-    :disallow{ -- here we disallow the input action we dont want them to use
+    :disallow{ -- here we disallow the input action we don't want them to use
         'add_permission_group',
         'delete_permission_group',
         'import_permissions_string',

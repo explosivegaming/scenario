@@ -1,4 +1,4 @@
---- Gui class define for text fields and text boxs
+--- Gui class define for text fields and text boxes
 --[[
 >>>> Functions
     Text.new_text_field(name) --- Creates a new text field element define

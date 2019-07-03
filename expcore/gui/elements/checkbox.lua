@@ -1,4 +1,4 @@
---- Gui class define for checkboxs and radiobuttons
+--- Gui class define for checkbox and radiobuttons
 --[[
 >>>> Using an option set
     An option set is a set of radio buttons where only one of them can be active at a time, this means that when one
@@ -26,7 +26,7 @@
 
     Note that these radiobuttons can still have on_element_update events but this may result in a double trigger of events as
     the option set update is always triggered; also add_store cant be used as the option set acts as the store however get
-    and set store will still work but will effect the option set rather than the indivual radiobuttons.
+    and set store will still work but will effect the option set rather than the individual radiobuttons.
 
 >>>> Functions
     Checkbox.new_checkbox(name) --- Creates a new checkbox element define
@@ -38,10 +38,10 @@
     Checkbox._prototype_radiobutton:on_store_update(callback) --- Registers a handler for when the stored value updates
     Checkbox._prototype_radiobutton:add_as_option(option_set,option_name) --- Adds this radiobutton to be an option in the given option set (only one can be true at a time)
 
-    Checkbox.new_option_set(name,callback,categorize) --- Registers a new option set that can be linked to radiobutotns (only one can be true at a time)
+    Checkbox.new_option_set(name,callback,categorize) --- Registers a new option set that can be linked to radiobutton (only one can be true at a time)
     Checkbox.draw_option_set(name,element) --- Draws all radiobuttons that are part of an option set at once (Gui.draw will not work)
 
-    Checkbox.reset_radiobutton(element,exclude,recursive) --- Sets all radiobutotn in a element to false (unless excluded) and can act recursivly
+    Checkbox.reset_radiobutton(element,exclude,recursive) --- Sets all radiobutton in a element to false (unless excluded) and can act recursively
 
     Other functions present from expcore.gui.core
 ]]
@@ -131,7 +131,7 @@ end
 
 --- Adds this radiobutton to be an option in the given option set (only one can be true at a time)
 -- @tparam string option_set the name of the option set to add this element to
--- @tparam string option_name the name of this option that will be used to idenitife it
+-- @tparam string option_name the name of this option that will be used to identify it
 -- @treturn self the define to allow chaining
 function Checkbox._prototype_radiobutton:add_as_option(option_set,option_name)
     self.option_set = option_set
@@ -166,9 +166,9 @@ function Checkbox._prototype_radiobutton:set_store(category,value,internal)
     return Store.set(location,category,value)
 end
 
---- Registers a new option set that can be linked to radiobutotns (only one can be true at a time)
+--- Registers a new option set that can be linked to radiobuttons (only one can be true at a time)
 -- @tparam string name the name of the option set, must be unique
--- @tparam function callback the update callback when the value of the option set chagnes
+-- @tparam function callback the update callback when the value of the option set changes
 -- callback param - value string - the new selected option for this option set
 -- callback param - category string - the category that updated if categorize was used
 -- @tparam function categorize the function used to convert an element into a string
@@ -208,7 +208,7 @@ function Checkbox.draw_option_set(name,element)
 
 end
 
---- Sets all radiobutotn in a element to false (unless excluded) and can act recursivly
+--- Sets all radiobutton in a element to false (unless excluded) and can act recursively
 -- @tparam LuaGuiElement element the root gui element to start setting radio buttons from
 -- @tparam[opt] table exclude ?string|table the name of the radiobutton to exclude or a of radiobuttons where true will set the state true
 -- @tparam[opt=false] ?number|boolean recursive if true will recur as much as possible, if a will recur that number of times

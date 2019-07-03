@@ -19,7 +19,7 @@
     Common.print_grid_value(value, surface, position, scale, offset, immutable) --- Prints a colored value on a location.
     Common.print_colored_grid_value(value, surface, position, offset, immutable,
         color_value, base_color, delta_color, under_bound, over_bound) --- Prints a colored value on a location. with extra settings.
-    Common.clear_flying_text(surface) --- Clears all flying text entites on a surface
+    Common.clear_flying_text(surface) --- Clears all flying text entities on a surface
 
     Common.string_contains(s, contains) --- Tests if a string contains a given substring.
 
@@ -29,7 +29,7 @@
     Common.table_keys(tbl) --- Returns all the keys of a table
     Common.table_values(tbl) --- Returns all the values of a table
     Common.table_alphanumsort(tbl) --- Returns the list is a sorted way that would be expected by people (this is by key)
-    Common.table_keysort(tbl) --- Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
+    Common.table_keysort(tbl) --- Returns the list is a sorted way that would be expected by people (this is by key) (faster alternative than above)
 
     Common.format_chat_colour(message,color) --- Returns a message with valid chat tags to change its colour
     Common.format_chat_colour_localized(message,color) --- Returns a message with valid chat tags to change its colour, using localization
@@ -262,7 +262,7 @@ function Common.move_items(items,surface,position,radius,chest_type)
     local entities = surface.find_entities_filtered{area={{p.x-r,p.y-r},{p.x+r,p.y+r}},name=chest_type} or {}
     local count = #entities
     local current = 1
-    -- Makes a new emtpy chest when it is needed
+    -- Makes a new empty chest when it is needed
     local function make_new_chest()
         local pos = surface.find_non_colliding_position(chest_type,position,32,1)
         local chest = surface.create_entity{name=chest_type,position=pos,force='neutral'}
@@ -437,7 +437,7 @@ function Common.print_colored_grid_value(value, surface, position, offset, immut
     }.active = false
 end
 
---- Clears all flying text entites on a surface
+--- Clears all flying text entities on a surface
 -- @tparam LuaSurface surface the surface to clear
 function Common.clear_flying_text(surface)
     local entities = surface.find_entities_filtered{name ='flying-text'}
@@ -598,7 +598,7 @@ function Common.table_alphanumsort(tbl)
     return _tbl
 end
 
---- Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
+--- Returns the list is a sorted way that would be expected by people (this is by key) (faster alternative than above)
 -- @tparam table tbl the table to be sorted
 -- @treturn table the sorted table
 function Common.table_keysort(tbl)

@@ -22,17 +22,17 @@ local Game = require 'utils.game'
 local mod_gui = require 'mod-gui'
 
 local Toolbar = {
-    permisison_names = {},
+    permission_names = {},
     buttons = {}
 }
 
 function Toolbar.allowed(player,define_name)
-    local permisison_name = Toolbar.permisison_names[define_name] or define_name
-    return Roles.player_allowed(player,permisison_name)
+    local permission_name = Toolbar.permission_names[define_name] or define_name
+    return Roles.player_allowed(player,permission_name)
 end
 
-function Toolbar.permission_alias(define_name,permisison_name)
-    Toolbar.permisison_names[define_name] = permisison_name
+function Toolbar.permission_alias(define_name,permission_name)
+    Toolbar.permission_names[define_name] = permission_name
 end
 
 --- Adds a new button to the toolbar

@@ -2,7 +2,7 @@
 -- each button has the button define(s) given along side an auth function, and optional reason callback
 -- if a reason callback is used then Store.set(action_name_store,player.name,'BUTTON_NAME') should be called during on_click
 -- buttons can be removed from the gui by commenting them out of the config at the bottom of this file
--- the key used for the name of the button is the permision name used by the role system
+-- the key used for the name of the button is the permission name used by the role system
 local Gui = require 'expcore.gui'
 local Roles = require 'expcore.roles'
 local Store = require 'expcore.store'
@@ -235,7 +235,7 @@ return {
             if not Roles.player_allowed(player,'command/give-warning') then
                 return not Roles.player_has_flag(action_player,'report-immune')
             end
-        end, -- can report any player that isnt immune and you arnt able to give warnings
+        end, -- can report any player that isn't immune and you aren't able to give warnings
         reason_callback=report_player_callback,
         report_player
     },
