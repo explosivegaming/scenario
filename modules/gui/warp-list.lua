@@ -253,7 +253,7 @@ end)
 local warp_timer =
 Gui.new_progressbar()
 :set_tooltip{'warp-list.timer-tooltip',config.recharge_time}
-:set_default_maximum(math.floor(config.recharge_time*config.update_smothing))
+:set_default_maximum(math.floor(config.recharge_time*config.update_smoothing))
 :add_store(Gui.categorize_by_player)
 :set_style(nil,function(style)
     style.horizontally_stretchable = true
@@ -397,7 +397,7 @@ end)
     generate_warp(player,element.parent.parent.parent,warp_id)
 end)
 
---[[ Generates each task, handles both view and edit mode
+--[[ Generates each warp, handles both view and edit mode
     element
     > icon-"warp_id"
     >> goto_warp or icon
@@ -421,7 +421,7 @@ function generate_warp(player,element,warp_id)
     local position = warp.position
 
     if not warp_name then
-        -- task is nil so remove it from the list
+        -- warp is nil so remove it from the list
         Gui.destory_if_valid(element['icon-'..warp_id])
         Gui.destory_if_valid(element['edit-'..warp_id])
         Gui.destory_if_valid(element[warp_id])
@@ -440,7 +440,7 @@ function generate_warp(player,element,warp_id)
             }
             Gui.set_padding(icon_area)
 
-            -- area which stores the task and buttons
+            -- area which stores the warp and buttons
             warp_area =
             element.add{
                 name=warp_id,
@@ -464,9 +464,9 @@ function generate_warp(player,element,warp_id)
         edit_area.visible = allowed
 
         if #players > 0 then
-            edit_area[edit_warp.name].tooltip = {'task-list.edit-tooltip',table.concat(players,', ')}
+            edit_area[edit_warp.name].tooltip = {'warp-list.edit-tooltip',table.concat(players,', ')}
         else
-            edit_area[edit_warp.name].tooltip = {'task-list.edit-tooltip-none'}
+            edit_area[edit_warp.name].tooltip = {'warp-list.edit-tooltip-none'}
         end
 
         -- draws/updates the warp area
@@ -557,7 +557,7 @@ end
     element
     > container
     >> header
-    >>> right aligned add_new_task
+    >>> right aligned add_new_warp
     >> scroll
     >>> table
     >> warp_timer
@@ -708,7 +708,7 @@ end)
 --- Handles updating the timer and checking distance from a warp
 local r2 = config.activation_range^2
 local rs2 = config.spawn_activation_range^2
-Event.on_nth_tick(math.floor(60/config.update_smothing),function()
+Event.on_nth_tick(math.floor(60/config.update_smoothing),function()
     local categories = Store.get_children(warp_timer.store)
     for _,category in pairs(categories) do
         warp_timer:increment(1,category)

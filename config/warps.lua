@@ -1,7 +1,7 @@
 --- This file contains all the different settings for the warp system and gui
 return {
     recharge_time = 60, -- The amount of time in seconds that the player must wait between warps, acts as a balance
-    update_smothing = 10, -- Higher is better, the amount of smothing applied to recharge timer and other gui updates, max is 60
+    update_smoothing = 10, -- Higher is better, the amount of smothing applied to recharge timer and other gui updates, max is 60
     minimum_distance = 100, -- The minimum distance that must be between warp points, creating new ones is blocked when too close
     activation_range = 4, -- The distance the player must be to a warp in order to use the warp gui, gui can still be viewd but not used
     spawn_activation_range = 20, -- A second activation range which is used for the forces spawn point
