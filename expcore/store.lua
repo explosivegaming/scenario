@@ -7,38 +7,38 @@
     This may be useful when storing config values and when they get set you want to make sure it is taken care of, or maybe you want
     to have a value that you can trigger an update of from different places.
 
-    -- this will register a new location called 'scenario.dificutly'
+    -- this will register a new location called 'scenario.difficulty'
     -- note that setting a start value is optional and we could take nil to mean normal
-    Store.register('scenario.dificutly',function(value)
-        game.print('The scenario dificulty has be set to: '..value)
+    Store.register('scenario.difficulty',function(value)
+        game.print('The scenario difficulty has be set to: '..value)
     end)
 
     -- this will set the value in the store to 'hard' and will trigger the update callback which will print a message to the game
-    Store.set('scenario.dificutly','hard')
+    Store.set('scenario.difficulty','hard')
 
     -- this will return 'hard'
-    Store.get('scenario.dificutly')
+    Store.get('scenario.difficulty')
 
 >>>> Using Children
-    One limitation of store is that all lcoations must be registered to avoid desyncs, to get round this issue "children" can be used.
-    When you set the value of a child it does not have its own update callback so rather the "parent" location which has been registerd
+    One limitation of store is that all locations must be registered to avoid desyncs, to get round this issue "children" can be used.
+    When you set the value of a child it does not have its own update callback so rather the "parent" location which has been registered
     will have its update value called with a second param of the name of that child.
 
-    This may be useful when you want a value of each player or force and since you cant regisier every player at the start you must use
+    This may be useful when you want a value of each player or force and since you cant register every player at the start you must use
     the players name as the child name.
 
-    -- this will register the lcoation 'scenario.score' where we plan to use force names as the child
+    -- this will register the location 'scenario.score' where we plan to use force names as the child
     Store.register('scenario.score',function(value,child)
         game.print(child..' now has a score of '..value)
     end)
 
-    -- this will return nil, but will not error as children dont need to be registerd
+    -- this will return nil, but will not error as children don't need to be registered
     Store.get('scenario.score','player')
 
     -- this will set 'player' to have a value of 10 for 'scenario.score' and trigger the game message print
     Store.set('scenario.score','player',10)
 
-    -- this would be the silliar to Store.get however this will return the names of all the children
+    -- this would be the similar to Store.get however this will return the names of all the children
     Store.get_children('scenario.score')
 
 >>>> Using Sync
@@ -49,16 +49,16 @@
     This may be useful when you want to have a value change effect multiple instances or even if you just want a database to store values so
     you can sync data between map resets.
 
-    -- this example will register the location 'stastics.total-play-time' where we plan to use plan names as the child
+    -- this example will register the location 'statistics.total-play-time' where we plan to use plan names as the child
     -- note that the location must be the same across instances
-    Store.register('stastics.total-play-time',true,function(value,child)
+    Store.register('statistics.total-play-time',true,function(value,child)
         game.print(child..' now has now played for '..value)
     end)
 
     -- use of set and are all the same as non synced but you should include from_sync as true
 
 >>>> Alternative method
-    Some people may prefer to use a varible rather than a string for formating reasons here is an example. Also for any times when
+    Some people may prefer to use a variable rather than a string for formating reasons here is an example. Also for any times when
     there will be little external input Store.uid_location() can be used to generate non conflicting locations, uid_location will also
     be used if you give a nil location.
 
@@ -94,15 +94,15 @@ local function error_not_table(value)
     end
 end
 
---- Check for if a lcoation is registered
+--- Check for if a location is registered
 -- @tparam string location the location to test for
 -- @treturn boolean true if registered
 function Store.is_registered(location)
     return Store.registered[location]
 end
 
---- Returns a unqiue name that can be used for a store
--- @treturn string a unqiue name
+--- Returns a unique name that can be used for a store
+-- @treturn string a unique name
 function Store.uid_location()
     return tostring(Token.uid())
 end
@@ -111,7 +111,7 @@ end
 -- @tparam[opt] string location string a unique that points to the data, string used rather than token to allow migration
 -- @tparam[opt] boolean synced when true will output changes to a file so it can be synced
 -- @tparam[opt] function callback when given the callback will be automatically registered to the update of the value
--- @treturn string the lcoation that is being used
+-- @treturn string the location that is being used
 function Store.register(location,synced,callback)
     if _LIFECYCLE ~= _STAGE.control then
         return error('Can only be called during the control stage', 2)
@@ -231,13 +231,13 @@ end
 --- Gets all non nil children at a location, children can be added and removed during runtime
 -- this is similar to Store.get but will always return a table even if it is empty
 -- @tparam string location the location to get the children of
--- @treturn table a table containg all the children names
+-- @treturn table a table containing all the children names
 function Store.get_children(location)
     local data = Store.get(location)
     return type(data) == 'table' and table_keys(data) or {}
 end
 
--- Handels syncing
+-- Handles syncing
 Event.add(Store.events.on_value_update,function(event)
     if Store.callbacks[event.location] then
         Store.callbacks[event.location](event.value,event.child)

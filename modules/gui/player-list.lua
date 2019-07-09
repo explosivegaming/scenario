@@ -37,7 +37,7 @@ local open_action_bar =
 Gui.new_button()
 :set_sprites('utility/expand_dots_white')
 :set_tooltip{'player-list.open-action-bar'}
-:set_embeded_flow(function(element,action_player_name)
+:set_embedded_flow(function(element,action_player_name)
     return action_player_name
 end)
 :set_style('frame_button',function(style)

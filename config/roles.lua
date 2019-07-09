@@ -5,7 +5,7 @@ local Roles = require 'expcore.roles'
 local seconds, minutes, hours = 60, 3600, 216000
 
 --[[
-    -- cant use a factory as it has upvalues ;-;
+    -- cant use a factory as it has up values ;-;
     local function playtime(time_required)
         return function(player)
             if player.online_time > time_required then

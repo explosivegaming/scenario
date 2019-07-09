@@ -7,7 +7,7 @@
     Button._prototype:on_left_click(player,element) --- Registers a handler for when the button is clicked with the left mouse button
     Button._prototype:on_right_click(player,element) --- Registers a handler for when the button is clicked with the right mouse button
 
-    Button._prototype:set_sprites(sprite,hovered_sprite,clicked_sprite) --- Adds sprites to a button making it a spirte button
+    Button._prototype:set_sprites(sprite,hovered_sprite,clicked_sprite) --- Adds sprites to a button making it a sprite button
     Button._prototype:set_click_filter(filter,...) --- Adds a click / mouse button filter to the button
     Button._prototype:set_key_filter(filter,...) --- Adds a control key filter to the button
 
@@ -66,7 +66,7 @@ function Button.new_button(name)
     return self
 end
 
---- Adds sprites to a button making it a spirte button
+--- Adds sprites to a button making it a sprite button
 -- @tparam SpritePath sprite the sprite path for the default sprite for the button
 -- @tparam[opt] SpritePath hovered_sprite the sprite path for the sprite when the player hovers over the button
 -- @tparam[opt] SpritePath clicked_sprite the sprite path for the sprite when the player clicks the button
@@ -103,7 +103,7 @@ end
 
 --- Adds a control key filter to the button
 -- @tparam table filter ?string|table either a of control keys or the first control keys to filter, with a table true means allowed
--- @tparam[opt] table ... when filter is not a you can add the control keyss one after each other
+-- @tparam[opt] table ... when filter is not a you can add the control keys one after each other
 -- @treturn self returns the button define to allow chaining
 function Button._prototype:set_key_filter(filter,...)
     if type(filter) == 'string' then

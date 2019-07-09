@@ -1,9 +1,9 @@
---- Gui element define for progess bars
+--- Gui element define for progress bars
 --[[
 >>>> Functions
     ProgressBar.set_maximum(element,amount,count_down) --- Sets the maximum value that represents the end value of the progress bar
-    ProgressBar.increment(element,amount) --- Increases the value of the progressbar, if a define is given all of its instances are incremented
-    ProgressBar.decrement(element,amount) --- Decreases the value of the progressbar, if a define is given all of its instances are decresed
+    ProgressBar.increment(element,amount) --- Increases the value of the progressbar, if a define is given all of its instances have incremented
+    ProgressBar.decrement(element,amount) --- Decreases the value of the progressbar, if a define is given all of its instances have decremented
 
     ProgressBar.new_progressbar(name) --- Creates a new progressbar element define
     ProgressBar._prototype:set_maximum(amount,count_down) --- Sets the maximum value that represents the end value of the progress bar
@@ -15,10 +15,10 @@
     ProgressBar._prototype:add_element(element,maximum) --- Adds an element into the list of instances that will are waiting to complete, does not work with store
     ProgressBar._prototype:reset_element(element) --- Resets an element, or its store, to be back at the start, either 1 or 0
 
-    ProgressBar._prototype:on_complete(callback) --- Triggers when a progress bar element compeltes (hits 0 or 1)
+    ProgressBar._prototype:on_complete(callback) --- Triggers when a progress bar element completes (hits 0 or 1)
     ProgressBar._prototype:on_complete(callback) --- Triggers when a store value completes (hits 0 or 1)
-    ProgressBar._prototype:event_counter(filter) --- Event handler factory that counts up by 1 every time the event triggeres, can filter which elements are incremented
-    ProgressBar._prototype:event_countdown(filter) --- Event handler factory that counts down by 1 every time the event triggeres, can filter which elements are decremented
+    ProgressBar._prototype:event_counter(filter) --- Event handler factory that counts up by 1 every time the event triggers, can filter which elements have incremented
+    ProgressBar._prototype:event_countdown(filter) --- Event handler factory that counts down by 1 every time the event triggers, can filter which elements have decremented
 ]]
 local Gui = require 'expcore.gui.core'
 local Prototype = require 'expcore.gui.prototype'
@@ -52,7 +52,7 @@ end
 
 local ProgressBar = {
     unregistered={}, -- elements with no callbacks
-    independent={}, -- elements with a link to a deinfe
+    independent={}, -- elements with a link to a define
     _prototype=Prototype.extend{
         on_complete = Prototype.event,
         on_store_complete = Prototype.event,
@@ -84,7 +84,7 @@ end
 
 --- Gets the element data, used when there is no define
 -- @tparam LuaGuiElement element the element to get the data of
--- @treturn table the element data simialr to define
+-- @treturn table the element data similar to define
 local function get_element(element)
     if not element.valid then return end
     local name = element.player_index..':'..element.index
@@ -102,7 +102,7 @@ function ProgressBar.set_maximum(element,amount)
 
     local define = get_define(element)
     if define then
-        define:set_deafult_maximum(amount)
+        define:set_default_maximum(amount)
 
     else
         local element_data = get_element(element)
@@ -122,7 +122,7 @@ function ProgressBar.set_maximum(element,amount)
     end
 end
 
---- Increases the value of the progressbar, if a define is given all of its instances are incremented
+--- Increases the value of the progressbar, if a define is given all of its instances have incremented
 -- @tparam ?LuaGuiElement|string element either a gui element or a registered define
 -- @tparam[opt=1] number amount the amount to increase the progressbar by
 function ProgressBar.increment(element,amount)
@@ -149,7 +149,7 @@ function ProgressBar.increment(element,amount)
     end
 end
 
---- Decreases the value of the progressbar, if a define is given all of its instances are decresed
+--- Decreases the value of the progressbar, if a define is given all of its instances have decremented
 -- @tparam ?LuaGuiElement|string element either a gui element or a registered define
 -- @tparam[opt=1] number amount the amount to decrease the progressbar by
 function ProgressBar.decrement(element,amount)
@@ -178,7 +178,7 @@ end
 
 --- Creates a new progressbar element define
 -- @tparam[opt] string name the optional debug name that can be added
--- @treturn table the new progressbar elemente define
+-- @treturn table the new progressbar element define
 function ProgressBar.new_progressbar(name)
 
     local self = Gui.new_define(ProgressBar._prototype,name)
@@ -349,8 +349,8 @@ function ProgressBar._prototype:reset_element(element)
     end
 end
 
---- Event handler factory that counts up by 1 every time the event triggeres, can filter which elements are incremented
--- @tparam[opt] function filter when given will use filtered incerement
+--- Event handler factory that counts up by 1 every time the event triggers, can filter which elements have incremented
+-- @tparam[opt] function filter when given will use filtered increment
 -- @treturn function the event handler
 function ProgressBar._prototype:event_counter(filter)
     if type(filter) == 'function' then
@@ -364,8 +364,8 @@ function ProgressBar._prototype:event_counter(filter)
     end
 end
 
---- Event handler factory that counts down by 1 every time the event triggeres, can filter which elements are decremented
--- @tparam[opt] function filter when given will use filtered decerement
+--- Event handler factory that counts down by 1 every time the event triggers, can filter which elements have decremented
+-- @tparam[opt] function filter when given will use filtered decrement
 -- @treturn function the event handler
 function ProgressBar._prototype:event_countdown(filter)
     if type(filter) == 'function' then

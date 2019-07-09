@@ -12,11 +12,11 @@
     -- here we give sudo access to the function under the name "make-admin"
     Sudo.register('make-admin',make_admin)
 
-    -- this will allow us to bypass this by runing one tick later outside of any player scope
+    -- this will allow us to bypass this by running one tick later outside of any player scope
     Sudo.run('make-admin',game.player)
 
 >>>> Functions
-    Sudo.register(name,callback) --- Registers a new callback under the given name, used to avoid desynces
+    Sudo.register(name,callback) --- Registers a new callback under the given name, used to avoid desyncs
     Sudo.get(name) --- Gets the function that is registered under the given name
     Sudo.run(name,...) --- Runs the function that is registered under the given name, you may supply any number of params as needed
 ]]
@@ -33,7 +33,7 @@ Token.register(function(params)
     func(unpack(params.params))
 end)
 
---- Registers a new callback under the given name, used to avoid desynces
+--- Registers a new callback under the given name, used to avoid desyncs
 -- @tparam string name the name that will be used to call this function
 -- @tparam function callback the function that will be called by this name
 function Sudo.register(name,callback)

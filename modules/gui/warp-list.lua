@@ -47,7 +47,7 @@ local function player_allowed_edit(player,warp_id)
         return false
     end
 
-    if config.edit_warps_role_permision and not Roles.player_allowed(player,config.edit_warps_role_permision) then
+    if config.edit_warps_role_permission and not Roles.player_allowed(player,config.edit_warps_role_permission) then
         return false
     end
 
@@ -87,8 +87,8 @@ local function make_warp_area(warp_id)
     if not warp then return end
 
     local position = warp.position
-    local posx = position.x
-    local posy = position.y
+    local px = position.x
+    local py = position.y
     local surface = warp.surface
     local radius = config.activation_range
     local radius2 = radius^2
@@ -104,7 +104,7 @@ local function make_warp_area(warp_id)
         for y = -radius, radius do
             local y2 = y^2
             if x2+y2 < radius2 then
-                table.insert(base_tiles,{name=base_tile,position={x+posx,y+posy}})
+                table.insert(base_tiles,{name=base_tile,position={x+px,y+py}})
             end
         end
     end
@@ -113,15 +113,15 @@ local function make_warp_area(warp_id)
     -- this adds the tile pattern
     local tiles = {}
     for _,pos in pairs(config.tiles) do
-        table.insert(tiles,{name=base_tile,position={pos[1]+posx,pos[2]+posy}})
+        table.insert(tiles,{name=base_tile,position={pos[1]+px,pos[2]+py}})
     end
     surface.set_tiles(tiles)
 
-    -- this adds the enitites
+    -- this adds the entities
     for _,entity in pairs(config.entities) do
         entity = surface.create_entity{
             name=entity[1],
-            position={entity[2]+posx,entity[3]+posy},
+            position={entity[2]+px,entity[3]+py},
             force='neutral'
         }
         entity.destructible = false
@@ -155,7 +155,7 @@ local function clear_warp_area(warp_id)
     end
     surface.set_tiles(tiles)
 
-    -- removes all entites (in the area) on the neutral force
+    -- removes all entities (in the area) on the neutral force
     local entities = surface.find_entities_filtered{
         force='neutral',
         area={
@@ -168,7 +168,7 @@ local function clear_warp_area(warp_id)
     if warp.tag and warp.tag.valid then warp.tag.destroy() end
 end
 
---- Speaial case for the warps; adds the spawn warp which cant be removed
+--- Special case for the warps; adds the spawn warp which cant be removed
 local function add_spawn(player)
     local warp_id = tostring(Token.uid())
     local force = player.force
@@ -229,7 +229,7 @@ local function add_warp(player)
     make_warp_area(warp_id)
 end
 
---- Removes all refrences to a warp
+--- Removes all references to a warp
 local function remove_warp(warp_id)
     local force_name = warp_details[warp_id].force
     local key = table.index_of(force_warps[force_name],warp_id)
@@ -253,7 +253,7 @@ end)
 local warp_timer =
 Gui.new_progressbar()
 :set_tooltip{'warp-list.timer-tooltip',config.recharge_time}
-:set_default_maximum(math.floor(config.recharge_time*config.update_smothing))
+:set_default_maximum(math.floor(config.recharge_time*config.update_smoothing))
 :add_store(Gui.categorize_by_player)
 :set_style(nil,function(style)
     style.horizontally_stretchable = true
@@ -287,7 +287,7 @@ end)
     if player.driving then player.driving = false end
     player.teleport(goto_position,surface)
 
-    if config.bypass_warp_limits_permision and not Roles.player_allowed(player,config.bypass_warp_limits_permision) then
+    if config.bypass_warp_limits_permission and not Roles.player_allowed(player,config.bypass_warp_limits_permission) then
         warp_timer:set_store(player.name,0)
         -- this is to force an update of the buttons
         local in_range = Store.get(warp_player_in_range_store,player.name)
@@ -307,15 +307,15 @@ Gui.new_button()
 end)
 :on_click(function(player,element)
     local position = player.position
-    local posx = position.x
-    local posy = position.y
+    local px = position.x
+    local py = position.y
     local dist2 = config.minimum_distance^2
 
     local warps = Store.get_children(warp_name_store)
     for _,warp_id in pairs(warps) do
         local warp = warp_details[warp_id]
         local pos = warp.position
-        if (posx-pos.x)^2+(posy-pos.y)^2 < dist2 then
+        if (px-pos.x)^2+(py-pos.y)^2 < dist2 then
             local warp_name = Store.get(warp_name_store,warp_id)
             player.print{'warp-list.too-close',warp_name}
             return
@@ -397,7 +397,7 @@ end)
     generate_warp(player,element.parent.parent.parent,warp_id)
 end)
 
---[[ Generates each task, handles both view and edit mode
+--[[ Generates each warp, handles both view and edit mode
     element
     > icon-"warp_id"
     >> goto_warp or icon
@@ -421,10 +421,10 @@ function generate_warp(player,element,warp_id)
     local position = warp.position
 
     if not warp_name then
-        -- task is nil so remove it from the list
-        Gui.destory_if_valid(element['icon-'..warp_id])
-        Gui.destory_if_valid(element['edit-'..warp_id])
-        Gui.destory_if_valid(element[warp_id])
+        -- warp is nil so remove it from the list
+        Gui.destroy_if_valid(element['icon-'..warp_id])
+        Gui.destroy_if_valid(element['edit-'..warp_id])
+        Gui.destroy_if_valid(element[warp_id])
 
     else
         -- if it is not already present then add it now
@@ -440,7 +440,7 @@ function generate_warp(player,element,warp_id)
             }
             Gui.set_padding(icon_area)
 
-            -- area which stores the task and buttons
+            -- area which stores the warp and buttons
             warp_area =
             element.add{
                 name=warp_id,
@@ -464,9 +464,9 @@ function generate_warp(player,element,warp_id)
         edit_area.visible = allowed
 
         if #players > 0 then
-            edit_area[edit_warp.name].tooltip = {'task-list.edit-tooltip',table.concat(players,', ')}
+            edit_area[edit_warp.name].tooltip = {'warp-list.edit-tooltip',table.concat(players,', ')}
         else
-            edit_area[edit_warp.name].tooltip = {'task-list.edit-tooltip-none'}
+            edit_area[edit_warp.name].tooltip = {'warp-list.edit-tooltip-none'}
         end
 
         -- draws/updates the warp area
@@ -493,7 +493,7 @@ function generate_warp(player,element,warp_id)
 
             local timer = warp_timer:get_store(player.name)
             local enabled = not timer and Store.get(warp_player_in_range_store,player.name)
-            or Roles.player_allowed(player,config.bypass_warp_limits_permision)
+            or Roles.player_allowed(player,config.bypass_warp_limits_permission)
             if not enabled then
                 btn.enabled = false
                 btn.tooltip = {'warp-list.goto-disabled'}
@@ -513,7 +513,7 @@ function generate_warp(player,element,warp_id)
             label.style.maximal_width = 150
 
         elseif editing and element_type ~= 'textfield' then
-            -- create the text field, edit mode, update it omited as value is being edited
+            -- create the text field, edit mode, update it omitted as value is being edited
             if edit_area then
                 edit_area[edit_warp.name].enabled = false
             end
@@ -557,7 +557,7 @@ end
     element
     > container
     >> header
-    >>> right aligned add_new_task
+    >>> right aligned add_new_warp
     >> scroll
     >>> table
     >> warp_timer
@@ -685,7 +685,7 @@ Store.register(warp_player_in_range_store,function(value,player_name)
         Gui.toggle_left_frame(warp_list.name,player,value)
     end
 
-    if Roles.player_allowed(player,config.bypass_warp_limits_permision) then
+    if Roles.player_allowed(player,config.bypass_warp_limits_permission) then
         return
     end
 
@@ -708,7 +708,7 @@ end)
 --- Handles updating the timer and checking distance from a warp
 local r2 = config.activation_range^2
 local rs2 = config.spawn_activation_range^2
-Event.on_nth_tick(math.floor(60/config.update_smothing),function()
+Event.on_nth_tick(math.floor(60/config.update_smoothing),function()
     local categories = Store.get_children(warp_timer.store)
     for _,category in pairs(categories) do
         warp_timer:increment(1,category)
@@ -725,9 +725,9 @@ Event.on_nth_tick(math.floor(60/config.update_smothing),function()
             local px,py = pos.x,pos.y
             for _,warp_id in pairs(warps) do
                 local warp = warp_details[warp_id]
-                local wpos = warp.position
+                local warp_pos = warp.position
                 if warp.surface.index == surface then
-                    local dx,dy = px-wpos.x,py-wpos.y
+                    local dx,dy = px-warp_pos.x,py-warp_pos.y
                     if not warp.editing and (dx*dx)+(dy*dy) < rs2 or (dx*dx)+(dy*dy) < r2 then
                         if not was_in_range then
                             Store.set(warp_player_in_range_store,player.name,true)
@@ -751,7 +751,7 @@ Event.add(defines.events.on_player_created,function(event)
     local player = Game.get_player_by_index(event.player_index)
     local force_name = player.force.name
 
-    local allowed = config.bypass_warp_limits_permision and Roles.player_allowed(player,config.bypass_warp_limits_permision) or false
+    local allowed = config.bypass_warp_limits_permission and Roles.player_allowed(player,config.bypass_warp_limits_permission) or false
     Store.set(warp_player_in_range_store,player.name,allowed)
     if allowed then
         warp_timer:set_store(player.name,1)

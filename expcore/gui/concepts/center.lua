@@ -7,7 +7,7 @@
     CenterFrames.redraw_frame(player,name) --- Draws the center frame for a player, if already open then will destroy it and redraw
     CenterFrames.toggle_frame(player,name,state) --- Toggles if the frame is currently open or not, will open if closed and close if open
 
-    CenterFrames.new_frame(permision_name) --- Sets the frame to be the current active gui when opened and closes all other frames
+    CenterFrames.new_frame(permission_name) --- Sets the frame to be the current active gui when opened and closes all other frames
     CenterFrames._prototype:on_draw(player,frame) --- Use to draw your elements onto the new frame
     CenterFrames._prototype:set_auto_focus(state) --- Sets the frame to be the current active gui when opened and closes all other frames
     CenterFrames._prototype:draw_frame(player) --- Draws this frame to the player, if already open does nothing (will call on_draw to draw to the frame)
@@ -87,10 +87,10 @@ function CenterFrames.toggle_frame(player,name,state)
 end
 
 --- Creates a new center frame define
--- @tparam string permision_name the name that can be used with the permision system
+-- @tparam string permission_name the name that can be used with the permission system
 -- @treturn table the new center frame define
-function CenterFrames.new_frame(permision_name)
-	local self = Toolbar.new_button(permision_name)
+function CenterFrames.new_frame(permission_name)
+	local self = Toolbar.new_button(permission_name)
 
 	self:on_click(function(player,element)
 		self:toggle_frame(player)

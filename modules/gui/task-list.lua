@@ -44,7 +44,7 @@ local function add_task(player,task_number)
     Store.set(task_store,task_id,'New task')
 end
 
---- Removes all refrences to a task
+--- Removes all references to a task
 local function remove_task(task_id)
     local force_name = task_details[task_id].force
     Store.clear(task_store,task_id)
@@ -69,7 +69,7 @@ local function player_allowed_edit(player,task_id)
         return false
     end
 
-    if config.edit_tasks_role_permision and not Roles.player_allowed(player,config.edit_tasks_role_permision) then
+    if config.edit_tasks_role_permission and not Roles.player_allowed(player,config.edit_tasks_role_permission) then
         return false
     end
 
@@ -186,9 +186,9 @@ function generate_task(player,element,task_id)
     if not task then
         -- task is nil so remove it from the list
         element.parent.no_tasks.visible = #tasks == 01
-        Gui.destory_if_valid(element['count-'..task_id])
-        Gui.destory_if_valid(element['edit-'..task_id])
-        Gui.destory_if_valid(element[task_id])
+        Gui.destroy_if_valid(element['count-'..task_id])
+        Gui.destroy_if_valid(element['edit-'..task_id])
+        Gui.destroy_if_valid(element[task_id])
 
     else
         element.parent.no_tasks.visible = false
@@ -260,7 +260,7 @@ function generate_task(player,element,task_id)
             label.style.maximal_width = 150
 
         elseif editing and element_type ~= 'textfield' then
-            -- create the text field, edit mode, update it omited as value is being edited
+            -- create the text field, edit mode, update it omitted as value is being edited
             if edit_area then
                 edit_area[edit_task.name].enabled = false
             end
@@ -342,7 +342,7 @@ local function generate_container(player,element)
     return flow_table
 end
 
---- Registeres the task list
+--- Registers the task list
 local task_list =
 Gui.new_left_frame('gui/task-list')
 :set_sprites('utility/not_enough_repair_packs_icon')
@@ -370,7 +370,7 @@ end)
 
 update_all = task_list 'update_all'
 
---- When a new task is added it will udpate the task list for everyone on that force
+--- When a new task is added it will update the task list for everyone on that force
 Store.register(task_store,function(value,task_id)
     local details = task_details[task_id]
     local force = game.forces[details.force]
@@ -382,7 +382,7 @@ Store.register(task_store,function(value,task_id)
     end
 end)
 
---- Makess sure the right buttons are present when roles change
+--- Makes sure the right buttons are present when roles change
 Event.add(Roles.events.on_role_assigned,task_list 'redraw')
 Event.add(Roles.events.on_role_unassigned,task_list 'redraw')
 

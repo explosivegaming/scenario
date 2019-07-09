@@ -1,4 +1,4 @@
---- Gui class define for dropdowns and list boxs
+--- Gui class define for dropdowns and list box
 --[[
 >>>> Functions
     Dropdown.new_dropdown(name) --- Creates a new dropdown element define

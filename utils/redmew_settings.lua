@@ -6,7 +6,7 @@ local tostring = tostring
 local pairs = pairs
 local format = string.format
 
---- Contains a set of callables that will attempt to sanitize and transform the input
+--- Contains a set of callable that will attempt to sanitize and transform the input
 local settings_type = {
     fraction = function (input)
         input = tonumber(input)
@@ -163,7 +163,7 @@ function Public.get(player_index, name)
     return player_setting ~= nil and player_setting or setting.default
 end
 
----Returns a table of all settings for a given player in a key => value setup
+---Returns a table of all settings for a given player in a key => value set-up
 ---@param player_index number
 function Public.all(player_index)
     local player_settings = memory[player_index] or {}
