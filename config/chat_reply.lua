@@ -45,7 +45,7 @@ return {
     commands = { -- will trigger only when command prefix is given
         ['dev']={'chat-bot.not-real-dev'},
         ['blame']=function(player)
-            local names = {'Cooldude2606','arty714','badgamernl',player.name}
+            local names = {'Cooldude2606','arty714','badgamernl', 'mark9064', 'aldldl', 'Drahc_pro',player.name}
             for _,next_player in pairs(game.connected_players) do
                 names[#names + 1] = next_player.name
             end
