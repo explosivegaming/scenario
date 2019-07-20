@@ -18,7 +18,7 @@ Commands.new_command('jail','Puts a player into jail and removes all other roles
     end
 end)
 
-Commands.new_command('unjail','Puts a player into jail and removes all other roles.')
+Commands.new_command('unjail','Removes a player from jail.')
 :add_param('player',false,'player-role')
 :add_alias('clear-jail','remove-jail')
 :enable_auto_concat()
@@ -46,7 +46,7 @@ Commands.new_command('temp-ban','Temp bans a player until the next reset; this r
     end
 end)
 
-Commands.new_command('clear-temp-ban','Removes temp ban from a player; this will not restore they items.')
+Commands.new_command('clear-temp-ban','Removes temp ban from a player; this will not restore their items.')
 :add_param('player',false,'player-role')
 :add_alias('untemp-ban','remove-temp-ban')
 :enable_auto_concat()
