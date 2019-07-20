@@ -35,14 +35,21 @@
     </div>
 
 
-    <!-- sidebar navigation -->
+<!-- sidebar navigation -->
+<!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    <li class="nav-item"><a href="#Fields"><span class="fragment-hashtag">#</span> Fields</a></li>
+    </ul>
+    </li>
+    </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
     <h2>Modules</h2>
     <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.advanced_start.html"><span class="module-name-item">config.advanced_start</span></a></div></li>
@@ -109,6 +116,17 @@
     </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
     <h2>Topics</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
@@ -118,19 +136,18 @@
     </ul>
 
 
-
+    </div>
+    <div class="up-to-top">
     <!-- list of items in a module -->
     <ul class="nav nav-module-contents">
     <li class="nav-item">
-    <h4>Contents of <strong>utils.table</strong></h4>
+    <h4>Jump to Section</h4>
     <ul class="nav">
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     <li class="nav-item"><a href="#Fields"><span class="fragment-hashtag">#</span> Fields</a></li>
     </ul>
     </li>
     </ul>
-    </div>
-    <div class="up-to-top">
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
     </div>
@@ -167,52 +184,52 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#add_all">add_all (t1, t2)</a></td>
-    <td class="summary">Adds the contents of table t2 to table t1</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#array_contains">array_contains (t, e)</a></td>
-    <td class="summary">Checks if the arrayed portion of a table contains an element</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#clear_table">clear_table (t, array)</a></td>
-    <td class="summary">Clears all existing entries in a table</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#contains">contains (t, e)</a></td>
-    <td class="summary">Checks if a table contains an element</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#fast_remove">fast_remove (tbl, index)</a></td>
+    <td class="name"><a href="#fast_remove">fast_remove(tbl, index)</a></td>
     <td class="summary">Removes an item from an array in O(1) time.</td>
     </tr>
     <tr>
-    <td class="name"><a href="#get_random_dictionary_entry">get_random_dictionary_entry (t, key)</a></td>
+    <td class="name"><a href="#add_all">add_all(t1, t2)</a></td>
+    <td class="summary">Adds the contents of table t2 to table t1</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#index_of">index_of(t, e)</a></td>
+    <td class="summary">Checks if a table contains an element</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#index_of_in_array">index_of_in_array(t, e)</a></td>
+    <td class="summary">Checks if the arrayed portion of a table contains an element</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#contains">contains(t, e)</a></td>
+    <td class="summary">Checks if a table contains an element</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#array_contains">array_contains(t, e)</a></td>
+    <td class="summary">Checks if the arrayed portion of a table contains an element</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#set">set(t, index, element)</a></td>
+    <td class="summary">Adds an element into a specific index position while shuffling the rest down</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#get_random_dictionary_entry">get_random_dictionary_entry(t, key)</a></td>
     <td class="summary">Chooses a random entry from a table
  because this uses math.random, it cannot be used outside of events</td>
     </tr>
     <tr>
-    <td class="name"><a href="#get_random_weighted">get_random_weighted (weight_table, item_index, weight_index)</a></td>
+    <td class="name"><a href="#get_random_weighted">get_random_weighted(weight_table, item_index, weight_index)</a></td>
     <td class="summary">Chooses a random entry from a weighted table
  because this uses math.random, it cannot be used outside of events</td>
     </tr>
     <tr>
-    <td class="name"><a href="#index_of">index_of (t, e)</a></td>
-    <td class="summary">Checks if a table contains an element</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#index_of_in_array">index_of_in_array (t, e)</a></td>
-    <td class="summary">Checks if the arrayed portion of a table contains an element</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#set">set (t, index, element)</a></td>
-    <td class="summary">Adds an element into a specific index position while shuffling the rest down</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#shuffle_table">shuffle_table (t)</a></td>
+    <td class="name"><a href="#shuffle_table">shuffle_table(t)</a></td>
     <td class="summary">Creates a fisher-yates shuffle of a sequential number-indexed table
  because this uses math.random, it cannot be used outside of events if no rng is supplied
  from: http://www.sdknews.com/cross-platform/corona/tutorial-how-to-shuffle-table-items</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#clear_table">clear_table(t, array)</a></td>
+    <td class="summary">Clears all existing entries in a table</td>
     </tr>
     </tbody>
     </table>
@@ -223,24 +240,24 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#deep_copy">deep_copy</a></td>
-    <td class="summary">Creates a deepcopy of a table.</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#equals">equals</a></td>
-    <td class="summary">Determines if two tables are structurally equal.</td>
-    </tr>
-    <tr>
     <td class="name"><a href="#inspect">inspect</a></td>
     <td class="summary">Similar to serpent.block, returns a string with a pretty representation of a table.</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#size">size</a></td>
+    <td class="summary">Takes a table and returns the number of entries in the table.</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#deep_copy">deep_copy</a></td>
+    <td class="summary">Creates a deepcopy of a table.</td>
     </tr>
     <tr>
     <td class="name"><a href="#merge">merge</a></td>
     <td class="summary">Merges multiple tables.</td>
     </tr>
     <tr>
-    <td class="name"><a href="#size">size</a></td>
-    <td class="summary">Takes a table and returns the number of entries in the table.</td>
+    <td class="name"><a href="#equals">equals</a></td>
+    <td class="summary">Determines if two tables are structurally equal.</td>
     </tr>
     </tbody>
     </table>
@@ -254,264 +271,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#add_all" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="add_all">add_all (t1, t2)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Adds the contents of table t2 to table t1</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t1</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to insert into
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t2</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to insert from
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#array_contains" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="array_contains">array_contains (t, e)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Checks if the arrayed portion of a table contains an element</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#clear_table" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="clear_table">clear_table (t, array)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Clears all existing entries in a table</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to clear
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>array</em></strong>
-
-    <strong> : </strong>
-
-
-     <boolean> to indicate whether the table is an array or not
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#contains" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="contains">contains (t, e)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Checks if a table contains an element</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#fast_remove" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="fast_remove">fast_remove (tbl, index)</span>
+    <span class="section-item-title" id="fast_remove">fast_remove(tbl, index)</span>
     </div>
     </dt>
     <dd>
@@ -575,8 +336,407 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
+    <a href="#add_all" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="add_all">add_all(t1, t2)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds the contents of table t2 to table t1</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>t1</em></strong>
+
+    <strong> : </strong>
+
+
+     <table> to insert into
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>t2</em></strong>
+
+    <strong> : </strong>
+
+
+     <table> to insert from
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#index_of" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="index_of">index_of(t, e)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Checks if a table contains an element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>t</em></strong>
+
+    <strong> : </strong>
+
+
+     <table>
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>e</em></strong>
+
+    <strong> : </strong>
+
+
+     <any> table element
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#index_of_in_array" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="index_of_in_array">index_of_in_array(t, e)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Checks if the arrayed portion of a table contains an element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>t</em></strong>
+
+    <strong> : </strong>
+
+
+     <table>
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>e</em></strong>
+
+    <strong> : </strong>
+
+
+     <any> table element
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#contains" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="contains">contains(t, e)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Checks if a table contains an element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>t</em></strong>
+
+    <strong> : </strong>
+
+
+     <table>
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>e</em></strong>
+
+    <strong> : </strong>
+
+
+     <any> table element
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#array_contains" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="array_contains">array_contains(t, e)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Checks if the arrayed portion of a table contains an element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>t</em></strong>
+
+    <strong> : </strong>
+
+
+     <table>
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>e</em></strong>
+
+    <strong> : </strong>
+
+
+     <any> table element
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#set" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="set">set(t, index, element)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds an element into a specific index position while shuffling the rest down</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>t</em></strong>
+
+    <strong> : </strong>
+
+
+     <table> to add into
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>index</em></strong>
+
+    <strong> : </strong>
+
+
+     <number> the position in the table to add to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+
+     <any> to add to the table
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
     <a href="#get_random_dictionary_entry" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_random_dictionary_entry">get_random_dictionary_entry (t, key)</span>
+    <span class="section-item-title" id="get_random_dictionary_entry">get_random_dictionary_entry(t, key)</span>
     </div>
     </dt>
     <dd>
@@ -647,7 +807,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#get_random_weighted" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_random_weighted">get_random_weighted (weight_table, item_index, weight_index)</span>
+    <span class="section-item-title" id="get_random_weighted">get_random_weighted(weight_table, item_index, weight_index)</span>
     </div>
     </dt>
     <dd>
@@ -735,215 +895,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#index_of" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="index_of">index_of (t, e)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Checks if a table contains an element</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#index_of_in_array" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="index_of_in_array">index_of_in_array (t, e)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Checks if the arrayed portion of a table contains an element</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#set" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="set">set (t, index, element)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Adds an element into a specific index position while shuffling the rest down</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to add into
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>index</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> the position in the table to add to
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>element</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> to add to the table
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#shuffle_table" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="shuffle_table">shuffle_table (t)</span>
+    <span class="section-item-title" id="shuffle_table">shuffle_table(t)</span>
     </div>
     </dt>
     <dd>
@@ -990,9 +943,168 @@
     <!-- usage end -->
 
     </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#clear_table" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="clear_table">clear_table(t, array)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Clears all existing entries in a table</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>t</em></strong>
+
+    <strong> : </strong>
+
+
+     <table> to clear
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>array</em></strong>
+
+    <strong> : </strong>
+
+
+     <boolean> to indicate whether the table is an array or not
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
     </dl>
     <h3><span id="Fields" class="section-title"><a href="#Fields">Fields</a></span></h3>
     <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#inspect" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="inspect">inspect</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Similar to serpent.block, returns a string with a pretty representation of a table.</p>
+    <p class="section-item-description">
+ Notice: This method is not appropriate for saving/restoring tables. It is meant to be used by the programmer mainly while debugging a program.
+ depth sets the maximum depth that will be printed out. When the max depth is reached, inspect will stop parsing tables and just return {...}
+ process is a function which allow altering the passed object before transforming it into a string.
+ A typical way to use it would be to remove certain values so that they don't appear at all.
+ return <string> the prettied table</p>
+
+    <!-- parameters start -->
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-module-field-li">
+
+    <strong><em>table</em></strong>
+
+    <strong> : </strong>
+
+
+     <table> the table to serialize
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-module-field-li">
+
+    <strong><em>options</em></strong>
+
+    <strong> : </strong>
+
+
+     <table> options are depth, newline, indent, process
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#size" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="size">size</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Takes a table and returns the number of entries in the table.</p>
+    <p class="section-item-description"> (Slower than #table, faster than iterating via pairs)</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
@@ -1023,6 +1135,55 @@
 
 
      <table> the object to copy
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#merge" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="merge">merge</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Merges multiple tables.</p>
+    <p class="section-item-description"> Tables later in the list will overwrite entries from tables earlier in the list.
+ Ex. merge({{1, 2, 3}, {[2] = 0}, {[3] = 0}}) will return {1, 0, 0}</p>
+
+    <!-- parameters start -->
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-module-field-li">
+
+    <strong><em>tables</em></strong>
+
+    <strong> : </strong>
+
+
+     <table> takes a table of tables to merge
 
     </li>
 
@@ -1106,150 +1267,6 @@
     <!-- usage end -->
 
     </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#inspect" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="inspect">inspect</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Similar to serpent.block, returns a string with a pretty representation of a table.</p>
-    <p class="section-item-description">
- Notice: This method is not appropriate for saving/restoring tables. It is meant to be used by the programmer mainly while debugging a program.
- depth sets the maximum depth that will be printed out. When the max depth is reached, inspect will stop parsing tables and just return {...}
- process is a function which allow altering the passed object before transforming it into a string.
- A typical way to use it would be to remove certain values so that they don't appear at all.
- return <string> the prettied table</p>
-
-    <!-- parameters start -->
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-module-field-li">
-
-    <strong><em>table</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> the table to serialize
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-module-field-li">
-
-    <strong><em>options</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> options are depth, newline, indent, process
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#merge" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="merge">merge</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Merges multiple tables.</p>
-    <p class="section-item-description"> Tables later in the list will overwrite entries from tables earlier in the list.
- Ex. merge({{1, 2, 3}, {[2] = 0}, {[3] = 0}}) will return {1, 0, 0}</p>
-
-    <!-- parameters start -->
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-module-field-li">
-
-    <strong><em>tables</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> takes a table of tables to merge
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#size" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="size">size</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Takes a table and returns the number of entries in the table.</p>
-    <p class="section-item-description"> (Slower than #table, faster than iterating via pairs)</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
     </dl>
 
     <!-- section end -->
@@ -1265,7 +1282,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-06-29 01:27:33 UTC</i>
+    <i>Last updated 2019-07-20 23:44:09 UTC</i>
     </div>
     </div>
     </div>

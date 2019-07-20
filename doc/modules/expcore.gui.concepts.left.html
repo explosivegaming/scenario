@@ -35,14 +35,20 @@
     </div>
 
 
-    <!-- sidebar navigation -->
+<!-- sidebar navigation -->
+<!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    </ul>
+    </li>
+    </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
     <h2>Modules</h2>
     <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.advanced_start.html"><span class="module-name-item">config.advanced_start</span></a></div></li>
@@ -109,6 +115,17 @@
     </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
     <h2>Topics</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
@@ -118,18 +135,17 @@
     </ul>
 
 
-
+    </div>
+    <div class="up-to-top">
     <!-- list of items in a module -->
     <ul class="nav nav-module-contents">
     <li class="nav-item">
-    <h4>Contents of <strong>expcore.gui.concepts.left</strong></h4>
+    <h4>Jump to Section</h4>
     <ul class="nav">
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     </ul>
     </li>
     </ul>
-    </div>
-    <div class="up-to-top">
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
     </div>
@@ -167,68 +183,68 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#LeftFrames._prototype:_internal_draw">LeftFrames._prototype:_internal_draw (player)</a></td>
-    <td class="summary">Creates the gui for the first time, used internally</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#LeftFrames._prototype:event_handler">LeftFrames._prototype:event_handler ([action=update])</a></td>
-    <td class="summary">Creates an event handler that will trigger one of its functions, use with Event.add</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#LeftFrames._prototype:get_frame">LeftFrames._prototype:get_frame (player)</a></td>
-    <td class="summary">Gets the frame for this define from the left frame flow</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#LeftFrames._prototype:is_open">LeftFrames._prototype:is_open (player)</a></td>
-    <td class="summary">Returns if the player currently has this define visible</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#LeftFrames._prototype:redraw">LeftFrames._prototype:redraw (player)</a></td>
-    <td class="summary">Redraws the frame by calling on_draw, will always clear the frame</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#LeftFrames._prototype:redraw_all">LeftFrames._prototype:redraw_all ([update_offline=false])</a></td>
-    <td class="summary">Redraws the frame for all players, see redraw</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#LeftFrames._prototype:set_direction">LeftFrames._prototype:set_direction (direction)</a></td>
-    <td class="summary">Sets the direction of the frame, either vertical or horizontal</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#LeftFrames._prototype:set_open_by_default">LeftFrames._prototype:set_open_by_default ([state=true])</a></td>
-    <td class="summary">Sets if the frame is visible when a player joins, can also be a function to return a boolean</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#LeftFrames._prototype:toggle">LeftFrames._prototype:toggle (player)</a></td>
-    <td class="summary">Toggles the visiblty of the left frame</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#LeftFrames._prototype:update">LeftFrames._prototype:update (player)</a></td>
-    <td class="summary">Updates the contents of the left frame, first tries update callback, oter wise will clear and redraw</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#LeftFrames._prototype:update_all">LeftFrames._prototype:update_all ([update_offline=false])</a></td>
-    <td class="summary">Updates the frame for all players, see update</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#LeftFrames.get_flow">LeftFrames.get_flow (player)</a></td>
+    <td class="name"><a href="#LeftFrames.get_flow">LeftFrames.get_flow(player)</a></td>
     <td class="summary">Gets the left frame flow for a player</td>
     </tr>
     <tr>
-    <td class="name"><a href="#LeftFrames.get_frame">LeftFrames.get_frame (name, player)</a></td>
+    <td class="name"><a href="#LeftFrames.get_frame">LeftFrames.get_frame(name, player)</a></td>
     <td class="summary">Gets one frame from the left flow by its name</td>
     </tr>
     <tr>
-    <td class="name"><a href="#LeftFrames.get_open">LeftFrames.get_open (player)</a></td>
+    <td class="name"><a href="#LeftFrames.get_open">LeftFrames.get_open(player)</a></td>
     <td class="summary">Gets all open frames for a player, if non are open it will remove the close all button</td>
     </tr>
     <tr>
-    <td class="name"><a href="#LeftFrames.new_frame">LeftFrames.new_frame (permision_name)</a></td>
+    <td class="name"><a href="#LeftFrames.toggle_frame">LeftFrames.toggle_frame(name, player[, state])</a></td>
+    <td class="summary">Toggles the visiblty of a left frame, or sets its visiblty state</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#LeftFrames.new_frame">LeftFrames.new_frame(permision_name)</a></td>
     <td class="summary">Creates a new left frame define</td>
     </tr>
     <tr>
-    <td class="name"><a href="#LeftFrames.toggle_frame">LeftFrames.toggle_frame (name, player[, state])</a></td>
-    <td class="summary">Toggles the visiblty of a left frame, or sets its visiblty state</td>
+    <td class="name"><a href="#LeftFrames._prototype:set_open_by_default">LeftFrames._prototype:set_open_by_default([state=true])</a></td>
+    <td class="summary">Sets if the frame is visible when a player joins, can also be a function to return a boolean</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#LeftFrames._prototype:set_direction">LeftFrames._prototype:set_direction(direction)</a></td>
+    <td class="summary">Sets the direction of the frame, either vertical or horizontal</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#LeftFrames._prototype:_internal_draw">LeftFrames._prototype:_internal_draw(player)</a></td>
+    <td class="summary">Creates the gui for the first time, used internally</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#LeftFrames._prototype:get_frame">LeftFrames._prototype:get_frame(player)</a></td>
+    <td class="summary">Gets the frame for this define from the left frame flow</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#LeftFrames._prototype:is_open">LeftFrames._prototype:is_open(player)</a></td>
+    <td class="summary">Returns if the player currently has this define visible</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#LeftFrames._prototype:toggle">LeftFrames._prototype:toggle(player)</a></td>
+    <td class="summary">Toggles the visiblty of the left frame</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#LeftFrames._prototype:update">LeftFrames._prototype:update(player)</a></td>
+    <td class="summary">Updates the contents of the left frame, first tries update callback, oter wise will clear and redraw</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#LeftFrames._prototype:update_all">LeftFrames._prototype:update_all([update_offline=false])</a></td>
+    <td class="summary">Updates the frame for all players, see update</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#LeftFrames._prototype:redraw">LeftFrames._prototype:redraw(player)</a></td>
+    <td class="summary">Redraws the frame by calling on_draw, will always clear the frame</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#LeftFrames._prototype:redraw_all">LeftFrames._prototype:redraw_all([update_offline=false])</a></td>
+    <td class="summary">Redraws the frame for all players, see redraw</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#LeftFrames._prototype:event_handler">LeftFrames._prototype:event_handler([action=update])</a></td>
+    <td class="summary">Creates an event handler that will trigger one of its functions, use with Event.add</td>
     </tr>
     </tbody>
     </table>
@@ -242,593 +258,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#LeftFrames._prototype:_internal_draw" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames._prototype:_internal_draw">LeftFrames._prototype:_internal_draw (player)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Creates the gui for the first time, used internally</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
-
-     the player to draw the frame to
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
-    <span class="return-text">the frame that was made</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#LeftFrames._prototype:event_handler" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames._prototype:event_handler">LeftFrames._prototype:event_handler ([action=update])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Creates an event handler that will trigger one of its functions, use with Event.add</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>action</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the action to take on this event
-
-    (<em>default</em>: update)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#LeftFrames._prototype:get_frame" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames._prototype:get_frame">LeftFrames._prototype:get_frame (player)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Gets the frame for this define from the left frame flow</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
-
-     the player to get the frame of
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
-    <span class="return-text">the frame in the left frame flow for this define</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#LeftFrames._prototype:is_open" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames._prototype:is_open">LeftFrames._prototype:is_open (player)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Returns if the player currently has this define visible</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
-
-     the player to get the frame of
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">true if it is open/visible</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#LeftFrames._prototype:redraw" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames._prototype:redraw">LeftFrames._prototype:redraw (player)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Redraws the frame by calling on_draw, will always clear the frame</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
-
-     the player to update the frame of
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#LeftFrames._prototype:redraw_all" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames._prototype:redraw_all">LeftFrames._prototype:redraw_all ([update_offline=false])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Redraws the frame for all players, see redraw</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>update_offline</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     when true will update the frame for offline players
-
-    (<em>default</em>: false)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#LeftFrames._prototype:set_direction" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames._prototype:set_direction">LeftFrames._prototype:set_direction (direction)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Sets the direction of the frame, either vertical or horizontal</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>direction</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the direction to have the elements be added to thef frame
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#LeftFrames._prototype:set_open_by_default" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames._prototype:set_open_by_default">LeftFrames._prototype:set_open_by_default ([state=true])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Sets if the frame is visible when a player joins, can also be a function to return a boolean</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>state</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a> or <a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
-
-     the default state of the visiblty, can be a function
- state param - player LuaPlayer - the player that has joined the game
- state param - define_name string - the define name for the frame
- state return - boolean - false will hide the frame
-
-    (<em>default</em>: true)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#LeftFrames._prototype:toggle" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames._prototype:toggle">LeftFrames._prototype:toggle (player)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Toggles the visiblty of the left frame</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
-
-     the player to toggle the frame of
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">the new state of the visiblity</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#LeftFrames._prototype:update" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames._prototype:update">LeftFrames._prototype:update (player)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Updates the contents of the left frame, first tries update callback, oter wise will clear and redraw</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
-
-     the player to update the frame of
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#LeftFrames._prototype:update_all" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames._prototype:update_all">LeftFrames._prototype:update_all ([update_offline=false])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Updates the frame for all players, see update</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>update_offline</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     when true will update the frame for offline players
-
-    (<em>default</em>: false)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#LeftFrames.get_flow" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames.get_flow">LeftFrames.get_flow (player)</span>
+    <span class="section-item-title" id="LeftFrames.get_flow">LeftFrames.get_flow(player)</span>
     </div>
     </dt>
     <dd>
@@ -885,7 +316,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#LeftFrames.get_frame" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames.get_frame">LeftFrames.get_frame (name, player)</span>
+    <span class="section-item-title" id="LeftFrames.get_frame">LeftFrames.get_frame(name, player)</span>
     </div>
     </dt>
     <dd>
@@ -958,7 +389,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#LeftFrames.get_open" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames.get_open">LeftFrames.get_open (player)</span>
+    <span class="section-item-title" id="LeftFrames.get_open">LeftFrames.get_open(player)</span>
     </div>
     </dt>
     <dd>
@@ -1014,65 +445,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#LeftFrames.new_frame" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames.new_frame">LeftFrames.new_frame (permision_name)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Creates a new left frame define</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>permision_name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name that can be used with the permision system
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the new left frame define</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#LeftFrames.toggle_frame" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="LeftFrames.toggle_frame">LeftFrames.toggle_frame (name, player[, state])</span>
+    <span class="section-item-title" id="LeftFrames.toggle_frame">LeftFrames.toggle_frame(name, player[, state])</span>
     </div>
     </dt>
     <dd>
@@ -1158,6 +532,648 @@
     <!-- usage end -->
 
     </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#LeftFrames.new_frame" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="LeftFrames.new_frame">LeftFrames.new_frame(permision_name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Creates a new left frame define</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>permision_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name that can be used with the permision system
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the new left frame define</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#LeftFrames._prototype:set_open_by_default" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="LeftFrames._prototype:set_open_by_default">LeftFrames._prototype:set_open_by_default([state=true])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sets if the frame is visible when a player joins, can also be a function to return a boolean</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>state</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a> or <a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the default state of the visiblty, can be a function
+ state param - player LuaPlayer - the player that has joined the game
+ state param - define_name string - the define name for the frame
+ state return - boolean - false will hide the frame
+
+    (<em>default</em>: true)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#LeftFrames._prototype:set_direction" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="LeftFrames._prototype:set_direction">LeftFrames._prototype:set_direction(direction)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sets the direction of the frame, either vertical or horizontal</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>direction</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the direction to have the elements be added to thef frame
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#LeftFrames._prototype:_internal_draw" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="LeftFrames._prototype:_internal_draw">LeftFrames._prototype:_internal_draw(player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Creates the gui for the first time, used internally</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to draw the frame to
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+    <span class="return-text">the frame that was made</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#LeftFrames._prototype:get_frame" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="LeftFrames._prototype:get_frame">LeftFrames._prototype:get_frame(player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets the frame for this define from the left frame flow</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to get the frame of
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+    <span class="return-text">the frame in the left frame flow for this define</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#LeftFrames._prototype:is_open" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="LeftFrames._prototype:is_open">LeftFrames._prototype:is_open(player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns if the player currently has this define visible</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to get the frame of
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if it is open/visible</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#LeftFrames._prototype:toggle" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="LeftFrames._prototype:toggle">LeftFrames._prototype:toggle(player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Toggles the visiblty of the left frame</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to toggle the frame of
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">the new state of the visiblity</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#LeftFrames._prototype:update" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="LeftFrames._prototype:update">LeftFrames._prototype:update(player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Updates the contents of the left frame, first tries update callback, oter wise will clear and redraw</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to update the frame of
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#LeftFrames._prototype:update_all" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="LeftFrames._prototype:update_all">LeftFrames._prototype:update_all([update_offline=false])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Updates the frame for all players, see update</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>update_offline</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true will update the frame for offline players
+
+    (<em>default</em>: false)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#LeftFrames._prototype:redraw" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="LeftFrames._prototype:redraw">LeftFrames._prototype:redraw(player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Redraws the frame by calling on_draw, will always clear the frame</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to update the frame of
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#LeftFrames._prototype:redraw_all" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="LeftFrames._prototype:redraw_all">LeftFrames._prototype:redraw_all([update_offline=false])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Redraws the frame for all players, see redraw</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>update_offline</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true will update the frame for offline players
+
+    (<em>default</em>: false)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#LeftFrames._prototype:event_handler" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="LeftFrames._prototype:event_handler">LeftFrames._prototype:event_handler([action=update])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Creates an event handler that will trigger one of its functions, use with Event.add</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>action</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the action to take on this event
+
+    (<em>default</em>: update)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
     </dl>
 
     <!-- section end -->
@@ -1173,7 +1189,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-06-29 01:27:33 UTC</i>
+    <i>Last updated 2019-07-20 23:44:09 UTC</i>
     </div>
     </div>
     </div>

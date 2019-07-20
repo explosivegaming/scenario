@@ -35,14 +35,23 @@
     </div>
 
 
-    <!-- sidebar navigation -->
+<!-- sidebar navigation -->
+<!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
+    <li class="nav-item"><a href="#Events"><span class="fragment-hashtag">#</span> Events</a></li>
+    <li class="nav-item"><a href="#Jail_functions"><span class="fragment-hashtag">#</span> Jail functions </a></li>
+    <li class="nav-item"><a href="#Temp_ban_functions"><span class="fragment-hashtag">#</span> Temp ban functions </a></li>
+    </ul>
+    </li>
+    </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
     <h2>Modules</h2>
     <ul class="nav">
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.advanced_start.html"><span class="module-name-item">config.advanced_start</span></a></div></li>
@@ -89,6 +98,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.addons.advanced-start.html"><span class="module-name-item">modules.addons.advanced-start</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.addons.chat-popups.html"><span class="module-name-item">modules.addons.chat-popups</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.addons.damage-popups.html"><span class="module-name-item">modules.addons.damage-popups</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.gui.player-list.html"><span class="module-name-item">modules.gui.player-list</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.gui.rocket-info.html"><span class="module-name-item">modules.gui.rocket-info</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/modules.gui.science-info.html"><span class="module-name-item">modules.gui.science-info</span></a></div></li>
@@ -109,6 +119,16 @@
     </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
     <h2>Topics</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
@@ -118,20 +138,20 @@
     </ul>
 
 
-
+    </div>
+    <div class="up-to-top">
     <!-- list of items in a module -->
     <ul class="nav nav-module-contents">
     <li class="nav-item">
-    <h4>Contents of <strong>Jail</strong></h4>
+    <h4>Jump to Section</h4>
     <ul class="nav">
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
     <li class="nav-item"><a href="#Events"><span class="fragment-hashtag">#</span> Events</a></li>
     <li class="nav-item"><a href="#Jail_functions"><span class="fragment-hashtag">#</span> Jail functions </a></li>
     <li class="nav-item"><a href="#Temp_ban_functions"><span class="fragment-hashtag">#</span> Temp ban functions </a></li>
     </ul>
     </li>
     </ul>
-    </div>
-    <div class="up-to-top">
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
     </div>
@@ -159,6 +179,9 @@
     <!-- module usage start -->
     <h3>Usage</h3>
     <pre class="code" data-lang="Lua"><code>
+    <span class="comment">-- import the module from the control modules
+</span>    <span class="keyword">local</span> Jail = <span class="global">require</span> <span class="string">'modules.control.jail'</span>
+
     <span class="comment">-- This will move 'MrBiter' to the jail role and remove all other roles from them
 </span>    <span class="comment">-- the player name and reason are only so they can be included in the event for user feedback
 </span>    Jail.jail_player(<span class="string">'MrBiter'</span>,<span class="string">'Cooldude2606'</span>,<span class="string">'Likes biters too much'</span>)
@@ -177,6 +200,30 @@
     <!-- module section list start -->
     <table class="section-content-list">
     <thead>
+    <h3><a href="#Dependencies">Dependencies</a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#expcore.roles">expcore.roles</a></td>
+    <td class="summary">Allows moving players into the jail role</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#utils.game">utils.game</a></td>
+    <td class="summary">Allows accessing a player from any value</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#utils.global">utils.global</a></td>
+    <td class="summary">Allows storing data in the global table</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.common">expcore.common</a></td>
+    <td class="summary">Use of move_items to clear inventroies</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
     <h3><a href="#Events">Events</a></h3>
     <span></span>
     </thead>
@@ -186,12 +233,12 @@
     <td class="summary">When a player is assigned to jail</td>
     </tr>
     <tr>
-    <td class="name"><a href="#on_player_temp_banned">on_player_temp_banned</a></td>
-    <td class="summary">When a player is temp banned</td>
-    </tr>
-    <tr>
     <td class="name"><a href="#on_player_unjailed">on_player_unjailed</a></td>
     <td class="summary">When a player is unassigned from jail</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#on_player_temp_banned">on_player_temp_banned</a></td>
+    <td class="summary">When a player is temp banned</td>
     </tr>
     <tr>
     <td class="name"><a href="#on_player_untemp_banned">on_player_untemp_banned</a></td>
@@ -244,6 +291,117 @@
     <br />
 
     <!-- section start -->
+    <h3><span id="Dependencies" class="section-title"><a href="#Dependencies">Dependencies</a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.roles" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.roles">expcore.roles</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Allows moving players into the jail role</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#utils.game" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.game">utils.game</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Allows accessing a player from any value</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#utils.global" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.global">utils.global</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Allows storing data in the global table</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.common" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.common">expcore.common</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Use of move_items to clear inventroies</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
     <h3><span id="Events" class="section-title"><a href="#Events">Events</a></span></h3>
     <dl class="section-body-container">
     <dt>
@@ -331,6 +489,72 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
+    <a href="#on_player_unjailed" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="on_player_unjailed">on_player_unjailed</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">When a player is unassigned from jail</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Event Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player_index</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the index of the player who was unjailed
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>by_player_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the player who unjailed the other player
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
     <a href="#on_player_temp_banned" class="fragment-hashtag">#</a>
     <span class="section-item-title" id="on_player_temp_banned">on_player_temp_banned</span>
     </div>
@@ -391,72 +615,6 @@
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
      the reason that the player was temp banned
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#on_player_unjailed" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="on_player_unjailed">on_player_unjailed</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">When a player is unassigned from jail</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Event Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player_index</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
-
-     the index of the player who was unjailed
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>by_player_name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name of the player who unjailed the other player
 
     </li>
 
@@ -1003,7 +1161,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-06-29 01:27:33 UTC</i>
+    <i>Last updated 2019-07-20 22:35:58 UTC</i>
     </div>
     </div>
     </div>

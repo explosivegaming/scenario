@@ -73,7 +73,22 @@
 
 > if module then
 
-    <!-- sidebar navigation -->
+<!-- sidebar navigation -->
+<!-- list of items in a module -->
+> if module and module.type ~= "topic" then
+> if module and not ldoc.no_summary and #module.items > 0 then
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+> for kind,items in module.kinds() do
+    <li class="nav-item"><a href="#$(no_spaces(kind))"><span class="fragment-hashtag">#</span> $(kind)</a></li>
+> end
+    </ul>
+    </li>
+    </ul>
+> end
+> end
 > if not ldoc.no_summary then
 > local this_mod = module and module.name
 > for kind, mods, type in ldoc.kinds() do
@@ -111,13 +126,15 @@
 > end
 
 > end
-
+    </div>
+> if module and module.type ~= "topic" then
+    <div class="up-to-top">
     <!-- list of items in a module -->
 > if module and module.type ~= "topic" then
 > if module and not ldoc.no_summary and #module.items > 0 then
     <ul class="nav nav-module-contents">
     <li class="nav-item">
-    <h4>Contents of <strong>$(display_name(module))</strong></h4>
+    <h4>Jump to Section</h4>
     <ul class="nav">
 > for kind,items in module.kinds() do
     <li class="nav-item"><a href="#$(no_spaces(kind))"><span class="fragment-hashtag">#</span> $(kind)</a></li>
@@ -127,9 +144,6 @@
     </ul>
 > end
 > end
-    </div>
-> if module and module.type ~= "topic" then
-    <div class="up-to-top">
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
 > end

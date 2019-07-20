@@ -35,14 +35,21 @@
     </div>
 
 
-    <!-- sidebar navigation -->
+<!-- sidebar navigation -->
+<!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    <li class="nav-item"><a href="#Fields"><span class="fragment-hashtag">#</span> Fields</a></li>
+    </ul>
+    </li>
+    </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
     <h2>Modules</h2>
     <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.advanced_start.html"><span class="module-name-item">config.advanced_start</span></a></div></li>
@@ -109,6 +116,17 @@
     </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
     <h2>Topics</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
@@ -118,19 +136,18 @@
     </ul>
 
 
-
+    </div>
+    <div class="up-to-top">
     <!-- list of items in a module -->
     <ul class="nav nav-module-contents">
     <li class="nav-item">
-    <h4>Contents of <strong>utils.core</strong></h4>
+    <h4>Jump to Section</h4>
     <ul class="nav">
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     <li class="nav-item"><a href="#Fields"><span class="fragment-hashtag">#</span> Fields</a></li>
     </ul>
     </li>
     </ul>
-    </div>
-    <div class="up-to-top">
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
     </div>
@@ -167,40 +184,40 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#Module.cant_run">Module.cant_run (name)</a></td>
-    <td class="summary">Prints a message letting the player know they cannot run a command</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Module.format_time">Module.format_time (ticks)</a></td>
-    <td class="summary">Takes a time in ticks and returns a string with the time in format "x hour(s) x minute(s)"</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Module.get_actor">Module.get_actor ()</a></td>
-    <td class="summary">Returns a valid string with the name of the actor of a command.</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Module.log_command">Module.log_command (actor, command, parameters)</a></td>
-    <td class="summary">Logs the use of a command and its user</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Module.print_admins">Module.print_admins (msg, source)</a></td>
-    <td class="summary">Prints a message to all online admins</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Module.print_except">Module.print_except (msg, player, color)</a></td>
+    <td class="name"><a href="#Module.print_except">Module.print_except(msg, player, color)</a></td>
     <td class="summary">Takes msg and prints it to all players except provided player</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Module.random_RGB">Module.random_RGB ()</a></td>
+    <td class="name"><a href="#Module.print_admins">Module.print_admins(msg, source)</a></td>
+    <td class="summary">Prints a message to all online admins</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.get_actor">Module.get_actor()</a></td>
+    <td class="summary">Returns a valid string with the name of the actor of a command.</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.format_time">Module.format_time(ticks)</a></td>
+    <td class="summary">Takes a time in ticks and returns a string with the time in format "x hour(s) x minute(s)"</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.cant_run">Module.cant_run(name)</a></td>
+    <td class="summary">Prints a message letting the player know they cannot run a command</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.log_command">Module.log_command(actor, command, parameters)</a></td>
+    <td class="summary">Logs the use of a command and its user</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.verify_mult_types">Module.verify_mult_types(arg, arg_types)</a></td>
+    <td class="summary">Asserts the argument is one of type arg_types</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.random_RGB">Module.random_RGB()</a></td>
     <td class="summary">Returns a random RGB color as a table</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Module.set_and_return">Module.set_and_return (tbl, key, value)</a></td>
+    <td class="name"><a href="#Module.set_and_return">Module.set_and_return(tbl, key, value)</a></td>
     <td class="summary">Sets a table element to value while also returning value.</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Module.verify_mult_types">Module.verify_mult_types (arg, arg_types)</a></td>
-    <td class="summary">Asserts the argument is one of type arg_types</td>
     </tr>
     </tbody>
     </table>
@@ -211,10 +228,6 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#Module.is_module_available">Module.is_module_available</a></td>
-    <td class="summary">Takes the string of a module and returns whether is it available or not</td>
-    </tr>
-    <tr>
     <td class="name"><a href="#Module.move_position">Module.move_position</a></td>
     <td class="summary">Moves a position according to the parameters given
  Notice: only accepts cardinal directions as direction</td>
@@ -222,6 +235,10 @@
     <tr>
     <td class="name"><a href="#Module.opposite_direction">Module.opposite_direction</a></td>
     <td class="summary">Takes a direction and gives you the opposite</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Module.is_module_available">Module.is_module_available</a></td>
+    <td class="summary">Takes the string of a module and returns whether is it available or not</td>
     </tr>
     </tbody>
     </table>
@@ -235,275 +252,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Module.cant_run" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.cant_run">Module.cant_run (name)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Prints a message letting the player know they cannot run a command</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>name</em></strong>
-
-    <strong> : </strong>
-
-
-     string name of the command
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Module.format_time" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.format_time">Module.format_time (ticks)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Takes a time in ticks and returns a string with the time in format "x hour(s) x minute(s)"</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>ticks</em></strong>
-
-
-
-
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Module.get_actor" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.get_actor">Module.get_actor ()</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Returns a valid string with the name of the actor of a command.</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Module.log_command" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.log_command">Module.log_command (actor, command, parameters)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Logs the use of a command and its user</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>actor</em></strong>
-
-    <strong> : </strong>
-
-
-     string with the actor's name (usually acquired by calling get_actor)
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>command</em></strong>
-
-    <strong> : </strong>
-
-
-     the command's name as table element
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>parameters</em></strong>
-
-    <strong> : </strong>
-
-
-     the command's parameters as a table (optional)
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Module.print_admins" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.print_admins">Module.print_admins (msg, source)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Prints a message to all online admins</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>msg</em></strong>
-
-    <strong> : </strong>
-
-
-     <string|table> table if locale is used
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>source</em></strong>
-
-    <strong> : </strong>
-
-
-     <LuaPlayer|string|nil> string must be the name of a player, nil for server.
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#Module.print_except" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.print_except">Module.print_except (msg, player, color)</span>
+    <span class="section-item-title" id="Module.print_except">Module.print_except(msg, player, color)</span>
     </div>
     </dt>
     <dd>
@@ -581,8 +331,345 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
+    <a href="#Module.print_admins" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.print_admins">Module.print_admins(msg, source)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Prints a message to all online admins</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>msg</em></strong>
+
+    <strong> : </strong>
+
+
+     <string|table> table if locale is used
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>source</em></strong>
+
+    <strong> : </strong>
+
+
+     <LuaPlayer|string|nil> string must be the name of a player, nil for server.
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.get_actor" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.get_actor">Module.get_actor()</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns a valid string with the name of the actor of a command.</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.format_time" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.format_time">Module.format_time(ticks)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Takes a time in ticks and returns a string with the time in format "x hour(s) x minute(s)"</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>ticks</em></strong>
+
+
+
+
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.cant_run" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.cant_run">Module.cant_run(name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Prints a message letting the player know they cannot run a command</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+
+     string name of the command
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.log_command" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.log_command">Module.log_command(actor, command, parameters)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Logs the use of a command and its user</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>actor</em></strong>
+
+    <strong> : </strong>
+
+
+     string with the actor's name (usually acquired by calling get_actor)
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>command</em></strong>
+
+    <strong> : </strong>
+
+
+     the command's name as table element
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>parameters</em></strong>
+
+    <strong> : </strong>
+
+
+     the command's parameters as a table (optional)
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.verify_mult_types" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.verify_mult_types">Module.verify_mult_types(arg, arg_types)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Asserts the argument is one of type arg_types</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>arg</em></strong>
+
+    <strong> : </strong>
+
+
+     the variable to check
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>arg_types</em></strong>
+
+    <strong> : </strong>
+
+
+     the type as a table of sings
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    <span class="return-text">boolean</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
     <a href="#Module.random_RGB" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.random_RGB">Module.random_RGB ()</span>
+    <span class="section-item-title" id="Module.random_RGB">Module.random_RGB()</span>
     </div>
     </dt>
     <dd>
@@ -609,7 +696,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Module.set_and_return" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.set_and_return">Module.set_and_return (tbl, key, value)</span>
+    <span class="section-item-title" id="Module.set_and_return">Module.set_and_return(tbl, key, value)</span>
     </div>
     </dt>
     <dd>
@@ -690,127 +777,9 @@
     <!-- usage end -->
 
     </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Module.verify_mult_types" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.verify_mult_types">Module.verify_mult_types (arg, arg_types)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Asserts the argument is one of type arg_types</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>arg</em></strong>
-
-    <strong> : </strong>
-
-
-     the variable to check
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>arg_types</em></strong>
-
-    <strong> : </strong>
-
-
-     the type as a table of sings
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    <span class="return-text">boolean</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
     </dl>
     <h3><span id="Fields" class="section-title"><a href="#Fields">Fields</a></span></h3>
     <dl class="section-body-container">
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Module.is_module_available" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Module.is_module_available">Module.is_module_available</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Takes the string of a module and returns whether is it available or not</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-module-field-li">
-
-    <strong><em>name</em></strong>
-
-    <strong> : </strong>
-
-
-     <string> the name of the module (ex. 'utils.core')
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
@@ -938,6 +907,54 @@
     <!-- usage end -->
 
     </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Module.is_module_available" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Module.is_module_available">Module.is_module_available</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Takes the string of a module and returns whether is it available or not</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-module-field-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+
+     <string> the name of the module (ex. 'utils.core')
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
     </dl>
 
     <!-- section end -->
@@ -953,7 +970,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-06-29 01:27:33 UTC</i>
+    <i>Last updated 2019-07-20 23:44:09 UTC</i>
     </div>
     </div>
     </div>

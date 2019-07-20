@@ -1,52 +1,12 @@
 --- Adds a science info gui that shows production usage and net for the different science packs as well as an eta
 local Gui = require 'expcore.gui'
 local Event = require 'utils.event'
-local Colors = require 'resources.color_presets'
 local format_time = ext_require('expcore.common','format_time')
-local format_number = ext_require('util','format_number')
 local config = require 'config.science'
+local Production = require 'modules.control.production'
 
 local null_time_short = {'science-info.eta-time',format_time(0,{hours=true,minutes=true,seconds=true,time=true,null=true})}
 local null_time_long = format_time(0,{hours=true,minutes=true,seconds=true,long=true,null=true})
-
---- Gets the production stats for a certain science pack
-local function get_production_stats(player,science_pack)
-    local force = player.force
-    local stats = force.item_production_statistics
-    local total_made = stats.get_input_count(science_pack)
-    local total_used = stats.get_output_count(science_pack)
-    local minute_made = stats.get_flow_count{
-        name=science_pack,
-        input=true,
-        precision_index=defines.flow_precision_index.one_minute,
-    }
-    local minute_used = stats.get_flow_count{
-        name=science_pack,
-        input=false,
-        precision_index=defines.flow_precision_index.one_minute,
-    }
-    return {
-        total_made=total_made,
-        total_used=total_used,
-        total_net=total_made-total_used,
-        minute_made=minute_made,
-        minute_used=minute_used,
-        minute_net=minute_made-minute_used
-    }
-end
-
---- Gets the font colour for a certain level of production
-local function get_font_colour(value,secondary)
-    if value > config.required_for_green then
-        return Colors.light_green
-    elseif value < config.required_for_red then
-        return Colors.indian_red
-    elseif secondary and secondary > 0 or not secondary and value ~= 0 then
-        return Colors.orange
-    else
-        return Colors.grey
-    end
-end
 
 --[[ Generates the main structure for the gui
     element
@@ -60,7 +20,7 @@ end
     >>> eta
     >>>> label
 ]]
-local function generate_container(player,element)
+local function generate_container(element)
     Gui.set_padding(element,1,2,2,2)
     element.style.minimal_width = 200
 
@@ -137,21 +97,8 @@ end
     > spm-"name"
 ]]
 local function add_data_label(element,name,value,secondary,tooltip)
-    local data_colour = get_font_colour(value,secondary)
-    local caption = format_number(math.round(value,1),true)
-
-    local surfix = caption:sub(-1)
-    if not tonumber(surfix) then
-        caption = caption:sub(1,-2)
-    else
-        surfix = ''
-    end
-
-    if value > 0 then
-        caption = '+'..caption
-    elseif value == 0 and caption:sub(1,1) == '-' then
-        caption = caption:sub(2)
-    end
+    local data_colour = Production.get_color(config.color_clamp, value, secondary)
+    local surfix,caption = Production.format_number(value)
 
     if element[name] then
         local data = element[name].label
@@ -197,16 +144,18 @@ end
     > net-"science_pack" (add_data_label)
 ]]
 local function generate_science_pack(player,element,science_pack)
-    local stats = get_production_stats(player,science_pack)
-    if stats.total_made > 0 then
+    local total = Production.get_production_total(player.force, science_pack)
+    local minute = Production.get_production(player.force, science_pack, defines.flow_precision_index.one_minute)
+    if total.made > 0 then
         element.parent.non_made.visible = false
 
         local icon_style = 'quick_bar_slot_button'
-        if stats.minute_net > config.required_for_green then
+        local flux = Production.get_fluctuations(player.force, science_pack, defines.flow_precision_index.one_minute)
+        if flux.net > -config.color_flux/2 then
             icon_style = 'green_slot_button'
-        elseif stats.minute_net < config.required_for_red then
+        elseif flux.net < -config.color_flux then
             icon_style = 'red_slot_button'
-        elseif stats.minute_made > 0 then
+        elseif minute.made > 0 then
             icon_style = 'selected_slot_button'
         end
 
@@ -257,9 +206,9 @@ local function generate_science_pack(player,element,science_pack)
             Gui.set_padding(delta_table)
         end
 
-        add_data_label(delta.table,'pos-'..science_pack,stats.minute_made,nil,{'science-info.pos-tooltip',stats.total_made})
-        add_data_label(delta.table,'neg-'..science_pack,-stats.minute_used,nil,{'science-info.neg-tooltip',stats.total_used})
-        add_data_label(element,'net-'..science_pack,stats.minute_net,stats.minute_made+stats.minute_used,{'science-info.net-tooltip',stats.total_net})
+        add_data_label(delta.table,'pos-'..science_pack,minute.made,nil,{'science-info.pos-tooltip',total.made})
+        add_data_label(delta.table,'neg-'..science_pack,-minute.used,nil,{'science-info.neg-tooltip',total.used})
+        add_data_label(element,'net-'..science_pack,minute.net,minute.made+minute.used,{'science-info.net-tooltip',total.net})
     end
 end
 
@@ -281,18 +230,9 @@ local function update_eta(player,element)
         for _,ingredient in pairs(research.research_unit_ingredients) do
             local pack_name = ingredient.name
             local required = ingredient.amount * remaining
-            local consumed = stats.get_flow_count{
-                name=pack_name,
-                input=false,
-                precision_index=defines.flow_precision_index.one_minute,
-            }
-            if consumed == 0 then
-                limit = -1
-                break
-            end
-            local minutes = required / consumed
-            if not limit or limit < minutes then
-                limit = minutes
+            local time = Production.get_consumsion_eta(force, pack_name, defines.flow_precision_index.one_minute, required)
+            if not limit or limit < time then
+                limit = time
             end
         end
 
@@ -301,9 +241,8 @@ local function update_eta(player,element)
             element.tooltip = null_time_long
 
         else
-            local ticks = limit*3600
-            element.caption = {'science-info.eta-time',format_time(ticks,{hours=true,minutes=true,seconds=true,time=true})}
-            element.tooltip = format_time(ticks,{hours=true,minutes=true,seconds=true,long=true})
+            element.caption = {'science-info.eta-time',format_time(limit,{hours=true,minutes=true,seconds=true,time=true})}
+            element.tooltip = format_time(limit,{hours=true,minutes=true,seconds=true,long=true})
 
         end
     end
@@ -316,7 +255,7 @@ Gui.new_left_frame('gui/science-info')
 :set_direction('vertical')
 :set_tooltip{'science-info.main-tooltip'}
 :on_creation(function(player,element)
-    local table, eta = generate_container(player,element)
+    local table, eta = generate_container(element)
 
     for _,science_pack in ipairs(config) do
         generate_science_pack(player,table,science_pack)

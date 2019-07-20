@@ -1,9 +1,12 @@
 --[[-- Control Module - Jail
     - Adds a way to jail players and temp ban players.
-    @module Jail
+    @control Jail
     @alias Jail
 
     @usage
+    -- import the module from the control modules
+    local Jail = require 'modules.control.jail'
+
     -- This will move 'MrBiter' to the jail role and remove all other roles from them
     -- the player name and reason are only so they can be included in the event for user feedback
     Jail.jail_player('MrBiter','Cooldude2606','Likes biters too much')
@@ -17,9 +20,17 @@
     Jail.temp_ban_player('MrBiter','Cooldude2606','Likes biters too much')
 ]]
 
+--- Allows moving players into the jail role
+-- @dep expcore.roles
 local Roles = require 'expcore.roles'
+--- Allows accessing a player from any value
+-- @dep utils.game
 local Game = require 'utils.game'
+--- Allows storing data in the global table
+-- @dep utils.global
 local Global = require 'utils.global'
+--- Use of move_items to clear inventroies
+-- @dep expcore.common
 local move_items = ext_require('expcore.common','move_items')
 
 local valid_player = Game.get_player_from_any
@@ -82,7 +93,7 @@ local function event_emit(event,player,by_player_name,reason)
     })
 end
 
---- Jail functions.
+--- Jail.
 -- Functions related to jail
 -- @section jail-functions
 
@@ -137,7 +148,7 @@ function Jail.unjail_player(player,by_player_name)
     return true
 end
 
---- Temp ban functions.
+--- Temp ban.
 -- Functions related to temp ban
 -- @section temp-ban-functions
 

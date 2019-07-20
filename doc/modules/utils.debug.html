@@ -35,14 +35,20 @@
     </div>
 
 
-    <!-- sidebar navigation -->
+<!-- sidebar navigation -->
+<!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    </ul>
+    </li>
+    </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
     <h2>Modules</h2>
     <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.advanced_start.html"><span class="module-name-item">config.advanced_start</span></a></div></li>
@@ -109,6 +115,17 @@
     </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
     <h2>Topics</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
@@ -118,18 +135,17 @@
     </ul>
 
 
-
+    </div>
+    <div class="up-to-top">
     <!-- list of items in a module -->
     <ul class="nav nav-module-contents">
     <li class="nav-item">
-    <h4>Contents of <strong>utils.debug</strong></h4>
+    <h4>Jump to Section</h4>
     <ul class="nav">
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     </ul>
     </li>
     </ul>
-    </div>
-    <div class="up-to-top">
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
     </div>
@@ -166,31 +182,31 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#Debug.cheat">Debug.cheat (callback)</a></td>
-    <td class="summary">Executes the given callback if cheating is enabled.</td>
+    <td class="name"><a href="#Debug.print">Debug.print(message, stack_traceback)</a></td>
+    <td class="summary">Shows the given message if debug is enabled.</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Debug.get_meta_value">Debug.get_meta_value (object, key)</a></td>
+    <td class="name"><a href="#Debug.get_meta_value">Debug.get_meta_value(object, key)</a></td>
     <td class="summary">Returns the value of the key inside the object
  or 'InvalidLuaObject' if the LuaObject is invalid.</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Debug.is_closure">Debug.is_closure (func)</a></td>
-    <td class="summary">Returns true if the function is a closure, false otherwise.</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Debug.object_type">Debug.object_type (object)</a></td>
+    <td class="name"><a href="#Debug.object_type">Debug.object_type(object)</a></td>
     <td class="summary">Returns the Lua data type or the factorio LuaObject type
  or 'NoHelpLuaObject' if the LuaObject does not have a help function
  or 'InvalidLuaObject' if the LuaObject is invalid.</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Debug.print">Debug.print (message, stack_traceback)</a></td>
-    <td class="summary">Shows the given message if debug is enabled.</td>
+    <td class="name"><a href="#Debug.print_position">Debug.print_position(position, message)</a></td>
+    <td class="summary">Shows the given message if debug is on.</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Debug.print_position">Debug.print_position (position, message)</a></td>
-    <td class="summary">Shows the given message if debug is on.</td>
+    <td class="name"><a href="#Debug.cheat">Debug.cheat(callback)</a></td>
+    <td class="summary">Executes the given callback if cheating is enabled.</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Debug.is_closure">Debug.is_closure(func)</a></td>
+    <td class="summary">Returns true if the function is a closure, false otherwise.</td>
     </tr>
     </tbody>
     </table>
@@ -204,15 +220,15 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Debug.cheat" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Debug.cheat">Debug.cheat (callback)</span>
+    <a href="#Debug.print" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Debug.print">Debug.print(message, stack_traceback)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Executes the given callback if cheating is enabled.</p>
-    <p class="section-item-description"></p>
+    <p class="section-item-summary">Shows the given message if debug is enabled.</p>
+    <p class="section-item-description"> Uses serpent to print non scalars.</p>
 
     <!-- parameters start -->
     <strong>Parameters:</strong>
@@ -225,12 +241,27 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>callback</em></strong>
+    <strong><em>message</em></strong>
 
     <strong> : </strong>
 
 
-     function
+     <table|string|number|boolean>
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>stack_traceback</em></strong>
+
+    <strong> : </strong>
+
+
+     <number|nil> levels of stack trace to give, defaults to 1 level if nil
 
     </li>
 
@@ -254,7 +285,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Debug.get_meta_value" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Debug.get_meta_value">Debug.get_meta_value (object, key)</span>
+    <span class="section-item-title" id="Debug.get_meta_value">Debug.get_meta_value(object, key)</span>
     </div>
     </dt>
     <dd>
@@ -325,65 +356,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Debug.is_closure" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Debug.is_closure">Debug.is_closure (func)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Returns true if the function is a closure, false otherwise.</p>
-    <p class="section-item-description">
- A closure is a function that contains 'upvalues' or in other words
- has a reference to a local variable defined outside the function's scope.</p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>func</em></strong>
-
-    <strong> : </strong>
-
-
-    <function>
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    <span class="return-text">boolean</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#Debug.object_type" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Debug.object_type">Debug.object_type (object)</span>
+    <span class="section-item-title" id="Debug.object_type">Debug.object_type(object)</span>
     </div>
     </dt>
     <dd>
@@ -439,72 +413,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Debug.print" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Debug.print">Debug.print (message, stack_traceback)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Shows the given message if debug is enabled.</p>
-    <p class="section-item-description"> Uses serpent to print non scalars.</p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>message</em></strong>
-
-    <strong> : </strong>
-
-
-     <table|string|number|boolean>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>stack_traceback</em></strong>
-
-    <strong> : </strong>
-
-
-     <number|nil> levels of stack trace to give, defaults to 1 level if nil
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#Debug.print_position" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Debug.print_position">Debug.print_position (position, message)</span>
+    <span class="section-item-title" id="Debug.print_position">Debug.print_position(position, message)</span>
     </div>
     </dt>
     <dd>
@@ -564,6 +474,112 @@
     <!-- usage end -->
 
     </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Debug.cheat" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Debug.cheat">Debug.cheat(callback)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Executes the given callback if cheating is enabled.</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>callback</em></strong>
+
+    <strong> : </strong>
+
+
+     function
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Debug.is_closure" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Debug.is_closure">Debug.is_closure(func)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns true if the function is a closure, false otherwise.</p>
+    <p class="section-item-description">
+ A closure is a function that contains 'upvalues' or in other words
+ has a reference to a local variable defined outside the function's scope.</p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>func</em></strong>
+
+    <strong> : </strong>
+
+
+    <function>
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    <span class="return-text">boolean</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
     </dl>
 
     <!-- section end -->
@@ -579,7 +595,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-06-29 01:27:33 UTC</i>
+    <i>Last updated 2019-07-20 23:44:09 UTC</i>
     </div>
     </div>
     </div>

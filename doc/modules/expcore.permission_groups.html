@@ -35,14 +35,20 @@
     </div>
 
 
-    <!-- sidebar navigation -->
+<!-- sidebar navigation -->
+<!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    </ul>
+    </li>
+    </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
     <h2>Modules</h2>
     <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.advanced_start.html"><span class="module-name-item">config.advanced_start</span></a></div></li>
@@ -109,6 +115,17 @@
     </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
     <h2>Topics</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
@@ -118,18 +135,17 @@
     </ul>
 
 
-
+    </div>
+    <div class="up-to-top">
     <!-- list of items in a module -->
     <ul class="nav nav-module-contents">
     <li class="nav-item">
-    <h4>Contents of <strong>expcore.permission_groups</strong></h4>
+    <h4>Jump to Section</h4>
     <ul class="nav">
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     </ul>
     </li>
     </ul>
-    </div>
-    <div class="up-to-top">
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
     </div>
@@ -170,76 +186,76 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#Permissions_Groups._prototype:add_player">Permissions_Groups._prototype:add_player (player)</a></td>
-    <td class="summary">Adds a player to this group</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups._prototype:allow">Permissions_Groups._prototype:allow (actions)</a></td>
-    <td class="summary">Sets an action or actions to be allowed for this group even with disallow_all triggered, Do not use in runtime</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups._prototype:allow_all">Permissions_Groups._prototype:allow_all ()</a></td>
-    <td class="summary">Sets the default state for any actions not given to be allowed, useful with :disallow</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups._prototype:create">Permissions_Groups._prototype:create ()</a></td>
-    <td class="summary">Creates or updates the permission group with the configured actions, used internally</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups._prototype:disallow">Permissions_Groups._prototype:disallow (actions)</a></td>
-    <td class="summary">Sets an action or actions to be disallowed for this group even with allow_all triggered, Do not use in runtime</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups._prototype:disallow_all">Permissions_Groups._prototype:disallow_all ()</a></td>
-    <td class="summary">Sets the default state for any action not given to be disallowed, useful with :allow</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups._prototype:get_players">Permissions_Groups._prototype:get_players ([online])</a></td>
-    <td class="summary">Returns all player that are in this group with the option to filter to online/offline only</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups._prototype:get_raw">Permissions_Groups._prototype:get_raw ()</a></td>
-    <td class="summary">Returns the LuaPermissionGroup that was created with this group object, used internally</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups._prototype:is_allowed">Permissions_Groups._prototype:is_allowed (action)</a></td>
-    <td class="summary">Returns if an input action is allowed for this group</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups._prototype:print">Permissions_Groups._prototype:print (message)</a></td>
-    <td class="summary">Prints a message to every player in this group</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups._prototype:remove_player">Permissions_Groups._prototype:remove_player (player)</a></td>
-    <td class="summary">Removes a player from this group</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups._prototype:set_action">Permissions_Groups._prototype:set_action (action, state)</a></td>
-    <td class="summary">Sets the allow state of an action for this group, used internally but is safe to use else where</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups.get_group_by_name">Permissions_Groups.get_group_by_name (name)</a></td>
-    <td class="summary">Returns the group with the given name, case sensitive</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups.get_group_from_player">Permissions_Groups.get_group_from_player (player)</a></td>
-    <td class="summary">Returns the group that a player is in</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups.lockdown_permissions">Permissions_Groups.lockdown_permissions (exempt)</a></td>
-    <td class="summary">Removes all permissions from every permission group except for "Default" and any passed as exempt</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Permissions_Groups.new_group">Permissions_Groups.new_group (name)</a></td>
+    <td class="name"><a href="#Permissions_Groups.new_group">Permissions_Groups.new_group(name)</a></td>
     <td class="summary">Defines a new permission group that can have it actions set in the config</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Permissions_Groups.reload_permissions">Permissions_Groups.reload_permissions ()</a></td>
+    <td class="name"><a href="#Permissions_Groups.get_group_by_name">Permissions_Groups.get_group_by_name(name)</a></td>
+    <td class="summary">Returns the group with the given name, case sensitive</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups.get_group_from_player">Permissions_Groups.get_group_from_player(player)</a></td>
+    <td class="summary">Returns the group that a player is in</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups.reload_permissions">Permissions_Groups.reload_permissions()</a></td>
     <td class="summary">Reloads/creates all permission groups and sets them to they configured state</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Permissions_Groups.set_player_group">Permissions_Groups.set_player_group (player, group)</a></td>
+    <td class="name"><a href="#Permissions_Groups.lockdown_permissions">Permissions_Groups.lockdown_permissions(exempt)</a></td>
+    <td class="summary">Removes all permissions from every permission group except for "Default" and any passed as exempt</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups.set_player_group">Permissions_Groups.set_player_group(player, group)</a></td>
     <td class="summary">Sets a player's group to the one given, a player can only have one group at a time</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups._prototype:set_action">Permissions_Groups._prototype:set_action(action, state)</a></td>
+    <td class="summary">Sets the allow state of an action for this group, used internally but is safe to use else where</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups._prototype:allow">Permissions_Groups._prototype:allow(actions)</a></td>
+    <td class="summary">Sets an action or actions to be allowed for this group even with disallow_all triggered, Do not use in runtime</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups._prototype:disallow">Permissions_Groups._prototype:disallow(actions)</a></td>
+    <td class="summary">Sets an action or actions to be disallowed for this group even with allow_all triggered, Do not use in runtime</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups._prototype:allow_all">Permissions_Groups._prototype:allow_all()</a></td>
+    <td class="summary">Sets the default state for any actions not given to be allowed, useful with :disallow</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups._prototype:disallow_all">Permissions_Groups._prototype:disallow_all()</a></td>
+    <td class="summary">Sets the default state for any action not given to be disallowed, useful with :allow</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups._prototype:is_allowed">Permissions_Groups._prototype:is_allowed(action)</a></td>
+    <td class="summary">Returns if an input action is allowed for this group</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups._prototype:get_raw">Permissions_Groups._prototype:get_raw()</a></td>
+    <td class="summary">Returns the LuaPermissionGroup that was created with this group object, used internally</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups._prototype:create">Permissions_Groups._prototype:create()</a></td>
+    <td class="summary">Creates or updates the permission group with the configured actions, used internally</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups._prototype:add_player">Permissions_Groups._prototype:add_player(player)</a></td>
+    <td class="summary">Adds a player to this group</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups._prototype:remove_player">Permissions_Groups._prototype:remove_player(player)</a></td>
+    <td class="summary">Removes a player from this group</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups._prototype:get_players">Permissions_Groups._prototype:get_players([online])</a></td>
+    <td class="summary">Returns all player that are in this group with the option to filter to online/offline only</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Permissions_Groups._prototype:print">Permissions_Groups._prototype:print(message)</a></td>
+    <td class="summary">Prints a message to every player in this group</td>
     </tr>
     </tbody>
     </table>
@@ -253,14 +269,128 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Permissions_Groups._prototype:add_player" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups._prototype:add_player">Permissions_Groups._prototype:add_player (player)</span>
+    <a href="#Permissions_Groups.new_group" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups.new_group">Permissions_Groups.new_group(name)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Adds a player to this group</p>
+    <p class="section-item-summary">Defines a new permission group that can have it actions set in the config</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the new group
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">Permissions_Groups._prototype</span></span>)
+    <span class="return-text">the new group made with function to allow and disallow actions</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Permissions_Groups.get_group_by_name" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups.get_group_by_name">Permissions_Groups.get_group_by_name(name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns the group with the given name, case sensitive</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the group to get
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">Permissions_Groups._prototype</span> or <a class="type" href="https://www.lua.org/pil/2.1.html">nil</a></span>)
+    <span class="return-text">the group with that name or nil if non found</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Permissions_Groups.get_group_from_player" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups.get_group_from_player">Permissions_Groups.get_group_from_player(player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns the group that a player is in</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -280,7 +410,164 @@
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
 
-     LuaPlayer the player you want to add to this group can be name or index etc
+     the player to get the group of can be name index etc
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">Permissions_Groups._prototype</span> or <a class="type" href="https://www.lua.org/pil/2.1.html">nil</a></span>)
+    <span class="return-text">the group with that player or nil if non found</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Permissions_Groups.reload_permissions" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups.reload_permissions">Permissions_Groups.reload_permissions()</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Reloads/creates all permission groups and sets them to they configured state</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Permissions_Groups.lockdown_permissions" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups.lockdown_permissions">Permissions_Groups.lockdown_permissions(exempt)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Removes all permissions from every permission group except for "Default" and any passed as exempt</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>exempt</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <span class="type">Array<string></span></span>)
+
+     groups that you want to be except, "Default" is always exempt
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+    <span class="return-text">the number of groups that had they permissions removed</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Permissions_Groups.set_player_group" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups.set_player_group">Permissions_Groups.set_player_group(player, group)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sets a player's group to the one given, a player can only have one group at a time</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to effect can be name index etc
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>group</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the group to give to the player
 
     </li>
 
@@ -310,487 +597,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Permissions_Groups._prototype:allow" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups._prototype:allow">Permissions_Groups._prototype:allow (actions)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Sets an action or actions to be allowed for this group even with disallow_all triggered, Do not use in runtime</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>actions</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <span class="type">Array<string></span></span>)
-
-     the action or actions that you want to allow for this group
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><span class="type">Permissions_Groups._prototype</span></span>)
-    <span class="return-text">returns self so function can be chained</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Permissions_Groups._prototype:allow_all" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups._prototype:allow_all">Permissions_Groups._prototype:allow_all ()</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Sets the default state for any actions not given to be allowed, useful with :disallow</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><span class="type">Permissions_Groups._prototype</span></span>)
-    <span class="return-text">returns self so function can be chained</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Permissions_Groups._prototype:create" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups._prototype:create">Permissions_Groups._prototype:create ()</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Creates or updates the permission group with the configured actions, used internally</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPermissionGroup.html">LuaPermissionGroup</a></span>)
-    <span class="return-text">the permission group that was created</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Permissions_Groups._prototype:disallow" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups._prototype:disallow">Permissions_Groups._prototype:disallow (actions)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Sets an action or actions to be disallowed for this group even with allow_all triggered, Do not use in runtime</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>actions</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <span class="type">Array<string></span></span>)
-
-     the action or actions that you want to disallow for this group
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><span class="type">Permissions_Groups._prototype</span></span>)
-    <span class="return-text">returns self so function can be chained</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Permissions_Groups._prototype:disallow_all" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups._prototype:disallow_all">Permissions_Groups._prototype:disallow_all ()</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Sets the default state for any action not given to be disallowed, useful with :allow</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><span class="type">Permissions_Groups._prototype</span></span>)
-    <span class="return-text">returns self so function can be chained</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Permissions_Groups._prototype:get_players" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups._prototype:get_players">Permissions_Groups._prototype:get_players ([online])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Returns all player that are in this group with the option to filter to online/offline only</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>online</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     if nil returns all players, if true online players only, if false returns online players only
-
-    (<em>optional</em>)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">a table of players that are in this group; filtered if online param is given</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Permissions_Groups._prototype:get_raw" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups._prototype:get_raw">Permissions_Groups._prototype:get_raw ()</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Returns the LuaPermissionGroup that was created with this group object, used internally</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPermissionGroup.html">LuaPermissionGroup</a></span>)
-    <span class="return-text">the raw lua permission group</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Permissions_Groups._prototype:is_allowed" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups._prototype:is_allowed">Permissions_Groups._prototype:is_allowed (action)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Returns if an input action is allowed for this group</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>action</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="http://lua-api.factorio.com/latest/defines.html#defines.input">defines.input_action</a></span>)
-
-     the action that you want to test for
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">true if the group is allowed the action, false other wise</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Permissions_Groups._prototype:print" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups._prototype:print">Permissions_Groups._prototype:print (message)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Prints a message to every player in this group</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>message</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the message that you want to send to the players
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
-    <span class="return-text">the number of players that received the message</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Permissions_Groups._prototype:remove_player" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups._prototype:remove_player">Permissions_Groups._prototype:remove_player (player)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Removes a player from this group</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
-
-     LuaPlayer the player you want to remove from this group can be name or index etc
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">true if the player was removed successfully, false other wise</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#Permissions_Groups._prototype:set_action" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups._prototype:set_action">Permissions_Groups._prototype:set_action (action, state)</span>
+    <span class="section-item-title" id="Permissions_Groups._prototype:set_action">Permissions_Groups._prototype:set_action(action, state)</span>
     </div>
     </dt>
     <dd>
@@ -862,14 +670,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Permissions_Groups.get_group_by_name" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups.get_group_by_name">Permissions_Groups.get_group_by_name (name)</span>
+    <a href="#Permissions_Groups._prototype:allow" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups._prototype:allow">Permissions_Groups._prototype:allow(actions)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Returns the group with the given name, case sensitive</p>
+    <p class="section-item-summary">Sets an action or actions to be allowed for this group even with disallow_all triggered, Do not use in runtime</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -883,184 +691,13 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name of the group to get
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><span class="type">Permissions_Groups._prototype</span> or <a class="type" href="https://www.lua.org/pil/2.1.html">nil</a></span>)
-    <span class="return-text">the group with that name or nil if non found</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Permissions_Groups.get_group_from_player" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups.get_group_from_player">Permissions_Groups.get_group_from_player (player)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Returns the group that a player is in</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
-
-     the player to get the group of can be name index etc
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><span class="type">Permissions_Groups._prototype</span> or <a class="type" href="https://www.lua.org/pil/2.1.html">nil</a></span>)
-    <span class="return-text">the group with that player or nil if non found</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Permissions_Groups.lockdown_permissions" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups.lockdown_permissions">Permissions_Groups.lockdown_permissions (exempt)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Removes all permissions from every permission group except for "Default" and any passed as exempt</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>exempt</em></strong>
+    <strong><em>actions</em></strong>
 
     <strong> : </strong>
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <span class="type">Array<string></span></span>)
 
-     groups that you want to be except, "Default" is always exempt
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
-    <span class="return-text">the number of groups that had they permissions removed</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Permissions_Groups.new_group" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups.new_group">Permissions_Groups.new_group (name)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Defines a new permission group that can have it actions set in the config</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name of the new group
+     the action or actions that you want to allow for this group
 
     </li>
 
@@ -1074,7 +711,7 @@
     <ul>
     <li>
     (<span class="types"><span class="type">Permissions_Groups._prototype</span></span>)
-    <span class="return-text">the new group made with function to allow and disallow actions</span>
+    <span class="return-text">returns self so function can be chained</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -1090,20 +727,50 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Permissions_Groups.reload_permissions" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups.reload_permissions">Permissions_Groups.reload_permissions ()</span>
+    <a href="#Permissions_Groups._prototype:disallow" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups._prototype:disallow">Permissions_Groups._prototype:disallow(actions)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Reloads/creates all permission groups and sets them to they configured state</p>
+    <p class="section-item-summary">Sets an action or actions to be disallowed for this group even with allow_all triggered, Do not use in runtime</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>actions</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <span class="type">Array<string></span></span>)
+
+     the action or actions that you want to disallow for this group
+
+    </li>
+
+
+    </ul>
+
     <!-- parameters end -->
 
     <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">Permissions_Groups._prototype</span></span>)
+    <span class="return-text">returns self so function can be chained</span>
+    </li>
+    </ul>
     <!-- returns end -->
 
 
@@ -1117,14 +784,207 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Permissions_Groups.set_player_group" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Permissions_Groups.set_player_group">Permissions_Groups.set_player_group (player, group)</span>
+    <a href="#Permissions_Groups._prototype:allow_all" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups._prototype:allow_all">Permissions_Groups._prototype:allow_all()</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Sets a player's group to the one given, a player can only have one group at a time</p>
+    <p class="section-item-summary">Sets the default state for any actions not given to be allowed, useful with :disallow</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">Permissions_Groups._prototype</span></span>)
+    <span class="return-text">returns self so function can be chained</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Permissions_Groups._prototype:disallow_all" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups._prototype:disallow_all">Permissions_Groups._prototype:disallow_all()</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sets the default state for any action not given to be disallowed, useful with :allow</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">Permissions_Groups._prototype</span></span>)
+    <span class="return-text">returns self so function can be chained</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Permissions_Groups._prototype:is_allowed" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups._prototype:is_allowed">Permissions_Groups._prototype:is_allowed(action)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns if an input action is allowed for this group</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>action</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="http://lua-api.factorio.com/latest/defines.html#defines.input">defines.input_action</a></span>)
+
+     the action that you want to test for
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if the group is allowed the action, false other wise</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Permissions_Groups._prototype:get_raw" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups._prototype:get_raw">Permissions_Groups._prototype:get_raw()</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns the LuaPermissionGroup that was created with this group object, used internally</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPermissionGroup.html">LuaPermissionGroup</a></span>)
+    <span class="return-text">the raw lua permission group</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Permissions_Groups._prototype:create" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups._prototype:create">Permissions_Groups._prototype:create()</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Creates or updates the permission group with the configured actions, used internally</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPermissionGroup.html">LuaPermissionGroup</a></span>)
+    <span class="return-text">the permission group that was created</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Permissions_Groups._prototype:add_player" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups._prototype:add_player">Permissions_Groups._prototype:add_player(player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds a player to this group</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -1144,23 +1004,7 @@
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
 
-     the player to effect can be name index etc
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>group</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name of the group to give to the player
+     LuaPlayer the player you want to add to this group can be name or index etc
 
     </li>
 
@@ -1175,6 +1019,178 @@
     <li>
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
     <span class="return-text">true if the player was added successfully, false other wise</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Permissions_Groups._prototype:remove_player" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups._prototype:remove_player">Permissions_Groups._prototype:remove_player(player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Removes a player from this group</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     LuaPlayer the player you want to remove from this group can be name or index etc
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if the player was removed successfully, false other wise</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Permissions_Groups._prototype:get_players" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups._prototype:get_players">Permissions_Groups._prototype:get_players([online])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns all player that are in this group with the option to filter to online/offline only</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>online</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     if nil returns all players, if true online players only, if false returns online players only
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">a table of players that are in this group; filtered if online param is given</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Permissions_Groups._prototype:print" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Permissions_Groups._prototype:print">Permissions_Groups._prototype:print(message)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Prints a message to every player in this group</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>message</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the message that you want to send to the players
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+    <span class="return-text">the number of players that received the message</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -1202,7 +1218,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-06-29 01:27:33 UTC</i>
+    <i>Last updated 2019-07-20 23:44:09 UTC</i>
     </div>
     </div>
     </div>

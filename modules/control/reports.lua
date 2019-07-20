@@ -1,9 +1,12 @@
 --[[-- Control Module - Reports
     - Adds a way to report players and store report messages.
-    @module Reports
+    @control Reports
     @alias Reports
 
     @usage
+    -- import the module from the control modules
+    local Reports = require 'modules.control.reports'
+
     -- This will place a report on "MrBiter" (must be a valid player) the report will have been made
     -- by "Cooldude2606" (must be the player name) with the reason 'Liking biters too much' this can be
     -- seen by using Reports.get_report.
@@ -21,7 +24,11 @@
 
 ]]
 
+--- Allows getting player from any value
+-- @dep utils.game
 local Game = require 'utils.game'
+--- Allows storing of data in global table
+-- @dep utils.global
 local Global = require 'utils.global'
 
 local valid_player = Game.get_player_from_any
@@ -49,7 +56,7 @@ Global.register(user_reports,function(tbl)
     user_reports = tbl
 end)
 
---- Get functions.
+--- Getters.
 -- Functions used to get information from reports
 -- @section get-functions
 
@@ -112,7 +119,7 @@ function Reports.count_reports(player,custom_count)
     end
 end
 
---- Set functions.
+--- Setters.
 -- Functions used to get information from reports
 -- @section set-functions
 

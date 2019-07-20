@@ -35,14 +35,20 @@
     </div>
 
 
-    <!-- sidebar navigation -->
+<!-- sidebar navigation -->
+<!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    </ul>
+    </li>
+    </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
     <h2>Modules</h2>
     <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.advanced_start.html"><span class="module-name-item">config.advanced_start</span></a></div></li>
@@ -109,6 +115,17 @@
     </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
     <h2>Topics</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
@@ -118,18 +135,17 @@
     </ul>
 
 
-
+    </div>
+    <div class="up-to-top">
     <!-- list of items in a module -->
     <ul class="nav nav-module-contents">
     <li class="nav-item">
-    <h4>Contents of <strong>expcore.store</strong></h4>
+    <h4>Jump to Section</h4>
     <ul class="nav">
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     </ul>
     </li>
     </ul>
-    </div>
-    <div class="up-to-top">
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
     </div>
@@ -167,33 +183,33 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#Store.clear">Store.clear (location[, child][, from_sync])</a></td>
-    <td class="summary">Sets the value at a location to nil, this location must be registered</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Store.get">Store.get (location[, child][, allow_unregistered=false])</a></td>
-    <td class="summary">Gets the value stored at a location, this location must be registered</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Store.get_children">Store.get_children (location)</a></td>
-    <td class="summary">Gets all non nil children at a location, children can be added and removed during runtime
- this is similar to Store.get but will always return a table even if it is empty</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Store.is_registered">Store.is_registered (location)</a></td>
+    <td class="name"><a href="#Store.is_registered">Store.is_registered(location)</a></td>
     <td class="summary">Check for if a lcoation is registered</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Store.register">Store.register ([location][, synced][, callback])</a></td>
+    <td class="name"><a href="#Store.uid_location">Store.uid_location()</a></td>
+    <td class="summary">Returns a unqiue name that can be used for a store</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Store.register">Store.register([location][, synced][, callback])</a></td>
     <td class="summary">Registers a new location with an update callback which is triggered when the value updates</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Store.set">Store.set (location[, child], value[, from_sync])</a></td>
+    <td class="name"><a href="#Store.get">Store.get(location[, child][, allow_unregistered=false])</a></td>
+    <td class="summary">Gets the value stored at a location, this location must be registered</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Store.set">Store.set(location[, child], value[, from_sync])</a></td>
     <td class="summary">Sets the value at a location, this location must be registered</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Store.uid_location">Store.uid_location ()</a></td>
-    <td class="summary">Returns a unqiue name that can be used for a store</td>
+    <td class="name"><a href="#Store.clear">Store.clear(location[, child][, from_sync])</a></td>
+    <td class="summary">Sets the value at a location to nil, this location must be registered</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Store.get_children">Store.get_children(location)</a></td>
+    <td class="summary">Gets all non nil children at a location, children can be added and removed during runtime
+ this is similar to Store.get but will always return a table even if it is empty</td>
     </tr>
     </tbody>
     </table>
@@ -207,248 +223,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Store.clear" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Store.clear">Store.clear (location[, child][, from_sync])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Sets the value at a location to nil, this location must be registered</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>location</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the location to set the data to
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>child</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the child location if required
-
-    (<em>optional</em>)
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>from_sync</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     set this true to avoid an output to the sync file
-
-    (<em>optional</em>)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">true if it was successful</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Store.get" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Store.get">Store.get (location[, child][, allow_unregistered=false])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Gets the value stored at a location, this location must be registered</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>location</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the location to get the data from
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>child</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the child location if required
-
-    (<em>optional</em>)
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>allow_unregistered</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     when true no error is returned if the location is not registered
-
-    (<em>default</em>: false)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><span class="type">any</span></span>)
-    <span class="return-text">the data which was stored at the location</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Store.get_children" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Store.get_children">Store.get_children (location)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Gets all non nil children at a location, children can be added and removed during runtime
- this is similar to Store.get but will always return a table even if it is empty</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>location</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the location to get the children of
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">a table containg all the children names</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#Store.is_registered" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Store.is_registered">Store.is_registered (location)</span>
+    <span class="section-item-title" id="Store.is_registered">Store.is_registered(location)</span>
     </div>
     </dt>
     <dd>
@@ -504,8 +280,42 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
+    <a href="#Store.uid_location" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Store.uid_location">Store.uid_location()</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns a unqiue name that can be used for a store</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    <span class="return-text">a unqiue name</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
     <a href="#Store.register" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Store.register">Store.register ([location][, synced][, callback])</span>
+    <span class="section-item-title" id="Store.register">Store.register([location][, synced][, callback])</span>
     </div>
     </dt>
     <dd>
@@ -596,8 +406,99 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
+    <a href="#Store.get" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Store.get">Store.get(location[, child][, allow_unregistered=false])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets the value stored at a location, this location must be registered</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>location</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the location to get the data from
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>child</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the child location if required
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>allow_unregistered</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true no error is returned if the location is not registered
+
+    (<em>default</em>: false)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">any</span></span>)
+    <span class="return-text">the data which was stored at the location</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
     <a href="#Store.set" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Store.set">Store.set (location[, child], value[, from_sync])</span>
+    <span class="section-item-title" id="Store.set">Store.set(location[, child], value[, from_sync])</span>
     </div>
     </dt>
     <dd>
@@ -703,25 +604,140 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Store.uid_location" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Store.uid_location">Store.uid_location ()</span>
+    <a href="#Store.clear" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Store.clear">Store.clear(location[, child][, from_sync])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Returns a unqiue name that can be used for a store</p>
+    <p class="section-item-summary">Sets the value at a location to nil, this location must be registered</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>location</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the location to set the data to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>child</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the child location if required
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>from_sync</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     set this true to avoid an output to the sync file
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
     <!-- parameters end -->
 
     <!-- returns start -->
     <strong>Returns:</strong>
     <ul>
     <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if it was successful</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Store.get_children" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Store.get_children">Store.get_children(location)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets all non nil children at a location, children can be added and removed during runtime
+ this is similar to Store.get but will always return a table even if it is empty</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>location</em></strong>
+
+    <strong> : </strong>
+
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-    <span class="return-text">a unqiue name</span>
+
+     the location to get the children of
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">a table containg all the children names</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -749,7 +765,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-06-29 01:27:33 UTC</i>
+    <i>Last updated 2019-07-20 23:44:09 UTC</i>
     </div>
     </div>
     </div>

@@ -35,14 +35,20 @@
     </div>
 
 
-    <!-- sidebar navigation -->
+<!-- sidebar navigation -->
+<!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    </ul>
+    </li>
+    </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
     <h2>Modules</h2>
     <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.advanced_start.html"><span class="module-name-item">config.advanced_start</span></a></div></li>
@@ -109,6 +115,17 @@
     </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
     <h2>Topics</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
@@ -118,18 +135,17 @@
     </ul>
 
 
-
+    </div>
+    <div class="up-to-top">
     <!-- list of items in a module -->
     <ul class="nav nav-module-contents">
     <li class="nav-item">
-    <h4>Contents of <strong>expcore.gui.concepts.center</strong></h4>
+    <h4>Jump to Section</h4>
     <ul class="nav">
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     </ul>
     </li>
     </ul>
-    </div>
-    <div class="up-to-top">
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
     </div>
@@ -167,48 +183,48 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#CenterFrames._prototype:draw_frame">CenterFrames._prototype:draw_frame (player)</a></td>
-    <td class="summary">Draws this frame to the player, if already open does nothing (will call on_draw to draw to the frame)</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#CenterFrames._prototype:event_handler">CenterFrames._prototype:event_handler ([action=update])</a></td>
-    <td class="summary">Creates an event handler that will trigger one of its functions, use with Event.add</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#CenterFrames._prototype:redraw_frame">CenterFrames._prototype:redraw_frame (player)</a></td>
-    <td class="summary">Draws this frame to the player, if already open it will remove it and redraw it (will call on_draw to draw to the frame)</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#CenterFrames._prototype:set_auto_focus">CenterFrames._prototype:set_auto_focus ([state=true])</a></td>
-    <td class="summary">Sets the frame to be the current active gui when opened and closes all other frames</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#CenterFrames._prototype:toggle_frame">CenterFrames._prototype:toggle_frame (player)</a></td>
-    <td class="summary">Toggles if the frame is open, if open it will close it and if closed it will open it</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#CenterFrames.clear_flow">CenterFrames.clear_flow (player)</a></td>
-    <td class="summary">Clears the center flow for a player</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#CenterFrames.draw_frame">CenterFrames.draw_frame (player, name)</a></td>
-    <td class="summary">Draws the center frame for a player, if already open then will do nothing</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#CenterFrames.get_flow">CenterFrames.get_flow (player)</a></td>
+    <td class="name"><a href="#CenterFrames.get_flow">CenterFrames.get_flow(player)</a></td>
     <td class="summary">Gets the center flow for a player</td>
     </tr>
     <tr>
-    <td class="name"><a href="#CenterFrames.new_frame">CenterFrames.new_frame (permision_name)</a></td>
-    <td class="summary">Creates a new center frame define</td>
+    <td class="name"><a href="#CenterFrames.clear_flow">CenterFrames.clear_flow(player)</a></td>
+    <td class="summary">Clears the center flow for a player</td>
     </tr>
     <tr>
-    <td class="name"><a href="#CenterFrames.redraw_frame">CenterFrames.redraw_frame (player, name)</a></td>
+    <td class="name"><a href="#CenterFrames.draw_frame">CenterFrames.draw_frame(player, name)</a></td>
+    <td class="summary">Draws the center frame for a player, if already open then will do nothing</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#CenterFrames.redraw_frame">CenterFrames.redraw_frame(player, name)</a></td>
     <td class="summary">Draws the center frame for a player, if already open then will destroy it and redraw</td>
     </tr>
     <tr>
-    <td class="name"><a href="#CenterFrames.toggle_frame">CenterFrames.toggle_frame (player, name[, state])</a></td>
+    <td class="name"><a href="#CenterFrames.toggle_frame">CenterFrames.toggle_frame(player, name[, state])</a></td>
     <td class="summary">Toggles if the frame is currently open or not, will open if closed and close if open</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#CenterFrames.new_frame">CenterFrames.new_frame(permision_name)</a></td>
+    <td class="summary">Creates a new center frame define</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#CenterFrames._prototype:set_auto_focus">CenterFrames._prototype:set_auto_focus([state=true])</a></td>
+    <td class="summary">Sets the frame to be the current active gui when opened and closes all other frames</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#CenterFrames._prototype:draw_frame">CenterFrames._prototype:draw_frame(player)</a></td>
+    <td class="summary">Draws this frame to the player, if already open does nothing (will call on_draw to draw to the frame)</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#CenterFrames._prototype:redraw_frame">CenterFrames._prototype:redraw_frame(player)</a></td>
+    <td class="summary">Draws this frame to the player, if already open it will remove it and redraw it (will call on_draw to draw to the frame)</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#CenterFrames._prototype:toggle_frame">CenterFrames._prototype:toggle_frame(player)</a></td>
+    <td class="summary">Toggles if the frame is open, if open it will close it and if closed it will open it</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#CenterFrames._prototype:event_handler">CenterFrames._prototype:event_handler([action=update])</a></td>
+    <td class="summary">Creates an event handler that will trigger one of its functions, use with Event.add</td>
     </tr>
     </tbody>
     </table>
@@ -222,14 +238,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#CenterFrames._prototype:draw_frame" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="CenterFrames._prototype:draw_frame">CenterFrames._prototype:draw_frame (player)</span>
+    <a href="#CenterFrames.get_flow" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="CenterFrames.get_flow">CenterFrames.get_flow(player)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Draws this frame to the player, if already open does nothing (will call on_draw to draw to the frame)</p>
+    <p class="section-item-summary">Gets the center flow for a player</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -249,7 +265,7 @@
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
 
-     the player to draw the frame for
+     the player to get the flow for
 
     </li>
 
@@ -263,223 +279,7 @@
     <ul>
     <li>
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
-    <span class="return-text">the new frame that was drawn</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#CenterFrames._prototype:event_handler" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="CenterFrames._prototype:event_handler">CenterFrames._prototype:event_handler ([action=update])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Creates an event handler that will trigger one of its functions, use with Event.add</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>action</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the action to take on this event
-
-    (<em>default</em>: update)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#CenterFrames._prototype:redraw_frame" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="CenterFrames._prototype:redraw_frame">CenterFrames._prototype:redraw_frame (player)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Draws this frame to the player, if already open it will remove it and redraw it (will call on_draw to draw to the frame)</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
-
-     the player to draw the frame for
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
-    <span class="return-text">the new frame that was drawn</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#CenterFrames._prototype:set_auto_focus" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="CenterFrames._prototype:set_auto_focus">CenterFrames._prototype:set_auto_focus ([state=true])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Sets the frame to be the current active gui when opened and closes all other frames</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>state</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     when true will auto close other frames and set this frame as player.opened
-
-    (<em>default</em>: true)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#CenterFrames._prototype:toggle_frame" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="CenterFrames._prototype:toggle_frame">CenterFrames._prototype:toggle_frame (player)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Toggles if the frame is open, if open it will close it and if closed it will open it</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
-
-     the player to draw the frame for
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">with the gui frame is now open</span>
+    <span class="return-text">the center flow</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -496,7 +296,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#CenterFrames.clear_flow" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="CenterFrames.clear_flow">CenterFrames.clear_flow (player)</span>
+    <span class="section-item-title" id="CenterFrames.clear_flow">CenterFrames.clear_flow(player)</span>
     </div>
     </dt>
     <dd>
@@ -546,7 +346,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#CenterFrames.draw_frame" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="CenterFrames.draw_frame">CenterFrames.draw_frame (player, name)</span>
+    <span class="section-item-title" id="CenterFrames.draw_frame">CenterFrames.draw_frame(player, name)</span>
     </div>
     </dt>
     <dd>
@@ -618,122 +418,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#CenterFrames.get_flow" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="CenterFrames.get_flow">CenterFrames.get_flow (player)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Gets the center flow for a player</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
-
-     the player to get the flow for
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
-    <span class="return-text">the center flow</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#CenterFrames.new_frame" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="CenterFrames.new_frame">CenterFrames.new_frame (permision_name)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Creates a new center frame define</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>permision_name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name that can be used with the permision system
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the new center frame define</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#CenterFrames.redraw_frame" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="CenterFrames.redraw_frame">CenterFrames.redraw_frame (player, name)</span>
+    <span class="section-item-title" id="CenterFrames.redraw_frame">CenterFrames.redraw_frame(player, name)</span>
     </div>
     </dt>
     <dd>
@@ -806,7 +492,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#CenterFrames.toggle_frame" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="CenterFrames.toggle_frame">CenterFrames.toggle_frame (player, name[, state])</span>
+    <span class="section-item-title" id="CenterFrames.toggle_frame">CenterFrames.toggle_frame(player, name[, state])</span>
     </div>
     </dt>
     <dd>
@@ -892,6 +578,336 @@
     <!-- usage end -->
 
     </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#CenterFrames.new_frame" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="CenterFrames.new_frame">CenterFrames.new_frame(permision_name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Creates a new center frame define</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>permision_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name that can be used with the permision system
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the new center frame define</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#CenterFrames._prototype:set_auto_focus" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="CenterFrames._prototype:set_auto_focus">CenterFrames._prototype:set_auto_focus([state=true])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sets the frame to be the current active gui when opened and closes all other frames</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>state</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true will auto close other frames and set this frame as player.opened
+
+    (<em>default</em>: true)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#CenterFrames._prototype:draw_frame" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="CenterFrames._prototype:draw_frame">CenterFrames._prototype:draw_frame(player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Draws this frame to the player, if already open does nothing (will call on_draw to draw to the frame)</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to draw the frame for
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+    <span class="return-text">the new frame that was drawn</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#CenterFrames._prototype:redraw_frame" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="CenterFrames._prototype:redraw_frame">CenterFrames._prototype:redraw_frame(player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Draws this frame to the player, if already open it will remove it and redraw it (will call on_draw to draw to the frame)</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to draw the frame for
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+    <span class="return-text">the new frame that was drawn</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#CenterFrames._prototype:toggle_frame" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="CenterFrames._prototype:toggle_frame">CenterFrames._prototype:toggle_frame(player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Toggles if the frame is open, if open it will close it and if closed it will open it</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to draw the frame for
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">with the gui frame is now open</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#CenterFrames._prototype:event_handler" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="CenterFrames._prototype:event_handler">CenterFrames._prototype:event_handler([action=update])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Creates an event handler that will trigger one of its functions, use with Event.add</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>action</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the action to take on this event
+
+    (<em>default</em>: update)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
     </dl>
 
     <!-- section end -->
@@ -907,7 +923,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-06-29 01:27:33 UTC</i>
+    <i>Last updated 2019-07-20 23:44:09 UTC</i>
     </div>
     </div>
     </div>

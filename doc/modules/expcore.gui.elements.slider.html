@@ -35,14 +35,20 @@
     </div>
 
 
-    <!-- sidebar navigation -->
+<!-- sidebar navigation -->
+<!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    </ul>
+    </li>
+    </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
     <h2>Modules</h2>
     <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.advanced_start.html"><span class="module-name-item">config.advanced_start</span></a></div></li>
@@ -109,6 +115,17 @@
     </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
     <h2>Topics</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
@@ -118,18 +135,17 @@
     </ul>
 
 
-
+    </div>
+    <div class="up-to-top">
     <!-- list of items in a module -->
     <ul class="nav nav-module-contents">
     <li class="nav-item">
-    <h4>Contents of <strong>expcore.gui.elements.slider</strong></h4>
+    <h4>Jump to Section</h4>
     <ul class="nav">
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     </ul>
     </li>
     </ul>
-    </div>
-    <div class="up-to-top">
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
     </div>
@@ -167,20 +183,20 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#Slider._prototype:draw_label">Slider._prototype:draw_label (element)</a></td>
-    <td class="summary">Draws a new label and links its value to the value of this slider, if no store then it will only show one value per player</td>
+    <td class="name"><a href="#Slider.new_slider">Slider.new_slider([name])</a></td>
+    <td class="summary">Creates a new slider element define</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Slider._prototype:enable_auto_draw_label">Slider._prototype:enable_auto_draw_label ([state=true])</a></td>
-    <td class="summary">Enables auto draw of the label, the label will share the same parent element as the slider</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Slider._prototype:set_range">Slider._prototype:set_range ([min][, max])</a></td>
+    <td class="name"><a href="#Slider._prototype:set_range">Slider._prototype:set_range([min][, max])</a></td>
     <td class="summary">Sets the range of a slider, if not used will use default values for a slider</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Slider.new_slider">Slider.new_slider ([name])</a></td>
-    <td class="summary">Creates a new slider element define</td>
+    <td class="name"><a href="#Slider._prototype:draw_label">Slider._prototype:draw_label(element)</a></td>
+    <td class="summary">Draws a new label and links its value to the value of this slider, if no store then it will only show one value per player</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Slider._prototype:enable_auto_draw_label">Slider._prototype:enable_auto_draw_label([state=true])</a></td>
+    <td class="summary">Enables auto draw of the label, the label will share the same parent element as the slider</td>
     </tr>
     </tbody>
     </table>
@@ -194,14 +210,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Slider._prototype:draw_label" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Slider._prototype:draw_label">Slider._prototype:draw_label (element)</span>
+    <a href="#Slider.new_slider" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Slider.new_slider">Slider.new_slider([name])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Draws a new label and links its value to the value of this slider, if no store then it will only show one value per player</p>
+    <p class="section-item-summary">Creates a new slider element define</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -215,14 +231,15 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>element</em></strong>
+    <strong><em>name</em></strong>
 
     <strong> : </strong>
 
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the parent element that the lable will be drawn to
+     the optional debug name that can be added
 
+    (<em>optional</em>)
     </li>
 
 
@@ -234,66 +251,8 @@
     <strong>Returns:</strong>
     <ul>
     <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
-    <span class="return-text">the new label element so that styles can be applied</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Slider._prototype:enable_auto_draw_label" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Slider._prototype:enable_auto_draw_label">Slider._prototype:enable_auto_draw_label ([state=true])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Enables auto draw of the label, the label will share the same parent element as the slider</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>state</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     when false will disable the auto draw of the label
-
-    (<em>default</em>: true)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><span class="type">self</span></span>)
-    <span class="return-text">the define to allow chaining</span>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the new slider element define</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -310,7 +269,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Slider._prototype:set_range" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Slider._prototype:set_range">Slider._prototype:set_range ([min][, max])</span>
+    <span class="section-item-title" id="Slider._prototype:set_range">Slider._prototype:set_range([min][, max])</span>
     </div>
     </dt>
     <dd>
@@ -384,14 +343,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Slider.new_slider" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Slider.new_slider">Slider.new_slider ([name])</span>
+    <a href="#Slider._prototype:draw_label" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Slider._prototype:draw_label">Slider._prototype:draw_label(element)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Creates a new slider element define</p>
+    <p class="section-item-summary">Draws a new label and links its value to the value of this slider, if no store then it will only show one value per player</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -405,15 +364,14 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>name</em></strong>
+    <strong><em>element</em></strong>
 
     <strong> : </strong>
 
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
 
-     the optional debug name that can be added
+     the parent element that the lable will be drawn to
 
-    (<em>optional</em>)
     </li>
 
 
@@ -425,8 +383,66 @@
     <strong>Returns:</strong>
     <ul>
     <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the new slider element define</span>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+    <span class="return-text">the new label element so that styles can be applied</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Slider._prototype:enable_auto_draw_label" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Slider._prototype:enable_auto_draw_label">Slider._prototype:enable_auto_draw_label([state=true])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Enables auto draw of the label, the label will share the same parent element as the slider</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>state</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when false will disable the auto draw of the label
+
+    (<em>default</em>: true)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">self</span></span>)
+    <span class="return-text">the define to allow chaining</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -454,7 +470,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-06-29 01:27:33 UTC</i>
+    <i>Last updated 2019-07-20 23:44:09 UTC</i>
     </div>
     </div>
     </div>

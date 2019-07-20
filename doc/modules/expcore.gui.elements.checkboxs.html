@@ -35,14 +35,20 @@
     </div>
 
 
-    <!-- sidebar navigation -->
+<!-- sidebar navigation -->
+<!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    </ul>
+    </li>
+    </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
     <h2>Modules</h2>
     <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.advanced_start.html"><span class="module-name-item">config.advanced_start</span></a></div></li>
@@ -109,6 +115,17 @@
     </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
     <h2>Topics</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
@@ -118,18 +135,17 @@
     </ul>
 
 
-
+    </div>
+    <div class="up-to-top">
     <!-- list of items in a module -->
     <ul class="nav nav-module-contents">
     <li class="nav-item">
-    <h4>Contents of <strong>expcore.gui.elements.checkboxs</strong></h4>
+    <h4>Jump to Section</h4>
     <ul class="nav">
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     </ul>
     </li>
     </ul>
-    </div>
-    <div class="up-to-top">
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
     </div>
@@ -167,35 +183,35 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#Checkbox._prototype_radiobutton:add_as_option">Checkbox._prototype_radiobutton:add_as_option (option_set, option_name)</a></td>
-    <td class="summary">Adds this radiobutton to be an option in the given option set (only one can be true at a time)</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Checkbox._prototype_radiobutton:get_store">Checkbox._prototype_radiobutton:get_store (category, internal)</a></td>
-    <td class="summary">Gets the stored value of the radiobutton or the option set if present</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Checkbox._prototype_radiobutton:set_store">Checkbox._prototype_radiobutton:set_store (category, value, internal)</a></td>
-    <td class="summary">Sets the stored value of the radiobutton or the option set if present</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Checkbox.draw_option_set">Checkbox.draw_option_set (name, element)</a></td>
-    <td class="summary">Draws all radiobuttons that are part of an option set at once (Gui.draw will not work)</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Checkbox.new_checkbox">Checkbox.new_checkbox ([name])</a></td>
+    <td class="name"><a href="#Checkbox.new_checkbox">Checkbox.new_checkbox([name])</a></td>
     <td class="summary">Creates a new checkbox element define</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Checkbox.new_option_set">Checkbox.new_option_set (name, callback, categorize)</a></td>
-    <td class="summary">Registers a new option set that can be linked to radiobutotns (only one can be true at a time)</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Checkbox.new_radiobutton">Checkbox.new_radiobutton ([name])</a></td>
+    <td class="name"><a href="#Checkbox.new_radiobutton">Checkbox.new_radiobutton([name])</a></td>
     <td class="summary">Creates a new radiobutton element define, has all functions checkbox has</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Checkbox.reset_radiobuttons">Checkbox.reset_radiobuttons (element[, exclude][, recursive=false])</a></td>
+    <td class="name"><a href="#Checkbox._prototype_radiobutton:add_as_option">Checkbox._prototype_radiobutton:add_as_option(option_set, option_name)</a></td>
+    <td class="summary">Adds this radiobutton to be an option in the given option set (only one can be true at a time)</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Checkbox._prototype_radiobutton:get_store">Checkbox._prototype_radiobutton:get_store(category, internal)</a></td>
+    <td class="summary">Gets the stored value of the radiobutton or the option set if present</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Checkbox._prototype_radiobutton:set_store">Checkbox._prototype_radiobutton:set_store(category, value, internal)</a></td>
+    <td class="summary">Sets the stored value of the radiobutton or the option set if present</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Checkbox.new_option_set">Checkbox.new_option_set(name, callback, categorize)</a></td>
+    <td class="summary">Registers a new option set that can be linked to radiobutotns (only one can be true at a time)</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Checkbox.draw_option_set">Checkbox.draw_option_set(name, element)</a></td>
+    <td class="summary">Draws all radiobuttons that are part of an option set at once (Gui.draw will not work)</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Checkbox.reset_radiobuttons">Checkbox.reset_radiobuttons(element[, exclude][, recursive=false])</a></td>
     <td class="summary">Sets all radiobutotn in a element to false (unless excluded) and can act recursivly</td>
     </tr>
     </tbody>
@@ -210,8 +226,124 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
+    <a href="#Checkbox.new_checkbox" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Checkbox.new_checkbox">Checkbox.new_checkbox([name])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Creates a new checkbox element define</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the optional debug name that can be added
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the new checkbox element define</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Checkbox.new_radiobutton" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Checkbox.new_radiobutton">Checkbox.new_radiobutton([name])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Creates a new radiobutton element define, has all functions checkbox has</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the optional debug name that can be added
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the new button element define</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
     <a href="#Checkbox._prototype_radiobutton:add_as_option" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox._prototype_radiobutton:add_as_option">Checkbox._prototype_radiobutton:add_as_option (option_set, option_name)</span>
+    <span class="section-item-title" id="Checkbox._prototype_radiobutton:add_as_option">Checkbox._prototype_radiobutton:add_as_option(option_set, option_name)</span>
     </div>
     </dt>
     <dd>
@@ -284,7 +416,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Checkbox._prototype_radiobutton:get_store" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox._prototype_radiobutton:get_store">Checkbox._prototype_radiobutton:get_store (category, internal)</span>
+    <span class="section-item-title" id="Checkbox._prototype_radiobutton:get_store">Checkbox._prototype_radiobutton:get_store(category, internal)</span>
     </div>
     </dt>
     <dd>
@@ -357,7 +489,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Checkbox._prototype_radiobutton:set_store" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox._prototype_radiobutton:set_store">Checkbox._prototype_radiobutton:set_store (category, value, internal)</span>
+    <span class="section-item-title" id="Checkbox._prototype_radiobutton:set_store">Checkbox._prototype_radiobutton:set_store(category, value, internal)</span>
     </div>
     </dt>
     <dd>
@@ -445,132 +577,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Checkbox.draw_option_set" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox.draw_option_set">Checkbox.draw_option_set (name, element)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Draws all radiobuttons that are part of an option set at once (Gui.draw will not work)</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name of the option set to draw the radiobuttons of
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>element</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
-
-     the parent element that the radiobuttons will be drawn to
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Checkbox.new_checkbox" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox.new_checkbox">Checkbox.new_checkbox ([name])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Creates a new checkbox element define</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the optional debug name that can be added
-
-    (<em>optional</em>)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the new checkbox element define</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#Checkbox.new_option_set" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox.new_option_set">Checkbox.new_option_set (name, callback, categorize)</span>
+    <span class="section-item-title" id="Checkbox.new_option_set">Checkbox.new_option_set(name, callback, categorize)</span>
     </div>
     </dt>
     <dd>
@@ -660,14 +668,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Checkbox.new_radiobutton" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox.new_radiobutton">Checkbox.new_radiobutton ([name])</span>
+    <a href="#Checkbox.draw_option_set" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Checkbox.draw_option_set">Checkbox.draw_option_set(name, element)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Creates a new radiobutton element define, has all functions checkbox has</p>
+    <p class="section-item-summary">Draws all radiobuttons that are part of an option set at once (Gui.draw will not work)</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -687,9 +695,24 @@
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the optional debug name that can be added
+     the name of the option set to draw the radiobuttons of
 
-    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the parent element that the radiobuttons will be drawn to
+
     </li>
 
 
@@ -698,13 +721,6 @@
     <!-- parameters end -->
 
     <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the new button element define</span>
-    </li>
-    </ul>
     <!-- returns end -->
 
 
@@ -719,7 +735,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Checkbox.reset_radiobuttons" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox.reset_radiobuttons">Checkbox.reset_radiobuttons (element[, exclude][, recursive=false])</span>
+    <span class="section-item-title" id="Checkbox.reset_radiobuttons">Checkbox.reset_radiobuttons(element[, exclude][, recursive=false])</span>
     </div>
     </dt>
     <dd>
@@ -821,7 +837,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-06-29 01:27:33 UTC</i>
+    <i>Last updated 2019-07-20 23:44:09 UTC</i>
     </div>
     </div>
     </div>

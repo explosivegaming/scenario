@@ -35,14 +35,20 @@
     </div>
 
 
-    <!-- sidebar navigation -->
+<!-- sidebar navigation -->
+<!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    </ul>
+    </li>
+    </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
     <h2>Modules</h2>
     <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config._file_loader.html"><span class="module-name-item">config._file_loader</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.action_buttons.html"><span class="module-name-item">config.action_buttons</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.advanced_start.html"><span class="module-name-item">config.advanced_start</span></a></div></li>
@@ -109,6 +115,17 @@
     </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
     <h2>Topics</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
@@ -118,18 +135,17 @@
     </ul>
 
 
-
+    </div>
+    <div class="up-to-top">
     <!-- list of items in a module -->
     <ul class="nav nav-module-contents">
     <li class="nav-item">
-    <h4>Contents of <strong>expcore.common</strong></h4>
+    <h4>Jump to Section</h4>
     <ul class="nav">
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     </ul>
     </li>
     </ul>
-    </div>
-    <div class="up-to-top">
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
     </div>
@@ -170,39 +186,35 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#Common.auto_complete">Common.auto_complete (options, input[, use_key=false][, rtn_key=false])</a></td>
-    <td class="summary">Returns the closest match to the input</td>
+    <td class="name"><a href="#Common.type_check">Common.type_check(value[, test_type=nil])</a></td>
+    <td class="summary">Compare types faster for faster validation of params</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Common.clear_flying_text">Common.clear_flying_text (surface)</a></td>
-    <td class="summary">Clears all flying text entites on a surface</td>
+    <td class="name"><a href="#Common.type_check_error">Common.type_check_error(value, test_type, error_message, level)</a></td>
+    <td class="summary">Raises an error if the value is of the wrong type</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Common.enum">Common.enum (tbl)</a></td>
-    <td class="summary">Converts a table to an enum</td>
+    <td class="name"><a href="#Common.param_check">Common.param_check(value, test_type, param_name, param_number)</a></td>
+    <td class="summary">Raises an error when the value is the incorrect type, uses a consistent error message format</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Common.ext_require">Common.ext_require (path, ...)</a></td>
+    <td class="name"><a href="#Common.player_return">Common.player_return(value[, colour=defines.colour.white][, player=game.player])</a></td>
+    <td class="summary">Will return a value of any type to the player/server console, allows colour for in-game players</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Common.write_json">Common.write_json(path, tbl)</a></td>
+    <td class="summary">Writes a table object to a file in json format</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Common.opt_require">Common.opt_require(path)</a></td>
+    <td class="summary">Calls a require that will not error if the file is not found</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Common.ext_require">Common.ext_require(path, ...)</a></td>
     <td class="summary">Calls a require and returns only the keys given, file must return a table</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Common.extract_keys">Common.extract_keys (tbl, ...)</a></td>
-    <td class="summary">Extracts certain keys from a table</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Common.format_chat_colour">Common.format_chat_colour (message, color)</a></td>
-    <td class="summary">Returns a message with valid chat tags to change its colour</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Common.format_chat_colour_localized">Common.format_chat_colour_localized (message, color)</a></td>
-    <td class="summary">Returns a message with valid chat tags to change its colour, using localization</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Common.format_chat_player_name">Common.format_chat_player_name (player[, raw_string=false])</a></td>
-    <td class="summary">Returns the players name in the players color</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Common.format_time">Common.format_time (ticks, options)</a></td>
+    <td class="name"><a href="#Common.format_time">Common.format_time(ticks, options)</a></td>
     <td class="summary">Formats tick into a clean format, denominations from highest to lowest
  long will use words rather than letters
  time will use : separates
@@ -210,61 +222,65 @@
  when a denomination is false it will overflow into the next one</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Common.move_items">Common.move_items (items[, surface=navies][, position={0][, radius=32][, chest_type=iron-chest])</a></td>
+    <td class="name"><a href="#Common.move_items">Common.move_items(items[, surface=navies][, position={0][, radius=32][, chest_type=iron-chest])</a></td>
     <td class="summary">Moves items to the position and stores them in the closest entity of the type given</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Common.opt_require">Common.opt_require (path)</a></td>
-    <td class="summary">Calls a require that will not error if the file is not found</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Common.param_check">Common.param_check (value, test_type, param_name, param_number)</a></td>
-    <td class="summary">Raises an error when the value is the incorrect type, uses a consistent error message format</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Common.player_return">Common.player_return (value[, colour=defines.colour.white][, player=game.player])</a></td>
-    <td class="summary">Will return a value of any type to the player/server console, allows colour for in-game players</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Common.print_colored_grid_value">Common.print_colored_grid_value (value, surface, position, offset, immutable, color_value, base_color, delta_color, under_bound, over_bound)</a></td>
-    <td class="summary">Prints a colored value on a location.</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Common.print_grid_value">Common.print_grid_value (value, surface, position, scale, offset, immutable)</a></td>
+    <td class="name"><a href="#Common.print_grid_value">Common.print_grid_value(value, surface, position, scale, offset, immutable)</a></td>
     <td class="summary">https://github.com/Refactorio/RedMew/blob/9184b2940f311d8c9c891e83429fc57ec7e0c4a2/map_gen/maps/diggy/debug.lua#L31
     Prints a colored value on a location.</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Common.string_contains">Common.string_contains (s, contains)</a></td>
+    <td class="name"><a href="#Common.print_colored_grid_value">Common.print_colored_grid_value(value, surface, position, offset, immutable, color_value, base_color, delta_color, under_bound, over_bound)</a></td>
+    <td class="summary">Prints a colored value on a location.</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Common.clear_flying_text">Common.clear_flying_text(surface)</a></td>
+    <td class="summary">Clears all flying text entites on a surface</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Common.string_contains">Common.string_contains(s, contains)</a></td>
     <td class="summary">Tests if a string contains a given substring.</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Common.table_alphanumsort">Common.table_alphanumsort (tbl)</a></td>
-    <td class="summary">Returns the list is a sorted way that would be expected by people (this is by key)</td>
+    <td class="name"><a href="#Common.extract_keys">Common.extract_keys(tbl, ...)</a></td>
+    <td class="summary">Extracts certain keys from a table</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Common.table_keys">Common.table_keys (table[, sorted][, as_string])</a></td>
-    <td class="summary">Returns a copy of all of the keys in the table.</td>
+    <td class="name"><a href="#Common.enum">Common.enum(tbl)</a></td>
+    <td class="summary">Converts a table to an enum</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Common.table_keysort">Common.table_keysort (tbl)</a></td>
-    <td class="summary">Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)</td>
+    <td class="name"><a href="#Common.auto_complete">Common.auto_complete(options, input[, use_key=false][, rtn_key=false])</a></td>
+    <td class="summary">Returns the closest match to the input</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Common.table_values">Common.table_values (table[, sorted][, as_string])</a></td>
+    <td class="name"><a href="#Common.table_values">Common.table_values(table[, sorted][, as_string])</a></td>
     <td class="summary">Returns a copy of all of the values in the table.</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Common.type_check">Common.type_check (value[, test_type=nil])</a></td>
-    <td class="summary">Compare types faster for faster validation of params</td>
+    <td class="name"><a href="#Common.table_keys">Common.table_keys(table[, sorted][, as_string])</a></td>
+    <td class="summary">Returns a copy of all of the keys in the table.</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Common.type_check_error">Common.type_check_error (value, test_type, error_message, level)</a></td>
-    <td class="summary">Raises an error if the value is of the wrong type</td>
+    <td class="name"><a href="#Common.table_alphanumsort">Common.table_alphanumsort(tbl)</a></td>
+    <td class="summary">Returns the list is a sorted way that would be expected by people (this is by key)</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Common.write_json">Common.write_json (path, tbl)</a></td>
-    <td class="summary">Writes a table object to a file in json format</td>
+    <td class="name"><a href="#Common.table_keysort">Common.table_keysort(tbl)</a></td>
+    <td class="summary">Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Common.format_chat_colour">Common.format_chat_colour(message, color)</a></td>
+    <td class="summary">Returns a message with valid chat tags to change its colour</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Common.format_chat_colour_localized">Common.format_chat_colour_localized(message, color)</a></td>
+    <td class="summary">Returns a message with valid chat tags to change its colour, using localization</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Common.format_chat_player_name">Common.format_chat_player_name(player[, raw_string=false])</a></td>
+    <td class="summary">Returns the players name in the players color</td>
     </tr>
     </tbody>
     </table>
@@ -278,14 +294,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Common.auto_complete" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.auto_complete">Common.auto_complete (options, input[, use_key=false][, rtn_key=false])</span>
+    <a href="#Common.type_check" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.type_check">Common.type_check(value[, test_type=nil])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Returns the closest match to the input</p>
+    <p class="section-item-summary">Compare types faster for faster validation of params</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -299,13 +315,13 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>options</em></strong>
+    <strong><em>value</em></strong>
 
     <strong> : </strong>
 
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    (<span class="types"><span class="type">any</span></span>)
 
-     table a of options for the auto complete
+     the value to be tested
 
     </li>
 
@@ -315,48 +331,15 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>input</em></strong>
+    <strong><em>test_type</em></strong>
 
     <strong> : </strong>
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     string the input that will be completed
+     the type to test for if not given then it tests for nil
 
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>use_key</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     when true the keys of options will be used as the options
-
-    (<em>default</em>: false)
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>rtn_key</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     when true the the key will be returned rather than the value
-
-    (<em>default</em>: false)
+    (<em>default</em>: nil)
     </li>
 
 
@@ -368,7 +351,8 @@
     <strong>Returns:</strong>
     <ul>
     <li>
-    <span class="return-text">the list item found that matches the input</span>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">is v of type test_type</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -378,20 +362,23 @@
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code>type_check(<span class="string">'foo'</span>,<span class="string">'string'</span>) -- <span class="keyword">return</span> <span class="keyword">true</span></code></pre>
+    <pre class="code" data-lang="Lua"><code>type_check(<span class="string">'foo'</span>) -- <span class="keyword">return</span> <span class="keyword">false</span></code></pre>
     <!-- usage end -->
 
     </dd>
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Common.clear_flying_text" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.clear_flying_text">Common.clear_flying_text (surface)</span>
+    <a href="#Common.type_check_error" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.type_check_error">Common.type_check_error(value, test_type, error_message, level)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Clears all flying text entites on a surface</p>
+    <p class="section-item-summary">Raises an error if the value is of the wrong type</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -405,14 +392,261 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>surface</em></strong>
+    <strong><em>value</em></strong>
 
     <strong> : </strong>
 
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaSurface.html">LuaSurface</a></span>)
+    (<span class="types"><span class="type">any</span></span>)
 
-     the surface to clear
+     the value that you want to test the type of
 
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>test_type</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the type that the value should be
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>error_message</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the error message that is returned
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>level</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the level to call the error on (level = 1 means the caller)
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if no error was called</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code>type_check_error(<span class="string">'foo'</span>,<span class="string">'number'</span>,<span class="string">'Value must be a number'</span>) -- will raise error <span class="string">"Value must be a number"</span></code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Common.param_check" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.param_check">Common.param_check(value, test_type, param_name, param_number)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Raises an error when the value is the incorrect type, uses a consistent error message format</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>value</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><span class="type">any</span></span>)
+
+     the value that you want to test the type of
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>test_type</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the type that the value should be
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>param_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the param
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>param_number</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the number param it is
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if no error was raised</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code>param_check(<span class="string">'foo'</span>,<span class="string">'number'</span>,<span class="string">'repeat_count'</span>,<span class="number">2</span>) -- will raise error <span class="string">"Invalid param #02 given to &lt;anon&gt;; repeat_count is not of type number"</span></code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Common.player_return" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.player_return">Common.player_return(value[, colour=defines.colour.white][, player=game.player])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Will return a value of any type to the player/server console, allows colour for in-game players</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>value</em></strong>
+
+    <strong> : </strong>
+
+
+     any value of any type that will be returned to the player or console
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>colour</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="../modules/defines.color.html">defines.color</a> or <a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the colour of the text for the player, ignored when printing to console
+
+    (<em>default</em>: defines.colour.white)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+      the player that return will go to, if no game.player then returns to server
+
+    (<em>default</em>: game.player)
     </li>
 
 
@@ -428,26 +662,46 @@
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code>player_return(<span class="string">'Hello, World!'</span>) -- returns <span class="string">'Hello, World!'</span> to game.player <span class="keyword">or</span> server console</code></pre>
+    <pre class="code" data-lang="Lua"><code>player_return(<span class="string">'Hello, World!'</span>,<span class="string">'green'</span>) -- returns <span class="string">'Hello, World!'</span> to game.player with colour green <span class="keyword">or</span> server console</code></pre>
+    <pre class="code" data-lang="Lua"><code>player_return(<span class="string">'Hello, World!'</span>,<span class="keyword">nil</span>,player) -- returns <span class="string">'Hello, World!'</span> to the given player</code></pre>
     <!-- usage end -->
 
     </dd>
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Common.enum" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.enum">Common.enum (tbl)</span>
+    <a href="#Common.write_json" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.write_json">Common.write_json(path, tbl)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Converts a table to an enum</p>
+    <p class="section-item-summary">Writes a table object to a file in json format</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
     <strong>Parameters:</strong>
 
     <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>path</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the path of the file to write include / to use dir
+
+    </li>
 
 
 
@@ -461,7 +715,7 @@
 
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
 
-     table the that will be converted
+     the table that will be converted to a json string and wrote to file
 
     </li>
 
@@ -471,13 +725,6 @@
     <!-- parameters end -->
 
     <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the new table that acts like an enum</span>
-    </li>
-    </ul>
     <!-- returns end -->
 
 
@@ -491,8 +738,66 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
+    <a href="#Common.opt_require" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.opt_require">Common.opt_require(path)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Calls a require that will not error if the file is not found</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>path</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the path that you want to require
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    <span class="return-text">the returns from that file or nil, error if not loaded</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="keyword">local</span> file = opt_require(<span class="string">'file.not.present'</span>) -- will <span class="keyword">not</span> cause any error</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
     <a href="#Common.ext_require" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.ext_require">Common.ext_require (path, ...)</span>
+    <span class="section-item-title" id="Common.ext_require">Common.ext_require(path, ...)</span>
     </div>
     </dt>
     <dd>
@@ -565,302 +870,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Common.extract_keys" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.extract_keys">Common.extract_keys (tbl, ...)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Extracts certain keys from a table</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>tbl</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-
-     table the which contains the keys
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>...</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the names of the keys you want extracted
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    <span class="return-text">the keys in the order given</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code><span class="keyword">local</span> key_three, key_one = extract({key_one=<span class="string">'foo'</span>,key_two=<span class="string">'bar'</span>,key_three=<span class="keyword">true</span>},<span class="string">'key_three'</span>,<span class="string">'key_one'</span>)</code></pre>
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Common.format_chat_colour" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.format_chat_colour">Common.format_chat_colour (message, color)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Returns a message with valid chat tags to change its colour</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>message</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the message that will be in the output
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>color</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-
-     a color which contains r,g,b as its keys
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-    <span class="return-text">the message with the color tags included</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Common.format_chat_colour_localized" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.format_chat_colour_localized">Common.format_chat_colour_localized (message, color)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Returns a message with valid chat tags to change its colour, using localization</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>message</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-
-     the message that will be in the output
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>color</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-
-     a color which contains r,g,b as its keys
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the message with the color tags included</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Common.format_chat_player_name" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.format_chat_player_name">Common.format_chat_player_name (player[, raw_string=false])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Returns the players name in the players color</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
-
-     the player to use the name and color of
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>raw_string</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     when true a is returned rather than a localized string
-
-    (<em>default</em>: false)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the players name with tags for the players color</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#Common.format_time" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.format_time">Common.format_time (ticks, options)</span>
+    <span class="section-item-title" id="Common.format_time">Common.format_time(ticks, options)</span>
     </div>
     </dt>
     <dd>
@@ -937,7 +948,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Common.move_items" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.move_items">Common.move_items (items[, surface=navies][, position={0][, radius=32][, chest_type=iron-chest])</span>
+    <span class="section-item-title" id="Common.move_items">Common.move_items(items[, surface=navies][, position={0][, radius=32][, chest_type=iron-chest])</span>
     </div>
     </dt>
     <dd>
@@ -1054,179 +1065,15 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Common.opt_require" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.opt_require">Common.opt_require (path)</span>
+    <a href="#Common.print_grid_value" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.print_grid_value">Common.print_grid_value(value, surface, position, scale, offset, immutable)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Calls a require that will not error if the file is not found</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>path</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the path that you want to require
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    <span class="return-text">the returns from that file or nil, error if not loaded</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code><span class="keyword">local</span> file = opt_require(<span class="string">'file.not.present'</span>) -- will <span class="keyword">not</span> cause any error</code></pre>
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Common.param_check" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.param_check">Common.param_check (value, test_type, param_name, param_number)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Raises an error when the value is the incorrect type, uses a consistent error message format</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>value</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><span class="type">any</span></span>)
-
-     the value that you want to test the type of
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>test_type</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the type that the value should be
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>param_name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name of the param
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>param_number</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
-
-     the number param it is
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">true if no error was raised</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>param_check(<span class="string">'foo'</span>,<span class="string">'number'</span>,<span class="string">'repeat_count'</span>,<span class="number">2</span>) -- will raise error <span class="string">"Invalid param #02 given to &lt;anon&gt;; repeat_count is not of type number"</span></code></pre>
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Common.player_return" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.player_return">Common.player_return (value[, colour=defines.colour.white][, player=game.player])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Will return a value of any type to the player/server console, allows colour for in-game players</p>
+    <p class="section-item-summary">https://github.com/Refactorio/RedMew/blob/9184b2940f311d8c9c891e83429fc57ec7e0c4a2/map_gen/maps/diggy/debug.lua#L31
+    Prints a colored value on a location.</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -1245,7 +1092,7 @@
     <strong> : </strong>
 
 
-     any value of any type that will be returned to the player or console
+     between -1 and 1
 
     </li>
 
@@ -1255,15 +1102,13 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>colour</em></strong>
+    <strong><em>surface</em></strong>
 
     <strong> : </strong>
 
-    (<span class="types"><a class="type" href="../modules/defines.color.html">defines.color</a> or <a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the colour of the text for the player, ignored when printing to console
+     LuaSurface
 
-    (<em>default</em>: defines.colour.white)
     </li>
 
 
@@ -1272,15 +1117,58 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>player</em></strong>
+    <strong><em>position</em></strong>
 
     <strong> : </strong>
 
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
 
-      the player that return will go to, if no game.player then returns to server
+     Position {x, y}
 
-    (<em>default</em>: game.player)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>scale</em></strong>
+
+    <strong> : </strong>
+
+
+     float
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>offset</em></strong>
+
+    <strong> : </strong>
+
+
+     float
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>immutable</em></strong>
+
+    <strong> : </strong>
+
+
+     bool if immutable, only set, never do a surface lookup, values never change
+
     </li>
 
 
@@ -1296,10 +1184,6 @@
     <!-- see also end -->
 
     <!-- usage start -->
-    <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>player_return(<span class="string">'Hello, World!'</span>) -- returns <span class="string">'Hello, World!'</span> to game.player <span class="keyword">or</span> server console</code></pre>
-    <pre class="code" data-lang="Lua"><code>player_return(<span class="string">'Hello, World!'</span>,<span class="string">'green'</span>) -- returns <span class="string">'Hello, World!'</span> to game.player with colour green <span class="keyword">or</span> server console</code></pre>
-    <pre class="code" data-lang="Lua"><code>player_return(<span class="string">'Hello, World!'</span>,<span class="keyword">nil</span>,player) -- returns <span class="string">'Hello, World!'</span> to the given player</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -1307,7 +1191,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Common.print_colored_grid_value" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.print_colored_grid_value">Common.print_colored_grid_value (value, surface, position, offset, immutable, color_value, base_color, delta_color, under_bound, over_bound)</span>
+    <span class="section-item-title" id="Common.print_colored_grid_value">Common.print_colored_grid_value(value, surface, position, offset, immutable, color_value, base_color, delta_color, under_bound, over_bound)</span>
     </div>
     </dt>
     <dd>
@@ -1493,15 +1377,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Common.print_grid_value" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.print_grid_value">Common.print_grid_value (value, surface, position, scale, offset, immutable)</span>
+    <a href="#Common.clear_flying_text" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.clear_flying_text">Common.clear_flying_text(surface)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">https://github.com/Refactorio/RedMew/blob/9184b2940f311d8c9c891e83429fc57ec7e0c4a2/map_gen/maps/diggy/debug.lua#L31
-    Prints a colored value on a location.</p>
+    <p class="section-item-summary">Clears all flying text entites on a surface</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -1515,87 +1398,13 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>value</em></strong>
-
-    <strong> : </strong>
-
-
-     between -1 and 1
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
     <strong><em>surface</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaSurface.html">LuaSurface</a></span>)
 
-     LuaSurface
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>position</em></strong>
-
-    <strong> : </strong>
-
-
-     Position {x, y}
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>scale</em></strong>
-
-    <strong> : </strong>
-
-
-     float
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>offset</em></strong>
-
-    <strong> : </strong>
-
-
-     float
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>immutable</em></strong>
-
-    <strong> : </strong>
-
-
-     bool if immutable, only set, never do a surface lookup, values never change
+     the surface to clear
 
     </li>
 
@@ -1619,7 +1428,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Common.string_contains" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.string_contains">Common.string_contains (s, contains)</span>
+    <span class="section-item-title" id="Common.string_contains">Common.string_contains(s, contains)</span>
     </div>
     </dt>
     <dd>
@@ -1691,14 +1500,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Common.table_alphanumsort" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.table_alphanumsort">Common.table_alphanumsort (tbl)</span>
+    <a href="#Common.extract_keys" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.extract_keys">Common.extract_keys(tbl, ...)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Returns the list is a sorted way that would be expected by people (this is by key)</p>
+    <p class="section-item-summary">Extracts certain keys from a table</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -1718,7 +1527,23 @@
 
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
 
-     the table to be sorted
+     table the which contains the keys
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>...</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the names of the keys you want extracted
 
     </li>
 
@@ -1731,8 +1556,7 @@
     <strong>Returns:</strong>
     <ul>
     <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the sorted table</span>
+    <span class="return-text">the keys in the order given</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -1742,111 +1566,22 @@
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="keyword">local</span> key_three, key_one = extract({key_one=<span class="string">'foo'</span>,key_two=<span class="string">'bar'</span>,key_three=<span class="keyword">true</span>},<span class="string">'key_three'</span>,<span class="string">'key_one'</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Common.table_keys" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.table_keys">Common.table_keys (table[, sorted][, as_string])</span>
+    <a href="#Common.enum" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.enum">Common.enum(tbl)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Returns a copy of all of the keys in the table.</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>table</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-
-     tbl the to copy the keys from, or an empty table if tbl is nil
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>sorted</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     whether to sort the keys (slower) or keep the random order from pairs()
-
-    (<em>optional</em>)
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>as_string</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     whether to try and parse the keys as strings, or leave them as their existing type
-
-    (<em>optional</em>)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/11.1.html">array</a></span>)
-    <span class="return-text">an array with a copy of all the keys in the table</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Common.table_keysort" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.table_keysort">Common.table_keysort (tbl)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)</p>
+    <p class="section-item-summary">Converts a table to an enum</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -1866,7 +1601,7 @@
 
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
 
-     the table to be sorted
+     table the that will be converted
 
     </li>
 
@@ -1880,7 +1615,113 @@
     <ul>
     <li>
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the sorted table</span>
+    <span class="return-text">the new table that acts like an enum</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Common.auto_complete" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.auto_complete">Common.auto_complete(options, input[, use_key=false][, rtn_key=false])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns the closest match to the input</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>options</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+
+     table a of options for the auto complete
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>input</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     string the input that will be completed
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>use_key</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true the keys of options will be used as the options
+
+    (<em>default</em>: false)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>rtn_key</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true the the key will be returned rather than the value
+
+    (<em>default</em>: false)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    <span class="return-text">the list item found that matches the input</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -1897,7 +1738,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Common.table_values" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.table_values">Common.table_values (table[, sorted][, as_string])</span>
+    <span class="section-item-title" id="Common.table_values">Common.table_values(table[, sorted][, as_string])</span>
     </div>
     </dt>
     <dd>
@@ -1987,14 +1828,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Common.type_check" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.type_check">Common.type_check (value[, test_type=nil])</span>
+    <a href="#Common.table_keys" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.table_keys">Common.table_keys(table[, sorted][, as_string])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Compare types faster for faster validation of params</p>
+    <p class="section-item-summary">Returns a copy of all of the keys in the table.</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -2008,13 +1849,13 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>value</em></strong>
+    <strong><em>table</em></strong>
 
     <strong> : </strong>
 
-    (<span class="types"><span class="type">any</span></span>)
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
 
-     the value to be tested
+     tbl the to copy the keys from, or an empty table if tbl is nil
 
     </li>
 
@@ -2024,15 +1865,32 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>test_type</em></strong>
+    <strong><em>sorted</em></strong>
 
     <strong> : </strong>
 
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
 
-     the type to test for if not given then it tests for nil
+     whether to sort the keys (slower) or keep the random order from pairs()
 
-    (<em>default</em>: nil)
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>as_string</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     whether to try and parse the keys as strings, or leave them as their existing type
+
+    (<em>optional</em>)
     </li>
 
 
@@ -2044,8 +1902,8 @@
     <strong>Returns:</strong>
     <ul>
     <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">is v of type test_type</span>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/11.1.html">array</a></span>)
+    <span class="return-text">an array with a copy of all the keys in the table</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -2055,152 +1913,26 @@
     <!-- see also end -->
 
     <!-- usage start -->
-    <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>type_check(<span class="string">'foo'</span>,<span class="string">'string'</span>) -- <span class="keyword">return</span> <span class="keyword">true</span></code></pre>
-    <pre class="code" data-lang="Lua"><code>type_check(<span class="string">'foo'</span>) -- <span class="keyword">return</span> <span class="keyword">false</span></code></pre>
     <!-- usage end -->
 
     </dd>
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Common.type_check_error" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.type_check_error">Common.type_check_error (value, test_type, error_message, level)</span>
+    <a href="#Common.table_alphanumsort" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.table_alphanumsort">Common.table_alphanumsort(tbl)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Raises an error if the value is of the wrong type</p>
+    <p class="section-item-summary">Returns the list is a sorted way that would be expected by people (this is by key)</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
     <strong>Parameters:</strong>
 
     <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>value</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><span class="type">any</span></span>)
-
-     the value that you want to test the type of
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>test_type</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the type that the value should be
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>error_message</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the error message that is returned
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>level</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
-
-     the level to call the error on (level = 1 means the caller)
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">true if no error was called</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>type_check_error(<span class="string">'foo'</span>,<span class="string">'number'</span>,<span class="string">'Value must be a number'</span>) -- will raise error <span class="string">"Value must be a number"</span></code></pre>
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Common.write_json" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Common.write_json">Common.write_json (path, tbl)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Writes a table object to a file in json format</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>path</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the path of the file to write include / to use dir
-
-    </li>
 
 
 
@@ -2214,7 +1946,7 @@
 
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
 
-     the table that will be converted to a json string and wrote to file
+     the table to be sorted
 
     </li>
 
@@ -2224,6 +1956,290 @@
     <!-- parameters end -->
 
     <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the sorted table</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Common.table_keysort" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.table_keysort">Common.table_keysort(tbl)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>tbl</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+
+     the table to be sorted
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the sorted table</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Common.format_chat_colour" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.format_chat_colour">Common.format_chat_colour(message, color)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns a message with valid chat tags to change its colour</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>message</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the message that will be in the output
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>color</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+
+     a color which contains r,g,b as its keys
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    <span class="return-text">the message with the color tags included</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Common.format_chat_colour_localized" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.format_chat_colour_localized">Common.format_chat_colour_localized(message, color)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns a message with valid chat tags to change its colour, using localization</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>message</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+
+     the message that will be in the output
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>color</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+
+     a color which contains r,g,b as its keys
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the message with the color tags included</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Common.format_chat_player_name" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Common.format_chat_player_name">Common.format_chat_player_name(player[, raw_string=false])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns the players name in the players color</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to use the name and color of
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>raw_string</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true a is returned rather than a localized string
+
+    (<em>default</em>: false)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the players name with tags for the players color</span>
+    </li>
+    </ul>
     <!-- returns end -->
 
 
@@ -2249,7 +2265,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-06-29 01:27:33 UTC</i>
+    <i>Last updated 2019-07-20 23:44:09 UTC</i>
     </div>
     </div>
     </div>

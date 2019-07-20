@@ -5,15 +5,25 @@ title = 'ExpGaming Scenario'
 description = 'Explosive Gaming\'s server scenario for 0.17'
 
 convert_opt = true
-sort = true
+sort = false
 not_luadoc = true
 no_lua_ref = true
 template_escape = ">"
 topics = {"../README.md", "../LICENSE"}
 style = '../doc'
 template = '../doc'
+no_space_before_args = true
 
+new_type("core", "Core", true)
+new_type("addon", "Addons", true)
+new_type("commands", "Commands", true)
+new_type("control", "Control", true)
+new_type("gui", "Guis", true)
+new_type("config", "Configs", true)
+
+new_type("dep", "Dependencies", false)
 new_type("event", "Events", false, "Event Parameters")
+new_type("command", "Commands", false, "Command Parameters")
 
 local api_url = "http://lua-api.factorio.com/latest/%s.html%s"
 

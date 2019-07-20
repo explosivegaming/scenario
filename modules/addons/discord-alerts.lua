@@ -102,7 +102,7 @@ end
 
 --- Warnings added and removed
 if config.player_warnings then
-    local Warnings = require 'modules.addons.warnings'
+    local Warnings = require 'modules.control.warnings'
     Event.add(Warnings.events.on_warning_added,function(event)
         local player_name,by_player_name = get_player_name(event)
         emit_event{
