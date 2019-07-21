@@ -5,7 +5,7 @@
     <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>utils.table module</title>
+    <title>Tasks control</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
     <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
@@ -41,8 +41,21 @@
     <li class="nav-item">
     <h2>Sections</h2>
     <ul class="nav">
-    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
-    <li class="nav-item"><a href="#Fields"><span class="fragment-hashtag">#</span> Fields</a></li>
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
+    <li class="nav-item"><a href="#Getters"><span class="fragment-hashtag">#</span> Getters </a></li>
+    <li class="nav-item"><a href="#Setters"><span class="fragment-hashtag">#</span> Setters </a></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../control/Tasks.html"><span class="module-name-item">Tasks</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     </ul>
     </li>
     </ul>
@@ -108,21 +121,9 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.math.html"><span class="module-name-item">utils.math</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.recipe_locker.html"><span class="module-name-item">utils.recipe_locker</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.state_machine.html"><span class="module-name-item">utils.state_machine</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/utils.table.html"><span class="module-name-item">utils.table</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.table.html"><span class="module-name-item">utils.table</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.task.html"><span class="module-name-item">utils.task</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.timestamp.html"><span class="module-name-item">utils.timestamp</span></a></div></li>
-    </ul>
-    </li>
-    </ul>
-    <ul class="nav nav-modules">
-    <li class="nav-item">
-    <h2>Control</h2>
-    <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Tasks.html"><span class="module-name-item">Tasks</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     </ul>
     </li>
     </ul>
@@ -144,8 +145,9 @@
     <li class="nav-item">
     <h4>Jump to Section</h4>
     <ul class="nav">
-    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
-    <li class="nav-item"><a href="#Fields"><span class="fragment-hashtag">#</span> Fields</a></li>
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
+    <li class="nav-item"><a href="#Getters"><span class="fragment-hashtag">#</span> Getters </a></li>
+    <li class="nav-item"><a href="#Setters"><span class="fragment-hashtag">#</span> Setters </a></li>
     </ul>
     </li>
     </ul>
@@ -164,8 +166,9 @@
 
     <!-- module content header start -->
 
-    <h2><span class="body-module-name"><strong><em>utils.table</em></strong></span> module</h2>
-    <p>Searches a table to remove a specific element without an index</p>
+    <h2><span class="body-module-name"><strong><em>Tasks</em></strong></span> control</h2>
+    <p>Control Module - Tasks
+    - Stores tasks for each force.</p>
     <p></p>
 
 
@@ -173,6 +176,26 @@
     <!-- module info end -->
 
     <!-- module usage start -->
+    <h3>Usage</h3>
+    <pre class="code" data-lang="Lua"><code>
+    <span class="comment">-- import the module from the control modules
+</span>    <span class="keyword">local</span> Tasks = <span class="global">require</span> <span class="string">'modules.control.tasks'</span>
+
+    <span class="comment">-- To create a new task all you need is the name of the force you want to add the task to
+</span>    <span class="comment">-- you can give a place to add it but this is optional
+</span>    Tasks.new_task(<span class="string">'player'</span>)
+
+    <span class="comment">-- You can then update this task to what ever value that you want
+</span>    <span class="comment">-- the task id is returned by new_task, or within an update handler
+</span>    <span class="comment">-- if a player name is not given that it will assume '&lt;server&gt;'
+</span>    Tasks.update_task(task_id,<span class="string">'My number one task!'</span>,<span class="string">'Cooldude2606'</span>)
+
+    <span class="comment">-- You can then remove the task and all data linked with it
+</span>    Tasks.remove_task(task_id)
+
+    <span class="comment">-- set_editing and is_editing may be used to block other or provide warnings
+</span>    <span class="comment">-- none of this is enforced by this module and so you must do so in your own module
+</span>    Tasks.set_editing(task_id,<span class="string">'Cooldude2606'</span>,<span class="keyword">true</span>)</code></pre>
     <!-- module usage end -->
 
     <!-- module content header end -->
@@ -180,85 +203,73 @@
     <!-- module section list start -->
     <table class="section-content-list">
     <thead>
-    <h3><a href="#Functions">Functions</a></h3>
+    <h3><a href="#Dependencies">Dependencies</a></h3>
     <span></span>
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#fast_remove">fast_remove(tbl, index)</a></td>
-    <td class="summary">Removes an item from an array in O(1) time.</td>
+    <td class="name"><a href="#expcore.store">expcore.store</a></td>
+    <td class="summary">Allows storing of task ids</td>
     </tr>
     <tr>
-    <td class="name"><a href="#add_all">add_all(t1, t2)</a></td>
-    <td class="summary">Adds the contents of table t2 to table t1</td>
+    <td class="name"><a href="#utils.global">utils.global</a></td>
+    <td class="summary">Allows storing in the global table</td>
     </tr>
     <tr>
-    <td class="name"><a href="#index_of">index_of(t, e)</a></td>
-    <td class="summary">Checks if a table contains an element</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#index_of_in_array">index_of_in_array(t, e)</a></td>
-    <td class="summary">Checks if the arrayed portion of a table contains an element</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#contains">contains(t, e)</a></td>
-    <td class="summary">Checks if a table contains an element</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#array_contains">array_contains(t, e)</a></td>
-    <td class="summary">Checks if the arrayed portion of a table contains an element</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#set">set(t, index, element)</a></td>
-    <td class="summary">Adds an element into a specific index position while shuffling the rest down</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#get_random_dictionary_entry">get_random_dictionary_entry(t, key)</a></td>
-    <td class="summary">Chooses a random entry from a table
- because this uses math.random, it cannot be used outside of events</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#get_random_weighted">get_random_weighted(weight_table, item_index, weight_index)</a></td>
-    <td class="summary">Chooses a random entry from a weighted table
- because this uses math.random, it cannot be used outside of events</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#shuffle_table">shuffle_table(t)</a></td>
-    <td class="summary">Creates a fisher-yates shuffle of a sequential number-indexed table
- because this uses math.random, it cannot be used outside of events if no rng is supplied
- from: http://www.sdknews.com/cross-platform/corona/tutorial-how-to-shuffle-table-items</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#clear_table">clear_table(t, array)</a></td>
-    <td class="summary">Clears all existing entries in a table</td>
+    <td class="name"><a href="#utils.token">utils.token</a></td>
+    <td class="summary">Allows non conflicting task ids</td>
     </tr>
     </tbody>
     </table>
     <table class="section-content-list">
     <thead>
-    <h3><a href="#Fields">Fields</a></h3>
+    <h3><a href="#Getters">Getters </a></h3>
     <span></span>
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#inspect">inspect</a></td>
-    <td class="summary">Similar to serpent.block, returns a string with a pretty representation of a table.</td>
+    <td class="name"><a href="#get_task">get_task(task_id)</a></td>
+    <td class="summary">Gets the task stored at this id</td>
     </tr>
     <tr>
-    <td class="name"><a href="#size">size</a></td>
-    <td class="summary">Takes a table and returns the number of entries in the table.</td>
+    <td class="name"><a href="#get_details">get_details(task_id)</a></td>
+    <td class="summary">Gets the task details stored at this id</td>
     </tr>
     <tr>
-    <td class="name"><a href="#deep_copy">deep_copy</a></td>
-    <td class="summary">Creates a deepcopy of a table.</td>
+    <td class="name"><a href="#get_force_tasks">get_force_tasks(force_name)</a></td>
+    <td class="summary">Gets the task ids for a force</td>
     </tr>
     <tr>
-    <td class="name"><a href="#merge">merge</a></td>
-    <td class="summary">Merges multiple tables.</td>
+    <td class="name"><a href="#is_editing">is_editing(task_id, player_name)</a></td>
+    <td class="summary">Gets if a player is currently editing this task</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Setters">Setters </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#add_handler">add_handler(callback)</a></td>
+    <td class="summary">Adds a new handler for when a task is updated</td>
     </tr>
     <tr>
-    <td class="name"><a href="#equals">equals</a></td>
-    <td class="summary">Determines if two tables are structurally equal.</td>
+    <td class="name"><a href="#new_task">new_task(force_name[, task_number][, player_name])</a></td>
+    <td class="summary">Adds a new task for a force, with option to place it in a certain order</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#remove_task">remove_task(task_id)</a></td>
+    <td class="summary">Removes a task and all data linked with it</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#update_task">update_task(task_id, task[, player_name='server'])</a></td>
+    <td class="summary">Updates a task message</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#set_editing">set_editing(task_id, player_name[, state])</a></td>
+    <td class="summary">Sets a player to be editing this task, used with is_editing</td>
     </tr>
     </tbody>
     </table>
@@ -267,60 +278,22 @@
     <br />
 
     <!-- section start -->
-    <h3><span id="Functions" class="section-title"><a href="#Functions">Functions</a></span></h3>
+    <h3><span id="Dependencies" class="section-title"><a href="#Dependencies">Dependencies</a></span></h3>
     <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#fast_remove" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="fast_remove">fast_remove(tbl, index)</span>
+    <a href="#expcore.store" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.store">expcore.store</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Removes an item from an array in O(1) time.</p>
-    <p class="section-item-description">
- The catch is that fast_remove doesn't guarantee to maintain the order of items in the array.</p>
+    <p class="section-item-summary">Allows storing of task ids</p>
+    <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>tbl</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> arrayed table
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>index</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> Must be >= 0. The case where index > #tbl is handled.
-
-    </li>
-
-
-    </ul>
-
     <!-- parameters end -->
 
     <!-- returns start -->
@@ -337,54 +310,17 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#add_all" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="add_all">add_all(t1, t2)</span>
+    <a href="#utils.global" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.global">utils.global</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Adds the contents of table t2 to table t1</p>
+    <p class="section-item-summary">Allows storing in the global table</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t1</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to insert into
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t2</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to insert from
-
-    </li>
-
-
-    </ul>
-
     <!-- parameters end -->
 
     <!-- returns start -->
@@ -401,600 +337,17 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#index_of" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="index_of">index_of(t, e)</span>
+    <a href="#utils.token" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.token">utils.token</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Checks if a table contains an element</p>
+    <p class="section-item-summary">Allows non conflicting task ids</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#index_of_in_array" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="index_of_in_array">index_of_in_array(t, e)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Checks if the arrayed portion of a table contains an element</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#contains" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="contains">contains(t, e)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Checks if a table contains an element</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#array_contains" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="array_contains">array_contains(t, e)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Checks if the arrayed portion of a table contains an element</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#set" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="set">set(t, index, element)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Adds an element into a specific index position while shuffling the rest down</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to add into
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>index</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> the position in the table to add to
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>element</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> to add to the table
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#get_random_dictionary_entry" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_random_dictionary_entry">get_random_dictionary_entry(t, key)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Chooses a random entry from a table
- because this uses math.random, it cannot be used outside of events</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>key</em></strong>
-
-    <strong> : </strong>
-
-
-     <boolean> to indicate whether to return the key or value
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    <span class="return-text"><any> a random element of table t</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#get_random_weighted" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_random_weighted">get_random_weighted(weight_table, item_index, weight_index)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Chooses a random entry from a weighted table
- because this uses math.random, it cannot be used outside of events</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>weight_table</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> of tables with items and their weights
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>item_index</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> of the index of items, defaults to 1
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>weight_index</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> of the index of the weights, defaults to 2
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    <span class="return-text"><any> table element</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <strong>See also:</strong>
-    <ul>
-    </ul>
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#shuffle_table" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="shuffle_table">shuffle_table(t)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Creates a fisher-yates shuffle of a sequential number-indexed table
- because this uses math.random, it cannot be used outside of events if no rng is supplied
- from: http://www.sdknews.com/cross-platform/corona/tutorial-how-to-shuffle-table-items</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to shuffle
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#clear_table" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="clear_table">clear_table(t, array)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Clears all existing entries in a table</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to clear
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>array</em></strong>
-
-    <strong> : </strong>
-
-
-     <boolean> to indicate whether the table is an array or not
-
-    </li>
-
-
-    </ul>
-
     <!-- parameters end -->
 
     <!-- returns start -->
@@ -1009,27 +362,23 @@
 
     </dd>
     </dl>
-    <h3><span id="Fields" class="section-title"><a href="#Fields">Fields</a></span></h3>
+    <h3><span id="Getters" class="section-title"><a href="#Getters">Getters </a></span></h3>
     <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#inspect" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="inspect">inspect</span>
+    <a href="#get_task" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_task">get_task(task_id)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Similar to serpent.block, returns a string with a pretty representation of a table.</p>
-    <p class="section-item-description">
- Notice: This method is not appropriate for saving/restoring tables. It is meant to be used by the programmer mainly while debugging a program.
- depth sets the maximum depth that will be printed out. When the max depth is reached, inspect will stop parsing tables and just return {...}
- process is a function which allow altering the passed object before transforming it into a string.
- A typical way to use it would be to remove certain values so that they don't appear at all.
- return <string> the prettied table</p>
+    <p class="section-item-summary">Gets the task stored at this id</p>
+    <p class="section-item-description"></p>
 
     <!-- parameters start -->
+    <strong>Parameters:</strong>
 
     <ul>
 
@@ -1037,14 +386,186 @@
 
 
 
-    <li class="section-subitem-module-field-li">
+    <li class="section-subitem-li">
 
-    <strong><em>table</em></strong>
+    <strong><em>task_id</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <table> the table to serialize
+     the uid of the task you want to get
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    <span class="return-text">the task message that was stored here</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#get_details" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_details">get_details(task_id)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets the task details stored at this id</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>task_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid of the task you want to get
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the task details that was stored here</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#get_force_tasks" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_force_tasks">get_force_tasks(force_name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets the task ids for a force</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>force_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the force that you want the ids for
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">an array of all the task ids</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#is_editing" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="is_editing">is_editing(task_id, player_name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets if a player is currently editing this task</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>task_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid of the task you want to check
 
     </li>
 
@@ -1052,14 +573,223 @@
 
 
 
-    <li class="section-subitem-module-field-li">
+    <li class="section-subitem-li">
 
-    <strong><em>options</em></strong>
+    <strong><em>player_name</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <table> options are depth, newline, indent, process
+     the name of the player that you want to check
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">weather the player is currently editing this task</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Setters" class="section-title"><a href="#Setters">Setters </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#add_handler" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="add_handler">add_handler(callback)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds a new handler for when a task is updated</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>callback</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the callback which is ran when a task is updated
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if the callback was added</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#new_task" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="new_task">new_task(force_name[, task_number][, player_name])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds a new task for a force, with option to place it in a certain order</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>force_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the force to add the task for
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>task_number</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the order place to add the task to, adds to end if omited
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     when given this player will be added to the editing list
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    <span class="return-text">the uid of the task which was created</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#remove_task" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="remove_task">remove_task(task_id)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Removes a task and all data linked with it</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>task_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid of the task which you want to remove
 
     </li>
 
@@ -1082,45 +812,18 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#size" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="size">size</span>
+    <a href="#update_task" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="update_task">update_task(task_id, task[, player_name='server'])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Takes a table and returns the number of entries in the table.</p>
-    <p class="section-item-description"> (Slower than #table, faster than iterating via pairs)</p>
+    <p class="section-item-summary">Updates a task message</p>
+    <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#deep_copy" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="deep_copy">deep_copy</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Creates a deepcopy of a table.</p>
-    <p class="section-item-description"> Metatables and LuaObjects inside the table are shallow copies.
- Shallow copies meaning it copies the reference to the object instead of the object itself.</p>
-
-    <!-- parameters start -->
+    <strong>Parameters:</strong>
 
     <ul>
 
@@ -1128,15 +831,49 @@
 
 
 
-    <li class="section-subitem-module-field-li">
+    <li class="section-subitem-li">
 
-    <strong><em>object</em></strong>
+    <strong><em>task_id</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <table> the object to copy
+     the uid of the task that you want to update
 
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>task</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the message that you want to change the task to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the player who made the edit
+
+    (<em>default</em>: 'server')
     </li>
 
 
@@ -1158,18 +895,18 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#merge" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="merge">merge</span>
+    <a href="#set_editing" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="set_editing">set_editing(task_id, player_name[, state])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Merges multiple tables.</p>
-    <p class="section-item-description"> Tables later in the list will overwrite entries from tables earlier in the list.
- Ex. merge({{1, 2, 3}, {[2] = 0}, {[3] = 0}}) will return {1, 0, 0}</p>
+    <p class="section-item-summary">Sets a player to be editing this task, used with is_editing</p>
+    <p class="section-item-description"></p>
 
     <!-- parameters start -->
+    <strong>Parameters:</strong>
 
     <ul>
 
@@ -1177,63 +914,15 @@
 
 
 
-    <li class="section-subitem-module-field-li">
+    <li class="section-subitem-li">
 
-    <strong><em>tables</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> takes a table of tables to merge
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#equals" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="equals">equals</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Determines if two tables are structurally equal.</p>
-    <p class="section-item-description">
- Notice: tables that are LuaObjects or contain LuaObjects won't be compared correctly, use == operator for LuaObjects</p>
-
-    <!-- parameters start -->
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-module-field-li">
-
-    <strong><em>tbl1</em></strong>
+    <strong><em>task_id</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <table>
+     the uid of the task that you want to editing for
 
     </li>
 
@@ -1241,15 +930,33 @@
 
 
 
-    <li class="section-subitem-module-field-li">
+    <li class="section-subitem-li">
 
-    <strong><em>tbl2</em></strong>
+    <strong><em>player_name</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <table>
+     the name of the player you want to set editing for
 
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>state</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     the new state to set editing to
+
+    (<em>optional</em>)
     </li>
 
 
