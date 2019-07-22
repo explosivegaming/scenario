@@ -1,376 +1,409 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<head>
-    <title>Reference</title>
+
+
+    <!doctype html>
+    <html class="no-js" lang="">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>ExpGaming Scenario</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="spectre.min.css" type="text/css" />
+    <link rel="stylesheet" href="spectre-icons.min.css" type="text/css" />
     <link rel="stylesheet" href="ldoc.css" type="text/css" />
-</head>
-<body>
+    </head>
+    <body>
 
-<div id="container">
+    <div class="container grid-1280">
+    <div class="columns">
 
-<div id="product">
-	<div id="product_logo"></div>
-	<div id="product_name"><big><b></b></big></div>
-	<div id="product_description"></div>
-</div> <!-- id="product" -->
+    <!-- sidebar start -->
 
+    <div id="sidebar" class="column col-3 col-sm-12">
 
-<div id="main">
+    <div class="sidebar-custom">
 
+    <div class="project-infobox">
 
-<!-- Menu -->
+    <!-- project title -->
 
-<div id="navigation">
-<br/>
-<h1>ldoc</h1>
+    <a href="index.html"><h1>ExpGaming Scenario</h1></a>
 
+    <!-- project description -->
+    <p class="project-desc">Explosive Gaming's server scenario for 0.17</p>
 
+    <!-- project full description -->
+    </div>
 
+    </div>
+    </div>
+    <!-- sidebar end -->
 
-<h2>Modules</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><a href="modules/config._file_loader.html">config._file_loader</a></li>
-  <li><a href="modules/config.action_buttons.html">config.action_buttons</a></li>
-  <li><a href="modules/config.advanced_start.html">config.advanced_start</a></li>
-  <li><a href="modules/config.death_logger.html">config.death_logger</a></li>
-  <li><a href="modules/config.expcore-commands.auth_admin.html">config.expcore-commands.auth_admin</a></li>
-  <li><a href="modules/config.expcore-commands.auth_roles.html">config.expcore-commands.auth_roles</a></li>
-  <li><a href="modules/config.expcore-commands.auth_runtime_disable.html">config.expcore-commands.auth_runtime_disable</a></li>
-  <li><a href="modules/config.expcore-commands.parse_general.html">config.expcore-commands.parse_general</a></li>
-  <li><a href="modules/config.expcore-commands.parse_roles.html">config.expcore-commands.parse_roles</a></li>
-  <li><a href="modules/config.permission_groups.html">config.permission_groups</a></li>
-  <li><a href="modules/config.popup_messages.html">config.popup_messages</a></li>
-  <li><a href="modules/config.rockets.html">config.rockets</a></li>
-  <li><a href="modules/config.roles.html">config.roles</a></li>
-  <li><a href="modules/config.scorched_earth.html">config.scorched_earth</a></li>
-  <li><a href="modules/config.spawn_area.html">config.spawn_area</a></li>
-  <li><a href="modules/config.warnings.html">config.warnings</a></li>
-  <li><a href="modules/control.html">control</a></li>
-  <li><a href="modules/expcore.commands.html">expcore.commands</a></li>
-  <li><a href="modules/expcore.common.html">expcore.common</a></li>
-  <li><a href="modules/expcore.gui.html">expcore.gui</a></li>
-  <li><a href="modules/expcore.gui.buttons.html">expcore.gui.buttons</a></li>
-  <li><a href="modules/expcore.gui.center.html">expcore.gui.center</a></li>
-  <li><a href="modules/expcore.gui.checkboxs.html">expcore.gui.checkboxs</a></li>
-  <li><a href="modules/expcore.gui.core.html">expcore.gui.core</a></li>
-  <li><a href="modules/expcore.gui.dropdown.html">expcore.gui.dropdown</a></li>
-  <li><a href="modules/expcore.gui.elem-button.html">expcore.gui.elem-button</a></li>
-  <li><a href="modules/expcore.gui.instances.html">expcore.gui.instances</a></li>
-  <li><a href="modules/expcore.gui.left.html">expcore.gui.left</a></li>
-  <li><a href="modules/expcore.gui.popups.html">expcore.gui.popups</a></li>
-  <li><a href="modules/expcore.gui.progress-bar.html">expcore.gui.progress-bar</a></li>
-  <li><a href="modules/expcore.gui.slider.html">expcore.gui.slider</a></li>
-  <li><a href="modules/expcore.gui.test.html">expcore.gui.test</a></li>
-  <li><a href="modules/expcore.gui.text.html">expcore.gui.text</a></li>
-  <li><a href="modules/expcore.gui.toolbar.html">expcore.gui.toolbar</a></li>
-  <li><a href="modules/expcore.permission_groups.html">expcore.permission_groups</a></li>
-  <li><a href="modules/expcore.roles.html">expcore.roles</a></li>
-  <li><a href="modules/expcore.store.html">expcore.store</a></li>
-  <li><a href="modules/modules.addons.advanced-start.html">modules.addons.advanced-start</a></li>
-  <li><a href="modules/modules.addons.chat-popups.html">modules.addons.chat-popups</a></li>
-  <li><a href="modules/modules.addons.damage-popups.html">modules.addons.damage-popups</a></li>
-  <li><a href="modules/modules.gui.player-list.html">modules.gui.player-list</a></li>
-  <li><a href="modules/modules.gui.rocket-info.html">modules.gui.rocket-info</a></li>
-  <li><a href="modules/modules.gui.science-info.html">modules.gui.science-info</a></li>
-  <li><a href="modules/modules.gui.task-list.html">modules.gui.task-list</a></li>
-  <li><a href="modules/utils.alien_evolution_progress.html">utils.alien_evolution_progress</a></li>
-  <li><a href="modules/utils.core.html">utils.core</a></li>
-  <li><a href="modules/utils.debug.html">utils.debug</a></li>
-  <li><a href="modules/utils.event.html">utils.event</a></li>
-  <li><a href="modules/utils.event_core.html">utils.event_core</a></li>
-  <li><a href="modules/utils.math.html">utils.math</a></li>
-  <li><a href="modules/utils.recipe_locker.html">utils.recipe_locker</a></li>
-  <li><a href="modules/utils.state_machine.html">utils.state_machine</a></li>
-  <li><a href="modules/utils.table.html">utils.table</a></li>
-  <li><a href="modules/utils.task.html">utils.task</a></li>
-  <li><a href="modules/utils.timestamp.html">utils.timestamp</a></li>
-</ul>
+    <!-- content body start -->
+    <div class="column col-9 col-sm-12">
 
-</div>
-
-<div id="content">
-
-
-
-<h2>Modules</h2>
-<table class="module_list">
-	<tr>
-		<td class="name"  nowrap><a href="modules/config._file_loader.html">config._file_loader</a></td>
-		<td class="summary">This contains a list of all files that will be loaded and the order they are loaded in
+    <!-- module list on the main page start -->
+    <h2>Control</h2>
+    <table class="module_list">
+    <tr>
+    <td class="name"><a href="control/Jail.html">Jail</a></td>
+    <td class="summary"><span>Control Module - Jail
+    - Adds a way to jail players and temp ban players.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="control/Production.html">Production</a></td>
+    <td class="summary"><span>Control Module - Production
+    - Common functions used to track production of items</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="control/Reports.html">Reports</a></td>
+    <td class="summary"><span>Control Module - Reports
+    - Adds a way to report players and store report messages.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="control/Rockets.html">Rockets</a></td>
+    <td class="summary"><span>Control Module - Rockets
+    - Stores rocket stats for each force.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="control/Tasks.html">Tasks</a></td>
+    <td class="summary"><span>Control Module - Tasks
+    - Stores tasks for each force.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="control/Warnings.html">Warnings</a></td>
+    <td class="summary"><span>Control Module - Warnings
+    - Adds a way to give and remove warnings to players.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="control/Warps.html">Warps</a></td>
+    <td class="summary"><span>Control Module - Warps
+    - Stores warps for each force.</span></td>
+    </tr>
+    </table>
+    <h2>Modules</h2>
+    <table class="module_list">
+    <tr>
+    <td class="name"><a href="modules/config._file_loader.html">config._file_loader</a></td>
+    <td class="summary"><span>This contains a list of all files that will be loaded and the order they are loaded in
  to stop a file from loading add "--" in front of it, remove the "--" to have the file be loaded
  config files should be loaded after all modules are loaded
- core files should be required by modules and not be present in this list</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.action_buttons.html">config.action_buttons</a></td>
-		<td class="summary">Config for the different action buttons that show on the player list
+ core files should be required by modules and not be present in this list</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.action_buttons.html">config.action_buttons</a></td>
+    <td class="summary"><span>Config for the different action buttons that show on the player list
  each button has the button define(s) given along side an auth function, and optional reason callback
- if a reason callback is used then Store.set_child(action_name_store,player.name,'BUTTON_NAME') should be called during on_click
+ if a reason callback is used then Store.set(action_name_store,player.name,'BUTTON_NAME') should be called during on_click
  buttons can be removed from the gui by commenting them out of the config at the bottom of this file
- the key used for the name of the button is the permision name used by the role system</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.advanced_start.html">config.advanced_start</a></td>
-		<td class="summary">This file is used to setup the map starting settings and the items players will start with</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.death_logger.html">config.death_logger</a></td>
-		<td class="summary">This config controls what happens when a player dies mostly about map markers and item collection
+ the key used for the name of the button is the permision name used by the role system</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.advanced_start.html">config.advanced_start</a></td>
+    <td class="summary"><span>This file is used to setup the map starting settings and the items players will start with</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.bonuses.html">config.bonuses</a></td>
+    <td class="summary"><span>Lists all bonuses which can be used, name followed by min max</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.chat_reply.html">config.chat_reply</a></td>
+    <td class="summary"><span>This file defines the different triggers for the chat bot</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.death_logger.html">config.death_logger</a></td>
+    <td class="summary"><span>This config controls what happens when a player dies mostly about map markers and item collection
  allow_teleport_to_body_command and allow_collect_bodies_command can be over ridden if command_auth_runtime_disable is present
- if not present then the commands will not be loaded into the game</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.expcore-commands.auth_admin.html">config.expcore-commands.auth_admin</a></td>
-		<td class="summary">This is a very simple config file which adds a admin only auth function
+ if not present then the commands will not be loaded into the game</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.discord_alerts.html">config.discord_alerts</a></td>
+    <td class="summary"><span>Config file used to enable and disable different push messages for discord</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.expcore-commands.auth_admin.html">config.expcore-commands.auth_admin</a></td>
+    <td class="summary"><span>This is a very simple config file which adds a admin only auth function
  not much to change here its more so it can be enabled and disabled from ./config/file_loader.lua
- either way you can change the requirements to be "admin" if you wanted to</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.expcore-commands.auth_roles.html">config.expcore-commands.auth_roles</a></td>
-		<td class="summary">This will make commands only work if the role has been allowed it in the role config</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.expcore-commands.auth_runtime_disable.html">config.expcore-commands.auth_runtime_disable</a></td>
-		<td class="summary">This config for command auth allows commands to be globally enabled and disabled during runtime
- this config adds Commands.disable and Commands.enable to enable and disable commands for all users</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.expcore-commands.parse_general.html">config.expcore-commands.parse_general</a></td>
-		<td class="summary">This file contains some common command param parse functions
+ either way you can change the requirements to be "admin" if you wanted to</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.expcore-commands.auth_roles.html">config.expcore-commands.auth_roles</a></td>
+    <td class="summary"><span>This will make commands only work if the role has been allowed it in the role config</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.expcore-commands.auth_runtime_disable.html">config.expcore-commands.auth_runtime_disable</a></td>
+    <td class="summary"><span>This config for command auth allows commands to be globally enabled and disabled during runtime
+ this config adds Commands.disable and Commands.enable to enable and disable commands for all users</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.expcore-commands.parse_general.html">config.expcore-commands.parse_general</a></td>
+    <td class="summary"><span>This file contains some common command param parse functions
  this file is less of a config and more of a requirement but you may wish to change how some behave
  as such you need to be confident with lua but you edit this config file
  use Commands.add_parse('name',function(input,player,reject) end) to add a parse
- see ./expcore/commands.lua for more details</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.expcore-commands.parse_roles.html">config.expcore-commands.parse_roles</a></td>
-		<td class="summary">Adds some parse functions that can be used with the role system</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.permission_groups.html">config.permission_groups</a></td>
-		<td class="summary">Use this file to add new permission groups to the game
+ see ./expcore/commands.lua for more details</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.expcore-commands.parse_roles.html">config.expcore-commands.parse_roles</a></td>
+    <td class="summary"><span>Adds some parse functions that can be used with the role system</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.permission_groups.html">config.permission_groups</a></td>
+    <td class="summary"><span>Use this file to add new permission groups to the game
  start with Permission_Groups.new_group('name')
  then use either :allow_all() or :disallow_all() to set the default for non specified actions
- then use :allow{} and :disallow{} to specify certain actions to allow/disallow</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.popup_messages.html">config.popup_messages</a></td>
-		<td class="summary">A combination of config settings for different popup values like chat and damage</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.rockets.html">config.rockets</a></td>
-		<td class="summary">This file controls what will show in each section of the rocket info gui</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.roles.html">config.roles</a></td>
-		<td class="summary">This is the main config file for the role system; file includes defines for roles and role flags and default values</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.scorched_earth.html">config.scorched_earth</a></td>
-		<td class="summary">This file controls the placement/degrading of tiles as players build and walk</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.spawn_area.html">config.spawn_area</a></td>
-		<td class="summary">Used to config the spawn generation settings yes there is alot here i know just ignore the long tables at the end (they were generated with a command)</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/config.warnings.html">config.warnings</a></td>
-		<td class="summary">Config file for the warning system, this is very similar to reports but is for the use of moderators rather than normal users.</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/control.html">control</a></td>
-		<td class="summary">Please go to ./config if you want to change settings, each file is commented with what it does
+ then use :allow{} and :disallow{} to specify certain actions to allow/disallow</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.popup_messages.html">config.popup_messages</a></td>
+    <td class="summary"><span>A combination of config settings for different popup values like chat and damage</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.rockets.html">config.rockets</a></td>
+    <td class="summary"><span>This file controls what will show in each section of the rocket info gui</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.roles.html">config.roles</a></td>
+    <td class="summary"><span>This is the main config file for the role system; file includes defines for roles and role flags and default values</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.scorched_earth.html">config.scorched_earth</a></td>
+    <td class="summary"><span>This file controls the placement/degrading of tiles as players build and walk</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.spawn_area.html">config.spawn_area</a></td>
+    <td class="summary"><span>Used to config the spawn generation settings yes there is alot here i know just ignore the long tables at the end (they were generated with a command)</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.warnings.html">config.warnings</a></td>
+    <td class="summary"><span>Config file for the warning system, this is very similar to reports but is for the use of moderators rather than normal users.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/config.warps.html">config.warps</a></td>
+    <td class="summary"><span>This file contains all the different settings for the warp system and gui</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/control.html">control</a></td>
+    <td class="summary"><span>Please go to ./config if you want to change settings, each file is commented with what it does
  if it is not in ./config then you should not attempt to change it unless you know what you are doing
  all files which are loaded (including the config files) are present in ./config/file_loader.lua
- this file is the landing point for all scenarios please DO NOT edit directly, further comments are to aid development</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.commands.html">expcore.commands</a></td>
-		<td class="summary">Factorio command making module that makes commands with better parse and more modularity</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.common.html">expcore.common</a></td>
-		<td class="summary">Adds some commonly used functions used in many modules</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.html">expcore.gui</a></td>
-		<td class="summary">This file is used to require all the different elements of the gui module
- each module has an outline here but for more details see their seperate files in ./gui</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.buttons.html">expcore.gui.buttons</a></td>
-		<td class="summary">Gui class define for buttons and sprite buttons
-[[</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.center.html">expcore.gui.center</a></td>
-		<td class="summary">Gui structure define for center gui frames
-[[</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.checkboxs.html">expcore.gui.checkboxs</a></td>
-		<td class="summary">Gui class define for checkboxs and radiobuttons
-[[</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.core.html">expcore.gui.core</a></td>
-		<td class="summary">Core gui file for making element defines and element classes (use require 'expcore.gui')
+ this file is the landing point for all scenarios please DO NOT edit directly, further comments are to aid development</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.commands.html">expcore.commands</a></td>
+    <td class="summary"><span>Factorio command making module that makes commands with better parse and more modularity</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.common.html">expcore.common</a></td>
+    <td class="summary"><span>Adds some commonly used functions used in many modules</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.html">expcore.gui</a></td>
+    <td class="summary"><span>This file is used to require all the different elements of the gui module
+ each module has an outline here but for more details see their seperate files in ./gui</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.concepts.center.html">expcore.gui.concepts.center</a></td>
+    <td class="summary"><span>Gui structure define for center gui frames
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.concepts.left.html">expcore.gui.concepts.left</a></td>
+    <td class="summary"><span>Gui structure define for left frames
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.concepts.popups.html">expcore.gui.concepts.popups</a></td>
+    <td class="summary"><span>Gui structure define for popup gui
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.concepts.toolbar.html">expcore.gui.concepts.toolbar</a></td>
+    <td class="summary"><span>Gui structure for the toolbar (top left)
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.core.html">expcore.gui.core</a></td>
+    <td class="summary"><span>Core gui file for making element defines and element classes (use require 'expcore.gui')
  see utils.gui for event handlering
  see expcore.gui.test for examples for element defines
-[[</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.dropdown.html">expcore.gui.dropdown</a></td>
-		<td class="summary">Gui class define for dropdowns and list boxs
-[[</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.elem-button.html">expcore.gui.elem-button</a></td>
-		<td class="summary">Gui class defines for elem buttons
-[[</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.instances.html">expcore.gui.instances</a></td>
-		<td class="summary">This file is a breakout from core which forcues on instance management of defines
-[[</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.left.html">expcore.gui.left</a></td>
-		<td class="summary">Gui structure define for left frames
-[[</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.popups.html">expcore.gui.popups</a></td>
-		<td class="summary">Gui structure define for popup gui
-[[</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.progress-bar.html">expcore.gui.progress-bar</a></td>
-		<td class="summary">Gui element define for progess bars
-[[</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.slider.html">expcore.gui.slider</a></td>
-		<td class="summary">Gui class define for silders
-[[</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.test.html">expcore.gui.test</a></td>
-		<td class="summary">This file creates a teste gui that is used to test every input method
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.elements.buttons.html">expcore.gui.elements.buttons</a></td>
+    <td class="summary"><span>Gui class define for buttons and sprite buttons
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.elements.checkboxs.html">expcore.gui.elements.checkboxs</a></td>
+    <td class="summary"><span>Gui class define for checkboxs and radiobuttons
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.elements.dropdown.html">expcore.gui.elements.dropdown</a></td>
+    <td class="summary"><span>Gui class define for dropdowns and list boxs
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.elements.elem-button.html">expcore.gui.elements.elem-button</a></td>
+    <td class="summary"><span>Gui class defines for elem buttons
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.elements.progress-bar.html">expcore.gui.elements.progress-bar</a></td>
+    <td class="summary"><span>Gui element define for progess bars
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.elements.slider.html">expcore.gui.elements.slider</a></td>
+    <td class="summary"><span>Gui class define for silders
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.elements.text.html">expcore.gui.elements.text</a></td>
+    <td class="summary"><span>Gui class define for text fields and text boxs
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.instances.html">expcore.gui.instances</a></td>
+    <td class="summary"><span>This file is a breakout from core which forcues on instance management of defines
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.prototype.html">expcore.gui.prototype</a></td>
+    <td class="summary"><span>Used to create new gui prototypes see elements and concepts
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.gui.test.html">expcore.gui.test</a></td>
+    <td class="summary"><span>This file creates a teste gui that is used to test every input method
  note that this does not cover every permutation only features in indepentance
- for example store in most cases is just by player name, but other store methods are tested with checkbox</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.text.html">expcore.gui.text</a></td>
-		<td class="summary">Gui class define for text fields and text boxs
-[[</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.gui.toolbar.html">expcore.gui.toolbar</a></td>
-		<td class="summary">Gui structure for the toolbar (top left)
-[[</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.permission_groups.html">expcore.permission_groups</a></td>
-		<td class="summary">Permission group making for factorio so you never have to make one by hand again</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.roles.html">expcore.roles</a></td>
-		<td class="summary">Factorio role system to manage custom permissions</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/expcore.store.html">expcore.store</a></td>
-		<td class="summary">Adds an easy way to store and watch for updates to a value
-[[</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/modules.addons.advanced-start.html">modules.addons.advanced-start</a></td>
-		<td class="summary">Adds a better method of player starting items based on production levels.</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/modules.addons.chat-popups.html">modules.addons.chat-popups</a></td>
-		<td class="summary">Creates flying text entities when a player sends a message in chat
- also displays a ping above users who are named in the message</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/modules.addons.damage-popups.html">modules.addons.damage-popups</a></td>
-		<td class="summary">Displays the amount of dmg that is done by players to entities
- also shows player health when a player is attacked</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/modules.gui.player-list.html">modules.gui.player-list</a></td>
-		<td class="summary">Gui left frame define for a player list</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/modules.gui.rocket-info.html">modules.gui.rocket-info</a></td>
-		<td class="summary">Adds a rocket infomation gui which shows general stats, milestones and build progress of rockets</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/modules.gui.science-info.html">modules.gui.science-info</a></td>
-		<td class="summary">Adds a science info gui that shows production usage and net for the different science packs as well as an eta</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/modules.gui.task-list.html">modules.gui.task-list</a></td>
-		<td class="summary">Adds a task list to the game which players can add remove and edit items on</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/utils.alien_evolution_progress.html">utils.alien_evolution_progress</a></td>
-		<td class="summary">info
+ for example store in most cases is just by player name, but other store methods are tested with checkbox</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.permission_groups.html">expcore.permission_groups</a></td>
+    <td class="summary"><span>Permission group making for factorio so you never have to make one by hand again</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.roles.html">expcore.roles</a></td>
+    <td class="summary"><span>Factorio role system to manage custom permissions</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.store.html">expcore.store</a></td>
+    <td class="summary"><span>Adds an easy way to store and watch for updates to a value
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/expcore.sudo.html">expcore.sudo</a></td>
+    <td class="summary"><span>An extention of task and token to allow a single require to register and run functions bypassing all permissions
+[[</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/modules.addons.advanced-start.html">modules.addons.advanced-start</a></td>
+    <td class="summary"><span>Adds a better method of player starting items based on production levels.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/modules.addons.chat-popups.html">modules.addons.chat-popups</a></td>
+    <td class="summary"><span>Creates flying text entities when a player sends a message in chat
+ also displays a ping above users who are named in the message</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/modules.addons.damage-popups.html">modules.addons.damage-popups</a></td>
+    <td class="summary"><span>Displays the amount of dmg that is done by players to entities
+ also shows player health when a player is attacked</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/modules.gui.player-list.html">modules.gui.player-list</a></td>
+    <td class="summary"><span>Gui left frame define for a player list</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/modules.gui.rocket-info.html">modules.gui.rocket-info</a></td>
+    <td class="summary"><span>Adds a rocket infomation gui which shows general stats, milestones and build progress of rockets</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/modules.gui.science-info.html">modules.gui.science-info</a></td>
+    <td class="summary"><span>Adds a science info gui that shows production usage and net for the different science packs as well as an eta</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/modules.gui.task-list.html">modules.gui.task-list</a></td>
+    <td class="summary"><span>Adds a task list to the game which players can add remove and edit items on</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/utils.alien_evolution_progress.html">utils.alien_evolution_progress</a></td>
+    <td class="summary"><span>info
     Original (javascript) version: https://hastebin.com/udakacavap.js
-    Can be tested against: https://wiki.factorio.com/Enemies#Spawn_chances_by_evolution_factor</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/utils.core.html">utils.core</a></td>
-		<td class="summary">Measures distance between pos1 and pos2</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/utils.debug.html">utils.debug</a></td>
-		<td class="summary"></td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/utils.event.html">utils.event</a></td>
-		<td class="summary">This Module allows for registering multiple handlers to the same event, overcoming the limitation of script.register.</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/utils.event_core.html">utils.event_core</a></td>
-		<td class="summary">Do not use this function, use Event.add instead as it has safety checks.</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/utils.math.html">utils.math</a></td>
-		<td class="summary">Takes two points and calculates the slope of a line</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/utils.recipe_locker.html">utils.recipe_locker</a></td>
-		<td class="summary">Locks recipes, preventing them from being enabled by research.</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/utils.state_machine.html">utils.state_machine</a></td>
-		<td class="summary">This module provides a classical mealy/moore state machine.</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/utils.table.html">utils.table</a></td>
-		<td class="summary">Searches a table to remove a specific element without an index</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/utils.task.html">utils.task</a></td>
-		<td class="summary">Allows you to set a timer (in ticks) after which the tokened function will be run with params given as an argument
- Cannot be called before init</td>
-	</tr>
-	<tr>
-		<td class="name"  nowrap><a href="modules/utils.timestamp.html">utils.timestamp</a></td>
-		<td class="summary">source https://github.com/daurnimator/luatz/blob/master/luatz/timetable.lua
- edited down to just what is needed.</td>
-	</tr>
-</table>
+    Can be tested against: https://wiki.factorio.com/Enemies#Spawn_chances_by_evolution_factor</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/utils.core.html">utils.core</a></td>
+    <td class="summary"><span>Measures distance between pos1 and pos2</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/utils.debug.html">utils.debug</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/utils.event.html">utils.event</a></td>
+    <td class="summary"><span>This Module allows for registering multiple handlers to the same event, overcoming the limitation of script.register.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/utils.event_core.html">utils.event_core</a></td>
+    <td class="summary"><span>Do not use this function, use Event.add instead as it has safety checks.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/utils.math.html">utils.math</a></td>
+    <td class="summary"><span>Takes two points and calculates the slope of a line</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/utils.recipe_locker.html">utils.recipe_locker</a></td>
+    <td class="summary"><span>Locks recipes, preventing them from being enabled by research.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/utils.state_machine.html">utils.state_machine</a></td>
+    <td class="summary"><span>This module provides a classical mealy/moore state machine.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/utils.table.html">utils.table</a></td>
+    <td class="summary"><span>Searches a table to remove a specific element without an index</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/utils.task.html">utils.task</a></td>
+    <td class="summary"><span>Allows you to set a timer (in ticks) after which the tokened function will be run with params given as an argument
+ Cannot be called before init</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="modules/utils.timestamp.html">utils.timestamp</a></td>
+    <td class="summary"><span>source https://github.com/daurnimator/luatz/blob/master/luatz/timetable.lua
+ edited down to just what is needed.</span></td>
+    </tr>
+    </table>
+    <h2>Topics</h2>
+    <table class="module_list">
+    <tr>
+    <td class="name"><a href="topics/readme.md.html">readme.md</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="topics/license.html">license</a></td>
+    </tr>
+    </table>
+    <!-- module list on the main page end -->
 
-</div> <!-- id="content" -->
-</div> <!-- id="main" -->
-<div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2019-05-29 22:30:49 </i>
-</div> <!-- id="about" -->
-</div> <!-- id="container" -->
-</body>
-</html>
+    <!-- module contents -->
+
+    <!-- section end -->
+
+    </div>
+    </div>
+    </div>
+
+    <div class="footer container grid-1280">
+    <div class="divider divider-custom"></div>
+    <div class="footer-columns columns">
+    <div class="sidebar-footer column col-3 col-sm-12">
+    <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
+    </div>
+    <div class="content-footer column col-9 col-sm-12">
+    <i>Last updated 2019-07-22 16:24:44 UTC</i>
+    </div>
+    </div>
+    </div>
+    </body>
+    </html>

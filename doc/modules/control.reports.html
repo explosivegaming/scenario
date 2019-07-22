@@ -1,0 +1,341 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Get_functions">Get functions </a></li>
+<li><a href="#Set_functions">Set functions </a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/addons.advanced-start.html">addons.advanced-start</a></li>
+  <li><a href="../modules/addons.chat-popups.html">addons.chat-popups</a></li>
+  <li><a href="../modules/addons.damage-popups.html">addons.damage-popups</a></li>
+  <li><strong>control.reports</strong></li>
+  <li><a href="../modules/gui.player-list.html">gui.player-list</a></li>
+  <li><a href="../modules/gui.rocket-info.html">gui.rocket-info</a></li>
+  <li><a href="../modules/gui.science-info.html">gui.science-info</a></li>
+  <li><a href="../modules/gui.task-list.html">gui.task-list</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>control.reports</code></h1>
+<p>Gets a list of all reports that a player has against them</p>
+<p></p>
+
+
+<h2><a href="#Get_functions">Get functions </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Reports.get_reports">Reports.get_reports (player)</a></td>
+	<td class="summary">Gets a list of all reports that a player has against them</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Reports.get_report">Reports.get_report (player[, by_player_name='server'])</a></td>
+	<td class="summary">Gets a single report against a player given the name of the player who made the report</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Reports.is_reported">Reports.is_reported (player[, by_player_name])</a></td>
+	<td class="summary">Checks if a player is reported, option to get if reported by a certain player</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Reports.count">Reports.count (player[, custom_count])</a></td>
+	<td class="summary">Counts the number of reports that a player has aganist them</td>
+	</tr>
+</table>
+<h2><a href="#Set_functions">Set functions </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Reports.report_player">Reports.report_player (player[, by_player_name='server'[, reason='Non Given.']])</a></td>
+	<td class="summary">Adds a report to a player, each player can only report another player once</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Reports.remove_report">Reports.remove_report (player[, by_player_name='server'])</a></td>
+	<td class="summary">Removes a report from a player</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Reports.remove_all">Reports.remove_all (player)</a></td>
+	<td class="summary">Removes all reports from a player</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Get_functions"></a>Get functions </h2>
+
+
+ Functions used to get information from reports
+    <dl class="function">
+    <dt>
+    <a name = "Reports.get_reports"></a>
+    <strong>Reports.get_reports (player)</strong>
+    </dt>
+    <dd>
+    Gets a list of all reports that a player has against them
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+            <span class="types"><span class="type">LuaPlayer</span></span>
+         the player to get the report for
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.5">table</a></span>
+        a list of all reports, key is by player name, value is reason
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Reports.get_report"></a>
+    <strong>Reports.get_report (player[, by_player_name='server'])</strong>
+    </dt>
+    <dd>
+    Gets a single report against a player given the name of the player who made the report
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+            <span class="types"><span class="type">LuaPlayer</span></span>
+         the player to get the report for
+        </li>
+        <li><span class="parameter">by_player_name</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the name of the player who made the report
+         (<em>default</em> 'server')
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a> or <span class="type">nil</span></span>
+        string is the reason that the player was reported, if the player is not reported
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Reports.is_reported"></a>
+    <strong>Reports.is_reported (player[, by_player_name])</strong>
+    </dt>
+    <dd>
+    Checks if a player is reported, option to get if reported by a certain player
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+            <span class="types"><span class="type">LuaPlayer</span></span>
+         the player to check if reported
+        </li>
+        <li><span class="parameter">by_player_name</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         when given will check if reported by this player
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        if the player has been reported
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Reports.count"></a>
+    <strong>Reports.count (player[, custom_count])</strong>
+    </dt>
+    <dd>
+    Counts the number of reports that a player has aganist them
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+            <span class="types"><span class="type">LuaPlayer</span></span>
+         the player to count the reports for
+        </li>
+        <li><span class="parameter">custom_count</span>
+            <span class="types"><span class="type">function</span></span>
+         when given this function will be used to count the reports
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        the number of reports that the user has
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Set_functions"></a>Set functions </h2>
+
+
+ Functions used to get information from reports
+    <dl class="function">
+    <dt>
+    <a name = "Reports.report_player"></a>
+    <strong>Reports.report_player (player[, by_player_name='server'[, reason='Non Given.']])</strong>
+    </dt>
+    <dd>
+    Adds a report to a player, each player can only report another player once
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+            <span class="types"><span class="type">LuaPlayer</span></span>
+         the player to add the report to
+        </li>
+        <li><span class="parameter">by_player_name</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the name of the player that is making the report
+         (<em>default</em> 'server')
+        </li>
+        <li><span class="parameter">reason</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the reason that the player is being reported
+         (<em>default</em> 'Non Given.')
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        whether the report was added successfully
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Reports.remove_report"></a>
+    <strong>Reports.remove_report (player[, by_player_name='server'])</strong>
+    </dt>
+    <dd>
+    Removes a report from a player
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+            <span class="types"><span class="type">LuaPlayer</span></span>
+         the player to remove the report from
+        </li>
+        <li><span class="parameter">by_player_name</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+         the name of the player that made the report
+         (<em>default</em> 'server')
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        whether the report was removed successfully
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Reports.remove_all"></a>
+    <strong>Reports.remove_all (player)</strong>
+    </dt>
+    <dd>
+    Removes all reports from a player
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+            <span class="types"><span class="type">LuaPlayer</span></span>
+         the player to remove the reports from
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        whether the reports were removed successfully
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2019-06-21 18:40:35 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
