@@ -5,7 +5,7 @@
     <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>utils.table module</title>
+    <title>Warps control</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
     <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
@@ -41,8 +41,24 @@
     <li class="nav-item">
     <h2>Sections</h2>
     <ul class="nav">
-    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
-    <li class="nav-item"><a href="#Fields"><span class="fragment-hashtag">#</span> Fields</a></li>
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
+    <li class="nav-item"><a href="#Getters"><span class="fragment-hashtag">#</span> Getters </a></li>
+    <li class="nav-item"><a href="#Setters"><span class="fragment-hashtag">#</span> Setters </a></li>
+    <li class="nav-item"><a href="#Generators"><span class="fragment-hashtag">#</span> Generators </a></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Rockets.html"><span class="module-name-item">Rockets</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Tasks.html"><span class="module-name-item">Tasks</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../control/Warps.html"><span class="module-name-item">Warps</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
     </ul>
     </li>
     </ul>
@@ -108,23 +124,9 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.math.html"><span class="module-name-item">utils.math</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.recipe_locker.html"><span class="module-name-item">utils.recipe_locker</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.state_machine.html"><span class="module-name-item">utils.state_machine</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/utils.table.html"><span class="module-name-item">utils.table</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.table.html"><span class="module-name-item">utils.table</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.task.html"><span class="module-name-item">utils.task</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.timestamp.html"><span class="module-name-item">utils.timestamp</span></a></div></li>
-    </ul>
-    </li>
-    </ul>
-    <ul class="nav nav-modules">
-    <li class="nav-item">
-    <h2>Control</h2>
-    <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Rockets.html"><span class="module-name-item">Rockets</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Tasks.html"><span class="module-name-item">Tasks</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warps.html"><span class="module-name-item">Warps</span></a></div></li>
     </ul>
     </li>
     </ul>
@@ -146,8 +148,10 @@
     <li class="nav-item">
     <h4>Jump to Section</h4>
     <ul class="nav">
-    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
-    <li class="nav-item"><a href="#Fields"><span class="fragment-hashtag">#</span> Fields</a></li>
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
+    <li class="nav-item"><a href="#Getters"><span class="fragment-hashtag">#</span> Getters </a></li>
+    <li class="nav-item"><a href="#Setters"><span class="fragment-hashtag">#</span> Setters </a></li>
+    <li class="nav-item"><a href="#Generators"><span class="fragment-hashtag">#</span> Generators </a></li>
     </ul>
     </li>
     </ul>
@@ -166,8 +170,9 @@
 
     <!-- module content header start -->
 
-    <h2><span class="body-module-name"><strong><em>utils.table</em></strong></span> module</h2>
-    <p>Searches a table to remove a specific element without an index</p>
+    <h2><span class="body-module-name"><strong><em>Warps</em></strong></span> control</h2>
+    <p>Control Module - Warps
+    - Stores warps for each force.</p>
     <p></p>
 
 
@@ -175,6 +180,26 @@
     <!-- module info end -->
 
     <!-- module usage start -->
+    <h3>Usage</h3>
+    <pre class="code" data-lang="Lua"><code>
+    <span class="comment">-- import the module from the control modules
+</span>    <span class="keyword">local</span> Warps = <span class="global">require</span> <span class="string">'modules.control.warps'</span>
+
+    <span class="comment">-- Adding a warp require a force, surface and postion, and the option to set this as the spawn
+</span>    <span class="comment">-- this function will also create the warp area unless set other wise
+</span>    Warps.new_warp(<span class="string">'player'</span>,surface,{x=<span class="number">0</span>,y=<span class="number">0</span>})
+
+    <span class="comment">-- You can then update the warp information, name and icon, with the update function
+</span>    Warps.update_warp(warp_id,<span class="string">'Best Warp'</span>,<span class="string">'iron-plate'</span>)
+
+    <span class="comment">-- Removeing a warp will restore the land that as under it, and remove any data linked with it
+</span>    Warps.remove_warp(warp_id)
+
+    <span class="comment">-- You can get the deatils for a warp which include last edit and postion
+</span>    Warps.get_details(warp_id)
+
+    <span class="comment">-- You can teleport a player to a warp, note that there is no limit on this action
+</span>    Warps.teleport_player(warp_id,player)</code></pre>
     <!-- module usage end -->
 
     <!-- module content header end -->
@@ -182,85 +207,105 @@
     <!-- module section list start -->
     <table class="section-content-list">
     <thead>
-    <h3><a href="#Functions">Functions</a></h3>
+    <h3><a href="#Dependencies">Dependencies</a></h3>
     <span></span>
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#fast_remove">fast_remove(tbl, index)</a></td>
-    <td class="summary">Removes an item from an array in O(1) time.</td>
+    <td class="name"><a href="#expcore.store">expcore.store</a></td>
+    <td class="summary">Allows storing of warp ids</td>
     </tr>
     <tr>
-    <td class="name"><a href="#add_all">add_all(t1, t2)</a></td>
-    <td class="summary">Adds the contents of table t2 to table t1</td>
+    <td class="name"><a href="#utils.global">utils.global</a></td>
+    <td class="summary">Allows storing of warp details</td>
     </tr>
     <tr>
-    <td class="name"><a href="#index_of">index_of(t, e)</a></td>
-    <td class="summary">Checks if a table contains an element</td>
+    <td class="name"><a href="#utils.token">utils.token</a></td>
+    <td class="summary">Allows non conflicting warp ids</td>
     </tr>
     <tr>
-    <td class="name"><a href="#index_of_in_array">index_of_in_array(t, e)</a></td>
-    <td class="summary">Checks if the arrayed portion of a table contains an element</td>
+    <td class="name"><a href="#expcore.store">expcore.store</a></td>
+    <td class="summary">Config for the warps</td>
     </tr>
     <tr>
-    <td class="name"><a href="#contains">contains(t, e)</a></td>
-    <td class="summary">Checks if a table contains an element</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#array_contains">array_contains(t, e)</a></td>
-    <td class="summary">Checks if the arrayed portion of a table contains an element</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#set">set(t, index, element)</a></td>
-    <td class="summary">Adds an element into a specific index position while shuffling the rest down</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#get_random_dictionary_entry">get_random_dictionary_entry(t, key)</a></td>
-    <td class="summary">Chooses a random entry from a table
- because this uses math.random, it cannot be used outside of events</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#get_random_weighted">get_random_weighted(weight_table, item_index, weight_index)</a></td>
-    <td class="summary">Chooses a random entry from a weighted table
- because this uses math.random, it cannot be used outside of events</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#shuffle_table">shuffle_table(t)</a></td>
-    <td class="summary">Creates a fisher-yates shuffle of a sequential number-indexed table
- because this uses math.random, it cannot be used outside of events if no rng is supplied
- from: http://www.sdknews.com/cross-platform/corona/tutorial-how-to-shuffle-table-items</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#clear_table">clear_table(t, array)</a></td>
-    <td class="summary">Clears all existing entries in a table</td>
+    <td class="name"><a href="#expcore.common">expcore.common</a></td>
+    <td class="summary">Access to table_values and table_keysort</td>
     </tr>
     </tbody>
     </table>
     <table class="section-content-list">
     <thead>
-    <h3><a href="#Fields">Fields</a></h3>
+    <h3><a href="#Getters">Getters </a></h3>
     <span></span>
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#inspect">inspect</a></td>
-    <td class="summary">Similar to serpent.block, returns a string with a pretty representation of a table.</td>
+    <td class="name"><a href="#get_warp_name">get_warp_name(warp_id)</a></td>
+    <td class="summary">Gets the name of a warp</td>
     </tr>
     <tr>
-    <td class="name"><a href="#size">size</a></td>
-    <td class="summary">Takes a table and returns the number of entries in the table.</td>
+    <td class="name"><a href="#get_warp_icon">get_warp_icon(warp_id)</a></td>
+    <td class="summary">Gets the icon of a warp</td>
     </tr>
     <tr>
-    <td class="name"><a href="#deep_copy">deep_copy</a></td>
-    <td class="summary">Creates a deepcopy of a table.</td>
+    <td class="name"><a href="#get_details">get_details(warp_id)</a></td>
+    <td class="summary">Gets the task details stored at this id</td>
     </tr>
     <tr>
-    <td class="name"><a href="#merge">merge</a></td>
-    <td class="summary">Merges multiple tables.</td>
+    <td class="name"><a href="#get_warps">get_warps(force_name)</a></td>
+    <td class="summary">Gets all warps for a force</td>
     </tr>
     <tr>
-    <td class="name"><a href="#equals">equals</a></td>
-    <td class="summary">Determines if two tables are structurally equal.</td>
+    <td class="name"><a href="#get_all_warps">get_all_warps()</a></td>
+    <td class="summary">Gets all warps from all forces</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#is_editing">is_editing(warp_id, player_name)</a></td>
+    <td class="summary">Gets if a player is currently editing this warp</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#teleport_player">teleport_player(warp_id, player)</a></td>
+    <td class="summary">Teleports a player to a warp point</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Setters">Setters </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#add_handler">add_handler(callback)</a></td>
+    <td class="summary">Adds a new handler for when a warp is updated</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#set_editing">set_editing(warp_id, player_name[, state])</a></td>
+    <td class="summary">Sets a player to be editing this warp, used with is_editing</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#update_warp">update_warp(warp_id, name, icon[, player_name='server'])</a></td>
+    <td class="summary">Updates a warp to a differecnt name and icon, both must be given</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Generators">Generators </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#make_chart_tag">make_chart_tag(warp_id)</a></td>
+    <td class="summary">Adds or updates the chart tag for a warp</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#new_warp">new_warp(force_name, surface, postion[, player_name='server'][, warp_name='New warp'][, block_generation=false][, set_spawn=false])</a></td>
+    <td class="summary">Adds a new warp to a force and makes the in game warp area</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#remove_warp">remove_warp(warp_id)</a></td>
+    <td class="summary">Removes a warp and clears the area where it was added</td>
     </tr>
     </tbody>
     </table>
@@ -269,60 +314,22 @@
     <br />
 
     <!-- section start -->
-    <h3><span id="Functions" class="section-title"><a href="#Functions">Functions</a></span></h3>
+    <h3><span id="Dependencies" class="section-title"><a href="#Dependencies">Dependencies</a></span></h3>
     <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#fast_remove" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="fast_remove">fast_remove(tbl, index)</span>
+    <a href="#expcore.store" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.store">expcore.store</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Removes an item from an array in O(1) time.</p>
-    <p class="section-item-description">
- The catch is that fast_remove doesn't guarantee to maintain the order of items in the array.</p>
+    <p class="section-item-summary">Allows storing of warp ids</p>
+    <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>tbl</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> arrayed table
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>index</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> Must be >= 0. The case where index > #tbl is handled.
-
-    </li>
-
-
-    </ul>
-
     <!-- parameters end -->
 
     <!-- returns start -->
@@ -339,54 +346,17 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#add_all" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="add_all">add_all(t1, t2)</span>
+    <a href="#utils.global" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.global">utils.global</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Adds the contents of table t2 to table t1</p>
+    <p class="section-item-summary">Allows storing of warp details</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t1</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to insert into
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t2</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to insert from
-
-    </li>
-
-
-    </ul>
-
     <!-- parameters end -->
 
     <!-- returns start -->
@@ -403,54 +373,17 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#index_of" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="index_of">index_of(t, e)</span>
+    <a href="#utils.token" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.token">utils.token</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Checks if a table contains an element</p>
+    <p class="section-item-summary">Allows non conflicting warp ids</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
     <!-- parameters end -->
 
     <!-- returns start -->
@@ -467,54 +400,17 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#index_of_in_array" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="index_of_in_array">index_of_in_array(t, e)</span>
+    <a href="#expcore.store" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.store">expcore.store</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Checks if the arrayed portion of a table contains an element</p>
+    <p class="section-item-summary">Config for the warps</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
     <!-- parameters end -->
 
     <!-- returns start -->
@@ -531,54 +427,17 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#contains" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="contains">contains(t, e)</span>
+    <a href="#expcore.common" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.common">expcore.common</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Checks if a table contains an element</p>
+    <p class="section-item-summary">Access to table_values and table_keysort</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
     <!-- parameters end -->
 
     <!-- returns start -->
@@ -592,17 +451,20 @@
     <!-- usage end -->
 
     </dd>
+    </dl>
+    <h3><span id="Getters" class="section-title"><a href="#Getters">Getters </a></span></h3>
+    <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#array_contains" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="array_contains">array_contains(t, e)</span>
+    <a href="#get_warp_name" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_warp_name">get_warp_name(warp_id)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Checks if the arrayed portion of a table contains an element</p>
+    <p class="section-item-summary">Gets the name of a warp</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -616,171 +478,13 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>t</em></strong>
+    <strong><em>warp_id</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#set" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="set">set(t, index, element)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Adds an element into a specific index position while shuffling the rest down</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to add into
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>index</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> the position in the table to add to
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>element</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> to add to the table
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#get_random_dictionary_entry" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_random_dictionary_entry">get_random_dictionary_entry(t, key)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Chooses a random entry from a table
- because this uses math.random, it cannot be used outside of events</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>key</em></strong>
-
-    <strong> : </strong>
-
-
-     <boolean> to indicate whether to return the key or value
+     the uid of the warp you want to get
 
     </li>
 
@@ -793,7 +497,8 @@
     <strong>Returns:</strong>
     <ul>
     <li>
-    <span class="return-text"><any> a random element of table t</span>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    <span class="return-text">the warp name that was stored here</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -809,15 +514,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#get_random_weighted" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_random_weighted">get_random_weighted(weight_table, item_index, weight_index)</span>
+    <a href="#get_warp_icon" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_warp_icon">get_warp_icon(warp_id)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Chooses a random entry from a weighted table
- because this uses math.random, it cannot be used outside of events</p>
+    <p class="section-item-summary">Gets the icon of a warp</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -831,42 +535,13 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>weight_table</em></strong>
+    <strong><em>warp_id</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <table> of tables with items and their weights
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>item_index</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> of the index of items, defaults to 1
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>weight_index</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> of the index of the weights, defaults to 2
+     the uid of the warp you want to get
 
     </li>
 
@@ -879,16 +554,14 @@
     <strong>Returns:</strong>
     <ul>
     <li>
-    <span class="return-text"><any> table element</span>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    <span class="return-text">the warp icon that was stored here</span>
     </li>
     </ul>
     <!-- returns end -->
 
 
     <!-- see also start -->
-    <strong>See also:</strong>
-    <ul>
-    </ul>
     <!-- see also end -->
 
     <!-- usage start -->
@@ -898,16 +571,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#shuffle_table" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="shuffle_table">shuffle_table(t)</span>
+    <a href="#get_details" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_details">get_details(warp_id)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Creates a fisher-yates shuffle of a sequential number-indexed table
- because this uses math.random, it cannot be used outside of events if no rng is supplied
- from: http://www.sdknews.com/cross-platform/corona/tutorial-how-to-shuffle-table-items</p>
+    <p class="section-item-summary">Gets the task details stored at this id</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -921,12 +592,13 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>t</em></strong>
+    <strong><em>warp_id</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <table> to shuffle
+     the uid of the warp you want to get
 
     </li>
 
@@ -936,6 +608,13 @@
     <!-- parameters end -->
 
     <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the warp details that was stored here</span>
+    </li>
+    </ul>
     <!-- returns end -->
 
 
@@ -949,14 +628,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#clear_table" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="clear_table">clear_table(t, array)</span>
+    <a href="#get_warps" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_warps">get_warps(force_name)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Clears all existing entries in a table</p>
+    <p class="section-item-summary">Gets all warps for a force</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -970,12 +649,104 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>t</em></strong>
+    <strong><em>force_name</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <table> to clear
+     the name of the force to get the warps for
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">an array of warp ids that belong to this force, spawn key is included</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#get_all_warps" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_all_warps">get_all_warps()</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets all warps from all forces</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">array of all warp details</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#is_editing" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="is_editing">is_editing(warp_id, player_name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets if a player is currently editing this warp</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warp_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid of the warp you want to check
 
     </li>
 
@@ -985,12 +756,86 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>array</em></strong>
+    <strong><em>player_name</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <boolean> to indicate whether the table is an array or not
+     the name of the player that you want to check
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">weather the player is currently editing this warp</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#teleport_player" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="teleport_player">teleport_player(warp_id, player)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Teleports a player to a warp point</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warp_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid of the warp to send the player to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to teleport to the warp
 
     </li>
 
@@ -1011,27 +856,23 @@
 
     </dd>
     </dl>
-    <h3><span id="Fields" class="section-title"><a href="#Fields">Fields</a></span></h3>
+    <h3><span id="Setters" class="section-title"><a href="#Setters">Setters </a></span></h3>
     <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#inspect" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="inspect">inspect</span>
+    <a href="#add_handler" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="add_handler">add_handler(callback)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Similar to serpent.block, returns a string with a pretty representation of a table.</p>
-    <p class="section-item-description">
- Notice: This method is not appropriate for saving/restoring tables. It is meant to be used by the programmer mainly while debugging a program.
- depth sets the maximum depth that will be printed out. When the max depth is reached, inspect will stop parsing tables and just return {...}
- process is a function which allow altering the passed object before transforming it into a string.
- A typical way to use it would be to remove certain values so that they don't appear at all.
- return <string> the prettied table</p>
+    <p class="section-item-summary">Adds a new handler for when a warp is updated</p>
+    <p class="section-item-description"></p>
 
     <!-- parameters start -->
+    <strong>Parameters:</strong>
 
     <ul>
 
@@ -1039,14 +880,72 @@
 
 
 
-    <li class="section-subitem-module-field-li">
+    <li class="section-subitem-li">
 
-    <strong><em>table</em></strong>
+    <strong><em>callback</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
 
-     <table> the table to serialize
+     the callback which is ran when a warp is updated
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if the callback was added</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#set_editing" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="set_editing">set_editing(warp_id, player_name[, state])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sets a player to be editing this warp, used with is_editing</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warp_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid of the warp that you want to editing for
 
     </li>
 
@@ -1054,15 +953,33 @@
 
 
 
-    <li class="section-subitem-module-field-li">
+    <li class="section-subitem-li">
 
-    <strong><em>options</em></strong>
+    <strong><em>player_name</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <table> options are depth, newline, indent, process
+     the name of the player you want to set editing for
 
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>state</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     the new state to set editing to
+
+    (<em>optional</em>)
     </li>
 
 
@@ -1084,17 +1001,89 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#size" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="size">size</span>
+    <a href="#update_warp" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="update_warp">update_warp(warp_id, name, icon[, player_name='server'])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Takes a table and returns the number of entries in the table.</p>
-    <p class="section-item-description"> (Slower than #table, faster than iterating via pairs)</p>
+    <p class="section-item-summary">Updates a warp to a differecnt name and icon, both must be given</p>
+    <p class="section-item-description"></p>
 
     <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warp_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid of the warp that you want to update
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name that you want the warp to have
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>icon</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the new icon that you want the warp to have
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the player that is updating the warp
+
+    (<em>default</em>: 'server')
+    </li>
+
+
+    </ul>
+
     <!-- parameters end -->
 
     <!-- returns start -->
@@ -1108,21 +1097,24 @@
     <!-- usage end -->
 
     </dd>
+    </dl>
+    <h3><span id="Generators" class="section-title"><a href="#Generators">Generators </a></span></h3>
+    <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#deep_copy" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="deep_copy">deep_copy</span>
+    <a href="#make_chart_tag" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="make_chart_tag">make_chart_tag(warp_id)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Creates a deepcopy of a table.</p>
-    <p class="section-item-description"> Metatables and LuaObjects inside the table are shallow copies.
- Shallow copies meaning it copies the reference to the object instead of the object itself.</p>
+    <p class="section-item-summary">Adds or updates the chart tag for a warp</p>
+    <p class="section-item-description"></p>
 
     <!-- parameters start -->
+    <strong>Parameters:</strong>
 
     <ul>
 
@@ -1130,15 +1122,173 @@
 
 
 
-    <li class="section-subitem-module-field-li">
+    <li class="section-subitem-li">
 
-    <strong><em>object</em></strong>
+    <strong><em>warp_id</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <table> the object to copy
+     the uid of the warp you want to make the chart tag for
 
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if a new tag was made, false if it was updated</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#new_warp" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="new_warp">new_warp(force_name, surface, postion[, player_name='server'][, warp_name='New warp'][, block_generation=false][, set_spawn=false])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds a new warp to a force and makes the in game warp area</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>force_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the force to add a new warp for
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>surface</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaSurface.html">LuaSurface</a></span>)
+
+     the surface to add the warp to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>postion</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><span class="type">Position</span></span>)
+
+     the postion to have the warp go to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the player who added this warp
+
+    (<em>default</em>: 'server')
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warp_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the warp that will be made
+
+    (<em>default</em>: 'New warp')
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>block_generation</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true a in game area will not be made
+
+    (<em>default</em>: false)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>set_spawn</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true this warp will become the spawn for the force
+
+    (<em>default</em>: false)
     </li>
 
 
@@ -1160,18 +1310,18 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#merge" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="merge">merge</span>
+    <a href="#remove_warp" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="remove_warp">remove_warp(warp_id)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Merges multiple tables.</p>
-    <p class="section-item-description"> Tables later in the list will overwrite entries from tables earlier in the list.
- Ex. merge({{1, 2, 3}, {[2] = 0}, {[3] = 0}}) will return {1, 0, 0}</p>
+    <p class="section-item-summary">Removes a warp and clears the area where it was added</p>
+    <p class="section-item-description"></p>
 
     <!-- parameters start -->
+    <strong>Parameters:</strong>
 
     <ul>
 
@@ -1179,78 +1329,15 @@
 
 
 
-    <li class="section-subitem-module-field-li">
+    <li class="section-subitem-li">
 
-    <strong><em>tables</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> takes a table of tables to merge
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#equals" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="equals">equals</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Determines if two tables are structurally equal.</p>
-    <p class="section-item-description">
- Notice: tables that are LuaObjects or contain LuaObjects won't be compared correctly, use == operator for LuaObjects</p>
-
-    <!-- parameters start -->
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-module-field-li">
-
-    <strong><em>tbl1</em></strong>
+    <strong><em>warp_id</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-module-field-li">
-
-    <strong><em>tbl2</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
+     the uid of the warp that you want to remove
 
     </li>
 

@@ -99,7 +99,7 @@ function Tasks.new_task(force_name,task_number,player_name)
     task_details[task_id] = {
         task_id=task_id,
         force=force_name,
-        last_edit_player='<server>',
+        last_edit_player=player_name or '<server>',
         last_edit_time=game.tick,
         editing={}
     }
@@ -130,7 +130,7 @@ end
 function Tasks.update_task(task_id,task,player_name)
     local details = task_details[task_id]
     details.last_edit_player = player_name or '<server>'
-    details.last_edit_player = game.tick
+    details.last_edit_time = game.tick
     Store.set(task_store,task_id,task)
 end
 
