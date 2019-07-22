@@ -16,9 +16,9 @@
 
     Other functions present from expcore.gui.core
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Game = require 'utils.game'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Game = require 'utils.game' --- @dep utils.game
 
 local select_value
 --- Store call for store update

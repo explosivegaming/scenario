@@ -1,9 +1,9 @@
-local Commands = require 'expcore.commands'
-local Roles = require 'expcore.roles'
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local Store = require 'expcore.store'
-local config = require 'config.bonuses'
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Event = require 'utils.event' --- @dep utils.event
+local Game = require 'utils.game' --- @dep utils.game
+local Store = require 'expcore.store' --- @dep expcore.store
+local config = require 'config.bonuses' --- @dep config.bonuses
 require 'config.expcore-commands.parse_general'
 
 local bonus_store =

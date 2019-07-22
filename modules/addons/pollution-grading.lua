@@ -1,5 +1,5 @@
-local Event = require 'utils.event'
-local config = require 'config.pollution_grading'
+local Event = require 'utils.event' --- @dep utils.event
+local config = require 'config.pollution_grading' --- @dep config.pollution_grading
 
 local delay = config.update_delay * 3600 -- convert from minutes to ticks
 Event.on_nth_tick(delay,function()

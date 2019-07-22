@@ -1,11 +1,11 @@
 --- Adds a rocket infomation gui which shows general stats, milestones and build progress of rockets
-local Gui = require 'expcore.gui'
-local Roles = require 'expcore.roles'
-local Event = require 'utils.event'
-local config = require 'config.rockets'
-local format_time = ext_require('expcore.common','format_time')
-local Colors = require 'resources.color_presets'
-local Rockets = require 'modules.control.rockets'
+local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Event = require 'utils.event' --- @dep utils.event
+local config = require 'config.rockets' --- @dep config.rockets
+local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
+local Colors = require 'resources.color_presets' --- @dep resources.color_presets
+local Rockets = require 'modules.control.rockets' --- @dep modules.control.rockets
 
 --- Gets if a player is allowed to use the action buttons
 local function player_allowed(player,action)

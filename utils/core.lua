@@ -1,8 +1,8 @@
--- This file contains core utilities used by the redmew scenario.
+--- This file contains core utilities used by the redmew scenario.
 
 -- Dependencies
-local Game = require 'utils.game'
-local Color = require 'resources.color_presets'
+local Game = require 'utils.game' --- @dep utils.game
+local Color = require 'resources.color_presets' --- @dep resources.color_presets
 
 -- localized functions
 local random = math.random

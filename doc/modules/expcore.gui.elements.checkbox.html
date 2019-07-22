@@ -5,7 +5,7 @@
     <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>utils.timestamp module</title>
+    <title>expcore.gui.elements.checkbox module</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
     <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
@@ -41,6 +41,7 @@
     <li class="nav-item">
     <h2>Sections</h2>
     <ul class="nav">
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     </ul>
     </li>
@@ -79,7 +80,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.concepts.toolbar.html"><span class="module-name-item">expcore.gui.concepts.toolbar</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.core.html"><span class="module-name-item">expcore.gui.core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.buttons.html"><span class="module-name-item">expcore.gui.elements.buttons</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.checkbox.html"><span class="module-name-item">expcore.gui.elements.checkbox</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/expcore.gui.elements.checkbox.html"><span class="module-name-item">expcore.gui.elements.checkbox</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.dropdown.html"><span class="module-name-item">expcore.gui.elements.dropdown</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.elem-button.html"><span class="module-name-item">expcore.gui.elements.elem-button</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.progress-bar.html"><span class="module-name-item">expcore.gui.elements.progress-bar</span></a></div></li>
@@ -110,7 +111,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.state_machine.html"><span class="module-name-item">utils.state_machine</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.table.html"><span class="module-name-item">utils.table</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.task.html"><span class="module-name-item">utils.task</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/utils.timestamp.html"><span class="module-name-item">utils.timestamp</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.timestamp.html"><span class="module-name-item">utils.timestamp</span></a></div></li>
     </ul>
     </li>
     </ul>
@@ -146,6 +147,7 @@
     <li class="nav-item">
     <h4>Jump to Section</h4>
     <ul class="nav">
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     </ul>
     </li>
@@ -165,9 +167,9 @@
 
     <!-- module content header start -->
 
-    <h2><span class="body-module-name"><strong><em>utils.timestamp</em></strong></span> module</h2>
-    <p>source https://github.com/daurnimator/luatz/blob/master/luatz/timetable.lua
- edited down to just what is needed.</p>
+    <h2><span class="body-module-name"><strong><em>expcore.gui.elements.checkbox</em></strong></span> module</h2>
+    <p>Gui class define for checkbox and radiobuttons
+[[</p>
     <p></p>
 
 
@@ -182,21 +184,61 @@
     <!-- module section list start -->
     <table class="section-content-list">
     <thead>
+    <h3><a href="#Dependencies">Dependencies</a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#expcore.gui.core">expcore.gui.core</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.gui.prototype">expcore.gui.prototype</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.store">expcore.store</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#utils.game">utils.game</a></td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
     <h3><a href="#Functions">Functions</a></h3>
     <span></span>
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#Public.to_timetable">Public.to_timetable(seconds)</a></td>
-    <td class="summary">Converts unix epoch timestamp into table {year: number, month: number, day: number, hour: number, min: number, sec: number}</td>
+    <td class="name"><a href="#Checkbox.new_checkbox">Checkbox.new_checkbox([name])</a></td>
+    <td class="summary">Creates a new checkbox element define</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Public.from_timetable">Public.from_timetable(timetable)</a></td>
-    <td class="summary">Converts timetable into unix epoch timestamp</td>
+    <td class="name"><a href="#Checkbox.new_radiobutton">Checkbox.new_radiobutton([name])</a></td>
+    <td class="summary">Creates a new radiobutton element define, has all functions checkbox has</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Public.to_string">Public.to_string(seconds)</a></td>
-    <td class="summary">Converts unix epoch timestamp into human readable string.</td>
+    <td class="name"><a href="#Checkbox._prototype_radiobutton:add_as_option">Checkbox._prototype_radiobutton:add_as_option(option_set, option_name)</a></td>
+    <td class="summary">Adds this radiobutton to be an option in the given option set (only one can be true at a time)</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Checkbox._prototype_radiobutton:get_store">Checkbox._prototype_radiobutton:get_store(category, internal)</a></td>
+    <td class="summary">Gets the stored value of the radiobutton or the option set if present</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Checkbox._prototype_radiobutton:set_store">Checkbox._prototype_radiobutton:set_store(category, value, internal)</a></td>
+    <td class="summary">Sets the stored value of the radiobutton or the option set if present</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Checkbox.new_option_set">Checkbox.new_option_set(name, callback, categorize)</a></td>
+    <td class="summary">Registers a new option set that can be linked to radiobuttons (only one can be true at a time)</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Checkbox.draw_option_set">Checkbox.draw_option_set(name, element)</a></td>
+    <td class="summary">Draws all radiobuttons that are part of an option set at once (Gui.draw will not work)</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Checkbox.reset_radiobuttons">Checkbox.reset_radiobuttons(element[, exclude][, recursive=false])</a></td>
+    <td class="summary">Sets all radiobutton in a element to false (unless excluded) and can act recursively</td>
     </tr>
     </tbody>
     </table>
@@ -205,19 +247,122 @@
     <br />
 
     <!-- section start -->
+    <h3><span id="Dependencies" class="section-title"><a href="#Dependencies">Dependencies</a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.gui.core" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.gui.core">expcore.gui.core</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.gui.prototype" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.gui.prototype">expcore.gui.prototype</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.store" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.store">expcore.store</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#utils.game" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.game">utils.game</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
     <h3><span id="Functions" class="section-title"><a href="#Functions">Functions</a></span></h3>
     <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Public.to_timetable" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Public.to_timetable">Public.to_timetable(seconds)</span>
+    <a href="#Checkbox.new_checkbox" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Checkbox.new_checkbox">Checkbox.new_checkbox([name])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Converts unix epoch timestamp into table {year: number, month: number, day: number, hour: number, min: number, sec: number}</p>
+    <p class="section-item-summary">Creates a new checkbox element define</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -231,13 +376,15 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>seconds</em></strong>
+    <strong><em>name</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-    <number> unix epoch timestamp
+     the optional debug name that can be added
 
+    (<em>optional</em>)
     </li>
 
 
@@ -249,7 +396,8 @@
     <strong>Returns:</strong>
     <ul>
     <li>
-    <span class="return-text">{year: number, month: number, day: number, hour: number, min: number, sec: number}</span>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the new checkbox element define</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -265,14 +413,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Public.from_timetable" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Public.from_timetable">Public.from_timetable(timetable)</span>
+    <a href="#Checkbox.new_radiobutton" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Checkbox.new_radiobutton">Checkbox.new_radiobutton([name])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Converts timetable into unix epoch timestamp</p>
+    <p class="section-item-summary">Creates a new radiobutton element define, has all functions checkbox has</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -286,13 +434,15 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>timetable</em></strong>
+    <strong><em>name</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-    <table> {year: number, month: number, day: number, hour: number, min: number, sec: number}
+     the optional debug name that can be added
 
+    (<em>optional</em>)
     </li>
 
 
@@ -304,7 +454,8 @@
     <strong>Returns:</strong>
     <ul>
     <li>
-    <span class="return-text">number</span>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the new button element define</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -320,14 +471,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Public.to_string" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Public.to_string">Public.to_string(seconds)</span>
+    <a href="#Checkbox._prototype_radiobutton:add_as_option" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Checkbox._prototype_radiobutton:add_as_option">Checkbox._prototype_radiobutton:add_as_option(option_set, option_name)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Converts unix epoch timestamp into human readable string.</p>
+    <p class="section-item-summary">Adds this radiobutton to be an option in the given option set (only one can be true at a time)</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -341,12 +492,29 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>seconds</em></strong>
+    <strong><em>option_set</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-    <type> unix epoch timestamp
+     the name of the option set to add this element to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>option_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of this option that will be used to identify it
 
     </li>
 
@@ -359,7 +527,418 @@
     <strong>Returns:</strong>
     <ul>
     <li>
-    <span class="return-text">string</span>
+    (<span class="types"><span class="type">self</span></span>)
+    <span class="return-text">the define to allow chaining</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Checkbox._prototype_radiobutton:get_store" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Checkbox._prototype_radiobutton:get_store">Checkbox._prototype_radiobutton:get_store(category, internal)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets the stored value of the radiobutton or the option set if present</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>category</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+    [opt] the category to get such as player name or force name
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>internal</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     used to prevent stackover flow
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">any</span></span>)
+    <span class="return-text">the value that is stored for this define</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Checkbox._prototype_radiobutton:set_store" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Checkbox._prototype_radiobutton:set_store">Checkbox._prototype_radiobutton:set_store(category, value, internal)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sets the stored value of the radiobutton or the option set if present</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>category</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+    [opt] the category to get such as player name or force name
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>value</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     the value to set for this define, must be valid for its type ie for checkbox etc
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>internal</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     used to prevent stackover flow
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if the value was set</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Checkbox.new_option_set" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Checkbox.new_option_set">Checkbox.new_option_set(name, callback, categorize)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Registers a new option set that can be linked to radiobuttons (only one can be true at a time)</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the option set, must be unique
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>callback</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the update callback when the value of the option set changes
+ callback param - value string - the new selected option for this option set
+ callback param - category string - the category that updated if categorize was used
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>categorize</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the function used to convert an element into a string
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    <span class="return-text">the name of this option set to be passed to add_as_option</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Checkbox.draw_option_set" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Checkbox.draw_option_set">Checkbox.draw_option_set(name, element)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Draws all radiobuttons that are part of an option set at once (Gui.draw will not work)</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the option set to draw the radiobuttons of
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the parent element that the radiobuttons will be drawn to
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Checkbox.reset_radiobuttons" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Checkbox.reset_radiobuttons">Checkbox.reset_radiobuttons(element[, exclude][, recursive=false])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sets all radiobutton in a element to false (unless excluded) and can act recursively</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the root gui element to start setting radio buttons from
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>exclude</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+
+     ?string|table the name of the radiobutton to exclude or a of radiobuttons where true will set the state true
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>recursive</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a> or <a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     if true will recur as much as possible, if a will recur that number of times
+
+    (<em>default</em>: false)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if successful</span>
     </li>
     </ul>
     <!-- returns end -->

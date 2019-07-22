@@ -11,15 +11,15 @@
     PopupFrames._prototype:set_default_open_time(amount) --- Sets the default open time for the popup, will be used if non is provided with open
     PopupFrames._prototype:open(player,open_time,...) --- Opens this define for a player, can be given open time and any other params for the draw function
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Game = require 'utils.game'
-local Event = require 'utils.event'
-local ProgressBar = require 'expcore.gui.elements.progress-bar'
-local Button = require 'expcore.gui.elements.buttons'
-local mod_gui = require 'mod-gui'
-local Color = require 'resources.color_presets'
-local Global = require 'utils.global'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Game = require 'utils.game' --- @dep utils.game
+local Event = require 'utils.event' --- @dep utils.event
+local ProgressBar = require 'expcore.gui.elements.progress-bar' --- @dep expcore.gui.elements.progress-bar
+local Button = require 'expcore.gui.elements.buttons' --- @dep expcore.gui.elements.buttons
+local mod_gui = require 'mod-gui' --- @dep mod-gui
+local Color = require 'resources.color_presets' --- @dep resources.color_presets
+local Global = require 'utils.global' --- @dep utils.global
 
 local PopupFrames = {
     paused_popups={},

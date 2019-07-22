@@ -1,4 +1,4 @@
-local Global = require 'utils.global'
+local Global = require 'utils.global' --- @dep utils.global
 local type = type
 local error = error
 local tonumber = tonumber

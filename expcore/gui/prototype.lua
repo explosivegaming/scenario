@@ -23,9 +23,9 @@
     Prototype:set_store(category,value) --- Sets the value in this elements store, category needed if categorize function used
     Prototype:clear_store(category) --- Sets the value in this elements store to nil, category needed if categorize function used
 ]]
-local Game = require 'utils.game'
-local Store = require 'expcore.store'
-local Instances = require 'expcore.gui.instances'
+local Game = require 'utils.game' --- @dep utils.game
+local Store = require 'expcore.store' --- @dep expcore.store
+local Instances = require 'expcore.gui.instances' --- @dep expcore.gui.instances
 
 local Constructor = {}
 local Prototype = {}

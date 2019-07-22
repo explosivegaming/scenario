@@ -5,7 +5,7 @@
 
     @usage
     -- import the module from the control modules
-    local Warps = require 'modules.control.warps'
+    local Warps = require 'modules.control.warps' --- @dep modules.control.warps
 
     -- Adding a warp require a force, surface and postion, and the option to set this as the spawn
     -- this function will also create the warp area unless set other wise
@@ -25,21 +25,11 @@
 
 ]]
 
---- Allows storing of warp ids
--- @dep expcore.store
-local Store = require 'expcore.store'
---- Allows storing of warp details
--- @dep utils.global
-local Global = require 'utils.global'
---- Allows non conflicting warp ids
--- @dep utils.token
-local Token = require 'utils.token'
---- Config for the warps
--- @dep expcore.store
-local config = require 'config.warps'
---- Access to table_values and table_keysort
--- @dep expcore.common
-local table_values,table_keysort = ext_require('expcore.common','table_values','table_keysort')
+local Store = require 'expcore.store' --- @dep expcore.store
+local Global = require 'utils.global' --- @dep utils.global
+local Token = require 'utils.token' --- @dep utils.token
+local config = require 'config.warps' --- @dep config.warps
+local table_values,table_keysort = ext_require('expcore.common','table_values','table_keysort') --- @dep expcore.common
 
 local Warps = {
     store = {

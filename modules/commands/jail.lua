@@ -1,6 +1,6 @@
-local Commands = require 'expcore.commands'
-local Jail = require 'modules.control.jail'
-local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Jail = require 'modules.control.jail' --- @dep modules.control.jail
+local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
 require 'config.expcore-commands.parse_roles'
 
 Commands.new_command('jail','Puts a player into jail and removes all other roles.')

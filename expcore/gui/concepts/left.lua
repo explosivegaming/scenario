@@ -48,13 +48,13 @@
     LeftFrames._prototype:on_player_toggle(player,frame) --- Is triggered when the player presses the toggle button
     LeftFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Toolbar = require 'expcore.gui.concepts.toolbar'
-local Buttons = require 'expcore.gui.elements.buttons'
-local mod_gui = require 'mod-gui'
-local Game = require 'utils.game'
-local Event = require 'utils.event'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Toolbar = require 'expcore.gui.concepts.toolbar' --- @dep expcore.gui.concepts.toolbar
+local Buttons = require 'expcore.gui.elements.buttons' --- @dep expcore.gui.elements.buttons
+local mod_gui = require 'mod-gui' --- @dep mod-gui
+local Game = require 'utils.game' --- @dep utils.game
+local Event = require 'utils.event' --- @dep utils.event
 
 local LeftFrames = {
     frames={},

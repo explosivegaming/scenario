@@ -4,9 +4,9 @@
 ]]
 
 -- dependencies
-local Global = require 'utils.global'
-local Debug = require 'utils.debug'
-local table = require 'utils.table'
+local Global = require 'utils.global' --- @dep utils.global
+local Debug = require 'utils.debug' --- @dep utils.debug
+local table = require 'utils.table' --- @dep utils.table
 
 -- localized functions
 local get_random_weighted = table.get_random_weighted

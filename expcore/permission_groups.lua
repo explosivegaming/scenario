@@ -49,9 +49,9 @@
 ]]
 
 
-local Game = require 'utils.game'
-local Event = require 'utils.event'
-local Sudo = require 'expcore.sudo'
+local Game = require 'utils.game' --- @dep utils.game
+local Event = require 'utils.event' --- @dep utils.event
+local Sudo = require 'expcore.sudo' --- @dep expcore.sudo
 
 local Permissions_Groups = {
     groups={}, -- store for the different groups that are created

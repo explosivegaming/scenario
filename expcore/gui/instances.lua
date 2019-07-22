@@ -75,7 +75,7 @@
     Instances.unregistered_add_element(name,category,element) --- A version of add_element that does not require the group to be registered
     Instances.unregistered_get_elements(name,category,callback) --- A version of get_elements that does not require the group to be registered
 ]]
-local Global = require 'utils.global'
+local Global = require 'utils.global' --- @dep utils.global
 
 local Instances = {
     categorise={},

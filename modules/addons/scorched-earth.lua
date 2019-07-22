@@ -1,8 +1,8 @@
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local Global = require 'utils.global'
-local print_grid_value, clear_flying_text = ext_require('expcore.common','print_grid_value','clear_flying_text')
-local config = require 'config.scorched_earth'
+local Event = require 'utils.event' --- @dep utils.event
+local Game = require 'utils.game' --- @dep utils.game
+local Global = require 'utils.global' --- @dep utils.global
+local print_grid_value, clear_flying_text = ext_require('expcore.common','print_grid_value','clear_flying_text') --- @dep expcore.common
+local config = require 'config.scorched_earth' --- @dep config.scorched_earth
 
 -- Loops over the config and finds the wile which has the highest value for strength
 local max_strength = 0

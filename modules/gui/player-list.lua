@@ -1,12 +1,12 @@
 --- Gui left frame define for a player list
-local Gui = require 'expcore.gui'
-local Roles = require 'expcore.roles'
-local Store = require 'expcore.store'
-local Game = require 'utils.game'
-local Event = require 'utils.event'
-local format_time = ext_require('expcore.common','format_time')
-local config = require 'config.action_buttons'
-local Colors = require 'resources.color_presets'
+local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Store = require 'expcore.store' --- @dep expcore.store
+local Game = require 'utils.game' --- @dep utils.game
+local Event = require 'utils.event' --- @dep utils.event
+local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
+local config = require 'config.action_buttons' --- @dep config.action_buttons
+local Colors = require 'resources.color_presets' --- @dep resources.color_presets
 
 local action_player_store = 'gui.left.player-list.action-player'
 local action_name_store = 'gui.left.player-list.action-name'

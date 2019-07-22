@@ -5,7 +5,7 @@
 
     @usage
     -- import the module from the control modules
-    local Reports = require 'modules.control.reports'
+    local Reports = require 'modules.control.reports' --- @dep modules.control.reports
 
     -- This will place a report on "MrBiter" (must be a valid player) the report will have been made
     -- by "Cooldude2606" (must be the player name) with the reason 'Liking biters too much' this can be
@@ -24,12 +24,8 @@
 
 ]]
 
---- Allows getting player from any value
--- @dep utils.game
-local Game = require 'utils.game'
---- Allows storing of data in global table
--- @dep utils.global
-local Global = require 'utils.global'
+local Game = require 'utils.game' --- @dep utils.game
+local Global = require 'utils.global' --- @dep utils.global
 
 local valid_player = Game.get_player_from_any
 

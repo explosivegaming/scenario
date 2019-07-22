@@ -37,6 +37,14 @@
 
 <!-- sidebar navigation -->
 <!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
+    </ul>
+    </li>
+    </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
     <h2>Modules</h2>
@@ -71,7 +79,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.concepts.toolbar.html"><span class="module-name-item">expcore.gui.concepts.toolbar</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.core.html"><span class="module-name-item">expcore.gui.core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.buttons.html"><span class="module-name-item">expcore.gui.elements.buttons</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.checkboxs.html"><span class="module-name-item">expcore.gui.elements.checkboxs</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.checkbox.html"><span class="module-name-item">expcore.gui.elements.checkbox</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.dropdown.html"><span class="module-name-item">expcore.gui.elements.dropdown</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.elem-button.html"><span class="module-name-item">expcore.gui.elements.elem-button</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.progress-bar.html"><span class="module-name-item">expcore.gui.elements.progress-bar</span></a></div></li>
@@ -94,6 +102,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.alien_evolution_progress.html"><span class="module-name-item">utils.alien_evolution_progress</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.core.html"><span class="module-name-item">utils.core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.debug.html"><span class="module-name-item">utils.debug</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.dump_env.html"><span class="module-name-item">utils.dump_env</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event.html"><span class="module-name-item">utils.event</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event_core.html"><span class="module-name-item">utils.event_core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.math.html"><span class="module-name-item">utils.math</span></a></div></li>
@@ -133,6 +142,14 @@
     </div>
     <div class="up-to-top">
     <!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h4>Jump to Section</h4>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
+    </ul>
+    </li>
+    </ul>
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
     </div>
@@ -153,7 +170,7 @@
  each button has the button define(s) given along side an auth function, and optional reason callback
  if a reason callback is used then Store.set(action_name_store,player.name,'BUTTON_NAME') should be called during on_click
  buttons can be removed from the gui by commenting them out of the config at the bottom of this file
- the key used for the name of the button is the permision name used by the role system</p>
+ the key used for the name of the button is the permission name used by the role system</p>
     <p></p>
 
 
@@ -166,11 +183,274 @@
     <!-- module content header end -->
 
     <!-- module section list start -->
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Dependencies">Dependencies</a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#expcore.gui">expcore.gui</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.roles">expcore.roles</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.store">expcore.store</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#utils.game">utils.game</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#modules.control.reports">modules.control.reports</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#modules.control.warnings">modules.control.warnings</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#modules.control.jail">modules.control.jail</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#resources.color_presets">resources.color_presets</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.common">expcore.common</a></td>
+    </tr>
+    </tbody>
+    </table>
     <!-- module section list end -->
 
     <br />
 
     <!-- section start -->
+    <h3><span id="Dependencies" class="section-title"><a href="#Dependencies">Dependencies</a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.gui" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.gui">expcore.gui</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.roles" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.roles">expcore.roles</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.store" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.store">expcore.store</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#utils.game" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.game">utils.game</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#modules.control.reports" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="modules.control.reports">modules.control.reports</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#modules.control.warnings" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="modules.control.warnings">modules.control.warnings</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#modules.control.jail" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="modules.control.jail">modules.control.jail</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#resources.color_presets" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="resources.color_presets">resources.color_presets</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.common" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.common">expcore.common</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
 
     <!-- section end -->
 
@@ -185,7 +465,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-07-22 16:24:44 UTC</i>
+    <i>Last updated 2019-07-22 17:37:51 UTC</i>
     </div>
     </div>
     </div>

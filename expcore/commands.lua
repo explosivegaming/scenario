@@ -216,8 +216,8 @@
     Commands.run_command(command_event) --- Main event function that is ran for all commands, used internally please avoid direct use
 ]]
 
-local Game = require 'utils.game'
-local player_return,write_json = ext_require('expcore.common','player_return','write_json')
+local Game = require 'utils.game' --- @dep utils.game
+local player_return,write_json = ext_require('expcore.common','player_return','write_json') --- @dep expcore.common
 
 local Commands = {
     defines={ -- common values are stored error like signals

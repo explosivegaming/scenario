@@ -5,7 +5,7 @@
 
     @usage
     -- import the module from the control modules
-    local Tasks = require 'modules.control.tasks'
+    local Tasks = require 'modules.control.tasks' --- @dep modules.control.tasks
 
     -- To create a new task all you need is the name of the force you want to add the task to
     -- you can give a place to add it but this is optional
@@ -25,15 +25,9 @@
 
 ]]
 
---- Allows storing of task ids
--- @dep expcore.store
-local Store = require 'expcore.store'
---- Allows storing in the global table
--- @dep utils.global
-local Global = require 'utils.global'
---- Allows non conflicting task ids
--- @dep utils.token
-local Token = require 'utils.token'
+local Store = require 'expcore.store' --- @dep expcore.store
+local Global = require 'utils.global' --- @dep utils.global
+local Token = require 'utils.token' --- @dep utils.token
 
 local Tasks = {
     store = 'gui.left.task-list.tasks',

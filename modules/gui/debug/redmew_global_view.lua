@@ -1,8 +1,8 @@
-local Gui = require 'utils.gui'
-local Global = require 'utils.global'
-local Token = require 'utils.token'
-local Color = require 'resources.color_presets'
-local Model = require 'modules.gui.debug.model'
+local Gui = require 'utils.gui' --- @dep utils.gui
+local Global = require 'utils.global' --- @dep utils.global
+local Token = require 'utils.token' --- @dep utils.token
+local Color = require 'resources.color_presets' --- @dep resources.color_presets
+local Model = require 'modules.gui.debug.model' --- @dep modules.gui.debug.model
 
 local dump = Model.dump
 local dump_text = Model.dump_text

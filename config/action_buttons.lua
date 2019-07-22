@@ -3,15 +3,15 @@
 -- if a reason callback is used then Store.set(action_name_store,player.name,'BUTTON_NAME') should be called during on_click
 -- buttons can be removed from the gui by commenting them out of the config at the bottom of this file
 -- the key used for the name of the button is the permission name used by the role system
-local Gui = require 'expcore.gui'
-local Roles = require 'expcore.roles'
-local Store = require 'expcore.store'
-local Game = require 'utils.game'
-local Reports = require 'modules.control.reports'
-local Warnings = require 'modules.control.warnings'
-local Jail = require 'modules.control.jail'
-local Colors = require 'resources.color_presets'
-local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
+local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Store = require 'expcore.store' --- @dep expcore.store
+local Game = require 'utils.game' --- @dep utils.game
+local Reports = require 'modules.control.reports' --- @dep modules.control.reports
+local Warnings = require 'modules.control.warnings' --- @dep modules.control.warnings
+local Jail = require 'modules.control.jail' --- @dep modules.control.jail
+local Colors = require 'resources.color_presets' --- @dep resources.color_presets
+local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
 
 local action_player_store = 'gui.left.player-list.action-player'
 local action_name_store = 'gui.left.player-list.action-name'

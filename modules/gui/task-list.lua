@@ -1,10 +1,10 @@
 --- Adds a task list to the game which players can add remove and edit items on
-local Gui = require 'expcore.gui'
-local Event = require 'utils.event'
-local Roles = require 'expcore.roles'
-local config = require 'config.tasks'
-local format_time,table_keys = ext_require('expcore.common','format_time','table_keys')
-local Tasks = require 'modules.control.tasks'
+local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Event = require 'utils.event' --- @dep utils.event
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local config = require 'config.tasks' --- @dep config.tasks
+local format_time,table_keys = ext_require('expcore.common','format_time','table_keys') --- @dep expcore.common
+local Tasks = require 'modules.control.tasks' --- @dep modules.control.tasks
 
 --- If a player is allowed to use the edit buttons
 local function player_allowed_edit(player,task_id)

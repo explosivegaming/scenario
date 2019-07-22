@@ -69,10 +69,10 @@
 
 ]]
 
-local Global = require 'utils.global'
-local Event = require 'utils.event'
-local table_keys,write_json = ext_require('expcore.common','table_keys','write_json')
-local Token = require 'utils.token'
+local Global = require 'utils.global' --- @dep utils.global
+local Event = require 'utils.event' --- @dep utils.event
+local table_keys,write_json = ext_require('expcore.common','table_keys','write_json') --- @dep expcore.common
+local Token = require 'utils.token' --- @dep utils.token
 
 local Store = {
     data={},

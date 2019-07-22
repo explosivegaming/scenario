@@ -41,6 +41,7 @@
     <li class="nav-item">
     <h2>Sections</h2>
     <ul class="nav">
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     </ul>
     </li>
@@ -79,7 +80,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.concepts.toolbar.html"><span class="module-name-item">expcore.gui.concepts.toolbar</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.core.html"><span class="module-name-item">expcore.gui.core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.buttons.html"><span class="module-name-item">expcore.gui.elements.buttons</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.checkboxs.html"><span class="module-name-item">expcore.gui.elements.checkboxs</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.checkbox.html"><span class="module-name-item">expcore.gui.elements.checkbox</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.dropdown.html"><span class="module-name-item">expcore.gui.elements.dropdown</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.elem-button.html"><span class="module-name-item">expcore.gui.elements.elem-button</span></a></div></li>
     <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/expcore.gui.elements.progress-bar.html"><span class="module-name-item">expcore.gui.elements.progress-bar</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
@@ -102,6 +103,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.alien_evolution_progress.html"><span class="module-name-item">utils.alien_evolution_progress</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.core.html"><span class="module-name-item">utils.core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.debug.html"><span class="module-name-item">utils.debug</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.dump_env.html"><span class="module-name-item">utils.dump_env</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event.html"><span class="module-name-item">utils.event</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event_core.html"><span class="module-name-item">utils.event_core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.math.html"><span class="module-name-item">utils.math</span></a></div></li>
@@ -145,6 +147,7 @@
     <li class="nav-item">
     <h4>Jump to Section</h4>
     <ul class="nav">
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     </ul>
     </li>
@@ -165,7 +168,7 @@
     <!-- module content header start -->
 
     <h2><span class="body-module-name"><strong><em>expcore.gui.elements.progress-bar</em></strong></span> module</h2>
-    <p>Gui element define for progess bars
+    <p>Gui element define for progress bars
 [[</p>
     <p></p>
 
@@ -181,6 +184,26 @@
     <!-- module section list start -->
     <table class="section-content-list">
     <thead>
+    <h3><a href="#Dependencies">Dependencies</a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#expcore.gui.core">expcore.gui.core</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.gui.prototype">expcore.gui.prototype</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#utils.global">utils.global</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#utils.game">utils.game</a></td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
     <h3><a href="#Functions">Functions</a></h3>
     <span></span>
     </thead>
@@ -191,11 +214,11 @@
     </tr>
     <tr>
     <td class="name"><a href="#ProgressBar.increment">ProgressBar.increment(element[, amount=1])</a></td>
-    <td class="summary">Increases the value of the progressbar, if a define is given all of its instances are incremented</td>
+    <td class="summary">Increases the value of the progressbar, if a define is given all of its instances have incremented</td>
     </tr>
     <tr>
     <td class="name"><a href="#ProgressBar.decrement">ProgressBar.decrement(element[, amount=1])</a></td>
-    <td class="summary">Decreases the value of the progressbar, if a define is given all of its instances are decresed</td>
+    <td class="summary">Decreases the value of the progressbar, if a define is given all of its instances have decremented</td>
     </tr>
     <tr>
     <td class="name"><a href="#ProgressBar.new_progressbar">ProgressBar.new_progressbar([name])</a></td>
@@ -236,11 +259,11 @@
     </tr>
     <tr>
     <td class="name"><a href="#ProgressBar._prototype:event_counter">ProgressBar._prototype:event_counter([filter])</a></td>
-    <td class="summary">Event handler factory that counts up by 1 every time the event triggeres, can filter which elements are incremented</td>
+    <td class="summary">Event handler factory that counts up by 1 every time the event triggers, can filter which elements have incremented</td>
     </tr>
     <tr>
     <td class="name"><a href="#ProgressBar._prototype:event_countdown">ProgressBar._prototype:event_countdown([filter])</a></td>
-    <td class="summary">Event handler factory that counts down by 1 every time the event triggeres, can filter which elements are decremented</td>
+    <td class="summary">Event handler factory that counts down by 1 every time the event triggers, can filter which elements have decremented</td>
     </tr>
     </tbody>
     </table>
@@ -249,6 +272,109 @@
     <br />
 
     <!-- section start -->
+    <h3><span id="Dependencies" class="section-title"><a href="#Dependencies">Dependencies</a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.gui.core" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.gui.core">expcore.gui.core</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.gui.prototype" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.gui.prototype">expcore.gui.prototype</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#utils.global" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.global">utils.global</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#utils.game" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.game">utils.game</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
     <h3><span id="Functions" class="section-title"><a href="#Functions">Functions</a></span></h3>
     <dl class="section-body-container">
     <dt>
@@ -327,7 +453,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Increases the value of the progressbar, if a define is given all of its instances are incremented</p>
+    <p class="section-item-summary">Increases the value of the progressbar, if a define is given all of its instances have incremented</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -394,7 +520,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Decreases the value of the progressbar, if a define is given all of its instances are decresed</p>
+    <p class="section-item-summary">Decreases the value of the progressbar, if a define is given all of its instances have decremented</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -496,7 +622,7 @@
     <ul>
     <li>
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the new progressbar elemente define</span>
+    <span class="return-text">the new progressbar element define</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -1022,7 +1148,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Event handler factory that counts up by 1 every time the event triggeres, can filter which elements are incremented</p>
+    <p class="section-item-summary">Event handler factory that counts up by 1 every time the event triggers, can filter which elements have incremented</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -1042,7 +1168,7 @@
 
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
 
-     when given will use filtered incerement
+     when given will use filtered increment
 
     (<em>optional</em>)
     </li>
@@ -1080,7 +1206,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Event handler factory that counts down by 1 every time the event triggeres, can filter which elements are decremented</p>
+    <p class="section-item-summary">Event handler factory that counts down by 1 every time the event triggers, can filter which elements have decremented</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -1100,7 +1226,7 @@
 
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
 
-     when given will use filtered decerement
+     when given will use filtered decrement
 
     (<em>optional</em>)
     </li>
@@ -1143,7 +1269,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-07-22 16:24:44 UTC</i>
+    <i>Last updated 2019-07-22 17:37:51 UTC</i>
     </div>
     </div>
     </div>

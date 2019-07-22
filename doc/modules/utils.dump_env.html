@@ -5,7 +5,7 @@
     <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>config.roles module</title>
+    <title>utils.dump_env module</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
     <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
@@ -64,7 +64,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.permission_groups.html"><span class="module-name-item">config.permission_groups</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.popup_messages.html"><span class="module-name-item">config.popup_messages</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.rockets.html"><span class="module-name-item">config.rockets</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/config.roles.html"><span class="module-name-item">config.roles</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.roles.html"><span class="module-name-item">config.roles</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.scorched_earth.html"><span class="module-name-item">config.scorched_earth</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.spawn_area.html"><span class="module-name-item">config.spawn_area</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/config.warnings.html"><span class="module-name-item">config.warnings</span></a></div></li>
@@ -102,7 +102,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.alien_evolution_progress.html"><span class="module-name-item">utils.alien_evolution_progress</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.core.html"><span class="module-name-item">utils.core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.debug.html"><span class="module-name-item">utils.debug</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.dump_env.html"><span class="module-name-item">utils.dump_env</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/utils.dump_env.html"><span class="module-name-item">utils.dump_env</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event.html"><span class="module-name-item">utils.event</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event_core.html"><span class="module-name-item">utils.event_core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.math.html"><span class="module-name-item">utils.math</span></a></div></li>
@@ -165,9 +165,12 @@
 
     <!-- module content header start -->
 
-    <h2><span class="body-module-name"><strong><em>config.roles</em></strong></span> module</h2>
-    <p>This is the main config file for the role system; file includes defines for roles and role flags and default values</p>
-    <p></p>
+    <h2><span class="body-module-name"><strong><em>utils.dump_env</em></strong></span> module</h2>
+    <p>A small debugging tool that writes the contents of _ENV to a file when the game loads.</p>
+    <p>
+ Useful for ensuring you get the same information when loading
+ the reference and desync levels in desync reports.
+ dependencies</p>
 
 
     <!-- module info start -->
@@ -186,7 +189,10 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#expcore.roles">expcore.roles</a></td>
+    <td class="name"><a href="#utils.table">utils.table</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#utils.event">utils.event</a></td>
     </tr>
     </tbody>
     </table>
@@ -200,8 +206,33 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#expcore.roles" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="expcore.roles">expcore.roles</span>
+    <a href="#utils.table" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.table">utils.table</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#utils.event" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.event">utils.event</span>
     </div>
     </dt>
     <dd>

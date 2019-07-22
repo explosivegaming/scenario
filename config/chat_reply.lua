@@ -1,5 +1,5 @@
 --- This file defines the different triggers for the chat bot
-local format_time = ext_require('expcore.common','format_time')
+local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
 return {
     allow_command_prefix_for_messages = true, -- when true any message trigger will print to all player when prefixed
     messages = { -- will trigger when ever the word is said

@@ -12,10 +12,10 @@
 
     Other functions present from expcore.gui.core
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Instances = require 'expcore.gui.instances'
-local Game = require 'utils.game'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Instances = require 'expcore.gui.instances' --- @dep expcore.gui.instances
+local Game = require 'utils.game' --- @dep utils.game
 
 --- Event call for on_value_changed and store update
 -- @tparam table define the define that this is acting on

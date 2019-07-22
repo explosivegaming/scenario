@@ -1,7 +1,7 @@
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local Roles = require 'expcore.roles'
-local config = require 'config.chat_reply'
+local Event = require 'utils.event' --- @dep utils.event
+local Game = require 'utils.game' --- @dep utils.game
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local config = require 'config.chat_reply' --- @dep config.chat_reply
 
 Event.add(defines.events.on_console_chat,function(event)
     local player_index = event.player_index

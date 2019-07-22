@@ -1,5 +1,5 @@
-local Commands = require 'expcore.commands'
-local config = require 'config.repair'
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local config = require 'config.repair' --- @dep config.repair
 require 'config.expcore-commands.parse_general'
 
 local max_time_to_live = 4294967295 -- unit32 max

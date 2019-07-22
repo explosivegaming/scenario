@@ -1,7 +1,7 @@
-local Commands = require 'expcore.commands'
-local Warnings = require 'modules.control.warnings'
-local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
-local config = require 'config.warnings'
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Warnings = require 'modules.control.warnings' --- @dep modules.control.warnings
+local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
+local config = require 'config.warnings' --- @dep config.warnings
 require 'config.expcore-commands.parse_roles'
 
 Commands.new_command('give-warning','Gives a warning to a player; may lead to automatic script action.')

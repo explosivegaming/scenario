@@ -154,13 +154,13 @@
     Roles._prototype:print(message) --- Will print a message to all players with this role
 ]]
 
-local Game = require 'utils.game'
-local Global = require 'utils.global'
-local Event = require 'utils.event'
-local Groups = require 'expcore.permission_groups'
-local Sudo = require 'expcore.sudo'
-local Colours = require 'resources.color_presets'
-local write_json = ext_require('expcore.common','write_json')
+local Game = require 'utils.game' --- @dep utils.game
+local Global = require 'utils.global' --- @dep utils.global
+local Event = require 'utils.event' --- @dep utils.event
+local Groups = require 'expcore.permission_groups' --- @dep expcore.permission_groups
+local Sudo = require 'expcore.sudo' --- @dep expcore.sudo
+local Colours = require 'resources.color_presets' --- @dep resources.color_presets
+local write_json = ext_require('expcore.common','write_json') --- @dep expcore.common
 
 local Roles = {
     _prototype={},

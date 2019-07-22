@@ -8,7 +8,7 @@
 -- Handlers added with Event.add cannot be removed.
 -- For handlers that need to be removed or added at runtime use Event.add_removable.
 -- @usage
--- local Event = require 'utils.event'
+-- local Event = require 'utils.event' --- @dep utils.event
 -- Event.add(
 --     defines.events.on_built_entity,
 --     function(event)
@@ -27,8 +27,8 @@
 -- Token is used because it's a desync risk to store closures inside the global table.
 --
 -- @usage
--- local Token = require 'utils.token'
--- local Event = require 'utils.event'
+-- local Token = require 'utils.token' --- @dep utils.token
+-- local Event = require 'utils.event' --- @dep utils.event
 --
 -- Token.register must not be called inside an event handler.
 -- local handler =
@@ -55,7 +55,7 @@
 -- A closure is a function that uses a local variable not defined in the function.
 --
 -- @usage
--- local Event = require 'utils.event'
+-- local Event = require 'utils.event' --- @dep utils.event
 --
 -- If you want to remove the handler you will need to keep a reference to it.
 -- global.handler = function(event)
@@ -80,7 +80,7 @@
 --
 -- ** Custom Scenario Events **
 --
--- local Event = require 'utils.event'
+-- local Event = require 'utils.event' --- @dep utils.event
 --
 -- local event_id = script.generate_event_name()
 --
@@ -94,10 +94,10 @@
 -- The table contains extra information that you want to pass to the handler.
 -- script.raise_event(event_id, {extra = 'data'})
 
-local EventCore = require 'utils.event_core'
-local Global = require 'utils.global'
-local Token = require 'utils.token'
-local Debug = require 'utils.debug'
+local EventCore = require 'utils.event_core' --- @dep utils.event_core
+local Global = require 'utils.global' --- @dep utils.global
+local Token = require 'utils.token' --- @dep utils.token
+local Debug = require 'utils.debug' --- @dep utils.debug
 
 local table_remove = table.remove
 local core_add = EventCore.add

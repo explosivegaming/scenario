@@ -1,8 +1,8 @@
 --- Creates flying text entities when a player sends a message in chat
 -- also displays a ping above users who are named in the message
-local Game = require 'utils.game'
-local Event = require 'utils.event'
-local config = require 'config.popup_messages'
+local Game = require 'utils.game' --- @dep utils.game
+local Event = require 'utils.event' --- @dep utils.event
+local config = require 'config.popup_messages' --- @dep config.popup_messages
 
 local send_text = Game.print_player_floating_text -- (player_index, text, color)
 

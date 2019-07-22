@@ -1,6 +1,6 @@
--- A module to prevent recipes from being unlocked by research. Accessed via the public functions.
-local Event = require 'utils.event'
-local Global = require 'utils.global'
+--- A module to prevent recipes from being unlocked by research. Accessed via the public functions.
+local Event = require 'utils.event' --- @dep utils.event
+local Global = require 'utils.global' --- @dep utils.global
 
 local Public = {}
 

@@ -1,13 +1,13 @@
-local Gui = require 'expcore.gui'
-local Store = require 'expcore.store'
-local Global = require 'utils.global'
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local Roles = require 'expcore.roles'
-local Colors = require 'resources.color_presets'
-local config = require 'config.warps'
-local format_time,table_keys = ext_require('expcore.common','format_time','table_keys')
-local Warps = require 'modules.control.warps'
+local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Store = require 'expcore.store' --- @dep expcore.store
+local Global = require 'utils.global' --- @dep utils.global
+local Event = require 'utils.event' --- @dep utils.event
+local Game = require 'utils.game' --- @dep utils.game
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Colors = require 'resources.color_presets' --- @dep resources.color_presets
+local config = require 'config.warps' --- @dep config.warps
+local format_time,table_keys = ext_require('expcore.common','format_time','table_keys') --- @dep expcore.common
+local Warps = require 'modules.control.warps' --- @dep modules.control.warps
 
 local warp_player_in_range_store = 'gui.left.warps.in_range'
 local warp_list

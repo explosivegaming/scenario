@@ -1,4 +1,4 @@
-local Commands = require 'expcore.commands'
+local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore-commands.parse_general'
 
 Commands.new_command('toggle-cheat-mode','Toggles cheat mode for your player, or another player.')

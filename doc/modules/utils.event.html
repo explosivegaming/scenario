@@ -41,6 +41,7 @@
     <li class="nav-item">
     <h2>Sections</h2>
     <ul class="nav">
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     </ul>
     </li>
@@ -79,7 +80,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.concepts.toolbar.html"><span class="module-name-item">expcore.gui.concepts.toolbar</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.core.html"><span class="module-name-item">expcore.gui.core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.buttons.html"><span class="module-name-item">expcore.gui.elements.buttons</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.checkboxs.html"><span class="module-name-item">expcore.gui.elements.checkboxs</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.checkbox.html"><span class="module-name-item">expcore.gui.elements.checkbox</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.dropdown.html"><span class="module-name-item">expcore.gui.elements.dropdown</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.elem-button.html"><span class="module-name-item">expcore.gui.elements.elem-button</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.progress-bar.html"><span class="module-name-item">expcore.gui.elements.progress-bar</span></a></div></li>
@@ -102,6 +103,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.alien_evolution_progress.html"><span class="module-name-item">utils.alien_evolution_progress</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.core.html"><span class="module-name-item">utils.core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.debug.html"><span class="module-name-item">utils.debug</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.dump_env.html"><span class="module-name-item">utils.dump_env</span></a></div></li>
     <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/utils.event.html"><span class="module-name-item">utils.event</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event_core.html"><span class="module-name-item">utils.event_core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.math.html"><span class="module-name-item">utils.math</span></a></div></li>
@@ -145,6 +147,7 @@
     <li class="nav-item">
     <h4>Jump to Section</h4>
     <ul class="nav">
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
     </ul>
     </li>
@@ -181,8 +184,8 @@
     <!-- module usage start -->
     <h3>Usage</h3>
     <pre class="code" data-lang="Lua"><code>
- <span class="keyword">local</span> Event = <span class="global">require</span> <span class="string">'utils.event'</span>
- Event.add(
+ <span class="keyword">local</span> Event = <span class="global">require</span> <span class="string">'utils.event'</span> <span class="comment">--- @dep utils.event
+</span> Event.add(
      defines.events.on_built_entity,
      <span class="keyword">function</span>(event)
          game.<span class="global">print</span>(serpent.block(event)) <span class="comment">-- prints the content of the event table to console.
@@ -199,9 +202,9 @@
  Event.add_removable cannot be called in on_load, doing so will crash the game on loading.
  Token is used because it'</span>s a desync risk to store closures inside the global <span class="global">table</span>.</code></pre>
     <pre class="code" data-lang="Lua"><code>
- <span class="keyword">local</span> Token = <span class="global">require</span> <span class="string">'utils.token'</span>
- <span class="keyword">local</span> Event = <span class="global">require</span> <span class="string">'utils.event'</span>
-
+ <span class="keyword">local</span> Token = <span class="global">require</span> <span class="string">'utils.token'</span> <span class="comment">--- @dep utils.token
+</span> <span class="keyword">local</span> Event = <span class="global">require</span> <span class="string">'utils.event'</span> <span class="comment">--- @dep utils.event
+</span>
  Token.register must <span class="keyword">not</span> be called inside an event handler.
  <span class="keyword">local</span> handler =
      Token.register(
@@ -226,8 +229,8 @@
  func cannot be a closure <span class="keyword">in</span> this case, as there is no safe way to store closures <span class="keyword">in</span> the global <span class="global">table</span>.
  A closure is a <span class="keyword">function</span> that uses a <span class="keyword">local</span> variable <span class="keyword">not</span> defined <span class="keyword">in</span> the <span class="keyword">function</span>.</code></pre>
     <pre class="code" data-lang="Lua"><code>
- <span class="keyword">local</span> Event = <span class="global">require</span> <span class="string">'utils.event'</span>
-
+ <span class="keyword">local</span> Event = <span class="global">require</span> <span class="string">'utils.event'</span> <span class="comment">--- @dep utils.event
+</span>
  If you want to remove the handler you will need to keep a reference to it.
  global.handler = <span class="keyword">function</span>(event)
      game.<span class="global">print</span>(serpent.block(event)) <span class="comment">-- prints the content of the event table to console.
@@ -251,8 +254,8 @@
 
  ** Custom Scenario Events **
 
- <span class="keyword">local</span> Event = <span class="global">require</span> <span class="string">'utils.event'</span>
-
+ <span class="keyword">local</span> Event = <span class="global">require</span> <span class="string">'utils.event'</span> <span class="comment">--- @dep utils.event
+</span>
  <span class="keyword">local</span> event_id = script.generate_event_name()
 
  Event.add(
@@ -269,6 +272,26 @@
     <!-- module content header end -->
 
     <!-- module section list start -->
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Dependencies">Dependencies</a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#utils.event_core">utils.event_core</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#utils.global">utils.global</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#utils.token">utils.token</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#utils.debug">utils.debug</a></td>
+    </tr>
+    </tbody>
+    </table>
     <table class="section-content-list">
     <thead>
     <h3><a href="#Functions">Functions</a></h3>
@@ -330,6 +353,109 @@
     <br />
 
     <!-- section start -->
+    <h3><span id="Dependencies" class="section-title"><a href="#Dependencies">Dependencies</a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#utils.event_core" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.event_core">utils.event_core</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#utils.global" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.global">utils.global</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#utils.token" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.token">utils.token</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#utils.debug" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.debug">utils.debug</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
     <h3><span id="Functions" class="section-title"><a href="#Functions">Functions</a></span></h3>
     <dl class="section-body-container">
     <dt>
@@ -1111,7 +1237,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-07-22 16:24:44 UTC</i>
+    <i>Last updated 2019-07-22 17:37:51 UTC</i>
     </div>
     </div>
     </div>

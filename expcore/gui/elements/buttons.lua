@@ -13,9 +13,9 @@
 
     Other functions present from expcore.gui.core
 ]]
-local mod_gui = require 'mod-gui'
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
+local mod_gui = require 'mod-gui' --- @dep mod-gui
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
 
 local Button = {
     _prototype=Prototype.extend{

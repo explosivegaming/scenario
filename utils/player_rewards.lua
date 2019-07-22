@@ -1,8 +1,8 @@
-local Global = require 'utils.global'
-local Game = require 'utils.game'
-local PlayerStats = require 'features.player_stats'
-local Command = require 'utils.command'
-local Ranks = require 'resources.ranks'
+local Global = require 'utils.global' --- @dep utils.global
+local Game = require 'utils.game' --- @dep utils.game
+local PlayerStats = require 'features.player_stats' --- @dep features.player_stats
+local Command = require 'utils.command' --- @dep utils.command
+local Ranks = require 'resources.ranks' --- @dep resources.ranks
 
 local format = string.format
 local abs = math.abs

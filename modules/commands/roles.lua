@@ -1,6 +1,6 @@
-local Commands = require 'expcore.commands'
-local Roles = require 'expcore.roles'
-local Colours = require 'resources.color_presets'
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Colours = require 'resources.color_presets' --- @dep resources.color_presets
 local format_chat_player_name, format_chat_colour_localized = ext_require('expcore.common',
     'format_chat_player_name',
     'format_chat_colour_localized'

@@ -20,8 +20,8 @@
     Sudo.get(name) --- Gets the function that is registered under the given name
     Sudo.run(name,...) --- Runs the function that is registered under the given name, you may supply any number of params as needed
 ]]
-local Task = require 'utils.task'
-local Token = require 'utils.token'
+local Task = require 'utils.task' --- @dep utils.task
+local Token = require 'utils.token' --- @dep utils.token
 
 local Sudo = {
     tokens={}

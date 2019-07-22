@@ -3,8 +3,8 @@
 -- as such you need to be confident with lua but you edit this config file
 -- use Commands.add_parse('name',function(input,player,reject) end) to add a parse
 -- see ./expcore/commands.lua for more details
-local Commands = require 'expcore.commands'
-local Game = require 'utils.game'
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Game = require 'utils.game' --- @dep utils.game
 
 --[[
 >>>>Adds Parses:

@@ -1,7 +1,7 @@
 --- This file is used to require all the different elements of the gui module
 -- each module has an outline here but for more details see their separate files in ./gui
 
-local Gui = require 'expcore.gui.core'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
 --[[
     Core
 
@@ -48,7 +48,7 @@ local Gui = require 'expcore.gui.core'
     Prototype:clear_store(category) --- Sets the value in this elements store to nil, category needed if categorize function used
 ]]
 
-local Instances = require 'expcore.gui.instances'
+local Instances = require 'expcore.gui.instances' --- @dep expcore.gui.instances
 Gui.new_instance_group = Instances.registers
 Gui.get_instances = Instances.get_elements
 Gui.add_instance = Instances.get_elements
@@ -67,7 +67,7 @@ Gui.classes.instances = Instances
     Instances.unregistered_get_elements(name,category,callback) --- A version of get_elements that does not require the group to be registered
 ]]
 
-local Button = require 'expcore.gui.elements.buttons'
+local Button = require 'expcore.gui.elements.buttons' --- @dep expcore.gui.elements.buttons
 Gui.new_button = Button.new_button
 Gui.classes.button = Button
 --[[
@@ -82,7 +82,7 @@ Gui.classes.button = Button
     Button._prototype:set_key_filter(filter,...) --- Adds a control key filter to the button
 ]]
 
-local Checkbox = require 'expcore.gui.elements.checkbox'
+local Checkbox = require 'expcore.gui.elements.checkbox' --- @dep expcore.gui.elements.checkbox
 Gui.new_checkbox = Checkbox.new_checkbox
 Gui.new_radiobutton = Checkbox.new_radiobutton
 Gui.new_radiobutton_option_set = Checkbox.new_option_set
@@ -104,7 +104,7 @@ Gui.classes.checkbox = Checkbox
     Checkbox.reset_radiobutton(element,exclude,recursive) --- Sets all radiobuttons in a element to false (unless excluded) and can act recursively
 ]]
 
-local Dropdown = require 'expcore.gui.elements.dropdown'
+local Dropdown = require 'expcore.gui.elements.dropdown' --- @dep expcore.gui.elements.dropdown
 Gui.new_dropdown = Dropdown.new_dropdown
 Gui.new_list_box = Dropdown.new_list_box
 Gui.classes.dropdown = Dropdown
@@ -123,7 +123,7 @@ Gui.classes.dropdown = Dropdown
     Dropdown.get_selected_value(element) --- Returns the currently selected value rather than index
 ]]
 
-local Slider = require 'expcore.gui.elements.slider'
+local Slider = require 'expcore.gui.elements.slider' --- @dep expcore.gui.elements.slider
 Gui.new_slider = Slider.new_slider
 Gui.classes.slider = Slider
 --[[
@@ -137,7 +137,7 @@ Gui.classes.slider = Slider
     Slider._prototype:enable_auto_draw_label(state) --- Enables auto draw of the label, the label will share the same parent element as the slider
 ]]
 
-local Text = require 'expcore.gui.elements.text'
+local Text = require 'expcore.gui.elements.text' --- @dep expcore.gui.elements.text
 Gui.new_text_filed = Text.new_text_field
 Gui.new_text_box = Text.new_text_box
 Gui.classes.text = Text
@@ -154,7 +154,7 @@ Gui.classes.text = Text
     Text._prototype_box:set_read_only(state) --- Sets the text box to be read only
 ]]
 
-local ElemButton = require 'expcore.gui.elements.elem-button'
+local ElemButton = require 'expcore.gui.elements.elem-button' --- @dep expcore.gui.elements.elem-button
 Gui.new_elem_button = ElemButton.new_elem_button
 Gui.classes.elem_button = ElemButton
 --[[
@@ -167,7 +167,7 @@ Gui.classes.elem_button = ElemButton
     ElemButton._prototype:set_default(value) --- Sets the default value for the elem button, this may be a function or a string
 ]]
 
-local ProgressBar = require 'expcore.gui.elements.progress-bar'
+local ProgressBar = require 'expcore.gui.elements.progress-bar' --- @dep expcore.gui.elements.progress-bar
 Gui.new_progressbar = ProgressBar.new_progressbar
 Gui.set_progressbar_maximum = ProgressBar.set_maximum
 Gui.increment_progressbar = ProgressBar.increment
@@ -194,7 +194,7 @@ Gui.classes.progressbar = ProgressBar
     ProgressBar._prototype:event_countdown(filter) --- Event handler factory that counts down by 1 every time the event triggers, can filter which elements are decremented
 ]]
 
-local Toolbar = require 'expcore.gui.concepts.toolbar'
+local Toolbar = require 'expcore.gui.concepts.toolbar' --- @dep expcore.gui.concepts.toolbar
 Gui.new_toolbar_button = Toolbar.new_button
 Gui.add_button_to_toolbar = Toolbar.add_button
 Gui.update_toolbar = Toolbar.update
@@ -205,7 +205,7 @@ Gui.classes.toolbar = Toolbar
     Toolbar.update(player) --- Updates the player's toolbar with an new buttons or expected change in auth return
 ]]
 
-local LeftFrames = require 'expcore.gui.concepts.left'
+local LeftFrames = require 'expcore.gui.concepts.left' --- @dep expcore.gui.concepts.left
 Gui.get_left_frame_flow = LeftFrames.get_flow
 Gui.toggle_left_frame = LeftFrames.toggle_frame
 Gui.new_left_frame = LeftFrames.new_frame
@@ -234,7 +234,7 @@ Gui.classes.left_frames = LeftFrames
     LeftFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
 
-local CenterFrames = require 'expcore.gui.concepts.center'
+local CenterFrames = require 'expcore.gui.concepts.center' --- @dep expcore.gui.concepts.center
 Gui.get_center_flow = CenterFrames.get_flow
 Gui.toggle_center_frame = CenterFrames.toggle_frame
 Gui.draw_center_frame = CenterFrames.draw_frame
@@ -257,7 +257,7 @@ Gui.classes.center_frames = CenterFrames
     CenterFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
 
-local PopupFrames = require 'expcore.gui.concepts.popups'
+local PopupFrames = require 'expcore.gui.concepts.popups' --- @dep expcore.gui.concepts.popups
 Gui.get_popup_flow = PopupFrames.get_flow
 Gui.open_popup = PopupFrames.open
 Gui.new_popup = PopupFrames.new_popup

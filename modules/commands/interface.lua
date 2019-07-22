@@ -1,6 +1,6 @@
-local Commands = require 'expcore.commands'
-local Global = require 'utils.global'
-local Common = require 'expcore.common'
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Global = require 'utils.global' --- @dep utils.global
+local Common = require 'expcore.common' --- @dep expcore.common
 
 -- modules that are loaded into the interface env to be accessed
 local interface_modules = {

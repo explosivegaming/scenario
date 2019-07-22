@@ -1,5 +1,5 @@
-local Commands = require 'expcore.commands'
-local Global = require 'utils.global'
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Global = require 'utils.global' --- @dep utils.global
 require 'config.expcore-commands.parse_general'
 
 local homes = {}

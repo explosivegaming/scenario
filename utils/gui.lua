@@ -1,8 +1,8 @@
-local Token = require 'utils.token'
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local Global = require 'utils.global'
-local mod_gui = require 'mod-gui'
+local Token = require 'utils.token' --- @dep utils.token
+local Event = require 'utils.event' --- @dep utils.event
+local Game = require 'utils.game' --- @dep utils.game
+local Global = require 'utils.global' --- @dep utils.global
+local mod_gui = require 'mod-gui' --- @dep mod-gui
 
 local Gui = {}
 

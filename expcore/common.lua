@@ -36,9 +36,9 @@
     Common.format_chat_player_name(player,raw_string) --- Returns the players name in the players color
 ]]
 
-local Colours = require 'resources.color_presets'
-local Game = require 'utils.game'
-local Util = require 'util'
+local Colours = require 'resources.color_presets' --- @dep resources.color_presets
+local Game = require 'utils.game' --- @dep utils.game
+local Util = require 'util' --- @dep util
 require 'utils.table'
 require 'utils.math'
 
@@ -141,7 +141,7 @@ function Common.opt_require(path)
 end
 
 --- Calls a require and returns only the keys given, file must return a table
--- @usage local extract, param_check = ext_require('expcore.common','extract','param_check')
+-- @usage local extract, param_check = ext_require('expcore.common','extract','param_check') --- @dep expcore.common
 -- @tparam string path the path that you want to require
 -- @tparam string ... the name of the keys that you want returned
 -- @return the keys in the order given

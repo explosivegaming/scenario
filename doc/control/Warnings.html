@@ -95,7 +95,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.concepts.toolbar.html"><span class="module-name-item">expcore.gui.concepts.toolbar</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.core.html"><span class="module-name-item">expcore.gui.core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.buttons.html"><span class="module-name-item">expcore.gui.elements.buttons</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.checkboxs.html"><span class="module-name-item">expcore.gui.elements.checkboxs</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.checkbox.html"><span class="module-name-item">expcore.gui.elements.checkbox</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.dropdown.html"><span class="module-name-item">expcore.gui.elements.dropdown</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.elem-button.html"><span class="module-name-item">expcore.gui.elements.elem-button</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/expcore.gui.elements.progress-bar.html"><span class="module-name-item">expcore.gui.elements.progress-bar</span></a></div></li>
@@ -118,6 +118,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.alien_evolution_progress.html"><span class="module-name-item">utils.alien_evolution_progress</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.core.html"><span class="module-name-item">utils.core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.debug.html"><span class="module-name-item">utils.debug</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.dump_env.html"><span class="module-name-item">utils.dump_env</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event.html"><span class="module-name-item">utils.event</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event_core.html"><span class="module-name-item">utils.event_core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.math.html"><span class="module-name-item">utils.math</span></a></div></li>
@@ -181,8 +182,8 @@
     <h3>Usage</h3>
     <pre class="code" data-lang="Lua"><code>
     <span class="comment">-- import the module from the control modules
-</span>    <span class="keyword">local</span> Warnings = <span class="global">require</span> <span class="string">'modules.control.warnings'</span>
-
+</span>    <span class="keyword">local</span> Warnings = <span class="global">require</span> <span class="string">'modules.control.warnings'</span> <span class="comment">--- @dep modules.control.warnings
+</span>
     <span class="comment">-- This will add a warning to the player
 </span>    Warnings.add_warning(<span class="string">'MrBiter'</span>,<span class="string">'Cooldude2606'</span>,<span class="string">'Killed too many biters'</span>)
 
@@ -208,19 +209,15 @@
     <tbody>
     <tr>
     <td class="name"><a href="#utils.event">utils.event</a></td>
-    <td class="summary">Allows registering of custom events</td>
     </tr>
     <tr>
     <td class="name"><a href="#utils.game">utils.game</a></td>
-    <td class="summary">Allows getting player from any value</td>
     </tr>
     <tr>
     <td class="name"><a href="#utils.global">utils.global</a></td>
-    <td class="summary">Allows storing in the global table</td>
     </tr>
     <tr>
     <td class="name"><a href="#config.warnings">config.warnings</a></td>
-    <td class="summary">Config file for this module</td>
     </tr>
     </tbody>
     </table>
@@ -313,8 +310,6 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Allows registering of custom events</p>
-    <p class="section-item-description"></p>
 
     <!-- parameters start -->
     <!-- parameters end -->
@@ -340,8 +335,6 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Allows getting player from any value</p>
-    <p class="section-item-description"></p>
 
     <!-- parameters start -->
     <!-- parameters end -->
@@ -367,8 +360,6 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Allows storing in the global table</p>
-    <p class="section-item-description"></p>
 
     <!-- parameters start -->
     <!-- parameters end -->
@@ -394,8 +385,6 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Config file for this module</p>
-    <p class="section-item-description"></p>
 
     <!-- parameters start -->
     <!-- parameters end -->
@@ -1421,7 +1410,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-07-22 16:24:44 UTC</i>
+    <i>Last updated 2019-07-22 17:37:51 UTC</i>
     </div>
     </div>
     </div>

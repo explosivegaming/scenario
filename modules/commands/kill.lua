@@ -1,5 +1,5 @@
-local Commands = require 'expcore.commands'
-local Roles = require 'expcore.roles'
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Roles = require 'expcore.roles' --- @dep expcore.roles
 require 'config.expcore-commands.parse_general'
 require 'config.expcore-commands.parse_roles'
 

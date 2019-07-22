@@ -1,5 +1,5 @@
-local Commands = require 'expcore.commands'
-local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
 require 'config.expcore-commands.parse_general'
 
 Commands.new_command('admin-chat','Sends a message in chat that only admins can see.')

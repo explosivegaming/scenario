@@ -129,8 +129,8 @@
     Gui.create_scroll_table(element,table_size,maximal_height,name) --- Creates a scroll area with a table inside, table can be any size
     Gui.create_header(element,caption,tooltip,right_align,name) --- Creates a header section with a label and button area
 ]]
-local Gui = require 'utils.gui'
-local Game = require 'utils.game'
+local Gui = require 'utils.gui' --- @dep utils.gui
+local Game = require 'utils.game' --- @dep utils.game
 
 Gui.classes = {} -- Stores the class definations used to create element defines
 Gui.defines = {} -- Stores the indivdual element definations
