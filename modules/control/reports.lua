@@ -171,6 +171,7 @@ end
 --- Removes a report from a player
 -- @tparam LuaPlayer player the player to remove the report from
 -- @tparam string reported_by_name the name of the player that made the report
+-- @tparam string removed_by_name the name of the player who removed the report
 -- @treturn boolean whether the report was removed successfully
 function Reports.remove_report(player,reported_by_name,removed_by_name)
     player = valid_player(player)
@@ -194,6 +195,7 @@ end
 
 --- Removes all reports from a player
 -- @tparam LuaPlayer player the player to remove the reports from
+-- @tparam string removed_by_name the name of the player who removed the report
 -- @treturn boolean whether the reports were removed successfully
 function Reports.remove_all(player,removed_by_name)
     player = valid_player(player)

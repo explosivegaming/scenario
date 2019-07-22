@@ -1,4 +1,9 @@
---- Adds a science info gui that shows production usage and net for the different science packs as well as an eta
+--[[-- Gui Module - Science Info
+    - Adds a science info gui that shows production usage and net for the different science packs as well as an eta
+    @gui Science-Info
+    @alias science_info
+]]
+
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Event = require 'utils.event' --- @dep utils.event
 local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
@@ -248,7 +253,8 @@ local function update_eta(player,element)
     end
 end
 
---- Registerse the new science info gui
+--- Registers the science info
+-- @element science_info
 local science_info =
 Gui.new_left_frame('gui/science-info')
 :set_sprites('entity/lab')

@@ -1,3 +1,9 @@
+--[[-- Gui Module - Warp List
+    - Adds a warp list gui which allows players to add and remove warp points
+    @gui Warps-List
+    @alias warp_list
+]]
+
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Store = require 'expcore.store' --- @dep expcore.store
 local Global = require 'utils.global' --- @dep utils.global
@@ -10,7 +16,6 @@ local format_time,table_keys = ext_require('expcore.common','format_time','table
 local Warps = require 'modules.control.warps' --- @dep modules.control.warps
 
 local warp_player_in_range_store = 'gui.left.warps.in_range'
-local warp_list
 
 local keep_open = {}
 Global.register(keep_open,function(tbl)
@@ -46,6 +51,7 @@ local function player_allowed_edit(player,warp_id)
 end
 
 --- Used on the name label to allow zoom to map
+-- @element zoom_to_map
 local zoom_to_map_name = Gui.uid_name()
 Gui.on_click(zoom_to_map_name,function(event)
     local warp_id = event.element.parent.name
@@ -56,6 +62,7 @@ end)
 
 
 --- This timer controls when a player is able to warp, eg every 60 seconds
+-- @element warp_timer
 local warp_timer =
 Gui.new_progressbar()
 :set_tooltip{'warp-list.timer-tooltip',config.recharge_time}
@@ -72,6 +79,7 @@ end)
 end)
 
 --- When the button is clicked it will teleport the player
+-- @element goto_warp
 local goto_warp =
 Gui.new_button()
 :set_sprites('item/'..config.default_icon)
@@ -93,6 +101,7 @@ end)
 end)
 
 --- Will add a new warp to the list, checks if the player is too close to an existing one
+-- @element add_new_warp
 local add_new_warp =
 Gui.new_button()
 :set_sprites('utility/add')
@@ -122,6 +131,7 @@ end)
 end)
 
 --- Confirms the edit to name or icon of the warp
+-- @element confirm_edit
 local confirm_edit =
 Gui.new_button()
 :set_sprites('utility/downloaded')
@@ -140,6 +150,7 @@ end)
 end)
 
 --- Cancels the editing changes of the selected warp name or icon
+-- @element cancel_edit
 local generate_warp
 local cancel_edit =
 Gui.new_button()
@@ -157,6 +168,7 @@ end)
 end)
 
 --- Removes a warp from the list, including the physical area and map tag
+-- @element discard_warp
 local discard_warp =
 Gui.new_button()
 :set_sprites('utility/trash')
@@ -172,6 +184,7 @@ end)
 end)
 
 --- Opens edit mode for the warp
+-- @element edit_warp
 local edit_warp =
 Gui.new_button()
 :set_sprites('utility/rename_icon_normal')
@@ -391,7 +404,8 @@ local function generate_container(player,element)
 end
 
 --- Registers the warp list
-warp_list =
+-- @element warp_list
+local warp_list =
 Gui.new_left_frame('gui/warp-list')
 :set_sprites('item/'..config.default_icon)
 :set_tooltip{'warp-list.main-tooltip',config.activation_range}

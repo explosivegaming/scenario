@@ -22,6 +22,7 @@ new_type("gui", "Guis", true)
 new_type("config", "Configs", true)
 
 new_type("dep", "Dependencies", false)
+new_type("element", "Elements", false)
 new_type("event", "Events", false, "Event Parameters")
 new_type("command", "Commands", false, "Command Parameters")
 

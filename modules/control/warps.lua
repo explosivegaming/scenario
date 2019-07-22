@@ -122,7 +122,7 @@ end
 --- Adds a new warp to a force and makes the in game warp area
 -- @tparam string force_name the name of the force to add a new warp for
 -- @tparam LuaSurface surface the surface to add the warp to
--- @tparam Position postion the postion to have the warp go to
+-- @tparam Position position the postion to have the warp go to
 -- @tparam[opt='server'] string player_name the name of the player who added this warp
 -- @tparam[opt='New warp'] string warp_name the name of the warp that will be made
 -- @tparam[opt=false] boolean block_generation when true a in game area will not be made

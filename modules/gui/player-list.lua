@@ -1,4 +1,9 @@
---- Gui left frame define for a player list
+--[[-- Gui Module - Player List
+    - Adds a player list to show names and play time; also includes action buttons which can apply to players
+    @gui Player-List
+    @alias player_list
+]]
+
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Store = require 'expcore.store' --- @dep expcore.store
@@ -33,6 +38,7 @@ Gui.on_click(zoom_to_map_name,function(event)
 end)
 
 --- Button used to open the action bar
+-- @element open_action_bar
 local open_action_bar =
 Gui.new_button()
 :set_sprites('utility/expand_dots_white')
@@ -56,6 +62,7 @@ end)
 end)
 
 --- Button used to close the action bar
+-- @element close_action_bar
 local close_action_bar =
 Gui.new_button()
 :set_sprites('utility/close_black','utility/close_white')
@@ -71,6 +78,7 @@ end)
 end)
 
 --- Button used to confirm a reason
+-- @element reason_confirm
 local reason_confirm =
 Gui.new_button()
 :set_sprites('utility/confirm_slot')
@@ -267,6 +275,7 @@ local function add_fake_players(list_table,count)
 end
 
 --- Registers the player list
+-- @element player_list
 local player_list =
 Gui.new_left_frame('gui/player-list')
 :set_sprites('entity/character')

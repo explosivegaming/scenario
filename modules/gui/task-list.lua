@@ -1,4 +1,9 @@
---- Adds a task list to the game which players can add remove and edit items on
+--[[-- Gui Module - Task List
+    - Adds a task list to the game which players can add remove and edit items on
+    @gui Task-List
+    @alias task_list
+]]
+
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Event = require 'utils.event' --- @dep utils.event
 local Roles = require 'expcore.roles' --- @dep expcore.roles
@@ -31,6 +36,7 @@ local function player_allowed_edit(player,task_id)
 end
 
 --- Button in the header to add a new task
+-- @element add_new_task
 local update_all
 local add_new_task =
 Gui.new_button()
@@ -46,6 +52,7 @@ end)
 end)
 
 --- Used to save changes to a task
+-- @element confirm_edit
 local confirm_edit =
 Gui.new_button()
 :set_sprites('utility/downloaded')
@@ -63,6 +70,7 @@ end)
 end)
 
 --- Used to cancel any changes you made to a task
+-- @element cancel_edit
 local generate_task
 local cancel_edit =
 Gui.new_button()
@@ -80,6 +88,7 @@ end)
 end)
 
 --- Removes the task from the list
+-- @element discard_task
 local discard_task =
 Gui.new_button()
 :set_sprites('utility/trash')
@@ -96,6 +105,7 @@ end)
 end)
 
 --- Opens edit mode for the task
+-- @element edit_task
 local edit_task =
 Gui.new_button()
 :set_sprites('utility/rename_icon_normal')
@@ -292,6 +302,7 @@ local function generate_container(player,element)
 end
 
 --- Registers the task list
+-- @element task_list
 local task_list =
 Gui.new_left_frame('gui/task-list')
 :set_sprites('utility/not_enough_repair_packs_icon')
