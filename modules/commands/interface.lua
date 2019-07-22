@@ -1,3 +1,8 @@
+--[[-- Commands Module - Interface
+    - Adds a command that acts as a direct link to the the active softmod, for debug use
+    @commands Interface
+]]
+
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Global = require 'utils.global' --- @dep utils.global
 local Common = require 'expcore.common' --- @dep expcore.common
@@ -52,8 +57,11 @@ local function get_index(self,key)
     end
 end
 
+--- Sends an innovation to be ran and returns the result.
+-- @command interface
+-- @tparam string innovation the command that will be run
 Commands.new_command('interface','Sends an innovation to be ran and returns the result.')
-:add_param('innovation',false) -- the message to send in the admin chat
+:add_param('innovation',false)
 :enable_auto_concat()
 :set_flag('admin_only',true)
 :register(function(player,innovation,raw)

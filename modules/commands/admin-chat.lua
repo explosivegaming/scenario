@@ -1,9 +1,17 @@
+--[[-- Commands Module - Admin Chat
+    - Adds a command that allows admins to talk in a private chat
+    @commands Admin-Chat
+]]
+
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
 require 'config.expcore-commands.parse_general'
 
+--- Sends a message in chat that only admins can see
+-- @command admin-chat
+-- @tparam string message the message to send in the admin chat
 Commands.new_command('admin-chat','Sends a message in chat that only admins can see.')
-:add_param('message',false) -- the message to send in the admin chat
+:add_param('message',false)
 :enable_auto_concat()
 :set_flag('admin_only',true)
 :add_alias('ac')

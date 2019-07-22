@@ -1,9 +1,18 @@
+--[[-- Commands Module - Warnings
+    - Adds a commands that allow admins to warn other players
+    @commands Warnings
+]]
+
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Warnings = require 'modules.control.warnings' --- @dep modules.control.warnings
 local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
 local config = require 'config.warnings' --- @dep config.warnings
 require 'config.expcore-commands.parse_roles'
 
+--- Gives a warning to a player; may lead to automatic script action.
+-- @command give-warning
+-- @tparam LuaPlayer player the player the will recive a warning
+-- @tparam string reason the reason the player is being given a warning
 Commands.new_command('give-warning','Gives a warning to a player; may lead to automatic script action.')
 :add_param('player',false,'player-role')
 :add_param('reason',false)
@@ -16,6 +25,9 @@ Commands.new_command('give-warning','Gives a warning to a player; may lead to au
     game.print{'expcom-warnings.received',action_player_name_color,by_player_name_color,reason}
 end)
 
+--- Gets the number of warnings a player has. If no player then lists all players and the number of warnings they have.
+-- @command get-warnings
+-- @tparam[opt=list] LuaPlayer player the player to get the warning for, if nil all players are listed
 Commands.new_command('get-warnings','Gets the number of warnings a player has. If no player then lists all players and the number of warnings they have.')
 :add_param('player',true,'player')
 :add_alias('warnings','list-warnings')
@@ -46,6 +58,9 @@ Commands.new_command('get-warnings','Gets the number of warnings a player has. I
     end
 end)
 
+--- Clears all warnings (and script warnings) from a player
+-- @command clear-warnings
+-- @tparam LuaPlayer player the player to clear the warnings from
 Commands.new_command('clear-warnings','Clears all warnings (and script warnings) from a player')
 :add_param('player',false,'player')
 :register(function(player,action_player,raw)

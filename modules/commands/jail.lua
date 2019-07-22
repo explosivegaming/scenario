@@ -1,8 +1,17 @@
+--[[-- Commands Module - Jail
+    - Adds a commands that allow admins to jail, unjail, and temp ban players
+    @commands Jail
+]]
+
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Jail = require 'modules.control.jail' --- @dep modules.control.jail
 local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
 require 'config.expcore-commands.parse_roles'
 
+--- Puts a player into jail and removes all other roles.
+-- @command jail
+-- @tparam LuaPlayer player the player that will be jailed
+-- @tparam[opt] string reason the reason why the player is being jailed
 Commands.new_command('jail','Puts a player into jail and removes all other roles.')
 :add_param('player',false,'player-role')
 :add_param('reason',true)
@@ -18,6 +27,9 @@ Commands.new_command('jail','Puts a player into jail and removes all other roles
     end
 end)
 
+--- Removes a player from jail.
+-- @command unjail
+-- @tparam LuaPlayer the player that will be unjailed
 Commands.new_command('unjail','Removes a player from jail.')
 :add_param('player',false,'player-role')
 :add_alias('clear-jail','remove-jail')
@@ -32,6 +44,10 @@ Commands.new_command('unjail','Removes a player from jail.')
     end
 end)
 
+--- Temp bans a player until the next reset; this requires a reason; this will clear the players inventory.
+-- @command temp-ban
+-- @tparam LuaPlayer player the player that will be temp banned
+-- @tparam string reason the reason that the player is being temp banned
 Commands.new_command('temp-ban','Temp bans a player until the next reset; this requires a reason; this will clear the players inventory.')
 :add_param('player',false,'player-role')
 :add_param('reason',false)
@@ -46,6 +62,9 @@ Commands.new_command('temp-ban','Temp bans a player until the next reset; this r
     end
 end)
 
+--- Removes temp ban from a player; this will not restore their items.
+-- @command clear-temp-ban
+-- @tparam LuaPlayer player the player to revoke the temp ban from
 Commands.new_command('clear-temp-ban','Removes temp ban from a player; this will not restore their items.')
 :add_param('player',false,'player-role')
 :add_alias('untemp-ban','remove-temp-ban')

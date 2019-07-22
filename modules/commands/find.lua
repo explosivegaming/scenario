@@ -1,8 +1,16 @@
+--[[-- Commands Module - Find
+    - Adds a command that zooms in on the given player
+    @commands Find
+]]
+
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore-commands.parse_general'
 
+--- Find a player on your map.
+-- @command find-on-map
+-- @tparam LuaPlayer the player to find on the map
 Commands.new_command('find-on-map','Find a player on your map.')
-:add_param('player',false,'player-online') -- the player to find on the map
+:add_param('player',false,'player-online')
 :add_alias('find','zoom-to')
 :register(function(player,action_player,raw)
     local position = action_player.position

@@ -1,3 +1,8 @@
+--[[-- Commands Module - Help
+    - Adds a better help command that allows searching of descriotions and names
+    @commands Help
+]]
+
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Global = require 'utils.global' --- @dep utils.global
 require 'config.expcore-commands.parse_general'
@@ -9,9 +14,13 @@ Global.register(search_cache,function(tbl)
     search_cache = tbl
 end)
 
+--- Searches for a keyword in all commands you are allowed to use.
+-- @command chelp
+-- @tparam string keyword the keyword that will be looked for
+-- @tparam number page the page of help to view, must be in range of pages
 Commands.new_command('chelp','Searches for a keyword in all commands you are allowed to use.')
-:add_param('keyword',true) -- the keyword that will be looked for
-:add_param('page',true,'integer') -- the keyword that will be looked for
+:add_param('keyword',true)
+:add_param('page',true,'integer')
 :set_defaults{keyword='',page=1}
 :register(function(player,keyword,page,raw)
     local player_index = player and player.index or 0

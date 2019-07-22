@@ -1,10 +1,18 @@
+--[[-- Commands Module - Kill
+    - Adds a command that allows players to kill them selfs and others
+    @commands Kill
+]]
+
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 require 'config.expcore-commands.parse_general'
 require 'config.expcore-commands.parse_roles'
 
+--- Kills yourself or another player.
+-- @command kill
+-- @tparam[opt=self] LuaPlayer player the player to kill, must be alive to be valid
 Commands.new_command('kill','Kills yourself or another player.')
-:add_param('player',true,'player-role-alive') -- the player to kill, must be alive to be valid
+:add_param('player',true,'player-role-alive')
 :set_defaults{player=function(player)
     -- default is the player unless they are dead
     if player.character and player.character.health > 0 then
