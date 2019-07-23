@@ -1,3 +1,6 @@
+--- Adds auto replies to chat messages; aswell as chat commands
+-- @addon Chat-Reply
+
 local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.game
 local Roles = require 'expcore.roles' --- @dep expcore.roles

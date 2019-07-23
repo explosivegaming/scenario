@@ -1,3 +1,6 @@
+--- When a player walks around the tiles under them will degrade over time, the same is true when entites are built
+-- @addon Scorched-Earth
+
 local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.game
 local Global = require 'utils.global' --- @dep utils.global

@@ -1,3 +1,6 @@
+--- Sends alert messages to our discord server when certain events are triggered
+-- @addon Discord-Alerts
+
 local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.game
 local Colors = require 'resources.color_presets' --- @dep resources.color_presets

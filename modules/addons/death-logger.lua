@@ -1,3 +1,6 @@
+--- Makes markers on the map where places have died and reclaims items if not recovered
+-- @addon Death-Logger
+
 local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.game
 local Global = require 'utils.global' --- @dep utils.global
