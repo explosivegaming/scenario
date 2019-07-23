@@ -1,4 +1,6 @@
 --- Config file used to enable and disable different push messages for discord
+-- @config Discord-Alerts
+
 return {
     player_reports=true,
     player_warnings=true,

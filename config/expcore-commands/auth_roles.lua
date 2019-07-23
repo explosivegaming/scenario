@@ -1,4 +1,6 @@
 --- This will make commands only work if the role has been allowed it in the role config
+-- @config Commands-Auth-Roles
+
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 

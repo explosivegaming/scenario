@@ -1,7 +1,9 @@
 --- This file controls the placement/degrading of tiles as players build and walk
+-- @config Scorched-Earth
+
 return {
-    weakness_value=50, -- lower value will make tiles more likely to degrade
-    strengths={ -- this decides how "strong" a tile is, bigger number means less likely to degrade
+    weakness_value=50, --- @setting weakness_value lower value will make tiles more likely to degrade
+    strengths={ --- @setting strengths this decides how "strong" a tile is, bigger number means less likely to degrade
         -- debug: /interface require('modules.addons.worn-paths')(player.name,true)
         -- note: tiles are effected by the tiles around them, so player paths will not degrade as fast when made wider
         -- note: values are relative to the tile with the highest value, recommended to keep highest tile as a "nice" number
@@ -42,7 +44,7 @@ return {
         --["water-shallow"]=90,
         --["water-mud"]=0, -- last tile, nothing to degrade to
     },
-    degrade_order={ -- when a tile degrades it will turn into the next tile given here
+    degrade_order={ --- @setting degrade_order when a tile degrades it will turn into the next tile given here
         ["refined-concrete"]='concrete',
         ["refined-hazard-concrete-left"]='hazard-concrete-left',
         ["refined-hazard-concrete-right"]='hazard-concrete-right',
@@ -79,7 +81,7 @@ return {
         --["water-shallow"]='water-mud',
         --["water-mud"]=0, -- last tile, nothing to degrade to
     },
-    entities={ -- entities in this list will degrade the tiles under them when they are placed
+    entities={ --- @setting entities entities in this list will degrade the tiles under them when they are placed
         ['stone-furnace']=true,
         ['steel-furnace']=true,
         ['electric-furnace']=true,

@@ -1,4 +1,6 @@
 --- This is the main config file for the role system; file includes defines for roles and role flags and default values
+-- @config Roles
+
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 
 -- Use these to adjust for ticks ie game.tick < 5*minutes

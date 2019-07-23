@@ -211,107 +211,134 @@
     - Adds a warp list gui which allows players to add and remove warp points</span></td>
     </tr>
     </table>
-    <h2>Modules</h2>
+    <h2>Configs</h2>
     <table class="module_list">
     <tr>
-    <td class="name"><a href="modules/config._file_loader.html">config._file_loader</a></td>
-    <td class="summary"><span>This contains a list of all files that will be loaded and the order they are loaded in
- to stop a file from loading add "--" in front of it, remove the "--" to have the file be loaded
- config files should be loaded after all modules are loaded
- core files should be required by modules and not be present in this list</span></td>
+    <td class="name"><a href="configs/File-Loader.html">File-Loader</a></td>
+    <td class="summary"><span>This contains a list of all files that will be loaded and the order they are loaded in;
+ to stop a file from loading add "--" in front of it, remove the "--" to have the file be loaded;
+ config files should be loaded after all modules are loaded;
+ core files should be required by modules and not be present in this list;</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.action_buttons.html">config.action_buttons</a></td>
-    <td class="summary"><span>Config for the different action buttons that show on the player list
- each button has the button define(s) given along side an auth function, and optional reason callback
- if a reason callback is used then Store.set(action_name_store,player.name,'BUTTON_NAME') should be called during on_click
- buttons can be removed from the gui by commenting them out of the config at the bottom of this file
- the key used for the name of the button is the permission name used by the role system</span></td>
+    <td class="name"><a href="configs/Player-List.html">Player-List</a></td>
+    <td class="summary"><span>Config for the different action buttons that show on the player list;
+ each button has the button define(s) given along side an auth function, and optional reason callback;
+ if a reason callback is used then Store.set(action_name_store,player.name,'BUTTON_NAME') should be called during on_click;
+ buttons can be removed from the gui by commenting them out of the config at the bottom of this file;
+ the key used for the name of the button is the permission name used by the role system;</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.advanced_start.html">config.advanced_start</a></td>
+    <td class="name"><a href="configs/Advanced-Start.html">Advanced-Start</a></td>
     <td class="summary"><span>This file is used to setup the map starting settings and the items players will start with</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.bonuses.html">config.bonuses</a></td>
+    <td class="name"><a href="configs/Bonuses.html">Bonuses</a></td>
     <td class="summary"><span>Lists all bonuses which can be used, name followed by min max</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.chat_reply.html">config.chat_reply</a></td>
+    <td class="name"><a href="configs/Chat-Reply.html">Chat-Reply</a></td>
     <td class="summary"><span>This file defines the different triggers for the chat bot</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.death_logger.html">config.death_logger</a></td>
-    <td class="summary"><span>This config controls what happens when a player dies mostly about map markers and item collection
- allow_teleport_to_body_command and allow_collect_bodies_command can be over ridden if command_auth_runtime_disable is present
+    <td class="name"><a href="configs/Compilatron.html">Compilatron</a></td>
+    <td class="summary"><span>Config file for the compliatrons including where they spawn and what messages they show</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="configs/Death-Logger.html">Death-Logger</a></td>
+    <td class="summary"><span>This config controls what happens when a player dies mostly about map markers and item collection;
+ allow_teleport_to_body_command and allow_collect_bodies_command can be over ridden if command_auth_runtime_disable is present;
  if not present then the commands will not be loaded into the game</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.discord_alerts.html">config.discord_alerts</a></td>
+    <td class="name"><a href="configs/Discord-Alerts.html">Discord-Alerts</a></td>
     <td class="summary"><span>Config file used to enable and disable different push messages for discord</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.expcore-commands.auth_admin.html">config.expcore-commands.auth_admin</a></td>
-    <td class="summary"><span>This is a very simple config file which adds a admin only auth function
- not much to change here its more so it can be enabled and disabled from ./config/file_loader.lua
+    <td class="name"><a href="configs/Commands-Auth-Admin.html">Commands-Auth-Admin</a></td>
+    <td class="summary"><span>This is a very simple config file which adds a admin only auth functio;
+ not much to change here its more so it can be enabled and disabled from ./config/file_loader.lua;
  either way you can change the requirements to be "admin" if you wanted to</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.expcore-commands.auth_roles.html">config.expcore-commands.auth_roles</a></td>
+    <td class="name"><a href="configs/Commands-Auth-Roles.html">Commands-Auth-Roles</a></td>
     <td class="summary"><span>This will make commands only work if the role has been allowed it in the role config</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.expcore-commands.auth_runtime_disable.html">config.expcore-commands.auth_runtime_disable</a></td>
-    <td class="summary"><span>This config for command auth allows commands to be globally enabled and disabled during runtime
+    <td class="name"><a href="configs/Commands-Auth-Runtime-Disable.html">Commands-Auth-Runtime-Disable</a></td>
+    <td class="summary"><span>This config for command auth allows commands to be globally enabled and disabled during runtime;
  this config adds Commands.disable and Commands.enable to enable and disable commands for all users</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.expcore-commands.parse_general.html">config.expcore-commands.parse_general</a></td>
-    <td class="summary"><span>This file contains some common command param parse functions
- this file is less of a config and more of a requirement but you may wish to change how some behave
- as such you need to be confident with lua but you edit this config file
- use Commands.add_parse('name',function(input,player,reject) end) to add a parse
- see ./expcore/commands.lua for more details</span></td>
+    <td class="name"><a href="configs/Commands-Parse.html">Commands-Parse</a></td>
+    <td class="summary"><span>This file contains some common command param parse functions;
+this file is less of a config and more of a requirement but you may wish to change how some behave;
+as such you need to be confident with lua but you edit this config file;
+use Commands.add_parse('name',function(input,player,reject) end) to add a parse;
+see ./expcore/commands.lua for more details</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.expcore-commands.parse_roles.html">config.expcore-commands.parse_roles</a></td>
+    <td class="name"><a href="configs/Commands-Parse-Roles.html">Commands-Parse-Roles</a></td>
     <td class="summary"><span>Adds some parse functions that can be used with the role system</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.permission_groups.html">config.permission_groups</a></td>
-    <td class="summary"><span>Use this file to add new permission groups to the game
- start with Permission_Groups.new_group('name')
- then use either :allow_all() or :disallow_all() to set the default for non specified actions
+    <td class="name"><a href="configs/Permission-Groups.html">Permission-Groups</a></td>
+    <td class="summary"><span>Use this file to add new permission groups to the game;
+ start with Permission_Groups.new_group('name');
+ then use either :allow_all() or :disallow_all() to set the default for non specified actions;
  then use :allow{} and :disallow{} to specify certain actions to allow/disallow</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.popup_messages.html">config.popup_messages</a></td>
+    <td class="name"><a href="configs/Pollution-Grading.html">Pollution-Grading</a></td>
+    <td class="summary"><span>This controls how pollution is viewed on the map</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="configs/Popup-Messages.html">Popup-Messages</a></td>
     <td class="summary"><span>A combination of config settings for different popup values like chat and damage</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.rockets.html">config.rockets</a></td>
+    <td class="name"><a href="configs/Preset-Player-Colours.html">Preset-Player-Colours</a></td>
+    <td class="summary"><span>Preset colours that players get when they join the server, if not in the list then will be given a random colour (which isnt disallowed)</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="configs/Repair.html">Repair</a></td>
+    <td class="summary"><span>Config file for the repair command</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="configs/Rockets.html">Rockets</a></td>
     <td class="summary"><span>This file controls what will show in each section of the rocket info gui</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.roles.html">config.roles</a></td>
+    <td class="name"><a href="configs/Roles.html">Roles</a></td>
     <td class="summary"><span>This is the main config file for the role system; file includes defines for roles and role flags and default values</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.scorched_earth.html">config.scorched_earth</a></td>
+    <td class="name"><a href="configs/Science.html">Science</a></td>
+    <td class="summary"><span>Config file for the science info gui</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="configs/Scorched-Earth.html">Scorched-Earth</a></td>
     <td class="summary"><span>This file controls the placement/degrading of tiles as players build and walk</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.spawn_area.html">config.spawn_area</a></td>
+    <td class="name"><a href="configs/Spawn-Area.html">Spawn-Area</a></td>
     <td class="summary"><span>Used to config the spawn generation settings yes there is alot here i know just ignore the long tables at the end (they were generated with a command)</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.warnings.html">config.warnings</a></td>
+    <td class="name"><a href="configs/Tasks.html">Tasks</a></td>
+    <td class="summary"><span>Config file for the tasks gui</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="configs/Warnings.html">Warnings</a></td>
     <td class="summary"><span>Config file for the warning system, this is very similar to reports but is for the use of moderators rather than normal users.</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/config.warps.html">config.warps</a></td>
+    <td class="name"><a href="configs/Warps.html">Warps</a></td>
     <td class="summary"><span>This file contains all the different settings for the warp system and gui</span></td>
     </tr>
+    </table>
+    <h2>Modules</h2>
+    <table class="module_list">
     <tr>
     <td class="name"><a href="modules/control.html">control</a></td>
     <td class="summary"><span>Please go to ./config if you want to change settings, each file is commented with what it does
@@ -520,7 +547,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-07-22 18:33:52 UTC</i>
+    <i>Last updated 2019-07-23 17:46:07 UTC</i>
     </div>
     </div>
     </div>
