@@ -22,7 +22,7 @@ Debug = require 'utils.debug' --- @dep utils.debug
 require 'resources.version'
 
 -- Global require function used to extract parts of a module, because simply being in common is not good enough
-ext_require = require 'expcore.common' --- @dep expcore.common.ext_require
+ext_require = require('expcore.common').ext_require --- @dep expcore.common.ext_require
 
 -- Please go to config/file_loader.lua to edit the files that are loaded
 log('[INFO] Getting file loader config')
