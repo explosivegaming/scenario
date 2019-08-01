@@ -59,7 +59,6 @@ Permission_Groups.new_group('Standard')
     'admin_action', -- trusted
     'change_programmable_speaker_alert_parameters', -- standard
     'drop_item',
-    'reset_assembling_machine',
     'set_auto_launch_rocket'
 }
 
@@ -81,7 +80,6 @@ Permission_Groups.new_group('Guest')
     'admin_action', -- trusted
     'change_programmable_speaker_alert_parameters', -- standard
     'drop_item',
-    'reset_assembling_machine',
     'set_auto_launch_rocket',
     'change_programmable_speaker_parameters', -- guest
     'change_train_stop_station',
