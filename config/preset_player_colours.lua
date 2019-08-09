@@ -13,7 +13,9 @@ return {
 		aldldl={r=0,g=131,b=255},
 		NAD4X4={r=135,g=206,b=250},
 		cydes={r=82,g=249,b=155},
-		UUBlueFire={r=0,g=204,b=255}
+		UUBlueFire={r=0,g=204,b=255},
+		CmonMate497={r=103,g=224,b=194}
+		
 	},
 	disallow = { --- @setting disallow colours which will not given to players; the value does not matter it is only the key which is checked
 		black = {r = 0, g = 0, b = 0},
