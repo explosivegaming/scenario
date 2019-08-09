@@ -494,7 +494,7 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing),function()
             local px,py = pos.x,pos.y
             for _,warp_id in pairs(warps) do
                 local warp = Warps.get_details(warp_id)
-                local wpos = warp.position
+                local warp_pos = warp.position
                 if warp.surface.index == surface then
                     local dx,dy = px-warp_pos.x,py-warp_pos.y
                     if not warp.editing and (dx*dx)+(dy*dy) < rs2 or (dx*dx)+(dy*dy) < r2 then
