@@ -1,4 +1,12 @@
---- Gui structure define for center gui frames
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Center Guis.
+-- Gui structure define for center gui frames
+-- @section center
+
 --[[
 >>>> Functions
     CenterFrames.get_flow(player) --- Gets the center flow for a player

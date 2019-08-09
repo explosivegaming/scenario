@@ -1,39 +1,7 @@
---- Adds some commonly used functions used in many modules
--- @author cooldude2606
---[[
->>>>Functions List (see function for more detail):
-    Common.type_check(value,test_type) --- Compare types faster for faster validation of prams
-    Common.type_check_error(value,test_type,error_message,level) --- Raises an error if the value is of the incorrect type
-    Common.param_check(value,test_type,param_name,param_number) --- Raises an error when the value is the incorrect type, uses a consistent error message format
-
-    Common.player_return(value,colour,player) --- Will return a value of any type to the player/server console, allows colour for in-game players
-    Common.write_json(path,tbl) --- Writes a table object to a file in json format
-
-    Common.opt_require(path) --- Calls a require that will not error if the file is not found
-    Common.ext_require(path,...) --- Calls a require and returns only the keys given, file must return a table
-
-    Common.format_time(ticks,options) --- Formats tick into a clean format, denominations from highest to lowest
-
-    Common.move_items(items,surface,position,radius,chest_type) --- Moves items to the position and stores them in the closest entity of the type given
-
-    Common.print_grid_value(value, surface, position, scale, offset, immutable) --- Prints a colored value on a location.
-    Common.print_colored_grid_value(value, surface, position, offset, immutable,
-        color_value, base_color, delta_color, under_bound, over_bound) --- Prints a colored value on a location. with extra settings.
-    Common.clear_flying_text(surface) --- Clears all flying text entities on a surface
-
-    Common.string_contains(s, contains) --- Tests if a string contains a given substring.
-
-    Common.extract_keys(tbl,...) --- Extracts certain keys from a table
-    Common.enum(tbl) --- Converts a table to an enum
-    Common.auto_complete(options,input,use_key,rtn_key) --- Returns the closest match to the input
-    Common.table_keys(tbl) --- Returns all the keys of a table
-    Common.table_values(tbl) --- Returns all the values of a table
-    Common.table_alphanumsort(tbl) --- Returns the list is a sorted way that would be expected by people (this is by key)
-    Common.table_keysort(tbl) --- Returns the list is a sorted way that would be expected by people (this is by key) (faster alternative than above)
-
-    Common.format_chat_colour(message,color) --- Returns a message with valid chat tags to change its colour
-    Common.format_chat_colour_localized(message,color) --- Returns a message with valid chat tags to change its colour, using localization
-    Common.format_chat_player_name(player,raw_string) --- Returns the players name in the players color
+--[[-- Core Module - Common Library
+    - Adds some commonly used functions used in many modules
+    @core Common-Library
+    @alias Common
 ]]
 
 local Colours = require 'resources.color_presets' --- @dep resources.color_presets
@@ -532,7 +500,7 @@ local function sortFunc(x, y) --sorts tables with mixed index types.
 end
 
 --- Returns a copy of all of the values in the table.
--- @tparam table table tbl the to copy the keys from, or an empty table if tbl is nil
+-- @tparam table tbl the to copy the keys from, or an empty table if tbl is nil
 -- @tparam[opt] boolean sorted whether to sort the keys (slower) or keep the random order from pairs()
 -- @tparam[opt] boolean as_string whether to try and parse the values as strings, or leave them as their existing type
 -- @treturn array an array with a copy of all the values in the table
@@ -558,7 +526,7 @@ function Common.table_values(tbl, sorted, as_string)
 end
 
 --- Returns a copy of all of the keys in the table.
--- @tparam table table tbl the to copy the keys from, or an empty table if tbl is nil
+-- @tparam table tbl the to copy the keys from, or an empty table if tbl is nil
 -- @tparam[opt] boolean sorted whether to sort the keys (slower) or keep the random order from pairs()
 -- @tparam[opt] boolean as_string whether to try and parse the keys as strings, or leave them as their existing type
 -- @treturn array an array with a copy of all the keys in the table

@@ -1,4 +1,12 @@
---- Gui structure define for popup gui
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Popups.
+-- Gui structure define for popup gui
+-- @section popups
+
 --[[
 >>>> Functions
     PopupFrames.get_flow(player) --- Gets the left flow that contains the popup frames

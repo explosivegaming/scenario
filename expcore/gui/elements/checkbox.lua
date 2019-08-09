@@ -1,4 +1,12 @@
---- Gui class define for checkbox and radiobuttons
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Checkboxs.
+-- Gui class define for checkbox and radiobuttons
+-- @section checkboxs
+
 --[[
 >>>> Using an option set
     An option set is a set of radio buttons where only one of them can be active at a time, this means that when one

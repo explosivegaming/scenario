@@ -1,4 +1,12 @@
---- Gui element define for progress bars
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Progress Bars.
+-- Gui element define for progress bars
+-- @section progress-bars
+
 --[[
 >>>> Functions
     ProgressBar.set_maximum(element,amount,count_down) --- Sets the maximum value that represents the end value of the progress bar

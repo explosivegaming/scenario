@@ -42,6 +42,47 @@
     <div class="column col-9 col-sm-12">
 
     <!-- module list on the main page start -->
+    <h2>Core</h2>
+    <table class="module_list">
+    <tr>
+    <td class="name"><a href="core/Commands.html">Commands</a></td>
+    <td class="summary"><span>Core Module - Commands
+    - Factorio command making module that makes commands with better parse and more modularity</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="core/Common-Library.html">Common-Library</a></td>
+    <td class="summary"><span>Core Module - Common Library
+    - Adds some commonly used functions used in many modules</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="core/Gui.html">Gui</a></td>
+    <td class="summary"><span>Core Module - Gui
+    - This file is used to require all the different elements of the gui module
+    - each module has an outline here but for more details see their separate files in ./gui
+    - please read the files for more documentation that cant be shown here
+    - please note there is a rework planned but not started</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="core/Permissions-Groups.html">Permissions-Groups</a></td>
+    <td class="summary"><span>Core Module - Permission Groups
+    - Permission group making for factorio so you never have to make one by hand again</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="core/Roles.html">Roles</a></td>
+    <td class="summary"><span>Core Module - Roles
+    - Factorio role system to manage custom permissions.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="core/Store.html">Store</a></td>
+    <td class="summary"><span>Core Module - Store
+    - Adds an easy way to store and watch for updates to a value</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="core/Sudo.html">Sudo</a></td>
+    <td class="summary"><span>Core Module - Sudo
+    - An extention of task and token to allow a single require to register and run functions bypassing all permissions.</span></td>
+    </tr>
+    </table>
     <h2>Addons</h2>
     <table class="module_list">
     <tr>
@@ -396,115 +437,6 @@ see ./expcore/commands.lua for more details</span></td>
  this file is the landing point for all scenarios please DO NOT edit directly, further comments are to aid development</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/expcore.commands.html">expcore.commands</a></td>
-    <td class="summary"><span>Factorio command making module that makes commands with better parse and more modularity</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.common.html">expcore.common</a></td>
-    <td class="summary"><span>Adds some commonly used functions used in many modules</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.html">expcore.gui</a></td>
-    <td class="summary"><span>This file is used to require all the different elements of the gui module
- each module has an outline here but for more details see their separate files in ./gui</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.concepts.center.html">expcore.gui.concepts.center</a></td>
-    <td class="summary"><span>Gui structure define for center gui frames
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.concepts.left.html">expcore.gui.concepts.left</a></td>
-    <td class="summary"><span>Gui structure define for left frames
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.concepts.popups.html">expcore.gui.concepts.popups</a></td>
-    <td class="summary"><span>Gui structure define for popup gui
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.concepts.toolbar.html">expcore.gui.concepts.toolbar</a></td>
-    <td class="summary"><span>Gui structure for the toolbar (top left)
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.core.html">expcore.gui.core</a></td>
-    <td class="summary"><span>Core gui file for making element defines and element classes (use require 'expcore.gui')
- see utils.gui for event handlering
- see expcore.gui.test for examples for element defines
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.elements.buttons.html">expcore.gui.elements.buttons</a></td>
-    <td class="summary"><span>Gui class define for buttons and sprite buttons
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.elements.checkbox.html">expcore.gui.elements.checkbox</a></td>
-    <td class="summary"><span>Gui class define for checkbox and radiobuttons
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.elements.dropdown.html">expcore.gui.elements.dropdown</a></td>
-    <td class="summary"><span>Gui class define for dropdowns and list box
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.elements.elem-button.html">expcore.gui.elements.elem-button</a></td>
-    <td class="summary"><span>Gui class defines for elem buttons
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.elements.progress-bar.html">expcore.gui.elements.progress-bar</a></td>
-    <td class="summary"><span>Gui element define for progress bars
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.elements.slider.html">expcore.gui.elements.slider</a></td>
-    <td class="summary"><span>Gui class define for sliders
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.elements.text.html">expcore.gui.elements.text</a></td>
-    <td class="summary"><span>Gui class define for text fields and text boxes
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.instances.html">expcore.gui.instances</a></td>
-    <td class="summary"><span>This file is a breakout from core which forcues on instance management of defines
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.prototype.html">expcore.gui.prototype</a></td>
-    <td class="summary"><span>Used to create new gui prototypes see elements and concepts
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.gui.test.html">expcore.gui.test</a></td>
-    <td class="summary"><span>This file creates a test gui that is used to test every input method
- note that this does not cover every permutation only features in independence
- for example store in most cases is just by player name, but other store methods are tested with checkbox</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.permission_groups.html">expcore.permission_groups</a></td>
-    <td class="summary"><span>Permission group making for factorio so you never have to make one by hand again</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.roles.html">expcore.roles</a></td>
-    <td class="summary"><span>Factorio role system to manage custom permissions</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.store.html">expcore.store</a></td>
-    <td class="summary"><span>Adds an easy way to store and watch for updates to a value
-[[</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/expcore.sudo.html">expcore.sudo</a></td>
-    <td class="summary"><span>An extention of task and token to allow a single require to register and run functions bypassing all permissions
-[[</span></td>
-    </tr>
-    <tr>
     <td class="name"><a href="modules/utils.alien_evolution_progress.html">utils.alien_evolution_progress</a></td>
     <td class="summary"><span>info
     Original (javascript) version: https://hastebin.com/udakacavap.js
@@ -582,7 +514,7 @@ see ./expcore/commands.lua for more details</span></td>
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-07-23 18:00:25 UTC</i>
+    <i>Last updated 2019-08-09 18:11:22 UTC</i>
     </div>
     </div>
     </div>

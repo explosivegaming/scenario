@@ -1,4 +1,12 @@
---- Gui class define for buttons and sprite buttons
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Buttons.
+-- Gui class define for buttons and sprite buttons
+-- @section Buttons
+
 --[[
 >>>> Functions
     Button.new_button(name) --- Creates a new button element define

@@ -1,4 +1,12 @@
---- Gui class define for dropdowns and list box
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Dropdowns.
+-- Gui class define for dropdowns and list box
+-- @section dropdowns
+
 --[[
 >>>> Functions
     Dropdown.new_dropdown(name) --- Creates a new dropdown element define

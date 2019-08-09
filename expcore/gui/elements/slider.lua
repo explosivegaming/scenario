@@ -1,4 +1,12 @@
---- Gui class define for sliders
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Sliders.
+-- Gui class define for sliders
+-- @section sliders
+
 --[[
 >>>> Functions
     Slider.new_slider(name) --- Creates a new slider element define

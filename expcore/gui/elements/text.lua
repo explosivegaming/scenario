@@ -1,4 +1,12 @@
---- Gui class define for text fields and text boxes
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Text.
+-- Gui class define for text fields and text boxes
+-- @section text
+
 --[[
 >>>> Functions
     Text.new_text_field(name) --- Creates a new text field element define

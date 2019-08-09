@@ -1,4 +1,12 @@
---- Gui structure for the toolbar (top left)
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Toolbar.
+-- Gui structure for the toolbar (top left)
+-- @section toolbar
+
 --[[
 >>>> Example format
     -- this is the same as any other button define, this just automatically draws it

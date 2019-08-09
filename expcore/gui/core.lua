@@ -1,6 +1,14 @@
---- Core gui file for making element defines and element classes (use require 'expcore.gui')
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Core.
+-- Core gui file for making element defines and element classes (use require 'expcore.gui')
 -- see utils.gui for event handlering
 -- see expcore.gui.test for examples for element defines
+-- @section core
+
 --[[
 >>>> Basic useage with no defines
     This module can be igroned if you are only wanting only event handlers as utils.gui adds the following:
@@ -138,6 +146,7 @@ Gui.names = {} -- Stores debug names to link to gui uids
 
 --- Used to create new element defines from a class prototype, please use the own given by the class
 -- @tparam table prototype the class prototype that will be used for the element define
+-- @tparam[opt] string debug_name the name that you want to see while debuging
 -- @treturn table the new element define with all functions accessed via __index metamethod
 function Gui.new_define(prototype,debug_name)
     local name = Gui.uid_name()
@@ -159,7 +168,7 @@ function Gui.new_define(prototype,debug_name)
 end
 
 --- Gets an element define give the uid, debug name or a copy of the element define
--- @tparam name ?string|table the uid, debug name or define for the element define to get
+-- @tparam ?string|table name the uid, debug name or define for the element define to get
 -- @tparam[opt] boolean internal when true the error trace is one level higher (used internally)
 -- @treturn table the element define that was found or an error
 function Gui.get_define(name,internal)
@@ -207,8 +216,8 @@ function Gui.categorize_by_surface(element)
 end
 
 --- Draws a copy of the element define to the parent element, see draw_to
--- @tparam name ?string|table the uid, debug name or define for the element define to draw
--- @tparam element LuaGuiEelement the parent element that it the define will be drawn to
+-- @tparam ?string|table name the uid, debug name or define for the element define to draw
+-- @tparam LuaGuiEelement element the parent element that it the define will be drawn to
 -- @treturn LuaGuiElement the new element that was created
 function Gui.draw(name,element,...)
     local define = Gui.get_define(name,true)
@@ -256,7 +265,7 @@ function Gui.set_padding(element,up,down,left,right)
 end
 
 --- Sets the padding for a gui style
--- @tparam element LuaStyle the element to set the padding for
+-- @tparam LuaStyle style the element to set the padding for
 -- @tparam[opt=0] number up the amount of padding on the top
 -- @tparam[opt=0] number down the amount of padding on the bottom
 -- @tparam[opt=0] number left the amount of padding on the left

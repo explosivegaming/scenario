@@ -1,4 +1,12 @@
---- Gui class defines for elem buttons
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Elem Buttons.
+-- Gui class defines for elem buttons
+-- @section elem-buttons
+
 --[[
 >>>> Functions
     ElemButton.new_elem_button(name) --- Creates a new elem button element define

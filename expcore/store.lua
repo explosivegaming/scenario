@@ -1,66 +1,73 @@
---- Adds an easy way to store and watch for updates to a value
---[[
->>>> Basic Use
-    At the most basic level this allows for the naming of locations to store in the global table, the second feature is that you are
-    able to listen for updates of this value, which means that when ever the set function is called it will trigger the update callback.
+--[[-- Core Module - Store
+    - Adds an easy way to store and watch for updates to a value
+    @core Store
+    @alias Store
 
-    This may be useful when storing config values and when they get set you want to make sure it is taken care of, or maybe you want
-    to have a value that you can trigger an update of from different places.
+    @usage
+---- Basic Use
+    -- At the most basic level this allows for the naming of locations to store in the global table, the second feature is that you are
+    -- able to listen for updates of this value, which means that when ever the set function is called it will trigger the update callback.
 
-    -- this will register a new location called 'scenario.difficulty'
+    -- This may be useful when storing config values and when they get set you want to make sure it is taken care of, or maybe you want
+    -- to have a value that you can trigger an update of from different places.
+
+    -- This will register a new location called 'scenario.difficulty'
     -- note that setting a start value is optional and we could take nil to mean normal
     Store.register('scenario.difficulty',function(value)
         game.print('The scenario difficulty has be set to: '..value)
     end)
 
-    -- this will set the value in the store to 'hard' and will trigger the update callback which will print a message to the game
+    -- This will set the value in the store to 'hard' and will trigger the update callback which will print a message to the game
     Store.set('scenario.difficulty','hard')
 
-    -- this will return 'hard'
+    -- This will return 'hard'
     Store.get('scenario.difficulty')
 
->>>> Using Children
-    One limitation of store is that all locations must be registered to avoid desyncs, to get round this issue "children" can be used.
-    When you set the value of a child it does not have its own update callback so rather the "parent" location which has been registered
-    will have its update value called with a second param of the name of that child.
+    @usage
+---- Using Children
+    -- One limitation of store is that all locations must be registered to avoid desyncs, to get round this issue "children" can be used.
+    -- When you set the value of a child it does not have its own update callback so rather the "parent" location which has been registered
+    -- will have its update value called with a second param of the name of that child.
 
-    This may be useful when you want a value of each player or force and since you cant register every player at the start you must use
-    the players name as the child name.
+    -- This may be useful when you want a value of each player or force and since you cant register every player at the start you must use
+    -- the players name as the child name.
 
-    -- this will register the location 'scenario.score' where we plan to use force names as the child
+    -- This will register the location 'scenario.score' where we plan to use force names as the child
     Store.register('scenario.score',function(value,child)
         game.print(child..' now has a score of '..value)
     end)
 
-    -- this will return nil, but will not error as children don't need to be registered
+    -- This will return nil, but will not error as children don't need to be registered
     Store.get('scenario.score','player')
 
-    -- this will set 'player' to have a value of 10 for 'scenario.score' and trigger the game message print
+    -- This will set 'player' to have a value of 10 for 'scenario.score' and trigger the game message print
     Store.set('scenario.score','player',10)
 
-    -- this would be the similar to Store.get however this will return the names of all the children
+    -- This would be the similar to Store.get however this will return the names of all the children
     Store.get_children('scenario.score')
 
->>>> Using Sync
-    There is the option to use synced values which is the same as a normal value however you can combine this with an external script
-    which can read the output from 'script-output/log/store.log' and have it send rcon commands back to the game allowing for cross instance
-    syncing of values.
+    @usage
+---- Using Sync
+    -- There is the option to use synced values which is the same as a normal value however you can combine this with an external script
+    -- which can read the output from 'script-output/log/store.log' and have it send rcon commands back to the game allowing for cross instance
+    -- syncing of values.
 
-    This may be useful when you want to have a value change effect multiple instances or even if you just want a database to store values so
-    you can sync data between map resets.
+    -- This may be useful when you want to have a value change effect multiple instances or even if you just want a database to store values so
+    -- you can sync data between map resets.
 
-    -- this example will register the location 'statistics.total-play-time' where we plan to use plan names as the child
+    -- This example will register the location 'statistics.total-play-time' where we plan to use plan names as the child
     -- note that the location must be the same across instances
     Store.register('statistics.total-play-time',true,function(value,child)
         game.print(child..' now has now played for '..value)
     end)
 
-    -- use of set and are all the same as non synced but you should include from_sync as true
+    -- Use of set and are all the same as non synced but you should include from_sync as true
 
->>>> Alternative method
-    Some people may prefer to use a variable rather than a string for formating reasons here is an example. Also for any times when
-    there will be little external input Store.uid_location() can be used to generate non conflicting locations, uid_location will also
-    be used if you give a nil location.
+    @usage
+---- Alternative method
+    -- Some people may prefer to use a variable rather than a string for formating reasons here is an example. Also for any times when
+    -- there will be little external input Store.uid_location() can be used to generate non conflicting locations, uid_location will also
+    -- be used if you give a nil location.
 
     local store_game_speed =
     Store.register(function(value)

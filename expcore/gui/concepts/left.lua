@@ -1,4 +1,12 @@
---- Gui structure define for left frames
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Left Guis.
+-- Gui structure define for left frames
+-- @section left
+
 --[[
 >>>> Example formating
 

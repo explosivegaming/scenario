@@ -13,6 +13,7 @@ topics = {"../README.md", "../LICENSE"}
 style = '../doc'
 template = '../doc'
 no_space_before_args = true
+merge=true
 
 new_type("core", "Core", true)
 new_type("addon", "Addons", true)

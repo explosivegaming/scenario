@@ -1,4 +1,12 @@
---- This file is a breakout from core which forcues on instance management of defines
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Instances.
+-- This file is a breakout from core which forcues on instance management of defines
+-- @section instances
+
 --[[
 >>>> Using registered instance groups
     The main use of this module is to register a group of elements referred here as "instances of an element define" in which
@@ -158,7 +166,7 @@ end
 --- Gets all valid element instances and has the option of running a callback on those that are valid
 -- @tparam string name the name of the instance group to get the instances of
 -- @tparam[opt] string category the category to get the instances of, not needed when no categorise function
--- @tparam[opt] callback function when given the callback will be ran on all valid elements
+-- @tparam[opt] function callback when given the callback will be ran on all valid elements
 -- callback param - element LuaGuiElement - the current valid element
 -- @treturn table the table of element instances with all invalid ones removed
 function Instances.get_valid_elements(name,category,callback)
@@ -186,7 +194,7 @@ Instances.apply_to_elements = Instances.get_valid_elements
 
 --- A version of add_element that does not require the group to be registered
 -- @tparam string name the name of the instance group to add the element to
--- @tparam category ?string|nil the category to add the element to, can be nil but must still be given
+-- @tparam ?string|nil category the category to add the element to, can be nil but must still be given
 -- @tparam LuaGuiElement element the element to add to the instance group
 function Instances.unregistered_add_element(name,category,element)
     if not Instances.data[name] then Instances.data[name] = {} end
@@ -200,7 +208,7 @@ end
 
 --- A version of get_elements that does not require the group to be registered
 -- @tparam string name the name of the instance group to get the instances of
--- @tparam category ?string|nil the category to get the instances of, can be nil but must still be given
+-- @tparam ?string|nil category the category to get the instances of, can be nil but must still be given
 -- @tparam[opt] function callback when given will be called on all valid instances
 -- callback param - element LuaGuiElement - the current valid element
 -- @treturn table the table of element instances with all invalid ones removed

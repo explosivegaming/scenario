@@ -1,7 +1,14 @@
---- This file is used to require all the different elements of the gui module
--- each module has an outline here but for more details see their separate files in ./gui
+--[[-- Core Module - Gui
+    - This file is used to require all the different elements of the gui module
+    - each module has an outline here but for more details see their separate files in ./gui
+    - please read the files for more documentation that cant be shown here
+    - please note there is a rework planned but not started
+    @core Gui
+    @alias Gui
+]]
 
 local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+
 --[[
     Core
 
