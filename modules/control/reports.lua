@@ -5,7 +5,7 @@
 
     @usage
     -- import the module from the control modules
-    local Reports = require 'modules.control.reports'
+    local Reports = require 'modules.control.reports' --- @dep modules.control.reports
 
     -- This will place a report on "MrBiter" (must be a valid player) the report will have been made
     -- by "Cooldude2606" (must be the player name) with the reason 'Liking biters too much' this can be
@@ -24,12 +24,8 @@
 
 ]]
 
---- Allows getting player from any value
--- @dep utils.game
-local Game = require 'utils.game'
---- Allows storing of data in global table
--- @dep utils.global
-local Global = require 'utils.global'
+local Game = require 'utils.game' --- @dep utils.game
+local Global = require 'utils.global' --- @dep utils.global
 
 local valid_player = Game.get_player_from_any
 
@@ -175,6 +171,7 @@ end
 --- Removes a report from a player
 -- @tparam LuaPlayer player the player to remove the report from
 -- @tparam string reported_by_name the name of the player that made the report
+-- @tparam string removed_by_name the name of the player who removed the report
 -- @treturn boolean whether the report was removed successfully
 function Reports.remove_report(player,reported_by_name,removed_by_name)
     player = valid_player(player)
@@ -198,6 +195,7 @@ end
 
 --- Removes all reports from a player
 -- @tparam LuaPlayer player the player to remove the reports from
+-- @tparam string removed_by_name the name of the player who removed the report
 -- @treturn boolean whether the reports were removed successfully
 function Reports.remove_all(player,removed_by_name)
     player = valid_player(player)

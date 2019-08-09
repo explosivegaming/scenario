@@ -1,4 +1,12 @@
---- Gui class define for checkbox and radiobuttons
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Checkboxs.
+-- Gui class define for checkbox and radiobuttons
+-- @section checkboxs
+
 --[[
 >>>> Using an option set
     An option set is a set of radio buttons where only one of them can be active at a time, this means that when one
@@ -45,10 +53,10 @@
 
     Other functions present from expcore.gui.core
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Store = require 'expcore.store'
-local Game = require 'utils.game'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Store = require 'expcore.store' --- @dep expcore.store
+local Game = require 'utils.game' --- @dep utils.game
 
 --- Store call for store update
 -- @tparam table define the define that this is acting on

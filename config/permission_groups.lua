@@ -1,10 +1,12 @@
---- Use this file to add new permission groups to the game
--- start with Permission_Groups.new_group('name')
--- then use either :allow_all() or :disallow_all() to set the default for non specified actions
+--- Use this file to add new permission groups to the game;
+-- start with Permission_Groups.new_group('name');
+-- then use either :allow_all() or :disallow_all() to set the default for non specified actions;
 -- then use :allow{} and :disallow{} to specify certain actions to allow/disallow
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local Permission_Groups = require 'expcore.permission_groups'
+-- @config Permission-Groups
+
+--local Event = require 'utils.event' -- @dep utils.event
+--local Game = require 'utils.game' -- @dep utils.game
+local Permission_Groups = require 'expcore.permission_groups' --- @dep expcore.permission_groups
 
 Permission_Groups.new_group('Admin')
 :allow_all()

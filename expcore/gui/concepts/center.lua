@@ -1,4 +1,12 @@
---- Gui structure define for center gui frames
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Center Guis.
+-- Gui structure define for center gui frames
+-- @section center
+
 --[[
 >>>> Functions
     CenterFrames.get_flow(player) --- Gets the center flow for a player
@@ -15,10 +23,10 @@
     CenterFrames._prototype:toggle_frame(player) --- Toggles if the frame is open, if open it will close it and if closed it will open it
     CenterFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Toolbar = require 'expcore.gui.concepts.toolbar'
-local Game = require 'utils.game'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Toolbar = require 'expcore.gui.concepts.toolbar' --- @dep expcore.gui.concepts.toolbar
+local Game = require 'utils.game' --- @dep utils.game
 
 local CenterFrames = {
 	_prototype = Prototype.extend{

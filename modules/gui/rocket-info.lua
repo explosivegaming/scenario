@@ -1,11 +1,16 @@
---- Adds a rocket infomation gui which shows general stats, milestones and build progress of rockets
-local Gui = require 'expcore.gui'
-local Roles = require 'expcore.roles'
-local Event = require 'utils.event'
-local config = require 'config.rockets'
-local format_time = ext_require('expcore.common','format_time')
-local Colors = require 'resources.color_presets'
-local Rockets = require 'modules.control.rockets'
+--[[-- Gui Module - Rocket Info
+    - Adds a rocket infomation gui which shows general stats, milestones and build progress of rockets
+    @gui Rocket-Info
+    @alias rocket_info
+]]
+
+local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Event = require 'utils.event' --- @dep utils.event
+local config = require 'config.rockets' --- @dep config.rockets
+local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
+local Colors = require 'resources.color_presets' --- @dep resources.color_presets
+local Rockets = require 'modules.control.rockets' --- @dep modules.control.rockets
 
 --- Gets if a player is allowed to use the action buttons
 local function player_allowed(player,action)
@@ -25,6 +30,7 @@ local function player_allowed(player,action)
 end
 
 --- Used on the name label to allow zoom to map
+-- @element zoom_to_map
 local zoom_to_map_name = Gui.uid_name()
 Gui.on_click(zoom_to_map_name,function(event)
     local rocket_silo_name = event.element.parent.caption
@@ -33,6 +39,7 @@ Gui.on_click(zoom_to_map_name,function(event)
 end)
 
 --- Used to launch the rocket, when it is ready
+-- @element launch_rocket
 local launch_rocket =
 Gui.new_button()
 :set_sprites('utility/center')
@@ -60,6 +67,7 @@ end)
 end)
 
 --- Used to toggle the auto launch on a rocket
+-- @element toggle_rocket
 local toggle_rocket =
 Gui.new_button()
 :set_sprites('utility/play')
@@ -87,6 +95,7 @@ end)
 end)
 
 --- Used to toggle the visibility of the different sections
+-- @element toggle_section
 local toggle_section =
 Gui.new_button()
 :set_sprites('utility/expand_dark','utility/expand')
@@ -112,7 +121,7 @@ end)
 
 --- Used to create the three different sections
 local function create_section(container,section_name,table_size)
-    --- Header for the section
+    -- Header for the section
     local header_area = Gui.create_header(
         container,
         {'rocket-info.section-caption-'..section_name},
@@ -121,11 +130,11 @@ local function create_section(container,section_name,table_size)
         section_name..'-header'
     )
 
-    --- Right aligned button to toggle the section
+    -- Right aligned button to toggle the section
     header_area.caption = section_name
     toggle_section(header_area)
 
-    --- Table used to store the data
+    -- Table used to store the data
     local flow_table = Gui.create_scroll_table(container,table_size,215,section_name)
     flow_table.parent.visible = false
 
@@ -437,7 +446,8 @@ local function generate_progress(player,frame)
     end
 end
 
---- Registers the new left gui
+--- Registers the rocket info
+-- @element rocket_info
 local rocket_info =
 Gui.new_left_frame('gui/rocket-info')
 :set_sprites('entity/rocket-silo')

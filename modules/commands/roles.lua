@@ -1,11 +1,20 @@
-local Commands = require 'expcore.commands'
-local Roles = require 'expcore.roles'
-local Colours = require 'resources.color_presets'
+--[[-- Commands Module - Roles
+    - Adds a commands that allow interaction with the role system
+    @commands Roles
+]]
+
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Colours = require 'resources.color_presets' --- @dep resources.color_presets
 local format_chat_player_name, format_chat_colour_localized = ext_require('expcore.common',
     'format_chat_player_name',
     'format_chat_colour_localized'
 )
 
+--- Assigns a role to a player
+-- @command assign-role
+-- @tparam LuaPlayer player the player to assign the role to
+-- @tparam string role the name of the role to assign to the player, supports auto complete after enter
 Commands.new_command('assign-role','Assigns a role to a player')
 :add_param('player',false,'player-role')
 :add_param('role',false,'role')
@@ -20,6 +29,10 @@ Commands.new_command('assign-role','Assigns a role to a player')
     end
 end)
 
+--- Unassigns a role from a player
+-- @command unassign-role
+-- @tparam LuaPlayer player the player to unassign the role from
+-- @tparam string role the name of the role to unassign from the player, supports auto complete after enter
 Commands.new_command('unassign-role','Unassigns a role from a player')
 :add_param('player',false,'player-role')
 :add_param('role',false,'role')
@@ -34,6 +47,9 @@ Commands.new_command('unassign-role','Unassigns a role from a player')
     end
 end)
 
+--- Lists all roles in they correct order
+-- @command list-roles
+-- @tparam[opt=all] LuaPlayer player list only the roles which this player has
 Commands.new_command('list-roles','Lists all roles in they correct order')
 :add_param('player',true,'player')
 :add_alias('lsroles','roles')

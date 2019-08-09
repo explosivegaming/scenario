@@ -1,17 +1,19 @@
---- Config for the different action buttons that show on the player list
--- each button has the button define(s) given along side an auth function, and optional reason callback
--- if a reason callback is used then Store.set(action_name_store,player.name,'BUTTON_NAME') should be called during on_click
--- buttons can be removed from the gui by commenting them out of the config at the bottom of this file
--- the key used for the name of the button is the permission name used by the role system
-local Gui = require 'expcore.gui'
-local Roles = require 'expcore.roles'
-local Store = require 'expcore.store'
-local Game = require 'utils.game'
-local Reports = require 'modules.control.reports'
-local Warnings = require 'modules.control.warnings'
-local Jail = require 'modules.control.jail'
-local Colors = require 'resources.color_presets'
-local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
+--- Config for the different action buttons that show on the player list;
+-- each button has the button define(s) given along side an auth function, and optional reason callback;
+-- if a reason callback is used then Store.set(action_name_store,player.name,'BUTTON_NAME') should be called during on_click;
+-- buttons can be removed from the gui by commenting them out of the config at the bottom of this file;
+-- the key used for the name of the button is the permission name used by the role system;
+-- @config Player-List
+
+local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Store = require 'expcore.store' --- @dep expcore.store
+local Game = require 'utils.game' --- @dep utils.game
+local Reports = require 'modules.control.reports' --- @dep modules.control.reports
+local Warnings = require 'modules.control.warnings' --- @dep modules.control.warnings
+local Jail = require 'modules.control.jail' --- @dep modules.control.jail
+local Colors = require 'resources.color_presets' --- @dep resources.color_presets
+local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
 
 local action_player_store = 'gui.left.player-list.action-player'
 local action_name_store = 'gui.left.player-list.action-name'
@@ -50,7 +52,8 @@ local function teleport(from_player,to_player)
     return true
 end
 
--- teleports the user to the action player
+--- Teleports the user to the action player
+-- @element goto_player
 local goto_player =
 Gui.new_button()
 :set_sprites('utility/export')
@@ -66,7 +69,8 @@ Gui.new_button()
     end
 end)
 
--- teleports the action player to the user
+--- Teleports the action player to the user
+-- @element bring_player
 local bring_player =
 Gui.new_button()
 :set_sprites('utility/import')
@@ -82,7 +86,8 @@ Gui.new_button()
     end
 end)
 
--- kills the action player, if there are alive
+--- Kills the action player, if there are alive
+-- @element kill_player
 local kill_player =
 Gui.new_button()
 :set_sprites('utility/too_far')
@@ -98,7 +103,8 @@ Gui.new_button()
     end
 end)
 
--- reports the action player, requires a reason to be given
+--- Reports the action player, requires a reason to be given
+-- @element report_player
 local report_player =
 Gui.new_button()
 :set_sprites('utility/spawn_flag')
@@ -121,7 +127,8 @@ local function report_player_callback(player,reason)
     Reports.report_player(action_player_name,player.name,reason)
 end
 
--- gives the action player a warning, requires a reason
+--- Gives the action player a warning, requires a reason
+-- @element warn_player
 local warn_player =
 Gui.new_button()
 :set_sprites('utility/spawn_flag')
@@ -138,7 +145,8 @@ local function warn_player_callback(player,reason)
     Warnings.add_warning(action_player_name,player.name,reason)
 end
 
--- jails the action player, requires a reason
+--- Jails the action player, requires a reason
+-- @element jail_player
 local jail_player =
 Gui.new_button()
 :set_sprites('utility/item_editor_icon')
@@ -160,7 +168,8 @@ local function jail_player_callback(player,reason)
     Jail.jail_player(action_player_name,player.name,reason)
 end
 
--- temp bans the action player, requires a reason
+--- Temp bans the action player, requires a reason
+-- @element temp_ban_player
 local temp_ban_player =
 Gui.new_button()
 :set_sprites('utility/clock')
@@ -182,7 +191,8 @@ local function temp_ban_player_callback(player,reason)
     Jail.temp_ban_player(action_player,player.name,reason)
 end
 
--- kicks the action player, requires a reason
+--- Kicks the action player, requires a reason
+-- @element kick_player
 local kick_player =
 Gui.new_button()
 :set_sprites('utility/warning_icon')
@@ -197,7 +207,8 @@ local function kick_player_callback(player,reason)
     game.kick_player(action_player,reason)
 end
 
--- bans the action player, requires a reason
+--- Bans the action player, requires a reason
+-- @element ban_player
 local ban_player =
 Gui.new_button()
 :set_sprites('utility/danger_icon')

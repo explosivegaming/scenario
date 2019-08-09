@@ -1,9 +1,18 @@
-local Roles = require 'expcore.roles'
-local Commands = require 'expcore.commands'
-local Reports = require 'modules.control.reports'
-local format_chat_player_name = ext_require('expcore.common','format_chat_player_name')
+--[[-- Commands Module - Reports
+    - Adds a commands that allow players to report other players
+    @commands Reports
+]]
+
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Reports = require 'modules.control.reports' --- @dep modules.control.reports
+local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
 require 'config.expcore-commands.parse_general'
 
+--- Reports a player and notifies moderators
+-- @command report
+-- @tparam LuaPlayer player the player to report, some players are immune
+-- @tparam string reason the reason the player is being reported
 Commands.new_command('report','Reports a player and notifies moderators')
 :add_param('player',false,function(input,player,reject)
     input = Commands.parse('player',input,player,reject)
@@ -28,6 +37,9 @@ end)
     end
 end)
 
+--- Gets a list of all reports that a player has on them. If no player then lists all players and the number of reports on them.
+-- @command get-reports
+-- @tparam LuaPlayer player the player to get the report for
 Commands.new_command('get-reports','Gets a list of all reports that a player has on them. If no player then lists all players and the number of reports on them.')
 :add_param('player',true,'player')
 :add_alias('reports','list-reports')
@@ -51,6 +63,10 @@ Commands.new_command('get-reports','Gets a list of all reports that a player has
     end
 end)
 
+--- Clears all reports from a player or just the report from one player.
+-- @command clear-reports
+-- @tparam LuaPlayer player the player to clear the report(s) from
+-- @tparam[opt=all] LuaPlayer from-player remove only the report made by this player
 Commands.new_command('clear-reports','Clears all reports from a player or just the report from one player.')
 :add_param('player',false,'player')
 :add_param('from-player',true,'player')

@@ -1,11 +1,11 @@
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local Utils = require 'utils.core'
-local Timestamp = require 'utils.timestamp'
-local Rank = require 'features.rank_system'
-local Donator = require 'features.donator'
-local Server = require 'features.server'
-local Ranks = require 'resources.ranks'
+local Event = require 'utils.event' --- @dep utils.event
+local Game = require 'utils.game' --- @dep utils.game
+local Utils = require 'utils.core' --- @dep utils.core
+local Timestamp = require 'utils.timestamp' --- @dep utils.timestamp
+local Rank = require 'features.rank_system' --- @dep features.rank_system
+local Donator = require 'features.donator' --- @dep features.donator
+local Server = require 'features.server' --- @dep features.server
+local Ranks = require 'resources.ranks' --- @dep resources.ranks
 
 local insert = table.insert
 local format = string.format

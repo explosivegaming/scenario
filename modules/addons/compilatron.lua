@@ -1,9 +1,12 @@
-local Event = require 'utils.event'
-local Global = require 'utils.global'
-local Game = require 'utils.game'
-local Task = require 'utils.task'
-local Token = require 'utils.token'
-local config = require 'config.compilatron'
+--- Adds a compilatron that walks around the spawn area; adapted from redmew code
+-- @addon Compilatron
+
+local Event = require 'utils.event' --- @dep utils.event
+local Global = require 'utils.global' --- @dep utils.global
+local Game = require 'utils.game' --- @dep utils.game
+local Task = require 'utils.task' --- @dep utils.task
+local Token = require 'utils.token' --- @dep utils.token
+local config = require 'config.compilatron' --- @dep config.compilatron
 local messages = config.messages
 local locations = config.locations
 
@@ -62,7 +65,7 @@ end
 Event.on_nth_tick(config.message_cycle, circle_messages)
 
 --- This will add a compilatron to the global and start his message cycle
--- @tparam entity LuaEntity the compilatron entity that moves around
+-- @tparam LuaEntity entity the compilatron entity that moves around
 -- @tparam string name the name of the location that the complitron is at
 function Public.add_compilatron(entity, name)
     if not entity and not entity.valid then

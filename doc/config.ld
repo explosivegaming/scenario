@@ -13,15 +13,18 @@ topics = {"../README.md", "../LICENSE"}
 style = '../doc'
 template = '../doc'
 no_space_before_args = true
+merge=true
 
 new_type("core", "Core", true)
 new_type("addon", "Addons", true)
 new_type("commands", "Commands", true)
 new_type("control", "Control", true)
 new_type("gui", "Guis", true)
-new_type("config", "Configs", true)
+new_type("config", "Configs", true, "Settings")
 
 new_type("dep", "Dependencies", false)
+new_type("element", "Elements", false)
+new_type("setting", "Settings", false)
 new_type("event", "Events", false, "Event Parameters")
 new_type("command", "Commands", false, "Command Parameters")
 

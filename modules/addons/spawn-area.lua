@@ -1,7 +1,10 @@
-local Global = require 'utils.global'
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local config = require 'config.spawn_area'
+--- Adds a custom spawn area with chests and afk turrets
+-- @addon Spawn-Area
+
+local Global = require 'utils.global' --- @dep utils.global
+local Event = require 'utils.event' --- @dep utils.event
+local Game = require 'utils.game' --- @dep utils.game
+local config = require 'config.spawn_area' --- @dep config.spawn_area
 local tiles = config.tiles
 local entities = config.entities
 local belts = config.afk_belts.locations

@@ -1,11 +1,19 @@
---- This file creates a test gui that is used to test every input method
+--[[-- Core Module - Gui
+    @module Gui
+    @alias tests
+]]
+
+--- Test.
+-- This file creates a test gui that is used to test every input method
 -- note that this does not cover every permutation only features in independence
 -- for example store in most cases is just by player name, but other store methods are tested with checkbox
-local Gui = require 'expcore.gui'
-local format_chat_colour,table_keys = ext_require('expcore.common','format_chat_colour','table_keys')
-local Colors = require 'resources.color_presets'
-local Event = require 'utils.event'
-local Store = require 'expcore.store'
+-- @section test
+
+local Gui = require 'expcore.gui' --- @dep expcore.gui
+local format_chat_colour,table_keys = ext_require('expcore.common','format_chat_colour','table_keys') --- @dep expcore.common
+local Colors = require 'resources.color_presets' --- @dep resources.color_presets
+local Event = require 'utils.event' --- @dep utils.event
+local Store = require 'expcore.store' --- @dep expcore.store
 
 local tests = {}
 

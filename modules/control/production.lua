@@ -5,7 +5,7 @@
 
     @usage
     -- import the module from the control modules
-    local Production = require 'modules.control.production'
+    local Production = require 'modules.control.production' --- @dep modules.control.production
 
     -- This will return the less precise index from the one given
     -- this means that one_second will return one_minute or ten_hours will return fifty_hours
@@ -32,12 +32,8 @@
 
 ]]
 
---- Provides colors for Production.get_color
--- @dep resources.color_presets
-local Colors = require 'resources.color_presets'
---- Provides format_number function to add surfixs
--- @dep util
-local format_number = ext_require('util','format_number')
+local Colors = require 'resources.color_presets' --- @dep resources.color_presets
+local format_number = ext_require('util','format_number') --- @dep util
 
 local precision_index = defines.flow_precision_index
 local Production = {}

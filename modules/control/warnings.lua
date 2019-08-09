@@ -5,7 +5,7 @@
 
     @usage
     -- import the module from the control modules
-    local Warnings = require 'modules.control.warnings'
+    local Warnings = require 'modules.control.warnings' --- @dep modules.control.warnings
 
     -- This will add a warning to the player
     Warnings.add_warning('MrBiter','Cooldude2606','Killed too many biters')
@@ -21,18 +21,10 @@
     Warnings.clear_warnings('MrBiter','Cooldude2606')
 ]]
 
---- Allows registering of custom events
--- @dep utils.event
-local Event = require 'utils.event'
---- Allows getting player from any value
--- @dep utils.game
-local Game = require 'utils.game'
---- Allows storing in the global table
--- @dep utils.global
-local Global = require 'utils.global'
---- Config file for this module
--- @dep config.warnings
-local config = require 'config.warnings'
+local Event = require 'utils.event' --- @dep utils.event
+local Game = require 'utils.game' --- @dep utils.game
+local Global = require 'utils.global' --- @dep utils.global
+local config = require 'config.warnings' --- @dep config.warnings
 
 local valid_player = Game.get_player_from_any
 

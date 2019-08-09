@@ -1,5 +1,10 @@
-local Commands = require 'expcore.commands'
-local Roles = require 'expcore.roles'
+--[[-- Commands Module - Spawn
+    - Adds a command that allows players to teleport to their spawn point
+    @commands Spawn
+]]
+
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Roles = require 'expcore.roles' --- @dep expcore.roles
 
 local function teleport(player)
     local surface = player.surface
@@ -11,6 +16,9 @@ local function teleport(player)
     return true
 end
 
+--- Teleport to spawn
+-- @command go-to-spawn
+-- @tparam[opt=self] LuaPlayer player the player to teleport to their spawn point
 Commands.new_command('go-to-spawn','Teleport to spawn')
 :add_param('player',true,'player-role-alive')
 :set_defaults{

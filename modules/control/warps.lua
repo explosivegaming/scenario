@@ -5,7 +5,7 @@
 
     @usage
     -- import the module from the control modules
-    local Warps = require 'modules.control.warps'
+    local Warps = require 'modules.control.warps' --- @dep modules.control.warps
 
     -- Adding a warp require a force, surface and postion, and the option to set this as the spawn
     -- this function will also create the warp area unless set other wise
@@ -25,21 +25,11 @@
 
 ]]
 
---- Allows storing of warp ids
--- @dep expcore.store
-local Store = require 'expcore.store'
---- Allows storing of warp details
--- @dep utils.global
-local Global = require 'utils.global'
---- Allows non conflicting warp ids
--- @dep utils.token
-local Token = require 'utils.token'
---- Config for the warps
--- @dep expcore.store
-local config = require 'config.warps'
---- Access to table_values and table_keysort
--- @dep expcore.common
-local table_values,table_keysort = ext_require('expcore.common','table_values','table_keysort')
+local Store = require 'expcore.store' --- @dep expcore.store
+local Global = require 'utils.global' --- @dep utils.global
+local Token = require 'utils.token' --- @dep utils.token
+local config = require 'config.warps' --- @dep config.warps
+local table_values,table_keysort = ext_require('expcore.common','table_values','table_keysort') --- @dep expcore.common
 
 local Warps = {
     store = {
@@ -132,7 +122,7 @@ end
 --- Adds a new warp to a force and makes the in game warp area
 -- @tparam string force_name the name of the force to add a new warp for
 -- @tparam LuaSurface surface the surface to add the warp to
--- @tparam Position postion the postion to have the warp go to
+-- @tparam Position position the postion to have the warp go to
 -- @tparam[opt='server'] string player_name the name of the player who added this warp
 -- @tparam[opt='New warp'] string warp_name the name of the warp that will be made
 -- @tparam[opt=false] boolean block_generation when true a in game area will not be made

@@ -1,9 +1,9 @@
--- A small debugging tool that writes the contents of _ENV to a file when the game loads.
+--- A small debugging tool that writes the contents of _ENV to a file when the game loads.
 -- Useful for ensuring you get the same information when loading
 -- the reference and desync levels in desync reports.
 -- dependencies
-local table = require 'utils.table'
-local Event = require 'utils.event'
+local table = require 'utils.table' --- @dep utils.table
+local Event = require 'utils.event' --- @dep utils.event
 
 -- localized functions
 local inspect = table.inspect

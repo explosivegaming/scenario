@@ -1,7 +1,10 @@
---- Permission group making for factorio so you never have to make one by hand again
--- @author Cooldude2606
---[[
->>>>Example Group (Allow All)
+--[[-- Core Module - Permission Groups
+    - Permission group making for factorio so you never have to make one by hand again
+    @core Permissions-Groups
+    @alias Permissions_Groups
+
+    @usage
+---- Example Group (Allow All)
 
     -- here we will create an admin group however we do not want them to use the map editor or mess with the permission groups
     Permission_Groups.new_group('Admin') -- this defines a new group called "Admin"
@@ -14,49 +17,29 @@
         'toggle_map_editor'
     }
 
->>>>Example Group (Disallow All)
+    @usage
+---- Example Group (Disallow All)
 
     -- here we will create a group that cant do anything but talk in chat
     Permission_Groups.new_group('Restricted') -- this defines a new group called "Restricted"
     :disallow_all() -- this makes the default to disallow any input action unless set other wise
     :allow('write_to_console') -- here we allow them to chat, {} can be used here if we had more than one action
 
->>>>Functions List (see function for more detail):
-    Permissions_Groups.new_group(name) --- Defines a new permission group that can have it actions set in the config
-    Permissions_Groups.get_group_by_name(name) --- Returns the group with the given name, case sensitive
-    Permissions_Groups.get_group_from_player(player) --- Returns the group that a player is in
-
-    Permissions_Groups.reload_permissions() --- Reloads/creates all permission groups and sets them to they configured state
-    Permissions_Groups.lockdown_permissions(exempt) --- Removes all permissions from every permission group except for "Default" and any passed as exempt
-
-    Permissions_Groups.set_player_group(player,group) --- Sets a player's group to the one given, a player can only have one group at a time
-
-    Permissions_Groups._prototype:set_action(action,state) --- Sets the allow state of an action for this group, used internally but is safe to use else where
-    Permissions_Groups._prototype:allow(actions) --- Sets an action or actions to be allowed for this group even with disallow_all triggered, Do not use in runtime
-    Permissions_Groups._prototype:disallow(actions) --- Sets an action or actions to be disallowed for this group even with allow_all triggered, Do not use in runtime
-    Permissions_Groups._prototype:allow_all() --- Sets the default state for any actions not given to be allowed, useful with :disallow
-    Permissions_Groups._prototype:disallow_all() --- Sets the default state for any action not given to be disallowed, useful with :allow
-    Permissions_Groups._prototype:is_allowed(action) --- Returns if an input action is allowed for this group
-
-    Permissions_Groups._prototype:get_raw() --- Returns the LuaPermissionGroup that was created with this group object, used internally
-    Permissions_Groups._prototype:create() --- Creates or updates the permission group with the configured actions, used internally
-
-    Permissions_Groups._prototype:add_player(player) --- Adds a player to this group
-    Permissions_Groups._prototype:remove_player(player) --- Removes a player from this group
-    Permissions_Groups._prototype:get_players(online) --- Returns all player that are in this group with the option to filter to online/offline only
-
-    Permissions_Groups._prototype:print(message) --- Prints a message to every player in this group
 ]]
 
 
-local Game = require 'utils.game'
-local Event = require 'utils.event'
-local Sudo = require 'expcore.sudo'
+local Game = require 'utils.game' --- @dep utils.game
+local Event = require 'utils.event' --- @dep utils.event
+local Sudo = require 'expcore.sudo' --- @dep expcore.sudo
 
 local Permissions_Groups = {
     groups={}, -- store for the different groups that are created
     _prototype={} -- stores functions that are used on group instances
 }
+
+--- Getters.
+-- Functions that get permission groups
+-- @section getters
 
 --- Defines a new permission group that can have it actions set in the config
 -- @tparam string name the name of the new group
@@ -91,6 +74,10 @@ function Permissions_Groups.get_group_from_player(player)
         return Permissions_Groups.groups[group.name]
     end
 end
+
+--- Setters.
+-- Functions that control all groups
+-- @section players
 
 --- Reloads/creates all permission groups and sets them to they configured state
 function Permissions_Groups.reload_permissions()
@@ -136,6 +123,10 @@ function Permissions_Groups.set_player_group(player,group)
     group:add_player(player)
     return true
 end
+
+--- Actions.
+-- Functions that control group actions
+-- @section actions
 
 --- Sets the allow state of an action for this group, used internally but is safe to use else where
 -- @tparam ?string|defines.input_action action the action that you want to set the state of
@@ -202,6 +193,10 @@ function Permissions_Groups._prototype:is_allowed(action)
     end
     return state
 end
+
+--- Players.
+-- Functions that control group players
+-- @section players
 
 --- Returns the LuaPermissionGroup that was created with this group object, used internally
 -- @treturn LuaPermissionGroup the raw lua permission group

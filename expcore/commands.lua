@@ -1,34 +1,37 @@
---- Factorio command making module that makes commands with better parse and more modularity
--- @author Cooldude2606
---[[
->>>>Example Authenticator:
-    The command system is most useful when you can control who can use commands; to do this would would need to
-    define an authenticator which is ran every time a command is run; in this example I will show a simple one
-    that requires some commands to require the user to be a game admin:
+--[[-- Core Module - Commands
+    - Factorio command making module that makes commands with better parse and more modularity
+    @core Commands
+    @alias Commands
 
-    When the authenticator is called be the command handler it will be passed 4 vales:
-    1) the player who used the command
-    2) the name of the command that is being used
-    3) any flags which have been set for this command, this is a table of values set using :set_flag(name,value)
-    4) the reject function which is the preferred method to prevent execution of the command
+    @usage
+---- Example Authenticator:
+    -- The command system is most useful when you can control who can use commands; to do this would would need to
+    -- define an authenticator which is ran every time a command is run; in this example I will show a simple one
+    -- that requires some commands to require the user to be a game admin:
 
-    For our admin only example we will set a flag to true when we want it do be admin only so when we define the
-    command will will use :set_flag('admin_only',true) and then inside the authenticator we will test if the flag
-    is present using: if flags.admin_only then
+    -- When the authenticator is called be the command handler it will be passed 4 vales:
+    -- 1) the player who used the command
+    -- 2) the name of the command that is being used
+    -- 3) any flags which have been set for this command, this is a table of values set using :set_flag(name,value)
+    -- 4) the reject function which is the preferred method to prevent execution of the command
 
-    Although no return is required to allow the command to execute it is best practice to return true; we do this in
-    two cases in our authenticator:
-    1) when the "admin_only" flag is not set, which we take to mean any one can use it
-    2) when the "admin_only" flag is set, and the player is admin
+    -- For our admin only example we will set a flag to true when we want it do be admin only so when we define the
+    -- command will will use :set_flag('admin_only',true) and then inside the authenticator we will test if the flag
+    -- is present using: if flags.admin_only then
 
-    Now when the user is not an admin and the command requires you to be an admin then we must reject the request:
-    1) return false -- this is the most basic block and should only be used while testing
-    2) return reject -- returning the reject function is only an option as a fail safe, same as returning false
-    3) reject() -- this will block execution without returning to allow further code to be ran in the authenticator
-    4) reject('This command is for admins only!') -- Using reject as a function allows a error message to be returned
-    5) return reject() -- using return on either case above is best practice as you should execute all code before rejecting
+    -- Although no return is required to allow the command to execute it is best practice to return true; we do this in
+    -- two cases in our authenticator:
+    -- 1) when the "admin_only" flag is not set, which we take to mean any one can use it
+    -- 2) when the "admin_only" flag is set, and the player is admin
 
-    Example Code:
+    -- Now when the user is not an admin and the command requires you to be an admin then we must reject the request:
+    -- 1) return false -- this is the most basic block and should only be used while testing
+    -- 2) return reject -- returning the reject function is only an option as a fail safe, same as returning false
+    -- 3) reject() -- this will block execution without returning to allow further code to be ran in the authenticator
+    -- 4) reject('This command is for admins only!') -- Using reject as a function allows a error message to be returned
+    -- 5) return reject() -- using return on either case above is best practice as you should execute all code before rejecting
+
+    -- Example Code:
     Commands.add_authenticator(function(player,command,flags,reject)
         if flags.admin_only then -- our test for the "admin_only" flag
             if player.admin then
@@ -41,41 +44,42 @@
         end
     end)
 
->>>>Example Parse:
-    Before you go making commands it is important to understand the most powerful feature of this command handler,
-    when you define a command you are able to type the params and have then be parsed by an handler so before your
-    command is ever executed you can be sure that all the params are valid. This module should be paired with a general
-    command parse but you may want to create your own:
+    @usage
+---- Example Parse:
+    -- Before you go making commands it is important to understand the most powerful feature of this command handler,
+    -- when you define a command you are able to type the params and have then be parsed by an handler so before your
+    -- command is ever executed you can be sure that all the params are valid. This module should be paired with a general
+    -- command parse but you may want to create your own:
 
-    For our example we will create a parse to accept only integer numbers in a given range:
-    1) we will give it the name "number-range-int" this is the "type" that the input is expected to be
-    2) when we define the type we will also define the min and max of the range so we can use the function more than once
-    Example parse usage:
+    -- For our example we will create a parse to accept only integer numbers in a given range:
+    -- 1) we will give it the name "number-range-int" this is the "type" that the input is expected to be
+    -- 2) when we define the type we will also define the min and max of the range so we can use the function more than once
+    -- Example parse usage:
     :add_param('repeat_count',false,'number-range-int',5,10) -- range 5 to 10 inclusive
 
-    The command parse will be passed 3 params and any other you define, in our case:
-    1) the input that has been given by the user for this param, the role of this function is to transform this value
-    nb: the input is a string but can be nil if the param is marked as optional
-    2) the player who is using the command, this is always present
-    3) the reject function to throw an error to the user, this is always present
-    4) the range min, this is user defined and has the value given when the param is defined
-    5) the range max, this is user defined and has the value given when the param is defined
+    -- The command parse will be passed 3 params and any other you define, in our case:
+    -- 1) the input that has been given by the user for this param, the role of this function is to transform this value
+    -- nb: the input is a string but can be nil if the param is marked as optional
+    -- 2) the player who is using the command, this is always present
+    -- 3) the reject function to throw an error to the user, this is always present
+    -- 4) the range min, this is user defined and has the value given when the param is defined
+    -- 5) the range max, this is user defined and has the value given when the param is defined
 
-    When returning from the param parse you again have a few options with how to do this:
-    1) you return the new value for the param (any non nil value) this value is then passed to the command callback
-    2) not returning will cause a generic invalid error and the command callback is blocked, not recommenced
-    3) return reject -- this is just a failsafe in case the function is not called, same as no return
-    4) return reject() -- will give a shorter error message as you pass a nil custom error
-    5) return reject('Number entered is not in range: '..range_min..', '..range_max) -- returns a custom error the the user
-    nb: if you do not return reject after you call it then you are still returning nil so there will be a duplicate message
+    -- When returning from the param parse you again have a few options with how to do this:
+    -- 1) you return the new value for the param (any non nil value) this value is then passed to the command callback
+    -- 2) not returning will cause a generic invalid error and the command callback is blocked, not recommenced
+    -- 3) return reject -- this is just a failsafe in case the function is not called, same as no return
+    -- 4) return reject() -- will give a shorter error message as you pass a nil custom error
+    -- 5) return reject('Number entered is not in range: '..range_min..', '..range_max) -- returns a custom error the the user
+    -- nb: if you do not return reject after you call it then you are still returning nil so there will be a duplicate message
 
-    It should be noted that if you want to expand on an existing parse you can use Commands.parse(type,input,player,reject)
-    and this value will either return a new value for the input or nil, if it is nil you should return nil to prevent double
-    messages to the user:
+    -- It should be noted that if you want to expand on an existing parse you can use Commands.parse(type,input,player,reject)
+    -- and this value will either return a new value for the input or nil, if it is nil you should return nil to prevent double
+    -- messages to the user:
     input = Commands.parse('number-int',input,player,reject)
     if not input then return end -- nil check
 
-    Example Code:
+    -- Example Code:
     Commands.add_parse('number-range-int',function(input,player,reject,range_min,range_max)
         local rtn = tonumber(input) and math.floor(tonumber(input)) or nil -- converts input to number
         if not rtn or rtn < range_min or rtn > range_max then
@@ -87,22 +91,23 @@
         end
     end)
 
->>>>Example Command:
-    How for the fun part making the commands, the commands can be set up with any number of params and flags that you want,
-    you can add aliases for the commands and set default values for optional params and of course register your command callback
-    in our example we will just have a command that will repeat the users name in chat X amount of times and only allow admins to use it.
+    @usage
+---- Example Command:
+    -- How for the fun part making the commands, the commands can be set up with any number of params and flags that you want,
+    -- you can add aliases for the commands and set default values for optional params and of course register your command callback
+    -- in our example we will just have a command that will repeat the users name in chat X amount of times and only allow admins to use it.
 
-    First we create the new command, nb this will not register the command to the game this is done at the end, we will call
-    the command "repeat-name" and set the help message as follows:
+    -- First we create the new command, nb this will not register the command to the game this is done at the end, we will call
+    -- the command "repeat-name" and set the help message as follows:
     Commands.new_command('repeat-name','Will repeat you name a number of times in chat.')
 
-    Now for our first param we will call "repeat-count" and it will be a required value between 1 and 5 inclusive:
+    -- Now for our first param we will call "repeat-count" and it will be a required value between 1 and 5 inclusive:
     :add_param('repeat-count',false,'number-range-int',1,5)
 
-    Our second param we need a custom parse for but we have not defined it, this is an option for when it is unlikely for
-    any other command to use the same input type; however in our case it will just be a boolean which should be noted as being
-    included in the general command parse config. As for the param its self it will be called "smiley" and will be optional with
-    a default value of false:
+    -- Our second param we need a custom parse for but we have not defined it, this is an option for when it is unlikely for
+    -- any other command to use the same input type; however in our case it will just be a boolean which should be noted as being
+    -- included in the general command parse config. As for the param its self it will be called "smiley" and will be optional with
+    -- a default value of false:
     :add_param('smiley',true,function(input,player,reject)
         -- since it is optional the input can be nil, in which case we just return
         if not input then return end
@@ -115,12 +120,12 @@
         end
     end)
 
-    Once all params are defined you can now define some default values if you have optional params, the default value will be used only
-    when no value is given as input, if an invalid value is given then the command will still fail and this value will not be used, the
-    default can also be a function which is passed the player using the command and returns a value. Here we set the default for "smiley" to false:
+    -- Once all params are defined you can now define some default values if you have optional params, the default value will be used only
+    -- when no value is given as input, if an invalid value is given then the command will still fail and this value will not be used, the
+    -- default can also be a function which is passed the player using the command and returns a value. Here we set the default for "smiley" to false:
     :set_defaults{smiley=false}
 
-    Another example of defaults if we have: item, amount[opt], player[opt]
+    -- Another example of defaults if we have: item, amount[opt], player[opt]
     :set_defaults{
         amount = 50, -- more than one value can be set at a time
         player = function(player)
@@ -128,18 +133,18 @@
         end
     }
 
-    Now the params are set up we can alter how the command works, we can set auth flags, add aliases to this command or enable "auto concat"
-    which is when you want all extra words to be concatenated onto the end of the last param, useful for reason or messages:
+    -- Now the params are set up we can alter how the command works, we can set auth flags, add aliases to this command or enable "auto concat"
+    -- which is when you want all extra words to be concatenated onto the end of the last param, useful for reason or messages:
     :set_flag('admin_only',true) -- in our case we want "admin_only" to be set to true so only admins can use the command
     :add_alias('name','rname') -- we also add two aliases here: "name" and "rname" which point to this command
     -- :enable_auto_concat() we do not use this in our case but this can also be used to enable the "auto concat" feature
 
-    And finally we want to register a callback to this command, the callback is what defines what the command does, can be as complex as you
-    want it to be to as simple as our example; the command receives two params plus all that you have defines:
-    1) the player who used the command
-    2) in our case repeat_count which will be a number
-    3) in our case smiley which will be a boolean
-    4) the raw input; this param is always last as is always present as a catch all
+    -- And finally we want to register a callback to this command, the callback is what defines what the command does, can be as complex as you
+    -- want it to be to as simple as our example; the command receives two params plus all that you have defines:
+    -- 1) the player who used the command
+    -- 2) in our case repeat_count which will be a number
+    -- 3) in our case smiley which will be a boolean
+    -- 4) the raw input; this param is always last as is always present as a catch all
     :register(function(player,repeat_count,smiley,raw)
         -- this is to show the value for raw as this is an example command, the log file will also show this
         game.print(player.name..' used a command with input: '..raw)
@@ -155,7 +160,7 @@
         -- see below for what else can be used here
     end)
 
-    Some other useful functions that can be used are:
+    -- Some other useful functions that can be used are:
     Commands.print(any,colour[opt]) -- this will return any value value to the user including if it is ran through rcon console
     Commands.error(message[opt]) -- this returns a warning to the user, aka an error that does not prevent execution of the command
     return Commands.error(message[opt]) -- this returns an error to the user, and will halt the command execution, ie no success message is returned
@@ -163,7 +168,7 @@
     return Commands.success(message[opt]) -- will return the success message to the user and your given message, halts execution
     return <any> if any value is returned then it will be returned to the player via a Commands.success call
 
-    Example Code:
+    -- Example Code:
     Commands.new_command('repeat-name','Will repeat you name a number of times in chat.')
     :add_param('repeat-count',false,'number-range-int',1,5) -- required int in range 1 to 5 inclusive
     :add_param('smiley',true,function(input,player,reject) -- optional boolean default false
@@ -188,36 +193,10 @@
         end
     end)
 
->>>>Functions List (see function for more detail):
-    Commands.add_authenticator(callback) --- Adds an authorization callback, function used to check if a player if allowed to use a command
-    Commands.remove_authenticator(callback) --- Removes an authorization callback, see add_authenticator for adding them
-    Commands.authorize(player,command_name) --- Mostly used internally, calls all authorization callbacks, returns if the player is authorized
-
-    Commands.get(player) --- Gets all commands that a player is allowed to use, game commands not included
-    Commands.search(keyword,allowed_player) --- Searches command names and help messages to find possible commands, game commands included
-
-    Commands.add_parse(name,callback) --- Adds a parse function which can be called by name rather than callback (used in add_param)
-    Commands.remove_parse(name) --- Removes a parse function, see add_parse for adding them
-    Commands.parse(name,input,player,reject,...) --- Intended to be used within other parse functions, runs a parse and returns success and new value
-
-    Commands.new_command(name,help) --- Creates a new command object to added details to, note this does not register the command to the game
-    Commands._prototype:add_param(name,optional,parse,...) --- Adds a new param to the command this will be displayed in the help and used to parse the input
-    Commands._prototype:set_defaults(defaults) --- Adds default values to params only matters if the param is optional
-    Commands._prototype:set_flag(name,value) --- Adds a tag to the command which is passed via the flags param to the authenticators, can be used to assign command roles or type
-    Commands._prototype:add_alias(...) --- Adds an alias or multiple that will also be registered with the same callback, eg /teleport can be /tp with both working
-    Commands._prototype:enable_auto_concat() --- Enables auto concatenation of any params on the end so quotes are not needed for last param
-    Commands._prototype:register(callback) --- Adds the callback to the command and registers all aliases, params and help message with the game
-
-    Commands.error(error_message,play_sound) --- Sends an error message to the player and returns a constant to return to command handler to exit execution
-    Commands.internal_error(success,command_name,error_message) --- Sends an error to the player and logs the error, used with pcall within command handler please avoid direct use
-    Commands.success(value) --- Sends a value to the player, followed by a command complete message
-    Commands.print(value) --- Short cut for player_return, will return any value given to it (not just strings) in a string format to the player/server
-
-    Commands.run_command(command_event) --- Main event function that is ran for all commands, used internally please avoid direct use
 ]]
 
-local Game = require 'utils.game'
-local player_return,write_json = ext_require('expcore.common','player_return','write_json')
+local Game = require 'utils.game' --- @dep utils.game
+local player_return,write_json = ext_require('expcore.common','player_return','write_json') --- @dep expcore.common
 
 local Commands = {
     defines={ -- common values are stored error like signals
@@ -232,6 +211,10 @@ local Commands = {
     print=player_return, -- short cut so player_return does not need to be required in every module
     _prototype={}, -- used to store functions which gets added to new custom commands
 }
+
+--- Authenication.
+-- Functions that control who can use commands
+-- @section auth
 
 --- Adds an authorization callback, function used to check if a player if allowed to use a command
 -- @tparam function callback the callback you want to register as an authenticator
@@ -317,6 +300,9 @@ function Commands.authorize(player,command_name)
         return true, Commands.defines.success
     end
 end
+--- Getters.
+-- Functions that get commands
+-- @section getters
 
 --- Gets all commands that a player is allowed to use, game commands not included
 -- @tparam[opt] LuaPlayer player the player that you want to get commands of, nil will return all commands
@@ -364,6 +350,10 @@ function Commands.search(keyword,allowed_player)
     return matches
 end
 
+--- Parse.
+-- Functions that help with parsing
+-- @section parse
+
 --- Adds a parse function which can be called by name rather than callback (used in add_param)
 -- nb: this is not needed as you can use the callback directly this just allows it to be called by name
 -- @tparam string name the name of the parse, should be the type like player or player_alive, must be unique
@@ -402,6 +392,10 @@ function Commands.parse(name,input,player,reject,...)
     if rtn == Commands.defines.error then return end
     return rtn
 end
+
+--- Creation.
+-- Functions that create a new command
+-- @section creation
 
 --- Creates a new command object to added details to, note this does not register the command to the game
 -- @tparam string name the name of the command to be created
@@ -539,6 +533,10 @@ function Commands._prototype:register(callback)
         end
     end
 end
+
+--- Status.
+-- Functions that indicate status
+-- @section status
 
 --- Sends an error message to the player and returns a constant to return to command handler to exit execution
 -- nb: this is for non fatal errors meaning there is no log of this event

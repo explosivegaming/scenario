@@ -1,27 +1,25 @@
---- An extention of task and token to allow a single require to register and run functions bypassing all permissions
---[[
->>>> Usage
-    To use sudo you must register the allowed functions when the files are loaded, often this will just be giving access to
-    some functions within a module if you expect that some parts may be blocked by in game permissions or a custom system you have made
+--[[-- Core Module - Sudo
+    - An extention of task and token to allow a single require to register and run functions bypassing all permissions.
+    @core Sudo
+    @alias Sudo
 
-    -- this will be blocked if the current player (from a command or gui) is not admin
+    @usage
+    -- To use sudo you must register the allowed functions when the files are loaded, often this will just be giving access to
+    -- some functions within a module if you expect that some parts may be blocked by in game permissions or a custom system you have made
+
+    -- This will be blocked if the current player (from a command or gui) is not admin
     local function make_admin(player)
-        player.admin = true 
+        player.admin = true
     end
 
-    -- here we give sudo access to the function under the name "make-admin"
+    -- Here we give sudo access to the function under the name "make-admin"
     Sudo.register('make-admin',make_admin)
 
-    -- this will allow us to bypass this by running one tick later outside of any player scope
+    -- This will allow us to bypass this by running one tick later outside of any player scope
     Sudo.run('make-admin',game.player)
-
->>>> Functions
-    Sudo.register(name,callback) --- Registers a new callback under the given name, used to avoid desyncs
-    Sudo.get(name) --- Gets the function that is registered under the given name
-    Sudo.run(name,...) --- Runs the function that is registered under the given name, you may supply any number of params as needed
 ]]
-local Task = require 'utils.task'
-local Token = require 'utils.token'
+local Task = require 'utils.task' --- @dep utils.task
+local Token = require 'utils.token' --- @dep utils.token
 
 local Sudo = {
     tokens={}
@@ -56,7 +54,7 @@ function Sudo.get(name)
 end
 
 --- Runs the function that is registered under the given name, you may supply any number of params as needed
--- @tparam name string the name of the function you want to run
+-- @tparam string name the name of the function you want to run
 -- @tparam[opt] any ... the other params that you want to pass to your function
 function Sudo.run(name,...)
     local token = Sudo.tokens[name]

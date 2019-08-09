@@ -1,5 +1,5 @@
-local Event = require 'utils.event_core'
-local Token = require 'utils.token'
+local Event = require 'utils.event_core' --- @dep utils.event_core
+local Token = require 'utils.token' --- @dep utils.token
 
 local Global = {}
 

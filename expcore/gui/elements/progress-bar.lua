@@ -1,4 +1,12 @@
---- Gui element define for progress bars
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Progress Bars.
+-- Gui element define for progress bars
+-- @section progress-bars
+
 --[[
 >>>> Functions
     ProgressBar.set_maximum(element,amount,count_down) --- Sets the maximum value that represents the end value of the progress bar
@@ -20,10 +28,10 @@
     ProgressBar._prototype:event_counter(filter) --- Event handler factory that counts up by 1 every time the event triggers, can filter which elements have incremented
     ProgressBar._prototype:event_countdown(filter) --- Event handler factory that counts down by 1 every time the event triggers, can filter which elements have decremented
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Global = require 'utils.global'
-local Game = require 'utils.game'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Global = require 'utils.global' --- @dep utils.global
+local Game = require 'utils.game' --- @dep utils.game
 
 --- Event call for when the value is outside the range 0-1
 -- @tparam table define the define that this is acting on

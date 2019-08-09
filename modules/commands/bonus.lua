@@ -1,9 +1,14 @@
-local Commands = require 'expcore.commands'
-local Roles = require 'expcore.roles'
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local Store = require 'expcore.store'
-local config = require 'config.bonuses'
+--[[-- Commands Module - Bonus
+    - Adds a command that allows players to have increased stats
+    @commands Bonus
+]]
+
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Event = require 'utils.event' --- @dep utils.event
+local Game = require 'utils.game' --- @dep utils.game
+local Store = require 'expcore.store' --- @dep expcore.store
+local config = require 'config.bonuses' --- @dep config.bonuses
 require 'config.expcore-commands.parse_general'
 
 local bonus_store =
@@ -15,6 +20,9 @@ Store.register(function(value,category)
     end
 end)
 
+--- Changes the amount of bonus you receive
+-- @command bonus
+-- @tparam number amount range 0-50 the percent increase for your bonus
 Commands.new_command('bonus','Changes the amount of bonus you receive')
 :add_param('amount','integer-range',0,50)
 :register(function(player,amount)

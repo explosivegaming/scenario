@@ -1,7 +1,10 @@
---- Factorio role system to manage custom permissions
--- @author Cooldude2606
---[[
->>>>Using Role System (Frontend):
+--[[-- Core Module - Roles
+    - Factorio role system to manage custom permissions.
+    @core Roles
+    @alias Roles
+
+    @usage
+---- Using Role System (Frontend):
     When a map first starts you will want to define on mass all the players you expect to join and the roles to give them:
     Roles.override_player_roles{
         Cooldude2606 = {'Owner','Admin','Member'},
@@ -12,7 +15,8 @@
     Roles.assign_player(player,'Admin',by_player_name) -- this will give the "Admin" role to the player
     Roles.unassign_player(player,{'Admin','Moderator'},by_player_name) -- this will remove "Admin" and "Moderator" role in one go
 
->>>>Using Role System (Backend):
+    @usage
+---- Using Role System (Backend):
     To comparer two players you can comparer the index of they highest roles, can be used when you want to allow a "write" down type system:
     Roles.get_player_highest_role(playerOne).index < Roles.get_player_highest_role(playerTwo).index -- remember that less means a higher role
 
@@ -24,7 +28,8 @@
     Roles.player_has_flag(player,'is_donator') -- your roles can be grouped together with flags such as is_donator
     Roles.player_allowed(player,'game modifiers') -- or you can have an action based system where each action is something the player can do
 
->>>>Example Flag Define:
+    @usage
+---- Example Flag Define:
     Flags can be used to group multiple roles and actions under one catch all, for example if you want a piece of code to only
     be active for your donators then you would add a "is_donator" flag to all your donator roles and then in the code test if
     a player has that tag present:
@@ -47,7 +52,8 @@
         -- some donator only code
     end
 
->>>>Example Role Define:
+    @usage
+---- Example Role Define:
     You can't use a role system without any roles so first you must define your roles; each role has a minimum of a name with
     the option for a shorthand:
     Roles.new_role('Administrator','Admin')
@@ -86,7 +92,8 @@
         'gui/game settings'
     }
 
->>>>Example System Define:
+    @usage
+---- Example System Define:
     Once all roles are defined these steps must be done to ensure the system is ready to use, this includes setting a default
     role, assigning a root (all permission) role that the server/system will use and the linear order that the roles fall into:
 
@@ -103,64 +110,15 @@
 
     Just remember that in this example all these roles have not been defined; so make sure all your roles that are used are defined
     before hand; a config file on load is useful for this to ensure that its loaded before the first player even joins.
-
->>>>Functions List (see function for more detail):
-    Roles.debug() --- Returns a string which contains all roles in index order displaying all data for them
-
-    Roles.print_to_roles(roles,message) --- Prints a message to all players in the given roles, may send duplicate message however factorio blocks spam
-    Roles.print_to_roles_higher(role,message) --- Prints a message to all players who have the given role or one which is higher (excluding default)
-    Roles.print_to_roles_lower(role,message) --- Prints a message to all players who have the given role or one which is lower (excluding default)
-
-    Roles.get_role_by_name(name) --- Get a role for the given name
-    Roles.get_role_by_order(index) --- Get a role with the given order index
-    Roles.get_role_from_any(any) --- Gets a role from a name,index or role object (where it is just returned)
-    Roles.get_player_roles(player) --- Gets all the roles of the given player, this will always contain the default role
-    Roles.get_player_highest_role(player) --- Gets the highest role which the player has, can be used to compeer one player to another
-
-    Roles.assign_player(player,roles,by_player_name,silent) --- Gives a player the given role(s) with an option to pass a by player name used in the log
-    Roles.unassign_player(player,roles,by_player_name,silent) --- Removes a player from the given role(s) with an option to pass a by player name used in the log
-    Roles.override_player_roles(roles) --- Overrides all player roles with the given table of roles, useful to mass set roles on game start
-
-    Roles.player_has_role(player,search_role) --- A test for weather a player has the given role
-    Roles.player_has_flag(player,flag_name) --- A test for weather a player has the given flag true for at least one of they roles
-    Roles.player_allowed(player,action) --- A test for weather a player has at least one role which is allowed the given action
-
-    Roles.define_role_order(order) --- Used to set the role order, higher in the list is better, must be called at least once in config
-    Roles.define_flag_trigger(name,callback) --- Defines a new trigger for when a tag is added or removed from a player
-    Roles.set_default(name) --- Sets the default role which every player will have, this needs to be called at least once
-    Roles.set_root(name) --- Sets the root role which will always have all permissions, any server actions act from this role
-
-    Roles.new_role(name,short_hand) --- Defines a new role and returns the prototype to allow configuration
-
-    Roles._prototype:set_allow_all(state) --- Sets the default allow state of the role, true will allow all actions
-    Roles._prototype:allow(actions) --- Sets the allow actions for this role, actions in this list will be allowed for this role
-    Roles._prototype:disallow(actions) --- Sets the disallow actions for this role, will prevent actions from being allowed regardless of inheritance
-    Roles._prototype:is_allowed(action) --- Test for if a role is allowed the given action, mostly internal see Roles.player_allowed
-
-    Roles._prototype:set_flag(name,value) --- Sets the state of a flag for a role, flags can be used to apply effects to players
-    Roles._prototype:clear_flags() --- Clears all flags from this role, individual flags can be removed with set_flag(name,false)
-    Roles._prototype:has_flag(name) --- A test for if the role has a flag set
-
-    Roles._prototype:set_custom_tag(tag) --- Sets a custom player tag for the role, can be accessed by other code
-    Roles._prototype:set_custom_color(color) --- Sets a custom colour for the role, can be accessed by other code
-    Roles._prototype:set_permission_group(name,use_factorio_api) --- Sets the permission group for this role, players will be moved to the group of they highest role
-    Roles._prototype:set_parent(role) --- Sets the parent for a role, any action not in allow or disallow will be looked for in its parents
-    Roles._prototype:set_auto_promote_condition(callback) --- Sets an auto promote condition that is checked every 5 seconds, if true is returned then the player will receive the role
-    Roles._prototype:set_block_auto_promote(state) --- Sets the role to not allow players to have auto promote effect them, useful to keep people locked to a punishment
-
-    Roles._prototype:add_player(player,skip_check,skip_event) --- Adds a player to this role, players can have more than one role at a time, used internally see Roles.assign
-    Roles._prototype:remove_player(player,skip_check,skip_event) --- Removes a player from this role, players can have more than one role at a time, used internally see Roles.unassign
-    Roles._prototype:get_players(online) --- Returns an array of all the players who have this role, can be filtered by online status
-    Roles._prototype:print(message) --- Will print a message to all players with this role
 ]]
 
-local Game = require 'utils.game'
-local Global = require 'utils.global'
-local Event = require 'utils.event'
-local Groups = require 'expcore.permission_groups'
-local Sudo = require 'expcore.sudo'
-local Colours = require 'resources.color_presets'
-local write_json = ext_require('expcore.common','write_json')
+local Game = require 'utils.game' --- @dep utils.game
+local Global = require 'utils.global' --- @dep utils.global
+local Event = require 'utils.event' --- @dep utils.event
+local Groups = require 'expcore.permission_groups' --- @dep expcore.permission_groups
+local Sudo = require 'expcore.sudo' --- @dep expcore.sudo
+local Colours = require 'resources.color_presets' --- @dep resources.color_presets
+local write_json = ext_require('expcore.common','write_json') --- @dep expcore.common
 
 local Roles = {
     _prototype={},
@@ -188,6 +146,10 @@ Global.register(Roles.config,function(tbl)
         end
     end
 end)
+
+--- Getter.
+-- Functions which get roles
+-- @section get
 
 --- Internal function used to trigger a few different things when roles are changed
 -- this is the raw internal trigger as the other function is called at other times
@@ -348,6 +310,10 @@ function Roles.get_player_highest_role(player)
     return highest
 end
 
+--- Assinment.
+-- Functions for changing player's roles
+-- @section assinment
+
 --- Gives a player the given role(s) with an option to pass a by player name used in the log
 -- @tparam LuaPlayer player the player that will be assigned the roles
 -- @tparam table roles table a of roles that the player will be given, can be one role and can be role names
@@ -394,6 +360,10 @@ function Roles.override_player_roles(roles)
     Roles.config.players = roles
 end
 
+--- Checks.
+-- Functions for checking player's roles
+-- @section checks
+
 --- A test for weather a player has the given role
 -- @tparam LuaPlayer player the player to test the roles of
 -- @tparam ?string|number|table search_role a pointer to the role that is being searched for
@@ -438,6 +408,10 @@ function Roles.player_allowed(player,action)
     end
     return false
 end
+
+--- Definations.
+-- Functions which are used to define roles
+-- @section checks
 
 --- Used to set the role order, higher in the list is better, must be called at least once in config
 -- nb: function also re links parents due to expected position in the config file
@@ -508,6 +482,10 @@ function Roles.new_role(name,short_hand)
     return role
 end
 
+--- Role Actions.
+-- Functions for using the role action system
+-- @section actions
+
 --- Sets the default allow state of the role, true will allow all actions
 -- @tparam[opt=true] boolean state true will allow all actions
 -- @treturn Roles._prototype allows chaining
@@ -551,6 +529,10 @@ function Roles._prototype:is_allowed(action)
     return self.allowed_actions[action] or self.allow_all_actions or is_root
 end
 
+--- Role Flags.
+-- Functions for using the role flag system
+-- @section flags
+
 --- Sets the state of a flag for a role, flags can be used to apply effects to players
 -- @tparam string name the name of the flag to set the value of
 -- @tparam[opt=true] boolean value the state to set the flag to
@@ -574,6 +556,10 @@ end
 function Roles._prototype:has_flag(name)
     return self.flags[name] or false
 end
+
+--- Role Properties.
+-- Functions for chaning other proerties
+-- @section properties
 
 --- Sets a custom player tag for the role, can be accessed by other code
 -- @tparam string tag the value that the tag will be
@@ -638,6 +624,10 @@ function Roles._prototype:set_block_auto_promote(state)
     self.block_auto_promote = not not state -- forces a boolean value
     return self
 end
+
+--- Role Players.
+-- Functions that control players in a role
+-- @section players
 
 --- Adds a player to this role, players can have more than one role at a time, used internally see Roles.assign
 -- @tparam LuaPlayer player the player that will be given this role

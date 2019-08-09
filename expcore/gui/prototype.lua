@@ -1,4 +1,12 @@
---- Used to create new gui prototypes see elements and concepts
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Prototype.
+-- Used to create new gui prototypes see elements and concepts
+-- @section prototype
+
 --[[
     >>>> Functions
     Constructor.event(event_name) --- Creates a new function to add functions to an event handler
@@ -23,9 +31,9 @@
     Prototype:set_store(category,value) --- Sets the value in this elements store, category needed if categorize function used
     Prototype:clear_store(category) --- Sets the value in this elements store to nil, category needed if categorize function used
 ]]
-local Game = require 'utils.game'
-local Store = require 'expcore.store'
-local Instances = require 'expcore.gui.instances'
+local Game = require 'utils.game' --- @dep utils.game
+local Store = require 'expcore.store' --- @dep expcore.store
+local Instances = require 'expcore.gui.instances' --- @dep expcore.gui.instances
 
 local Constructor = {}
 local Prototype = {}
@@ -200,7 +208,7 @@ Prototype.on_style_update = Constructor.event('on_style_update')
 
 --- Sets the style for the element define
 -- @tparam string style the style that will be used for this element when drawn
--- @tparam[opt] callback function function is called when element is drawn to alter its style
+-- @tparam[opt] function callback function is called when element is drawn to alter its style
 -- @treturn self the element define to allow chaining
 function Prototype:set_style(style,callback)
     self.draw_data.style = style
@@ -211,7 +219,7 @@ function Prototype:set_style(style,callback)
 end
 
 --- Sets the element to be drawn inside a nameless flow, can be given a name using a function
--- @tparam state ?boolean|function when true a padless flow is created to contain the element
+-- @tparam ?boolean|function state when true a padless flow is created to contain the element
 -- @treturn self the element define to allow chaining
 function Prototype:set_embedded_flow(state)
     if state == false or type(state) == 'function' then

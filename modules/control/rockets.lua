@@ -5,7 +5,7 @@
 
     @usage
     -- import the module from the control modules
-    local Rockets = require 'modules.control.rockets'
+    local Rockets = require 'modules.control.rockets' --- @dep modules.control.rockets
 
     -- Some basic information is stored for each silo that has been built
     -- the data includes: the tick it was built, the rockets launched from it and more
@@ -25,15 +25,9 @@
 
 ]]
 
---- Allows registering event handlers
--- @dep utils.event
-local Event = require 'utils.event'
---- Allows storing in the global table
--- @dep utils.global
-local Global = require 'utils.global'
---- Contains the config for this module
--- @dep config.rockets
-local config = require 'config.rockets'
+local Event = require 'utils.event' --- @dep utils.event
+local Global = require 'utils.global' --- @dep utils.global
+local config = require 'config.rockets' --- @dep config.rockets
 
 local largest_rolling_avg = 0
 for _,avg_over in pairs(config.stats.rolling_avg) do
