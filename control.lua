@@ -50,6 +50,10 @@ for index,path in pairs(files) do
 
 end
 
+-- Override the default require; require can no longer load new scripts
+log('[INFO] Require Overright! No more requires can be made!')
+require 'utils.require_override'
+
 -- Logs all errors again to make it make it easy to find
 log('[INFO] All files loaded with '..#errors..' errors:')
 for _,error in pairs(errors) do log(error) end
