@@ -1,38 +1,16 @@
---- Adds a rocket infomation gui which shows general stats, milestones and build progress of rockets
-local Gui = require 'expcore.gui'
-local Roles = require 'expcore.roles'
-local Event = require 'utils.event'
-local config = require 'config.rockets'
-local Global = require 'utils.global'
-local format_time = ext_require('expcore.common','format_time')
-local Colors = require 'resources.color_presets'
+--[[-- Gui Module - Rocket Info
+    - Adds a rocket infomation gui which shows general stats, milestones and build progress of rockets
+    @gui Rocket-Info
+    @alias rocket_info
+]]
 
-local largest_rolling_avg = 0
-for _,avg_over in pairs(config.stats.rolling_avg) do
-    if avg_over > largest_rolling_avg then
-        largest_rolling_avg = avg_over
-    end
-end
-
-local rocket_times = {}
-local rocket_stats = {}
-local rocket_silos = {}
-
-Global.register({
-    rocket_times = rocket_times,
-    rocket_stats = rocket_stats,
-    rocket_silos = rocket_silos
-},function(tbl)
-    rocket_times = tbl.rocket_times
-    rocket_stats = tbl.rocket_stats
-    rocket_silos = tbl.rocket_silos
-end)
-
---- Gets the name used to refrence the the rocket silo
-local function get_silo_name(entity)
-    local position = entity.position
-    return math.floor(position.x)..':'..math.floor(position.y)
-end
+local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Event = require 'utils.event' --- @dep utils.event
+local config = require 'config.rockets' --- @dep config.rockets
+local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
+local Colors = require 'resources.color_presets' --- @dep resources.color_presets
+local Rockets = require 'modules.control.rockets' --- @dep modules.control.rockets
 
 --- Gets if a player is allowed to use the action buttons
 local function player_allowed(player,action)
@@ -44,7 +22,7 @@ local function player_allowed(player,action)
         return false
     end
 
-    if config.progress[action..'_role_permision'] and not Roles.player_allowed(player,config.progress[action..'_role_permision']) then
+    if config.progress[action..'_role_permission'] and not Roles.player_allowed(player,config.progress[action..'_role_permission']) then
         return false
     end
 
@@ -52,21 +30,21 @@ local function player_allowed(player,action)
 end
 
 --- Used on the name label to allow zoom to map
+-- @element zoom_to_map
 local zoom_to_map_name = Gui.uid_name()
 Gui.on_click(zoom_to_map_name,function(event)
-    local force = event.player.force
     local rocket_silo_name = event.element.parent.caption
-    local rocket_silo_data = rocket_silos[force.name][rocket_silo_name]
-    local position = rocket_silo_data.entity.position
-    event.player.zoom_to_world(position,2)
+    local rocket_silo = Rockets.get_silo_entity(rocket_silo_name)
+    event.player.zoom_to_world(rocket_silo.position,2)
 end)
 
 --- Used to launch the rocket, when it is ready
+-- @element launch_rocket
 local launch_rocket =
 Gui.new_button()
 :set_sprites('utility/center')
 :set_tooltip{'rocket-info.launch-tooltip'}
-:set_embeded_flow(function(element,rocket_silo_name)
+:set_embedded_flow(function(element,rocket_silo_name)
     return 'launch-'..rocket_silo_name
 end)
 :set_style('tool_button',function(style)
@@ -75,11 +53,10 @@ end)
     style.height = 16
 end)
 :on_click(function(player,element)
-    local force = player.force
     local rocket_silo_name = element.parent.name:sub(8)
-    local rocket_silo_data = rocket_silos[force.name][rocket_silo_name]
-    if rocket_silo_data.entity.launch_rocket() then
-        rocket_silo_data.awaiting_reset = true
+    local silo_data = Rockets.get_silo_data_by_name(rocket_silo_name)
+    if silo_data.entity.launch_rocket() then
+        silo_data.awaiting_reset = true
         element.enabled = false
         local progress_label = element.parent.parent[rocket_silo_name].label
         progress_label.caption = {'rocket-info.progress-launched'}
@@ -90,11 +67,12 @@ end)
 end)
 
 --- Used to toggle the auto launch on a rocket
+-- @element toggle_rocket
 local toggle_rocket =
 Gui.new_button()
 :set_sprites('utility/play')
 :set_tooltip{'rocket-info.toggle-rocket-tooltip'}
-:set_embeded_flow(function(element,rocket_silo_name)
+:set_embedded_flow(function(element,rocket_silo_name)
     return 'toggle-'..rocket_silo_name
 end)
 :set_style('tool_button',function(style)
@@ -103,22 +81,21 @@ end)
     style.height = 16
 end)
 :on_click(function(player,element)
-    local force = player.force
     local rocket_silo_name = element.parent.name:sub(8)
-    local rocket_silo_data = rocket_silos[force.name][rocket_silo_name]
-    local active = rocket_silo_data.entity.auto_launch -- need to test for auto launch
-    if active then
+    local rocket_silo = Rockets.get_silo_entity(rocket_silo_name)
+    if rocket_silo.auto_launch then
         element.sprite = 'utility/play'
         element.tooltip = {'rocket-info.toggle-rocket-tooltip'}
-        rocket_silo_data.entity.auto_launch = false
+        rocket_silo.auto_launch = false
     else
         element.sprite = 'utility/stop'
         element.tooltip = {'rocket-info.toggle-rocket-tooltip-disabled'}
-        rocket_silo_data.entity.auto_launch = true
+        rocket_silo.auto_launch = true
     end
 end)
 
---- Used to toggle the visiblty of the different sections
+--- Used to toggle the visibility of the different sections
+-- @element toggle_section
 local toggle_section =
 Gui.new_button()
 :set_sprites('utility/expand_dark','utility/expand')
@@ -144,7 +121,7 @@ end)
 
 --- Used to create the three different sections
 local function create_section(container,section_name,table_size)
-    --- Header for the section
+    -- Header for the section
     local header_area = Gui.create_header(
         container,
         {'rocket-info.section-caption-'..section_name},
@@ -153,11 +130,11 @@ local function create_section(container,section_name,table_size)
         section_name..'-header'
     )
 
-    --- Right aligned button to toggle the section
+    -- Right aligned button to toggle the section
     header_area.caption = section_name
     toggle_section(header_area)
 
-    --- Table used to store the data
+    -- Table used to store the data
     local flow_table = Gui.create_scroll_table(container,table_size,215,section_name)
     flow_table.parent.visible = false
 
@@ -263,28 +240,25 @@ end
 local function generate_stats(player,frame)
     if not config.stats.show_stats then return end
     local element = frame.container.stats.table
-    local force_rockets = player.force.rockets_launched
+    local force_name = player.force.name
+    local force_rockets = Rockets.get_rocket_count(force_name)
+    local stats = Rockets.get_stats(force_name)
 
     if config.stats.show_first_rocket then
-        create_label_value_pair_time(element,'first-launch',rocket_stats.first_launch or 0)
+        create_label_value_pair_time(element,'first-launch',stats.first_launch or 0)
     end
 
     if config.stats.show_last_rocket then
-        create_label_value_pair_time(element,'last-launch',rocket_stats.last_launch or 0)
+        create_label_value_pair_time(element,'last-launch',stats.last_launch or 0)
     end
 
     if config.stats.show_fastest_rocket then
-        create_label_value_pair_time(element,'fastest-launch',rocket_stats.fastest_launch or 0,true)
+        create_label_value_pair_time(element,'fastest-launch',stats.fastest_launch or 0,true)
     end
 
     if config.stats.show_total_rockets then
-        local total_rockets = 1
-        if force_rockets > 0 then
-            total_rockets = 0
-            for _,force in pairs(game.forces) do
-                total_rockets = total_rockets + force.rockets_launched
-            end
-        end
+        local total_rockets = Rockets.get_game_rocket_count()
+        total_rockets = total_rockets == 0 and 1 or total_rockets
         local percentage = math.round(force_rockets/total_rockets,3)*100
         create_label_value_pair(element,'total-rockets',force_rockets,{'rocket-info.value-tooltip-total-rockets',percentage})
     end
@@ -295,14 +269,7 @@ local function generate_stats(player,frame)
     end
 
     for _,avg_over in pairs(config.stats.rolling_avg) do
-        local rocket_count = avg_over
-        local first_rocket = 0
-        if avg_over < force_rockets then
-            first_rocket = rocket_times[player.force.name][force_rockets-avg_over+1]
-        else
-            rocket_count = force_rockets
-        end
-        local avg = rocket_count > 0 and math.floor((game.tick-first_rocket)/rocket_count) or 0
+        local avg = Rockets.get_rolling_average(force_name,avg_over)
         create_label_value_pair_time(element,'avg-launch-n',avg,true,avg_over)
     end
 
@@ -312,11 +279,12 @@ end
 local function generate_milestones(player,frame)
     if not config.milestones.show_milestones then return end
     local element = frame.container.milestones.table
-    local force_rockets = player.force.rockets_launched
+    local force_name = player.force.name
+    local force_rockets = Rockets.get_rocket_count(force_name)
 
     for _,milestone in ipairs(config.milestones) do
         if milestone <= force_rockets then
-            local time = rocket_times[player.force.name][milestone]
+            local time = Rockets.get_rocket_time(force_name,milestone)
             create_label_value_pair_time(element,'milestone-n',time,false,milestone)
         else
             create_label_value_pair_time(element,'milestone-n',0,false,milestone)
@@ -326,10 +294,11 @@ local function generate_milestones(player,frame)
 end
 
 --- Creats the different buttons used with the rocket silos
-local function generate_progress_buttons(player,element,rocket_silo_data)
-    local silo_name = rocket_silo_data.name
-    local status = rocket_silo_data.entity.status == defines.entity_status.waiting_to_launch_rocket
-    local active = rocket_silo_data.entity.auto_launch
+local function generate_progress_buttons(player,element,silo_data)
+    local silo_name = silo_data.name
+    local rocket_silo = silo_data.entity
+    local status = rocket_silo.status == defines.entity_status.waiting_to_launch_rocket
+    local active = rocket_silo.auto_launch
 
     if player_allowed(player,'toggle_active') then
         local button_element = element['toggle-'..silo_name]
@@ -358,7 +327,7 @@ local function generate_progress_buttons(player,element,rocket_silo_data)
             button_element = launch_rocket(element,silo_name)
         end
 
-        if rocket_silo_data.awaiting_reset then
+        if silo_data.awaiting_reset then
             button_element.enabled = false
         else
             button_element.enabled = status
@@ -383,17 +352,18 @@ local function generate_progress(player,frame)
     local element = frame.container.progress.table
     local force = player.force
     local force_name = force.name
-    local force_silo_data = rocket_silos[force_name]
+    local force_silos = Rockets.get_silos(force_name)
 
-    if not force_silo_data or table.size(force_silo_data) == 0 then
+    if not force_silos or table.size(force_silos) == 0 then
         element.parent.no_silos.visible = true
 
     else
         element.parent.no_silos.visible = false
 
-        for silo_name,rocket_silo_data in pairs(force_silo_data) do
-            if not rocket_silo_data.entity or not rocket_silo_data.entity.valid then
-                force_silo_data[silo_name] = nil
+        for _,silo_data in pairs(force_silos) do
+            local silo_name = silo_data.name
+            if not silo_data.entity or not silo_data.entity.valid then
+                force_silos[silo_name] = nil
                 Gui.destory_if_valid(element['toggle-'..silo_name])
                 Gui.destory_if_valid(element['launch-'..silo_name])
                 Gui.destory_if_valid(element['label-x-'..silo_name])
@@ -401,16 +371,16 @@ local function generate_progress(player,frame)
                 Gui.destory_if_valid(element[silo_name])
 
             elseif not element[silo_name] then
-                local entity = rocket_silo_data.entity
+                local entity = silo_data.entity
                 local progress = entity.rocket_parts
                 local pos = {
                     x=entity.position.x,
                     y=entity.position.y
                 }
 
-                generate_progress_buttons(player,element,rocket_silo_data)
+                generate_progress_buttons(player,element,silo_data)
 
-                --- Creats two flows and two labels for the X and Y position
+                --- Creates two flows and two labels for the X and Y position
                 local name = config.progress.allow_zoom_to_map and zoom_to_map_name or nil
                 local tooltip = config.progress.allow_zoom_to_map and {'rocket-info.progress-label-tooltip'} or nil
                 local flow_x = element.add{
@@ -445,30 +415,30 @@ local function generate_progress(player,frame)
                     type='label',
                     name='label',
                     caption={'rocket-info.progress-caption',progress},
-                    tooltip={'rocket-info.progress-tooltip',rocket_silo_data.launched or 0}
+                    tooltip={'rocket-info.progress-tooltip',silo_data.launched or 0}
                 }
 
             else
-                local entity = rocket_silo_data.entity
+                local entity = silo_data.entity
                 local progress = entity.rocket_parts
                 local status = entity.status == 21
 
                 local label = element[silo_name].label
                 label.caption = {'rocket-info.progress-caption',progress}
-                label.tooltip = {'rocket-info.progress-tooltip',rocket_silo_data.launched or 0}
+                label.tooltip = {'rocket-info.progress-tooltip',silo_data.launched or 0}
 
-                if status and rocket_silo_data.awaiting_reset then
+                if status and silo_data.awaiting_reset then
                     label.caption = {'rocket-info.progress-launched'}
                     label.style.font_color = Colors.green
                 elseif status then
                     label.caption = {'rocket-info.progress-caption',100}
                     label.style.font_color = Colors.cyan
                 else
-                    rocket_silo_data.awaiting_reset = false
+                    silo_data.awaiting_reset = false
                     label.style.font_color = Colors.white
                 end
 
-                generate_progress_buttons(player,element,rocket_silo_data)
+                generate_progress_buttons(player,element,silo_data)
 
             end
         end
@@ -476,7 +446,8 @@ local function generate_progress(player,frame)
     end
 end
 
---- Registers the new left gui
+--- Registers the rocket info
+-- @element rocket_info
 local rocket_info =
 Gui.new_left_frame('gui/rocket-info')
 :set_sprites('entity/rocket-silo')
@@ -501,42 +472,9 @@ end)
 
 --- Event used to update the stats and the hui when a rocket is launched
 Event.add(defines.events.on_rocket_launched,function(event)
-    local entity = event.rocket_silo
-    local silo_name = get_silo_name(entity)
     local force = event.rocket_silo.force
-    local force_name = force.name
-    local force_silo_data = rocket_silos[force_name]
     local rockets_launched = force.rockets_launched
     local first_rocket = rockets_launched == 1
-
-    --- Handles updates to the rocket stats
-    if not rocket_stats[force_name] then
-        rocket_stats[force_name] = {}
-    end
-
-    if first_rocket then
-        rocket_stats.first_launch = event.tick
-        rocket_stats.fastest_launch = event.tick
-    elseif event.tick-rocket_stats.last_launch < rocket_stats.fastest_launch then
-        rocket_stats.fastest_launch = event.tick-rocket_stats.last_launch
-    end
-
-    rocket_stats.last_launch = event.tick
-
-    --- Appends the new rocket into the array
-    if not rocket_times[force_name] then
-        rocket_times[force_name] = {}
-    end
-
-    rocket_times[force_name][rockets_launched] = event.tick
-
-    local remove_rocket = rockets_launched-largest_rolling_avg
-    if remove_rocket > 0 and not table.contains(config.milestones,remove_rocket) then
-        rocket_times[force_name][remove_rocket] = nil
-    end
-
-    --- Adds this 1 to the launch count for this silo
-    force_silo_data[silo_name].launched = force_silo_data[silo_name].launched+1
 
     --- Updates all the guis (and toolbar since the button may now be visible)
     for _,player in pairs(force.players) do
@@ -548,34 +486,11 @@ Event.add(defines.events.on_rocket_launched,function(event)
     end
 end)
 
---- When a launch is reiggered it will await reset
-Event.add(defines.events.on_rocket_launch_ordered,function(event)
-    local entity = event.rocket_silo
-    local silo_name = get_silo_name(entity)
-    local force = event.rocket_silo.force
-    local force_name = force.name
-    local force_silo_data = rocket_silos[force_name]
-    force_silo_data[silo_name].awaiting_reset = true
-end)
-
 --- Adds a silo to the list when it is built
 local function on_built(event)
     local entity = event.created_entity
     if entity.valid and entity.name == 'rocket-silo' then
         local force = entity.force
-        local force_name = force.name
-        local silo_name = get_silo_name(entity)
-
-        if not rocket_silos[force_name] then
-            rocket_silos[force_name] = {}
-        end
-
-        rocket_silos[force_name][silo_name] = {
-            name=silo_name,
-            entity=entity,
-            launched=0,
-            awaiting_reset=false
-        }
 
         for _,player in pairs(force.players) do
             local frame = rocket_info:get_frame(player)
@@ -590,8 +505,8 @@ Event.add(defines.events.on_robot_built_entity,on_built)
 --- Optimised update for only the build progress
 Event.on_nth_tick(150,function()
     for _,force in pairs(game.forces) do
-        local silos = rocket_silos[force.name]
-        if silos then
+        local silos = Rockets.get_silos(force.name)
+        if #silos > 0 then
             for _,player in pairs(force.connected_players) do
                 local frame = rocket_info:get_frame(player)
                 generate_progress(player,frame)

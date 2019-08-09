@@ -1,12 +1,17 @@
---- Gui left frame define for a player list
-local Gui = require 'expcore.gui'
-local Roles = require 'expcore.roles'
-local Store = require 'expcore.store'
-local Game = require 'utils.game'
-local Event = require 'utils.event'
-local format_time = ext_require('expcore.common','format_time')
-local config = require 'config.action_buttons'
-local Colors = require 'resources.color_presets'
+--[[-- Gui Module - Player List
+    - Adds a player list to show names and play time; also includes action buttons which can apply to players
+    @gui Player-List
+    @alias player_list
+]]
+
+local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Store = require 'expcore.store' --- @dep expcore.store
+local Game = require 'utils.game' --- @dep utils.game
+local Event = require 'utils.event' --- @dep utils.event
+local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
+local config = require 'config.action_buttons' --- @dep config.action_buttons
+local Colors = require 'resources.color_presets' --- @dep resources.color_presets
 
 local action_player_store = 'gui.left.player-list.action-player'
 local action_name_store = 'gui.left.player-list.action-name'
@@ -33,11 +38,12 @@ Gui.on_click(zoom_to_map_name,function(event)
 end)
 
 --- Button used to open the action bar
+-- @element open_action_bar
 local open_action_bar =
 Gui.new_button()
 :set_sprites('utility/expand_dots_white')
 :set_tooltip{'player-list.open-action-bar'}
-:set_embeded_flow(function(element,action_player_name)
+:set_embedded_flow(function(element,action_player_name)
     return action_player_name
 end)
 :set_style('frame_button',function(style)
@@ -56,6 +62,7 @@ end)
 end)
 
 --- Button used to close the action bar
+-- @element close_action_bar
 local close_action_bar =
 Gui.new_button()
 :set_sprites('utility/close_black','utility/close_white')
@@ -71,6 +78,7 @@ end)
 end)
 
 --- Button used to confirm a reason
+-- @element reason_confirm
 local reason_confirm =
 Gui.new_button()
 :set_sprites('utility/confirm_slot')
@@ -267,6 +275,7 @@ local function add_fake_players(list_table,count)
 end
 
 --- Registers the player list
+-- @element player_list
 local player_list =
 Gui.new_left_frame('gui/player-list')
 :set_sprites('entity/character')

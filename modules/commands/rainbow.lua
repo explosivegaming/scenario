@@ -1,5 +1,10 @@
-local Commands = require 'expcore.commands'
-local format_chat_colour = ext_require('expcore.common','format_chat_colour')
+--[[-- Commands Module - Rainbow
+    - Adds a command that prints your message in rainbow font
+    @commands Rainbow
+]]
+
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local format_chat_colour = ext_require('expcore.common','format_chat_colour') --- @dep expcore.common
 
 local function step_component(c1,c2)
     if c1 < 0 then
@@ -35,8 +40,11 @@ local function next_color(color,step)
     return step_color(new_color)
 end
 
+--- Sends an rainbow message in the chat
+-- @command rainbow
+-- @tparam string message the message that will be printed in chat
 Commands.new_command('rainbow','Sends an rainbow message in the chat')
-:add_param('message',false) -- action that is done by the player, just text its meaningless
+:add_param('message',false)
 :enable_auto_concat()
 :register(function(player,message,raw)
     local player_name = player and player.name or '<Server>'

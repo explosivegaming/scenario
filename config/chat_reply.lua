@@ -1,8 +1,11 @@
 --- This file defines the different triggers for the chat bot
-local format_time = ext_require('expcore.common','format_time')
+-- @config Chat-Reply
+
+local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
+
 return {
-    allow_command_prefix_for_messages = true, -- when true any message trigger will print to all player when prefixed
-    messages = { -- will trigger when ever the word is said
+    allow_command_prefix_for_messages = true, --- @setting allow_command_prefix_for_messages when true any message trigger will print to all player when prefixed
+    messages = { --- @setting messages will trigger when ever the word is said
         ['discord']={'info.discord'},
         ['expgaming']={'info.website'},
         ['website']={'info.website'},
@@ -39,13 +42,13 @@ return {
             return {'chat-bot.map-time',format_time(game.tick,{days=true,hours=true,minutes=true,seconds=true,long=true})}
         end,
     },
-    command_admin_only = false, -- when true will only allow chat commands for admins
-    command_permission = 'command/chat-bot', -- the permision used to allow command prefixs
-    command_prefix = '!', -- prefix used for commands below and to print to all players (if enabled above)
-    commands = { -- will trigger only when command prefix is given
+    command_admin_only = false, --- @setting command_admin_only when true will only allow chat commands for admins
+    command_permission = 'command/chat-bot', --- @setting command_permission the permission used to allow command prefixes
+    command_prefix = '!', --- @setting command_prefix prefix used for commands below and to print to all players (if enabled above)
+    commands = { --- @setting commands will trigger only when command prefix is given
         ['dev']={'chat-bot.not-real-dev'},
         ['blame']=function(player)
-            local names = {'Cooldude2606','arty714','badgamernl',player.name}
+            local names = {'Cooldude2606','arty714','badgamernl', 'mark9064', 'aldldl', 'Drahc_pro',player.name}
             for _,next_player in pairs(game.connected_players) do
                 names[#names + 1] = next_player.name
             end

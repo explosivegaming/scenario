@@ -8,7 +8,7 @@
 -- Handlers added with Event.add cannot be removed.
 -- For handlers that need to be removed or added at runtime use Event.add_removable.
 -- @usage
--- local Event = require 'utils.event'
+-- local Event = require 'utils.event' --- @dep utils.event
 -- Event.add(
 --     defines.events.on_built_entity,
 --     function(event)
@@ -27,8 +27,8 @@
 -- Token is used because it's a desync risk to store closures inside the global table.
 --
 -- @usage
--- local Token = require 'utils.token'
--- local Event = require 'utils.event'
+-- local Token = require 'utils.token' --- @dep utils.token
+-- local Event = require 'utils.event' --- @dep utils.event
 --
 -- Token.register must not be called inside an event handler.
 -- local handler =
@@ -55,7 +55,7 @@
 -- A closure is a function that uses a local variable not defined in the function.
 --
 -- @usage
--- local Event = require 'utils.event'
+-- local Event = require 'utils.event' --- @dep utils.event
 --
 -- If you want to remove the handler you will need to keep a reference to it.
 -- global.handler = function(event)
@@ -80,7 +80,7 @@
 --
 -- ** Custom Scenario Events **
 --
--- local Event = require 'utils.event'
+-- local Event = require 'utils.event' --- @dep utils.event
 --
 -- local event_id = script.generate_event_name()
 --
@@ -94,10 +94,10 @@
 -- The table contains extra information that you want to pass to the handler.
 -- script.raise_event(event_id, {extra = 'data'})
 
-local EventCore = require 'utils.event_core'
-local Global = require 'utils.global'
-local Token = require 'utils.token'
-local Debug = require 'utils.debug'
+local EventCore = require 'utils.event_core' --- @dep utils.event_core
+local Global = require 'utils.global' --- @dep utils.global
+local Token = require 'utils.token' --- @dep utils.token
+local Debug = require 'utils.debug' --- @dep utils.debug
 
 local table_remove = table.remove
 local core_add = EventCore.add
@@ -140,7 +140,7 @@ local function remove(tbl, handler)
         return
     end
 
-    -- the handler we are looking for is more likly to be at the back of the array.
+    -- the handler we are looking for is more likely to be at the back of the array.
     for i = #tbl, 1, -1 do
         if tbl[i] == handler then
             table_remove(tbl, i)
@@ -272,11 +272,11 @@ function Event.add_removable_function(event_name, func)
         )
     end
 
-    local funcs = function_handlers[event_name]
-    if not funcs then
+    local functions = function_handlers[event_name]
+    if not functions then
         function_handlers[event_name] = {func}
     else
-        funcs[#funcs + 1] = func
+        functions[#functions + 1] = func
     end
 
     if handlers_added then
@@ -293,15 +293,15 @@ function Event.remove_removable_function(event_name, func)
     if _LIFECYCLE == stage_load then
         error('cannot call during on_load', 2)
     end
-    local funcs = function_handlers[event_name]
+    local functions = function_handlers[event_name]
 
-    if not funcs then
+    if not functions then
         return
     end
 
     local handlers = event_handlers[event_name]
 
-    remove(funcs, func)
+    remove(functions, func)
     remove(handlers, func)
 
     if #handlers == 0 then
@@ -382,11 +382,11 @@ function Event.add_removable_nth_tick_function(tick, func)
         )
     end
 
-    local funcs = function_nth_tick_handlers[tick]
-    if not funcs then
+    local functions = function_nth_tick_handlers[tick]
+    if not functions then
         function_nth_tick_handlers[tick] = {func}
     else
-        funcs[#funcs + 1] = func
+        functions[#functions + 1] = func
     end
 
     if handlers_added then
@@ -403,15 +403,15 @@ function Event.remove_removable_nth_tick_function(tick, func)
     if _LIFECYCLE == stage_load then
         error('cannot call during on_load', 2)
     end
-    local funcs = function_nth_tick_handlers[tick]
+    local functions = function_nth_tick_handlers[tick]
 
-    if not funcs then
+    if not functions then
         return
     end
 
     local handlers = on_nth_tick_event_handlers[tick]
 
-    remove(funcs, func)
+    remove(functions, func)
     remove(handlers, func)
 
     if #handlers == 0 then
@@ -427,9 +427,9 @@ local function add_handlers()
         end
     end
 
-    for event_name, funcs in pairs(function_handlers) do
-        for i = 1, #funcs do
-            local handler = funcs[i]
+    for event_name, functions in pairs(function_handlers) do
+        for i = 1, #functions do
+            local handler = functions[i]
             core_add(event_name, handler)
         end
     end
@@ -441,9 +441,9 @@ local function add_handlers()
         end
     end
 
-    for tick, funcs in pairs(function_nth_tick_handlers) do
-        for i = 1, #funcs do
-            local handler = funcs[i]
+    for tick, functions in pairs(function_nth_tick_handlers) do
+        for i = 1, #functions do
+            local handler = functions[i]
             core_on_nth_tick(tick, handler)
         end
     end

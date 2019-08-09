@@ -1,4 +1,12 @@
---- Gui structure for the toolbar (top left)
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Toolbar.
+-- Gui structure for the toolbar (top left)
+-- @section toolbar
+
 --[[
 >>>> Example format
     -- this is the same as any other button define, this just automatically draws it
@@ -14,25 +22,25 @@
     Toolbar.add_button(button) --- Adds an existing buttton to the toolbar
     Toolbar.update(player) --- Updates the player's toolbar with an new buttons or expected change in auth return
 ]]
-local Gui = require 'expcore.gui.core'
-local Buttons = require 'expcore.gui.elements.buttons'
-local Roles = require 'expcore.roles'
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local mod_gui = require 'mod-gui'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Buttons = require 'expcore.gui.elements.buttons' --- @dep expcore.gui.elements.buttons
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Event = require 'utils.event' --- @dep utils.event
+local Game = require 'utils.game' --- @dep utils.game
+local mod_gui = require 'mod-gui' --- @dep mod-gui
 
 local Toolbar = {
-    permisison_names = {},
+    permission_names = {},
     buttons = {}
 }
 
 function Toolbar.allowed(player,define_name)
-    local permisison_name = Toolbar.permisison_names[define_name] or define_name
-    return Roles.player_allowed(player,permisison_name)
+    local permission_name = Toolbar.permission_names[define_name] or define_name
+    return Roles.player_allowed(player,permission_name)
 end
 
-function Toolbar.permission_alias(define_name,permisison_name)
-    Toolbar.permisison_names[define_name] = permisison_name
+function Toolbar.permission_alias(define_name,permission_name)
+    Toolbar.permission_names[define_name] = permission_name
 end
 
 --- Adds a new button to the toolbar

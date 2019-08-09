@@ -1,11 +1,19 @@
---- This file creates a teste gui that is used to test every input method
--- note that this does not cover every permutation only features in indepentance
+--[[-- Core Module - Gui
+    @module Gui
+    @alias tests
+]]
+
+--- Test.
+-- This file creates a test gui that is used to test every input method
+-- note that this does not cover every permutation only features in independence
 -- for example store in most cases is just by player name, but other store methods are tested with checkbox
-local Gui = require 'expcore.gui'
-local format_chat_colour,table_keys = ext_require('expcore.common','format_chat_colour','table_keys')
-local Colors = require 'resources.color_presets'
-local Event = require 'utils.event'
-local Store = require 'expcore.store'
+-- @section test
+
+local Gui = require 'expcore.gui' --- @dep expcore.gui
+local format_chat_colour,table_keys = ext_require('expcore.common','format_chat_colour','table_keys') --- @dep expcore.common
+local Colors = require 'resources.color_presets' --- @dep resources.color_presets
+local Event = require 'utils.event' --- @dep utils.event
+local Store = require 'expcore.store' --- @dep expcore.store
 
 local tests = {}
 
@@ -223,7 +231,7 @@ end)
 
 local checkbox_force =
 Gui.new_checkbox('test-checkbox-store-force')
-:set_tooltip('Checkboc store force')
+:set_tooltip('Checkbox store force')
 :set_caption('Checkbox Store Force')
 :add_store(Gui.categorize_by_force)
 :on_element_update(function(player,element,state)
@@ -239,7 +247,7 @@ Gui.new_checkbox('test-checkbox-store-player')
     player.print('Checkbox store player: '..tostring(state))
 end)
 
-tests.Checkboxs = {
+tests.Checkboxes = {
     ['Local']=checkbox_local,
     ['Game store']=checkbox_game,
     ['Force store']=checkbox_force,
@@ -425,7 +433,7 @@ Gui.new_list_box('test-list-box-store')
     player.print('Dropdown store: '..tostring(value))
 end)
 
-tests["List Boxs"] = {
+tests["List Boxes"] = {
     ['Local']=list_box_local,
     ['Player']=list_box_player
 }
@@ -442,7 +450,7 @@ tests["List Boxs"] = {
 
 local slider_local_default =
 Gui.new_slider('test-slider-local-default')
-:set_tooltip('Silder local default')
+:set_tooltip('Slider local default')
 :on_element_update(function(player,element,value,percent)
     player.print('Slider local default: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
 end)
@@ -450,7 +458,7 @@ end)
 
 local slider_player_default =
 Gui.new_slider('test-slider-store-default')
-:set_tooltip('Silder store default')
+:set_tooltip('Slider store default')
 :add_store(Gui.categorize_by_player)
 :on_element_update(function(player,element,value,percent)
     player.print('Slider store default: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
@@ -458,7 +466,7 @@ end)
 
 local slider_static =
 Gui.new_slider('test-slider-static-range')
-:set_tooltip('Silder static range')
+:set_tooltip('Slider static range')
 :set_range(5,50)
 :on_element_update(function(player,element,value,percent)
     player.print('Slider static range: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
@@ -466,7 +474,7 @@ end)
 
 local slider_dynamic =
 Gui.new_slider('test-slider-dynamic-range')
-:set_tooltip('Silder dynamic range')
+:set_tooltip('Slider dynamic range')
 :set_range(function(player,element)
     return player.index - 5
 end,function(player,element)
@@ -478,7 +486,7 @@ end)
 
 local label_slider_local =
 Gui.new_slider('test-slider-local-label')
-:set_tooltip('Silder local label')
+:set_tooltip('Slider local label')
 :enable_auto_draw_label()
 :on_element_update(function(player,element,value,percent)
     player.print('Slider local label: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
@@ -486,7 +494,7 @@ end)
 
 local label_slider_player =
 Gui.new_slider('test-slider-store-label')
-:set_tooltip('Silder store label')
+:set_tooltip('Slider store label')
 :enable_auto_draw_label()
 :add_store(Gui.categorize_by_player)
 :on_element_update(function(player,element,value,percent)
@@ -610,7 +618,7 @@ tests["Elem Buttons"] = {
     Progress bar tests
     > Simple -- Progress bar that fills every 2 seconds
     > Store -- Progress bar that fills every 5 seconds with synced value
-    > Reverce -- Progress bar that decreases every 2 seconds
+    > Reverse -- Progress bar that decreases every 2 seconds
 ]]
 
 local progressbar_one =
@@ -651,5 +659,5 @@ end)
 tests["Progress Bars"] = {
     ['Simple']=progressbar_one,
     ['Store']=progressbar_two,
-    ['Reverce']=progressbar_three
+    ['Reverse']=progressbar_three
 }

@@ -1,7 +1,9 @@
---- This is a very simple config file which adds a admin only auth function
--- not much to change here its more so it can be enabled and disabled from ./config/file_loader.lua
+--- This is a very simple config file which adds a admin only auth functio;
+-- not much to change here its more so it can be enabled and disabled from ./config/file_loader.lua;
 -- either way you can change the requirements to be "admin" if you wanted to
-local Commands = require 'expcore.commands'
+-- @config Commands-Auth-Admin
+
+local Commands = require 'expcore.commands' --- @dep expcore.commands
 
 Commands.add_authenticator(function(player,command,tags,reject)
     if tags.admin_only then

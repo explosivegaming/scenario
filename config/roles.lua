@@ -1,11 +1,13 @@
 --- This is the main config file for the role system; file includes defines for roles and role flags and default values
-local Roles = require 'expcore.roles'
+-- @config Roles
+
+local Roles = require 'expcore.roles' --- @dep expcore.roles
 
 -- Use these to adjust for ticks ie game.tick < 5*minutes
 local seconds, minutes, hours = 60, 3600, 216000
 
 --[[
-    -- cant use a factory as it has upvalues ;-;
+    -- cant use a factory as it has up values ;-;
     local function playtime(time_required)
         return function(player)
             if player.online_time > time_required then

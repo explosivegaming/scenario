@@ -18,15 +18,15 @@ require 'utils.print_override'
 require 'utils.math'
 
 -- Global Debug and make sure our version file is registered
-Debug = require 'utils.debug'
+Debug = require 'utils.debug' --- @dep utils.debug
 require 'resources.version'
 
 -- Global require function used to extract parts of a module, because simply being in common is not good enough
-ext_require = require('expcore.common').ext_require
+ext_require = require('expcore.common').ext_require --- @dep expcore.common.ext_require
 
 -- Please go to config/file_loader.lua to edit the files that are loaded
 log('[INFO] Getting file loader config')
-local files = require 'config._file_loader'
+local files = require 'config._file_loader' --- @dep config._file_loader
 
 -- Loads all files from the config and logs that they are loaded
 local total_file_count = string.format('%3d',#files)
@@ -49,6 +49,10 @@ for index,path in pairs(files) do
     end
 
 end
+
+-- Override the default require; require can no longer load new scripts
+log('[INFO] Require Overright! No more requires can be made!')
+require 'utils.require_override'
 
 -- Logs all errors again to make it make it easy to find
 log('[INFO] All files loaded with '..#errors..' errors:')

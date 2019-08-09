@@ -1,4 +1,12 @@
---- Gui class define for text fields and text boxs
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Text.
+-- Gui class define for text fields and text boxes
+-- @section text
+
 --[[
 >>>> Functions
     Text.new_text_field(name) --- Creates a new text field element define
@@ -14,9 +22,9 @@
 
     Other functions present from expcore.gui.core
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Game = require 'utils.game'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Game = require 'utils.game' --- @dep utils.game
 
 --- Store call for store update
 -- @tparam table define the define that this is acting on

@@ -1,8 +1,8 @@
--- This file contains core utilities used by the redmew scenario.
+--- This file contains core utilities used by the redmew scenario.
 
 -- Dependencies
-local Game = require 'utils.game'
-local Color = require 'resources.color_presets'
+local Game = require 'utils.game' --- @dep utils.game
+local Color = require 'resources.color_presets' --- @dep resources.color_presets
 
 -- localized functions
 local random = math.random
@@ -19,7 +19,7 @@ local hours_to_ticks = 60 * 60 * 60
 local ticks_to_minutes = 1 / minutes_to_ticks
 local ticks_to_hours = 1 / hours_to_ticks
 
--- local vars
+-- local variables
 local Module = {}
 
 --- Measures distance between pos1 and pos2

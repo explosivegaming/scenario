@@ -1,7 +1,7 @@
-local Event = require 'utils.event'
-local table = require 'utils.table'
-local Gui = require 'utils.gui'
-local Model = require 'modules.gui.debug.model'
+local Event = require 'utils.event' --- @dep utils.event
+local table = require 'utils.table' --- @dep utils.table
+local Gui = require 'utils.gui' --- @dep utils.gui
+local Model = require 'modules.gui.debug.model' --- @dep modules.gui.debug.model
 
 local format = string.format
 local insert = table.insert

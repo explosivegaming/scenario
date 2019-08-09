@@ -1,4 +1,6 @@
 --- Lists all bonuses which can be used, name followed by min max
+-- @config Bonuses
+
 return {
     character_mining_speed_modifier={0,3},
     character_crafting_speed_modifier={0,3},

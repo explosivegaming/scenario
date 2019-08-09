@@ -1,11 +1,11 @@
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local Utils = require 'utils.core'
-local Timestamp = require 'utils.timestamp'
-local Rank = require 'features.rank_system'
-local Donator = require 'features.donator'
-local Server = require 'features.server'
-local Ranks = require 'resources.ranks'
+local Event = require 'utils.event' --- @dep utils.event
+local Game = require 'utils.game' --- @dep utils.game
+local Utils = require 'utils.core' --- @dep utils.core
+local Timestamp = require 'utils.timestamp' --- @dep utils.timestamp
+local Rank = require 'features.rank_system' --- @dep features.rank_system
+local Donator = require 'features.donator' --- @dep features.donator
+local Server = require 'features.server' --- @dep features.server
+local Ranks = require 'resources.ranks' --- @dep resources.ranks
 
 local insert = table.insert
 local format = string.format
@@ -27,7 +27,7 @@ local deprecated_command_alternatives = {
 
 local notify_on_commands = {
     ['version'] = 'RedMew has a version as well, accessible via /redmew-version',
-    ['color'] = 'RedMew allows color saving and a color randomizer: check out /redmew-color',
+    ['color'] = 'RedMew allows color saving and a color randomiser: check out /redmew-color',
     ['ban'] = 'In case your forgot: please remember to include a message on how to appeal a ban'
 }
 
@@ -35,7 +35,7 @@ local option_names = {
     ['description'] = 'A description of the command',
     ['arguments'] = 'A table of arguments, example: {"foo", "bar"} would map the first 2 arguments to foo and bar',
     ['default_values'] = 'A default value for a given argument when omitted, example: {bar = false}',
-    ['required_rank'] = 'Set this to determins what rank is required to execute a command',
+    ['required_rank'] = 'Set this to determines what rank is required to execute a command',
     ['donator_only'] = 'Set this to true if only donators may execute this command',
     ['debug_only'] = 'Set this to true if it should be registered when _DEBUG is true',
     ['cheat_only'] = 'Set this to true if it should be registered when _CHEATS is true',

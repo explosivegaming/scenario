@@ -1,33 +1,35 @@
 --- Used to config the spawn generation settings yes there is alot here i know just ignore the long tables at the end (they were generated with a command)
+-- @config Spawn-Area
+
 return {
-    infinite_ammo_turrets = { -- These turrets will have they ammo refilled automatically and can not be looted
-        enabled=true, -- weather the turrets will be created and refilled
-        ammo_type='uranium-rounds-magazine', -- the ammo type that will be used
-        locations={ -- locations of all turrets, this is default it can be changed during runtime
+    infinite_ammo_turrets = { --- @setting infinite_ammo_turrets These turrets will have they ammo refilled automatically and can not be looted
+        enabled=true, --- @setting enabled weather the turrets will be created and refilled
+        ammo_type='uranium-rounds-magazine', --- @setting ammo_type the ammo type that will be used
+        locations={ --- @setting locations locations of all turrets, this is default it can be changed during runtime
             {surface=1,position={x=-3,y=-3}},
             {surface=1,position={x=3 ,y=-3}},
             {surface=1,position={x=-3,y=3 }},
             {surface=1,position={x=3 ,y=3 }}
         }
     },
-    afk_belts = {
-        enabled=true, -- weather afk belts will be generated
-        locations={ -- top left connors of any afk belt loops to be added
+    afk_belts = { --- @setting afk_belts setting relating to afk belts round the spawn point
+        enabled=true, --- @setting enabled weather afk belts will be generated
+        locations={ --- @setting locations top left connors of any afk belt loops to be added
             {x=-5,y=-5},
             {x=5, y=-5},
             {x=-5,y=5 },
             {x=5, y=5 }
         }
     },
-    corrections = { -- Some settings that have no where else to go
-        protect_entities=true,
-        offset = {x=0,y=-2}, -- a global offset value to correct the x and y values of the tables below
-        deconstruction_radius=20, -- when the spawn is made this area will have all entities removed first
-        deconstruction_tile='concrete', -- this is the tile that will spawn in the deconstruction radius
-        pattern_radius = 50, -- this is the radius of the pattern all water in this area will be filled
-        pattern_tile = 'stone-path' -- the tile that is used for the pattern
+    corrections = { --- @setting corrections Some settings that have no where else to go
+        protect_entities=true, --- @setting protect_entities if the spawn entites will be protected
+        offset = {x=0,y=-2}, --- @setting offset a global offset value to correct the x and y values of the tables below
+        deconstruction_radius=20, --- @setting deconstruction_radius when the spawn is made this area will have all entities removed first
+        deconstruction_tile='concrete', --- @setting deconstruction_tile this is the tile that will spawn in the deconstruction radius
+        pattern_radius = 50, --- @setting pattern_radius this is the radius of the pattern all water in this area will be filled
+        pattern_tile = 'stone-path' --- @setting pattern_tile the tile that is used for the pattern
     },
-    entities = { -- All entities that will be created as part of spawn {entity-name,x-pos,y-pos}
+    entities = { --- @setting entities All entities that will be created as part of spawn {entity-name,x-pos,y-pos}
         {"stone-wall",-10,-6},{"stone-wall",-10,-5},{"stone-wall",-10,-4},{"stone-wall",-10,-3},{"stone-wall",-10,-2},{"stone-wall",-10,-1},{"stone-wall",-10,0},{"stone-wall",-10,3},{"stone-wall",-10,4},{"stone-wall",-10,5},
         {"stone-wall",-10,6},{"stone-wall",-10,7},{"stone-wall",-10,8},{"stone-wall",-10,9},{"stone-wall",-8,-8},{"small-lamp",-8,-4},{"small-lamp",-8,-1},{"iron-chest",-8,0},{"iron-chest",-8,3},{"small-lamp",-8,4},
         {"small-lamp",-8,7},{"stone-wall",-8,11},{"stone-wall",-7,-8},{"small-electric-pole",-7,-2},{"iron-chest",-7,0},{"iron-chest",-7,3},{"small-electric-pole",-7,5},{"stone-wall",-7,11},{"stone-wall",-6,-8},{"small-lamp",-6,-6},
@@ -43,7 +45,7 @@ return {
         {"stone-wall",9,-4},{"stone-wall",9,-3},{"stone-wall",9,-2},{"stone-wall",9,-1},{"stone-wall",9,0},{"stone-wall",9,3},{"stone-wall",9,4},{"stone-wall",9,5},{"stone-wall",9,6},{"stone-wall",9,7},
         {"stone-wall",9,8},{"stone-wall",9,9}
     },
-    tiles = { -- The location of the "pattern" tiles {x-pos,y-pos}
+    tiles = { --- @setting tiles The location of the "pattern" tiles {x-pos,y-pos}
         {-49,-3},{-49,-2},{-49,1},{-49,2},{-49,5},{-49,6},{-48,-4},{-48,-3},{-48,-2},{-48,1},{-48,2},{-48,5},{-48,6},{-48,7},{-47,-7},{-47,-6},{-47,-5},{-47,-4},{-47,-3},{-47,-2},{-47,5},{-47,6},{-47,7},{-47,8},{-47,9},{-47,10},{-46,-8},{-46,-7},{-46,-6},{-46,-5},
         {-46,-4},{-46,-3},{-46,-2},{-46,-1},{-46,4},{-46,5},{-46,6},{-46,7},{-46,8},{-46,9},{-46,10},{-46,11},{-45,-17},{-45,-16},{-45,-15},{-45,-14},{-45,-13},{-45,-12},{-45,-9},{-45,-8},{-45,-7},{-45,-2},{-45,-1},{-45,0},{-45,1},{-45,2},{-45,3},{-45,4},{-45,5},{-45,10},
         {-45,11},{-45,12},{-45,15},{-45,16},{-45,17},{-45,18},{-45,19},{-45,20},{-44,-18},{-44,-17},{-44,-16},{-44,-15},{-44,-14},{-44,-13},{-44,-12},{-44,-9},{-44,-8},{-44,-1},{-44,0},{-44,1},{-44,2},{-44,3},{-44,4},{-44,11},{-44,12},{-44,15},{-44,16},{-44,17},{-44,18},{-44,19},

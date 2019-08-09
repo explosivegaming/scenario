@@ -1,6 +1,6 @@
-local Event = require 'utils.event'
-local Global = require 'utils.global'
-local config = require 'config.advanced_start'
+local Event = require 'utils.event' --- @dep utils.event
+local Global = require 'utils.global' --- @dep utils.global
+local config = require 'config.advanced_start' --- @dep config.advanced_start
 local use_silo_script = not config.disable_base_game_silo_script
 
 local util = require("util")

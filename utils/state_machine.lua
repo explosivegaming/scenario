@@ -6,7 +6,7 @@
 
 local Module = {}
 
-local Debug = require 'utils.debug'
+local Debug = require 'utils.debug' --- @dep utils.debug
 
 local in_state_callbacks = {}
 local transaction_callbacks = {}

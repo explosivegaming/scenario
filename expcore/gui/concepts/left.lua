@@ -1,4 +1,12 @@
---- Gui structure define for left frames
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Left Guis.
+-- Gui structure define for left frames
+-- @section left
+
 --[[
 >>>> Example formating
 
@@ -29,16 +37,16 @@
     LeftFrames.get_flow(player) --- Gets the left frame flow for a player
     LeftFrames.get_frame(name,player) --- Gets one frame from the left flow by its name
     LeftFrames.get_open(player) --- Gets all open frames for a player, if non are open it will remove the close all button
-    LeftFrames.toggle_frame(name,player,state) --- Toggles the visiblty of a left frame, or sets its visiblty state
+    LeftFrames.toggle_frame(name,player,state) --- Toggles the visibility of a left frame, or sets its visibility state
 
-    LeftFrames.new_frame(permision_name) --- Creates a new left frame define
+    LeftFrames.new_frame(permission_name) --- Creates a new left frame define
     LeftFrames._prototype:set_open_by_default(state) --- Sets if the frame is visible when a player joins, can also be a function to return a boolean
     LeftFrames._prototype:set_direction(direction) --- Sets the direction of the frame, either vertical or horizontal
     LeftFrames._prototype:get_frame(player) --- Gets the frame for this define from the left frame flow
     LeftFrames._prototype:is_open(player) --- Returns if the player currently has this define visible
-    LeftFrames._prototype:toggle(player) --- Toggles the visiblty of the left frame
+    LeftFrames._prototype:toggle(player) --- Toggles the visibility of the left frame
 
-    LeftFrames._prototype:update(player) --- Updates the contents of the left frame, first tries update callback, oter wise will clear and redraw
+    LeftFrames._prototype:update(player) --- Updates the contents of the left frame, first tries update callback, other wise will clear and redraw
     LeftFrames._prototype:update_all(update_offline) --- Updates the frame for all players, see update
     LeftFrames._prototype:redraw(player) --- Redraws the frame by calling on_draw, will always clear the frame
     LeftFrames._prototype:redraw_all(update_offline) --- Redraws the frame for all players, see redraw
@@ -48,13 +56,13 @@
     LeftFrames._prototype:on_player_toggle(player,frame) --- Is triggered when the player presses the toggle button
     LeftFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Toolbar = require 'expcore.gui.concepts.toolbar'
-local Buttons = require 'expcore.gui.elements.buttons'
-local mod_gui = require 'mod-gui'
-local Game = require 'utils.game'
-local Event = require 'utils.event'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Toolbar = require 'expcore.gui.concepts.toolbar' --- @dep expcore.gui.concepts.toolbar
+local Buttons = require 'expcore.gui.elements.buttons' --- @dep expcore.gui.elements.buttons
+local mod_gui = require 'mod-gui' --- @dep mod-gui
+local Game = require 'utils.game' --- @dep utils.game
+local Event = require 'utils.event' --- @dep utils.event
 
 local LeftFrames = {
     frames={},
@@ -106,11 +114,11 @@ function LeftFrames.get_open(player)
     return open
 end
 
---- Toggles the visiblty of a left frame, or sets its visiblty state
+--- Toggles the visibility of a left frame, or sets its visibility state
 -- @tparam string name the name of the gui frame to toggle
 -- @tparam LuaPlayer player the player to get the frame of
--- @tparam[opt] boolean state when given will be the state that the visiblty is set to
--- @treturn boolean the new state of the visiblity
+-- @tparam[opt] boolean state when given will be the state that the visibility is set to
+-- @treturn boolean the new state of the visibility
 function LeftFrames.toggle_frame(name,player,state)
     local define = LeftFrames.frames[name]
     if not define then
@@ -130,10 +138,10 @@ function LeftFrames.toggle_frame(name,player,state)
 end
 
 --- Creates a new left frame define
--- @tparam string permision_name the name that can be used with the permision system
+-- @tparam string permission_name the name that can be used with the permission system
 -- @treturn table the new left frame define
-function LeftFrames.new_frame(permision_name)
-    local self = Toolbar.new_button(permision_name)
+function LeftFrames.new_frame(permission_name)
+    local self = Toolbar.new_button(permission_name)
 
     local mt = getmetatable(self)
     mt.__index = LeftFrames._prototype
@@ -151,7 +159,7 @@ function LeftFrames.new_frame(permision_name)
 end
 
 --- Sets if the frame is visible when a player joins, can also be a function to return a boolean
--- @tparam[opt=true] ?boolean|function state the default state of the visiblty, can be a function
+-- @tparam[opt=true] ?boolean|function state the default state of the visibility, can be a function
 -- state param - player LuaPlayer - the player that has joined the game
 -- state param - define_name string - the define name for the frame
 -- state return - boolean - false will hide the frame
@@ -167,7 +175,7 @@ function LeftFrames._prototype:set_open_by_default(state)
 end
 
 --- Sets the direction of the frame, either vertical or horizontal
--- @tparam string direction the direction to have the elements be added to thef frame
+-- @tparam string direction the direction to have the elements be added to the frame
 function LeftFrames._prototype:set_direction(direction)
     self.direction = direction
     return self
@@ -221,9 +229,9 @@ function LeftFrames._prototype:is_open(player)
     return frame and frame.visible or false
 end
 
---- Toggles the visiblty of the left frame
+--- Toggles the visibility of the left frame
 -- @tparam LuaPlayer player the player to toggle the frame of
--- @treturn boolean the new state of the visiblity
+-- @treturn boolean the new state of the visibility
 function LeftFrames._prototype:toggle(player)
     local frame = self:get_frame(player)
     Gui.toggle_visible(frame)
@@ -231,7 +239,7 @@ function LeftFrames._prototype:toggle(player)
     return frame.visible
 end
 
---- Updates the contents of the left frame, first tries update callback, oter wise will clear and redraw
+--- Updates the contents of the left frame, first tries update callback, other wise will clear and redraw
 -- @tparam LuaPlayer player the player to update the frame of
 function LeftFrames._prototype:update(player)
     local frame = self:get_frame(player)

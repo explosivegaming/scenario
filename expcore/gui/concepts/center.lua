@@ -1,4 +1,12 @@
---- Gui structure define for center gui frames
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Center Guis.
+-- Gui structure define for center gui frames
+-- @section center
+
 --[[
 >>>> Functions
     CenterFrames.get_flow(player) --- Gets the center flow for a player
@@ -7,7 +15,7 @@
     CenterFrames.redraw_frame(player,name) --- Draws the center frame for a player, if already open then will destroy it and redraw
     CenterFrames.toggle_frame(player,name,state) --- Toggles if the frame is currently open or not, will open if closed and close if open
 
-    CenterFrames.new_frame(permision_name) --- Sets the frame to be the current active gui when opened and closes all other frames
+    CenterFrames.new_frame(permission_name) --- Sets the frame to be the current active gui when opened and closes all other frames
     CenterFrames._prototype:on_draw(player,frame) --- Use to draw your elements onto the new frame
     CenterFrames._prototype:set_auto_focus(state) --- Sets the frame to be the current active gui when opened and closes all other frames
     CenterFrames._prototype:draw_frame(player) --- Draws this frame to the player, if already open does nothing (will call on_draw to draw to the frame)
@@ -15,10 +23,10 @@
     CenterFrames._prototype:toggle_frame(player) --- Toggles if the frame is open, if open it will close it and if closed it will open it
     CenterFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Toolbar = require 'expcore.gui.concepts.toolbar'
-local Game = require 'utils.game'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Toolbar = require 'expcore.gui.concepts.toolbar' --- @dep expcore.gui.concepts.toolbar
+local Game = require 'utils.game' --- @dep utils.game
 
 local CenterFrames = {
 	_prototype = Prototype.extend{
@@ -87,10 +95,10 @@ function CenterFrames.toggle_frame(player,name,state)
 end
 
 --- Creates a new center frame define
--- @tparam string permision_name the name that can be used with the permision system
+-- @tparam string permission_name the name that can be used with the permission system
 -- @treturn table the new center frame define
-function CenterFrames.new_frame(permision_name)
-	local self = Toolbar.new_button(permision_name)
+function CenterFrames.new_frame(permission_name)
+	local self = Toolbar.new_button(permission_name)
 
 	self:on_click(function(player,element)
 		self:toggle_frame(player)

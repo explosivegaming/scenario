@@ -1,7 +1,14 @@
---- This file is used to require all the different elements of the gui module
--- each module has an outline here but for more details see their seperate files in ./gui
+--[[-- Core Module - Gui
+    - This file is used to require all the different elements of the gui module
+    - each module has an outline here but for more details see their separate files in ./gui
+    - please read the files for more documentation that cant be shown here
+    - please note there is a rework planned but not started
+    @core Gui
+    @alias Gui
+]]
 
-local Gui = require 'expcore.gui.core'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+
 --[[
     Core
 
@@ -13,11 +20,11 @@ local Gui = require 'expcore.gui.core'
     Gui.categorize_by_surface(element) --- A categorize function to be used with add_store, each surface has its own value
 
     Gui.toggle_enabled(element) --- Will toggle the enabled state of an element
-    Gui.toggle_visible(element) --- Will toggle the visiblity of an element
+    Gui.toggle_visible(element) --- Will toggle the visibility of an element
     Gui.set_padding(element,up,down,left,right) --- Sets the padding for a gui element
     Gui.set_padding_style(style,up,down,left,right) --- Sets the padding for a gui style
     Gui.create_alignment(element,flow_name) --- Allows the creation of a right align flow to place elements into
-    Gui.destory_if_valid(element) --- Destroies an element but tests for it being present and valid first
+    Gui.destroy_if_valid(element) --- Destroys an element but tests for it being present and valid first
     Gui.create_scroll_table(element,table_size,maximal_height,name) --- Creates a scroll area with a table inside, table can be any size
     Gui.create_header(element,caption,tooltip,right_align,name) --- Creates a header section with a label and button area
 
@@ -35,7 +42,7 @@ local Gui = require 'expcore.gui.core'
     Prototype:set_caption(value) --- Sets the caption for the element define
     Prototype:set_tooltip(value) --- Sets the tooltip for the element define
     Prototype:set_style(style,callback) --- Sets the style for the element define
-    Prototype:set_embeded_flow(state) --- Sets the element to be drawn inside a nameless flow, can be given a name using a function
+    Prototype:set_embedded_flow(state) --- Sets the element to be drawn inside a nameless flow, can be given a name using a function
 
     Prototype:set_pre_authenticator --- Sets an authenticator that blocks the draw function if check fails
     Prototype:set_post_authenticator --- Sets an authenticator that disables the element if check fails
@@ -48,14 +55,14 @@ local Gui = require 'expcore.gui.core'
     Prototype:clear_store(category) --- Sets the value in this elements store to nil, category needed if categorize function used
 ]]
 
-local Instances = require 'expcore.gui.instances'
+local Instances = require 'expcore.gui.instances' --- @dep expcore.gui.instances
 Gui.new_instance_group = Instances.registers
 Gui.get_instances = Instances.get_elements
 Gui.add_instance = Instances.get_elements
 Gui.update_instances = Instances.apply_to_elements
 Gui.classes.instances = Instances
 --[[
-    Instances.has_categories(name) --- Returns if a instnace group has a categorise function; must be registerd
+    Instances.has_categories(name) --- Returns if a instance group has a categorise function; must be registered
     Instances.is_registered(name) --- Returns if the given name is a registered instance group
     Instances.register(name,categorise) --- Registers the name of an instance group to allow for storing element instances
 
@@ -67,7 +74,7 @@ Gui.classes.instances = Instances
     Instances.unregistered_get_elements(name,category,callback) --- A version of get_elements that does not require the group to be registered
 ]]
 
-local Button = require 'expcore.gui.elements.buttons'
+local Button = require 'expcore.gui.elements.buttons' --- @dep expcore.gui.elements.buttons
 Gui.new_button = Button.new_button
 Gui.classes.button = Button
 --[[
@@ -77,12 +84,12 @@ Gui.classes.button = Button
     Button._prototype:on_left_click(player,element) --- Registers a handler for when the button is clicked with the left mouse button
     Button._prototype:on_right_click(player,element) --- Registers a handler for when the button is clicked with the right mouse button
 
-    Button._prototype:set_sprites(sprite,hovered_sprite,clicked_sprite) --- Adds sprites to a button making it a spirte button
+    Button._prototype:set_sprites(sprite,hovered_sprite,clicked_sprite) --- Adds sprites to a button making it a sprite button
     Button._prototype:set_click_filter(filter,...) --- Adds a click / mouse button filter to the button
     Button._prototype:set_key_filter(filter,...) --- Adds a control key filter to the button
 ]]
 
-local Checkbox = require 'expcore.gui.elements.checkboxs'
+local Checkbox = require 'expcore.gui.elements.checkbox' --- @dep expcore.gui.elements.checkbox
 Gui.new_checkbox = Checkbox.new_checkbox
 Gui.new_radiobutton = Checkbox.new_radiobutton
 Gui.new_radiobutton_option_set = Checkbox.new_option_set
@@ -98,13 +105,13 @@ Gui.classes.checkbox = Checkbox
     Checkbox._prototype_radiobutton:on_store_update(callback) --- Registers a handler for when the stored value updates
     Checkbox._prototype_radiobutton:add_as_option(option_set,option_name) --- Adds this radiobutton to be an option in the given option set (only one can be true at a time)
 
-    Checkbox.new_option_set(name,callback,categorize) --- Registers a new option set that can be linked to radiobutotns (only one can be true at a time)
+    Checkbox.new_option_set(name,callback,categorize) --- Registers a new option set that can be linked to radiobuttons (only one can be true at a time)
     Checkbox.draw_option_set(name,element) --- Draws all radiobuttons that are part of an option set at once (Gui.draw will not work)
 
-    Checkbox.reset_radiobutton(element,exclude,recursive) --- Sets all radiobutotn in a element to false (unless excluded) and can act recursivly
+    Checkbox.reset_radiobutton(element,exclude,recursive) --- Sets all radiobuttons in a element to false (unless excluded) and can act recursively
 ]]
 
-local Dropdown = require 'expcore.gui.elements.dropdown'
+local Dropdown = require 'expcore.gui.elements.dropdown' --- @dep expcore.gui.elements.dropdown
 Gui.new_dropdown = Dropdown.new_dropdown
 Gui.new_list_box = Dropdown.new_list_box
 Gui.classes.dropdown = Dropdown
@@ -123,7 +130,7 @@ Gui.classes.dropdown = Dropdown
     Dropdown.get_selected_value(element) --- Returns the currently selected value rather than index
 ]]
 
-local Slider = require 'expcore.gui.elements.slider'
+local Slider = require 'expcore.gui.elements.slider' --- @dep expcore.gui.elements.slider
 Gui.new_slider = Slider.new_slider
 Gui.classes.slider = Slider
 --[[
@@ -137,7 +144,7 @@ Gui.classes.slider = Slider
     Slider._prototype:enable_auto_draw_label(state) --- Enables auto draw of the label, the label will share the same parent element as the slider
 ]]
 
-local Text = require 'expcore.gui.elements.text'
+local Text = require 'expcore.gui.elements.text' --- @dep expcore.gui.elements.text
 Gui.new_text_filed = Text.new_text_field
 Gui.new_text_box = Text.new_text_box
 Gui.classes.text = Text
@@ -154,7 +161,7 @@ Gui.classes.text = Text
     Text._prototype_box:set_read_only(state) --- Sets the text box to be read only
 ]]
 
-local ElemButton = require 'expcore.gui.elements.elem-button'
+local ElemButton = require 'expcore.gui.elements.elem-button' --- @dep expcore.gui.elements.elem-button
 Gui.new_elem_button = ElemButton.new_elem_button
 Gui.classes.elem_button = ElemButton
 --[[
@@ -167,7 +174,7 @@ Gui.classes.elem_button = ElemButton
     ElemButton._prototype:set_default(value) --- Sets the default value for the elem button, this may be a function or a string
 ]]
 
-local ProgressBar = require 'expcore.gui.elements.progress-bar'
+local ProgressBar = require 'expcore.gui.elements.progress-bar' --- @dep expcore.gui.elements.progress-bar
 Gui.new_progressbar = ProgressBar.new_progressbar
 Gui.set_progressbar_maximum = ProgressBar.set_maximum
 Gui.increment_progressbar = ProgressBar.increment
@@ -176,7 +183,7 @@ Gui.classes.progressbar = ProgressBar
 --[[
     ProgressBar.set_maximum(element,amount,count_down) --- Sets the maximum value that represents the end value of the progress bar
     ProgressBar.increment(element,amount) --- Increases the value of the progressbar, if a define is given all of its instances are incremented
-    ProgressBar.decrement(element,amount) --- Decreases the value of the progressbar, if a define is given all of its instances are decresed
+    ProgressBar.decrement(element,amount) --- Decreases the value of the progressbar, if a define is given all of its instances are decreased
 
     ProgressBar.new_progressbar(name) --- Creates a new progressbar element define
     ProgressBar._prototype:set_maximum(amount,count_down) --- Sets the maximum value that represents the end value of the progress bar
@@ -188,13 +195,13 @@ Gui.classes.progressbar = ProgressBar
     ProgressBar._prototype:add_element(element,maximum) --- Adds an element into the list of instances that will are waiting to complete, does not work with store
     ProgressBar._prototype:reset_element(element) --- Resets an element, or its store, to be back at the start, either 1 or 0
 
-    ProgressBar._prototype:on_complete(callback) --- Triggers when a progress bar element compeltes (hits 0 or 1)
+    ProgressBar._prototype:on_complete(callback) --- Triggers when a progress bar element completes (hits 0 or 1)
     ProgressBar._prototype:on_complete(callback) --- Triggers when a store value completes (hits 0 or 1)
-    ProgressBar._prototype:event_counter(filter) --- Event handler factory that counts up by 1 every time the event triggeres, can filter which elements are incremented
-    ProgressBar._prototype:event_countdown(filter) --- Event handler factory that counts down by 1 every time the event triggeres, can filter which elements are decremented
+    ProgressBar._prototype:event_counter(filter) --- Event handler factory that counts up by 1 every time the event triggers, can filter which elements are incremented
+    ProgressBar._prototype:event_countdown(filter) --- Event handler factory that counts down by 1 every time the event triggers, can filter which elements are decremented
 ]]
 
-local Toolbar = require 'expcore.gui.concepts.toolbar'
+local Toolbar = require 'expcore.gui.concepts.toolbar' --- @dep expcore.gui.concepts.toolbar
 Gui.new_toolbar_button = Toolbar.new_button
 Gui.add_button_to_toolbar = Toolbar.add_button
 Gui.update_toolbar = Toolbar.update
@@ -205,7 +212,7 @@ Gui.classes.toolbar = Toolbar
     Toolbar.update(player) --- Updates the player's toolbar with an new buttons or expected change in auth return
 ]]
 
-local LeftFrames = require 'expcore.gui.concepts.left'
+local LeftFrames = require 'expcore.gui.concepts.left' --- @dep expcore.gui.concepts.left
 Gui.get_left_frame_flow = LeftFrames.get_flow
 Gui.toggle_left_frame = LeftFrames.toggle_frame
 Gui.new_left_frame = LeftFrames.new_frame
@@ -214,16 +221,16 @@ Gui.classes.left_frames = LeftFrames
     LeftFrames.get_flow(player) --- Gets the left frame flow for a player
     LeftFrames.get_frame(name,player) --- Gets one frame from the left flow by its name
     LeftFrames.get_open(player) --- Gets all open frames for a player, if non are open it will remove the close all button
-    LeftFrames.toggle_frame(name,player,state) --- Toggles the visiblty of a left frame, or sets its visiblty state
+    LeftFrames.toggle_frame(name,player,state) --- Toggles the visibility of a left frame, or sets its visibility state
 
-    LeftFrames.new_frame(permision_name) --- Creates a new left frame define
+    LeftFrames.new_frame(permission_name) --- Creates a new left frame define
     LeftFrames._prototype:set_open_by_default(state) --- Sets if the frame is visible when a player joins, can also be a function to return a boolean
     LeftFrames._prototype:set_direction(direction) --- Sets the direction of the frame, either vertical or horizontal
     LeftFrames._prototype:get_frame(player) --- Gets the frame for this define from the left frame flow
     LeftFrames._prototype:is_open(player) --- Returns if the player currently has this define visible
-    LeftFrames._prototype:toggle(player) --- Toggles the visiblty of the left frame
+    LeftFrames._prototype:toggle(player) --- Toggles the visibility of the left frame
 
-    LeftFrames._prototype:update(player) --- Updates the contents of the left frame, first tries update callback, oter wise will clear and redraw
+    LeftFrames._prototype:update(player) --- Updates the contents of the left frame, first tries update callback, other wise will clear and redraw
     LeftFrames._prototype:update_all(update_offline) --- Updates the frame for all players, see update
     LeftFrames._prototype:redraw(player) --- Redraws the frame by calling on_draw, will always clear the frame
     LeftFrames._prototype:redraw_all(update_offline) --- Redraws the frame for all players, see redraw
@@ -234,7 +241,7 @@ Gui.classes.left_frames = LeftFrames
     LeftFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
 
-local CenterFrames = require 'expcore.gui.concepts.center'
+local CenterFrames = require 'expcore.gui.concepts.center' --- @dep expcore.gui.concepts.center
 Gui.get_center_flow = CenterFrames.get_flow
 Gui.toggle_center_frame = CenterFrames.toggle_frame
 Gui.draw_center_frame = CenterFrames.draw_frame
@@ -245,10 +252,10 @@ Gui.classes.center_frames = CenterFrames
     CenterFrames.get_flow(player) --- Gets the center flow for a player
     CenterFrames.clear_flow(player) --- Clears the center flow for a player
     CenterFrames.draw_frame(player,name) --- Draws the center frame for a player, if already open then will do nothing
-    CenterFrames.redraw_frame(player,name) --- Draws the center frame for a player, if already open then will destory it and redraw
+    CenterFrames.redraw_frame(player,name) --- Draws the center frame for a player, if already open then will destroy it and redraw
     CenterFrames.toggle_frame(player,name,state) --- Toggles if the frame is currently open or not, will open if closed and close if open
 
-    CenterFrames.new_frame(permision_name) --- Sets the frame to be the current active gui when opened and closes all other frames
+    CenterFrames.new_frame(permission_name) --- Sets the frame to be the current active gui when opened and closes all other frames
     CenterFrames._prototype:on_draw(player,frame) --- Use to draw your elements onto the new frame
     CenterFrames._prototype:set_auto_focus(state) --- Sets the frame to be the current active gui when opened and closes all other frames
     CenterFrames._prototype:draw_frame(player) --- Draws this frame to the player, if already open does nothing (will call on_draw to draw to the frame)
@@ -257,7 +264,7 @@ Gui.classes.center_frames = CenterFrames
     CenterFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
 ]]
 
-local PopupFrames = require 'expcore.gui.concepts.popups'
+local PopupFrames = require 'expcore.gui.concepts.popups' --- @dep expcore.gui.concepts.popups
 Gui.get_popup_flow = PopupFrames.get_flow
 Gui.open_popup = PopupFrames.open
 Gui.new_popup = PopupFrames.new_popup
@@ -266,7 +273,7 @@ Gui.classes.popup_frames = PopupFrames
     PopupFrames.get_flow(player) --- Gets the left flow that contains the popup frames
     PopupFrames.open(define_name,player,open_time,...) --- Opens a popup for the player, can give the amount of time it is open as well as params for the draw function
 
-    PopupFrames.close_progress --- Progress bar which when depleaded will close the popup frame
+    PopupFrames.close_progress --- Progress bar which when depleted will close the popup frame
     PopupFrames.close_button --- A button which can be used to close the gui before the timer runs out
 
     PopupFrames.new_popup(name) --- Creates a new popup frame define

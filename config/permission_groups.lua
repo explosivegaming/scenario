@@ -1,10 +1,12 @@
---- Use this file to add new permission groups to the game
--- start with Permission_Groups.new_group('name')
--- then use either :allow_all() or :disallow_all() to set the default for non specified actions
+--- Use this file to add new permission groups to the game;
+-- start with Permission_Groups.new_group('name');
+-- then use either :allow_all() or :disallow_all() to set the default for non specified actions;
 -- then use :allow{} and :disallow{} to specify certain actions to allow/disallow
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local Permission_Groups = require 'expcore.permission_groups'
+-- @config Permission-Groups
+
+--local Event = require 'utils.event' -- @dep utils.event
+--local Game = require 'utils.game' -- @dep utils.game
+local Permission_Groups = require 'expcore.permission_groups' --- @dep expcore.permission_groups
 
 Permission_Groups.new_group('Admin')
 :allow_all()
@@ -59,7 +61,6 @@ Permission_Groups.new_group('Standard')
     'admin_action', -- trusted
     'change_programmable_speaker_alert_parameters', -- standard
     'drop_item',
-    'reset_assembling_machine',
     'set_auto_launch_rocket'
 }
 
@@ -81,7 +82,6 @@ Permission_Groups.new_group('Guest')
     'admin_action', -- trusted
     'change_programmable_speaker_alert_parameters', -- standard
     'drop_item',
-    'reset_assembling_machine',
     'set_auto_launch_rocket',
     'change_programmable_speaker_parameters', -- guest
     'change_train_stop_station',

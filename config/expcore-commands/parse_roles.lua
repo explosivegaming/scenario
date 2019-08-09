@@ -1,7 +1,15 @@
---- Adds some parse functions that can be used with the role system
-local Commands = require 'expcore.commands'
-local Roles = require 'expcore.roles'
-local auto_complete = ext_require('expcore.common','auto_complete')
+--[[-- Adds some parse functions that can be used with the role system
+@config Commands-Parse-Roles
+@usage Adds Parses:
+    role
+    player-role
+    player-role-online
+    player-role-alive
+]]
+
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local auto_complete = ext_require('expcore.common','auto_complete') --- @dep expcore.common
 require 'config.expcore-commands.parse_general'
 
 Commands.add_parse('role',function(input,player,reject)

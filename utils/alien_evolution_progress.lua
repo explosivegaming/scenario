@@ -4,9 +4,9 @@
 ]]
 
 -- dependencies
-local Global = require 'utils.global'
-local Debug = require 'utils.debug'
-local table = require 'utils.table'
+local Global = require 'utils.global' --- @dep utils.global
+local Debug = require 'utils.debug' --- @dep utils.debug
+local table = require 'utils.table' --- @dep utils.table
 
 -- localized functions
 local get_random_weighted = table.get_random_weighted
@@ -142,8 +142,8 @@ local function calculate_total(count, spawner, evolution)
 end
 
 ---Creates the spawner_request structure required for AlienEvolutionProgress.get_aliens for all
----available spawners. If dividing the total spawners by the total aliens causes a fraction, the
----fraction will decide a chance to spawn. 1 alien for 2 spawners will have 50% on both.
+---available spawner's. If dividing the total spawner's by the total aliens causes a fraction, the
+---fraction will decide a chance to spawn. 1 alien for 2 spawner's will have 50% on both.
 ---@param total_aliens table
 function AlienEvolutionProgress.create_spawner_request(total_aliens)
     local per_spawner = total_aliens / memory.spawner_specifications_count

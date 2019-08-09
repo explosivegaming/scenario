@@ -1,8 +1,16 @@
-local Commands = require 'expcore.commands'
-local config = require 'config.repair'
+--[[-- Commands Module - Repair
+    - Adds a command that allows an admin to repair and revive a large area
+    @commands Repair
+]]
+
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local config = require 'config.repair' --- @dep config.repair
 require 'config.expcore-commands.parse_general'
 
 local max_time_to_live = 4294967295 -- unit32 max
+--- Repairs entities on your force around you
+-- @command repair
+-- @tparam number range the range to repair stuff in, there is a max limit to this
 Commands.new_command('repair','Repairs entities on your force around you')
 :add_param('range',false,'integer-range',1,config.max_range)
 :register(function(player,range,raw)

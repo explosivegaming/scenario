@@ -1,61 +1,20 @@
---- Adds a task list to the game which players can add remove and edit items on
-local Gui = require 'expcore.gui'
-local Store = require 'expcore.store'
-local Global = require 'utils.global'
-local Event = require 'utils.event'
-local Roles = require 'expcore.roles'
-local Token = require 'utils.token'
-local config = require 'config.tasks'
-local format_time,table_keys = ext_require('expcore.common','format_time','table_keys')
+--[[-- Gui Module - Task List
+    - Adds a task list to the game which players can add remove and edit items on
+    @gui Task-List
+    @alias task_list
+]]
 
-local task_store = 'gui.left.task-list.tasks'
-
-local task_details = {}
-local force_tasks = {}
-Global.register({
-    task_details=task_details,
-    force_tasks=force_tasks
-},function(tbl)
-    task_details = tbl.task_details
-    force_tasks = tbl.force_tasks
-end)
-
---- Adds a new task for this force with this players name attached
-local function add_task(player,task_number)
-    local task_id = tostring(Token.uid())
-
-    if not force_tasks[player.force.name] then
-        force_tasks[player.force.name] = {}
-    end
-    if task_number then
-        table.insert(force_tasks[player.force.name],task_number,task_id)
-    else
-        table.insert(force_tasks[player.force.name],task_id)
-    end
-
-    task_details[task_id] = {
-        task_id=task_id,
-        force=player.force.name,
-        last_edit_player=player.name,
-        last_edit_time=game.tick,
-        editing={[player.name]=true}
-    }
-
-    Store.set(task_store,task_id,'New task')
-end
-
---- Removes all refrences to a task
-local function remove_task(task_id)
-    local force_name = task_details[task_id].force
-    Store.clear(task_store,task_id)
-    task_details[task_id] = nil
-    table.remove_element(force_tasks[force_name],task_id)
-end
+local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Event = require 'utils.event' --- @dep utils.event
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+local config = require 'config.tasks' --- @dep config.tasks
+local format_time,table_keys = ext_require('expcore.common','format_time','table_keys') --- @dep expcore.common
+local Tasks = require 'modules.control.tasks' --- @dep modules.control.tasks
 
 --- If a player is allowed to use the edit buttons
 local function player_allowed_edit(player,task_id)
     if task_id then
-        local details = task_details[task_id]
+        local details = Tasks.get_details(task_id)
         if config.user_can_edit_own_tasks and details.last_edit_player == player.name then
             return true
         end
@@ -69,7 +28,7 @@ local function player_allowed_edit(player,task_id)
         return false
     end
 
-    if config.edit_tasks_role_permision and not Roles.player_allowed(player,config.edit_tasks_role_permision) then
+    if config.edit_tasks_role_permission and not Roles.player_allowed(player,config.edit_tasks_role_permission) then
         return false
     end
 
@@ -77,6 +36,7 @@ local function player_allowed_edit(player,task_id)
 end
 
 --- Button in the header to add a new task
+-- @element add_new_task
 local update_all
 local add_new_task =
 Gui.new_button()
@@ -88,10 +48,11 @@ Gui.new_button()
     style.width = 20
 end)
 :on_click(function(player,element)
-    add_task(player)
+    Tasks.new_task(player.force.name,nil,player.name)
 end)
 
 --- Used to save changes to a task
+-- @element confirm_edit
 local confirm_edit =
 Gui.new_button()
 :set_sprites('utility/downloaded')
@@ -104,14 +65,12 @@ end)
 :on_click(function(player,element)
     local task_id = element.parent.name
     local task = element.parent.task.text
-    local details = task_details[task_id]
-    details.editing[player.name] = nil
-    details.last_edit_player = player.name
-    details.last_edit_time = game.tick
-    Store.set(task_store,task_id,task)
+    Tasks.set_editing(task_id,player.name)
+    Tasks.update_task(task_id,task,player.name)
 end)
 
 --- Used to cancel any changes you made to a task
+-- @element cancel_edit
 local generate_task
 local cancel_edit =
 Gui.new_button()
@@ -124,12 +83,12 @@ Gui.new_button()
 end)
 :on_click(function(player,element)
     local task_id = element.parent.name
-    local details = task_details[task_id]
-    details.editing[player.name] = nil
+    Tasks.set_editing(task_id,player.name)
     generate_task(player,element.parent.parent,task_id)
 end)
 
 --- Removes the task from the list
+-- @element discard_task
 local discard_task =
 Gui.new_button()
 :set_sprites('utility/trash')
@@ -141,11 +100,12 @@ Gui.new_button()
 end)
 :on_click(function(player,element)
     local task_id = element.parent.name
-    remove_task(task_id)
+    Tasks.remove_task(task_id)
     update_all()
 end)
 
 --- Opens edit mode for the task
+-- @element edit_task
 local edit_task =
 Gui.new_button()
 :set_sprites('utility/rename_icon_normal')
@@ -157,8 +117,7 @@ Gui.new_button()
 end)
 :on_click(function(player,element)
     local task_id = element.parent.name
-    local details = task_details[task_id]
-    details.editing[player.name] = true
+    Tasks.set_editing(task_id,player.name,true)
     generate_task(player,element.parent.parent.parent,task_id)
 end)
 
@@ -175,20 +134,20 @@ end)
     >> discard_task
 ]]
 function generate_task(player,element,task_id)
-    local task = Store.get(task_store,task_id)
-    local details = task_details[task_id]
-    local editing = details.editing[player.name]
+    local task = Tasks.get_task(task_id)
+    local editing = Tasks.is_editing(task_id,player.name)
+    local details = Tasks.get_details(task_id)
     local last_edit_player = details.last_edit_player
     local last_edit_time = details.last_edit_time
-    local tasks = force_tasks[player.force.name]
+    local tasks = Tasks.get_force_tasks(player.force.name)
     local task_number = table.index_of(tasks, task_id)
 
     if not task then
         -- task is nil so remove it from the list
         element.parent.no_tasks.visible = #tasks == 01
-        Gui.destory_if_valid(element['count-'..task_id])
-        Gui.destory_if_valid(element['edit-'..task_id])
-        Gui.destory_if_valid(element[task_id])
+        Gui.destroy_if_valid(element['count-'..task_id])
+        Gui.destroy_if_valid(element['edit-'..task_id])
+        Gui.destroy_if_valid(element[task_id])
 
     else
         element.parent.no_tasks.visible = false
@@ -260,7 +219,7 @@ function generate_task(player,element,task_id)
             label.style.maximal_width = 150
 
         elseif editing and element_type ~= 'textfield' then
-            -- create the text field, edit mode, update it omited as value is being edited
+            -- create the text field, edit mode, update it omitted as value is being edited
             if edit_area then
                 edit_area[edit_task.name].enabled = false
             end
@@ -342,7 +301,8 @@ local function generate_container(player,element)
     return flow_table
 end
 
---- Registeres the task list
+--- Registers the task list
+-- @element task_list
 local task_list =
 Gui.new_left_frame('gui/task-list')
 :set_sprites('utility/not_enough_repair_packs_icon')
@@ -351,18 +311,16 @@ Gui.new_left_frame('gui/task-list')
 :set_open_by_default()
 :on_creation(function(player,element)
     local data_table = generate_container(player,element)
-    local force_name = player.force.name
+    local tasks = Tasks.get_force_tasks(player.force.name)
 
-    local tasks = force_tasks[force_name] or {}
     for _,task_id in pairs(tasks) do
         generate_task(player,data_table,task_id)
     end
 end)
 :on_update(function(player,element)
     local data_table = element.container.scroll.table
-    local force_name = player.force.name
+    local tasks = Tasks.get_force_tasks(player.force.name)
 
-    local tasks = force_tasks[force_name] or {}
     for _,task_id in pairs(tasks) do
         generate_task(player,data_table,task_id)
     end
@@ -371,10 +329,7 @@ end)
 update_all = task_list 'update_all'
 
 --- When a new task is added it will udpate the task list for everyone on that force
-Store.register(task_store,function(value,task_id)
-    local details = task_details[task_id]
-    local force = game.forces[details.force]
-
+Tasks.add_handler(function(force,task_id)
     for _,player in pairs(force.players) do
         local frame = task_list:get_frame(player)
         local element = frame.container.scroll.table
@@ -382,7 +337,7 @@ Store.register(task_store,function(value,task_id)
     end
 end)
 
---- Makess sure the right buttons are present when roles change
+--- Makes sure the right buttons are present when roles change
 Event.add(Roles.events.on_role_assigned,task_list 'redraw')
 Event.add(Roles.events.on_role_unassigned,task_list 'redraw')
 

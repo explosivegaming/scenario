@@ -1,4 +1,12 @@
---- Gui class define for dropdowns and list boxs
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Dropdowns.
+-- Gui class define for dropdowns and list box
+-- @section dropdowns
+
 --[[
 >>>> Functions
     Dropdown.new_dropdown(name) --- Creates a new dropdown element define
@@ -16,9 +24,9 @@
 
     Other functions present from expcore.gui.core
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Game = require 'utils.game'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Game = require 'utils.game' --- @dep utils.game
 
 local select_value
 --- Store call for store update
