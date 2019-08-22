@@ -526,8 +526,10 @@ Event.add(defines.events.on_player_created,function(event)
     end
 
     local force = player.force
-    local spawn_position = force.get_spawn_position(player.surface)
-    Warps.new_warp(force.name,player.surface,spawn_position,nil,'Spawn',true,true)
+    if not Warps.forces[force.name] then
+        local spawn_position = force.get_spawn_position(player.surface)
+        Warps.new_warp(force.name,player.surface,spawn_position,nil,'Spawn',true,true)
+    end
 end)
 
 local function maintain_tag(event)
