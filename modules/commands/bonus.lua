@@ -43,17 +43,10 @@ Event.add(defines.events.on_player_respawned,function(event)
     end
 end)
 
-Event.add(defines.events.on_pre_player_died,function(event)
+Event.add(defines.events.on_player_died,function(event)
     local player = Game.get_player_by_index(event.player_index)
     if Roles.player_has_flag(player,'instance-respawn') then
         player.ticks_to_respawn = 120
-        -- manually dispatch death event because it is not fired when ticks_to_respawn is set pre death
-        Event.dispatch{
-            name=defines.events.on_player_died,
-            tick=event.tick,
-            player_index=event.player_index,
-            cause = event.cause
-        }
     end
 end)
 
