@@ -120,7 +120,7 @@ end)
     local warps = Warps.get_all_warps()
     for warp_id,warp in pairs(warps) do
         local pos = warp.position
-        if (posx-pos.x)^2+(posy-pos.y)^2 < dist2 then
+        if (px-pos.x)^2+(py-pos.y)^2 < dist2 then
             local warp_name = Warps.get_warp_name(warp_id)
             player.print{'warp-list.too-close',warp_name}
             return
