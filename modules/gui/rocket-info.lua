@@ -364,11 +364,11 @@ local function generate_progress(player,frame)
             local silo_name = silo_data.name
             if not silo_data.entity or not silo_data.entity.valid then
                 force_silos[silo_name] = nil
-                Gui.destory_if_valid(element['toggle-'..silo_name])
-                Gui.destory_if_valid(element['launch-'..silo_name])
-                Gui.destory_if_valid(element['label-x-'..silo_name])
-                Gui.destory_if_valid(element['label-y-'..silo_name])
-                Gui.destory_if_valid(element[silo_name])
+                Gui.destroy_if_valid(element['toggle-'..silo_name])
+                Gui.destroy_if_valid(element['launch-'..silo_name])
+                Gui.destroy_if_valid(element['label-x-'..silo_name])
+                Gui.destroy_if_valid(element['label-y-'..silo_name])
+                Gui.destroy_if_valid(element[silo_name])
 
             elseif not element[silo_name] then
                 local entity = silo_data.entity

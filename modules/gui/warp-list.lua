@@ -120,7 +120,7 @@ end)
     local warps = Warps.get_all_warps()
     for warp_id,warp in pairs(warps) do
         local pos = warp.position
-        if (posx-pos.x)^2+(posy-pos.y)^2 < dist2 then
+        if (px-pos.x)^2+(py-pos.y)^2 < dist2 then
             local warp_name = Warps.get_warp_name(warp_id)
             player.print{'warp-list.too-close',warp_name}
             return
@@ -526,8 +526,10 @@ Event.add(defines.events.on_player_created,function(event)
     end
 
     local force = player.force
-    local spawn_position = force.get_spawn_position(player.surface)
-    Warps.new_warp(force.name,player.surface,spawn_position,nil,'Spawn',true,true)
+    if not Warps.forces[force.name] then
+        local spawn_position = force.get_spawn_position(player.surface)
+        Warps.new_warp(force.name,player.surface,spawn_position,nil,'Spawn',true,true)
+    end
 end)
 
 local function maintain_tag(event)
