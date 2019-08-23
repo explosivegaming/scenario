@@ -1,5 +1,5 @@
 file = '../'
-dir = '../doc'
+dir = '../docs'
 project = 'ExpGaming Scenario'
 title = 'ExpGaming Scenario'
 description = 'Explosive Gaming\'s server scenario for 0.17'
@@ -10,8 +10,8 @@ not_luadoc = true
 no_lua_ref = true
 template_escape = ">"
 topics = {"../README.md", "../LICENSE"}
-style = '../doc'
-template = '../doc'
+style = '../docs'
+template = '../docs'
 no_space_before_args = true
 merge=true
 

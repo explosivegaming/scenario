@@ -650,7 +650,7 @@ end)
 Event.add(defines.events.on_tick,function()
     progressbar_one:increment()
     progressbar_three:decrement()
-    local categories = Store.get_children(progressbar_two.store)
+    local categories = Store.get_keys(progressbar_two.store)
     for _,category in pairs(categories) do
         progressbar_two:increment(1,category)
     end

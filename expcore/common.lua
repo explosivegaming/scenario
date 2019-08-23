@@ -611,4 +611,12 @@ function Common.format_chat_player_name(player,raw_string)
     end
 end
 
+--- Returns a desync safe file path for the current file
+-- @tparam[opt=0] number offset the offset in the stack to get, 0 is current file
+-- @treturn string the file path
+function Common.get_file_path(offset)
+    offset = offset or 0
+    return debug.getinfo(offset+2, 'S').source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+end
+
 return Common

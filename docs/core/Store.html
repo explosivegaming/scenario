@@ -234,73 +234,37 @@
     <!-- module usage start -->
     <h3>Usage</h3>
     <pre class="code" data-lang="Lua"><code>
-<span class="comment">---- Basic Use
-</span>    <span class="comment">-- At the most basic level this allows for the naming of locations to store in the global table, the second feature is that you are
-</span>    <span class="comment">-- able to listen for updates of this value, which means that when ever the set function is called it will trigger the update callback.
-</span>
-    <span class="comment">-- This may be useful when storing config values and when they get set you want to make sure it is taken care of, or maybe you want
-</span>    <span class="comment">-- to have a value that you can trigger an update of from different places.
-</span>
-    <span class="comment">-- This will register a new location called 'scenario.difficulty'
-</span>    <span class="comment">-- note that setting a start value is optional and we could take nil to mean normal
-</span>    Store.register(<span class="string">'scenario.difficulty'</span>,<span class="keyword">function</span>(value)
-        game.<span class="global">print</span>(<span class="string">'The scenario difficulty has be set to: '</span>..value)
-    <span class="keyword">end</span>)
+<span class="comment">-- The data store module is designed to be an alterative way to store data in the global table
+</span><span class="comment">-- each piece of data is stored at a location and optional key of that location
+</span><span class="comment">-- it is recomented that you use a local varible to store the location
+</span><span class="keyword">local</span> scenario_difficuly = Store.uid_location()
+<span class="keyword">local</span> team_scores = <span class="string">'team-scores'</span>
 
-    <span class="comment">-- This will set the value in the store to 'hard' and will trigger the update callback which will print a message to the game
-</span>    Store.set(<span class="string">'scenario.difficulty'</span>,<span class="string">'hard'</span>)
+<span class="comment">-- Setting and getting data is then as simple as
+</span>Store.set(scenario_difficuly,<span class="string">'Hard'</span>)
+Store.set(team_scores,game.player.force.name,<span class="number">20</span>)
 
-    <span class="comment">-- This will return 'hard'
-</span>    Store.get(<span class="string">'scenario.difficulty'</span>)</code></pre>
-    <pre class="code" data-lang="Lua"><code>
-<span class="comment">---- Using Children
-</span>    <span class="comment">-- One limitation of store is that all locations must be registered to avoid desyncs, to get round this issue "children" can be used.
-</span>    <span class="comment">-- When you set the value of a child it does not have its own update callback so rather the "parent" location which has been registered
-</span>    <span class="comment">-- will have its update value called with a second param of the name of that child.
+Store.get(scenario_difficuly) <span class="comment">-- returns 'Hard'
+</span>Store.get(team_scores,game.player.force.name) <span class="comment">-- returns 20
 </span>
-    <span class="comment">-- This may be useful when you want a value of each player or force and since you cant register every player at the start you must use
-</span>    <span class="comment">-- the players name as the child name.
-</span>
-    <span class="comment">-- This will register the location 'scenario.score' where we plan to use force names as the child
-</span>    Store.register(<span class="string">'scenario.score'</span>,<span class="keyword">function</span>(value,child)
-        game.<span class="global">print</span>(child..<span class="string">' now has a score of '</span>..value)
-    <span class="keyword">end</span>)
+<span class="comment">-- The reason for using stores over global is the abilty to watch for updates
+</span><span class="comment">-- for stores to work you must register them, often at the end of the file
+</span><span class="comment">-- note that storing a table value may cause issues as a key changing does not cause the set function to trigger
+</span>Store.register(scenario_difficuly,<span class="keyword">function</span>(value)
+    game.<span class="global">print</span>(<span class="string">'Scenario difficulty has been set to: '</span>..value)
+<span class="keyword">end</span>)
 
-    <span class="comment">-- This will return nil, but will not error as children don't need to be registered
-</span>    Store.get(<span class="string">'scenario.score'</span>,<span class="string">'player'</span>)
+Store.register(team_scores,<span class="keyword">function</span>(value,key)
+    game.<span class="global">print</span>(<span class="string">'Team '</span>..key..<span class="string">' now has a score of '</span>..value)
+<span class="keyword">end</span>)
 
-    <span class="comment">-- This will set 'player' to have a value of 10 for 'scenario.score' and trigger the game message print
-</span>    Store.set(<span class="string">'scenario.score'</span>,<span class="string">'player'</span>,<span class="number">10</span>)
-
-    <span class="comment">-- This would be the similar to Store.get however this will return the names of all the children
-</span>    Store.get_children(<span class="string">'scenario.score'</span>)</code></pre>
-    <pre class="code" data-lang="Lua"><code>
-<span class="comment">---- Using Sync
-</span>    <span class="comment">-- There is the option to use synced values which is the same as a normal value however you can combine this with an external script
-</span>    <span class="comment">-- which can read the output from 'script-output/log/store.log' and have it send rcon commands back to the game allowing for cross instance
-</span>    <span class="comment">-- syncing of values.
-</span>
-    <span class="comment">-- This may be useful when you want to have a value change effect multiple instances or even if you just want a database to store values so
-</span>    <span class="comment">-- you can sync data between map resets.
-</span>
-    <span class="comment">-- This example will register the location 'statistics.total-play-time' where we plan to use plan names as the child
-</span>    <span class="comment">-- note that the location must be the same across instances
-</span>    Store.register(<span class="string">'statistics.total-play-time'</span>,<span class="keyword">true</span>,<span class="keyword">function</span>(value,child)
-        game.<span class="global">print</span>(child..<span class="string">' now has now played for '</span>..value)
-    <span class="keyword">end</span>)
-
-    <span class="comment">-- Use of set and are all the same as non synced but you should include from_sync as true
-</span></code></pre>
-    <pre class="code" data-lang="Lua"><code>
-<span class="comment">---- Alternative method
-</span>    <span class="comment">-- Some people may prefer to use a variable rather than a string for formating reasons here is an example. Also for any times when
-</span>    <span class="comment">-- there will be little external input Store.uid_location() can be used to generate non conflicting locations, uid_location will also
-</span>    <span class="comment">-- be used if you give a nil location.
-</span>
-    <span class="keyword">local</span> store_game_speed =
-    Store.register(<span class="keyword">function</span>(value)
-        game.<span class="global">print</span>(<span class="string">'The game speed has been set to: '</span>..value)
-    <span class="keyword">end</span>)</code></pre>
+<span class="comment">-- This can be very powerful when working with data that can be changed for a number of locations
+</span><span class="comment">-- with this module you can enable any location to output its changes to a file
+</span><span class="comment">-- say we wanted team scores to be synced across servers or between saves
+</span><span class="comment">-- although you will need to set up a method of storing the data outside the game
+</span>Store.register(team_scores,<span class="keyword">true</span>,<span class="keyword">function</span>(value,key)
+    game.<span class="global">print</span>(<span class="string">'Team '</span>..key..<span class="string">' now has a score of '</span>..value)
+<span class="keyword">end</span>)</code></pre>
     <!-- module usage end -->
 
     <!-- module content header end -->
@@ -333,33 +297,37 @@
     </thead>
     <tbody>
     <tr>
+    <td class="name"><a href="#register">register([location][, synced=false][, callback])</a></td>
+    <td class="summary">Registers a new location with an update callback which is triggered when the value updates</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#get">get(location[, key])</a></td>
+    <td class="summary">Gets the value stored at a location, this location must be registered</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#set">set(location[, key], value[, from_sync=false])</a></td>
+    <td class="summary">Sets the value at a location, this location must be registered</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#update">update(location[, key])</a></td>
+    <td class="summary">Triggers the change handler manually</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#clear">clear(location[, key][, from_sync=false])</a></td>
+    <td class="summary">Sets the value at a location to nil, this location must be registered</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#get_keys">get_keys(location)</a></td>
+    <td class="summary">Gets all non nil keys at a location, keys can be added and removed during runtime
+ this is similar to Store.get but will always return a table even if it is empty</td>
+    </tr>
+    <tr>
     <td class="name"><a href="#is_registered">is_registered(location)</a></td>
     <td class="summary">Check for if a location is registered</td>
     </tr>
     <tr>
     <td class="name"><a href="#uid_location">uid_location()</a></td>
     <td class="summary">Returns a unique name that can be used for a store</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#register">register([location][, synced][, callback])</a></td>
-    <td class="summary">Registers a new location with an update callback which is triggered when the value updates</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#get">get(location[, child][, allow_unregistered=false])</a></td>
-    <td class="summary">Gets the value stored at a location, this location must be registered</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#set">set(location[, child], value[, from_sync])</a></td>
-    <td class="summary">Sets the value at a location, this location must be registered</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#clear">clear(location[, child][, from_sync])</a></td>
-    <td class="summary">Sets the value at a location to nil, this location must be registered</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#get_children">get_children(location)</a></td>
-    <td class="summary">Gets all non nil children at a location, children can be added and removed during runtime
- this is similar to Store.get but will always return a table even if it is empty</td>
     </tr>
     </tbody>
     </table>
@@ -476,6 +444,495 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
+    <a href="#register" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="register">register([location][, synced=false][, callback])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Registers a new location with an update callback which is triggered when the value updates</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>location</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     string a unique that points to the data, string used rather than token to allow migration
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>synced</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true will output changes to a file so it can be synced
+
+    (<em>default</em>: false)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>callback</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     when given the callback will be automatically registered to the update of the value
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    <span class="return-text">the location that is being used</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#get" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get">get(location[, key])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets the value stored at a location, this location must be registered</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>location</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the location to get the data from
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>key</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the key location if used
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">any</span></span>)
+    <span class="return-text">the data which was stored at the location</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#set" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="set">set(location[, key], value[, from_sync=false])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sets the value at a location, this location must be registered</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>location</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the location to set the data to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>key</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the key location if used
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>value</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><span class="type">any</span></span>)
+
+     the new value to set at the location, value may be reverted if there is a watch callback, cant be nil
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>from_sync</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     set this true to avoid an output to the sync file
+
+    (<em>default</em>: false)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if it was successful</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#update" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="update">update(location[, key])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Triggers the change handler manually</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>location</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the location to set the data to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>key</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the key location if required
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#clear" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="clear">clear(location[, key][, from_sync=false])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sets the value at a location to nil, this location must be registered</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>location</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the location to set the data to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>key</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the key location if used
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>from_sync</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     set this true to avoid an output to the sync file
+
+    (<em>default</em>: false)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if it was successful</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#get_keys" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_keys">get_keys(location)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets all non nil keys at a location, keys can be added and removed during runtime
+ this is similar to Store.get but will always return a table even if it is empty</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>location</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the location to get the keys of
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">a table containing all the keys names</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
     <a href="#is_registered" class="fragment-hashtag">#</a>
     <span class="section-item-title" id="is_registered">is_registered(location)</span>
     </div>
@@ -564,445 +1021,6 @@
     <!-- usage end -->
 
     </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#register" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="register">register([location][, synced][, callback])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Registers a new location with an update callback which is triggered when the value updates</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>location</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     string a unique that points to the data, string used rather than token to allow migration
-
-    (<em>optional</em>)
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>synced</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     when true will output changes to a file so it can be synced
-
-    (<em>optional</em>)
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>callback</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
-
-     when given the callback will be automatically registered to the update of the value
-
-    (<em>optional</em>)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-    <span class="return-text">the location that is being used</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#get" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get">get(location[, child][, allow_unregistered=false])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Gets the value stored at a location, this location must be registered</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>location</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the location to get the data from
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>child</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the child location if required
-
-    (<em>optional</em>)
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>allow_unregistered</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     when true no error is returned if the location is not registered
-
-    (<em>default</em>: false)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><span class="type">any</span></span>)
-    <span class="return-text">the data which was stored at the location</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#set" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="set">set(location[, child], value[, from_sync])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Sets the value at a location, this location must be registered</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>location</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the location to set the data to
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>child</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the child location if required
-
-    (<em>optional</em>)
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>value</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><span class="type">any</span></span>)
-
-     the new value to set at the location, value may be reverted if there is a watch callback, cant be nil
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>from_sync</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     set this true to avoid an output to the sync file
-
-    (<em>optional</em>)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">true if it was successful</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#clear" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="clear">clear(location[, child][, from_sync])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Sets the value at a location to nil, this location must be registered</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>location</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the location to set the data to
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>child</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the child location if required
-
-    (<em>optional</em>)
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>from_sync</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     set this true to avoid an output to the sync file
-
-    (<em>optional</em>)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">true if it was successful</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#get_children" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_children">get_children(location)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Gets all non nil children at a location, children can be added and removed during runtime
- this is similar to Store.get but will always return a table even if it is empty</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>location</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the location to get the children of
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">a table containing all the children names</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
     </dl>
 
     <!-- section end -->
@@ -1018,7 +1036,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-08-09 18:11:22 UTC</i>
+    <i>Last updated 2019-08-23 21:40:48 UTC</i>
     </div>
     </div>
     </div>
