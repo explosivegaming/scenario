@@ -241,15 +241,19 @@
 <span class="keyword">local</span> team_scores = <span class="string">'team-scores'</span>
 
 <span class="comment">-- Setting and getting data is then as simple as
+</span><span class="comment">-- note that when storing a table you must use Store.update
 </span>Store.set(scenario_difficuly,<span class="string">'Hard'</span>)
 Store.set(team_scores,game.player.force.name,<span class="number">20</span>)
 
 Store.get(scenario_difficuly) <span class="comment">-- returns 'Hard'
 </span>Store.get(team_scores,game.player.force.name) <span class="comment">-- returns 20
 </span>
+Store.update(team_scores,game.player.force.name,<span class="keyword">function</span>(value,key)
+    <span class="keyword">return</span> value + <span class="number">10</span> <span class="comment">-- add 10 to the score
+</span><span class="keyword">end</span>)
+
 <span class="comment">-- The reason for using stores over global is the abilty to watch for updates
 </span><span class="comment">-- for stores to work you must register them, often at the end of the file
-</span><span class="comment">-- note that storing a table value may cause issues as a key changing does not cause the set function to trigger
 </span>Store.register(scenario_difficuly,<span class="keyword">function</span>(value)
     game.<span class="global">print</span>(<span class="string">'Scenario difficulty has been set to: '</span>..value)
 <span class="keyword">end</span>)
@@ -309,8 +313,12 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <td class="summary">Sets the value at a location, this location must be registered</td>
     </tr>
     <tr>
-    <td class="name"><a href="#update">update(location[, key])</a></td>
-    <td class="summary">Triggers the change handler manually</td>
+    <td class="name"><a href="#update">update(location[, key][, update_callback])</a></td>
+    <td class="summary">Allows for updating a value based on the current value; only valid way to change tables in a store</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#update_all">update_all(location[, update_callback])</a></td>
+    <td class="summary">Allows for updating all values at a location based on the current value; only valid way to change tables in a store</td>
     </tr>
     <tr>
     <td class="name"><a href="#clear">clear(location[, key][, from_sync=false])</a></td>
@@ -718,13 +726,13 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#update" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="update">update(location[, key])</span>
+    <span class="section-item-title" id="update">update(location[, key][, update_callback])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Triggers the change handler manually</p>
+    <p class="section-item-summary">Allows for updating a value based on the current value; only valid way to change tables in a store</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -761,6 +769,90 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
      the key location if required
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>update_callback</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the function called to update the value stored, rtn value to set new value
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#update_all" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="update_all">update_all(location[, update_callback])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Allows for updating all values at a location based on the current value; only valid way to change tables in a store</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>location</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the location to set the data to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>update_callback</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the function called to update the value stored
 
     (<em>optional</em>)
     </li>
@@ -1036,7 +1128,7 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-08-23 21:40:48 UTC</i>
+    <i>Last updated 2019-08-25 00:50:15 UTC</i>
     </div>
     </div>
     </div>

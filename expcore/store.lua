@@ -11,15 +11,19 @@ local scenario_difficuly = Store.uid_location()
 local team_scores = 'team-scores'
 
 -- Setting and getting data is then as simple as
+-- note that when storing a table you must use Store.update
 Store.set(scenario_difficuly,'Hard')
 Store.set(team_scores,game.player.force.name,20)
 
 Store.get(scenario_difficuly) -- returns 'Hard'
 Store.get(team_scores,game.player.force.name) -- returns 20
 
+Store.update(team_scores,game.player.force.name,function(value,key)
+    return value + 10 -- add 10 to the score
+end)
+
 -- The reason for using stores over global is the abilty to watch for updates
 -- for stores to work you must register them, often at the end of the file
--- note that storing a table value may cause issues as a key changing does not cause the set function to trigger
 Store.register(scenario_difficuly,function(value)
     game.print('Scenario difficulty has been set to: '..value)
 end)
@@ -152,20 +156,67 @@ function Store.set(location,key,value,from_sync)
     return true
 end
 
---- Triggers the change handler manually
+--- Allows for updating a value based on the current value; only valid way to change tables in a store
 -- @tparam string location the location to set the data to
 -- @tparam[opt] string key the key location if required
-function Store.update(location,key)
+-- @tparam[opt] function update_callback the function called to update the value stored, rtn value to set new value
+function Store.update(location,key,update_callback,...)
     local value = Store.get(location,key)
-    script.raise_event(Store.events.on_value_changed,{
-        tick=game.tick,
-        location=location,
-        key=key,
-        value=value,
-        from_sync=false
-    })
+
+    local arg1
+    if type(key) == 'function' then
+        arg1 = update_callback
+        update_callback = key
+        key = nil
+    end
+
+    local rtn
+    if update_callback and type(update_callback) == 'function' then
+        rtn = update_callback(value,key,arg1,...)
+    end
+
+    if rtn then
+        Store.set(location,key,rtn)
+    else
+        script.raise_event(Store.events.on_value_changed,{
+            tick=game.tick,
+            location=location,
+            key=key,
+            value=value,
+            from_sync=false
+        })
+    end
+
 end
 
+--- Allows for updating all values at a location based on the current value; only valid way to change tables in a store
+-- @tparam string location the location to set the data to
+-- @tparam[opt] function update_callback the function called to update the value stored
+function Store.update_all(location,update_callback,...)
+    local data = Store.get(location)
+
+    error_not_table(data)
+
+    for key,value in pairs(data) do
+        local rtn
+        if update_callback and type(update_callback) == 'function' then
+            rtn = update_callback(value,key,...)
+        end
+
+        if rtn then
+            Store.set(location,key,rtn)
+        else
+            script.raise_event(Store.events.on_value_changed,{
+                tick=game.tick,
+                location=location,
+                key=key,
+                value=value,
+                from_sync=false
+            })
+        end
+    end
+
+end
 
 --- Sets the value at a location to nil, this location must be registered
 -- @tparam string location the location to set the data to

@@ -1,4 +1,7 @@
---- This file combines all the other gui files
+--[[-- Core Module - Gui
+    @core Gui
+    @alias Gui
+]]
 
 local Gui = require 'expcore.gui.core'
 
