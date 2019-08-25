@@ -233,6 +233,41 @@
     <!-- module info end -->
 
     <!-- module usage start -->
+    <h3>Usage</h3>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making the base button concept
+</span><span class="keyword">local</span> button =
+Gui.new_concept(<span class="string">'Button'</span>)
+:new_event(<span class="string">'on_click'</span>,defines.events.on_gui_click)
+:new_property(<span class="string">'tooltip'</span>)
+:new_property(<span class="string">'caption'</span>,<span class="keyword">nil</span>,<span class="keyword">function</span>(properties,value)
+    properties.caption = value
+    properties.sprite = <span class="keyword">nil</span>
+    properties.<span class="global">type</span> = <span class="string">'button'</span>
+<span class="keyword">end</span>)
+:new_property(<span class="string">'sprite'</span>,<span class="keyword">nil</span>,<span class="keyword">function</span>(properties,value)
+    properties.image = value
+    properties.caption = <span class="keyword">nil</span>
+    properties.<span class="global">type</span> = <span class="string">'sprite-button'</span>
+<span class="keyword">end</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Makeing a alternative button based on the first
+</span><span class="keyword">local</span> custom_button =
+button:clone(<span class="string">'CustomButton'</span>)
+:new_event(<span class="string">'on_admin_clicked'</span>,defines.events.on_gui_click,<span class="keyword">function</span>(event)
+    <span class="keyword">return</span> event.player.admin <span class="comment">-- only raise custom event when an admin clicks the button
+</span><span class="keyword">end</span>)
+:set_caption(<span class="string">'Custom Button'</span>)
+:set_tooltip(<span class="string">'Only admins can press this button'</span>)
+:on_click(<span class="keyword">function</span>(event)
+    <span class="keyword">if</span> <span class="keyword">not</span> event.player.admin <span class="keyword">then</span>
+        event.player.<span class="global">print</span>(<span class="string">'You must be admin to use this button'</span>)
+    <span class="keyword">end</span>
+<span class="keyword">end</span>)
+:on_admin_clicked(<span class="keyword">function</span>(event)
+    <span class="comment">-- Yes i know this can just be an if else but its an example
+</span>    game.<span class="global">print</span>(event.player.name..<span class="string">' pressed my admin button'</span>)
+<span class="keyword">end</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Drawing a concept
+</span>custom_button:draw(game.player.gui.left)</code></pre>
     <!-- module usage end -->
 
     <!-- module content header end -->
@@ -404,8 +439,8 @@
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Clones the base Button concept to make a alternative button
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'Button'</span>):clone(<span class="string">'CustomButton'</span>)</code></pre>
     <!-- usage end -->
 
@@ -499,8 +534,8 @@ Gui.get_concept(<span class="string">'Button'</span>):clone(<span class="string"
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adds an on_admin_clicked event to fire when ever an admin clicks the button
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'Button'</span>):clone(<span class="string">'CustomButton'</span>)
 :new_event(<span class="string">'on_admin_clicked'</span>,defines.events.on_gui_click,<span class="keyword">function</span>(event)
     <span class="keyword">return</span> event.player.admin <span class="comment">-- only raise custom event when an admin clicks the button
@@ -563,9 +598,9 @@ Gui.get_concept(<span class="string">'Button'</span>):clone(<span class="string"
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
-Gui.get_concept(<span class="string">'CustomButton'</span>):clone(<span class="string">'MyCustomButton'</span>)
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- When an admin clicks the button a message is printed
+</span><span class="keyword">local</span> custom_button =
+Gui.get_concept(<span class="string">'CustomButton'</span>)
 :on_admin_clicked(<span class="keyword">function</span>(event)
     game.<span class="global">print</span>(event.player.name..<span class="string">' pressed my admin button'</span>)
 <span class="keyword">end</span>)</code></pre>
@@ -654,8 +689,8 @@ Gui.get_concept(<span class="string">'CustomButton'</span>):clone(<span class="s
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Raising the custom event on_admin_clicked
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 
 <span class="comment">-- Note that this is an example and would not work due it expecting a valid element for event.element
@@ -754,8 +789,8 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding caption, sprite, and tooltip to the base button concept
+</span><span class="keyword">local</span> button =
 Gui.get_concept(<span class="string">'Button'</span>)
 :new_property(<span class="string">'tooltip'</span>)
 :new_property(<span class="string">'caption'</span>,<span class="keyword">nil</span>,<span class="keyword">function</span>(properties,value)
@@ -826,12 +861,11 @@ Gui.get_concept(<span class="string">'Button'</span>)
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Setting the caption on the base button concept after a cloning
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'Button'</span>)
 :set_caption(<span class="string">'Default Button'</span>)</code></pre>
-    <pre class="code" data-lang="Lua"><code>
-<span class="comment">-- In our examples CustomButton is cloned from Button, this means the caption property already exists
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- In our examples CustomButton is cloned from Button, this means the caption property already exists
 </span><span class="comment">-- note that what ever values that properties have at the time of cloning are also copied
 </span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
@@ -894,8 +928,8 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding the draw define for the base button concept, we then return the element
+</span><span class="keyword">local</span> button =
 Gui.get_concept(<span class="string">'Button'</span>)
 :define_draw(<span class="keyword">function</span>(properties,parent,element)
     <span class="comment">-- Note that element might be nil if this is the first draw function
@@ -981,8 +1015,8 @@ Gui.get_concept(<span class="string">'Button'</span>)
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Drawing the custom button concept
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 
 <span class="comment">-- Note that the draw function from button was cloned, so unless we want to alter the base button we dont need a new draw define
@@ -1049,8 +1083,8 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="comment">-- Note even thou this is a copy of Button; if Button had an instance store it would not be cloned over
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Allowing storing instances of the custom button; stored by the players index
+</span><span class="comment">-- Note even thou this is a copy of Button; if Button had an instance store it would not be cloned over
 </span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 :define_instance_store(<span class="keyword">function</span>(element)
@@ -1115,8 +1149,8 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Getting all the instances of the player with index 1
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 
 custom_button.get_instances(<span class="number">1</span>) -- player index <span class="number">1</span></code></pre>
@@ -1188,8 +1222,8 @@ custom_button.get_instances(<span class="number">1</span>) -- player index <span
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding an element as a instance for this concept, mostly for internal use
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 
 custom_button.add_instance(element) -- normally <span class="keyword">not</span> needed due to use <span class="keyword">in</span> concept:draw</code></pre>
@@ -1261,12 +1295,11 @@ custom_button.add_instance(element) -- normally <span class="keyword">not</span>
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Changing the font color of all instances for player 1
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 
-<span class="comment">-- Change all the instances to have red text for player 1
-</span>custom_button.update_instances(<span class="number">1</span>,<span class="keyword">function</span>(element)
+custom_button.update_instances(<span class="number">1</span>,<span class="keyword">function</span>(element)
     element.style.font_color = {r=<span class="number">1</span>,g=<span class="number">0</span>,b=<span class="number">0</span>}
 <span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
@@ -1331,8 +1364,8 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="comment">-- Note even thou this is a copy of Button; if Button had an data store it would not be cloned over
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a way to store data for this concept; each player has their own store
+</span><span class="comment">-- Note even thou this is a copy of Button; if Button had an data store it would not be cloned over
 </span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 :define_data_store(<span class="keyword">function</span>(element)
@@ -1397,8 +1430,8 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Getting the stored data for player 1
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 
 custom_button.get_data(<span class="number">1</span>) -- player index <span class="number">1</span></code></pre>
@@ -1470,8 +1503,8 @@ custom_button.get_data(<span class="number">1</span>) -- player index <span clas
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Setting the data for player 1 to a table with two keys
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 
 <span class="comment">-- A table is used to show correct way to use a table with self.update_data
@@ -1532,8 +1565,8 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Clearing the data for player 1
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 
 custom_button.clear_data(<span class="number">1</span>) -- player index <span class="number">1</span></code></pre>
@@ -1605,16 +1638,15 @@ custom_button.clear_data(<span class="number">1</span>) -- player index <span cl
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Updating the clicks key in the concept data for player 1
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 
 custom_button.update_data(<span class="number">1</span>,<span class="keyword">function</span>(tbl)
     tbl.clicks = tbl.clicks + <span class="number">1</span> <span class="comment">-- here we are incrementing the clicks by 1
 </span><span class="keyword">end</span>) <span class="comment">-- player index 1
 </span></code></pre>
-    <pre class="code" data-lang="Lua"><code>
-<span class="comment">-- Alterative method more useful when not using a table
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Updating a value when a table is not used, alterative to get set
 </span><span class="comment">-- so for this example assume that we did custom_button.set_data(1,0)
 </span>custom_button.update_data(<span class="number">1</span>,<span class="keyword">function</span>(value)
     <span class="keyword">return</span> value + <span class="number">1</span> <span class="comment">-- here we are incrementing the value by 1, we may only be tracking clicks
@@ -1710,8 +1742,8 @@ custom_button.update_data(<span class="number">1</span>,<span class="keyword">fu
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a way to sync captions bettween all instances, more useful for things that arnt buttons
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 :define_combined_store(
 <span class="keyword">function</span>(element)
@@ -1774,8 +1806,8 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Setting the caption of this element to be the same as the stored value
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 
 <span class="comment">-- Used internally when first draw and automatically when the store updates
@@ -1831,8 +1863,8 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code>
-<span class="keyword">local</span> custom_button =
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Setting the stored value to be the same as the caption for this element
+</span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 
 <span class="comment">-- You may want to use this with gui events
@@ -1855,7 +1887,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-08-25 00:50:15 UTC</i>
+    <i>Last updated 2019-08-25 01:11:55 UTC</i>
     </div>
     </div>
     </div>

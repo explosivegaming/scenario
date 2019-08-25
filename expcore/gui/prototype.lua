@@ -2,7 +2,8 @@
     @module Gui
     @alias Prototype
 
-    @usage
+@usage DX note - chaning this doc string has no effect on the docs
+
 local button =
 Gui.new_concept('Button')
 :new_event('on_click',defines.events.on_gui_click)
@@ -74,7 +75,7 @@ end
 --[[-- Used to copy all the settings from one concept to another and removing links to the orginal
 @tparam string concept_name the name of the new concept; must be unique
 @treturn GuiConcept the base for building a custom gui
-@usage
+@usage-- Clones the base Button concept to make a alternative button
 local custom_button =
 Gui.get_concept('Button'):clone('CustomButton')
 ]]
@@ -124,7 +125,7 @@ end
 @tparam[opt] defines.events factorio_event when given will fire the custom event when the factorio event is raised
 @tparam[opt] function event_condition used to filter when a factorio event triggers the custom event; if the event contains a reference to an element then names are automatically filtered
 @treturn GuiConcept to allow chaing of functions
-@usage
+@usage-- Adds an on_admin_clicked event to fire when ever an admin clicks the button
 local custom_button =
 Gui.get_concept('Button'):clone('CustomButton')
 :new_event('on_admin_clicked',defines.events.on_gui_click,function(event)
@@ -141,9 +142,9 @@ function Prototype:new_event(event_name,factorio_event,event_condition)
 @function Prototype:on_custom_event
 @tparam function handler the function which will recive the event
 @treturn GuiConcept to allow chaing of functions
-@usage
+@usage-- When an admin clicks the button a message is printed
 local custom_button =
-Gui.get_concept('CustomButton'):clone('MyCustomButton')
+Gui.get_concept('CustomButton')
 :on_admin_clicked(function(event)
     game.print(event.player.name..' pressed my admin button')
 end)
@@ -179,7 +180,7 @@ end
 @tparam string event_name the name of the event that you want to raise
 @tparam[opt={}] table event table containg data you want to send with the event, some keys already included
 @tparam[opt=false] boolean from_factorio internal use, if the raise came from the factorio event handler
-@usage
+@usage-- Raising the custom event on_admin_clicked
 local custom_button =
 Gui.get_concept('CustomButton')
 
@@ -225,7 +226,7 @@ end
 @tparam any default the default value for this property, although not strictly required is is strongly recomented
 @tparam[opt] function setter_callback this function is called when set is called, if not provided then key in concept.properties is updated to new value
 @treturn GuiConcept to allow chaing of functions
-@usage
+@usage-- Adding caption, sprite, and tooltip to the base button concept
 local button =
 Gui.get_concept('Button')
 :new_property('tooltip')
@@ -253,13 +254,12 @@ function Prototype:new_property(property_name,default,setter_callback)
 @function Prototype:set_custom_property
 @tparam any value the value that you want to set for this property
 @treturn GuiConcept to allow chaing of functions
-@usage
+@usage-- Setting the caption on the base button concept after a cloning
 local custom_button =
 Gui.get_concept('Button')
 :set_caption('Default Button')
 
-@usage
--- In our examples CustomButton is cloned from Button, this means the caption property already exists
+@usage-- In our examples CustomButton is cloned from Button, this means the caption property already exists
 -- note that what ever values that properties have at the time of cloning are also copied
 local custom_button =
 Gui.get_concept('CustomButton')
@@ -287,7 +287,7 @@ end
 --[[-- Used to define how the concept is turned into an ingame element or "instance" as we may refer to them
 @tparam function draw_callback the function that will be called to draw/update the instance; this function must return the instance or the new acting instance
 @treturn GuiConcept to allow chaing of functions
-@usage
+@usage-- Adding the draw define for the base button concept, we then return the element
 local button =
 Gui.get_concept('Button')
 :define_draw(function(properties,parent,element)
@@ -332,7 +332,7 @@ end
 --[[-- Calls all the draw functions in order to create this concept in game; will also store and sync the instance if stores are used
 @tparam LuaGuiElement parent_element the element that the concept will use as a base
 @treturn LuaGuiElement the element that was created and then passed though and returned by the draw functions
-@usage
+@usage-- Drawing the custom button concept
 local custom_button =
 Gui.get_concept('CustomButton')
 
@@ -372,7 +372,7 @@ end
 --[[-- Adds an instance store to the concept; when a new instance is made it is stored so you can access it later
 @tparam[opt] function category_callback when given will act as a way to turn an element into a string to act as a key; keys returned can over lap
 @treturn GuiConcept to allow chaing of functions
-@usage
+@usage-- Allowing storing instances of the custom button; stored by the players index
 -- Note even thou this is a copy of Button; if Button had an instance store it would not be cloned over
 local custom_button =
 Gui.get_concept('CustomButton')
@@ -392,7 +392,7 @@ function Prototype:define_instance_store(category_callback)
 @function Prototype.get_instances
 @tparam[opt] ?string|LuaGuiElement category the category to get, can only be nil if categories are not used
 @treturn table a table which contains all the instances
-@usage
+@usage-- Getting all the instances of the player with index 1
 local custom_button =
 Gui.get_concept('CustomButton')
 
@@ -406,7 +406,7 @@ custom_button.get_instances(1) -- player index 1
 @function Prototype.add_instance
 @tparam LuaGuiElement element the element that will be added as an instance
 @tparam[opt] string category the category to add this element under, if nil the category callback is used to assign one
-@usage
+@usage-- Adding an element as a instance for this concept, mostly for internal use
 local custom_button =
 Gui.get_concept('CustomButton')
 
@@ -428,11 +428,10 @@ custom_button.add_instance(element) -- normally not needed due to use in concept
 @function Prototype.update_instances
 @tparam[opt] ?string|LuaGuiElement category the category to get, can only be nil if categories are not used
 @tparam function update_callback the function which is called on each instance, recives other args passed to update_instances
-@usage
+@usage-- Changing the font color of all instances for player 1
 local custom_button =
 Gui.get_concept('CustomButton')
 
--- Change all the instances to have red text for player 1
 custom_button.update_instances(1,function(element)
     element.style.font_color = {r=1,g=0,b=0}
 end)
@@ -465,7 +464,7 @@ end
 --[[-- Adds a data store to this concept which allows you to store synced/percistent data between instances
 @tparam[opt] function category_callback when given will act as a way to turn an element into a string to act as a key; keys returned can over lap
 @treturn GuiConcept to allow chaing of functions
-@usage
+@usage-- Adding a way to store data for this concept; each player has their own store
 -- Note even thou this is a copy of Button; if Button had an data store it would not be cloned over
 local custom_button =
 Gui.get_concept('CustomButton')
@@ -491,7 +490,7 @@ function Prototype:define_data_store(category_callback)
 @function Prototype.get_data
 @tparam[opt] ?string|LuaGuiElement category the category to get, can only be nil if categories are not used
 @treturn any the data that you had stored in this location
-@usage
+@usage-- Getting the stored data for player 1
 local custom_button =
 Gui.get_concept('CustomButton')
 
@@ -505,7 +504,7 @@ custom_button.get_data(1) -- player index 1
 @function Prototype.set_data
 @tparam[opt] ?string|LuaGuiElement category the category to set, can only be nil if categories are not used
 @tparam any value the data that you want to stored in this location
-@usage
+@usage-- Setting the data for player 1 to a table with two keys
 local custom_button =
 Gui.get_concept('CustomButton')
 
@@ -523,7 +522,7 @@ custom_button.set_data(1,{
 --[[-- Clears the data that is stored for this category
 @function Prototype.clear_data
 @tparam[opt] ?string|LuaGuiElement category the category to clear, can only be nil if categories are not used
-@usage
+@usage-- Clearing the data for player 1
 local custom_button =
 Gui.get_concept('CustomButton')
 
@@ -537,7 +536,7 @@ custom_button.clear_data(1) -- player index 1
 @function Prototype.update_data
 @tparam[opt] ?string|LuaGuiElement category the category to clear, can only be nil if categories are not used
 @tparam function update_callback the function which is called to update the data
-@usage
+@usage-- Updating the clicks key in the concept data for player 1
 local custom_button =
 Gui.get_concept('CustomButton')
 
@@ -545,8 +544,7 @@ custom_button.update_data(1,function(tbl)
     tbl.clicks = tbl.clicks + 1 -- here we are incrementing the clicks by 1
 end) -- player index 1
 
-@usage
--- Alterative method more useful when not using a table
+@usage-- Updating a value when a table is not used, alterative to get set
 -- so for this example assume that we did custom_button.set_data(1,0)
 custom_button.update_data(1,function(value)
     return value + 1 -- here we are incrementing the value by 1, we may only be tracking clicks
@@ -564,7 +562,7 @@ end
 @tparam function get_callback the function which is called when you set the store from an instance
 @tparam function set_callback the function which is called when you update an instance using the value in the store
 @treturn GuiConcept to allow chaing of functions
-@usage
+@usage-- Adding a way to sync captions bettween all instances, more useful for things that arnt buttons
 local custom_button =
 Gui.get_concept('CustomButton')
 :define_combined_store(
@@ -596,7 +594,7 @@ function Prototype:define_combined_store(category_callback,get_callback,set_call
 --[[-- Will set the state of an instance based on the value in the store
 @function Prototype.set_instance_from_store
 @tparam LuaGuiElement the element that you want to have update
-@usage
+@usage-- Setting the caption of this element to be the same as the stored value
 local custom_button =
 Gui.get_concept('CustomButton')
 
@@ -610,7 +608,7 @@ custom_button.set_instance_from_store(element)
 --[[-- Will set the value in the store and update the other instances based on the instance given
 @function Prototype.set_store_from_instance
 @tparam LuaGuiElement the element that you want to use to update the store
-@usage
+@usage-- Setting the stored value to be the same as the caption for this element
 local custom_button =
 Gui.get_concept('CustomButton')
 
