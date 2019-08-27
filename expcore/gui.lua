@@ -17,6 +17,31 @@ end)
     properties.caption = nil
     properties.type = 'sprite-button'
 end)
+:define_draw(function(properties,parent,element)
+    -- Note that element might be nil if this is the first draw function
+    -- in this case button is a new concept so we know this is the first function and element is nil
+    if properties.type == 'button' then
+        element = parent.draw{
+            type = properties.type,
+            name = properties.name,
+            caption = properties.caption,
+            tooltip = properties.tooltip
+        }
+
+    else
+        element = parent.draw{
+            type = properties.type,
+            name = properties.name,
+            sprite = properties.sprite,
+            tooltip = properties.tooltip
+        }
+
+    end
+
+    -- We must return the element or what we want to be seen as the instance, this is so other draw functions have access to it
+    -- for example if our custom button defined a draw function to change the font color to red
+    return element
+end)
 
 @usage-- Makeing a alternative button based on the first
 local custom_button =

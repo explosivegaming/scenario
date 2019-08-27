@@ -51,5 +51,5 @@ return {
     'config.expcore-commands.auth_runtime_disable', -- allows commands to be enabled and disabled during runtime
     'config.permission_groups', -- loads some predefined permission groups
     'config.roles', -- loads some predefined roles
-    --'expcore.gui.test' -- loads multiple gui defines to test the gui system
+    'expcore.gui.test' -- loads multiple gui defines to test the gui system
 }

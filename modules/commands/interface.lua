@@ -16,7 +16,7 @@ local interface_modules = {
     ['Group']='expcore.permission_groups',
     ['Roles']='expcore.roles',
     ['Store']='expcore.store',
-    --['Gui']='expcore.gui',
+    ['Gui']='expcore.gui',
     ['Sudo']='expcore.sudo'
 }
 

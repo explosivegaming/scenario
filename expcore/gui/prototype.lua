@@ -18,6 +18,31 @@ end)
     properties.caption = nil
     properties.type = 'sprite-button'
 end)
+:define_draw(function(properties,parent,element)
+    -- Note that element might be nil if this is the first draw function
+    -- in this case button is a new concept so we know this is the first function and element is nil
+    if properties.type == 'button' then
+        element = parent.draw{
+            type = properties.type,
+            name = properties.name,
+            caption = properties.caption,
+            tooltip = properties.tooltip
+        }
+
+    else
+        element = parent.draw{
+            type = properties.type,
+            name = properties.name,
+            sprite = properties.sprite,
+            tooltip = properties.tooltip
+        }
+
+    end
+
+    -- We must return the element or what we want to be seen as the instance, this is so other draw functions have access to it
+    -- for example if our custom button defined a draw function to change the font color to red
+    return element
+end)
 
 local custom_button =
 button:clone('CustomButton')
@@ -117,7 +142,25 @@ function Prototype:clone(concept_name)
         concept.set_store_from_instance = nil
     end
 
+    -- Sets the concept name
+    concept:change_name()
+
     return concept
+end
+
+--[[-- Used internally to save concept names to the core gui module
+@function Prototype:change_name
+@tparam[opt=self.name] string new_name the new name of the concept
+@usage-- Internal Saving
+-- this is never needed to be done, internal use only!
+local button = Gui.get_concept('Button')
+button:change_name('Not Button')
+]]
+function Prototype:change_name(new_name)
+    -- over writen in core file
+    self.name = new_name or self.name
+    self.properties.name = self.name
+    return self
 end
 
 --[[-- Adds a new event trigger to the concept which can be linked to a factorio event
@@ -293,6 +336,7 @@ Gui.get_concept('Button')
 :define_draw(function(properties,parent,element)
     -- Note that element might be nil if this is the first draw function
     -- for this example we assume button was cloned from Prototype and so has no other draw functions defined
+    -- this means that there is no element yet and what we return will be the first time the element is returned
     -- although not shown here you also can recive any extra arguments here from the call to draw
     if properties.type == 'button' then
         element = parent.draw{
@@ -312,8 +356,8 @@ Gui.get_concept('Button')
 
     end
 
-    -- We must return the element or what we want to be seen as the instance
-    -- this is so other draw functions have access to it, say if our custom button defined a draw function to change the font color to red
+    -- We must return the element or what we want to be seen as the instance, this is so other draw functions have access to it
+    -- for example if our custom button defined a draw function to change the font color to red
     return element
 end)
 ]]
