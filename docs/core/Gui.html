@@ -41,9 +41,12 @@
     <li class="nav-item">
     <h2>Sections</h2>
     <ul class="nav">
+    <li class="nav-item"><a href="#Elements"><span class="fragment-hashtag">#</span> Elements</a></li>
+    <li class="nav-item"><a href="#Core"><span class="fragment-hashtag">#</span> Core </a></li>
     <li class="nav-item"><a href="#Concept_Base"><span class="fragment-hashtag">#</span> Concept Base </a></li>
     <li class="nav-item"><a href="#Concept_Instances"><span class="fragment-hashtag">#</span> Concept Instances </a></li>
     <li class="nav-item"><a href="#Concept_Data"><span class="fragment-hashtag">#</span> Concept Data </a></li>
+    <li class="nav-item"><a href="#Tests"><span class="fragment-hashtag">#</span> Tests </a></li>
     </ul>
     </li>
     </ul>
@@ -203,9 +206,12 @@
     <li class="nav-item">
     <h4>Jump to Section</h4>
     <ul class="nav">
+    <li class="nav-item"><a href="#Elements"><span class="fragment-hashtag">#</span> Elements</a></li>
+    <li class="nav-item"><a href="#Core"><span class="fragment-hashtag">#</span> Core </a></li>
     <li class="nav-item"><a href="#Concept_Base"><span class="fragment-hashtag">#</span> Concept Base </a></li>
     <li class="nav-item"><a href="#Concept_Instances"><span class="fragment-hashtag">#</span> Concept Instances </a></li>
     <li class="nav-item"><a href="#Concept_Data"><span class="fragment-hashtag">#</span> Concept Data </a></li>
+    <li class="nav-item"><a href="#Tests"><span class="fragment-hashtag">#</span> Tests </a></li>
     </ul>
     </li>
     </ul>
@@ -248,6 +254,31 @@ Gui.new_concept(<span class="string">'Button'</span>)
     properties.image = value
     properties.caption = <span class="keyword">nil</span>
     properties.<span class="global">type</span> = <span class="string">'sprite-button'</span>
+<span class="keyword">end</span>)
+:define_draw(<span class="keyword">function</span>(properties,parent,element)
+    <span class="comment">-- Note that element might be nil if this is the first draw function
+</span>    <span class="comment">-- in this case button is a new concept so we know this is the first function and element is nil
+</span>    <span class="keyword">if</span> properties.<span class="global">type</span> == <span class="string">'button'</span> <span class="keyword">then</span>
+        element = parent.add{
+            <span class="global">type</span> = properties.<span class="global">type</span>,
+            name = properties.name,
+            caption = properties.caption,
+            tooltip = properties.tooltip
+        }
+
+    <span class="keyword">else</span>
+        element = parent.add{
+            <span class="global">type</span> = properties.<span class="global">type</span>,
+            name = properties.name,
+            sprite = properties.sprite,
+            tooltip = properties.tooltip
+        }
+
+    <span class="keyword">end</span>
+
+    <span class="comment">-- We must return the element or what we want to be seen as the instance, this is so other draw functions have access to it
+</span>    <span class="comment">-- for example if our custom button defined a draw function to change the font color to red
+</span>    <span class="keyword">return</span> element
 <span class="keyword">end</span>)</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Makeing a alternative button based on the first
 </span><span class="keyword">local</span> custom_button =
@@ -275,6 +306,50 @@ button:clone(<span class="string">'CustomButton'</span>)
     <!-- module section list start -->
     <table class="section-content-list">
     <thead>
+    <h3><a href="#Elements">Elements</a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#button">button</a></td>
+    <td class="summary">The basic button element</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#frame">frame</a></td>
+    <td class="summary">The basic frame element</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Core">Core </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#require_concept">require_concept(concept)</a></td>
+    <td class="summary">Loads a concept from the concepts file, used internally</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#get_concept">get_concept(name)</a></td>
+    <td class="summary">Gets the gui concept with this name</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Prototype:change_name">Prototype:change_name([new_name=self.name])</a></td>
+    <td class="summary">Used internally to save concept names to the core gui module</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#new_concept">new_concept(name)</a></td>
+    <td class="summary">Returns a new gui concept with no properties or events</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#clone_concept">clone_concept(name, new_name)</a></td>
+    <td class="summary">Making anew concept based on the properties and drawing of another</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
     <h3><a href="#Concept_Base">Concept Base </a></h3>
     <span></span>
     </thead>
@@ -282,6 +357,10 @@ button:clone(<span class="string">'CustomButton'</span>)
     <tr>
     <td class="name"><a href="#Prototype:clone">Prototype:clone(concept_name)</a></td>
     <td class="summary">Used to copy all the settings from one concept to another and removing links to the orginal</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Prototype:change_name">Prototype:change_name([new_name=self.name])</a></td>
+    <td class="summary">Used internally to save concept names to the core gui module</td>
     </tr>
     <tr>
     <td class="name"><a href="#Prototype:new_event">Prototype:new_event(event_name[, factorio_event][, event_condition])</a></td>
@@ -377,11 +456,490 @@ button:clone(<span class="string">'CustomButton'</span>)
     </tr>
     </tbody>
     </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Tests">Tests </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#run_tests">run_tests(player[, category])</a></td>
+    <td class="summary">Runs a set of gui tests to ensure that the system is working</td>
+    </tr>
+    </tbody>
+    </table>
     <!-- module section list end -->
 
     <br />
 
     <!-- section start -->
+    <h3><span id="Elements" class="section-title"><a href="#Elements">Elements</a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="button">button</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">The basic button element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Properties / Events:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>on_click</em></strong>
+
+    <strong> : </strong>
+
+
+     fired when the player clicks the button
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>on_left_click</em></strong>
+
+    <strong> : </strong>
+
+
+     fired when the player clicks with the right mouse button
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>on_left_click</em></strong>
+
+    <strong> : </strong>
+
+
+     fired when the player clicks with the right mouse button
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>caption</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#LocalisedString">LocalisedString</a></span>)
+
+     the message that is shown on the button
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>tooltip</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#LocalisedString">LocalisedString</a></span>)
+
+     the tooltip that shows when a player hovers over the button
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>sprite</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><span class="type">SpritePath</span></span>)
+
+     upto three sprites in the order: default, hovered, clicked
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#frame" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="frame">frame</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">The basic frame element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Properties / Events:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>title</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#LocalisedString">LocalisedString</a></span>)
+
+     the title that will show in the frame
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Core" class="section-title"><a href="#Core">Core </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#require_concept" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="require_concept">require_concept(concept)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Loads a concept from the concepts file, used internally</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>concept</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the concept to require
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Load a base concept
+</span>Gui.require_concept(<span class="string">'frame'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#get_concept" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_concept">get_concept(name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets the gui concept with this name</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the concept that you want to get
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Getting a gui concept
+</span><span class="keyword">local</span> button = Gui.get_concept(<span class="string">'Button'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Prototype:change_name" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Prototype:change_name">Prototype:change_name([new_name=self.name])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Used internally to save concept names to the core gui module</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>new_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the new name of the concept
+
+    (<em>default</em>: self.name)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Internal Saving
+</span><span class="comment">-- this is never needed to be done, internal use only!
+</span><span class="keyword">local</span> button = Gui.get_concept(<span class="string">'Button'</span>)
+button:change_name(<span class="string">'Not Button'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#new_concept" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="new_concept">new_concept(name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Returns a new gui concept with no properties or events</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name that you want this concept to have
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a new concept, see module usage
+</span><span class="keyword">local</span> button = Gui.new_concept(<span class="string">'Button'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#clone_concept" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="clone_concept">clone_concept(name, new_name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Making anew concept based on the properties and drawing of another</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the concept that you want as the base
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>new_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name that you want the new concept to have
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a new concept from another, see module usage
+</span><span class="keyword">local</span> custom_button = Gui.clone_concept(<span class="string">'Button'</span>,<span class="string">'CustomButton'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    </dl>
     <h3><span id="Concept_Base" class="section-title"><a href="#Concept_Base">Concept Base </a></span></h3>
     <dl class="section-body-container">
     <dt>
@@ -442,6 +1000,62 @@ button:clone(<span class="string">'CustomButton'</span>)
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Clones the base Button concept to make a alternative button
 </span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'Button'</span>):clone(<span class="string">'CustomButton'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Prototype:change_name" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Prototype:change_name">Prototype:change_name([new_name=self.name])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Used internally to save concept names to the core gui module</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>new_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the new name of the concept
+
+    (<em>default</em>: self.name)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Internal Saving
+</span><span class="comment">-- this is never needed to be done, internal use only!
+</span><span class="keyword">local</span> button = Gui.get_concept(<span class="string">'Button'</span>)
+button:change_name(<span class="string">'Not Button'</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -934,6 +1548,7 @@ Gui.get_concept(<span class="string">'Button'</span>)
 :define_draw(<span class="keyword">function</span>(properties,parent,element)
     <span class="comment">-- Note that element might be nil if this is the first draw function
 </span>    <span class="comment">-- for this example we assume button was cloned from Prototype and so has no other draw functions defined
+</span>    <span class="comment">-- this means that there is no element yet and what we return will be the first time the element is returned
 </span>    <span class="comment">-- although not shown here you also can recive any extra arguments here from the call to draw
 </span>    <span class="keyword">if</span> properties.<span class="global">type</span> == <span class="string">'button'</span> <span class="keyword">then</span>
         element = parent.draw{
@@ -953,8 +1568,8 @@ Gui.get_concept(<span class="string">'Button'</span>)
 
     <span class="keyword">end</span>
 
-    <span class="comment">-- We must return the element or what we want to be seen as the instance
-</span>    <span class="comment">-- this is so other draw functions have access to it, say if our custom button defined a draw function to change the font color to red
+    <span class="comment">-- We must return the element or what we want to be seen as the instance, this is so other draw functions have access to it
+</span>    <span class="comment">-- for example if our custom button defined a draw function to change the font color to red
 </span>    <span class="keyword">return</span> element
 <span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
@@ -1873,6 +2488,79 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 
     </dd>
     </dl>
+    <h3><span id="Tests" class="section-title"><a href="#Tests">Tests </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#run_tests" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="run_tests">run_tests(player[, category])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Runs a set of gui tests to ensure that the system is working</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player that the guis are made for and who recives the results
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>category</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     when given only tests in this category are ran
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Run all gui tests
+</span>Gui.run_tests(game.player)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    </dl>
 
     <!-- section end -->
 
@@ -1887,7 +2575,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-08-25 01:11:55 UTC</i>
+    <i>Last updated 2019-08-27 21:07:36 UTC</i>
     </div>
     </div>
     </div>

@@ -21,7 +21,7 @@ end)
     -- Note that element might be nil if this is the first draw function
     -- in this case button is a new concept so we know this is the first function and element is nil
     if properties.type == 'button' then
-        element = parent.draw{
+        element = parent.add{
             type = properties.type,
             name = properties.name,
             caption = properties.caption,
@@ -29,7 +29,7 @@ end)
         }
 
     else
-        element = parent.draw{
+        element = parent.add{
             type = properties.type,
             name = properties.name,
             sprite = properties.sprite,
@@ -66,5 +66,8 @@ custom_button:draw(game.player.gui.left)
 ]]
 
 local Gui = require 'expcore.gui.core'
+
+Gui.require_concept('frame')
+Gui.require_concept('button')
 
 return Gui

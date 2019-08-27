@@ -14,6 +14,15 @@ local Gui = {
     concepts = {}
 }
 
+--[[-- Loads a concept from the concepts file, used internally
+@tparam string concept the name of the concept to require
+@usage-- Load a base concept
+Gui.require_concept('frame')
+]]
+function Gui.require_concept(concept)
+    require('expcore.gui.concepts.'..concept)
+end
+
 --[[-- Gets the gui concept with this name
 @tparam string name the name of the concept that you want to get
 @usage-- Getting a gui concept
@@ -64,8 +73,8 @@ local custom_button = Gui.clone_concept('Button','CustomButton')
 function Gui.clone_concept(name,new_name)
     local concept = Gui.concepts[name] or error('Gui concept "'..name..'" is not defind',2)
 
-    if Gui.concepts[name] then
-        error('Gui concept "'..name..'" is already defind',2)
+    if Gui.concepts[new_name] then
+        error('Gui concept "'..new_name..'" is already defind',2)
     end
 
     return concept:clone(new_name)

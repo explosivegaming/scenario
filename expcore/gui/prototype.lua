@@ -76,22 +76,24 @@ local Factorio_Events = {}
 local Prototype = {
     draw_callbacks = {},
     properties = {},
+    factorio_events = {},
     events = {}
 }
 
 --- Acts as a gernal handler for any factorio event
 local function factorio_event_handler(event)
     local element = event.element
+    local event_handlers = Factorio_Events[event.name]
     if element then
         if not element.valid then return end
-        local concept_name = element.name
-        local concept_event = Factorio_Events[event.name][concept_name]
-        concept_event[1]:raise_event(concept_event[2],event,true)
+        local concept_event_raise = event_handlers[element.name]
+        if concept_event_raise then
+            concept_event_raise(event)
+        end
 
     else
-        local events_handlers = Factorio_Events[event.name]
-        for _,concept_event in pairs(events_handlers) do
-            concept_event[1]:raise_event(concept_event[2],event,true)
+        for _,concept_event_raise in pairs(event_handlers) do
+            concept_event_raise(event)
         end
 
     end
@@ -110,11 +112,20 @@ function Prototype:clone(concept_name)
     -- Replace name of the concept
     concept.name = concept_name
     concept.properties.name = concept_name
+    concept:change_name()
 
     -- Remove all event handlers that were copied
     concept.events = {}
     for event_name,_ in pairs(self.events) do
         concept.events[event_name] = {}
+    end
+
+    -- Remakes even handlers for factorio
+    concept.factorio_events = {}
+    for event_name,factorio_event in pairs(self.factorio_events) do
+        Factorio_Events[factorio_event][concept.name] = function(event)
+            concept:raise_event(event_name,event,true)
+        end
     end
 
     -- Remove all refrences to an instance store
@@ -141,9 +152,6 @@ function Prototype:clone(concept_name)
         concept.set_instance_from_store = nil
         concept.set_store_from_instance = nil
     end
-
-    -- Sets the concept name
-    concept:change_name()
 
     return concept
 end
@@ -201,19 +209,24 @@ end)
         end
 
         local handlers = concept.events[event_name]
-        handlers[#handlers] = handler
+        handlers[#handlers+1] = handler
 
         return concept
     end
 
     -- Adds the factorio event handler if this event is linked to one
     if factorio_event then
+        self.factorio_events[event_name] = factorio_event
         self.events[event_name].factorio_handler = event_condition
+
         if not Factorio_Events[factorio_event] then
             Factorio_Events[factorio_event] = {}
             Event.add(factorio_event,factorio_event_handler)
         end
-        Factorio_Events[factorio_event][self.name] = {self,event_name}
+
+        Factorio_Events[factorio_event][self.name] = function(event)
+            self:raise_event(event_name,event,true)
+        end
     end
 
     return self
@@ -259,7 +272,7 @@ function Prototype:raise_event(event_name,event,from_factorio)
     for _,handler in ipairs(handlers) do
         local success, err = pcall(handler,event)
         if not success then
-            print('Gui event handler error with '..self.name..'/'..event_name..': '..err)
+            error('Gui event handler error with '..self.name..'/'..event_name..': '..err)
         end
     end
 end
@@ -314,7 +327,7 @@ Gui.get_concept('CustomButton')
             -- Call the setter method to update values if present
             local success, err = pcall(setter_callback,concept.properties,value,...)
             if not success then
-                print('Gui property handler error with '..concept.name..'/'..property_name..': '..err)
+                error('Gui property handler error with '..concept.name..'/'..property_name..': '..err)
             end
         else
             -- Otherwise just update the key
@@ -392,7 +405,7 @@ function Prototype:draw(parent_element,...)
         if success and rtn then
             element = rtn
         elseif not success then
-            print('Gui draw handler error with '..self.name..': '..rtn)
+            error('Gui draw handler error with '..self.name..': '..rtn)
         end
     end
 
