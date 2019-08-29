@@ -10,9 +10,7 @@ local Gui = require 'expcore.gui.core'
 @tparam ?string|Concepts.LocalisedString title the title that will show in the frame
 ]]
 Gui.new_concept('frame')
-:new_property('title',function(properties,value)
-    properties.title = value
-end)
+:new_property('title')
 :define_draw(function(properties,parent,element)
     element = parent.add{
         name = properties.name,

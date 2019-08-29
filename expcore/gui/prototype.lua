@@ -148,8 +148,8 @@ function Prototype:clone(concept_name)
     end
 
     -- Remove all refrences to a combined store
-    if concept.set_instance_from_store then
-        concept.set_instance_from_store = nil
+    if concept.sync_instance then
+        concept.sync_instance = nil
         concept.set_store_from_instance = nil
     end
 
@@ -175,7 +175,7 @@ end
 @tparam string event_name the name of the event to add, must be unique, recomented to start with "on_"
 @tparam[opt] defines.events factorio_event when given will fire the custom event when the factorio event is raised
 @tparam[opt] function event_condition used to filter when a factorio event triggers the custom event; if the event contains a reference to an element then names are automatically filtered
-@treturn GuiConcept to allow chaing of functions
+@treturn GuiConcept to allow chaining of functions
 @usage-- Adds an on_admin_clicked event to fire when ever an admin clicks the button
 local custom_button =
 Gui.get_concept('Button'):clone('CustomButton')
@@ -192,7 +192,7 @@ function Prototype:new_event(event_name,factorio_event,event_condition)
 --[[-- Adds a custom event handler, replace with the name of the event
 @function Prototype:on_custom_event
 @tparam function handler the function which will recive the event
-@treturn GuiConcept to allow chaing of functions
+@treturn GuiConcept to allow chaining of functions
 @usage-- When an admin clicks the button a message is printed
 local custom_button =
 Gui.get_concept('CustomButton')
@@ -281,7 +281,7 @@ end
 @tparam string property_name the name of the new property, must be unique
 @tparam any default the default value for this property, although not strictly required is is strongly recomented
 @tparam[opt] function setter_callback this function is called when set is called, if not provided then key in concept.properties is updated to new value
-@treturn GuiConcept to allow chaing of functions
+@treturn GuiConcept to allow chaining of functions
 @usage-- Adding caption, sprite, and tooltip to the base button concept
 local button =
 Gui.get_concept('Button')
@@ -309,7 +309,7 @@ function Prototype:new_property(property_name,default,setter_callback)
 --[[-- Sets a new value for a property, triggers setter method if provided, replace with property name
 @function Prototype:set_custom_property
 @tparam any value the value that you want to set for this property
-@treturn GuiConcept to allow chaing of functions
+@treturn GuiConcept to allow chaining of functions
 @usage-- Setting the caption on the base button concept after a cloning
 local custom_button =
 Gui.get_concept('Button')
@@ -342,7 +342,7 @@ end
 
 --[[-- Used to define how the concept is turned into an ingame element or "instance" as we may refer to them
 @tparam function draw_callback the function that will be called to draw/update the instance; this function must return the instance or the new acting instance
-@treturn GuiConcept to allow chaing of functions
+@treturn GuiConcept to allow chaining of functions
 @usage-- Adding the draw define for the base button concept, we then return the element
 local button =
 Gui.get_concept('Button')
@@ -415,8 +415,8 @@ function Prototype:draw(parent_element,...)
     end
 
     -- Syncs the instance if there is a combined store
-    if self.set_instance_from_store then
-        self.set_instance_from_store(element)
+    if self.sync_instance then
+        self.sync_instance(element)
     end
 
     return element
@@ -428,7 +428,7 @@ end
 
 --[[-- Adds an instance store to the concept; when a new instance is made it is stored so you can access it later
 @tparam[opt] function category_callback when given will act as a way to turn an element into a string to act as a key; keys returned can over lap
-@treturn GuiConcept to allow chaing of functions
+@treturn GuiConcept to allow chaining of functions
 @usage-- Allowing storing instances of the custom button; stored by the players index
 -- Note even thou this is a copy of Button; if Button had an instance store it would not be cloned over
 local custom_button =
@@ -442,7 +442,11 @@ function Prototype:define_instance_store(category_callback)
 
     local valid_category = category_callback and type(category_callback) == 'function'
     local function get_category(category)
-        return valid_category and type(category) == 'table' and category_callback(category) or category
+        if type(category) == 'table' and type(category.__self) == 'userdata' then
+            return valid_category and category_callback(category) or nil
+        else
+            return category
+        end
     end
 
 --[[-- Gets all insatnces in a category, category may be nil to return all
@@ -494,9 +498,9 @@ custom_button.update_instances(1,function(element)
 end)
 ]]
     function self.update_instances(category,update_callback,...)
-        local arg1
+        local args
         if type(category) == 'function' then
-            arg1 = update_callback
+            args = {update_callback,...}
             update_callback = category
             category = nil
         end
@@ -507,7 +511,11 @@ end)
                 instances[key] = nil
             end
 
-            update_callback(instance,arg1,...)
+            if args then
+                update_callback(instance,unpack(args))
+            else
+                update_callback(instance,...)
+            end
         end
     end
 
@@ -520,7 +528,7 @@ end
 
 --[[-- Adds a data store to this concept which allows you to store synced/percistent data between instances
 @tparam[opt] function category_callback when given will act as a way to turn an element into a string to act as a key; keys returned can over lap
-@treturn GuiConcept to allow chaing of functions
+@treturn GuiConcept to allow chaining of functions
 @usage-- Adding a way to store data for this concept; each player has their own store
 -- Note even thou this is a copy of Button; if Button had an data store it would not be cloned over
 local custom_button =
@@ -540,7 +548,11 @@ function Prototype:define_data_store(category_callback)
 
     local valid_category = category_callback and type(category_callback) == 'function'
     local function get_category(category)
-        return valid_category and type(category) == 'table' and category_callback(category) or category
+        if type(category) == 'table' and type(category.__self) == 'userdata' then
+            return valid_category and category_callback(category) or nil
+        else
+            return category
+        end
     end
 
 --[[-- Gets the data that is stored for this category
@@ -614,66 +626,47 @@ end) -- player index 1
     return self
 end
 
---[[-- Used to add a both instance and data stores which are linked together, new instances are synced to current value, changing one instances changes them all
+--[[-- Used to add a both instance and data stores which are linked together, new instances are synced to current value, changing one instance changes them all
 @tparam[opt] function category_callback when given will act as a way to turn an element into a string to act as a key; keys returned can over lap
-@tparam function get_callback the function which is called when you set the store from an instance
-@tparam function set_callback the function which is called when you update an instance using the value in the store
-@treturn GuiConcept to allow chaing of functions
-@usage-- Adding a way to sync captions bettween all instances, more useful for things that arnt buttons
+@tparam function sync_callback the function which is called to update an instance to match the store
+@treturn GuiConcept to allow chaining of functions
+@usage-- Adding a way to sync enabled state bettween all instances, more useful for things that arnt buttons
 local custom_button =
 Gui.get_concept('CustomButton')
 :define_combined_store(
 function(element)
     return element.player_index -- The data is stored based on player id
 end,
-function(element)
-   return element.caption -- We want to store the caption
-end,
 function(element,value)
-    element.caption = value -- This is the inverse of above
+    element.enabled = value -- We will use custom_button.set_data(element,value) to trigger this
 end)
 ]]
-function Prototype:define_combined_store(category_callback,get_callback,set_callback)
-    if set_callback == nil then
-        set_callback = get_callback
-        get_callback = category_callback
+function Prototype:define_combined_store(category_callback,sync_callback)
+    if sync_callback == nil then
+        sync_callback = category_callback
         category_callback = nil
     end
 
     self:define_data_store(category_callback)
-    self:define_instance_Store(category_callback)
+    self:define_instance_store(category_callback)
 
     -- Will update all instances when the data store updates
     self:on_data_store_update(function(event)
-        self.update_instances(event.category,set_callback,event.value)
+        self.update_instances(event.category,sync_callback,event.value)
     end)
 
---[[-- Will set the state of an instance based on the value in the store
-@function Prototype.set_instance_from_store
-@tparam LuaGuiElement the element that you want to have update
+--[[-- Will sync an instance to match the stored value based on the given sync callback
+@function Prototype.sync_instance
+@tparam LuaGuiElement element the element that you want to have update
 @usage-- Setting the caption of this element to be the same as the stored value
 local custom_button =
 Gui.get_concept('CustomButton')
 
 -- Used internally when first draw and automatically when the store updates
-custom_button.set_instance_from_store(element)
+custom_button.sync_instance(element)
 ]]
-    function self.set_instance_from_store(element)
-        set_callback(element,self.get_data(element))
-    end
-
---[[-- Will set the value in the store and update the other instances based on the instance given
-@function Prototype.set_store_from_instance
-@tparam LuaGuiElement the element that you want to use to update the store
-@usage-- Setting the stored value to be the same as the caption for this element
-local custom_button =
-Gui.get_concept('CustomButton')
-
--- You may want to use this with gui events
-custom_button.set_store_from_instance(element)
-]]
-    function self.set_store_from_instance(element)
-        self.set_data(element,get_callback(element))
+    function self.sync_instance(element)
+        sync_callback(element,self.get_data(element))
     end
 
     return self

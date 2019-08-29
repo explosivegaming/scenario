@@ -7,7 +7,7 @@
 -- Functions that act as a landing point for the other funtions
 -- @section core
 
-local Event = require 'utils.event' -- @dep utils.event
+local Game = require 'utils.game' -- @dep utils.game
 local Prototype = require 'expcore.gui.prototype'
 
 local Gui = {
@@ -78,6 +78,42 @@ function Gui.clone_concept(name,new_name)
     end
 
     return concept:clone(new_name)
+end
+
+--[[-- A categorize function to be used with add_store, each player has their own category
+@tparam LuaGuiElement element the element that will be converted to a string
+@treturn string the player's name who owns this element
+@usage-- Storing data on a per player basis, can be used with instances
+Gui.get_concept('CustomButton')
+:define_data_store(Gui.categorize_by_player)
+]]
+function Gui.categorize_by_player(element)
+    local player = Game.get_player_by_index(element.player_index)
+    return player.name
+end
+
+--[[-- A categorize function to be used with add_store, each force has its own category
+@tparam LuaGuiElement element the element that will be converted to a string
+@treturn string the player's force name who owns this element
+@usage-- Storing data on a per force basis, can be used with instances
+Gui.get_concept('CustomButton')
+:define_data_store(Gui.categorize_by_force)
+]]
+function Gui.categorize_by_force(element)
+    local player = Game.get_player_by_index(element.player_index)
+    return player.force.name
+end
+
+--[[-- A categorize function to be used with add_store, each surface has its own category
+@tparam LuaGuiElement element the element that will be converted to a string
+@treturn string the player's surface name who owns this element
+@usage-- Storing data on a per surface basis, can be used with instances
+Gui.get_concept('CustomButton')
+:define_data_store(Gui.categorize_by_surface)
+]]
+function Gui.categorize_by_surface(element)
+    local player = Game.get_player_by_index(element.player_index)
+    return player.surface.name
 end
 
 return Gui

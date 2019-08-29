@@ -315,6 +315,10 @@ button:clone(<span class="string">'CustomButton'</span>)
     <td class="summary">The basic button element</td>
     </tr>
     <tr>
+    <td class="name"><a href="#checkbox">checkbox</a></td>
+    <td class="summary">The basic checkbox element</td>
+    </tr>
+    <tr>
     <td class="name"><a href="#frame">frame</a></td>
     <td class="summary">The basic frame element</td>
     </tr>
@@ -345,6 +349,18 @@ button:clone(<span class="string">'CustomButton'</span>)
     <tr>
     <td class="name"><a href="#clone_concept">clone_concept(name, new_name)</a></td>
     <td class="summary">Making anew concept based on the properties and drawing of another</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#categorize_by_player">categorize_by_player(element)</a></td>
+    <td class="summary">A categorize function to be used with add_store, each player has their own category</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#categorize_by_force">categorize_by_force(element)</a></td>
+    <td class="summary">A categorize function to be used with add_store, each force has its own category</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#categorize_by_surface">categorize_by_surface(element)</a></td>
+    <td class="summary">A categorize function to be used with add_store, each surface has its own category</td>
     </tr>
     </tbody>
     </table>
@@ -443,16 +459,12 @@ button:clone(<span class="string">'CustomButton'</span>)
     <td class="summary">Updates the data that is stored for this category</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Prototype:define_combined_store">Prototype:define_combined_store([category_callback], get_callback, set_callback)</a></td>
-    <td class="summary">Used to add a both instance and data stores which are linked together, new instances are synced to current value, changing one instances changes them all</td>
+    <td class="name"><a href="#Prototype:define_combined_store">Prototype:define_combined_store([category_callback], sync_callback)</a></td>
+    <td class="summary">Used to add a both instance and data stores which are linked together, new instances are synced to current value, changing one instance changes them all</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Prototype.set_instance_from_store">Prototype.set_instance_from_store(the)</a></td>
-    <td class="summary">Will set the state of an instance based on the value in the store</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Prototype.set_store_from_instance">Prototype.set_store_from_instance(the)</a></td>
-    <td class="summary">Will set the value in the store and update the other instances based on the instance given</td>
+    <td class="name"><a href="#Prototype.sync_instance">Prototype.sync_instance(element)</a></td>
+    <td class="summary">Will sync an instance to match the stored value based on the given sync callback</td>
     </tr>
     </tbody>
     </table>
@@ -583,6 +595,103 @@ button:clone(<span class="string">'CustomButton'</span>)
     (<span class="types"><span class="type">SpritePath</span></span>)
 
      upto three sprites in the order: default, hovered, clicked
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#checkbox" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="checkbox">checkbox</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">The basic checkbox element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Properties / Events:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>on_state_change</em></strong>
+
+    <strong> : </strong>
+
+
+     fired when the state of the element is changed
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>caption</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#LocalisedString">LocalisedString</a></span>)
+
+     the message that is shown next to the checkbox
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>tooltip</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#LocalisedString">LocalisedString</a></span>)
+
+     the tooltip that shows when a player hovers over the checkbox
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>use_radio</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     setting to true will use radio buttons rather than checkboxs
 
     </li>
 
@@ -939,6 +1048,189 @@ button:change_name(<span class="string">'Not Button'</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#categorize_by_player" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="categorize_by_player">categorize_by_player(element)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">A categorize function to be used with add_store, each player has their own category</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the element that will be converted to a string
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    <span class="return-text">the player's name who owns this element</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Storing data on a per player basis, can be used with instances
+</span>Gui.get_concept(<span class="string">'CustomButton'</span>)
+:define_data_store(Gui.categorize_by_player)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#categorize_by_force" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="categorize_by_force">categorize_by_force(element)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">A categorize function to be used with add_store, each force has its own category</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the element that will be converted to a string
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    <span class="return-text">the player's force name who owns this element</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Storing data on a per force basis, can be used with instances
+</span>Gui.get_concept(<span class="string">'CustomButton'</span>)
+:define_data_store(Gui.categorize_by_force)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#categorize_by_surface" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="categorize_by_surface">categorize_by_surface(element)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">A categorize function to be used with add_store, each surface has its own category</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the element that will be converted to a string
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    <span class="return-text">the player's surface name who owns this element</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Storing data on a per surface basis, can be used with instances
+</span>Gui.get_concept(<span class="string">'CustomButton'</span>)
+:define_data_store(Gui.categorize_by_surface)</code></pre>
+    <!-- usage end -->
+
+    </dd>
     </dl>
     <h3><span id="Concept_Base" class="section-title"><a href="#Concept_Base">Concept Base </a></span></h3>
     <dl class="section-body-container">
@@ -1137,7 +1429,7 @@ button:change_name(<span class="string">'Not Button'</span>)</code></pre>
     <ul>
     <li>
     (<span class="types"><span class="type">GuiConcept</span></span>)
-    <span class="return-text">to allow chaing of functions</span>
+    <span class="return-text">to allow chaining of functions</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -1201,7 +1493,7 @@ Gui.get_concept(<span class="string">'Button'</span>):clone(<span class="string"
     <ul>
     <li>
     (<span class="types"><span class="type">GuiConcept</span></span>)
-    <span class="return-text">to allow chaing of functions</span>
+    <span class="return-text">to allow chaining of functions</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -1392,7 +1684,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <ul>
     <li>
     (<span class="types"><span class="type">GuiConcept</span></span>)
-    <span class="return-text">to allow chaing of functions</span>
+    <span class="return-text">to allow chaining of functions</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -1464,7 +1756,7 @@ Gui.get_concept(<span class="string">'Button'</span>)
     <ul>
     <li>
     (<span class="types"><span class="type">GuiConcept</span></span>)
-    <span class="return-text">to allow chaing of functions</span>
+    <span class="return-text">to allow chaining of functions</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -1531,7 +1823,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <ul>
     <li>
     (<span class="types"><span class="type">GuiConcept</span></span>)
-    <span class="return-text">to allow chaing of functions</span>
+    <span class="return-text">to allow chaining of functions</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -1687,7 +1979,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <ul>
     <li>
     (<span class="types"><span class="type">GuiConcept</span></span>)
-    <span class="return-text">to allow chaing of functions</span>
+    <span class="return-text">to allow chaining of functions</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -1968,7 +2260,7 @@ custom_button.update_instances(<span class="number">1</span>,<span class="keywor
     <ul>
     <li>
     (<span class="types"><span class="type">GuiConcept</span></span>)
-    <span class="return-text">to allow chaing of functions</span>
+    <span class="return-text">to allow chaining of functions</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -2273,13 +2565,13 @@ custom_button.update_data(<span class="number">1</span>,<span class="keyword">fu
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Prototype:define_combined_store" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Prototype:define_combined_store">Prototype:define_combined_store([category_callback], get_callback, set_callback)</span>
+    <span class="section-item-title" id="Prototype:define_combined_store">Prototype:define_combined_store([category_callback], sync_callback)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Used to add a both instance and data stores which are linked together, new instances are synced to current value, changing one instances changes them all</p>
+    <p class="section-item-summary">Used to add a both instance and data stores which are linked together, new instances are synced to current value, changing one instance changes them all</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -2310,29 +2602,13 @@ custom_button.update_data(<span class="number">1</span>,<span class="keyword">fu
 
     <li class="section-subitem-li">
 
-    <strong><em>get_callback</em></strong>
+    <strong><em>sync_callback</em></strong>
 
     <strong> : </strong>
 
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
 
-     the function which is called when you set the store from an instance
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>set_callback</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
-
-     the function which is called when you update an instance using the value in the store
+     the function which is called to update an instance to match the store
 
     </li>
 
@@ -2346,7 +2622,7 @@ custom_button.update_data(<span class="number">1</span>,<span class="keyword">fu
     <ul>
     <li>
     (<span class="types"><span class="type">GuiConcept</span></span>)
-    <span class="return-text">to allow chaing of functions</span>
+    <span class="return-text">to allow chaining of functions</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -2357,18 +2633,15 @@ custom_button.update_data(<span class="number">1</span>,<span class="keyword">fu
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a way to sync captions bettween all instances, more useful for things that arnt buttons
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a way to sync enabled state bettween all instances, more useful for things that arnt buttons
 </span><span class="keyword">local</span> custom_button =
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 :define_combined_store(
 <span class="keyword">function</span>(element)
     <span class="keyword">return</span> element.player_index <span class="comment">-- The data is stored based on player id
 </span><span class="keyword">end</span>,
-<span class="keyword">function</span>(element)
-   <span class="keyword">return</span> element.caption <span class="comment">-- We want to store the caption
-</span><span class="keyword">end</span>,
 <span class="keyword">function</span>(element,value)
-    element.caption = value <span class="comment">-- This is the inverse of above
+    element.enabled = value <span class="comment">-- We will use custom_button.set_data(element,value) to trigger this
 </span><span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
@@ -2376,14 +2649,14 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Prototype.set_instance_from_store" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Prototype.set_instance_from_store">Prototype.set_instance_from_store(the)</span>
+    <a href="#Prototype.sync_instance" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Prototype.sync_instance">Prototype.sync_instance(element)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Will set the state of an instance based on the value in the store</p>
+    <p class="section-item-summary">Will sync an instance to match the stored value based on the given sync callback</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -2397,13 +2670,13 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 
     <li class="section-subitem-li">
 
-    <strong><em>the</em></strong>
+    <strong><em>element</em></strong>
 
     <strong> : </strong>
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
 
-     element that you want to have update
+     the element that you want to have update
 
     </li>
 
@@ -2426,64 +2699,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 Gui.get_concept(<span class="string">'CustomButton'</span>)
 
 <span class="comment">-- Used internally when first draw and automatically when the store updates
-</span>custom_button.set_instance_from_store(element)</code></pre>
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Prototype.set_store_from_instance" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Prototype.set_store_from_instance">Prototype.set_store_from_instance(the)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Will set the value in the store and update the other instances based on the instance given</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>the</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
-
-     element that you want to use to update the store
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code><span class="comment">-- Setting the stored value to be the same as the caption for this element
-</span><span class="keyword">local</span> custom_button =
-Gui.get_concept(<span class="string">'CustomButton'</span>)
-
-<span class="comment">-- You may want to use this with gui events
-</span>custom_button.set_store_from_instance(element)</code></pre>
+</span>custom_button.sync_instance(element)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -2575,7 +2791,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-08-27 21:07:36 UTC</i>
+    <i>Last updated 2019-08-29 18:20:09 UTC</i>
     </div>
     </div>
     </div>

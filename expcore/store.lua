@@ -122,14 +122,15 @@ end
 -- @tparam[opt] string key the key location if used
 -- @tparam any value the new value to set at the location, value may be reverted if there is a watch callback, cant be nil
 -- @tparam[opt=false] boolean from_sync set this true to avoid an output to the sync file
+-- @tparam[opt=false] boolean from_internal set this true to add one to the error stack offset
 -- @treturn boolean true if it was successful
-function Store.set(location,key,value,from_sync)
-    if not Store.callbacks[location] then
-        return error('Location is not registered', 2)
+function Store.set(location,key,value,from_sync,from_internal)
+    if not Store.registered[location] then
+        return error('Location is not registered', from_internal and 3 or 2)
     end
 
-    if key == nil or value == nil then
-        value = key or value
+    if value == nil then
+        value = key
         key = nil
     end
 
@@ -163,20 +164,24 @@ end
 function Store.update(location,key,update_callback,...)
     local value = Store.get(location,key)
 
-    local arg1
+    local args
     if type(key) == 'function' then
-        arg1 = update_callback
+        args = {update_callback,...}
         update_callback = key
         key = nil
     end
 
     local rtn
     if update_callback and type(update_callback) == 'function' then
-        rtn = update_callback(value,key,arg1,...)
+        if args then
+            rtn = udpate_callback(value,key,unpack(args))
+        else
+            rtn = update_callback(value,key,...)
+        end
     end
 
     if rtn then
-        Store.set(location,key,rtn)
+        Store.set(location,key,rtn,nil,true)
     else
         script.raise_event(Store.events.on_value_changed,{
             tick=game.tick,
@@ -204,7 +209,7 @@ function Store.update_all(location,update_callback,...)
         end
 
         if rtn then
-            Store.set(location,key,rtn)
+            Store.set(location,key,rtn,nil,true)
         else
             script.raise_event(Store.events.on_value_changed,{
                 tick=game.tick,

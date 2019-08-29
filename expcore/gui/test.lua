@@ -93,6 +93,10 @@ end
 
 --[[
 Buttons
+> Basic Button -- Button with a caption and a tooltip
+> Sprite Button -- Button with a single sprite and a tooltip
+> Multi Sprite Button -- Button with three sprites and a tooltip
+> Admin Button -- Button which is disabled if the player is not an admin
 ]]
 
 local basic_button =
@@ -139,4 +143,66 @@ tests.Buttons = {
     ['Sprite Button'] = sprite_button,
     ['Multi Sprite Button'] = multi_sprite_button,
     ['Admin Button'] = admin_button,
+}
+
+--[[
+Checkboxs
+> Basic Checkbox -- Simple checkbox that can be toggled
+> Game Stored Checkbox -- Checkbox which syncs its state between all players
+> Force Stored Checkbox -- Checkbox which syncs its state with all players on the same force
+> Player Stored Checkbox -- Checkbox that stores its state between re-draws
+]]
+
+local basic_checkbox =
+Gui.clone_concept('checkbox',TEST 'basic_checkbox')
+:set_caption('Basic Checkbox')
+:set_tooltip('Basic checkbox')
+:on_state_change(function(event)
+    event.player.print('Basic checkbox is now: '..tostring(event.element.state))
+end)
+
+local game_checkbox =
+Gui.clone_concept('checkbox',TEST 'game_checkbox')
+:set_caption('Game Stored Checkbox')
+:set_tooltip('Game stored checkbox')
+:on_state_change(function(event)
+    local element = event.element
+    event.concept.set_data(element,element.state) -- Update other instances
+    event.player.print('Game stored checkbox is now: '..tostring(element.state))
+end)
+:define_combined_store(function(element,state)
+    element.state = state or false
+end)
+
+local force_checkbox =
+Gui.clone_concept('checkbox',TEST 'force_checkbox')
+:set_caption('Force Stored Checkbox')
+:set_tooltip('Force stored checkbox')
+:on_state_change(function(event)
+    local element = event.element
+    event.concept.set_data(element,element.state) -- Update other instances
+    event.player.print('Force stored checkbox is now: '..tostring(element.state))
+end)
+:define_combined_store(function(element,state)
+    element.state = state or false
+end)
+
+local player_checkbox =
+Gui.clone_concept('checkbox',TEST 'player_checkbox')
+:set_caption('Player Stored Checkbox')
+:set_tooltip('Player stored checkbox')
+:on_state_change(function(event)
+    local element = event.element
+    event.concept.set_data(element,element.state) -- Update other instances
+    event.player.print('Player stored checkbox is now: '..tostring(element.state))
+end)
+:define_combined_store(function(element,state)
+    element.state = state or false
+end)
+
+tests.Checkboxs = {
+    ['Basic Checkbox'] = basic_checkbox,
+    ['Game Stored Checkbox'] = game_checkbox,
+    ['Force Stored Checkbox'] = force_checkbox,
+    ['Player Stored Checkbox'] = player_checkbox
 }
