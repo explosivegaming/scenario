@@ -83,17 +83,26 @@ local Prototype = {
 --- Acts as a gernal handler for any factorio event
 local function factorio_event_handler(event)
     local element = event.element
-    local event_handlers = Factorio_Events[event.name]
+    local rasied_event = event.name
+    local factorio_event_concepts = Factorio_Events[rasied_event]
     if element then
         if not element.valid then return end
-        local concept_event_raise = event_handlers[element.name]
-        if concept_event_raise then
-            concept_event_raise(event)
+        local concept = factorio_event_concepts[element.name]
+        if concept then
+            for event_name, factorio_event in pairs(concept.factorio_events) do
+                if rasied_event == factorio_event then
+                    concept:raise_event(event_name,event,true)
+                end
+            end
         end
 
     else
-        for _,concept_event_raise in pairs(event_handlers) do
-            concept_event_raise(event)
+        for _,concept in pairs(factorio_event_concepts) do
+            for event_name, factorio_event in pairs(concept.factorio_events) do
+                if rasied_event == factorio_event then
+                    concept:raise_event(event_name,event,true)
+                end
+            end
         end
 
     end
@@ -121,11 +130,8 @@ function Prototype:clone(concept_name)
     end
 
     -- Remakes even handlers for factorio
-    concept.factorio_events = {}
-    for event_name,factorio_event in pairs(self.factorio_events) do
-        Factorio_Events[factorio_event][concept.name] = function(event)
-            concept:raise_event(event_name,event,true)
-        end
+    for _,factorio_event in pairs(concept.factorio_events) do
+        Factorio_Events[factorio_event][concept.name] = concept
     end
 
     -- Remove all refrences to an instance store
@@ -217,15 +223,17 @@ end)
     -- Adds the factorio event handler if this event is linked to one
     if factorio_event then
         self.factorio_events[event_name] = factorio_event
-        self.events[event_name].factorio_handler = event_condition
+        self.events[event_name].factorio_event_condition = event_condition
 
-        if not Factorio_Events[factorio_event] then
-            Factorio_Events[factorio_event] = {}
+        local factorio_event_concepts = Factorio_Events[factorio_event]
+        if not factorio_event_concepts then
+            factorio_event_concepts = {}
+            Factorio_Events[factorio_event] = factorio_event_concepts
             Event.add(factorio_event,factorio_event_handler)
         end
 
-        Factorio_Events[factorio_event][self.name] = function(event)
-            self:raise_event(event_name,event,true)
+        if not factorio_event_concepts[self.name] then
+            factorio_event_concepts[self.name] = self
         end
     end
 
@@ -264,7 +272,7 @@ function Prototype:raise_event(event_name,event,from_factorio)
     local handlers = self.events[event_name]
 
     -- If it is from factorio and the filter fails
-    if from_factorio and handlers.factorio_handler and not handlers.factorio_handler(event) then
+    if from_factorio and handlers.factorio_event_condition and not handlers.factorio_event_condition(event) then
         return
     end
 

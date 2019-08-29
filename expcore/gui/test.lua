@@ -183,7 +183,7 @@ Gui.clone_concept('checkbox',TEST 'force_checkbox')
     event.concept.set_data(element,element.state) -- Update other instances
     event.player.print('Force stored checkbox is now: '..tostring(element.state))
 end)
-:define_combined_store(function(element,state)
+:define_combined_store(Gui.categorize_by_force,function(element,state)
     element.state = state or false
 end)
 
@@ -196,7 +196,7 @@ Gui.clone_concept('checkbox',TEST 'player_checkbox')
     event.concept.set_data(element,element.state) -- Update other instances
     event.player.print('Player stored checkbox is now: '..tostring(element.state))
 end)
-:define_combined_store(function(element,state)
+:define_combined_store(Gui.categorize_by_player,function(element,state)
     element.state = state or false
 end)
 
