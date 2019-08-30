@@ -42,10 +42,14 @@
     <h2>Sections</h2>
     <ul class="nav">
     <li class="nav-item"><a href="#Elements"><span class="fragment-hashtag">#</span> Elements</a></li>
-    <li class="nav-item"><a href="#Core"><span class="fragment-hashtag">#</span> Core </a></li>
+    <li class="nav-item"><a href="#Dropdowns"><span class="fragment-hashtag">#</span> Dropdowns </a></li>
+    <li class="nav-item"><a href="#Concept_Control"><span class="fragment-hashtag">#</span> Concept Control </a></li>
+    <li class="nav-item"><a href="#Element_Control"><span class="fragment-hashtag">#</span> Element Control </a></li>
+    <li class="nav-item"><a href="#Store_Categories"><span class="fragment-hashtag">#</span> Store Categories </a></li>
     <li class="nav-item"><a href="#Concept_Base"><span class="fragment-hashtag">#</span> Concept Base </a></li>
     <li class="nav-item"><a href="#Concept_Instances"><span class="fragment-hashtag">#</span> Concept Instances </a></li>
     <li class="nav-item"><a href="#Concept_Data"><span class="fragment-hashtag">#</span> Concept Data </a></li>
+    <li class="nav-item"><a href="#Concept_Combined_Instances"><span class="fragment-hashtag">#</span> Concept Combined Instances </a></li>
     <li class="nav-item"><a href="#Tests"><span class="fragment-hashtag">#</span> Tests </a></li>
     </ul>
     </li>
@@ -207,10 +211,14 @@
     <h4>Jump to Section</h4>
     <ul class="nav">
     <li class="nav-item"><a href="#Elements"><span class="fragment-hashtag">#</span> Elements</a></li>
-    <li class="nav-item"><a href="#Core"><span class="fragment-hashtag">#</span> Core </a></li>
+    <li class="nav-item"><a href="#Dropdowns"><span class="fragment-hashtag">#</span> Dropdowns </a></li>
+    <li class="nav-item"><a href="#Concept_Control"><span class="fragment-hashtag">#</span> Concept Control </a></li>
+    <li class="nav-item"><a href="#Element_Control"><span class="fragment-hashtag">#</span> Element Control </a></li>
+    <li class="nav-item"><a href="#Store_Categories"><span class="fragment-hashtag">#</span> Store Categories </a></li>
     <li class="nav-item"><a href="#Concept_Base"><span class="fragment-hashtag">#</span> Concept Base </a></li>
     <li class="nav-item"><a href="#Concept_Instances"><span class="fragment-hashtag">#</span> Concept Instances </a></li>
     <li class="nav-item"><a href="#Concept_Data"><span class="fragment-hashtag">#</span> Concept Data </a></li>
+    <li class="nav-item"><a href="#Concept_Combined_Instances"><span class="fragment-hashtag">#</span> Concept Combined Instances </a></li>
     <li class="nav-item"><a href="#Tests"><span class="fragment-hashtag">#</span> Tests </a></li>
     </ul>
     </li>
@@ -319,6 +327,10 @@ button:clone(<span class="string">'CustomButton'</span>)
     <td class="summary">The basic checkbox element</td>
     </tr>
     <tr>
+    <td class="name"><a href="#dropdown">dropdown</a></td>
+    <td class="summary">The basic dropdown element</td>
+    </tr>
+    <tr>
     <td class="name"><a href="#frame">frame</a></td>
     <td class="summary">The basic frame element</td>
     </tr>
@@ -326,7 +338,27 @@ button:clone(<span class="string">'CustomButton'</span>)
     </table>
     <table class="section-content-list">
     <thead>
-    <h3><a href="#Core">Core </a></h3>
+    <h3><a href="#Dropdowns">Dropdowns </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#set_dropdown_value">set_dropdown_value(element, value)</a></td>
+    <td class="summary">Selects the index of a dropdown with this value</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#get_dropdown_value">get_dropdown_value(element)</a></td>
+    <td class="summary">Gets the selected item value of a dropdown</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#add_dropdown_items">add_dropdown_items(element[, start_index], new_items)</a></td>
+    <td class="summary">Adds the given items into the list of items for this dropdown</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Concept_Control">Concept Control </a></h3>
     <span></span>
     </thead>
     <tbody>
@@ -348,8 +380,52 @@ button:clone(<span class="string">'CustomButton'</span>)
     </tr>
     <tr>
     <td class="name"><a href="#clone_concept">clone_concept(name, new_name)</a></td>
-    <td class="summary">Making anew concept based on the properties and drawing of another</td>
+    <td class="summary">Make a new concept based on the properties and drawing of another</td>
     </tr>
+    <tr>
+    <td class="name"><a href="#draw_concept">draw_concept(name, parent)</a></td>
+    <td class="summary">Used to draw a concept to a parent element</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Element_Control">Element Control </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#get_player_from_element">get_player_from_element(element)</a></td>
+    <td class="summary">Gets the player who owns this element</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#valid">valid(element)</a></td>
+    <td class="summary">Simple check for if an element is valid</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#destroy">destroy(element)</a></td>
+    <td class="summary">Destroies and element if it is valid</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#toggle_enabled">toggle_enabled(element)</a></td>
+    <td class="summary">Toggles the enabled state of an element</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#toggle_visible">toggle_visible(element)</a></td>
+    <td class="summary">Toggles the visible state of an element</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#set_padding">set_padding(element[, up=0][, down=0][, left=0][, right=0])</a></td>
+    <td class="summary">Sets the padding for a gui element</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Store_Categories">Store Categories </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
     <tr>
     <td class="name"><a href="#categorize_by_player">categorize_by_player(element)</a></td>
     <td class="summary">A categorize function to be used with add_store, each player has their own category</td>
@@ -458,9 +534,17 @@ button:clone(<span class="string">'CustomButton'</span>)
     <td class="name"><a href="#Prototype.update_data">Prototype.update_data([category], update_callback)</a></td>
     <td class="summary">Updates the data that is stored for this category</td>
     </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Concept_Combined_Instances">Concept Combined Instances </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
     <tr>
     <td class="name"><a href="#Prototype:define_combined_store">Prototype:define_combined_store([category_callback], sync_callback)</a></td>
-    <td class="summary">Used to add a both instance and data stores which are linked together, new instances are synced to current value, changing one instance changes them all</td>
+    <td class="summary">Used to add a both instance and data store which are linked together, new instances are synced to the current value, changing the stored value will change all instances</td>
     </tr>
     <tr>
     <td class="name"><a href="#Prototype.sync_instance">Prototype.sync_instance(element)</a></td>
@@ -714,6 +798,119 @@ button:clone(<span class="string">'CustomButton'</span>)
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
+    <a href="#dropdown" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="dropdown">dropdown</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">The basic dropdown element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Properties / Events:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>on_selection_change</em></strong>
+
+    <strong> : </strong>
+
+
+     fired when the selected value is changed
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>default_selection</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <span class="type">Conepts.LocalisedString</span></span>)
+
+     the option which is selected by default
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>use_list_box</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true a list box will be used rather than a dropdown menu
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>static_items</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.1.html">nil</a> or <a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+
+     when called with a table the values will be added as items for the dropdown, if called with nil then all items are cleared
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>dynamic_items</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the given function will be called to return a list of items and optional start index to add items to the dropdown when it is first drawn
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
     <a href="#frame" class="fragment-hashtag">#</a>
     <span class="section-item-title" id="frame">frame</span>
     </div>
@@ -762,7 +959,241 @@ button:clone(<span class="string">'CustomButton'</span>)
 
     </dd>
     </dl>
-    <h3><span id="Core" class="section-title"><a href="#Core">Core </a></span></h3>
+    <h3><span id="Dropdowns" class="section-title"><a href="#Dropdowns">Dropdowns </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#set_dropdown_value" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="set_dropdown_value">set_dropdown_value(element, value)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Selects the index of a dropdown with this value</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the dropdown that you want to set the selection for
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>value</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <span class="type">Conepts.LocalisedString</span></span>)
+
+     the value that you want selected
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">if an item with this value was found</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Selecting the item with the value 'foo'
+</span>Gui.set_dropdown_value(element,<span class="string">'foo'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#get_dropdown_value" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_dropdown_value">get_dropdown_value(element)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets the selected item value of a dropdown</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the dropdown that you want the selected value of
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <span class="type">Conepts.LocalisedString</span></span>)
+    <span class="return-text">the value that is currently selected</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Getting the selected value
+</span><span class="keyword">local</span> selected_value = Gui.get_dropdown_value(element)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#add_dropdown_items" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="add_dropdown_items">add_dropdown_items(element[, start_index], new_items)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds the given items into the list of items for this dropdown</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the dropdown that you want to add the items to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>start_index</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the index at which the items will be added, if not given appened to the end
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>new_items</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+
+     the list of new items that you want to add
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the list of items that the element now has</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Add the items 'foo' and 'bar' to the end
+</span>Gui.add_dropdown_items(element,{<span class="string">'foo'</span>,<span class="string">'bar'</span>})</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Add the items 'foo' and 'bar' to the start
+</span>Gui.add_dropdown_items(element,<span class="number">1</span>,{<span class="string">'foo'</span>,<span class="string">'bar'</span>})</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Concept_Control" class="section-title"><a href="#Concept_Control">Concept Control </a></span></h3>
     <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
@@ -989,7 +1420,7 @@ button:change_name(<span class="string">'Not Button'</span>)</code></pre>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Making anew concept based on the properties and drawing of another</p>
+    <p class="section-item-summary">Make a new concept based on the properties and drawing of another</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -1048,6 +1479,513 @@ button:change_name(<span class="string">'Not Button'</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#draw_concept" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="draw_concept">draw_concept(name, parent)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Used to draw a concept to a parent element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the concept that you want to draw
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>parent</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the element that will act as a parent for the new element
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+    <span class="return-text">the element that was created</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Drawing a new element
+</span>Gui.draw_concept(<span class="string">'Button'</span>,element)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Element_Control" class="section-title"><a href="#Element_Control">Element Control </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#get_player_from_element" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_player_from_element">get_player_from_element(element)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets the player who owns this element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the element that you want to get the player of
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+    <span class="return-text">the player who owns this element</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Getting the player of an element
+</span><span class="keyword">local</span> player = Gui.get_player_from_element(element)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#valid" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="valid">valid(element)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Simple check for if an element is valid</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the element that you want to check is valid
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if the element is valid</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Return if not valid
+</span><span class="keyword">if</span> <span class="keyword">not</span> Gui.valid(element) <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span></code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#destroy" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="destroy">destroy(element)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Destroies and element if it is valid</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the element that you want to destroy
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if the element was valid and was destoried</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Destoring an element
+</span>Gui.destroy(element)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#toggle_enabled" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="toggle_enabled">toggle_enabled(element)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Toggles the enabled state of an element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the element that you want to toggle the enabled state of
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">the new enabled state of the element</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Toggle the enabled state of an element
+</span>Gui.toggle_enabled(element)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#toggle_visible" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="toggle_visible">toggle_visible(element)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Toggles the visible state of an element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the element that you want to toggle the visible state of
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">the new visible state of the element</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Toggle the visible state of an element
+</span>Gui.toggle_visible(element)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#set_padding" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="set_padding">set_padding(element[, up=0][, down=0][, left=0][, right=0])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sets the padding for a gui element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the element to set the padding for
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>up</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a> or <a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     the amount of padding on the top, true leaves unchanged
+
+    (<em>default</em>: 0)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>down</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a> or <a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     the amount of padding on the bottom, true leaves unchanged
+
+    (<em>default</em>: 0)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>left</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a> or <a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     the amount of padding on the left, true leaves unchanged
+
+    (<em>default</em>: 0)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>right</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a> or <a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     the amount of padding on the right, true leaves unchanged
+
+    (<em>default</em>: 0)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Remove all padding of an element
+</span>Gui.set_padding(element)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Remove side padding but keep vertical padding
+</span>Gui.set_padding(element,<span class="keyword">true</span>,<span class="keyword">true</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Remove all padding but set right to 2
+</span>Gui.set_padding(element,<span class="keyword">false</span>,<span class="keyword">false</span>,<span class="keyword">false</span>,<span class="number">2</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Store_Categories" class="section-title"><a href="#Store_Categories">Store Categories </a></span></h3>
+    <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
@@ -2561,6 +3499,9 @@ custom_button.update_data(<span class="number">1</span>,<span class="keyword">fu
     <!-- usage end -->
 
     </dd>
+    </dl>
+    <h3><span id="Concept_Combined_Instances" class="section-title"><a href="#Concept_Combined_Instances">Concept Combined Instances </a></span></h3>
+    <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
@@ -2571,7 +3512,7 @@ custom_button.update_data(<span class="number">1</span>,<span class="keyword">fu
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Used to add a both instance and data stores which are linked together, new instances are synced to current value, changing one instance changes them all</p>
+    <p class="section-item-summary">Used to add a both instance and data store which are linked together, new instances are synced to the current value, changing the stored value will change all instances</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -2608,7 +3549,7 @@ custom_button.update_data(<span class="number">1</span>,<span class="keyword">fu
 
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
 
-     the function which is called to update an instance to match the store
+     the function which is called to update an instance to match the store, this is called on all instances when concept.set_data or update_data is used
 
     </li>
 
@@ -2633,15 +3574,17 @@ custom_button.update_data(<span class="number">1</span>,<span class="keyword">fu
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a way to sync enabled state bettween all instances, more useful for things that arnt buttons
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a check box which is a "global setting" synced between all players
 </span><span class="keyword">local</span> custom_button =
-Gui.get_concept(<span class="string">'CustomButton'</span>)
-:define_combined_store(
-<span class="keyword">function</span>(element)
-    <span class="keyword">return</span> element.player_index <span class="comment">-- The data is stored based on player id
-</span><span class="keyword">end</span>,
-<span class="keyword">function</span>(element,value)
-    element.enabled = value <span class="comment">-- We will use custom_button.set_data(element,value) to trigger this
+Gui.get_concept(<span class="string">'checkbox'</span>):clone(<span class="string">'my_checkbox'</span>)
+:set_caption(<span class="string">'My Checkbox'</span>)
+:set_tooltip(<span class="string">'Clicking this check box will change it for everyone'</span>)
+:on_state_change(<span class="keyword">function</span>(event)
+    <span class="keyword">local</span> element = event.element
+    event.concept.set_data(element,element.state) <span class="comment">-- Update the stored data to trigger an update of all other instances
+</span><span class="keyword">end</span>)
+:define_combined_store(<span class="keyword">function</span>(element,state) <span class="comment">-- We could add a category function here if we wanted to
+</span>    element.state = state <span class="keyword">or</span> <span class="keyword">false</span> <span class="comment">-- When you sync an instance this is what is called
 </span><span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
@@ -2791,7 +3734,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-08-29 18:20:09 UTC</i>
+    <i>Last updated 2019-08-30 17:12:01 UTC</i>
     </div>
     </div>
     </div>

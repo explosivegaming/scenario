@@ -206,3 +206,76 @@ tests.Checkboxs = {
     ['Force Stored Checkbox'] = force_checkbox,
     ['Player Stored Checkbox'] = player_checkbox
 }
+
+--[[
+Dropdowns
+> Static Dropdown -- Simple dropdown with all options being static
+> Dynamic Dropdown -- Dropdown which has items based on when it is drawn
+> Static Player Stored Dropdown -- Dropdown where the values is synced for each player
+> Dynamic Player Stored Dropdown -- Same as above but now with dynamic options
+]]
+
+local static_dropdown =
+Gui.clone_concept('dropdown',TEST 'static_dropdown')
+:set_static_items{'Option 1','Option 2','Option 3'}
+:on_selection_change(function(event)
+    local value = Gui.get_dropdown_value(event.element)
+    event.player.print('Static dropdown is now: '..value)
+end)
+
+local dynamic_dropdown =
+Gui.clone_concept('dropdown',TEST 'dynamic_dropdown')
+:set_dynamic_items(function(element)
+    local items = {}
+    for concept_name,_ in pairs(Gui.concepts) do
+        if concept_name:len() < 16 then
+            items[#items+1] = concept_name
+        end
+    end
+    return items
+end)
+:on_selection_change(function(event)
+    local value = Gui.get_dropdown_value(event.element)
+    event.player.print('Dynamic dropdown is now: '..value)
+end)
+
+local static_player_dropdown =
+Gui.clone_concept('dropdown',TEST 'static_player_dropdown')
+:set_static_items{'Option 1','Option 2','Option 3'}
+:on_selection_change(function(event)
+    local element = event.element
+    local value = Gui.get_dropdown_value(element)
+    event.concept.set_data(element,value)
+    event.player.print('Static player stored dropdown is now: '..value)
+end)
+:define_combined_store(Gui.categorize_by_player,function(element,value)
+    Gui.set_dropdown_value(element,value)
+end)
+
+local dynamic_player_dropdown =
+Gui.clone_concept('dropdown',TEST 'dynamic_player_dropdown')
+:set_dynamic_items(function(element)
+    local items = {}
+    for concept_name,_ in pairs(Gui.concepts) do
+        if concept_name:len() < 16 then
+            items[#items+1] = concept_name
+        end
+    end
+    return items
+end)
+:on_selection_change(function(event)
+    local element = event.element
+    local value = Gui.get_dropdown_value(element)
+    event.concept.set_data(element,value)
+    event.player.print('Dynamic player dropdown is now: '..value)
+end)
+:define_combined_store(Gui.categorize_by_player,function(element,value)
+    Gui.set_dropdown_value(element,value)
+end)
+
+tests.Dropdowns = {
+    ['Static Dropdown'] = static_dropdown,
+    ['Dynamic Dropdown'] = dynamic_dropdown,
+    ['Static Player Stored Dropdown'] = static_player_dropdown,
+    ['Dynamic Player Stored Dropdown'] = dynamic_player_dropdown
+}

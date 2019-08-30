@@ -634,19 +634,25 @@ end) -- player index 1
     return self
 end
 
---[[-- Used to add a both instance and data stores which are linked together, new instances are synced to current value, changing one instance changes them all
+--- Concept Combined Instances.
+-- Functions that are used to make store concept instances and data
+-- @section concept-instances
+
+--[[-- Used to add a both instance and data store which are linked together, new instances are synced to the current value, changing the stored value will change all instances
 @tparam[opt] function category_callback when given will act as a way to turn an element into a string to act as a key; keys returned can over lap
-@tparam function sync_callback the function which is called to update an instance to match the store
+@tparam function sync_callback the function which is called to update an instance to match the store, this is called on all instances when concept.set_data or update_data is used
 @treturn GuiConcept to allow chaining of functions
-@usage-- Adding a way to sync enabled state bettween all instances, more useful for things that arnt buttons
+@usage-- Adding a check box which is a "global setting" synced between all players
 local custom_button =
-Gui.get_concept('CustomButton')
-:define_combined_store(
-function(element)
-    return element.player_index -- The data is stored based on player id
-end,
-function(element,value)
-    element.enabled = value -- We will use custom_button.set_data(element,value) to trigger this
+Gui.get_concept('checkbox'):clone('my_checkbox')
+:set_caption('My Checkbox')
+:set_tooltip('Clicking this check box will change it for everyone')
+:on_state_change(function(event)
+    local element = event.element
+    event.concept.set_data(element,element.state) -- Update the stored data to trigger an update of all other instances
+end)
+:define_combined_store(function(element,state) -- We could add a category function here if we wanted to
+    element.state = state or false -- When you sync an instance this is what is called
 end)
 ]]
 function Prototype:define_combined_store(category_callback,sync_callback)

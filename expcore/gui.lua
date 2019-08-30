@@ -70,5 +70,6 @@ local Gui = require 'expcore.gui.core'
 Gui.require_concept('frame')
 Gui.require_concept('button')
 Gui.require_concept('checkbox')
+Gui.require_concept('dropdown')
 
 return Gui

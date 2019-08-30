@@ -3,16 +3,16 @@
     @alias Gui
 ]]
 
---- Core.
--- Functions that act as a landing point for the other funtions
--- @section core
-
 local Game = require 'utils.game' -- @dep utils.game
 local Prototype = require 'expcore.gui.prototype'
 
 local Gui = {
     concepts = {}
 }
+
+--- Concept Control.
+-- Functions that act as a landing point for the other funtions
+-- @section concept-control
 
 --[[-- Loads a concept from the concepts file, used internally
 @tparam string concept the name of the concept to require
@@ -64,7 +64,7 @@ function Gui.new_concept(name)
     return Prototype:clone(name)
 end
 
---[[-- Making anew concept based on the properties and drawing of another
+--[[-- Make a new concept based on the properties and drawing of another
 @tparam string name the name of the concept that you want as the base
 @tparam string new_name the name that you want the new concept to have
 @usage-- Making a new concept from another, see module usage
@@ -79,6 +79,116 @@ function Gui.clone_concept(name,new_name)
 
     return concept:clone(new_name)
 end
+
+--[[-- Used to draw a concept to a parent element
+@tparam string name the name of the concept that you want to draw
+@tparam LuaGuiElement parent the element that will act as a parent for the new element
+@treturn LuaGuiElement the element that was created
+@usage-- Drawing a new element
+Gui.draw_concept('Button',element)
+]]
+function Gui.draw_concept(name,parent,...)
+    local concept = Gui.concepts[name] or error('Gui concept "'..name..'" is not defind',2)
+
+    return concept:draw(parent,...)
+end
+
+--- Element Control.
+-- Functions that aim to making working with gui elements easier
+-- @section element-control
+
+--[[-- Gets the player who owns this element
+@tparam LuaGuiElement element the element that you want to get the player of
+@treturn LuaPlayer the player who owns this element
+@usage-- Getting the player of an element
+local player = Gui.get_player_from_element(element)
+]]
+function Gui.get_player_from_element(element)
+    return Game.get_player_by_index(element.player_index)
+end
+
+--[[-- Simple check for if an element is valid
+@tparam LuaGuiElement element the element that you want to check is valid
+@treturn boolean true if the element is valid
+@usage-- Return if not valid
+if not Gui.valid(element) then return end
+]]
+function Gui.valid(element)
+    return element and element.valid or false
+end
+
+--[[-- Destroies and element if it is valid
+@tparam LuaGuiElement element the element that you want to destroy
+@treturn boolean true if the element was valid and was destoried
+@usage-- Destoring an element
+Gui.destroy(element)
+]]
+function Gui.destroy(element)
+    if element and element.valid then
+        element.destroy()
+        return true
+    end
+    return false
+end
+
+--[[-- Toggles the enabled state of an element
+@tparam LuaGuiElement element the element that you want to toggle the enabled state of
+@treturn boolean the new enabled state of the element
+@usage-- Toggle the enabled state of an element
+Gui.toggle_enabled(element)
+]]
+function Gui.toggle_enabled(element)
+    if not element or not element.valid then return end
+    if not element.enabled then
+        element.enabled = true
+        return true
+    else
+        element.enabled = false
+        return false
+    end
+end
+
+--[[-- Toggles the visible state of an element
+@tparam LuaGuiElement element the element that you want to toggle the visible state of
+@treturn boolean the new visible state of the element
+@usage-- Toggle the visible state of an element
+Gui.toggle_visible(element)
+]]
+function Gui.toggle_visible(element)
+    if not element or not element.valid then return end
+    if not element.visible then
+        element.visible = true
+        return true
+    else
+        element.visible = false
+        return false
+    end
+end
+
+--[[-- Sets the padding for a gui element
+@tparam LuaGuiElement element the element to set the padding for
+@tparam[opt=0] ?number|boolean up the amount of padding on the top, true leaves unchanged
+@tparam[opt=0] ?number|boolean down the amount of padding on the bottom, true leaves unchanged
+@tparam[opt=0] ?number|boolean left the amount of padding on the left, true leaves unchanged
+@tparam[opt=0] ?number|boolean right the amount of padding on the right, true leaves unchanged
+@usage-- Remove all padding of an element
+Gui.set_padding(element)
+@usage-- Remove side padding but keep vertical padding
+Gui.set_padding(element,true,true)
+@usage-- Remove all padding but set right to 2
+Gui.set_padding(element,false,false,false,2)
+]]
+function Gui.set_padding(element,up,down,left,right)
+    local style = element.style
+    style.top_padding = up == true and style.top_padding or up or 0
+    style.bottom_padding = down == true and style.top_padding or down or 0
+    style.left_padding = left == true and style.top_padding or left or 0
+    style.right_padding = right == true and style.top_padding or right or 0
+end
+
+--- Store Categories.
+-- Functions that are common types of categories
+-- @section store-categories
 
 --[[-- A categorize function to be used with add_store, each player has their own category
 @tparam LuaGuiElement element the element that will be converted to a string
