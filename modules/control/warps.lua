@@ -47,8 +47,8 @@ Global.register({
     warp_details=warp_details,
     force_warps=force_warps
 },function(tbl)
-    Warps.details = tbl.force_warps
-    Warps.forces = tbl.warp_details
+    Warps.details = tbl.warp_details
+    Warps.forces = tbl.force_warps
     warp_details = Warps.details
     force_warps = Warps.forces
 end)
