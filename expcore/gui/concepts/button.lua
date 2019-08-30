@@ -13,6 +13,22 @@ local Gui = require 'expcore.gui.core'
 @tparam ?string|Concepts.LocalisedString caption the message that is shown on the button
 @tparam ?string|Concepts.LocalisedString tooltip the tooltip that shows when a player hovers over the button
 @tparam SpritePath sprite upto three sprites in the order: default, hovered, clicked
+@usage-- Making a basic button
+local basic_button =
+Gui.clone_concept('button','basic_button')
+:set_caption('Basic Button')
+:set_tooltip('Basic button')
+:on_click(function(event)
+    event.player.print('You pressed basic button!')
+end)
+@usage-- Making a sprite button
+local sprite_button =
+Gui.clone_concept('button','sprite_button')
+:set_sprite('utility/warning_icon')
+:set_tooltip('Sprite button')
+:on_click(function(event)
+    event.player.print('You pressed sprite button!')
+end)
 ]]
 Gui.new_concept('button')
 :new_event('on_click',defines.events.on_gui_click)

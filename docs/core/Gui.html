@@ -695,6 +695,23 @@ button:clone(<span class="string">'CustomButton'</span>)
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic button
+</span><span class="keyword">local</span> basic_button =
+Gui.clone_concept(<span class="string">'button'</span>,<span class="string">'basic_button'</span>)
+:set_caption(<span class="string">'Basic Button'</span>)
+:set_tooltip(<span class="string">'Basic button'</span>)
+:on_click(<span class="keyword">function</span>(event)
+    event.player.<span class="global">print</span>(<span class="string">'You pressed basic button!'</span>)
+<span class="keyword">end</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a sprite button
+</span><span class="keyword">local</span> sprite_button =
+Gui.clone_concept(<span class="string">'button'</span>,<span class="string">'sprite_button'</span>)
+:set_sprite(<span class="string">'utility/warning_icon'</span>)
+:set_tooltip(<span class="string">'Sprite button'</span>)
+:on_click(<span class="keyword">function</span>(event)
+    event.player.<span class="global">print</span>(<span class="string">'You pressed sprite button!'</span>)
+<span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -792,6 +809,15 @@ button:clone(<span class="string">'CustomButton'</span>)
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic checkbox
+</span><span class="keyword">local</span> basic_checkbox =
+Gui.clone_concept(<span class="string">'checkbox'</span>,<span class="string">'basic_checkbox'</span>)
+:set_caption(<span class="string">'Basic Checkbox'</span>)
+:set_tooltip(<span class="string">'Basic checkbox'</span>)
+:on_state_change(<span class="keyword">function</span>(event)
+    event.player.<span class="global">print</span>(<span class="string">'Basic checkbox is now: '</span>..<span class="global">tostring</span>(event.element.state))
+<span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -905,6 +931,31 @@ button:clone(<span class="string">'CustomButton'</span>)
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic dropdown
+</span><span class="keyword">local</span> static_dropdown =
+Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'static_dropdown'</span>)
+:set_static_items{<span class="string">'Option 1'</span>,<span class="string">'Option 2'</span>,<span class="string">'Option 3'</span>}
+:on_selection_change(<span class="keyword">function</span>(event)
+    <span class="keyword">local</span> value = Gui.get_dropdown_value(event.element)
+    event.player.<span class="global">print</span>(<span class="string">'Static dropdown is now: '</span>..value)
+<span class="keyword">end</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a dropdown with dynamic items, example is name of online players
+</span><span class="keyword">local</span> dynamic_dropdown =
+Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'dynamic_dropdown'</span>)
+:set_dynamic_items(<span class="keyword">function</span>(element)
+    <span class="keyword">local</span> items = {}
+
+    <span class="keyword">for</span> _,player <span class="keyword">in</span> <span class="global">pairs</span>(game.connected_players) <span class="keyword">do</span>
+        items[#items+<span class="number">1</span>] = player.name
+    <span class="keyword">end</span>
+
+    <span class="keyword">return</span> items
+<span class="keyword">end</span>)
+:on_selection_change(<span class="keyword">function</span>(event)
+    <span class="keyword">local</span> value = Gui.get_dropdown_value(event.element)
+    event.player.<span class="global">print</span>(<span class="string">'Dynamic dropdown is now: '</span>..value)
+<span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -955,6 +1006,17 @@ button:clone(<span class="string">'CustomButton'</span>)
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic frame, contains a label with hello world
+</span><span class="keyword">local</span> basic_frame =
+Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'basic_frame'</span>)
+:set_title(<span class="string">'Basic Frame'</span>)
+:define_draw(<span class="keyword">function</span>(properties,parent,element)
+    element.add{
+        <span class="global">type</span> = <span class="string">'label'</span>,
+        caption = <span class="string">'Hello, World!'</span>
+    }
+<span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -3734,7 +3796,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-08-30 17:12:01 UTC</i>
+    <i>Last updated 2019-08-30 17:29:53 UTC</i>
     </div>
     </div>
     </div>

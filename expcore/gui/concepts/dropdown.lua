@@ -13,6 +13,30 @@ local array_insert = ext_require('expcore.common','array_insert')
 @tparam boolean use_list_box when true a list box will be used rather than a dropdown menu
 @tparam ?nil|table static_items when called with a table the values will be added as items for the dropdown, if called with nil then all items are cleared
 @tparam function dynamic_items the given function will be called to return a list of items and optional start index to add items to the dropdown when it is first drawn
+@usage-- Making a basic dropdown
+local static_dropdown =
+Gui.clone_concept('dropdown','static_dropdown')
+:set_static_items{'Option 1','Option 2','Option 3'}
+:on_selection_change(function(event)
+    local value = Gui.get_dropdown_value(event.element)
+    event.player.print('Static dropdown is now: '..value)
+end)
+@usage-- Making a dropdown with dynamic items, example is name of online players
+local dynamic_dropdown =
+Gui.clone_concept('dropdown','dynamic_dropdown')
+:set_dynamic_items(function(element)
+    local items = {}
+
+    for _,player in pairs(game.connected_players) do
+        items[#items+1] = player.name
+    end
+
+    return items
+end)
+:on_selection_change(function(event)
+    local value = Gui.get_dropdown_value(event.element)
+    event.player.print('Dynamic dropdown is now: '..value)
+end)
 ]]
 Gui.new_concept('dropdown')
 :new_event('on_selection_change',defines.events.on_gui_selection_state_changed)
