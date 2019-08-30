@@ -49,7 +49,8 @@ local Reports = {
 
 local user_reports = Reports.user_reports
 Global.register(user_reports,function(tbl)
-    user_reports = tbl
+    Reports.user_reports = tbl
+    user_reports = Reports.user_reports
 end)
 
 --- Getters.

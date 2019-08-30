@@ -47,8 +47,10 @@ Global.register({
     warp_details=warp_details,
     force_warps=force_warps
 },function(tbl)
-    force_warps = tbl.force_warps
-    warp_details = tbl.warp_details
+    Warps.details = tbl.force_warps
+    Warps.forces = tbl.warp_details
+    warp_details = Warps.details
+    force_warps = Warps.forces
 end)
 
 local warp_names = Warps.store.names

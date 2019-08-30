@@ -66,8 +66,10 @@ Global.register({
     user_warnings = user_warnings,
     user_script_warnings = user_script_warnings
 },function(tbl)
-    user_warnings = tbl.user_warnings
-    user_script_warnings = tbl.user_script_warnings
+    Warnings.user_warnings = tbl.user_warnings
+    Warnings.user_script_warnings = tbl.user_script_warnings
+    user_warnings = Warnings.user_warnings
+    user_script_warnings = Warnings.user_script_warnings
 end)
 
 --- Gets an array of warnings that the player has, always returns a list even if emtpy
