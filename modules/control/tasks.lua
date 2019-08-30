@@ -42,8 +42,10 @@ Global.register({
     task_details=task_details,
     force_tasks=force_tasks
 },function(tbl)
-    task_details = tbl.task_details
-    force_tasks = tbl.force_tasks
+    Tasks.details = tbl.task_details
+    Tasks.forces = tbl.force_tasks
+    task_details = Tasks.details
+    force_tasks = Tasks.forces
 end)
 
 local task_store = Tasks.store

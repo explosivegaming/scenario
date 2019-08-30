@@ -50,9 +50,12 @@ Global.register({
     rocket_stats = rocket_stats,
     rocket_silos = rocket_silos
 },function(tbl)
-    rocket_times = tbl.rocket_times
-    rocket_stats = tbl.rocket_stats
-    rocket_silos = tbl.rocket_silos
+    Rockets.times = tbl.rocket_times
+    Rockets.stats = tbl.rocket_stats
+    Rockets.silos = tbl.rocket_silos
+    rocket_times = Rockets.times
+    rocket_stats = Rockets.stats
+    rocket_silos = Rockets.silos
 end)
 
 --- Gets the silo data for a given silo entity
