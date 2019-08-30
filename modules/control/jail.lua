@@ -66,8 +66,10 @@ Global.register({
     old_roles = old_roles,
     temp_bans = temp_bans
 },function(tbl)
-    old_roles = tbl.old_roles
-    temp_bans = tbl.temp_bans
+    Jail.old_roles = tbl.old_roles
+    Jail.temp_bans = tbl.temp_bans
+    old_roles = Jail.old_roles
+    temp_bans = Jail.temp_bans
 end)
 
 --- Used to emit the jail related events
