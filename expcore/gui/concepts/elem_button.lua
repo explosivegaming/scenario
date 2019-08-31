@@ -12,7 +12,7 @@ local Gui = require 'expcore.gui.core'
 @tparam string elem_type the type of elem selection that this is, default is item selection
 @usage-- Making a basic elem button
 local basic_elem_button =
-Gui.clone_concept('elem_button',TEST 'basic_elembutton')
+Gui.clone_concept('elem_button','basic_elembutton')
 :on_selection_change(function(event)
     event.player.print('Basic elem button is now: '..event.element.elem_value)
 end)

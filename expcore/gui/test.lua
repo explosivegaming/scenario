@@ -354,3 +354,96 @@ tests['Elem Buttons'] = {
     ['Defaut Selection Elem Button'] = default_selection_elem_button,
     ['Player Stored Elem Button'] = player_elem_button
 }
+
+--[[
+Progress Bars
+> Basic Progress Bar -- will increse when pressed, when full then it will reset
+> Inverted Progress Bar -- will increse when pressed, when empty then it will reset
+> Game Instance Progress Bar -- will take 5 seconds to fill, when full it will reset, note instances are required due to on_tick
+> Force Instance Progress Bar -- will increse when pressed, instance only means all instances will increse at same time but may not have the same value
+> Force Stored Progress Bar -- will increse when pressed, unlike above all will increse at same time and will have the same value
+]]
+
+local basic_progress_bar =
+Gui.clone_concept('progress_bar',TEST 'basic_progress_bar')
+:set_tooltip('Basic progress bar')
+:set_maximum(5)
+:new_event('on_click',defines.events.on_gui_click)
+:on_click(function(event)
+    event.concept:increment(event.element)
+end)
+:set_delay_completion(true)
+:on_completion(function(event)
+    event.concept:reset(event.element)
+end)
+
+local inverted_progress_bar =
+Gui.clone_concept('progress_bar',TEST 'inverted_progress_bar')
+:set_tooltip('Inverted progress bar')
+:set_inverted(true)
+:set_maximum(5)
+:new_event('on_click',defines.events.on_gui_click)
+:on_click(function(event)
+    event.concept:increment(event.element)
+end)
+:on_completion(function(event)
+    event.concept:reset(event.element)
+end)
+
+local game_progress_bar =
+Gui.clone_concept('progress_bar',TEST 'game_progress_bar')
+:set_tooltip('Game progress bar')
+:set_maximum(300)
+:new_event('on_tick',defines.events.on_tick)
+:on_tick(function(event)
+    event.concept:increment(event.element)
+end)
+:set_delay_completion(true)
+:on_completion(function(event)
+    event.concept:reset(event.element)
+end)
+:define_instance_store()
+
+local force_instance_progress_bar =
+Gui.clone_concept('progress_bar',TEST 'force_instance_progress_bar')
+:set_tooltip('Force instance progress bar')
+:set_maximum(5)
+:new_event('on_click',defines.events.on_gui_click)
+:on_click(function(event)
+    event.concept:increment(event.element)
+end)
+:set_delay_completion(true)
+:on_completion(function(event)
+    event.concept:reset(event.element)
+end)
+:define_instance_store(Gui.categorize_by_force)
+
+local force_stored_progress_bar =
+Gui.clone_concept('progress_bar',TEST 'force_stored_progress_bar')
+:set_tooltip('Force stored progress bar')
+:set_maximum(5)
+:new_event('on_click',defines.events.on_gui_click)
+:on_click(function(event)
+    local element = event.element
+    local concept = event.concept
+    local new_value = concept:increment(element)
+    if new_value then concept.set_data(element,new_value) end
+end)
+:set_delay_completion(true)
+:on_completion(function(event)
+    local element = event.element
+    local concept = event.concept
+    local new_value = concept:reset(element)
+    concept.set_data(element,new_value)
+end)
+:define_combined_store(Gui.categorize_by_force,function(element,value)
+    element.value = value or 0
+end)
+
+tests['Progress Bars'] = {
+    ['Basic Progress Bar'] = basic_progress_bar,
+    ['Inverted Progress Bar'] = inverted_progress_bar,
+    ['Game Instance Progress Bar'] = game_progress_bar,
+    ['Force Instance Progress Bar'] = force_instance_progress_bar,
+    ['Force Stored Progress Bar'] = force_stored_progress_bar
+}

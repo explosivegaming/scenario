@@ -43,6 +43,7 @@
     <ul class="nav">
     <li class="nav-item"><a href="#Elements"><span class="fragment-hashtag">#</span> Elements</a></li>
     <li class="nav-item"><a href="#Dropdowns"><span class="fragment-hashtag">#</span> Dropdowns </a></li>
+    <li class="nav-item"><a href="#Progress_Bars"><span class="fragment-hashtag">#</span> Progress Bars </a></li>
     <li class="nav-item"><a href="#Concept_Control"><span class="fragment-hashtag">#</span> Concept Control </a></li>
     <li class="nav-item"><a href="#Element_Control"><span class="fragment-hashtag">#</span> Element Control </a></li>
     <li class="nav-item"><a href="#Store_Categories"><span class="fragment-hashtag">#</span> Store Categories </a></li>
@@ -212,6 +213,7 @@
     <ul class="nav">
     <li class="nav-item"><a href="#Elements"><span class="fragment-hashtag">#</span> Elements</a></li>
     <li class="nav-item"><a href="#Dropdowns"><span class="fragment-hashtag">#</span> Dropdowns </a></li>
+    <li class="nav-item"><a href="#Progress_Bars"><span class="fragment-hashtag">#</span> Progress Bars </a></li>
     <li class="nav-item"><a href="#Concept_Control"><span class="fragment-hashtag">#</span> Concept Control </a></li>
     <li class="nav-item"><a href="#Element_Control"><span class="fragment-hashtag">#</span> Element Control </a></li>
     <li class="nav-item"><a href="#Store_Categories"><span class="fragment-hashtag">#</span> Store Categories </a></li>
@@ -338,6 +340,10 @@ button:clone(<span class="string">'CustomButton'</span>)
     <td class="name"><a href="#frame">frame</a></td>
     <td class="summary">The basic frame element</td>
     </tr>
+    <tr>
+    <td class="name"><a href="#progress_bar">progress_bar</a></td>
+    <td class="summary">The basic checkbox element</td>
+    </tr>
     </tbody>
     </table>
     <table class="section-content-list">
@@ -357,6 +363,34 @@ button:clone(<span class="string">'CustomButton'</span>)
     <tr>
     <td class="name"><a href="#add_dropdown_items">add_dropdown_items(element[, start_index], new_items)</a></td>
     <td class="summary">Adds the given items into the list of items for this dropdown</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Progress_Bars">Progress Bars </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#progress_bar:increment">progress_bar:increment(element[, amount=1])</a></td>
+    <td class="summary">Will increase the progress of a progress bar based on this concept, if the concept has an instance store then element acts as the category, if you have a combined store it will NOT update all instances</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#progress_bar:decrement">progress_bar:decrement(element[, amount=1])</a></td>
+    <td class="summary">Will decrease the progress of a progress bar based on this concept, if the concept has an instance store then element acts as the category, if you have a combined store it will NOT update all instances</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#progress_bar:reset">progress_bar:reset(element)</a></td>
+    <td class="summary">Resets the progress back to 0% for this element, if the concept has an instance store then element acts as the category, if you have a combined store it will NOT update all instances</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#increment_progress_bar">increment_progress_bar(element[, amount=0.01])</a></td>
+    <td class="summary">Increment any progress bar by the given percentage</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#decrement_progress_bar">decrement_progress_bar(element[, amount=0.01])</a></td>
+    <td class="summary">Decrement any progress bar by the given percentage</td>
     </tr>
     </tbody>
     </table>
@@ -1042,7 +1076,7 @@ Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'d
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic elem button
 </span><span class="keyword">local</span> basic_elem_button =
-Gui.clone_concept(<span class="string">'elem_button'</span>,TEST <span class="string">'basic_elembutton'</span>)
+Gui.clone_concept(<span class="string">'elem_button'</span>,<span class="string">'basic_elembutton'</span>)
 :on_selection_change(<span class="keyword">function</span>(event)
     event.player.<span class="global">print</span>(<span class="string">'Basic elem button is now: '</span>..event.element.elem_value)
 <span class="keyword">end</span>)</code></pre>
@@ -1084,6 +1118,22 @@ Gui.clone_concept(<span class="string">'elem_button'</span>,TEST <span class="st
     </li>
 
 
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>direction</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the direction that children will be added
+
+    </li>
+
+
     </ul>
 
     <!-- parameters end -->
@@ -1106,6 +1156,133 @@ Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'b
         <span class="global">type</span> = <span class="string">'label'</span>,
         caption = <span class="string">'Hello, World!'</span>
     }
+<span class="keyword">end</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#progress_bar" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="progress_bar">progress_bar</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">The basic checkbox element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Properties / Events:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>on_completion</em></strong>
+
+    <strong> : </strong>
+
+
+     fired when increment reaches the maxium value set by set_maximum
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>tooltip</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#LocalisedString">LocalisedString</a></span>)
+
+     the tooltip that will show for this element
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>maximum</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the maxium amount an instance can be increased, default 100
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>delay_completion</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true the progress will be completed untill after the maximum rather than at the maximum
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>inverted</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     although this will NOT effect how you use the functions it will make the element start full and reduce as you call increase, note issues with 0 detections
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic progress bar, will increase when pressed then will reset when full
+</span><span class="keyword">local</span> basic_progress_bar =
+Gui.clone_concept(<span class="string">'progress_bar'</span>,<span class="string">'basic_progress_bar'</span>)
+:set_tooltip(<span class="string">'Basic progress bar'</span>)
+:set_maximum(<span class="number">5</span>)
+:new_event(<span class="string">'on_click'</span>,defines.events.on_gui_click)
+:on_click(<span class="keyword">function</span>(event)
+    event.concept:increment(event.element)
+<span class="keyword">end</span>)
+:set_delay_completion(<span class="keyword">true</span>)
+:on_completion(<span class="keyword">function</span>(event)
+    event.concept:reset(event.element)
 <span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
@@ -1341,6 +1518,383 @@ Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'b
 </span>Gui.add_dropdown_items(element,{<span class="string">'foo'</span>,<span class="string">'bar'</span>})</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Add the items 'foo' and 'bar' to the start
 </span>Gui.add_dropdown_items(element,<span class="number">1</span>,{<span class="string">'foo'</span>,<span class="string">'bar'</span>})</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Progress_Bars" class="section-title"><a href="#Progress_Bars">Progress Bars </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#progress_bar:increment" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="progress_bar:increment">progress_bar:increment(element[, amount=1])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Will increase the progress of a progress bar based on this concept, if the concept has an instance store then element acts as the category, if you have a combined store it will NOT update all instances</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a> or <a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     either the element that is changed or the category that is being changed (only if an instance store is defined)
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>amount</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the amount that will bar will increase, note that this amount must be less than the max
+
+    (<em>default</em>: 1)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a> or <a class="type" href="https://www.lua.org/pil/2.1.html">nil</a></span>)
+    <span class="return-text">the new value of the element, use this to sync a data store, if the return is nil then either a instance store was used or the new value may have changed</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Incrementing progress bar with no instance store
+</span><span class="keyword">local</span> new_value = progress_bar:increment(element)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Incrementing progress bar with an instance store
+</span>progress_bar:increment(category)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#progress_bar:decrement" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="progress_bar:decrement">progress_bar:decrement(element[, amount=1])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Will decrease the progress of a progress bar based on this concept, if the concept has an instance store then element acts as the category, if you have a combined store it will NOT update all instances</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a> or <a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     either the element that is changed or the category that is being changed (only if an instance store is defined)
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>amount</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the amount that will bar will decrease, note that this amount must be less than the max
+
+    (<em>default</em>: 1)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+    <span class="return-text">the new value of the element, use this to sync a data store, if the return is nil then either a instance store was used or the new value may have changed</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Decrementing progress bar with no instance store
+</span><span class="keyword">local</span> new_value = progress_bar:decrement(element)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Decrementing progress bar with an instance store
+</span>progress_bar:decrement(category)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#progress_bar:reset" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="progress_bar:reset">progress_bar:reset(element)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Resets the progress back to 0% for this element, if the concept has an instance store then element acts as the category, if you have a combined store it will NOT update all instances</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a> or <a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     either the element that is changed or the category that is being changed (only if an instance store is defined)
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a> or <a class="type" href="https://www.lua.org/pil/2.1.html">nil</a></span>)
+    <span class="return-text">the new value of the element, use this to sync a data store, if the return is nil then either a instance store was used or the new value may have changed</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Reseting a progress bar with no instance store
+</span><span class="keyword">local</span> new_value = progress_bar:reset(element)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Reseting a progress bar with an instance store
+</span>progress_bar:reset(category)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#increment_progress_bar" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="increment_progress_bar">increment_progress_bar(element[, amount=0.01])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Increment any progress bar by the given percentage</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the progress bar that you want to update
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>amount</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the percentage that you want to increment the progress bar by
+
+    (<em>default</em>: 0.01)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if the bar is now full</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Increment any progress bar by 10%
+</span>Gui.increment_progress_bar(element,<span class="number">0.1</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#decrement_progress_bar" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="decrement_progress_bar">decrement_progress_bar(element[, amount=0.01])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Decrement any progress bar by the given percentage</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the progress bar that you want to update
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>amount</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the percentage that you want to decrement the progress bar by
+
+    (<em>default</em>: 0.01)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if the bar is now empty</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Decrement any progress bar by 10%
+</span>Gui.decrement_progress_bar(element,<span class="number">0.1</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -3886,7 +4440,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-08-31 15:13:50 UTC</i>
+    <i>Last updated 2019-08-31 17:46:10 UTC</i>
     </div>
     </div>
     </div>

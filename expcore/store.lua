@@ -174,7 +174,7 @@ function Store.update(location,key,update_callback,...)
     local rtn
     if update_callback and type(update_callback) == 'function' then
         if args then
-            rtn = udpate_callback(value,key,unpack(args))
+            rtn = update_callback(value,key,unpack(args))
         else
             rtn = update_callback(value,key,...)
         end

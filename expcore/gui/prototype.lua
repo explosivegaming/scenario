@@ -513,7 +513,7 @@ end)
             category = nil
         end
 
-        local instances = Store.get(self.instance_store,get_category(category))
+        local instances = Store.get(self.instance_store,get_category(category)) or {}
         for key,instance in pairs(instances) do
             if not instance or not instance.valid then
                 instances[key] = nil
