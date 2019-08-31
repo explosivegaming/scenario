@@ -331,6 +331,10 @@ button:clone(<span class="string">'CustomButton'</span>)
     <td class="summary">The basic dropdown element</td>
     </tr>
     <tr>
+    <td class="name"><a href="#elem_button">elem_button</a></td>
+    <td class="summary">The basic dropdown element</td>
+    </tr>
+    <tr>
     <td class="name"><a href="#frame">frame</a></td>
     <td class="summary">The basic frame element</td>
     </tr>
@@ -864,9 +868,9 @@ Gui.clone_concept(<span class="string">'checkbox'</span>,<span class="string">'b
 
     <strong> : </strong>
 
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <span class="type">Conepts.LocalisedString</span></span>)
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a>, <a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#LocalisedString">LocalisedString</a> or <a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
 
-     the option which is selected by default
+     the option which is selected by default, or a function which returns the default
 
     </li>
 
@@ -945,16 +949,102 @@ Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'s
 Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'dynamic_dropdown'</span>)
 :set_dynamic_items(<span class="keyword">function</span>(element)
     <span class="keyword">local</span> items = {}
-
     <span class="keyword">for</span> _,player <span class="keyword">in</span> <span class="global">pairs</span>(game.connected_players) <span class="keyword">do</span>
         items[#items+<span class="number">1</span>] = player.name
     <span class="keyword">end</span>
-
     <span class="keyword">return</span> items
 <span class="keyword">end</span>)
 :on_selection_change(<span class="keyword">function</span>(event)
     <span class="keyword">local</span> value = Gui.get_dropdown_value(event.element)
     event.player.<span class="global">print</span>(<span class="string">'Dynamic dropdown is now: '</span>..value)
+<span class="keyword">end</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#elem_button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="elem_button">elem_button</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">The basic dropdown element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Properties / Events:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>on_selection_change</em></strong>
+
+    <strong> : </strong>
+
+
+     fired when the selected value is changed
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>default_selection</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a>, <a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#SignalID">SignalID</a> or <a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the option which is selected by default, or a function which returns the default
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>elem_type</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the type of elem selection that this is, default is item selection
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic elem button
+</span><span class="keyword">local</span> basic_elem_button =
+Gui.clone_concept(<span class="string">'elem_button'</span>,TEST <span class="string">'basic_elembutton'</span>)
+:on_selection_change(<span class="keyword">function</span>(event)
+    event.player.<span class="global">print</span>(<span class="string">'Basic elem button is now: '</span>..event.element.elem_value)
 <span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
@@ -1067,7 +1157,7 @@ Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'b
 
     <strong> : </strong>
 
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <span class="type">Conepts.LocalisedString</span></span>)
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#LocalisedString">LocalisedString</a></span>)
 
      the value that you want selected
 
@@ -1142,7 +1232,7 @@ Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'b
     <strong>Returns:</strong>
     <ul>
     <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <span class="type">Conepts.LocalisedString</span></span>)
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#LocalisedString">LocalisedString</a></span>)
     <span class="return-text">the value that is currently selected</span>
     </li>
     </ul>
@@ -3796,7 +3886,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-08-30 17:29:53 UTC</i>
+    <i>Last updated 2019-08-31 15:13:50 UTC</i>
     </div>
     </div>
     </div>

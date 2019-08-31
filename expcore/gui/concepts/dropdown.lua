@@ -9,7 +9,7 @@ local array_insert = ext_require('expcore.common','array_insert')
 --[[-- The basic dropdown element
 @element dropdown
 @param on_selection_change fired when the selected value is changed
-@tparam ?string|Conepts.LocalisedString default_selection the option which is selected by default
+@tparam ?string|Concepts.LocalisedString|function default_selection the option which is selected by default, or a function which returns the default
 @tparam boolean use_list_box when true a list box will be used rather than a dropdown menu
 @tparam ?nil|table static_items when called with a table the values will be added as items for the dropdown, if called with nil then all items are cleared
 @tparam function dynamic_items the given function will be called to return a list of items and optional start index to add items to the dropdown when it is first drawn
@@ -26,11 +26,9 @@ local dynamic_dropdown =
 Gui.clone_concept('dropdown','dynamic_dropdown')
 :set_dynamic_items(function(element)
     local items = {}
-
     for _,player in pairs(game.connected_players) do
         items[#items+1] = player.name
     end
-
     return items
 end)
 :on_selection_change(function(event)
@@ -107,7 +105,7 @@ end)
 
 --[[-- Selects the index of a dropdown with this value
 @tparam LuaGuiElement element the dropdown that you want to set the selection for
-@tparam ?string|Conepts.LocalisedString value the value that you want selected
+@tparam ?string|Concepts.LocalisedString value the value that you want selected
 @treturn boolean if an item with this value was found
 @usage-- Selecting the item with the value 'foo'
 Gui.set_dropdown_value(element,'foo')
@@ -124,7 +122,7 @@ end
 
 --[[-- Gets the selected item value of a dropdown
 @tparam LuaGuiElement element the dropdown that you want the selected value of
-@treturn ?string|Conepts.LocalisedString the value that is currently selected
+@treturn ?string|Concepts.LocalisedString the value that is currently selected
 @usage-- Getting the selected value
 local selected_value = Gui.get_dropdown_value(element)
 ]]

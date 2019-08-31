@@ -279,3 +279,78 @@ tests.Dropdowns = {
     ['Static Player Stored Dropdown'] = static_player_dropdown,
     ['Dynamic Player Stored Dropdown'] = dynamic_player_dropdown
 }
+
+--[[
+Listboxs
+> Static Listbox -- Simple Listbox with all options being static
+> Static Player Stored Listbox -- Listbox where the values is synced for each player
+]]
+
+local static_listbox =
+Gui.clone_concept('dropdown',TEST 'static_listbox')
+:set_use_list_box(true)
+:set_static_items{'Option 1','Option 2','Option 3'}
+:on_selection_change(function(event)
+    local value = Gui.get_dropdown_value(event.element)
+    event.player.print('Static listbox is now: '..value)
+end)
+
+local static_player_listbox =
+Gui.clone_concept('dropdown',TEST 'static_player_listbox')
+:set_use_list_box(true)
+:set_static_items{'Option 1','Option 2','Option 3'}
+:on_selection_change(function(event)
+    local element = event.element
+    local value = Gui.get_dropdown_value(element)
+    event.concept.set_data(element,value)
+    event.player.print('Static player stored listbox is now: '..value)
+end)
+:define_combined_store(Gui.categorize_by_player,function(element,value)
+    Gui.set_dropdown_value(element,value)
+end)
+
+tests.Listboxs = {
+    ['Static Listbox'] = static_listbox,
+    ['Static Player Stored Listbox'] = static_player_listbox
+}
+
+--[[
+Elem Buttons
+> Basic Elem Button -- Basic elem button
+> Defaut Selection Elem Button -- Same as above but has a default selection
+> Player Stored Elem Button -- Same as above but is stored per player
+]]
+
+local basic_elem_button =
+Gui.clone_concept('elem_button',TEST 'basic_elembutton')
+:on_selection_change(function(event)
+    event.player.print('Basic elem button is now: '..event.element.elem_value)
+end)
+
+local default_selection_elem_button =
+Gui.clone_concept('elem_button',TEST 'default_selection_elem_button')
+:set_elem_type('signal')
+:set_default_selection{type='virtual',name='signal-info'}
+:on_selection_change(function(event)
+    local value = event.element.elem_value
+    event.player.print('Default selection elem button is now: '..value.type..'/'..value.name)
+end)
+
+local player_elem_button =
+Gui.clone_concept('elem_button',TEST 'player_elem_button')
+:set_elem_type('technology')
+:on_selection_change(function(event)
+    local element = event.element
+    local value = element.elem_value
+    event.concept.set_data(element,value)
+    event.player.print('Player stored elem button is now: '..value)
+end)
+:define_combined_store(Gui.categorize_by_player,function(element,value)
+    element.elem_value = value
+end)
+
+tests['Elem Buttons'] = {
+    ['Basic Elem Button'] = basic_elem_button,
+    ['Defaut Selection Elem Button'] = default_selection_elem_button,
+    ['Player Stored Elem Button'] = player_elem_button
+}
