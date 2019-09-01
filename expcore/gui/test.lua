@@ -157,7 +157,7 @@ local basic_checkbox =
 Gui.clone_concept('checkbox',TEST 'basic_checkbox')
 :set_caption('Basic Checkbox')
 :set_tooltip('Basic checkbox')
-:on_state_change(function(event)
+:on_state_changed(function(event)
     event.player.print('Basic checkbox is now: '..tostring(event.element.state))
 end)
 
@@ -165,7 +165,7 @@ local game_checkbox =
 Gui.clone_concept('checkbox',TEST 'game_checkbox')
 :set_caption('Game Stored Checkbox')
 :set_tooltip('Game stored checkbox')
-:on_state_change(function(event)
+:on_state_changed(function(event)
     local element = event.element
     event.concept.set_data(element,element.state) -- Update other instances
     event.player.print('Game stored checkbox is now: '..tostring(element.state))
@@ -178,7 +178,7 @@ local force_checkbox =
 Gui.clone_concept('checkbox',TEST 'force_checkbox')
 :set_caption('Force Stored Checkbox')
 :set_tooltip('Force stored checkbox')
-:on_state_change(function(event)
+:on_state_changed(function(event)
     local element = event.element
     event.concept.set_data(element,element.state) -- Update other instances
     event.player.print('Force stored checkbox is now: '..tostring(element.state))
@@ -191,7 +191,7 @@ local player_checkbox =
 Gui.clone_concept('checkbox',TEST 'player_checkbox')
 :set_caption('Player Stored Checkbox')
 :set_tooltip('Player stored checkbox')
-:on_state_change(function(event)
+:on_state_changed(function(event)
     local element = event.element
     event.concept.set_data(element,element.state) -- Update other instances
     event.player.print('Player stored checkbox is now: '..tostring(element.state))
@@ -218,7 +218,7 @@ Dropdowns
 local static_dropdown =
 Gui.clone_concept('dropdown',TEST 'static_dropdown')
 :set_static_items{'Option 1','Option 2','Option 3'}
-:on_selection_change(function(event)
+:on_selection_changed(function(event)
     local value = Gui.get_dropdown_value(event.element)
     event.player.print('Static dropdown is now: '..value)
 end)
@@ -234,7 +234,7 @@ Gui.clone_concept('dropdown',TEST 'dynamic_dropdown')
     end
     return items
 end)
-:on_selection_change(function(event)
+:on_selection_changed(function(event)
     local value = Gui.get_dropdown_value(event.element)
     event.player.print('Dynamic dropdown is now: '..value)
 end)
@@ -242,7 +242,7 @@ end)
 local static_player_dropdown =
 Gui.clone_concept('dropdown',TEST 'static_player_dropdown')
 :set_static_items{'Option 1','Option 2','Option 3'}
-:on_selection_change(function(event)
+:on_selection_changed(function(event)
     local element = event.element
     local value = Gui.get_dropdown_value(element)
     event.concept.set_data(element,value)
@@ -263,7 +263,7 @@ Gui.clone_concept('dropdown',TEST 'dynamic_player_dropdown')
     end
     return items
 end)
-:on_selection_change(function(event)
+:on_selection_changed(function(event)
     local element = event.element
     local value = Gui.get_dropdown_value(element)
     event.concept.set_data(element,value)
@@ -290,7 +290,7 @@ local static_listbox =
 Gui.clone_concept('dropdown',TEST 'static_listbox')
 :set_use_list_box(true)
 :set_static_items{'Option 1','Option 2','Option 3'}
-:on_selection_change(function(event)
+:on_selection_changed(function(event)
     local value = Gui.get_dropdown_value(event.element)
     event.player.print('Static listbox is now: '..value)
 end)
@@ -299,7 +299,7 @@ local static_player_listbox =
 Gui.clone_concept('dropdown',TEST 'static_player_listbox')
 :set_use_list_box(true)
 :set_static_items{'Option 1','Option 2','Option 3'}
-:on_selection_change(function(event)
+:on_selection_changed(function(event)
     local element = event.element
     local value = Gui.get_dropdown_value(element)
     event.concept.set_data(element,value)
@@ -323,15 +323,15 @@ Elem Buttons
 
 local basic_elem_button =
 Gui.clone_concept('elem_button',TEST 'basic_elembutton')
-:on_selection_change(function(event)
+:on_selection_changed(function(event)
     event.player.print('Basic elem button is now: '..event.element.elem_value)
 end)
 
 local default_selection_elem_button =
 Gui.clone_concept('elem_button',TEST 'default_selection_elem_button')
 :set_elem_type('signal')
-:set_default_selection{type='virtual',name='signal-info'}
-:on_selection_change(function(event)
+:set_default{type='virtual',name='signal-info'}
+:on_selection_changed(function(event)
     local value = event.element.elem_value
     event.player.print('Default selection elem button is now: '..value.type..'/'..value.name)
 end)
@@ -339,7 +339,7 @@ end)
 local player_elem_button =
 Gui.clone_concept('elem_button',TEST 'player_elem_button')
 :set_elem_type('technology')
-:on_selection_change(function(event)
+:on_selection_changed(function(event)
     local element = event.element
     local value = element.elem_value
     event.concept.set_data(element,value)
@@ -446,4 +446,72 @@ tests['Progress Bars'] = {
     ['Game Instance Progress Bar'] = game_progress_bar,
     ['Force Instance Progress Bar'] = force_instance_progress_bar,
     ['Force Stored Progress Bar'] = force_stored_progress_bar
+}
+
+--[[
+Sliders
+> Basic Slider -- Just a basic slider with range 1 to 10
+> Interval Slider -- Same as above but can only be intergers
+> Discrete Slider -- A discrete slider
+> Dynamic Slider -- A slider which has a dynamic range
+> Player Stored Slider -- Slider which stores the value per player, also goes 1 to 10
+]]
+
+local basic_slider =
+Gui.clone_concept('slider',TEST 'basic_slider')
+:set_range(1,10)
+:on_value_changed(function(event)
+    event.player.print('Basic slider is now: '..event.element.slider_value)
+end)
+
+local interval_slider =
+Gui.clone_concept('slider',TEST 'interval_slider')
+:set_range(1,10)
+:set_value_step(1)
+:on_value_changed(function(event)
+    event.player.print('Interval slider is now: '..event.element.slider_value)
+end)
+
+local discrete_slider =
+Gui.clone_concept('slider',TEST 'discrete_slider')
+:set_range(1,10)
+:set_value_step(1)
+:set_discrete_slider(true)
+:on_value_changed(function(event)
+    event.player.print('Discrete slider is now: '..event.element.slider_value)
+end)
+
+local dynamic_slider =
+Gui.clone_concept('slider',TEST 'dynamic_slider')
+:set_range(function(element)
+    local player = Gui.get_player_from_element(element)
+    return 1, player.name:len()
+end)
+:set_value_step(1)
+:set_discrete_slider(true)
+:on_value_changed(function(event)
+    event.player.print('Dynamic slider is now: '..event.element.slider_value)
+end)
+
+local player_slider =
+Gui.clone_concept('slider',TEST 'player_slider')
+:set_range(1,10)
+:set_value_step(1)
+:set_discrete_slider(true)
+:on_value_changed(function(event)
+    local element = event.element
+    local value = element.slider_value
+    event.concept.set_data(element,value)
+    event.player.print('Player stored slider is now: '..value)
+end)
+:define_combined_store(Gui.categorize_by_player,function(element,value)
+    element.slider_value = value or 0
+end)
+
+tests.Sliders = {
+    ['Basic Slider'] = basic_slider,
+    ['Interval Slider'] = interval_slider,
+    ['Discrete Slider'] = discrete_slider,
+    ['Dynamic Slider'] = dynamic_slider,
+    ['Player Stored Slider'] = player_slider
 }

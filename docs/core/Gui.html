@@ -344,6 +344,10 @@ button:clone(<span class="string">'CustomButton'</span>)
     <td class="name"><a href="#progress_bar">progress_bar</a></td>
     <td class="summary">The basic checkbox element</td>
     </tr>
+    <tr>
+    <td class="name"><a href="#slider">slider</a></td>
+    <td class="summary">The basic slider element</td>
+    </tr>
     </tbody>
     </table>
     <table class="section-content-list">
@@ -777,7 +781,7 @@ Gui.clone_concept(<span class="string">'button'</span>,<span class="string">'spr
 
     <li class="section-subitem-li">
 
-    <strong><em>on_state_change</em></strong>
+    <strong><em>on_state_changed</em></strong>
 
     <strong> : </strong>
 
@@ -824,6 +828,22 @@ Gui.clone_concept(<span class="string">'button'</span>,<span class="string">'spr
 
     <li class="section-subitem-li">
 
+    <strong><em>default</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a> or <a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the default state of this checkbox, or a function which returns the default state
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
     <strong><em>use_radio</em></strong>
 
     <strong> : </strong>
@@ -853,7 +873,7 @@ Gui.clone_concept(<span class="string">'button'</span>,<span class="string">'spr
 Gui.clone_concept(<span class="string">'checkbox'</span>,<span class="string">'basic_checkbox'</span>)
 :set_caption(<span class="string">'Basic Checkbox'</span>)
 :set_tooltip(<span class="string">'Basic checkbox'</span>)
-:on_state_change(<span class="keyword">function</span>(event)
+:on_state_changed(<span class="keyword">function</span>(event)
     event.player.<span class="global">print</span>(<span class="string">'Basic checkbox is now: '</span>..<span class="global">tostring</span>(event.element.state))
 <span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
@@ -883,7 +903,7 @@ Gui.clone_concept(<span class="string">'checkbox'</span>,<span class="string">'b
 
     <li class="section-subitem-li">
 
-    <strong><em>on_selection_change</em></strong>
+    <strong><em>on_selection_changed</em></strong>
 
     <strong> : </strong>
 
@@ -898,7 +918,7 @@ Gui.clone_concept(<span class="string">'checkbox'</span>,<span class="string">'b
 
     <li class="section-subitem-li">
 
-    <strong><em>default_selection</em></strong>
+    <strong><em>default</em></strong>
 
     <strong> : </strong>
 
@@ -974,7 +994,7 @@ Gui.clone_concept(<span class="string">'checkbox'</span>,<span class="string">'b
 </span><span class="keyword">local</span> static_dropdown =
 Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'static_dropdown'</span>)
 :set_static_items{<span class="string">'Option 1'</span>,<span class="string">'Option 2'</span>,<span class="string">'Option 3'</span>}
-:on_selection_change(<span class="keyword">function</span>(event)
+:on_selection_changed(<span class="keyword">function</span>(event)
     <span class="keyword">local</span> value = Gui.get_dropdown_value(event.element)
     event.player.<span class="global">print</span>(<span class="string">'Static dropdown is now: '</span>..value)
 <span class="keyword">end</span>)</code></pre>
@@ -988,7 +1008,7 @@ Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'d
     <span class="keyword">end</span>
     <span class="keyword">return</span> items
 <span class="keyword">end</span>)
-:on_selection_change(<span class="keyword">function</span>(event)
+:on_selection_changed(<span class="keyword">function</span>(event)
     <span class="keyword">local</span> value = Gui.get_dropdown_value(event.element)
     event.player.<span class="global">print</span>(<span class="string">'Dynamic dropdown is now: '</span>..value)
 <span class="keyword">end</span>)</code></pre>
@@ -1019,7 +1039,7 @@ Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'d
 
     <li class="section-subitem-li">
 
-    <strong><em>on_selection_change</em></strong>
+    <strong><em>on_selection_changed</em></strong>
 
     <strong> : </strong>
 
@@ -1034,7 +1054,7 @@ Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'d
 
     <li class="section-subitem-li">
 
-    <strong><em>default_selection</em></strong>
+    <strong><em>default</em></strong>
 
     <strong> : </strong>
 
@@ -1077,7 +1097,7 @@ Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'d
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic elem button
 </span><span class="keyword">local</span> basic_elem_button =
 Gui.clone_concept(<span class="string">'elem_button'</span>,<span class="string">'basic_elembutton'</span>)
-:on_selection_change(<span class="keyword">function</span>(event)
+:on_selection_changed(<span class="keyword">function</span>(event)
     event.player.<span class="global">print</span>(<span class="string">'Basic elem button is now: '</span>..event.element.elem_value)
 <span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
@@ -1283,6 +1303,136 @@ Gui.clone_concept(<span class="string">'progress_bar'</span>,<span class="string
 :set_delay_completion(<span class="keyword">true</span>)
 :on_completion(<span class="keyword">function</span>(event)
     event.concept:reset(event.element)
+<span class="keyword">end</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#slider" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="slider">slider</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">The basic slider element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Properties / Events:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>on_value_changed</em></strong>
+
+    <strong> : </strong>
+
+
+     fired when the value of the slider is changed
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>value_step</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the minimum amount by which the value of the slider can be changed
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>default</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a> or <a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the default value of the slider or a function which returns the default value
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>discrete_slider</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     makes this slider a discrete slider (at time of writing unsure what this is)
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>range</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a> or <a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     accepts two params the minimum and the maximum for this slider, or a single function to return both
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic slider
+</span><span class="keyword">local</span> basic_slider =
+Gui.clone_concept(<span class="string">'slider'</span>,<span class="string">'basic_slider'</span>)
+:set_range(<span class="number">1</span>,<span class="number">10</span>)
+:on_value_changed(<span class="keyword">function</span>(event)
+    event.player.<span class="global">print</span>(<span class="string">'Basic slider is now: '</span>..event.element.slider_value)
+<span class="keyword">end</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a discrete_slider
+</span><span class="keyword">local</span> discrete_slider =
+Gui.clone_concept(<span class="string">'slider'</span>,<span class="string">'discrete_slider'</span>)
+:set_range(<span class="number">1</span>,<span class="number">10</span>)
+:set_value_step(<span class="number">1</span>)
+:set_discrete_slider(<span class="keyword">true</span>)
+:on_value_changed(<span class="keyword">function</span>(event)
+    event.player.<span class="global">print</span>(<span class="string">'Interval slider is now: '</span>..event.element.slider_value)
 <span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
@@ -4285,12 +4435,12 @@ custom_button.update_data(<span class="number">1</span>,<span class="keyword">fu
 Gui.get_concept(<span class="string">'checkbox'</span>):clone(<span class="string">'my_checkbox'</span>)
 :set_caption(<span class="string">'My Checkbox'</span>)
 :set_tooltip(<span class="string">'Clicking this check box will change it for everyone'</span>)
-:on_state_change(<span class="keyword">function</span>(event)
+:on_state_changed(<span class="keyword">function</span>(event)
     <span class="keyword">local</span> element = event.element
     event.concept.set_data(element,element.state) <span class="comment">-- Update the stored data to trigger an update of all other instances
 </span><span class="keyword">end</span>)
 :define_combined_store(<span class="keyword">function</span>(element,state) <span class="comment">-- We could add a category function here if we wanted to
-</span>    element.state = state <span class="keyword">or</span> <span class="keyword">false</span> <span class="comment">-- When you sync an instance this is what is called
+</span>    element.state = state <span class="keyword">or</span> <span class="keyword">false</span> <span class="comment">-- Note that the value passed may be nil if there is no stored value and no default set
 </span><span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
@@ -4440,7 +4590,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-08-31 17:46:10 UTC</i>
+    <i>Last updated 2019-09-01 17:18:10 UTC</i>
     </div>
     </div>
     </div>

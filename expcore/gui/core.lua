@@ -4,6 +4,7 @@
 ]]
 
 local Game = require 'utils.game' -- @dep utils.game
+local resolve_value = ext_require('expcore.common','resolve_value') -- @dep expcore.common
 local Prototype = require 'expcore.gui.prototype'
 
 local Gui = {
@@ -185,6 +186,18 @@ function Gui.set_padding(element,up,down,left,right)
     style.left_padding = left == true and style.top_padding or left or 0
     style.right_padding = right == true and style.top_padding or right or 0
 end
+
+--[[ Used to check a property exists and if it is a function then call the function
+@tparam any value the value that you are testing exists and call if its a function
+@tparam LuaGuiElement element the element that is passed to the function if it is a function
+@treturn any the value or what it returns if it is a function
+@usage-- Getting the default value
+local default = Gui.resolve_property(properties.default,element)
+if default then
+    element.value = default
+end
+]]
+Gui.resolve_property = resolve_value
 
 --- Store Categories.
 -- Functions that are common types of categories

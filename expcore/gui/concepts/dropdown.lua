@@ -8,8 +8,8 @@ local array_insert = ext_require('expcore.common','array_insert')
 
 --[[-- The basic dropdown element
 @element dropdown
-@param on_selection_change fired when the selected value is changed
-@tparam ?string|Concepts.LocalisedString|function default_selection the option which is selected by default, or a function which returns the default
+@param on_selection_changed fired when the selected value is changed
+@tparam ?string|Concepts.LocalisedString|function default the option which is selected by default, or a function which returns the default
 @tparam boolean use_list_box when true a list box will be used rather than a dropdown menu
 @tparam ?nil|table static_items when called with a table the values will be added as items for the dropdown, if called with nil then all items are cleared
 @tparam function dynamic_items the given function will be called to return a list of items and optional start index to add items to the dropdown when it is first drawn
@@ -17,7 +17,7 @@ local array_insert = ext_require('expcore.common','array_insert')
 local static_dropdown =
 Gui.clone_concept('dropdown','static_dropdown')
 :set_static_items{'Option 1','Option 2','Option 3'}
-:on_selection_change(function(event)
+:on_selection_changed(function(event)
     local value = Gui.get_dropdown_value(event.element)
     event.player.print('Static dropdown is now: '..value)
 end)
@@ -31,14 +31,14 @@ Gui.clone_concept('dropdown','dynamic_dropdown')
     end
     return items
 end)
-:on_selection_change(function(event)
+:on_selection_changed(function(event)
     local value = Gui.get_dropdown_value(event.element)
     event.player.print('Dynamic dropdown is now: '..value)
 end)
 ]]
 Gui.new_concept('dropdown')
-:new_event('on_selection_change',defines.events.on_gui_selection_state_changed)
-:new_property('default_selection')
+:new_event('on_selection_changed',defines.events.on_gui_selection_state_changed)
+:new_property('default')
 :new_property('use_list_box',false)
 :new_property('static_items',nil,function(properties,value,start_index)
     if not value then
@@ -87,12 +87,8 @@ end)
         end
     end
 
-    if properties.default_selection then
-        local default = properties.default_selection
-        if type(default) == 'function' then
-            default = default(element)
-        end
-
+    local default = Gui.resolve_property(properties.default,element)
+    if default then
         Gui.set_dropdown_value(element,default)
     end
 

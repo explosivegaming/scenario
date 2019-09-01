@@ -73,5 +73,6 @@ Gui.require_concept('checkbox')
 Gui.require_concept('dropdown')
 Gui.require_concept('elem_button')
 Gui.require_concept('progress_bar')
+Gui.require_concept('slider')
 
 return Gui

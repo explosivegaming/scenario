@@ -682,4 +682,22 @@ function Common.table_insert(tbl,start_index,tbl2)
     return tbl
 end
 
+--[[-- Used to resolve a value that could also be a function returning that value
+@tparam any value the value which you want to test is not nil and if it is a function then call the function
+@treturn any the value given or returned by value if it is a function
+@usage-- Default value handling
+-- if default value is not a function then it is returned
+-- if it is a function then it is called with the first argument being self
+local value = Common.resolve_value(self.defaut_value,self)
+]]
+function Common.resolve_value(value,...)
+    if value then
+        if type(value) == 'function' then
+            return value(...)
+        else
+            return value
+        end
+    end
+end
+
 return Common

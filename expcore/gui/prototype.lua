@@ -517,12 +517,13 @@ end)
         for key,instance in pairs(instances) do
             if not instance or not instance.valid then
                 instances[key] = nil
-            end
 
-            if args then
-                update_callback(instance,unpack(args))
             else
-                update_callback(instance,...)
+                if args then
+                    update_callback(instance,unpack(args))
+                else
+                    update_callback(instance,...)
+                end
             end
         end
     end
@@ -647,12 +648,12 @@ local custom_button =
 Gui.get_concept('checkbox'):clone('my_checkbox')
 :set_caption('My Checkbox')
 :set_tooltip('Clicking this check box will change it for everyone')
-:on_state_change(function(event)
+:on_state_changed(function(event)
     local element = event.element
     event.concept.set_data(element,element.state) -- Update the stored data to trigger an update of all other instances
 end)
 :define_combined_store(function(element,state) -- We could add a category function here if we wanted to
-    element.state = state or false -- When you sync an instance this is what is called
+    element.state = state or false -- Note that the value passed may be nil if there is no stored value and no default set
 end)
 ]]
 function Prototype:define_combined_store(category_callback,sync_callback)
@@ -679,8 +680,11 @@ Gui.get_concept('CustomButton')
 -- Used internally when first draw and automatically when the store updates
 custom_button.sync_instance(element)
 ]]
+    local properties = self.properties
     function self.sync_instance(element)
-        sync_callback(element,self.get_data(element))
+        local default = properties.default
+        local value = self.get_data(element) or type(default) == 'function' and default(element) or default
+        sync_callback(element,value)
     end
 
     return self
