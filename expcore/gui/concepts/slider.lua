@@ -10,7 +10,7 @@ local Gui = require 'expcore.gui.core'
 @param on_value_changed fired when the value of the slider is changed
 @tparam number value_step the minimum amount by which the value of the slider can be changed
 @tparam ?number|function default the default value of the slider or a function which returns the default value
-@tparam boolean discrete_slider makes this slider a discrete slider (at time of writing unsure what this is)
+@tparam boolean discrete_slider makes this slider a discrete slider, this means that the slider button will stop at the same interval as the values do
 @tparam ?number|function range accepts two params the minimum and the maximum for this slider, or a single function to return both
 @usage-- Making a basic slider
 local basic_slider =

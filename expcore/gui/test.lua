@@ -515,3 +515,97 @@ tests.Sliders = {
     ['Dynamic Slider'] = dynamic_slider,
     ['Player Stored Slider'] = player_slider
 }
+
+--[[
+Text Fields
+> Basic Text Field -- Just a text field which text can be entered into
+> Better Text Field -- Same as above but will clear on rmb and un forcus on confirmation
+> Decimal Text Field -- Text field which accepts decimal values
+> Password Text Field -- Text field which stars out the typed characters
+> Player Stored Text Field - Same as basic but will store value per player
+]]
+
+-- Making a text field
+local basic_text_field =
+Gui.clone_concept('text_field',TEST 'basic_text_field')
+:set_tooltip('Basic text field')
+:on_confirmation(function(event)
+    event.player.print('Basic text field is now: '..event.element.text)
+end)
+
+local better_text_field =
+Gui.clone_concept('text_field',TEST 'better_text_field')
+:set_tooltip('Better text field')
+:set_clear_on_rmb(true)
+:set_lose_forcus(true)
+:on_confirmation(function(event)
+    event.player.print('Better text field is now: '..event.element.text)
+end)
+
+local decimal_text_field =
+Gui.clone_concept('text_field',TEST 'decimal_text_field')
+:set_tooltip('Decimal text field')
+:set_is_decimal(true)
+:on_confirmation(function(event)
+    event.player.print('Decimal text field is now: '..event.element.text)
+end)
+
+local password_text_field =
+Gui.clone_concept('text_field',TEST 'password_text_field')
+:set_tooltip('Password text field')
+:set_is_password(true)
+:on_confirmation(function(event)
+    event.player.print('Password text field is now: '..event.element.text)
+end)
+
+local player_text_field =
+Gui.clone_concept('text_field',TEST 'player_text_field')
+:set_tooltip('Player stored text field')
+:on_confirmation(function(event)
+    local element = event.element
+    local text = element.text
+    event.concept.set_data(element,text)
+    event.player.print('Player stored text field is now: '..text)
+end)
+:define_combined_store(Gui.categorize_by_player, function(element,value)
+    element.text = value or ''
+end)
+
+tests['Text Fields'] = {
+    ['Basic Text Field'] = basic_text_field,
+    ['Better Text Field'] = better_text_field,
+    ['Decimal Text Field'] = decimal_text_field,
+    ['Password Text Field'] = password_text_field,
+    ['Player Stored Text Field'] = player_text_field
+}
+
+--[[
+Text Boxs
+> Basic Text Box -- A text box that can not be edited
+> Editible Text Box -- A text box that can be edited
+]]
+
+local basic_text_box =
+Gui.clone_concept('text_box',TEST 'basic_text_box')
+:set_tooltip('Basic text box')
+:set_default('I am the text that will show in the text box')
+:define_draw(function(properties,parent,element)
+    element.style.height = 75
+end)
+
+local editible_text_box =
+Gui.clone_concept('text_box',TEST 'editible_text_box')
+:set_tooltip('Editible text box')
+:set_is_read_only(false)
+:set_default('I am the text that will show in the text box')
+:on_text_changed(function(event)
+    event.player.print('Editible text box is now: '..event.element.text)
+end)
+:define_draw(function(properties,parent,element)
+    element.style.height = 75
+end)
+
+tests['Text Boxs'] = {
+    ['Basic Text Box'] = basic_text_box,
+    ['Editible Text Box'] = editible_text_box
+}

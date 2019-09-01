@@ -348,6 +348,14 @@ button:clone(<span class="string">'CustomButton'</span>)
     <td class="name"><a href="#slider">slider</a></td>
     <td class="summary">The basic slider element</td>
     </tr>
+    <tr>
+    <td class="name"><a href="#text_box">text_box</a></td>
+    <td class="summary">The text box element</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#text_field">text_field</a></td>
+    <td class="summary">The text field element</td>
+    </tr>
     </tbody>
     </table>
     <table class="section-content-list">
@@ -1384,7 +1392,7 @@ Gui.clone_concept(<span class="string">'progress_bar'</span>,<span class="string
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
 
-     makes this slider a discrete slider (at time of writing unsure what this is)
+     makes this slider a discrete slider, this means that the slider button will stop at the same interval as the values do
 
     </li>
 
@@ -1433,6 +1441,378 @@ Gui.clone_concept(<span class="string">'slider'</span>,<span class="string">'dis
 :set_discrete_slider(<span class="keyword">true</span>)
 :on_value_changed(<span class="keyword">function</span>(event)
     event.player.<span class="global">print</span>(<span class="string">'Interval slider is now: '</span>..event.element.slider_value)
+<span class="keyword">end</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#text_box" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="text_box">text_box</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">The text box element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Properties / Events:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>on_text_changed</em></strong>
+
+    <strong> : </strong>
+
+
+     fired when the text within the text box is changed
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>tooltip</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#LocalisedString">LocalisedString</a></span>)
+
+     the tooltip that shows when a player hovers over the text box
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>default</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the default text that will appear in the text box, or a function that returns it
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>clear_on_rmb</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     if the text box will be cleared and forcused on a right click
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>is_selectable</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true the text inside the box can be selected
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>has_word_wrap</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true the text will wrap onto the next line if it reachs the end
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>is_read_only</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true the text inside the box can not be edited by the player
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a text box
+</span><span class="keyword">local</span> basic_text_box =
+Gui.clone_concept(<span class="string">'text_box'</span>,<span class="string">'basic_text_box'</span>)
+:set_default(<span class="string">'I am the text that will show in the text box'</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a text box which can be edited
+</span><span class="keyword">local</span> editible_text_box =
+Gui.clone_concept(<span class="string">'text_box'</span>,<span class="string">'editible_text_box'</span>)
+:set_is_read_only(<span class="keyword">false</span>)
+:set_default(<span class="string">'I am the text that will show in the text box'</span>)
+:on_confirmation(<span class="keyword">function</span>(event)
+    event.player.<span class="global">print</span>(<span class="string">'Editible text box is now: '</span>..event.element.text)
+<span class="keyword">end</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#text_field" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="text_field">text_field</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">The text field element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Properties / Events:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>on_text_changed</em></strong>
+
+    <strong> : </strong>
+
+
+     fired when the text within the text field is changed
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>on_confirmation</em></strong>
+
+    <strong> : </strong>
+
+
+     fired when the player presses enter with the text field forcused
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>tooltip</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#LocalisedString">LocalisedString</a></span>)
+
+     the tooltip that shows when a player hovers over the text field
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>default</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the default text that will appear in the text field, or a function that returns it
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>clear_on_rmb</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     if the text field will be cleared and forcused on a right click
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>lose_forcus</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     if the text field will lose forcus after the confirmation event
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>is_number</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     if this text field contains a number value, can be ignored if is_decimal or is_negitive is used
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>is_decimal</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     if this text field contains a decimal value
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>is_negative</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     if this text field contains a negative value
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>is_password</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     if this text field contains a password value
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a text field
+</span><span class="keyword">local</span> basic_text_field =
+Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">'basic_text_field'</span>)
+:on_confirmation(<span class="keyword">function</span>(event)
+    event.player.<span class="global">print</span>(<span class="string">'Basic text field is now: '</span>..event.element.text)
+<span class="keyword">end</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a text field which will clear on right click and un forcus on confirmation
+</span><span class="keyword">local</span> better_text_field =
+Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">'better_text_field'</span>)
+:set_clear_on_rmb(<span class="keyword">true</span>)
+:set_lose_forcus(<span class="keyword">true</span>)
+:on_confirmation(<span class="keyword">function</span>(event)
+    event.player.<span class="global">print</span>(<span class="string">'Better text field is now: '</span>..event.element.text)
+<span class="keyword">end</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a decimal input
+</span><span class="keyword">local</span> decimal_text_field =
+Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">'decimal_text_field'</span>)
+:set_is_decimal(<span class="keyword">true</span>)
+:on_confirmation(<span class="keyword">function</span>(event)
+    event.player.<span class="global">print</span>(<span class="string">'Decimal text field is now: '</span>..event.element.text)
 <span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
@@ -4590,7 +4970,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-09-01 17:18:10 UTC</i>
+    <i>Last updated 2019-09-01 19:16:00 UTC</i>
     </div>
     </div>
     </div>
