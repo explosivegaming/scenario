@@ -188,6 +188,7 @@ function Gui.set_padding(element,up,down,left,right)
 end
 
 --[[ Used to check a property exists and if it is a function then call the function
+@function Gui.resolve_property
 @tparam any value the value that you are testing exists and call if its a function
 @tparam LuaGuiElement element the element that is passed to the function if it is a function
 @treturn any the value or what it returns if it is a function

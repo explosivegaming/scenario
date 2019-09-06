@@ -75,6 +75,7 @@ local Game = require 'utils.game' -- @dep utils.game
 local Factorio_Events = {}
 local Prototype = {
     draw_callbacks = {},
+    clone_callbacks = {},
     properties = {},
     factorio_events = {},
     events = {}
@@ -159,7 +160,38 @@ function Prototype:clone(concept_name)
         concept.set_store_from_instance = nil
     end
 
+    -- Loop over all the clone defines, element is updated when a value is returned
+    for _,clone_callback in pairs(concept.clone_callbacks) do
+        local success, rtn = pcall(clone_callback,concept)
+        if not success then
+            error('Gui clone handler error with '..concept.name..':\n\t'..rtn)
+        end
+    end
+
     return concept
+end
+
+--[[-- Use to add your own callbacks to the clone function, for example adding to a local table
+@tparam function clone_callback the function which is called with the concept to have something done to it
+@treturn table self to allow chaining
+@usage-- Adding concept to a local table
+local buttons = {}
+local button =
+Gui.get_concept('Button')
+:define_clone(function(concept)
+    buttons[concept.name] = concept
+end)
+]]
+function Prototype:define_clone(clone_callback)
+    -- Check that it is a function that is being added
+    if type(clone_callback) ~= 'function' then
+        error('Draw define must be a function',2)
+    end
+
+    -- Add the draw function
+    self.clone_callbacks[#self.clone_callbacks+1] = clone_callback
+
+    return self
 end
 
 --[[-- Used internally to save concept names to the core gui module
@@ -280,7 +312,7 @@ function Prototype:raise_event(event_name,event,from_factorio)
     for _,handler in ipairs(handlers) do
         local success, err = pcall(handler,event)
         if not success then
-            error('Gui event handler error with '..self.name..'/'..event_name..': '..err)
+            error('Gui event handler error with '..self.name..'/'..event_name..':\n\t'..err)
         end
     end
 end
@@ -335,7 +367,7 @@ Gui.get_concept('CustomButton')
             -- Call the setter method to update values if present
             local success, err = pcall(setter_callback,concept.properties,value,...)
             if not success then
-                error('Gui property handler error with '..concept.name..'/'..property_name..': '..err)
+                error('Gui property handler error with '..concept.name..'/'..property_name..':\n\t'..err)
             end
         else
             -- Otherwise just update the key
@@ -413,7 +445,7 @@ function Prototype:draw(parent_element,...)
         if success and rtn then
             element = rtn
         elseif not success then
-            error('Gui draw handler error with '..self.name..': '..rtn)
+            error('Gui draw handler error with '..self.name..':\n\t'..rtn)
         end
     end
 

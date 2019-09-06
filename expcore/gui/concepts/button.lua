@@ -50,21 +50,21 @@ end)
     properties.type = 'sprite-button'
 end)
 :define_draw(function(properties,parent,element)
-    if properties.type == 'button' then
+    if properties.type == 'sprite-button' then
         element = parent.add{
             name = properties.name,
-            type = properties.type,
-            caption = properties.caption,
+            type = 'sprite-button',
+            sprite = properties.sprite,
+            hovered_sprite = properties.hovered_sprite,
+            clicked_sprite = properties.clicked_sprite,
             tooltip = properties.tooltip
         }
 
     else
         element = parent.add{
             name = properties.name,
-            type = properties.type,
-            sprite = properties.sprite,
-            hovered_sprite = properties.hovered_sprite,
-            clicked_sprite = properties.clicked_sprite,
+            type = 'button',
+            caption = properties.caption,
             tooltip = properties.tooltip
         }
 

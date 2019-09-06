@@ -8,7 +8,9 @@
 -- @section tests
 
 local Gui = require 'expcore.gui'
-local Game = require 'utils.game' -- @dep utils.game
+local Game = require 'utils.game'
+local Event = require 'utils.event'
+require 'expcore.toolbar'
 
 local test_prefix = '__GUI_TEST_'
 local tests = {}
@@ -30,6 +32,59 @@ Gui.clone_concept('frame',TEST 'test_frame')
             direction = 'vertical'
         }
     end
+end)
+
+Gui.clone_concept('toolbar-button',TEST 'run_test_button')
+:set_permission_alias('gui-test')
+:set_caption('Element Tests')
+:on_click(function(event)
+    local player = event.player
+    if not Gui.destroy(player.gui.center[test_frame.name]) then
+        Gui.run_tests(event.player)
+    end
+end)
+
+local test_left_frame =
+Gui.clone_concept('toolbar-frame',TEST 'player_list')
+:set_permission_alias('gui-test')
+:set_caption('Frame Test Left')
+:define_draw(function(properties,parent,element)
+    local list_area =
+    element.add{
+        name = 'scroll',
+        type = 'scroll-pane',
+        direction = 'vertical',
+        horizontal_scroll_policy = 'never',
+        vertical_scroll_policy = 'auto-and-reserve-space'
+    }
+    Gui.set_padding(list_area,1,1,2,2)
+    list_area.style.horizontally_stretchable = true
+    list_area.style.maximal_height = 200
+
+    for _,player in pairs(game.connected_players) do
+        list_area.add{
+            type='label',
+            caption=player.name
+        }
+    end
+end)
+:on_update(function(event)
+    local list_area = event.element.scroll
+    list_area.clear()
+
+    for _,player in pairs(game.connected_players) do
+        list_area.add{
+            type='label',
+            caption=player.name
+        }
+    end
+end)
+
+Event.add(defines.events.on_player_joined_game,function(event)
+    test_left_frame:update_all(event)
+end)
+Event.add(defines.events.on_player_left_game,function(event)
+    test_left_frame:update_all(event)
 end)
 
 --[[-- Runs a set of gui tests to ensure that the system is working
