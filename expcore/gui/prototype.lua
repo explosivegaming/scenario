@@ -426,6 +426,34 @@ function Prototype:define_draw(draw_callback)
     return self
 end
 
+--[[ Used to define a draw callback that is ran before any other draw callbacks, see define_draw
+@tparam function draw_callback the function that will be called to draw/update the instance; this function must return the instance or the new acting instance
+@treturn GuiConcept to allow chaining of functions
+@usage-- Placing a button into a flow
+local button =
+Gui.get_concept('Button')
+:define_pre_draw(function(properties,parent,element)
+    -- Here we set the lcoal parent to a new flow, to set this as the new parent we must return it below
+    parent = parent.add{
+        type = 'flow'
+    }
+
+    -- We must return the element here but we can also return a new parent instance that all other draw functions will see as the parent
+    return element, parent
+end)
+]]
+function Prototype:define_pre_draw(draw_callback)
+    -- Check that it is a function that is being added
+    if type(draw_callback) ~= 'function' then
+        error('Draw define must be a function',2)
+    end
+
+    -- Add the draw function
+    table.insert(self.draw_callbacks,1,draw_callback)
+
+    return self
+end
+
 --[[-- Calls all the draw functions in order to create this concept in game; will also store and sync the instance if stores are used
 @tparam LuaGuiElement parent_element the element that the concept will use as a base
 @treturn LuaGuiElement the element that was created and then passed though and returned by the draw functions
@@ -437,15 +465,17 @@ Gui.get_concept('CustomButton')
 custom_button:draw(game.player.gui.left)
 ]]
 function Prototype:draw(parent_element,...)
+    local parent = parent_element
     local element
 
     -- Loop over all the draw defines, element is updated when a value is returned
     for _,draw_callback in pairs(self.draw_callbacks) do
-        local success, rtn = pcall(draw_callback,self.properties,parent_element,element,...)
-        if success and rtn then
-            element = rtn
+        local success, _element, _parent = pcall(draw_callback,self.properties,parent,element,...)
+        if success then
+            if _element then element = _element end
+            if _parent then parent = _parent end
         elseif not success then
-            error('Gui draw handler error with '..self.name..':\n\t'..rtn)
+            error('Gui draw handler error with '..self.name..':\n\t'.._element)
         end
     end
 
