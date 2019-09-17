@@ -6,7 +6,7 @@
 local Gui = require 'expcore.gui.core'
 local array_insert = ext_require('expcore.common','array_insert')
 
---[[-- The basic dropdown element
+--[[-- A drop down list of other elements.
 @element dropdown
 @param on_selection_changed fired when the selected value is changed
 @tparam ?string|Concepts.LocalisedString|function default the option which is selected by default, or a function which returns the default

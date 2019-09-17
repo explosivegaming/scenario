@@ -5,7 +5,7 @@
 
 local Gui = require 'expcore.gui.core'
 
---[[-- The basic slider element
+--[[-- A number picker.
 @element slider
 @param on_value_changed fired when the value of the slider is changed
 @tparam number value_step the minimum amount by which the value of the slider can be changed

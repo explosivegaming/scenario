@@ -44,7 +44,7 @@ Explosive Gaming (often ExpGaming) is a server hosting community with a strong f
 
 ## Contributing
 
-All are welcome to make pull requests and issues for this scenario, if you are in any doubt please ask someone in our [discord]. If you do not know lua and don't feel like learning you can always make a [feature request]. Please keep in mind while making code changes:
+All are welcome to make pull requests and issues for this scenario, if you are in any doubt please ask someone in our [discord]. If you do not know lua and don't feel like learning you can always make a [feature request]. All our docs can be found [here][docs]. Please keep in mind while making code changes:
 
 * New features should have the branch names: `feature/feature-name`
 * New features are merged into `dev` after it has been completed.
@@ -111,6 +111,7 @@ All are welcome to make pull requests and issues for this scenario, if you are i
 
 The Explosive Gaming codebase is licensed under the [GNU General Public License v3.0](LICENSE)
 
+[docs]: https://explosivegaming.github.io/scenario/
 [issues]: https://github.com/explosivegaming/scenario/issues/new/choose
 [website]: https://explosivegaming.nl
 [discord]: https://discord.explosivegaming.nl

@@ -5,7 +5,7 @@
 
 local Gui = require 'expcore.gui.core'
 
---[[-- The text field element
+--[[-- Boxes of text the user can type in.
 @element text_field
 @param on_text_changed fired when the text within the text field is changed
 @param on_confirmation fired when the player presses enter with the text field forcused

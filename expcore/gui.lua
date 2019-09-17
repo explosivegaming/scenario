@@ -68,6 +68,13 @@ custom_button:draw(game.player.gui.left)
 local Gui = require 'expcore.gui.core'
 
 Gui.require_concept('frame')
+Gui.require_concept('flow')
+Gui.require_concept('table')
+Gui.require_concept('label')
+Gui.require_concept('line')
+Gui.require_concept('scroll')
+Gui.require_concept('empty')
+
 Gui.require_concept('button')
 Gui.require_concept('checkbox')
 Gui.require_concept('dropdown')

@@ -5,7 +5,7 @@
 
 local Gui = require 'expcore.gui.core'
 
---[[-- The basic checkbox element
+--[[-- Clickable elements with a cross in the middle that can be turned off or on.
 @element checkbox
 @param on_state_changed fired when the state of the element is changed
 @tparam ?string|Concepts.LocalisedString caption the message that is shown next to the checkbox

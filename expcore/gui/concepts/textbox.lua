@@ -5,7 +5,7 @@
 
 local Gui = require 'expcore.gui.core'
 
---[[-- The text box element
+--[[-- A multi-line text box that supports selection and copy-paste.
 @element text_box
 @param on_text_changed fired when the text within the text box is changed
 @tparam ?string|Concepts.LocalisedString tooltip the tooltip that shows when a player hovers over the text box

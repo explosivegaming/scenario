@@ -5,7 +5,7 @@
 
 local Gui = require 'expcore.gui.core'
 
---[[-- The basic checkbox element
+--[[-- Indicate progress by displaying a partially filled bar.
 @element progress_bar
 @param on_completion fired when increment reaches the maxium value set by set_maximum
 @tparam ?string|Concepts.LocalisedString tooltip the tooltip that will show for this element

@@ -5,14 +5,12 @@
 
 local Gui = require 'expcore.gui.core'
 
---[[-- Grey semi-transparent boxes that contain other elements. They have a caption, and, just like flows, they lay out children either horizontally or vertically.
-@element frame
-@tparam ?string|Concepts.LocalisedString title the title that will show in the frame
+--[[-- Invisible containers that lay out children either horizontally or vertically. The root GUI elements (top, left and center; see LuaGui) are flows.
+@element flow
 @tparam string direction the direction that children will be added
-@usage-- Making a basic frame, contains a label with hello world
-local basic_frame =
-Gui.clone_concept('frame','basic_frame')
-:set_title('Basic Frame')
+@usage-- Making a basic flow, contains a label with hello world
+local basic_flow =
+Gui.clone_concept('flow','basic_flow')
 :define_draw(function(properties,parent,element)
     element.add{
         type = 'label',
@@ -20,13 +18,12 @@ Gui.clone_concept('frame','basic_frame')
     }
 end)
 ]]
-Gui.new_concept('frame')
-:new_property('title')
+Gui.new_concept('flow')
 :new_property('direction')
 :define_draw(function(properties,parent,element)
     element = parent.add{
         name = properties.name,
-        type = 'frame',
+        type = 'flow',
         caption = properties.title,
         direction = properties.direction
     }

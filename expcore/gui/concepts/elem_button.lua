@@ -5,7 +5,7 @@
 
 local Gui = require 'expcore.gui.core'
 
---[[-- The basic dropdown element
+--[[-- A button that lets the player pick one of an: item, entity, tile, or signal similar to the filter-select window.
 @element elem_button
 @param on_selection_changed fired when the selected value is changed
 @tparam ?string|Concepts.SignalID|function default the option which is selected by default, or a function which returns the default

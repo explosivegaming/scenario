@@ -5,7 +5,7 @@
 
 local Gui = require 'expcore.gui.core'
 
---[[-- The basic button element
+--[[-- Clickable elements that fire on_gui_click when clicked.
 @element button
 @param on_click fired when the player clicks the button
 @param on_left_click fired when the player clicks with the left mouse button
