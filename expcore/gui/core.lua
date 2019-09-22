@@ -30,7 +30,7 @@ end
 Gui.require_concept('expgaming') --- @dep Gui.style.frame
 ]]
 function Gui.require_style(style_name)
-    require('expcore.gui.styles.'..style_name)
+    require('expcore.gui.styles.'..style_name..'.index')
 end
 
 --[[-- Gets a gui concept from name, id, or its self
