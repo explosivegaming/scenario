@@ -253,22 +253,24 @@
     <h3>Usage</h3>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making the base button concept
 </span><span class="keyword">local</span> button =
-Gui.new_concept(<span class="string">'Button'</span>)
-:new_event(<span class="string">'on_click'</span>,defines.events.on_gui_click)
-:new_property(<span class="string">'tooltip'</span>)
-:new_property(<span class="string">'caption'</span>,<span class="keyword">nil</span>,<span class="keyword">function</span>(properties,value)
-    properties.caption = value
+Gui.new_concept() <span class="comment">-- Make a new empty concept
+</span>:save_as(<span class="string">'button'</span>) <span class="comment">-- Save it as Gui.concepts.button so it can be used in other files
+</span>:new_event(<span class="string">'on_click'</span>,defines.events.on_gui_click) <span class="comment">-- Add an on click event for this concept
+</span>:new_property(<span class="string">'tooltip'</span>) <span class="comment">-- Add a property with the default setter method called tooltip
+</span>:new_property(<span class="string">'caption'</span>,<span class="keyword">function</span>(properties,value) <span class="comment">-- Add a property with a custom setter method called caption
+</span>    properties.caption = value
     properties.sprite = <span class="keyword">nil</span>
     properties.<span class="global">type</span> = <span class="string">'button'</span>
 <span class="keyword">end</span>)
-:new_property(<span class="string">'sprite'</span>,<span class="keyword">nil</span>,<span class="keyword">function</span>(properties,value)
-    properties.image = value
+:new_property(<span class="string">'sprite'</span>,<span class="keyword">function</span>(properties,value) <span class="comment">-- Add a property with a custom setter method called sprite
+</span>    properties.image = value
     properties.caption = <span class="keyword">nil</span>
     properties.<span class="global">type</span> = <span class="string">'sprite-button'</span>
 <span class="keyword">end</span>)
-:define_draw(<span class="keyword">function</span>(properties,parent,element)
-    <span class="comment">-- Note that element might be nil if this is the first draw function
-</span>    <span class="comment">-- in this case button is a new concept so we know this is the first function and element is nil
+:define_draw(<span class="keyword">function</span>(properties,parent,element) <span class="comment">-- Add the draw function to create the element from the concept
+</span>    <span class="comment">-- Properties will include all the information that you need to draw the element
+</span>    <span class="comment">-- Parent is the parent element for the element, this may have been altered by previous draw functions
+</span>    <span class="comment">-- Element is the current element being made, this may have a nil value, if it is nil then this is the first draw function
 </span>    <span class="keyword">if</span> properties.<span class="global">type</span> == <span class="string">'button'</span> <span class="keyword">then</span>
         element = parent.add{
             <span class="global">type</span> = properties.<span class="global">type</span>,
@@ -287,25 +289,26 @@ Gui.new_concept(<span class="string">'Button'</span>)
 
     <span class="keyword">end</span>
 
-    <span class="comment">-- We must return the element or what we want to be seen as the instance, this is so other draw functions have access to it
-</span>    <span class="comment">-- for example if our custom button defined a draw function to change the font color to red
-</span>    <span class="keyword">return</span> element
+    <span class="comment">-- If you return element or parent then their values will be updated for the next draw function in the chain
+</span>    <span class="comment">-- It is best practice to always return the values if you have made any changes to them
+</span>    <span class="keyword">return</span> element, parent
 <span class="keyword">end</span>)</code></pre>
-    <pre class="code" data-lang="Lua"><code><span class="comment">-- Makeing a alternative button based on the first
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a new button which has a custom style
 </span><span class="keyword">local</span> custom_button =
-button:clone(<span class="string">'CustomButton'</span>)
-:new_event(<span class="string">'on_admin_clicked'</span>,defines.events.on_gui_click,<span class="keyword">function</span>(event)
-    <span class="keyword">return</span> event.player.admin <span class="comment">-- only raise custom event when an admin clicks the button
-</span><span class="keyword">end</span>)
-:set_caption(<span class="string">'Custom Button'</span>)
-:set_tooltip(<span class="string">'Only admins can press this button'</span>)
-:on_click(<span class="keyword">function</span>(event)
-    <span class="keyword">if</span> <span class="keyword">not</span> event.player.admin <span class="keyword">then</span>
+Gui.new_concept(<span class="string">'button'</span>) <span class="comment">-- We can use button here since we used save as on the concept
+</span><span class="comment">-- button:clone() -- If we had not used save as then this is how we would use it as a base
+</span>:set_caption(<span class="string">'Custom Button'</span>) <span class="comment">-- Set the caption of the concept, this is possible as we added caption as a property
+</span>:set_tooltip(<span class="string">'Only admins can press this button'</span>) <span class="comment">-- Set the tooltip of the concept, this is possible as we added tooltip as a property
+</span>:on_click(<span class="keyword">function</span>(event) <span class="comment">-- Register a handler to the click event we added with new event
+</span>    <span class="keyword">if</span> <span class="keyword">not</span> event.player.admin <span class="keyword">then</span>
         event.player.<span class="global">print</span>(<span class="string">'You must be admin to use this button'</span>)
     <span class="keyword">end</span>
 <span class="keyword">end</span>)
-:on_admin_clicked(<span class="keyword">function</span>(event)
-    <span class="comment">-- Yes i know this can just be an if else but its an example
+:new_event(<span class="string">'on_admin_clicked'</span>,defines.events.on_gui_click,<span class="keyword">function</span>(event) <span class="comment">-- Add a click event which has a filter function
+</span>    <span class="keyword">return</span> event.player.admin <span class="comment">-- Check if the player is admin
+</span><span class="keyword">end</span>)
+:on_admin_clicked(<span class="keyword">function</span>(event) <span class="comment">-- Register a handler to the admin click event we have just created
+</span>    <span class="comment">-- The admin click event is only an example, because of how sinmple the filter is we could have just used an if else statement
 </span>    game.<span class="global">print</span>(event.player.name..<span class="string">' pressed my admin button'</span>)
 <span class="keyword">end</span>)</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Drawing a concept
@@ -438,27 +441,27 @@ button:clone(<span class="string">'CustomButton'</span>)
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#require_concept">require_concept(concept)</a></td>
-    <td class="summary">Loads a concept from the concepts file, used internally</td>
+    <td class="name"><a href="#require_concept">require_concept(concept_name)</a></td>
+    <td class="summary">Loads a concept from the concepts file</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#require_style">require_style(style_name)</a></td>
+    <td class="summary">Loads a set of concepts from the styles file</td>
     </tr>
     <tr>
     <td class="name"><a href="#get_concept">get_concept(name)</a></td>
-    <td class="summary">Gets the gui concept with this name</td>
+    <td class="summary">Gets a gui concept from name, id, or its self</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Prototype:change_name">Prototype:change_name([new_name=self.name])</a></td>
-    <td class="summary">Used internally to save concept names to the core gui module</td>
+    <td class="name"><a href="#Prototype:save_as">Prototype:save_as(save_name)</a></td>
+    <td class="summary">Used to save the concept to the main gui module to allow access from other files</td>
     </tr>
     <tr>
-    <td class="name"><a href="#new_concept">new_concept(name)</a></td>
-    <td class="summary">Returns a new gui concept with no properties or events</td>
+    <td class="name"><a href="#new_concept">new_concept([base_concept])</a></td>
+    <td class="summary">Returns a new gui concept, option to provide a base concept to copy properties and draw functions from</td>
     </tr>
     <tr>
-    <td class="name"><a href="#clone_concept">clone_concept(name, new_name)</a></td>
-    <td class="summary">Make a new concept based on the properties and drawing of another</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#draw_concept">draw_concept(name, parent)</a></td>
+    <td class="name"><a href="#draw_concept">draw_concept(concept, parent)</a></td>
     <td class="summary">Used to draw a concept to a parent element</td>
     </tr>
     </tbody>
@@ -530,8 +533,12 @@ button:clone(<span class="string">'CustomButton'</span>)
     <td class="summary">Use to add your own callbacks to the clone function, for example adding to a local table</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Prototype:change_name">Prototype:change_name([new_name=self.name])</a></td>
-    <td class="summary">Used internally to save concept names to the core gui module</td>
+    <td class="name"><a href="#Prototype:save_as">Prototype:save_as(save_name)</a></td>
+    <td class="summary">Used to save the concept to the main gui module to allow access from other files</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Prototype:debug">Prototype:debug(name)</a></td>
+    <td class="summary">Sets a debug name that can be used with error handlers</td>
     </tr>
     <tr>
     <td class="name"><a href="#Prototype:new_event">Prototype:new_event(event_name[, factorio_event][, event_condition])</a></td>
@@ -546,7 +553,7 @@ button:clone(<span class="string">'CustomButton'</span>)
     <td class="summary">Raises a custom event, folowing keys included automaticlly: concept, event name, game tick, player from player_index, element if valid</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Prototype:new_property">Prototype:new_property(property_name, default[, setter_callback])</a></td>
+    <td class="name"><a href="#Prototype:new_property">Prototype:new_property(property_name[, setter_callback][, default])</a></td>
     <td class="summary">Adds a new property to the concept, such as caption, tooltip, or some custom property you want to control</td>
     </tr>
     <tr>
@@ -777,7 +784,7 @@ button:clone(<span class="string">'CustomButton'</span>)
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic button
 </span><span class="keyword">local</span> basic_button =
-Gui.clone_concept(<span class="string">'button'</span>,<span class="string">'basic_button'</span>)
+Gui.new_concept(<span class="string">'button'</span>)
 :set_caption(<span class="string">'Basic Button'</span>)
 :set_tooltip(<span class="string">'Basic button'</span>)
 :on_click(<span class="keyword">function</span>(event)
@@ -785,7 +792,7 @@ Gui.clone_concept(<span class="string">'button'</span>,<span class="string">'bas
 <span class="keyword">end</span>)</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a sprite button
 </span><span class="keyword">local</span> sprite_button =
-Gui.clone_concept(<span class="string">'button'</span>,<span class="string">'sprite_button'</span>)
+Gui.new_concept(<span class="string">'button'</span>)
 :set_sprite(<span class="string">'utility/warning_icon'</span>)
 :set_tooltip(<span class="string">'Sprite button'</span>)
 :on_click(<span class="keyword">function</span>(event)
@@ -907,7 +914,7 @@ Gui.clone_concept(<span class="string">'button'</span>,<span class="string">'spr
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic checkbox
 </span><span class="keyword">local</span> basic_checkbox =
-Gui.clone_concept(<span class="string">'checkbox'</span>,<span class="string">'basic_checkbox'</span>)
+Gui.new_concept(<span class="string">'checkbox'</span>)
 :set_caption(<span class="string">'Basic Checkbox'</span>)
 :set_tooltip(<span class="string">'Basic checkbox'</span>)
 :on_state_changed(<span class="keyword">function</span>(event)
@@ -1029,7 +1036,7 @@ Gui.clone_concept(<span class="string">'checkbox'</span>,<span class="string">'b
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic dropdown
 </span><span class="keyword">local</span> static_dropdown =
-Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'static_dropdown'</span>)
+Gui.new_concept(<span class="string">'dropdown'</span>)
 :set_static_items{<span class="string">'Option 1'</span>,<span class="string">'Option 2'</span>,<span class="string">'Option 3'</span>}
 :on_selection_changed(<span class="keyword">function</span>(event)
     <span class="keyword">local</span> value = Gui.get_dropdown_value(event.element)
@@ -1037,7 +1044,7 @@ Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'s
 <span class="keyword">end</span>)</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a dropdown with dynamic items, example is name of online players
 </span><span class="keyword">local</span> dynamic_dropdown =
-Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'dynamic_dropdown'</span>)
+Gui.new_concept(<span class="string">'dropdown'</span>)
 :set_dynamic_items(<span class="keyword">function</span>(element)
     <span class="keyword">local</span> items = {}
     <span class="keyword">for</span> _,player <span class="keyword">in</span> <span class="global">pairs</span>(game.connected_players) <span class="keyword">do</span>
@@ -1133,7 +1140,7 @@ Gui.clone_concept(<span class="string">'dropdown'</span>,<span class="string">'d
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic elem button
 </span><span class="keyword">local</span> basic_elem_button =
-Gui.clone_concept(<span class="string">'elem_button'</span>,<span class="string">'basic_elembutton'</span>)
+Gui.new_concept(<span class="string">'elem_button'</span>)
 :on_selection_changed(<span class="keyword">function</span>(event)
     event.player.<span class="global">print</span>(<span class="string">'Basic elem button is now: '</span>..event.element.elem_value)
 <span class="keyword">end</span>)</code></pre>
@@ -1190,7 +1197,7 @@ Gui.clone_concept(<span class="string">'elem_button'</span>,<span class="string"
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a draggable space styled widget
 </span><span class="keyword">local</span> draggable_space =
-Gui.clone_concept(<span class="string">'empty'</span>,<span class="string">'draggable_space'</span>)
+Gui.new_concept(<span class="string">'empty'</span>)
 :set_style(<span class="string">'draggable_space'</span>)</code></pre>
     <!-- usage end -->
 
@@ -1245,7 +1252,7 @@ Gui.clone_concept(<span class="string">'empty'</span>,<span class="string">'drag
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic flow, contains a label with hello world
 </span><span class="keyword">local</span> basic_flow =
-Gui.clone_concept(<span class="string">'flow'</span>,<span class="string">'basic_flow'</span>)
+Gui.new_concept(<span class="string">'flow'</span>)
 :define_draw(<span class="keyword">function</span>(properties,parent,element)
     element.add{
         <span class="global">type</span> = <span class="string">'label'</span>,
@@ -1321,7 +1328,7 @@ Gui.clone_concept(<span class="string">'flow'</span>,<span class="string">'basic
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic frame, contains a label with hello world
 </span><span class="keyword">local</span> basic_frame =
-Gui.clone_concept(<span class="string">'frame'</span>,<span class="string">'basic_frame'</span>)
+Gui.new_concept(<span class="string">'frame'</span>)
 :set_title(<span class="string">'Basic Frame'</span>)
 :define_draw(<span class="keyword">function</span>(properties,parent,element)
     element.add{
@@ -1383,6 +1390,22 @@ Gui.clone_concept(<span class="string">'frame'</span>,<span class="string">'basi
     </li>
 
 
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>rich_text</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/defines.html#defines.rich">defines.rich_text_setting</a></span>)
+
+     how this element handles rich text
+
+    </li>
+
+
     </ul>
 
     <!-- parameters end -->
@@ -1398,7 +1421,7 @@ Gui.clone_concept(<span class="string">'frame'</span>,<span class="string">'basi
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic label
 </span><span class="keyword">local</span> basic_label =
-Gui.clone_concept(<span class="string">'label'</span>,<span class="string">'basic_label'</span>)
+Gui.new_concept(<span class="string">'label'</span>)
 :set_caption(<span class="string">'Hello, World!'</span>)</code></pre>
     <!-- usage end -->
 
@@ -1453,7 +1476,7 @@ Gui.clone_concept(<span class="string">'label'</span>,<span class="string">'basi
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic frame, contains a label with hello world
 </span><span class="keyword">local</span> basic_line =
-Gui.clone_concept(<span class="string">'line'</span>,<span class="string">'basic_line'</span>)</code></pre>
+Gui.new_concept(<span class="string">'line'</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -1570,7 +1593,7 @@ Gui.clone_concept(<span class="string">'line'</span>,<span class="string">'basic
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic progress bar, will increase when pressed then will reset when full
 </span><span class="keyword">local</span> basic_progress_bar =
-Gui.clone_concept(<span class="string">'progress_bar'</span>,<span class="string">'basic_progress_bar'</span>)
+Gui.new_concept(<span class="string">'progress_bar'</span>)
 :set_tooltip(<span class="string">'Basic progress bar'</span>)
 :set_maximum(<span class="number">5</span>)
 :new_event(<span class="string">'on_click'</span>,defines.events.on_gui_click)
@@ -1650,7 +1673,7 @@ Gui.clone_concept(<span class="string">'progress_bar'</span>,<span class="string
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic flow, contains a label with hello world
 </span><span class="keyword">local</span> basic_scroll =
-Gui.clone_concept(<span class="string">'scroll'</span>,<span class="string">'basic_scroll'</span>)
+Gui.new_concept(<span class="string">'scroll'</span>)
 :define_draw(<span class="keyword">function</span>(properties,parent,element)
     element.style.hieght = <span class="number">50</span>
     <span class="keyword">for</span> i = <span class="number">1</span>,<span class="number">10</span> <span class="keyword">do</span>
@@ -1776,14 +1799,14 @@ Gui.clone_concept(<span class="string">'scroll'</span>,<span class="string">'bas
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic slider
 </span><span class="keyword">local</span> basic_slider =
-Gui.clone_concept(<span class="string">'slider'</span>,<span class="string">'basic_slider'</span>)
+Gui.new_concept(<span class="string">'slider'</span>)
 :set_range(<span class="number">1</span>,<span class="number">10</span>)
 :on_value_changed(<span class="keyword">function</span>(event)
     event.player.<span class="global">print</span>(<span class="string">'Basic slider is now: '</span>..event.element.slider_value)
 <span class="keyword">end</span>)</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a discrete_slider
 </span><span class="keyword">local</span> discrete_slider =
-Gui.clone_concept(<span class="string">'slider'</span>,<span class="string">'discrete_slider'</span>)
+Gui.new_concept(<span class="string">'slider'</span>)
 :set_range(<span class="number">1</span>,<span class="number">10</span>)
 :set_value_step(<span class="number">1</span>)
 :set_discrete_slider(<span class="keyword">true</span>)
@@ -1907,7 +1930,7 @@ Gui.clone_concept(<span class="string">'slider'</span>,<span class="string">'dis
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a basic table, contains 25 labels
 </span><span class="keyword">local</span> basic_table =
-Gui.clone_concept(<span class="string">'table'</span>,<span class="string">'basic_table'</span>)
+Gui.new_concept(<span class="string">'table'</span>)
 :set_column_count(<span class="number">5</span>)
 :define_draw(<span class="keyword">function</span>(properties,parent,element)
     <span class="keyword">for</span> i = <span class="number">1</span>,<span class="number">25</span> <span class="keyword">do</span>
@@ -1991,6 +2014,22 @@ Gui.clone_concept(<span class="string">'table'</span>,<span class="string">'basi
 
     <li class="section-subitem-li">
 
+    <strong><em>rich_text</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/defines.html#defines.rich">defines.rich_text_setting</a></span>)
+
+     how this element handles rich text
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
     <strong><em>clear_on_rmb</em></strong>
 
     <strong> : </strong>
@@ -2065,11 +2104,11 @@ Gui.clone_concept(<span class="string">'table'</span>,<span class="string">'basi
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a text box
 </span><span class="keyword">local</span> basic_text_box =
-Gui.clone_concept(<span class="string">'text_box'</span>,<span class="string">'basic_text_box'</span>)
+Gui.new_concept(<span class="string">'text_box'</span>)
 :set_default(<span class="string">'I am the text that will show in the text box'</span>)</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a text box which can be edited
 </span><span class="keyword">local</span> editible_text_box =
-Gui.clone_concept(<span class="string">'text_box'</span>,<span class="string">'editible_text_box'</span>)
+Gui.new_concept(<span class="string">'text_box'</span>)
 :set_is_read_only(<span class="keyword">false</span>)
 :set_default(<span class="string">'I am the text that will show in the text box'</span>)
 :on_confirmation(<span class="keyword">function</span>(event)
@@ -2155,6 +2194,22 @@ Gui.clone_concept(<span class="string">'text_box'</span>,<span class="string">'e
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
 
      the default text that will appear in the text field, or a function that returns it
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>rich_text</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/defines.html#defines.rich">defines.rich_text_setting</a></span>)
+
+     how this element handles rich text
 
     </li>
 
@@ -2270,13 +2325,13 @@ Gui.clone_concept(<span class="string">'text_box'</span>,<span class="string">'e
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a text field
 </span><span class="keyword">local</span> basic_text_field =
-Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">'basic_text_field'</span>)
+Gui.new_concept(<span class="string">'text_field'</span>)
 :on_confirmation(<span class="keyword">function</span>(event)
     event.player.<span class="global">print</span>(<span class="string">'Basic text field is now: '</span>..event.element.text)
 <span class="keyword">end</span>)</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a text field which will clear on right click and un forcus on confirmation
 </span><span class="keyword">local</span> better_text_field =
-Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">'better_text_field'</span>)
+Gui.new_concept(<span class="string">'text_field'</span>)
 :set_clear_on_rmb(<span class="keyword">true</span>)
 :set_lose_forcus(<span class="keyword">true</span>)
 :on_confirmation(<span class="keyword">function</span>(event)
@@ -2284,7 +2339,7 @@ Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">
 <span class="keyword">end</span>)</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a decimal input
 </span><span class="keyword">local</span> decimal_text_field =
-Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">'decimal_text_field'</span>)
+Gui.new_concept(<span class="string">'text_field'</span>)
 :set_is_decimal(<span class="keyword">true</span>)
 :on_confirmation(<span class="keyword">function</span>(event)
     event.player.<span class="global">print</span>(<span class="string">'Decimal text field is now: '</span>..event.element.text)
@@ -2910,13 +2965,13 @@ Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#require_concept" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="require_concept">require_concept(concept)</span>
+    <span class="section-item-title" id="require_concept">require_concept(concept_name)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Loads a concept from the concepts file, used internally</p>
+    <p class="section-item-summary">Loads a concept from the concepts file</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -2930,7 +2985,7 @@ Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">
 
     <li class="section-subitem-li">
 
-    <strong><em>concept</em></strong>
+    <strong><em>concept_name</em></strong>
 
     <strong> : </strong>
 
@@ -2955,7 +3010,60 @@ Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">
     <!-- usage start -->
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Load a base concept
-</span>Gui.require_concept(<span class="string">'frame'</span>)</code></pre>
+</span>Gui.require_concept(<span class="string">'frame'</span>) --- @dep Gui.concept.frame</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#require_style" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="require_style">require_style(style_name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Loads a set of concepts from the styles file</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>style_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the style to require
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Load a base style
+</span>Gui.require_concept(<span class="string">'expgaming'</span>) --- @dep Gui.style.frame</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -2969,7 +3077,7 @@ Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Gets the gui concept with this name</p>
+    <p class="section-item-summary">Gets a gui concept from name, id, or its self</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -2987,9 +3095,9 @@ Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">
 
     <strong> : </strong>
 
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a>, <a class="type" href="https://www.lua.org/pil/2.3.html">number</a> or <a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
 
-     the name of the concept that you want to get
+     the name, id, or the concept you want to get
 
     </li>
 
@@ -3015,14 +3123,14 @@ Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Prototype:change_name" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Prototype:change_name">Prototype:change_name([new_name=self.name])</span>
+    <a href="#Prototype:save_as" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Prototype:save_as">Prototype:save_as(save_name)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Used internally to save concept names to the core gui module</p>
+    <p class="section-item-summary">Used to save the concept to the main gui module to allow access from other files</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -3036,7 +3144,7 @@ Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">
 
     <li class="section-subitem-li">
 
-    <strong><em>new_name</em></strong>
+    <strong><em>save_name</em></strong>
 
     <strong> : </strong>
 
@@ -3044,7 +3152,6 @@ Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">
 
      the new name of the concept
 
-    (<em>default</em>: self.name)
     </li>
 
 
@@ -3061,10 +3168,11 @@ Gui.clone_concept(<span class="string">'text_field'</span>,<span class="string">
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code><span class="comment">-- Internal Saving
-</span><span class="comment">-- this is never needed to be done, internal use only!
-</span><span class="keyword">local</span> button = Gui.get_concept(<span class="string">'Button'</span>)
-button:change_name(<span class="string">'Not Button'</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Save a concept to allow access in another file
+</span>button:save_as(<span class="string">'button'</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Access concept after being saved
+</span>Gui.concepts.button
+Gui.get_concept(<span class="string">'button'</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -3072,13 +3180,13 @@ button:change_name(<span class="string">'Not Button'</span>)</code></pre>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#new_concept" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="new_concept">new_concept(name)</span>
+    <span class="section-item-title" id="new_concept">new_concept([base_concept])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Returns a new gui concept with no properties or events</p>
+    <p class="section-item-summary">Returns a new gui concept, option to provide a base concept to copy properties and draw functions from</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -3092,14 +3200,15 @@ button:change_name(<span class="string">'Not Button'</span>)</code></pre>
 
     <li class="section-subitem-li">
 
-    <strong><em>name</em></strong>
+    <strong><em>base_concept</em></strong>
 
     <strong> : </strong>
 
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a>, <a class="type" href="https://www.lua.org/pil/2.3.html">number</a> or <a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
 
-     the name that you want this concept to have
+     the concept that you want to copy the details of
 
+    (<em>optional</em>)
     </li>
 
 
@@ -3116,7 +3225,7 @@ button:change_name(<span class="string">'Not Button'</span>)</code></pre>
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a new concept, see module usage
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a new button, see module usage
 </span><span class="keyword">local</span> button = Gui.new_concept(<span class="string">'Button'</span>)</code></pre>
     <!-- usage end -->
 
@@ -3124,77 +3233,8 @@ button:change_name(<span class="string">'Not Button'</span>)</code></pre>
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#clone_concept" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="clone_concept">clone_concept(name, new_name)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Make a new concept based on the properties and drawing of another</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name of the concept that you want as the base
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>new_name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name that you want the new concept to have
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a new concept from another, see module usage
-</span><span class="keyword">local</span> custom_button = Gui.clone_concept(<span class="string">'Button'</span>,<span class="string">'CustomButton'</span>)</code></pre>
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#draw_concept" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="draw_concept">draw_concept(name, parent)</span>
+    <span class="section-item-title" id="draw_concept">draw_concept(concept, parent)</span>
     </div>
     </dt>
     <dd>
@@ -3214,11 +3254,11 @@ button:change_name(<span class="string">'Not Button'</span>)</code></pre>
 
     <li class="section-subitem-li">
 
-    <strong><em>name</em></strong>
+    <strong><em>concept</em></strong>
 
     <strong> : </strong>
 
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a>, <a class="type" href="https://www.lua.org/pil/2.3.html">number</a> or <a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
 
      the name of the concept that you want to draw
 
@@ -3940,7 +3980,7 @@ button:change_name(<span class="string">'Not Button'</span>)</code></pre>
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Clones the base Button concept to make a alternative button
 </span><span class="keyword">local</span> custom_button =
-Gui.get_concept(<span class="string">'Button'</span>):clone(<span class="string">'CustomButton'</span>)</code></pre>
+Gui.get_concept(Gui.concepts.button):clone()</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -4012,14 +4052,14 @@ Gui.get_concept(<span class="string">'Button'</span>)
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Prototype:change_name" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Prototype:change_name">Prototype:change_name([new_name=self.name])</span>
+    <a href="#Prototype:save_as" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Prototype:save_as">Prototype:save_as(save_name)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Used internally to save concept names to the core gui module</p>
+    <p class="section-item-summary">Used to save the concept to the main gui module to allow access from other files</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -4033,7 +4073,7 @@ Gui.get_concept(<span class="string">'Button'</span>)
 
     <li class="section-subitem-li">
 
-    <strong><em>new_name</em></strong>
+    <strong><em>save_name</em></strong>
 
     <strong> : </strong>
 
@@ -4041,7 +4081,6 @@ Gui.get_concept(<span class="string">'Button'</span>)
 
      the new name of the concept
 
-    (<em>default</em>: self.name)
     </li>
 
 
@@ -4058,10 +4097,71 @@ Gui.get_concept(<span class="string">'Button'</span>)
 
     <!-- usage start -->
     <strong>Usage:</strong>
-    <pre class="code" data-lang="Lua"><code><span class="comment">-- Internal Saving
-</span><span class="comment">-- this is never needed to be done, internal use only!
-</span><span class="keyword">local</span> button = Gui.get_concept(<span class="string">'Button'</span>)
-button:change_name(<span class="string">'Not Button'</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Save a concept to allow access in another file
+</span>button:save_as(<span class="string">'button'</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Access concept after being saved
+</span>Gui.concepts.button
+Gui.get_concept(<span class="string">'button'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Prototype:debug" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Prototype:debug">Prototype:debug(name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sets a debug name that can be used with error handlers</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name that will be used in error messages
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">self</span></span>)
+    <span class="return-text">to allow chaining</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Set the debug name
+</span>unsaved_concept:<span class="global">debug</span>(<span class="string">'Example button'</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -4325,7 +4425,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Prototype:new_property" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Prototype:new_property">Prototype:new_property(property_name, default[, setter_callback])</span>
+    <span class="section-item-title" id="Prototype:new_property">Prototype:new_property(property_name[, setter_callback][, default])</span>
     </div>
     </dt>
     <dd>
@@ -4361,14 +4461,15 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 
     <li class="section-subitem-li">
 
-    <strong><em>default</em></strong>
+    <strong><em>setter_callback</em></strong>
 
     <strong> : </strong>
 
-    (<span class="types"><span class="type">any</span></span>)
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
 
-     the default value for this property, although not strictly required is is strongly recomented
+     this function is called when set is called, if not provided then key in concept.properties is updated to new value
 
+    (<em>optional</em>)
     </li>
 
 
@@ -4377,13 +4478,13 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 
     <li class="section-subitem-li">
 
-    <strong><em>setter_callback</em></strong>
+    <strong><em>default</em></strong>
 
     <strong> : </strong>
 
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+    (<span class="types"><span class="type">any</span></span>)
 
-     this function is called when set is called, if not provided then key in concept.properties is updated to new value
+     use this as the default value, will call the setter callback if defined
 
     (<em>optional</em>)
     </li>
@@ -4552,12 +4653,12 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
 </span><span class="keyword">local</span> button =
 Gui.get_concept(<span class="string">'Button'</span>)
 :define_draw(<span class="keyword">function</span>(properties,parent,element)
-    <span class="comment">-- Note that element might be nil if this is the first draw function
-</span>    <span class="comment">-- for this example we assume button was cloned from Prototype and so has no other draw functions defined
-</span>    <span class="comment">-- this means that there is no element yet and what we return will be the first time the element is returned
-</span>    <span class="comment">-- although not shown here you also can recive any extra arguments here from the call to draw
+    <span class="comment">-- Properties will include all the information that you need to draw the element
+</span>    <span class="comment">-- Parent is the parent element for the element, this may have been altered by previous draw functions
+</span>    <span class="comment">-- Element is the current element being made, this may have a nil value, if it is nil then this is the first draw function
+</span>    <span class="comment">-- You can also pass any other arguments that you want to this function from the draw call
 </span>    <span class="keyword">if</span> properties.<span class="global">type</span> == <span class="string">'button'</span> <span class="keyword">then</span>
-        element = parent.draw{
+        element = parent.add{
             <span class="global">type</span> = properties.<span class="global">type</span>,
             name = properties.name,
             caption = properties.caption,
@@ -4565,7 +4666,7 @@ Gui.get_concept(<span class="string">'Button'</span>)
         }
 
     <span class="keyword">else</span>
-        element = parent.draw{
+        element = parent.add{
             <span class="global">type</span> = properties.<span class="global">type</span>,
             name = properties.name,
             sprite = properties.sprite,
@@ -4574,9 +4675,9 @@ Gui.get_concept(<span class="string">'Button'</span>)
 
     <span class="keyword">end</span>
 
-    <span class="comment">-- We must return the element or what we want to be seen as the instance, this is so other draw functions have access to it
-</span>    <span class="comment">-- for example if our custom button defined a draw function to change the font color to red
-</span>    <span class="keyword">return</span> element
+    <span class="comment">-- If you return element or parent then their values will be updated for the next draw function in the chain
+</span>    <span class="comment">-- It is best practice to always return the values if you have made any changes to them
+</span>    <span class="keyword">return</span> element, parent
 <span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
@@ -5510,7 +5611,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-09-17 21:04:13 UTC</i>
+    <i>Last updated 2019-09-22 17:08:34 UTC</i>
     </div>
     </div>
     </div>

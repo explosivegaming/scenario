@@ -12,17 +12,16 @@ local Game = require 'utils.game'
 local Event = require 'utils.event'
 require 'expcore.toolbar'
 
-local test_prefix = '__GUI_TEST_'
 local tests = {}
-
-local function TEST(str) return test_prefix..str end
 
 --[[
 The main test frame
 ]]
 
+Gui.require_concept('frame')
+
 local test_frame =
-Gui.clone_concept('frame',TEST 'test_frame')
+Gui.new_concept('frame')
 :set_title('Gui Tests')
 :define_draw(function(properties,parent,element)
     for category, _ in pairs(tests) do
@@ -34,7 +33,7 @@ Gui.clone_concept('frame',TEST 'test_frame')
     end
 end)
 
-Gui.clone_concept('toolbar-button',TEST 'run_test_button')
+Gui.new_concept('toolbar-button')
 :set_permission_alias('gui-test')
 :set_caption('Element Tests')
 :on_click(function(event)
@@ -45,7 +44,7 @@ Gui.clone_concept('toolbar-button',TEST 'run_test_button')
 end)
 
 local test_left_frame =
-Gui.clone_concept('toolbar-frame',TEST 'player_list')
+Gui.new_concept('toolbar-frame')
 :set_permission_alias('gui-test')
 :set_caption('Frame Test Left')
 :define_draw(function(properties,parent,element)
@@ -61,6 +60,7 @@ Gui.clone_concept('toolbar-frame',TEST 'player_list')
     list_area.style.horizontally_stretchable = true
     list_area.style.maximal_height = 200
 
+    -- Add player names
     for _,player in pairs(game.connected_players) do
         list_area.add{
             type='label',
@@ -72,6 +72,7 @@ end)
     local list_area = event.element.scroll
     list_area.clear()
 
+    -- Add player names
     for _,player in pairs(game.connected_players) do
         list_area.add{
             type='label',
@@ -154,8 +155,11 @@ Buttons
 > Admin Button -- Button which is disabled if the player is not an admin
 ]]
 
+Gui.require_concept('button')
+
 local basic_button =
-Gui.clone_concept('button',TEST 'basic_button')
+Gui.new_concept('button')
+:debug('basic_button')
 :set_caption('Basic Button')
 :set_tooltip('Basic button')
 :on_click(function(event)
@@ -163,7 +167,8 @@ Gui.clone_concept('button',TEST 'basic_button')
 end)
 
 local sprite_button =
-Gui.clone_concept('button',TEST 'sprite_button')
+Gui.new_concept('button')
+:debug('sprite_button')
 :set_sprite('utility/warning_icon')
 :set_tooltip('Sprite button')
 :on_click(function(event)
@@ -171,7 +176,8 @@ Gui.clone_concept('button',TEST 'sprite_button')
 end)
 
 local multi_sprite_button =
-Gui.clone_concept('button',TEST 'multi_sprite_button')
+Gui.new_concept('button')
+:debug('multi_sprite_button')
 :set_sprite('utility/warning_icon','utility/warning','utility/warning_white')
 :set_tooltip('Multi-sprite button')
 :on_click(function(event)
@@ -179,7 +185,8 @@ Gui.clone_concept('button',TEST 'multi_sprite_button')
 end)
 
 local admin_button =
-Gui.clone_concept('button',TEST 'admin_button')
+Gui.new_concept('button')
+:debug('admin_button')
 :set_caption('Admin Button')
 :set_tooltip('Admin button')
 :define_draw(function(properties,parent,element)
@@ -208,8 +215,11 @@ Checkboxs
 > Player Stored Checkbox -- Checkbox that stores its state between re-draws
 ]]
 
+Gui.require_concept('checkbox')
+
 local basic_checkbox =
-Gui.clone_concept('checkbox',TEST 'basic_checkbox')
+Gui.new_concept('checkbox')
+:debug('basic_checkbox')
 :set_caption('Basic Checkbox')
 :set_tooltip('Basic checkbox')
 :on_state_changed(function(event)
@@ -217,7 +227,8 @@ Gui.clone_concept('checkbox',TEST 'basic_checkbox')
 end)
 
 local game_checkbox =
-Gui.clone_concept('checkbox',TEST 'game_checkbox')
+Gui.new_concept('checkbox')
+:debug('game_checkbox')
 :set_caption('Game Stored Checkbox')
 :set_tooltip('Game stored checkbox')
 :on_state_changed(function(event)
@@ -230,7 +241,8 @@ end)
 end)
 
 local force_checkbox =
-Gui.clone_concept('checkbox',TEST 'force_checkbox')
+Gui.new_concept('checkbox')
+:debug('force_checkbox')
 :set_caption('Force Stored Checkbox')
 :set_tooltip('Force stored checkbox')
 :on_state_changed(function(event)
@@ -243,7 +255,8 @@ end)
 end)
 
 local player_checkbox =
-Gui.clone_concept('checkbox',TEST 'player_checkbox')
+Gui.new_concept('checkbox')
+:debug('player_checkbox')
 :set_caption('Player Stored Checkbox')
 :set_tooltip('Player stored checkbox')
 :on_state_changed(function(event)
@@ -270,8 +283,11 @@ Dropdowns
 > Dynamic Player Stored Dropdown -- Same as above but now with dynamic options
 ]]
 
+Gui.require_concept('dropdown')
+
 local static_dropdown =
-Gui.clone_concept('dropdown',TEST 'static_dropdown')
+Gui.new_concept('dropdown')
+:debug('static_dropdown')
 :set_static_items{'Option 1','Option 2','Option 3'}
 :on_selection_changed(function(event)
     local value = Gui.get_dropdown_value(event.element)
@@ -279,7 +295,8 @@ Gui.clone_concept('dropdown',TEST 'static_dropdown')
 end)
 
 local dynamic_dropdown =
-Gui.clone_concept('dropdown',TEST 'dynamic_dropdown')
+Gui.new_concept('dropdown')
+:debug('dynamic_dropdown')
 :set_dynamic_items(function(element)
     local items = {}
     for concept_name,_ in pairs(Gui.concepts) do
@@ -295,7 +312,8 @@ end)
 end)
 
 local static_player_dropdown =
-Gui.clone_concept('dropdown',TEST 'static_player_dropdown')
+Gui.new_concept('dropdown')
+:debug('static_player_dropdown')
 :set_static_items{'Option 1','Option 2','Option 3'}
 :on_selection_changed(function(event)
     local element = event.element
@@ -308,7 +326,8 @@ end)
 end)
 
 local dynamic_player_dropdown =
-Gui.clone_concept('dropdown',TEST 'dynamic_player_dropdown')
+Gui.new_concept('dropdown')
+:debug('dynamic_player_dropdown')
 :set_dynamic_items(function(element)
     local items = {}
     for concept_name,_ in pairs(Gui.concepts) do
@@ -342,7 +361,8 @@ Listboxs
 ]]
 
 local static_listbox =
-Gui.clone_concept('dropdown',TEST 'static_listbox')
+Gui.new_concept('dropdown')
+:debug('static_listbox')
 :set_use_list_box(true)
 :set_static_items{'Option 1','Option 2','Option 3'}
 :on_selection_changed(function(event)
@@ -351,7 +371,8 @@ Gui.clone_concept('dropdown',TEST 'static_listbox')
 end)
 
 local static_player_listbox =
-Gui.clone_concept('dropdown',TEST 'static_player_listbox')
+Gui.new_concept('dropdown')
+:debug('static_player_listbox')
 :set_use_list_box(true)
 :set_static_items{'Option 1','Option 2','Option 3'}
 :on_selection_changed(function(event)
@@ -376,14 +397,18 @@ Elem Buttons
 > Player Stored Elem Button -- Same as above but is stored per player
 ]]
 
+Gui.require_concept('elem_button')
+
 local basic_elem_button =
-Gui.clone_concept('elem_button',TEST 'basic_elembutton')
+Gui.new_concept('elem_button')
+:debug('basic_elem_button')
 :on_selection_changed(function(event)
     event.player.print('Basic elem button is now: '..event.element.elem_value)
 end)
 
 local default_selection_elem_button =
-Gui.clone_concept('elem_button',TEST 'default_selection_elem_button')
+Gui.new_concept('elem_button')
+:debug('default_selection_elem_button')
 :set_elem_type('signal')
 :set_default{type='virtual',name='signal-info'}
 :on_selection_changed(function(event)
@@ -392,7 +417,8 @@ Gui.clone_concept('elem_button',TEST 'default_selection_elem_button')
 end)
 
 local player_elem_button =
-Gui.clone_concept('elem_button',TEST 'player_elem_button')
+Gui.new_concept('elem_button')
+:debug('player_elem_button')
 :set_elem_type('technology')
 :on_selection_changed(function(event)
     local element = event.element
@@ -419,8 +445,11 @@ Progress Bars
 > Force Stored Progress Bar -- will increse when pressed, unlike above all will increse at same time and will have the same value
 ]]
 
+Gui.require_concept('progress_bar')
+
 local basic_progress_bar =
-Gui.clone_concept('progress_bar',TEST 'basic_progress_bar')
+Gui.new_concept('progress_bar')
+:debug('basic_progress_bar')
 :set_tooltip('Basic progress bar')
 :set_maximum(5)
 :new_event('on_click',defines.events.on_gui_click)
@@ -433,7 +462,8 @@ end)
 end)
 
 local inverted_progress_bar =
-Gui.clone_concept('progress_bar',TEST 'inverted_progress_bar')
+Gui.new_concept('progress_bar')
+:debug('inverted_progress_bar')
 :set_tooltip('Inverted progress bar')
 :set_inverted(true)
 :set_maximum(5)
@@ -446,7 +476,8 @@ end)
 end)
 
 local game_progress_bar =
-Gui.clone_concept('progress_bar',TEST 'game_progress_bar')
+Gui.new_concept('progress_bar')
+:debug('game_progress_bar')
 :set_tooltip('Game progress bar')
 :set_maximum(300)
 :new_event('on_tick',defines.events.on_tick)
@@ -460,7 +491,8 @@ end)
 :define_instance_store()
 
 local force_instance_progress_bar =
-Gui.clone_concept('progress_bar',TEST 'force_instance_progress_bar')
+Gui.new_concept('progress_bar')
+:debug('force_instance_progress_bar')
 :set_tooltip('Force instance progress bar')
 :set_maximum(5)
 :new_event('on_click',defines.events.on_gui_click)
@@ -474,7 +506,8 @@ end)
 :define_instance_store(Gui.categorize_by_force)
 
 local force_stored_progress_bar =
-Gui.clone_concept('progress_bar',TEST 'force_stored_progress_bar')
+Gui.new_concept('progress_bar')
+:debug('force_stored_progress_bar')
 :set_tooltip('Force stored progress bar')
 :set_maximum(5)
 :new_event('on_click',defines.events.on_gui_click)
@@ -512,15 +545,19 @@ Sliders
 > Player Stored Slider -- Slider which stores the value per player, also goes 1 to 10
 ]]
 
+Gui.require_concept('slider')
+
 local basic_slider =
-Gui.clone_concept('slider',TEST 'basic_slider')
+Gui.new_concept('slider')
+:debug('basic_slider')
 :set_range(1,10)
 :on_value_changed(function(event)
     event.player.print('Basic slider is now: '..event.element.slider_value)
 end)
 
 local interval_slider =
-Gui.clone_concept('slider',TEST 'interval_slider')
+Gui.new_concept('slider')
+:debug('interval_slider')
 :set_range(1,10)
 :set_value_step(1)
 :on_value_changed(function(event)
@@ -528,7 +565,8 @@ Gui.clone_concept('slider',TEST 'interval_slider')
 end)
 
 local discrete_slider =
-Gui.clone_concept('slider',TEST 'discrete_slider')
+Gui.new_concept('slider')
+:debug('discrete_slider')
 :set_range(1,10)
 :set_value_step(1)
 :set_discrete_slider(true)
@@ -537,7 +575,8 @@ Gui.clone_concept('slider',TEST 'discrete_slider')
 end)
 
 local dynamic_slider =
-Gui.clone_concept('slider',TEST 'dynamic_slider')
+Gui.new_concept('slider')
+:debug('dynamic_slider')
 :set_range(function(element)
     local player = Gui.get_player_from_element(element)
     return 1, player.name:len()
@@ -549,7 +588,8 @@ end)
 end)
 
 local player_slider =
-Gui.clone_concept('slider',TEST 'player_slider')
+Gui.new_concept('slider')
+:debug('player_slider')
 :set_range(1,10)
 :set_value_step(1)
 :set_discrete_slider(true)
@@ -580,16 +620,20 @@ Text Fields
 > Player Stored Text Field - Same as basic but will store value per player
 ]]
 
+Gui.require_concept('text_field')
+
 -- Making a text field
 local basic_text_field =
-Gui.clone_concept('text_field',TEST 'basic_text_field')
+Gui.new_concept('text_field')
+:debug('basic_text_field')
 :set_tooltip('Basic text field')
 :on_confirmation(function(event)
     event.player.print('Basic text field is now: '..event.element.text)
 end)
 
 local better_text_field =
-Gui.clone_concept('text_field',TEST 'better_text_field')
+Gui.new_concept('text_field')
+:debug('better_text_field')
 :set_tooltip('Better text field')
 :set_clear_on_rmb(true)
 :set_lose_forcus(true)
@@ -598,7 +642,8 @@ Gui.clone_concept('text_field',TEST 'better_text_field')
 end)
 
 local decimal_text_field =
-Gui.clone_concept('text_field',TEST 'decimal_text_field')
+Gui.new_concept('text_field')
+:debug('decimal_text_field')
 :set_tooltip('Decimal text field')
 :set_is_decimal(true)
 :on_confirmation(function(event)
@@ -606,7 +651,8 @@ Gui.clone_concept('text_field',TEST 'decimal_text_field')
 end)
 
 local password_text_field =
-Gui.clone_concept('text_field',TEST 'password_text_field')
+Gui.new_concept('text_field')
+:debug('password_text_field')
 :set_tooltip('Password text field')
 :set_is_password(true)
 :on_confirmation(function(event)
@@ -614,7 +660,8 @@ Gui.clone_concept('text_field',TEST 'password_text_field')
 end)
 
 local player_text_field =
-Gui.clone_concept('text_field',TEST 'player_text_field')
+Gui.new_concept('text_field')
+:debug('player_text_field')
 :set_tooltip('Player stored text field')
 :on_confirmation(function(event)
     local element = event.element
@@ -640,8 +687,11 @@ Text Boxs
 > Editible Text Box -- A text box that can be edited
 ]]
 
+Gui.require_concept('text_box')
+
 local basic_text_box =
-Gui.clone_concept('text_box',TEST 'basic_text_box')
+Gui.new_concept('text_box')
+:debug('basic_text_box')
 :set_tooltip('Basic text box')
 :set_default('I am the text that will show in the text box')
 :define_draw(function(properties,parent,element)
@@ -649,7 +699,8 @@ Gui.clone_concept('text_box',TEST 'basic_text_box')
 end)
 
 local editible_text_box =
-Gui.clone_concept('text_box',TEST 'editible_text_box')
+Gui.new_concept('text_box')
+:debug('editible_text_box')
 :set_tooltip('Editible text box')
 :set_is_read_only(false)
 :set_default('I am the text that will show in the text box')

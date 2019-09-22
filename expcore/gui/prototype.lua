@@ -1,67 +1,6 @@
 --[[-- Core Module - Gui
     @module Gui
     @alias Prototype
-
-@usage DX note - chaning this doc string has no effect on the docs
-
-local button =
-Gui.new_concept('Button')
-:new_event('on_click',defines.events.on_gui_click)
-:new_property('tooltip')
-:new_property('caption',nil,function(properties,value)
-    properties.caption = value
-    properties.sprite = nil
-    properties.type = 'button'
-end)
-:new_property('sprite',nil,function(properties,value)
-    properties.image = value
-    properties.caption = nil
-    properties.type = 'sprite-button'
-end)
-:define_draw(function(properties,parent,element)
-    -- Note that element might be nil if this is the first draw function
-    -- in this case button is a new concept so we know this is the first function and element is nil
-    if properties.type == 'button' then
-        element = parent.draw{
-            type = properties.type,
-            name = properties.name,
-            caption = properties.caption,
-            tooltip = properties.tooltip
-        }
-
-    else
-        element = parent.draw{
-            type = properties.type,
-            name = properties.name,
-            sprite = properties.sprite,
-            tooltip = properties.tooltip
-        }
-
-    end
-
-    -- We must return the element or what we want to be seen as the instance, this is so other draw functions have access to it
-    -- for example if our custom button defined a draw function to change the font color to red
-    return element
-end)
-
-local custom_button =
-button:clone('CustomButton')
-:new_event('on_admin_clicked',defines.events.on_gui_click,function(event)
-    return event.player.admin -- only raise custom event when an admin clicks the button
-end)
-:set_caption('Custom Button')
-:set_tooltip('Only admins can press this button')
-:on_click(function(event)
-    if not event.player.admin then
-        event.player.print('You must be admin to use this button')
-    end
-end)
-:on_admin_clicked(function(event)
-    -- Yes i know this can just be an if else but its an example
-    game.print(event.player.name..' pressed my admin button')
-end)
-
-custom_button:draw(game.player.gui.left)
 ]]
 
 --- Concept Base.
@@ -71,6 +10,7 @@ custom_button:draw(game.player.gui.left)
 local Event = require 'utils.event' -- @dep utils.event
 local Store = require 'expcore.store' -- @dep expcore.store
 local Game = require 'utils.game' -- @dep utils.game
+local Token = require 'utils.token' -- @dep utils.token
 
 local Factorio_Events = {}
 local Prototype = {
@@ -114,15 +54,16 @@ end
 @treturn GuiConcept the base for building a custom gui
 @usage-- Clones the base Button concept to make a alternative button
 local custom_button =
-Gui.get_concept('Button'):clone('CustomButton')
+Gui.get_concept(Gui.concepts.button):clone()
 ]]
-function Prototype:clone(concept_name)
+function Prototype:clone()
     local concept = table.deep_copy(self)
 
     -- Replace name of the concept
-    concept.name = concept_name
-    concept.properties.name = concept_name
-    concept:change_name()
+    local uid = tostring(Token.uid())
+    concept.name = uid
+    concept.debug_name = uid
+    concept.properties.name = uid
 
     -- Remove all event handlers that were copied
     concept.events = {}
@@ -164,7 +105,7 @@ function Prototype:clone(concept_name)
     for _,clone_callback in pairs(concept.clone_callbacks) do
         local success, rtn = pcall(clone_callback,concept)
         if not success then
-            error('Gui clone handler error with '..concept.name..':\n\t'..rtn)
+            error('Gui clone handler error with '..concept.debug_name..':\n\t'..rtn)
         end
     end
 
@@ -194,18 +135,28 @@ function Prototype:define_clone(clone_callback)
     return self
 end
 
---[[-- Used internally to save concept names to the core gui module
-@function Prototype:change_name
-@tparam[opt=self.name] string new_name the new name of the concept
-@usage-- Internal Saving
--- this is never needed to be done, internal use only!
-local button = Gui.get_concept('Button')
-button:change_name('Not Button')
+--[[-- Used to save the concept to the main gui module to allow access from other files
+@function Prototype:save_as
+@tparam string save_name the new name of the concept
+@usage-- Save a concept to allow access in another file
+button:save_as('button')
+@usage-- Access concept after being saved
+Gui.concepts.button
+Gui.get_concept('button')
 ]]
-function Prototype:change_name(new_name)
+function Prototype:save_as(save_name)
     -- over writen in core file
-    self.name = new_name or self.name
-    self.properties.name = self.name
+    return self
+end
+
+--[[-- Sets a debug name that can be used with error handlers
+@tparam string name the name that will be used in error messages
+@treturn self to allow chaining
+@usage-- Set the debug name
+unsaved_concept:debug('Example button')
+]]
+function Prototype:debug(name)
+    self.debug_name = name
     return self
 end
 
@@ -312,15 +263,15 @@ function Prototype:raise_event(event_name,event,from_factorio)
     for _,handler in ipairs(handlers) do
         local success, err = pcall(handler,event)
         if not success then
-            error('Gui event handler error with '..self.name..'/'..event_name..':\n\t'..err)
+            error('Gui event handler error with '..self.debug_name..'/'..event_name..':\n\t'..err)
         end
     end
 end
 
 --[[-- Adds a new property to the concept, such as caption, tooltip, or some custom property you want to control
 @tparam string property_name the name of the new property, must be unique
-@tparam any default the default value for this property, although not strictly required is is strongly recomented
 @tparam[opt] function setter_callback this function is called when set is called, if not provided then key in concept.properties is updated to new value
+@tparam[opt] any default use this as the default value, will call the setter callback if defined
 @treturn GuiConcept to allow chaining of functions
 @usage-- Adding caption, sprite, and tooltip to the base button concept
 local button =
@@ -337,14 +288,16 @@ end)
     properties.type = 'sprite-button'
 end)
 ]]
-function Prototype:new_property(property_name,default,setter_callback)
+function Prototype:new_property(property_name,setter_callback,default,...)
     -- Check that the property does not already exist
     if self.properties[property_name] then
         error('Property is already defined',2)
     end
 
-    -- Set the property to its default
-    self.properties[property_name] = default
+    -- Check that setter is a function if present
+    if setter_callback and not type(setter_callback) == 'function' then
+        error('Setter callback must be a function')
+    end
 
 --[[-- Sets a new value for a property, triggers setter method if provided, replace with property name
 @function Prototype:set_custom_property
@@ -354,7 +307,6 @@ function Prototype:new_property(property_name,default,setter_callback)
 local custom_button =
 Gui.get_concept('Button')
 :set_caption('Default Button')
-
 @usage-- In our examples CustomButton is cloned from Button, this means the caption property already exists
 -- note that what ever values that properties have at the time of cloning are also copied
 local custom_button =
@@ -367,7 +319,7 @@ Gui.get_concept('CustomButton')
             -- Call the setter method to update values if present
             local success, err = pcall(setter_callback,concept.properties,value,...)
             if not success then
-                error('Gui property handler error with '..concept.name..'/'..property_name..':\n\t'..err)
+                error('Gui property handler error with '..concept.debug_name..'/'..property_name..':\n\t'..err)
             end
         else
             -- Otherwise just update the key
@@ -375,6 +327,11 @@ Gui.get_concept('CustomButton')
         end
 
         return concept
+    end
+
+    -- If a default value if given then set the default value
+    if default ~= nil then
+        self['set_'..property_name](self,default,...)
     end
 
     return self
@@ -387,12 +344,12 @@ end
 local button =
 Gui.get_concept('Button')
 :define_draw(function(properties,parent,element)
-    -- Note that element might be nil if this is the first draw function
-    -- for this example we assume button was cloned from Prototype and so has no other draw functions defined
-    -- this means that there is no element yet and what we return will be the first time the element is returned
-    -- although not shown here you also can recive any extra arguments here from the call to draw
+    -- Properties will include all the information that you need to draw the element
+    -- Parent is the parent element for the element, this may have been altered by previous draw functions
+    -- Element is the current element being made, this may have a nil value, if it is nil then this is the first draw function
+    -- You can also pass any other arguments that you want to this function from the draw call
     if properties.type == 'button' then
-        element = parent.draw{
+        element = parent.add{
             type = properties.type,
             name = properties.name,
             caption = properties.caption,
@@ -400,7 +357,7 @@ Gui.get_concept('Button')
         }
 
     else
-        element = parent.draw{
+        element = parent.add{
             type = properties.type,
             name = properties.name,
             sprite = properties.sprite,
@@ -409,9 +366,9 @@ Gui.get_concept('Button')
 
     end
 
-    -- We must return the element or what we want to be seen as the instance, this is so other draw functions have access to it
-    -- for example if our custom button defined a draw function to change the font color to red
-    return element
+    -- If you return element or parent then their values will be updated for the next draw function in the chain
+    -- It is best practice to always return the values if you have made any changes to them
+    return element, parent
 end)
 ]]
 function Prototype:define_draw(draw_callback)
@@ -433,12 +390,16 @@ end
 local button =
 Gui.get_concept('Button')
 :define_pre_draw(function(properties,parent,element)
-    -- Here we set the lcoal parent to a new flow, to set this as the new parent we must return it below
+    -- Properties will include all the information that you need to draw the element
+    -- Parent is the parent element for the element, this may have been altered by previous draw functions
+    -- Element is the current element being made, this may have a nil value, if it is nil then this is the first draw function
+    -- You can also pass any other arguments that you want to this function from the draw call
     parent = parent.add{
         type = 'flow'
     }
 
-    -- We must return the element here but we can also return a new parent instance that all other draw functions will see as the parent
+    -- If you return element or parent then their values will be updated for the next draw function in the chain
+    -- It is best practice to always return the values if you have made any changes to them
     return element, parent
 end)
 ]]
@@ -475,7 +436,7 @@ function Prototype:draw(parent_element,...)
             if _element then element = _element end
             if _parent then parent = _parent end
         elseif not success then
-            error('Gui draw handler error with '..self.name..':\n\t'.._element)
+            error('Gui draw handler error with '..self.debug_name..':\n\t'.._element)
         end
     end
 

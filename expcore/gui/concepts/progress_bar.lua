@@ -7,14 +7,17 @@ local Gui = require 'expcore.gui.core'
 
 --[[-- Indicate progress by displaying a partially filled bar.
 @element progress_bar
+
 @param on_completion fired when increment reaches the maxium value set by set_maximum
+
 @tparam ?string|Concepts.LocalisedString tooltip the tooltip that will show for this element
 @tparam number maximum the maxium amount an instance can be increased, default 100
 @tparam boolean delay_completion when true the progress will be completed untill after the maximum rather than at the maximum
 @tparam boolean inverted although this will NOT effect how you use the functions it will make the element start full and reduce as you call increase, note issues with 0 detections
+
 @usage-- Making a basic progress bar, will increase when pressed then will reset when full
 local basic_progress_bar =
-Gui.clone_concept('progress_bar','basic_progress_bar')
+Gui.new_concept('progress_bar')
 :set_tooltip('Basic progress bar')
 :set_maximum(5)
 :new_event('on_click',defines.events.on_gui_click)
@@ -25,15 +28,25 @@ end)
 :on_completion(function(event)
     event.concept:reset(event.element)
 end)
+
 ]]
+
 local progress_bar =
-Gui.new_concept('progress_bar')
+Gui.new_concept()
+:save_as('progress_bar')
+
+-- Events
 :new_event('on_completion')
+
+-- Properties
 :new_property('tooltip')
-:new_property('maximum',100)
-:new_property('delay_completion',false)
-:new_property('inverted',false)
+:new_property('maximum',nil,100)
+:new_property('delay_completion',nil,false)
+:new_property('inverted',nil,false)
+
+-- Draw
 :define_draw(function(properties,parent,element)
+    -- Draw a progress bar
     element = parent.add{
         name = properties.name,
         tooltip = properties.tooltip,

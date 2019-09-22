@@ -640,7 +640,7 @@ function Common.array_insert(tbl,start_index,values)
         local starting_length = #tbl
         local adding_length = #values
         local move_to = start_index+adding_length+1
-        for offset = 0, starting_length-start_index do
+        for offset = starting_length-start_index, 0, -1 do
             tbl[move_to+offset] = tbl[starting_length+offset]
         end
         start_index = start_index-1

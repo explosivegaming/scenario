@@ -7,20 +7,30 @@ local Gui = require 'expcore.gui.core'
 
 --[[-- Invisible containers that lay out children either horizontally or vertically. The root GUI elements (top, left and center; see LuaGui) are flows.
 @element flow
+
 @tparam string direction the direction that children will be added
+
 @usage-- Making a basic flow, contains a label with hello world
 local basic_flow =
-Gui.clone_concept('flow','basic_flow')
+Gui.new_concept('flow')
 :define_draw(function(properties,parent,element)
     element.add{
         type = 'label',
         caption = 'Hello, World!'
     }
 end)
+
 ]]
-Gui.new_concept('flow')
+
+Gui.new_concept()
+:save_as('flow')
+
+-- Properties
 :new_property('direction')
+
+-- Draw
 :define_draw(function(properties,parent,element)
+    -- Draw a flow
     element = parent.add{
         name = properties.name,
         type = 'flow',

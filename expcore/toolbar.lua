@@ -9,6 +9,8 @@ local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.game
 local mod_gui = require 'mod-gui' --- @dep mod-gui
 
+Gui.require_concept('button') --- @dep Gui.concept.button
+
 local toolbar_toggle_concept
 local toolbar_hide_concept
 local toolbar_concept
@@ -54,7 +56,7 @@ end
 @tparam table concept the gui concept that you want to add to the button area
 @usage-- Adding a basic button to the toolbar
 local new_button =
-Gui.clone_concept('button','new-button')
+Gui.new_concept('button')
 :set_caption('Click Me')
 :on_click(function(event)
     event.player.print('You Clicked Me!!')
@@ -102,17 +104,20 @@ end
 @element toolbar-button
 @tparam string permission_alias the alias used with Toolbar.allowed
 @usage-- Adding a basic button to the toolbar, note no need to call Toolbar.add_button_concept
-Gui.clone_concept('toolbar-button','new-button')
+Gui.new_concept('toolbar-button')
 :set_caption('Click Me')
 :on_click(function(event)
     event.player.print('You Clicked Me!!')
 end)
 ]]
 Toolbar.button =
-Gui.clone_concept('button','toolbar-button')
+Gui.new_concept('button')
+:save_as('toolbar-button')
+
 :new_property('permission_alias',nil,function(properties,value)
     Toolbar.set_permission_alias(properties.name,value)
 end)
+
 :define_clone(Toolbar.add_button_concept)
 :define_draw(function(properties,parent,element)
     element.style = mod_gui.button_style
@@ -126,7 +131,7 @@ end)
 @tparam table concept the gui concept that you want to add to the toolbar frame area
 @usage-- Adding a basic frame to the frame area
 local new_frame =
-Gui.clone_concept('frame','new_frame')
+Gui.new_concept('frame')
 :set_title('Test')
 
 Toolbar.add_frame_concept(new_frame)
@@ -177,7 +182,7 @@ end
 @tparam string direction the direction that the items in the frame are added
 @usage-- Adding a basic player list
 local player_list =
-Gui.clone_concept('toolbar-frame','player_list')
+Gui.new_concept('toolbar-frame')
 :set_permission_alias('player_list')
 :set_caption('Player List')
 :toggle_with_click()
@@ -214,17 +219,24 @@ end)
 end)
 ]]
 Toolbar.frame =
-Gui.clone_concept('toolbar-button','toolbar-frame')
+Gui.new_concept('toolbar-button')
+:save_as('toolbar-frame')
+
+-- Properties
 :new_property('open_by_default',false)
 :new_property('use_container',true)
 :new_property('direction','horizontal')
 :new_event('on_update')
+
+-- Clone
 :define_clone(function(concept)
     Toolbar.add_frame_concept(concept)
     concept:on_click(function(event)
         event.concept:toggle_visible_state(event.player)
     end)
 end)
+
+-- Draw
 :define_draw(function(properties,parent,element)
     -- Add the base frame element, the button is already drawn to parent
     local player = Gui.get_player_from_element(element)
@@ -332,7 +344,8 @@ end
 @param on_hide_frames fired when the frames are hidden for a player
 ]]
 toolbar_concept =
-Gui.new_concept('toolbar')
+Gui.new_concept()
+:debug('toolbar')
 :define_draw(function(properties,player)
     -- Get the main flows
     local top_flow = mod_gui.get_button_flow(player)
@@ -372,6 +385,8 @@ Gui.new_concept('toolbar')
     Toolbar.get_visible_frames(player)
 
 end)
+
+-- When the buttons are updated
 :new_event('on_button_update')
 :on_button_update(function(event)
     -- Get the top flow
@@ -389,6 +404,8 @@ end)
     end
 
 end)
+
+-- When frames are hidden
 :new_event('on_hide_frames')
 :on_hide_frames(function(event)
     -- Get the left flow
@@ -419,7 +436,7 @@ end
 @element toolbar-toggle
 ]]
 toolbar_toggle_concept =
-Gui.clone_concept('button','toolbar-toggle')
+Gui.new_concept('button')
 :set_caption('<')
 :set_tooltip{'gui_util.button_tooltip'}
 :define_draw(toolbar_button_draw)
@@ -435,7 +452,7 @@ end)
 @element toolbar-clear
 ]]
 toolbar_hide_concept =
-Gui.clone_concept('button','toolbar-clear')
+Gui.new_concept('button')
 :set_caption('<')
 :set_tooltip{'expcore-gui.left-button-tooltip'}
 :define_draw(toolbar_button_draw)

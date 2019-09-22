@@ -15,82 +15,89 @@ local Gui = {
 -- Functions that act as a landing point for the other funtions
 -- @section concept-control
 
---[[-- Loads a concept from the concepts file, used internally
-@tparam string concept the name of the concept to require
+--[[-- Loads a concept from the concepts file
+@tparam string concept_name the name of the concept to require
 @usage-- Load a base concept
-Gui.require_concept('frame')
+Gui.require_concept('frame') --- @dep Gui.concept.frame
 ]]
-function Gui.require_concept(concept)
-    require('expcore.gui.concepts.'..concept)
+function Gui.require_concept(concept_name)
+    require('expcore.gui.concepts.'..concept_name)
 end
 
---[[-- Gets the gui concept with this name
-@tparam string name the name of the concept that you want to get
+--[[-- Loads a set of concepts from the styles file
+@tparam string style_name the name of the style to require
+@usage-- Load a base style
+Gui.require_concept('expgaming') --- @dep Gui.style.frame
+]]
+function Gui.require_style(style_name)
+    require('expcore.gui.styles.'..style_name)
+end
+
+--[[-- Gets a gui concept from name, id, or its self
+@tparam ?string|number|table name the name, id, or the concept you want to get
 @usage-- Getting a gui concept
 local button = Gui.get_concept('Button')
 ]]
 function Gui.get_concept(name)
-    return Gui.concepts[name] or error('Gui concept "'..name..'" is not defind',2)
-end
+    if not name then return end
+    local vtype = type(name)
 
---[[-- Used internally to save concept names to the core gui module
-@function Prototype:change_name
-@tparam[opt=self.name] string new_name the new name of the concept
-@usage-- Internal Saving
--- this is never needed to be done, internal use only!
-local button = Gui.get_concept('Button')
-button:change_name('Not Button')
-]]
-function Prototype:change_name(new_name)
-    if new_name then
-        Gui.concepts[self.name] = nil
-        self.name = new_name
-        self.properties.name = new_name
+    if vtype == 'string' then
+        return Gui.concepts[name]
+
+    elseif vtype == 'table' then
+        if name.draw_callbacks then
+            return name
+        end
+
+    elseif vtype == 'number' then
+        for _,concept in pairs(Gui.concepts) do
+            if concept.name == name then
+                return concept
+            end
+        end
+
     end
 
-    Gui.concepts[self.name] = self
+end
+
+--[[-- Used to save the concept to the main gui module to allow access from other files
+@function Prototype:save_as
+@tparam string save_name the new name of the concept
+@usage-- Save a concept to allow access in another file
+button:save_as('button')
+@usage-- Access concept after being saved
+Gui.concepts.button
+Gui.get_concept('button')
+]]
+function Prototype:save_as(save_name)
+    Gui.concepts[save_name] = self
     return self
 end
 
---[[-- Returns a new gui concept with no properties or events
-@tparam string name the name that you want this concept to have
-@usage-- Making a new concept, see module usage
+--[[-- Returns a new gui concept, option to provide a base concept to copy properties and draw functions from
+@tparam[opt] ?string|number|table base_concept the concept that you want to copy the details of
+@usage-- Making a new button, see module usage
 local button = Gui.new_concept('Button')
 ]]
-function Gui.new_concept(name)
-    if Gui.concepts[name] then
-        error('Gui concept "'..name..'" is already defind',2)
+function Gui.new_concept(base_concept)
+    if base_concept then
+        base_concept = Gui.get_concept(base_concept) or error('Invalid gui concept "'..tostring(base_concept)..'"',2)
+        return base_concept:clone()
+    else
+        return Prototype:clone()
     end
-
-    return Prototype:clone(name)
-end
-
---[[-- Make a new concept based on the properties and drawing of another
-@tparam string name the name of the concept that you want as the base
-@tparam string new_name the name that you want the new concept to have
-@usage-- Making a new concept from another, see module usage
-local custom_button = Gui.clone_concept('Button','CustomButton')
-]]
-function Gui.clone_concept(name,new_name)
-    local concept = Gui.concepts[name] or error('Gui concept "'..name..'" is not defind',2)
-
-    if Gui.concepts[new_name] then
-        error('Gui concept "'..new_name..'" is already defind',2)
-    end
-
-    return concept:clone(new_name)
 end
 
 --[[-- Used to draw a concept to a parent element
-@tparam string name the name of the concept that you want to draw
+@tparam ?string|number|table concept the name of the concept that you want to draw
 @tparam LuaGuiElement parent the element that will act as a parent for the new element
 @treturn LuaGuiElement the element that was created
 @usage-- Drawing a new element
 Gui.draw_concept('Button',element)
 ]]
-function Gui.draw_concept(name,parent,...)
-    local concept = Gui.concepts[name] or error('Gui concept "'..name..'" is not defind',2)
-
+function Gui.draw_concept(concept,parent,...)
+    concept = Gui.get_concept(concept) or error('Invalid gui concept "'..tostring(concept)..'"',2)
     return concept:draw(parent,...)
 end
 
