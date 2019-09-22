@@ -40,6 +40,11 @@ Store.register(team_scores,true,function(value,key)
     game.print('Team '..key..' now has a score of '..value)
 end)
 
+-- If you want multiple handlers on one store location then you can register to the raw event
+Event.add(Store.events.on_value_changed,function(event)
+    game.print('Store '..event.location..'/'..event.key..' was updated to: '..event.value)
+end)
+
 ]]
 
 local Global = require 'utils.global' --- @dep utils.global
@@ -67,11 +72,19 @@ local function error_not_table(value)
     end
 end
 
---- Registers a new location with an update callback which is triggered when the value updates
--- @tparam[opt] string location string a unique that points to the data, string used rather than token to allow migration
--- @tparam[opt=false] boolean synced when true will output changes to a file so it can be synced
--- @tparam[opt] function callback when given the callback will be automatically registered to the update of the value
--- @treturn string the location that is being used
+--[[-- Registers a new location with an update callback which is triggered when the value updates
+@tparam[opt] string location string a unique that points to the data, string used rather than token to allow migration
+@tparam[opt=false] boolean synced when true will output changes to a file so it can be synced
+@tparam[opt] function callback when given the callback will be automatically registered to the update of the value
+@treturn string the location that is being used
+@usage-- Registering a new store location
+local store_id = Store.register()
+@usage-- Registering a new store location, with custom update callback
+local store_id = Store.uid_location()
+Store.register(store_id,function(value,key)
+    game.print('Store '..store_id..'/'..key..' was updated to: '..value)
+end)
+]]
 function Store.register(location,synced,callback)
     if _LIFECYCLE ~= _STAGE.control then
         return error('Can only be called during the control stage', 2)
@@ -99,10 +112,14 @@ function Store.register(location,synced,callback)
     return location
 end
 
---- Gets the value stored at a location, this location must be registered
--- @tparam string location the location to get the data from
--- @tparam[opt] string key the key location if used
--- @treturn any the data which was stored at the location
+--[[-- Gets the value stored at a location, this location must be registered
+@tparam string location the location to get the data from
+@tparam[opt] string key the key location if used
+@treturn any the data which was stored at the location
+@usage-- Getting the data at a store location
+local data = Store.get(store_id_no_keys)
+local data = Store.get(store_id_with_keys,'key_one')
+]]
 function Store.get(location,key)
     if not Store.registered[location] then
         return error('Location is not registered', 2)
@@ -117,13 +134,17 @@ function Store.get(location,key)
     return data
 end
 
---- Sets the value at a location, this location must be registered
--- @tparam string location the location to set the data to
--- @tparam[opt] string key the key location if used
--- @tparam any value the new value to set at the location, value may be reverted if there is a watch callback, cant be nil
--- @tparam[opt=false] boolean from_sync set this true to avoid an output to the sync file
--- @tparam[opt=false] boolean from_internal set this true to add one to the error stack offset
--- @treturn boolean true if it was successful
+--[[-- Sets the value at a location, this location must be registered
+@tparam string location the location to set the data to
+@tparam[opt] string key the key location if used
+@tparam any value the new value to set at the location, value may be reverted if there is a watch callback, cant be nil
+@tparam[opt=false] boolean from_sync set this true to avoid an output to the sync file
+@tparam[opt=false] boolean from_internal set this true to add one to the error stack offset
+@treturn boolean true if it was successful
+@usage-- Setting the data at a store location
+Store.set(store_id_no_keys,'Hello, World!')
+Store.set(store_id_with_keys,'key_one','Hello, World!')
+]]
 function Store.set(location,key,value,from_sync,from_internal)
     if not Store.registered[location] then
         return error('Location is not registered', from_internal and 3 or 2)
@@ -157,10 +178,25 @@ function Store.set(location,key,value,from_sync,from_internal)
     return true
 end
 
---- Allows for updating a value based on the current value; only valid way to change tables in a store
--- @tparam string location the location to set the data to
--- @tparam[opt] string key the key location if required
--- @tparam[opt] function update_callback the function called to update the value stored, rtn value to set new value
+--[[-- Allows for updating a value based on the current value; only valid way to change tables in a store
+@tparam string location the location to set the data to
+@tparam[opt] string key the key location if required
+@tparam[opt] function update_callback the function called to update the value stored, rtn value to set new value
+@usage-- Updating a value stored at a location
+Store.update(store_id_no_keys,function(value)
+    return value + 1
+end)
+Store.update(store_id_with_keys,'key_one',function(value)
+    return value + 1
+end)
+@usage-- Updating a table stored at a location
+Store.update(store_id_no_keys,function(value)
+    value.ctn = value.ctn + 1
+end)
+Store.update(store_id_with_keys,'key_one',function(value)
+    value.ctn = value.ctn + 1
+end)
+]]
 function Store.update(location,key,update_callback,...)
     local value = Store.get(location,key)
 
@@ -194,9 +230,18 @@ function Store.update(location,key,update_callback,...)
 
 end
 
---- Allows for updating all values at a location based on the current value; only valid way to change tables in a store
--- @tparam string location the location to set the data to
--- @tparam[opt] function update_callback the function called to update the value stored
+--[[-- Allows for updating all values at a location based on the current value; only valid way to change tables in a store
+@tparam string location the location to set the data to
+@tparam[opt] function update_callback the function called to update the value stored
+@usage-- Updating all values at a location
+Store.update(store_id_with_keys,function(value)
+    return value + 1
+end)
+@usage-- Updating all tables at a location
+Store.update(store_id_with_keys,function(value)
+    value.ctn = value.ctn + 1
+end)
+]]
 function Store.update_all(location,update_callback,...)
     local data = Store.get(location)
 
@@ -223,11 +268,15 @@ function Store.update_all(location,update_callback,...)
 
 end
 
---- Sets the value at a location to nil, this location must be registered
--- @tparam string location the location to set the data to
--- @tparam[opt] string key the key location if used
--- @tparam[opt=false] boolean from_sync set this true to avoid an output to the sync file
--- @treturn boolean true if it was successful
+--[[-- Sets the value at a location to nil, this location must be registered
+@tparam string location the location to set the data to
+@tparam[opt] string key the key location if used
+@tparam[opt=false] boolean from_sync set this true to avoid an output to the sync file
+@treturn boolean true if it was successful
+@usage-- Clear the data at a location
+Store.clear(store_id_no_keys)
+Store.clear(store_id_with_keys,'key_one')
+]]
 function Store.clear(location,key,from_sync)
     if not Store.callbacks[location] then
         return error('Location is not registered', 2)
@@ -252,24 +301,33 @@ function Store.clear(location,key,from_sync)
     return true
 end
 
---- Gets all non nil keys at a location, keys can be added and removed during runtime
--- this is similar to Store.get but will always return a table even if it is empty
--- @tparam string location the location to get the keys of
--- @treturn table a table containing all the keys names
+--[[-- Gets all non nil keys at a location, keys can be added and removed during runtime
+this is similar to Store.get but will always return a table even if it is empty
+@tparam string location the location to get the keys of
+@treturn table a table containing all the keys names
+@usage-- Get all keys at a store location
+local keys = Store.get_keys(store_id_with_keys)
+]]
 function Store.get_keys(location)
     local data = Store.get(location)
     return type(data) == 'table' and table_keys(data) or {}
 end
 
---- Check for if a location is registered
--- @tparam string location the location to test for
--- @treturn boolean true if registered
+--[[-- Check for if a location is registered
+@tparam string location the location to test for
+@treturn boolean true if registered
+@usage-- Check that a store is registered
+local registerd = Store.is_registered(store_id)
+]]
 function Store.is_registered(location)
     return Store.registered[location]
 end
 
---- Returns a unique name that can be used for a store
--- @treturn string a unique name
+--[[-- Returns a unique name that can be used for a store
+@treturn string a unique name
+@usage-- Get a new unique store id
+local store_id = Store.uid_location()
+]]
 function Store.uid_location()
     return tostring(Token.uid())
 end

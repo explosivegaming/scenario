@@ -14,7 +14,7 @@ local Gui = require 'expcore.gui.core'
 
 @tparam ?string|Concepts.LocalisedString caption the message that is shown on the button
 @tparam ?string|Concepts.LocalisedString tooltip the tooltip that shows when a player hovers over the button
-@tparam SpritePath sprite upto three sprites in the order: default, hovered, clicked
+@tparam Concepts.SpritePath sprite upto three sprites in the order: default, hovered, clicked
 
 @usage-- Making a basic button
 local basic_button =

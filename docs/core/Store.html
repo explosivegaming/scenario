@@ -269,6 +269,11 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
 </span><span class="comment">-- although you will need to set up a method of storing the data outside the game
 </span>Store.register(team_scores,<span class="keyword">true</span>,<span class="keyword">function</span>(value,key)
     game.<span class="global">print</span>(<span class="string">'Team '</span>..key..<span class="string">' now has a score of '</span>..value)
+<span class="keyword">end</span>)
+
+<span class="comment">-- If you want multiple handlers on one store location then you can register to the raw event
+</span>Event.add(Store.events.on_value_changed,<span class="keyword">function</span>(event)
+    game.<span class="global">print</span>(<span class="string">'Store '</span>..event.location..<span class="string">'/'</span>..event.key..<span class="string">' was updated to: '</span>..event.value)
 <span class="keyword">end</span>)</code></pre>
     <!-- module usage end -->
 
@@ -328,7 +333,7 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <tr>
     <td class="name"><a href="#get_keys">get_keys(location)</a></td>
     <td class="summary">Gets all non nil keys at a location, keys can be added and removed during runtime
- this is similar to Store.get but will always return a table even if it is empty</td>
+this is similar to Store.get but will always return a table even if it is empty</td>
     </tr>
     <tr>
     <td class="name"><a href="#is_registered">is_registered(location)</a></td>
@@ -539,6 +544,14 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Registering a new store location
+</span><span class="keyword">local</span> store_id = Store.register()</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Registering a new store location, with custom update callback
+</span><span class="keyword">local</span> store_id = Store.uid_location()
+Store.register(store_id,<span class="keyword">function</span>(value,key)
+    game.<span class="global">print</span>(<span class="string">'Store '</span>..store_id..<span class="string">'/'</span>..key..<span class="string">' was updated to: '</span>..value)
+<span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -613,6 +626,10 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Getting the data at a store location
+</span><span class="keyword">local</span> data = Store.get(store_id_no_keys)
+<span class="keyword">local</span> data = Store.get(store_id_with_keys,<span class="string">'key_one'</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -737,6 +754,10 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Setting the data at a store location
+</span>Store.set(store_id_no_keys,<span class="string">'Hello, World!'</span>)
+Store.set(store_id_with_keys,<span class="string">'key_one'</span>,<span class="string">'Hello, World!'</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -821,6 +842,21 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Updating a value stored at a location
+</span>Store.update(store_id_no_keys,<span class="keyword">function</span>(value)
+    <span class="keyword">return</span> value + <span class="number">1</span>
+<span class="keyword">end</span>)
+Store.update(store_id_with_keys,<span class="string">'key_one'</span>,<span class="keyword">function</span>(value)
+    <span class="keyword">return</span> value + <span class="number">1</span>
+<span class="keyword">end</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Updating a table stored at a location
+</span>Store.update(store_id_no_keys,<span class="keyword">function</span>(value)
+    value.ctn = value.ctn + <span class="number">1</span>
+<span class="keyword">end</span>)
+Store.update(store_id_with_keys,<span class="string">'key_one'</span>,<span class="keyword">function</span>(value)
+    value.ctn = value.ctn + <span class="number">1</span>
+<span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -888,6 +924,15 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Updating all values at a location
+</span>Store.update(store_id_with_keys,<span class="keyword">function</span>(value)
+    <span class="keyword">return</span> value + <span class="number">1</span>
+<span class="keyword">end</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Updating all tables at a location
+</span>Store.update(store_id_with_keys,<span class="keyword">function</span>(value)
+    value.ctn = value.ctn + <span class="number">1</span>
+<span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -979,6 +1024,10 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Clear the data at a location
+</span>Store.clear(store_id_no_keys)
+Store.clear(store_id_with_keys,<span class="string">'key_one'</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -993,7 +1042,7 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <div class="section-item-body">
 
     <p class="section-item-summary">Gets all non nil keys at a location, keys can be added and removed during runtime
- this is similar to Store.get but will always return a table even if it is empty</p>
+this is similar to Store.get but will always return a table even if it is empty</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -1037,6 +1086,9 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Get all keys at a store location
+</span><span class="keyword">local</span> keys = Store.get_keys(store_id_with_keys)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -1094,6 +1146,9 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Check that a store is registered
+</span><span class="keyword">local</span> registerd = Store.is_registered(store_id)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -1128,6 +1183,9 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Get a new unique store id
+</span><span class="keyword">local</span> store_id = Store.uid_location()</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -1146,7 +1204,7 @@ Store.register(team_scores,<span class="keyword">function</span>(value,key)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-09-22 17:08:34 UTC</i>
+    <i>Last updated 2019-09-22 17:34:57 UTC</i>
     </div>
     </div>
     </div>

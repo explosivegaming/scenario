@@ -102,13 +102,16 @@ end
 
 --[[-- The base element to be used with the toolbar, others can be used but this is recomented
 @element toolbar-button
+
 @tparam string permission_alias the alias used with Toolbar.allowed
+
 @usage-- Adding a basic button to the toolbar, note no need to call Toolbar.add_button_concept
 Gui.new_concept('toolbar-button')
 :set_caption('Click Me')
 :on_click(function(event)
     event.player.print('You Clicked Me!!')
 end)
+
 ]]
 Toolbar.button =
 Gui.new_concept('button')
@@ -176,16 +179,20 @@ end
 
 --[[-- The base toolbar frame, others can be used but this is recomented
 @element toolbar-frame
+
 @param on_update fired when the frame is to have its content updated
+
 @tparam boolean open_by_default weather the frame should be open when a player first joins
 @tparam boolean use_container true by default and will place a container inside the frame for content
 @tparam string direction the direction that the items in the frame are added
+
 @usage-- Adding a basic player list
 local player_list =
 Gui.new_concept('toolbar-frame')
 :set_permission_alias('player_list')
 :set_caption('Player List')
 :toggle_with_click()
+
 :define_draw(function(properties,parent,element)
     local list_area =
     element.add{
@@ -206,6 +213,7 @@ Gui.new_concept('toolbar-frame')
         }
     end
 end)
+
 :on_update(function(event)
     local list_area = event.element.scroll
     list_area.clear()
@@ -217,6 +225,7 @@ end)
         }
     end
 end)
+
 ]]
 Toolbar.frame =
 Gui.new_concept('toolbar-button')
