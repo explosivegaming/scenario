@@ -39,7 +39,8 @@ math.calculate_slope = function(x1, y1, x2, y2)
 end
 
 --- Calculates the y-intercept of a line
--- @param x, y numbers - coordinates of point on line
+-- @param x number - coordinates of point on line
+-- @param y number - coordinates of point on line
 -- @param slope number - the slope of a line
 -- @return number - the y-intercept of a line
 math.calculate_y_intercept = function(x, y, slope)

@@ -1,663 +1,717 @@
 --[[-- Core Module - Gui
     @module Gui
-    @alias tests
+    @alias Gui
 ]]
 
---- Test.
--- This file creates a test gui that is used to test every input method
--- note that this does not cover every permutation only features in independence
--- for example store in most cases is just by player name, but other store methods are tested with checkbox
--- @section test
+--- Tests.
+-- functions used to test
+-- @section tests
 
-local Gui = require 'expcore.gui' --- @dep expcore.gui
-local format_chat_colour,table_keys = ext_require('expcore.common','format_chat_colour','table_keys') --- @dep expcore.common
-local Colors = require 'resources.color_presets' --- @dep resources.color_presets
-local Event = require 'utils.event' --- @dep utils.event
-local Store = require 'expcore.store' --- @dep expcore.store
+local Gui = require 'expcore.gui'
+local Game = require 'utils.game'
+local Event = require 'utils.event'
+require 'expcore.toolbar'
 
 local tests = {}
 
 --[[
-    Toolbar Tests
-    > No display - Toolbar button with no display
-    > With caption - Toolbar button with a caption display
-    > With icons - Toolbar button with an icon
+The main test frame
 ]]
 
-Gui.new_toolbar_button('click-1')
-:set_post_authenticator(function(player,button_name)
-    return global.click_one
-end)
-:on_click(function(player,element)
-    player.print('CLICK 1')
-end)
+Gui.require_concept('frame')
 
-Gui.new_toolbar_button('click-2')
-:set_caption('Click Two')
-:set_post_authenticator(function(player,button_name)
-    return global.click_two
-end)
-:on_click(function(player,element)
-    player.print('CLICK 2')
-end)
-
-Gui.new_toolbar_button('click-3')
-:set_sprites('utility/questionmark')
-:set_post_authenticator(function(player,button_name)
-    return global.click_three
-end)
-:on_click(function(player,element)
-    player.print('CLICK 3')
-end)
-
---[[
-    Center Frame Tests
-    > Main test gui - Main test gui triggers all other tests
-]]
-
-local test_gui =
-Gui.new_center_frame('gui-test-open')
-:set_caption('Open Test Gui')
-:set_tooltip('Main test gui triggers all other tests')
-:set_post_authenticator(function(player,button_name)
-    return global.show_test_gui
-end)
-
-:on_creation(function(player,frame)
-    for test_group_name,test_group in pairs(tests) do
-
-        player.print('Starting tests for: '..format_chat_colour(test_group_name,Colors.cyan))
-
-        local pass_count = 0
-        local test_count = 0
-
-        local flow = frame.add{
-            type='flow',
-            name=test_group_name,
-            direction='vertical'
+local test_frame =
+Gui.new_concept('frame')
+:set_title('Gui Tests')
+:define_draw(function(properties,parent,element)
+    for category, _ in pairs(tests) do
+        element.add{
+            type = 'flow',
+            name = category,
+            direction = 'vertical'
         }
-
-        for test_name,test in pairs(test_group) do
-            local test_function = type(test) == 'function' and test or test.draw_to
-            test_count = test_count+1
-
-            local success,err = pcall(test_function,test,flow)
-            if success then
-                pass_count = pass_count+1
-            else
-                player.print('Failed Test: '..format_chat_colour(test_name,Colors.red))
-                log('Gui Test Failed: '..test_name..' stacktrace:\n'..err)
-            end
-
-        end
-
-        if pass_count == test_count then
-            player.print('All tests '..format_chat_colour('passed',Colors.green)..' ('..test_group_name..')')
-        else
-            player.print('Passed '..format_chat_colour(pass_count..'/'..test_count,Colors.cyan)..' ('..test_group_name..')')
-        end
-
     end
 end)
 
---[[
-    Left Frame Test
-    > Left frame which holds all online player names, updates when player leaves or joins
-]]
-
-local left_frame =
-Gui.new_left_frame('test-left-frame')
-:set_caption('Test Left Gui')
-:set_tooltip('Left frame which holds all online player names, updates when player leaves or joins')
-:set_post_authenticator(function(player,button_name)
-    return global.show_test_gui
+Gui.new_concept('toolbar-button')
+:set_permission_alias('gui-test')
+:set_caption('Element Tests')
+:on_click(function(event)
+    local player = event.player
+    if not Gui.destroy(player.gui.center[test_frame.name]) then
+        Gui.run_tests(event.player)
+    end
 end)
 
-:set_open_by_default()
-:on_creation(function(_player,frame)
+local test_left_frame =
+Gui.new_concept('toolbar-frame')
+:set_permission_alias('gui-test')
+:set_caption('Frame Test Left')
+:define_draw(function(properties,parent,element)
+    local list_area =
+    element.add{
+        name = 'scroll',
+        type = 'scroll-pane',
+        direction = 'vertical',
+        horizontal_scroll_policy = 'never',
+        vertical_scroll_policy = 'auto-and-reserve-space'
+    }
+    Gui.set_padding(list_area,1,1,2,2)
+    list_area.style.horizontally_stretchable = true
+    list_area.style.maximal_height = 200
+
+    -- Add player names
     for _,player in pairs(game.connected_players) do
-        frame.add{
+        list_area.add{
+            type='label',
+            caption=player.name
+        }
+    end
+end)
+:on_update(function(event)
+    local list_area = event.element.scroll
+    list_area.clear()
+
+    -- Add player names
+    for _,player in pairs(game.connected_players) do
+        list_area.add{
             type='label',
             caption=player.name
         }
     end
 end)
 
-Event.add(defines.events.on_player_joined_game,left_frame 'update_all')
-Event.add(defines.events.on_player_left_game,left_frame 'update_all')
+Event.add(defines.events.on_player_joined_game,function(event)
+    test_left_frame:update_all(event)
+end)
+Event.add(defines.events.on_player_left_game,function(event)
+    test_left_frame:update_all(event)
+end)
+
+--[[-- Runs a set of gui tests to ensure that the system is working
+@tparam LuaPlayer player the player that the guis are made for and who recives the results
+@tparam[opt] string category when given only tests in this category are ran
+@usage-- Run all gui tests
+Gui.run_tests(game.player)
+]]
+function Gui.run_tests(player,category)
+    local results = {
+        passed = 0,
+        failed = 0,
+        total = 0,
+        errors = {}
+    }
+
+    if not category then
+        results.breakdown = {}
+
+        for cat,_ in pairs(tests) do
+            local rtn = Gui.run_tests(player,cat)
+            results.passed = results.passed + rtn.passed
+            results.failed = results.failed + rtn.failed
+            results.total = results.total + rtn.total
+
+            for test_name, err in pairs(rtn.errors) do
+                results.errors[cat..'/'..test_name] = err
+            end
+
+            results.breakdown[cat] = rtn
+        end
+
+        player.print(string.format('All Tests Complete. %d failed.',results.failed))
+
+        return results
+    end
+
+    local frame = player.gui.center[test_frame.name] or test_frame:draw(player.gui.center)
+    local cat_tests = tests[category]
+
+    results.total = #cat_tests
+
+    local output = player.print
+    for test_name, concept in pairs(cat_tests) do
+        local success, err = pcall(concept.draw,concept,frame[category])
+
+        if success then
+            results.passed = results.passed + 1
+        else
+            results.errors[test_name] = err
+            results.failed = results.failed + 1
+            output(string.format('Test "%s / %s" failed:\n%s',category,test_name,err))
+        end
+
+    end
+
+    output(string.format('Test Complete "%s". %d failed.',category,results.failed))
+
+    return results
+end
 
 --[[
-    Popup Test
-    > Allows opening a popup which contains the players name and tick it was opened
+Buttons
+> Basic Button -- Button with a caption and a tooltip
+> Sprite Button -- Button with a single sprite and a tooltip
+> Multi Sprite Button -- Button with three sprites and a tooltip
+> Admin Button -- Button which is disabled if the player is not an admin
 ]]
 
-local test_popup =
-Gui.new_popup('test-popup')
-:on_creation(function(player,frame)
-    frame.add{
-        type='label',
-        caption=player.name
-    }
-    frame.add{
-        type='label',
-        caption=game.tick
-    }
+Gui.require_concept('button')
+
+local basic_button =
+Gui.new_concept('button')
+:debug('basic_button')
+:set_caption('Basic Button')
+:set_tooltip('Basic button')
+:on_click(function(event)
+    event.player.print('You pressed basic button!')
 end)
 
-Gui.new_toolbar_button('test-popup-open')
-:set_caption('Test Popup')
-:set_tooltip('Allows opening a popup which contains the players name and tick it was opened')
-:set_post_authenticator(function(player,button_name)
-    return global.show_test_gui
-end)
-:on_click(function(player,element)
-    test_popup(player,300)
-end)
-
---[[
-    Button Tests
-    > No display - Simple button which has no display
-    > Caption - Simple button but has a caption on it
-    > Icons - Button with an icon display plus two icons for hover and select
-    > Auth - Button which can only be passed when auth is true (press no display to toggle; needs reopen)
-]]
-
-local button_no_display =
-Gui.new_button('test-button-no-display')
-:set_tooltip('Button no display')
-:on_click(function(player,element)
-    player.print('Button no display')
-    global.test_auth_button = not global.test_auth_button
-    player.print('Auth Button auth state: '..tostring(global.test_auth_button))
+local sprite_button =
+Gui.new_concept('button')
+:debug('sprite_button')
+:set_sprite('utility/warning_icon')
+:set_tooltip('Sprite button')
+:on_click(function(event)
+    event.player.print('You pressed sprite button!')
 end)
 
-local button_with_caption =
-Gui.new_button('test-button-with-caption')
-:set_tooltip('Button with caption')
-:set_caption('Button Caption')
-:on_click(function(player,element)
-    player.print('Button with caption')
+local multi_sprite_button =
+Gui.new_concept('button')
+:debug('multi_sprite_button')
+:set_sprite('utility/warning_icon','utility/warning','utility/warning_white')
+:set_tooltip('Multi-sprite button')
+:on_click(function(event)
+    event.player.print('You pressed multi sprite button!')
 end)
 
-local button_with_icon =
-Gui.new_button('test-button-with-icon')
-:set_tooltip('Button with icons')
-:set_sprites('utility/warning_icon','utility/warning','utility/warning_white')
-:on_click(function(player,element)
-    player.print('Button with icons')
+local admin_button =
+Gui.new_concept('button')
+:debug('admin_button')
+:set_caption('Admin Button')
+:set_tooltip('Admin button')
+:define_draw(function(properties,parent,element)
+    local player = Game.get_player_by_index(element.player_index)
+    if not player.admin then
+        element.enabled = false
+        element.tooltip = 'You must be admin to press this button'
+    end
 end)
-
-local button_with_auth =
-Gui.new_button('test-button-with-auth')
-:set_tooltip('Button with auth')
-:set_post_authenticator(function(player,button_name)
-    return global.test_auth_button
-end)
-:on_click(function(player,element)
-    player.print('Button with auth')
+:on_click(function(event)
+    event.player.print('You pressed admin button!')
 end)
 
 tests.Buttons = {
-    ['No display']=button_no_display,
-    ['Caption']=button_with_caption,
-    ['Icons']=button_with_icon,
-    ['Auth']=button_with_auth
+    ['Basic Button'] = basic_button,
+    ['Sprite Button'] = sprite_button,
+    ['Multi Sprite Button'] = multi_sprite_button,
+    ['Admin Button'] = admin_button,
 }
 
 --[[
-    Checkbox Test
-    > Local -- Simple checkbox that can toggle
-    > Game store -- Checkbox which syncs its state between all players
-    > Force store -- Checkbox which syncs its state with all players on the same force
-    > Player store -- Checkbox that stores its state between re-draws
+Checkboxs
+> Basic Checkbox -- Simple checkbox that can be toggled
+> Game Stored Checkbox -- Checkbox which syncs its state between all players
+> Force Stored Checkbox -- Checkbox which syncs its state with all players on the same force
+> Player Stored Checkbox -- Checkbox that stores its state between re-draws
 ]]
 
-local checkbox_local =
-Gui.new_checkbox('test-checkbox-local')
-:set_tooltip('Checkbox local')
-:set_caption('Checkbox Local')
-:on_element_update(function(player,element,state)
-    player.print('Checkbox local: '..tostring(state))
+Gui.require_concept('checkbox')
+
+local basic_checkbox =
+Gui.new_concept('checkbox')
+:debug('basic_checkbox')
+:set_caption('Basic Checkbox')
+:set_tooltip('Basic checkbox')
+:on_state_changed(function(event)
+    event.player.print('Basic checkbox is now: '..tostring(event.element.state))
 end)
 
-local checkbox_game =
-Gui.new_checkbox('test-checkbox-store-game')
-:set_tooltip('Checkbox store game')
-:set_caption('Checkbox Store Game')
-:add_store()
-:on_element_update(function(player,element,state)
-    player.print('Checkbox store game: '..tostring(state))
+local game_checkbox =
+Gui.new_concept('checkbox')
+:debug('game_checkbox')
+:set_caption('Game Stored Checkbox')
+:set_tooltip('Game stored checkbox')
+:on_state_changed(function(event)
+    local element = event.element
+    event.concept.set_data(element,element.state) -- Update other instances
+    event.player.print('Game stored checkbox is now: '..tostring(element.state))
+end)
+:define_combined_store(function(element,state)
+    element.state = state or false
 end)
 
-local checkbox_force =
-Gui.new_checkbox('test-checkbox-store-force')
-:set_tooltip('Checkbox store force')
-:set_caption('Checkbox Store Force')
-:add_store(Gui.categorize_by_force)
-:on_element_update(function(player,element,state)
-    player.print('Checkbox store force: '..tostring(state))
+local force_checkbox =
+Gui.new_concept('checkbox')
+:debug('force_checkbox')
+:set_caption('Force Stored Checkbox')
+:set_tooltip('Force stored checkbox')
+:on_state_changed(function(event)
+    local element = event.element
+    event.concept.set_data(element,element.state) -- Update other instances
+    event.player.print('Force stored checkbox is now: '..tostring(element.state))
+end)
+:define_combined_store(Gui.categorize_by_force,function(element,state)
+    element.state = state or false
 end)
 
-local checkbox_player =
-Gui.new_checkbox('test-checkbox-store-player')
-:set_tooltip('Checkbox store player')
-:set_caption('Checkbox Store Player')
-:add_store(Gui.categorize_by_player)
-:on_element_update(function(player,element,state)
-    player.print('Checkbox store player: '..tostring(state))
+local player_checkbox =
+Gui.new_concept('checkbox')
+:debug('player_checkbox')
+:set_caption('Player Stored Checkbox')
+:set_tooltip('Player stored checkbox')
+:on_state_changed(function(event)
+    local element = event.element
+    event.concept.set_data(element,element.state) -- Update other instances
+    event.player.print('Player stored checkbox is now: '..tostring(element.state))
+end)
+:define_combined_store(Gui.categorize_by_player,function(element,state)
+    element.state = state or false
 end)
 
-tests.Checkboxes = {
-    ['Local']=checkbox_local,
-    ['Game store']=checkbox_game,
-    ['Force store']=checkbox_force,
-    ['Player store']=checkbox_player
+tests.Checkboxs = {
+    ['Basic Checkbox'] = basic_checkbox,
+    ['Game Stored Checkbox'] = game_checkbox,
+    ['Force Stored Checkbox'] = force_checkbox,
+    ['Player Stored Checkbox'] = player_checkbox
 }
 
 --[[
-    Radiobutton Tests
-    > Local -- Simple radiobutton that can only be toggled true
-    > Player store -- Radio button that saves its state between re-draws
-    > Option set -- A set of radio buttons where only one can be true at a time
+Dropdowns
+> Static Dropdown -- Simple dropdown with all options being static
+> Dynamic Dropdown -- Dropdown which has items based on when it is drawn
+> Static Player Stored Dropdown -- Dropdown where the values is synced for each player
+> Dynamic Player Stored Dropdown -- Same as above but now with dynamic options
 ]]
 
-local radiobutton_local =
-Gui.new_radiobutton('test-radiobutton-local')
-:set_tooltip('Radiobutton local')
-:set_caption('Radiobutton Local')
-:on_element_update(function(player,element,state)
-    player.print('Radiobutton local: '..tostring(state))
+Gui.require_concept('dropdown')
+
+local static_dropdown =
+Gui.new_concept('dropdown')
+:debug('static_dropdown')
+:set_static_items{'Option 1','Option 2','Option 3'}
+:on_selection_changed(function(event)
+    local value = Gui.get_dropdown_value(event.element)
+    event.player.print('Static dropdown is now: '..value)
 end)
 
-local radiobutton_player =
-Gui.new_radiobutton('test-radiobutton-store')
-:set_tooltip('Radiobutton store')
-:set_caption('Radiobutton Store')
-:add_store(Gui.categorize_by_player)
-:on_element_update(function(player,element,state)
-    player.print('Radiobutton store: '..tostring(state))
-end)
-
-local radiobutton_option_set =
-Gui.new_radiobutton_option_set('gui.test.share',function(value,category)
-    game.print('Radiobutton option set for: '..category..' is now: '..tostring(value))
-end,Gui.categorize_by_player)
-
-local radiobutton_option_one =
-Gui.new_radiobutton('test-radiobutton-option-one')
-:set_tooltip('Radiobutton option set')
-:set_caption('Radiobutton Option One')
-:add_as_option(radiobutton_option_set,'One')
-:on_element_update(function(player,element,state)
-    player.print('Radiobutton option one: '..tostring(state))
-end)
-
-local radiobutton_option_two =
-Gui.new_radiobutton('test-radiobutton-option-two')
-:set_tooltip('Radiobutton option set')
-:set_caption('Radiobutton Option Two')
-:add_as_option(radiobutton_option_set,'Two')
-:on_element_update(function(player,element,state)
-    player.print('Radiobutton option two: '..tostring(state))
-end)
-
-local radiobutton_option_three =
-Gui.new_radiobutton('test-radiobutton-option-three')
-:set_tooltip('Radiobutton option set')
-:set_caption('Radiobutton Option Three')
-:add_as_option(radiobutton_option_set,'Three')
-:on_element_update(function(player,element,state)
-    player.print('Radiobutton option three: '..tostring(state))
-end)
-
-tests.Radiobuttons = {
-    ['Local']=radiobutton_local,
-    ['Player store']=radiobutton_player,
-    ['Option set']=function(self,frame)
-        Gui.draw_option_set(radiobutton_option_set,frame)
+local dynamic_dropdown =
+Gui.new_concept('dropdown')
+:debug('dynamic_dropdown')
+:set_dynamic_items(function(element)
+    local items = {}
+    for concept_name,_ in pairs(Gui.concepts) do
+        if concept_name:len() < 16 then
+            items[#items+1] = concept_name
+        end
     end
-}
-
---[[
-    Dropdown Test
-    > Local static general -- Simple dropdown with all static options and general handler
-    > Player startic general -- Dropdown with all static options and general handler and stores option between re-draws
-    > Local static case -- Dropdown with all static options but case handlers and a general handler
-    > Player static case -- Dropdown with all static options but case handlers and a general handler and stores option between re-draws
-    > Local dynamic -- Dropdown with one static option with the reset generated by a function
-    > Player dynamic -- Dropdown with one static option with the reset generated by a function and stores option between re-draws
-]]
-
-local dropdown_local_static_general =
-Gui.new_dropdown('test-dropdown-local-static-general')
-:set_tooltip('Dropdown local static general')
-:add_options('One','Two','Three','Four')
-:on_element_update(function(player,element,value)
-    player.print('Dropdown local static general: '..tostring(value))
+    return items
+end)
+:on_selection_changed(function(event)
+    local value = Gui.get_dropdown_value(event.element)
+    event.player.print('Dynamic dropdown is now: '..value)
 end)
 
-local dropdown_player_static_general =
-Gui.new_dropdown('test-dropdown-store-static-general')
-:set_tooltip('Dropdown store static general')
-:add_options('One','Two','Three','Four')
-:add_store(Gui.categorize_by_player)
-:on_element_update(function(player,element,value)
-    player.print('Dropdown store static general: '..tostring(value))
+local static_player_dropdown =
+Gui.new_concept('dropdown')
+:debug('static_player_dropdown')
+:set_static_items{'Option 1','Option 2','Option 3'}
+:on_selection_changed(function(event)
+    local element = event.element
+    local value = Gui.get_dropdown_value(element)
+    event.concept.set_data(element,value)
+    event.player.print('Static player stored dropdown is now: '..value)
+end)
+:define_combined_store(Gui.categorize_by_player,function(element,value)
+    Gui.set_dropdown_value(element,value)
 end)
 
-local function print_option_selected_1(player,element,value)
-    player.print('Dropdown local static case (case): '..tostring(value))
-end
-
-local dropdown_local_static_case =
-Gui.new_dropdown('test-dropdown-local-static-case')
-:set_tooltip('Dropdown local static case')
-:add_options('One','Two')
-:add_option_callback('One',print_option_selected_1)
-:add_option_callback('Two',print_option_selected_1)
-:add_option_callback('Three',print_option_selected_1)
-:add_option_callback('Four',print_option_selected_1)
-:on_element_update(function(player,element,value)
-    player.print('Dropdown local static case (general): '..tostring(value))
+local dynamic_player_dropdown =
+Gui.new_concept('dropdown')
+:debug('dynamic_player_dropdown')
+:set_dynamic_items(function(element)
+    local items = {}
+    for concept_name,_ in pairs(Gui.concepts) do
+        if concept_name:len() < 16 then
+            items[#items+1] = concept_name
+        end
+    end
+    return items
 end)
-
-local function print_option_selected_2(player,element,value)
-    player.print('Dropdown store static case (case): '..tostring(value))
-end
-
-local dropdown_player_static_case =
-Gui.new_dropdown('test-dropdown-store-static-case')
-:set_tooltip('Dropdown store static case')
-:add_store(Gui.categorize_by_player)
-:add_options('One','Two')
-:add_option_callback('One',print_option_selected_2)
-:add_option_callback('Two',print_option_selected_2)
-:add_option_callback('Three',print_option_selected_2)
-:add_option_callback('Four',print_option_selected_2)
-:on_element_update(function(player,element,value)
-    player.print('Dropdown store static case (general): '..tostring(value))
+:on_selection_changed(function(event)
+    local element = event.element
+    local value = Gui.get_dropdown_value(element)
+    event.concept.set_data(element,value)
+    event.player.print('Dynamic player dropdown is now: '..value)
 end)
-
-local dropdown_local_dynamic =
-Gui.new_dropdown('test-dropdown-local-dynamic')
-:set_tooltip('Dropdown local dynamic')
-:add_options('Static')
-:add_dynamic(function(player,element)
-    return table_keys(Colors)
-end)
-:on_element_update(function(player,element,value)
-    player.print('Dropdown local dynamic: '..tostring(value))
-end)
-
-local dropdown_player_dynamic =
-Gui.new_dropdown('test-dropdown-store-dynamic')
-:set_tooltip('Dropdown store dynamic')
-:add_options('Static')
-:add_dynamic(function(player,element)
-    return table_keys(Colors)
-end)
-:add_store(Gui.categorize_by_player)
-:on_element_update(function(player,element,value)
-    player.print('Dropdown store dynamic: '..tostring(value))
+:define_combined_store(Gui.categorize_by_player,function(element,value)
+    Gui.set_dropdown_value(element,value)
 end)
 
 tests.Dropdowns = {
-    ['Local static general']=dropdown_local_static_general,
-    ['Player startic general']=dropdown_player_static_general,
-    ['Local static case']=dropdown_local_static_case,
-    ['Player static case']=dropdown_player_static_case,
-    ['Local dynamic general']=dropdown_local_dynamic,
-    ['Player dynamic general']=dropdown_player_dynamic
+    ['Static Dropdown'] = static_dropdown,
+    ['Dynamic Dropdown'] = dynamic_dropdown,
+    ['Static Player Stored Dropdown'] = static_player_dropdown,
+    ['Dynamic Player Stored Dropdown'] = dynamic_player_dropdown
 }
 
 --[[
-    List Box Tests
-    > Local -- A list box with all static options and general handler
-    > Store -- A list box with all static options and general handler and stores options between re-draws
+Listboxs
+> Static Listbox -- Simple Listbox with all options being static
+> Static Player Stored Listbox -- Listbox where the values is synced for each player
 ]]
 
-local list_box_local =
-Gui.new_list_box('test-list-box-local')
-:set_tooltip('List box local')
-:add_options('One','Two','Three','Four')
-:on_element_update(function(player,element,value)
-    player.print('Dropdown local: '..tostring(value))
+local static_listbox =
+Gui.new_concept('dropdown')
+:debug('static_listbox')
+:set_use_list_box(true)
+:set_static_items{'Option 1','Option 2','Option 3'}
+:on_selection_changed(function(event)
+    local value = Gui.get_dropdown_value(event.element)
+    event.player.print('Static listbox is now: '..value)
 end)
 
-local list_box_player =
-Gui.new_list_box('test-list-box-store')
-:set_tooltip('List box store')
-:add_options('One','Two','Three','Four')
-:add_store(Gui.categorize_by_player)
-:on_element_update(function(player,element,value)
-    player.print('Dropdown store: '..tostring(value))
+local static_player_listbox =
+Gui.new_concept('dropdown')
+:debug('static_player_listbox')
+:set_use_list_box(true)
+:set_static_items{'Option 1','Option 2','Option 3'}
+:on_selection_changed(function(event)
+    local element = event.element
+    local value = Gui.get_dropdown_value(element)
+    event.concept.set_data(element,value)
+    event.player.print('Static player stored listbox is now: '..value)
+end)
+:define_combined_store(Gui.categorize_by_player,function(element,value)
+    Gui.set_dropdown_value(element,value)
 end)
 
-tests["List Boxes"] = {
-    ['Local']=list_box_local,
-    ['Player']=list_box_player
+tests.Listboxs = {
+    ['Static Listbox'] = static_listbox,
+    ['Static Player Stored Listbox'] = static_player_listbox
 }
 
 --[[
-    Slider Tests
-    > Local default -- Simple slider with default range
-    > Store default -- Slider with default range that stores value between re-draws
-    > Static range -- Simple slider with a static range
-    > Dynamic range -- Slider with a dynamic range
-    > Local label -- Simple slider with default range which has a label
-    > Store label -- Slider with default range which has a label and stores value between re-draws
+Elem Buttons
+> Basic Elem Button -- Basic elem button
+> Defaut Selection Elem Button -- Same as above but has a default selection
+> Player Stored Elem Button -- Same as above but is stored per player
 ]]
 
-local slider_local_default =
-Gui.new_slider('test-slider-local-default')
-:set_tooltip('Slider local default')
-:on_element_update(function(player,element,value,percent)
-    player.print('Slider local default: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
+Gui.require_concept('elem_button')
+
+local basic_elem_button =
+Gui.new_concept('elem_button')
+:debug('basic_elem_button')
+:on_selection_changed(function(event)
+    event.player.print('Basic elem button is now: '..event.element.elem_value)
 end)
 
-
-local slider_player_default =
-Gui.new_slider('test-slider-store-default')
-:set_tooltip('Slider store default')
-:add_store(Gui.categorize_by_player)
-:on_element_update(function(player,element,value,percent)
-    player.print('Slider store default: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
+local default_selection_elem_button =
+Gui.new_concept('elem_button')
+:debug('default_selection_elem_button')
+:set_elem_type('signal')
+:set_default{type='virtual',name='signal-info'}
+:on_selection_changed(function(event)
+    local value = event.element.elem_value
+    event.player.print('Default selection elem button is now: '..value.type..'/'..value.name)
 end)
 
-local slider_static =
-Gui.new_slider('test-slider-static-range')
-:set_tooltip('Slider static range')
-:set_range(5,50)
-:on_element_update(function(player,element,value,percent)
-    player.print('Slider static range: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
+local player_elem_button =
+Gui.new_concept('elem_button')
+:debug('player_elem_button')
+:set_elem_type('technology')
+:on_selection_changed(function(event)
+    local element = event.element
+    local value = element.elem_value
+    event.concept.set_data(element,value)
+    event.player.print('Player stored elem button is now: '..value)
+end)
+:define_combined_store(Gui.categorize_by_player,function(element,value)
+    element.elem_value = value
 end)
 
-local slider_dynamic =
-Gui.new_slider('test-slider-dynamic-range')
-:set_tooltip('Slider dynamic range')
-:set_range(function(player,element)
-    return player.index - 5
-end,function(player,element)
-    return player.index + 4
+tests['Elem Buttons'] = {
+    ['Basic Elem Button'] = basic_elem_button,
+    ['Defaut Selection Elem Button'] = default_selection_elem_button,
+    ['Player Stored Elem Button'] = player_elem_button
+}
+
+--[[
+Progress Bars
+> Basic Progress Bar -- will increse when pressed, when full then it will reset
+> Inverted Progress Bar -- will increse when pressed, when empty then it will reset
+> Game Instance Progress Bar -- will take 5 seconds to fill, when full it will reset, note instances are required due to on_tick
+> Force Instance Progress Bar -- will increse when pressed, instance only means all instances will increse at same time but may not have the same value
+> Force Stored Progress Bar -- will increse when pressed, unlike above all will increse at same time and will have the same value
+]]
+
+Gui.require_concept('progress_bar')
+
+local basic_progress_bar =
+Gui.new_concept('progress_bar')
+:debug('basic_progress_bar')
+:set_tooltip('Basic progress bar')
+:set_maximum(5)
+:new_event('on_click',defines.events.on_gui_click)
+:on_click(function(event)
+    event.concept:increment(event.element)
 end)
-:on_element_update(function(player,element,value,percent)
-    player.print('Slider dynamic range: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
+:set_delay_completion(true)
+:on_completion(function(event)
+    event.concept:reset(event.element)
 end)
 
-local label_slider_local =
-Gui.new_slider('test-slider-local-label')
-:set_tooltip('Slider local label')
-:enable_auto_draw_label()
-:on_element_update(function(player,element,value,percent)
-    player.print('Slider local label: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
+local inverted_progress_bar =
+Gui.new_concept('progress_bar')
+:debug('inverted_progress_bar')
+:set_tooltip('Inverted progress bar')
+:set_inverted(true)
+:set_maximum(5)
+:new_event('on_click',defines.events.on_gui_click)
+:on_click(function(event)
+    event.concept:increment(event.element)
+end)
+:on_completion(function(event)
+    event.concept:reset(event.element)
 end)
 
-local label_slider_player =
-Gui.new_slider('test-slider-store-label')
-:set_tooltip('Slider store label')
-:enable_auto_draw_label()
-:add_store(Gui.categorize_by_player)
-:on_element_update(function(player,element,value,percent)
-    player.print('Slider store label: '..tostring(math.round(value))..' '..tostring(math.round(percent,1)))
+local game_progress_bar =
+Gui.new_concept('progress_bar')
+:debug('game_progress_bar')
+:set_tooltip('Game progress bar')
+:set_maximum(300)
+:new_event('on_tick',defines.events.on_tick)
+:on_tick(function(event)
+    event.concept:increment(event.element)
+end)
+:set_delay_completion(true)
+:on_completion(function(event)
+    event.concept:reset(event.element)
+end)
+:define_instance_store()
+
+local force_instance_progress_bar =
+Gui.new_concept('progress_bar')
+:debug('force_instance_progress_bar')
+:set_tooltip('Force instance progress bar')
+:set_maximum(5)
+:new_event('on_click',defines.events.on_gui_click)
+:on_click(function(event)
+    event.concept:increment(event.element)
+end)
+:set_delay_completion(true)
+:on_completion(function(event)
+    event.concept:reset(event.element)
+end)
+:define_instance_store(Gui.categorize_by_force)
+
+local force_stored_progress_bar =
+Gui.new_concept('progress_bar')
+:debug('force_stored_progress_bar')
+:set_tooltip('Force stored progress bar')
+:set_maximum(5)
+:new_event('on_click',defines.events.on_gui_click)
+:on_click(function(event)
+    local element = event.element
+    local concept = event.concept
+    local new_value = concept:increment(element)
+    if new_value then concept.set_data(element,new_value) end
+end)
+:set_delay_completion(true)
+:on_completion(function(event)
+    local element = event.element
+    local concept = event.concept
+    local new_value = concept:reset(element)
+    concept.set_data(element,new_value)
+end)
+:define_combined_store(Gui.categorize_by_force,function(element,value)
+    element.value = value or 0
+end)
+
+tests['Progress Bars'] = {
+    ['Basic Progress Bar'] = basic_progress_bar,
+    ['Inverted Progress Bar'] = inverted_progress_bar,
+    ['Game Instance Progress Bar'] = game_progress_bar,
+    ['Force Instance Progress Bar'] = force_instance_progress_bar,
+    ['Force Stored Progress Bar'] = force_stored_progress_bar
+}
+
+--[[
+Sliders
+> Basic Slider -- Just a basic slider with range 1 to 10
+> Interval Slider -- Same as above but can only be intergers
+> Discrete Slider -- A discrete slider
+> Dynamic Slider -- A slider which has a dynamic range
+> Player Stored Slider -- Slider which stores the value per player, also goes 1 to 10
+]]
+
+Gui.require_concept('slider')
+
+local basic_slider =
+Gui.new_concept('slider')
+:debug('basic_slider')
+:set_range(1,10)
+:on_value_changed(function(event)
+    event.player.print('Basic slider is now: '..event.element.slider_value)
+end)
+
+local interval_slider =
+Gui.new_concept('slider')
+:debug('interval_slider')
+:set_range(1,10)
+:set_value_step(1)
+:on_value_changed(function(event)
+    event.player.print('Interval slider is now: '..event.element.slider_value)
+end)
+
+local discrete_slider =
+Gui.new_concept('slider')
+:debug('discrete_slider')
+:set_range(1,10)
+:set_value_step(1)
+:set_discrete_slider(true)
+:on_value_changed(function(event)
+    event.player.print('Discrete slider is now: '..event.element.slider_value)
+end)
+
+local dynamic_slider =
+Gui.new_concept('slider')
+:debug('dynamic_slider')
+:set_range(function(element)
+    local player = Gui.get_player_from_element(element)
+    return 1, player.name:len()
+end)
+:set_value_step(1)
+:set_discrete_slider(true)
+:on_value_changed(function(event)
+    event.player.print('Dynamic slider is now: '..event.element.slider_value)
+end)
+
+local player_slider =
+Gui.new_concept('slider')
+:debug('player_slider')
+:set_range(1,10)
+:set_value_step(1)
+:set_discrete_slider(true)
+:on_value_changed(function(event)
+    local element = event.element
+    local value = element.slider_value
+    event.concept.set_data(element,value)
+    event.player.print('Player stored slider is now: '..value)
+end)
+:define_combined_store(Gui.categorize_by_player,function(element,value)
+    element.slider_value = value or 0
 end)
 
 tests.Sliders = {
-    ['Local default']=slider_local_default,
-    ['Player default']=slider_player_default,
-    ['Static range']=slider_static,
-    ['Dynamic range']=slider_dynamic,
-    ['Local label']=function(self,frame)
-        local flow = frame.add{type='flow'}
-        label_slider_local:draw_to(flow)
-    end,
-    ['Player label']=function(self,frame)
-        local flow = frame.add{type='flow'}
-        label_slider_player:draw_to(flow)
-    end
+    ['Basic Slider'] = basic_slider,
+    ['Interval Slider'] = interval_slider,
+    ['Discrete Slider'] = discrete_slider,
+    ['Dynamic Slider'] = dynamic_slider,
+    ['Player Stored Slider'] = player_slider
 }
 
 --[[
-    Text Tests
-    > Local field -- Simple text field
-    > Store field -- Test field that stores text between re-draws
-    > Local box -- Simple text box
-    > Wrap box -- Text box which has word wrap and selection disabled
+Text Fields
+> Basic Text Field -- Just a text field which text can be entered into
+> Better Text Field -- Same as above but will clear on rmb and un forcus on confirmation
+> Decimal Text Field -- Text field which accepts decimal values
+> Password Text Field -- Text field which stars out the typed characters
+> Player Stored Text Field - Same as basic but will store value per player
 ]]
 
-local text_filed_local =
-Gui.new_text_filed('test-text-field-local')
-:set_tooltip('Text field local')
-:on_element_update(function(player,element,value)
-    player.print('Text field local: '..value)
+Gui.require_concept('text_field')
+
+-- Making a text field
+local basic_text_field =
+Gui.new_concept('text_field')
+:debug('basic_text_field')
+:set_tooltip('Basic text field')
+:on_confirmation(function(event)
+    event.player.print('Basic text field is now: '..event.element.text)
 end)
 
-local text_filed_store =
-Gui.new_text_filed('test-text-field-store')
-:set_tooltip('Text field store')
-:add_store(Gui.categorize_by_player)
-:on_element_update(function(player,element,value)
-    player.print('Text field store: '..value)
+local better_text_field =
+Gui.new_concept('text_field')
+:debug('better_text_field')
+:set_tooltip('Better text field')
+:set_clear_on_rmb(true)
+:set_lose_forcus(true)
+:on_confirmation(function(event)
+    event.player.print('Better text field is now: '..event.element.text)
 end)
 
-local text_box_local =
-Gui.new_text_box('test-text-box-local')
-:set_tooltip('Text box local')
-:on_element_update(function(player,element,value)
-    player.print('Text box local: '..value)
+local decimal_text_field =
+Gui.new_concept('text_field')
+:debug('decimal_text_field')
+:set_tooltip('Decimal text field')
+:set_is_decimal(true)
+:on_confirmation(function(event)
+    event.player.print('Decimal text field is now: '..event.element.text)
 end)
 
-local text_box_wrap =
-Gui.new_text_box('test-text-box-wrap')
-:set_tooltip('Text box wrap')
-:set_selectable(false)
-:set_word_wrap()
-:on_element_update(function(player,element,value)
-    player.print('Text box wrap: '..value)
+local password_text_field =
+Gui.new_concept('text_field')
+:debug('password_text_field')
+:set_tooltip('Password text field')
+:set_is_password(true)
+:on_confirmation(function(event)
+    event.player.print('Password text field is now: '..event.element.text)
 end)
 
-tests.Texts = {
-    ['Local field']=text_filed_local,
-    ['Store field']=text_filed_store,
-    ['Local box']=text_box_local,
-    ['Wrap box']=text_box_wrap
+local player_text_field =
+Gui.new_concept('text_field')
+:debug('player_text_field')
+:set_tooltip('Player stored text field')
+:on_confirmation(function(event)
+    local element = event.element
+    local text = element.text
+    event.concept.set_data(element,text)
+    event.player.print('Player stored text field is now: '..text)
+end)
+:define_combined_store(Gui.categorize_by_player, function(element,value)
+    element.text = value or ''
+end)
+
+tests['Text Fields'] = {
+    ['Basic Text Field'] = basic_text_field,
+    ['Better Text Field'] = better_text_field,
+    ['Decimal Text Field'] = decimal_text_field,
+    ['Password Text Field'] = password_text_field,
+    ['Player Stored Text Field'] = player_text_field
 }
 
 --[[
-    Elem Button Tests
-    > Local -- Simple elem button
-    > Default -- Simple elem button which has a default value
-    > Function -- Elem button which has a dynamic default
-    > Store -- Elem button which stores its value between re-draws
+Text Boxs
+> Basic Text Box -- A text box that can not be edited
+> Editible Text Box -- A text box that can be edited
 ]]
 
-local elem_local =
-Gui.new_elem_button('test-elem-local')
-:set_tooltip('Elem')
-:set_type('item')
-:on_element_update(function(player,element,value)
-    player.print('Elem: '..value)
+Gui.require_concept('text_box')
+
+local basic_text_box =
+Gui.new_concept('text_box')
+:debug('basic_text_box')
+:set_tooltip('Basic text box')
+:set_default('I am the text that will show in the text box')
+:define_draw(function(properties,parent,element)
+    element.style.height = 75
 end)
 
-local elem_default =
-Gui.new_elem_button('test-elem-default')
-:set_tooltip('Elem default')
-:set_type('item')
-:set_default('iron-plate')
-:on_element_update(function(player,element,value)
-    player.print('Elem default: '..value)
+local editible_text_box =
+Gui.new_concept('text_box')
+:debug('editible_text_box')
+:set_tooltip('Editible text box')
+:set_is_read_only(false)
+:set_default('I am the text that will show in the text box')
+:on_text_changed(function(event)
+    event.player.print('Editible text box is now: '..event.element.text)
+end)
+:define_draw(function(properties,parent,element)
+    element.style.height = 75
 end)
 
-local elem_function =
-Gui.new_elem_button('test-elem-function')
-:set_tooltip('Elem function')
-:set_type('item')
-:set_default(function(player,element)
-    return 'iron-plate'
-end)
-:on_element_update(function(player,element,value)
-    player.print('Elem function: '..value)
-end)
-
-local elem_store =
-Gui.new_elem_button('test-elem-store')
-:set_tooltip('Elem store')
-:set_type('item')
-:add_store(Gui.categorize_by_player)
-:on_element_update(function(player,element,value)
-    player.print('Elem store: '..value)
-end)
-
-tests["Elem Buttons"] = {
-    ['Local']=elem_local,
-    ['Default']=elem_default,
-    ['Function']=elem_function,
-    ['Store']=elem_store
-}
-
---[[
-    Progress bar tests
-    > Simple -- Progress bar that fills every 2 seconds
-    > Store -- Progress bar that fills every 5 seconds with synced value
-    > Reverse -- Progress bar that decreases every 2 seconds
-]]
-
-local progressbar_one =
-Gui.new_progressbar('test-prog-one')
-:set_default_maximum(120)
-:on_complete(function(player,element,reset_element)
-    reset_element()
-end)
-
-local progressbar_two =
-Gui.new_progressbar('test-prog-one')
-:set_default_maximum(300)
-:add_store(Gui.categorize_by_force)
-:on_complete(function(player,element,reset_element)
-    reset_element()
-end)
-:on_store_complete(function(category,reset_store)
-    reset_store()
-end)
-
-local progressbar_three =
-Gui.new_progressbar('test-prog-one')
-:set_default_maximum(120)
-:use_count_down()
-:on_complete(function(player,element,reset_element)
-    reset_element()
-end)
-
-Event.add(defines.events.on_tick,function()
-    progressbar_one:increment()
-    progressbar_three:decrement()
-    local categories = Store.get_children(progressbar_two.store)
-    for _,category in pairs(categories) do
-        progressbar_two:increment(1,category)
-    end
-end)
-
-tests["Progress Bars"] = {
-    ['Simple']=progressbar_one,
-    ['Store']=progressbar_two,
-    ['Reverse']=progressbar_three
+tests['Text Boxs'] = {
+    ['Basic Text Box'] = basic_text_box,
+    ['Editible Text Box'] = editible_text_box
 }

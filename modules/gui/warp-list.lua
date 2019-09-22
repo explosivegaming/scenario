@@ -478,7 +478,7 @@ end)
 local r2 = config.activation_range^2
 local rs2 = config.spawn_activation_range^2
 Event.on_nth_tick(math.floor(60/config.update_smoothing),function()
-    local categories = Store.get_children(warp_timer.store)
+    local categories = Store.get_keys(warp_timer.store)
     for _,category in pairs(categories) do
         warp_timer:increment(1,category)
     end

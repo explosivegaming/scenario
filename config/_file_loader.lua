@@ -39,12 +39,12 @@ return {
     'modules.addons.discord-alerts',
     'modules.addons.chat-reply',
     -- GUI
-    'modules.gui.rocket-info',
-    'modules.gui.science-info',
-    'modules.gui.warp-list',
-    'modules.gui.task-list',
-    'modules.gui.player-list',
-    'modules.commands.debug',
+    --'modules.gui.rocket-info',
+    --'modules.gui.science-info',
+    --'modules.gui.warp-list',
+    --'modules.gui.task-list',
+    --'modules.gui.player-list',
+    --'modules.commands.debug',
     -- Config Files
     'config.expcore-commands.auth_admin', -- commands tagged with admin_only are blocked for non admins
     'config.expcore-commands.auth_roles', -- commands must be allowed via the role config

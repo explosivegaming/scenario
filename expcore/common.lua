@@ -611,4 +611,93 @@ function Common.format_chat_player_name(player,raw_string)
     end
 end
 
+--- Returns a desync safe file path for the current file
+-- @tparam[opt=0] number offset the offset in the stack to get, 0 is current file
+-- @treturn string the file path
+function Common.get_file_path(offset)
+    offset = offset or 0
+    return debug.getinfo(offset+2, 'S').source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+end
+
+--[[-- Much faster method for inserting items into an array
+@tparam table tbl the table that will have the values added to it
+@tparam[opt] number start_index the index at which values will be added, nil means end of the array
+@tparam table values the new values that will be added to the table
+@treturn table the table that was passed as the first argument
+@usage-- Adding 1000 values into the middle of the array
+local tbl = {}
+local values = {}
+for i = 1,1000 do tbl[i] = i values[i] = i end
+Common.array_insert(tbl,500,values) -- around 0.4ms
+]]
+function Common.array_insert(tbl,start_index,values)
+    if not values then
+        values = start_index
+        start_index = nil
+    end
+
+    if start_index then
+        local starting_length = #tbl
+        local adding_length = #values
+        local move_to = start_index+adding_length+1
+        for offset = starting_length-start_index, 0, -1 do
+            tbl[move_to+offset] = tbl[starting_length+offset]
+        end
+        start_index = start_index-1
+    else
+        start_index = #tbl
+    end
+
+    for offset, item in ipairs(values) do
+        tbl[start_index+offset] = item
+    end
+
+    return tbl
+end
+
+--[[-- Much faster method for inserting keys into a table
+@tparam table tbl the table that will have keys added to it
+@tparam[opt] number start_index the index at which values will be added, nil means end of the array, numbered indexs only
+@tparam table tbl2 the table that may contain both string and numbered keys
+@treturn table the table passed as the first argument
+@usage-- Merging two tables
+local tbl = {}
+local tbl2 = {}
+for i = 1,100 do tbl[i] = i tbl['_'..i] = i tbl2[i] = i tbl2['__'..i] = i end
+Common.table_insert(tbl,50,tbl2)
+]]
+function Common.table_insert(tbl,start_index,tbl2)
+    if not tbl2 then
+        tbl2 = start_index
+        start_index = nil
+    end
+
+    Common.array_insert(tbl,start_index,tbl2)
+    for key, value in pairs(tbl2) do
+        if not tonumber(key) then
+            tbl[key] = value
+        end
+    end
+
+    return tbl
+end
+
+--[[-- Used to resolve a value that could also be a function returning that value
+@tparam any value the value which you want to test is not nil and if it is a function then call the function
+@treturn any the value given or returned by value if it is a function
+@usage-- Default value handling
+-- if default value is not a function then it is returned
+-- if it is a function then it is called with the first argument being self
+local value = Common.resolve_value(self.defaut_value,self)
+]]
+function Common.resolve_value(value,...)
+    if value then
+        if type(value) == 'function' then
+            return value(...)
+        else
+            return value
+        end
+    end
+end
+
 return Common
