@@ -7,6 +7,7 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 Gui.require_concept 'frame' --- @dep gui.concept.frame
 
 --[[-- A container frame that can be used to add a boader around your content
+@see frame
 @element container
 @usage-- Concept Structure
 -- Root

@@ -46,6 +46,12 @@ end
 @usage-- Concept Structure
 -- Root
 --> [time_label] - the label with the time
+local time_label =
+Gui.new_concept('time_label')
+:set_use_hours(true)
+:set_time(game.tick)
+
+time_label:update_time(element,game.tick)
 ]]
 
 local time_label =

@@ -13,12 +13,16 @@ Gui.new_concept('scroll')
 :set_horizontal_scroll('never')
 
 --[[-- A table that is inside a vertical scroll area
+@see table
 @element scroll_table
 @tparam number hight the max hight of the scroll area
 @usage-- Concept Structure
 -- Root
 --> [scroll_table] - the scroll area
 -->> table - the table area
+Gui.new_concept('scroll_table')
+:set_height(200)
+:set_column_count(2)
 ]]
 
 Gui.new_concept('table')

@@ -7,6 +7,7 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 Gui.require_concept 'flow' --- @dep gui.concept.flow
 
 --[[-- A flow which can be used to align text and other elements
+@see flow
 @element alignment
 @usage-- Concept Structure
 -- Root
