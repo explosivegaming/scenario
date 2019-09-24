@@ -2,10 +2,10 @@
     @module ExpStyle
 ]]
 
-local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Gui = require 'expcore.gui' -- @dep expcore.gui
 
-Gui.require_concept 'table' --- @dep gui.concept.table
-Gui.require_concept 'scroll' --- @dep gui.concept.scroll
+Gui.require_concept 'table' -- @dep gui.concept.table
+Gui.require_concept 'scroll' -- @dep gui.concept.scroll
 
 local scroll_area =
 Gui.new_concept('scroll')
@@ -13,7 +13,7 @@ Gui.new_concept('scroll')
 :set_horizontal_scroll('never')
 
 --[[-- A table that is inside a vertical scroll area
-@see table
+@see Gui.table
 @element scroll_table
 @tparam number hight the max hight of the scroll area
 @usage-- Concept Structure

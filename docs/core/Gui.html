@@ -62,6 +62,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Commands.html"><span class="module-name-item">Commands</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Common-Library.html"><span class="module-name-item">Common-Library</span></a></div></li>
     <li class="nav-item active"><div class="nav-item-block-active block"><a href="../core/Gui.html"><span class="module-name-item">Gui</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/ExpStyle.html"><span class="module-name-item">ExpStyle</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Permissions-Groups.html"><span class="module-name-item">Permissions-Groups</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Roles.html"><span class="module-name-item">Roles</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Store.html"><span class="module-name-item">Store</span></a></div></li>
@@ -353,7 +354,7 @@ Gui.new_concept(<span class="string">'button'</span>) <span class="comment">-- W
     <td class="summary">Grey semi-transparent boxes that contain other elements.</td>
     </tr>
     <tr>
-    <td class="name"><a href="#frame">frame</a></td>
+    <td class="name"><a href="#label">label</a></td>
     <td class="summary">A piece of text.</td>
     </tr>
     <tr>
@@ -485,6 +486,14 @@ Gui.new_concept(<span class="string">'button'</span>) <span class="comment">-- W
     <td class="summary">Destroies and element if it is valid</td>
     </tr>
     <tr>
+    <td class="name"><a href="#find">find(element, ...)</a></td>
+    <td class="summary">Finds and returns a gui element if it is valid from a long chain of element names or concepts</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#exists">exists</a></td>
+    <td class="summary">Checks if a gui element exists or not, returns it if found else the path where it failed</td>
+    </tr>
+    <tr>
     <td class="name"><a href="#toggle_enabled">toggle_enabled(element)</a></td>
     <td class="summary">Toggles the enabled state of an element</td>
     </tr>
@@ -565,7 +574,7 @@ Gui.new_concept(<span class="string">'button'</span>) <span class="comment">-- W
     <td class="summary">Used to define how the concept is turned into an ingame element or "instance" as we may refer to them</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Prototype:draw">Prototype:draw(parent_element)</a></td>
+    <td class="name"><a href="#Prototype:draw">Prototype:draw(parent_element[, override_name])</a></td>
     <td class="summary">Calls all the draw functions in order to create this concept in game; will also store and sync the instance if stores are used</td>
     </tr>
     </tbody>
@@ -1342,8 +1351,8 @@ Gui.new_concept(<span class="string">'frame'</span>)
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#frame" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="frame">frame</span>
+    <a href="#label" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="label">label</span>
     </div>
     </dt>
     <dd>
@@ -3492,6 +3501,169 @@ Gui.get_concept(<span class="string">'button'</span>)</code></pre>
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
+    <a href="#find" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="find">find(element, ...)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Finds and returns a gui element if it is valid from a long chain of element names or concepts</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the root element to start checking from
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>...</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+
+     element names or element concepts that point to your element
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">if the element was found, failed</span>
+    </li>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    <span class="return-text">the path of the element that the search stoped at</span>
+    </li>
+    </ul>
+    <h5>Or</h5>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">if the element was found, found</span>
+    </li>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+    <span class="return-text">the element that was found</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Getting the center gui
+</span><span class="keyword">local</span> exists, center = Gui.find(player,<span class="string">'gui'</span>,<span class="string">'center'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#exists" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="exists">exists</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Checks if a gui element exists or not, returns it if found else the path where it failed</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-module-field-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the root element to start checking from
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-module-field-li">
+
+    <strong><em>...</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+
+     element names or element concepts that point to your element
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <strong>See also:</strong>
+    <ul>
+    <li><a href="../core/Gui.html#find">Gui.find</a></li>
+    </ul>
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Getting the center gui
+</span><span class="keyword">local</span> exists, center = Gui.exists(player,<span class="string">'gui'</span>,<span class="string">'center'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
     <a href="#toggle_enabled" class="fragment-hashtag">#</a>
     <span class="section-item-title" id="toggle_enabled">toggle_enabled(element)</span>
     </div>
@@ -4686,7 +4858,7 @@ Gui.get_concept(<span class="string">'Button'</span>)
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Prototype:draw" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Prototype:draw">Prototype:draw(parent_element)</span>
+    <span class="section-item-title" id="Prototype:draw">Prototype:draw(parent_element[, override_name])</span>
     </div>
     </dt>
     <dd>
@@ -4714,6 +4886,23 @@ Gui.get_concept(<span class="string">'Button'</span>)
 
      the element that the concept will use as a base
 
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>override_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     when given this will be the name of the element rather than the concept id
+
+    (<em>optional</em>)
     </li>
 
 
@@ -5611,7 +5800,7 @@ Gui.get_concept(<span class="string">'CustomButton'</span>)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-09-22 17:34:57 UTC</i>
+    <i>Last updated 2019-09-24 19:27:54 UTC</i>
     </div>
     </div>
     </div>

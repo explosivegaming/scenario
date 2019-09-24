@@ -2,15 +2,15 @@
     @module ExpStyle
 ]]
 
-local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Gui = require 'expcore.gui' -- @dep expcore.gui
 
-Gui.require_concept 'label' --- @dep gui.concept.frame
+Gui.require_concept 'label' -- @dep gui.concept.frame
 
 local right_align =
 Gui.new_concept('alignment')
 
 --[[-- A label pair which has a static label and a data label which can be changed
-@see label
+@see Gui.label
 @element data_label
 @usage-- Concept Structure
 -- Root
@@ -64,6 +64,12 @@ end)
     return data_label_element
 end)
 
+--[[-- Updates the caption and tooltip of the data label using the data format function
+@tparam LuaGuiElement element the data label element that you want to update
+@tparam any data the data that you want to pass to the format function
+@usage-- Updating the data to the current game tick
+data_label:update_data_element(element,game.tick)
+]]
 function data_label:update_data_element(element,data,...)
     local caption, tooltip = self.properties.data_format(self,element,data,...)
     if caption then
@@ -74,6 +80,12 @@ function data_label:update_data_element(element,data,...)
     end
 end
 
+--[[-- Updates the caption and tooltip of the data label using the data format function, given the parent of the data label
+@tparam LuaGuiElement parent the parent element to the data label element that you want to update
+@tparam any data the data that you want to pass to the format function
+@usage-- Updating the data to the current game tick
+data_label:update_from_parent(parent,game.tick)
+]]
 function data_label:update_from_parent(parent,data,...)
     local properties = self.properties
     local data_name = properties.data_label_name or properties.name..'_data'

@@ -2,7 +2,7 @@
     @module ExpStyle
 ]]
 
-local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Gui = require 'expcore.gui' -- @dep expcore.gui
 local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
 
 --- Converts a tick into string format with workds and symbols

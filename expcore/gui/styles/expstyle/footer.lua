@@ -2,15 +2,15 @@
     @module ExpStyle
 ]]
 
-local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Gui = require 'expcore.gui' -- @dep expcore.gui
 
-Gui.require_concept 'frame' --- @dep gui.concept.table
+Gui.require_concept 'frame' -- @dep gui.concept.table
 
 local right_align =
 Gui.new_concept('alignment')
 
 --[[-- A frame that acts as a footer to a section of content
-@see frame
+@see Gui.frame
 @element footer
 @tparam string tooltip the tooltip to show on the title
 @usage-- Concept Structure

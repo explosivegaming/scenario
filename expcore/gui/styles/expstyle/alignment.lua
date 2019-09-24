@@ -1,13 +1,14 @@
 --[[-- Core Module - ExpStyle
-    @module ExpStyle
+    @core ExpStyle
+    @alias expstyle
 ]]
 
-local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Gui = require 'expcore.gui'  -- @dep expcore.gui
 
-Gui.require_concept 'flow' --- @dep gui.concept.flow
+Gui.require_concept 'flow' -- @dep gui.concept.flow
 
 --[[-- A flow which can be used to align text and other elements
-@see flow
+@see Gui.flow
 @element alignment
 @usage-- Concept Structure
 -- Root

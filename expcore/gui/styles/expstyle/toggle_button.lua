@@ -2,12 +2,12 @@
     @module ExpStyle
 ]]
 
-local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Gui = require 'expcore.gui' -- @dep expcore.gui
 
-Gui.require_concept 'button' --- @dep gui.concept.table
+Gui.require_concept 'button' -- @dep gui.concept.table
 
 --[[-- A button that will toggle its caption each time it is pressed
-@see button
+@see Gui.button
 @element toggle_button
 @tparam string alt_caption the caption to show on the button in its true state
 @tparam string alt_tooltip the tooltip to show on the button in its true state
