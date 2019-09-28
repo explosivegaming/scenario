@@ -15,16 +15,12 @@ local Jail = require 'modules.control.jail' --- @dep modules.control.jail
 local Colors = require 'resources.color_presets' --- @dep resources.color_presets
 local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
 
-Gui.require_concept('button')
-
 local action_player_store = 'gui.left.player-list.action-player'
 local action_name_store = 'gui.left.player-list.action-name'
 
 -- common style used by all action buttons
-local function tool_button_style(properties,parent,element)
-    element.style = 'tool_button'
-    local style = element.style
-    style.padding = -1
+local function tool_button_style(style)
+    Gui.set_padding_style(style,-1,-1,-1,-1)
     style.height = 28
     style.width = 28
 end
@@ -59,12 +55,11 @@ end
 --- Teleports the user to the action player
 -- @element goto_player
 local goto_player =
-Gui.new_concept('button')
-:set_sprite('utility/export')
+Gui.new_button()
+:set_sprites('utility/export')
 :set_tooltip{'player-list.goto-player'}
-:define_draw(tool_button_style)
-:on_click(function(event)
-    local player = event.player
+:set_style('tool_button',tool_button_style)
+:on_click(function(player,element)
     local action_player_name = get_action_player_name(player)
     local action_player = Game.get_player_from_any(action_player_name)
     if not player.character or not action_player.character then
@@ -77,12 +72,11 @@ end)
 --- Teleports the action player to the user
 -- @element bring_player
 local bring_player =
-Gui.new_concept('button')
-:set_sprite('utility/import')
+Gui.new_button()
+:set_sprites('utility/import')
 :set_tooltip{'player-list.bring-player'}
-:define_draw(tool_button_style)
-:on_click(function(event)
-    local player = event.player
+:set_style('tool_button',tool_button_style)
+:on_click(function(player,element)
     local action_player_name = get_action_player_name(player)
     local action_player = Game.get_player_from_any(action_player_name)
     if not player.character or not action_player.character then
@@ -95,12 +89,11 @@ end)
 --- Kills the action player, if there are alive
 -- @element kill_player
 local kill_player =
-Gui.new_concept('button')
-:set_sprite('utility/too_far')
+Gui.new_button()
+:set_sprites('utility/too_far')
 :set_tooltip{'player-list.kill-player'}
-:define_draw(tool_button_style)
-:on_click(function(event)
-    local player = event.player
+:set_style('tool_button',tool_button_style)
+:on_click(function(player,element)
     local action_player_name = get_action_player_name(player)
     local action_player = Game.get_player_from_any(action_player_name)
     if action_player.character then
@@ -113,12 +106,11 @@ end)
 --- Reports the action player, requires a reason to be given
 -- @element report_player
 local report_player =
-Gui.new_concept('button')
-:set_sprite('utility/spawn_flag')
+Gui.new_button()
+:set_sprites('utility/spawn_flag')
 :set_tooltip{'player-list.report-player'}
-:define_draw(tool_button_style)
-:on_click(function(event)
-    local player = event.player
+:set_style('tool_button',tool_button_style)
+:on_click(function(player,element)
     local action_player_name = get_action_player_name(player)
     if Reports.is_reported(action_player_name,player.name) then
         player.print({'expcom-report.already-reported'},Colors.orange_red)
@@ -138,12 +130,11 @@ end
 --- Gives the action player a warning, requires a reason
 -- @element warn_player
 local warn_player =
-Gui.new_concept('button')
-:set_sprite('utility/spawn_flag')
+Gui.new_button()
+:set_sprites('utility/spawn_flag')
 :set_tooltip{'player-list.warn-player'}
-:define_draw(tool_button_style)
-:on_click(function(event)
-    local player = event.player
+:set_style('tool_button',tool_button_style)
+:on_click(function(player,element)
     Store.set(action_name_store,player.name,'command/give-warning')
 end)
 
@@ -157,12 +148,11 @@ end
 --- Jails the action player, requires a reason
 -- @element jail_player
 local jail_player =
-Gui.new_concept('button')
-:set_sprite('utility/item_editor_icon')
+Gui.new_button()
+:set_sprites('utility/item_editor_icon')
 :set_tooltip{'player-list.jail-player'}
-:define_draw(tool_button_style)
-:on_click(function(event)
-    local player = event.player
+:set_style('tool_button',tool_button_style)
+:on_click(function(player,element)
     local action_player_name,action_player_name_color = get_action_player_name(player)
     if Jail.is_jailed(action_player_name) then
         player.print({'expcom-jail.already-jailed',action_player_name_color},Colors.orange_red)
@@ -181,12 +171,11 @@ end
 --- Temp bans the action player, requires a reason
 -- @element temp_ban_player
 local temp_ban_player =
-Gui.new_concept('button')
-:set_sprite('utility/clock')
+Gui.new_button()
+:set_sprites('utility/clock')
 :set_tooltip{'player-list.temp-ban-player'}
-:define_draw(tool_button_style)
-:on_click(function(event)
-    local player = event.player
+:set_style('tool_button',tool_button_style)
+:on_click(function(player,element)
     local action_player_name,action_player_name_color = get_action_player_name(player)
     if Jail.is_jailed(action_player_name) then
         player.print({'expcom-jail.already-banned',action_player_name_color},Colors.orange_red)
@@ -205,12 +194,11 @@ end
 --- Kicks the action player, requires a reason
 -- @element kick_player
 local kick_player =
-Gui.new_concept('button')
-:set_sprite('utility/warning_icon')
+Gui.new_button()
+:set_sprites('utility/warning_icon')
 :set_tooltip{'player-list.kick-player'}
-:define_draw(tool_button_style)
-:on_click(function(event)
-    local player = event.player
+:set_style('tool_button',tool_button_style)
+:on_click(function(player,element)
     Store.set(action_name_store,player.name,'command/kick')
 end)
 
@@ -222,12 +210,11 @@ end
 --- Bans the action player, requires a reason
 -- @element ban_player
 local ban_player =
-Gui.new_concept('button')
-:set_sprite('utility/danger_icon')
+Gui.new_button()
+:set_sprites('utility/danger_icon')
 :set_tooltip{'player-list.ban-player'}
-:define_draw(tool_button_style)
-:on_click(function(event)
-    local player = event.player
+:set_style('tool_button',tool_button_style)
+:on_click(function(player,element)
     Store.set(action_name_store,player.name,'command/ban')
 end)
 

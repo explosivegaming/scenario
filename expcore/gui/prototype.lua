@@ -3,721 +3,309 @@
     @alias Prototype
 ]]
 
---- Concept Base.
--- Functions that are used to make concepts
--- @section concept-base
+--- Prototype.
+-- Used to create new gui prototypes see elements and concepts
+-- @section prototype
 
-local Event = require 'utils.event' -- @dep utils.event
-local Store = require 'expcore.store' -- @dep expcore.store
-local Game = require 'utils.game' -- @dep utils.game
-local Token = require 'utils.token' -- @dep utils.token
+--[[
+    >>>> Functions
+    Constructor.event(event_name) --- Creates a new function to add functions to an event handler
+    Constructor.extend(new_prototype) --- Extents a prototype with the base functions of all gui prototypes, no metatables
+    Constructor.store(sync,callback) --- Creates a new function which adds a store to a gui define
+    Constructor.setter(value_type,key,second_key) --- Creates a setter function that checks the type when a value is set
 
-local Factorio_Events = {}
-local Prototype = {
-    draw_callbacks = {},
-    clone_callbacks = {},
-    properties = {},
-    factorio_events = {},
-    events = {}
-}
+    Prototype:uid() --- Gets the uid for the element define
+    Prototype:debug_name(value) ---  Sets a debug alias for the define
+    Prototype:set_caption(value) --- Sets the caption for the element define
+    Prototype:set_tooltip(value) --- Sets the tooltip for the element define
+    Prototype:set_style(style,callback) --- Sets the style for the element define
+    Prototype:set_embedded_flow(state) --- Sets the element to be drawn inside a nameless flow, can be given a name using a function
 
---- Acts as a gernal handler for any factorio event
-local function factorio_event_handler(event)
-    local element = event.element
-    local rasied_event = event.name
-    local factorio_event_concepts = Factorio_Events[rasied_event]
-    if element then
-        if not element.valid then return end
-        local concept = factorio_event_concepts[element.name]
-        if concept then
-            for event_name, factorio_event in pairs(concept.factorio_events) do
-                if rasied_event == factorio_event then
-                    concept:raise_event(event_name,event,true)
-                end
-            end
+    Prototype:set_pre_authenticator --- Sets an authenticator that blocks the draw function if check fails
+    Prototype:set_post_authenticator --- Sets an authenticator that disables the element if check fails
+
+    Prototype:raise_event(event_name,...) --- Raises a custom event for this define, any number of params can be given
+    Prototype:draw_to(element,...) --- The main function for defines, when called will draw an instance of this define to the given element
+
+    Prototype:get_store(category) --- Gets the value in this elements store, category needed if categorize function used
+    Prototype:set_store(category,value) --- Sets the value in this elements store, category needed if categorize function used
+    Prototype:clear_store(category) --- Sets the value in this elements store to nil, category needed if categorize function used
+]]
+local Game = require 'utils.game' --- @dep utils.game
+local Store = require 'expcore.store' --- @dep expcore.store
+local Instances = require 'expcore.gui.instances' --- @dep expcore.gui.instances
+
+local Constructor = {}
+local Prototype = {}
+
+--- Creates a new function to add functions to an event handler
+-- @tparam string event_name the name of the event that callbacks will be added to
+-- @treturn function the function used to register handlers
+function Constructor.event(event_name)
+    --- Adds a callback as a handler for an event
+    -- @tparam table self the gui define being acted on
+    -- @tparam function callback the function that will be added as a handler for the event
+    -- @treturn table self returned to allowing chaining of functions
+    return function(self,callback)
+        if type(callback) ~= 'function' then
+            return error('Event callback for '..event_name..' must be a function',2)
         end
 
-    else
-        for _,concept in pairs(factorio_event_concepts) do
-            for event_name, factorio_event in pairs(concept.factorio_events) do
-                if rasied_event == factorio_event then
-                    concept:raise_event(event_name,event,true)
-                end
-            end
+        local handlers = self.events[event_name]
+        if not handlers then
+            handlers = {}
+            self.events[event_name] = handlers
         end
 
+        handlers[#handlers+1] = callback
+        return self
     end
 end
 
---[[-- Used to copy all the settings from one concept to another and removing links to the orginal
-@tparam string concept_name the name of the new concept; must be unique
-@treturn GuiConcept the base for building a custom gui
-@usage-- Clones the base Button concept to make a alternative button
-local custom_button =
-Gui.get_concept(Gui.concepts.button):clone()
-]]
-function Prototype:clone()
-    local concept = table.deep_copy(self)
-
-    -- Replace name of the concept
-    local uid = tostring(Token.uid())
-    concept.name = uid
-    concept.debug_name = uid
-    concept.properties.name = uid
-
-    -- Remove all event handlers that were copied
-    concept.events = {}
-    for event_name,_ in pairs(self.events) do
-        concept.events[event_name] = {}
-    end
-
-    -- Remakes even handlers for factorio
-    for _,factorio_event in pairs(concept.factorio_events) do
-        Factorio_Events[factorio_event][concept.name] = concept
-    end
-
-    -- Remove all refrences to an instance store
-    if concept.instance_store then
-        concept.instance_store = nil
-        concept.get_instances = nil
-        concept.add_instance = nil
-        concept.update_instances = nil
-    end
-
-    -- Remove all refrences to a data store
-    if concept.data_store then
-        concept.data_store = nil
-        concept.get_data = nil
-        concept.set_data = nil
-        concept.clear_data = nil
-        concept.update_data = nil
-        concept.on_data_store_update = nil
-        concept.events.on_data_store_update = nil
-    end
-
-    -- Remove all refrences to a combined store
-    if concept.sync_instance then
-        concept.sync_instance = nil
-        concept.set_store_from_instance = nil
-    end
-
-    -- Loop over all the clone defines, element is updated when a value is returned
-    for _,clone_callback in pairs(concept.clone_callbacks) do
-        local success, rtn = pcall(clone_callback,concept)
-        if not success then
-            error('Gui clone handler error with '..concept.debug_name..':\n\t'..rtn)
-        end
-    end
-
-    return concept
-end
-
---[[-- Use to add your own callbacks to the clone function, for example adding to a local table
-@tparam function clone_callback the function which is called with the concept to have something done to it
-@treturn table self to allow chaining
-@usage-- Adding concept to a local table
-local buttons = {}
-local button =
-Gui.get_concept('Button')
-:define_clone(function(concept)
-    buttons[concept.name] = concept
-end)
-]]
-function Prototype:define_clone(clone_callback)
-    -- Check that it is a function that is being added
-    if type(clone_callback) ~= 'function' then
-        error('Draw define must be a function',2)
-    end
-
-    -- Add the draw function
-    self.clone_callbacks[#self.clone_callbacks+1] = clone_callback
-
-    return self
-end
-
---[[-- Used to save the concept to the main gui module to allow access from other files
-@function Prototype:save_as
-@tparam string save_name the new name of the concept
-@usage-- Save a concept to allow access in another file
-button:save_as('button')
-@usage-- Access concept after being saved
-Gui.concepts.button
-Gui.get_concept('button')
-]]
-function Prototype:save_as(save_name)
-    -- over writen in core file
-    return self
-end
-
---[[-- Sets a debug name that can be used with error handlers
-@tparam string name the name that will be used in error messages
-@treturn self to allow chaining
-@usage-- Set the debug name
-unsaved_concept:debug('Example button')
-]]
-function Prototype:debug(name)
-    self.debug_name = name
-    return self
-end
-
---[[-- Adds a new event trigger to the concept which can be linked to a factorio event
-@tparam string event_name the name of the event to add, must be unique, recomented to start with "on_"
-@tparam[opt] defines.events factorio_event when given will fire the custom event when the factorio event is raised
-@tparam[opt] function event_condition used to filter when a factorio event triggers the custom event; if the event contains a reference to an element then names are automatically filtered
-@treturn GuiConcept to allow chaining of functions
-@usage-- Adds an on_admin_clicked event to fire when ever an admin clicks the button
-local custom_button =
-Gui.get_concept('Button'):clone('CustomButton')
-:new_event('on_admin_clicked',defines.events.on_gui_click,function(event)
-    return event.player.admin -- only raise custom event when an admin clicks the button
-end)
-]]
-function Prototype:new_event(event_name,factorio_event,event_condition)
-    -- Check the event does not already exist
-    if self.events[event_name] then
-        error('Event is already defined',2)
-    end
-
---[[-- Adds a custom event handler, replace with the name of the event
-@function Prototype:on_custom_event
-@tparam function handler the function which will recive the event
-@treturn GuiConcept to allow chaining of functions
-@usage-- When an admin clicks the button a message is printed
-local custom_button =
-Gui.get_concept('CustomButton')
-:on_admin_clicked(function(event)
-    game.print(event.player.name..' pressed my admin button')
-end)
-]]
-
-    -- Adds a handler table and the event handler adder, comment above not indented to look better in docs
-    self.events[event_name] = {}
-    self[event_name] = function(concept,handler)
-        if type(handler) ~= 'function' then
-            error('Event handler must be a function',2)
-        end
-
-        local handlers = concept.events[event_name]
-        handlers[#handlers+1] = handler
-
-        return concept
-    end
-
-    -- Adds the factorio event handler if this event is linked to one
-    if factorio_event then
-        self.factorio_events[event_name] = factorio_event
-        self.events[event_name].factorio_event_condition = event_condition
-
-        local factorio_event_concepts = Factorio_Events[factorio_event]
-        if not factorio_event_concepts then
-            factorio_event_concepts = {}
-            Factorio_Events[factorio_event] = factorio_event_concepts
-            Event.add(factorio_event,factorio_event_handler)
-        end
-
-        if not factorio_event_concepts[self.name] then
-            factorio_event_concepts[self.name] = self
-        end
-    end
-
-    return self
-end
-
---[[-- Raises a custom event, folowing keys included automaticlly: concept, event name, game tick, player from player_index, element if valid
-@tparam string event_name the name of the event that you want to raise
-@tparam[opt={}] table event table containg data you want to send with the event, some keys already included
-@tparam[opt=false] boolean from_factorio internal use, if the raise came from the factorio event handler
-@usage-- Raising the custom event on_admin_clicked
-local custom_button =
-Gui.get_concept('CustomButton')
-
--- Note that this is an example and would not work due it expecting a valid element for event.element
--- this will however work fine if you can provide all expected keys, or its not linked to any factorio event
-custom_button:raise_event('on_admin_clicked',{
-    player_index = game.player.index
-})
-]]
-function Prototype:raise_event(event_name,event,from_factorio)
-    -- Check that the event exists
-    if not self.events[event_name] then
-        error('Event is not defined',2)
-    end
-
-    -- Setup the event table with automatic keys
-    event = event or {}
-    event.concept = self
-    event.name = event.name or event_name
-    event.tick = event.tick or game.tick
-    event.player = event.player_index and Game.get_player_by_index(event.player_index) or nil
-    if event.element and not event.element.valid then return end
-
-    -- Get the event handlers
-    local handlers = self.events[event_name]
-
-    -- If it is from factorio and the filter fails
-    if from_factorio and handlers.factorio_event_condition and not handlers.factorio_event_condition(event) then
-        return
-    end
-
-    -- Trigger every handler
-    for _,handler in ipairs(handlers) do
-        local success, err = pcall(handler,event)
-        if not success then
-            error('Gui event handler error with '..self.debug_name..'/'..event_name..':\n\t'..err)
-        end
-    end
-end
-
---[[-- Adds a new property to the concept, such as caption, tooltip, or some custom property you want to control
-@tparam string property_name the name of the new property, must be unique
-@tparam[opt] function setter_callback this function is called when set is called, if not provided then key in concept.properties is updated to new value
-@tparam[opt] any default use this as the default value, will call the setter callback if defined
-@treturn GuiConcept to allow chaining of functions
-@usage-- Adding caption, sprite, and tooltip to the base button concept
-local button =
-Gui.get_concept('Button')
-:new_property('tooltip')
-:new_property('caption',nil,function(properties,value)
-    properties.caption = value
-    properties.sprite = nil
-    properties.type = 'button'
-end)
-:new_property('sprite',nil,function(properties,value)
-    properties.image = value
-    properties.caption = nil
-    properties.type = 'sprite-button'
-end)
-]]
-function Prototype:new_property(property_name,setter_callback,default,...)
-    -- Check that the property does not already exist
-    if self.properties[property_name] then
-        error('Property is already defined',2)
-    end
-
-    -- Check that setter is a function if present
-    if setter_callback and not type(setter_callback) == 'function' then
-        error('Setter callback must be a function')
-    end
-
---[[-- Sets a new value for a property, triggers setter method if provided, replace with property name
-@function Prototype:set_custom_property
-@tparam any value the value that you want to set for this property
-@treturn GuiConcept to allow chaining of functions
-@usage-- Setting the caption on the base button concept after a cloning
-local custom_button =
-Gui.get_concept('Button')
-:set_caption('Default Button')
-@usage-- In our examples CustomButton is cloned from Button, this means the caption property already exists
--- note that what ever values that properties have at the time of cloning are also copied
-local custom_button =
-Gui.get_concept('CustomButton')
-:set_caption('Custom Button')
-]]
-
-    self['set_'..property_name] = function(concept,value,...)
-        if setter_callback then
-            -- Call the setter method to update values if present
-            local success, err = pcall(setter_callback,concept.properties,value,...)
-            if not success then
-                error('Gui property handler error with '..concept.debug_name..'/'..property_name..':\n\t'..err)
-            end
+--- Extents a prototype with the base functions of all gui prototypes, no metatables
+-- @tparam table new_prototype the prototype that you want to add the functions to
+-- @treturn table the same prototype but with the new functions added
+function Constructor.extend(new_prototype)
+    for key,value in pairs(Prototype) do
+        if type(value) == 'table' then
+            new_prototype[key] = table.deepcopy(value)
         else
-            -- Otherwise just update the key
-            concept.properties[property_name] = value
-        end
-
-        return concept
-    end
-
-    -- If a default value if given then set the default value
-    if default ~= nil then
-        self['set_'..property_name](self,default,...)
-    end
-
-    return self
-end
-
---[[-- Used to define how the concept is turned into an ingame element or "instance" as we may refer to them
-@tparam function draw_callback the function that will be called to draw/update the instance; this function must return the instance or the new acting instance
-@treturn GuiConcept to allow chaining of functions
-@usage-- Adding the draw define for the base button concept, we then return the element
-local button =
-Gui.get_concept('Button')
-:define_draw(function(properties,parent,element)
-    -- Properties will include all the information that you need to draw the element
-    -- Parent is the parent element for the element, this may have been altered by previous draw functions
-    -- Element is the current element being made, this may have a nil value, if it is nil then this is the first draw function
-    -- You can also pass any other arguments that you want to this function from the draw call
-    if properties.type == 'button' then
-        element = parent.add{
-            type = properties.type,
-            name = properties.name,
-            caption = properties.caption,
-            tooltip = properties.tooltip
-        }
-
-    else
-        element = parent.add{
-            type = properties.type,
-            name = properties.name,
-            sprite = properties.sprite,
-            tooltip = properties.tooltip
-        }
-
-    end
-
-    -- If you return element or parent then their values will be updated for the next draw function in the chain
-    -- It is best practice to always return the values if you have made any changes to them
-    return element, parent
-end)
-]]
-function Prototype:define_draw(draw_callback)
-    -- Check that it is a function that is being added
-    if type(draw_callback) ~= 'function' then
-        error('Draw define must be a function',2)
-    end
-
-    -- Add the draw function
-    self.draw_callbacks[#self.draw_callbacks+1] = draw_callback
-
-    return self
-end
-
---[[ Used to define a draw callback that is ran before any other draw callbacks, see define_draw
-@tparam function draw_callback the function that will be called to draw/update the instance; this function must return the instance or the new acting instance
-@treturn GuiConcept to allow chaining of functions
-@usage-- Placing a button into a flow
-local button =
-Gui.get_concept('Button')
-:define_pre_draw(function(properties,parent,element)
-    -- Properties will include all the information that you need to draw the element
-    -- Parent is the parent element for the element, this may have been altered by previous draw functions
-    -- Element is the current element being made, this may have a nil value, if it is nil then this is the first draw function
-    -- You can also pass any other arguments that you want to this function from the draw call
-    parent = parent.add{
-        type = 'flow'
-    }
-
-    -- If you return element or parent then their values will be updated for the next draw function in the chain
-    -- It is best practice to always return the values if you have made any changes to them
-    return element, parent
-end)
-]]
-function Prototype:define_pre_draw(draw_callback)
-    -- Check that it is a function that is being added
-    if type(draw_callback) ~= 'function' then
-        error('Draw define must be a function',2)
-    end
-
-    -- Add the draw function
-    table.insert(self.draw_callbacks,1,draw_callback)
-
-    return self
-end
-
---[[-- Calls all the draw functions in order to create this concept in game; will also store and sync the instance if stores are used
-@tparam LuaGuiElement parent_element the element that the concept will use as a base
-@tparam[opt] string override_name when given this will be the name of the element rather than the concept id
-@treturn LuaGuiElement the element that was created and then passed though and returned by the draw functions
-@usage-- Drawing the custom button concept
-local custom_button =
-Gui.get_concept('CustomButton')
-
--- Note that the draw function from button was cloned, so unless we want to alter the base button we dont need a new draw define
-custom_button:draw(game.player.gui.left)
-]]
-function Prototype:draw(parent_element,override_name,...)
-    local old_name = self.properties.name
-    local parent = parent_element
-    local element
-
-    if override_name then self.properties.name = override_name end
-    -- Loop over all the draw defines, element is updated when a value is returned
-    for _,draw_callback in pairs(self.draw_callbacks) do
-        local success, _element, _parent = pcall(draw_callback,self.properties,parent,element,...)
-        if success then
-            if _element then element = _element end
-            if _parent then parent = _parent end
-        elseif not success then
-            self.properties.name = old_name
-            error('Gui draw handler error with '..self.debug_name..':\n\t'.._element)
+            new_prototype[key] = value
         end
     end
-
-    -- Return the name back to its previous value
-    self.properties.name = old_name
-
-    -- Adds the instance if instance store is used
-    if self.add_instance then
-        self.add_instance(element)
-    end
-
-    -- Syncs the instance if there is a combined store
-    if self.sync_instance then
-        self.sync_instance(element)
-    end
-
-    return element
-end
-
---- Concept Instances.
--- Functions that are used to make store concept instances
--- @section concept-instances
-
---[[-- Adds an instance store to the concept; when a new instance is made it is stored so you can access it later
-@tparam[opt] function category_callback when given will act as a way to turn an element into a string to act as a key; keys returned can over lap
-@treturn GuiConcept to allow chaining of functions
-@usage-- Allowing storing instances of the custom button; stored by the players index
--- Note even thou this is a copy of Button; if Button had an instance store it would not be cloned over
-local custom_button =
-Gui.get_concept('CustomButton')
-:define_instance_store(function(element)
-    return element.player_index -- The instances are stored based on player id
-end)
-]]
-function Prototype:define_instance_store(category_callback)
-    self.instance_store = Store.register('gui_instances_'..self.name)
-
-    local valid_category = category_callback and type(category_callback) == 'function'
-    local function get_category(category)
-        if type(category) == 'table' and type(category.__self) == 'userdata' then
-            return valid_category and category_callback(category) or nil
-        else
-            return category
+    for key,value in pairs(new_prototype) do
+        if value == Constructor.event then
+            new_prototype[key] = Constructor.event(key)
         end
     end
+    return new_prototype
+end
 
---[[-- Gets all insatnces in a category, category may be nil to return all
-@function Prototype.get_instances
-@tparam[opt] ?string|LuaGuiElement category the category to get, can only be nil if categories are not used
-@treturn table a table which contains all the instances
-@usage-- Getting all the instances of the player with index 1
-local custom_button =
-Gui.get_concept('CustomButton')
+--- Creates a new function which adds a store to a gui define
+-- @tparam boolean sync if the function should create a synced store
+-- @tparam function callback the function called when needing to update the value of an element
+-- @treturn function the function that will add a store for this define
+function Constructor.store(sync,callback)
+    --- Adds a store for the define that is shared between all instances of the define in the same category, categorize is a function that returns a string
+    -- @tparam self table the gui define being acted on
+    -- @tparam[opt] string location a unique location identifier, when omitted a uid location will be used, use when sync is set to true
+    -- @tparam[opt] function categorize function used to determine the category of a LuaGuiElement, when omitted all share one single category
+    -- categorize param - LuaGuiElement element - the element that needs to be converted
+    -- categorize return - string - a deterministic string that references to a category such as player name or force name
+    -- @treturn self the element define to allow chaining
+    return function(self,location,categorize)
+        if self.store then return end
 
-custom_button.get_instances(1) -- player index 1
-]]
-    function self.get_instances(category)
-        return Store.get(self.instance_store,get_category(category))
-    end
+        if not sync then
+            categorize = location
+            location = Store.uid_location()
+        end
 
---[[-- Adds an instance to this concept, used automatically during concept:draw
-@function Prototype.add_instance
-@tparam LuaGuiElement element the element that will be added as an instance
-@tparam[opt] string category the category to add this element under, if nil the category callback is used to assign one
-@usage-- Adding an element as a instance for this concept, mostly for internal use
-local custom_button =
-Gui.get_concept('CustomButton')
+        if Store.is_registered(location) then
+            return error('Location for store is already registered: '..location,2)
+        end
 
-custom_button.add_instance(element) -- normally not needed due to use in concept:draw
-]]
-    function self.add_instance(element,category)
-        category = category or get_category(element)
-        if not valid_category then category = nil end
-        return Store.update(self.instance_store,category,function(tbl)
-            if type(tbl) ~= 'table' then
-                return {element}
-            else
-                table.insert(tbl,element)
+        self.store = location
+        self.categorize = categorize
+
+        Instances.register(self.name,self.categorize)
+
+        Store.register(self.store,sync,function(value,category)
+            self:raise_event('on_store_update',value,category)
+
+            if Instances.is_registered(self.name) then
+                Instances.apply_to_elements(self.name,category,function(element)
+                    callback(self,element,value)
+                end)
             end
         end)
+
+        return self
     end
-
---[[-- Applies an update function to all instances, simialr use to what table.forEach would be
-@function Prototype.update_instances
-@tparam[opt] ?string|LuaGuiElement category the category to get, can only be nil if categories are not used
-@tparam function update_callback the function which is called on each instance, recives other args passed to update_instances
-@usage-- Changing the font color of all instances for player 1
-local custom_button =
-Gui.get_concept('CustomButton')
-
-custom_button.update_instances(1,function(element)
-    element.style.font_color = {r=1,g=0,b=0}
-end)
-]]
-    function self.update_instances(category,update_callback,...)
-        local args
-        if type(category) == 'function' then
-            args = {update_callback,...}
-            update_callback = category
-            category = nil
-        end
-
-        local instances = Store.get(self.instance_store,get_category(category)) or {}
-        for key,instance in pairs(instances) do
-            if not instance or not instance.valid then
-                instances[key] = nil
-
-            else
-                if args then
-                    update_callback(instance,unpack(args))
-                else
-                    update_callback(instance,...)
-                end
-            end
-        end
-    end
-
-    return self
 end
 
---- Concept Data.
--- Functions that are used to store concept data
--- @section concept-data
+--- Creates a setter function that checks the type when a value is set
+-- @tparam string value_type the type that the value should be when it is set
+-- @tparam string key the key of the define that will be set
+-- @tparam[opt] string second_key allows for setting of a key in a sub table
+-- @treturn function the function that will check the type and set the value
+function Constructor.setter(value_type,key,second_key)
+    local display_message = 'Gui define '..key..' must be of type '..value_type
+    if second_key then
+        display_message = 'Gui define '..second_key..' must be of type '..value_type
+    end
 
---[[-- Adds a data store to this concept which allows you to store synced/percistent data between instances
-@tparam[opt] function category_callback when given will act as a way to turn an element into a string to act as a key; keys returned can over lap
-@treturn GuiConcept to allow chaining of functions
-@usage-- Adding a way to store data for this concept; each player has their own store
--- Note even thou this is a copy of Button; if Button had an data store it would not be cloned over
-local custom_button =
-Gui.get_concept('CustomButton')
-:define_data_store(function(element)
-    return element.player_index -- The data is stored based on player id
-end)
-]]
-function Prototype:define_data_store(category_callback)
-    self:new_event('on_data_store_update')
-    self.data_store = Store.register('gui_data_'..self.name,function(value,key)
-        self:raise_event('on_data_store_update',{
-            category = key,
-            value = value
-        })
-    end)
+    local locale = false
+    if value_type == 'locale-string' then
+        locale = true
+        value_type = 'table'
+    end
 
-    local valid_category = category_callback and type(category_callback) == 'function'
-    local function get_category(category)
-        if type(category) == 'table' and type(category.__self) == 'userdata' then
-            return valid_category and category_callback(category) or nil
+    return function(self,value)
+        local v_type = type(value)
+        if v_type ~= value_type and (not locale or v_type ~= 'string') then
+            error(display_message,2)
+        end
+
+        if second_key then
+            self[key][second_key] = value
         else
-            return category
+            self[key] = value
+        end
+
+        return self
+    end
+end
+
+--- Gets the uid for the element define
+-- @treturn string the uid of this element define
+function Prototype:uid()
+    return self.name
+end
+
+--- Sets a debug alias for the define
+-- @tparam string name the debug name for the element define that can be used to get this element define
+-- @treturn self the element define to allow chaining
+Prototype.debug_name = Constructor.setter('string','debug_name')
+
+--- Sets the caption for the element define
+-- @tparam string caption the caption that will be drawn with the element
+-- @treturn self the element define to allow chaining
+Prototype.set_caption = Constructor.setter('locale-string','draw_data','caption')
+
+--- Sets the tooltip for the element define
+-- @tparam string tooltip the tooltip that will be displayed for this element when drawn
+-- @treturn self the element define to allow chaining
+Prototype.set_tooltip = Constructor.setter('locale-string','draw_data','tooltip')
+
+--- Sets an authenticator that blocks the draw function if check fails
+-- @tparam function callback the function that will be ran to test if the element should be drawn or not
+-- callback param - LuaPlayer player - the player that the element is being drawn to
+-- callback param - string define_name - the name of the define that is being drawn
+-- callback return - boolean - false will stop the element from being drawn
+-- @treturn self the element define to allow chaining
+Prototype.set_pre_authenticator = Constructor.setter('function','pre_authenticator')
+
+--- Sets an authenticator that disables the element if check fails
+-- @tparam function callback the function that will be ran to test if the element should be enabled or not
+-- callback param - LuaPlayer player - the player that the element is being drawn to
+-- callback param - string define_name - the name of the define that is being drawn
+-- callback return - boolean - false will disable the element
+-- @treturn self the element define to allow chaining
+Prototype.set_post_authenticator = Constructor.setter('function','post_authenticator')
+
+--- Registers a callback to the on_draw event
+-- @tparam function callback
+-- callback param - LuaPlayer player - the player that the element was drawn to
+-- callback param - LuaGuiElement element - the element that was drawn
+-- callback param - any ... - any other params passed by the draw_to function
+Prototype.on_draw = Constructor.event('on_draw')
+
+--- Registers a callback to the on_style_update event
+-- @tparam function callback
+-- callback param - LuaStyle style - the style that was changed and/or needs changing
+Prototype.on_style_update = Constructor.event('on_style_update')
+
+--- Sets the style for the element define
+-- @tparam string style the style that will be used for this element when drawn
+-- @tparam[opt] function callback function is called when element is drawn to alter its style
+-- @treturn self the element define to allow chaining
+function Prototype:set_style(style,callback)
+    self.draw_data.style = style
+    if callback then
+        self:on_style_update(callback)
+    end
+    return self
+end
+
+--- Sets the element to be drawn inside a nameless flow, can be given a name using a function
+-- @tparam ?boolean|function state when true a padless flow is created to contain the element
+-- @treturn self the element define to allow chaining
+function Prototype:set_embedded_flow(state)
+    if state == false or type(state) == 'function' then
+        self.embedded_flow = state
+    else
+        self.embedded_flow = true
+    end
+    return self
+end
+
+--- Raises a custom event for this define, any number of params can be given
+-- @tparam string event_name the name of the event that you want to raise
+-- @tparam any ... any params that you want to pass to the event
+-- @treturn number the number of handlers that were registered
+function Prototype:raise_event(event_name,...)
+    local handlers = self.events[event_name]
+    if handlers then
+        for _,handler in pairs(handlers) do
+            handler(...)
         end
     end
-
---[[-- Gets the data that is stored for this category
-@function Prototype.get_data
-@tparam[opt] ?string|LuaGuiElement category the category to get, can only be nil if categories are not used
-@treturn any the data that you had stored in this location
-@usage-- Getting the stored data for player 1
-local custom_button =
-Gui.get_concept('CustomButton')
-
-custom_button.get_data(1) -- player index 1
-]]
-    function self.get_data(category)
-        return Store.get(self.data_store,get_category(category))
-    end
-
---[[-- Sets the data that is stored for this category
-@function Prototype.set_data
-@tparam[opt] ?string|LuaGuiElement category the category to set, can only be nil if categories are not used
-@tparam any value the data that you want to stored in this location
-@usage-- Setting the data for player 1 to a table with two keys
-local custom_button =
-Gui.get_concept('CustomButton')
-
--- A table is used to show correct way to use a table with self.update_data
--- but a table is not required and can be any data, however upvalues may cause desyncs
-custom_button.set_data(1,{
-    clicks = 0,
-    required_clicks = 100
-}) -- player index 1
-]]
-    function self.set_data(category,value)
-        return Store.set(self.data_store,get_category(category),value)
-    end
-
---[[-- Clears the data that is stored for this category
-@function Prototype.clear_data
-@tparam[opt] ?string|LuaGuiElement category the category to clear, can only be nil if categories are not used
-@usage-- Clearing the data for player 1
-local custom_button =
-Gui.get_concept('CustomButton')
-
-custom_button.clear_data(1) -- player index 1
-]]
-    function self.clear_data(category)
-        return Store.clear(self.data_store,get_category(category))
-    end
-
---[[-- Updates the data that is stored for this category
-@function Prototype.update_data
-@tparam[opt] ?string|LuaGuiElement category the category to clear, can only be nil if categories are not used
-@tparam function update_callback the function which is called to update the data
-@usage-- Updating the clicks key in the concept data for player 1
-local custom_button =
-Gui.get_concept('CustomButton')
-
-custom_button.update_data(1,function(tbl)
-    tbl.clicks = tbl.clicks + 1 -- here we are incrementing the clicks by 1
-end) -- player index 1
-
-@usage-- Updating a value when a table is not used, alterative to get set
--- so for this example assume that we did custom_button.set_data(1,0)
-custom_button.update_data(1,function(value)
-    return value + 1 -- here we are incrementing the value by 1, we may only be tracking clicks
-end) -- player index 1
-]]
-    function self.update_data(category,update_callback,...)
-        return Store.update(self.data_store,get_category(category),update_callback,...)
-    end
-
-    return self
+    return handlers and #handlers or 0
 end
 
---- Concept Combined Instances.
--- Functions that are used to make store concept instances and data
--- @section concept-instances
+--- The main function for defines, when called will draw an instance of this define to the given element
+-- what is drawn is based on the data in draw_data which is set using other functions
+-- @tparam LuaGuiElement element the element that the define will draw a instance of its self onto
+-- @treturn LuaGuiElement the new element that was drawn
+function Prototype:draw_to(element,...)
+    local name = self.name
+    if element[name] then return end
+    local player = Game.get_player_by_index(element.player_index)
 
---[[-- Used to add a both instance and data store which are linked together, new instances are synced to the current value, changing the stored value will change all instances
-@tparam[opt] function category_callback when given will act as a way to turn an element into a string to act as a key; keys returned can over lap
-@tparam function sync_callback the function which is called to update an instance to match the store, this is called on all instances when concept.set_data or update_data is used
-@treturn GuiConcept to allow chaining of functions
-@usage-- Adding a check box which is a "global setting" synced between all players
-local custom_button =
-Gui.get_concept('checkbox'):clone('my_checkbox')
-:set_caption('My Checkbox')
-:set_tooltip('Clicking this check box will change it for everyone')
-:on_state_changed(function(event)
-    local element = event.element
-    event.concept.set_data(element,element.state) -- Update the stored data to trigger an update of all other instances
-end)
-:define_combined_store(function(element,state) -- We could add a category function here if we wanted to
-    element.state = state or false -- Note that the value passed may be nil if there is no stored value and no default set
-end)
-]]
-function Prototype:define_combined_store(category_callback,sync_callback)
-    if sync_callback == nil then
-        sync_callback = category_callback
-        category_callback = nil
+    if self.pre_authenticator then
+        if not self.pre_authenticator(player,self.name) then return end
     end
 
-    self:define_data_store(category_callback)
-    self:define_instance_store(category_callback)
-
-    -- Will update all instances when the data store updates
-    self:on_data_store_update(function(event)
-        self.update_instances(event.category,sync_callback,event.value)
-    end)
-
---[[-- Will sync an instance to match the stored value based on the given sync callback
-@function Prototype.sync_instance
-@tparam LuaGuiElement element the element that you want to have update
-@usage-- Setting the caption of this element to be the same as the stored value
-local custom_button =
-Gui.get_concept('CustomButton')
-
--- Used internally when first draw and automatically when the store updates
-custom_button.sync_instance(element)
-]]
-    local properties = self.properties
-    function self.sync_instance(element)
-        local default = properties.default
-        local value = self.get_data(element) or type(default) == 'function' and default(element) or default
-        sync_callback(element,value)
+    if self.embedded_flow then
+        local embedded_name
+        if type(self.embedded_flow) == 'function' then
+            embedded_name = self.embedded_flow(element,...)
+        end
+        element = element.add{type='flow',name=embedded_name}
+        element.style.padding = 0
     end
 
-    return self
+    local new_element = element.add(self.draw_data)
+
+    self:raise_event('on_style_update',new_element.style)
+
+    if self.post_authenticator then
+        new_element.enabled = self.post_authenticator(player,self.name)
+    end
+
+    if Instances.is_registered(self.name) then
+        Instances.add_element(self.name,new_element)
+    end
+
+    self:raise_event('on_draw',player,new_element)
+
+    return new_element
 end
 
-return Prototype
+--- Gets the value in this elements store, category needed if categorize function used
+-- @tparam string category[opt] the category to get such as player name or force name
+-- @treturn any the value that is stored for this define
+function Prototype:get_store(category)
+    if not self.store then return end
+    return Store.get(self.store,category)
+end
+
+--- Sets the value in this elements store, category needed if categorize function used
+-- @tparam string category[opt] the category to get such as player name or force name
+-- @tparam any value the value to set for this define, must be valid for its type ie for checkbox etc
+-- @treturn boolean true if the value was set
+function Prototype:set_store(category,value)
+    if not self.store then return end
+    return Store.set(self.store,category,value)
+end
+
+--- Sets the value in this elements store to nil, category needed if categorize function used
+-- @tparam[opt] string category the category to get such as player name or force name
+-- @treturn boolean true if the value was set
+function Prototype:clear_store(category)
+    if not self.store then return end
+    return Store.clear(self.store,category)
+end
+
+return Constructor
