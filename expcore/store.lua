@@ -4,121 +4,87 @@
     @alias Store
 
     @usage
----- Basic Use
-    -- At the most basic level this allows for the naming of locations to store in the global table, the second feature is that you are
-    -- able to listen for updates of this value, which means that when ever the set function is called it will trigger the update callback.
+-- The data store module is designed to be an alterative way to store data in the global table
+-- each piece of data is stored at a location and optional key of that location
+-- it is recomented that you use a local varible to store the location
+local scenario_difficuly = Store.uid_location()
+local team_scores = 'team-scores'
 
-    -- This may be useful when storing config values and when they get set you want to make sure it is taken care of, or maybe you want
-    -- to have a value that you can trigger an update of from different places.
+-- Setting and getting data is then as simple as
+-- note that when storing a table you must use Store.update
+Store.set(scenario_difficuly,'Hard')
+Store.set(team_scores,game.player.force.name,20)
 
-    -- This will register a new location called 'scenario.difficulty'
-    -- note that setting a start value is optional and we could take nil to mean normal
-    Store.register('scenario.difficulty',function(value)
-        game.print('The scenario difficulty has be set to: '..value)
-    end)
+Store.get(scenario_difficuly) -- returns 'Hard'
+Store.get(team_scores,game.player.force.name) -- returns 20
 
-    -- This will set the value in the store to 'hard' and will trigger the update callback which will print a message to the game
-    Store.set('scenario.difficulty','hard')
+Store.update(team_scores,game.player.force.name,function(value,key)
+    return value + 10 -- add 10 to the score
+end)
 
-    -- This will return 'hard'
-    Store.get('scenario.difficulty')
+-- The reason for using stores over global is the abilty to watch for updates
+-- for stores to work you must register them, often at the end of the file
+Store.register(scenario_difficuly,function(value)
+    game.print('Scenario difficulty has been set to: '..value)
+end)
 
-    @usage
----- Using Children
-    -- One limitation of store is that all locations must be registered to avoid desyncs, to get round this issue "children" can be used.
-    -- When you set the value of a child it does not have its own update callback so rather the "parent" location which has been registered
-    -- will have its update value called with a second param of the name of that child.
+Store.register(team_scores,function(value,key)
+    game.print('Team '..key..' now has a score of '..value)
+end)
 
-    -- This may be useful when you want a value of each player or force and since you cant register every player at the start you must use
-    -- the players name as the child name.
+-- This can be very powerful when working with data that can be changed for a number of locations
+-- with this module you can enable any location to output its changes to a file
+-- say we wanted team scores to be synced across servers or between saves
+-- although you will need to set up a method of storing the data outside the game
+Store.register(team_scores,true,function(value,key)
+    game.print('Team '..key..' now has a score of '..value)
+end)
 
-    -- This will register the location 'scenario.score' where we plan to use force names as the child
-    Store.register('scenario.score',function(value,child)
-        game.print(child..' now has a score of '..value)
-    end)
-
-    -- This will return nil, but will not error as children don't need to be registered
-    Store.get('scenario.score','player')
-
-    -- This will set 'player' to have a value of 10 for 'scenario.score' and trigger the game message print
-    Store.set('scenario.score','player',10)
-
-    -- This would be the similar to Store.get however this will return the names of all the children
-    Store.get_children('scenario.score')
-
-    @usage
----- Using Sync
-    -- There is the option to use synced values which is the same as a normal value however you can combine this with an external script
-    -- which can read the output from 'script-output/log/store.log' and have it send rcon commands back to the game allowing for cross instance
-    -- syncing of values.
-
-    -- This may be useful when you want to have a value change effect multiple instances or even if you just want a database to store values so
-    -- you can sync data between map resets.
-
-    -- This example will register the location 'statistics.total-play-time' where we plan to use plan names as the child
-    -- note that the location must be the same across instances
-    Store.register('statistics.total-play-time',true,function(value,child)
-        game.print(child..' now has now played for '..value)
-    end)
-
-    -- Use of set and are all the same as non synced but you should include from_sync as true
-
-    @usage
----- Alternative method
-    -- Some people may prefer to use a variable rather than a string for formating reasons here is an example. Also for any times when
-    -- there will be little external input Store.uid_location() can be used to generate non conflicting locations, uid_location will also
-    -- be used if you give a nil location.
-
-    local store_game_speed =
-    Store.register(function(value)
-        game.print('The game speed has been set to: '..value)
-    end)
+-- If you want multiple handlers on one store location then you can register to the raw event
+Event.add(Store.events.on_value_changed,function(event)
+    game.print('Store '..event.location..'/'..event.key..' was updated to: '..event.value)
+end)
 
 ]]
 
 local Global = require 'utils.global' --- @dep utils.global
 local Event = require 'utils.event' --- @dep utils.event
-local table_keys,write_json = ext_require('expcore.common','table_keys','write_json') --- @dep expcore.common
+local table_keys,write_json,get_file_path = ext_require('expcore.common','table_keys','write_json','get_file_path') --- @dep expcore.common
 local Token = require 'utils.token' --- @dep utils.token
 
 local Store = {
-    data={},
     registered={},
     synced={},
     callbacks={},
     events = {
-        on_value_update=script.generate_event_name()
+        on_value_changed=script.generate_event_name()
     }
 }
 
+local store_data = {}
 Global.register(Store.data,function(tbl)
-    Store.data = tbl
+    store_data = tbl
 end)
 
 local function error_not_table(value)
     if type(value) ~= 'table' then
-        error('Location is not a table can not use child locations',3)
+        error('Location is not a table can not use key locations',3)
     end
 end
 
---- Check for if a location is registered
--- @tparam string location the location to test for
--- @treturn boolean true if registered
-function Store.is_registered(location)
-    return Store.registered[location]
-end
-
---- Returns a unique name that can be used for a store
--- @treturn string a unique name
-function Store.uid_location()
-    return tostring(Token.uid())
-end
-
---- Registers a new location with an update callback which is triggered when the value updates
--- @tparam[opt] string location string a unique that points to the data, string used rather than token to allow migration
--- @tparam[opt] boolean synced when true will output changes to a file so it can be synced
--- @tparam[opt] function callback when given the callback will be automatically registered to the update of the value
--- @treturn string the location that is being used
+--[[-- Registers a new location with an update callback which is triggered when the value updates
+@tparam[opt] string location string a unique that points to the data, string used rather than token to allow migration
+@tparam[opt=false] boolean synced when true will output changes to a file so it can be synced
+@tparam[opt] function callback when given the callback will be automatically registered to the update of the value
+@treturn string the location that is being used
+@usage-- Registering a new store location
+local store_id = Store.register()
+@usage-- Registering a new store location, with custom update callback
+local store_id = Store.uid_location()
+Store.register(store_id,function(value,key)
+    game.print('Store '..store_id..'/'..key..' was updated to: '..value)
+end)
+]]
 function Store.register(location,synced,callback)
     if _LIFECYCLE ~= _STAGE.control then
         return error('Can only be called during the control stage', 2)
@@ -136,125 +102,247 @@ function Store.register(location,synced,callback)
     location = type(location) == 'string' and location or Store.uid_location()
 
     if Store.registered[location] then
-        return error('Location is already registered', 2)
+        return error('Location '..location..' is already registered by '..Store.registered[location], 2)
     end
 
-    Store.registered[location] = true
+    Store.registered[location] = get_file_path(1)
     Store.synced[location] = synced and true or nil
     Store.callbacks[location] = callback or nil
 
     return location
 end
 
---- Gets the value stored at a location, this location must be registered
--- @tparam string location the location to get the data from
--- @tparam[opt] string child the child location if required
--- @tparam[opt=false] boolean allow_unregistered when true no error is returned if the location is not registered
--- @treturn any the data which was stored at the location
-function Store.get(location,child,allow_unregistered)
-    if not Store.callbacks[location] and not allow_unregistered then
+--[[-- Gets the value stored at a location, this location must be registered
+@tparam string location the location to get the data from
+@tparam[opt] string key the key location if used
+@treturn any the data which was stored at the location
+@usage-- Getting the data at a store location
+local data = Store.get(store_id_no_keys)
+local data = Store.get(store_id_with_keys,'key_one')
+]]
+function Store.get(location,key)
+    if not Store.registered[location] then
         return error('Location is not registered', 2)
     end
 
-    local data = Store.data[location]
-    if child and data then
+    local data = store_data[location]
+    if key and data then
         error_not_table(data)
-        return data[child]
+        return data[key]
     end
 
     return data
 end
 
---- Sets the value at a location, this location must be registered
--- @tparam string location the location to set the data to
--- @tparam[opt] string child the child location if required
--- @tparam any value the new value to set at the location, value may be reverted if there is a watch callback, cant be nil
--- @tparam[opt] boolean from_sync set this true to avoid an output to the sync file
--- @treturn boolean true if it was successful
-function Store.set(location,child,value,from_sync)
-    if not Store.callbacks[location] then
-        return error('Location is not registered', 2)
+--[[-- Sets the value at a location, this location must be registered
+@tparam string location the location to set the data to
+@tparam[opt] string key the key location if used
+@tparam any value the new value to set at the location, value may be reverted if there is a watch callback, cant be nil
+@tparam[opt=false] boolean from_sync set this true to avoid an output to the sync file
+@tparam[opt=false] boolean from_internal set this true to add one to the error stack offset
+@treturn boolean true if it was successful
+@usage-- Setting the data at a store location
+Store.set(store_id_no_keys,'Hello, World!')
+Store.set(store_id_with_keys,'key_one','Hello, World!')
+]]
+function Store.set(location,key,value,from_sync,from_internal)
+    if not Store.registered[location] then
+        return error('Location is not registered', from_internal and 3 or 2)
     end
 
-    if child == nil or value == nil then
-        value = child or value
-        child = nil
+    if value == nil then
+        value = key
+        key = nil
     end
 
-    local data = Store.data
-    if child then
-        data = data[location]
+    if key then
+        local data = store_data[location]
         if not data then
             data = {}
-            Store.data[location] = data
+            store_data[location] = data
         end
         error_not_table(data)
-        data[child] = value
+        data[key] = value
     else
-        data[location] = value
+        store_data[location] = value
     end
 
-    script.raise_event(Store.events.on_value_update,{
+    script.raise_event(Store.events.on_value_changed,{
         tick=game.tick,
         location=location,
-        child=child,
+        key=key,
         value=value,
-        from_sync=from_sync
+        from_sync=from_sync or false
     })
 
     return true
 end
 
---- Sets the value at a location to nil, this location must be registered
--- @tparam string location the location to set the data to
--- @tparam[opt] string child the child location if required
--- @tparam[opt] boolean from_sync set this true to avoid an output to the sync file
--- @treturn boolean true if it was successful
-function Store.clear(location,child,from_sync)
+--[[-- Allows for updating a value based on the current value; only valid way to change tables in a store
+@tparam string location the location to set the data to
+@tparam[opt] string key the key location if required
+@tparam[opt] function update_callback the function called to update the value stored, rtn value to set new value
+@usage-- Updating a value stored at a location
+Store.update(store_id_no_keys,function(value)
+    return value + 1
+end)
+Store.update(store_id_with_keys,'key_one',function(value)
+    return value + 1
+end)
+@usage-- Updating a table stored at a location
+Store.update(store_id_no_keys,function(value)
+    value.ctn = value.ctn + 1
+end)
+Store.update(store_id_with_keys,'key_one',function(value)
+    value.ctn = value.ctn + 1
+end)
+]]
+function Store.update(location,key,update_callback,...)
+    local value = Store.get(location,key)
+
+    local args
+    if type(key) == 'function' then
+        args = {update_callback,...}
+        update_callback = key
+        key = nil
+    end
+
+    local rtn
+    if update_callback and type(update_callback) == 'function' then
+        if args then
+            rtn = update_callback(value,key,unpack(args))
+        else
+            rtn = update_callback(value,key,...)
+        end
+    end
+
+    if rtn then
+        Store.set(location,key,rtn,nil,true)
+    else
+        script.raise_event(Store.events.on_value_changed,{
+            tick=game.tick,
+            location=location,
+            key=key,
+            value=value,
+            from_sync=false
+        })
+    end
+
+end
+
+--[[-- Allows for updating all values at a location based on the current value; only valid way to change tables in a store
+@tparam string location the location to set the data to
+@tparam[opt] function update_callback the function called to update the value stored
+@usage-- Updating all values at a location
+Store.update(store_id_with_keys,function(value)
+    return value + 1
+end)
+@usage-- Updating all tables at a location
+Store.update(store_id_with_keys,function(value)
+    value.ctn = value.ctn + 1
+end)
+]]
+function Store.update_all(location,update_callback,...)
+    local data = Store.get(location)
+
+    error_not_table(data)
+
+    for key,value in pairs(data) do
+        local rtn
+        if update_callback and type(update_callback) == 'function' then
+            rtn = update_callback(value,key,...)
+        end
+
+        if rtn then
+            Store.set(location,key,rtn,nil,true)
+        else
+            script.raise_event(Store.events.on_value_changed,{
+                tick=game.tick,
+                location=location,
+                key=key,
+                value=value,
+                from_sync=false
+            })
+        end
+    end
+
+end
+
+--[[-- Sets the value at a location to nil, this location must be registered
+@tparam string location the location to set the data to
+@tparam[opt] string key the key location if used
+@tparam[opt=false] boolean from_sync set this true to avoid an output to the sync file
+@treturn boolean true if it was successful
+@usage-- Clear the data at a location
+Store.clear(store_id_no_keys)
+Store.clear(store_id_with_keys,'key_one')
+]]
+function Store.clear(location,key,from_sync)
     if not Store.callbacks[location] then
         return error('Location is not registered', 2)
     end
 
-    local data = Store.data
-    if child then
-        data = data[location]
+    if key then
+        local data = store_data[location]
         if not data then return end
         error_not_table(data)
-        data[child] = nil
+        data[key] = nil
     else
-        data[location] = nil
+        store_data[location] = nil
     end
 
-    script.raise_event(Store.events.on_value_update,{
+    script.raise_event(Store.events.on_value_changed,{
         tick=game.tick,
         location=location,
-        child=child,
-        from_sync=from_sync
+        key=key,
+        from_sync=from_sync or false
     })
 
     return true
 end
 
---- Gets all non nil children at a location, children can be added and removed during runtime
--- this is similar to Store.get but will always return a table even if it is empty
--- @tparam string location the location to get the children of
--- @treturn table a table containing all the children names
-function Store.get_children(location)
+--[[-- Gets all non nil keys at a location, keys can be added and removed during runtime
+this is similar to Store.get but will always return a table even if it is empty
+@tparam string location the location to get the keys of
+@treturn table a table containing all the keys names
+@usage-- Get all keys at a store location
+local keys = Store.get_keys(store_id_with_keys)
+]]
+function Store.get_keys(location)
     local data = Store.get(location)
     return type(data) == 'table' and table_keys(data) or {}
 end
 
+--[[-- Check for if a location is registered
+@tparam string location the location to test for
+@treturn boolean true if registered
+@usage-- Check that a store is registered
+local registerd = Store.is_registered(store_id)
+]]
+function Store.is_registered(location)
+    return Store.registered[location]
+end
+
+--[[-- Returns a unique name that can be used for a store
+@treturn string a unique name
+@usage-- Get a new unique store id
+local store_id = Store.uid_location()
+]]
+function Store.uid_location()
+    return tostring(Token.uid())
+end
+
 -- Handles syncing
-Event.add(Store.events.on_value_update,function(event)
+Event.add(Store.events.on_value_changed,function(event)
     if Store.callbacks[event.location] then
-        Store.callbacks[event.location](event.value,event.child)
+        Store.callbacks[event.location](event.value,event.key)
     end
 
     if not event.from_sync and Store.synced[event.location] then
         write_json('log/store.log',{
             tick=event.tick,
             location=event.location,
-            child=event.child,
+            key=event.key,
             value=event.value,
         })
     end

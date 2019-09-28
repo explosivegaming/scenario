@@ -5,7 +5,7 @@
     <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>utils.task module</title>
+    <title>tesrt module</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
     <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
@@ -42,7 +42,7 @@
     <h2>Sections</h2>
     <ul class="nav">
     <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
-    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    <li class="nav-item"><a href="#Elements"><span class="fragment-hashtag">#</span> Elements</a></li>
     </ul>
     </li>
     </ul>
@@ -51,6 +51,8 @@
     <h2>Modules</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/control.html"><span class="module-name-item">control</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/tesrt.html"><span class="module-name-item">tesrt</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/ExpStyle.html"><span class="module-name-item">ExpStyle</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.alien_evolution_progress.html"><span class="module-name-item">utils.alien_evolution_progress</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.core.html"><span class="module-name-item">utils.core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.debug.html"><span class="module-name-item">utils.debug</span></a></div></li>
@@ -61,7 +63,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.recipe_locker.html"><span class="module-name-item">utils.recipe_locker</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.state_machine.html"><span class="module-name-item">utils.state_machine</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.table.html"><span class="module-name-item">utils.table</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/utils.task.html"><span class="module-name-item">utils.task</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.task.html"><span class="module-name-item">utils.task</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.timestamp.html"><span class="module-name-item">utils.timestamp</span></a></div></li>
     </ul>
     </li>
@@ -73,10 +75,12 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Commands.html"><span class="module-name-item">Commands</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Common-Library.html"><span class="module-name-item">Common-Library</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Gui.html"><span class="module-name-item">Gui</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/ExpStyle.html"><span class="module-name-item">ExpStyle</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Permissions-Groups.html"><span class="module-name-item">Permissions-Groups</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Roles.html"><span class="module-name-item">Roles</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Store.html"><span class="module-name-item">Store</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Sudo.html"><span class="module-name-item">Sudo</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Toolbar.html"><span class="module-name-item">Toolbar</span></a></div></li>
     </ul>
     </li>
     </ul>
@@ -203,7 +207,7 @@
     <h4>Jump to Section</h4>
     <ul class="nav">
     <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
-    <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
+    <li class="nav-item"><a href="#Elements"><span class="fragment-hashtag">#</span> Elements</a></li>
     </ul>
     </li>
     </ul>
@@ -222,18 +226,12 @@
 
     <!-- module content header start -->
 
-    <h2><span class="body-module-name"><strong><em>utils.task</em></strong></span> module</h2>
-    <p>Threading simulation module
- Task.sleep()</p>
-    <p>
- github: https://github.com/Refactorio/RedMew
- ======================================================= --</p>
+    <h2><span class="body-module-name"><strong><em>tesrt</em></strong></span> module</h2>
+    <p>Core Module - ExpStyle</p>
+    <p></p>
 
 
     <!-- module info start -->
-    <ul>
-    <li><strong>Author</strong>:  Valansch and Grilledham</li>
-    </ul>
     <!-- module info end -->
 
     <!-- module usage start -->
@@ -249,38 +247,22 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#utils.queue">utils.queue</a></td>
+    <td class="name"><a href="#expcore.gui">expcore.gui</a></td>
     </tr>
     <tr>
-    <td class="name"><a href="#utils.priority_queue">utils.priority_queue</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#utils.event">utils.event</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#utils.token">utils.token</a></td>
+    <td class="name"><a href="#gui.concept.flow">gui.concept.flow</a></td>
     </tr>
     </tbody>
     </table>
     <table class="section-content-list">
     <thead>
-    <h3><a href="#Functions">Functions</a></h3>
+    <h3><a href="#Elements">Elements</a></h3>
     <span></span>
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#Task.set_timeout_in_ticks">Task.set_timeout_in_ticks(ticks, func_token, params)</a></td>
-    <td class="summary">Allows you to set a timer (in ticks) after which the tokened function will be run with params given as an argument
- Cannot be called before init</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Task.set_timeout">Task.set_timeout(sec, func_token, params)</a></td>
-    <td class="summary">Allows you to set a timer (in seconds) after which the tokened function will be run with params given as an argument
- Cannot be called before init</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#Task.queue_task">Task.queue_task(func_token, params, weight)</a></td>
-    <td class="summary">Queueing allows you to split up heavy tasks which don't need to be completed in the same tick.</td>
+    <td class="name"><a href="#alignment">alignment</a></td>
+    <td class="summary">A flow which can be used to align text and other elements</td>
     </tr>
     </tbody>
     </table>
@@ -294,8 +276,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#utils.queue" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="utils.queue">utils.queue</span>
+    <a href="#expcore.gui" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.gui">expcore.gui</span>
     </div>
     </dt>
     <dd>
@@ -319,58 +301,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#utils.priority_queue" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="utils.priority_queue">utils.priority_queue</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#utils.event" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="utils.event">utils.event</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#utils.token" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="utils.token">utils.token</span>
+    <a href="#gui.concept.flow" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="gui.concept.flow">gui.concept.flow</span>
     </div>
     </dt>
     <dd>
@@ -392,75 +324,22 @@
 
     </dd>
     </dl>
-    <h3><span id="Functions" class="section-title"><a href="#Functions">Functions</a></span></h3>
+    <h3><span id="Elements" class="section-title"><a href="#Elements">Elements</a></span></h3>
     <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#Task.set_timeout_in_ticks" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Task.set_timeout_in_ticks">Task.set_timeout_in_ticks(ticks, func_token, params)</span>
+    <a href="#alignment" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="alignment">alignment</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Allows you to set a timer (in ticks) after which the tokened function will be run with params given as an argument
- Cannot be called before init</p>
+    <p class="section-item-summary">A flow which can be used to align text and other elements</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>ticks</em></strong>
-
-    <strong> : </strong>
-
-
-     <number>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>func_token</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> a token for a function store via the token system
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>params</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> the argument to send to the tokened function
-
-    </li>
-
-
-    </ul>
-
     <!-- parameters end -->
 
     <!-- returns start -->
@@ -468,171 +347,19 @@
 
 
     <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Task.set_timeout" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Task.set_timeout">Task.set_timeout(sec, func_token, params)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Allows you to set a timer (in seconds) after which the tokened function will be run with params given as an argument
- Cannot be called before init</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
+    <strong>See also:</strong>
     <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>sec</em></strong>
-
-    <strong> : </strong>
-
-
-     <number>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>func_token</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> a token for a function store via the token system
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>params</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> the argument to send to the tokened function
-
-    </li>
-
-
+    <li><a href="../modules/tesrt.html#gui.concept.flow">flow</a></li>
     </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
     <!-- see also end -->
 
     <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#Task.queue_task" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Task.queue_task">Task.queue_task(func_token, params, weight)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Queueing allows you to split up heavy tasks which don't need to be completed in the same tick.</p>
-    <p class="section-item-description">
- Queued tasks are generally run 1 per tick. If the queue backs up, more tasks will be processed per tick.
- Ex. if the task is expected to repeat multiple times (ie. the function returns true and loops several ticks)</p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>func_token</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> a token for a function stored via the token system
- If this function returns `true` it will run again the next tick, delaying other queued tasks (see weight)
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>params</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> the argument to send to the tokened function
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>weight</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> (defaults to 1) weight is the number of ticks a task is expected to take.
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Concept Structure
+</span><span class="comment">-- Root
+</span><span class="comment">--&gt; [alignment] - the alignment area
+</span>Gui.new_concept(<span class="string">'alignment'</span>)
+:set_horizontal_align(<span class="string">'center'</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -651,7 +378,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-09-28 16:34:46 UTC</i>
+    <i>Last updated 2019-09-24 19:15:41 UTC</i>
     </div>
     </div>
     </div>

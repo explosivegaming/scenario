@@ -31,7 +31,7 @@ end
 
 ---Shows the given message if debug is enabled. Uses serpent to print non scalars.
 -- @param message <table|string|number|boolean>
--- @param stack_traceback <number|nil> levels of stack trace to give, defaults to 1 level if nil
+-- @param trace_levels <number|nil> levels of stack trace to give, defaults to 1 level if nil
 function Debug.print(message, trace_levels)
     if not _DEBUG then
         return
