@@ -27,7 +27,7 @@ Gui.new_concept('scroll_table')
 
 Gui.new_concept('table')
 :save_as('scroll_table')
-:new_property('hight',nil,100)
+:new_property('height',nil,100)
 
 -- Add a scroll before the table is drawn
 :define_pre_draw(function(properties,parent,element)
@@ -36,7 +36,7 @@ Gui.new_concept('table')
     -- Set the scroll style
     Gui.set_padding(scroll,1,1,2,2)
     scroll.style.horizontally_stretchable = true
-    scroll.style.maximal_height = properties.hight
+    scroll.style.maximal_height = properties.height
 
     -- Change the name of the element to table before it is drawn
     properties.name = 'table'

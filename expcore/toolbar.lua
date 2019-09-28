@@ -232,9 +232,9 @@ Gui.new_concept('toolbar-button')
 :save_as('toolbar-frame')
 
 -- Properties
-:new_property('open_by_default',false)
-:new_property('use_container',true)
-:new_property('direction','horizontal')
+:new_property('open_by_default',nil,false)
+:new_property('use_container',nil,true)
+:new_property('direction',nil,'horizontal')
 :new_event('on_update')
 
 -- Clone
@@ -258,7 +258,6 @@ end)
 
     frame.style.padding = 2
 
-    -- Add and return the container if a container is used
     if properties.use_container then
         local container =
         frame.add{
@@ -270,7 +269,6 @@ end)
         Gui.set_padding(container)
 
         return container
-
     end
 
     return frame

@@ -40,7 +40,7 @@ end)
 -- Draw
 :define_draw(function(properties,parent,element)
     -- Make the label right aligned
-    local data_name = properties.data_label_name or properties.name..'_data' 
+    local data_name = properties.data_label_name or properties.name..'_data'
     local right_align_element = right_align:draw(parent,data_name)
 
     -- Add a new label

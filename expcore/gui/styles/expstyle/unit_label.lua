@@ -4,11 +4,6 @@
 
 local Gui = require 'expcore.gui' -- @dep expcore.gui
 
-Gui.require_concept 'label' -- @dep gui.concept.frame
-
-local right_align =
-Gui.new_concept('alignment')
-
 --[[-- A label triplet which has a static label, a data label which can be changed, and a unit label
 @see Gui.label
 @see data_label
@@ -34,11 +29,8 @@ end)
 local unit_label =
 Gui.new_concept('data_label')
 :save_as('unit_label')
-:new_property('data_label_name')
-:new_property('data_caption')
-:new_property('data_tooltip')
 :new_property('data_unit')
-:new_property('data_format',nil,function(concept,element,data,...)
+:set_data_format(function(concept,element,data,...)
     local base_unit = concept.properties.data_unit
     local caption = tostring(data)
     local unit = data == 1 and base_unit or base_unit..'s'
@@ -53,6 +45,7 @@ end)
     -- Add the unit label
     parent.add{
         name = element.name..'_unit',
+        type='label',
         caption = unit or '',
         tooltip = element.tooltip
     }

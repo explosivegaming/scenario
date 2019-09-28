@@ -31,19 +31,21 @@ Gui.new_concept('frame')
     -- Update the table style
     Gui.set_padding(element,2,2,4,4)
     element.style = 'subfooter_frame'
-    element.caption = nil
+    element.caption = ''
 
     local style = element.style
     style.horizontally_stretchable = true
     style.use_header_filler = false
 
     -- Add the caption to the frame
-    element.add{
-        type = 'label',
-        name = 'footer_caption',
-        caption = properties.title,
-        tooltip = properties.tooltip
-    }
+    if properties.title then
+        element.add{
+            type = 'label',
+            name = 'footer_caption',
+            caption = properties.title,
+            tooltip = properties.tooltip
+        }
+    end
 
     -- Add the right align area
     local align = right_align:draw(element,'footer_content')
