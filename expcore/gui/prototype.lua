@@ -417,6 +417,7 @@ end
 
 --[[-- Calls all the draw functions in order to create this concept in game; will also store and sync the instance if stores are used
 @tparam LuaGuiElement parent_element the element that the concept will use as a base
+@tparam[opt] string override_name when given this will be the name of the element rather than the concept id
 @treturn LuaGuiElement the element that was created and then passed though and returned by the draw functions
 @usage-- Drawing the custom button concept
 local custom_button =
@@ -425,10 +426,12 @@ Gui.get_concept('CustomButton')
 -- Note that the draw function from button was cloned, so unless we want to alter the base button we dont need a new draw define
 custom_button:draw(game.player.gui.left)
 ]]
-function Prototype:draw(parent_element,...)
+function Prototype:draw(parent_element,override_name,...)
+    local old_name = self.properties.name
     local parent = parent_element
     local element
 
+    if override_name then self.properties.name = override_name end
     -- Loop over all the draw defines, element is updated when a value is returned
     for _,draw_callback in pairs(self.draw_callbacks) do
         local success, _element, _parent = pcall(draw_callback,self.properties,parent,element,...)
@@ -436,9 +439,13 @@ function Prototype:draw(parent_element,...)
             if _element then element = _element end
             if _parent then parent = _parent end
         elseif not success then
+            self.properties.name = old_name
             error('Gui draw handler error with '..self.debug_name..':\n\t'.._element)
         end
     end
+
+    -- Return the name back to its previous value
+    self.properties.name = old_name
 
     -- Adds the instance if instance store is used
     if self.add_instance then

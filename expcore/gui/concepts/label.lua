@@ -6,7 +6,7 @@
 local Gui = require 'expcore.gui.core'
 
 --[[-- A piece of text.
-@element frame
+@element label
 
 @tparam ?string|Concepts.LocalisedString caption the caption that will show in the label
 @tparam ?string|Concepts.LocalisedString description the description that will show on the label

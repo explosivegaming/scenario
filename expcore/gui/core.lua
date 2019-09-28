@@ -30,7 +30,7 @@ end
 Gui.require_concept('expgaming') --- @dep Gui.style.frame
 ]]
 function Gui.require_style(style_name)
-    require('expcore.gui.styles.'..style_name)
+    require('expcore.gui.styles.'..style_name..'.index')
 end
 
 --[[-- Gets a gui concept from name, id, or its self
@@ -138,6 +138,45 @@ function Gui.destroy(element)
     end
     return false
 end
+
+--[[-- Finds and returns a gui element if it is valid from a long chain of element names or concepts
+@tparam LuaGuiElement element the root element to start checking from
+@tparam ?string|table ... element names or element concepts that point to your element
+@treturn[1] boolean if the element was found, failed
+@treturn[1] string the path of the element that the search stoped at
+@treturn[2] boolean if the element was found, found
+@treturn[2] LuaGuiElement the element that was found
+@usage-- Getting the center gui
+local exists, center = Gui.find(player,'gui','center')
+]]
+function Gui.find(element,...)
+    local path = tostring(element.name)
+    for _,next_element_name in pairs{...} do
+        if type(next_element_name) == 'table' then
+            next_element_name = next_element_name.name
+        end
+
+        element = element[next_element_name]
+        path = path..'.'..tostring(next_element_name)
+        if not Gui.valid(element) then
+            return false, path
+        end
+    end
+    return true, element
+end
+
+--[[-- Checks if a gui element exists or not, returns it if found else the path where it failed
+@see Gui.find
+@tparam LuaGuiElement element the root element to start checking from
+@tparam ?string|table ... element names or element concepts that point to your element
+@treturn[1] boolean if the element was found, failed
+@treturn[1] string the path of the element that the search stoped at
+@treturn[2] boolean if the element was found, found
+@treturn[2] LuaGuiElement the element that was found
+@usage-- Getting the center gui
+local exists, center = Gui.exists(player,'gui','center')
+]]
+Gui.exists = Gui.find
 
 --[[-- Toggles the enabled state of an element
 @tparam LuaGuiElement element the element that you want to toggle the enabled state of
