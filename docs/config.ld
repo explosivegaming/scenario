@@ -16,10 +16,10 @@ no_space_before_args = true
 merge=true
 
 new_type("core", "Core", true)
-new_type("addon", "Addons", true)
-new_type("commands", "Commands", true)
 new_type("control", "Control", true)
+new_type("addon", "Addons", true)
 new_type("gui", "Guis", true)
+new_type("commands", "Commands", true)
 new_type("config", "Configs", true, "Settings")
 
 new_type("dep", "Dependencies", false)

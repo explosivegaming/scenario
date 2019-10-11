@@ -3,16 +3,53 @@
 @core Store
 @alias Store
 
+@usage-- Require the module and add a store with no keys
+-- Store with no keys does not need a serializer
+local Store = require 'expcore.store' --- @dep expcore.store
+local scenario_diffculty = Store.register()
+
+-- When the store is changed this function will trigger
+Store.watch(scenario_diffculty,function(value)
+    game.print('The scenario diffculty has been set to '..value)
+end)
+
+Store.set(scenario_diffculty,'hard') -- Set the value stored to 'hard'
+Store.get(scenario_diffculty) -- Returns 'hard'
+Store.update(scenario_diffculty,function(value) -- Will set value to 'normal' if no value is present
+    return not value and 'normal'
+end)
+
+@usage-- Require the module and add a store with keys
+-- Store with keys does not require a serializer but it can be helpful
+local Store = require 'expcore.store' --- @dep expcore.store
+local player_scores = Store.register(function(player) -- Use player name as the key
+    return player.name
+end)
+
+-- When any key in the store is changed this function will trigger
+Store.watch(player_scores,function(value,key)
+    game.print(key..' now has a score of '..value)
+end)
+
+Store.set(player_scores,game.player,10) -- Set your score to 10
+Store.get(scenario_diffculty,game.player) -- Returns 10
+Store.update(scenario_diffculty,game.player,function(value) -- Add 1 to your score
+    return value + 1
+end)
+
 ]]
 
 local Event = require 'utils.event' --- @dep utils.event
 
 local Store = {
-    --- @field uid the current highest uid that is being used, will not increase during runtime
+    --- The current highest uid that is being used, will not increase during runtime
+    -- @field uid
     uid = 0,
-    --- @table serializers array of the serializers that stores are using, key is store uids
+    --- An array of the serializers that stores are using, key is store uids
+    -- @table serializers
     serializers = {},
-    --- @table watchers array of watchers that stores will trigger, key is store uids
+    --- An array of watchers that stores will trigger, key is store uids
+    -- @table watchers
     watchers = {}
 }
 
@@ -45,7 +82,7 @@ local key = Store.validate(player_scores,game.player)
 function Store.validate(store,key,error_stack)
     error_stack = error_stack or 1
 
-    if not type(store) == 'number' then
+    if type(store) ~= 'number' then
         -- Store is not a number and so if not valid
         error('Store uid given is not a number; recived type '..type(store),error_stack+1)
     elseif store > Store.uid then
@@ -138,6 +175,11 @@ Store.set(player_scores,game.player,10)
 
 ]]
 function Store.watch(store,watcher)
+    if _LIFECYCLE ~= _STAGE.control then
+        -- Only allow this function to be called during the control stage
+        error('Store watcher can not be registered durring runtime', 2)
+    end
+
     Store.validate(store,nil,2)
 
     -- Add the watchers table if it does not exist

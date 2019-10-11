@@ -1,27 +1,12 @@
 --[[-- Control Module - Tasks
-    - Stores tasks for each force.
-    @control Tasks
-    @alias Tasks
+- Stores tasks for each force.
+@control Tasks
+@alias Tasks
 
-    @usage
-    -- import the module from the control modules
-    local Tasks = require 'modules.control.tasks' --- @dep modules.control.tasks
+@usage-- Making and then editing a new task
+local task_id = Tasks.add_task(game.player.force.name,nil,game.player.name)
 
-    -- To create a new task all you need is the name of the force you want to add the task to
-    -- you can give a place to add it but this is optional
-    Tasks.new_task('player')
-
-    -- You can then update this task to what ever value that you want
-    -- the task id is returned by new_task, or within an update handler
-    -- if a player name is not given that it will assume '<server>'
-    Tasks.update_task(task_id,'My number one task!','Cooldude2606')
-
-    -- You can then remove the task and all data linked with it
-    Tasks.remove_task(task_id)
-
-    -- set_editing and is_editing may be used to block other or provide warnings
-    -- none of this is enforced by this module and so you must do so in your own module
-    Tasks.set_editing(task_id,'Cooldude2606',true)
+Tasks.update_task(task_id,'We need more iron!',game.player.name)
 
 ]]
 
@@ -29,148 +14,169 @@ local Store = require 'expcore.store' --- @dep expcore.store
 local Global = require 'utils.global' --- @dep utils.global
 local Token = require 'utils.token' --- @dep utils.token
 
-local Tasks = {
-    store = 'gui.left.task-list.tasks',
-    handlers = {},
-    details = {},
-    forces = {}
-}
+local Tasks = {}
 
-local task_details = Tasks.details
-local force_tasks = Tasks.forces
-Global.register({
-    task_details=task_details,
-    force_tasks=force_tasks
-},function(tbl)
-    Tasks.details = tbl.task_details
-    Tasks.forces = tbl.force_tasks
-    task_details = Tasks.details
-    force_tasks = Tasks.forces
+-- Global lookup table for force name to task ids
+local force_tasks = {}
+Global.register(force_tasks,function(tbl)
+    force_tasks = tbl
 end)
 
-local task_store = Tasks.store
-Store.register(task_store,function(value,task_id)
-    local details = task_details[task_id]
-    local force = game.forces[details.force]
-    for _,handler in pairs(Tasks.handlers) do
-        handler(force,task_id)
-    end
-end)
+-- Task store is keyed by task id, value is a table
+local task_store = Store.register()
+Tasks.store = task_store
 
 --- Setters.
 -- functions used to created and alter tasks
 -- @section setters
 
---- Adds a new handler for when a task is updated
--- @tparam function callback the callback which is ran when a task is updated
--- @treturn boolean true if the callback was added
-function Tasks.add_handler(callback)
-    if type(callback) == 'function' then
-        table.insert(Tasks.handlers,callback)
-        return true
-    end
-    return false
-end
+--[[-- Add a new task for a force, the task can be placed into a certain position for that force
+@tparam string force_name the name of the force to add the task for
+@tparam[opt] number task_number the order place to add the task to, appends to end if omited
+@tparam[opt] string player_name the player who added this task, will cause them to be listed under editing
+@treturn string the uid of the task which was created
 
---- Adds a new task for a force, with option to place it in a certain order
--- @tparam string force_name the name of the force to add the task for
--- @tparam[opt] number task_number the order place to add the task to, adds to end if omited
--- @tparam[opt] string player_name when given this player will be added to the editing list
--- @treturn string the uid of the task which was created
-function Tasks.new_task(force_name,task_number,player_name)
+@usage-- Adding a new task for your force
+local task_id = Tasks.add_task(game.player.force.name,nil,game.player.name)
+
+]]
+function Tasks.add_task(force_name,task_number,player_name)
+    -- Get a new task id
     local task_id = tostring(Token.uid())
 
+    -- Get the existing tasks for this force
     local tasks = force_tasks[force_name]
     if not tasks then
         force_tasks[force_name] = {}
         tasks = force_tasks[force_name]
     end
 
+    -- Insert the task id into the forces tasks
     if task_number then
         table.insert(tasks,task_number,task_id)
     else
         table.insert(tasks,task_id)
     end
 
-    task_details[task_id] = {
-        task_id=task_id,
-        force=force_name,
-        last_edit_player=player_name or '<server>',
-        last_edit_time=game.tick,
-        editing={}
-    }
-
+    -- Create the editing table
+    local editing = {}
     if player_name then
-        task_details[task_id].editing[player_name] = true
+        editing[player_name] = true
     end
 
-    Store.set(task_store,task_id,'New Task')
+    -- Add the new task to the store
+    Store.set(task_store,task_id,{
+        task_id = task_id,
+        force_name = force_name,
+        message = 'New Task',
+        last_edit_name = player_name or '<server>',
+        last_edit_time = game.tick,
+        curently_editing = editing
+    })
 
     return task_id
 end
 
---- Removes a task and all data linked with it
--- @tparam string task_id the uid of the task which you want to remove
+--[[-- Removes a task and any data that is linked with it
+@tparam string task_id the uid of the task which you want to remove
+
+@usage-- Removing a task
+Tasks.remove_task(task_id)
+
+]]
 function Tasks.remove_task(task_id)
-    local details = task_details[task_id]
-    local force = details.force
+    local task = Store.get(task_store,task_id)
+    local force_name = task.force_name
     Store.clear(task_store,task_id)
-    task_details[task_id] = nil
-    table.remove_element(force_tasks[force],task_id)
+    table.remove_element(force_tasks[force_name],task_id)
 end
 
---- Updates a task message
--- @tparam string task_id the uid of the task that you want to update
--- @tparam string task the message that you want to change the task to
--- @tparam[opt='server'] string player_name the name of the player who made the edit
-function Tasks.update_task(task_id,task,player_name)
-    local details = task_details[task_id]
-    details.last_edit_player = player_name or '<server>'
-    details.last_edit_time = game.tick
-    Store.set(task_store,task_id,task)
+--[[-- Update the message and last edited information for a task
+@tparam string task_id the uid of the task that you want to update
+@tparam string new_message the message that you want to have for the task
+@tparam[opt='server'] string player_name the name of the player who made the edit
+
+@usage-- Updating the message for on a task
+Task.update_task(task_id,'We need more iron!',game.player.name)
+
+]]
+function Tasks.update_task(task_id,new_message,player_name)
+    Store.update(task_store,task_id,function(task)
+        task.last_edit_name = player_name or '<server>'
+        task.last_edit_time = game.tick
+        task.message = new_message
+    end)
 end
 
---- Sets a player to be editing this task, used with is_editing
--- @tparam string task_id the uid of the task that you want to editing for
--- @tparam string player_name the name of the player you want to set editing for
--- @tparam[opt] boolean state the new state to set editing to
+--[[-- Set the editing state for a player, can be used as a warning or to display a text field
+@tparam string task_id the uid of the task that you want to effect
+@tparam string player_name the name of the player you want to set the state for
+@tparam boolean state the new state to set editing to
+
+@usage-- Setting your editing state to true
+Tasks.set_editing(task_id,game.player.name,true)
+
+]]
 function Tasks.set_editing(task_id,player_name,state)
-    local details = task_details[task_id]
-    details.editing[player_name] = state
+    Store.update(task_store,task_id,function(task)
+        task.curently_editing[player_name] = state
+    end)
+end
+
+--[[-- Adds an update handler for when a task is added, removed, or updated
+@tparam function handler the handler which is called when a task is updated
+
+@usage-- Add a game print when a task is updated
+Tasks.on_update(function(task)
+    game.print(task.force_name..' now has the task: '..task.message)
+end)
+
+]]
+function Tasks.on_update(handler)
+    Store.watch(task_store,handler)
 end
 
 --- Getters.
 -- function used to get information about tasks
 -- @section getters
 
---- Gets the task stored at this id
--- @tparam string task_id the uid of the task you want to get
--- @treturn string the task message that was stored here
+--[[-- Gets the task information that is linked with this id
+@tparam string task_id the uid of the task you want to get
+@treturn table the task information
+
+@usage-- Getting task information outside of on_update
+local task = Tasks.get_task(task_id)
+
+]]
 function Tasks.get_task(task_id)
     return Store.get(task_store,task_id)
 end
 
---- Gets the task details stored at this id
--- @tparam string task_id the uid of the task you want to get
--- @treturn table the task details that was stored here
-function Tasks.get_details(task_id)
-    return task_details[task_id]
-end
+--[[-- Gets all the task ids that a force has
+@tparam string force_name the name of the force that you want the task ids for
+@treturn table an array of all the task ids
 
---- Gets the task ids for a force
--- @tparam string force_name the name of the force that you want the ids for
--- @treturn table an array of all the task ids
-function Tasks.get_force_tasks(force_name)
+@usage-- Getting the task ids for a force
+local task_ids = Tasks.get_force_task_ids(game.player.force.name)
+
+]]
+function Tasks.get_force_task_ids(force_name)
     return force_tasks[force_name] or {}
 end
 
---- Gets if a player is currently editing this task
--- @tparam string task_id the uid of the task you want to check
--- @tparam string player_name the name of the player that you want to check
--- @treturn boolean weather the player is currently editing this task
-function Tasks.is_editing(task_id,player_name)
-    local details = task_details[task_id]
-    return details.editing[player_name]
+--[[-- Gets the editing state for a player
+@tparam string task_id the uid of the task you want to check
+@tparam string player_name the name of the player that you want to check
+@treturn boolean weather the player is currently editing this task
+
+@usage-- Check if a player is editing a task or not
+local editing = Tasks.get_editing(task_id,game.player.name)
+
+]]
+function Tasks.get_editing(task_id,player_name)
+    local task = Store.get(task_store,task_id)
+    return task.curently_editing[player_name]
 end
 
+-- Module Return
 return Tasks
