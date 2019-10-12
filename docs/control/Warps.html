@@ -44,7 +44,7 @@
     <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
     <li class="nav-item"><a href="#Getters"><span class="fragment-hashtag">#</span> Getters </a></li>
     <li class="nav-item"><a href="#Setters"><span class="fragment-hashtag">#</span> Setters </a></li>
-    <li class="nav-item"><a href="#Generators"><span class="fragment-hashtag">#</span> Generators </a></li>
+    <li class="nav-item"><a href="#Map_Intergration"><span class="fragment-hashtag">#</span> Map Intergration </a></li>
     </ul>
     </li>
     </ul>
@@ -207,7 +207,7 @@
     <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
     <li class="nav-item"><a href="#Getters"><span class="fragment-hashtag">#</span> Getters </a></li>
     <li class="nav-item"><a href="#Setters"><span class="fragment-hashtag">#</span> Setters </a></li>
-    <li class="nav-item"><a href="#Generators"><span class="fragment-hashtag">#</span> Generators </a></li>
+    <li class="nav-item"><a href="#Map_Intergration"><span class="fragment-hashtag">#</span> Map Intergration </a></li>
     </ul>
     </li>
     </ul>
@@ -228,7 +228,7 @@
 
     <h2><span class="body-module-name"><strong><em>Warps</em></strong></span> control</h2>
     <p>Control Module - Warps
-    - Stores warps for each force.</p>
+- Stores warps for each force.</p>
     <p></p>
 
 
@@ -237,25 +237,20 @@
 
     <!-- module usage start -->
     <h3>Usage</h3>
-    <pre class="code" data-lang="Lua"><code>
-    <span class="comment">-- import the module from the control modules
-</span>    <span class="keyword">local</span> Warps = <span class="global">require</span> <span class="string">'modules.control.warps'</span> <span class="comment">--- @dep modules.control.warps
-</span>
-    <span class="comment">-- Adding a warp require a force, surface and postion, and the option to set this as the spawn
-</span>    <span class="comment">-- this function will also create the warp area unless set other wise
-</span>    Warps.new_warp(<span class="string">'player'</span>,surface,{x=<span class="number">0</span>,y=<span class="number">0</span>})
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a new spawn warp
+</span><span class="keyword">local</span> player = game.player
+<span class="keyword">local</span> force = player.force
+<span class="keyword">local</span> spawn_id = Warps.add_warp(force.name,player.surface,player.position,player.name,<span class="string">'Spawn'</span>)
 
-    <span class="comment">-- You can then update the warp information, name and icon, with the update function
-</span>    Warps.update_warp(warp_id,<span class="string">'Best Warp'</span>,<span class="string">'iron-plate'</span>)
+Warps.set_spawn_warp(spawn_id, force)
+Warps.make_warp_tag(spawn_id)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a new warp with a warp area
+</span><span class="keyword">local</span> player = game.player
+<span class="keyword">local</span> force = player.force
+<span class="keyword">local</span> warp_id = Warps.add_warp(force.name,player.surface,player.position,player.name)
 
-    <span class="comment">-- Removeing a warp will restore the land that as under it, and remove any data linked with it
-</span>    Warps.remove_warp(warp_id)
-
-    <span class="comment">-- You can get the deatils for a warp which include last edit and postion
-</span>    Warps.get_details(warp_id)
-
-    <span class="comment">-- You can teleport a player to a warp, note that there is no limit on this action
-</span>    Warps.teleport_player(warp_id,player)</code></pre>
+Warps.make_warp_area(warp_id)
+Warps.make_warp_tag(warp_id)</code></pre>
     <!-- module usage end -->
 
     <!-- module content header end -->
@@ -291,32 +286,20 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#get_warp_name">get_warp_name(warp_id)</a></td>
-    <td class="summary">Gets the name of a warp</td>
+    <td class="name"><a href="#get_warp">get_warp(warp_id)</a></td>
+    <td class="summary">Gets the warp information that is linked with this id</td>
     </tr>
     <tr>
-    <td class="name"><a href="#get_warp_icon">get_warp_icon(warp_id)</a></td>
-    <td class="summary">Gets the icon of a warp</td>
+    <td class="name"><a href="#get_force_warp_ids">get_force_warp_ids(force_name)</a></td>
+    <td class="summary">Gets all the warp ids that a force has</td>
     </tr>
     <tr>
-    <td class="name"><a href="#get_details">get_details(warp_id)</a></td>
-    <td class="summary">Gets the task details stored at this id</td>
+    <td class="name"><a href="#get_spawn_warp_id">get_spawn_warp_id(force_name)</a></td>
+    <td class="summary">Get the id of the spawn warp</td>
     </tr>
     <tr>
-    <td class="name"><a href="#get_warps">get_warps(force_name)</a></td>
-    <td class="summary">Gets all warps for a force</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#get_all_warps">get_all_warps()</a></td>
-    <td class="summary">Gets all warps from all forces</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#is_editing">is_editing(warp_id, player_name)</a></td>
-    <td class="summary">Gets if a player is currently editing this warp</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#teleport_player">teleport_player(warp_id, player)</a></td>
-    <td class="summary">Teleports a player to a warp point</td>
+    <td class="name"><a href="#get_editing">get_editing(warp_id, player_name)</a></td>
+    <td class="summary">Gets the editing state for a player</td>
     </tr>
     </tbody>
     </table>
@@ -327,36 +310,56 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#add_handler">add_handler(callback)</a></td>
-    <td class="summary">Adds a new handler for when a warp is updated</td>
+    <td class="name"><a href="#add_warp">add_warp(force_name, surface, position[, player_name][, warp_name])</a></td>
+    <td class="summary">Add a new warp for a force, the warp must have a surface and a position</td>
     </tr>
     <tr>
-    <td class="name"><a href="#set_editing">set_editing(warp_id, player_name[, state])</a></td>
-    <td class="summary">Sets a player to be editing this warp, used with is_editing</td>
+    <td class="name"><a href="#remove_warp">remove_warp(warp_id)</a></td>
+    <td class="summary">Removes a warp and any data linked to it</td>
     </tr>
     <tr>
-    <td class="name"><a href="#update_warp">update_warp(warp_id, name, icon[, player_name='server'])</a></td>
-    <td class="summary">Updates a warp to a differecnt name and icon, both must be given</td>
+    <td class="name"><a href="#update_warp">update_warp(warp_id[, new_name][, new_icon][, player_name='server'])</a></td>
+    <td class="summary">Update the name and icon for a warp</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#set_editing">set_editing(warp_id, player_name, state)</a></td>
+    <td class="summary">Set the editing state for a player, can be used as a warning or to display a text field</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#on_update">on_update(handler)</a></td>
+    <td class="summary">Adds an update handler for when a warp is added, removed, or updated</td>
     </tr>
     </tbody>
     </table>
     <table class="section-content-list">
     <thead>
-    <h3><a href="#Generators">Generators </a></h3>
+    <h3><a href="#Map_Intergration">Map Intergration </a></h3>
     <span></span>
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#make_chart_tag">make_chart_tag(warp_id)</a></td>
-    <td class="summary">Adds or updates the chart tag for a warp</td>
+    <td class="name"><a href="#make_warp_tag">make_warp_tag(warp_id)</a></td>
+    <td class="summary">Add or update the chat tag for this warp</td>
     </tr>
     <tr>
-    <td class="name"><a href="#new_warp">new_warp(force_name, surface, position[, player_name='server'][, warp_name='New warp'][, block_generation=false][, set_spawn=false])</a></td>
-    <td class="summary">Adds a new warp to a force and makes the in game warp area</td>
+    <td class="name"><a href="#remove_warp_tag">remove_warp_tag(warp_id)</a></td>
+    <td class="summary">Remove the chart tag for this warp</td>
     </tr>
     <tr>
-    <td class="name"><a href="#remove_warp">remove_warp(warp_id)</a></td>
-    <td class="summary">Removes a warp and clears the area where it was added</td>
+    <td class="name"><a href="#make_warp_area">make_warp_area(warp_id)</a></td>
+    <td class="summary">Add a warp area for the warp, purely cosmetic</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#remove_warp_area">remove_warp_area(warp_id)</a></td>
+    <td class="summary">Remove the warp area for a warp</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#set_spawn_warp">set_spawn_warp(warp_id, force)</a></td>
+    <td class="summary">Set a warp to be the spawn point for a force, force must own this warp</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#teleport_player">teleport_player(warp_id, player)</a></td>
+    <td class="summary">Teleport a player to a warp point</td>
     </tr>
     </tbody>
     </table>
@@ -498,128 +501,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#get_warp_name" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_warp_name">get_warp_name(warp_id)</span>
+    <a href="#get_warp" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_warp">get_warp(warp_id)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Gets the name of a warp</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>warp_id</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the uid of the warp you want to get
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-    <span class="return-text">the warp name that was stored here</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#get_warp_icon" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_warp_icon">get_warp_icon(warp_id)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Gets the icon of a warp</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>warp_id</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the uid of the warp you want to get
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-    <span class="return-text">the warp icon that was stored here</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#get_details" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_details">get_details(warp_id)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Gets the task details stored at this id</p>
+    <p class="section-item-summary">Gets the warp information that is linked with this id</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -653,7 +542,7 @@
     <ul>
     <li>
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the warp details that was stored here</span>
+    <span class="return-text">the warp information</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -663,20 +552,23 @@
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Getting warp information outside of on_update
+</span><span class="keyword">local</span> warp = Warps.get_warp(warp_id)</code></pre>
     <!-- usage end -->
 
     </dd>
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#get_warps" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_warps">get_warps(force_name)</span>
+    <a href="#get_force_warp_ids" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_force_warp_ids">get_force_warp_ids(force_name)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Gets all warps for a force</p>
+    <p class="section-item-summary">Gets all the warp ids that a force has</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -696,7 +588,7 @@
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the name of the force to get the warps for
+     the name of the force that you want the warp ids for
 
     </li>
 
@@ -710,7 +602,7 @@
     <ul>
     <li>
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">an array of warp ids that belong to this force, spawn key is included</span>
+    <span class="return-text">an array of all the warp ids</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -720,31 +612,57 @@
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Getting the warp ids for a force
+</span><span class="keyword">local</span> warp_ids = Warps.get_force_warp_ids(game.player.force.name)</code></pre>
     <!-- usage end -->
 
     </dd>
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#get_all_warps" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_all_warps">get_all_warps()</span>
+    <a href="#get_spawn_warp_id" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_spawn_warp_id">get_spawn_warp_id(force_name)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Gets all warps from all forces</p>
+    <p class="section-item-summary">Get the id of the spawn warp</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>force_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the force that you want to get the spawn warp for
+
+    </li>
+
+
+    </ul>
+
     <!-- parameters end -->
 
     <!-- returns start -->
     <strong>Returns:</strong>
     <ul>
     <li>
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">array of all warp details</span>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="https://www.lua.org/pil/2.1.html">nil</a></span>)
+    <span class="return-text">the uid of the spawn warp for this force if there is one</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -754,20 +672,23 @@
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Getting the spawn warp id
+</span><span class="keyword">local</span> spawn_id = Warps.get_spawn_warp_id(game.player.force.name)</code></pre>
     <!-- usage end -->
 
     </dd>
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#is_editing" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="is_editing">is_editing(warp_id, player_name)</span>
+    <a href="#get_editing" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_editing">get_editing(warp_id, player_name)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Gets if a player is currently editing this warp</p>
+    <p class="section-item-summary">Gets the editing state for a player</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -827,6 +748,734 @@
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Check if a player is editing a warp or not
+</span><span class="keyword">local</span> editing = Warps.get_editing(warp_id,game.player.name)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Setters" class="section-title"><a href="#Setters">Setters </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#add_warp" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="add_warp">add_warp(force_name, surface, position[, player_name][, warp_name])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Add a new warp for a force, the warp must have a surface and a position</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>force_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the force to add the warp for
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>surface</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaSurface.html">LuaSurface</a></span>)
+
+     the surface that the warp will be on
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>position</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#Position">Position</a></span>)
+
+     the position that the warp will be on
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the player that is adding the warp
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warp_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the warp that is being added, if omited default is used
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    <span class="return-text">the uid of the warp which was created</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a new warp for your force at your position
+</span><span class="keyword">local</span> player = game.player
+<span class="keyword">local</span> warp_id = Warps.add_warp(player.force.name,player.surface,player.position,player.name)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#remove_warp" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="remove_warp">remove_warp(warp_id)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Removes a warp and any data linked to it</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warp_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid of the warp that you want to remove
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Removing a warp
+</span>Warps.remove_warp(warp_id)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#update_warp" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="update_warp">update_warp(warp_id[, new_name][, new_icon][, player_name='server'])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Update the name and icon for a warp</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warp_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid of the warp that you want to update
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>new_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the new name that you want the warp to have
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>new_icon</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the new icon that you want the warp to have
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the player that made the edit
+
+    (<em>default</em>: 'server')
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Changing the name and icon for a warp
+</span>Warps.update_warp(warp_id,<span class="string">'My Warp'</span>,<span class="string">'iron-plate'</span>,game.player.name)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#set_editing" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="set_editing">set_editing(warp_id, player_name, state)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Set the editing state for a player, can be used as a warning or to display a text field</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warp_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid of the warp that you want to effect
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the player you want to set the state for
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>state</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     the new state to set editing to
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Setting your editing state to true
+</span>Warps.set_editing(warp_id,game.player.name,<span class="keyword">true</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#on_update" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="on_update">on_update(handler)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds an update handler for when a warp is added, removed, or updated</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>handler</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the handler which is called when a warp is updated
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Add a game print when a warp is updated
+</span>Warps.on_update(<span class="keyword">function</span>(warp)
+    game.<span class="global">print</span>(warp.force_name..<span class="string">' now has the warp: '</span>..warp.name)
+<span class="keyword">end</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Map_Intergration" class="section-title"><a href="#Map_Intergration">Map Intergration </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#make_warp_tag" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="make_warp_tag">make_warp_tag(warp_id)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Add or update the chat tag for this warp</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warp_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid of the warp you want the chart tag for
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if a new tag was made, false if it was updated</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a chart tag for a new warp
+</span><span class="keyword">local</span> tag_added = Warps.make_warp_tag(warp_id)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#remove_warp_tag" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="remove_warp_tag">remove_warp_tag(warp_id)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Remove the chart tag for this warp</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warp_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid for the warp that you want to remove the chart tag from
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if the tag was valid and was removed, false if the tag was invalid</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Removing the chart tag from a warp
+</span><span class="keyword">local</span> removed = Warps.remove_warp_tag(warp_id)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#make_warp_area" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="make_warp_area">make_warp_area(warp_id)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Add a warp area for the warp, purely cosmetic</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warp_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid of the warp you want the area for
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a warp area for a warp
+</span>Warps.make_warp_area(warp_id)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#remove_warp_area" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="remove_warp_area">remove_warp_area(warp_id)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Remove the warp area for a warp</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warp_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid of the warp that you want to remove the area for
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Remove the warp area for a warp
+</span>Warps.remove_warp_area(warp_id)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#set_spawn_warp" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="set_spawn_warp">set_spawn_warp(warp_id, force)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Set a warp to be the spawn point for a force, force must own this warp</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>warp_id</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the uid of the warp that you want to be the spawn for the force
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>force</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaForce.html">LuaForce</a></span>)
+
+     the force that you want to set the spawn for
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Set your forces spawn to a warp
+</span>Warps.set_spawn_warp(warp_id,game.player.force)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -840,7 +1489,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Teleports a player to a warp point</p>
+    <p class="section-item-summary">Teleport a player to a warp point</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -893,508 +1542,9 @@
     <!-- see also end -->
 
     <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    </dl>
-    <h3><span id="Setters" class="section-title"><a href="#Setters">Setters </a></span></h3>
-    <dl class="section-body-container">
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#add_handler" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="add_handler">add_handler(callback)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Adds a new handler for when a warp is updated</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>callback</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
-
-     the callback which is ran when a warp is updated
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">true if the callback was added</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#set_editing" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="set_editing">set_editing(warp_id, player_name[, state])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Sets a player to be editing this warp, used with is_editing</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>warp_id</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the uid of the warp that you want to editing for
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player_name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name of the player you want to set editing for
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>state</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     the new state to set editing to
-
-    (<em>optional</em>)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#update_warp" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="update_warp">update_warp(warp_id, name, icon[, player_name='server'])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Updates a warp to a differecnt name and icon, both must be given</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>warp_id</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the uid of the warp that you want to update
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name that you want the warp to have
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>icon</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the new icon that you want the warp to have
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player_name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name of the player that is updating the warp
-
-    (<em>default</em>: 'server')
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    </dl>
-    <h3><span id="Generators" class="section-title"><a href="#Generators">Generators </a></span></h3>
-    <dl class="section-body-container">
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#make_chart_tag" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="make_chart_tag">make_chart_tag(warp_id)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Adds or updates the chart tag for a warp</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>warp_id</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the uid of the warp you want to make the chart tag for
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">true if a new tag was made, false if it was updated</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#new_warp" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="new_warp">new_warp(force_name, surface, position[, player_name='server'][, warp_name='New warp'][, block_generation=false][, set_spawn=false])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Adds a new warp to a force and makes the in game warp area</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>force_name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name of the force to add a new warp for
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>surface</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaSurface.html">LuaSurface</a></span>)
-
-     the surface to add the warp to
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>position</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><span class="type">Position</span></span>)
-
-     the postion to have the warp go to
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>player_name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name of the player who added this warp
-
-    (<em>default</em>: 'server')
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>warp_name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name of the warp that will be made
-
-    (<em>default</em>: 'New warp')
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>block_generation</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     when true a in game area will not be made
-
-    (<em>default</em>: false)
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>set_spawn</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     when true this warp will become the spawn for the force
-
-    (<em>default</em>: false)
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#remove_warp" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="remove_warp">remove_warp(warp_id)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Removes a warp and clears the area where it was added</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>warp_id</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the uid of the warp that you want to remove
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Teleport yourself to a warp point
+</span>Warps.teleport_player(warp_id,game.player)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -1413,7 +1563,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-10-11 23:24:57 UTC</i>
+    <i>Last updated 2019-10-13 00:25:15 UTC</i>
     </div>
     </div>
     </div>

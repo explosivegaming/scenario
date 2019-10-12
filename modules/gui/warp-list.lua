@@ -15,22 +15,25 @@ local config = require 'config.warps' --- @dep config.warps
 local format_time,table_keys = ext_require('expcore.common','format_time','table_keys') --- @dep expcore.common
 local Warps = require 'modules.control.warps' --- @dep modules.control.warps
 
-local warp_player_in_range_store = 'gui.left.warps.in_range'
+-- Stores a boolean value indexed by player name
+local player_in_range_store = Store.register(function(player)
+    return player.name
+end)
 
-local keep_open = {}
-Global.register(keep_open,function(tbl)
-    keep_open = tbl
+-- Table that stores a boolean value of weather to keep the warp gui open
+local keep_gui_open = {}
+Global.register(keep_gui_open,function(tbl)
+    keep_gui_open = tbl
 end)
 
 --- Returns if a player is allowed to edit the given warp
-local function player_allowed_edit(player,warp_id)
-    if warp_id then
-        local details = Warps.get_details(warp_id)
-        local warps = Warps.get_warps(player.force.name)
-        if warps.spawn == warp_id then
+local function player_allowed_edit(player,warp)
+    if warp then
+        local spawn_id = Warps.get_spawn_warp_id(player.force.name)
+        if spawn_id == warp.warp_id then
             return false
         end
-        if config.user_can_edit_own_warps and details.last_edit_player == player.name then
+        if config.user_can_edit_own_warps and warp.last_edit_name == player.name then
             return true
         end
     else
@@ -55,7 +58,7 @@ end
 local zoom_to_map_name = Gui.uid_name()
 Gui.on_click(zoom_to_map_name,function(event)
     local warp_id = event.element.parent.name
-    local warp = Warps.get_details(warp_id)
+    local warp = Warps.get_warp(warp_id)
     local position = warp.position
     event.player.zoom_to_world(position,1.5)
 end)
@@ -73,9 +76,7 @@ Gui.new_progressbar()
     style.color = Colors.light_blue
 end)
 :on_store_complete(function(player_name,reset)
-    -- this is to force an update of the button
-    local in_range = Store.get(warp_player_in_range_store,player_name)
-    Store.set(warp_player_in_range_store,player_name,in_range)
+    Store.trigger(player_in_range_store,player_name)
 end)
 
 --- When the button is clicked it will teleport the player
@@ -92,11 +93,10 @@ end)
     local warp_id = element.parent.caption
     Warps.teleport_player(warp_id,player)
 
+    -- Reset the warp cooldown if the player does not have unlimited warps
     if config.bypass_warp_limits_permision and not Roles.player_allowed(player,config.bypass_warp_limits_permision) then
         warp_timer:set_store(player.name,0)
-        -- this is to force an update of the buttons
-        local in_range = Store.get(warp_player_in_range_store,player.name)
-        Store.set(warp_player_in_range_store,player.name,in_range)
+        Store.trigger(player_in_range_store,player)
     end
 end)
 
@@ -112,22 +112,28 @@ Gui.new_button()
     style.width = 20
 end)
 :on_click(function(player,element)
+    local force_name = player.force.name
+    local surface = player.surface
     local position = player.position
     local px = position.x
     local py = position.y
     local dist2 = config.minimum_distance^2
 
-    local warps = Warps.get_all_warps()
-    for warp_id,warp in pairs(warps) do
+    -- Check the distance to all existing warps
+    local warp_ids = Warps.get_force_warp_ids(force_name)
+    for _,warp_id in pairs(warp_ids) do
+        local warp = Warps.get_warp(warp_id)
         local pos = warp.position
-        if (px-pos.x)^2+(py-pos.y)^2 < dist2 then
-            local warp_name = Warps.get_warp_name(warp_id)
-            player.print{'warp-list.too-close',warp_name}
+        if surface == warp.surface and (px-pos.x)^2+(py-pos.y)^2 < dist2 then
+            player.print{'warp-list.too-close',warp.name}
             return
         end
     end
 
-    Warps.new_warp(player.force.name,player.surface,position,player.name)
+    -- Add the new warp
+    local warp_id = Warps.add_warp(force_name,surface,position,player.name)
+    Warps.make_warp_tag(warp_id)
+    Warps.make_warp_area(warp_id)
 end)
 
 --- Confirms the edit to name or icon of the warp
@@ -151,7 +157,6 @@ end)
 
 --- Cancels the editing changes of the selected warp name or icon
 -- @element cancel_edit
-local generate_warp
 local cancel_edit =
 Gui.new_button()
 :set_sprites('utility/close_black')
@@ -164,7 +169,6 @@ end)
 :on_click(function(player,element)
     local warp_id = element.parent.name
     Warps.set_editing(warp_id,player.name)
-    generate_warp(player,element.parent.parent,warp_id)
 end)
 
 --- Removes a warp from the list, including the physical area and map tag
@@ -197,7 +201,6 @@ end)
 :on_click(function(player,element)
     local warp_id = element.parent.name
     Warps.set_editing(warp_id,player.name,true)
-    generate_warp(player,element.parent.parent.parent,warp_id)
 end)
 
 --[[ Generates each warp, handles both view and edit mode
@@ -213,23 +216,22 @@ end)
     >>> edit_warp
     >>> discard_warp
 ]]
-function generate_warp(player,element,warp_id)
-    local warp_name = Warps.get_warp_name(warp_id)
-    local warp_icon = Warps.get_warp_icon(warp_id)
-    local warp = Warps.get_details(warp_id)
-
-    local editing = Warps.is_editing(warp_id,player.name)
-    local last_edit_player = warp.last_edit_player
-    local last_edit_time = warp.last_edit_time
-    local position = warp.position
-
-    if not warp_name then
+local function generate_warp(player,element,warp_id)
+    local warp = Warps.get_warp(warp_id)
+    if not warp then
         -- warp is nil so remove it from the list
         Gui.destroy_if_valid(element['icon-'..warp_id])
         Gui.destroy_if_valid(element['edit-'..warp_id])
         Gui.destroy_if_valid(element[warp_id])
 
     else
+        local warp_name = warp.name
+        local warp_icon = warp.icon
+        local editing = warp.currently_editing[player.name]
+        local last_edit_name = warp.last_edit_name
+        local last_edit_time = warp.last_edit_time
+        local position = warp.position
+
         -- if it is not already present then add it now
         local warp_area = element[warp_id]
         local icon_area = element['icon-'..warp_id]
@@ -261,8 +263,8 @@ function generate_warp(player,element,warp_id)
         end
 
         local edit_area = element['edit-'..warp_id][warp_id]
-        local players = warp.editing and table_keys(warp.editing) or {}
-        local allowed = player_allowed_edit(player,warp_id)
+        local players = warp.currently_editing and table_keys(warp.currently_editing) or {}
+        local allowed = player_allowed_edit(player,warp)
 
         edit_area.visible = allowed
 
@@ -278,7 +280,7 @@ function generate_warp(player,element,warp_id)
         if not editing and element_type == 'label' then
             -- update the label already present
             label_element.caption = warp_name
-            label_element.tooltip = {'warp-list.last-edit',last_edit_player,format_time(last_edit_time)}
+            label_element.tooltip = {'warp-list.last-edit',last_edit_name,format_time(last_edit_time)}
             icon_area[goto_warp.name].sprite = 'item/'..warp_icon
 
         elseif not editing then
@@ -295,7 +297,7 @@ function generate_warp(player,element,warp_id)
             btn.tooltip = {'warp-list.goto-tooltip',position.x,position.y}
 
             local timer = warp_timer:get_store(player.name)
-            local enabled = not timer and Store.get(warp_player_in_range_store,player.name)
+            local enabled = not timer and Store.get(player_in_range_store,player)
             or Roles.player_allowed(player,config.bypass_warp_limits_permission)
             if not enabled then
                 btn.enabled = false
@@ -310,7 +312,7 @@ function generate_warp(player,element,warp_id)
                 name=zoom_to_map_name,
                 type='label',
                 caption=warp_name,
-                tooltip={'warp-list.last-edit',last_edit_player,format_time(last_edit_time)}
+                tooltip={'warp-list.last-edit',last_edit_name,format_time(last_edit_time)}
             }
             label.style.single_line = false
             label.style.maximal_width = 150
@@ -412,38 +414,30 @@ Gui.new_left_frame('gui/warp-list')
 :set_direction('vertical')
 :on_creation(function(player,element)
     local data_table = generate_container(player,element)
-    local warps = Warps.get_warps(player.force.name)
+    local warp_ids = Warps.get_force_warp_ids(player.force.name)
 
-    for key,warp_id in pairs(warps) do
-        if key ~= 'spawn' then
-            generate_warp(player,data_table,warp_id)
-        end
+    for _,warp_id in ipairs(warp_ids) do
+        generate_warp(player,data_table,warp_id)
     end
 end)
 :on_update(function(player,element)
     local data_table = element.container.scroll.table
-    local warps = Warps.get_warps(player.force.name)
+    local warp_ids = Warps.get_force_warp_ids(player.force.name)
 
     data_table.clear()
-    for key,warp_id in pairs(warps) do
-        if key ~= 'spawn' then
-            generate_warp(player,data_table,warp_id)
-        end
+    for _,warp_id in ipairs(warp_ids) do
+        generate_warp(player,data_table,warp_id)
     end
 end)
 :on_player_toggle(function(player,element,visible)
-    keep_open[player.name] = visible
+    keep_gui_open[player.name] = visible
 end)
 
 --- When the name of a warp is updated this is triggered
-Warps.add_handler(function(force,warp_id)
-    for _,player in pairs(force.players) do
-        warp_list:update(player)
-    end
-end)
+Warps.on_update(warp_list 'update_all')
 
 --- When the player leaves or enters range of a warp this is triggered
-Store.register(warp_player_in_range_store,function(value,player_name)
+Store.register(player_in_range_store,function(value,player_name)
     local player = game.players[player_name]
     local force = player.force
     local frame = warp_list:get_frame(player_name)
@@ -451,7 +445,7 @@ Store.register(warp_player_in_range_store,function(value,player_name)
     local timer = warp_timer:get_store(player_name)
     local state = not timer and value
 
-    if not keep_open[player.name] then
+    if not keep_gui_open[player.name] then
         Gui.toggle_left_frame(warp_list.name,player,value)
     end
 
@@ -459,8 +453,8 @@ Store.register(warp_player_in_range_store,function(value,player_name)
         return
     end
 
-    local warps = Warps.get_warps(force.name)
-    for _,warp_id in pairs(warps) do
+    local warp_ids = Warps.get_force_warp_ids(force.name)
+    for _,warp_id in pairs(warp_ids) do
         local element = table_area['icon-'..warp_id][goto_warp.name]
         if element and element.valid then
             element.enabled = state
@@ -478,38 +472,59 @@ end)
 local r2 = config.activation_range^2
 local rs2 = config.spawn_activation_range^2
 Event.on_nth_tick(math.floor(60/config.update_smoothing),function()
-    local categories = Store.get_keys(warp_timer.store)
-    for _,category in pairs(categories) do
+    local categories = Store.get(warp_timer.store) or {}
+    for category,_ in pairs(categories) do
         warp_timer:increment(1,category)
     end
 
+    local force_warps = {}
+    local warps = {}
     for _,player in pairs(game.connected_players) do
-        local was_in_range = Store.get(warp_player_in_range_store,player.name)
-        local force = player.force
-        local warps = Warps.get_warps(force.name)
+        local was_in_range = Store.get(player_in_range_store,player)
 
-        if #warps > 0 then
-            local surface = player.surface.index
+        -- Get the ids of all the warps on the players force
+        local force_name = player.force
+        local warp_ids = force_warps[force_name]
+        if not warp_ids then
+            warp_ids = Warps.get_force_warp_ids(force_name)
+            force_warps[force_name] = warp_ids
+        end
+
+        -- Check if the force has any warps
+        if #warp_ids > 0 then
+            local surface = player.surface
             local pos = player.position
             local px,py = pos.x,pos.y
-            for _,warp_id in pairs(warps) do
-                local warp = Warps.get_details(warp_id)
+
+            -- Loop over each warp
+            for _,warp_id in pairs(warp_ids) do
+                -- Check if warp id is chached
+                local warp = warps[warp_id]
+                if not warp then
+                    warp = Warps.get(warp_id)
+                    warps[warp_id] = warp
+                end
+
+                -- Check if the player is within range
                 local warp_pos = warp.position
-                if warp.surface.index == surface then
-                    local dx,dy = px-warp_pos.x,py-warp_pos.y
-                    if not warp.editing and (dx*dx)+(dy*dy) < rs2 or (dx*dx)+(dy*dy) < r2 then
+                if warp.surface == surface then
+                    local dx, dy = px-warp_pos.x, py-warp_pos.y
+                    if (dx*dx)+(dy*dy) < rs2 or (dx*dx)+(dy*dy) < r2 then
+                        -- Set in range to true if the player was preiovusly out of range
                         if not was_in_range then
-                            Store.set(warp_player_in_range_store,player.name,true)
+                            Store.set(player_in_range_store,player,true)
                         end
-                        return
+                        break
                     end
                 end
             end
-            if was_in_range then
-                Store.set(warp_player_in_range_store,player.name,false)
-            end
-        end
 
+            -- Set in range to false if the player was preiovusly in range
+            if was_in_range then
+                Store.set(player_in_range_store,player,false)
+            end
+
+        end
 
     end
 
@@ -519,30 +534,38 @@ end)
 Event.add(defines.events.on_player_created,function(event)
     local player = Game.get_player_by_index(event.player_index)
 
+    -- Check if a player is allowed unlimited warps
     local allowed = config.bypass_warp_limits_permission and Roles.player_allowed(player,config.bypass_warp_limits_permission) or false
-    Store.set(warp_player_in_range_store,player.name,allowed)
+    Store.set(player_in_range_store,player,allowed)
     if allowed then
         warp_timer:set_store(player.name,1)
     end
 
+    -- If the force has no spawn then make a spawn warp
     local force = player.force
-    if not Warps.forces[force.name] then
+    local spawn_id = Warps.get_spawn_warp_id(force.name)
+    if not spawn_id then
         local spawn_position = force.get_spawn_position(player.surface)
-        Warps.new_warp(force.name,player.surface,spawn_position,nil,'Spawn',true,true)
+        spawn_id = Warps.add_warp(force.name,player.surface,spawn_position,nil,'Spawn')
+        Warps.set_spawn_warp(spawn_id,force)
+        Store.trigger(Warps.store,spawn_id)
+        Warps.make_warp_tag(spawn_id)
     end
 end)
 
 local function maintain_tag(event)
+    if not event.player_index then return end
     local tag = event.tag
-    local force = event.force
-    local warps = Warps.get_warps(force.name)
-    for _,warp_id in pairs(warps) do
-        local warp = Warps.get_warps(force.name)
-        if not warp.tag or not warp.tag.valid or warp.tag == tag then
+    local force_name = event.force.name
+    local warp_ids = Warps.get_force_warp_ids(force_name)
+    for _,warp_id in pairs(warp_ids) do
+        local warp = Warps.get_warp(warp_id)
+        local wtag = warp.tag
+        if not wtag or not wtag.valid or wtag == tag then
             if event.name == defines.events.on_chart_tag_removed then
                 warp.tag = nil
             end
-            Warps.make_chart_tag(warp_id)
+            Warps.make_warp_tag(warp_id)
         end
     end
 end

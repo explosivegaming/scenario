@@ -34,15 +34,17 @@ Tasks.store = task_store
 @tparam string force_name the name of the force to add the task for
 @tparam[opt] number task_number the order place to add the task to, appends to end if omited
 @tparam[opt] string player_name the player who added this task, will cause them to be listed under editing
+@tparam[opt] string task_message the message that is used for this task, if not given default is used
 @treturn string the uid of the task which was created
 
 @usage-- Adding a new task for your force
 local task_id = Tasks.add_task(game.player.force.name,nil,game.player.name)
 
 ]]
-function Tasks.add_task(force_name,task_number,player_name)
+function Tasks.add_task(force_name,task_number,player_name,task_message)
     -- Get a new task id
     local task_id = tostring(Token.uid())
+    task_message = task_message or 'New Task'
 
     -- Get the existing tasks for this force
     local tasks = force_tasks[force_name]
@@ -68,7 +70,7 @@ function Tasks.add_task(force_name,task_number,player_name)
     Store.set(task_store,task_id,{
         task_id = task_id,
         force_name = force_name,
-        message = 'New Task',
+        message = task_message,
         last_edit_name = player_name or '<server>',
         last_edit_time = game.tick,
         curently_editing = editing

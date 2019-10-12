@@ -14,7 +14,7 @@ local Tasks = require 'modules.control.tasks' --- @dep modules.control.tasks
 --- If a player is allowed to use the edit buttons
 local function player_allowed_edit(player,task)
     if task then
-        if config.user_can_edit_own_tasks and task.last_edit_player == player.name then
+        if config.user_can_edit_own_tasks and task.last_edit_name == player.name then
             return true
         end
     else

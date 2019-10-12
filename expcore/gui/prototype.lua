@@ -98,11 +98,7 @@ function Constructor.store(sync,callback)
 
         if not sync then
             categorize = location
-            location = Store.uid_location()
-        end
-
-        if Store.is_registered(location) then
-            return error('Location for store is already registered: '..location,2)
+            location = Store.register()
         end
 
         self.store = location
@@ -110,7 +106,7 @@ function Constructor.store(sync,callback)
 
         Instances.register(self.name,self.categorize)
 
-        Store.register(self.store,sync,function(value,category)
+        Store.watch(self.store,function(value,category)
             self:raise_event('on_store_update',value,category)
 
             if Instances.is_registered(self.name) then

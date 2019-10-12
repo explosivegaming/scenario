@@ -99,7 +99,7 @@ function Store.validate(store,key,error_stack)
 
             if not success then
                 -- Serializer casued an error while serializing the key
-                error('Store watcher casued an error: '..key,error_stack+1)
+                error('Store watcher casued an error:\n\t'..key,error_stack+1)
             elseif type(key) ~= 'string' then
                 -- Serializer was successful but failed to return a string value
                 error('Store key serializer did not return a string; recived type '..type(key),error_stack+1)
@@ -227,7 +227,12 @@ function Store.get(store,key)
     -- Get the data from the data store
     local data = data_store[store]
     if key then
-        return data[key]
+        if type(data) ~= 'table' then
+            data_store[store] = {_value = data_store[store]}
+            return nil
+        else
+            return data[key]
+        end
     end
 
     -- Return all data if there is no key
@@ -269,7 +274,7 @@ function Store.clear(store,key)
     end
 
     -- Trigger any watch functions
-    Store.trigger(store,key,nil)
+    Store.raw_trigger(store,key,nil)
 end
 
 --[[-- Used to set the data in a store, will trigger any watchers, key is optional depending on if you are using them
@@ -321,7 +326,7 @@ function Store.set(store,key,value)
     end
 
     -- Trigger any watchers
-    Store.trigger(store,key,value)
+    Store.raw_trigger(store,key,value)
 end
 
 --[[-- Used to update the data in a store, use this with tables, will trigger any watchers, key is optional depending on if you are using them
@@ -396,7 +401,7 @@ function Store.update(store,key,updater)
     end
 
     -- Trigger any watchers
-    Store.trigger(store,key,value)
+    Store.raw_trigger(store,key,value)
 end
 
 --[[-- Used to update all values that are in a store, similar to Store.update but acts on all keys at once, will trigger watchers for every key present
@@ -439,11 +444,34 @@ function Store.map(store,updater)
         if rtn then
             data[key] = rtn
         end
-        Store.trigger(store,key,data[key])
+        Store.raw_trigger(store,key,data[key])
     end
 end
 
---[[-- Used to trigger any watchers that are on this store, the key and value are passed to the watcher functions
+--[[-- Used to trigger watcher functions, this may be used to trigger them if you did not use Store.update or Store.set
+@tparam number store the uid of the store that you want to trigger
+@tparam[opt] ?string|any key the key that you want to trigger, must be a string unless you have a serializer
+@usage-- Faking the update to a store
+-- The type of store we use does not really matter for this as long as you pass it what you watchers are expecting
+local scenario_diffculty = Store.register()
+
+-- Trigger the watchers with a fake change of diffculty
+Store.trigger(scenario_diffculty)
+
+]]
+function Store.trigger(store,key)
+    key = Store.validate(store,key,2)
+
+    -- Get the data from the data store
+    local data = data_store[store]
+    if key then
+        Store.raw_trigger(store,key,data[key])
+    else
+        Store.raw_trigger(store,key,data)
+    end
+end
+
+--[[-- Used to trigger watcher functions, the value and key are passed directly to the watchers regardless if the value is correct
 @tparam number store the uid of the store that you want to trigger
 @tparam[opt] ?string|any key the key that you want to trigger, must be a string unless you have a serializer
 @tparam[opt] any value the new value that is at this key or store, passed directly to the watcher
@@ -454,18 +482,18 @@ local scenario_diffculty = Store.register()
 
 -- Trigger the watchers with a fake change of diffculty
 -- This is mostly used internally but it can be useful in other cases
-Store.trigger(scenario_diffculty,nil,'normal')
+Store.raw_trigger(scenario_diffculty,nil,'normal')
 
 ]]
-function Store.trigger(store,key,value)
+function Store.raw_trigger(store,key,value)
     key = Store.validate(store,key,2)
 
     -- Get the watchers and then loop over them
-    local watchers = Store.watchers[store]
+    local watchers = Store.watchers[store] or {}
     for _,watcher in pairs(watchers) do
         local success, err = pcall(watcher,value,key)
         if not success then
-            error('Store watcher casued an error: '..err)
+            error('Store watcher casued an error:\n\t'..err)
         end
     end
 end
