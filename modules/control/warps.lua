@@ -1,27 +1,23 @@
 --[[-- Control Module - Warps
-    - Stores warps for each force.
-    @control Warps
-    @alias Warps
+- Stores warps for each force.
+@control Warps
+@alias Warps
 
-    @usage
-    -- import the module from the control modules
-    local Warps = require 'modules.control.warps' --- @dep modules.control.warps
+@usage-- Making a new spawn warp
+local player = game.player
+local force = player.force
+local spawn_id = Warps.add_warp(force.name,player.surface,player.position,player.name,'Spawn')
 
-    -- Adding a warp require a force, surface and postion, and the option to set this as the spawn
-    -- this function will also create the warp area unless set other wise
-    Warps.new_warp('player',surface,{x=0,y=0})
+Warps.set_spawn_warp(spawn_id, force)
+Warps.make_warp_tag(spawn_id)
 
-    -- You can then update the warp information, name and icon, with the update function
-    Warps.update_warp(warp_id,'Best Warp','iron-plate')
+@usage-- Making a new warp with a warp area
+local player = game.player
+local force = player.force
+local warp_id = Warps.add_warp(force.name,player.surface,player.position,player.name)
 
-    -- Removeing a warp will restore the land that as under it, and remove any data linked with it
-    Warps.remove_warp(warp_id)
-
-    -- You can get the deatils for a warp which include last edit and postion
-    Warps.get_details(warp_id)
-
-    -- You can teleport a player to a warp, note that there is no limit on this action
-    Warps.teleport_player(warp_id,player)
+Warps.make_warp_area(warp_id)
+Warps.make_warp_tag(warp_id)
 
 ]]
 
@@ -31,153 +27,139 @@ local Token = require 'utils.token' --- @dep utils.token
 local config = require 'config.warps' --- @dep config.warps
 local table_values,table_keysort = ext_require('expcore.common','table_values','table_keysort') --- @dep expcore.common
 
-local Warps = {
-    store = {
-        names = 'gui.left.warps.names',
-        icons = 'gui.left.warps.tags'
-    },
-    details = {},
-    forces = {},
-    handlers = {}
-}
+local Warps = {}
 
-local warp_details = Warps.details
-local force_warps = Warps.forces
-Global.register({
-    warp_details=warp_details,
-    force_warps=force_warps
-},function(tbl)
-    Warps.details = tbl.warp_details
-    Warps.forces = tbl.force_warps
-    warp_details = Warps.details
-    force_warps = Warps.forces
+-- Global lookup table for force name to task ids
+local force_warps = {}
+Global.register(force_warps,function(tbl)
+    force_warps = tbl
 end)
 
-local warp_names = Warps.store.names
-Store.register(warp_names,function(value,warp_id)
-    local details = warp_details[warp_id]
-    local force_name = details.force
-    local force = game.forces[force_name]
-    local warps = force_warps[force_name]
-    local spawn_id = warps.spawn
+-- Warp store is keyed by warp id, value is a table
+local warp_store = Store.register()
+Warps.store = warp_store
 
-    local names = {}
-    for _,next_warp_id in pairs(warps) do
-        local warp_name = Store.get(warp_names,next_warp_id)
-        if next_warp_id ~= spawn_id then
-            names[warp_name..next_warp_id] = next_warp_id
+-- When a warp is updated change its chat tag and resort the warp order
+Store.watch(warp_store,function(warp,warp_id)
+    if warp then
+        -- Update the map chart tag if there is one
+        if warp.tag then
+            Warps.make_warp_tag(warp_id)
         end
-    end
 
-    force_warps[force_name] = table_values(table_keysort(names))
-    table.insert(force_warps[force.name],1,spawn_id)
-    force_warps[force_name].spawn = spawn_id
+        -- Check that the name of the warp has been changed
+        if warp.name == warp.old_name then return end
 
-    for _,handler in pairs(Warps.handlers) do
-        handler(force,warp_id)
+        -- Get the names of all the warp points for this force
+        local force_name = warp.force_name
+        local warp_ids = force_warps[force_name]
+        local spawn_id = warp_ids.spawn
+
+        local warp_names = {}
+        for _,next_warp_id in pairs(warp_ids) do
+            local next_warp = Store.get(warp_store,next_warp_id)
+            if next_warp_id ~= spawn_id then
+                warp_names[next_warp.name..next_warp_id] = next_warp_id
+            end
+        end
+
+        -- Sort the warp names in alphabetical order
+        local new_warp_ids = table_values(table_keysort(warp_names))
+        table.insert(new_warp_ids,1,spawn_id)
+        new_warp_ids.spawn = spawn_id
+        force_warps[force_name] = new_warp_ids
     end
 end)
 
-local warp_icons = Warps.store.icons
-Store.register(warp_icons,function(value,warp_id)
-    if value then
-        Warps.make_chart_tag(warp_id)
-    else
-        local warp = warp_details[warp_id]
-        if warp.tag and warp.tag.valid then warp.tag.destroy() end
-    end
-end)
-
---- Generators.
+--- Map Intergration.
 -- functions used to create and alter warps with in the map
--- @section generators
+-- @section mapIntergration
 
---- Adds or updates the chart tag for a warp
--- @tparam string warp_id the uid of the warp you want to make the chart tag for
--- @treturn boolean true if a new tag was made, false if it was updated
-function Warps.make_chart_tag(warp_id)
-    local warp = warp_details[warp_id]
+--[[-- Add or update the chat tag for this warp
+@tparam string warp_id the uid of the warp you want the chart tag for
+@treturn boolean true if a new tag was made, false if it was updated
 
-    local name = Store.get(warp_names,warp_id)
-    local icon = Store.get(warp_icons,warp_id)
+@usage-- Adding a chart tag for a new warp
+local tag_added = Warps.make_warp_tag(warp_id)
 
-    if warp.tag and warp.tag.valid then
-        warp.tag.text = 'Warp: '..name
-        warp.tag.icon = {type='item',name=icon}
+]]
+function Warps.make_warp_tag(warp_id)
+    local warp = Store.get(warp_store,warp_id)
+    local name = warp.name
+    local icon = warp.icon
+
+    -- Edit the existing tag if it is present
+    local tag = warp.tag
+    if tag and tag.valid then
+        tag.text = 'Warp: '..name
+        tag.icon = {type='item',name=icon}
         return false
     end
 
-    local force = game.forces[warp.force]
+    -- Make a new tag if one did not exist
+    local force = game.forces[warp.force_name]
     local surface = warp.surface
     local position = warp.position
 
-    local tag = force.add_chart_tag(surface,{
-        position={position.x+0.5,position.y+0.5},
-        text='Warp: '..name,
-        icon={type='item',name=icon}
+    tag = force.add_chart_tag(surface,{
+        position = {position.x+0.5,position.y+0.5},
+        text = 'Warp: '..name,
+        icon = {type='item',name=icon}
     })
 
+    -- Add the tag to this warp, store.update not needed as we dont want it to trigger
     warp.tag = tag
     return true
 end
 
---- Adds a new warp to a force and makes the in game warp area
--- @tparam string force_name the name of the force to add a new warp for
--- @tparam LuaSurface surface the surface to add the warp to
--- @tparam Position position the postion to have the warp go to
--- @tparam[opt='server'] string player_name the name of the player who added this warp
--- @tparam[opt='New warp'] string warp_name the name of the warp that will be made
--- @tparam[opt=false] boolean block_generation when true a in game area will not be made
--- @tparam[opt=false] boolean set_spawn when true this warp will become the spawn for the force
-function Warps.new_warp(force_name,surface,position,player_name,warp_name,block_generation,set_spawn)
-    local warp_id = tostring(Token.uid())
-    warp_name = warp_name or 'New warp'
+--[[-- Remove the chart tag for this warp
+@tparam string warp_id the uid for the warp that you want to remove the chart tag from
+@treturn boolean true if the tag was valid and was removed, false if the tag was invalid
 
-    if not force_warps[force_name] then
-        force_warps[force_name] = {}
-    end
-    table.insert(force_warps[force_name],warp_id)
+@usage-- Removing the chart tag from a warp
+local removed = Warps.remove_warp_tag(warp_id)
 
-    warp_details[warp_id] = {
-        warp_id = warp_id,
-        force = force_name,
-        position = {
-            x=math.floor(position.x),
-            y=math.floor(position.y)
-        },
-        surface = surface,
-        last_edit_player=player_name or '<server>',
-        last_edit_time=game.tick,
-        editing={}
-    }
+]]
+function Warps.remove_warp_tag(warp_id)
+    local warp = Store.get(warp_store,warp_id)
 
-    local warp = warp_details[warp_id]
-
-    if player_name then
-        warp.editing[player_name] = true
+    -- Check there is a tag to remove
+    local tag = warp.tag
+    if not tag or not tag.valid then
+        warp.tag = nil
+        return false
     end
 
-    if set_spawn then
-        force_warps[force_name].spawn = warp_id
-        game.forces[force_name].set_spawn_position(position,surface)
-    end
+    -- Remove the warp chart tag if it is valid
+    tag.destroy()
+    warp.tag = nil
 
-    Store.set(warp_names,warp_id,warp_name)
-    Store.set(warp_icons,warp_id,config.default_icon)
+    return true
+end
 
-    if block_generation then return warp_id end
+--[[-- Add a warp area for the warp, purely cosmetic
+@tparam string warp_id the uid of the warp you want the area for
 
+@usage-- Adding a warp area for a warp
+Warps.make_warp_area(warp_id)
+
+]]
+function Warps.make_warp_area(warp_id)
+    local warp = Store.get(warp_store,warp_id)
+    local surface = warp.surface
+    local position = warp.position
     local posx = position.x
     local posy = position.y
     local radius = config.activation_range
     local radius2 = radius^2
 
+    -- Get the tile that is being replaced, store.update not needed as we dont want it to trigger
     local old_tile = surface.get_tile(position).name
     warp.old_tile = old_tile
 
+    -- Make a circle that acts as a base for the warp structure
     local base_tile = config.base_tile
     local base_tiles = {}
-    -- this makes a base plate to make the warp point
     for x = -radius, radius do
         local x2 = x^2
         for y = -radius, radius do
@@ -189,14 +171,14 @@ function Warps.new_warp(force_name,surface,position,player_name,warp_name,block_
     end
     surface.set_tiles(base_tiles)
 
-    -- this adds the tile pattern
+    -- Add a tile patern ontop of the base
     local tiles = {}
     for _,pos in pairs(config.tiles) do
         table.insert(tiles,{name=base_tile,position={pos[1]+posx,pos[2]+posy}})
     end
     surface.set_tiles(tiles)
 
-    -- this adds the enitites
+    -- Add entities to the warp structure
     for _,entity in pairs(config.entities) do
         entity = surface.create_entity{
             name=entity[1],
@@ -208,29 +190,28 @@ function Warps.new_warp(force_name,surface,position,player_name,warp_name,block_
         entity.minable = false
         entity.rotatable = false
     end
-
-    return warp_id
 end
 
---- Removes a warp and clears the area where it was added
--- @tparam string warp_id the uid of the warp that you want to remove
-function Warps.remove_warp(warp_id)
-    local force_name = warp_details[warp_id].force
-    local warps = force_warps[force_name]
-    local key = table.index_of(warps,warp_id)
-    warps[key] = nil
-    Store.clear(warp_names,warp_id)
-    Store.clear(warp_icons,warp_id)
+--[[-- Remove the warp area for a warp
+@tparam string warp_id the uid of the warp that you want to remove the area for
 
-    local warp = warp_details[warp_id]
+@usage-- Remove the warp area for a warp
+Warps.remove_warp_area(warp_id)
+
+]]
+function Warps.remove_warp_area(warp_id)
+    local warp = Store.get(warp_store,warp_id)
     local position = warp.position
     local surface = warp.surface
     local radius = config.activation_range
     local radius2 = radius^2
 
+    -- Check that a warp area was created previously
     local base_tile = warp.old_tile
+    if not base_tile then return end
+
+    -- Reset all the tiles that were replaced
     local tiles = {}
-    -- clears the area where the warp was
     for x = -radius, radius do
         local x2 = x^2
         for y = -radius, radius do
@@ -242,7 +223,7 @@ function Warps.remove_warp(warp_id)
     end
     surface.set_tiles(tiles)
 
-    -- removes all entites (in the area) on the neutral force
+    -- Remove all the entites that are in the area
     local entities = surface.find_entities_filtered{
         force='neutral',
         area={
@@ -251,108 +232,230 @@ function Warps.remove_warp(warp_id)
         }
     }
     for _,entity in pairs(entities) do if entity.name ~= 'player' then entity.destroy() end end
-
-    warp_details[warp_id] = nil
 end
 
---- Setters.
--- functions used to created and alter warps
--- @section setters
+--[[-- Set a warp to be the spawn point for a force, force must own this warp
+@tparam string warp_id the uid of the warp that you want to be the spawn for the force
+@tparam LuaForce force the force that you want to set the spawn for
 
---- Adds a new handler for when a warp is updated
--- @tparam function callback the callback which is ran when a warp is updated
--- @treturn boolean true if the callback was added
-function Warps.add_handler(callback)
-    if type(callback) == 'function' then
-        table.insert(Warps.handlers,callback)
-        return true
+@usage-- Set your forces spawn to a warp
+Warps.set_spawn_warp(warp_id,game.player.force)
+
+]]
+function Warps.set_spawn_warp(warp_id,force)
+    -- Check the force owns this warp
+    local warp = Store.get(warp_store,warp_id)
+    if warp.force_name ~= force.name then return end
+
+    -- Set this warp as the spawn
+    local warp_ids = force_warps[warp.force_name]
+    if not warp_ids then
+        warp_ids = {}
+        force_warps[warp.force_name] = warp_ids
     end
-    return false
+    warp_ids.spawn = warp_id
+
+    -- Set the forces spawn to this warp
+    force.set_spawn_position(warp.position, warp.surface)
 end
 
---- Sets a player to be editing this warp, used with is_editing
--- @tparam string warp_id the uid of the warp that you want to editing for
--- @tparam string player_name the name of the player you want to set editing for
--- @tparam[opt] boolean state the new state to set editing to
-function Warps.set_editing(warp_id,player_name,state)
-    local details = warp_details[warp_id]
-    details.editing[player_name] = state
-end
+--[[-- Teleport a player to a warp point
+@tparam string warp_id the uid of the warp to send the player to
+@tparam LuaPlayer player the player to teleport to the warp
 
---- Updates a warp to a differecnt name and icon, both must be given
--- @tparam string warp_id the uid of the warp that you want to update
--- @tparam string name the name that you want the warp to have
--- @tparam string icon the new icon that you want the warp to have
--- @tparam[opt='server'] string player_name the name of the player that is updating the warp
-function Warps.update_warp(warp_id,name,icon,player_name)
-    local warp = warp_details[warp_id]
-    warp.last_edit_player = player_name or '<server>'
-    warp.last_edit_time = game.tick
-    Store.set(warp_icons,warp_id,icon)
-    Store.set(warp_names,warp_id,name)
-end
+@usage-- Teleport yourself to a warp point
+Warps.teleport_player(warp_id,game.player)
 
---- Getters.
--- function used to get information about warps
--- @section getters
-
---- Gets the name of a warp
--- @tparam string warp_id the uid of the warp you want to get
--- @treturn string the warp name that was stored here
-function Warps.get_warp_name(warp_id)
-    return Store.get(warp_names,warp_id)
-end
-
---- Gets the icon of a warp
--- @tparam string warp_id the uid of the warp you want to get
--- @treturn string the warp icon that was stored here
-function Warps.get_warp_icon(warp_id)
-    return Store.get(warp_icons,warp_id) or config.default_icon
-end
-
---- Gets the task details stored at this id
--- @tparam string warp_id the uid of the warp you want to get
--- @treturn table the warp details that was stored here
-function Warps.get_details(warp_id)
-    return warp_details[warp_id]
-end
-
---- Gets all warps for a force
--- @tparam string force_name the name of the force to get the warps for
--- @treturn table an array of warp ids that belong to this force, spawn key is included
-function Warps.get_warps(force_name)
-    return force_warps[force_name] or {}
-end
-
---- Gets all warps from all forces
--- @treturn table array of all warp details
-function Warps.get_all_warps()
-    return warp_details
-end
-
---- Gets if a player is currently editing this warp
--- @tparam string warp_id the uid of the warp you want to check
--- @tparam string player_name the name of the player that you want to check
--- @treturn boolean weather the player is currently editing this warp
-function Warps.is_editing(warp_id,player_name)
-    local details = warp_details[warp_id]
-    return details.editing[player_name]
-end
-
---- Teleports a player to a warp point
--- @tparam string warp_id the uid of the warp to send the player to
--- @tparam LuaPlayer player the player to teleport to the warp
+]]
 function Warps.teleport_player(warp_id,player)
-    local warp = warp_details[warp_id]
+    local warp = Store.get(warp_store,warp_id)
     local surface = warp.surface
     local position = {
         x=warp.position.x+0.5,
         y=warp.position.y+0.5
     }
 
+    -- Teleport the player
     local goto_position = surface.find_non_colliding_position('character',position,32,1)
     if player.driving then player.driving = false end
     player.teleport(goto_position,surface)
 end
 
+--- Setters.
+-- functions used to created and alter warps
+-- @section setters
+
+--[[-- Add a new warp for a force, the warp must have a surface and a position
+@tparam string force_name the name of the force to add the warp for
+@tparam LuaSurface surface the surface that the warp will be on
+@tparam Concepts.Position position the position that the warp will be on
+@tparam[opt] string player_name the name of the player that is adding the warp
+@tparam[opt] string warp_name the name of the warp that is being added, if omited default is used
+@treturn string the uid of the warp which was created
+
+@usage-- Adding a new warp for your force at your position
+local player = game.player
+local warp_id = Warps.add_warp(player.force.name,player.surface,player.position,player.name)
+
+]]
+function Warps.add_warp(force_name,surface,position,player_name,warp_name)
+    -- Get new warp id
+    local warp_id = tostring(Token.uid())
+    warp_name = warp_name or 'New warp'
+
+    -- Get the existing warps for this force
+    local warps = force_warps[force_name]
+    if not warps then
+        force_warps[force_name] = {}
+        warps = force_warps[force_name]
+    end
+
+    -- Insert the warp id into the force warps
+    table.insert(warps,warp_id)
+
+    -- Create the editing table
+    local editing = {}
+    if player_name then
+        editing[player_name] = true
+    end
+
+    -- Add the new warp to the store
+    Store.set(warp_store,warp_id,{
+        warp_id = warp_id,
+        force_name = force_name,
+        name = warp_name,
+        icon = config.default_icon,
+        surface = surface,
+        position = {
+            x = math.floor(position.x),
+            y = math.floor(position.y)
+        },
+        last_edit_name = player_name or '<server>',
+        last_edit_time = game.tick,
+        currently_editing = editing
+    })
+
+    return warp_id
+end
+
+--[[-- Removes a warp and any data linked to it
+@tparam string warp_id the uid of the warp that you want to remove
+
+@usage-- Removing a warp
+Warps.remove_warp(warp_id)
+
+]]
+function Warps.remove_warp(warp_id)
+    local warp = Store.get(warp_store,warp_id)
+    local force_name = warp.force_name
+    Warps.remove_warp_tag(warp_id)
+    Warps.remove_warp_area(warp_id)
+    Store.clear(warp_store,warp_id)
+    table.remove_element(force_warps[force_name],warp_id)
+end
+
+--[[-- Update the name and icon for a warp
+@tparam string warp_id the uid of the warp that you want to update
+@tparam[opt] string new_name the new name that you want the warp to have
+@tparam[opt] string new_icon the new icon that you want the warp to have
+@tparam[opt='server'] string player_name the name of the player that made the edit
+
+@usage-- Changing the name and icon for a warp
+Warps.update_warp(warp_id,'My Warp','iron-plate',game.player.name)
+
+]]
+function Warps.update_warp(warp_id,new_name,new_icon,player_name)
+    Store.update(warp_store,warp_id,function(warp)
+        warp.last_edit_name = player_name or '<server>'
+        warp.last_edit_time = game.tick
+        warp.old_name = warp.name
+        warp.name = new_name or warp.name
+        warp.icon = new_icon or warp.icon
+    end)
+end
+
+--[[-- Set the editing state for a player, can be used as a warning or to display a text field
+@tparam string warp_id the uid of the warp that you want to effect
+@tparam string player_name the name of the player you want to set the state for
+@tparam boolean state the new state to set editing to
+
+@usage-- Setting your editing state to true
+Warps.set_editing(warp_id,game.player.name,true)
+
+]]
+function Warps.set_editing(warp_id,player_name,state)
+    Store.update(warp_store,warp_id,function(warp)
+        warp.currently_editing[player_name] = state
+    end)
+end
+
+--[[-- Adds an update handler for when a warp is added, removed, or updated
+@tparam function handler the handler which is called when a warp is updated
+
+@usage-- Add a game print when a warp is updated
+Warps.on_update(function(warp)
+    game.print(warp.force_name..' now has the warp: '..warp.name)
+end)
+
+]]
+function Warps.on_update(handler)
+    Store.watch(warp_store,handler)
+end
+
+--- Getters.
+-- function used to get information about warps
+-- @section getters
+
+--[[-- Gets the warp information that is linked with this id
+@tparam string warp_id the uid of the warp you want to get
+@treturn table the warp information
+
+@usage-- Getting warp information outside of on_update
+local warp = Warps.get_warp(warp_id)
+
+]]
+function Warps.get_warp(warp_id)
+    return Store.get(warp_store,warp_id)
+end
+
+--[[-- Gets all the warp ids that a force has
+@tparam string force_name the name of the force that you want the warp ids for
+@treturn table an array of all the warp ids
+
+@usage-- Getting the warp ids for a force
+local warp_ids = Warps.get_force_warp_ids(game.player.force.name)
+
+]]
+function Warps.get_force_warp_ids(force_name)
+    return force_warps[force_name] or {}
+end
+
+--[[-- Get the id of the spawn warp
+@tparam string force_name the name of the force that you want to get the spawn warp for
+@treturn ?string|nil the uid of the spawn warp for this force if there is one
+
+@usage-- Getting the spawn warp id
+local spawn_id = Warps.get_spawn_warp_id(game.player.force.name)
+
+]]
+function Warps.get_spawn_warp_id(force_name)
+    local warp_ids = force_warps[force_name] or {}
+    return warp_ids.spawn
+end
+
+--[[-- Gets the editing state for a player
+@tparam string warp_id the uid of the warp you want to check
+@tparam string player_name the name of the player that you want to check
+@treturn boolean weather the player is currently editing this warp
+
+@usage-- Check if a player is editing a warp or not
+local editing = Warps.get_editing(warp_id,game.player.name)
+
+]]
+function Warps.get_editing(warp_id,player_name)
+    local warp = Store.get(warp_store,warp_id)
+    return warp.currently_editing[player_name]
+end
+
+-- Module return
 return Warps

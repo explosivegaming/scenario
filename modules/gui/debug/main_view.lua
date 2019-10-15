@@ -5,6 +5,7 @@ local Public = {}
 
 local pages = {
     require 'modules.gui.debug.redmew_global_view',
+    require 'modules.gui.debug.expcore_store_view',
     require 'modules.gui.debug.global_view',
     require 'modules.gui.debug.package_view',
     require 'modules.gui.debug._g_view',

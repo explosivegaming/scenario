@@ -64,8 +64,7 @@ local ProgressBar = {
     _prototype=Prototype.extend{
         on_complete = Prototype.event,
         on_store_complete = Prototype.event,
-        add_store = Prototype.store(false,store_update),
-        add_sync_store = Prototype.store(true,store_update)
+        add_store = Prototype.store(store_update)
     }
 }
 
@@ -194,11 +193,10 @@ function ProgressBar.new_progressbar(name)
 
     self:on_draw(function(player,element,maximum)
         if self.store then
-            local category = self.categorize and self.categorize(element) or nil
-            local value = self:get_store(category)
+            local value = self:get_store(element)
             if not value then
                 value = self.count_down and 1 or 0
-                self:set_store(category,value)
+                self:set_store(element,value)
             end
             element.value = value
 
@@ -350,8 +348,7 @@ function ProgressBar._prototype:reset_element(element)
     if not element or not element.valid then return end
     local value = self.count_down and 1 or 0
     if self.store then
-        local category = self.categorize and self.categorize(element) or value
-        self:set_store(category,value)
+        self:set_store(element,value)
     else
         element.value = value
     end

@@ -95,6 +95,18 @@
     </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
+    <h2>Guis</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Player-List.html"><span class="module-name-item">Player-List</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Rocket-Info.html"><span class="module-name-item">Rocket-Info</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Science-Info.html"><span class="module-name-item">Science-Info</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Task-List.html"><span class="module-name-item">Task-List</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Warps-List.html"><span class="module-name-item">Warps-List</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
     <h2>Commands</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Admin-Chat.html"><span class="module-name-item">Admin-Chat</span></a></div></li>
@@ -117,18 +129,6 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Tag.html"><span class="module-name-item">Tag</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Teleport.html"><span class="module-name-item">Teleport</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
-    </ul>
-    </li>
-    </ul>
-    <ul class="nav nav-modules">
-    <li class="nav-item">
-    <h2>Guis</h2>
-    <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Player-List.html"><span class="module-name-item">Player-List</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Rocket-Info.html"><span class="module-name-item">Rocket-Info</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Science-Info.html"><span class="module-name-item">Science-Info</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Task-List.html"><span class="module-name-item">Task-List</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Warps-List.html"><span class="module-name-item">Warps-List</span></a></div></li>
     </ul>
     </li>
     </ul>
@@ -226,7 +226,7 @@
 
     <h2><span class="body-module-name"><strong><em>Tasks</em></strong></span> control</h2>
     <p>Control Module - Tasks
-    - Stores tasks for each force.</p>
+- Stores tasks for each force.</p>
     <p></p>
 
 
@@ -235,25 +235,10 @@
 
     <!-- module usage start -->
     <h3>Usage</h3>
-    <pre class="code" data-lang="Lua"><code>
-    <span class="comment">-- import the module from the control modules
-</span>    <span class="keyword">local</span> Tasks = <span class="global">require</span> <span class="string">'modules.control.tasks'</span> <span class="comment">--- @dep modules.control.tasks
-</span>
-    <span class="comment">-- To create a new task all you need is the name of the force you want to add the task to
-</span>    <span class="comment">-- you can give a place to add it but this is optional
-</span>    Tasks.new_task(<span class="string">'player'</span>)
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Making and then editing a new task
+</span><span class="keyword">local</span> task_id = Tasks.add_task(game.player.force.name,<span class="keyword">nil</span>,game.player.name)
 
-    <span class="comment">-- You can then update this task to what ever value that you want
-</span>    <span class="comment">-- the task id is returned by new_task, or within an update handler
-</span>    <span class="comment">-- if a player name is not given that it will assume '&lt;server&gt;'
-</span>    Tasks.update_task(task_id,<span class="string">'My number one task!'</span>,<span class="string">'Cooldude2606'</span>)
-
-    <span class="comment">-- You can then remove the task and all data linked with it
-</span>    Tasks.remove_task(task_id)
-
-    <span class="comment">-- set_editing and is_editing may be used to block other or provide warnings
-</span>    <span class="comment">-- none of this is enforced by this module and so you must do so in your own module
-</span>    Tasks.set_editing(task_id,<span class="string">'Cooldude2606'</span>,<span class="keyword">true</span>)</code></pre>
+Tasks.update_task(task_id,<span class="string">'We need more iron!'</span>,game.player.name)</code></pre>
     <!-- module usage end -->
 
     <!-- module content header end -->
@@ -284,19 +269,15 @@
     <tbody>
     <tr>
     <td class="name"><a href="#get_task">get_task(task_id)</a></td>
-    <td class="summary">Gets the task stored at this id</td>
+    <td class="summary">Gets the task information that is linked with this id</td>
     </tr>
     <tr>
-    <td class="name"><a href="#get_details">get_details(task_id)</a></td>
-    <td class="summary">Gets the task details stored at this id</td>
+    <td class="name"><a href="#get_force_task_ids">get_force_task_ids(force_name)</a></td>
+    <td class="summary">Gets all the task ids that a force has</td>
     </tr>
     <tr>
-    <td class="name"><a href="#get_force_tasks">get_force_tasks(force_name)</a></td>
-    <td class="summary">Gets the task ids for a force</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#is_editing">is_editing(task_id, player_name)</a></td>
-    <td class="summary">Gets if a player is currently editing this task</td>
+    <td class="name"><a href="#get_editing">get_editing(task_id, player_name)</a></td>
+    <td class="summary">Gets the editing state for a player</td>
     </tr>
     </tbody>
     </table>
@@ -307,24 +288,24 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#add_handler">add_handler(callback)</a></td>
-    <td class="summary">Adds a new handler for when a task is updated</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#new_task">new_task(force_name[, task_number][, player_name])</a></td>
-    <td class="summary">Adds a new task for a force, with option to place it in a certain order</td>
+    <td class="name"><a href="#add_task">add_task(force_name[, task_number][, player_name][, task_message])</a></td>
+    <td class="summary">Add a new task for a force, the task can be placed into a certain position for that force</td>
     </tr>
     <tr>
     <td class="name"><a href="#remove_task">remove_task(task_id)</a></td>
-    <td class="summary">Removes a task and all data linked with it</td>
+    <td class="summary">Removes a task and any data that is linked with it</td>
     </tr>
     <tr>
-    <td class="name"><a href="#update_task">update_task(task_id, task[, player_name='server'])</a></td>
-    <td class="summary">Updates a task message</td>
+    <td class="name"><a href="#update_task">update_task(task_id, new_message[, player_name='server'])</a></td>
+    <td class="summary">Update the message and last edited information for a task</td>
     </tr>
     <tr>
-    <td class="name"><a href="#set_editing">set_editing(task_id, player_name[, state])</a></td>
-    <td class="summary">Sets a player to be editing this task, used with is_editing</td>
+    <td class="name"><a href="#set_editing">set_editing(task_id, player_name, state)</a></td>
+    <td class="summary">Set the editing state for a player, can be used as a warning or to display a text field</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#on_update">on_update(handler)</a></td>
+    <td class="summary">Adds an update handler for when a task is added, removed, or updated</td>
     </tr>
     </tbody>
     </table>
@@ -423,64 +404,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Gets the task stored at this id</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>task_id</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the uid of the task you want to get
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-    <span class="return-text">the task message that was stored here</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#get_details" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_details">get_details(task_id)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Gets the task details stored at this id</p>
+    <p class="section-item-summary">Gets the task information that is linked with this id</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -514,7 +438,7 @@
     <ul>
     <li>
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
-    <span class="return-text">the task details that was stored here</span>
+    <span class="return-text">the task information</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -524,20 +448,23 @@
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Getting task information outside of on_update
+</span><span class="keyword">local</span> task = Tasks.get_task(task_id)</code></pre>
     <!-- usage end -->
 
     </dd>
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#get_force_tasks" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_force_tasks">get_force_tasks(force_name)</span>
+    <a href="#get_force_task_ids" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_force_task_ids">get_force_task_ids(force_name)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Gets the task ids for a force</p>
+    <p class="section-item-summary">Gets all the task ids that a force has</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -557,7 +484,7 @@
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the name of the force that you want the ids for
+     the name of the force that you want the task ids for
 
     </li>
 
@@ -581,20 +508,23 @@
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Getting the task ids for a force
+</span><span class="keyword">local</span> task_ids = Tasks.get_force_task_ids(game.player.force.name)</code></pre>
     <!-- usage end -->
 
     </dd>
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#is_editing" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="is_editing">is_editing(task_id, player_name)</span>
+    <a href="#get_editing" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_editing">get_editing(task_id, player_name)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Gets if a player is currently editing this task</p>
+    <p class="section-item-summary">Gets the editing state for a player</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -654,6 +584,9 @@
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Check if a player is editing a task or not
+</span><span class="keyword">local</span> editing = Tasks.get_editing(task_id,game.player.name)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -663,71 +596,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#add_handler" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="add_handler">add_handler(callback)</span>
+    <a href="#add_task" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="add_task">add_task(force_name[, task_number][, player_name][, task_message])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Adds a new handler for when a task is updated</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>callback</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
-
-     the callback which is ran when a task is updated
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">true if the callback was added</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#new_task" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="new_task">new_task(force_name[, task_number][, player_name])</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Adds a new task for a force, with option to place it in a certain order</p>
+    <p class="section-item-summary">Add a new task for a force, the task can be placed into a certain position for that force</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -763,7 +639,7 @@
 
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
 
-     the order place to add the task to, adds to end if omited
+     the order place to add the task to, appends to end if omited
 
     (<em>optional</em>)
     </li>
@@ -780,7 +656,24 @@
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     when given this player will be added to the editing list
+     the player who added this task, will cause them to be listed under editing
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>task_message</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the message that is used for this task, if not given default is used
 
     (<em>optional</em>)
     </li>
@@ -805,6 +698,9 @@
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a new task for your force
+</span><span class="keyword">local</span> task_id = Tasks.add_task(game.player.force.name,<span class="keyword">nil</span>,game.player.name)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -818,7 +714,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Removes a task and all data linked with it</p>
+    <p class="section-item-summary">Removes a task and any data that is linked with it</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -855,6 +751,9 @@
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Removing a task
+</span>Tasks.remove_task(task_id)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -862,13 +761,13 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#update_task" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="update_task">update_task(task_id, task[, player_name='server'])</span>
+    <span class="section-item-title" id="update_task">update_task(task_id, new_message[, player_name='server'])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Updates a task message</p>
+    <p class="section-item-summary">Update the message and last edited information for a task</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -898,13 +797,13 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>task</em></strong>
+    <strong><em>new_message</em></strong>
 
     <strong> : </strong>
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the message that you want to change the task to
+     the message that you want to have for the task
 
     </li>
 
@@ -938,6 +837,9 @@
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Updating the message for on a task
+</span>Task.update_task(task_id,<span class="string">'We need more iron!'</span>,game.player.name)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -945,13 +847,13 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#set_editing" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="set_editing">set_editing(task_id, player_name[, state])</span>
+    <span class="section-item-title" id="set_editing">set_editing(task_id, player_name, state)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Sets a player to be editing this task, used with is_editing</p>
+    <p class="section-item-summary">Set the editing state for a player, can be used as a warning or to display a text field</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -971,7 +873,7 @@
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the uid of the task that you want to editing for
+     the uid of the task that you want to effect
 
     </li>
 
@@ -987,7 +889,7 @@
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the name of the player you want to set editing for
+     the name of the player you want to set the state for
 
     </li>
 
@@ -1005,7 +907,6 @@
 
      the new state to set editing to
 
-    (<em>optional</em>)
     </li>
 
 
@@ -1021,6 +922,64 @@
     <!-- see also end -->
 
     <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Setting your editing state to true
+</span>Tasks.set_editing(task_id,game.player.name,<span class="keyword">true</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#on_update" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="on_update">on_update(handler)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds an update handler for when a task is added, removed, or updated</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>handler</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the handler which is called when a task is updated
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Add a game print when a task is updated
+</span>Tasks.on_update(<span class="keyword">function</span>(task)
+    game.<span class="global">print</span>(task.force_name..<span class="string">' now has the task: '</span>..task.message)
+<span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -1039,7 +998,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-09-28 16:34:46 UTC</i>
+    <i>Last updated 2019-10-15 22:37:40 UTC</i>
     </div>
     </div>
     </div>

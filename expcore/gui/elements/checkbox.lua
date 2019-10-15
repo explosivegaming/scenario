@@ -74,14 +74,12 @@ local Checkbox = {
     _prototype_checkbox=Prototype.extend{
         on_element_update = Prototype.event,
         on_store_update = Prototype.event,
-        add_store = Prototype.store(false,store_update),
-        add_sync_store = Prototype.store(true,store_update)
+        add_store = Prototype.store(store_update)
     },
     _prototype_radiobutton=Prototype.extend{
         on_element_update = Prototype.event,
         on_store_update = Prototype.event,
-        add_store = Prototype.store(false,store_update),
-        add_sync_store = Prototype.store(true,store_update)
+        add_store = Prototype.store(store_update)
     }
 }
 
@@ -96,8 +94,7 @@ function Checkbox.new_checkbox(name)
 
     self:on_draw(function(player,element)
         if self.store then
-            local category = self.categorize and self.categorize(element) or nil
-            local state = self:get_store(category,true)
+            local state = self:get_store(element,true)
             if state then element.state = true end
         end
     end)
@@ -107,13 +104,11 @@ function Checkbox.new_checkbox(name)
 
         if self.option_set then
             local value = Checkbox.option_sets[self.option_set][element.name]
-            local category = self.categorize and self.categorize(element)
-            self:set_store(category,value)
+            self:set_store(element,value)
 
         elseif self.store then
             local value = element.state
-            local category = self.categorize and self.categorize(element)
-            self:set_store(category,value)
+            self:set_store(element,value)
 
         else
             self:raise_event('on_element_update',event.player,element,element.state)
@@ -175,15 +170,15 @@ function Checkbox._prototype_radiobutton:set_store(category,value,internal)
 end
 
 --- Registers a new option set that can be linked to radiobuttons (only one can be true at a time)
--- @tparam string name the name of the option set, must be unique
 -- @tparam function callback the update callback when the value of the option set changes
 -- callback param - value string - the new selected option for this option set
 -- callback param - category string - the category that updated if categorize was used
 -- @tparam function categorize the function used to convert an element into a string
 -- @treturn string the name of this option set to be passed to add_as_option
-function Checkbox.new_option_set(name,callback,categorize)
+function Checkbox.new_option_set(callback,categorize)
+    local name = Store.register(categorize)
 
-    Store.register(name,function(value,category)
+    Store.watch(name,function(value,category)
         local options = Checkbox.option_sets[name]
         for opt_name,define_name in pairs(options) do
             if Gui.defines[define_name] then
