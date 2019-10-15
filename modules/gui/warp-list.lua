@@ -437,7 +437,7 @@ end)
 Warps.on_update(warp_list 'update_all')
 
 --- When the player leaves or enters range of a warp this is triggered
-Store.register(player_in_range_store,function(value,player_name)
+Store.watch(player_in_range_store,function(value,player_name)
     local player = game.players[player_name]
     local force = player.force
     local frame = warp_list:get_frame(player_name)

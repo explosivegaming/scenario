@@ -279,7 +279,7 @@ Gui.new_radiobutton('test-radiobutton-store')
 end)
 
 local radiobutton_option_set =
-Gui.new_radiobutton_option_set('gui.test.share',function(value,category)
+Gui.new_radiobutton_option_set(function(value,category)
     game.print('Radiobutton option set for: '..category..' is now: '..tostring(value))
 end,Gui.categorize_by_player)
 

@@ -47,8 +47,7 @@ local Dropdown = {
     _prototype=Prototype.extend{
         on_element_update = Prototype.event,
         on_store_update = Prototype.event,
-        add_store = Prototype.store(false,store_update),
-        add_sync_store = Prototype.store(true,store_update)
+        add_store = Prototype.store(store_update)
     }
 }
 
@@ -71,8 +70,7 @@ function Dropdown.new_dropdown(name)
         end
 
         if self.store then
-            local category = self.categorize and self.categorize(element) or nil
-            local value = self:get_store(category)
+            local value = self:get_store(element)
             if value then Dropdown.select_value(element,value) end
         end
     end)
@@ -82,8 +80,7 @@ function Dropdown.new_dropdown(name)
         local value = Dropdown.get_selected_value(element)
 
         if self.store then
-            local category = self.categorize and self.categorize(element) or value
-            self:set_store(category,value)
+            self:set_store(element,value)
 
         else
             local player = event.player

@@ -715,7 +715,7 @@
     <td class="summary">Sets the stored value of the radiobutton or the option set if present</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Checkbox.new_option_set">Checkbox.new_option_set(name, callback, categorize)</a></td>
+    <td class="name"><a href="#Checkbox.new_option_set">Checkbox.new_option_set(callback, categorize)</a></td>
     <td class="summary">Registers a new option set that can be linked to radiobuttons (only one can be true at a time)</td>
     </tr>
     <tr>
@@ -963,14 +963,14 @@
     </tr>
     <tr>
     <td class="name"><a href="#Instances.has_categories">Instances.has_categories(name)</a></td>
-    <td class="summary">Returns if a instance group has a categorise function; must be registered</td>
+    <td class="summary">Returns if a instance group has a serializer function; must be registered</td>
     </tr>
     <tr>
     <td class="name"><a href="#Instances.is_registered">Instances.is_registered(name)</a></td>
     <td class="summary">Returns if the given name is a registered instance group</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Instances.register">Instances.register(name[, categorise])</a></td>
+    <td class="name"><a href="#Instances.register">Instances.register(name[, serializer])</a></td>
     <td class="summary">Registers the name of an instance group to allow for storing element instances</td>
     </tr>
     <tr>
@@ -1019,7 +1019,7 @@
     <td class="summary">Extents a prototype with the base functions of all gui prototypes, no metatables</td>
     </tr>
     <tr>
-    <td class="name"><a href="#Constructor.store">Constructor.store(sync, callback)</a></td>
+    <td class="name"><a href="#Constructor.store">Constructor.store(callback)</a></td>
     <td class="summary">Creates a new function which adds a store to a gui define</td>
     </tr>
     <tr>
@@ -1077,15 +1077,15 @@
     </tr>
     <tr>
     <td class="name"><a href="#Prototype:get_store">Prototype:get_store(category)</a></td>
-    <td class="summary">Gets the value in this elements store, category needed if categorize function used</td>
+    <td class="summary">Gets the value in this elements store, category needed if serializer function used</td>
     </tr>
     <tr>
     <td class="name"><a href="#Prototype:set_store">Prototype:set_store(category, value)</a></td>
-    <td class="summary">Sets the value in this elements store, category needed if categorize function used</td>
+    <td class="summary">Sets the value in this elements store, category needed if serializer function used</td>
     </tr>
     <tr>
     <td class="name"><a href="#Prototype:clear_store">Prototype:clear_store([category])</a></td>
-    <td class="summary">Sets the value in this elements store to nil, category needed if categorize function used</td>
+    <td class="summary">Sets the value in this elements store to nil, category needed if serializer function used</td>
     </tr>
     </tbody>
     </table>
@@ -6301,7 +6301,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Checkbox.new_option_set" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Checkbox.new_option_set">Checkbox.new_option_set(name, callback, categorize)</span>
+    <span class="section-item-title" id="Checkbox.new_option_set">Checkbox.new_option_set(callback, categorize)</span>
     </div>
     </dt>
     <dd>
@@ -6314,22 +6314,6 @@
     <strong>Parameters:</strong>
 
     <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>name</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the name of the option set, must be unique
-
-    </li>
 
 
 
@@ -9067,7 +9051,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Returns if a instance group has a categorise function; must be registered</p>
+    <p class="section-item-summary">Returns if a instance group has a serializer function; must be registered</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -9101,7 +9085,7 @@
     <ul>
     <li>
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-    <span class="return-text">true if there is a categorise function</span>
+    <span class="return-text">true if there is a serializer function</span>
     </li>
     </ul>
     <!-- returns end -->
@@ -9175,7 +9159,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Instances.register" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Instances.register">Instances.register(name[, categorise])</span>
+    <span class="section-item-title" id="Instances.register">Instances.register(name[, serializer])</span>
     </div>
     </dt>
     <dd>
@@ -9211,15 +9195,15 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>categorise</em></strong>
+    <strong><em>serializer</em></strong>
 
     <strong> : </strong>
 
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
 
      function used to turn the element into a string
- categorise param - element LuaGuiElement - the gui element to be turned into a string
- categorise return - string - the category that the element will be added to like the player's name or force's name
+ serializer param - element LuaGuiElement - the gui element to be turned into a string
+ serializer return - string - the category that the element will be added to like the player's name or force's name
 
     (<em>optional</em>)
     </li>
@@ -9359,7 +9343,7 @@
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the category to get the instance from, not needed when no categorise function
+     the category to get the instance from, not needed when no serializer function
 
     (<em>optional</em>)
     </li>
@@ -9433,7 +9417,7 @@
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the category to get the instances of, not needed when no categorise function
+     the category to get the instances of, not needed when no serializer function
 
     (<em>optional</em>)
     </li>
@@ -9848,7 +9832,7 @@
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#Constructor.store" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="Constructor.store">Constructor.store(sync, callback)</span>
+    <span class="section-item-title" id="Constructor.store">Constructor.store(callback)</span>
     </div>
     </dt>
     <dd>
@@ -9861,22 +9845,6 @@
     <strong>Parameters:</strong>
 
     <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>sync</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
-
-     if the function should create a synced store
-
-    </li>
 
 
 
@@ -10666,7 +10634,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Gets the value in this elements store, category needed if categorize function used</p>
+    <p class="section-item-summary">Gets the value in this elements store, category needed if serializer function used</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -10723,7 +10691,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Sets the value in this elements store, category needed if categorize function used</p>
+    <p class="section-item-summary">Sets the value in this elements store, category needed if serializer function used</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -10796,7 +10764,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Sets the value in this elements store to nil, category needed if categorize function used</p>
+    <p class="section-item-summary">Sets the value in this elements store to nil, category needed if serializer function used</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -10987,7 +10955,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-10-13 00:25:15 UTC</i>
+    <i>Last updated 2019-10-15 22:37:40 UTC</i>
     </div>
     </div>
     </div>

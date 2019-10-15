@@ -27,9 +27,9 @@
     Prototype:raise_event(event_name,...) --- Raises a custom event for this define, any number of params can be given
     Prototype:draw_to(element,...) --- The main function for defines, when called will draw an instance of this define to the given element
 
-    Prototype:get_store(category) --- Gets the value in this elements store, category needed if categorize function used
-    Prototype:set_store(category,value) --- Sets the value in this elements store, category needed if categorize function used
-    Prototype:clear_store(category) --- Sets the value in this elements store to nil, category needed if categorize function used
+    Prototype:get_store(category) --- Gets the value in this elements store, category needed if serializer function used
+    Prototype:set_store(category,value) --- Sets the value in this elements store, category needed if serializer function used
+    Prototype:clear_store(category) --- Sets the value in this elements store to nil, category needed if serializer function used
 ]]
 local Game = require 'utils.game' --- @dep utils.game
 local Store = require 'expcore.store' --- @dep expcore.store
@@ -82,29 +82,22 @@ function Constructor.extend(new_prototype)
 end
 
 --- Creates a new function which adds a store to a gui define
--- @tparam boolean sync if the function should create a synced store
 -- @tparam function callback the function called when needing to update the value of an element
 -- @treturn function the function that will add a store for this define
-function Constructor.store(sync,callback)
-    --- Adds a store for the define that is shared between all instances of the define in the same category, categorize is a function that returns a string
+function Constructor.store(callback)
+    --- Adds a store for the define that is shared between all instances of the define in the same category, serializer is a function that returns a string
     -- @tparam self table the gui define being acted on
-    -- @tparam[opt] string location a unique location identifier, when omitted a uid location will be used, use when sync is set to true
-    -- @tparam[opt] function categorize function used to determine the category of a LuaGuiElement, when omitted all share one single category
-    -- categorize param - LuaGuiElement element - the element that needs to be converted
-    -- categorize return - string - a deterministic string that references to a category such as player name or force name
+    -- @tparam[opt] function serializer function used to determine the category of a LuaGuiElement, when omitted all share one single category
+    -- serializer param - LuaGuiElement element - the element that needs to be converted
+    -- serializer return - string - a deterministic string that references to a category such as player name or force name
     -- @treturn self the element define to allow chaining
-    return function(self,location,categorize)
+    return function(self,serializer)
         if self.store then return end
+        serializer = serializer or function() return '' end
 
-        if not sync then
-            categorize = location
-            location = Store.register()
-        end
+        self.store = Store.register(serializer)
 
-        self.store = location
-        self.categorize = categorize
-
-        Instances.register(self.name,self.categorize)
+        Instances.register(self.name,serializer)
 
         Store.watch(self.store,function(value,category)
             self:raise_event('on_store_update',value,category)
@@ -274,12 +267,12 @@ function Prototype:draw_to(element,...)
         Instances.add_element(self.name,new_element)
     end
 
-    self:raise_event('on_draw',player,new_element)
+    self:raise_event('on_draw',player,new_element,...)
 
     return new_element
 end
 
---- Gets the value in this elements store, category needed if categorize function used
+--- Gets the value in this elements store, category needed if serializer function used
 -- @tparam string category[opt] the category to get such as player name or force name
 -- @treturn any the value that is stored for this define
 function Prototype:get_store(category)
@@ -287,7 +280,7 @@ function Prototype:get_store(category)
     return Store.get(self.store,category)
 end
 
---- Sets the value in this elements store, category needed if categorize function used
+--- Sets the value in this elements store, category needed if serializer function used
 -- @tparam string category[opt] the category to get such as player name or force name
 -- @tparam any value the value to set for this define, must be valid for its type ie for checkbox etc
 -- @treturn boolean true if the value was set
@@ -296,7 +289,7 @@ function Prototype:set_store(category,value)
     return Store.set(self.store,category,value)
 end
 
---- Sets the value in this elements store to nil, category needed if categorize function used
+--- Sets the value in this elements store to nil, category needed if serializer function used
 -- @tparam[opt] string category the category to get such as player name or force name
 -- @treturn boolean true if the value was set
 function Prototype:clear_store(category)
