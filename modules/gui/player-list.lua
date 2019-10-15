@@ -13,26 +13,36 @@ local format_time = ext_require('expcore.common','format_time') --- @dep expcore
 local config = require 'config.action_buttons' --- @dep config.action_buttons
 local Colors = require 'resources.color_presets' --- @dep resources.color_presets
 
-local action_player_store = 'gui.left.player-list.action-player'
-local action_name_store = 'gui.left.player-list.action-name'
+-- Stores the name of the player a player has selected
+local selected_player_store = Store.register(function(player)
+    return player.name
+end)
 
---- used on player name label to allow zoom to map
+-- Stores the current action that a player wants to do
+local selected_action_store = Store.register(function(player)
+    return player.name
+end)
+
+-- Set the config to use these stores
+config.set_store_uids(selected_player_store,selected_action_store)
+
+--- Used to open the map on a player or toggle the settings
 local zoom_to_map_name = Gui.uid_name()
 Gui.on_click(zoom_to_map_name,function(event)
-    local action_player_name = event.element.caption
-    local action_player = Game.get_player_from_any(action_player_name)
+    local selected_player_name = event.element.caption
+    local selected_player = Game.get_player_from_any(selected_player_name)
     if event.button == defines.mouse_button_type.left then
-        -- lmb will zoom to map
-        local position = action_player.position
+        -- LMB will open the map to the selected player
+        local position = selected_player.position
         event.player.zoom_to_world(position,1.75)
     else
-        -- rmb will open settings
-        local player_name = event.player.name
-        local old_action_player_name = Store.get(action_player_store,player_name)
-        if action_player_name == old_action_player_name then
-            Store.clear(action_player_store,player_name) -- will close if already open
+        -- RMB will toggle the settings
+        local player = event.player
+        local old_selected_player_name = Store.get(selected_player_store,player)
+        if selected_player_name == old_selected_player_name then
+            Store.clear(selected_player_store,player)
         else
-            Store.set(action_player_store,player_name,action_player_name)
+            Store.set(selected_player_store,player,selected_player_name)
         end
     end
 end)
@@ -43,8 +53,8 @@ local open_action_bar =
 Gui.new_button()
 :set_sprites('utility/expand_dots_white')
 :set_tooltip{'player-list.open-action-bar'}
-:set_embedded_flow(function(element,action_player_name)
-    return action_player_name
+:set_embedded_flow(function(element,selected_player_name)
+    return selected_player_name
 end)
 :set_style('frame_button',function(style)
     Gui.set_padding_style(style,-2,-2,-2,-2)
@@ -52,12 +62,12 @@ end)
     style.height = 14
 end)
 :on_click(function(player,element)
-    local new_action_player_name = element.parent.name
-    local action_player_name = Store.get(action_player_store,player.name)
-    if action_player_name == new_action_player_name then
-        Store.clear(action_player_store,player.name) -- will close if already open
+    local selected_player_name = element.parent.name
+    local old_selected_player_name = Store.get(selected_player_store,player)
+    if selected_player_name == old_selected_player_name then
+        Store.clear(selected_player_store,player)
     else
-        Store.set(action_player_store,player.name,new_action_player_name)
+        Store.set(selected_player_store,player,selected_player_name)
     end
 end)
 
@@ -73,8 +83,8 @@ Gui.new_button()
     style.width = 28
 end)
 :on_click(function(player,element)
-    Store.clear(action_player_store,player.name)
-    Store.clear(action_name_store,player.name)
+    Store.clear(selected_player_store,player)
+    Store.clear(selected_action_store,player)
 end)
 
 --- Button used to confirm a reason
@@ -90,11 +100,11 @@ Gui.new_button()
 end)
 :on_click(function(player,element)
     local reason = element.parent.entry.text or 'Non Given'
-    local action_name = Store.get(action_name_store,player.name)
-    local reason_callback = config[action_name].reason_callback
+    local action_name = Store.get(selected_action_store,player)
+    local reason_callback = config.buttons[action_name].reason_callback
     reason_callback(player,reason)
-    Store.clear(action_player_store,player.name)
-    Store.clear(action_name_store,player.name)
+    Store.clear(selected_player_store,player)
+    Store.clear(selected_action_store,player)
     element.parent.entry.text = ''
 end)
 
@@ -143,7 +153,7 @@ local function generate_container(player,element)
     Gui.set_padding(reason_bar,-1,-1,3,3)
     reason_bar.style.horizontally_stretchable = true
     reason_bar.style.height = 35
-    local action_name = Store.get(action_name_store,player.name)
+    local action_name = Store.get(selected_action_store,player)
     reason_bar.visible = action_name ~= nil
 
     -- text entry for the reason bar
@@ -166,9 +176,9 @@ end
 --- Adds buttons and permission flows to the action bar
 local function generate_action_bar(player,element)
     close_action_bar(element)
-    local action_player = Store.get(action_player_store,player.name)
+    local selected_player_name = Store.get(selected_player_store,player)
 
-    for action_name,buttons in pairs(config) do
+    for action_name,buttons in pairs(config.buttons) do
         local permission_flow =
         element.add{
             type='flow',
@@ -183,12 +193,12 @@ local function generate_action_bar(player,element)
             permission_flow.visible = false
         end
 
-        if buttons.auth and action_player and not buttons.auth(player,action_player) then
+        if buttons.auth and selected_player_name and not buttons.auth(player,selected_player_name) then
             permission_flow.visible = false
         end
     end
 
-    if not action_player then
+    if not selected_player_name then
         element.visible = false
     end
 end
@@ -198,25 +208,30 @@ local player_list_name
 local function update_action_bar(player)
     local frame = Gui.classes.left_frames.get_frame(player_list_name,player)
     local element = frame.container.action_bar
-    local action_player_name = Store.get(action_player_store,player.name)
+    local selected_player_name = Store.get(selected_player_store,player)
 
-    if not action_player_name then
+    if not selected_player_name then
         element.visible = false
+
     else
-        local action_player = Game.get_player_from_any(action_player_name)
-        if not action_player.connected then
+        local selected_player = Game.get_player_from_any(selected_player_name)
+        if not selected_player.connected then
+            -- If the player is offline then reest stores
             element.visible = false
-            Store.clear(action_player_store,player.name) -- clears store if player is offline
-            Store.clear(action_name_store,player.name)
+            Store.clear(selected_player_store,player)
+            Store.clear(selected_action_store,player)
+
         else
+            -- Otherwise check what actions the player is allowed to use
             element.visible = true
-            for action_name,buttons in pairs(config) do
-                if buttons.auth and not buttons.auth(player,action_player) then
+            for action_name,buttons in pairs(config.buttons) do
+                if buttons.auth and not buttons.auth(player,selected_player) then
                     element[action_name].visible = false
                 elseif Roles.player_allowed(player,action_name) then
                     element[action_name].visible = true
                 end
             end
+
         end
     end
 end
@@ -323,10 +338,11 @@ end)
 player_list_name = player_list:uid()
 
 --- When the action player is changed the action bar will update
-Store.register(action_player_store,function(value,category)
-    local player = Game.get_player_from_any(category)
+Store.watch(selected_player_store,function(value,player_name)
+    local player = Game.get_player_from_any(player_name)
     update_action_bar(player)
 
+    -- Change the style of the option buttons
     local frame = player_list:get_frame(player)
     local data_table = frame.container.scroll.table
     for _,next_player in pairs(game.connected_players) do
@@ -343,21 +359,25 @@ Store.register(action_player_store,function(value,category)
 end)
 
 --- When the action name is changed the reason input will update
-Store.register(action_name_store,function(value,category)
-    local player = Game.get_player_from_any(category)
+Store.watch(selected_action_store,function(value,player_name)
+    local player = Game.get_player_from_any(player_name)
     local frame = Gui.classes.left_frames.get_frame(player_list_name,player)
     local element = frame.container.reason_bar
     if value then
-        local action_player_name = Store.get(action_player_store,category)
-        local action_player = Game.get_player_from_any(action_player_name)
-        if action_player.connected then
+        -- if there is a new value then check the player is still online
+        local selected_player_name = Store.get(selected_player_store,player_name)
+        local selected_player = Game.get_player_from_any(selected_player_name)
+        if selected_player.connected then
             element.visible = true
         else
-            Store.clear(action_player_store,category) -- clears store if player is offline
-            Store.clear(action_name_store,category)
+            -- Clear if the player is offline
+            Store.clear(selected_player_store,player_name)
+            Store.clear(selected_action_store,player_name)
         end
+
     else
         element.visible = false
+
     end
 end)
 

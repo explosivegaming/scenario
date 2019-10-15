@@ -1,6 +1,7 @@
 local Gui = require 'utils.gui' --- @dep utils.gui
-local Model = require 'modules.gui.debug.model' --- @dep modules.gui.debug.model
+local Store = require 'expcore.store' --- @dep utils.global
 local Color = require 'resources.color_presets' --- @dep resources.color_presets
+local Model = require 'modules.gui.debug.model' --- @dep modules.gui.debug.model
 
 local dump = Model.dump
 local dump_text = Model.dump_text
@@ -8,15 +9,13 @@ local concat = table.concat
 
 local Public = {}
 
-local ignore = {tokens = true, data_store = true}
-
 local header_name = Gui.uid_name()
 local left_panel_name = Gui.uid_name()
 local right_panel_name = Gui.uid_name()
 local input_text_box_name = Gui.uid_name()
 local refresh_name = Gui.uid_name()
 
-Public.name = 'global'
+Public.name = 'Store'
 
 function Public.show(container)
     local main_flow = container.add {type = 'flow', direction = 'horizontal'}
@@ -25,12 +24,9 @@ function Public.show(container)
     local left_panel_style = left_panel.style
     left_panel_style.width = 300
 
-    for key, _ in pairs(global) do
-        if not ignore[key] then
-            local header =
-                left_panel.add({type = 'flow'}).add {type = 'label', name = header_name, caption = tostring(key)}
-            Gui.set_data(header, key)
-        end
+    for store_id, token_name in pairs(Store.file_paths) do
+        local header = left_panel.add({type = 'flow'}).add {type = 'label', name = header_name, caption = store_id..' - '..token_name}
+        Gui.set_data(header, store_id)
     end
 
     local right_flow = main_flow.add {type = 'flow', direction = 'vertical'}
@@ -62,8 +58,7 @@ function Public.show(container)
     local data = {
         right_panel = right_panel,
         input_text_box = input_text_box,
-        selected_header = nil,
-        selected_token_id = nil
+        selected_header = nil
     }
 
     Gui.set_data(input_text_box, data)
@@ -75,7 +70,7 @@ Gui.on_click(
     header_name,
     function(event)
         local element = event.element
-        local key = Gui.get_data(element)
+        local store_id = Gui.get_data(element)
 
         local left_panel = element.parent.parent
         local data = Gui.get_data(left_panel)
@@ -90,10 +85,10 @@ Gui.on_click(
         element.style.font_color = Color.orange
         data.selected_header = element
 
-        input_text_box.text = concat {"global['", key, "']"}
+        input_text_box.text = concat {'global.data_store[', store_id, ']'}
         input_text_box.style.font_color = Color.black
 
-        local content = dump(global[key]) or 'nil'
+        local content = dump(Store.get(store_id)) or 'nil'
         right_panel.text = content
     end
 )

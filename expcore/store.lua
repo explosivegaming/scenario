@@ -50,12 +50,15 @@ local Store = {
     serializers = {},
     --- An array of watchers that stores will trigger, key is store uids
     -- @table watchers
-    watchers = {}
+    watchers = {},
+    --- An index used for debuging to find the file where different stores where registered
+    -- @table file_paths
+    file_paths = {}
 }
 
 -- All data is stored in global.data_store and is accessed here with data_store
 local data_store = {}
-global.data_store = {}
+global.data_store = data_store
 Event.on_load(function()
     data_store = global.data_store
 end)
@@ -95,15 +98,17 @@ function Store.validate(store,key,error_stack)
         -- Key is present and so it is serialized and returned
         local serializer = Store.serializers[store]
         if type(key) ~= 'string' then
-            local success, key = pcall(serializer,key)
+            local success, serialized_key = pcall(serializer,key)
 
             if not success then
                 -- Serializer casued an error while serializing the key
                 error('Store watcher casued an error:\n\t'..key,error_stack+1)
-            elseif type(key) ~= 'string' then
+            elseif type(serialized_key) ~= 'string' then
                 -- Serializer was successful but failed to return a string value
                 error('Store key serializer did not return a string; recived type '..type(key),error_stack+1)
             end
+
+            return serialized_key
         end
 
         return key
@@ -138,6 +143,10 @@ function Store.register(serializer)
     if serializer then
         Store.serializers[uid] = serializer
     end
+
+    -- Add entry in the debug table
+    local file_path = debug.getinfo(2, 'S').source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+    Store.file_paths[uid] = file_path
 
     -- Return the new uid
     return uid
