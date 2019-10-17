@@ -277,7 +277,9 @@ function Store.clear(store,key)
 
     -- Check if there is a key being used
     if key then
-        data_store[store][key] = nil
+        if type(data_store[store]) == 'table' then
+            data_store[store][key] = nil
+        end
     else
         data_store[store] = nil
     end

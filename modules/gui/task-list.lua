@@ -326,7 +326,7 @@ Tasks.on_update(function(task,task_id)
     local players
     if task then
         local force = game.forces[task.force_name]
-        players = force.players
+        players = force.connected_players
     else
         players = game.connected_players
     end
@@ -337,6 +337,9 @@ Tasks.on_update(function(task,task_id)
         generate_task(player,element,task_id)
     end
 end)
+
+--- Update the tasks when the player joins
+Event.add(defines.events.on_player_joined_game,task_list 'redraw')
 
 --- Makes sure the right buttons are present when roles change
 Event.add(Roles.events.on_role_assigned,task_list 'redraw')
