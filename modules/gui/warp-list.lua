@@ -434,7 +434,38 @@ end)
 end)
 
 --- When the name of a warp is updated this is triggered
-Warps.on_update(warp_list 'update_all')
+Warps.on_update(function(warp)
+    local players
+    local force_name
+    if warp then
+        local force = game.forces[warp.force_name]
+        players = force.connected_players
+        force_name = warp.force_name
+    else
+        players = game.connected_players
+    end
+
+    -- Update the gui for selected players
+    local force_warps = {}
+    for _,player in pairs(players) do
+        local frame = warp_list:get_frame(player)
+        local element = frame.container.scroll.table
+
+        -- Get the warp ids for the players force
+        force_name = force_name or player.force.name
+        local warp_ids = force_warps[force_name]
+        if not warp_ids then
+            warp_ids = Warps.get_force_warp_ids(force_name)
+            force_warps[force_name] = warp_ids
+        end
+
+        -- Update the gui
+        element.clear()
+        for _,warp_id in ipairs(warp_ids) do
+            generate_warp(player,element,warp_id)
+        end
+    end
+end)
 
 --- Update the warps when the player joins
 Event.add(defines.events.on_player_joined_game,warp_list 'redraw')
