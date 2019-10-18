@@ -304,14 +304,14 @@ function Warps.add_warp(force_name,surface,position,player_name,warp_name)
     warp_name = warp_name or 'New warp'
 
     -- Get the existing warps for this force
-    local warps = force_warps[force_name]
-    if not warps then
-        force_warps[force_name] = {}
-        warps = force_warps[force_name]
+    local warp_ids = force_warps[force_name]
+    if not warp_ids then
+        warp_ids = {}
+        force_warps[force_name] = warp_ids
     end
 
     -- Insert the warp id into the force warps
-    table.insert(warps,warp_id)
+    table.insert(warp_ids,warp_id)
 
     -- Create the editing table
     local editing = {}

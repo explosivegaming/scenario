@@ -94,7 +94,7 @@ end)
     Warps.teleport_player(warp_id,player)
 
     -- Reset the warp cooldown if the player does not have unlimited warps
-    if config.bypass_warp_limits_permision and not Roles.player_allowed(player,config.bypass_warp_limits_permision) then
+    if config.bypass_warp_limits_permission and not Roles.player_allowed(player,config.bypass_warp_limits_permission) then
         warp_timer:set_store(player.name,0)
         Store.trigger(player_in_range_store,player)
     end
@@ -434,7 +434,43 @@ end)
 end)
 
 --- When the name of a warp is updated this is triggered
-Warps.on_update(warp_list 'update_all')
+Warps.on_update(function(warp)
+    local players
+    local force_name
+    if warp then
+        local force = game.forces[warp.force_name]
+        players = force.connected_players
+        force_name = warp.force_name
+    else
+        players = game.connected_players
+    end
+
+    -- Update the gui for selected players
+    local force_warps = {}
+    for _,player in pairs(players) do
+        local frame = warp_list:get_frame(player)
+        local element = frame.container.scroll.table
+
+        -- Get the warp ids for the players force
+        force_name = force_name or player.force.name
+        local warp_ids = force_warps[force_name]
+        if not warp_ids then
+            warp_ids = Warps.get_force_warp_ids(force_name)
+            force_warps[force_name] = warp_ids
+        end
+
+        -- Update the gui
+        element.clear()
+        for _,warp_id in ipairs(warp_ids) do
+            generate_warp(player,element,warp_id)
+        end
+    end
+end)
+
+--- Update the warps when the player joins
+Event.add(defines.events.on_player_joined_game,warp_list 'redraw')
+Event.add(Roles.events.on_role_assigned,warp_list 'redraw')
+Event.add(Roles.events.on_role_unassigned,warp_list 'redraw')
 
 --- When the player leaves or enters range of a warp this is triggered
 Store.watch(player_in_range_store,function(value,player_name)
@@ -459,7 +495,7 @@ Store.watch(player_in_range_store,function(value,player_name)
         if element and element.valid then
             element.enabled = state
             if state then
-                local position = Warps.get_details(warp_id).position
+                local position = Warps.get_warp(warp_id).position
                 element.tooltip = {'warp-list.goto-tooltip',position.x,position.y}
             else
                 element.tooltip = {'warp-list.goto-disabled'}
@@ -483,7 +519,7 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing),function()
         local was_in_range = Store.get(player_in_range_store,player)
 
         -- Get the ids of all the warps on the players force
-        local force_name = player.force
+        local force_name = player.force.name
         local warp_ids = force_warps[force_name]
         if not warp_ids then
             warp_ids = Warps.get_force_warp_ids(force_name)
@@ -497,11 +533,11 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing),function()
             local px,py = pos.x,pos.y
 
             -- Loop over each warp
-            for _,warp_id in pairs(warp_ids) do
+            for _,warp_id in ipairs(warp_ids) do
                 -- Check if warp id is chached
                 local warp = warps[warp_id]
                 if not warp then
-                    warp = Warps.get(warp_id)
+                    warp = Warps.get_warp(warp_id)
                     warps[warp_id] = warp
                 end
 
@@ -509,11 +545,12 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing),function()
                 local warp_pos = warp.position
                 if warp.surface == surface then
                     local dx, dy = px-warp_pos.x, py-warp_pos.y
-                    if (dx*dx)+(dy*dy) < rs2 or (dx*dx)+(dy*dy) < r2 then
+                    if (warp_id == warp_ids.spawn and (dx*dx)+(dy*dy) < rs2) or (dx*dx)+(dy*dy) < r2 then
                         -- Set in range to true if the player was preiovusly out of range
                         if not was_in_range then
                             Store.set(player_in_range_store,player,true)
                         end
+                        was_in_range = false -- stops setting back to false below
                         break
                     end
                 end
