@@ -44,18 +44,20 @@ Explosive Gaming (often ExpGaming) is a server hosting community with a strong f
 
 ## Contributing
 
-All are welcome to make pull requests and issues for this scenario, if you are in any doubt please ask someone in our [discord]. If you do not know lua and don't feel like learning you can always make a [feature request]. Please keep in mind while making code changes:
+All are welcome to make pull requests and issues for this scenario, if you are in any doubt please ask someone in our [discord]. If you do not know lua and don't feel like learning you can always make a [feature request]. All our docs can be found [here][docs]. Please keep in mind while making code changes:
 
 * New features should have the branch names: `feature/feature-name`
-* New features are merged into `dev` after it has been completed.
-* After a number of features have been added a release branch is made: `release/X.Y.0`; this branch should have no new features and only bug fixes or localization.
-* A release is merged into `master` on the following friday in time for the the weekly reset.
-* Patches may be named `patch/X.Y.Z` and fill be merged into `master` and `dev` when appropriate.
+* New features are merged into `dev` after it has been completed, this can be done through a pull request.
+* After a number of features have been added a release branch is made: `release/X.Y.0`
+* Bug fixes and localization can be made to the release branch with a pull request rather than into dev.
+* A release is merged into `master` on the following friday after it is considered stable.
+* Patches may be named `patch/X.Y.Z` and will be merged into `dev` and then `master` when appropriate.
 
 ## Releases
 
 | Scenario Version* | Version Name | Factorio Version** |
 |---|---|---|
+| [v5.10][s5.10] | Data Store Rewrite | [v0.17.71][f0.17.71] |
 | [v5.9][s5.9] | Control Modules and Documentation | [v0.17.63][f0.17.63] |
 | [v5.8][s5.8] | Home and Chat Bot | [v0.17.47][f0.17.49] |
 | [v5.7][s5.7] | Warp System | [v0.17.47][f0.17.47] |
@@ -76,6 +78,7 @@ All are welcome to make pull requests and issues for this scenario, if you are i
 
 \*\* Factorio versions show the version they were made for, often the minimum requirement.
 
+[s5.10]: https://github.com/explosivegaming/scenario/releases/tag/5.10.0
 [s5.9]: https://github.com/explosivegaming/scenario/releases/tag/5.9.0
 [s5.8]: https://github.com/explosivegaming/scenario/releases/tag/5.8.0
 [s5.7]: https://github.com/explosivegaming/scenario/releases/tag/5.7.0
@@ -92,6 +95,7 @@ All are welcome to make pull requests and issues for this scenario, if you are i
 [s1.0]: https://github.com/explosivegaming/scenario/releases/tag/v1.0
 [s0.1]: https://github.com/explosivegaming/scenario/releases/tag/v0.1
 
+[f0.17.71]: https://wiki.factorio.com/Version_history/0.17.0#0.17.71
 [f0.17.63]: https://wiki.factorio.com/Version_history/0.17.0#0.17.63
 [f0.17.49]: https://wiki.factorio.com/Version_history/0.17.0#0.17.49
 [f0.17.47]: https://wiki.factorio.com/Version_history/0.17.0#0.17.47
@@ -111,6 +115,7 @@ All are welcome to make pull requests and issues for this scenario, if you are i
 
 The Explosive Gaming codebase is licensed under the [GNU General Public License v3.0](LICENSE)
 
+[docs]: https://explosivegaming.github.io/scenario/
 [issues]: https://github.com/explosivegaming/scenario/issues/new/choose
 [website]: https://explosivegaming.nl
 [discord]: https://discord.explosivegaming.nl

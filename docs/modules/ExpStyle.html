@@ -5,7 +5,7 @@
     <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>utils.table module</title>
+    <title>ExpStyle module</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
     <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
@@ -42,8 +42,8 @@
     <h2>Sections</h2>
     <ul class="nav">
     <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
+    <li class="nav-item"><a href="#Elements"><span class="fragment-hashtag">#</span> Elements</a></li>
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
-    <li class="nav-item"><a href="#Fields"><span class="fragment-hashtag">#</span> Fields</a></li>
     </ul>
     </li>
     </ul>
@@ -52,6 +52,8 @@
     <h2>Modules</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/control.html"><span class="module-name-item">control</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/tesrt.html"><span class="module-name-item">tesrt</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/ExpStyle.html"><span class="module-name-item">ExpStyle</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.alien_evolution_progress.html"><span class="module-name-item">utils.alien_evolution_progress</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.core.html"><span class="module-name-item">utils.core</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.debug.html"><span class="module-name-item">utils.debug</span></a></div></li>
@@ -61,7 +63,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.math.html"><span class="module-name-item">utils.math</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.recipe_locker.html"><span class="module-name-item">utils.recipe_locker</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.state_machine.html"><span class="module-name-item">utils.state_machine</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../modules/utils.table.html"><span class="module-name-item">utils.table</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.table.html"><span class="module-name-item">utils.table</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.task.html"><span class="module-name-item">utils.task</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.timestamp.html"><span class="module-name-item">utils.timestamp</span></a></div></li>
     </ul>
@@ -74,24 +76,12 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Commands.html"><span class="module-name-item">Commands</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Common-Library.html"><span class="module-name-item">Common-Library</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Gui.html"><span class="module-name-item">Gui</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../core/ExpStyle.html"><span class="module-name-item">ExpStyle</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Permissions-Groups.html"><span class="module-name-item">Permissions-Groups</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Roles.html"><span class="module-name-item">Roles</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Store.html"><span class="module-name-item">Store</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Sudo.html"><span class="module-name-item">Sudo</span></a></div></li>
-    </ul>
-    </li>
-    </ul>
-    <ul class="nav nav-modules">
-    <li class="nav-item">
-    <h2>Control</h2>
-    <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Rockets.html"><span class="module-name-item">Rockets</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Tasks.html"><span class="module-name-item">Tasks</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warps.html"><span class="module-name-item">Warps</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Toolbar.html"><span class="module-name-item">Toolbar</span></a></div></li>
     </ul>
     </li>
     </ul>
@@ -110,18 +100,6 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Player-Colours.html"><span class="module-name-item">Player-Colours</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Scorched-Earth.html"><span class="module-name-item">Scorched-Earth</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Spawn-Area.html"><span class="module-name-item">Spawn-Area</span></a></div></li>
-    </ul>
-    </li>
-    </ul>
-    <ul class="nav nav-modules">
-    <li class="nav-item">
-    <h2>Guis</h2>
-    <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Player-List.html"><span class="module-name-item">Player-List</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Rocket-Info.html"><span class="module-name-item">Rocket-Info</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Science-Info.html"><span class="module-name-item">Science-Info</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Task-List.html"><span class="module-name-item">Task-List</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Warps-List.html"><span class="module-name-item">Warps-List</span></a></div></li>
     </ul>
     </li>
     </ul>
@@ -149,6 +127,32 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Tag.html"><span class="module-name-item">Tag</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Teleport.html"><span class="module-name-item">Teleport</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Rockets.html"><span class="module-name-item">Rockets</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Tasks.html"><span class="module-name-item">Tasks</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warps.html"><span class="module-name-item">Warps</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Guis</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Player-List.html"><span class="module-name-item">Player-List</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Rocket-Info.html"><span class="module-name-item">Rocket-Info</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Science-Info.html"><span class="module-name-item">Science-Info</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Task-List.html"><span class="module-name-item">Task-List</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Warps-List.html"><span class="module-name-item">Warps-List</span></a></div></li>
     </ul>
     </li>
     </ul>
@@ -204,8 +208,8 @@
     <h4>Jump to Section</h4>
     <ul class="nav">
     <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
+    <li class="nav-item"><a href="#Elements"><span class="fragment-hashtag">#</span> Elements</a></li>
     <li class="nav-item"><a href="#Functions"><span class="fragment-hashtag">#</span> Functions</a></li>
-    <li class="nav-item"><a href="#Fields"><span class="fragment-hashtag">#</span> Fields</a></li>
     </ul>
     </li>
     </ul>
@@ -224,8 +228,8 @@
 
     <!-- module content header start -->
 
-    <h2><span class="body-module-name"><strong><em>utils.table</em></strong></span> module</h2>
-    <p>Searches a table to remove a specific element without an index</p>
+    <h2><span class="body-module-name"><strong><em>ExpStyle</em></strong></span> module</h2>
+    <p>Core Module - ExpStyle</p>
     <p></p>
 
 
@@ -245,7 +249,95 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#utils.inspect">utils.inspect</a></td>
+    <td class="name"><a href="#expcore.gui">expcore.gui</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#gui.concept.frame">gui.concept.frame</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.gui">expcore.gui</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#gui.concept.frame">gui.concept.frame</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.gui">expcore.gui</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#gui.concept.table">gui.concept.table</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.gui">expcore.gui</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#gui.concept.table">gui.concept.table</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.gui">expcore.gui</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#gui.concept.table">gui.concept.table</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#gui.concept.scroll">gui.concept.scroll</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.gui">expcore.gui</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.common">expcore.common</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.gui">expcore.gui</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#gui.concept.table">gui.concept.table</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.gui">expcore.gui</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#gui.concept.frame">gui.concept.frame</a></td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Elements">Elements</a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#container">container</a></td>
+    <td class="summary">A container frame that can be used to add a boader around your content</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#data_label">data_label</a></td>
+    <td class="summary">A label pair which has a static label and a data label which can be changed</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#footer">footer</a></td>
+    <td class="summary">A frame that acts as a footer to a section of content</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#header">header</a></td>
+    <td class="summary">A frame that acts as a header to a section of content</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#scroll_table">scroll_table</a></td>
+    <td class="summary">A table that is inside a vertical scroll area</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#time_label">time_label</a></td>
+    <td class="summary">A label that show time in a nice, user friendly way</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#toggle_button">toggle_button</a></td>
+    <td class="summary">A button that will toggle its caption each time it is pressed</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#unit_label">unit_label</a></td>
+    <td class="summary">A label triplet which has a static label, a data label which can be changed, and a unit label</td>
     </tr>
     </tbody>
     </table>
@@ -256,80 +348,8 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#fast_remove">fast_remove(tbl, index)</a></td>
-    <td class="summary">Removes an item from an array in O(1) time.</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#add_all">add_all(t1, t2)</a></td>
-    <td class="summary">Adds the contents of table t2 to table t1</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#index_of">index_of(t, e)</a></td>
-    <td class="summary">Checks if a table contains an element</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#index_of_in_array">index_of_in_array(t, e)</a></td>
-    <td class="summary">Checks if the arrayed portion of a table contains an element</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#contains">contains(t, e)</a></td>
-    <td class="summary">Checks if a table contains an element</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#array_contains">array_contains(t, e)</a></td>
-    <td class="summary">Checks if the arrayed portion of a table contains an element</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#set">set(t, index, element)</a></td>
-    <td class="summary">Adds an element into a specific index position while shuffling the rest down</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#get_random_dictionary_entry">get_random_dictionary_entry(t, key)</a></td>
-    <td class="summary">Chooses a random entry from a table
- because this uses math.random, it cannot be used outside of events</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#get_random_weighted">get_random_weighted(weighted_table, item_index, weight_index)</a></td>
-    <td class="summary">Chooses a random entry from a weighted table
- because this uses math.random, it cannot be used outside of events</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#shuffle_table">shuffle_table(t, rng)</a></td>
-    <td class="summary">Creates a fisher-yates shuffle of a sequential number-indexed table
- because this uses math.random, it cannot be used outside of events if no rng is supplied
- from: http://www.sdknews.com/cross-platform/corona/tutorial-how-to-shuffle-table-items</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#clear_table">clear_table(t, array)</a></td>
-    <td class="summary">Clears all existing entries in a table</td>
-    </tr>
-    </tbody>
-    </table>
-    <table class="section-content-list">
-    <thead>
-    <h3><a href="#Fields">Fields</a></h3>
-    <span></span>
-    </thead>
-    <tbody>
-    <tr>
-    <td class="name"><a href="#inspect">inspect</a></td>
-    <td class="summary">Similar to serpent.block, returns a string with a pretty representation of a table.</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#size">size</a></td>
-    <td class="summary">Takes a table and returns the number of entries in the table.</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#deep_copy">deep_copy</a></td>
-    <td class="summary">Creates a deepcopy of a table.</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#merge">merge</a></td>
-    <td class="summary">Merges multiple tables.</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#equals">equals</a></td>
-    <td class="summary">Determines if two tables are structurally equal.</td>
+    <td class="name"><a href="#time_label:update_time">time_label:update_time(element, time)</a></td>
+    <td class="summary">Updates the time that is on a label</td>
     </tr>
     </tbody>
     </table>
@@ -343,8 +363,408 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#utils.inspect" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="utils.inspect">utils.inspect</span>
+    <a href="#expcore.gui" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.gui">expcore.gui</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#gui.concept.frame" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="gui.concept.frame">gui.concept.frame</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.gui" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.gui">expcore.gui</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#gui.concept.frame" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="gui.concept.frame">gui.concept.frame</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.gui" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.gui">expcore.gui</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#gui.concept.table" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="gui.concept.table">gui.concept.table</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.gui" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.gui">expcore.gui</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#gui.concept.table" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="gui.concept.table">gui.concept.table</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.gui" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.gui">expcore.gui</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#gui.concept.table" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="gui.concept.table">gui.concept.table</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#gui.concept.scroll" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="gui.concept.scroll">gui.concept.scroll</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.gui" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.gui">expcore.gui</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.common" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.common">expcore.common</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.gui" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.gui">expcore.gui</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#gui.concept.table" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="gui.concept.table">gui.concept.table</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.gui" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.gui">expcore.gui</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#gui.concept.frame" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="gui.concept.frame">gui.concept.frame</span>
     </div>
     </dt>
     <dd>
@@ -366,464 +786,488 @@
 
     </dd>
     </dl>
+    <h3><span id="Elements" class="section-title"><a href="#Elements">Elements</a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#container" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="container">container</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">A container frame that can be used to add a boader around your content</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <strong>See also:</strong>
+    <ul>
+    <li><a href="../modules/ExpStyle.html#gui.concept.frame">frame</a></li>
+    </ul>
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Concept Structure
+</span><span class="comment">-- Root
+</span><span class="comment">--&gt; [container] - the outer frame
+</span><span class="comment">--&gt;&gt; container - the content area
+</span>Gui.new_concept(<span class="string">'container'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#data_label" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="data_label">data_label</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">A label pair which has a static label and a data label which can be changed</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <strong>See also:</strong>
+    <ul>
+    <li><a href="../core/Gui.html#label">Gui.label</a></li>
+    </ul>
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Concept Structure
+</span><span class="comment">-- Root
+</span><span class="comment">--&gt; [data_label] - the static label
+</span><span class="comment">--&gt; [properties.data_name] - the data label which can be updated
+</span>Gui.new_concept(<span class="string">'data_label'</span>)
+:set_data_label_name(<span class="string">'game_ticks'</span>)
+:set_data_caption(<span class="string">'0'</span>)
+:set_data_format(<span class="keyword">function</span>(concept,element,data,...)
+    <span class="comment">-- This is used with update_data_element and update_from_parent
+</span>    <span class="keyword">local</span> caption = tostirng(<span class="string">'data'</span>)
+    <span class="keyword">local</span> tooltip = <span class="string">'This game has beeing running for: '</span>..caption..<span class="string">' ticks'</span>
+    <span class="keyword">return</span> caption, tooltip
+<span class="keyword">end</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#footer" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="footer">footer</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">A frame that acts as a footer to a section of content</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Properties / Events:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>tooltip</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the tooltip to show on the title
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <strong>See also:</strong>
+    <ul>
+    <li><a href="../modules/ExpStyle.html#gui.concept.frame">frame</a></li>
+    </ul>
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Concept Structure
+</span><span class="comment">-- Root
+</span><span class="comment">--&gt; [footer] - the footer frame
+</span><span class="comment">--&gt;&gt; footer_caption - the lable with the title in it
+</span><span class="comment">--&gt;&gt; footer_content - the area to contain butons
+</span>Gui.new_concept(<span class="string">'footer'</span>)
+:set_title(<span class="string">'Example Footer'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#header" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="header">header</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">A frame that acts as a header to a section of content</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Properties / Events:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>tooltip</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the tooltip to show on the title
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <strong>See also:</strong>
+    <ul>
+    <li><a href="../modules/ExpStyle.html#gui.concept.frame">frame</a></li>
+    </ul>
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Concept Structure
+</span><span class="comment">-- Root
+</span><span class="comment">--&gt; [header] - the header frame
+</span><span class="comment">--&gt;&gt; header_caption - the lable with the title in it
+</span><span class="comment">--&gt;&gt; header_content - the area to contain butons
+</span>Gui.new_concept(<span class="string">'header'</span>)
+:set_title(<span class="string">'Example Header'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#scroll_table" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="scroll_table">scroll_table</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">A table that is inside a vertical scroll area</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Properties / Events:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>hight</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the max hight of the scroll area
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <strong>See also:</strong>
+    <ul>
+    <li><a href="https://www.lua.org/pil/2.5.html">table</a></li>
+    </ul>
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Concept Structure
+</span><span class="comment">-- Root
+</span><span class="comment">--&gt; [scroll_table] - the scroll area
+</span><span class="comment">--&gt;&gt; table - the table area
+</span>Gui.new_concept(<span class="string">'scroll_table'</span>)
+:set_height(<span class="number">200</span>)
+:set_column_count(<span class="number">2</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#time_label" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="time_label">time_label</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">A label that show time in a nice, user friendly way</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Properties / Events:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>time</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the time to display in tick
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Concept Structure
+</span><span class="comment">-- Root
+</span><span class="comment">--&gt; [time_label] - the label with the time
+</span><span class="keyword">local</span> time_label =
+Gui.new_concept(<span class="string">'time_label'</span>)
+:set_use_hours(<span class="keyword">true</span>)
+:set_time(game.tick)
+
+time_label:update_time(element,game.tick)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#toggle_button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="toggle_button">toggle_button</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">A button that will toggle its caption each time it is pressed</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Properties / Events:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>alt_caption</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the caption to show on the button in its true state
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>alt_tooltip</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the tooltip to show on the button in its true state
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <strong>See also:</strong>
+    <ul>
+    <li><a href="../core/Gui.html#button">Gui.button</a></li>
+    </ul>
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Concept Structure
+</span><span class="comment">-- Root
+</span><span class="comment">--&gt; [toggle_button] - the header button
+</span>Gui.new_concept(<span class="string">'toggle_button'</span>)
+:set_caption(<span class="string">'&lt;'</span>)
+:set_tooltip(<span class="string">'Press to close.'</span>)
+:set_alt_caption(<span class="string">'&gt;'</span>)
+:set_alt_tooltip(<span class="string">'Press to open.'</span>)
+:on_click(<span class="keyword">function</span>(event)
+    <span class="keyword">local</span> state = event.state <span class="keyword">and</span> <span class="string">'close'</span> <span class="keyword">or</span> <span class="string">'open'</span>
+    event.player.<span class="global">print</span>(<span class="string">'Toggle button is now: '</span>..state)
+<span class="keyword">end</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#unit_label" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="unit_label">unit_label</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">A label triplet which has a static label, a data label which can be changed, and a unit label</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <strong>See also:</strong>
+    <ul>
+    <li><a href="../core/Gui.html#label">Gui.label</a></li>
+    <li><a href="../modules/ExpStyle.html#data_label">data_label</a></li>
+    </ul>
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Concept Structure
+</span><span class="comment">-- Root
+</span><span class="comment">--&gt; [unit_label] - the static label
+</span><span class="comment">--&gt; [properties.data_name] - the data label which can be updated
+</span><span class="comment">--&gt; [properties.data_name..'_unit'] - the data label unit which can be updated
+</span>Gui.new_concept(<span class="string">'unit_label'</span>)
+:set_data_label_name(<span class="string">'game_ticks'</span>)
+:set_data_caption(<span class="string">'0'</span>)
+:set_data_unit(<span class="string">'ticks'</span>)
+:set_data_format(<span class="keyword">function</span>(concept,element,data,...)
+    <span class="comment">-- This is used with update_data_element and update_from_parent
+</span>    <span class="keyword">local</span> caption = tostirng(data)
+    <span class="keyword">local</span> unit = data &gt; <span class="number">1</span> <span class="keyword">and</span> <span class="string">'ticks'</span> <span class="keyword">or</span> <span class="string">'tick'</span>
+    <span class="keyword">local</span> tooltip = <span class="string">'This game has beeing running for: '</span>..caption..<span class="string">' ticks'</span>
+    <span class="keyword">return</span> caption, unit, tooltip
+<span class="keyword">end</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    </dl>
     <h3><span id="Functions" class="section-title"><a href="#Functions">Functions</a></span></h3>
     <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#fast_remove" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="fast_remove">fast_remove(tbl, index)</span>
+    <a href="#time_label:update_time" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="time_label:update_time">time_label:update_time(element, time)</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Removes an item from an array in O(1) time.</p>
-    <p class="section-item-description">
- The catch is that fast_remove doesn't guarantee to maintain the order of items in the array.</p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>tbl</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> arrayed table
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>index</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> Must be >= 0. The case where index > #tbl is handled.
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#add_all" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="add_all">add_all(t1, t2)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Adds the contents of table t2 to table t1</p>
+    <p class="section-item-summary">Updates the time that is on a label</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
     <strong>Parameters:</strong>
 
     <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t1</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to insert into
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t2</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to insert from
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#index_of" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="index_of">index_of(t, e)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Checks if a table contains an element</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    <span class="return-text"><any> the index of the element or nil</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#index_of_in_array" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="index_of_in_array">index_of_in_array(t, e)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Checks if the arrayed portion of a table contains an element</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    <span class="return-text"><number|nil> the index of the element or nil</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#contains" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="contains">contains(t, e)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Checks if a table contains an element</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    <span class="return-text"><boolean> indicating success</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#array_contains" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="array_contains">array_contains(t, e)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Checks if the arrayed portion of a table contains an element</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>e</em></strong>
-
-    <strong> : </strong>
-
-
-     <any> table element
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    <span class="return-text"><boolean> indicating success</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#set" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="set">set(t, index, element)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Adds an element into a specific index position while shuffling the rest down</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to add into
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>index</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> the position in the table to add to
-
-    </li>
 
 
 
@@ -835,58 +1279,9 @@
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
 
-     <any> to add to the table
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#get_random_dictionary_entry" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_random_dictionary_entry">get_random_dictionary_entry(t, key)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Chooses a random entry from a table
- because this uses math.random, it cannot be used outside of events</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
+     the label that you want to update
 
     </li>
 
@@ -896,170 +1291,13 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>key</em></strong>
+    <strong><em>time</em></strong>
 
     <strong> : </strong>
 
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
 
-     <boolean> to indicate whether to return the key or value
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    <span class="return-text"><any> a random element of table t</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#get_random_weighted" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="get_random_weighted">get_random_weighted(weighted_table, item_index, weight_index)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Chooses a random entry from a weighted table
- because this uses math.random, it cannot be used outside of events</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>weighted_table</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> of tables with items and their weights
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>item_index</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> of the index of items, defaults to 1
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>weight_index</em></strong>
-
-    <strong> : </strong>
-
-
-     <number> of the index of the weights, defaults to 2
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <strong>Returns:</strong>
-    <ul>
-    <li>
-    <span class="return-text"><any> table element</span>
-    </li>
-    </ul>
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#shuffle_table" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="shuffle_table">shuffle_table(t, rng)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Creates a fisher-yates shuffle of a sequential number-indexed table
- because this uses math.random, it cannot be used outside of events if no rng is supplied
- from: http://www.sdknews.com/cross-platform/corona/tutorial-how-to-shuffle-table-items</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to shuffle
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>rng</em></strong>
-
-    <strong> : </strong>
-
-
-     <function> to provide random numbers
+     the number of tick you want it to show
 
     </li>
 
@@ -1076,330 +1314,9 @@
     <!-- see also end -->
 
     <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#clear_table" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="clear_table">clear_table(t, array)</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Clears all existing entries in a table</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <strong>Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>t</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> to clear
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>array</em></strong>
-
-    <strong> : </strong>
-
-
-     <boolean> to indicate whether the table is an array or not
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    </dl>
-    <h3><span id="Fields" class="section-title"><a href="#Fields">Fields</a></span></h3>
-    <dl class="section-body-container">
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#inspect" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="inspect">inspect</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Similar to serpent.block, returns a string with a pretty representation of a table.</p>
-    <p class="section-item-description">
- Notice: This method is not appropriate for saving/restoring tables. It is meant to be used by the programmer mainly while debugging a program.
- depth sets the maximum depth that will be printed out. When the max depth is reached, inspect will stop parsing tables and just return {...}
- process is a function which allow altering the passed object before transforming it into a string.
- A typical way to use it would be to remove certain values so that they don't appear at all.
- return <string> the prettied table</p>
-
-    <!-- parameters start -->
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-module-field-li">
-
-    <strong><em>table</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> the table to serialize
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-module-field-li">
-
-    <strong><em>options</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> options are depth, newline, indent, process
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#size" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="size">size</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Takes a table and returns the number of entries in the table.</p>
-    <p class="section-item-description"> (Slower than #table, faster than iterating via pairs)</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#deep_copy" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="deep_copy">deep_copy</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Creates a deepcopy of a table.</p>
-    <p class="section-item-description"> Metatables and LuaObjects inside the table are shallow copies.
- Shallow copies meaning it copies the reference to the object instead of the object itself.</p>
-
-    <!-- parameters start -->
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-module-field-li">
-
-    <strong><em>object</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> the object to copy
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#merge" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="merge">merge</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Merges multiple tables.</p>
-    <p class="section-item-description"> Tables later in the list will overwrite entries from tables earlier in the list.
- Ex. merge({{1, 2, 3}, {[2] = 0}, {[3] = 0}}) will return {1, 0, 0}</p>
-
-    <!-- parameters start -->
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-module-field-li">
-
-    <strong><em>tables</em></strong>
-
-    <strong> : </strong>
-
-
-     <table> takes a table of tables to merge
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#equals" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="equals">equals</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Determines if two tables are structurally equal.</p>
-    <p class="section-item-description">
- Notice: tables that are LuaObjects or contain LuaObjects won't be compared correctly, use == operator for LuaObjects</p>
-
-    <!-- parameters start -->
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-module-field-li">
-
-    <strong><em>tbl1</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-module-field-li">
-
-    <strong><em>tbl2</em></strong>
-
-    <strong> : </strong>
-
-
-     <table>
-
-    </li>
-
-
-    </ul>
-
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Update the time to show game time
+</span>time_label:update_time(element,game.time)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -1418,7 +1335,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-10-15 22:37:40 UTC</i>
+    <i>Last updated 2019-09-24 19:15:41 UTC</i>
     </div>
     </div>
     </div>

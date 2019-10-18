@@ -12,10 +12,9 @@ local format_time,table_keys = ext_require('expcore.common','format_time','table
 local Tasks = require 'modules.control.tasks' --- @dep modules.control.tasks
 
 --- If a player is allowed to use the edit buttons
-local function player_allowed_edit(player,task_id)
-    if task_id then
-        local details = Tasks.get_details(task_id)
-        if config.user_can_edit_own_tasks and details.last_edit_player == player.name then
+local function player_allowed_edit(player,task)
+    if task then
+        if config.user_can_edit_own_tasks and task.last_edit_name == player.name then
             return true
         end
     else
@@ -37,7 +36,6 @@ end
 
 --- Button in the header to add a new task
 -- @element add_new_task
-local update_all
 local add_new_task =
 Gui.new_button()
 :set_sprites('utility/add')
@@ -48,7 +46,7 @@ Gui.new_button()
     style.width = 20
 end)
 :on_click(function(player,element)
-    Tasks.new_task(player.force.name,nil,player.name)
+    Tasks.add_task(player.force.name,nil,player.name)
 end)
 
 --- Used to save changes to a task
@@ -64,14 +62,13 @@ Gui.new_button()
 end)
 :on_click(function(player,element)
     local task_id = element.parent.name
-    local task = element.parent.task.text
+    local new_message = element.parent.task.text
     Tasks.set_editing(task_id,player.name)
-    Tasks.update_task(task_id,task,player.name)
+    Tasks.update_task(task_id,new_message,player.name)
 end)
 
 --- Used to cancel any changes you made to a task
 -- @element cancel_edit
-local generate_task
 local cancel_edit =
 Gui.new_button()
 :set_sprites('utility/close_black')
@@ -84,7 +81,6 @@ end)
 :on_click(function(player,element)
     local task_id = element.parent.name
     Tasks.set_editing(task_id,player.name)
-    generate_task(player,element.parent.parent,task_id)
 end)
 
 --- Removes the task from the list
@@ -101,7 +97,6 @@ end)
 :on_click(function(player,element)
     local task_id = element.parent.name
     Tasks.remove_task(task_id)
-    update_all()
 end)
 
 --- Opens edit mode for the task
@@ -118,7 +113,6 @@ end)
 :on_click(function(player,element)
     local task_id = element.parent.name
     Tasks.set_editing(task_id,player.name,true)
-    generate_task(player,element.parent.parent.parent,task_id)
 end)
 
 --[[ Generates each task, handles both view and edit mode
@@ -133,23 +127,24 @@ end)
     >> edit_task
     >> discard_task
 ]]
-function generate_task(player,element,task_id)
+local function generate_task(player,element,task_id)
     local task = Tasks.get_task(task_id)
-    local editing = Tasks.is_editing(task_id,player.name)
-    local details = Tasks.get_details(task_id)
-    local last_edit_player = details.last_edit_player
-    local last_edit_time = details.last_edit_time
-    local tasks = Tasks.get_force_tasks(player.force.name)
-    local task_number = table.index_of(tasks, task_id)
+    local task_ids = Tasks.get_force_task_ids(player.force.name)
+    local task_number = table.index_of(task_ids, task_id)
 
     if not task then
         -- task is nil so remove it from the list
-        element.parent.no_tasks.visible = #tasks == 01
+        element.parent.no_tasks.visible = #task_ids == 1
         Gui.destroy_if_valid(element['count-'..task_id])
         Gui.destroy_if_valid(element['edit-'..task_id])
         Gui.destroy_if_valid(element[task_id])
 
     else
+        local message = task.message
+        local editing = task.curently_editing[player.name]
+        local last_edit_name = task.last_edit_name
+        local last_edit_time = task.last_edit_time
+
         element.parent.no_tasks.visible = false
         -- if it is not already present then add it now
         local task_area = element[task_id]
@@ -182,8 +177,8 @@ function generate_task(player,element,task_id)
         element['count-'..task_id].caption = task_number..')'
 
         local edit_area = element['edit-'..task_id][task_id]
-        local players = table_keys(details.editing)
-        local allowed = player_allowed_edit(player,task_id)
+        local players = table_keys(task.editing)
+        local allowed = player_allowed_edit(player,task)
 
         edit_area.visible = allowed
 
@@ -197,8 +192,8 @@ function generate_task(player,element,task_id)
         local element_type = task_area.task and task_area.task.type or nil
         if not editing and element_type == 'label' then
             -- update the label already present
-            task_area.task.caption = task
-            task_area.task.tooltip = {'task-list.last-edit',last_edit_player,format_time(last_edit_time)}
+            task_area.task.caption = message
+            task_area.task.tooltip = {'task-list.last-edit',last_edit_name,format_time(last_edit_time)}
 
         elseif not editing then
             -- create the label, view mode
@@ -212,8 +207,8 @@ function generate_task(player,element,task_id)
             task_area.add{
                 name='task',
                 type='label',
-                caption=task,
-                tooltip={'task-list.last-edit',last_edit_player,format_time(last_edit_time)}
+                caption=message,
+                tooltip={'task-list.last-edit',last_edit_name,format_time(last_edit_time)}
             }
             label.style.single_line = false
             label.style.maximal_width = 150
@@ -230,7 +225,7 @@ function generate_task(player,element,task_id)
             task_area.add{
                 name='task',
                 type='textfield',
-                text=task
+                text=message
             }
             entry.style.maximal_width = 150
             entry.style.height = 20
@@ -311,31 +306,40 @@ Gui.new_left_frame('gui/task-list')
 :set_open_by_default()
 :on_creation(function(player,element)
     local data_table = generate_container(player,element)
-    local tasks = Tasks.get_force_tasks(player.force.name)
+    local task_ids = Tasks.get_force_task_ids(player.force.name)
 
-    for _,task_id in pairs(tasks) do
+    for _,task_id in pairs(task_ids) do
         generate_task(player,data_table,task_id)
     end
 end)
 :on_update(function(player,element)
     local data_table = element.container.scroll.table
-    local tasks = Tasks.get_force_tasks(player.force.name)
+    local task_ids = Tasks.get_force_task_ids(player.force.name)
 
-    for _,task_id in pairs(tasks) do
+    for _,task_id in pairs(task_ids) do
         generate_task(player,data_table,task_id)
     end
 end)
 
-update_all = task_list 'update_all'
-
 --- When a new task is added it will udpate the task list for everyone on that force
-Tasks.add_handler(function(force,task_id)
-    for _,player in pairs(force.players) do
+Tasks.on_update(function(task,task_id)
+    local players
+    if task then
+        local force = game.forces[task.force_name]
+        players = force.connected_players
+    else
+        players = game.connected_players
+    end
+
+    for _,player in pairs(players) do
         local frame = task_list:get_frame(player)
         local element = frame.container.scroll.table
         generate_task(player,element,task_id)
     end
 end)
+
+--- Update the tasks when the player joins
+Event.add(defines.events.on_player_joined_game,task_list 'redraw')
 
 --- Makes sure the right buttons are present when roles change
 Event.add(Roles.events.on_role_assigned,task_list 'redraw')

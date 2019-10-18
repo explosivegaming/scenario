@@ -79,8 +79,8 @@ return {
         ['electronic-circuit']=scale_amount_made(1000,0,6),
         ['iron-gear-wheel']=scale_amount_made(1000,0,6),
         -- Starting Items
-        ['burner-mining-drill']=cutoff_time(5*minutes,4,0),
-        ['stone-furnace']=cutoff_time(5*minutes,4,0),
+        ['burner-mining-drill']=cutoff_time(10*minutes,4,0),
+        ['stone-furnace']=cutoff_time(10*minutes,4,0),
         -- Armor
         ['light-armor']=cutoff_amount_made_unless(5,0,1,'heavy-armor',5),
         ['heavy-armor']=cutoff_amount_made(5,0,1),

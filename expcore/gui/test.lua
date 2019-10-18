@@ -279,7 +279,7 @@ Gui.new_radiobutton('test-radiobutton-store')
 end)
 
 local radiobutton_option_set =
-Gui.new_radiobutton_option_set('gui.test.share',function(value,category)
+Gui.new_radiobutton_option_set(function(value,category)
     game.print('Radiobutton option set for: '..category..' is now: '..tostring(value))
 end,Gui.categorize_by_player)
 
@@ -650,8 +650,8 @@ end)
 Event.add(defines.events.on_tick,function()
     progressbar_one:increment()
     progressbar_three:decrement()
-    local categories = Store.get_children(progressbar_two.store)
-    for _,category in pairs(categories) do
+    local categories = Store.get(progressbar_two.store) or {}
+    for category,_ in pairs(categories) do
         progressbar_two:increment(1,category)
     end
 end)

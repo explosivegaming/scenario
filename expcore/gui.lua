@@ -105,7 +105,7 @@ Gui.classes.checkbox = Checkbox
     Checkbox._prototype_radiobutton:on_store_update(callback) --- Registers a handler for when the stored value updates
     Checkbox._prototype_radiobutton:add_as_option(option_set,option_name) --- Adds this radiobutton to be an option in the given option set (only one can be true at a time)
 
-    Checkbox.new_option_set(name,callback,categorize) --- Registers a new option set that can be linked to radiobuttons (only one can be true at a time)
+    Checkbox.new_option_set(callback,categorize) --- Registers a new option set that can be linked to radiobuttons (only one can be true at a time)
     Checkbox.draw_option_set(name,element) --- Draws all radiobuttons that are part of an option set at once (Gui.draw will not work)
 
     Checkbox.reset_radiobutton(element,exclude,recursive) --- Sets all radiobuttons in a element to false (unless excluded) and can act recursively
