@@ -24,13 +24,13 @@
 
 ## Explosive Gaming
 
-Explosive Gaming (often ExpGaming) is a server hosting community with a strong focus on Factorio and games that follow similar ideas. Our factorio server are known for hosting large maps with the main goal of being a "mega base" which can produce as much as possible with in our reset schedule. Although these server tend to the more experienced players our server are open to everyone. You can find us through our [website], [discord], [wiki], or in the public games tab in factorio (ExpGaming S1).
+Explosive Gaming (often ExpGaming) is a server hosting community with a strong focus on Factorio and games that follow similar ideas. Our Factorio server are known for hosting large maps with the main goal of being a "mega base" which can produce as much as possible within our reset schedule. Although these servers tend to attract the more experienced players, our servers are open to everyone. You can find us through our [website], [discord], [wiki], or in the public games tab in Factorio (ExpGaming S1, ExpGaming S2, etc.).
 
 ## Use and Installation
 
 1) Download this [git repository](https://github.com/explosivegaming/scenario/archive/master.zip) for the stable release. The dev branch can be found [here](https://github.com/explosivegaming/scenario/archive/dev.zip) for those who want the latest features. See [releases](#releases) for other release branches.
 
-2) Extract the downloaded zip file from the branch you downloaded into factorio's scenario directory:
+2) Extract the downloaded zip file from the branch you downloaded into Factorio's scenario directory:
     * Windows: `%appdata%\Factorio\scenarios`
     * Linux: `~/.factorio/scenarios`
 
@@ -38,13 +38,14 @@ Explosive Gaming (often ExpGaming) is a server hosting community with a strong f
 
 4) More advanced users may want to play with the other configs files within `./config` but please be aware that some of the config files will require a basic understanding of lua while others may just be a list of values.
 
-5) Once you have made any config changes that you wish to make open factorio, select play, then start scenario (or host scenario from within multiplayer tab), and select the scenario which will be called `scenario-master` if you have downloaded the latest stable release and have not changed the folder name.
+5) Once you have made any config changes that you wish to make open Factorio, select play, then start scenario (or host scenario from within multiplayer tab), and select the scenario which will be called `scenario-master` if you have downloaded the latest stable release and have not changed the folder name.
 
-6) The scenario will now load all the selected modules and start the map, any errors or exceptions raised in the scenario should not cause a game/server crash so if any features don't work as expected then it may be returning an error in the log, please report these errors to [the issues page](issues).
+6) The scenario will now load all the selected modules and start the map, any errors or exceptions raised in the scenario should not cause a game/server crash, so if any features do not work as expected then it may be returning an error in the log.
+Please report these errors to [the issues page](issues).
 
 ## Contributing
 
-All are welcome to make pull requests and issues for this scenario, if you are in any doubt please ask someone in our [discord]. If you do not know lua and don't feel like learning you can always make a [feature request]. All our docs can be found [here][docs]. Please keep in mind while making code changes:
+All are welcome to make pull requests and issues for this scenario, if you are in any doubt, please ask someone in our [discord]. If you do not know lua and don't feel like learning you can always make a [feature request]. All our docs can be found [here][docs]. Please keep in mind while making code changes:
 
 * New features should have the branch names: `feature/feature-name`
 * New features are merged into `dev` after it has been completed, this can be done through a pull request.
