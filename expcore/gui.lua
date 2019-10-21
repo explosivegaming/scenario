@@ -1,284 +1,489 @@
 --[[-- Core Module - Gui
-    - This file is used to require all the different elements of the gui module
-    - each module has an outline here but for more details see their separate files in ./gui
-    - please read the files for more documentation that cant be shown here
-    - please note there is a rework planned but not started
-    @core Gui
-    @alias Gui
+- Used to define new gui elements and gui event handlers
+@core Gui
+@alias Gui
+
+@usage-- Defining a button that prints the player's name
+local example_button =
+Gui.new_element{
+    type = 'button',
+    caption = 'Example Button'
+}
+:on_click(function(event)
+    local player = event.player
+    player.print(player.name)
+end)
+
+@usage-- Defining using a custom function
+local example_flow_with_button =
+Gui.new_element(function(event_trigger,parent)
+    local flow =
+    parent.add{
+        name = 'example_flow',
+        type = 'flow'
+    }
+
+    local element =
+    flow.add{
+        name = event_trigger,
+        type = 'button',
+        caption = 'Example Button'
+    }
+
+    return element
+end)
+:on_click(function(event)
+    local player = event.player
+    player.print(player.name)
+end)
+
+@usage-- Drawing an element
+local exmple_button_element = example_button(parent)
+local example_flow_with_button = example_flow_with_button(parent)
+
 ]]
 
-local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Event = require 'utils.event' --- @dep utils.event
+local mod_gui = require 'mod-gui' --- @dep mod-gui
 
---[[
-    Core
+local Gui = {
+    --- The current highest uid that is being used, will not increase during runtime
+    -- @field uid
+    uid = 0,
+    --- Contains the uids of the elements that will show on the top flow and the auth function
+    -- @table top_elements
+    top_elements = {},
+    --- Contains the uids of the elements that will show on the left flow and the open on join function
+    -- @table left_elements
+    left_elements = {},
+    --- Table of all the elements which have been registed with the draw function and event handlers
+    -- @table defines
+    defines = {},
+    --- An index used for debuging to find the file where different elements where registered
+    -- @table file_paths
+    file_paths = {},
+    --- The element prototype which is returned from Gui.new_element
+    -- @table _prototype_element
+    _prototype_element = {},
+    --- The prototype metatable applied to new element defines
+    -- @table _mt_element
+    _mt_element = {
+        __call = function(self,parent,...)
+            return self._draw(self.name,parent,...)
+        end
+    }
+}
 
-    Gui.new_define(prototype) --- Used internally to create new element defines from a class prototype
-    Gui.draw(name,element) --- Draws a copy of the element define to the parent element, see draw_to
+Gui._mt_element.__index = Gui._prototype_element
 
-    Gui.categorize_by_player(element) --- A categorize function to be used with add_store, each player has their own value
-    Gui.categorize_by_force(element) --- A categorize function to be used with add_store, each force has its own value
-    Gui.categorize_by_surface(element) --- A categorize function to be used with add_store, each surface has its own value
+--- Element Define.
+-- @section elementDefine
 
-    Gui.toggle_enabled(element) --- Will toggle the enabled state of an element
-    Gui.toggle_visible(element) --- Will toggle the visibility of an element
-    Gui.set_padding(element,up,down,left,right) --- Sets the padding for a gui element
-    Gui.set_padding_style(style,up,down,left,right) --- Sets the padding for a gui style
-    Gui.create_alignment(element,flow_name) --- Allows the creation of a right align flow to place elements into
-    Gui.destroy_if_valid(element) --- Destroys an element but tests for it being present and valid first
-    Gui.create_scroll_table(element,table_size,maximal_height,name) --- Creates a scroll area with a table inside, table can be any size
-    Gui.create_header(element,caption,tooltip,right_align,name) --- Creates a header section with a label and button area
+--[[-- Base function used to define new elements, can be used with a table or with a function
+@tparam ?table|function element_define used to define how the element is draw, using a table is the simplist way of doing this
+@treturn table the new element define that is used to register events to this element
 
-    Prototype Constructor
+@usage-- Defining an element with a table
+local example_button =
+Gui.new_element{
+    type = 'button',
+    caption = 'Example Button'
+}
 
-    Constructor.event(event_name) --- Creates a new function to add functions to an event handler
-    Constructor.extend(new_prototype) --- Extents a prototype with the base functions of all gui prototypes, no metatables
-    Constructor.store(sync,callback) --- Creates a new function which adds a store to a gui define
-    Constructor.setter(value_type,key,second_key) --- Creates a setter function that checks the type when a value is set
+@usage-- Defining an element with a function
+local example_flow_with_button =
+Gui.new_element(function(event_trigger,parent)
+    local flow =
+    parent.add{
+        name = 'example_flow',
+        type = 'flow'
+    }
 
-    Base Prototype
+    local element =
+    flow.add{
+        name = event_trigger,
+        type = 'button',
+        caption = 'Example Button'
+    }
 
-    Prototype:uid() --- Gets the uid for the element define
-    Prototype:debug_name(value) ---  Sets a debug alias for the define
-    Prototype:set_caption(value) --- Sets the caption for the element define
-    Prototype:set_tooltip(value) --- Sets the tooltip for the element define
-    Prototype:set_style(style,callback) --- Sets the style for the element define
-    Prototype:set_embedded_flow(state) --- Sets the element to be drawn inside a nameless flow, can be given a name using a function
+    return element
+end)
 
-    Prototype:set_pre_authenticator --- Sets an authenticator that blocks the draw function if check fails
-    Prototype:set_post_authenticator --- Sets an authenticator that disables the element if check fails
-
-    Prototype:raise_event(event_name,...) --- Raises a custom event for this define, any number of params can be given
-    Prototype:draw_to(element,...) --- The main function for defines, when called will draw an instance of this define to the given element
-
-    Prototype:get_store(category) --- Gets the value in this elements store, category needed if categorize function used
-    Prototype:set_store(category,value) --- Sets the value in this elements store, category needed if categorize function used
-    Prototype:clear_store(category) --- Sets the value in this elements store to nil, category needed if categorize function used
 ]]
+function Gui.new_element(element_define)
+    -- Set the metatable to allow access to register events
+    local element = setmetatable({}, Gui._mt_element)
 
-local Instances = require 'expcore.gui.instances' --- @dep expcore.gui.instances
-Gui.new_instance_group = Instances.registers
-Gui.get_instances = Instances.get_elements
-Gui.add_instance = Instances.get_elements
-Gui.update_instances = Instances.apply_to_elements
-Gui.classes.instances = Instances
---[[
-    Instances.has_categories(name) --- Returns if a instance group has a categorise function; must be registered
-    Instances.is_registered(name) --- Returns if the given name is a registered instance group
-    Instances.register(name,categorise) --- Registers the name of an instance group to allow for storing element instances
+    -- Increment the uid counter
+    local uid = Gui.uid + 1
+    Gui.uid = uid
+    local name = tostring(uid)
+    element.name = name
 
-    Instances.add_element(name,element) --- Adds an element to the instance group under the correct category; must be registered
-    Instances.get_elements_raw(name,category) --- Gets all element instances without first removing any invalid ones; used internally and must be registered
-    Instances.get_valid_elements(name,category,callback) --- Gets all valid element instances and has the option of running a callback on those that are valid
+    -- Add the defination function
+    if type(element_define) == 'table' then
+        element_define.name = name
+        element._draw = function(_,parent)
+            return parent.add(element_define)
+        end
+    else
+        element._draw = element_define
+    end
 
-    Instances.unregistered_add_element(name,category,element) --- A version of add_element that does not require the group to be registered
-    Instances.unregistered_get_elements(name,category,callback) --- A version of get_elements that does not require the group to be registered
+    -- Add the define to the base module
+    local file_path = debug.getinfo(2, 'S').source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+    Gui.file_paths[name] = file_path
+    Gui.defines[name] = element
+
+    -- Return the element so event handers can be accessed
+    return element
+end
+
+--[[-- Adds an element to be drawn to the top flow when a player joins
+@tparam[opt] function authenticator called during toggle or update to decide if the element should be visible
+
+@usage-- Adding the example button
+example_button:add_to_top_flow(function(player)
+    -- example button will only show when game time is less than 1 minute
+    return player.online_time < 3600
+end)
+
 ]]
+function Gui._prototype_element:add_to_top_flow(authenticator)
+    Gui.top_elements[self.name] = authenticator or true
+end
 
-local Button = require 'expcore.gui.elements.buttons' --- @dep expcore.gui.elements.buttons
-Gui.new_button = Button.new_button
-Gui.classes.button = Button
---[[
-    Button.new_button(name) --- Creates a new button element define
+--[[-- Adds an element to be drawn to the left flow when a player joins
+@tparam[opt] ?boolean|function open_on_join called during first darw to decide if the element is visible
 
-    Button._prototype:on_click(player,element) --- Registers a handler for when the button is clicked
-    Button._prototype:on_left_click(player,element) --- Registers a handler for when the button is clicked with the left mouse button
-    Button._prototype:on_right_click(player,element) --- Registers a handler for when the button is clicked with the right mouse button
+@usage-- Adding the example button
+example_flow_with_button:add_to_left_flow(true)
 
-    Button._prototype:set_sprites(sprite,hovered_sprite,clicked_sprite) --- Adds sprites to a button making it a sprite button
-    Button._prototype:set_click_filter(filter,...) --- Adds a click / mouse button filter to the button
-    Button._prototype:set_key_filter(filter,...) --- Adds a control key filter to the button
 ]]
+function Gui._prototype_element:add_to_left_flow(open_on_join)
+    Gui.left_elements[self.name] = open_on_join or false
+end
 
-local Checkbox = require 'expcore.gui.elements.checkbox' --- @dep expcore.gui.elements.checkbox
-Gui.new_checkbox = Checkbox.new_checkbox
-Gui.new_radiobutton = Checkbox.new_radiobutton
-Gui.new_radiobutton_option_set = Checkbox.new_option_set
-Gui.draw_option_set = Checkbox.draw_option_set
-Gui.classes.checkbox = Checkbox
---[[
-    Checkbox.new_checkbox(name) --- Creates a new checkbox element define
-    Checkbox._prototype_checkbox:on_element_update(callback) --- Registers a handler for when an element instance updates
-    Checkbox._prototype_checkbox:on_store_update(callback) --- Registers a handler for when the stored value updates
+-- This function is called for event event
+local function general_event_handler(event)
+    -- Check the element is valid
+    local element = event.element
+    if not element or not element.valid then
+        return
+    end
 
-    Checkbox.new_radiobutton(name) --- Creates a new radiobutton element define
-    Checkbox._prototype_radiobutton:on_element_update(callback) --- Registers a handler for when an element instance updates
-    Checkbox._prototype_radiobutton:on_store_update(callback) --- Registers a handler for when the stored value updates
-    Checkbox._prototype_radiobutton:add_as_option(option_set,option_name) --- Adds this radiobutton to be an option in the given option set (only one can be true at a time)
+    -- Get the event handler for this element
+    local handlers = Gui.defines[element.name]
+    local handler = handlers and handlers[event.name]
+    if not handler then
+        return
+    end
 
-    Checkbox.new_option_set(callback,categorize) --- Registers a new option set that can be linked to radiobuttons (only one can be true at a time)
-    Checkbox.draw_option_set(name,element) --- Draws all radiobuttons that are part of an option set at once (Gui.draw will not work)
+    -- Get the player for this event
+    local player = game.players[event.player_index]
+    if not player or not player.valid then
+        return
+    end
+    event.player = player
 
-    Checkbox.reset_radiobutton(element,exclude,recursive) --- Sets all radiobuttons in a element to false (unless excluded) and can act recursively
+    local success, err = pcall(handler,event)
+    if not success then
+        error('There as been an error with an event handler for a gui element:\n\t'..err)
+    end
+end
+
+-- This function returns the event handler adder and registeres the general handler
+local function event_handler_factory(event_name)
+    Event.add(event_name, general_event_handler)
+
+    return function(self,handler)
+        self[event_name] = handler
+        return self
+    end
+end
+
+--- Element Events.
+-- @section elementEvents
+
+--- Called when the player opens a GUI.
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_opened = event_handler_factory(defines.events.on_gui_opened)
+
+--- Called when the player closes the GUI they have open.
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_closed = event_handler_factory(defines.events.on_gui_closed)
+
+--- Called when LuaGuiElement is clicked.
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_click = event_handler_factory(defines.events.on_gui_click)
+
+--- Called when a LuaGuiElement is confirmed, for example by pressing Enter in a textfield.
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_confirmed = event_handler_factory(defines.events.on_gui_confirmed)
+
+--- Called when LuaGuiElement checked state is changed (related to checkboxes and radio buttons).
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_checked_changed = event_handler_factory(defines.events.on_gui_checked_state_changed)
+
+--- Called when LuaGuiElement element value is changed (related to choose element buttons).
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_elem_changed = event_handler_factory(defines.events.on_gui_elem_changed)
+
+--- Called when LuaGuiElement element location is changed (related to frames in player.gui.screen).
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_location_changed = event_handler_factory(defines.events.on_gui_location_changed)
+
+--- Called when LuaGuiElement selected tab is changed (related to tabbed-panes).
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_tab_changed = event_handler_factory(defines.events.on_gui_selected_tab_changed)
+
+--- Called when LuaGuiElement selection state is changed (related to drop-downs and listboxes).
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_selection_changed = event_handler_factory(defines.events.on_gui_selection_state_changed)
+
+--- Called when LuaGuiElement switch state is changed (related to switches).
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_switch_changed = event_handler_factory(defines.events.on_gui_switch_state_changed)
+
+--- Called when LuaGuiElement text is changed by the player.
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_text_change = event_handler_factory(defines.events.on_gui_text_changed)
+
+--- Called when LuaGuiElement slider value is changed (related to the slider element).
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_value_changed = event_handler_factory(defines.events.on_gui_value_changed)
+
+--- Top Flow.
+-- @section topFlow
+
+--- Button which toggles the top flow elements
+-- @element toggle_top_flow
+local toggle_top_flow =
+Gui.new_element(function(event_trigger,parent)
+    -- Draw the element
+    local element =
+    parent.add{
+        name = event_trigger,
+        type = 'button',
+        style = mod_gui.button_style,
+        caption = '<',
+        tooltip = {'gui_util.button_tooltip'}
+    }
+
+    -- Change its style
+    local style = element.style
+    style.width = 18
+    style.height = 36
+    style.padding = 0
+    style.font = 'default-small-bold'
+
+    -- Return the element
+    return element
+end)
+:on_click(function(event)
+    Gui.toggle_top_flow(event.player)
+end)
+
+--[[-- Gets the flow which contains the elements for the top flow
+@function Gui.get_top_flow(player)
+@tparam LuaPlayer player the player that you want to get the flow for
+@treturn LuaGuiElement the top element flow
+
+@usage-- Geting your top element flow
+local top_flow = Gui.get_top_flow(game.player)
+
 ]]
+Gui.get_top_flow = mod_gui.get_button_flow
 
-local Dropdown = require 'expcore.gui.elements.dropdown' --- @dep expcore.gui.elements.dropdown
-Gui.new_dropdown = Dropdown.new_dropdown
-Gui.new_list_box = Dropdown.new_list_box
-Gui.classes.dropdown = Dropdown
---[[
-    Dropdown.new_dropdown(name) --- Creates a new dropdown element define
-    Dropdown.new_list_box(name) --- Creates a new list box element define
+--[[-- Updates the visible states of all the elements on a players top flow
+@tparam LuaPlayer player the player that you want to update the flow for
 
-    Dropdown._prototype:on_element_update(callback) --- Registers a handler for when an element instance updates
-    Dropdown._prototype:on_store_update(callback) --- Registers a handler for when the stored value updates
+@usage-- Update your flow
+Gui.update_top_flow(game.player)
 
-    Dropdown._prototype:new_static_options(options,...) --- Adds new static options to the dropdown which will trigger the general callback
-    Dropdown._prototype:new_dynamic_options(callback) --- Adds a callback which should return a table of values to be added as options for the dropdown (appended after static options)
-    Dropdown._prototype:add_option_callback(option,callback) --- Adds a case specific callback which will only run when that option is selected (general case still triggered)
-
-    Dropdown.select_value(element,value) --- Selects the option from a dropdown or list box given the value rather than key
-    Dropdown.get_selected_value(element) --- Returns the currently selected value rather than index
 ]]
+function Gui.update_top_flow(player)
+    local top_flow = Gui.get_top_flow(player)
+    local toggle_button = top_flow[toggle_top_flow.name]
+    local is_visible = toggle_button.caption == '<'
 
-local Slider = require 'expcore.gui.elements.slider' --- @dep expcore.gui.elements.slider
-Gui.new_slider = Slider.new_slider
-Gui.classes.slider = Slider
---[[
-    Slider.new_slider(name) --- Creates a new slider element define
+    -- Set the visible state of all elements in the flow
+    for name,authenticator in pairs(Gui.top_elements) do
+        -- Ensure the element exists
+        local element = top_flow[name]
+        if not element then
+            element = Gui.defines[name](top_flow)
+        end
 
-    Slider._prototype:on_element_update(callback) --- Registers a handler for when an element instance updates
-    Slider._prototype:on_store_update(callback) --- Registers a handler for when the stored value updates
+        -- Set the visible state
+        element.visible = is_visible and authenticator(player) or false
+    end
+end
 
-    Slider._prototype:set_range(min,max) --- Sets the range of a slider, if not used will use default values for a slider
-    Slider._prototype:draw_label(element) --- Draws a new label and links its value to the value of this slider, if no store then it will only show one value per player
-    Slider._prototype:enable_auto_draw_label(state) --- Enables auto draw of the label, the label will share the same parent element as the slider
+--[[-- Toggles the visible states of all the elements on a players top flow
+@tparam LuaPlayer player the player that you want to toggle the flow for
+@tparam[opt] boolean state if given then the state will be set to this state
+@treturn boolean the new visible state of the top flow
+
+@usage-- Toggle your flow
+Gui.toggle_top_flow(game.player)
+
+@usage-- Open your top flow
+Gui.toggle_top_flow(game.player,true)
+
 ]]
+function Gui.toggle_top_flow(player,state)
+    local top_flow = Gui.get_top_flow(player)
+    local toggle_button = top_flow[toggle_top_flow.name]
+    local new_state = state or toggle_button.caption == '>'
 
-local Text = require 'expcore.gui.elements.text' --- @dep expcore.gui.elements.text
-Gui.new_text_filed = Text.new_text_field
-Gui.new_text_box = Text.new_text_box
-Gui.classes.text = Text
---[[
-    Text.new_text_field(name) --- Creates a new text field element define
-    Text._prototype_field:on_element_update(callback) --- Registers a handler for when an element instance updates
-    Text._prototype_field:on_store_update(callback) --- Registers a handler for when the stored value updates
+    -- Set the visible state of all elements in the flow
+    for name,authenticator in pairs(Gui.top_elements) do
+        top_flow[name].visible = new_state and authenticator(player) or false
+    end
 
-    Text.new_text_box(name) --- Creates a new text box element define
-    Text._prototype_field:on_element_update(callback) --- Registers a handler for when an element instance updates
-    Text._prototype_field:on_store_update(callback) --- Registers a handler for when the stored value updates
-    Text._prototype_box:set_selectable(state) --- Sets the text box to be selectable
-    Text._prototype_box:set_word_wrap(state) --- Sets the text box to have word wrap
-    Text._prototype_box:set_read_only(state) --- Sets the text box to be read only
+    -- Change the style of the toggle button
+    if new_state then
+        toggle_button.caption = '<'
+        toggle_button.style.height = 34
+    else
+        toggle_button.caption = '>'
+        toggle_button.style.height = 24
+    end
+
+    return new_state
+end
+
+--- Left Flow.
+-- @section leftFlow
+
+--- Button which hides the elements in the left flow
+-- @element hide_left_flow
+local hide_left_flow =
+Gui.new_element(function(event_trigger,parent)
+    -- Draw the element
+    local element =
+    parent.add{
+        name = event_trigger,
+        type = 'button',
+        style = mod_gui.button_style,
+        caption = '<',
+        tooltip = {'expcore-gui.left-button-tooltip'}
+    }
+
+    -- Change its style
+    local style = element.style
+    style.width = 18
+    style.height = 36
+    style.padding = 0
+    style.font = 'default-small-bold'
+
+    -- Return the element
+    return element
+end)
+:on_click(function(event)
+    Gui.hide_left_flow(event.player)
+end)
+
+--[[-- Gets the flow which contains the elements for the left flow
+@function Gui.get_left_flow(player)
+@tparam LuaPlayer player the player that you want to get the flow for
+@treturn LuaGuiElement the left element flow
+
+@usage-- Geting your left element flow
+local left_flow = Gui.get_left_flow(game.player)
+
 ]]
+Gui.get_left_flow = mod_gui.get_frame_flow
 
-local ElemButton = require 'expcore.gui.elements.elem-button' --- @dep expcore.gui.elements.elem-button
-Gui.new_elem_button = ElemButton.new_elem_button
-Gui.classes.elem_button = ElemButton
---[[
-    ElemButton.new_elem_button(name) --- Creates a new elem button element define
+--[[-- Hides all left elements for a player
+@tparam LuaPlayer player the player to hide the elements for
 
-    ElemButton._prototype:on_element_update(callback) --- Registers a handler for when an element instance updates
-    ElemButton._prototype:on_store_update(callback) --- Registers a handler for when the stored value updates
+@usage-- Hide your left elements
+Gui.hide_left_flow(game.player)
 
-    ElemButton._prototype:set_type(type) --- Sets the type of the elem button, the type is required so this must be called at least once
-    ElemButton._prototype:set_default(value) --- Sets the default value for the elem button, this may be a function or a string
 ]]
+function Gui.hide_left_flow(player)
+    local left_flow = Gui.get_left_flow(player)
+    local hide_button = left_flow[hide_left_flow.name]
 
-local ProgressBar = require 'expcore.gui.elements.progress-bar' --- @dep expcore.gui.elements.progress-bar
-Gui.new_progressbar = ProgressBar.new_progressbar
-Gui.set_progressbar_maximum = ProgressBar.set_maximum
-Gui.increment_progressbar = ProgressBar.increment
-Gui.decrement_progressbar = ProgressBar.decrement
-Gui.classes.progressbar = ProgressBar
---[[
-    ProgressBar.set_maximum(element,amount,count_down) --- Sets the maximum value that represents the end value of the progress bar
-    ProgressBar.increment(element,amount) --- Increases the value of the progressbar, if a define is given all of its instances are incremented
-    ProgressBar.decrement(element,amount) --- Decreases the value of the progressbar, if a define is given all of its instances are decreased
+    -- Set the visible state of all elements in the flow
+    hide_button.visible = false
+    for name,_ in pairs(Gui.left_elements) do
+        left_flow[name].visible = false
+    end
+end
 
-    ProgressBar.new_progressbar(name) --- Creates a new progressbar element define
-    ProgressBar._prototype:set_maximum(amount,count_down) --- Sets the maximum value that represents the end value of the progress bar
-    ProgressBar._prototype:use_count_down(state) --- Will set the progress bar to start at 1 and trigger when it hits 0
-    ProgressBar._prototype:increment(amount,category) --- Increases the value of the progressbar
-    ProgressBar._prototype:increment_filtered(amount,filter) --- Increases the value of the progressbar, if the filter condition is met, does not work with store
-    ProgressBar._prototype:decrement(amount,category) --- Decreases the value of the progressbar
-    ProgressBar._prototype:decrement_filtered(amount,filter) --- Decreases the value of the progressbar, if the filter condition is met, does not work with store
-    ProgressBar._prototype:add_element(element,maximum) --- Adds an element into the list of instances that will are waiting to complete, does not work with store
-    ProgressBar._prototype:reset_element(element) --- Resets an element, or its store, to be back at the start, either 1 or 0
+--[[-- Toggles the visible state of all a left element for a player
+@tparam LuaPlayer player the player that you want to toggle the element for
+@tparam table element_define the element that you want to toggle for the player
+@tparam[opt] boolean state if given then the state will be set to this state
+@treturn boolean the new visible state of the element
 
-    ProgressBar._prototype:on_complete(callback) --- Triggers when a progress bar element completes (hits 0 or 1)
-    ProgressBar._prototype:on_complete(callback) --- Triggers when a store value completes (hits 0 or 1)
-    ProgressBar._prototype:event_counter(filter) --- Event handler factory that counts up by 1 every time the event triggers, can filter which elements are incremented
-    ProgressBar._prototype:event_countdown(filter) --- Event handler factory that counts down by 1 every time the event triggers, can filter which elements are decremented
+@usage-- Toggle your example button
+Gui.toggle_top_flow(game.player,example_flow_with_button)
+
+@usage-- Open your example button
+Gui.toggle_top_flow(game.player,example_flow_with_button,true)
+
 ]]
+function Gui.toggle_left_element(player,element_define,state)
+    local left_flow = Gui.get_left_flow(player)
+    local hide_button = left_flow[hide_left_flow.name]
 
-local Toolbar = require 'expcore.gui.concepts.toolbar' --- @dep expcore.gui.concepts.toolbar
-Gui.new_toolbar_button = Toolbar.new_button
-Gui.add_button_to_toolbar = Toolbar.add_button
-Gui.update_toolbar = Toolbar.update
-Gui.classes.toolbar = Toolbar
---[[
-    Toolbar.new_button(name) --- Adds a new button to the toolbar
-    Toolbar.add_button(button) --- Adds an existing buttton to the toolbar
-    Toolbar.update(player) --- Updates the player's toolbar with an new buttons or expected change in auth return
-]]
+    -- Set the visible state
+    local element = left_flow[element_define.name]
+    local new_state = state or not element.visible
+    element.visible = new_state
 
-local LeftFrames = require 'expcore.gui.concepts.left' --- @dep expcore.gui.concepts.left
-Gui.get_left_frame_flow = LeftFrames.get_flow
-Gui.toggle_left_frame = LeftFrames.toggle_frame
-Gui.new_left_frame = LeftFrames.new_frame
-Gui.classes.left_frames = LeftFrames
---[[
-    LeftFrames.get_flow(player) --- Gets the left frame flow for a player
-    LeftFrames.get_frame(name,player) --- Gets one frame from the left flow by its name
-    LeftFrames.get_open(player) --- Gets all open frames for a player, if non are open it will remove the close all button
-    LeftFrames.toggle_frame(name,player,state) --- Toggles the visibility of a left frame, or sets its visibility state
+    -- Check if the hide button should be visible
+    local show_hide_button = false
+    for name,_ in pairs(Gui.left_elements) do
+        if left_flow[name].visible then
+            show_hide_button = true
+            break
+        end
+    end
+    hide_button.visible = show_hide_button
 
-    LeftFrames.new_frame(permission_name) --- Creates a new left frame define
-    LeftFrames._prototype:set_open_by_default(state) --- Sets if the frame is visible when a player joins, can also be a function to return a boolean
-    LeftFrames._prototype:set_direction(direction) --- Sets the direction of the frame, either vertical or horizontal
-    LeftFrames._prototype:get_frame(player) --- Gets the frame for this define from the left frame flow
-    LeftFrames._prototype:is_open(player) --- Returns if the player currently has this define visible
-    LeftFrames._prototype:toggle(player) --- Toggles the visibility of the left frame
+    return new_state
+end
 
-    LeftFrames._prototype:update(player) --- Updates the contents of the left frame, first tries update callback, other wise will clear and redraw
-    LeftFrames._prototype:update_all(update_offline) --- Updates the frame for all players, see update
-    LeftFrames._prototype:redraw(player) --- Redraws the frame by calling on_draw, will always clear the frame
-    LeftFrames._prototype:redraw_all(update_offline) --- Redraws the frame for all players, see redraw
+-- Draw the two flows when a player joins
+Event.add(defines.events.on_player_joined_game,function(event)
+    local player = game.players[event.player_index]
 
-    LeftFrames._prototype:on_draw(player,frame) --- Use to draw your elements to the new frame
-    LeftFrames._prototype:on_update(player,frame) --- Use to edit your frame when there is no need to redraw it
-    LeftFrames._prototype:on_player_toggle(player,frame) --- Triggered when the player toggle the left frame
-    LeftFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
-]]
+    -- Draw the top flow
+    local top_flow = Gui.get_top_flow(player)
+    toggle_top_flow(top_flow)
+    Gui.update_top_flow(player)
 
-local CenterFrames = require 'expcore.gui.concepts.center' --- @dep expcore.gui.concepts.center
-Gui.get_center_flow = CenterFrames.get_flow
-Gui.toggle_center_frame = CenterFrames.toggle_frame
-Gui.draw_center_frame = CenterFrames.draw_frame
-Gui.redraw_center_frame = CenterFrames.redraw_frames
-Gui.new_center_frame = CenterFrames.new_frame
-Gui.classes.center_frames = CenterFrames
---[[
-    CenterFrames.get_flow(player) --- Gets the center flow for a player
-    CenterFrames.clear_flow(player) --- Clears the center flow for a player
-    CenterFrames.draw_frame(player,name) --- Draws the center frame for a player, if already open then will do nothing
-    CenterFrames.redraw_frame(player,name) --- Draws the center frame for a player, if already open then will destroy it and redraw
-    CenterFrames.toggle_frame(player,name,state) --- Toggles if the frame is currently open or not, will open if closed and close if open
+    -- Draw the left flow
+    local left_flow = Gui.get_left_flow(player)
+    local hide_left = hide_left_flow(left_flow)
 
-    CenterFrames.new_frame(permission_name) --- Sets the frame to be the current active gui when opened and closes all other frames
-    CenterFrames._prototype:on_draw(player,frame) --- Use to draw your elements onto the new frame
-    CenterFrames._prototype:set_auto_focus(state) --- Sets the frame to be the current active gui when opened and closes all other frames
-    CenterFrames._prototype:draw_frame(player) --- Draws this frame to the player, if already open does nothing (will call on_draw to draw to the frame)
-    CenterFrames._prototype:redraw_frame(player) --- Draws this frame to the player, if already open it will remove it and redraw it (will call on_draw to draw to the frame)
-    CenterFrames._prototype:toggle_frame(player) --- Toggles if the frame is open, if open it will close it and if closed it will open it
-    CenterFrames._prototype:event_handler(action) --- Creates an event handler that will trigger one of its functions, use with Event.add
-]]
+    -- Draw the elements on the left flow
+    local show_hide_left = false
+    for name,open_on_join in pairs(Gui.left_elements) do
+        local left_element = Gui.defines[name](left_flow)
 
-local PopupFrames = require 'expcore.gui.concepts.popups' --- @dep expcore.gui.concepts.popups
-Gui.get_popup_flow = PopupFrames.get_flow
-Gui.open_popup = PopupFrames.open
-Gui.new_popup = PopupFrames.new_popup
-Gui.classes.popup_frames = PopupFrames
---[[
-    PopupFrames.get_flow(player) --- Gets the left flow that contains the popup frames
-    PopupFrames.open(define_name,player,open_time,...) --- Opens a popup for the player, can give the amount of time it is open as well as params for the draw function
+        -- Check if the element should be visible
+        local visible = type(open_on_join) == 'boolean' and open_on_join or false
+        if type(open_on_join) == 'function' then
+            local success, err = pcall(open_on_join,player)
+            if not success then
+                error('There as been an error with an open on join hander for a gui element:\n\t'..err)
+            end
+            visible = err
+        end
 
-    PopupFrames.close_progress --- Progress bar which when depleted will close the popup frame
-    PopupFrames.close_button --- A button which can be used to close the gui before the timer runs out
+        left_element.visible = visible
+        if visible then
+            show_hide_left = true
+        end
+    end
 
-    PopupFrames.new_popup(name) --- Creates a new popup frame define
-    PopupFrames._prototype:set_default_open_time(amount) --- Sets the default open time for the popup, will be used if non is provided with open
-    PopupFrames._prototype:open(player,open_time,...) --- Opens this define for a player, can be given open time and any other params for the draw function
-]]
+    hide_left.visible = show_hide_left
+end)
 
 return Gui
