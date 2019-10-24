@@ -411,15 +411,15 @@ Gui.toggle_top_flow(game.player,true)
 function Gui.toggle_top_flow(player,state)
     local top_flow = Gui.get_top_flow(player)
     local toggle_button = top_flow[toggle_top_flow.name]
-    local new_state = state or toggle_button.style.name == 'forward_button'
+    if state == nil then state = toggle_button.style.name == 'forward_button' end
 
     -- Set the visible state of all elements in the flow
     for name,authenticator in pairs(Gui.top_elements) do
-        top_flow[name].visible = new_state and authenticator(player) or false
+        top_flow[name].visible = state and authenticator(player) or false
     end
 
     -- Change the style of the toggle button
-    if new_state then
+    if state then
         toggle_button.style = 'back_button'
         local style = toggle_button.style
         style.height = 36
@@ -431,7 +431,7 @@ function Gui.toggle_top_flow(player,state)
         style.width = 18
     end
 
-    return new_state
+    return state
 end
 
 --- Left Flow.
@@ -501,8 +501,8 @@ function Gui.toggle_left_element(player,element_define,state)
 
     -- Set the visible state
     local element = left_flow[element_define.name]
-    local new_state = state or not element.visible
-    element.visible = new_state
+    if state == nil then state = not element.visible end
+    element.visible = state
 
     -- Check if the hide button should be visible
     local show_hide_button = false
@@ -514,11 +514,11 @@ function Gui.toggle_left_element(player,element_define,state)
     end
     hide_button.visible = show_hide_button
 
-    return new_state
+    return state
 end
 
 -- Draw the two flows when a player joins
-Event.add(defines.events.on_player_joined_game,function(event)
+Event.add(defines.events.on_player_created,function(event)
     local player = game.players[event.player_index]
 
     -- Draw the top flow
@@ -581,9 +581,9 @@ local new_enabled_state = Gui.toggle_enabled_state(element)
 ]]
 function Gui.toggle_enabled_state(element,state)
     if not element or not element.valid then return end
-    local new_state = state or not element.enabled
-    element.enabled = new_state
-    return new_state
+    if state == nil then state = not element.enabled end
+    element.enabled = state
+    return state
 end
 
 --[[-- Will toggle the visible state of an element or set it to the one given
@@ -597,9 +597,9 @@ local new_visible_state = Gui.toggle_visible_state(element)
 ]]
 function Gui.toggle_visible_state(element,state)
     if not element or not element.valid then return end
-    local new_state = state or not element.visible
-    element.visible = new_state
-    return new_state
+    if state == nil then state = not element.visible end
+    element.visible = state
+    return state
 end
 
 --[[-- Destory a gui element without causing any errors, likly if the element may have already been removed

@@ -333,7 +333,9 @@ Gui.element(function(event_trigger,parent)
     }
 
     -- Set the frame style
-    frame.style.padding = 2
+    local frame_style = frame.style
+    frame_style.padding = 2
+    frame_style.minimal_width = 200
 
     -- Draw the internal container
     local container =

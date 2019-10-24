@@ -282,28 +282,8 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#zoom_to_map">zoom_to_map</a></td>
-    <td class="summary">Used on the name label to allow zoom to map</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#warp_timer">warp_timer</a></td>
-    <td class="summary">This timer controls when a player is able to warp, eg every 60 seconds</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#goto_warp">goto_warp</a></td>
-    <td class="summary">When the button is clicked it will teleport the player</td>
-    </tr>
-    <tr>
     <td class="name"><a href="#add_new_warp">add_new_warp</a></td>
     <td class="summary">Will add a new warp to the list, checks if the player is too close to an existing one</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#confirm_edit">confirm_edit</a></td>
-    <td class="summary">Confirms the edit to name or icon of the warp</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#cancel_edit">cancel_edit</a></td>
-    <td class="summary">Cancels the editing changes of the selected warp name or icon</td>
     </tr>
     <tr>
     <td class="name"><a href="#discard_warp">discard_warp</a></td>
@@ -314,8 +294,44 @@
     <td class="summary">Opens edit mode for the warp</td>
     </tr>
     <tr>
-    <td class="name"><a href="#warp_list">warp_list</a></td>
-    <td class="summary">Registers the warp list</td>
+    <td class="name"><a href="#add_warp_base">add_warp_base</a></td>
+    <td class="summary">Set of three elements which make up each row of the warp table</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#confirm_edit">confirm_edit</a></td>
+    <td class="summary">Confirms the edit to name or icon of the warp</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#cancel_edit">cancel_edit</a></td>
+    <td class="summary">Cancels the editing changes of the selected warp name or icon</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#warp_editing">warp_editing</a></td>
+    <td class="summary">Editing state for a warp, contrins a text field and the two edit buttons</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#warp_label">warp_label</a></td>
+    <td class="summary">Default state for a warp, contains only a label with the warp name</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#warp_icon_button">warp_icon_button</a></td>
+    <td class="summary">Default state for the warp icon, when pressed teleports the player</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#warp_icon_editing">warp_icon_editing</a></td>
+    <td class="summary">Editing state for the warp icon, chose elem used to chosse icon</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#warp_timer">warp_timer</a></td>
+    <td class="summary">This timer controls when a player is able to warp, eg every 60 seconds</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#warp_list_container">warp_list_container</a></td>
+    <td class="summary">Main warp list container for the left flow</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#warp_list_toggle">warp_list_toggle</a></td>
+    <td class="summary">Button on the top flow used to toggle the warp list container</td>
     </tr>
     </tbody>
     </table>
@@ -582,87 +598,6 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#zoom_to_map" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="zoom_to_map">zoom_to_map</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Used on the name label to allow zoom to map</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#warp_timer" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="warp_timer">warp_timer</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">This timer controls when a player is able to warp, eg every 60 seconds</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#goto_warp" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="goto_warp">goto_warp</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">When the button is clicked it will teleport the player</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#add_new_warp" class="fragment-hashtag">#</a>
     <span class="section-item-title" id="add_new_warp">add_new_warp</span>
     </div>
@@ -671,60 +606,6 @@
     <div class="section-item-body">
 
     <p class="section-item-summary">Will add a new warp to the list, checks if the player is too close to an existing one</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#confirm_edit" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="confirm_edit">confirm_edit</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Confirms the edit to name or icon of the warp</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#cancel_edit" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="cancel_edit">cancel_edit</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Cancels the editing changes of the selected warp name or icon</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -798,14 +679,257 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#warp_list" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="warp_list">warp_list</span>
+    <a href="#add_warp_base" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="add_warp_base">add_warp_base</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Registers the warp list</p>
+    <p class="section-item-summary">Set of three elements which make up each row of the warp table</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#confirm_edit" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="confirm_edit">confirm_edit</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Confirms the edit to name or icon of the warp</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#cancel_edit" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="cancel_edit">cancel_edit</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Cancels the editing changes of the selected warp name or icon</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#warp_editing" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="warp_editing">warp_editing</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Editing state for a warp, contrins a text field and the two edit buttons</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#warp_label" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="warp_label">warp_label</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Default state for a warp, contains only a label with the warp name</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#warp_icon_button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="warp_icon_button">warp_icon_button</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Default state for the warp icon, when pressed teleports the player</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#warp_icon_editing" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="warp_icon_editing">warp_icon_editing</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Editing state for the warp icon, chose elem used to chosse icon</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#warp_timer" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="warp_timer">warp_timer</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">This timer controls when a player is able to warp, eg every 60 seconds</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#warp_list_container" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="warp_list_container">warp_list_container</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Main warp list container for the left flow</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#warp_list_toggle" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="warp_list_toggle">warp_list_toggle</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Button on the top flow used to toggle the warp list container</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -837,7 +961,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-10-24 01:44:32 UTC</i>
+    <i>Last updated 2019-10-24 21:28:42 UTC</i>
     </div>
     </div>
     </div>
