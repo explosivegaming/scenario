@@ -69,13 +69,13 @@ Gui.element{
     Tasks.add_task(player.force.name,nil,player.name)
 end)
 
---- Button displayed next to tasks which the user is currently editing, used to save changes
--- @element confirm_edit
-local confirm_edit =
+--- Button displayed next to tasks which the user is can edit, used to start editing a task
+-- @element edit_task
+local edit_task =
 Gui.element{
     type = 'sprite-button',
-    sprite = 'utility/downloaded',
-    tooltip = {'task-list.confirm-tooltip'},
+    sprite = 'utility/rename_icon_normal',
+    tooltip = {'task-list.edit-tooltip-none'},
     style = 'tool_button'
 }
 :style{
@@ -84,29 +84,8 @@ Gui.element{
     width = 20
 }
 :on_click(function(player,element,_)
-    local task_id = element.parent.name
-    local new_message = element.parent.task_entry.text
-    Tasks.set_editing(task_id,player.name)
-    Tasks.update_task(task_id,new_message,player.name)
-end)
-
---- Button displayed next to tasks which the user is currently editing, used to discard changes
--- @element cancel_edit
-local cancel_edit =
-Gui.element{
-    type = 'sprite-button',
-    sprite = 'utility/close_black',
-    tooltip = {'task-list.cancel-tooltip'},
-    style = 'tool_button'
-}
-:style{
-    padding = -2,
-    height = 20,
-    width = 20
-}
-:on_click(function(player,element,_)
-    local task_id = element.parent.name
-    Tasks.set_editing(task_id,player.name)
+    local task_id = element.parent.name:sub(6)
+    Tasks.set_editing(task_id,player.name,true)
 end)
 
 --- Button displayed next to tasks which the user is can edit, used to delete a task from the list
@@ -126,25 +105,6 @@ Gui.element{
 :on_click(function(_,element,_)
     local task_id = element.parent.name:sub(6)
     Tasks.remove_task(task_id)
-end)
-
---- Button displayed next to tasks which the user is can edit, used to start editing a task
--- @element edit_task
-local edit_task =
-Gui.element{
-    type = 'sprite-button',
-    sprite = 'utility/rename_icon_normal',
-    tooltip = {'task-list.edit-tooltip-none'},
-    style = 'tool_button'
-}
-:style{
-    padding = -2,
-    height = 20,
-    width = 20
-}
-:on_click(function(player,element,_)
-    local task_id = element.parent.name:sub(6)
-    Tasks.set_editing(task_id,player.name,true)
 end)
 
 --- Set of three elements which make up each row of the task table
@@ -185,6 +145,83 @@ local function remove_task_base(parent,task_id)
     Gui.destroy_if_valid(parent[task_id])
 end
 
+--- Button displayed next to tasks which the user is currently editing, used to save changes
+-- @element confirm_edit
+local task_editing
+local confirm_edit =
+Gui.element{
+    type = 'sprite-button',
+    sprite = 'utility/downloaded',
+    tooltip = {'task-list.confirm-tooltip'},
+    style = 'shortcut_bar_button_green'
+}
+:style{
+    padding = -2,
+    right_margin = -3,
+    height = 22,
+    width = 22
+}
+:on_click(function(player,element,_)
+    local task_id = element.parent.name
+    local new_message = element.parent[task_editing.name].text
+    Tasks.set_editing(task_id,player.name)
+    Tasks.update_task(task_id,new_message,player.name)
+end)
+
+--- Button displayed next to tasks which the user is currently editing, used to discard changes
+-- @element cancel_edit
+local cancel_edit =
+Gui.element{
+    type = 'sprite-button',
+    sprite = 'utility/close_black',
+    tooltip = {'task-list.cancel-tooltip'},
+    style = 'shortcut_bar_button_red'
+}
+:style{
+    padding = -2,
+    right_margin = -3,
+    height = 22,
+    width = 22
+}
+:on_click(function(player,element,_)
+    local task_id = element.parent.name
+    Tasks.set_editing(task_id,player.name)
+end)
+
+--- Editing state for a task, contrins a text field and the two edit buttons
+-- @element task_editing
+task_editing =
+Gui.element(function(event_trigger,parent,task)
+    local message = task.message
+
+    -- Draw the element
+    local element =
+    parent.add{
+        name = event_trigger,
+        type = 'textfield',
+        text = message,
+        clear_and_focus_on_right_click = true
+    }
+
+    -- Change the style
+    local style = element.style
+    style.maximal_width = 110
+    style.height = 20
+
+    -- Add the edit buttons
+    cancel_edit(parent)
+    confirm_edit(parent)
+
+    -- Return the element
+    return element
+end)
+:on_confirmed(function(player,element,_)
+    local task_id = element.parent.name
+    local new_message = element.text
+    Tasks.set_editing(task_id,player.name)
+    Tasks.update_task(task_id,new_message,player.name)
+end)
+
 --- Default state for a task, contains only a label with the task message
 -- @element task_label
 local task_label =
@@ -196,7 +233,7 @@ Gui.element(function(_,parent,task)
     -- Draw the element
     local element =
     parent.add{
-        name = 'task_entry',
+        name = task_editing.name,
         type = 'label',
         caption = message,
         tooltip = {'task-list.last-edit', last_edit_name, format_time(last_edit_time)}
@@ -206,33 +243,6 @@ Gui.element(function(_,parent,task)
     local style = element.style
     style.single_line = false
     style.maximal_width = 150
-
-    -- Return the element
-    return element
-end)
-
---- Editing state for a task, contrins a text field and the two edit buttons
--- @element task_editing
-local task_editing =
-Gui.element(function(_,parent,task)
-    local message = task.message
-
-    -- Draw the element
-    local element =
-    parent.add{
-        name = 'task_entry',
-        type = 'textfield',
-        text = message
-    }
-
-    -- Change the style
-    local style = element.style
-    style.maximal_width = 150
-    style.height = 20
-
-    -- Add the edit buttons
-    cancel_edit(parent)
-    confirm_edit(parent)
 
     -- Return the element
     return element
@@ -266,13 +276,15 @@ local function update_task(player,task_table,task_id)
     edit_task_element.visible = player_allowed_edit
     discard_task_element.visible = player_allowed_edit
     if #players_editing > 0 then
+        edit_task_element.hovered_sprite = 'utility/warning_icon'
         edit_task_element.tooltip = {'task-list.edit-tooltip',table.concat(players_editing,', ')}
     else
+        edit_task_element.hovered_sprite = edit_task_element.sprite
         edit_task_element.tooltip = {'task-list.edit-tooltip-none'}
     end
 
     -- Check if the player is was editing and/or currently editing
-    local task_entry = task_flow.task_entry or task_label(task_flow,task)
+    local task_entry = task_flow[task_editing.name] or task_label(task_flow,task)
     local player_was_editing = task_entry.type == 'textfield'
     local player_is_editing = task.curently_editing[player.name]
 
@@ -295,7 +307,7 @@ local function update_task(player,task_table,task_id)
         -- Player was not editing but now is, remove label and add text field
         edit_task_element.enabled = false
         task_flow.clear()
-        task_editing(task_flow,task)
+        task_editing(task_flow,task).focus()
 
     end
 end

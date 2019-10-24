@@ -669,13 +669,13 @@ function Gui.scroll_table(parent,height,column_count,name)
         type = 'scroll-pane',
         direction = 'vertical',
         horizontal_scroll_policy = 'never',
-        vertical_scroll_policy = 'auto-and-reserve-space',
+        vertical_scroll_policy = 'auto',
         style = 'scroll_pane_under_subheader'
     }
 
     -- Change the style of the scroll
     local scroll_style = scroll.style
-    scroll_style.padding = {1,2}
+    scroll_style.padding = {1,3}
     scroll_style.maximal_height = height
     scroll_style.horizontally_stretchable = true
 
