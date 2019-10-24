@@ -48,6 +48,7 @@
     <li class="nav-item"><a href="#Element_Events"><span class="fragment-hashtag">#</span> Element Events </a></li>
     <li class="nav-item"><a href="#Top_Flow"><span class="fragment-hashtag">#</span> Top Flow </a></li>
     <li class="nav-item"><a href="#Left_Flow"><span class="fragment-hashtag">#</span> Left Flow </a></li>
+    <li class="nav-item"><a href="#Helper_Functions"><span class="fragment-hashtag">#</span> Helper Functions </a></li>
     </ul>
     </li>
     </ul>
@@ -214,6 +215,7 @@
     <li class="nav-item"><a href="#Element_Events"><span class="fragment-hashtag">#</span> Element Events </a></li>
     <li class="nav-item"><a href="#Top_Flow"><span class="fragment-hashtag">#</span> Top Flow </a></li>
     <li class="nav-item"><a href="#Left_Flow"><span class="fragment-hashtag">#</span> Left Flow </a></li>
+    <li class="nav-item"><a href="#Helper_Functions"><span class="fragment-hashtag">#</span> Helper Functions </a></li>
     </ul>
     </li>
     </ul>
@@ -245,34 +247,58 @@
     <h3>Usage</h3>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Defining a button that prints the player's name
 </span><span class="keyword">local</span> example_button =
-Gui.new_element{
+Gui.element{
     <span class="global">type</span> = <span class="string">'button'</span>,
     caption = <span class="string">'Example Button'</span>
 }
-:on_click(<span class="keyword">function</span>(event)
-    <span class="keyword">local</span> player = event.player
+:on_click(<span class="keyword">function</span>(player,element,event)
     player.<span class="global">print</span>(player.name)
 <span class="keyword">end</span>)</code></pre>
-    <pre class="code" data-lang="Lua"><code><span class="comment">-- Defining using a custom function
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Defining a button with a custom style
+</span><span class="keyword">local</span> example_button =
+Gui.element{
+    <span class="global">type</span> = <span class="string">'button'</span>,
+    caption = <span class="string">'Example Button'</span>
+}
+:style{
+    height = <span class="number">25</span>,
+    width = <span class="number">100</span>
+}
+:on_click(<span class="keyword">function</span>(player,element,event)
+    player.<span class="global">print</span>(player.name)
+<span class="keyword">end</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Defining a button using a custom function
 </span><span class="keyword">local</span> example_flow_with_button =
-Gui.new_element(<span class="keyword">function</span>(event_trigger,parent)
-    <span class="keyword">local</span> flow =
+Gui.element(<span class="keyword">function</span>(event_trigger,parent)
+    <span class="comment">-- Add the flow the button is in
+</span>    <span class="keyword">local</span> flow =
     parent.add{
         name = <span class="string">'example_flow'</span>,
         <span class="global">type</span> = <span class="string">'flow'</span>
     }
 
-    <span class="keyword">local</span> element =
+    <span class="comment">-- Get the players name
+</span>    <span class="keyword">local</span> player = game.players[parent.player_index]
+    <span class="keyword">local</span> player_name = player.name
+
+    <span class="comment">-- Add the button
+</span>    <span class="keyword">local</span> element =
     flow.add{
         name = event_trigger,
         <span class="global">type</span> = <span class="string">'button'</span>,
-        caption = <span class="string">'Example Button'</span>
+        caption = <span class="string">'Example Button: '</span>..player_name
     }
 
-    <span class="keyword">return</span> element
+    <span class="comment">-- Set the style of the button
+</span>    <span class="keyword">local</span> style = element.style
+    style.height = <span class="number">25</span>
+    style.width = <span class="number">100</span>]
+    style.font_color = player.color
+
+    <span class="comment">-- Return the element
+</span>    <span class="keyword">return</span> element
 <span class="keyword">end</span>)
-:on_click(<span class="keyword">function</span>(event)
-    <span class="keyword">local</span> player = event.player
+:on_click(<span class="keyword">function</span>(player,element,event)
     player.<span class="global">print</span>(player.name)
 <span class="keyword">end</span>)</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Drawing an element
@@ -321,7 +347,7 @@ Gui.new_element(<span class="keyword">function</span>(event_trigger,parent)
     </tr>
     <tr>
     <td class="name"><a href="#_prototype_element">_prototype_element</a></td>
-    <td class="summary">The element prototype which is returned from Gui.new_element</td>
+    <td class="summary">The element prototype which is returned from Gui.element</td>
     </tr>
     <tr>
     <td class="name"><a href="#_mt_element">_mt_element</a></td>
@@ -348,8 +374,12 @@ Gui.new_element(<span class="keyword">function</span>(event_trigger,parent)
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#new_element">new_element(element_define)</a></td>
+    <td class="name"><a href="#element">element(element_define)</a></td>
     <td class="summary">Base function used to define new elements, can be used with a table or with a function</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Gui._prototype_element:style">Gui._prototype_element:style(style_define)</a></td>
+    <td class="summary">Extension of Gui.element when using the table method, values applied after the element is drawn</td>
     </tr>
     <tr>
     <td class="name"><a href="#Gui._prototype_element:add_to_top_flow">Gui._prototype_element:add_to_top_flow([authenticator])</a></td>
@@ -428,6 +458,10 @@ Gui.new_element(<span class="keyword">function</span>(event_trigger,parent)
     <td class="summary">Button which toggles the top flow elements</td>
     </tr>
     <tr>
+    <td class="name"><a href="#top_flow_button_style">top_flow_button_style</a></td>
+    <td class="summary">The style that should be used for buttons on the top flow</td>
+    </tr>
+    <tr>
     <td class="name"><a href="#get_top_flow">get_top_flow(player)</a></td>
     <td class="summary">Gets the flow which contains the elements for the top flow</td>
     </tr>
@@ -462,6 +496,42 @@ Gui.new_element(<span class="keyword">function</span>(event_trigger,parent)
     <tr>
     <td class="name"><a href="#toggle_left_element">toggle_left_element(player, element_define[, state])</a></td>
     <td class="summary">Toggles the visible state of all a left element for a player</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Helper_Functions">Helper Functions </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#get_player_from_element">get_player_from_element(element)</a></td>
+    <td class="summary">Get the player that owns a gui element</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#toggle_enabled_state">toggle_enabled_state(element[, state])</a></td>
+    <td class="summary">Will toggle the enabled state of an element or set it to the one given</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#toggle_visible_state">toggle_visible_state(element[, state])</a></td>
+    <td class="summary">Will toggle the visible state of an element or set it to the one given</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#destroy_if_valid">destroy_if_valid(element)</a></td>
+    <td class="summary">Destory a gui element without causing any errors, likly if the element may have already been removed</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#alignment">alignment(parent[, horizontal_align='right'][, vertical_align='center'][, name='alignment'])</a></td>
+    <td class="summary">Draw a flow that has custom element alignments, default is right align</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#scroll_table">scroll_table(parent, height, column_count[, name='scroll'])</a></td>
+    <td class="summary">Draw a scroll pane that has a table inside of it</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#header">header(parent, caption[, tooltip][, add_alignment=false][, name='header'])</a></td>
+    <td class="summary">Used to add a header to a frame, this has the option for a custom right alignment flow for buttons</td>
     </tr>
     </tbody>
     </table>
@@ -643,7 +713,7 @@ Gui.new_element(<span class="keyword">function</span>(event_trigger,parent)
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">The element prototype which is returned from Gui.new_element</p>
+    <p class="section-item-summary">The element prototype which is returned from Gui.element</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -764,8 +834,8 @@ Gui.new_element(<span class="keyword">function</span>(event_trigger,parent)
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#new_element" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="new_element">new_element(element_define)</span>
+    <a href="#element" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="element">element(element_define)</span>
     </div>
     </dt>
     <dd>
@@ -818,27 +888,115 @@ Gui.new_element(<span class="keyword">function</span>(event_trigger,parent)
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Defining an element with a table
 </span><span class="keyword">local</span> example_button =
-Gui.new_element{
+Gui.element{
     <span class="global">type</span> = <span class="string">'button'</span>,
     caption = <span class="string">'Example Button'</span>
 }</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Defining an element with a function
 </span><span class="keyword">local</span> example_flow_with_button =
-Gui.new_element(<span class="keyword">function</span>(event_trigger,parent)
-    <span class="keyword">local</span> flow =
+Gui.element(<span class="keyword">function</span>(event_trigger,parent,...)
+    <span class="comment">-- Add the flow the button is in
+</span>    <span class="keyword">local</span> flow =
     parent.add{
         name = <span class="string">'example_flow'</span>,
         <span class="global">type</span> = <span class="string">'flow'</span>
     }
 
-    <span class="keyword">local</span> element =
+    <span class="comment">-- Add the button
+</span>    <span class="keyword">local</span> element =
     flow.add{
         name = event_trigger,
         <span class="global">type</span> = <span class="string">'button'</span>,
         caption = <span class="string">'Example Button'</span>
     }
 
-    <span class="keyword">return</span> element
+    <span class="comment">-- Set the style of the button
+</span>    <span class="keyword">local</span> style = element.style
+    style.height = <span class="number">25</span>
+    style.width = <span class="number">100</span>
+
+    <span class="comment">-- Return the element
+</span>    <span class="keyword">return</span> element
+<span class="keyword">end</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Gui._prototype_element:style" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Gui._prototype_element:style">Gui._prototype_element:style(style_define)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Extension of Gui.element when using the table method, values applied after the element is drawn</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>style_define</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a> or <a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     used to define how the style is applied, using a table is the simplist way of doing this
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the new element define that is used to register events to this element</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Setting the height and width of the example button
+</span><span class="keyword">local</span> example_button =
+Gui.element{
+    <span class="global">type</span> = <span class="string">'button'</span>,
+    caption = <span class="string">'Example Button'</span>
+}
+:style{
+    height = <span class="number">25</span>,
+    width = <span class="number">100</span>
+}</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Using a function to set the style
+</span><span class="keyword">local</span> example_button =
+Gui.element{
+    <span class="global">type</span> = <span class="string">'button'</span>,
+    caption = <span class="string">'Example Button'</span>
+}
+:style(<span class="keyword">function</span>(style,element,...)
+    <span class="keyword">local</span> player = game.players[element.player_index]
+    style.height = <span class="number">25</span>
+    style.width = <span class="number">100</span>
+    style.font_color = player.color
 <span class="keyword">end</span>)</code></pre>
     <!-- usage end -->
 
@@ -884,6 +1042,13 @@ Gui.new_element(<span class="keyword">function</span>(event_trigger,parent)
     <!-- parameters end -->
 
     <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the new element define that is used to register events to this element</span>
+    </li>
+    </ul>
     <!-- returns end -->
 
 
@@ -941,6 +1106,13 @@ Gui.new_element(<span class="keyword">function</span>(event_trigger,parent)
     <!-- parameters end -->
 
     <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">the new element define that is used to register events to this element</span>
+    </li>
+    </ul>
     <!-- returns end -->
 
 
@@ -1578,6 +1750,33 @@ Gui.new_element(<span class="keyword">function</span>(event_trigger,parent)
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
+    <a href="#top_flow_button_style" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="top_flow_button_style">top_flow_button_style</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">The style that should be used for buttons on the top flow</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
     <a href="#get_top_flow" class="fragment-hashtag">#</a>
     <span class="section-item-title" id="get_top_flow">get_top_flow(player)</span>
     </div>
@@ -2006,6 +2205,638 @@ Gui.new_element(<span class="keyword">function</span>(event_trigger,parent)
 
     </dd>
     </dl>
+    <h3><span id="Helper_Functions" class="section-title"><a href="#Helper_Functions">Helper Functions </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#get_player_from_element" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get_player_from_element">get_player_from_element(element)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Get the player that owns a gui element</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the element that you want to get the owner of
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+    <span class="return-text">the player that owns this element</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Geting the owner of an element
+</span><span class="keyword">local</span> player = Gui.get_player_from_element(element)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#toggle_enabled_state" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="toggle_enabled_state">toggle_enabled_state(element[, state])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Will toggle the enabled state of an element or set it to the one given</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the element that you want to toggle the state of
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>state</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     the state that you want to set
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">the new enabled state that the element has</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Toggling the the enabled state
+</span><span class="keyword">local</span> new_enabled_state = Gui.toggle_enabled_state(element)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#toggle_visible_state" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="toggle_visible_state">toggle_visible_state(element[, state])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Will toggle the visible state of an element or set it to the one given</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the element that you want to toggle the state of
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>state</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     the state that you want to set
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">the new visible state that the element has</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Toggling the the visible state
+</span><span class="keyword">local</span> new_visible_state = Gui.toggle_visible_state(element)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#destroy_if_valid" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="destroy_if_valid">destroy_if_valid(element)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Destory a gui element without causing any errors, likly if the element may have already been removed</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>element</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the element that you want to remove
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true if the element was valid and has been removed</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Likely use case for element not existing
+</span>Gui.destroy_if_valid(element[child_name])</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#alignment" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="alignment">alignment(parent[, horizontal_align='right'][, vertical_align='center'][, name='alignment'])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Draw a flow that has custom element alignments, default is right align</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>parent</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the parent element that the alignment flow will be added to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>horizontal_align</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the horizontal alignment of the elements in the flow
+
+    (<em>default</em>: 'right')
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>vertical_align</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the vertical alignment of the elements in the flow
+
+    (<em>default</em>: 'center')
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the alignment flow
+
+    (<em>default</em>: 'alignment')
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+    <span class="return-text">the alignment flow that was created</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a right align flow
+</span><span class="keyword">local</span> alignment = Gui.alignment(element,<span class="string">'example_right_alignment'</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a horizontal center and top align flow
+</span><span class="keyword">local</span> alignment = Gui.alignment(element,<span class="string">'example_center_top_alignment'</span>,<span class="string">'center'</span>,<span class="string">'top'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#scroll_table" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="scroll_table">scroll_table(parent, height, column_count[, name='scroll'])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Draw a scroll pane that has a table inside of it</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>parent</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the parent element that the scroll table will be added to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>height</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the maximum height for the scroll pane
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>column_count</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the number of columns that the table will have
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the scroll pane that is added, the table is always called 'table'
+
+    (<em>default</em>: 'scroll')
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+    <span class="return-text">the table that was created</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a scroll table with max height of 200 and column count of 3
+</span><span class="keyword">local</span> scroll_table = Gui.scroll_table(element,<span class="string">'example_scroll_table'</span>,<span class="number">200</span>,<span class="number">3</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#header" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="header">header(parent, caption[, tooltip][, add_alignment=false][, name='header'])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Used to add a header to a frame, this has the option for a custom right alignment flow for buttons</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>parent</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+
+     the parent element that the header will be added to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>caption</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#LocalizedString">LocalizedString</a></span>)
+
+     the caption that will be shown on the header
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>tooltip</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="http://lua-api.factorio.com/latest/Concepts.html#LocalizedString">LocalizedString</a></span>)
+
+     the tooltip that will be shown on the header
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>add_alignment</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     when true an alignment flow will be added for buttons
+
+    (<em>default</em>: false)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the header that is being added, the alignment is always called 'alignment'
+
+    (<em>default</em>: 'header')
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaGuiElement.html">LuaGuiElement</a></span>)
+    <span class="return-text">either the header or the header alignment if add_alignment is true</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a custom header
+</span><span class="keyword">local</span> header_alignment = Gui.header(
+    element,
+    <span class="string">'example_header'</span>,
+    <span class="string">'Example Caption'</span>,
+    <span class="string">'Example Tooltip'</span>,
+    <span class="keyword">true</span>
+)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    </dl>
 
     <!-- section end -->
 
@@ -2020,7 +2851,7 @@ Gui.new_element(<span class="keyword">function</span>(event_trigger,parent)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-10-21 22:17:42 UTC</i>
+    <i>Last updated 2019-10-24 01:44:32 UTC</i>
     </div>
     </div>
     </div>

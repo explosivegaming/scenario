@@ -271,27 +271,43 @@
     <tbody>
     <tr>
     <td class="name"><a href="#add_new_task">add_new_task</a></td>
-    <td class="summary">Button in the header to add a new task</td>
+    <td class="summary">Button displayed in the ehader bar, used to add a new task</td>
     </tr>
     <tr>
     <td class="name"><a href="#confirm_edit">confirm_edit</a></td>
-    <td class="summary">Used to save changes to a task</td>
+    <td class="summary">Button displayed next to tasks which the user is currently editing, used to save changes</td>
     </tr>
     <tr>
     <td class="name"><a href="#cancel_edit">cancel_edit</a></td>
-    <td class="summary">Used to cancel any changes you made to a task</td>
+    <td class="summary">Button displayed next to tasks which the user is currently editing, used to discard changes</td>
     </tr>
     <tr>
     <td class="name"><a href="#discard_task">discard_task</a></td>
-    <td class="summary">Removes the task from the list</td>
+    <td class="summary">Button displayed next to tasks which the user is can edit, used to delete a task from the list</td>
     </tr>
     <tr>
     <td class="name"><a href="#edit_task">edit_task</a></td>
-    <td class="summary">Opens edit mode for the task</td>
+    <td class="summary">Button displayed next to tasks which the user is can edit, used to start editing a task</td>
     </tr>
     <tr>
-    <td class="name"><a href="#task_list">task_list</a></td>
-    <td class="summary">Registers the task list</td>
+    <td class="name"><a href="#add_task_base">add_task_base</a></td>
+    <td class="summary">Set of three elements which make up each row of the task table</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#task_label">task_label</a></td>
+    <td class="summary">Default state for a task, contains only a label with the task message</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#task_editing">task_editing</a></td>
+    <td class="summary">Editing state for a task, contrins a text field and the two edit buttons</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#task_list_container">task_list_container</a></td>
+    <td class="summary">Main task list container for the left flow</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#task_list_toggle">task_list_toggle</a></td>
+    <td class="summary">Button on the top flow used to toggle the task list container</td>
     </tr>
     </tbody>
     </table>
@@ -465,7 +481,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Button in the header to add a new task</p>
+    <p class="section-item-summary">Button displayed in the ehader bar, used to add a new task</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -492,7 +508,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Used to save changes to a task</p>
+    <p class="section-item-summary">Button displayed next to tasks which the user is currently editing, used to save changes</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -519,7 +535,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Used to cancel any changes you made to a task</p>
+    <p class="section-item-summary">Button displayed next to tasks which the user is currently editing, used to discard changes</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -546,7 +562,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Removes the task from the list</p>
+    <p class="section-item-summary">Button displayed next to tasks which the user is can edit, used to delete a task from the list</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -573,7 +589,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Opens edit mode for the task</p>
+    <p class="section-item-summary">Button displayed next to tasks which the user is can edit, used to start editing a task</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -593,14 +609,122 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#task_list" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="task_list">task_list</span>
+    <a href="#add_task_base" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="add_task_base">add_task_base</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Registers the task list</p>
+    <p class="section-item-summary">Set of three elements which make up each row of the task table</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#task_label" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_label">task_label</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Default state for a task, contains only a label with the task message</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#task_editing" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_editing">task_editing</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Editing state for a task, contrins a text field and the two edit buttons</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#task_list_container" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_list_container">task_list_container</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Main task list container for the left flow</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#task_list_toggle" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_list_toggle">task_list_toggle</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Button on the top flow used to toggle the task list container</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -632,7 +756,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-10-21 22:17:42 UTC</i>
+    <i>Last updated 2019-10-24 01:44:32 UTC</i>
     </div>
     </div>
     </div>

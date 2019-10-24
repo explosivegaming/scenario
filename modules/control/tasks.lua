@@ -89,8 +89,8 @@ Tasks.remove_task(task_id)
 function Tasks.remove_task(task_id)
     local task = Store.get(task_store,task_id)
     local force_name = task.force_name
-    Store.clear(task_store,task_id)
     table.remove_element(force_tasks[force_name],task_id)
+    Store.clear(task_store,task_id)
 end
 
 --[[-- Update the message and last edited information for a task
