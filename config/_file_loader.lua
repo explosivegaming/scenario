@@ -39,7 +39,7 @@ return {
     'modules.addons.discord-alerts',
     'modules.addons.chat-reply',
     -- GUI
-    --'modules.gui.rocket-info',
+    'modules.gui.rocket-info',
     'modules.gui.science-info',
     'modules.gui.warp-list',
     'modules.gui.task-list',
