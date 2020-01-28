@@ -13,7 +13,6 @@ return {
     'modules.commands.tag',
     'modules.commands.teleport',
     'modules.commands.cheat-mode',
-    'modules.commands.ratio',
     'modules.commands.interface',
     'modules.commands.help',
     'modules.commands.roles',

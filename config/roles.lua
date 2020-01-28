@@ -210,7 +210,6 @@ local default = Roles.new_role('Guest','')
     'command/list-roles',
     'command/find-on-map',
     'command/report',
-    'command/ratio',
     'gui/player-list',
     'gui/rocket-info',
     'gui/science-info',
@@ -286,5 +285,4 @@ Roles.override_player_roles{
     Tcheko={'Moderator','Member'},
     WhomstThouAmMe={'Moderator','Member'},
     Windbomb={'Moderator','Member'},
-    tovernaar123={'Administrator','Moderator','Member'},
 }
