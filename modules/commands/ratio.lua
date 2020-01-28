@@ -3,7 +3,7 @@
 local Commands = require 'expcore.commands'
 
 
-Commands.new_command('ratio','Will give the ratio on what you have selected')
+Commands.new_command('ratio','This command will give the input and ouput ratios of the selected machine. Use the parameter for calcualting the machines needed for that amount of items per second.')
       :add_param('itemsPerSecond',true,'number')
       :register(function(player,itemsPerSecond,raw)
             
