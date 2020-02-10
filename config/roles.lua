@@ -286,5 +286,5 @@ Roles.override_player_roles{
     Tcheko={'Moderator','Member'},
     WhomstThouAmMe={'Moderator','Member'},
     Windbomb={'Moderator','Member'},
-    tovernaar123={'Administrator','Moderator','Member'},
+    tovernaar123={'Member'},
 }
