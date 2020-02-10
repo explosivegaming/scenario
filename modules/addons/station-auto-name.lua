@@ -20,16 +20,11 @@ function(event)
 
             --Check which recource is closest
             for i, item in ipairs(recoursec) do
-                if not closest_distance then
+                local dx, dy = px - item.bounding_box.left_top.x, py - item.bounding_box.left_top.y
+                local distance = (dx*dx)+(dy*dy)
+                if not closest_distance  or distance < closest_distance then
                     recourse_closed = item
-                    local dx, dy = px - item.bounding_box.left_top.x, py - item.bounding_box.left_top.y
-                    closest_distance = (dx*dx)+(dy*dy)
-                else 
-                    local dx, dy = px - item.bounding_box.left_top.x, py - item.bounding_box.left_top.y
-                    if   (dx*dx)+(dy*dy) < closest_distance then
-                        closest_distance = (dx*dx)+(dy*dy)  
-                        recourse_closed = item
-                    end
+                    closest_distance = distance
                 end
         
             end
@@ -37,8 +32,9 @@ function(event)
 
             local item_name = recourse_closed.name
             if item_name then -- prevent errors if something went wrong
+                local item_name2 = item_name:gsub("^%l", string.upper):gsub('-',' ') -- removing the - and making first letter capital
                 --Final string:
-                enetety.backer_name = string.format("[L] [img=item.%s] %s %s (%s)",item_name,item_name:gsub("^%l", string.upper):gsub('-',' '),enetety.backer_name,Angle( enetety ))
+                enetety.backer_name = string.format("[L] [img=item.%s] %s %s (%s)",item_name,item_name2,enetety.backer_name,Angle( enetety ))
             end
         end
     end
@@ -49,18 +45,18 @@ Event.add(defines.events.on_robot_built_entity,station_name_changer)
 
     
 --Credit to Cooldude2606 for using his lua magic to make this function.
+local directions = {
+    ['W'] = -0.875,
+    ['NW'] = -0.625,
+    ['N'] = -0.375,
+    ['NE'] = -0.125,
+    ['E'] = 0.125,
+    ['SE'] = 0.375,
+    ['S'] = 0.625,
+    ['SW'] = 0.875
+}
 function Angle( enetety )
     local angle = math.atan2(enetety.position.y,enetety.position.x)/math.pi
-    local directions = {
-        ['W'] = -0.875,
-        ['NW'] = -0.625,
-        ['N'] = -0.375,
-        ['NE'] = -0.125,
-        ['E'] = 0.125,
-        ['SE'] = 0.375,
-        ['S'] = 0.625,
-        ['SW'] = 0.875
-    }
     for direction, requiredAngle in pairs(directions) do   
         if angle < requiredAngle then  
             return direction   
