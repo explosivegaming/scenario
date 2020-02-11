@@ -29,6 +29,7 @@ return {
     'modules.commands.home',
     -- QoL Addons
     'modules.addons.station-auto-name',
+    'modules.addons.greetings',
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',
     'modules.addons.death-logger',
