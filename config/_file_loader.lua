@@ -43,7 +43,7 @@ return {
     'modules.gui.science-info',
     'modules.gui.warp-list',
     'modules.gui.task-list',
-    --'modules.gui.player-list',
+    'modules.gui.player-list',
     --'modules.commands.debug',
     -- Config Files
     'config.expcore-commands.auth_admin', -- commands tagged with admin_only are blocked for non admins
