@@ -116,7 +116,7 @@ local Game = require 'utils.game' --- @dep utils.game
 local Global = require 'utils.global' --- @dep utils.global
 local Event = require 'utils.event' --- @dep utils.event
 local Groups = require 'expcore.permission_groups' --- @dep expcore.permission_groups
-local Sudo = require 'expcore.sudo' --- @dep expcore.sudo
+local Async = require 'expcore.async' --- @dep expcore.async
 local Colours = require 'resources.color_presets' --- @dep resources.color_presets
 local write_json = ext_require('expcore.common','write_json') --- @dep expcore.common
 
@@ -443,9 +443,7 @@ end
 -- flag param - player - the player that has had they roles changed
 -- flag param - state - the state of the flag, aka if the flag is present
 function Roles.define_flag_trigger(name,callback)
-    local sudo_name = 'role-flag-'..name
-    Roles.config.flags[name] = sudo_name
-    Sudo.register(sudo_name,callback)
+    Roles.config.flags[name] = Async.register(callback)
 end
 
 --- Sets the default role which every player will have, this needs to be called at least once
@@ -748,9 +746,9 @@ end
 local function role_update(event)
     local player = Game.get_player_by_index(event.player_index)
     -- Updates flags given to the player
-    for flag,sudo_name in pairs(Roles.config.flags) do
+    for flag, async_token in pairs(Roles.config.flags) do
         local state = Roles.player_has_flag(player,flag)
-        Sudo(sudo_name,player,state)
+        Async(async_token, player, state)
     end
     -- Updates the players permission group
     local highest = Roles.get_player_highest_role(player)
@@ -758,10 +756,10 @@ local function role_update(event)
         if highest.permission_group[1] then
             local group = game.permissions.get_group(highest.permission_group[2])
             if group then
-                Sudo('add-player-to-permission-group',group,player)
+                Async(Groups.async_token_add_to_permission_group, group, player)
             end
         else
-            Groups.set_player_group(player,highest.permission_group)
+            Groups.set_player_group(player, highest.permission_group)
         end
     end
 end

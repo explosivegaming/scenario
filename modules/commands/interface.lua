@@ -17,7 +17,7 @@ local interface_modules = {
     ['Roles']='expcore.roles',
     ['Store']='expcore.store',
     ['Gui']='expcore.gui',
-    ['Sudo']='expcore.sudo'
+    ['Async']='expcore.async'
 }
 
 -- loads all the modules given in the above table
