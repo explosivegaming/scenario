@@ -44,7 +44,7 @@ return {
     'modules.gui.warp-list',
     'modules.gui.task-list',
     'modules.gui.player-list',
-    --'modules.commands.debug',
+    'modules.commands.debug',
     -- Config Files
     'config.expcore-commands.auth_admin', -- commands tagged with admin_only are blocked for non admins
     'config.expcore-commands.auth_roles', -- commands must be allowed via the role config

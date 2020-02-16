@@ -6,6 +6,7 @@ local Public = {}
 local pages = {
     require 'modules.gui.debug.redmew_global_view',
     require 'modules.gui.debug.expcore_store_view',
+    require 'modules.gui.debug.expcore_gui_view',
     require 'modules.gui.debug.global_view',
     require 'modules.gui.debug.package_view',
     require 'modules.gui.debug._g_view',
@@ -31,7 +32,7 @@ function Public.open_dubug(player)
         return
     end
 
-    frame = center.add {type = 'frame', name = main_frame_name, caption = 'Debuggertron 3001', direction = 'vertical'}
+    frame = center.add {type = 'frame', name = main_frame_name, caption = 'Debuggertron 3002', direction = 'vertical'}
     local frame_style = frame.style
     frame_style.height = 600
     frame_style.width = 900

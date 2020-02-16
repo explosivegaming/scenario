@@ -87,6 +87,9 @@ local Gui = {
     --- An index used for debuging to find the file where different elements where registered
     -- @table file_paths
     file_paths = {},
+    --- An index used for debuging to show the raw data used to define an element
+    -- @table debug_info
+    debug_info = {},
     --- The element prototype which is returned from Gui.element
     -- @table _prototype_element
     _prototype_element = {},
@@ -154,14 +157,17 @@ function Gui.element(element_define)
     Gui.uid = uid
     local name = tostring(uid)
     element.name = name
+    Gui.debug_info[name] = { draw = 'None', style = 'None', events = {} }
 
     -- Add the defination function
     if type(element_define) == 'table' then
+        Gui.debug_info[name].draw = element_define
         element_define.name = name
         element._draw = function(_,parent)
             return parent.add(element_define)
         end
     else
+        Gui.debug_info[name].draw = 'Function'
         element._draw = element_define
     end
 
@@ -206,12 +212,14 @@ end)
 function Gui._prototype_element:style(style_define)
     -- Add the defination function
     if type(style_define) == 'table' then
+        Gui.debug_info[self.name].style = style_define
         self._style = function(style)
             for key,value in pairs(style_define) do
                 style[key] = value
             end
         end
     else
+        Gui.debug_info[self.name].style = 'Function'
         self._style = style_define
     end
 
@@ -281,6 +289,7 @@ local function event_handler_factory(event_name)
     Event.add(event_name, general_event_handler)
 
     return function(self,handler)
+        table.insert(Gui.debug_info[self.name].events,debug.getinfo(1, "n").name)
         self[event_name] = handler
         return self
     end
@@ -331,7 +340,7 @@ Gui._prototype_element.on_switch_changed = event_handler_factory(defines.events.
 
 --- Called when LuaGuiElement text is changed by the player.
 -- @tparam function handler the event handler which will be called
-Gui._prototype_element.on_text_change = event_handler_factory(defines.events.on_gui_text_changed)
+Gui._prototype_element.on_text_changed = event_handler_factory(defines.events.on_gui_text_changed)
 
 --- Called when LuaGuiElement slider value is changed (related to the slider element).
 -- @tparam function handler the event handler which will be called
