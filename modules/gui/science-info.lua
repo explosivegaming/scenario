@@ -47,7 +47,9 @@ Gui.element(function(_,parent,production_label_data)
     }
 
     -- Change the style
-    surfix_element.style.font_color = color
+    local surfix_element_style = surfix_element.style
+    surfix_element_style.font_color = color
+    surfix_element_style.right_margin = 1
 
     -- Return the value label
     return element
@@ -119,8 +121,6 @@ Gui.element(function(_,parent,science_pack_data)
         type = 'frame',
         style = 'bordered_frame'
     }
-
-    -- Change the style of the delta flow
     delta_flow.style.padding = {0,3}
 
     -- Draw the delta flow table
@@ -130,8 +130,6 @@ Gui.element(function(_,parent,science_pack_data)
         type = 'table',
         column_count = 2
     }
-
-    -- Change the style of the delta flow table
     delta_table.style.padding = 0
 
     -- Draw the production labels
@@ -223,9 +221,9 @@ local function get_eta_label_data(player)
         return { research = false }
     end
 
+    local limit
     local progress = force.research_progress
     local remaining = research.research_unit_count*(1-progress)
-    local limit
 
     -- Check for the limiting science pack
     for _,ingredient in pairs(research.research_unit_ingredients) do
@@ -266,40 +264,14 @@ local science_info_container =
 Gui.element(function(event_trigger,parent)
     local player = Gui.get_player_from_element(parent)
 
-    -- Draw the external container
-    local frame =
-    parent.add{
-        name = event_trigger,
-        type = 'frame'
-    }
-
-    -- Set the frame style
-    local frame_style = frame.style
-    frame_style.padding = 2
-    frame_style.minimal_width = 200
-
     -- Draw the internal container
-    local container =
-    frame.add{
-        name = 'container',
-        type = 'frame',
-        direction = 'vertical',
-        style = 'window_content_frame_packed'
-    }
-
-    -- Set the container style
-    local style = container.style
-    style.vertically_stretchable = false
+    local container = Gui.container(parent,event_trigger,200)
 
     -- Draw the header
-    Gui.header(
-        container,
-        {'science-info.main-caption'},
-        {'science-info.main-tooltip'}
-    )
+    Gui.header(container, {'science-info.main-caption'}, {'science-info.main-tooltip'})
 
     -- Draw the scroll table for the tasks
-    local scroll_table = Gui.scroll_table(container,185,4)
+    local scroll_table = Gui.scroll_table(container,178,4)
 
     -- Draw the no packs label
     local no_packs_label =
@@ -318,20 +290,7 @@ Gui.element(function(event_trigger,parent)
     -- Add the footer and eta
     if config.show_eta then
         -- Draw the footer
-        local footer = Gui.header(
-            container,
-            {'science-info.eta-caption'},
-            {'science-info.eta-tooltip'},
-            true,
-            'footer'
-        )
-
-        -- Set the style
-        footer.parent.style = 'subheader_frame'
-        local footer_style = footer.parent.style
-        footer_style.padding = {2,4}
-        footer_style.use_header_filler = false
-        footer_style.horizontally_stretchable = true
+        local footer = Gui.footer(container, {'science-info.eta-caption'}, {'science-info.eta-tooltip'}, true)
 
         -- Draw the eta label
         local eta_label =
@@ -354,26 +313,14 @@ Gui.element(function(event_trigger,parent)
     end
 
     -- Return the exteral container
-    return frame
+    return container.parent
 end)
 :add_to_left_flow()
 
 --- Button on the top flow used to toggle the task list container
--- @element task_list_toggle
-Gui.element{
-    type = 'sprite-button',
-    sprite = 'entity/lab',
-    tooltip = {'science-info.main-tooltip'},
-    style = Gui.top_flow_button_style
-}
-:style{
-    padding = -2
-}
-:add_to_top_flow(function(player)
+-- @element toggle_left_element
+Gui.left_toolbar_button('entity/lab', {'science-info.main-tooltip'}, science_info_container, function(player)
     return Roles.player_allowed(player,'gui/science-info')
-end)
-:on_click(function(player,_,_)
-    Gui.toggle_left_element(player, science_info_container)
 end)
 
 --- Updates the gui every 1 second
@@ -382,8 +329,7 @@ Event.on_nth_tick(60,function()
     local force_eta_data = {}
     for _,player in pairs(game.connected_players) do
         local force_name = player.force.name
-        local left_flow = Gui.get_left_flow(player)
-        local frame = left_flow[science_info_container.name]
+        local frame = Gui.get_left_element(player,science_info_container)
         local container = frame.container
 
         -- Update the science packs

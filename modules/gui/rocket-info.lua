@@ -29,7 +29,8 @@ local function check_player_permissions(player,action)
         return false
     end
 
-    if config.progress[action..'_role_permission'] and not Roles.player_allowed(player,config.progress[action..'_role_permission']) then
+	if config.progress[action..'_role_permission']
+	and not Roles.player_allowed(player,config.progress[action..'_role_permission']) then
         return false
     end
 
@@ -45,12 +46,13 @@ Gui.element(function(_,parent,label_data)
 	local data_fullname = data_subname and data_name..data_subname or data_name
 
 	-- Add the name label
-	parent.add{
+	local name_label = parent.add{
 		type = 'label',
 		name = data_fullname..'-label',
         caption = {'rocket-info.data-caption-'..data_name,data_subname},
         tooltip = {'rocket-info.data-tooltip-'..data_name,data_subname}
 	}
+	name_label.style.padding = {0,2}
 
     --- Right aligned label to store the data
 	local alignment = Gui.alignment(parent,nil,nil,data_fullname)
@@ -61,6 +63,7 @@ Gui.element(function(_,parent,label_data)
         caption = label_data.value,
         tooltip = label_data.tooltip
 	}
+	element.style.padding = {0,2}
 
 	return element
 end)
@@ -187,11 +190,7 @@ Gui.element{
 	sprite = 'utility/play',
 	tooltip = {'rocket-info.toggle-rocket-tooltip'}
 }
-:style{
-	padding = -2,
-	width = 16,
-	height = 16
-}
+:style(Gui.sprite_style(16))
 :on_click(function(player,element,_)
 	local rocket_silo_name = element.parent.name:sub(8)
 	local rocket_silo = Rockets.get_silo_entity(rocket_silo_name)
@@ -214,11 +213,7 @@ Gui.element{
 	sprite = 'utility/center',
 	tooltip = {'rocket-info.launch-tooltip'}
 }
-:style{
-	padding = -2,
-	width = 16,
-	height = 16
-}
+:style(Gui.sprite_style(16,-1))
 :on_click(function(player,element,_)
 	local rocket_silo_name = element.parent.name:sub(8)
     local silo_data = Rockets.get_silo_data_by_name(rocket_silo_name)
@@ -333,6 +328,7 @@ local function get_progress_data(force_name)
 				silo_name = silo_data.name,
 				remove = true
 			})
+
 		else
 			-- Get the progress caption and tooltip
 			local progress_color = Colors.white
@@ -430,12 +426,8 @@ Gui.element{
 	hovered_sprite = 'utility/expand',
 	tooltip = {'rocket-info.toggle-section-tooltip'}
 }
-:style{
-	padding = -2,
-	height = 20,
-	width = 20
-}
-:on_click(function(player,element,_)
+:style(Gui.sprite_style(20))
+:on_click(function(_,element,_)
 	local header_flow = element.parent
 	local flow_name = header_flow.caption
 	local flow = header_flow.parent.parent[flow_name]
@@ -479,32 +471,12 @@ end)
 -- @element rocket_list_container
 local rocket_list_container =
 Gui.element(function(event_trigger,parent)
-    -- Draw the external container
-    local frame =
-    parent.add{
-        name = event_trigger,
-        type = 'frame'
-    }
-
-    -- Set the frame style
-    local frame_style = frame.style
-    frame_style.padding = 2
-    frame_style.minimal_width = 200
-
     -- Draw the internal container
-    local container =
-    frame.add{
-        name = 'container',
-        type = 'frame',
-        direction = 'vertical',
-        style = 'window_content_frame_packed'
-    }
+    local container = Gui.container(parent,event_trigger,200)
 
     -- Set the container style
     local style = container.style
-	style.vertically_stretchable = false
 	style.padding = 0
-
 
 	local player = Gui.get_player_from_element(parent)
 	local force_name = player.force.name
@@ -525,36 +497,26 @@ Gui.element(function(event_trigger,parent)
 		if check_player_permissions(player,'toggle_active') then col_count = col_count+1 end
 		local progress = section(container,'progress',col_count)
 		-- Label used when there are no active silos
-        progress.add{
+        local no_silos = progress.add{
             type = 'label',
             name = 'no_silos',
             caption = {'rocket-info.progress-no-silos'}
-        }
+		}
+		no_silos.style.padding = {1,2}
 		update_build_progress(progress,get_progress_data(force_name))
 	end
 
 	-- Return the exteral container
-	return frame
+	return container.parent
 end)
 :add_to_left_flow(function(player)
     return player.force.rockets_launched > 0 and Roles.player_allowed(player,'gui/rocket-info')
 end)
 
 --- Button on the top flow used to toggle the container
--- @element rocket_list_toggle
-Gui.element{
-    type = 'sprite-button',
-    sprite = 'entity/rocket-silo',
-    style = Gui.top_flow_button_style
-}
-:style{
-	padding = -2
-}
-:add_to_top_flow(function(player)
+-- @element toggle_left_element
+Gui.left_toolbar_button('entity/rocket-silo', {'rocket-info.main-tooltip'}, rocket_list_container, function(player)
     return Roles.player_allowed(player,'gui/rocket-info')
-end)
-:on_click(function(player,_,_)
-    Gui.toggle_left_element(player, rocket_list_container)
 end)
 
 --- Update the gui for all players on a force
@@ -563,8 +525,7 @@ local function update_rocket_gui_all(force_name)
 	local milestones = get_milestone_data(force_name)
 	local progress = get_progress_data(force_name)
 	for _,player in pairs(game.forces[force_name].players) do
-		local left_flow = Gui.get_left_flow(player)
-        local frame = left_flow[rocket_list_container.name]
+        local frame = Gui.get_left_element(player,rocket_list_container)
 		local container = frame.container
 		update_data_labels(container.stats.table,stats)
 		update_data_labels(container.milestones.table,milestones)
@@ -587,8 +548,7 @@ end)
 local function update_rocket_gui_progress(force_name)
 	local progress = get_progress_data(force_name)
 	for _,player in pairs(game.forces[force_name].players) do
-		local left_flow = Gui.get_left_flow(player)
-        local frame = left_flow[rocket_list_container.name]
+        local frame = Gui.get_left_element(player,rocket_list_container)
 		local container = frame.container
 		update_build_progress(container.progress.table,progress)
 	end
@@ -616,8 +576,7 @@ Event.add(defines.events.on_robot_built_entity,on_built)
 --- Redraw the progress section on role change
 local function role_update_event(event)
 	local player = game.players[event.player_index]
-    local left_flow = Gui.get_left_flow(player)
-	local container = left_flow[rocket_list_container.name].container
+	local container = Gui.get_left_element(player,rocket_list_container).container
 	local progress = container.progress
 	if config.progress.show_progress then
 		progress.destroy()

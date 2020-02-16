@@ -11,6 +11,12 @@ local config = require 'config.tasks' --- @dep config.tasks
 local format_time,table_keys = ext_require('expcore.common','format_time','table_keys') --- @dep expcore.common
 local Tasks = require 'modules.control.tasks' --- @dep modules.control.tasks
 
+-- Styles used for sprite buttons
+local Styles = {
+    sprite20 = Gui.sprite_style(20),
+    sprite22 = Gui.sprite_style(20, nil, { right_margin = -3 })
+}
+
 --- If a player is allowed to use the edit buttons
 local function check_player_permissions(player,task)
     if task then
@@ -60,11 +66,7 @@ Gui.element{
     tooltip = {'task-list.add-tooltip'},
     style = 'tool_button'
 }
-:style{
-    padding = -2,
-    height = 20,
-    width = 20
-}
+:style(Styles.sprite20)
 :on_click(function(player,_,_)
     Tasks.add_task(player.force.name,nil,player.name)
 end)
@@ -78,11 +80,7 @@ Gui.element{
     tooltip = {'task-list.edit-tooltip-none'},
     style = 'tool_button'
 }
-:style{
-    padding = -2,
-    height = 20,
-    width = 20
-}
+:style(Styles.sprite20)
 :on_click(function(player,element,_)
     local task_id = element.parent.name:sub(6)
     Tasks.set_editing(task_id,player.name,true)
@@ -97,11 +95,7 @@ Gui.element{
     tooltip = {'task-list.discard-tooltip'},
     style = 'tool_button'
 }
-:style{
-    padding = -2,
-    height = 20,
-    width = 20
-}
+:style(Styles.sprite20)
 :on_click(function(_,element,_)
     local task_id = element.parent.name:sub(6)
     Tasks.remove_task(task_id)
@@ -112,22 +106,16 @@ end)
 local add_task_base =
 Gui.element(function(_,parent,task_id)
     -- Add the task number label
-    parent.add{
+    local task_number = parent.add{
         name = 'count-'..task_id,
         type = 'label',
         caption = '0)'
     }
+    task_number.style.left_margin = 1
 
     -- Add a flow which will contain the task message and edit buttons
-    local task_flow =
-    parent.add{
-        name = task_id,
-        type = 'flow',
-    }
-
-    -- Set the padding on the task flow
-    local task_flow_style = task_flow.style
-    task_flow_style.padding = 0
+    local task_flow = parent.add{ name = task_id, type = 'flow', }
+    task_flow.style.padding = 0
 
     -- Add the two edit buttons outside the task flow
     local edit_flow = Gui.alignment(parent,nil,nil,'edit-'..task_id)
@@ -155,12 +143,7 @@ Gui.element{
     tooltip = {'task-list.confirm-tooltip'},
     style = 'shortcut_bar_button_green'
 }
-:style{
-    padding = -2,
-    right_margin = -3,
-    height = 22,
-    width = 22
-}
+:style(Styles.sprite22)
 :on_click(function(player,element,_)
     local task_id = element.parent.name
     local new_message = element.parent[task_editing.name].text
@@ -177,12 +160,7 @@ Gui.element{
     tooltip = {'task-list.cancel-tooltip'},
     style = 'shortcut_bar_button_red'
 }
-:style{
-    padding = -2,
-    right_margin = -3,
-    height = 22,
-    width = 22
-}
+:style(Styles.sprite22)
 :on_click(function(player,element,_)
     local task_id = element.parent.name
     Tasks.set_editing(task_id,player.name)
@@ -203,11 +181,6 @@ Gui.element(function(event_trigger,parent,task)
         clear_and_focus_on_right_click = true
     }
 
-    -- Change the style
-    local style = element.style
-    style.maximal_width = 110
-    style.height = 20
-
     -- Add the edit buttons
     cancel_edit(parent)
     confirm_edit(parent)
@@ -215,6 +188,10 @@ Gui.element(function(event_trigger,parent,task)
     -- Return the element
     return element
 end)
+:style{
+    maximal_width = 110,
+    height = 20
+}
 :on_confirmed(function(player,element,_)
     local task_id = element.parent.name
     local new_message = element.text
@@ -229,24 +206,18 @@ Gui.element(function(_,parent,task)
     local message = task.message
     local last_edit_name = task.last_edit_name
     local last_edit_time = task.last_edit_time
-
     -- Draw the element
-    local element =
-    parent.add{
+    return parent.add{
         name = task_editing.name,
         type = 'label',
         caption = message,
         tooltip = {'task-list.last-edit', last_edit_name, format_time(last_edit_time)}
     }
-
-    -- Change the style
-    local style = element.style
-    style.single_line = false
-    style.maximal_width = 150
-
-    -- Return the element
-    return element
 end)
+:style{
+    single_line = false,
+    maximal_width = 150
+}
 
 --- Updates a task for a player
 local function update_task(player,task_table,task_id)
@@ -308,10 +279,12 @@ local function update_task(player,task_table,task_id)
         edit_task_element.enabled = false
         task_flow.clear()
         task_editing(task_flow,task).focus()
+        task_table.parent.scroll_to_element(task_flow,'top-third')
 
     end
 end
 
+-- Update all the tasks for a player
 local function update_all_tasks(player,scroll_table)
     local task_ids = Tasks.get_force_task_ids(player.force.name)
     if #task_ids > 0 then
@@ -325,30 +298,8 @@ end
 -- @element task_list_container
 local task_list_container =
 Gui.element(function(event_trigger,parent)
-    -- Draw the external container
-    local frame =
-    parent.add{
-        name = event_trigger,
-        type = 'frame'
-    }
-
-    -- Set the frame style
-    local frame_style = frame.style
-    frame_style.padding = 2
-    frame_style.minimal_width = 200
-
     -- Draw the internal container
-    local container =
-    frame.add{
-        name = 'container',
-        type = 'frame',
-        direction = 'vertical',
-        style = 'window_content_frame_packed'
-    }
-
-    -- Set the container style
-    local style = container.style
-    style.vertically_stretchable = false
+    local container = Gui.container(parent,event_trigger,200)
 
     -- Draw the header
     local header = Gui.header(
@@ -364,7 +315,7 @@ Gui.element(function(event_trigger,parent)
     add_new_task_element.visible = check_player_permissions(player)
 
     -- Draw the scroll table for the tasks
-    local scroll_table = Gui.scroll_table(container,185,3)
+    local scroll_table = Gui.scroll_table(container,190,3)
     scroll_table.draw_horizontal_lines = true
     scroll_table.vertical_centering = false
 
@@ -397,7 +348,7 @@ Gui.element(function(event_trigger,parent)
     end
 
     -- Return the exteral container
-    return frame
+    return container.parent
 end)
 :add_to_left_flow(function(player)
     local task_ids = Tasks.get_force_task_ids(player.force.name)
@@ -405,21 +356,9 @@ end)
 end)
 
 --- Button on the top flow used to toggle the task list container
--- @element task_list_toggle
-Gui.element{
-    type = 'sprite-button',
-    sprite = 'utility/not_enough_repair_packs_icon',
-    tooltip = {'task-list.main-tooltip'},
-    style = Gui.top_flow_button_style
-}
-:style{
-    padding = -2
-}
-:add_to_top_flow(function(player)
+-- @element toggle_left_element
+Gui.left_toolbar_button('utility/not_enough_repair_packs_icon', {'task-list.main-tooltip'}, task_list_container, function(player)
     return Roles.player_allowed(player,'gui/task-list')
-end)
-:on_click(function(player,_,_)
-    Gui.toggle_left_element(player, task_list_container)
 end)
 
 --- When a new task is added it will udpate the task list for everyone on that force
@@ -435,8 +374,7 @@ Tasks.on_update(function(task,task_id,removed_task)
     -- Update the task for all the players on the force
     local task_ids = Tasks.get_force_task_ids(force.name)
     for _,player in pairs(force.connected_players) do
-        local left_flow = Gui.get_left_flow(player)
-        local frame = left_flow[task_list_container.name]
+        local frame = Gui.get_left_element(player,task_list_container)
         local scroll_table = frame.container.scroll.table
 
         -- Update the task that was changed
@@ -455,8 +393,7 @@ end)
 --- Update the tasks when the player joins
 Event.add(defines.events.on_player_joined_game,function(event)
     local player = game.players[event.player_index]
-    local left_flow = Gui.get_left_flow(player)
-    local frame = left_flow[task_list_container.name]
+    local frame = Gui.get_left_element(player,task_list_container)
     local scroll_table = frame.container.scroll.table
     update_all_tasks(player,scroll_table)
 end)
@@ -464,8 +401,7 @@ end)
 --- Makes sure the right buttons are present when roles change
 local function role_update_event(event)
     local player = game.players[event.player_index]
-    local left_flow = Gui.get_left_flow(player)
-    local container = left_flow[task_list_container.name].container
+    local container = Gui.get_left_element(player,task_list_container).container
 
     -- Update the tasks, incase the user can now edit them
     local scroll_table = container.scroll.table

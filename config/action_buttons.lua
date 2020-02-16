@@ -137,7 +137,7 @@ end
 
 --- Jails the action player, requires a reason
 -- @element jail_player
-local jail_player = new_button('utility/item_editor_icon',{'player-list.jail-player'})
+local jail_player = new_button('utility/multiplayer_waiting_icon',{'player-list.jail-player'})
 :on_click(function(player)
     local selected_player_name, selected_player_color = get_action_player_name(player)
     if Jail.is_jailed(selected_player_name) then
@@ -156,7 +156,7 @@ end
 
 --- Temp bans the action player, requires a reason
 -- @element temp_ban_player
-local temp_ban_player = new_button('utility/clock',{'player-list.temp-ban-player'})
+local temp_ban_player = new_button('utility/warning_white',{'player-list.temp-ban-player'})
 :on_click(function(player)
     local selected_player_name, selected_player_color = get_action_player_name(player)
     if Jail.is_jailed(selected_player_name) then

@@ -340,22 +340,6 @@ Gui._prototype_element.on_value_changed = event_handler_factory(defines.events.o
 --- Top Flow.
 -- @section topFlow
 
---- Button which toggles the top flow elements
--- @element toggle_top_flow
-local toggle_top_flow =
-Gui.element{
-    type = 'button',
-    style = 'back_button',
-    tooltip = {'gui_util.button_tooltip'}
-}
-:style{
-    width = 18,
-    height = 36
-}
-:on_click(function(player,_,_)
-    Gui.toggle_top_flow(player)
-end)
-
 --- The style that should be used for buttons on the top flow
 -- @field Gui.top_flow_button_style
 Gui.top_flow_button_style = mod_gui.button_style
@@ -371,6 +355,42 @@ local top_flow = Gui.get_top_flow(game.player)
 ]]
 Gui.get_top_flow = mod_gui.get_button_flow
 
+--- Button which toggles the top flow elements, shows inside top flow
+-- @element hide_top_flow
+local hide_top_flow =
+Gui.element{
+    type = 'sprite-button',
+    sprite = 'utility/preset',
+    style = 'tool_button',
+    tooltip = {'gui_util.button_tooltip'}
+}
+:style{
+    padding = -2,
+    width = 18,
+    height = 36
+}
+:on_click(function(player,_,_)
+    Gui.toggle_top_flow(player)
+end)
+
+--- Button which toggles the top flow elements, shows inside left flow
+-- @element show_top_flow
+local show_top_flow =
+Gui.element{
+    type = 'sprite-button',
+    sprite = 'utility/preset',
+    style = 'tool_button',
+    tooltip = {'gui_util.button_tooltip'}
+}
+:style{
+    padding = -2,
+    width = 18,
+    height = 20
+}
+:on_click(function(player,_,_)
+    Gui.toggle_top_flow(player)
+end)
+
 --[[-- Updates the visible states of all the elements on a players top flow
 @tparam LuaPlayer player the player that you want to update the flow for
 
@@ -380,8 +400,8 @@ Gui.update_top_flow(game.player)
 ]]
 function Gui.update_top_flow(player)
     local top_flow = Gui.get_top_flow(player)
-    local toggle_button = top_flow[toggle_top_flow.name]
-    local is_visible = toggle_button.style.name == 'back_button'
+    local hide_button = top_flow[hide_top_flow.name]
+    local is_visible = hide_button.visible
 
     -- Set the visible state of all elements in the flow
     for name,authenticator in pairs(Gui.top_elements) do
@@ -409,49 +429,21 @@ Gui.toggle_top_flow(game.player,true)
 
 ]]
 function Gui.toggle_top_flow(player,state)
+    -- Get the top flow and hide button
     local top_flow = Gui.get_top_flow(player)
-    local toggle_button = top_flow[toggle_top_flow.name]
-    if state == nil then state = toggle_button.style.name == 'forward_button' end
+    if state == nil then state = not top_flow.visible end
 
-    -- Set the visible state of all elements in the flow
-    for name,authenticator in pairs(Gui.top_elements) do
-        top_flow[name].visible = state and authenticator(player) or false
-    end
-
-    -- Change the style of the toggle button
-    if state then
-        toggle_button.style = 'back_button'
-        local style = toggle_button.style
-        style.height = 36
-        style.width = 18
-    else
-        toggle_button.style = 'forward_button'
-        local style = toggle_button.style
-        style.height = 20
-        style.width = 18
-    end
+    -- Change the visiblty of the flow
+    local left_flow = Gui.get_left_flow(player)
+    local show_button = left_flow.gui_core_buttons[show_top_flow.name]
+    show_button.visible = not state
+    top_flow.visible = state
 
     return state
 end
 
 --- Left Flow.
 -- @section leftFlow
-
---- Button which hides the elements in the left flow
--- @element hide_left_flow
-local hide_left_flow =
-Gui.element{
-    type = 'button',
-    style = 'back_button',
-    tooltip = {'expcore-gui.left-button-tooltip'}
-}
-:style{
-    width = 18,
-    height = 36
-}
-:on_click(function(player,_,_)
-    Gui.hide_left_flow(player)
-end)
 
 --[[-- Gets the flow which contains the elements for the left flow
 @function Gui.get_left_flow(player)
@@ -464,6 +456,52 @@ local left_flow = Gui.get_left_flow(game.player)
 ]]
 Gui.get_left_flow = mod_gui.get_frame_flow
 
+--- Button which hides the elements in the left flow
+-- @element hide_left_flow
+local hide_left_flow =
+Gui.element{
+    type = 'sprite-button',
+    sprite = 'utility/close_black',
+    style = 'tool_button',
+    tooltip = {'expcore-gui.left-button-tooltip'}
+}
+:style{
+    padding = -3,
+    width = 18,
+    height = 20
+}
+:on_click(function(player,_,_)
+    Gui.hide_left_flow(player)
+end)
+
+--[[-- Button which can be used to toggle a left element, placed on the top flow
+@tparam string sprite the sprite that you want to use on the button
+@tparam ?string|Concepts.LocalizedString tooltip the tooltip that you want the button to have
+@tparam table element_define the element define that you want to be toggled on the left flow
+@tparam[opt] function authenticator used to decide if the button should be visible to a player
+
+@usage-- Add a button to toggle a left element
+local toolbar_button = Gui.left_toolbar_button('entity/inserter','Nothing to see here',example_flow_with_button,function(player)
+    return player.admin
+end)
+
+]]
+function Gui.left_toolbar_button(sprite,tooltip,element_define,authenticator)
+    return Gui.element{
+        type = 'sprite-button',
+        sprite = sprite,
+        tooltip = tooltip,
+        style = Gui.top_flow_button_style
+    }
+    :style{
+        padding = -2
+    }
+    :add_to_top_flow(authenticator)
+    :on_click(function(player,_,_)
+        Gui.toggle_left_element(player, element_define)
+    end)
+end
+
 --[[-- Hides all left elements for a player
 @tparam LuaPlayer player the player to hide the elements for
 
@@ -473,7 +511,7 @@ Gui.hide_left_flow(game.player)
 ]]
 function Gui.hide_left_flow(player)
     local left_flow = Gui.get_left_flow(player)
-    local hide_button = left_flow[hide_left_flow.name]
+    local hide_button = left_flow.gui_core_buttons[hide_left_flow.name]
 
     -- Set the visible state of all elements in the flow
     hide_button.visible = false
@@ -482,7 +520,21 @@ function Gui.hide_left_flow(player)
     end
 end
 
---[[-- Toggles the visible state of all a left element for a player
+--[[-- Get the element define that is in the left flow
+@tparam LuaPlayer player the player that you want tog et the element for
+@tparam table element_define the element that you want to get for the player
+@treturn LuaGuiElement the gui element linked to this define in the left flow
+
+@usage-- Get your left element
+local frame = Gui.get_left_element(game.player,example_flow_with_button)
+
+]]
+function Gui.get_left_element(player,element_define)
+    local left_flow = Gui.get_left_flow(player)
+    return left_flow[element_define.name]
+end
+
+--[[-- Toggles the visible state of a left element for a player
 @tparam LuaPlayer player the player that you want to toggle the element for
 @tparam table element_define the element that you want to toggle for the player
 @tparam[opt] boolean state if given then the state will be set to this state
@@ -497,7 +549,7 @@ Gui.toggle_top_flow(game.player,example_flow_with_button,true)
 ]]
 function Gui.toggle_left_element(player,element_define,state)
     local left_flow = Gui.get_left_flow(player)
-    local hide_button = left_flow[hide_left_flow.name]
+    local hide_button = left_flow.gui_core_buttons[hide_left_flow.name]
 
     -- Set the visible state
     local element = left_flow[element_define.name]
@@ -523,12 +575,15 @@ Event.add(defines.events.on_player_created,function(event)
 
     -- Draw the top flow
     local top_flow = Gui.get_top_flow(player)
-    toggle_top_flow(top_flow)
+    hide_top_flow(top_flow)
     Gui.update_top_flow(player)
 
     -- Draw the left flow
     local left_flow = Gui.get_left_flow(player)
-    local hide_left = hide_left_flow(left_flow)
+    local button_flow = left_flow.add{ type = 'flow', name = 'gui_core_buttons', direction = 'vertical' }
+    local show_top = show_top_flow(button_flow)
+    local hide_left = hide_left_flow(button_flow)
+    show_top.visible = false
 
     -- Draw the elements on the left flow
     local show_hide_left = false
@@ -538,7 +593,7 @@ Event.add(defines.events.on_player_created,function(event)
         -- Check if the element should be visible
         local visible = type(open_on_join) == 'boolean' and open_on_join or false
         if type(open_on_join) == 'function' then
-            local success, err = pcall(open_on_join,player)
+            local success, err = pcall(open_on_join, player)
             if not success then
                 error('There as been an error with an open on join hander for a gui element:\n\t'..err)
             end
@@ -616,7 +671,31 @@ function Gui.destroy_if_valid(element)
     return true
 end
 
+--[[-- Returns a table to be used as a style on sprite buttons, produces a sqaure button
+@tparam number size the size that you want the button to be
+@tparam[opt=-2] number padding the padding that you want on the sprite
+@tparam[opt] table style any extra style settings that you want to have
+@treturn table the style table to be used with element_define:style()
+
+@usage-- Adding a sprite button with size 20
+local button =
+Gui.element{
+    type = 'sprite-button',
+    sprite = 'entity/inserter'
+}
+:style(Gui.sprite_style(20))
+
+]]
+function Gui.sprite_style(size,padding,style)
+    style = style or {}
+    style.padding = padding or -2
+    style.height = size
+    style.width = size
+    return style
+end
+
 --[[-- Draw a flow that has custom element alignments, default is right align
+@element Gui.alignment
 @tparam LuaGuiElement parent the parent element that the alignment flow will be added to
 @tparam[opt='right'] string horizontal_align the horizontal alignment of the elements in the flow
 @tparam[opt='center'] string vertical_align the vertical alignment of the elements in the flow
@@ -630,27 +709,23 @@ local alignment = Gui.alignment(element,'example_right_alignment')
 local alignment = Gui.alignment(element,'example_center_top_alignment','center','top')
 
 ]]
-function Gui.alignment(parent,horizontal_align,vertical_align,name)
-    -- Draw the alignment flow
-    local alignment =
-    parent.add{
+Gui.alignment =
+Gui.element(function(_,parent,_,_,name)
+    return parent.add{
         name = name or 'alignment',
         type = 'flow',
     }
-
-    -- Change its style
-    local style = alignment.style
+end)
+:style(function(style,_,horizontal_align,vertical_align,_)
     style.padding = {1,2}
     style.vertical_align = vertical_align or 'center'
     style.horizontal_align = horizontal_align or 'right'
     style.vertically_stretchable  = style.vertical_align ~= 'center'
     style.horizontally_stretchable = style.horizontal_align ~= 'center'
-
-    -- Return the flow
-    return alignment
-end
+end)
 
 --[[-- Draw a scroll pane that has a table inside of it
+@element Gui.scroll_table
 @tparam LuaGuiElement parent the parent element that the scroll table will be added to
 @tparam number height the maximum height for the scroll pane
 @tparam number column_count the number of columns that the table will have
@@ -661,9 +736,10 @@ end
 local scroll_table = Gui.scroll_table(element,'example_scroll_table',200,3)
 
 ]]
-function Gui.scroll_table(parent,height,column_count,name)
+Gui.scroll_table =
+Gui.element(function(_,parent,_,column_count,name)
     -- Draw the scroll
-    local scroll =
+    local scroll_pane =
     parent.add{
         name = name or 'scroll',
         type = 'scroll-pane',
@@ -673,32 +749,33 @@ function Gui.scroll_table(parent,height,column_count,name)
         style = 'scroll_pane_under_subheader'
     }
 
-    -- Change the style of the scroll
-    local scroll_style = scroll.style
-    scroll_style.padding = {1,3}
-    scroll_style.maximal_height = height
-    scroll_style.horizontally_stretchable = true
-
     -- Draw the table
     local scroll_table =
-    scroll.add{
+    scroll_pane.add{
         type = 'table',
         name = 'table',
         column_count = column_count
     }
 
-    -- Change the style of the table
-    local table_style = scroll_table.style
-    table_style.padding = 0
-    table_style.cell_padding = 0
-    table_style.vertical_align = 'center'
-    table_style.horizontally_stretchable = true
-
     -- Return the scroll table
     return scroll_table
-end
+end)
+:style(function(style,element,height,_,_)
+    -- Change the style of the scroll
+    local scroll_style = element.parent.style
+    scroll_style.padding = {1,3}
+    scroll_style.maximal_height = height
+    scroll_style.horizontally_stretchable = true
+
+    -- Change the style of the table
+    style.padding = 0
+    style.cell_padding = 0
+    style.vertical_align = 'center'
+    style.horizontally_stretchable = true
+end)
 
 --[[-- Used to add a header to a frame, this has the option for a custom right alignment flow for buttons
+@element Gui.header
 @tparam LuaGuiElement parent the parent element that the header will be added to
 @tparam ?string|Concepts.LocalizedString caption the caption that will be shown on the header
 @tparam[opt] ?string|Concepts.LocalizedString tooltip the tooltip that will be shown on the header
@@ -706,17 +783,17 @@ end
 @tparam[opt='header'] string name the name of the header that is being added, the alignment is always called 'alignment'
 @treturn LuaGuiElement either the header or the header alignment if add_alignment is true
 
-@usage-- Adding a custom header
+@usage-- Adding a custom header with a label
 local header_alignment = Gui.header(
     element,
-    'example_header',
     'Example Caption',
     'Example Tooltip',
     true
 )
 
 ]]
-function Gui.header(parent,caption,tooltip,add_alignment,name)
+Gui.header =
+Gui.element(function(_,parent,caption,tooltip,add_alignment,name)
     -- Draw the header
     local header =
     parent.add{
@@ -732,17 +809,102 @@ function Gui.header(parent,caption,tooltip,add_alignment,name)
     style.horizontally_stretchable = true
 
     -- Draw the caption label
-    header.add{
-        name = 'header_label',
-        type = 'label',
-        style = 'heading_1_label',
-        caption = caption,
-        tooltip = tooltip
-    }
+    if caption then
+        header.add{
+            name = 'header_label',
+            type = 'label',
+            style = 'heading_1_label',
+            caption = caption,
+            tooltip = tooltip
+        }
+    end
 
     -- Return either the header or the added alignment
     return add_alignment and Gui.alignment(header) or header
-end
+end)
+
+--[[-- Used to add a footer to a frame, this has the option for a custom right alignment flow for buttons
+@element Gui.header
+@tparam LuaGuiElement parent the parent element that the footer will be added to
+@tparam ?string|Concepts.LocalizedString caption the caption that will be shown on the footer
+@tparam[opt] ?string|Concepts.LocalizedString tooltip the tooltip that will be shown on the footer
+@tparam[opt=false] boolean add_alignment when true an alignment flow will be added for buttons
+@tparam[opt='footer'] string name the name of the footer that is being added, the alignment is always called 'alignment'
+@treturn LuaGuiElement either the footer or the footer alignment if add_alignment is true
+
+@usage-- Adding a custom footer with a label
+local header_alignment = Gui.footer(
+    element,
+    'Example Caption',
+    'Example Tooltip',
+    true
+)
+
+]]
+Gui.footer =
+Gui.element(function(_,parent,caption,tooltip,add_alignment,name)
+    -- Draw the header
+    local footer =
+    parent.add{
+        name = name or 'footer',
+        type = 'frame',
+        style = 'subfooter_frame'
+    }
+
+    -- Change the style of the footer
+    local style = footer.style
+    style.padding = {2,4}
+    style.use_header_filler = false
+    style.horizontally_stretchable = true
+
+    -- Draw the caption label
+    if caption then
+        footer.add{
+            name = 'footer_label',
+            type = 'label',
+            style = 'heading_1_label',
+            caption = caption,
+            tooltip = tooltip
+        }
+    end
+
+    -- Return either the footer or the added alignment
+    return add_alignment and Gui.alignment(footer) or footer
+end)
+
+--[[-- Used for left frame to add a nice boarder to them and contain them
+@element Gui.container
+@tparam LuaGuiElement parent the parent element that the container will be added to
+@tparam string name the name that you want to give the outer frame, often just event_trigger for a left frame
+@tparam number width the minimal width that the frame will have
+
+@usage-- Adding a container as a base
+local container = Gui.container(parent,'my_container',200)
+
+]]
+Gui.container =
+Gui.element(function(_,parent,name,_)
+    -- Draw the external container
+    local frame =
+    parent.add{
+        name = name,
+        type = 'frame'
+    }
+
+    -- Return the container
+    return frame.add{
+        name = 'container',
+        type = 'frame',
+        direction = 'vertical',
+        style = 'window_content_frame_packed'
+    }
+end)
+:style(function(style,element,_,width)
+    style.vertically_stretchable = false
+    local frame_style = element.parent.style
+    frame_style.padding = 2
+    frame_style.minimal_width = width
+end)
 
 -- Module return
 return Gui

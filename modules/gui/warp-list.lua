@@ -31,6 +31,13 @@ Global.register(keep_gui_open,function(tbl)
     keep_gui_open = tbl
 end)
 
+-- Styles used for sprite buttons
+local Styles = {
+    sprite20 = Gui.sprite_style(20),
+    sprite22 = Gui.sprite_style(20, nil, { right_margin = -3 }),
+    sprite32 = { height = 32, width = 32, left_margin = 1 }
+}
+
 --- Returns if a player is allowed to edit the given warp
 --- If a player is allowed to use the edit buttons
 local function check_player_permissions(player,action,warp)
@@ -71,11 +78,7 @@ Gui.element{
     tooltip = {'warp-list.add-tooltip'},
     style = 'tool_button'
 }
-:style{
-    padding = -2,
-    height = 20,
-    width = 20
-}
+:style(Styles.sprite20)
 :on_click(function(player,element)
     -- Add the new warp
     local force_name = player.force.name
@@ -95,11 +98,7 @@ Gui.element{
     tooltip = {'warp-list.discard-tooltip'},
     style = 'tool_button'
 }
-:style{
-    padding = -2,
-    height = 20,
-    width = 20
-}
+:style(Styles.sprite20)
 :on_click(function(_,element)
     local warp_id = element.parent.name:sub(6)
     Warps.remove_warp(warp_id)
@@ -114,11 +113,7 @@ Gui.element{
     tooltip = {'warp-list.edit-tooltip-none'},
     style = 'tool_button'
 }
-:style{
-    padding = -2,
-    height = 20,
-    width = 20
-}
+:style(Styles.sprite20)
 :on_click(function(player,element)
     local warp_id = element.parent.name:sub(6)
     Warps.set_editing(warp_id,player.name,true)
@@ -135,18 +130,10 @@ Gui.element(function(_,parent,warp_id)
         type = 'flow',
         caption = warp_id
     }
-
-    -- Change the style of the flow
     icon_flow.style.padding = 0
 
     -- Add a flow which will contain the warp name and edit buttons
-    local warp_flow =
-    parent.add{
-        name = warp_id,
-        type = 'flow',
-    }
-
-    -- Set the padding on the warp flow
+    local warp_flow = parent.add{ type = 'flow', name = warp_id }
     warp_flow.style.padding = 0
 
     -- Add the two edit buttons outside the warp flow
@@ -176,12 +163,7 @@ Gui.element{
     tooltip = {'warp-list.confirm-tooltip'},
     style = 'shortcut_bar_button_green'
 }
-:style{
-    padding = -2,
-    right_margin = -3,
-    height = 22,
-    width = 22
-}
+:style(Styles.sprite22)
 :on_click(function(player,element)
     local warp_id = element.parent.name
     local warp_name = element.parent[warp_editing.name].text
@@ -199,12 +181,7 @@ Gui.element{
     tooltip = {'warp-list.cancel-tooltip'},
     style = 'shortcut_bar_button_red'
 }
-:style{
-    padding = -2,
-    right_margin = -3,
-    height = 22,
-    width = 22
-}
+:style(Styles.sprite22)
 :on_click(function(player,element)
     local warp_id = element.parent.name
     Warps.set_editing(warp_id,player.name)
@@ -225,11 +202,6 @@ Gui.element(function(event_trigger,parent,warp)
         clear_and_focus_on_right_click = true
     }
 
-    -- Change the style
-    local style = element.style
-    style.maximal_width = 110
-    style.height = 20
-
     -- Add the edit buttons
     cancel_edit(parent)
     confirm_edit(parent)
@@ -237,6 +209,10 @@ Gui.element(function(event_trigger,parent,warp)
     -- Return the element
     return element
 end)
+:style{
+    maximal_width = 110,
+    height = 20
+}
 :on_confirmed(function(player,element,_)
     local warp_id = element.parent.name
     local warp_name = element.text
@@ -249,27 +225,20 @@ end)
 -- @element warp_label
 local warp_label =
 Gui.element(function(event_trigger,parent,warp)
-    local name = warp.name
     local last_edit_name = warp.last_edit_name
     local last_edit_time = warp.last_edit_time
-
     -- Draw the element
-    local element =
-    parent.add{
+    return parent.add{
         name = event_trigger,
         type = 'label',
-        caption = name,
+        caption = warp.name,
         tooltip = {'warp-list.last-edit',last_edit_name,format_time(last_edit_time)}
     }
-
-    -- Change the style
-    local style = element.style
-    style.single_line = false
-    style.maximal_width = 150
-
-    -- Return the element
-    return element
 end)
+:style{
+    single_line = false,
+    maximal_width = 150
+}
 :on_click(function(player,element,_)
     local warp_id = element.parent.name
     local warp = Warps.get_warp(warp_id)
@@ -283,25 +252,16 @@ end)
 warp_icon_button =
 Gui.element(function(event_trigger,parent,warp)
     local warp_position = warp.position
-
     -- Draw the element
-    local element =
-    parent.add{
+    return parent.add{
         name = event_trigger,
         type = 'sprite-button',
         sprite = 'item/'..warp.icon,
         tooltip = {'warp-list.goto-tooltip',warp_position.x,warp_position.y},
         style = 'quick_bar_slot_button'
     }
-
-    -- Change the style
-    local style = element.style
-    style.height = 32
-    style.width = 32
-
-    -- Return the element
-    return element
 end)
+:style(Styles.sprite32)
 :on_click(function(player,element,_)
     local warp_id = element.parent.caption
     Warps.teleport_player(warp_id,player)
@@ -316,27 +276,16 @@ end)
 --- Editing state for the warp icon, chose elem used to chosse icon
 -- @element warp_icon_editing
 local warp_icon_editing =
-Gui.element(function(event_trigger,parent,warp)
-    local warp_icon = warp.icon
-
-    -- Draw the element
-    local element =
-    parent.add{
+Gui.element(function(_,parent,warp)
+    return parent.add{
         name = warp_icon_button.name,
         type = 'choose-elem-button',
         elem_type = 'item',
-        item = warp_icon,
+        item = warp.icon,
         tooltip = {'warp-list.goto-edit'},
     }
-
-    -- Change the style
-    local style = element.style
-    style.height = 32
-    style.width = 32
-
-    -- Return the element
-    return element
 end)
+:style(Styles.sprite32)
 
 --- This timer controls when a player is able to warp, eg every 60 seconds
 -- @element warp_timer
@@ -421,12 +370,14 @@ local function update_warp(player,warp_table,warp_id)
         edit_warp_element.enabled = false
         warp_flow.clear()
         warp_editing(warp_flow,warp).focus()
+        warp_table.parent.scroll_to_element(warp_flow,'top-third')
         icon_flow.clear()
         warp_icon_editing(icon_flow,warp)
 
     end
 end
 
+-- Update all the warps for a player
 local function update_all_warps(player,warp_table)
     local warp_ids = Warps.get_force_warp_ids(player.force.name)
     if #warp_ids > 0 then
@@ -440,30 +391,8 @@ end
 -- @element warp_list_container
 local warp_list_container =
 Gui.element(function(event_trigger,parent)
-    -- Draw the external container
-    local frame =
-    parent.add{
-        name = event_trigger,
-        type = 'frame'
-    }
-
-    -- Set the frame style
-    local frame_style = frame.style
-    frame_style.padding = 2
-    frame_style.minimal_width = 200
-
     -- Draw the internal container
-    local container =
-    frame.add{
-        name = 'container',
-        type = 'frame',
-        direction = 'vertical',
-        style = 'window_content_frame_packed'
-    }
-
-    -- Set the container style
-    local style = container.style
-    style.vertically_stretchable = false
+    local container = Gui.container(parent,event_trigger,200)
 
     -- Draw the header
     local header = Gui.header(
@@ -479,7 +408,7 @@ Gui.element(function(event_trigger,parent)
     add_new_warp_element.visible = check_player_permissions(player,'allow_add_warp')
 
     -- Draw the scroll table for the warps
-    local scroll_table = Gui.scroll_table(container,258,3)
+    local scroll_table = Gui.scroll_table(container,250,3)
 
     -- Change the style of the scroll table
     local scroll_table_style = scroll_table.style
@@ -501,7 +430,7 @@ Gui.element(function(event_trigger,parent)
     update_all_warps(player,scroll_table)
 
     -- Return the exteral container
-    return frame
+    return container.parent
 end)
 :add_to_left_flow()
 
@@ -537,8 +466,7 @@ Warps.on_update(function(warp,_,removed_warp)
     -- Update the gui for selected players
     local warp_ids = Warps.get_force_warp_ids(force.name)
     for _,player in pairs(force.connected_players) do
-        local left_flow = Gui.get_left_flow(player)
-        local frame = left_flow[warp_list_container.name]
+        local frame = Gui.get_left_element(player,warp_list_container)
         local scroll_table = frame.container.scroll.table
 
         -- Update the gui
@@ -552,8 +480,7 @@ end)
 --- Update the warps when the player joins
 Event.add(defines.events.on_player_joined_game,function(event)
     local player = game.players[event.player_index]
-    local left_flow = Gui.get_left_flow(player)
-    local frame = left_flow[warp_list_container.name]
+    local frame = Gui.get_left_element(player,warp_list_container)
     local scroll_table = frame.container.scroll.table
     update_all_warps(player,scroll_table)
 end)
@@ -561,8 +488,7 @@ end)
 --- Makes sure the right buttons are present when roles change
 local function role_update_event(event)
     local player = game.players[event.player_index]
-    local left_flow = Gui.get_left_flow(player)
-    local container = left_flow[warp_list_container.name].container
+    local container = Gui.get_left_element(player,warp_list_container).container
 
     -- Update the warps, incase the user can now edit them
     local scroll_table = container.scroll.table
@@ -592,8 +518,7 @@ Store.watch(player_in_range_store,function(value,player_name)
     end
 
     -- Get the warp table
-    local left_flow = Gui.get_left_flow(player)
-    local frame = left_flow[warp_list_container.name]
+    local frame = Gui.get_left_element(player,warp_list_container)
     local scroll_table = frame.container.scroll.table
 
     -- Check if the buttons should be active
@@ -621,8 +546,7 @@ Store.watch(player_warp_cooldown_store,function(value,player_name,old_value)
     if value == old_value then return end
     -- Get the progress bar element
     local player = game.players[player_name]
-    local left_flow = Gui.get_left_flow(player)
-    local frame = left_flow[warp_list_container.name]
+    local frame = Gui.get_left_element(player,warp_list_container)
     local warp_timer_element = frame.container[warp_timer.name]
 
     -- Set the progress
@@ -702,8 +626,7 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing),function()
             end
 
             -- Change the enabled state of the add warp button
-            local left_flow = Gui.get_left_flow(player)
-            local frame = left_flow[warp_list_container.name]
+            local frame = Gui.get_left_element(player,warp_list_container)
             local add_warp_element = frame.container.header.alignment[add_new_warp.name]
             local was_able_to_make_warp = add_warp_element.enabled
             local can_make_warp = closest_distance > mr2
