@@ -28,7 +28,7 @@ Event.add(defines.events.on_console_chat,function(event)
     -- Loops over online players to see if they name is included
     for _,mentioned_player in pairs(game.connected_players) do
         if mentioned_player.index ~= player.index then
-            if search_string:match(mentioned_player.name:lower()) then
+            if search_string:match(mentioned_player.name:lower(), 1, true) then
                 send_text(mentioned_player.index,{'chat-popup.ping',player.name},player.chat_color)
             end
         end
