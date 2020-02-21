@@ -436,16 +436,7 @@ end)
 
 --- Button on the top flow used to toggle the warp list container
 -- @element warp_list_toggle
-Gui.element{
-    type = 'sprite-button',
-    sprite = 'item/'..config.default_icon,
-    tooltip = {'warp-list.main-tooltip',config.standard_proximity_radius},
-    style = Gui.top_flow_button_style
-}
-:style{
-    padding = -2
-}
-:add_to_top_flow(function(player)
+Gui.left_toolbar_button('item/'..config.default_icon,{'warp-list.main-tooltip',config.standard_proximity_radius},warp_list_container, function(player)
     return Roles.player_allowed(player,'gui/warp-list')
 end)
 :on_click(function(player,_,_)
