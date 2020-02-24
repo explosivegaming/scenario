@@ -246,6 +246,7 @@ end
 
 --[[-- Raise the handler which is attached to any event; external use should be limited to custom events
 @tparam table event the event table bassed to the handler, must include fields: name, element
+@treturn table the element define so more events can be raised
 
 @usage Raising a custom event
 element_define:raise_custom_event{
@@ -258,20 +259,20 @@ function Gui._prototype_element:raise_custom_event(event)
     -- Check the element is valid
     local element = event.element
     if not element or not element.valid then
-        return
+        return self
     end
 
     -- Get the event handler for this element
     local handler = self[event.name]
     if not handler then
-        return
+        return self
     end
 
     -- Get the player for this event
     local player_index = event.player_index or element.player_index
     local player = game.players[player_index]
     if not player or not player.valid then
-        return
+        return self
     end
     event.player = player
 
@@ -279,6 +280,7 @@ function Gui._prototype_element:raise_custom_event(event)
     if not success then
         error('There as been an error with an event handler for a gui element:\n\t'..err)
     end
+    return self
 end
 
 -- This function is used to register a link between element define events and the events in the factorio api
