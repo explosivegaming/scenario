@@ -160,28 +160,20 @@ function Gui.hide_left_flow(player)
         local top_flow = Gui.get_top_flow(player)
 
         -- Check if the the element has a button attached
-        if not element_define.toolbar_button then
-            goto hide_left_flow_end
+        if element_define.toolbar_button then
+            -- Check if the topflow contains the button
+            local button = top_flow[element_define.toolbar_button]
+            if button then
+                -- Get the button define from the reverse lookup on the element
+                local button_define = Gui.defines[element_define.toolbar_button]
+                -- Raise the custom event if all of the top checks have passed
+                button_define:raise_custom_event{
+                    name = Gui.events.on_visibility_changed_by_click,
+                    element = button,
+                    state = false
+                }
+            end
         end
-
-        -- Check if the topflow contains the button
-        local button = top_flow[element_define.toolbar_button]
-        if not button then
-            goto hide_left_flow_end
-        end
-
-        -- Get the button define from the reverse lookup on the element
-        local button_define = Gui.defines[element_define.toolbar_button]
-
-        -- Raise the custom event if all of the top checks have passed
-        button_define:raise_custom_event{
-            name = Gui.events.on_visibility_changed_by_click,
-            element = button,
-            state = false
-        }
-
-        -- Label for the end of the loop
-        ::hide_left_flow_end::
     end
 end
 
