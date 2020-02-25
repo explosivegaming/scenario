@@ -52,7 +52,7 @@ end)
 
 ]]
 function Gui.left_toolbar_button(sprite,tooltip,element_define,authenticator)
-    return Gui.element{
+    local button = Gui.element{
         type = 'sprite-button',
         sprite = sprite,
         tooltip = tooltip,
@@ -62,9 +62,26 @@ function Gui.left_toolbar_button(sprite,tooltip,element_define,authenticator)
         padding = -2
     }
     :add_to_top_flow(authenticator)
-    :on_click(function(player,_,_)
-        Gui.toggle_left_element(player, element_define)
+
+    -- Add on_click handler to handle click events comming from the player
+    button:on_click(function(player,_,_)
+        local top_flow = Gui.get_top_flow(player)
+        local element = top_flow[button.name]
+        local visibility_state  = Gui.toggle_left_element(player, element_define)
+
+        -- Raise custom event that tells listening elements if the element has changed visibility by a player clicking
+        -- Used in warp gui to handle the keep open logic
+        button:raise_custom_event{
+            name = Gui.events.on_visibility_changed_by_click,
+            element = element,
+            state = visibility_state
+        }
     end)
+
+    -- Add property to the left flow element with the name of the button
+    -- This is for the ability to reverse lookup the button from the left flow element
+    element_define.toolbar_button = button.name
+    return button
 end
 
 --[[-- Draw all the left elements onto the left flow, internal use only
@@ -137,6 +154,26 @@ function Gui.hide_left_flow(player)
     hide_button.visible = false
     for name,_ in pairs(Gui.left_elements) do
         left_flow[name].visible = false
+
+        -- Get the assosiated element define
+        local element_define = Gui.defines[name]
+        local top_flow = Gui.get_top_flow(player)
+
+        -- Check if the the element has a button attached
+        if element_define.toolbar_button then
+            -- Check if the topflow contains the button
+            local button = top_flow[element_define.toolbar_button]
+            if button then
+                -- Get the button define from the reverse lookup on the element
+                local button_define = Gui.defines[element_define.toolbar_button]
+                -- Raise the custom event if all of the top checks have passed
+                button_define:raise_custom_event{
+                    name = Gui.events.on_visibility_changed_by_click,
+                    element = button,
+                    state = false
+                }
+            end
+        end
     end
 end
 

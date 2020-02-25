@@ -439,9 +439,9 @@ end)
 Gui.left_toolbar_button('item/'..config.default_icon,{'warp-list.main-tooltip',config.standard_proximity_radius},warp_list_container, function(player)
     return Roles.player_allowed(player,'gui/warp-list')
 end)
-:on_click(function(player,_,_)
-    local visible_state = Gui.toggle_left_element(player, warp_list_container)
-    keep_gui_open[player.name] = visible_state
+:on_custom_event(Gui.events.on_visibility_changed_by_click, function(player,_,event)
+    -- Set gui keep open state for player that clicked the button: true if visible, false if invisible
+    keep_gui_open[player.name] = event.state
 end)
 
 --- When the name of a warp is updated this is triggered
