@@ -352,10 +352,9 @@ Gui._prototype_element.on_value_changed = event_handler_factory(defines.events.o
 
 --- Custom element events.
 -- @section customEvents
-Gui.custom_event = {
-    -- Triggered when a user changed the visibility of a left flow element by clicking a button
-    on_visibility_changed_by_click = 'on_visibility_changed_by_click'
-}
+
+-- Triggered when a user changed the visibility of a left flow element by clicking a button
+Gui.events.on_visibility_changed_by_click = 'on_visibility_changed_by_click'
 
 -- Module return
 return Gui
