@@ -30,12 +30,26 @@
 
 local Game = require 'utils.game' --- @dep utils.game
 local Event = require 'utils.event' --- @dep utils.event
-local Sudo = require 'expcore.sudo' --- @dep expcore.sudo
+local Async = require 'expcore.async' --- @dep expcore.async
 
 local Permissions_Groups = {
     groups={}, -- store for the different groups that are created
     _prototype={} -- stores functions that are used on group instances
 }
+
+-- Async function to add players to permission groups
+local add_to_permission_group =
+Async.register(function(permission_group,player)
+    permission_group.add_player(player)
+end)
+Permissions_Groups.async_token_add_to_permission_group = add_to_permission_group
+
+-- Async function to remove players from permission groups
+local remove_from_permission_group =
+Async.register(function(permission_group,player)
+    permission_group.remove_player(player)
+end)
+Permissions_Groups.async_token_remove_from_permission_group = remove_from_permission_group
 
 --- Getters.
 -- Functions that get permission groups
@@ -224,7 +238,7 @@ function Permissions_Groups._prototype:add_player(player)
     player = Game.get_player_from_any(player)
     local group = self:get_raw()
     if not group or not player then return false end
-    Sudo('add-player-to-permission-group',group,player)
+    Async(add_to_permission_group, group, player)
     return true
 end
 
@@ -235,7 +249,7 @@ function Permissions_Groups._prototype:remove_player(player)
     player = Game.get_player_from_any(player)
     local group = self:get_raw()
     if not group or not player then return false end
-    Sudo('remove-player-from-permission-group',group,player)
+    Async(remove_from_permission_group, group, player)
     return true
 end
 
@@ -273,13 +287,6 @@ end
 -- when the game starts it will make the permission groups
 Event.on_init(function()
     Permissions_Groups.reload_permissions()
-end)
-
-Sudo.register('add-player-to-permission-group',function(permission_group,player)
-    permission_group.add_player(player)
-end)
-Sudo.register('remove-player-from-permission-group',function(permission_group,player)
-    permission_group.remove_player(player)
 end)
 
 return Permissions_Groups

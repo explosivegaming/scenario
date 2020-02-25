@@ -1,7 +1,12 @@
 --- This file defines the different triggers for the chat bot
 -- @config Chat-Reply
 
+local Async = require 'expcore.async'
 local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
+
+local async_message = Async.register(function(player, message)
+    player.print(message)
+end)
 
 return {
     allow_command_prefix_for_messages = true, --- @setting allow_command_prefix_for_messages when true any message trigger will print to all player when prefixed
@@ -65,5 +70,48 @@ return {
         ['evolution']=function()
             return {'chat-bot.current-evolution',string.format('%.2f',game.forces['enemy'].evolution_factor)}
         end,
+        ['makepopcorn']=function(player)
+            local timeout = math.floor(180*(math.random()+0.5))
+            Async(async_message,player,{'chat-bot.reply',{'chat-bot.get-popcorn-1'}})
+            Async.wait(timeout,async_message,player,{'chat-bot.reply',{'chat-bot.get-popcorn-2',player.name}})
+        end,
+        ['passsomesnaps']=function(player)
+            local timeout = math.floor(180*(math.random()+0.5))
+            Async(async_message,player,{'chat-bot.reply',{'chat-bot.get-snaps-1'}})
+            Async.wait(timeout,async_message,player,{'chat-bot.reply',{'chat-bot.get-snaps-2',player.name}})
+            Async.wait(timeout*(math.random()+0.5),async_message,player,{'chat-bot.reply',{'chat-bot.get-snaps-3',player.name}})
+        end,
+        ['makecocktail']=function(player)
+            local timeout = math.floor(180*(math.random()+0.5))
+            Async(async_message,player,{'chat-bot.reply',{'chat-bot.get-cocktail-1'}})
+            Async.wait(timeout,async_message,player,{'chat-bot.reply',{'chat-bot.get-cocktail-2',player.name}})
+            Async.wait(timeout*(math.random()+0.5),async_message,player,{'chat-bot.reply',{'chat-bot.get-cocktail-3',player.name}})
+        end,
+        ['makecoffee']=function(player)
+            local timeout = math.floor(180*(math.random()+0.5))
+            Async(async_message,player,{'chat-bot.reply',{'chat-bot.make-coffee-1'}})
+            Async.wait(timeout,async_message,player,{'chat-bot.reply',{'chat-bot.make-coffee-2',player.name}})
+        end,
+        ['orderpizza']=function(player)
+            local timeout = math.floor(180*(math.random()+0.5))
+            Async(async_message,player,{'chat-bot.reply',{'chat-bot.order-pizza-1'}})
+            Async.wait(timeout,async_message,player,{'chat-bot.reply',{'chat-bot.order-pizza-2',player.name}})
+            Async.wait(timeout*(math.random()+0.5),async_message,player,{'chat-bot.reply',{'chat-bot.order-pizza-3',player.name}})
+        end,
+        ['maketea']=function(player)
+            local timeout = math.floor(180*(math.random()+0.5))
+            Async(async_message,player,{'chat-bot.reply',{'chat-bot.make-tea-1'}})
+            Async.wait(timeout,async_message,player,{'chat-bot.reply',{'chat-bot.make-tea-2',player.name}})
+        end,
+        ['meadplease']=function(player)
+            local timeout = math.floor(180*(math.random()+0.5))
+            Async(async_message,player,{'chat-bot.reply',{'chat-bot.get-mead-1'}})
+            Async.wait(timeout,async_message,player,{'chat-bot.reply',{'chat-bot.get-mead-2',player.name}})
+        end,
+        ['passabeer']=function(player)
+            local timeout = math.floor(180*(math.random()+0.5))
+            Async(async_message,player,{'chat-bot.reply',{'chat-bot.get-beer-1'}})
+            Async.wait(timeout,async_message,player,{'chat-bot.reply',{'chat-bot.get-beer-2',player.name}})
+        end
     }
 }
