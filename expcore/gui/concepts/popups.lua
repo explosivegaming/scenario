@@ -1,25 +1,33 @@
---- Gui structure define for popup gui
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Popups.
+-- Gui structure define for popup gui
+-- @section popups
+
 --[[
 >>>> Functions
     PopupFrames.get_flow(player) --- Gets the left flow that contains the popup frames
     PopupFrames.open(define_name,player,open_time,...) --- Opens a popup for the player, can give the amount of time it is open as well as params for the draw function
 
-    PopupFrames.close_progress --- Progress bar which when depleaded will close the popup frame
+    PopupFrames.close_progress --- Progress bar which when depleted will close the popup frame
     PopupFrames.close_button --- A button which can be used to close the gui before the timer runs out
 
     PopupFrames.new_popup(name) --- Creates a new popup frame define
     PopupFrames._prototype:set_default_open_time(amount) --- Sets the default open time for the popup, will be used if non is provided with open
     PopupFrames._prototype:open(player,open_time,...) --- Opens this define for a player, can be given open time and any other params for the draw function
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Game = require 'utils.game'
-local Event = require 'utils.event'
-local ProgressBar = require 'expcore.gui.elements.progress-bar'
-local Button = require 'expcore.gui.elements.buttons'
-local mod_gui = require 'mod-gui'
-local Color = require 'resources.color_presets'
-local Global = require 'utils.global'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Game = require 'utils.game' --- @dep utils.game
+local Event = require 'utils.event' --- @dep utils.event
+local ProgressBar = require 'expcore.gui.elements.progress-bar' --- @dep expcore.gui.elements.progress-bar
+local Button = require 'expcore.gui.elements.buttons' --- @dep expcore.gui.elements.buttons
+local mod_gui = require 'mod-gui' --- @dep mod-gui
+local Color = require 'resources.color_presets' --- @dep resources.color_presets
+local Global = require 'utils.global' --- @dep utils.global
 
 local PopupFrames = {
     paused_popups={},
@@ -34,17 +42,17 @@ Global.register(PopupFrames.paused_popups,function(tbl)
     PopupFrames.paused_popups = tbl
 end)
 
---- Sets the state of the element in the pasued list, nil or true
+--- Sets the state of the element in the paused list, nil or true
 -- @tparam LuaGuiElement element the element to set the state of
 -- @tparam[opt] boolean state the state to set it to, true will pause the the progress bar
-local function set_pasued_state(element,state)
+local function set_paused_state(element,state)
     local name = element.player_index..':'..element.index
     PopupFrames.paused_popups[name] = state
 end
 
---- Gets the state of the element in the pasued list, nil or true
+--- Gets the state of the element in the paused list, nil or true
 -- @tparam LuaGuiElement element the element to get the state of
-local function get_pasued_state(element)
+local function get_paused_state(element)
     local name = element.player_index..':'..element.index
     return PopupFrames.paused_popups[name]
 end
@@ -75,11 +83,11 @@ end
 local function close_popup(element)
 	local frame = element.parent.parent.parent
     if not frame or not frame.valid then return end
-    set_pasued_state(element.parent[PopupFrames.close_progress:uid()])
+    set_paused_state(element.parent[PopupFrames.close_progress:uid()])
 	frame.destroy()
 end
 
---- Progress bar which when depleaded will close the popup frame
+--- Progress bar which when depleted will close the popup frame
 PopupFrames.close_progress =
 ProgressBar.new_progressbar()
 :use_count_down()
@@ -100,20 +108,20 @@ end)
 --- When the progress bar is clicked it will pause its progress, or resume if previously paused
 Gui.on_click(PopupFrames.close_progress:uid(),function(event)
     local element = event.element
-    if get_pasued_state(element) then
-        set_pasued_state(element)
+    if get_paused_state(element) then
+        set_paused_state(element)
     else
-        set_pasued_state(element,true)
+        set_paused_state(element,true)
     end
 end)
 
 --- When the parent flow of the progress bar is clicked it will pause its progress, or resume if previously paused
 Gui.on_click(PopupFrames.close_frame_name,function(event)
     local element = event.element[PopupFrames.close_progress:uid()]
-    if get_pasued_state(element) then
-        set_pasued_state(element)
+    if get_paused_state(element) then
+        set_paused_state(element)
     else
-        set_pasued_state(element,true)
+        set_paused_state(element,true)
     end
 end)
 
@@ -214,9 +222,9 @@ Event.add(defines.events.on_player_created,function(event)
     }
 end)
 
---- Every tick any, not pasued, progress bars will go down by one tick
+--- Every tick any, not paused, progress bars will go down by one tick
 Event.add(defines.events.on_tick,PopupFrames.close_progress:event_countdown(function(element)
-    return not get_pasued_state(element)
+    return not get_paused_state(element)
 end))
 
 return PopupFrames

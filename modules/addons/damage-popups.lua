@@ -1,8 +1,10 @@
---- Displays the amount of dmg that is done by players to entities
+--- Displays the amount of dmg that is done by players to entities;
 -- also shows player health when a player is attacked
-local Game = require 'utils.game'
-local Event = require 'utils.event'
-local config = require 'config.popup_messages'
+-- @addon Damage-Popups
+
+local Game = require 'utils.game' --- @dep utils.game
+local Event = require 'utils.event' --- @dep utils.event
+local config = require 'config.popup_messages' --- @dep config.popup_messages
 
 Event.add(defines.events.on_entity_damaged, function(event)
     local entity = event.entity

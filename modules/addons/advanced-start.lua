@@ -1,7 +1,9 @@
 --- Adds a better method of player starting items based on production levels.
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local config = require 'config.advanced_start'
+-- @addon Advanced-Start
+
+local Event = require 'utils.event' --- @dep utils.event
+local Game = require 'utils.game' --- @dep utils.game
+local config = require 'config.advanced_start' --- @dep config.advanced_start
 local items = config.items
 
 Event.add(defines.events.on_player_created, function(event)
@@ -20,6 +22,7 @@ Event.add(defines.events.on_player_created, function(event)
             local stats = player.force.item_production_statistics
             local made = stats.get_input_count(item)
             local success,count = pcall(callback,made,stats.get_input_count,player)
+            count = math.floor(count)
             if success and count > 0 then
                 player.insert{name=item,count=count}
             end

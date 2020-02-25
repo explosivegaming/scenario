@@ -1,4 +1,12 @@
---- Gui class define for dropdowns and list boxs
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Dropdowns.
+-- Gui class define for dropdowns and list box
+-- @section dropdowns
+
 --[[
 >>>> Functions
     Dropdown.new_dropdown(name) --- Creates a new dropdown element define
@@ -16,9 +24,9 @@
 
     Other functions present from expcore.gui.core
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Game = require 'utils.game'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Game = require 'utils.game' --- @dep utils.game
 
 local select_value
 --- Store call for store update
@@ -39,8 +47,7 @@ local Dropdown = {
     _prototype=Prototype.extend{
         on_element_update = Prototype.event,
         on_store_update = Prototype.event,
-        add_store = Prototype.store(false,store_update),
-        add_sync_store = Prototype.store(true,store_update)
+        add_store = Prototype.store(store_update)
     }
 }
 
@@ -63,8 +70,7 @@ function Dropdown.new_dropdown(name)
         end
 
         if self.store then
-            local category = self.categorize and self.categorize(element) or nil
-            local value = self:get_store(category)
+            local value = self:get_store(element)
             if value then Dropdown.select_value(element,value) end
         end
     end)
@@ -74,8 +80,7 @@ function Dropdown.new_dropdown(name)
         local value = Dropdown.get_selected_value(element)
 
         if self.store then
-            local category = self.categorize and self.categorize(element) or value
-            self:set_store(category,value)
+            self:set_store(element,value)
 
         else
             local player = event.player

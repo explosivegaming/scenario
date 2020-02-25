@@ -1,8 +1,11 @@
-local Event = require 'utils.event'
-local Game = require 'utils.game'
-local Colors = require 'resources.color_presets'
-local write_json,format_time = ext_require('expcore.common','write_json','format_time')
-local config = require 'config.discord_alerts'
+--- Sends alert messages to our discord server when certain events are triggered
+-- @addon Discord-Alerts
+
+local Event = require 'utils.event' --- @dep utils.event
+local Game = require 'utils.game' --- @dep utils.game
+local Colors = require 'resources.color_presets' --- @dep resources.color_presets
+local write_json,format_time = ext_require('expcore.common','write_json','format_time') --- @dep expcore.common
+local config = require 'config.discord_alerts' --- @dep config.discord_alerts
 
 local function get_player_name(event)
     local player = Game.get_player_by_index(event.player_index)
@@ -76,7 +79,7 @@ end
 
 --- Reports added and removed
 if config.player_reports then
-    local Reports = require 'modules.addons.reports-control'
+    local Reports = require 'modules.control.reports' --- @dep modules.control.reports
     Event.add(Reports.events.on_player_reported,function(event)
         local player_name,by_player_name = get_player_name(event)
         emit_event{
@@ -88,32 +91,33 @@ if config.player_reports then
             ['Reason:']=event.reason
         }
     end)
-    Event.add(Reports.events.on_player_report_removed,function(event)
-        local player_name,by_player_name = get_player_name(event)
+    Event.add(Reports.events.on_report_removed,function(event)
+        local player_name = get_player_name(event)
         emit_event{
             title='Report Removed',
             description='A player has a report removed',
             color=Colors.green,
             ['Player:']='<inline>'..player_name,
-            ['By:']='<inline>'..by_player_name
+            ['By:']='<inline>'..event.removed_by_name
         }
     end)
 end
 
 --- Warnings added and removed
 if config.player_warnings then
-    local Warnings = require 'modules.addons.warnings-control'
-    Event.add(Warnings.events.on_player_warned,function(event)
+    local Warnings = require 'modules.control.warnings' --- @dep modules.control.warnings
+    Event.add(Warnings.events.on_warning_added,function(event)
         local player_name,by_player_name = get_player_name(event)
         emit_event{
             title='Warning',
             description='A player has been given a warning',
             color=Colors.yellow,
             ['Player:']='<inline>'..player_name,
-            ['By:']='<inline>'..by_player_name
+            ['By:']='<inline>'..by_player_name,
+            ['Reason:']=event.reason
         }
     end)
-    Event.add(Warnings.events.on_player_warning_removed,function(event)
+    Event.add(Warnings.events.on_warning_removed,function(event)
         local player_name,by_player_name = get_player_name(event)
         emit_event{
             title='Warning Removed',

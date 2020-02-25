@@ -1,256 +1,513 @@
---- Adds an easy way to store and watch for updates to a value
---[[
->>>> Basic Use
-    At the most basic level this allows for the naming of locations to store in the global table, the second feature is that you are
-    able to listen for updates of this value, which means that when ever the set function is called it will trigger the update callback.
+--[[-- Core Module - Store
+- Used to store and watch for updates for values in the global table
+@core Store
+@alias Store
 
-    This may be useful when storing config values and when they get set you want to make sure it is taken care of, or maybe you want
-    to have a value that you can trigger an update of from different places.
+@usage-- Require the module and add a store with no keys
+-- Store with no keys does not need a serializer
+local Store = require 'expcore.store' --- @dep expcore.store
+local scenario_diffculty = Store.register()
 
-    -- this will register a new location called 'scenario.dificutly'
-    -- note that setting a start value is optional and we could take nil to mean normal
-    Store.register('scenario.dificutly',function(value)
-        game.print('The scenario dificulty has be set to: '..value)
-    end)
+-- When the store is changed this function will trigger
+Store.watch(scenario_diffculty,function(value)
+    game.print('The scenario diffculty has been set to '..value)
+end)
 
-    -- this will set the value in the store to 'hard' and will trigger the update callback which will print a message to the game
-    Store.set('scenario.dificutly','hard')
+Store.set(scenario_diffculty,'hard') -- Set the value stored to 'hard'
+Store.get(scenario_diffculty) -- Returns 'hard'
+Store.update(scenario_diffculty,function(value) -- Will set value to 'normal' if no value is present
+    return not value and 'normal'
+end)
 
-    -- this will return 'hard'
-    Store.get('scenario.dificutly')
+@usage-- Require the module and add a store with keys
+-- Store with keys does not require a serializer but it can be helpful
+local Store = require 'expcore.store' --- @dep expcore.store
+local player_scores = Store.register(function(player) -- Use player name as the key
+    return player.name
+end)
 
->>>> Using Children
-    One limitation of store is that all lcoations must be registered to avoid desyncs, to get round this issue "children" can be used.
-    When you set the value of a child it does not have its own update callback so rather the "parent" location which has been registerd
-    will have its update value called with a second param of the name of that child.
+-- When any key in the store is changed this function will trigger
+Store.watch(player_scores,function(value,key)
+    game.print(key..' now has a score of '..value)
+end)
 
-    This may be useful when you want a value of each player or force and since you cant regisier every player at the start you must use
-    the players name as the child name.
-
-    -- this will register the lcoation 'scenario.score' where we plan to use force names as the child
-    Store.register('scenario.score',function(value,child)
-        game.print(child..' now has a score of '..value)
-    end)
-
-    -- this will return nil, but will not error as children dont need to be registerd
-    Store.get('scenario.score','player')
-
-    -- this will set 'player' to have a value of 10 for 'scenario.score' and trigger the game message print
-    Store.set('scenario.score','player',10)
-
-    -- this would be the silliar to Store.get however this will return the names of all the children
-    Store.get_children('scenario.score')
-
->>>> Using Sync
-    There is the option to use synced values which is the same as a normal value however you can combine this with an external script
-    which can read the output from 'script-output/log/store.log' and have it send rcon commands back to the game allowing for cross instance
-    syncing of values.
-
-    This may be useful when you want to have a value change effect multiple instances or even if you just want a database to store values so
-    you can sync data between map resets.
-
-    -- this example will register the location 'stastics.total-play-time' where we plan to use plan names as the child
-    -- note that the location must be the same across instances
-    Store.register('stastics.total-play-time',true,function(value,child)
-        game.print(child..' now has now played for '..value)
-    end)
-
-    -- use of set and are all the same as non synced but you should include from_sync as true
-
->>>> Alternative method
-    Some people may prefer to use a varible rather than a string for formating reasons here is an example. Also for any times when
-    there will be little external input Store.uid_location() can be used to generate non conflicting locations, uid_location will also
-    be used if you give a nil location.
-
-    local store_game_speed =
-    Store.register(function(value)
-        game.print('The game speed has been set to: '..value)
-    end)
+Store.set(player_scores,game.player,10) -- Set your score to 10
+Store.get(scenario_diffculty,game.player) -- Returns 10
+Store.update(scenario_diffculty,game.player,function(value) -- Add 1 to your score
+    return value + 1
+end)
 
 ]]
 
-local Global = require 'utils.global'
-local Event = require 'utils.event'
-local table_keys,write_json = ext_require('expcore.common','table_keys','write_json')
-local Token = require 'utils.token'
+local Event = require 'utils.event' --- @dep utils.event
 
 local Store = {
-    data={},
-    registered={},
-    synced={},
-    callbacks={},
-    events = {
-        on_value_update=script.generate_event_name()
-    }
+    --- The current highest uid that is being used, will not increase during runtime
+    -- @field uid
+    uid = 0,
+    --- An array of the serializers that stores are using, key is store uids
+    -- @table serializers
+    serializers = {},
+    --- An array of watchers that stores will trigger, key is store uids
+    -- @table watchers
+    watchers = {},
+    --- An index used for debuging to find the file where different stores where registered
+    -- @table file_paths
+    file_paths = {}
 }
 
-Global.register(Store.data,function(tbl)
-    Store.data = tbl
+-- All data is stored in global.data_store and is accessed here with data_store
+local data_store = {}
+global.data_store = data_store
+Event.on_load(function()
+    data_store = global.data_store
 end)
 
-local function error_not_table(value)
-    if type(value) ~= 'table' then
-        error('Location is not a table can not use child locations',3)
+--- Store Setup.
+-- @section setup
+
+--[[-- An error checking and serializing function for checking store uids and keys, note key is not required
+@tparam number store the uid of the store that you want to check is valid
+@tparam[opt] ?string|any key the key that you want to serialize or check is a string
+@tparam[opt=1] number error_stack the position in the stack relative to the current function (1) to raise this error on
+@treturn string if key is given and a serializer is registered, or key was already a string, then the key is returned
+
+@usage-- Registering a new store and checking that it is valid
+-- New store will use player names as the keys
+local player_scores = Store.register(function(player)
+    return player.name
+end)
+
+-- player_scores is a valid store and key will be your player name
+local key = Store.validate(player_scores,game.player)
+
+]]
+function Store.validate(store,key,error_stack)
+    error_stack = error_stack or 1
+
+    if type(store) ~= 'number' then
+        -- Store is not a number and so if not valid
+        error('Store uid given is not a number; recived type '..type(store),error_stack+1)
+    elseif store > Store.uid then
+        -- Store is a number but it is out of range, ie larger than the current highest uid
+        error('Store uid is out of range; recived '..tostring(store),error_stack+1)
+    elseif key ~= nil and type(key) ~= 'string' and Store.serializers[store] == nil then
+        -- Key is present but is not a string and there is no serializer registered
+        error('Store key is not a string and no serializer has been registered; recived '..type(key),error_stack+1)
+    elseif key ~= nil then
+        -- Key is present and so it is serialized and returned
+        local serializer = Store.serializers[store]
+        if type(key) ~= 'string' then
+            local success, serialized_key = pcall(serializer,key)
+
+            if not success then
+                -- Serializer casued an error while serializing the key
+                error('Store watcher casued an error:\n\t'..key,error_stack+1)
+            elseif type(serialized_key) ~= 'string' then
+                -- Serializer was successful but failed to return a string value
+                error('Store key serializer did not return a string; recived type '..type(key),error_stack+1)
+            end
+
+            return serialized_key
+        end
+
+        return key
     end
+
 end
 
---- Check for if a lcoation is registered
--- @tparam string location the location to test for
--- @treturn boolean true if registered
-function Store.is_registered(location)
-    return Store.registered[location]
-end
+--[[-- Required to create new stores and register an serializer to a store, serializer not required
+@tparam[opt] function serializer the function used to convert non string keys into strings to be used in the store
+@treturn number the uid for the new store that you have created, use this as the first param to all other functions
 
---- Returns a unqiue name that can be used for a store
--- @treturn string a unqiue name
-function Store.uid_location()
-    return tostring(Token.uid())
-end
+@usage-- Creating a store with no serializer
+local scenario_diffculty = Store.register()
 
---- Registers a new location with an update callback which is triggered when the value updates
--- @tparam[opt] string location string a unique that points to the data, string used rather than token to allow migration
--- @tparam[opt] boolean synced when true will output changes to a file so it can be synced
--- @tparam[opt] function callback when given the callback will be automatically registered to the update of the value
--- @treturn string the lcoation that is being used
-function Store.register(location,synced,callback)
+@usage-- Creating a store which can take LuaPlayer
+local player_scores = Store.register(function(player)
+    return player.name
+end)
+
+]]
+function Store.register(serializer)
     if _LIFECYCLE ~= _STAGE.control then
-        return error('Can only be called during the control stage', 2)
+        -- Only allow this function to be called during the control stage
+        error('Store can not be registered durring runtime', 2)
     end
 
-    if type(location) ~= 'string' then
-        callback = synced
-        synced = location
+    -- Increment the uid counter
+    local uid = Store.uid + 1
+    Store.uid = uid
+
+    -- Register the serializer if given
+    if serializer then
+        Store.serializers[uid] = serializer
     end
 
-    if type(synced) ~= 'boolean' then
-        callback = synced
-    end
+    -- Add entry in the debug table
+    local file_path = debug.getinfo(2, 'S').source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+    Store.file_paths[uid] = file_path
 
-    location = type(location) == 'string' and location or Store.uid_location()
-
-    if Store.registered[location] then
-        return error('Location is already registered', 2)
-    end
-
-    Store.registered[location] = true
-    Store.synced[location] = synced and true or nil
-    Store.callbacks[location] = callback or nil
-
-    return location
+    -- Return the new uid
+    return uid
 end
 
---- Gets the value stored at a location, this location must be registered
--- @tparam string location the location to get the data from
--- @tparam[opt] string child the child location if required
--- @tparam[opt=false] boolean allow_unregistered when true no error is returned if the location is not registered
--- @treturn any the data which was stored at the location
-function Store.get(location,child,allow_unregistered)
-    if not Store.callbacks[location] and not allow_unregistered then
-        return error('Location is not registered', 2)
+--[[-- Register a watch function to a store that is called when the value in the store is changed, triggers for any key
+@tparam number store the uid of the store that you want to watch for changes to
+@tparam function watcher the function that will be called when there is a change to the store
+
+@usage-- Printing the changed value to all players, no keys
+-- Register the new store, we are not using keys so we dont need a serializer
+local scenario_diffculty = Store.register()
+
+-- Register the watcher so that when we change the value the message is printed
+Store.watch(scenario_diffculty,function(value)
+    game.print('The scenario diffculty has been set to '..value)
+end)
+
+-- Set a new value for the diffculty and see that it has printed to the game
+Store.set(scenario_diffculty,'hard')
+
+@usage-- Printing the changed value to all players, with keys
+-- Register the new store, we are not using player names as the keys so it would be useful to accept LuaPlayer objects
+local player_scores = Store.register(function(player)
+    return player.name
+end)
+
+-- Register the watcher so that when we change the value the message is printed
+Store.watch(player_scores,function(value,key)
+    game.print(key..' now has a score of '..value)
+end)
+
+-- Set a new value for your score and see that it has printed to the game
+Store.set(player_scores,game.player,10)
+
+]]
+function Store.watch(store,watcher)
+    if _LIFECYCLE ~= _STAGE.control then
+        -- Only allow this function to be called during the control stage
+        error('Store watcher can not be registered durring runtime', 2)
     end
 
-    local data = Store.data[location]
-    if child and data then
-        error_not_table(data)
-        return data[child]
+    Store.validate(store,nil,2)
+
+    -- Add the watchers table if it does not exist
+    local watchers = Store.watchers[store]
+    if not watchers then
+        watchers = {}
+        Store.watchers[store] = watchers
     end
 
+    -- Append the new watcher function
+    watchers[#watchers+1] = watcher
+end
+
+--- Store Data Management.
+-- @section data
+
+--[[-- Used to retrive the current data that is stored, key is optional depending on if you are using them
+@tparam number store the uid of the store that you want to get the value from
+@tparam[opt] ?string|any key the key that you want to get the value of, must be a string unless you have a serializer
+@treturn any the data that is stored
+
+@usage-- Getting the value of a store with no keys
+-- Register the new store, we are not using keys so we dont need a serializer
+local scenario_diffculty = Store.register()
+
+-- Get the current diffculty for the scenario
+local diffculty = Store.get(scenario_diffculty)
+
+@usage-- Getting the data from a store with keys
+-- Register the new store, we are not using player names as the keys so it would be useful to accept LuaPlayer objects
+local player_scores = Store.register(function(player)
+    return player.name
+end)
+
+-- Get your current score
+local my_score = Store.get(player_scores,game.player)
+
+-- Get all scores
+lcoal scores = Store.get(player_scores)
+
+]]
+function Store.get(store,key)
+    key = Store.validate(store,key,2)
+
+    -- Get the data from the data store
+    local data = data_store[store]
+    if key then
+        if type(data) ~= 'table' then
+            data_store[store] = {_value = data_store[store]}
+            return nil
+        else
+            return data[key]
+        end
+    end
+
+    -- Return all data if there is no key
     return data
 end
 
---- Sets the value at a location, this location must be registered
--- @tparam string location the location to set the data to
--- @tparam[opt] string child the child location if required
--- @tparam any value the new value to set at the location, value may be reverted if there is a watch callback, cant be nil
--- @tparam[opt] boolean from_sync set this true to avoid an output to the sync file
--- @treturn boolean true if it was successful
-function Store.set(location,child,value,from_sync)
-    if not Store.callbacks[location] then
-        return error('Location is not registered', 2)
-    end
+--[[-- Used to clear the data in a store, will trigger any watchers, key is optional depending on if you are using them
+@tparam number store the uid of the store that you want to clear
+@tparam[opt] ?string|any key the key that you want to clear, must be a string unless you have a serializer
 
-    if child == nil or value == nil then
-        value = child or value
-        child = nil
-    end
+@usage-- Clear a store which does not use keys
+-- Register the new store, we are not using keys so we dont need a serializer
+local scenario_diffculty = Store.register()
 
-    local data = Store.data
-    if child then
-        data = data[location]
-        if not data then
-            data = {}
-            Store.data[location] = data
-        end
-        error_not_table(data)
-        data[child] = value
-    else
-        data[location] = value
-    end
+-- Clear the scenario diffculty
+Store.clear(scenario_diffculty)
 
-    script.raise_event(Store.events.on_value_update,{
-        tick=game.tick,
-        location=location,
-        child=child,
-        value=value,
-        from_sync=from_sync
-    })
-
-    return true
-end
-
---- Sets the value at a location to nil, this location must be registered
--- @tparam string location the location to set the data to
--- @tparam[opt] string child the child location if required
--- @tparam[opt] boolean from_sync set this true to avoid an output to the sync file
--- @treturn boolean true if it was successful
-function Store.clear(location,child,from_sync)
-    if not Store.callbacks[location] then
-        return error('Location is not registered', 2)
-    end
-
-    local data = Store.data
-    if child then
-        data = data[location]
-        if not data then return end
-        error_not_table(data)
-        data[child] = nil
-    else
-        data[location] = nil
-    end
-
-    script.raise_event(Store.events.on_value_update,{
-        tick=game.tick,
-        location=location,
-        child=child,
-        from_sync=from_sync
-    })
-
-    return true
-end
-
---- Gets all non nil children at a location, children can be added and removed during runtime
--- this is similar to Store.get but will always return a table even if it is empty
--- @tparam string location the location to get the children of
--- @treturn table a table containg all the children names
-function Store.get_children(location)
-    local data = Store.get(location)
-    return type(data) == 'table' and table_keys(data) or {}
-end
-
--- Handels syncing
-Event.add(Store.events.on_value_update,function(event)
-    if Store.callbacks[event.location] then
-        Store.callbacks[event.location](event.value,event.child)
-    end
-
-    if not event.from_sync and Store.synced[event.location] then
-        write_json('log/store.log',{
-            tick=event.tick,
-            location=event.location,
-            child=event.child,
-            value=event.value,
-        })
-    end
+@usage-- Clear data that is in a store with keys
+-- Register the new store, we are not using player names as the keys so it would be useful to accept LuaPlayer objects
+local player_scores = Store.register(function(player)
+    return player.name
 end)
 
+-- Clear your score
+Store.clear(player_scores,game.player)
+
+-- Clear all scores
+Store.clear(player_scores)
+
+]]
+function Store.clear(store,key)
+    key = Store.validate(store,key,2)
+
+    -- Check if there is a key being used
+    if key then
+        if type(data_store[store]) == 'table' then
+            data_store[store][key] = nil
+        end
+    else
+        data_store[store] = nil
+    end
+
+    -- Trigger any watch functions
+    Store.raw_trigger(store,key,nil)
+end
+
+--[[-- Used to set the data in a store, will trigger any watchers, key is optional depending on if you are using them
+@tparam number store the uid of the store that you want to set
+@tparam[opt] ?string|any key the key that you want to set, must be a string unless you have a serializer
+@tparam any value the value that you want to set
+
+@usage-- Setting a store which does not use keys
+-- Register the new store, we are not using keys so we dont need a serializer
+local scenario_diffculty = Store.register()
+
+-- Set the new scenario diffculty
+Store.set(scenario_diffculty,'hard')
+
+@usage-- Set data in a store with keys
+-- Register the new store, we are not using player names as the keys so it would be useful to accept LuaPlayer objects
+local player_scores = Store.register(function(player)
+    return player.name
+end)
+
+-- Set your current score
+Store.set(player_scores,game.player,10)
+
+-- Set all scores, note this might not have much use
+Store.set(player_scores,{
+    [game.player.name] = 10,
+    ['SomeOtherPlayer'] = 0
+})
+
+]]
+function Store.set(store,key,value)
+    -- Allow for key to be optional
+    if value == nil then
+        value = key
+        key = nil
+    end
+
+    -- Check the store is valid
+    key = Store.validate(store,key,2)
+
+    -- If there is a key being used then the store must be a able
+    if key then
+        if type(data_store[store]) ~= 'table' then
+            data_store[store] = {_value = data_store[store]}
+        end
+        data_store[store][key] = value
+    else
+        data_store[store] = value
+    end
+
+    -- Trigger any watchers
+    Store.raw_trigger(store,key,value)
+end
+
+--[[-- Used to update the data in a store, use this with tables, will trigger any watchers, key is optional depending on if you are using them
+@tparam number store the uid of the store that you want to update
+@tparam[opt] ?string|any key the key that you want to update, must be a string unless you have a serializer
+@tparam function updater the function which is called to make changes to the value, such as changing table keys, if a value is returned it will replace the current value in the store
+
+@usage-- Incrementing a global score
+-- Because we are only going to have one score so we will not need keys or a serializer
+local game_score = Store.register()
+
+-- Setting a default value
+Store.set(game_score,0)
+
+-- We now will update the game score by one, we return the value so that it is set as the new value in the store
+Store.update(game_score,function(value)
+    return value + 1
+end)
+
+@usage-- Updating keys in a table of data
+-- Register the new store, we are not using player names as the keys so it would be useful to accept LuaPlayer objects
+local player_data = Store.register(function(player)
+    return player.name
+end)
+
+-- Setting a default value for your player, used to show the table structure
+Store.set(player_data,game.player,{
+    group = 'Admin',
+    role = 'Owner',
+    show_group_config = false
+})
+
+-- Updating the show_group_config key in your player data, note that it would be harder to call set every time
+-- We do not need to return anything in this case as we are not replacing all the data
+Store.update(player_data,game.player,function(data)
+    data.show_group_config = not data.show_group_config
+end)
+
+]]
+function Store.update(store,key,updater)
+    -- Allow for key to be nil
+    if updater == nil then
+        updater = key
+        key = nil
+    end
+
+    -- Check the store is valid
+    key = Store.validate(store,key,2)
+    local value
+
+    -- If a key is used then the store must be a table
+    if key then
+        if type(data_store[store]) ~= 'table' then
+            data_store[store] = {_value = data_store[store]}
+        end
+
+        -- Call the updater and if it returns a value then set this value
+        local rtn = updater(data_store[store][key])
+        if rtn then
+            data_store[store][key] = rtn
+        end
+        value = data_store[store][key]
+
+    else
+        -- Call the updater and if it returns a value then set this value
+        local rtn = updater(data_store[store])
+        if rtn then
+            data_store[store] = rtn
+        end
+        value = data_store[store]
+
+    end
+
+    -- Trigger any watchers
+    Store.raw_trigger(store,key,value)
+end
+
+--[[-- Used to update all values that are in a store, similar to Store.update but acts on all keys at once, will trigger watchers for every key present
+@tparam number store the uid of the store that you want to map
+@tparam function updater the function that is called on every key in this store
+
+@usage-- Updating keys in a table of data
+-- Register the new store, we are not using player names as the keys so it would be useful to accept LuaPlayer objects
+local player_data = Store.register(function(player)
+    return player.name
+end)
+
+-- Setting a default value for your player, used to show the table structure
+Store.set(player_data,game.player,{
+    group = 'Admin',
+    role = 'Owner',
+    show_group_config = false
+})
+
+-- Updating the show_group_config key for all players, note that it would be harder to call set every time
+-- We do not need to return anything in this case as we are not replacing all the data
+-- We also have access to the current key being updated if needed
+Store.map(player_data,function(data,key)
+    data.show_group_config = not data.show_group_config
+end)
+
+]]
+function Store.map(store,updater)
+    Store.validate(store,nil,2)
+
+    -- Get all that data in the store and check its a table
+    local data = data_store[store]
+    if not type(data) == 'table' then
+        return
+    end
+
+    -- Loop over all the keys and call the updater, setting value if returned, and calling watcher functions
+    for key,value in pairs(data) do
+        local rtn = updater(value,key)
+        if rtn then
+            data[key] = rtn
+        end
+        Store.raw_trigger(store,key,data[key])
+    end
+end
+
+--[[-- Used to trigger watcher functions, this may be used to trigger them if you did not use Store.update or Store.set
+@tparam number store the uid of the store that you want to trigger
+@tparam[opt] ?string|any key the key that you want to trigger, must be a string unless you have a serializer
+@usage-- Faking the update to a store
+-- The type of store we use does not really matter for this as long as you pass it what you watchers are expecting
+local scenario_diffculty = Store.register()
+
+-- Trigger the watchers with a fake change of diffculty
+Store.trigger(scenario_diffculty)
+
+]]
+function Store.trigger(store,key)
+    key = Store.validate(store,key,2)
+
+    -- Get the data from the data store
+    local data = data_store[store]
+    if key then
+        Store.raw_trigger(store,key,data[key])
+    else
+        Store.raw_trigger(store,key,data)
+    end
+end
+
+--[[-- Used to trigger watcher functions, the value and key are passed directly to the watchers regardless if the value is correct
+@tparam number store the uid of the store that you want to trigger
+@tparam[opt] ?string|any key the key that you want to trigger, must be a string unless you have a serializer
+@tparam[opt] any value the new value that is at this key or store, passed directly to the watcher
+
+@usage-- Triggering a manule call of the watchers
+-- The type of store we use does not really matter for this as long as you pass it what you watchers are expecting
+local scenario_diffculty = Store.register()
+
+-- Trigger the watchers with a fake change of diffculty
+-- This is mostly used internally but it can be useful in other cases
+Store.raw_trigger(scenario_diffculty,nil,'normal')
+
+]]
+function Store.raw_trigger(store,key,value)
+    key = Store.validate(store,key,2)
+
+    -- Get the watchers and then loop over them
+    local watchers = Store.watchers[store] or {}
+    for _,watcher in pairs(watchers) do
+        local success, err = pcall(watcher,value,key)
+        if not success then
+            error('Store watcher casued an error:\n\t'..err)
+        end
+    end
+end
+
+-- Module return
 return Store

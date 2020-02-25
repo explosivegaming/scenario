@@ -1,4 +1,12 @@
---- Gui class define for text fields and text boxs
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Text.
+-- Gui class define for text fields and text boxes
+-- @section text
+
 --[[
 >>>> Functions
     Text.new_text_field(name) --- Creates a new text field element define
@@ -14,9 +22,9 @@
 
     Other functions present from expcore.gui.core
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Game = require 'utils.game'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Game = require 'utils.game' --- @dep utils.game
 
 --- Store call for store update
 -- @tparam table define the define that this is acting on
@@ -32,14 +40,12 @@ local Text = {
     _prototype_field=Prototype.extend{
         on_element_update = Prototype.event,
         on_store_update = Prototype.event,
-        add_store = Prototype.store(false,store_update),
-        add_sync_store = Prototype.store(true,store_update)
+        add_store = Prototype.store(store_update)
     },
     _prototype_box=Prototype.extend{
         on_element_update = Prototype.event,
         on_store_update = Prototype.event,
-        add_store = Prototype.store(false,store_update),
-        add_sync_store = Prototype.store(true,store_update)
+        add_store = Prototype.store(store_update)
     }
 }
 
@@ -65,8 +71,7 @@ function Text.new_text_field(name)
         end
 
         if self.store then
-            local category = self.categorize and self.categorize(element) or nil
-            local value = self:get_store(category)
+            local value = self:get_store(element)
             if value then element.text = value end
         end
     end)
@@ -76,8 +81,7 @@ function Text.new_text_field(name)
         local value = element.text
 
         if self.store then
-            local category = self.categorize and self.categorize(element) or value
-            self:set_store(category,value)
+            self:set_store(element,value)
 
         else
             self:raise_event('on_element_update',event.player,element,value)

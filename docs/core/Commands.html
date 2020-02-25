@@ -1,0 +1,1980 @@
+
+
+    <!doctype html>
+    <html class="no-js" lang="">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Commands core</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
+    <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+    </head>
+    <body>
+
+    <div class="container grid-1280">
+    <div class="columns">
+
+    <!-- sidebar start -->
+
+    <div id="sidebar" class="column col-3 col-sm-12">
+
+    <div class="sidebar-custom">
+
+    <div class="project-infobox">
+
+    <!-- project title -->
+
+    <a href="../index.html"><h1>ExpGaming Scenario</h1></a>
+
+    <!-- project description -->
+    <p class="project-desc">Explosive Gaming's server scenario for 0.17</p>
+
+    <!-- project full description -->
+    </div>
+
+
+<!-- sidebar navigation -->
+<!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
+    <li class="nav-item"><a href="#Authenication"><span class="fragment-hashtag">#</span> Authenication </a></li>
+    <li class="nav-item"><a href="#Getters"><span class="fragment-hashtag">#</span> Getters </a></li>
+    <li class="nav-item"><a href="#Parse"><span class="fragment-hashtag">#</span> Parse </a></li>
+    <li class="nav-item"><a href="#Creation"><span class="fragment-hashtag">#</span> Creation </a></li>
+    <li class="nav-item"><a href="#Status"><span class="fragment-hashtag">#</span> Status </a></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Core</h2>
+    <ul class="nav">
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../core/Commands.html"><span class="module-name-item">Commands</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Common-Library.html"><span class="module-name-item">Common-Library</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Gui.html"><span class="module-name-item">Gui</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Permissions-Groups.html"><span class="module-name-item">Permissions-Groups</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Roles.html"><span class="module-name-item">Roles</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Store.html"><span class="module-name-item">Store</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../core/Sudo.html"><span class="module-name-item">Sudo</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Control</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Rockets.html"><span class="module-name-item">Rockets</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Tasks.html"><span class="module-name-item">Tasks</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warps.html"><span class="module-name-item">Warps</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Addons</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Advanced-Start.html"><span class="module-name-item">Advanced-Start</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Chat-Popups.html"><span class="module-name-item">Chat-Popups</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Chat-Reply.html"><span class="module-name-item">Chat-Reply</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Compilatron.html"><span class="module-name-item">Compilatron</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Damage-Popups.html"><span class="module-name-item">Damage-Popups</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Death-Logger.html"><span class="module-name-item">Death-Logger</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Player-Colours.html"><span class="module-name-item">Player-Colours</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Scorched-Earth.html"><span class="module-name-item">Scorched-Earth</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Spawn-Area.html"><span class="module-name-item">Spawn-Area</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Guis</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Player-List.html"><span class="module-name-item">Player-List</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Rocket-Info.html"><span class="module-name-item">Rocket-Info</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Science-Info.html"><span class="module-name-item">Science-Info</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Task-List.html"><span class="module-name-item">Task-List</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../guis/Warps-List.html"><span class="module-name-item">Warps-List</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Commands</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Admin-Chat.html"><span class="module-name-item">Admin-Chat</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Bonus.html"><span class="module-name-item">Bonus</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Cheat-Mode.html"><span class="module-name-item">Cheat-Mode</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Clear-Inventory.html"><span class="module-name-item">Clear-Inventory</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Debug.html"><span class="module-name-item">Debug</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Find.html"><span class="module-name-item">Find</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Help.html"><span class="module-name-item">Help</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Home.html"><span class="module-name-item">Home</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Interface.html"><span class="module-name-item">Interface</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Kill.html"><span class="module-name-item">Kill</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Me.html"><span class="module-name-item">Me</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Rainbow.html"><span class="module-name-item">Rainbow</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Repair.html"><span class="module-name-item">Repair</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Roles.html"><span class="module-name-item">Roles</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Spawn.html"><span class="module-name-item">Spawn</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Tag.html"><span class="module-name-item">Tag</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Teleport.html"><span class="module-name-item">Teleport</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Configs</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/File-Loader.html"><span class="module-name-item">File-Loader</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Player-List.html"><span class="module-name-item">Player-List</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Advanced-Start.html"><span class="module-name-item">Advanced-Start</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Bonuses.html"><span class="module-name-item">Bonuses</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Chat-Reply.html"><span class="module-name-item">Chat-Reply</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Compilatron.html"><span class="module-name-item">Compilatron</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Death-Logger.html"><span class="module-name-item">Death-Logger</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Auth-Admin.html"><span class="module-name-item">Commands-Auth-Admin</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Auth-Roles.html"><span class="module-name-item">Commands-Auth-Roles</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Auth-Runtime-Disable.html"><span class="module-name-item">Commands-Auth-Runtime-Disable</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Parse.html"><span class="module-name-item">Commands-Parse</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Parse-Roles.html"><span class="module-name-item">Commands-Parse-Roles</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Permission-Groups.html"><span class="module-name-item">Permission-Groups</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Popup-Messages.html"><span class="module-name-item">Popup-Messages</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Preset-Player-Colours.html"><span class="module-name-item">Preset-Player-Colours</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Repair.html"><span class="module-name-item">Repair</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Rockets.html"><span class="module-name-item">Rockets</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Roles.html"><span class="module-name-item">Roles</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Science.html"><span class="module-name-item">Science</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Scorched-Earth.html"><span class="module-name-item">Scorched-Earth</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Spawn-Area.html"><span class="module-name-item">Spawn-Area</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Tasks.html"><span class="module-name-item">Tasks</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Warps.html"><span class="module-name-item">Warps</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Modules</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/control.html"><span class="module-name-item">control</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.alien_evolution_progress.html"><span class="module-name-item">utils.alien_evolution_progress</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.core.html"><span class="module-name-item">utils.core</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.debug.html"><span class="module-name-item">utils.debug</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.dump_env.html"><span class="module-name-item">utils.dump_env</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event.html"><span class="module-name-item">utils.event</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.event_core.html"><span class="module-name-item">utils.event_core</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.math.html"><span class="module-name-item">utils.math</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.recipe_locker.html"><span class="module-name-item">utils.recipe_locker</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.state_machine.html"><span class="module-name-item">utils.state_machine</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.table.html"><span class="module-name-item">utils.table</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.task.html"><span class="module-name-item">utils.task</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../modules/utils.timestamp.html"><span class="module-name-item">utils.timestamp</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+    <ul class="nav nav-modules">
+    <li class="nav-item">
+    <h2>Topics</h2>
+    <ul class="nav">
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/license.html"><span class="module-name-item">license</span></a></div></li>
+    </ul>
+    </li>
+    </ul>
+
+
+    </div>
+    <div class="up-to-top">
+    <!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h4>Jump to Section</h4>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
+    <li class="nav-item"><a href="#Authenication"><span class="fragment-hashtag">#</span> Authenication </a></li>
+    <li class="nav-item"><a href="#Getters"><span class="fragment-hashtag">#</span> Getters </a></li>
+    <li class="nav-item"><a href="#Parse"><span class="fragment-hashtag">#</span> Parse </a></li>
+    <li class="nav-item"><a href="#Creation"><span class="fragment-hashtag">#</span> Creation </a></li>
+    <li class="nav-item"><a href="#Status"><span class="fragment-hashtag">#</span> Status </a></li>
+    </ul>
+    </li>
+    </ul>
+    <a href="#">Top <i class="icon icon-upward"></i></a>
+    </div>
+    </div>
+    <!-- sidebar end -->
+
+    <!-- content body start -->
+    <div class="column col-9 col-sm-12">
+
+    <!-- module list on the main page start -->
+    <!-- module list on the main page end -->
+
+    <!-- module contents -->
+
+    <!-- module content header start -->
+
+    <h2><span class="body-module-name"><strong><em>Commands</em></strong></span> core</h2>
+    <p>Core Module - Commands
+    - Factorio command making module that makes commands with better parse and more modularity</p>
+    <p></p>
+
+
+    <!-- module info start -->
+    <!-- module info end -->
+
+    <!-- module usage start -->
+    <h3>Usage</h3>
+    <pre class="code" data-lang="Lua"><code>
+<span class="comment">---- Example Authenticator:
+</span>    <span class="comment">-- The command system is most useful when you can control who can use commands; to do this would would need to
+</span>    <span class="comment">-- define an authenticator which is ran every time a command is run; in this example I will show a simple one
+</span>    <span class="comment">-- that requires some commands to require the user to be a game admin:
+</span>
+    <span class="comment">-- When the authenticator is called be the command handler it will be passed 4 vales:
+</span>    <span class="comment">-- 1) the player who used the command
+</span>    <span class="comment">-- 2) the name of the command that is being used
+</span>    <span class="comment">-- 3) any flags which have been set for this command, this is a table of values set using :set_flag(name,value)
+</span>    <span class="comment">-- 4) the reject function which is the preferred method to prevent execution of the command
+</span>
+    <span class="comment">-- For our admin only example we will set a flag to true when we want it do be admin only so when we define the
+</span>    <span class="comment">-- command will will use :set_flag('admin_only',true) and then inside the authenticator we will test if the flag
+</span>    <span class="comment">-- is present using: if flags.admin_only then
+</span>
+    <span class="comment">-- Although no return is required to allow the command to execute it is best practice to return true; we do this in
+</span>    <span class="comment">-- two cases in our authenticator:
+</span>    <span class="comment">-- 1) when the "admin_only" flag is not set, which we take to mean any one can use it
+</span>    <span class="comment">-- 2) when the "admin_only" flag is set, and the player is admin
+</span>
+    <span class="comment">-- Now when the user is not an admin and the command requires you to be an admin then we must reject the request:
+</span>    <span class="comment">-- 1) return false -- this is the most basic block and should only be used while testing
+</span>    <span class="comment">-- 2) return reject -- returning the reject function is only an option as a fail safe, same as returning false
+</span>    <span class="comment">-- 3) reject() -- this will block execution without returning to allow further code to be ran in the authenticator
+</span>    <span class="comment">-- 4) reject('This command is for admins only!') -- Using reject as a function allows a error message to be returned
+</span>    <span class="comment">-- 5) return reject() -- using return on either case above is best practice as you should execute all code before rejecting
+</span>
+    <span class="comment">-- Example Code:
+</span>    Commands.add_authenticator(<span class="keyword">function</span>(player,command,flags,reject)
+        <span class="keyword">if</span> flags.admin_only <span class="keyword">then</span> <span class="comment">-- our test for the "admin_only" flag
+</span>            <span class="keyword">if</span> player.admin <span class="keyword">then</span>
+                <span class="keyword">return</span> <span class="keyword">true</span> <span class="comment">-- true return 2
+</span>            <span class="keyword">else</span>
+                <span class="keyword">return</span> reject(<span class="string">'This command is for admins only!'</span>) <span class="comment">-- reject return 5 with a custom error message
+</span>            <span class="keyword">end</span>
+        <span class="keyword">else</span>
+            <span class="keyword">return</span> <span class="keyword">true</span> <span class="comment">-- true return 1
+</span>        <span class="keyword">end</span>
+    <span class="keyword">end</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code>
+<span class="comment">---- Example Parse:
+</span>    <span class="comment">-- Before you go making commands it is important to understand the most powerful feature of this command handler,
+</span>    <span class="comment">-- when you define a command you are able to type the params and have then be parsed by an handler so before your
+</span>    <span class="comment">-- command is ever executed you can be sure that all the params are valid. This module should be paired with a general
+</span>    <span class="comment">-- command parse but you may want to create your own:
+</span>
+    <span class="comment">-- For our example we will create a parse to accept only integer numbers in a given range:
+</span>    <span class="comment">-- 1) we will give it the name "number-range-int" this is the "type" that the input is expected to be
+</span>    <span class="comment">-- 2) when we define the type we will also define the min and max of the range so we can use the function more than once
+</span>    <span class="comment">-- Example parse usage:
+</span>    :add_param(<span class="string">'repeat_count'</span>,<span class="keyword">false</span>,<span class="string">'number-range-int'</span>,<span class="number">5</span>,<span class="number">10</span>) <span class="comment">-- range 5 to 10 inclusive
+</span>
+    <span class="comment">-- The command parse will be passed 3 params and any other you define, in our case:
+</span>    <span class="comment">-- 1) the input that has been given by the user for this param, the role of this function is to transform this value
+</span>    <span class="comment">-- nb: the input is a string but can be nil if the param is marked as optional
+</span>    <span class="comment">-- 2) the player who is using the command, this is always present
+</span>    <span class="comment">-- 3) the reject function to throw an error to the user, this is always present
+</span>    <span class="comment">-- 4) the range min, this is user defined and has the value given when the param is defined
+</span>    <span class="comment">-- 5) the range max, this is user defined and has the value given when the param is defined
+</span>
+    <span class="comment">-- When returning from the param parse you again have a few options with how to do this:
+</span>    <span class="comment">-- 1) you return the new value for the param (any non nil value) this value is then passed to the command callback
+</span>    <span class="comment">-- 2) not returning will cause a generic invalid error and the command callback is blocked, not recommenced
+</span>    <span class="comment">-- 3) return reject -- this is just a failsafe in case the function is not called, same as no return
+</span>    <span class="comment">-- 4) return reject() -- will give a shorter error message as you pass a nil custom error
+</span>    <span class="comment">-- 5) return reject('Number entered is not in range: '..range_min..', '..range_max) -- returns a custom error the the user
+</span>    <span class="comment">-- nb: if you do not return reject after you call it then you are still returning nil so there will be a duplicate message
+</span>
+    <span class="comment">-- It should be noted that if you want to expand on an existing parse you can use Commands.parse(type,input,player,reject)
+</span>    <span class="comment">-- and this value will either return a new value for the input or nil, if it is nil you should return nil to prevent double
+</span>    <span class="comment">-- messages to the user:
+</span>    input = Commands.parse(<span class="string">'number-int'</span>,input,player,reject)
+    <span class="keyword">if</span> <span class="keyword">not</span> input <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span> <span class="comment">-- nil check
+</span>
+    <span class="comment">-- Example Code:
+</span>    Commands.add_parse(<span class="string">'number-range-int'</span>,<span class="keyword">function</span>(input,player,reject,range_min,range_max)
+        <span class="keyword">local</span> rtn = <span class="global">tonumber</span>(input) <span class="keyword">and</span> <span class="global">math</span>.floor(<span class="global">tonumber</span>(input)) <span class="keyword">or</span> <span class="keyword">nil</span> <span class="comment">-- converts input to number
+</span>        <span class="keyword">if</span> <span class="keyword">not</span> rtn <span class="keyword">or</span> rtn &lt; range_min <span class="keyword">or</span> rtn &gt; range_max <span class="keyword">then</span>
+            <span class="comment">-- the input is either not a number or is outside the range
+</span>            <span class="keyword">return</span> reject(<span class="string">'Number entered is not in range: '</span>..range_min..<span class="string">', '</span>..range_max)
+        <span class="keyword">else</span>
+            <span class="comment">-- returns the input as a number value rather than a string, thus the param is now the correct type
+</span>            <span class="keyword">return</span> rtn
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>)</code></pre>
+    <pre class="code" data-lang="Lua"><code>
+<span class="comment">---- Example Command:
+</span>    <span class="comment">-- How for the fun part making the commands, the commands can be set up with any number of params and flags that you want,
+</span>    <span class="comment">-- you can add aliases for the commands and set default values for optional params and of course register your command callback
+</span>    <span class="comment">-- in our example we will just have a command that will repeat the users name in chat X amount of times and only allow admins to use it.
+</span>
+    <span class="comment">-- First we create the new command, nb this will not register the command to the game this is done at the end, we will call
+</span>    <span class="comment">-- the command "repeat-name" and set the help message as follows:
+</span>    Commands.new_command(<span class="string">'repeat-name'</span>,<span class="string">'Will repeat you name a number of times in chat.'</span>)
+
+    <span class="comment">-- Now for our first param we will call "repeat-count" and it will be a required value between 1 and 5 inclusive:
+</span>    :add_param(<span class="string">'repeat-count'</span>,<span class="keyword">false</span>,<span class="string">'number-range-int'</span>,<span class="number">1</span>,<span class="number">5</span>)
+
+    <span class="comment">-- Our second param we need a custom parse for but we have not defined it, this is an option for when it is unlikely for
+</span>    <span class="comment">-- any other command to use the same input type; however in our case it will just be a boolean which should be noted as being
+</span>    <span class="comment">-- included in the general command parse config. As for the param its self it will be called "smiley" and will be optional with
+</span>    <span class="comment">-- a default value of false:
+</span>    :add_param(<span class="string">'smiley'</span>,<span class="keyword">true</span>,<span class="keyword">function</span>(input,player,reject)
+        <span class="comment">-- since it is optional the input can be nil, in which case we just return
+</span>        <span class="keyword">if</span> <span class="keyword">not</span> input <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span>
+        <span class="comment">-- if it is not nil then we check for a truthy value
+</span>        <span class="keyword">if</span> input:lower() == <span class="string">'true'</span> <span class="keyword">or</span> input:lower() == <span class="string">'yes'</span> <span class="keyword">then</span>
+            <span class="keyword">return</span> <span class="keyword">true</span>
+        <span class="keyword">else</span>
+            <span class="comment">-- note that because we did not return nil or reject then false will be passed to command callback, see example parse
+</span>            <span class="keyword">return</span> <span class="keyword">false</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>)
+
+    <span class="comment">-- Once all params are defined you can now define some default values if you have optional params, the default value will be used only
+</span>    <span class="comment">-- when no value is given as input, if an invalid value is given then the command will still fail and this value will not be used, the
+</span>    <span class="comment">-- default can also be a function which is passed the player using the command and returns a value. Here we set the default for "smiley" to false:
+</span>    :set_defaults{smiley=<span class="keyword">false</span>}
+
+    <span class="comment">-- Another example of defaults if we have: item, amount[opt], player[opt]
+</span>    :set_defaults{
+        amount = <span class="number">50</span>, <span class="comment">-- more than one value can be set at a time
+</span>        player = <span class="keyword">function</span>(player)
+            <span class="keyword">return</span> player <span class="comment">-- default is the player using the command
+</span>        <span class="keyword">end</span>
+    }
+
+    <span class="comment">-- Now the params are set up we can alter how the command works, we can set auth flags, add aliases to this command or enable "auto concat"
+</span>    <span class="comment">-- which is when you want all extra words to be concatenated onto the end of the last param, useful for reason or messages:
+</span>    :set_flag(<span class="string">'admin_only'</span>,<span class="keyword">true</span>) <span class="comment">-- in our case we want "admin_only" to be set to true so only admins can use the command
+</span>    :add_alias(<span class="string">'name'</span>,<span class="string">'rname'</span>) <span class="comment">-- we also add two aliases here: "name" and "rname" which point to this command
+</span>    <span class="comment">-- :enable_auto_concat() we do not use this in our case but this can also be used to enable the "auto concat" feature
+</span>
+    <span class="comment">-- And finally we want to register a callback to this command, the callback is what defines what the command does, can be as complex as you
+</span>    <span class="comment">-- want it to be to as simple as our example; the command receives two params plus all that you have defines:
+</span>    <span class="comment">-- 1) the player who used the command
+</span>    <span class="comment">-- 2) in our case repeat_count which will be a number
+</span>    <span class="comment">-- 3) in our case smiley which will be a boolean
+</span>    <span class="comment">-- 4) the raw input; this param is always last as is always present as a catch all
+</span>    :register(<span class="keyword">function</span>(player,repeat_count,smiley,raw)
+        <span class="comment">-- this is to show the value for raw as this is an example command, the log file will also show this
+</span>        game.<span class="global">print</span>(player.name..<span class="string">' used a command with input: '</span>..raw)
+        <span class="keyword">local</span> msg = <span class="string">') '</span>..player.name
+        <span class="keyword">if</span> smiley <span class="keyword">then</span>
+            <span class="comment">-- this is where that smiley param is used
+</span>            msg = <span class="string">':'</span>..msg
+        <span class="keyword">end</span>
+        <span class="keyword">for</span> <span class="number">1</span> = <span class="number">1</span>,repeat_count <span class="keyword">do</span>
+            <span class="comment">-- this print function will return ANY value to the user in a desync safe manor, this includes if the command was used through rcon
+</span>            Command.<span class="global">print</span>(<span class="number">1.</span>.msg)
+        <span class="keyword">end</span>
+        <span class="comment">-- see below for what else can be used here
+</span>    <span class="keyword">end</span>)
+
+    <span class="comment">-- Some other useful functions that can be used are:
+</span>    Commands.<span class="global">print</span>(any,colour[opt]) <span class="comment">-- this will return any value value to the user including if it is ran through rcon console
+</span>    Commands.error(message[opt]) <span class="comment">-- this returns a warning to the user, aka an error that does not prevent execution of the command
+</span>    <span class="keyword">return</span> Commands.error(message[opt]) <span class="comment">-- this returns an error to the user, and will halt the command execution, ie no success message is returned
+</span>    Commands.success(message[opt]) <span class="comment">-- used to return a success message however don't use this method see below
+</span>    <span class="keyword">return</span> Commands.success(message[opt]) <span class="comment">-- will return the success message to the user and your given message, halts execution
+</span>    <span class="keyword">return</span> &lt;any&gt; <span class="keyword">if</span> any value is returned <span class="keyword">then</span> it will be returned to the player via a Commands.success call
+
+    <span class="comment">-- Example Code:
+</span>    Commands.new_command(<span class="string">'repeat-name'</span>,<span class="string">'Will repeat you name a number of times in chat.'</span>)
+    :add_param(<span class="string">'repeat-count'</span>,<span class="keyword">false</span>,<span class="string">'number-range-int'</span>,<span class="number">1</span>,<span class="number">5</span>) <span class="comment">-- required int in range 1 to 5 inclusive
+</span>    :add_param(<span class="string">'smiley'</span>,<span class="keyword">true</span>,<span class="keyword">function</span>(input,player,reject) <span class="comment">-- optional boolean default false
+</span>        <span class="keyword">if</span> <span class="keyword">not</span> input <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span>
+        <span class="keyword">if</span> input:lower() == <span class="string">'true'</span> <span class="keyword">or</span> input:lower() == <span class="string">'yes'</span> <span class="keyword">then</span>
+            <span class="keyword">return</span> <span class="keyword">true</span>
+        <span class="keyword">else</span>
+            <span class="keyword">return</span> <span class="keyword">false</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>)
+    :set_defaults{smiley=<span class="keyword">false</span>}
+    :set_flag(<span class="string">'admin_only'</span>,<span class="keyword">true</span>) <span class="comment">-- command is admin only
+</span>    :add_alias(<span class="string">'name'</span>,<span class="string">'rname'</span>) <span class="comment">-- allow alias: name and rname
+</span>    :register(<span class="keyword">function</span>(player,repeat_count,smiley,raw)
+        game.<span class="global">print</span>(player.name..<span class="string">' used a command with input: '</span>..raw)
+        <span class="keyword">local</span> msg = <span class="string">') '</span>..player.name
+        <span class="keyword">if</span> smiley <span class="keyword">then</span>
+            msg = <span class="string">':'</span>..msg
+        <span class="keyword">end</span>
+        <span class="keyword">for</span> <span class="number">1</span> = <span class="number">1</span>,repeat_count <span class="keyword">do</span>
+            Command.<span class="global">print</span>(<span class="number">1.</span>.msg)
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>)</code></pre>
+    <!-- module usage end -->
+
+    <!-- module content header end -->
+
+    <!-- module section list start -->
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Dependencies">Dependencies</a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#utils.game">utils.game</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#expcore.common">expcore.common</a></td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Authenication">Authenication </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#add_authenticator">add_authenticator(callback)</a></td>
+    <td class="summary">Adds an authorization callback, function used to check if a player if allowed to use a command</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#remove_authenticator">remove_authenticator(callback)</a></td>
+    <td class="summary">Removes an authorization callback</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#authorize">authorize(player, command_name)</a></td>
+    <td class="summary">Mostly used internally, calls all authorization callbacks, returns if the player is authorized</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Getters">Getters </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#get">get([player])</a></td>
+    <td class="summary">Gets all commands that a player is allowed to use, game commands not included</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#search">search(keyword[, allowed_player])</a></td>
+    <td class="summary">Searches command names and help messages to find possible commands, game commands included</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Parse">Parse </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#add_parse">add_parse(name, callback)</a></td>
+    <td class="summary">Adds a parse function which can be called by name rather than callback (used in add_param)
+ nb: this is not needed as you can use the callback directly this just allows it to be called by name</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#remove_parse">remove_parse(name)</a></td>
+    <td class="summary">Removes a parse function, see add_parse for adding them</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#parse">parse(name, input, player, reject)</a></td>
+    <td class="summary">Intended to be used within other parse functions, runs a parse and returns success and new value</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Creation">Creation </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#new_command">new_command(name, help)</a></td>
+    <td class="summary">Creates a new command object to added details to, note this does not register the command to the game</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Commands._prototype:add_param">Commands._prototype:add_param(name[, optional=false][, parse=pass function through][, ...])</a></td>
+    <td class="summary">Adds a new param to the command this will be displayed in the help and used to parse the input</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Commands._prototype:set_defaults">Commands._prototype:set_defaults(defaults)</a></td>
+    <td class="summary">Adds default values to params only matters if the param is optional, if default value is a function it is called with param player</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Commands._prototype:set_flag">Commands._prototype:set_flag(name, value)</a></td>
+    <td class="summary">Adds a tag to the command which is passed via the flags param to the authenticators, can be used to assign command roles or type</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Commands._prototype:add_alias">Commands._prototype:add_alias(any)</a></td>
+    <td class="summary">Adds an alias or multiple that will also be registered with the same callback, eg /teleport can be /tp with both working</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Commands._prototype:enable_auto_concat">Commands._prototype:enable_auto_concat()</a></td>
+    <td class="summary">Enables auto concatenation of any params on the end so quotes are not needed for last param
+ nb: this will disable max param checking as they will be concatenated onto the end of that last param
+ this can be useful for reasons or longs text, can only have one per command</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#Commands._prototype:register">Commands._prototype:register(callback)</a></td>
+    <td class="summary">Adds the callback to the command and registers all aliases, params and help message with the game
+ nb: this must be the last function ran on the command and must be done for the command to work</td>
+    </tr>
+    </tbody>
+    </table>
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Status">Status </a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#error">error([error_message][, play_sound])</a></td>
+    <td class="summary">Sends an error message to the player and returns a constant to return to command handler to exit execution
+ nb: this is for non fatal errors meaning there is no log of this event
+ nb: if reject is giving as a param to the callback use that instead</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#internal_error">internal_error(success, command_name, error_message)</a></td>
+    <td class="summary">Sends an error to the player and logs the error, used with pcall within command handler please avoid direct use
+ nb: use error(error_message) within your callback to trigger do not trigger directly as the handler may still continue</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#success">success([value])</a></td>
+    <td class="summary">Sends a value to the player, followed by a command complete message
+ nb: either return a value from your callback to trigger or return the return of this to prevent two messages</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#run_command">run_command(command_event)</a></td>
+    <td class="summary">Main event function that is ran for all commands, used internally please avoid direct use</td>
+    </tr>
+    </tbody>
+    </table>
+    <!-- module section list end -->
+
+    <br />
+
+    <!-- section start -->
+    <h3><span id="Dependencies" class="section-title"><a href="#Dependencies">Dependencies</a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#utils.game" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.game">utils.game</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.common" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.common">expcore.common</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Authenication" class="section-title"><a href="#Authenication">Authenication </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#add_authenticator" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="add_authenticator">add_authenticator(callback)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds an authorization callback, function used to check if a player if allowed to use a command</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>callback</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the callback you want to register as an authenticator
+ callback param - player: LuaPlayer - the player who is trying to use the command
+ callback param - command: string - the name of the command which is being used
+ callback param - flags: table - any flags which have been set for the command
+ callback param - reject: function(error_message?: string) - call to fail authorize with optional error message
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+    <span class="return-text">the index it was inserted at use to remove the callback, if anon function used</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#remove_authenticator" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="remove_authenticator">remove_authenticator(callback)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Removes an authorization callback</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>callback</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a> or <a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the callback to remove, an index returned by add_authenticator can be passed
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">was the callback found and removed</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#authorize" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="authorize">authorize(player, command_name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Mostly used internally, calls all authorization callbacks, returns if the player is authorized</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player that is using the command, passed to callbacks
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>command_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the command that is being used, passed to callbacks
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">true player is authorized</span>
+    </li>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+    <span class="return-text">commands const for success</span>
+    </li>
+    </ul>
+    <h5>Or</h5>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">false player is unauthorized</span>
+    </li>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <span class="type">locale_string</span></span>)
+    <span class="return-text">the reason given by the authenticator</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Getters" class="section-title"><a href="#Getters">Getters </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#get" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="get">get([player])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Gets all commands that a player is allowed to use, game commands not included</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player that you want to get commands of, nil will return all commands
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">all commands that that player is allowed to use, or all commands</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#search" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="search">search(keyword[, allowed_player])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Searches command names and help messages to find possible commands, game commands included</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>keyword</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the word which you are trying to find
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>allowed_player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player to get allowed commands of, if nil all commands are searched
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+    <span class="return-text">all commands that contain the key word, and allowed by player if player given</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Parse" class="section-title"><a href="#Parse">Parse </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#add_parse" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="add_parse">add_parse(name, callback)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds a parse function which can be called by name rather than callback (used in add_param)
+ nb: this is not needed as you can use the callback directly this just allows it to be called by name</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the parse, should be the type like player or player_alive, must be unique
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>callback</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the callback that is ran to parse the input
+ parse param - input: string - the input given by the user for this param
+ parse param - player: LuaPlayer - the player who is using the command
+ parse param - reject: function(error_message) - use this function to send a error to the user and fail running
+ parse return - the value that will be passed to the command callback, must not be nil and if reject then command is not run
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">was the parse added will be false if the name is already used</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#remove_parse" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="remove_parse">remove_parse(name)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Removes a parse function, see add_parse for adding them</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the parse to remove
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#parse" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="parse">parse(name, input, player, reject)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Intended to be used within other parse functions, runs a parse and returns success and new value</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the parse to call, must be registered and cant be a function
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>input</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     string the input to pass to the parse, will always be a but might not be the original input
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>player</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaPlayer.html">LuaPlayer</a></span>)
+
+     the player that is calling using the command
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>reject</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the reject function that was passed by the command hander
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">any</span></span>)
+    <span class="return-text">the new value for the input, may be nil, if nil then either there was an error or input was nil</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Creation" class="section-title"><a href="#Creation">Creation </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#new_command" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="new_command">new_command(name, help)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Creates a new command object to added details to, note this does not register the command to the game</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the command to be created
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>help</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the help message for the command
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">Commands._prototype</span></span>)
+    <span class="return-text">this will be used with other functions to generate the command functions</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Commands._prototype:add_param" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Commands._prototype:add_param">Commands._prototype:add_param(name[, optional=false][, parse=pass function through][, ...])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds a new param to the command this will be displayed in the help and used to parse the input</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the new param that is being added to the command
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>optional</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     is this param required for this command, these must be after all required params
+
+    (<em>default</em>: false)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>parse</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a> or <a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     this function will take the input and return a new (or same) value
+
+    (<em>default</em>: pass function through)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>...</em></strong>
+
+    <strong> : </strong>
+
+
+     extra args you want to pass to the parse function; for example if the parse is general use
+ parse param - input: string - the input given by the user for this param
+ parse param - player: LuaPlayer - the player who is using the command
+ parse param - reject: function(error_message) - use this function to send a error to the user and fail running
+ parse return - the value that will be passed to the command callback, must not be nil and if reject then command is not run
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">Commands._prototype</span></span>)
+    <span class="return-text">pass through to allow more functions to be called</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Commands._prototype:set_defaults" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Commands._prototype:set_defaults">Commands._prototype:set_defaults(defaults)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds default values to params only matters if the param is optional, if default value is a function it is called with param player</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>defaults</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+
+     table a keyed by the name of the param with the value as the default value {paramName=defaultValue}
+ callback param - player: LuaPlayer - the player using the command, default value does not need to be a function callback
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">Commands._prototype</span></span>)
+    <span class="return-text">pass through to allow more functions to be called</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Commands._prototype:set_flag" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Commands._prototype:set_flag">Commands._prototype:set_flag(name, value)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds a tag to the command which is passed via the flags param to the authenticators, can be used to assign command roles or type</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the tag to be added; used to keep flags separate
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>value</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><span class="type">any</span></span>)
+
+     the tag that you want can be anything that the authenticators are expecting
+ nb: if value is nil then name will be assumed as the value and added at a numbered index
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">Commands._prototype</span></span>)
+    <span class="return-text">pass through to allow more functions to be called</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Commands._prototype:add_alias" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Commands._prototype:add_alias">Commands._prototype:add_alias(any)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds an alias or multiple that will also be registered with the same callback, eg /teleport can be /tp with both working</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>any</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     ... amount of aliases that you want this command to be callable with
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">Commands._prototype</span></span>)
+    <span class="return-text">pass through to allow more functions to be called</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code>command:add_alias(<span class="string">'aliasOne'</span>,<span class="string">'aliasTwo'</span>,<span class="string">'etc'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Commands._prototype:enable_auto_concat" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Commands._prototype:enable_auto_concat">Commands._prototype:enable_auto_concat()</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Enables auto concatenation of any params on the end so quotes are not needed for last param
+ nb: this will disable max param checking as they will be concatenated onto the end of that last param
+ this can be useful for reasons or longs text, can only have one per command</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">Commands._prototype</span></span>)
+    <span class="return-text">pass through to allow more functions to be called</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#Commands._prototype:register" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="Commands._prototype:register">Commands._prototype:register(callback)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Adds the callback to the command and registers all aliases, params and help message with the game
+ nb: this must be the last function ran on the command and must be done for the command to work</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>callback</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.6.html">function</a></span>)
+
+     the callback for the command, will receive the player running command, and params added with add_param
+ callback param - player: LuaPlayer - the player who used the command
+ callback param - ... - any params which were registered with add_param in the order they where registered
+ callback param - raw: string - the raw input from the user, comes after every param added with add_param
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+    <h3><span id="Status" class="section-title"><a href="#Status">Status </a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#error" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="error">error([error_message][, play_sound])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sends an error message to the player and returns a constant to return to command handler to exit execution
+ nb: this is for non fatal errors meaning there is no log of this event
+ nb: if reject is giving as a param to the callback use that instead</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>error_message</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     an optional error message that can be sent to the user
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>play_sound</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the sound to play for the error
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">Commands.defines.error</span></span>)
+    <span class="return-text">return this to command handler to exit execution</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="keyword">return</span> Commands.error()</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#internal_error" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="internal_error">internal_error(success, command_name, error_message)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sends an error to the player and logs the error, used with pcall within command handler please avoid direct use
+ nb: use error(error_message) within your callback to trigger do not trigger directly as the handler may still continue</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>success</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     the success value returned from pcall, or just false to trigger error
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>command_name</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the name of the command this is used within the log
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>error_message</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the error returned by pcall or some other error, this is logged and not returned to player
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+    <span class="return-text">the opposite of success so true means to cancel execution, used internally</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#success" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="success">success([value])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Sends a value to the player, followed by a command complete message
+ nb: either return a value from your callback to trigger or return the return of this to prevent two messages</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>value</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><span class="type">any</span></span>)
+
+     the value to return to the player, if nil then only success message returned
+
+    (<em>optional</em>)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><span class="type">Commands.defines.success</span></span>)
+    <span class="return-text">return this to the command handler to prevent two success messages</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#run_command" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="run_command">run_command(command_event)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Main event function that is ran for all commands, used internally please avoid direct use</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>command_event</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+
+     passed directly from command event from the add_command function
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
+
+    <!-- section end -->
+
+    </div>
+    </div>
+    </div>
+
+    <div class="footer container grid-1280">
+    <div class="divider divider-custom"></div>
+    <div class="footer-columns columns">
+    <div class="sidebar-footer column col-3 col-sm-12">
+    <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
+    </div>
+    <div class="content-footer column col-9 col-sm-12">
+    <i>Last updated 2019-10-15 22:37:40 UTC</i>
+    </div>
+    </div>
+    </div>
+    </body>
+    </html>

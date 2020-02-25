@@ -1,6 +1,8 @@
--- preset colours that players get when they join the server, if not in the list then will be given a random colour (which isnt disallowed)
+--- Preset colours that players get when they join the server, if not in the list then will be given a random colour (which isnt disallowed)
+-- @config Preset-Player-Colours
+
 return {
-	players={
+	players={ --- @setting players list of all players and the colour in rgb256 that they will recive upon joining
 		BADgamerNL={r=255,g=20,b=147},
 		arty714={r=150,g=68,b=161},
 		Cooldude2606={r=57,g=192,b=207},
@@ -11,9 +13,12 @@ return {
 		aldldl={r=0,g=131,b=255},
 		NAD4X4={r=135,g=206,b=250},
 		cydes={r=82,g=249,b=155},
-		UUBlueFire={r=0,g=204,b=255}
+		UUBlueFire={r=0,g=204,b=255},
+		CmonMate497={r=103,g=224,b=194},
+		s4sh={r=255,g=120,b=0},
+		ArPiiX={r=0,g=255,b=0}
 	},
-	disallow = { -- the value does not matter it is only the key which is checked
+	disallow = { --- @setting disallow colours which will not given to players; the value does not matter it is only the key which is checked
 		black = {r = 0, g = 0, b = 0},
 		white = {r = 255, g = 255, b = 255},
 		jailed = {r = 255, g = 255, b = 255},

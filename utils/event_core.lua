@@ -27,7 +27,7 @@ local function call_handlers(handlers, event)
             local handler = handlers[i]
             local success, error = pcall(handler, event)
             if not success then
-                log(error)
+                log('\n\t'..error)
             end
         end
     end

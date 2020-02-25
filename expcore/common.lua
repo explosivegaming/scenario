@@ -1,44 +1,12 @@
---- Adds some commonly used functions used in many modules
--- @author cooldude2606
---[[
->>>>Functions List (see function for more detail):
-    Common.type_check(value,test_type) --- Compare types faster for faster validation of prams
-    Common.type_check_error(value,test_type,error_message,level) --- Raises an error if the value is of the incorrect type
-    Common.param_check(value,test_type,param_name,param_number) --- Raises an error when the value is the incorrect type, uses a consistent error message format
-
-    Common.player_return(value,colour,player) --- Will return a value of any type to the player/server console, allows colour for in-game players
-    Common.write_json(path,tbl) --- Writes a table object to a file in json format
-
-    Common.opt_require(path) --- Calls a require that will not error if the file is not found
-    Common.ext_require(path,...) --- Calls a require and returns only the keys given, file must return a table
-
-    Common.format_time(ticks,options) --- Formats tick into a clean format, denominations from highest to lowest
-
-    Common.move_items(items,surface,position,radius,chest_type) --- Moves items to the position and stores them in the closest entity of the type given
-
-    Common.print_grid_value(value, surface, position, scale, offset, immutable) --- Prints a colored value on a location.
-    Common.print_colored_grid_value(value, surface, position, offset, immutable,
-        color_value, base_color, delta_color, under_bound, over_bound) --- Prints a colored value on a location. with extra settings.
-    Common.clear_flying_text(surface) --- Clears all flying text entites on a surface
-
-    Common.string_contains(s, contains) --- Tests if a string contains a given substring.
-
-    Common.extract_keys(tbl,...) --- Extracts certain keys from a table
-    Common.enum(tbl) --- Converts a table to an enum
-    Common.auto_complete(options,input,use_key,rtn_key) --- Returns the closest match to the input
-    Common.table_keys(tbl) --- Returns all the keys of a table
-    Common.table_values(tbl) --- Returns all the values of a table
-    Common.table_alphanumsort(tbl) --- Returns the list is a sorted way that would be expected by people (this is by key)
-    Common.table_keysort(tbl) --- Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
-
-    Common.format_chat_colour(message,color) --- Returns a message with valid chat tags to change its colour
-    Common.format_chat_colour_localized(message,color) --- Returns a message with valid chat tags to change its colour, using localization
-    Common.format_chat_player_name(player,raw_string) --- Returns the players name in the players color
+--[[-- Core Module - Common Library
+    - Adds some commonly used functions used in many modules
+    @core Common-Library
+    @alias Common
 ]]
 
-local Colours = require 'resources.color_presets'
-local Game = require 'utils.game'
-local Util = require 'util'
+local Colours = require 'resources.color_presets' --- @dep resources.color_presets
+local Game = require 'utils.game' --- @dep utils.game
+local Util = require 'util' --- @dep util
 require 'utils.table'
 require 'utils.math'
 
@@ -141,7 +109,7 @@ function Common.opt_require(path)
 end
 
 --- Calls a require and returns only the keys given, file must return a table
--- @usage local extract, param_check = ext_require('expcore.common','extract','param_check')
+-- @usage local extract, param_check = ext_require('expcore.common','extract','param_check') --- @dep expcore.common
 -- @tparam string path the path that you want to require
 -- @tparam string ... the name of the keys that you want returned
 -- @return the keys in the order given
@@ -262,7 +230,7 @@ function Common.move_items(items,surface,position,radius,chest_type)
     local entities = surface.find_entities_filtered{area={{p.x-r,p.y-r},{p.x+r,p.y+r}},name=chest_type} or {}
     local count = #entities
     local current = 1
-    -- Makes a new emtpy chest when it is needed
+    -- Makes a new empty chest when it is needed
     local function make_new_chest()
         local pos = surface.find_non_colliding_position(chest_type,position,32,1)
         local chest = surface.create_entity{name=chest_type,position=pos,force='neutral'}
@@ -437,7 +405,7 @@ function Common.print_colored_grid_value(value, surface, position, offset, immut
     }.active = false
 end
 
---- Clears all flying text entites on a surface
+--- Clears all flying text entities on a surface
 -- @tparam LuaSurface surface the surface to clear
 function Common.clear_flying_text(surface)
     local entities = surface.find_entities_filtered{name ='flying-text'}
@@ -532,7 +500,7 @@ local function sortFunc(x, y) --sorts tables with mixed index types.
 end
 
 --- Returns a copy of all of the values in the table.
--- @tparam table table tbl the to copy the keys from, or an empty table if tbl is nil
+-- @tparam table tbl the to copy the keys from, or an empty table if tbl is nil
 -- @tparam[opt] boolean sorted whether to sort the keys (slower) or keep the random order from pairs()
 -- @tparam[opt] boolean as_string whether to try and parse the values as strings, or leave them as their existing type
 -- @treturn array an array with a copy of all the values in the table
@@ -558,7 +526,7 @@ function Common.table_values(tbl, sorted, as_string)
 end
 
 --- Returns a copy of all of the keys in the table.
--- @tparam table table tbl the to copy the keys from, or an empty table if tbl is nil
+-- @tparam table tbl the to copy the keys from, or an empty table if tbl is nil
 -- @tparam[opt] boolean sorted whether to sort the keys (slower) or keep the random order from pairs()
 -- @tparam[opt] boolean as_string whether to try and parse the keys as strings, or leave them as their existing type
 -- @treturn array an array with a copy of all the keys in the table
@@ -598,7 +566,7 @@ function Common.table_alphanumsort(tbl)
     return _tbl
 end
 
---- Returns the list is a sorted way that would be expected by people (this is by key) (faster alterative than above)
+--- Returns the list is a sorted way that would be expected by people (this is by key) (faster alternative than above)
 -- @tparam table tbl the table to be sorted
 -- @treturn table the sorted table
 function Common.table_keysort(tbl)
@@ -640,6 +608,95 @@ function Common.format_chat_player_name(player,raw_string)
         return Common.format_chat_colour(player_name,player_chat_colour)
     else
         return Common.format_chat_colour_localized(player_name,player_chat_colour)
+    end
+end
+
+--- Returns a desync safe file path for the current file
+-- @tparam[opt=0] number offset the offset in the stack to get, 0 is current file
+-- @treturn string the file path
+function Common.get_file_path(offset)
+    offset = offset or 0
+    return debug.getinfo(offset+2, 'S').source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+end
+
+--[[-- Much faster method for inserting items into an array
+@tparam table tbl the table that will have the values added to it
+@tparam[opt] number start_index the index at which values will be added, nil means end of the array
+@tparam table values the new values that will be added to the table
+@treturn table the table that was passed as the first argument
+@usage-- Adding 1000 values into the middle of the array
+local tbl = {}
+local values = {}
+for i = 1,1000 do tbl[i] = i values[i] = i end
+Common.array_insert(tbl,500,values) -- around 0.4ms
+]]
+function Common.array_insert(tbl,start_index,values)
+    if not values then
+        values = start_index
+        start_index = nil
+    end
+
+    if start_index then
+        local starting_length = #tbl
+        local adding_length = #values
+        local move_to = start_index+adding_length+1
+        for offset = starting_length-start_index, 0, -1 do
+            tbl[move_to+offset] = tbl[starting_length+offset]
+        end
+        start_index = start_index-1
+    else
+        start_index = #tbl
+    end
+
+    for offset, item in ipairs(values) do
+        tbl[start_index+offset] = item
+    end
+
+    return tbl
+end
+
+--[[-- Much faster method for inserting keys into a table
+@tparam table tbl the table that will have keys added to it
+@tparam[opt] number start_index the index at which values will be added, nil means end of the array, numbered indexs only
+@tparam table tbl2 the table that may contain both string and numbered keys
+@treturn table the table passed as the first argument
+@usage-- Merging two tables
+local tbl = {}
+local tbl2 = {}
+for i = 1,100 do tbl[i] = i tbl['_'..i] = i tbl2[i] = i tbl2['__'..i] = i end
+Common.table_insert(tbl,50,tbl2)
+]]
+function Common.table_insert(tbl,start_index,tbl2)
+    if not tbl2 then
+        tbl2 = start_index
+        start_index = nil
+    end
+
+    Common.array_insert(tbl,start_index,tbl2)
+    for key, value in pairs(tbl2) do
+        if not tonumber(key) then
+            tbl[key] = value
+        end
+    end
+
+    return tbl
+end
+
+--[[-- Used to resolve a value that could also be a function returning that value
+@tparam any value the value which you want to test is not nil and if it is a function then call the function
+@treturn any the value given or returned by value if it is a function
+@usage-- Default value handling
+-- if default value is not a function then it is returned
+-- if it is a function then it is called with the first argument being self
+local value = Common.resolve_value(self.defaut_value,self)
+]]
+function Common.resolve_value(value,...)
+    if value then
+        if type(value) == 'function' then
+            return value(...)
+        else
+            return value
+        end
     end
 end
 

@@ -1,5 +1,10 @@
-local Commands = require 'expcore.commands'
-local Global = require 'utils.global'
+--[[-- Commands Module - Home
+    - Adds a command that allows setting and teleporting to your home position
+    @commands Home
+]]
+
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Global = require 'utils.global' --- @dep utils.global
 require 'config.expcore-commands.parse_general'
 
 local homes = {}
@@ -23,6 +28,8 @@ local function floor_pos(position)
     }
 end
 
+--- Teleports you to your home location
+-- @command home
 Commands.new_command('home','Teleports you to your home location')
 :register(function(player,raw)
     local home = homes[player.index]
@@ -35,6 +42,8 @@ Commands.new_command('home','Teleports you to your home location')
     Commands.print{'expcom-home.return-set',rtn.x,rtn.y}
 end)
 
+--- Sets your home location to your current position
+-- @command home-set
 Commands.new_command('home-set','Sets your home location to your current position')
 :register(function(player,raw)
     local home = homes[player.index]
@@ -47,6 +56,8 @@ Commands.new_command('home-set','Sets your home location to your current positio
     Commands.print{'expcom-home.home-set',pos.x,pos.y}
 end)
 
+--- Returns your current home location
+-- @command home-get
 Commands.new_command('home-get','Returns your current home location')
 :register(function(player,raw)
     local home = homes[player.index]
@@ -57,6 +68,8 @@ Commands.new_command('home-get','Returns your current home location')
     Commands.print{'expcom-home.home-get',pos.x,pos.y}
 end)
 
+--- Teleports you to previous location
+-- @command return
 Commands.new_command('return','Teleports you to previous location')
 :register(function(player,raw)
     local home = homes[player.index]

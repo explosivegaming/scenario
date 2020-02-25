@@ -1,4 +1,12 @@
---- Gui class defines for elem buttons
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Elem Buttons.
+-- Gui class defines for elem buttons
+-- @section elem-buttons
+
 --[[
 >>>> Functions
     ElemButton.new_elem_button(name) --- Creates a new elem button element define
@@ -11,9 +19,9 @@
 
     Other functions present from expcore.gui.core
 ]]
-local Gui = require 'expcore.gui.core'
-local Prototype = require 'expcore.gui.prototype'
-local Game = require 'utils.game'
+local Gui = require 'expcore.gui.core' --- @dep expcore.gui.core
+local Prototype = require 'expcore.gui.prototype' --- @dep expcore.gui.prototype
+local Game = require 'utils.game' --- @dep utils.game
 
 --- Store call for store update
 -- @tparam table define the define that this is acting on
@@ -29,8 +37,7 @@ local ElemButton = {
     _prototype=Prototype.extend{
         on_element_update = Prototype.event,
         on_store_update = Prototype.event,
-        add_store = Prototype.store(false,store_update),
-        add_sync_store = Prototype.store(true,store_update)
+        add_store = Prototype.store(store_update)
     }
 }
 
@@ -48,8 +55,7 @@ function ElemButton.new_elem_button(name)
         end
 
         if self.store then
-            local category = self.categorize and self.categorize(element) or nil
-            local value = self:get_store(category)
+            local value = self:get_store(element)
             if value then element.elem_value = value end
         end
     end)
@@ -59,8 +65,7 @@ function ElemButton.new_elem_button(name)
         local value = element.elem_value
 
         if self.store then
-            local category = self.categorize and self.categorize(element) or value
-            self:set_store(category,value)
+            self:set_store(element,value)
 
         else
             self:raise_event('on_element_update',event.player,element,value)

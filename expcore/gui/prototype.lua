@@ -1,4 +1,12 @@
---- Used to create new gui prototypes see elements and concepts
+--[[-- Core Module - Gui
+    @module Gui
+    @alias Prototype
+]]
+
+--- Prototype.
+-- Used to create new gui prototypes see elements and concepts
+-- @section prototype
+
 --[[
     >>>> Functions
     Constructor.event(event_name) --- Creates a new function to add functions to an event handler
@@ -11,7 +19,7 @@
     Prototype:set_caption(value) --- Sets the caption for the element define
     Prototype:set_tooltip(value) --- Sets the tooltip for the element define
     Prototype:set_style(style,callback) --- Sets the style for the element define
-    Prototype:set_embeded_flow(state) --- Sets the element to be drawn inside a nameless flow, can be given a name using a function
+    Prototype:set_embedded_flow(state) --- Sets the element to be drawn inside a nameless flow, can be given a name using a function
 
     Prototype:set_pre_authenticator --- Sets an authenticator that blocks the draw function if check fails
     Prototype:set_post_authenticator --- Sets an authenticator that disables the element if check fails
@@ -19,13 +27,13 @@
     Prototype:raise_event(event_name,...) --- Raises a custom event for this define, any number of params can be given
     Prototype:draw_to(element,...) --- The main function for defines, when called will draw an instance of this define to the given element
 
-    Prototype:get_store(category) --- Gets the value in this elements store, category needed if categorize function used
-    Prototype:set_store(category,value) --- Sets the value in this elements store, category needed if categorize function used
-    Prototype:clear_store(category) --- Sets the value in this elements store to nil, category needed if categorize function used
+    Prototype:get_store(category) --- Gets the value in this elements store, category needed if serializer function used
+    Prototype:set_store(category,value) --- Sets the value in this elements store, category needed if serializer function used
+    Prototype:clear_store(category) --- Sets the value in this elements store to nil, category needed if serializer function used
 ]]
-local Game = require 'utils.game'
-local Store = require 'expcore.store'
-local Instances = require 'expcore.gui.instances'
+local Game = require 'utils.game' --- @dep utils.game
+local Store = require 'expcore.store' --- @dep expcore.store
+local Instances = require 'expcore.gui.instances' --- @dep expcore.gui.instances
 
 local Constructor = {}
 local Prototype = {}
@@ -74,35 +82,24 @@ function Constructor.extend(new_prototype)
 end
 
 --- Creates a new function which adds a store to a gui define
--- @tparam boolean sync if the function should create a synced store
 -- @tparam function callback the function called when needing to update the value of an element
 -- @treturn function the function that will add a store for this define
-function Constructor.store(sync,callback)
-    --- Adds a store for the define that is shared between all instances of the define in the same category, categorize is a function that returns a string
+function Constructor.store(callback)
+    --- Adds a store for the define that is shared between all instances of the define in the same category, serializer is a function that returns a string
     -- @tparam self table the gui define being acted on
-    -- @tparam[opt] string location a unique location identifier, when omited a uid location will be used, use when sync is set to true
-    -- @tparam[opt] function categorize function used to determine the category of a LuaGuiElement, when omited all share one single category
-    -- categorize param - LuaGuiElement element - the element that needs to be converted
-    -- categorize return - string - a determistic string that referses to a category such as player name or force name
+    -- @tparam[opt] function serializer function used to determine the category of a LuaGuiElement, when omitted all share one single category
+    -- serializer param - LuaGuiElement element - the element that needs to be converted
+    -- serializer return - string - a deterministic string that references to a category such as player name or force name
     -- @treturn self the element define to allow chaining
-    return function(self,location,categorize)
+    return function(self,serializer)
         if self.store then return end
+        serializer = serializer or function() return '' end
 
-        if not sync then
-            categorize = location
-            location = Store.uid_location()
-        end
+        self.store = Store.register(serializer)
 
-        if Store.is_registered(location) then
-            return error('Location for store is already registered: '..location,2)
-        end
+        Instances.register(self.name,serializer)
 
-        self.store = location
-        self.categorize = categorize
-
-        Instances.register(self.name,self.categorize)
-
-        Store.register(self.store,sync,function(value,category)
+        Store.watch(self.store,function(value,category)
             self:raise_event('on_store_update',value,category)
 
             if Instances.is_registered(self.name) then
@@ -134,8 +131,8 @@ function Constructor.setter(value_type,key,second_key)
     end
 
     return function(self,value)
-        local vtype = type(value)
-        if vtype ~= value_type and (not locale or vtype ~= 'string') then
+        local v_type = type(value)
+        if v_type ~= value_type and (not locale or v_type ~= 'string') then
             error(display_message,2)
         end
 
@@ -200,7 +197,7 @@ Prototype.on_style_update = Constructor.event('on_style_update')
 
 --- Sets the style for the element define
 -- @tparam string style the style that will be used for this element when drawn
--- @tparam[opt] callback function function is called when element is drawn to alter its style
+-- @tparam[opt] function callback function is called when element is drawn to alter its style
 -- @treturn self the element define to allow chaining
 function Prototype:set_style(style,callback)
     self.draw_data.style = style
@@ -211,13 +208,13 @@ function Prototype:set_style(style,callback)
 end
 
 --- Sets the element to be drawn inside a nameless flow, can be given a name using a function
--- @tparam state ?boolean|function when true a padless flow is created to contain the element
+-- @tparam ?boolean|function state when true a padless flow is created to contain the element
 -- @treturn self the element define to allow chaining
-function Prototype:set_embeded_flow(state)
+function Prototype:set_embedded_flow(state)
     if state == false or type(state) == 'function' then
-        self.embeded_flow = state
+        self.embedded_flow = state
     else
-        self.embeded_flow = true
+        self.embedded_flow = true
     end
     return self
 end
@@ -249,12 +246,12 @@ function Prototype:draw_to(element,...)
         if not self.pre_authenticator(player,self.name) then return end
     end
 
-    if self.embeded_flow then
-        local embeded_name
-        if type(self.embeded_flow) == 'function' then
-            embeded_name = self.embeded_flow(element,...)
+    if self.embedded_flow then
+        local embedded_name
+        if type(self.embedded_flow) == 'function' then
+            embedded_name = self.embedded_flow(element,...)
         end
-        element = element.add{type='flow',name=embeded_name}
+        element = element.add{type='flow',name=embedded_name}
         element.style.padding = 0
     end
 
@@ -270,12 +267,12 @@ function Prototype:draw_to(element,...)
         Instances.add_element(self.name,new_element)
     end
 
-    self:raise_event('on_draw',player,new_element)
+    self:raise_event('on_draw',player,new_element,...)
 
     return new_element
 end
 
---- Gets the value in this elements store, category needed if categorize function used
+--- Gets the value in this elements store, category needed if serializer function used
 -- @tparam string category[opt] the category to get such as player name or force name
 -- @treturn any the value that is stored for this define
 function Prototype:get_store(category)
@@ -283,7 +280,7 @@ function Prototype:get_store(category)
     return Store.get(self.store,category)
 end
 
---- Sets the value in this elements store, category needed if categorize function used
+--- Sets the value in this elements store, category needed if serializer function used
 -- @tparam string category[opt] the category to get such as player name or force name
 -- @tparam any value the value to set for this define, must be valid for its type ie for checkbox etc
 -- @treturn boolean true if the value was set
@@ -292,7 +289,7 @@ function Prototype:set_store(category,value)
     return Store.set(self.store,category,value)
 end
 
---- Sets the value in this elements store to nil, category needed if categorize function used
+--- Sets the value in this elements store to nil, category needed if serializer function used
 -- @tparam[opt] string category the category to get such as player name or force name
 -- @treturn boolean true if the value was set
 function Prototype:clear_store(category)

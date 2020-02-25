@@ -1,6 +1,6 @@
-local Gui = require 'utils.gui'
-local Model = require 'modules.gui.debug.model'
-local Color = require 'resources.color_presets'
+local Gui = require 'utils.gui' --- @dep utils.gui
+local Model = require 'modules.gui.debug.model' --- @dep modules.gui.debug.model
+local Color = require 'resources.color_presets' --- @dep resources.color_presets
 
 local dump = Model.dump
 local dump_text = Model.dump_text
@@ -8,7 +8,7 @@ local concat = table.concat
 
 local Public = {}
 
-local ignore = {tokens = true}
+local ignore = {tokens = true, data_store = true}
 
 local header_name = Gui.uid_name()
 local left_panel_name = Gui.uid_name()

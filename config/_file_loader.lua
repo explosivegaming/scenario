@@ -1,7 +1,8 @@
---- This contains a list of all files that will be loaded and the order they are loaded in
--- to stop a file from loading add "--" in front of it, remove the "--" to have the file be loaded
--- config files should be loaded after all modules are loaded
--- core files should be required by modules and not be present in this list
+--- This contains a list of all files that will be loaded and the order they are loaded in;
+-- to stop a file from loading add "--" in front of it, remove the "--" to have the file be loaded;
+-- config files should be loaded after all modules are loaded;
+-- core files should be required by modules and not be present in this list;
+-- @config File-Loader
 return {
     --'example.file_not_loaded',
     'modules.factorio-control', -- base factorio free play scenario
@@ -12,6 +13,7 @@ return {
     'modules.commands.tag',
     'modules.commands.teleport',
     'modules.commands.cheat-mode',
+    'modules.commands.ratio',
     'modules.commands.interface',
     'modules.commands.help',
     'modules.commands.roles',
@@ -26,6 +28,8 @@ return {
     'modules.commands.bonus',
     'modules.commands.home',
     -- QoL Addons
+    'modules.addons.station-auto-name',
+    'modules.addons.greetings',
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',
     'modules.addons.death-logger',

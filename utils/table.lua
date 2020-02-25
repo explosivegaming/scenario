@@ -49,7 +49,7 @@ end
 --- Checks if a table contains an element
 -- @param t <table>
 -- @param e <any> table element
--- @returns <any> the index of the element or nil
+-- @return <any> the index of the element or nil
 function table.index_of(t, e)
     for k, v in pairs(t) do
         if v == e then
@@ -62,7 +62,7 @@ end
 --- Checks if the arrayed portion of a table contains an element
 -- @param t <table>
 -- @param e <any> table element
--- @returns <number|nil> the index of the element or nil
+-- @return <number|nil> the index of the element or nil
 function table.index_of_in_array(t, e)
     for i = 1, #t do
         if t[i] == e then
@@ -76,7 +76,7 @@ local index_of = table.index_of
 --- Checks if a table contains an element
 -- @param t <table>
 -- @param e <any> table element
--- @returns <boolean> indicating success
+-- @return <boolean> indicating success
 function table.contains(t, e)
     return index_of(t, e) and true or false
 end
@@ -85,7 +85,7 @@ local index_of_in_array = table.index_of_in_array
 --- Checks if the arrayed portion of a table contains an element
 -- @param t <table>
 -- @param e <any> table element
--- @returns <boolean> indicating success
+-- @return <boolean> indicating success
 function table.array_contains(t, e)
     return index_of_in_array(t, e) and true or false
 end
@@ -128,11 +128,10 @@ end
 
 --- Chooses a random entry from a weighted table
 -- because this uses math.random, it cannot be used outside of events
--- @param weight_table <table> of tables with items and their weights
+-- @param weighted_table <table> of tables with items and their weights
 -- @param item_index <number> of the index of items, defaults to 1
 -- @param weight_index <number> of the index of the weights, defaults to 2
 -- @return <any> table element
--- @see features.chat_triggers::hodor
 function table.get_random_weighted(weighted_table, item_index, weight_index)
     local total_weight = 0
     item_index = item_index or 1
@@ -156,6 +155,7 @@ end
 -- because this uses math.random, it cannot be used outside of events if no rng is supplied
 -- from: http://www.sdknews.com/cross-platform/corona/tutorial-how-to-shuffle-table-items
 -- @param t <table> to shuffle
+-- @param rng <function> to provide random numbers
 function table.shuffle_table(t, rng)
     local rand = rng or math.random
     local iterations = #t
@@ -238,7 +238,7 @@ require 'util'
 -- process is a function which allow altering the passed object before transforming it into a string.
 -- A typical way to use it would be to remove certain values so that they don't appear at all.
 -- return <string> the prettied table
-table.inspect = require 'utils.inspect'
+table.inspect = require 'utils.inspect' --- @dep utils.inspect
 
 --- Takes a table and returns the number of entries in the table. (Slower than #table, faster than iterating via pairs)
 table.size = table_size

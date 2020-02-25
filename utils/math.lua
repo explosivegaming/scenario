@@ -31,15 +31,16 @@ math.clamp = function(num, min, max)
 end
 
 --- Takes two points and calculates the slope of a line
--- @param x1, y1 numbers - cordinates of a point on a line
--- @param x2, y2 numbers - cordinates of a point on a line
+-- @param x1, y1 numbers - coordinates of a point on a line
+-- @param x2, y2 numbers - coordinates of a point on a line
 -- @return number - the slope of the line
 math.calculate_slope = function(x1, y1, x2, y2)
     return math.abs((y2 - y1) / (x2 - x1))
 end
 
 --- Calculates the y-intercept of a line
--- @param x, y numbers - coordinates of point on line
+-- @param x number - coordinates of point on line
+-- @param y number - coordinates of point on line
 -- @param slope number - the slope of a line
 -- @return number - the y-intercept of a line
 math.calculate_y_intercept = function(x, y, slope)

@@ -6,7 +6,7 @@
 
 local Module = {}
 
-local Debug = require 'utils.debug'
+local Debug = require 'utils.debug' --- @dep utils.debug
 
 local in_state_callbacks = {}
 local transaction_callbacks = {}
@@ -87,8 +87,8 @@ end
 -- You may register multiple handlers for the same transition
 -- NOTICE: This function will invoke an error if called after init. Dynamic machine changes are currently unsupported
 -- @param self StateMachine the machine
--- @param state number/string exiting state
--- @param state number/string entering state
+-- @param old number/string exiting state
+-- @param new number/string entering state
 -- @param callback function
 function Module.register_transition_callback(self, old, new, callback)
     if _LIFECYCLE ~= control_stage then

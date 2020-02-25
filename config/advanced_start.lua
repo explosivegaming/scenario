@@ -1,4 +1,5 @@
 --- This file is used to setup the map starting settings and the items players will start with
+-- @config Advanced-Start
 
 --- These are called factories because they return another function
 -- use these as a simple methods of adding new items
@@ -61,14 +62,14 @@ end
 ]]
 
 return {
-    skip_intro=true, -- skips the intro given in the default factorio free play scenario
-    skip_victory=true, -- will skip the victory screen when a rocket is launched
-    disable_base_game_silo_script=true, -- will not load the silo script at all
-    research_queue_from_start=true, -- when true the research queue is useible from the start
-    friendly_fire=false, -- weather players will be able to attack each other on the same force
-    enemy_expansion=false, -- a catch all for in case the map settings file fails to load
-    chart_radius=10*32, -- the number of tiles that will be charted when the map starts
-    items = { -- items and there condition for being given
+    skip_intro=true, --- @setting skip_intro skips the intro given in the default factorio free play scenario
+    skip_victory=true, --- @setting skip_victory will skip the victory screen when a rocket is launched
+    disable_base_game_silo_script=true, --- @setting disable_base_game_silo_script will not load the silo script at all
+    research_queue_from_start=true, --- @setting research_queue_from_start when true the research queue is useible from the start
+    friendly_fire=false, --- @setting friendly_fire weather players will be able to attack each other on the same force
+    enemy_expansion=false, --- @setting enemy_expansion a catch all for in case the map settings file fails to load
+    chart_radius=10*32, --- @setting chart_radius the number of tiles that will be charted when the map starts
+    items = { --- @setting items items and there condition for being given
         -- ['item-name'] = function(amount_made,production_stats,player) return <Number> end -- 0 means no items given
         -- Plates
         ['iron-plate']=scale_amount_made(100,10,10),
@@ -78,8 +79,8 @@ return {
         ['electronic-circuit']=scale_amount_made(1000,0,6),
         ['iron-gear-wheel']=scale_amount_made(1000,0,6),
         -- Starting Items
-        ['burner-mining-drill']=cutoff_time(5*minutes,4,0),
-        ['stone-furnace']=cutoff_time(5*minutes,4,0),
+        ['burner-mining-drill']=cutoff_time(10*minutes,4,0),
+        ['stone-furnace']=cutoff_time(10*minutes,4,0),
         -- Armor
         ['light-armor']=cutoff_amount_made_unless(5,0,1,'heavy-armor',5),
         ['heavy-armor']=cutoff_amount_made(5,0,1),

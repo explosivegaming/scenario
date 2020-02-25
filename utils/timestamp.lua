@@ -51,11 +51,11 @@ local function month_length(m, y)
 end
 
 local function day_of_year(day, month, year)
-    local yday = months_to_days_cumulative[month]
+    local y_day = months_to_days_cumulative[month]
     if month > 2 and is_leap(year) then
-        yday = yday + 1
+        y_day = y_day + 1
     end
-    return yday + day
+    return y_day + day
 end
 
 local function leap_years_since(year)
@@ -80,7 +80,7 @@ local function normalise(year, month, day, hour, min, sec)
 
     -- Propagate out of range values up
     -- e.g. if `min` is 70, `hour` increments by 1 and `min` becomes 10
-    -- This has to happen for all columns after borrowing, as lower radixes may be pushed out of range
+    -- This has to happen for all columns after borrowing, as lower radix's may be pushed out of range
     min, sec = carry(min, sec, 60) -- TODO: consider leap seconds?
     hour, min = carry(hour, min, 60)
     day, hour = carry(day, hour, 24)
@@ -119,10 +119,10 @@ local function normalise(year, month, day, hour, min, sec)
 end
 
 --- Converts unix epoch timestamp into table {year: number, month: number, day: number, hour: number, min: number, sec: number}
--- @param  sec<number> unix epoch timestamp
+-- @param  seconds<number> unix epoch timestamp
 -- @return {year: number, month: number, day: number, hour: number, min: number, sec: number}
-function Public.to_timetable(secs)
-    return normalise(1970, 1, 1, 0, 0, secs)
+function Public.to_timetable(seconds)
+    return normalise(1970, 1, 1, 0, 0, seconds)
 end
 
 --- Converts timetable into unix epoch timestamp
@@ -142,10 +142,10 @@ function Public.from_timetable(timetable)
 end
 
 --- Converts unix epoch timestamp into human readable string.
--- @param  secs<type> unix epoch timestamp
+-- @param  seconds<type> unix epoch timestamp
 -- @return string
-function Public.to_string(secs)
-    local tt = normalise(1970, 1, 1, 0, 0, secs)
+function Public.to_string(seconds)
+    local tt = normalise(1970, 1, 1, 0, 0, seconds)
     return strformat('%04u-%02u-%02u %02u:%02u:%02d', tt.year, tt.month, tt.day, tt.hour, tt.min, tt.sec)
 end
 
