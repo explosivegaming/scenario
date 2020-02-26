@@ -20,6 +20,10 @@ Gui.top_elements = {}
 -- @field Gui.top_flow_button_style
 Gui.top_flow_button_style = mod_gui.button_style
 
+--- The style that should be used for buttons on the top flow where the flow it opens is visible
+-- @field Gui.top_flow_button_visible_style
+Gui.top_flow_button_visible_style = 'menu_button_continue'
+
 --[[-- Gets the flow which contains the elements for the top flow
 @function Gui.get_top_flow(player)
 @tparam LuaPlayer player the player that you want to get the flow for
