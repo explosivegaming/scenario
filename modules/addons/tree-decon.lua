@@ -1,0 +1,61 @@
+--- Makes trees which are marked for decon "decay" quickly to allow faster building
+-- @addon Tree-Decon
+
+local Event = require 'utils.event' --- @dep utils.event
+local Game = require 'utils.game' --- @dep utils.game
+local Global = require 'utils.global' --- @dep utils.global
+local Roles = require 'expcore.roles' --- @dep expcore.roles
+
+-- Global queue used to store trees that need to be removed, also chache for player roles
+local chache = {}
+local tree_queue = { _head=0 }
+Global.register({ tree_queue, chache }, function(tbl)
+    tree_queue = tbl[1]
+    chache = tbl[2]
+end)
+
+-- Add trees to queue when marked, only allows simple entities and for players with role permission
+Event.add(defines.events.on_marked_for_deconstruction, function(event)
+    -- Check the player is allowed fast decon
+    local player = Game.get_player_by_index(event.player_index)
+    if chache[player.name] ~= true and not Roles.player_allowed(player, 'fast-tree-decon') then
+        chache[player.name] = false
+        return
+    end
+    chache[player.name] = true
+
+    -- Check that the entity is allowed to be isntant deconed
+    local head = tree_queue._head + 1
+    local entity = event.entity
+    if entity and entity.valid and not entity.last_user and entity.type ~= 'cliff' then
+        tree_queue[head] = entity
+        tree_queue._head = head
+    end
+end)
+
+-- Remove trees at random till the queue is empty
+Event.add(defines.events.on_tick, function()
+    local head = tree_queue._head
+    if head == 0 then return end
+
+    local max_remove = math.floor(head/100)+1
+    local remove_count = math.random(0, max_remove)
+    while remove_count > 0 do
+        local remove_index = math.random(1,head)
+        local entity = tree_queue[remove_index]
+        tree_queue[remove_index] = tree_queue[head]
+        head = head - 1
+        if entity and entity.valid then
+            remove_count = remove_count - 1
+            entity.destroy()
+        end
+    end
+    tree_queue._head = head
+end)
+
+-- Clear the chache
+Event.on_nth_tick(300, function()
+    for key,_ in pairs(chache) do
+        chache[key] = nil
+    end
+end)

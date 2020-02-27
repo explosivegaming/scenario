@@ -90,6 +90,7 @@ Roles.new_role('Moderator','Mod')
     'command/return',
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
+    'fast-tree-decon',
 }
 
 Roles.new_role('Trainee','TrMod')
@@ -138,6 +139,7 @@ Roles.new_role('Pay to Win','P2W')
     'command/home-set',
     'command/home-get',
     'command/return',
+    'fast-tree-decon',
 }
 
 Roles.new_role('Donator','Don')
