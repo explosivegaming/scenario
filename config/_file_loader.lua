@@ -41,6 +41,7 @@ return {
     'modules.addons.random-player-colours',
     'modules.addons.discord-alerts',
     'modules.addons.chat-reply',
+    'modules.addons.tree-decon',
     -- GUI
     'modules.gui.rocket-info',
     'modules.gui.science-info',
