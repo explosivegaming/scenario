@@ -105,7 +105,7 @@ Gui.element(function(event_trigger,parent,player_data)
     player_name.style.font_color = player_data.chat_color
 
     -- Add the time played label
-    local alignment = Gui.alignment(parent,nil,nil,'player-time-'..player_data.index)
+    local alignment = Gui.alignment(parent,'player-time-'..player_data.index)
     local time_label = alignment.add{
         name = 'label',
         type = 'label',

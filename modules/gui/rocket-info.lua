@@ -55,7 +55,7 @@ Gui.element(function(_,parent,label_data)
 	name_label.style.padding = {0,2}
 
     --- Right aligned label to store the data
-	local alignment = Gui.alignment(parent,nil,nil,data_fullname)
+	local alignment = Gui.alignment(parent,data_fullname)
 	local element =
     alignment.add{
         type = 'label',
@@ -302,7 +302,7 @@ Gui.element(function(_,parent,silo_data)
 	silo_cords(parent,silo_data)
 
 	-- Add a progress label
-	local alignment = Gui.alignment(parent,nil,nil,silo_name)
+	local alignment = Gui.alignment(parent,silo_name)
 	local element =
 	alignment.add{
 		type = 'label',

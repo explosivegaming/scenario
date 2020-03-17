@@ -118,7 +118,7 @@ Gui.element(function(_,parent,task_id)
     task_flow.style.padding = 0
 
     -- Add the two edit buttons outside the task flow
-    local edit_flow = Gui.alignment(parent,nil,nil,'edit-'..task_id)
+    local edit_flow = Gui.alignment(parent,'edit-'..task_id)
     edit_task(edit_flow)
     discard_task(edit_flow)
 

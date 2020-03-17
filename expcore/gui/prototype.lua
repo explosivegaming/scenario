@@ -1,95 +1,148 @@
 --[[-- Core Module - Gui
-- Used to define new gui elements and gui event handlers
+- Used to simplify gui creation using factory functions called element defines
 @core Gui
 @alias Gui
 
-@usage-- Defining a button that prints the player's name
+@usage-- To draw your element you only need to call the factory function
+-- You are able to pass any other arguments that are used in your custom functions but the first is always the parent element
+local example_button_element = example_button(parent_element)
+
+@usage-- Making a factory function for a button with the caption "Example Button"
+-- This method has all the same features as LuaGuiElement.add
 local example_button =
 Gui.element{
     type = 'button',
     caption = 'Example Button'
 }
-:on_click(function(player,element,event)
-    player.print(player.name)
-end)
 
-@usage-- Defining a button with a custom style
-local example_button =
-Gui.element{
-    type = 'button',
-    caption = 'Example Button'
-}
-:style{
-    height = 25,
-    width = 100
-}
-:on_click(function(player,element,event)
-    player.print(player.name)
-end)
-
-@usage-- Defining a button using a custom function
+@usage-- Making a factory function for a button which is contained within a flow
+-- This method is for when you still want to register event handlers but cant use the table method
 local example_flow_with_button =
-Gui.element(function(event_trigger,parent)
-    -- Add the flow the button is in
+Gui.element(function(event_trigger,parent,...)
+    -- ... shows that all other arguments from the factory call are passed to this function
+    -- Here we are adding a flow which we will then later add a button to
     local flow =
-    parent.add{
+    parent.add{ -- paraent is the element which is passed to the factory function
         name = 'example_flow',
         type = 'flow'
     }
 
-    -- Get the players name
-    local player = game.players[parent.player_index]
-    local player_name = player.name
-
-    -- Add the button
+    -- Now we add the button to the flow that we created earlier
     local element =
     flow.add{
-        name = event_trigger,
+        name = event_trigger, -- event_trigger should be the name of any elements you want to trigger your event handlers
         type = 'button',
-        caption = 'Example Button: '..player_name
+        caption = 'Example Button'
     }
 
-    -- Set the style of the button
-    local style = element.style
-    style.height = 25
-    style.width = 100]
-    style.font_color = player.color
-
-    -- Return the element
+    -- You must return a new element, this is so styles can be applied and returned to the caller
+    -- You may return any of your elements that you added, consider the context in which it will be used for which should be returned
     return element
 end)
-:on_click(function(player,element,event)
-    player.print(player.name)
+
+@usage-- Styles can be added to any element define, simplest way mimics LuaGuiElement.style[key] = value
+local example_button =
+Gui.element{
+    type = 'button',
+    caption = 'Example Button',
+    style = 'forward_button' -- factorio styles can be applied here
+}
+:style{
+    height = 25, -- same as element.style.height = 25
+    width = 100 -- same as element.style.width = 25
+}
+
+@usage-- Styles can also have a custom function when the style is dynamic and depends on other factors
+-- Use this method if your style is dynamic and depends on other factors
+local example_button =
+Gui.element{
+    type = 'button',
+    caption = 'Example Button',
+    style = 'forward_button' -- factorio styles can be applied here
+}
+:style(function(style,element,...)
+    -- style is the current style object for the elemenent
+    -- element is the element that is being changed
+    -- ... shows that all other arguments from the factory call are passed to this function
+    local player = game.players[element.player_index]
+    style.height = 25
+    style.width = 100
+    style.font_color = player.color
 end)
 
-@usage-- Drawing an element
-local exmple_button_element = example_button(parent)
-local example_flow_with_button = example_flow_with_button(parent)
+@usage-- You are able to register event handlers to your elements, these can be factorio events or custom ones
+-- All events are checked to be valid before raising any handlers, this means element.valid = true and player.valid = true
+Gui.element{
+    type = 'button',
+    caption = 'Example Button'
+}
+:on_click(function(player,element,event)
+    -- player is the player who interacted with the element to cause the event
+    -- element is a refrence to the element which caused the event
+    -- event is a raw refrence to the event data if player and element are not enough
+    player.print('Clicked: '..element.name)
+end)
+
+@usage-- Example from core_defines, Gui.core_defines.hide_left_flow, called like: hide_left_flow(parent_element)
+--- Button which hides the elements in the left flow, shows inside the left flow when frames are visible
+-- @element hide_left_flow
+local hide_left_flow =
+Gui.element{
+    type = 'sprite-button',
+    sprite = 'utility/close_black',
+    style = 'tool_button',
+    tooltip = {'expcore-gui.left-button-tooltip'}
+}
+:style{
+    padding = -3,
+    width = 18,
+    height = 20
+}
+:on_click(function(player,_,_)
+    Gui.hide_left_flow(player)
+end)
+
+@usage-- Eample from defines, Gui.alignment, called like: Gui.alignment(parent, name, horizontal_align, vertical_align)
+-- Notice how _ are used to blank arguments that are not needed in that context and how they line up with above
+Gui.alignment =
+Gui.element(function(_,parent,name,_,_)
+    return parent.add{
+        name = name or 'alignment',
+        type = 'flow',
+    }
+end)
+:style(function(style,_,_,horizontal_align,vertical_align)
+    style.padding = {1,2}
+    style.vertical_align = vertical_align or 'center'
+    style.horizontal_align = horizontal_align or 'right'
+    style.vertically_stretchable  = style.vertical_align ~= 'center'
+    style.horizontally_stretchable = style.horizontal_align ~= 'center'
+end)
 
 ]]
 
 local Event = require 'utils.event' --- @dep utils.event
 
 local Gui = {
-    --- The current highest uid that is being used, will not increase during runtime
+    --- The current highest uid that is being used by a define, will not increase during runtime
     -- @field uid
     uid = 0,
-    --- An index of the element deinfes which are used by the core gui system
-    -- @table core_defines
-    core_defines = {},
-    --- Table of all the elements which have been registed with the draw function and event handlers
-    -- @table defines
-    defines = {},
-    --- Table of all custom events that are used by element defines, used to avoid conflicts
+    --- String indexed table used to avoid conflict with custom event names, similar to how defines.events works
     -- @table events
     events = {},
-    --- An index used for debuging to find the file where different elements where registered
+    --- Uid indexed array that stores all the factory functions that were defined, no new values will be added during runtime
+    -- @table defines
+    defines = {},
+    --- An string indexed table of all the defines which are used by the core of the gui system, used for internal refrence
+    -- @table core_defines
+    core_defines = {},
+    --- Used to store the file names where elements were defined, this can be useful to find the uid of an element, mostly for debuging
     -- @table file_paths
     file_paths = {},
-    --- An index used for debuging to show more data on element defines
+    --- Used to store extra infomation about elements as they get defined such as the params used and event handlers registered to them
     -- @table debug_info
     debug_info = {},
-    --- The element prototype which is returned from Gui.element
+    --- The prototype used to store the functions of an element define
     -- @table _prototype_element
     _prototype_element = {},
     --- The prototype metatable applied to new element defines
@@ -108,28 +161,33 @@ Gui._mt_element.__index = Gui._prototype_element
 --- Element Define.
 -- @section elementDefine
 
---[[-- Base function used to define new elements, can be used with a table or with a function
-@tparam ?table|function element_define used to define how the element is draw, using a table is the simplist way of doing this
-@treturn table the new element define that is used to register events to this element
+--[[-- Used to define new elements for your gui, can be used like LuaGuiElement.add or a custom function
+@tparam ?table|function element_define the define information for the gui element, same data as LuaGuiElement.add, or a custom function may be used
+@treturn table the new element define, this can be considered a factory for the element which can be called to draw the element to any other element
 
-@usage-- Defining an element with a table
+@usage-- Using element defines like LuaGuiElement.add
+-- This returns a factory function to draw a button with the caption "Example Button"
 local example_button =
 Gui.element{
     type = 'button',
     caption = 'Example Button'
 }
 
-@usage-- Defining an element with a function
+@usage-- Using element defines with a custom factory function
+-- This method can be used if you still want to be able register event handlers but it is too complex to be compatible with LuaGuiElement.add
 local example_flow_with_button =
 Gui.element(function(event_trigger,parent,...)
-    -- Add the flow the button is in
+    -- ... shows that all other arguments from the factory call are passed to this function
+    -- parent is the element which was passed to the factory function where you should add your new element
+    -- here we are adding a flow which we will then later add a button to
     local flow =
     parent.add{
         name = 'example_flow',
         type = 'flow'
     }
 
-    -- Add the button
+    -- event_trigger should be the name of any elements you want to trigger your event handlers, such as on_click or on_state_changed
+    -- now we add the button to the flow that we created earlier
     local element =
     flow.add{
         name = event_trigger,
@@ -137,12 +195,8 @@ Gui.element(function(event_trigger,parent,...)
         caption = 'Example Button'
     }
 
-    -- Set the style of the button
-    local style = element.style
-    style.height = 25
-    style.width = 100
-
-    -- Return the element
+    -- you must return your new element, this is so styles can be applied and returned to the caller
+    -- you may return any of your elements that you add, consider the context in which it will be used for what should be returned
     return element
 end)
 
@@ -179,28 +233,34 @@ function Gui.element(element_define)
     return element
 end
 
---[[-- Extension of Gui.element when using the table method, values applied after the element is drawn
-@tparam ?table|function style_define used to define how the style is applied, using a table is the simplist way of doing this
-@treturn table the new element define that is used to register events to this element
+--[[-- Used to extent your element define with a style factory, this style will be applied to your element when created, can also be a custom function
+@tparam ?table|function style_define style table where each key and value pair is treated like LuaGuiElement.style[key] = value, a custom function can be used
+@treturn table the element define is returned to allow for event handlers to be registered
 
-@usage-- Setting the height and width of the example button
+@usage-- Using the table method of setting the style
 local example_button =
 Gui.element{
     type = 'button',
-    caption = 'Example Button'
+    caption = 'Example Button',
+    style = 'forward_button' -- factorio styles can be applied here
 }
 :style{
-    height = 25,
-    width = 100
+    height = 25, -- same as element.style.height = 25
+    width = 100 -- same as element.style.width = 25
 }
 
-@usage-- Using a function to set the style
+@usage-- Using the function method to set the style
+-- Use this method if your style is dynamic and depends on other factors
 local example_button =
 Gui.element{
     type = 'button',
-    caption = 'Example Button'
+    caption = 'Example Button',
+    style = 'forward_button' -- factorio styles can be applied here
 }
 :style(function(style,element,...)
+    -- style is the current style object for the elemenent
+    -- element is the element that is being changed
+    -- ... shows that all other arguments from the factory call are passed to this function
     local player = game.players[element.player_index]
     style.height = 25
     style.width = 100
@@ -226,12 +286,12 @@ function Gui._prototype_element:style(style_define)
     return self
 end
 
---[[-- Set the handler to be called on a custom event, only one handler can be used
-@tparam string event_name the name of the event you want to handler to be called on
+--[[-- Set the handler which will be called for a custom event, only one handler can be used per event per element
+@tparam string event_name the name of the event you want to handler to be called on, often from Gui.events
 @tparam function handler the handler that you want to be called when the event is raised
 @treturn table the element define so more handleres can be registered
 
-@usage Print the player name when my_custom_event is raised
+@usage-- Register a handler to "my_custom_event" for this element
 element_deinfe:on_custom_event('my_custom_event', function(event)
     event.player.print(player.name)
 end)
@@ -244,8 +304,8 @@ function Gui._prototype_element:on_custom_event(event_name,handler)
     return self
 end
 
---[[-- Raise the handler which is attached to any event; external use should be limited to custom events
-@tparam table event the event table bassed to the handler, must include fields: name, element
+--[[-- Raise the handler which is attached to an event; external use should be limited to custom events
+@tparam table event the event table passed to the handler, must contain fields: name, element
 @treturn table the element define so more events can be raised
 
 @usage Raising a custom event
@@ -283,7 +343,7 @@ function Gui._prototype_element:raise_custom_event(event)
     return self
 end
 
--- This function is used to register a link between element define events and the events in the factorio api
+-- This function is used to link element define events and the events from the factorio api
 local function event_handler_factory(event_name)
     Event.add(event_name, function(event)
         local element = event.element
@@ -349,12 +409,6 @@ Gui._prototype_element.on_text_changed = event_handler_factory(defines.events.on
 --- Called when LuaGuiElement slider value is changed (related to the slider element).
 -- @tparam function handler the event handler which will be called
 Gui._prototype_element.on_value_changed = event_handler_factory(defines.events.on_gui_value_changed)
-
---- Custom element events.
--- @section customEvents
-
--- Triggered when a user changed the visibility of a left flow element by clicking a button
-Gui.events.on_visibility_changed_by_click = 'on_visibility_changed_by_click'
 
 -- Module return
 return Gui

@@ -23,7 +23,7 @@ Gui.element(function(_,parent,production_label_data)
     local color = production_label_data.color
 
     -- Add an alignment for the number
-    local alignment = Gui.alignment(parent,nil,nil,name)
+    local alignment = Gui.alignment(parent,name)
 
     -- Add the main value label
     local element =

@@ -137,7 +137,7 @@ Gui.element(function(_,parent,warp_id)
     warp_flow.style.padding = 0
 
     -- Add the two edit buttons outside the warp flow
-    local edit_flow = Gui.alignment(parent,nil,nil,'edit-'..warp_id)
+    local edit_flow = Gui.alignment(parent,'edit-'..warp_id)
     edit_warp(edit_flow)
     discard_warp(edit_flow)
 

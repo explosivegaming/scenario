@@ -11,23 +11,26 @@ local hide_left_flow = Gui.core_defines.hide_left_flow.name
 --- Left Flow.
 -- @section leftFlow
 
---- Contains the uids of the elements that will show on the left flow and the open on join function
+-- Triggered when a user changed the visibility of a left flow element by clicking a button
+Gui.events.on_visibility_changed_by_click = 'on_visibility_changed_by_click'
+
+--- Contains the uids of the elements that will shown on the left flow and their join functions
 -- @table left_elements
 Gui.left_elements = {}
 
---[[-- Gets the flow which contains the elements for the left flow
+--[[-- Gets the flow refered to as the left flow, each player has one left flow
 @function Gui.get_left_flow(player)
-@tparam LuaPlayer player the player that you want to get the flow for
+@tparam LuaPlayer player the player that you want to get the left flow for
 @treturn LuaGuiElement the left element flow
 
-@usage-- Geting your left element flow
+@usage-- Geting your left flow
 local left_flow = Gui.get_left_flow(game.player)
 
 ]]
 Gui.get_left_flow = mod_gui.get_frame_flow
 
---[[-- Adds an element to be drawn to the left flow when a player joins
-@tparam[opt] ?boolean|function open_on_join called during first darw to decide if the element is visible
+--[[-- Sets an element define to be drawn to the left flow when a player joins, includes optional check
+@tparam[opt] ?boolean|function open_on_join called during first darw to decide if the element should be visible
 @treturn table the new element define that is used to register events to this element
 
 @usage-- Adding the example button
@@ -39,7 +42,7 @@ function Gui._prototype_element:add_to_left_flow(open_on_join)
     return self
 end
 
---[[-- Styles the top flow button depending on the state given
+--[[-- Styles a top flow button depending on the state given
 @tparam LuaGuiElement the button element to style
 @tparam boolean state The state the button is in
 
@@ -61,14 +64,15 @@ function Gui.left_toolbar_button_style(button, state)
     button.style.padding = -2
 end
 
---[[-- Button which can be used to toggle a left element, placed on the top flow
+--[[-- Creates a button on the top flow which will toggle the given element define, the define must exist in the left flow
 @tparam string sprite the sprite that you want to use on the button
 @tparam ?string|Concepts.LocalizedString tooltip the tooltip that you want the button to have
-@tparam table element_define the element define that you want to be toggled on the left flow
+@tparam table element_define the element define that you want to have toggled by this button, define must exist on the left flow
 @tparam[opt] function authenticator used to decide if the button should be visible to a player
 
 @usage-- Add a button to toggle a left element
-local toolbar_button = Gui.left_toolbar_button('entity/inserter','Nothing to see here',example_flow_with_button,function(player)
+local toolbar_button =
+Gui.left_toolbar_button('entity/inserter', 'Nothing to see here', example_flow_with_button, function(player)
     return player.admin
 end)
 
@@ -108,7 +112,7 @@ function Gui.left_toolbar_button(sprite,tooltip,element_define,authenticator)
     return button
 end
 
---[[-- Draw all the left elements onto the left flow, internal use only
+--[[-- Draw all the left elements onto the left flow, internal use only with on join
 @tparam LuaPlayer player the player that you want to draw the elements for
 
 @usage Draw all the left elements
@@ -156,11 +160,11 @@ function Gui.draw_left_flow(player)
     hide_button.visible = show_hide_button
 end
 
---[[-- Update the visible state of the hide left button, also draw left elements if not present
+--[[-- Update the visible state of the hide button, can be used to check if any frames are visible
 @tparam LuaPlayer player the player to update the left flow for
 @treturn boolean true if any left element is visible
 
-@usage Check if any left elements are visible
+@usage-- Check if any left elements are visible
 local visible = Gui.update_left_flow(player)
 
 ]]
@@ -185,6 +189,7 @@ Gui.hide_left_flow(game.player)
 
 ]]
 function Gui.hide_left_flow(player)
+    local top_flow = Gui.get_top_flow(player)
     local left_flow = Gui.get_left_flow(player)
     local hide_button = left_flow.gui_core_buttons[hide_left_flow]
 
@@ -193,11 +198,8 @@ function Gui.hide_left_flow(player)
     for name,_ in pairs(Gui.left_elements) do
         left_flow[name].visible = false
 
-        -- Get the assosiated element define
+        -- Check if the the element has a toobar button attached
         local element_define = Gui.defines[name]
-        local top_flow = Gui.get_top_flow(player)
-
-        -- Check if the the element has a button attached
         if element_define.toolbar_button then
             -- Check if the topflow contains the button
             local button = top_flow[element_define.toolbar_button]
@@ -217,13 +219,13 @@ function Gui.hide_left_flow(player)
     end
 end
 
---[[-- Get the element define that is in the left flow
-@tparam LuaPlayer player the player that you want tog et the element for
-@tparam table element_define the element that you want to get for the player
-@treturn LuaGuiElement the gui element linked to this define in the left flow
+--[[-- Get the element define that is in the left flow, use in events without an element refrence
+@tparam LuaPlayer player the player that you want to get the element for
+@tparam table element_define the element that you want to get
+@treturn LuaGuiElement the gui element linked to this define for this player
 
 @usage-- Get your left element
-local frame = Gui.get_left_element(game.player,example_flow_with_button)
+local frame = Gui.get_left_element(game.player, example_flow_with_button)
 
 ]]
 function Gui.get_left_element(player,element_define)
@@ -231,17 +233,17 @@ function Gui.get_left_element(player,element_define)
     return left_flow[element_define.name]
 end
 
---[[-- Toggles the visible state of a left element for a player
+--[[-- Toggles the visible state of a left element for a given player, can be used to set the visible state
 @tparam LuaPlayer player the player that you want to toggle the element for
-@tparam table element_define the element that you want to toggle for the player
-@tparam[opt] boolean state if given then the state will be set to this state
+@tparam table element_define the element that you want to toggle
+@tparam[opt] boolean state with given will set the state, else state will be toggled
 @treturn boolean the new visible state of the element
 
 @usage-- Toggle your example button
-Gui.toggle_top_flow(game.player,example_flow_with_button)
+Gui.toggle_top_flow(game.player, example_flow_with_button)
 
-@usage-- Open your example button
-Gui.toggle_top_flow(game.player,example_flow_with_button,true)
+@usage-- Show your example button
+Gui.toggle_top_flow(game.player, example_flow_with_button, true)
 
 ]]
 function Gui.toggle_left_element(player,element_define,state)

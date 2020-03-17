@@ -1,5 +1,5 @@
 --[[-- Core Module - Gui
-- Used to define new gui elements and gui event handlers
+- Gui defines that are used internally by the gui system
 @module Gui
 ]]
 
@@ -9,7 +9,7 @@ local Event = require 'utils.event' --- @dep utils.event
 --- Core Defines.
 -- @section coreDefines
 
---- Button which toggles the top flow elements, shows inside top flow
+--- Button which toggles the top flow elements, version which shows inside the top flow when top flow is visible
 -- @element hide_top_flow
 local hide_top_flow =
 Gui.element{
@@ -28,7 +28,7 @@ Gui.element{
 end)
 Gui.core_defines.hide_top_flow = hide_top_flow
 
---- Button which toggles the top flow elements, shows inside left flow
+--- Button which toggles the top flow elements, version which shows inside the left flow when top flow is hidden
 -- @element show_top_flow
 local show_top_flow =
 Gui.element{
@@ -47,7 +47,7 @@ Gui.element{
 end)
 Gui.core_defines.show_top_flow = show_top_flow
 
---- Button which hides the elements in the left flow
+--- Button which hides the elements in the left flow, shows inside the left flow when frames are visible
 -- @element hide_left_flow
 local hide_left_flow =
 Gui.element{
