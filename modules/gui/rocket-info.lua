@@ -37,151 +37,6 @@ local function check_player_permissions(player,action)
     return true
 end
 
---- Data label which contains a name and a value label pair
--- @element data_label
-local data_label =
-Gui.element(function(_,parent,label_data)
-	local data_name = label_data.name
-	local data_subname = label_data.subname
-	local data_fullname = data_subname and data_name..data_subname or data_name
-
-	-- Add the name label
-	local name_label = parent.add{
-		type = 'label',
-		name = data_fullname..'-label',
-        caption = {'rocket-info.data-caption-'..data_name,data_subname},
-        tooltip = {'rocket-info.data-tooltip-'..data_name,data_subname}
-	}
-	name_label.style.padding = {0,2}
-
-    --- Right aligned label to store the data
-	local alignment = Gui.alignment(parent,data_fullname)
-	local element =
-    alignment.add{
-        type = 'label',
-        name = 'label',
-        caption = label_data.value,
-        tooltip = label_data.tooltip
-	}
-	element.style.padding = {0,2}
-
-	return element
-end)
-
-local function update_data_labels(parent,data_label_data)
-	for _, label_data in ipairs(data_label_data) do
-		local data_name = label_data.subname and label_data.name..label_data.subname or label_data.name
-		if not parent[data_name] then
-			data_label(parent,label_data)
-		else
-			local data_label_element = parent[data_name].label
-			data_label_element.tooltip = label_data.tooltip
-			data_label_element.caption = label_data.value
-		end
-	end
-end
-
---- Gets the label data for all the different stats
-local function get_stats_data(force_name)
-    local force_rockets = Rockets.get_rocket_count(force_name)
-	local stats = Rockets.get_stats(force_name)
-	local stats_data = {}
-
-	-- Format the first launch data
-	if config.stats.show_first_rocket then
-		local value = stats.first_launch or 0
-		table.insert(stats_data,{
-			name = 'first-launch',
-			value = time_formats.caption_hours(value),
-			tooltip = time_formats.tooltip_hours(value)
-		})
-	end
-
-	-- Format the last launch data
-	if config.stats.show_last_rocket then
-		local value = stats.last_launch or 0
-		table.insert(stats_data,{
-			name = 'last-launch',
-			value = time_formats.caption_hours(value),
-			tooltip = time_formats.tooltip_hours(value)
-		})
-    end
-
-	-- Format fastest launch data
-	if config.stats.show_fastest_rocket then
-		local value = stats.fastest_launch or 0
-		table.insert(stats_data,{
-			name = 'fastest-launch',
-			value = time_formats.caption_hours(value),
-			tooltip = time_formats.tooltip_hours(value)
-		})
-    end
-
-	-- Format total rocket data
-    if config.stats.show_total_rockets then
-        local total_rockets = Rockets.get_game_rocket_count()
-        total_rockets = total_rockets == 0 and 1 or total_rockets
-		local percentage = math.round(force_rockets/total_rockets,3)*100
-		table.insert(stats_data,{
-			name = 'total-rockets',
-			value = force_rockets,
-			tooltip = {'rocket-info.value-tooltip-total-rockets',percentage}
-		})
-    end
-
-	-- Format game avg data
-    if config.stats.show_game_avg then
-		local avg = force_rockets > 0 and math.floor(game.tick/force_rockets) or 0
-		table.insert(stats_data,{
-			name = 'avg-launch',
-			value = time_formats.caption(avg),
-			tooltip = time_formats.tooltip(avg)
-		})
-    end
-
-	-- Format rolling avg data
-    for _,avg_over in pairs(config.stats.rolling_avg) do
-		local avg = Rockets.get_rolling_average(force_name,avg_over)
-		table.insert(stats_data,{
-			name = 'avg-launch-n',
-			subname = avg_over,
-			value = time_formats.caption(avg),
-			tooltip = time_formats.tooltip(avg)
-		})
-	end
-
-	-- Return formated data
-	return stats_data
-end
-
---- Gets the label data for the milestones
-local function get_milestone_data(force_name)
-	local force_rockets = Rockets.get_rocket_count(force_name)
-	local milestone_data = {}
-
-	for _,milestone in ipairs(config.milestones) do
-        if milestone <= force_rockets then
-			local time = Rockets.get_rocket_time(force_name,milestone)
-			table.insert(milestone_data,{
-				name = 'milestone-n',
-				subname = milestone,
-				value = time_formats.caption_hours(time),
-				tooltip = time_formats.tooltip_hours(time)
-			})
-		else
-			table.insert(milestone_data,{
-				name = 'milestone-n',
-				subname = milestone,
-				value = {'rocket-info.data-caption-milestone-next'},
-				tooltip = {'rocket-info.data-tooltip-milestone-next'}
-			})
-            break
-        end
-	end
-
-	return milestone_data
-end
-
 --- Button to toggle the auto launch on a rocket silo
 -- @elemeent toggle_launch
 local toggle_launch =
@@ -191,7 +46,7 @@ Gui.element{
 	tooltip = {'rocket-info.toggle-rocket-tooltip'}
 }
 :style(Gui.sprite_style(16))
-:on_click(function(player,element,_)
+:on_click(function(_,element,_)
 	local rocket_silo_name = element.parent.name:sub(8)
 	local rocket_silo = Rockets.get_silo_entity(rocket_silo_name)
 	if rocket_silo.auto_launch then
@@ -315,6 +170,51 @@ Gui.element(function(_,parent,silo_data)
 	return element
 end)
 
+--- Data label which contains a name and a value label pair
+-- @element data_label
+local data_label =
+Gui.element(function(_,parent,label_data)
+	local data_name = label_data.name
+	local data_subname = label_data.subname
+	local data_fullname = data_subname and data_name..data_subname or data_name
+
+	-- Add the name label
+	local name_label = parent.add{
+		type = 'label',
+		name = data_fullname..'-label',
+        caption = {'rocket-info.data-caption-'..data_name,data_subname},
+        tooltip = {'rocket-info.data-tooltip-'..data_name,data_subname}
+	}
+	name_label.style.padding = {0,2}
+
+    --- Right aligned label to store the data
+	local alignment = Gui.alignment(parent,data_fullname)
+	local element =
+    alignment.add{
+        type = 'label',
+        name = 'label',
+        caption = label_data.value,
+        tooltip = label_data.tooltip
+	}
+	element.style.padding = {0,2}
+
+	return element
+end)
+
+-- Used to update the captions and tooltips on the data labels
+local function update_data_labels(parent,data_label_data)
+	for _, label_data in ipairs(data_label_data) do
+		local data_name = label_data.subname and label_data.name..label_data.subname or label_data.name
+		if not parent[data_name] then
+			data_label(parent,label_data)
+		else
+			local data_label_element = parent[data_name].label
+			data_label_element.tooltip = label_data.tooltip
+			data_label_element.caption = label_data.value
+		end
+	end
+end
+
 local function get_progress_data(force_name)
 	local force_silos = Rockets.get_silos(force_name)
 	local progress_data = {}
@@ -415,6 +315,107 @@ local function update_build_progress(parent,progress_data)
 		end
 	end
 	if show_message then parent.no_silos.visible = true end
+end
+
+--- Gets the label data for all the different stats
+local function get_stats_data(force_name)
+    local force_rockets = Rockets.get_rocket_count(force_name)
+	local stats = Rockets.get_stats(force_name)
+	local stats_data = {}
+
+	-- Format the first launch data
+	if config.stats.show_first_rocket then
+		local value = stats.first_launch or 0
+		table.insert(stats_data,{
+			name = 'first-launch',
+			value = time_formats.caption_hours(value),
+			tooltip = time_formats.tooltip_hours(value)
+		})
+	end
+
+	-- Format the last launch data
+	if config.stats.show_last_rocket then
+		local value = stats.last_launch or 0
+		table.insert(stats_data,{
+			name = 'last-launch',
+			value = time_formats.caption_hours(value),
+			tooltip = time_formats.tooltip_hours(value)
+		})
+    end
+
+	-- Format fastest launch data
+	if config.stats.show_fastest_rocket then
+		local value = stats.fastest_launch or 0
+		table.insert(stats_data,{
+			name = 'fastest-launch',
+			value = time_formats.caption_hours(value),
+			tooltip = time_formats.tooltip_hours(value)
+		})
+    end
+
+	-- Format total rocket data
+    if config.stats.show_total_rockets then
+        local total_rockets = Rockets.get_game_rocket_count()
+        total_rockets = total_rockets == 0 and 1 or total_rockets
+		local percentage = math.round(force_rockets/total_rockets,3)*100
+		table.insert(stats_data,{
+			name = 'total-rockets',
+			value = force_rockets,
+			tooltip = {'rocket-info.value-tooltip-total-rockets',percentage}
+		})
+    end
+
+	-- Format game avg data
+    if config.stats.show_game_avg then
+		local avg = force_rockets > 0 and math.floor(game.tick/force_rockets) or 0
+		table.insert(stats_data,{
+			name = 'avg-launch',
+			value = time_formats.caption(avg),
+			tooltip = time_formats.tooltip(avg)
+		})
+    end
+
+	-- Format rolling avg data
+    for _,avg_over in pairs(config.stats.rolling_avg) do
+		local avg = Rockets.get_rolling_average(force_name,avg_over)
+		table.insert(stats_data,{
+			name = 'avg-launch-n',
+			subname = avg_over,
+			value = time_formats.caption(avg),
+			tooltip = time_formats.tooltip(avg)
+		})
+	end
+
+	-- Return formated data
+	return stats_data
+end
+
+--- Gets the label data for the milestones
+local function get_milestone_data(force_name)
+	local force_rockets = Rockets.get_rocket_count(force_name)
+	local milestone_data = {}
+
+	for _,milestone in ipairs(config.milestones) do
+        if milestone <= force_rockets then
+			local time = Rockets.get_rocket_time(force_name,milestone)
+			table.insert(milestone_data,{
+				name = 'milestone-n',
+				subname = milestone,
+				value = time_formats.caption_hours(time),
+				tooltip = time_formats.tooltip_hours(time)
+			})
+		else
+			table.insert(milestone_data,{
+				name = 'milestone-n',
+				subname = milestone,
+				value = {'rocket-info.data-caption-milestone-next'},
+				tooltip = {'rocket-info.data-tooltip-milestone-next'}
+			})
+            break
+        end
+	end
+
+	return milestone_data
 end
 
 -- Button to toggle a section dropdown

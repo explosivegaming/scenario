@@ -178,6 +178,7 @@ function Gui.update_left_flow(player)
             return true
         end
     end
+    hide_button.visible = false
     return false
 end
 

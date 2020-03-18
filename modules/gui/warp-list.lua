@@ -79,7 +79,7 @@ Gui.element{
     style = 'tool_button'
 }
 :style(Styles.sprite20)
-:on_click(function(player,element)
+:on_click(function(player,_)
     -- Add the new warp
     local force_name = player.force.name
     local surface = player.surface
@@ -263,6 +263,7 @@ Gui.element(function(event_trigger,parent,warp)
 end)
 :style(Styles.sprite32)
 :on_click(function(player,element,_)
+    if element.type == 'choose-elem-button' then return end
     local warp_id = element.parent.caption
     Warps.teleport_player(warp_id,player)
 

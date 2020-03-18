@@ -1,5 +1,5 @@
 --[[-- Gui Module - Task List
-    - Adds a task list to the game which players can add remove and edit items on
+    - Adds a task list to the game which players can add, remove and edit items on
     @gui Task-List
     @alias task_list
 ]]

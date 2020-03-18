@@ -1,5 +1,5 @@
 --[[-- Gui Module - Player List
-    - Adds a player list to show names and play time; also includes action buttons which can apply to players
+    - Adds a player list to show names and play time; also includes action buttons which can preform actions to players
     @gui Player-List
     @alias player_list
 ]]
@@ -60,7 +60,7 @@ Gui.element{
     style = 'shortcut_bar_button_red'
 }
 :style(Gui.sprite_style(30,-1,{ top_margin = -1, right_margin = -1 }))
-:on_click(function(player,element)
+:on_click(function(player,_)
     Store.clear(selected_player_store,player)
     Store.clear(selected_action_store,player)
 end)
@@ -170,7 +170,7 @@ Gui.element(function(_,parent)
 end)
 
 --- Updates the visible state of the action bar buttons
-local function update_action_bar_buttons(element)
+local function update_action_bar(element)
     local player = Gui.get_player_from_element(element)
     local selected_player_name = Store.get(selected_player_store,player)
 
@@ -389,7 +389,7 @@ Store.watch(selected_player_store,function(value,player_name)
     local player = Game.get_player_from_any(player_name)
     local frame = Gui.get_left_element(player,player_list_container)
     local scroll_table = frame.container.scroll.table
-    update_action_bar_buttons(frame.container.action_bar)
+    update_action_bar(frame.container.action_bar)
     for _,next_player in pairs(game.connected_players) do
         local element = scroll_table[next_player.name][open_action_bar.name]
         local style = 'frame_button'
