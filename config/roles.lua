@@ -217,9 +217,7 @@ local default = Roles.new_role('Guest','')
     'gui/rocket-info',
     'gui/science-info',
     'gui/task-list',
-    'gui/warp-list',
-    'gui/warp-list/apply-cooldown',
-    'gui/warp-list/apply-proximity',
+    'gui/warp-list'
 }
 
 --- Jail role
