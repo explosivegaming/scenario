@@ -61,7 +61,8 @@ Roles.new_role('Administrator','Admin')
 :set_flag('instance-respawn')
 :set_parent('Moderator')
 :allow{
-    'gui/warp-list/no-limit',
+    'gui/warp-list/bypass-cooldown',
+    'gui/warp-list/bypass-proximity',
 }
 
 Roles.new_role('Moderator','Mod')
@@ -181,7 +182,9 @@ Roles.new_role('Member','Mem')
 :set_custom_color{r=24,g=172,b=188}
 :set_parent('Regular')
 :allow{
+    'gui/task-list/add',
     'gui/task-list/edit',
+    'gui/warp-list/add',
     'gui/warp-list/edit'
 }
 
@@ -217,7 +220,7 @@ local default = Roles.new_role('Guest','')
     'gui/rocket-info',
     'gui/science-info',
     'gui/task-list',
-    'gui/warp-list',
+    'gui/warp-list'
 }
 
 --- Jail role

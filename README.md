@@ -45,7 +45,7 @@ Please report these errors to [the issues page](issues).
 
 ## Contributing
 
-All are welcome to make pull requests and issues for this scenario, if you are in any doubt, please ask someone in our [discord]. If you do not know lua and don't feel like learning you can always make a [feature request]. All our docs can be found [here][docs]. Please keep in mind while making code changes:
+All are welcome to make pull requests and issues for this scenario, if you are in any doubt, please ask someone in our [discord]. If you do not know lua and don't feel like learning you can always make a [feature request]. To find out what we already have please read our [docs]. Please keep in mind while making code changes:
 
 * New features should have the branch names: `feature/feature-name`
 * New features are merged into `dev` after it has been completed, this can be done through a pull request.

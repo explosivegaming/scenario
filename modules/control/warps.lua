@@ -150,7 +150,7 @@ function Warps.make_warp_area(warp_id)
     local position = warp.position
     local posx = position.x
     local posy = position.y
-    local radius = config.activation_range
+    local radius = config.standard_proximity_radius
     local radius2 = radius^2
 
     -- Get the tile that is being replaced, store.update not needed as we dont want it to trigger
@@ -203,7 +203,7 @@ function Warps.remove_warp_area(warp_id)
     local warp = Store.get(warp_store,warp_id)
     local position = warp.position
     local surface = warp.surface
-    local radius = config.activation_range
+    local radius = config.standard_proximity_radius
     local radius2 = radius^2
 
     -- Check that a warp area was created previously

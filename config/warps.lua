@@ -2,24 +2,39 @@
 -- @config Warps
 
 return {
-    recharge_time = 60, --- @setting recharge_time The amount of time in seconds that the player must wait between warps, acts as a balance
-    update_smoothing = 10, --- @setting update_smoothing Higher is better, the amount of smoothing applied to recharge timer and other gui updates, max is 60
-    minimum_distance = 100, --- @setting minimum_distance The minimum distance that must be between warp points, creating new ones is blocked when too close
-    activation_range = 4, --- @setting activation_range The distance the player must be to a warp in order to use the warp gui, gui can still be viewed but not used
-    spawn_activation_range = 20, --- @setting spawn_activation_range A second activation range which is used for the forces spawn point
-    default_icon = 'discharge-defense-equipment', --- @setting default_icon The default icon which is used by warps; must be an item name
-    user_can_edit_own_warps = false, --- @setting user_can_edit_own_warps When true the user can always edit warps which they created regardless of other settings
-    any_user_can_add_new_warp = false, --- @setting any_user_can_add_new_warp When true any user is able to create new warps, however editing may still be restricted
-    only_admins_can_edit = false, --- @setting only_admins_can_edit When true only admins can edit warps
-    edit_warps_role_permission = 'gui/warp-list/edit', --- @setting edit_warps_role_permission Role permission used by the role system to allow editing warps
-    bypass_warp_limits_permission = 'gui/warp-list/no-limit', --- @setting bypass_warp_limits_permission Role permission used by the role system to allow bypassing the time and distance restrictions
-    entities = { --- @setting entities The entities which are created for warps
+    -- General config
+    update_smoothing = 10, --- @setting update_smoothing the amount of smoothing applied to updates to the cooldown timer, higher is better, max is 60
+    minimum_distance = 100, --- @setting minimum_distance the minimum distance that is allowed between warps on the same force
+    default_icon = 'discharge-defense-equipment', --- @setting default_icon the default icon that will be used for warps
+
+    -- Warp cooldowns
+    bypass_warp_cooldown = 'expcore.roles', --- @setting bypass_warp_cooldown dictates who the warp cooldown is applied to; values: all, admin, expcore.roles, none
+    expcore_roles_bypass_warp_cooldown = 'gui/warp-list/bypass-cooldown', --- @setting expcore_roles_bypass_warp_cooldown if expcore.roles is used then this is the required permission
+    cooldown_duraction = 60, --- @setting cooldown_duraction the duration of the warp cooldown in seconds
+
+    -- Warp proximity
+    bypass_warp_proximity = 'expcore.roles', --- @setting bypass_warp_proximity dictates who the warp proximity is applied to; values: all, admin, expcore.roles, none
+    expcore_roles_bypass_warp_proximity = 'gui/warp-list/bypass-proximity', --- @setting expcore_roles_bypass_warp_proximity if expcore.roles is used then this is the required permission
+    standard_proximity_radius = 4, --- @setting standard_proximity_radius the minimum distance a player is allowed to be to a warp in order to use it
+    spawn_proximity_radius = 20, --- @setting spawn_proximity_radius the minimum distance a player is allowed to be from they spawn point to use warps
+
+    -- Adding warps
+    allow_add_warp = 'expcore.roles', --- @setting allow_add_warp dictates who is allowed to add warps; values: all, admin, expcore.roles, none
+    expcore_roles_allow_add_warp = 'gui/warp-list/add', --- @setting expcore_roles_allow_add_warp if expcore.roles is used then this is the required permission
+
+    -- Editing warps
+    allow_edit_warp = 'expcore.roles', --- @setting allow_edit_warp dictates who is allowed to edit warps; values: all, admin, expcore.roles, none
+    expcore_roles_allow_edit_warp = 'gui/warp-list/edit', --- @setting expcore_roles_allow_edit_warp if expcore.roles is used then this is the required permission
+    user_can_edit_own_warps = false, --- @settings user_can_edit_own_warps if true then the user who made the warp can edit it regardless of the allow_edit_warp setting
+
+    -- Warp area generation
+    entities = { --- @setting entities The entities which are created for warp areas
         {'small-lamp',-3,-2},{'small-lamp',-3,2},{'small-lamp',3,-2},{'small-lamp',3,2},
         {'small-lamp',-2,-3},{'small-lamp',2,-3},{'small-lamp',-2,3},{'small-lamp',2,3},
         {'small-electric-pole',-3,-3},{'small-electric-pole',3,3},{'small-electric-pole',-3,3},{'small-electric-pole',3,-3}
     },
-    base_tile = 'tutorial-grid', --- @setting base_tile The tile which is used for the warps
-    tiles = { --- @setting tiles The tiles which are created for warps
+    base_tile = 'tutorial-grid', --- @setting base_tile The tile which is used for the warp areas
+    tiles = { --- @setting tiles The tiles which are created for warp areas
         {-3,-2},{-3,-1},{-3,0},{-3,1},{-3,2},{3,-2},{3,-1},{3,0},{3,1},{3,2},
         {-2,-3},{-1,-3},{0,-3},{1,-3},{2,-3},{-2,3},{-1,3},{0,3},{1,3},{2,3}
     }

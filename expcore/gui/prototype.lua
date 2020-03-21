@@ -1,300 +1,414 @@
 --[[-- Core Module - Gui
-    @module Gui
-    @alias Prototype
+- Used to simplify gui creation using factory functions called element defines
+@core Gui
+@alias Gui
+
+@usage-- To draw your element you only need to call the factory function
+-- You are able to pass any other arguments that are used in your custom functions but the first is always the parent element
+local example_button_element = example_button(parent_element)
+
+@usage-- Making a factory function for a button with the caption "Example Button"
+-- This method has all the same features as LuaGuiElement.add
+local example_button =
+Gui.element{
+    type = 'button',
+    caption = 'Example Button'
+}
+
+@usage-- Making a factory function for a button which is contained within a flow
+-- This method is for when you still want to register event handlers but cant use the table method
+local example_flow_with_button =
+Gui.element(function(event_trigger,parent,...)
+    -- ... shows that all other arguments from the factory call are passed to this function
+    -- Here we are adding a flow which we will then later add a button to
+    local flow =
+    parent.add{ -- paraent is the element which is passed to the factory function
+        name = 'example_flow',
+        type = 'flow'
+    }
+
+    -- Now we add the button to the flow that we created earlier
+    local element =
+    flow.add{
+        name = event_trigger, -- event_trigger should be the name of any elements you want to trigger your event handlers
+        type = 'button',
+        caption = 'Example Button'
+    }
+
+    -- You must return a new element, this is so styles can be applied and returned to the caller
+    -- You may return any of your elements that you added, consider the context in which it will be used for which should be returned
+    return element
+end)
+
+@usage-- Styles can be added to any element define, simplest way mimics LuaGuiElement.style[key] = value
+local example_button =
+Gui.element{
+    type = 'button',
+    caption = 'Example Button',
+    style = 'forward_button' -- factorio styles can be applied here
+}
+:style{
+    height = 25, -- same as element.style.height = 25
+    width = 100 -- same as element.style.width = 25
+}
+
+@usage-- Styles can also have a custom function when the style is dynamic and depends on other factors
+-- Use this method if your style is dynamic and depends on other factors
+local example_button =
+Gui.element{
+    type = 'button',
+    caption = 'Example Button',
+    style = 'forward_button' -- factorio styles can be applied here
+}
+:style(function(style,element,...)
+    -- style is the current style object for the elemenent
+    -- element is the element that is being changed
+    -- ... shows that all other arguments from the factory call are passed to this function
+    local player = game.players[element.player_index]
+    style.height = 25
+    style.width = 100
+    style.font_color = player.color
+end)
+
+@usage-- You are able to register event handlers to your elements, these can be factorio events or custom ones
+-- All events are checked to be valid before raising any handlers, this means element.valid = true and player.valid = true
+Gui.element{
+    type = 'button',
+    caption = 'Example Button'
+}
+:on_click(function(player,element,event)
+    -- player is the player who interacted with the element to cause the event
+    -- element is a refrence to the element which caused the event
+    -- event is a raw refrence to the event data if player and element are not enough
+    player.print('Clicked: '..element.name)
+end)
+
+@usage-- Example from core_defines, Gui.core_defines.hide_left_flow, called like: hide_left_flow(parent_element)
+--- Button which hides the elements in the left flow, shows inside the left flow when frames are visible
+-- @element hide_left_flow
+local hide_left_flow =
+Gui.element{
+    type = 'sprite-button',
+    sprite = 'utility/close_black',
+    style = 'tool_button',
+    tooltip = {'expcore-gui.left-button-tooltip'}
+}
+:style{
+    padding = -3,
+    width = 18,
+    height = 20
+}
+:on_click(function(player,_,_)
+    Gui.hide_left_flow(player)
+end)
+
+@usage-- Eample from defines, Gui.alignment, called like: Gui.alignment(parent, name, horizontal_align, vertical_align)
+-- Notice how _ are used to blank arguments that are not needed in that context and how they line up with above
+Gui.alignment =
+Gui.element(function(_,parent,name,_,_)
+    return parent.add{
+        name = name or 'alignment',
+        type = 'flow',
+    }
+end)
+:style(function(style,_,_,horizontal_align,vertical_align)
+    style.padding = {1,2}
+    style.vertical_align = vertical_align or 'center'
+    style.horizontal_align = horizontal_align or 'right'
+    style.vertically_stretchable  = style.vertical_align ~= 'center'
+    style.horizontally_stretchable = style.horizontal_align ~= 'center'
+end)
+
 ]]
 
---- Prototype.
--- Used to create new gui prototypes see elements and concepts
--- @section prototype
+local Event = require 'utils.event' --- @dep utils.event
 
---[[
-    >>>> Functions
-    Constructor.event(event_name) --- Creates a new function to add functions to an event handler
-    Constructor.extend(new_prototype) --- Extents a prototype with the base functions of all gui prototypes, no metatables
-    Constructor.store(sync,callback) --- Creates a new function which adds a store to a gui define
-    Constructor.setter(value_type,key,second_key) --- Creates a setter function that checks the type when a value is set
+local Gui = {
+    --- The current highest uid that is being used by a define, will not increase during runtime
+    -- @field uid
+    uid = 0,
+    --- String indexed table used to avoid conflict with custom event names, similar to how defines.events works
+    -- @table events
+    events = {},
+    --- Uid indexed array that stores all the factory functions that were defined, no new values will be added during runtime
+    -- @table defines
+    defines = {},
+    --- An string indexed table of all the defines which are used by the core of the gui system, used for internal refrence
+    -- @table core_defines
+    core_defines = {},
+    --- Used to store the file names where elements were defined, this can be useful to find the uid of an element, mostly for debuging
+    -- @table file_paths
+    file_paths = {},
+    --- Used to store extra infomation about elements as they get defined such as the params used and event handlers registered to them
+    -- @table debug_info
+    debug_info = {},
+    --- The prototype used to store the functions of an element define
+    -- @table _prototype_element
+    _prototype_element = {},
+    --- The prototype metatable applied to new element defines
+    -- @table _mt_element
+    _mt_element = {
+        __call = function(self,parent,...)
+            local element = self._draw(self.name,parent,...)
+            if self._style then self._style(element.style,element,...) end
+            return element
+        end
+    }
+}
 
-    Prototype:uid() --- Gets the uid for the element define
-    Prototype:debug_name(value) ---  Sets a debug alias for the define
-    Prototype:set_caption(value) --- Sets the caption for the element define
-    Prototype:set_tooltip(value) --- Sets the tooltip for the element define
-    Prototype:set_style(style,callback) --- Sets the style for the element define
-    Prototype:set_embedded_flow(state) --- Sets the element to be drawn inside a nameless flow, can be given a name using a function
+Gui._mt_element.__index = Gui._prototype_element
 
-    Prototype:set_pre_authenticator --- Sets an authenticator that blocks the draw function if check fails
-    Prototype:set_post_authenticator --- Sets an authenticator that disables the element if check fails
+--- Element Define.
+-- @section elementDefine
 
-    Prototype:raise_event(event_name,...) --- Raises a custom event for this define, any number of params can be given
-    Prototype:draw_to(element,...) --- The main function for defines, when called will draw an instance of this define to the given element
+--[[-- Used to define new elements for your gui, can be used like LuaGuiElement.add or a custom function
+@tparam ?table|function element_define the define information for the gui element, same data as LuaGuiElement.add, or a custom function may be used
+@treturn table the new element define, this can be considered a factory for the element which can be called to draw the element to any other element
 
-    Prototype:get_store(category) --- Gets the value in this elements store, category needed if serializer function used
-    Prototype:set_store(category,value) --- Sets the value in this elements store, category needed if serializer function used
-    Prototype:clear_store(category) --- Sets the value in this elements store to nil, category needed if serializer function used
+@usage-- Using element defines like LuaGuiElement.add
+-- This returns a factory function to draw a button with the caption "Example Button"
+local example_button =
+Gui.element{
+    type = 'button',
+    caption = 'Example Button'
+}
+
+@usage-- Using element defines with a custom factory function
+-- This method can be used if you still want to be able register event handlers but it is too complex to be compatible with LuaGuiElement.add
+local example_flow_with_button =
+Gui.element(function(event_trigger,parent,...)
+    -- ... shows that all other arguments from the factory call are passed to this function
+    -- parent is the element which was passed to the factory function where you should add your new element
+    -- here we are adding a flow which we will then later add a button to
+    local flow =
+    parent.add{
+        name = 'example_flow',
+        type = 'flow'
+    }
+
+    -- event_trigger should be the name of any elements you want to trigger your event handlers, such as on_click or on_state_changed
+    -- now we add the button to the flow that we created earlier
+    local element =
+    flow.add{
+        name = event_trigger,
+        type = 'button',
+        caption = 'Example Button'
+    }
+
+    -- you must return your new element, this is so styles can be applied and returned to the caller
+    -- you may return any of your elements that you add, consider the context in which it will be used for what should be returned
+    return element
+end)
+
 ]]
-local Game = require 'utils.game' --- @dep utils.game
-local Store = require 'expcore.store' --- @dep expcore.store
-local Instances = require 'expcore.gui.instances' --- @dep expcore.gui.instances
+function Gui.element(element_define)
+    -- Set the metatable to allow access to register events
+    local element = setmetatable({}, Gui._mt_element)
 
-local Constructor = {}
-local Prototype = {}
+    -- Increment the uid counter
+    local uid = Gui.uid + 1
+    Gui.uid = uid
+    local name = tostring(uid)
+    element.name = name
+    Gui.debug_info[name] = { draw = 'None', style = 'None', events = {} }
 
---- Creates a new function to add functions to an event handler
--- @tparam string event_name the name of the event that callbacks will be added to
--- @treturn function the function used to register handlers
-function Constructor.event(event_name)
-    --- Adds a callback as a handler for an event
-    -- @tparam table self the gui define being acted on
-    -- @tparam function callback the function that will be added as a handler for the event
-    -- @treturn table self returned to allowing chaining of functions
-    return function(self,callback)
-        if type(callback) ~= 'function' then
-            return error('Event callback for '..event_name..' must be a function',2)
+    -- Add the defination function
+    if type(element_define) == 'table' then
+        Gui.debug_info[name].draw = element_define
+        element_define.name = name
+        element._draw = function(_,parent)
+            return parent.add(element_define)
         end
-
-        local handlers = self.events[event_name]
-        if not handlers then
-            handlers = {}
-            self.events[event_name] = handlers
-        end
-
-        handlers[#handlers+1] = callback
-        return self
-    end
-end
-
---- Extents a prototype with the base functions of all gui prototypes, no metatables
--- @tparam table new_prototype the prototype that you want to add the functions to
--- @treturn table the same prototype but with the new functions added
-function Constructor.extend(new_prototype)
-    for key,value in pairs(Prototype) do
-        if type(value) == 'table' then
-            new_prototype[key] = table.deepcopy(value)
-        else
-            new_prototype[key] = value
-        end
-    end
-    for key,value in pairs(new_prototype) do
-        if value == Constructor.event then
-            new_prototype[key] = Constructor.event(key)
-        end
-    end
-    return new_prototype
-end
-
---- Creates a new function which adds a store to a gui define
--- @tparam function callback the function called when needing to update the value of an element
--- @treturn function the function that will add a store for this define
-function Constructor.store(callback)
-    --- Adds a store for the define that is shared between all instances of the define in the same category, serializer is a function that returns a string
-    -- @tparam self table the gui define being acted on
-    -- @tparam[opt] function serializer function used to determine the category of a LuaGuiElement, when omitted all share one single category
-    -- serializer param - LuaGuiElement element - the element that needs to be converted
-    -- serializer return - string - a deterministic string that references to a category such as player name or force name
-    -- @treturn self the element define to allow chaining
-    return function(self,serializer)
-        if self.store then return end
-        serializer = serializer or function() return '' end
-
-        self.store = Store.register(serializer)
-
-        Instances.register(self.name,serializer)
-
-        Store.watch(self.store,function(value,category)
-            self:raise_event('on_store_update',value,category)
-
-            if Instances.is_registered(self.name) then
-                Instances.apply_to_elements(self.name,category,function(element)
-                    callback(self,element,value)
-                end)
-            end
-        end)
-
-        return self
-    end
-end
-
---- Creates a setter function that checks the type when a value is set
--- @tparam string value_type the type that the value should be when it is set
--- @tparam string key the key of the define that will be set
--- @tparam[opt] string second_key allows for setting of a key in a sub table
--- @treturn function the function that will check the type and set the value
-function Constructor.setter(value_type,key,second_key)
-    local display_message = 'Gui define '..key..' must be of type '..value_type
-    if second_key then
-        display_message = 'Gui define '..second_key..' must be of type '..value_type
-    end
-
-    local locale = false
-    if value_type == 'locale-string' then
-        locale = true
-        value_type = 'table'
-    end
-
-    return function(self,value)
-        local v_type = type(value)
-        if v_type ~= value_type and (not locale or v_type ~= 'string') then
-            error(display_message,2)
-        end
-
-        if second_key then
-            self[key][second_key] = value
-        else
-            self[key] = value
-        end
-
-        return self
-    end
-end
-
---- Gets the uid for the element define
--- @treturn string the uid of this element define
-function Prototype:uid()
-    return self.name
-end
-
---- Sets a debug alias for the define
--- @tparam string name the debug name for the element define that can be used to get this element define
--- @treturn self the element define to allow chaining
-Prototype.debug_name = Constructor.setter('string','debug_name')
-
---- Sets the caption for the element define
--- @tparam string caption the caption that will be drawn with the element
--- @treturn self the element define to allow chaining
-Prototype.set_caption = Constructor.setter('locale-string','draw_data','caption')
-
---- Sets the tooltip for the element define
--- @tparam string tooltip the tooltip that will be displayed for this element when drawn
--- @treturn self the element define to allow chaining
-Prototype.set_tooltip = Constructor.setter('locale-string','draw_data','tooltip')
-
---- Sets an authenticator that blocks the draw function if check fails
--- @tparam function callback the function that will be ran to test if the element should be drawn or not
--- callback param - LuaPlayer player - the player that the element is being drawn to
--- callback param - string define_name - the name of the define that is being drawn
--- callback return - boolean - false will stop the element from being drawn
--- @treturn self the element define to allow chaining
-Prototype.set_pre_authenticator = Constructor.setter('function','pre_authenticator')
-
---- Sets an authenticator that disables the element if check fails
--- @tparam function callback the function that will be ran to test if the element should be enabled or not
--- callback param - LuaPlayer player - the player that the element is being drawn to
--- callback param - string define_name - the name of the define that is being drawn
--- callback return - boolean - false will disable the element
--- @treturn self the element define to allow chaining
-Prototype.set_post_authenticator = Constructor.setter('function','post_authenticator')
-
---- Registers a callback to the on_draw event
--- @tparam function callback
--- callback param - LuaPlayer player - the player that the element was drawn to
--- callback param - LuaGuiElement element - the element that was drawn
--- callback param - any ... - any other params passed by the draw_to function
-Prototype.on_draw = Constructor.event('on_draw')
-
---- Registers a callback to the on_style_update event
--- @tparam function callback
--- callback param - LuaStyle style - the style that was changed and/or needs changing
-Prototype.on_style_update = Constructor.event('on_style_update')
-
---- Sets the style for the element define
--- @tparam string style the style that will be used for this element when drawn
--- @tparam[opt] function callback function is called when element is drawn to alter its style
--- @treturn self the element define to allow chaining
-function Prototype:set_style(style,callback)
-    self.draw_data.style = style
-    if callback then
-        self:on_style_update(callback)
-    end
-    return self
-end
-
---- Sets the element to be drawn inside a nameless flow, can be given a name using a function
--- @tparam ?boolean|function state when true a padless flow is created to contain the element
--- @treturn self the element define to allow chaining
-function Prototype:set_embedded_flow(state)
-    if state == false or type(state) == 'function' then
-        self.embedded_flow = state
     else
-        self.embedded_flow = true
+        Gui.debug_info[name].draw = 'Function'
+        element._draw = element_define
+    end
+
+    -- Add the define to the base module
+    local file_path = debug.getinfo(2, 'S').source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+    Gui.file_paths[name] = file_path
+    Gui.defines[name] = element
+
+    -- Return the element so event handers can be accessed
+    return element
+end
+
+--[[-- Used to extent your element define with a style factory, this style will be applied to your element when created, can also be a custom function
+@tparam ?table|function style_define style table where each key and value pair is treated like LuaGuiElement.style[key] = value, a custom function can be used
+@treturn table the element define is returned to allow for event handlers to be registered
+
+@usage-- Using the table method of setting the style
+local example_button =
+Gui.element{
+    type = 'button',
+    caption = 'Example Button',
+    style = 'forward_button' -- factorio styles can be applied here
+}
+:style{
+    height = 25, -- same as element.style.height = 25
+    width = 100 -- same as element.style.width = 25
+}
+
+@usage-- Using the function method to set the style
+-- Use this method if your style is dynamic and depends on other factors
+local example_button =
+Gui.element{
+    type = 'button',
+    caption = 'Example Button',
+    style = 'forward_button' -- factorio styles can be applied here
+}
+:style(function(style,element,...)
+    -- style is the current style object for the elemenent
+    -- element is the element that is being changed
+    -- ... shows that all other arguments from the factory call are passed to this function
+    local player = game.players[element.player_index]
+    style.height = 25
+    style.width = 100
+    style.font_color = player.color
+end)
+
+]]
+function Gui._prototype_element:style(style_define)
+    -- Add the defination function
+    if type(style_define) == 'table' then
+        Gui.debug_info[self.name].style = style_define
+        self._style = function(style)
+            for key,value in pairs(style_define) do
+                style[key] = value
+            end
+        end
+    else
+        Gui.debug_info[self.name].style = 'Function'
+        self._style = style_define
+    end
+
+    -- Return the element so event handers can be accessed
+    return self
+end
+
+--[[-- Set the handler which will be called for a custom event, only one handler can be used per event per element
+@tparam string event_name the name of the event you want to handler to be called on, often from Gui.events
+@tparam function handler the handler that you want to be called when the event is raised
+@treturn table the element define so more handleres can be registered
+
+@usage-- Register a handler to "my_custom_event" for this element
+element_deinfe:on_custom_event('my_custom_event', function(event)
+    event.player.print(player.name)
+end)
+
+]]
+function Gui._prototype_element:on_custom_event(event_name,handler)
+    table.insert(Gui.debug_info[self.name].events,event_name)
+    Gui.events[event_name] = event_name
+    self[event_name] = handler
+    return self
+end
+
+--[[-- Raise the handler which is attached to an event; external use should be limited to custom events
+@tparam table event the event table passed to the handler, must contain fields: name, element
+@treturn table the element define so more events can be raised
+
+@usage Raising a custom event
+element_define:raise_custom_event{
+    name = 'my_custom_event',
+    element = element
+}
+
+]]
+function Gui._prototype_element:raise_custom_event(event)
+    -- Check the element is valid
+    local element = event.element
+    if not element or not element.valid then
+        return self
+    end
+
+    -- Get the event handler for this element
+    local handler = self[event.name]
+    if not handler then
+        return self
+    end
+
+    -- Get the player for this event
+    local player_index = event.player_index or element.player_index
+    local player = game.players[player_index]
+    if not player or not player.valid then
+        return self
+    end
+    event.player = player
+
+    local success, err = pcall(handler,player,element,event)
+    if not success then
+        error('There as been an error with an event handler for a gui element:\n\t'..err)
     end
     return self
 end
 
---- Raises a custom event for this define, any number of params can be given
--- @tparam string event_name the name of the event that you want to raise
--- @tparam any ... any params that you want to pass to the event
--- @treturn number the number of handlers that were registered
-function Prototype:raise_event(event_name,...)
-    local handlers = self.events[event_name]
-    if handlers then
-        for _,handler in pairs(handlers) do
-            handler(...)
-        end
+-- This function is used to link element define events and the events from the factorio api
+local function event_handler_factory(event_name)
+    Event.add(event_name, function(event)
+        local element = event.element
+        if not element or not element.valid then return end
+        local element_define = Gui.defines[element.name]
+        element_define:raise_custom_event(event)
+    end)
+
+    return function(self,handler)
+        table.insert(Gui.debug_info[self.name].events,debug.getinfo(1, "n").name)
+        self[event_name] = handler
+        return self
     end
-    return handlers and #handlers or 0
 end
 
---- The main function for defines, when called will draw an instance of this define to the given element
--- what is drawn is based on the data in draw_data which is set using other functions
--- @tparam LuaGuiElement element the element that the define will draw a instance of its self onto
--- @treturn LuaGuiElement the new element that was drawn
-function Prototype:draw_to(element,...)
-    local name = self.name
-    if element[name] then return end
-    local player = Game.get_player_by_index(element.player_index)
+--- Element Events.
+-- @section elementEvents
 
-    if self.pre_authenticator then
-        if not self.pre_authenticator(player,self.name) then return end
-    end
+--- Called when the player opens a GUI.
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_opened = event_handler_factory(defines.events.on_gui_opened)
 
-    if self.embedded_flow then
-        local embedded_name
-        if type(self.embedded_flow) == 'function' then
-            embedded_name = self.embedded_flow(element,...)
-        end
-        element = element.add{type='flow',name=embedded_name}
-        element.style.padding = 0
-    end
+--- Called when the player closes the GUI they have open.
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_closed = event_handler_factory(defines.events.on_gui_closed)
 
-    local new_element = element.add(self.draw_data)
+--- Called when LuaGuiElement is clicked.
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_click = event_handler_factory(defines.events.on_gui_click)
 
-    self:raise_event('on_style_update',new_element.style)
+--- Called when a LuaGuiElement is confirmed, for example by pressing Enter in a textfield.
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_confirmed = event_handler_factory(defines.events.on_gui_confirmed)
 
-    if self.post_authenticator then
-        new_element.enabled = self.post_authenticator(player,self.name)
-    end
+--- Called when LuaGuiElement checked state is changed (related to checkboxes and radio buttons).
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_checked_changed = event_handler_factory(defines.events.on_gui_checked_state_changed)
 
-    if Instances.is_registered(self.name) then
-        Instances.add_element(self.name,new_element)
-    end
+--- Called when LuaGuiElement element value is changed (related to choose element buttons).
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_elem_changed = event_handler_factory(defines.events.on_gui_elem_changed)
 
-    self:raise_event('on_draw',player,new_element,...)
+--- Called when LuaGuiElement element location is changed (related to frames in player.gui.screen).
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_location_changed = event_handler_factory(defines.events.on_gui_location_changed)
 
-    return new_element
-end
+--- Called when LuaGuiElement selected tab is changed (related to tabbed-panes).
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_tab_changed = event_handler_factory(defines.events.on_gui_selected_tab_changed)
 
---- Gets the value in this elements store, category needed if serializer function used
--- @tparam string category[opt] the category to get such as player name or force name
--- @treturn any the value that is stored for this define
-function Prototype:get_store(category)
-    if not self.store then return end
-    return Store.get(self.store,category)
-end
+--- Called when LuaGuiElement selection state is changed (related to drop-downs and listboxes).
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_selection_changed = event_handler_factory(defines.events.on_gui_selection_state_changed)
 
---- Sets the value in this elements store, category needed if serializer function used
--- @tparam string category[opt] the category to get such as player name or force name
--- @tparam any value the value to set for this define, must be valid for its type ie for checkbox etc
--- @treturn boolean true if the value was set
-function Prototype:set_store(category,value)
-    if not self.store then return end
-    return Store.set(self.store,category,value)
-end
+--- Called when LuaGuiElement switch state is changed (related to switches).
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_switch_changed = event_handler_factory(defines.events.on_gui_switch_state_changed)
 
---- Sets the value in this elements store to nil, category needed if serializer function used
--- @tparam[opt] string category the category to get such as player name or force name
--- @treturn boolean true if the value was set
-function Prototype:clear_store(category)
-    if not self.store then return end
-    return Store.clear(self.store,category)
-end
+--- Called when LuaGuiElement text is changed by the player.
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_text_changed = event_handler_factory(defines.events.on_gui_text_changed)
 
-return Constructor
+--- Called when LuaGuiElement slider value is changed (related to the slider element).
+-- @tparam function handler the event handler which will be called
+Gui._prototype_element.on_value_changed = event_handler_factory(defines.events.on_gui_value_changed)
+
+-- Module return
+return Gui
