@@ -349,6 +349,7 @@ local function event_handler_factory(event_name)
         local element = event.element
         if not element or not element.valid then return end
         local element_define = Gui.defines[element.name]
+        if not element_define then return end
         element_define:raise_custom_event(event)
     end)
 
