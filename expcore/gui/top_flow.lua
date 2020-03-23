@@ -102,3 +102,66 @@ function Gui.toggle_top_flow(player,state)
 
     return state
 end
+
+--[[-- Get the element define that is in the top flow, use in events without an element refrence
+@tparam LuaPlayer player the player that you want to get the element for
+@tparam table element_define the element that you want to get
+@treturn LuaGuiElement the gui element linked to this define for this player
+
+@usage-- Get your top element
+local button = Gui.get_top_element(game.player, example_button)
+
+]]
+function Gui.get_top_element(player, element_define)
+    local top_flow = Gui.get_top_flow(player)
+    return top_flow[element_define.name]
+end
+
+--[[-- Creates a button on the top flow with consistent styling
+@tparam string sprite the sprite that you want to use on the button
+@tparam ?string|Concepts.LocalizedString tooltip the tooltip that you want the button to have
+@tparam[opt] function authenticator used to decide if the button should be visible to a player
+
+@usage-- Add a button to the toolbar
+local toolbar_button =
+Gui.left_toolbar_button('entity/inserter', 'Nothing to see here', function(player)
+    return player.admin
+end)
+
+]]
+function Gui.toolbar_button(sprite,tooltip,authenticator)
+    return Gui.element{
+        type = 'sprite-button',
+        sprite = sprite,
+        tooltip = tooltip,
+        style = Gui.top_flow_button_style
+    }
+    :style{
+        minimal_width = 36,
+        height = 36,
+        padding = -2
+    }
+    :add_to_top_flow(authenticator)
+end
+
+--[[-- Styles a top flow button depending on the state given
+@tparam LuaGuiElement the button element to style
+@tparam boolean state The state the button is in
+
+@usage-- Sets the button to the visible style
+Gui.toolbar_button_style(button, true)
+
+@usage-- Sets the button to the hidden style
+Gui.toolbar_button_style(button, false)
+
+]]
+function Gui.toolbar_button_style(button, state)
+    if state then
+        button.style = Gui.top_flow_button_visible_style
+    else
+        button.style = Gui.top_flow_button_style
+    end
+    button.style.minimal_width = 36
+    button.style.height = 36
+    button.style.padding = -2
+end
