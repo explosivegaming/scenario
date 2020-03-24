@@ -216,3 +216,27 @@ end)
     frame_style.padding = 2
     frame_style.minimal_width = width
 end)
+
+--[[-- Used to make a solid white bar in a gui
+@element Gui.bar
+@tparam LuaGuiElement parent the parent element to which the container will be added
+@tparam number width the width of the bar that will be made, if not given bar will strech to fill the parent
+
+@usage-- Adding a bar to a gui
+local bar = Gui.bar(parent, 100)
+
+]]
+Gui.bar =
+Gui.element(function(_,parent)
+    return parent.add{
+        type = 'progressbar',
+        size = 1,
+        value = 1
+    }
+end)
+:style(function(style,_,width)
+    style.height = 3
+    style.color = {r=255,g=255,b=255}
+    if width then style.width = width
+    else style.horizontally_stretchable = true end
+end)
