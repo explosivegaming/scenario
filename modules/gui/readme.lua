@@ -90,10 +90,36 @@ end))
 --- Content area for the rules tab
 -- @element rules_content
 Tab({'readme.rules-tab'},{'readme.rules-tooltip'},
-Gui.element{
-    type = 'label',
-    caption = 'Rules'
-})
+Gui.element(function(_,parent)
+    local container = parent.add{ type='flow', direction='vertical' }
+
+    -- Add the title to the content
+    local title_flow = container.add{ type='flow' }
+    title_flow.style.vertical_align = 'center'
+    Gui.bar(title_flow,267)
+    title_flow.add{
+        type = 'label',
+        caption = {'readme.rules-tab'},
+        style = 'heading_1_label'
+    }
+    Gui.bar(title_flow,267)
+
+    -- Add the tab description
+    description_label(container,575,{'readme.rules-general'})
+    Gui.bar(container)
+
+    -- Add a table for the rules
+    local rules = Gui.scroll_table(container,275,1)
+    rules.style = 'bordered_table'
+    rules.style.top_margin = 2
+
+    -- Add the rules to the table
+    for i = 1,15 do
+        description_label(rules,545,{'readme.rules-'..i})
+    end
+
+    return container
+end))
 
 --- Content area for the commands tab
 -- @element commands_content
