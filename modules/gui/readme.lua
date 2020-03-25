@@ -151,13 +151,34 @@ Gui.element(function(_,parent)
 
     return container
 end))
+
 --- Content area for the servers tab
 -- @element servers_content
 Tab({'readme.servers-tab'},{'readme.servers-tooltip'},
-Gui.element{
-    type = 'label',
-    caption = 'Servers'
-})
+Gui.element(function(_,parent)
+    local container = parent.add{ type='flow', direction='vertical' }
+
+    -- Add the title to the content
+    title(container,260,{'readme.servers-tab'})
+
+    -- Add the tab description
+    description_label(container,575,{'readme.servers-general'})
+    Gui.bar(container)
+
+    -- Create the external links string
+    local result
+    local keys = {'discord','website','patreon','status','github'}
+    for i,key in ipairs(keys) do
+        if i == 1 then result = {'info.'..key}
+        else result = {'readme.servers-external',result,{'info.'..key}} end
+    end
+
+    -- Add the other information to the gui
+    description_label(sub_content(container),575,{'readme.servers-factorio'})
+    description_label(sub_content(container),575,result)
+
+    return container
+end))
 
 --- Content area for the servers tab
 -- @element backers_content

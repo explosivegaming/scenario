@@ -17,6 +17,8 @@ return {
         ['wiki']={'info.wiki'},
         ['status']={'info.status'},
         ['github']={'info.github'},
+        ['patreon']={'info.patreon'},
+        ['donate']={'info.patreon'},
         ['command']={'info.custom-commands'},
         ['commands']={'info.custom-commands'},
         ['softmod']={'info.softmod'},
