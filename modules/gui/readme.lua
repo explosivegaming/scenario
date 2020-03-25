@@ -15,6 +15,8 @@ local function Tab(caption,tooltip,element_define)
     tabs[#tabs+1] = {caption,tooltip,element_define}
 end
 
+local frame_width = 595
+
 local function description_label(parent,width,caption)
     local label = parent.add{
         type = 'label',
@@ -91,9 +93,9 @@ Gui.element(function(_,parent)
     end
 
     -- Add the other information to the gui
-    description_label(sub_content(container),575,{'readme.welcome-general',server_details.reset_time})
-    description_label(sub_content(container),575,{'readme.welcome-roles',table.concat(role_names,', ')})
-    description_label(sub_content(container),575,{'readme.welcome-chat'})
+    description_label(sub_content(container),frame_width,{'readme.welcome-general',server_details.reset_time})
+    description_label(sub_content(container),frame_width,{'readme.welcome-roles',table.concat(role_names,', ')})
+    description_label(sub_content(container),frame_width,{'readme.welcome-chat'})
 
     return container
 end))
@@ -108,7 +110,7 @@ Gui.element(function(_,parent)
     title(container,267,{'readme.rules-tab'})
 
     -- Add the tab description
-    description_label(container,575,{'readme.rules-general'})
+    description_label(container,frame_width,{'readme.rules-general'})
     Gui.bar(container)
 
     -- Add a table for the rules
@@ -118,7 +120,7 @@ Gui.element(function(_,parent)
 
     -- Add the rules to the table
     for i = 1,15 do
-        description_label(rules,555,{'readme.rules-'..i})
+        description_label(rules,560,{'readme.rules-'..i})
     end
 
     return container
@@ -135,10 +137,10 @@ Gui.element(function(_,parent)
     title(container,250,{'readme.commands-tab'})
 
     -- Add the tab description
-    description_label(container,575,{'readme.commands-general'})
+    description_label(container,frame_width,{'readme.commands-general'})
     Gui.bar(container)
 
-    -- Add a table for the rules
+    -- Add a table for the commands
     container.add{ type='flow' }
     local commands = Gui.scroll_table(container,275,2)
     commands.style = 'bordered_table'
@@ -146,7 +148,7 @@ Gui.element(function(_,parent)
     -- Add the rules to the table
     for name,command in pairs(Commands.get(player)) do
         description_label(commands,100,name)
-        description_label(commands,440,command.help)
+        description_label(commands,444,command.help)
     end
 
     return container
@@ -162,7 +164,7 @@ Gui.element(function(_,parent)
     title(container,260,{'readme.servers-tab'})
 
     -- Add the tab description
-    description_label(container,575,{'readme.servers-general'})
+    description_label(container,frame_width,{'readme.servers-general'})
     Gui.bar(container)
 
     -- Create the external links string
@@ -174,19 +176,107 @@ Gui.element(function(_,parent)
     end
 
     -- Add the other information to the gui
-    description_label(sub_content(container),575,{'readme.servers-factorio'})
-    description_label(sub_content(container),575,result)
+    description_label(sub_content(container),frame_width,{'readme.servers-factorio'})
+    description_label(sub_content(container),frame_width,result)
 
     return container
 end))
 
+--- Contains the names for backer players
+-- @element backer_table
+local backer_table =
+Gui.element(function(_,parent)
+    return parent.add{
+        type = 'table',
+        column_count = 4,
+        style = 'bordered_table'
+    }
+end)
+:style{
+    padding = 0,
+    cell_padding = 0,
+    vertical_align = 'center',
+    horizontally_stretchable = true
+}
+
 --- Content area for the servers tab
 -- @element backers_content
 Tab({'readme.backers-tab'},{'readme.backers-tooltip'},
-Gui.element{
-    type = 'label',
-    caption = 'Backers'
-})
+Gui.element(function(_,parent)
+    local container = parent.add{ type='flow', direction='vertical' }
+
+    -- Add the title to the content
+    title(container,260,{'readme.backers-tab'})
+
+    -- Add the tab description
+    description_label(container,frame_width,{'readme.backers-general'})
+    Gui.bar(container)
+
+    -- Find which players will go where
+    local done = {}
+    local groups = {
+        Administrator = { _title={'readme.backers-management'}, _width=230 },
+        Sponsor = { _title={'readme.backers-board'}, _width=145 }, -- change role to board
+        Donator = { _title={'readme.backers-backers'}, _width=196 }, -- change to backer
+        Moderator = { _title={'readme.backers-staff'}, _width=235 },
+        Active = { _title={'readme.backers-active'}, _width=235 },
+    }
+
+    -- Fill by player roles
+    for player_name, player_roles in pairs(Roles.config.players) do
+        for role_name, players in pairs(groups) do
+            if table.contains(player_roles, role_name) then
+                done[player_name] = true
+                table.insert(players,player_name)
+                break
+            end
+        end
+    end
+
+    -- Fill by active times
+    local active_time = 3*3600*60
+    for _, player in pairs(game.players) do
+        if not done[player.name] then
+            if player.online_time > active_time then
+                table.insert(groups.Active,player.name)
+            end
+        end
+    end
+
+    -- Draw the scroll
+    container.add{ type='flow' }
+    local scroll_pane =
+    container.add{
+        type = 'scroll-pane',
+        direction = 'vertical',
+        horizontal_scroll_policy = 'never',
+        vertical_scroll_policy = 'auto',
+        style = 'scroll_pane_under_subheader'
+    }
+
+    -- Set the style of the scroll pane
+    local scroll_style = scroll_pane.style
+    scroll_style.padding = {1,3}
+    scroll_style.maximal_height = 275
+    scroll_style.horizontally_stretchable = true
+
+    -- Add the different tables
+    for _, players in pairs(groups) do
+        title(scroll_pane, players._width, players._title)
+        local table = backer_table(scroll_pane)
+        for _,player_name in ipairs(players) do
+            description_label(table,140,player_name)
+        end
+
+        if #players < 4 then
+            for i = 1,4-#players do
+                description_label(table,140)
+            end
+        end
+    end
+
+    return container
+end))
 
 --- Main readme container for the center flow
 -- @element readme
