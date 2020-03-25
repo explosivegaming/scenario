@@ -63,6 +63,41 @@ Gui.element(function(_,parent,bar_size,caption)
     return title_label
 end)
 
+--- Table which has a title above it
+-- @element title_table
+local title_table =
+Gui.element(function(_,parent,bar_size,caption,column_count)
+    title(parent, bar_size, caption)
+
+    return parent.add{
+        type = 'table',
+        column_count = column_count,
+        style = 'bordered_table'
+    }
+end)
+:style{
+    padding = 0,
+    cell_padding = 0,
+    vertical_align = 'center',
+    horizontally_stretchable = true
+}
+
+--- Scroll to be used with title tables
+-- @element title_table_scroll
+local title_table_scroll =
+Gui.element{
+    type = 'scroll-pane',
+    direction = 'vertical',
+    horizontal_scroll_policy = 'never',
+    vertical_scroll_policy = 'auto',
+    style = 'scroll_pane_under_subheader'
+}
+:style{
+    padding = {1,3},
+    maximal_height = 275,
+    horizontally_stretchable = true,
+}
+
 --- Content area for the welcome tab
 -- @element welcome_content
 Tab({'readme.welcome-tab'},{'readme.welcome-tooltip'},
@@ -84,6 +119,7 @@ Gui.element(function(_,parent)
     -- Add the description to the top flow
     description_label(top_vertical_flow,380,server_details.description)
     Gui.bar(container)
+    container.add{ type='flow' }.style.height = 4
 
     -- Get the names of the roles the player has
     local player_roles = Roles.get_player_roles(player)
@@ -167,37 +203,27 @@ Gui.element(function(_,parent)
     description_label(container,frame_width,{'readme.servers-general'})
     Gui.bar(container)
 
-    -- Create the external links string
-    local result
-    local keys = {'discord','website','patreon','status','github'}
-    for i,key in ipairs(keys) do
-        if i == 1 then result = {'info.'..key}
-        else result = {'readme.servers-external',result,{'info.'..key}} end
+    -- Draw the scroll
+    container.add{ type='flow' }
+    local scroll_pane = title_table_scroll(container)
+    scroll_pane.style.maximal_height = 295
+
+    -- Add the dactorio servers
+    local factoiro_servers = title_table(scroll_pane, 225, {'readme.servers-factorio'}, 2)
+    for i = 1,8 do
+        description_label(factoiro_servers,106,{'readme.servers-'..i})
+        description_label(factoiro_servers,462,{'readme.servers-d'..i})
     end
 
-    -- Add the other information to the gui
-    description_label(sub_content(container),frame_width,{'readme.servers-factorio'})
-    description_label(sub_content(container),frame_width,result)
+    -- Add the external links
+    local external_links = title_table(scroll_pane, 235, {'readme.servers-external'}, 2)
+    for _,key in ipairs{'discord','website','patreon','status','github'} do
+        description_label(external_links,106,key:gsub("^%l", string.upper))
+        description_label(external_links,462,{'links.'..key})
+    end
 
     return container
 end))
-
---- Contains the names for backer players
--- @element backer_table
-local backer_table =
-Gui.element(function(_,parent)
-    return parent.add{
-        type = 'table',
-        column_count = 4,
-        style = 'bordered_table'
-    }
-end)
-:style{
-    padding = 0,
-    cell_padding = 0,
-    vertical_align = 'center',
-    horizontally_stretchable = true
-}
 
 --- Content area for the servers tab
 -- @element backers_content
@@ -245,25 +271,11 @@ Gui.element(function(_,parent)
 
     -- Draw the scroll
     container.add{ type='flow' }
-    local scroll_pane =
-    container.add{
-        type = 'scroll-pane',
-        direction = 'vertical',
-        horizontal_scroll_policy = 'never',
-        vertical_scroll_policy = 'auto',
-        style = 'scroll_pane_under_subheader'
-    }
-
-    -- Set the style of the scroll pane
-    local scroll_style = scroll_pane.style
-    scroll_style.padding = {1,3}
-    scroll_style.maximal_height = 275
-    scroll_style.horizontally_stretchable = true
+    local scroll_pane = title_table_scroll(container)
 
     -- Add the different tables
     for _, players in pairs(groups) do
-        title(scroll_pane, players._width, players._title)
-        local table = backer_table(scroll_pane)
+        local table = title_table(scroll_pane, players._width, players._title, 4)
         for _,player_name in ipairs(players) do
             description_label(table,140,player_name)
         end
