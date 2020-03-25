@@ -211,7 +211,7 @@ local default = Roles.new_role('Guest','')
 :allow{
     'command/tag',
     'command/tag-clear',
-    'command/chelp',
+    'command/search-help',
     'command/list-roles',
     'command/find-on-map',
     'command/report',

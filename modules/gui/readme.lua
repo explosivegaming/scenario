@@ -6,6 +6,7 @@
 
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.game
 
@@ -42,6 +43,24 @@ end)
     horizontal_align = 'center'
 }
 
+--- Title element with bars on each side
+-- @element title
+local title =
+Gui.element(function(_,parent,bar_size,caption)
+    local title_flow = parent.add{ type='flow' }
+    title_flow.style.vertical_align = 'center'
+
+    Gui.bar(title_flow,bar_size)
+    local title_label = title_flow.add{
+        type = 'label',
+        caption = caption,
+        style = 'heading_1_label'
+    }
+    Gui.bar(title_flow)
+
+    return title_label
+end)
+
 --- Content area for the welcome tab
 -- @element welcome_content
 Tab({'readme.welcome-tab'},{'readme.welcome-tooltip'},
@@ -58,15 +77,7 @@ Gui.element(function(_,parent)
     top_vertical_flow.style.horizontal_align = 'center'
 
     -- Add the title to the top flow
-    local title_flow = top_vertical_flow.add{ type='flow' }
-    title_flow.style.vertical_align = 'center'
-    Gui.bar(title_flow,85)
-    title_flow.add{
-        type = 'label',
-        caption = 'Welcome to '..server_details.name,
-        style = 'caption_label'
-    }
-    Gui.bar(title_flow,85)
+    title(top_vertical_flow,62,'Welcome to '..server_details.name)
 
     -- Add the description to the top flow
     description_label(top_vertical_flow,380,server_details.description)
@@ -94,28 +105,20 @@ Gui.element(function(_,parent)
     local container = parent.add{ type='flow', direction='vertical' }
 
     -- Add the title to the content
-    local title_flow = container.add{ type='flow' }
-    title_flow.style.vertical_align = 'center'
-    Gui.bar(title_flow,267)
-    title_flow.add{
-        type = 'label',
-        caption = {'readme.rules-tab'},
-        style = 'heading_1_label'
-    }
-    Gui.bar(title_flow,267)
+    title(container,267,{'readme.rules-tab'})
 
     -- Add the tab description
     description_label(container,575,{'readme.rules-general'})
     Gui.bar(container)
 
     -- Add a table for the rules
+    container.add{ type='flow' }
     local rules = Gui.scroll_table(container,275,1)
     rules.style = 'bordered_table'
-    rules.style.top_margin = 2
 
     -- Add the rules to the table
     for i = 1,15 do
-        description_label(rules,545,{'readme.rules-'..i})
+        description_label(rules,555,{'readme.rules-'..i})
     end
 
     return container
@@ -124,11 +127,30 @@ end))
 --- Content area for the commands tab
 -- @element commands_content
 Tab({'readme.commands-tab'},{'readme.commands-tooltip'},
-Gui.element{
-    type = 'label',
-    caption = 'Commands'
-})
+Gui.element(function(_,parent)
+    local container = parent.add{ type='flow', direction='vertical' }
+    local player = Gui.get_player_from_element(parent)
 
+    -- Add the title to the content
+    title(container,250,{'readme.commands-tab'})
+
+    -- Add the tab description
+    description_label(container,575,{'readme.commands-general'})
+    Gui.bar(container)
+
+    -- Add a table for the rules
+    container.add{ type='flow' }
+    local commands = Gui.scroll_table(container,275,2)
+    commands.style = 'bordered_table'
+
+    -- Add the rules to the table
+    for name,command in pairs(Commands.get(player)) do
+        description_label(commands,100,name)
+        description_label(commands,440,command.help)
+    end
+
+    return container
+end))
 --- Content area for the servers tab
 -- @element servers_content
 Tab({'readme.servers-tab'},{'readme.servers-tooltip'},
