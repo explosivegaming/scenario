@@ -12,23 +12,12 @@ local Game = require 'utils.game' --- @dep utils.game
 
 local tabs = {}
 local function Tab(caption,tooltip,element_define)
-    tabs[#tabs+1] = {caption,tooltip,element_define}
+    tabs[#tabs+1] = {caption, tooltip, element_define}
 end
 
-local frame_width = 595
-
-local function description_label(parent,width,caption)
-    local label = parent.add{
-        type = 'label',
-        caption = caption,
-        style = 'description_label'
-    }
-
-    local style = label.style
-    style.horizontal_align = 'center'
-    style.single_line = false
-    style.width = width
-end
+local frame_width = 595 -- controls width of top descritions
+local title_width = 270 -- controls the centering of the titles
+local scroll_hieght = 275 -- controls the height of the scrolls
 
 --- Sub content area used within the content areas
 -- @element sub_content
@@ -45,29 +34,11 @@ end)
     horizontal_align = 'center'
 }
 
---- Title element with bars on each side
--- @element title
-local title =
-Gui.element(function(_,parent,bar_size,caption)
-    local title_flow = parent.add{ type='flow' }
-    title_flow.style.vertical_align = 'center'
-
-    Gui.bar(title_flow,bar_size)
-    local title_label = title_flow.add{
-        type = 'label',
-        caption = caption,
-        style = 'heading_1_label'
-    }
-    Gui.bar(title_flow)
-
-    return title_label
-end)
-
---- Table which has a title above it
+--- Table which has a title above it above it
 -- @element title_table
 local title_table =
 Gui.element(function(_,parent,bar_size,caption,column_count)
-    title(parent, bar_size, caption)
+    Gui.title_label(parent, bar_size, caption)
 
     return parent.add{
         type = 'table',
@@ -82,7 +53,7 @@ end)
     horizontally_stretchable = true
 }
 
---- Scroll to be used with title tables
+--- Scroll to be used with Gui.title_label tables
 -- @element title_table_scroll
 local title_table_scroll =
 Gui.element{
@@ -94,7 +65,7 @@ Gui.element{
 }
 :style{
     padding = {1,3},
-    maximal_height = 275,
+    maximal_height = scroll_hieght,
     horizontally_stretchable = true,
 }
 
@@ -108,18 +79,15 @@ Gui.element(function(_,parent)
 
     -- Set up the top flow with logos
     local top_flow = container.add{ type='flow' }
-    top_flow.add{ type='sprite', sprite='file/modules/gui/logo.png'}
+    top_flow.add{ type='sprite', sprite='file/modules/gui/logo.png' }
     local top_vertical_flow = top_flow.add{ type='flow', direction='vertical' }
-    top_flow.add{ type='sprite', sprite='file/modules/gui/logo.png'}
+    top_flow.add{ type='sprite', sprite='file/modules/gui/logo.png' }
     top_vertical_flow.style.horizontal_align = 'center'
 
-    -- Add the title to the top flow
-    title(top_vertical_flow,62,'Welcome to '..server_details.name)
-
-    -- Add the description to the top flow
-    description_label(top_vertical_flow,380,server_details.description)
+    -- Add the title and description to the top flow
+    Gui.title_label(top_vertical_flow, 62, 'Welcome to '..server_details.name)
+    Gui.centered_label(top_vertical_flow, 380, server_details.description)
     Gui.bar(container)
-    container.add{ type='flow' }.style.height = 4
 
     -- Get the names of the roles the player has
     local player_roles = Roles.get_player_roles(player)
@@ -129,9 +97,10 @@ Gui.element(function(_,parent)
     end
 
     -- Add the other information to the gui
-    description_label(sub_content(container),frame_width,{'readme.welcome-general',server_details.reset_time})
-    description_label(sub_content(container),frame_width,{'readme.welcome-roles',table.concat(role_names,', ')})
-    description_label(sub_content(container),frame_width,{'readme.welcome-chat'})
+    container.add{ type='flow' }.style.height = 4
+    Gui.centered_label(sub_content(container), frame_width, {'readme.welcome-general', server_details.reset_time})
+    Gui.centered_label(sub_content(container), frame_width, {'readme.welcome-roles', table.concat(role_names,', ')})
+    Gui.centered_label(sub_content(container), frame_width, {'readme.welcome-chat'})
 
     return container
 end))
@@ -142,21 +111,20 @@ Tab({'readme.rules-tab'},{'readme.rules-tooltip'},
 Gui.element(function(_,parent)
     local container = parent.add{ type='flow', direction='vertical' }
 
-    -- Add the title to the content
-    title(container,267,{'readme.rules-tab'})
-
-    -- Add the tab description
-    description_label(container,frame_width,{'readme.rules-general'})
+    -- Add the title and description to the content
+    Gui.title_label(container, title_width-3, {'readme.rules-tab'})
+    Gui.centered_label(container, frame_width, {'readme.rules-general'})
     Gui.bar(container)
+    container.add{ type='flow' }
 
     -- Add a table for the rules
-    container.add{ type='flow' }
-    local rules = Gui.scroll_table(container,275,1)
+    local rules = Gui.scroll_table(container, scroll_hieght, 1)
     rules.style = 'bordered_table'
+    rules.style.cell_padding = 4
 
     -- Add the rules to the table
     for i = 1,15 do
-        description_label(rules,560,{'readme.rules-'..i})
+        Gui.centered_label(rules, 565, {'readme.rules-'..i})
     end
 
     return container
@@ -169,22 +137,21 @@ Gui.element(function(_,parent)
     local container = parent.add{ type='flow', direction='vertical' }
     local player = Gui.get_player_from_element(parent)
 
-    -- Add the title to the content
-    title(container,250,{'readme.commands-tab'})
-
-    -- Add the tab description
-    description_label(container,frame_width,{'readme.commands-general'})
+    -- Add the title and description to the content
+    Gui.title_label(container, title_width-20, {'readme.commands-tab'})
+    Gui.centered_label(container, frame_width, {'readme.commands-general'})
     Gui.bar(container)
+    container.add{ type='flow' }
 
     -- Add a table for the commands
-    container.add{ type='flow' }
-    local commands = Gui.scroll_table(container,275,2)
+    local commands = Gui.scroll_table(container, scroll_hieght, 2)
     commands.style = 'bordered_table'
+    commands.style.cell_padding = 0
 
     -- Add the rules to the table
     for name,command in pairs(Commands.get(player)) do
-        description_label(commands,100,name)
-        description_label(commands,444,command.help)
+        Gui.centered_label(commands, 120, name)
+        Gui.centered_label(commands, 450, command.help)
     end
 
     return container
@@ -196,30 +163,28 @@ Tab({'readme.servers-tab'},{'readme.servers-tooltip'},
 Gui.element(function(_,parent)
     local container = parent.add{ type='flow', direction='vertical' }
 
-    -- Add the title to the content
-    title(container,260,{'readme.servers-tab'})
-
-    -- Add the tab description
-    description_label(container,frame_width,{'readme.servers-general'})
+    -- Add the title and description to the content
+    Gui.title_label(container, title_width-10, {'readme.servers-tab'})
+    Gui.centered_label(container, frame_width, {'readme.servers-general'})
     Gui.bar(container)
+    container.add{ type='flow' }
 
     -- Draw the scroll
-    container.add{ type='flow' }
     local scroll_pane = title_table_scroll(container)
-    scroll_pane.style.maximal_height = 295
+    scroll_pane.style.maximal_height = scroll_hieght + 20 -- the text is a bit shorter
 
-    -- Add the dactorio servers
+    -- Add the factorio servers
     local factoiro_servers = title_table(scroll_pane, 225, {'readme.servers-factorio'}, 2)
     for i = 1,8 do
-        description_label(factoiro_servers,106,{'readme.servers-'..i})
-        description_label(factoiro_servers,462,{'readme.servers-d'..i})
+        Gui.centered_label(factoiro_servers, 110, {'readme.servers-'..i})
+        Gui.centered_label(factoiro_servers, 460, {'readme.servers-d'..i})
     end
 
     -- Add the external links
     local external_links = title_table(scroll_pane, 235, {'readme.servers-external'}, 2)
     for _,key in ipairs{'discord','website','patreon','status','github'} do
-        description_label(external_links,106,key:gsub("^%l", string.upper))
-        description_label(external_links,462,{'links.'..key})
+        Gui.centered_label(external_links, 110, key:gsub("^%l", string.upper))
+        Gui.centered_label(external_links, 460, {'links.'..key}, {'readme.servers-open-in-browser'})
     end
 
     return container
@@ -231,12 +196,11 @@ Tab({'readme.backers-tab'},{'readme.backers-tooltip'},
 Gui.element(function(_,parent)
     local container = parent.add{ type='flow', direction='vertical' }
 
-    -- Add the title to the content
-    title(container,260,{'readme.backers-tab'})
-
-    -- Add the tab description
-    description_label(container,frame_width,{'readme.backers-general'})
+    -- Add the title and description to the content
+    Gui.title_label(container, title_width-10, {'readme.backers-tab'})
+    Gui.centered_label(container, frame_width, {'readme.backers-general'})
     Gui.bar(container)
+    container.add{ type='flow' }
 
     -- Find which players will go where
     local done = {}
@@ -269,20 +233,17 @@ Gui.element(function(_,parent)
         end
     end
 
-    -- Draw the scroll
-    container.add{ type='flow' }
-    local scroll_pane = title_table_scroll(container)
-
     -- Add the different tables
+    local scroll_pane = title_table_scroll(container)
     for _, players in pairs(groups) do
         local table = title_table(scroll_pane, players._width, players._title, 4)
         for _,player_name in ipairs(players) do
-            description_label(table,140,player_name)
+            Gui.centered_label(table, 140, player_name)
         end
 
         if #players < 4 then
             for i = 1,4-#players do
-                description_label(table,140)
+                Gui.centered_label(table, 140)
             end
         end
     end
@@ -302,11 +263,11 @@ Gui.element(function(event_trigger,parent)
     }
 
     -- Add the left hand side of the frame back, removed because of frame_tabbed_pane style
-    local left_lignment = Gui.alignment(container,nil,nil,'bottom')
-    left_lignment.style.padding = {32,0,0,0}
+    local left_alignment = Gui.alignment(container, nil, nil, 'bottom')
+    left_alignment.style.padding = {32,0,0,0}
 
     local left_side =
-    left_lignment.add{
+    left_alignment.add{
         type = 'frame',
         style = 'frame_without_right_side'
     }

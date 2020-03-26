@@ -219,7 +219,7 @@ end)
 
 --[[-- Used to make a solid white bar in a gui
 @element Gui.bar
-@tparam LuaGuiElement parent the parent element to which the container will be added
+@tparam LuaGuiElement parent the parent element to which the bar will be added
 @tparam number width the width of the bar that will be made, if not given bar will strech to fill the parent
 
 @usage-- Adding a bar to a gui
@@ -239,4 +239,60 @@ end)
     style.color = {r=255,g=255,b=255}
     if width then style.width = width
     else style.horizontally_stretchable = true end
+end)
+
+--[[-- Used to make a label which is centered and of a certian size
+@element Gui.centered_label
+@tparam LuaGuiElement parent the parent element to which the label will be added
+@tparam number width the width of the label, must be given in order to center the caption
+@tparam ?string|Concepts.LocalizedString caption the caption that will be shown on the label
+@tparam[opt] ?string|Concepts.LocalizedString tooltip the tooltip that will be shown on the label
+
+@usage-- Adding a centered label
+local label = Gui.centered_label(parent, 100, 'This is centered')
+
+]]
+Gui.centered_label =
+Gui.element(function(_,parent,width,caption,tooltip)
+    local label = parent.add{
+        type = 'label',
+        caption = caption,
+        tooltip = tooltip,
+        style = 'description_label'
+    }
+
+    local style = label.style
+    style.horizontal_align = 'center'
+    style.single_line = false
+    style.width = width
+
+    return label
+end)
+
+--[[-- Used to make a title which has two bars on either side
+@element Gui.title_label
+@tparam LuaGuiElement parent the parent element to which the label will be added
+@tparam number width the width of the first bar, this can be used to position the label
+@tparam ?string|Concepts.LocalizedString caption the caption that will be shown on the label
+@tparam[opt] ?string|Concepts.LocalizedString tooltip the tooltip that will be shown on the label
+
+@usage-- Adding a centered label
+local label = Gui.centered_label(parent, 100, 'This is centered')
+
+]]
+Gui.title_label =
+Gui.element(function(_,parent,width,caption,tooltip)
+    local title_flow = parent.add{ type='flow' }
+    title_flow.style.vertical_align = 'center'
+
+    Gui.bar(title_flow,width)
+    local title_label = title_flow.add{
+        type = 'label',
+        caption = caption,
+        tooltip = tooltip,
+        style = 'heading_1_label'
+    }
+    Gui.bar(title_flow)
+
+    return title_label
 end)
