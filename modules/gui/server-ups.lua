@@ -25,6 +25,9 @@ Commands.new_command('server-ups','Toggle the server ups display')
 :add_alias('sups','ups')
 :register(function(player)
     local label = player.gui.screen[sverer_ups.name]
+    if not global.ext or not global.ext.server_ups then
+        return Commands.error{'expcom-server-ups.no-ext'}
+    end
     label.visible = not label.visible
 end)
 
@@ -48,12 +51,11 @@ end)
 
 -- Update the caption for all online players
 Event.on_nth_tick(60,function()
-    local caption = 'Server UPS = 60.0'
     if global.ext and global.ext.server_ups then
-        caption = 'Server UPS = '..global.ext.server_ups
-    end
-    for _,player in pairs(game.connected_players) do
-        player.gui.screen[sverer_ups.name].caption = caption
+        local caption = 'Server UPS = '..global.ext.server_ups
+        for _,player in pairs(game.connected_players) do
+            player.gui.screen[sverer_ups.name].caption = caption
+        end
     end
 end)
 
