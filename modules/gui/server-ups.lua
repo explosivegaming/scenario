@@ -1,7 +1,7 @@
 --[[-- Gui Module - Server UPS
     - Adds a server ups counter in the top right and a command to toggle is
-    @gui sverer-ups
-    @alias sverer_ups
+    @gui server-ups
+    @alias server_ups
 ]]
 
 local Gui = require 'expcore.gui' --- @dep expcore.gui
@@ -9,8 +9,8 @@ local Event = require 'utils.event' --- @dep utils.event
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 
 --- Label to show the server ups
--- @element sverer_ups
-local sverer_ups =
+-- @element server_ups
+local server_ups =
 Gui.element{
     type = 'label',
     caption = 'Server UPS = 60.0'
@@ -24,7 +24,7 @@ Gui.element{
 Commands.new_command('server-ups','Toggle the server ups display')
 :add_alias('sups','ups')
 :register(function(player)
-    local label = player.gui.screen[sverer_ups.name]
+    local label = player.gui.screen[server_ups.name]
     if not global.ext or not global.ext.server_ups then
         return Commands.error{'expcom-server-ups.no-ext'}
     end
@@ -35,7 +35,7 @@ end)
 -- 1920x1080: x=1455, y=30 (ui scale 100%)
 local function set_location(event)
     local player = game.players[event.player_index]
-    local label = player.gui.screen[sverer_ups.name]
+    local label = player.gui.screen[server_ups.name]
     local res = player.display_resolution
     local uis = player.display_scale
     label.location = { x=res.width-465*uis, y=30*uis }
@@ -44,7 +44,7 @@ end
 -- Draw the label when the player joins
 Event.add(defines.events.on_player_created,function(event)
     local player = game.players[event.player_index]
-    local label = sverer_ups(player.gui.screen)
+    local label = server_ups(player.gui.screen)
     label.visible = false
     set_location(event)
 end)
@@ -54,7 +54,7 @@ Event.on_nth_tick(60,function()
     if global.ext and global.ext.server_ups then
         local caption = 'Server UPS = '..global.ext.server_ups
         for _,player in pairs(game.connected_players) do
-            player.gui.screen[sverer_ups.name].caption = caption
+            player.gui.screen[server_ups.name].caption = caption
         end
     end
 end)
