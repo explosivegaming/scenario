@@ -216,6 +216,7 @@ local default = Roles.new_role('Guest','')
     'command/find-on-map',
     'command/report',
     'command/ratio',
+    'command/server-ups',
     'gui/player-list',
     'gui/rocket-info',
     'gui/science-info',
