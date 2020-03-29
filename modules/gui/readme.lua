@@ -174,10 +174,10 @@ Gui.element(function(_,parent)
     scroll_pane.style.maximal_height = scroll_hieght + 20 -- the text is a bit shorter
 
     -- Add the factorio servers
-    local factoiro_servers = title_table(scroll_pane, 225, {'readme.servers-factorio'}, 2)
+    local factorio_servers = title_table(scroll_pane, 225, {'readme.servers-factorio'}, 2)
     for i = 1,8 do
-        Gui.centered_label(factoiro_servers, 110, {'readme.servers-'..i})
-        Gui.centered_label(factoiro_servers, 460, {'readme.servers-d'..i})
+        Gui.centered_label(factorio_servers, 110, {'readme.servers-'..i})
+        Gui.centered_label(factorio_servers, 460, {'readme.servers-d'..i})
     end
 
     -- Add the external links
