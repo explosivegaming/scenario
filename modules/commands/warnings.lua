@@ -5,7 +5,7 @@
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Warnings = require 'modules.control.warnings' --- @dep modules.control.warnings
-local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
+local format_chat_player_name = _C.ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
 local config = require 'config.warnings' --- @dep config.warnings
 require 'config.expcore-commands.parse_roles'
 

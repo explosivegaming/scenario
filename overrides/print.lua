@@ -1,5 +1,4 @@
-local Public = {}
-
+--luacheck:ignore global print
 local locale_string = {'', '[PRINT] ', nil}
 local raw_print = print
 
@@ -8,6 +7,4 @@ function print(str)
     log(locale_string)
 end
 
-Public.raw_print = raw_print
-
-return Public
+return raw_print

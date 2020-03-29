@@ -1,4 +1,5 @@
-local loaded = _G.package.loaded
+--luacheck:ignore global require
+local loaded = package.loaded
 local raw_require = require
 
 function require(path)

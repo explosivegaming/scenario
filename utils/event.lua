@@ -97,7 +97,7 @@
 local EventCore = require 'utils.event_core' --- @dep utils.event_core
 local Global = require 'utils.global' --- @dep utils.global
 local Token = require 'utils.token' --- @dep utils.token
-local Debug = require 'utils.debug' --- @dep utils.debug
+local Debug = require 'overrides.debug' --- @dep overrides.debug
 
 local table_remove = table.remove
 local core_add = EventCore.add

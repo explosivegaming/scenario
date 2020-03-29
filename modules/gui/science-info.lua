@@ -7,7 +7,7 @@
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.gui
 local Event = require 'utils.event' --- @dep utils.event
-local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
+local format_time = _C.ext_require('expcore.common','format_time') --- @dep expcore.common
 local config = require 'config.science' --- @dep config.science
 local Production = require 'modules.control.production' --- @dep modules.control.production
 

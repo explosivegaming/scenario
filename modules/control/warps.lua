@@ -25,7 +25,6 @@ local Store = require 'expcore.store' --- @dep expcore.store
 local Global = require 'utils.global' --- @dep utils.global
 local Token = require 'utils.token' --- @dep utils.token
 local config = require 'config.warps' --- @dep config.warps
-local table_values,table_keysort = ext_require('expcore.common','table_values','table_keysort') --- @dep expcore.common
 
 local Warps = {}
 
@@ -64,7 +63,7 @@ Store.watch(warp_store,function(warp,warp_id)
         end
 
         -- Sort the warp names in alphabetical order
-        local new_warp_ids = table_values(table_keysort(warp_names))
+        local new_warp_ids = table.get_values(table.keysort(warp_names))
         table.insert(new_warp_ids,1,spawn_id)
         new_warp_ids.spawn = spawn_id
         force_warps[force_name] = new_warp_ids

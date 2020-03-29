@@ -8,8 +8,8 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.rockets' --- @dep config.rockets
-local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
-local Colors = require 'resources.color_presets' --- @dep resources.color_presets
+local format_time = _C.ext_require('expcore.common','format_time') --- @dep expcore.common
+local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 local Rockets = require 'modules.control.rockets' --- @dep modules.control.rockets
 
 local time_formats = {

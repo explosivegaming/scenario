@@ -9,9 +9,9 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Store = require 'expcore.store' --- @dep expcore.store
 local Game = require 'utils.game' --- @dep utils.game
 local Event = require 'utils.event' --- @dep utils.event
-local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
+local format_time = _C.ext_require('expcore.common','format_time') --- @dep expcore.common
 local config = require 'config.action_buttons' --- @dep config.action_buttons
-local Colors = require 'resources.color_presets' --- @dep resources.color_presets
+local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 
 -- Stores the name of the player a player has selected
 local selected_player_store = Store.register(function(player)

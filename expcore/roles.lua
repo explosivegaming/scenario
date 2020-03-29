@@ -117,8 +117,8 @@ local Global = require 'utils.global' --- @dep utils.global
 local Event = require 'utils.event' --- @dep utils.event
 local Groups = require 'expcore.permission_groups' --- @dep expcore.permission_groups
 local Async = require 'expcore.async' --- @dep expcore.async
-local Colours = require 'resources.color_presets' --- @dep resources.color_presets
-local write_json = ext_require('expcore.common','write_json') --- @dep expcore.common
+local Colours = require 'utils.color_presets' --- @dep utils.color_presets
+local write_json = _C.ext_require('expcore.common','write_json') --- @dep expcore.common
 
 local Roles = {
     _prototype={},
@@ -437,7 +437,7 @@ function Roles.define_role_order(order)
         end
     end
     -- Check no roles were missed
-    for role_name,_ in pairs(Role.config.roles) do
+    for role_name,_ in pairs(Roles.config.roles) do
         if not done[role_name] then
             error('Role missing '..role_name..' from role order, all defined roles must be included.',2)
         end

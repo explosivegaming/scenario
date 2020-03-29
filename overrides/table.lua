@@ -22,7 +22,7 @@ end
 -- The catch is that fast_remove doesn't guarantee to maintain the order of items in the array.
 -- @param tbl <table> arrayed table
 -- @param index <number> Must be >= 0. The case where index > #tbl is handled.
-function table.fast_remove(tbl, index)
+function table.remove_index(tbl, index)
     local count = #tbl
     if index > count then
         return
@@ -36,7 +36,7 @@ end
 --- Adds the contents of table t2 to table t1
 -- @param t1 <table> to insert into
 -- @param t2 <table> to insert from
-function table.add_all(t1, t2)
+function table.merge_table(t1, t2)
     for k, v in pairs(t2) do
         if tonumber(k) then
             t1[#t1 + 1] = v
@@ -46,11 +46,74 @@ function table.add_all(t1, t2)
     end
 end
 
+--[[-- Much faster method for inserting items into an array
+@tparam table tbl the table that will have the values added to it
+@tparam[opt] number start_index the index at which values will be added, nil means end of the array
+@tparam table values the new values that will be added to the table
+@treturn table the table that was passed as the first argument
+@usage-- Adding 1000 values into the middle of the array
+local tbl = {}
+local values = {}
+for i = 1,1000 do tbl[i] = i values[i] = i end
+table.array_insert(tbl,500,values) -- around 0.4ms
+]]
+function table.array_insert(tbl,start_index,values)
+    if not values then
+        values = start_index
+        start_index = nil
+    end
+
+    if start_index then
+        local starting_length = #tbl
+        local adding_length = #values
+        local move_to = start_index+adding_length+1
+        for offset = starting_length-start_index, 0, -1 do
+            tbl[move_to+offset] = tbl[starting_length+offset]
+        end
+        start_index = start_index-1
+    else
+        start_index = #tbl
+    end
+
+    for offset, item in ipairs(values) do
+        tbl[start_index+offset] = item
+    end
+
+    return tbl
+end
+
+--[[-- Much faster method for inserting keys into a table
+@tparam table tbl the table that will have keys added to it
+@tparam[opt] number start_index the index at which values will be added, nil means end of the array, numbered indexs only
+@tparam table tbl2 the table that may contain both string and numbered keys
+@treturn table the table passed as the first argument
+@usage-- Merging two tables
+local tbl = {}
+local tbl2 = {}
+for i = 1,100 do tbl[i] = i tbl['_'..i] = i tbl2[i] = i tbl2['__'..i] = i end
+table.table_insert(tbl,50,tbl2)
+]]
+function table.table_insert(tbl,start_index,tbl2)
+    if not tbl2 then
+        tbl2 = start_index
+        start_index = nil
+    end
+
+    table.array_insert(tbl,start_index,tbl2)
+    for key, value in pairs(tbl2) do
+        if not tonumber(key) then
+            tbl[key] = value
+        end
+    end
+
+    return tbl
+end
+
 --- Checks if a table contains an element
 -- @param t <table>
 -- @param e <any> table element
 -- @return <any> the index of the element or nil
-function table.index_of(t, e)
+function table.get_key(t, e)
     for k, v in pairs(t) do
         if v == e then
             return k
@@ -63,7 +126,7 @@ end
 -- @param t <table>
 -- @param e <any> table element
 -- @return <number|nil> the index of the element or nil
-function table.index_of_in_array(t, e)
+function table.get_index(t, e)
     for i = 1, #t do
         if t[i] == e then
             return i
@@ -72,22 +135,33 @@ function table.index_of_in_array(t, e)
     return nil
 end
 
-local index_of = table.index_of
 --- Checks if a table contains an element
 -- @param t <table>
 -- @param e <any> table element
 -- @return <boolean> indicating success
 function table.contains(t, e)
-    return index_of(t, e) and true or false
+    return table.get_key(t, e) and true or false
 end
 
-local index_of_in_array = table.index_of_in_array
 --- Checks if the arrayed portion of a table contains an element
 -- @param t <table>
 -- @param e <any> table element
 -- @return <boolean> indicating success
 function table.array_contains(t, e)
-    return index_of_in_array(t, e) and true or false
+    return table.get_index(t, e) and true or false
+end
+
+--- Extracts certain keys from a table
+-- @usage local key_three, key_one = extract({key_one='foo',key_two='bar',key_three=true},'key_three','key_one')
+-- @tparam table tbl table the which contains the keys
+-- @tparam string ... the names of the keys you want extracted
+-- @return the keys in the order given
+function table.extract_keys(tbl,...)
+    local values = {}
+    for _,key in pairs({...}) do
+        table.insert(values,tbl[key])
+    end
+    return unpack(values)
 end
 
 --- Adds an element into a specific index position while shuffling the rest down
@@ -151,6 +225,21 @@ function table.get_random_weighted(weighted_table, item_index, weight_index)
     end
 end
 
+--- Clears all existing entries in a table
+-- @param t <table> to clear
+-- @param array <boolean> to indicate whether the table is an array or not
+function table.clear_table(t, array)
+    if array then
+        for i = 1, #t do
+            t[i] = nil
+        end
+    else
+        for i in pairs(t) do
+            t[i] = nil
+        end
+    end
+end
+
 --- Creates a fisher-yates shuffle of a sequential number-indexed table
 -- because this uses math.random, it cannot be used outside of events if no rng is supplied
 -- from: http://www.sdknews.com/cross-platform/corona/tutorial-how-to-shuffle-table-items
@@ -171,19 +260,102 @@ function table.shuffle_table(t, rng)
     end
 end
 
---- Clears all existing entries in a table
--- @param t <table> to clear
--- @param array <boolean> to indicate whether the table is an array or not
-function table.clear_table(t, array)
-    if array then
-        for i = 1, #t do
-            t[i] = nil
+--- Default table comparator sort function.
+-- @local
+-- @param x one comparator operand
+-- @param y the other comparator operand
+-- @return true if x logically comes before y in a list, false otherwise
+local function sortFunc(x, y) --sorts tables with mixed index types.
+    local tx = type(x)
+    local ty = type(y)
+    if tx == ty then
+        if type(x) == 'string' then
+            return string.lower(x) < string.lower(y)
+        else
+            return x < y
+        end
+    elseif tx == 'number' then
+        return true --only x is a number and goes first
+    else
+        return false --only y is a number and goes first
+    end
+end
+
+--- Returns a copy of all of the values in the table.
+-- @tparam table tbl the to copy the keys from, or an empty table if tbl is nil
+-- @tparam[opt] boolean sorted whether to sort the keys (slower) or keep the random order from pairs()
+-- @tparam[opt] boolean as_string whether to try and parse the values as strings, or leave them as their existing type
+-- @treturn array an array with a copy of all the values in the table
+function table.get_values(tbl, sorted, as_string)
+    if not tbl then return {} end
+    local valueset = {}
+    local n = 0
+    if as_string then --checking as_string /before/ looping is faster
+        for _, v in pairs(tbl) do
+            n = n + 1
+            valueset[n] = tostring(v)
         end
     else
-        for i in pairs(t) do
-            t[i] = nil
+        for _, v in pairs(tbl) do
+            n = n + 1
+            valueset[n] = v
         end
     end
+    if sorted then
+        table.sort(valueset,sortFunc)
+    end
+    return valueset
+end
+
+--- Returns a copy of all of the keys in the table.
+-- @tparam table tbl the to copy the keys from, or an empty table if tbl is nil
+-- @tparam[opt] boolean sorted whether to sort the keys (slower) or keep the random order from pairs()
+-- @tparam[opt] boolean as_string whether to try and parse the keys as strings, or leave them as their existing type
+-- @treturn array an array with a copy of all the keys in the table
+function table.get_keys(tbl, sorted, as_string)
+    if not tbl then return {} end
+    local keyset = {}
+    local n = 0
+    if as_string then --checking as_string /before/ looping is faster
+        for k, _ in pairs(tbl) do
+            n = n + 1
+            keyset[n] = tostring(k)
+        end
+    else
+        for k, _ in pairs(tbl) do
+            n = n + 1
+            keyset[n] = k
+        end
+    end
+    if sorted then
+        table.sort(keyset,sortFunc)
+    end
+    return keyset
+end
+
+--- Returns the list is a sorted way that would be expected by people (this is by key)
+-- @tparam table tbl the table to be sorted
+-- @treturn table the sorted table
+function table.alphanumsort(tbl)
+    local o = table.get_keys(tbl)
+    local function padnum(d) local dec, n = string.match(d, "(%.?)0*(.+)")
+        return #dec > 0 and ("%.12f"):format(d) or ("%s%03d%s"):format(dec, #n, n) end
+    table.sort(o, function(a,b)
+        return tostring(a):gsub("%.?%d+",padnum)..("%3d"):format(#b)
+           < tostring(b):gsub("%.?%d+",padnum)..("%3d"):format(#a) end)
+    local _tbl = {}
+    for _,k in pairs(o) do _tbl[k] = tbl[k] end
+    return _tbl
+end
+
+--- Returns the list is a sorted way that would be expected by people (this is by key) (faster alternative than above)
+-- @tparam table tbl the table to be sorted
+-- @treturn table the sorted table
+function table.keysort(tbl)
+    local o = table.get_keys(tbl,true)
+    local _tbl = {}
+    for _,k in pairs(o) do _tbl[k] = tbl[k] end
+    return _tbl
 end
 
 --[[
@@ -238,7 +410,7 @@ require 'util'
 -- process is a function which allow altering the passed object before transforming it into a string.
 -- A typical way to use it would be to remove certain values so that they don't appear at all.
 -- return <string> the prettied table
-table.inspect = require 'utils.inspect' --- @dep utils.inspect
+table.inspect = require 'overrides.inspect' --- @dep overrides.inspect
 
 --- Takes a table and returns the number of entries in the table. (Slower than #table, faster than iterating via pairs)
 table.size = table_size

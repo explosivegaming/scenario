@@ -1,5 +1,5 @@
 local Global = require 'utils.global' --- @dep utils.global
-local Color = require 'resources.color_presets' --- @dep resources.color_presets
+local Color = require 'utils.color_presets' --- @dep utils.color_presets
 local pairs = pairs
 
 local Game = {}

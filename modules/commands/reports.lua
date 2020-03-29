@@ -6,7 +6,7 @@
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Reports = require 'modules.control.reports' --- @dep modules.control.reports
-local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
+local format_chat_player_name = _C.ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
 require 'config.expcore-commands.parse_general'
 
 --- Reports a player and notifies moderators
