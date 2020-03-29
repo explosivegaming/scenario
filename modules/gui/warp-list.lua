@@ -11,7 +11,7 @@ local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.game
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
-local config = require 'config.warps' --- @dep config.warps
+local config = require 'config.gui.warps' --- @dep config.gui.warps
 local Warps = require 'modules.control.warps' --- @dep modules.control.warps
 local format_time = _C.format_time --- @dep expcore.common
 

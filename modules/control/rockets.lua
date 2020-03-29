@@ -27,7 +27,7 @@
 
 local Event = require 'utils.event' --- @dep utils.event
 local Global = require 'utils.global' --- @dep utils.global
-local config = require 'config.rockets' --- @dep config.rockets
+local config = require 'config.gui.rockets' --- @dep config.rockets
 
 local largest_rolling_avg = 0
 for _,avg_over in pairs(config.stats.rolling_avg) do

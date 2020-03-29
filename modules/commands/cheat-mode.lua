@@ -4,7 +4,7 @@
 ]]
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
-require 'config.expcore-commands.parse_general'
+require 'config.expcore.command_general_parse'
 
 --- Toggles cheat mode for your player, or another player.
 -- @command toggle-cheat-mode

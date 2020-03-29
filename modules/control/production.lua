@@ -33,7 +33,7 @@
 ]]
 
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
-local format_number = _C.ext_require('util','format_number') --- @dep util
+local format_number = _C.format_number --- @dep util
 
 local precision_index = defines.flow_precision_index
 local Production = {}

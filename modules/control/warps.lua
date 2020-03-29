@@ -24,7 +24,7 @@ Warps.make_warp_tag(warp_id)
 local Store = require 'expcore.store' --- @dep expcore.store
 local Global = require 'utils.global' --- @dep utils.global
 local Token = require 'utils.token' --- @dep utils.token
-local config = require 'config.warps' --- @dep config.warps
+local config = require 'config.gui.warps' --- @dep config.warps
 
 local Warps = {}
 

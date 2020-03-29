@@ -3,20 +3,6 @@
 
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 
--- Use these to adjust for ticks ie game.tick < 5*minutes
-local seconds, minutes, hours = 60, 3600, 216000
-
---[[
-    -- cant use a factory as it has up values ;-;
-    local function playtime(time_required)
-        return function(player)
-            if player.online_time > time_required then
-                return true
-            end
-        end
-    end
-]]
-
 --- Role flags that will run when a player changes roles
 Roles.define_flag_trigger('is_admin',function(player,state)
     player.admin = state

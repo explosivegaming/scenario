@@ -13,7 +13,7 @@ local Reports = require 'modules.control.reports' --- @dep modules.control.repor
 local Warnings = require 'modules.control.warnings' --- @dep modules.control.warnings
 local Jail = require 'modules.control.jail' --- @dep modules.control.jail
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
-local format_chat_player_name = _C.ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
+local format_chat_player_name = _C.format_chat_player_name --- @dep expcore.common
 
 local selected_player_store = ''
 local selected_action_store = ''

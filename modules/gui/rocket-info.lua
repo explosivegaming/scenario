@@ -7,10 +7,10 @@
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
-local config = require 'config.rockets' --- @dep config.rockets
-local format_time = _C.ext_require('expcore.common','format_time') --- @dep expcore.common
+local config = require 'config.gui.rockets' --- @dep config.gui.rockets
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 local Rockets = require 'modules.control.rockets' --- @dep modules.control.rockets
+local format_time = _C.format_time --- @dep expcore.common
 
 local time_formats = {
 	caption = function(value) return format_time(value, {minutes=true, seconds=true}) end,

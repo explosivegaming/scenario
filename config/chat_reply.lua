@@ -2,7 +2,7 @@
 -- @config Chat-Reply
 
 local Async = require 'expcore.async'
-local format_time = _C.ext_require('expcore.common','format_time') --- @dep expcore.common
+local format_time = _C.format_time --- @dep expcore.common
 
 local async_message = Async.register(function(player, message)
     player.print(message)

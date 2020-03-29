@@ -23,7 +23,7 @@
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Game = require 'utils.game' --- @dep utils.game
 local Global = require 'utils.global' --- @dep utils.global
-local move_items = _C.ext_require('expcore.common','move_items') --- @dep expcore.common
+local move_items = _C.move_items --- @dep expcore.common
 
 local valid_player = Game.get_player_from_any
 local assign_roles = Roles.assign_player

@@ -192,19 +192,6 @@ function Common.opt_require(path)
     else return nil,rtn end
 end
 
---- Calls a require and returns only the keys given, file must return a table
--- @usage local extract, param_check = _C.ext_require('expcore.common','extract','param_check') --- @dep expcore.common
--- @tparam string path the path that you want to require
--- @tparam string ... the name of the keys that you want returned
--- @return the keys in the order given
-function Common.ext_require(path,...)
-    local rtn = require(path)
-    if type(rtn) ~= 'table' then
-        error('File did not return a table, can not extract keys.',2)
-    end
-    return table.extract_keys(rtn,...)
-end
-
 --- Returns a desync safe file path for the current file
 -- @tparam[opt=0] number offset the offset in the stack to get, 0 is current file
 -- @treturn string the file path

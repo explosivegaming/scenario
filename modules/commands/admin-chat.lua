@@ -4,8 +4,8 @@
 ]]
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
-local format_chat_player_name = _C.ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
-require 'config.expcore-commands.parse_general'
+local format_chat_player_name = _C.format_chat_player_name --- @dep expcore.common
+require 'config.expcore.command_general_parse'
 
 --- Sends a message in chat that only admins can see
 -- @command admin-chat
