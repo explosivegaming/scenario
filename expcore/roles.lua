@@ -318,29 +318,34 @@ end
 -- @tparam LuaPlayer player the player that will be assigned the roles
 -- @tparam table roles table a of roles that the player will be given, can be one role and can be role names
 -- @tparam[opt=<server>] string by_player_name the name of the player that will be shown in the log
+-- @tparam[opt=false] boolean skip_checks when true there will be no checks are done for if the player is valid
 -- @tparam[opt=false] boolean silent when true there will be no game message printed
-function Roles.assign_player(player,roles,by_player_name,silent)
-    player = Game.get_player_from_any(player)
-    if not player then return end
+function Roles.assign_player(player,roles,by_player_name,skip_checks,silent)
+    local valid_player = Game.get_player_from_any(player)
+    if not skip_checks and not valid_player then return end
     if type(roles) ~= 'table' or roles.name then
         roles = {roles}
     end
     for _,role in pairs(roles) do
         role = Roles.get_role_from_any(role)
         if role then
-            role:add_player(player,false,true)
+            role:add_player(valid_player or player, valid_player == nil, true)
         end
     end
-    emit_player_roles_updated(player,'assign',roles,by_player_name,silent)
+    if valid_player then
+        emit_player_roles_updated(valid_player, 'assign', roles, by_player_name, silent)
+    end
 end
 
 --- Removes a player from the given role(s) with an option to pass a by player name used in the log
 -- @tparam LuaPlayer player the player that will have the roles removed
 -- @tparam table roles table a of roles to be removed from the player, can be one role and can be role names
 -- @tparam[opt=<server>] string by_player_name the name of the player that will be shown in the logs
+-- @tparam[opt=false] boolean skip_checks when true there will be no checks are done for if the player is valid
 -- @tparam[opt=false] boolean silent when true there will be no game message printed
-function Roles.unassign_player(player,roles,by_player_name,silent)
-    player = Game.get_player_from_any(player)
+function Roles.unassign_player(player,roles,by_player_name,skip_checks,silent)
+    local valid_player = Game.get_player_from_any(player)
+    if not skip_checks and not valid_player then return end
     if not player then return end
     if type(roles) ~= 'table' or roles.name then
         roles = {roles}
@@ -348,10 +353,12 @@ function Roles.unassign_player(player,roles,by_player_name,silent)
     for _,role in pairs(roles) do
         role = Roles.get_role_from_any(role)
         if role then
-            role:remove_player(player,false,true)
+            role:remove_player(valid_player or player, valid_player == nil, true)
         end
     end
-    emit_player_roles_updated(player,'unassign',roles,by_player_name,silent)
+    if valid_player then
+        emit_player_roles_updated(valid_player, 'unassign', roles, by_player_name, silent)
+    end
 end
 
 --- Overrides all player roles with the given table of roles, useful to mass set roles on game start
@@ -419,16 +426,28 @@ end
 function Roles.define_role_order(order)
     -- Clears and then rebuilds the order table
     Roles.config.order = {}
+    local done = {}
     for _,role in ipairs(order) do
         if type(role) == 'table' and role.name then
+            done[role.name] = true
             table.insert(Roles.config.order,role.name)
         else
+            done[role] = true
             table.insert(Roles.config.order,role)
         end
     end
+    -- Check no roles were missed
+    for role_name,_ in pairs(Role.config.roles) do
+        if not done[role_name] then
+            error('Role missing '..role_name..' from role order, all defined roles must be included.',2)
+        end
+    end
     -- Re-links roles to they parents as this is called at the end of the config
-    for index,role in pairs(Roles.config.order) do
-        role = Roles.config.roles[role]
+    for index,role_name in pairs(Roles.config.order) do
+        local role = Roles.config.roles[role_name]
+        if not role then
+            error('Role with name '..role_name..' has not beed defined, either define it or remove it from the order list.',2)
+        end
         role.index = index
         local parent = Roles.config.roles[role.parent]
         if parent then

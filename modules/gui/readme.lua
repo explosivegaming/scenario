@@ -205,20 +205,22 @@ Gui.element(function(_,parent)
     -- Find which players will go where
     local done = {}
     local groups = {
-        Administrator = { _title={'readme.backers-management'}, _width=230 },
-        Sponsor = { _title={'readme.backers-board'}, _width=145 }, -- change role to board
-        Donator = { _title={'readme.backers-backers'}, _width=196 }, -- change to backer
-        Moderator = { _title={'readme.backers-staff'}, _width=235 },
-        Active = { _title={'readme.backers-active'}, _width=235 },
+        { _roles={'Senior Administrator','Administrator'}, _title={'readme.backers-management'}, _width=230 },
+        { _roles={'Board Member','Senior Backer'}, _title={'readme.backers-board'}, _width=145 }, -- change role to board
+        { _roles={'Sponsor','Supporter'}, _title={'readme.backers-backers'}, _width=196 }, -- change to backer
+        { _roles={'Moderator','Trainee'}, _title={'readme.backers-staff'}, _width=235 },
+        { _roles={}, _title={'readme.backers-active'}, _width=235 },
     }
 
     -- Fill by player roles
     for player_name, player_roles in pairs(Roles.config.players) do
-        for role_name, players in pairs(groups) do
-            if table.contains(player_roles, role_name) then
-                done[player_name] = true
-                table.insert(players,player_name)
-                break
+        for _, players in ipairs(groups) do
+            for _, role_name in pairs(players._roles) do
+                if table.contains(player_roles, role_name) then
+                    done[player_name] = true
+                    table.insert(players,player_name)
+                    break
+                end
             end
         end
     end
@@ -235,7 +237,7 @@ Gui.element(function(_,parent)
 
     -- Add the different tables
     local scroll_pane = title_table_scroll(container)
-    for _, players in pairs(groups) do
+    for _, players in ipairs(groups) do
         local table = title_table(scroll_pane, players._width, players._title, 4)
         for _,player_name in ipairs(players) do
             Gui.centered_label(table, 140, player_name)
