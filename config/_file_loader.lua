@@ -43,6 +43,7 @@ return {
     'modules.addons.chat-reply',
     'modules.addons.tree-decon',
     -- GUI
+    'modules.gui.readme',
     'modules.gui.rocket-info',
     'modules.gui.science-info',
     'modules.gui.warp-list',

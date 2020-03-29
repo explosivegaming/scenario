@@ -365,11 +365,11 @@ end
 
 --- Called when the player opens a GUI.
 -- @tparam function handler the event handler which will be called
-Gui._prototype_element.on_opened = event_handler_factory(defines.events.on_gui_opened)
+Gui._prototype_element.on_open = event_handler_factory(defines.events.on_gui_opened)
 
 --- Called when the player closes the GUI they have open.
 -- @tparam function handler the event handler which will be called
-Gui._prototype_element.on_closed = event_handler_factory(defines.events.on_gui_closed)
+Gui._prototype_element.on_close = event_handler_factory(defines.events.on_gui_closed)
 
 --- Called when LuaGuiElement is clicked.
 -- @tparam function handler the event handler which will be called

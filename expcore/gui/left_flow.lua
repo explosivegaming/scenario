@@ -42,28 +42,6 @@ function Gui._prototype_element:add_to_left_flow(open_on_join)
     return self
 end
 
---[[-- Styles a top flow button depending on the state given
-@tparam LuaGuiElement the button element to style
-@tparam boolean state The state the button is in
-
-@usage-- Sets the button to the visible style
-Gui.left_toolbar_button_style(button, true)
-
-@usage-- Sets the button to the hidden style
-Gui.left_toolbar_button_style(button, false)
-
-]]
-function Gui.left_toolbar_button_style(button, state)
-    if state then
-        button.style = Gui.top_flow_button_visible_style
-    else
-        button.style = Gui.top_flow_button_style
-    end
-    button.style.minimal_width = 36
-    button.style.height = 36
-    button.style.padding = -2
-end
-
 --[[-- Creates a button on the top flow which will toggle the given element define, the define must exist in the left flow
 @tparam string sprite the sprite that you want to use on the button
 @tparam ?string|Concepts.LocalizedString tooltip the tooltip that you want the button to have
@@ -78,18 +56,7 @@ end)
 
 ]]
 function Gui.left_toolbar_button(sprite,tooltip,element_define,authenticator)
-    local button = Gui.element{
-        type = 'sprite-button',
-        sprite = sprite,
-        tooltip = tooltip,
-        style = Gui.top_flow_button_style
-    }
-    :style{
-        minimal_width = 36,
-        height = 36,
-        padding = -2
-    }
-    :add_to_top_flow(authenticator)
+    local button = Gui.toolbar_button(sprite,tooltip,authenticator)
 
     -- Add on_click handler to handle click events comming from the player
     button:on_click(function(player,_,_)
@@ -152,7 +119,7 @@ function Gui.draw_left_flow(player)
             local button = top_flow[element_define.toolbar_button]
             if button then
                 -- Style the button
-                Gui.left_toolbar_button_style(button, visible)
+                Gui.toolbar_button_style(button, visible)
             end
         end
     end
@@ -206,7 +173,7 @@ function Gui.hide_left_flow(player)
             local button = top_flow[element_define.toolbar_button]
             if button then
                 -- Style the button
-                Gui.left_toolbar_button_style(button, false)
+                Gui.toolbar_button_style(button, false)
                 -- Get the button define from the reverse lookup on the element
                 local button_define = Gui.defines[element_define.toolbar_button]
                 -- Raise the custom event if all of the top checks have passed
@@ -263,7 +230,7 @@ function Gui.toggle_left_element(player,element_define,state)
         local button = top_flow[element_define.toolbar_button]
         if button then
             -- Style the button
-            Gui.left_toolbar_button_style(button, state)
+            Gui.toolbar_button_style(button, state)
         end
     end
     return state

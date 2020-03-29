@@ -19,6 +19,7 @@ return {
             {'info.status'},
             {'info.lhd'},
             {'info.github'},
+            {'info.patreon'},
         }
     }
 }
