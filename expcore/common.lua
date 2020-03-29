@@ -95,6 +95,24 @@ function Common.validate_argument_multi_type(value, test_types, param_name, para
     return true
 end
 
+--- Will raise an error if called during runtime
+-- @usage error_if_runtime()
+function Common.error_if_runtime()
+    if _LIFECYCLE == 8 then
+        local function_name = debug.getinfo(2,'n').name or '<anon>'
+        error(function_name..' can not be called during runtime',3)
+    end
+end
+
+--- Will raise an error if the function is a closure
+-- @usage error_if_runetime_closure(func)
+function Common.error_if_runetime_closure(func)
+    if _LIFECYCLE == 8 and Debug.is_closure(func) then
+        local function_name = debug.getinfo(2,'n').name or '<anon>'
+        error(function_name..' can not be called during runtime with a closure',3)
+    end
+end
+
 --- Value Returns.
 -- @section valueReturns
 

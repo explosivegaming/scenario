@@ -127,7 +127,7 @@ local Roles = {
         roles={}, -- Contains the raw info for the roles, indexed by role name
         flags={}, -- Contains functions that run when a flag is added/removed from a player
         internal={}, -- Contains all internally accessed roles, such as root, default
-        players={}
+        players={} -- Contains the roles that players have
     },
     events = {
         on_role_assigned=script.generate_event_name(),
@@ -425,6 +425,7 @@ end
 -- @tparam table order table a which is keyed only by numbers (start 1) and values are roles in order with highest first
 function Roles.define_role_order(order)
     -- Clears and then rebuilds the order table
+    _C.error_if_runtime()
     Roles.config.order = {}
     local done = {}
     for _,role in ipairs(order) do
@@ -462,6 +463,7 @@ end
 -- flag param - player - the player that has had they roles changed
 -- flag param - state - the state of the flag, aka if the flag is present
 function Roles.define_flag_trigger(name,callback)
+    _C.error_if_runtime()
     Roles.config.flags[name] = Async.register(callback)
 end
 
@@ -487,6 +489,7 @@ end
 -- @tparam[opt=name] string short_hand the shortened version of the name
 -- @treturn Roles._prototype the start of the config chain for this role
 function Roles.new_role(name,short_hand)
+    _C.error_if_runtime()
     if Roles.config.roles[name] then return error('Role name is non unique') end
     local role = setmetatable({
         name=name,
@@ -602,6 +605,7 @@ end
 -- @tparam[opt=false] boolean use_factorio_api when true the custom permission group module is ignored
 -- @treturn Roles._prototype allows chaining
 function Roles._prototype:set_permission_group(name,use_factorio_api)
+    _C.error_if_runtime()
     if use_factorio_api then
         self.permission_group = {true,name}
     else
@@ -617,6 +621,7 @@ end
 -- @tparam string role the name of the role that will be the parent; has imminent effect if role is already defined
 -- @treturn Roles._prototype allows chaining
 function Roles._prototype:set_parent(role)
+    _C.error_if_runtime()
     self.parent = role
     role = Roles.get_role_from_any(role)
     if not role then return self end
@@ -629,6 +634,7 @@ end
 -- @tparam function callback receives only one param which is player to promote, return true to promote the player
 -- @treturn Roles._prototype allows chaining
 function Roles._prototype:set_auto_promote_condition(callback)
+    _C.error_if_runetime_closure(callback)
     self.auto_promote_condition = callback
     return self
 end
