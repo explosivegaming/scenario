@@ -38,7 +38,7 @@ local function check_player_permissions(player,action)
 end
 
 --- Button to toggle the auto launch on a rocket silo
--- @elemeent toggle_launch
+-- @element toggle_launch
 local toggle_launch =
 Gui.element{
 	type = 'sprite-button',

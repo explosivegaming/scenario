@@ -1,29 +1,25 @@
 --[[-- Core Module - Permission Groups
-    - Permission group making for factorio so you never have to make one by hand again
-    @core Permissions-Groups
-    @alias Permissions_Groups
+- Permission group making for factorio so you never have to make one by hand again
+@core Groups
+@alias Permissions_Groups
 
-    @usage
----- Example Group (Allow All)
+@usage--- Example Group (Allow All)
+-- here we will create an admin group however we do not want them to use the map editor or mess with the permission groups
+Permission_Groups.new_group('Admin') -- this defines a new group called "Admin"
+:allow_all() -- this makes the default to allow any input action unless set other wise
+:disallow{ -- here we disallow the input action we don't want them to use
+    'add_permission_group',
+    'delete_permission_group',
+    'import_permissions_string',
+    'map_editor_action',
+    'toggle_map_editor'
+}
 
-    -- here we will create an admin group however we do not want them to use the map editor or mess with the permission groups
-    Permission_Groups.new_group('Admin') -- this defines a new group called "Admin"
-    :allow_all() -- this makes the default to allow any input action unless set other wise
-    :disallow{ -- here we disallow the input action we don't want them to use
-        'add_permission_group',
-        'delete_permission_group',
-        'import_permissions_string',
-        'map_editor_action',
-        'toggle_map_editor'
-    }
-
-    @usage
----- Example Group (Disallow All)
-
-    -- here we will create a group that cant do anything but talk in chat
-    Permission_Groups.new_group('Restricted') -- this defines a new group called "Restricted"
-    :disallow_all() -- this makes the default to disallow any input action unless set other wise
-    :allow('write_to_console') -- here we allow them to chat, {} can be used here if we had more than one action
+@usage--- Example Group (Disallow All)
+-- here we will create a group that cant do anything but talk in chat
+Permission_Groups.new_group('Restricted') -- this defines a new group called "Restricted"
+:disallow_all() -- this makes the default to disallow any input action unless set other wise
+:allow('write_to_console') -- here we allow them to chat, {} can be used here if we had more than one action
 
 ]]
 
@@ -55,9 +51,14 @@ Permissions_Groups.async_token_remove_from_permission_group = remove_from_permis
 -- Functions that get permission groups
 -- @section getters
 
---- Defines a new permission group that can have it actions set in the config
--- @tparam string name the name of the new group
--- @treturn Permissions_Groups._prototype the new group made with function to allow and disallow actions
+--[[-- Defines a new permission group that can have it actions set in the config
+@tparam string name the name of the new group
+@treturn Permissions_Groups._prototype the new group made with function to allow and disallow actions
+
+@usage-- Defining a new permission group
+Groups.new_group('Admin')
+
+]]
 function Permissions_Groups.new_group(name)
     local group = setmetatable({
         name=name,
@@ -70,16 +71,26 @@ function Permissions_Groups.new_group(name)
     return group
 end
 
---- Returns the group with the given name, case sensitive
--- @tparam string name the name of the group to get
--- @treturn ?Permissions_Groups._prototype|nil the group with that name or nil if non found
+--[[-- Returns the group with the given name, case sensitive
+@tparam string name the name of the group to get
+@treturn ?Permissions_Groups._prototype|nil the group with that name or nil if non found
+
+@usage-- Getting a permision group
+local admin_group = Groups.get_group_by_name('Admin')
+
+]]
 function Permissions_Groups.get_group_by_name(name)
     return Permissions_Groups.groups[name]
 end
 
---- Returns the group that a player is in
--- @tparam LuaPlayer player the player to get the group of can be name index etc
--- @treturn ?Permissions_Groups._prototype|nil the group with that player or nil if non found
+--[[-- Returns the group that a player is in
+@tparam LuaPlayer player the player to get the group of can be name index etc
+@treturn ?Permissions_Groups._prototype|nil the group with that player or nil if non found
+
+@usage-- Get your permission group
+local group = Groups.get_group_from_player(game.player)
+
+]]
 function Permissions_Groups.get_group_from_player(player)
     player = Game.get_player_from_any(player)
     if not player then return end
@@ -93,43 +104,27 @@ end
 -- Functions that control all groups
 -- @section players
 
---- Reloads/creates all permission groups and sets them to they configured state
+--[[-- Reloads/creates all permission groups and sets them to they configured state
+
+@usage-- Reload the permission groups, used internally
+Groups.reload_permissions()
+
+]]
 function Permissions_Groups.reload_permissions()
     for _,group in pairs(Permissions_Groups.groups) do
         group:create()
     end
 end
 
---- Removes all permissions from every permission group except for "Default" and any passed as exempt
--- @tparam ?string|Array<string> exempt groups that you want to be except, "Default" is always exempt
--- @treturn number the number of groups that had they permissions removed
-function Permissions_Groups.lockdown_permissions(exempt)
-    local count = 0
-    if type(exempt) ~= 'table' then
-        exempt = {exempt}
-    end
-    for _,group in pairs(exempt) do
-        if type(group) == 'string' then
-            exempt[group:lower()] = true
-        elseif type(group) == 'table' then
-            exempt[group.name:lower()] = true
-        end
-    end
-    for _,group in pairs(game.permissions.groups) do
-        if not exempt[group.name:lower()] and not group.name == 'Default' then
-            count = count +1
-            for _,action in pairs(defines.input_action) do
-                group.set_allows_action(action,false)
-            end
-        end
-    end
-    return count
-end
+--[[-- Sets a player's group to the one given, a player can only have one group at a time
+@tparam LuaPlayer player the player to effect can be name index etc
+@tparam string group the name of the group to give to the player
+@treturn boolean true if the player was added successfully, false other wise
 
---- Sets a player's group to the one given, a player can only have one group at a time
--- @tparam LuaPlayer player the player to effect can be name index etc
--- @tparam string group the name of the group to give to the player
--- @treturn boolean true if the player was added successfully, false other wise
+@usage-- Set your permission group
+Groups.set_player_group(game.player, 'Admin')
+
+]]
 function Permissions_Groups.set_player_group(player,group)
     player = Game.get_player_from_any(player)
     group = Permissions_Groups.get_group_by_name(group)
@@ -142,10 +137,15 @@ end
 -- Functions that control group actions
 -- @section actions
 
---- Sets the allow state of an action for this group, used internally but is safe to use else where
--- @tparam ?string|defines.input_action action the action that you want to set the state of
--- @tparam boolean state the state that you want to set it to, true = allow, false = disallow
--- @treturn Permissions_Groups._prototype returns self so function can be chained
+--[[-- Sets the allow state of an action for this group, used internally but is safe to use else where
+@tparam ?string|defines.input_action action the action that you want to set the state of
+@tparam boolean state the state that you want to set it to, true = allow, false = disallow
+@treturn Permissions_Groups._prototype returns self so function can be chained
+
+@usage-- Set an action to be disalowed
+group:set_action('toggle_map_editor', false)
+
+]]
 function Permissions_Groups._prototype:set_action(action,state)
     if type(action) == 'string' then
         action = defines.input_action[action]
@@ -154,9 +154,16 @@ function Permissions_Groups._prototype:set_action(action,state)
     return self
 end
 
---- Sets an action or actions to be allowed for this group even with disallow_all triggered, Do not use in runtime
--- @tparam string|Array<string> actions the action or actions that you want to allow for this group
--- @treturn Permissions_Groups._prototype returns self so function can be chained
+--[[-- Sets an action or actions to be allowed for this group even with disallow_all triggered, Do not use in runtime
+@tparam string|Array<string> actions the action or actions that you want to allow for this group
+@treturn Permissions_Groups._prototype returns self so function can be chained
+
+@usage-- Allow some actions
+group:allow{
+    'write_to_console'
+}
+
+]]
 function Permissions_Groups._prototype:allow(actions)
     if type(actions) ~= 'table' then
         actions = {actions}
@@ -167,9 +174,20 @@ function Permissions_Groups._prototype:allow(actions)
     return self
 end
 
---- Sets an action or actions to be disallowed for this group even with allow_all triggered, Do not use in runtime
--- @tparam string|Array<string> actions the action or actions that you want to disallow for this group
--- @treturn Permissions_Groups._prototype returns self so function can be chained
+--[[-- Sets an action or actions to be disallowed for this group even with allow_all triggered, Do not use in runtime
+@tparam string|Array<string> actions the action or actions that you want to disallow for this group
+@treturn Permissions_Groups._prototype returns self so function can be chained
+
+@usage-- Disalow some actions
+group:disallow{
+    'add_permission_group',
+    'delete_permission_group',
+    'import_permissions_string',
+    'map_editor_action',
+    'toggle_map_editor'
+}
+
+]]
 function Permissions_Groups._prototype:disallow(actions)
     if type(actions) ~= 'table' then
         actions = {actions}
@@ -180,23 +198,38 @@ function Permissions_Groups._prototype:disallow(actions)
     return self
 end
 
---- Sets the default state for any actions not given to be allowed, useful with :disallow
--- @treturn Permissions_Groups._prototype returns self so function can be chained
+--[[-- Sets the default state for any actions not given to be allowed, useful with :disallow
+@treturn Permissions_Groups._prototype returns self so function can be chained
+
+@usage-- Allow all actions unless given by disallow
+group:allow_all()
+
+]]
 function Permissions_Groups._prototype:allow_all()
     self.allow_all_actions = true
     return self
 end
 
---- Sets the default state for any action not given to be disallowed, useful with :allow
--- @treturn Permissions_Groups._prototype returns self so function can be chained
+--[[-- Sets the default state for any action not given to be disallowed, useful with :allow
+@treturn Permissions_Groups._prototype returns self so function can be chained
+
+@usage-- Disallow all actions unless given by allow
+group:disallow_all()
+
+]]
 function Permissions_Groups._prototype:disallow_all()
     self.allow_all_actions = false
     return self
 end
 
---- Returns if an input action is allowed for this group
--- @tparam ?string|defines.input_action action the action that you want to test for
--- @treturn boolean true if the group is allowed the action, false other wise
+--[[-- Returns if an input action is allowed for this group
+@tparam ?string|defines.input_action action the action that you want to test for
+@treturn boolean true if the group is allowed the action, false other wise
+
+@usage-- Test if a group is allowed an action
+local allowed = group:is_allowed('write_to_console')
+
+]]
 function Permissions_Groups._prototype:is_allowed(action)
     if type(action) == 'string' then
         action = defines.input_action[action]
@@ -212,14 +245,13 @@ end
 -- Functions that control group players
 -- @section players
 
---- Returns the LuaPermissionGroup that was created with this group object, used internally
--- @treturn LuaPermissionGroup the raw lua permission group
-function Permissions_Groups._prototype:get_raw()
-    return game.permissions.get_group(self.name)
-end
+--[[-- Creates or updates the permission group with the configured actions, used internally
+@treturn LuaPermissionGroup the permission group that was created
 
---- Creates or updates the permission group with the configured actions, used internally
--- @treturn LuaPermissionGroup the permission group that was created
+@usage-- Create the permission group so players can be added, used internally
+group:create()
+
+]]
 function Permissions_Groups._prototype:create()
     local group = self:get_raw()
     if not group then
@@ -231,9 +263,25 @@ function Permissions_Groups._prototype:create()
     return group
 end
 
---- Adds a player to this group
--- @tparam LuaPlayer player LuaPlayer the player you want to add to this group can be name or index etc
--- @treturn boolean true if the player was added successfully, false other wise
+--[[-- Returns the LuaPermissionGroup that was created with this group object, used internally
+@treturn LuaPermissionGroup the raw lua permission group
+
+@usage-- Get the factorio api permision group, used internally
+local permission_group = group:get_raw()
+
+]]
+function Permissions_Groups._prototype:get_raw()
+    return game.permissions.get_group(self.name)
+end
+
+--[[-- Adds a player to this group
+@tparam LuaPlayer player LuaPlayer the player you want to add to this group can be name or index etc
+@treturn boolean true if the player was added successfully, false other wise
+
+@usage-- Add a player to this permission group
+group:add_player(game.player)
+
+]]
 function Permissions_Groups._prototype:add_player(player)
     player = Game.get_player_from_any(player)
     local group = self:get_raw()
@@ -242,9 +290,14 @@ function Permissions_Groups._prototype:add_player(player)
     return true
 end
 
---- Removes a player from this group
--- @tparam LuaPlayer player LuaPlayer the player you want to remove from this group can be name or index etc
--- @treturn boolean true if the player was removed successfully, false other wise
+--[[-- Removes a player from this group
+@tparam LuaPlayer player LuaPlayer the player you want to remove from this group can be name or index etc
+@treturn boolean true if the player was removed successfully, false other wise
+
+@usage-- Remove a player from this permission group
+group:remove_player(game.player)
+
+]]
 function Permissions_Groups._prototype:remove_player(player)
     player = Game.get_player_from_any(player)
     local group = self:get_raw()
@@ -253,9 +306,17 @@ function Permissions_Groups._prototype:remove_player(player)
     return true
 end
 
---- Returns all player that are in this group with the option to filter to online/offline only
--- @tparam[opt] boolean online if nil returns all players, if true online players only, if false returns online players only
--- @treturn table a table of players that are in this group; filtered if online param is given
+--[[-- Returns all player that are in this group with the option to filter to online/offline only
+@tparam[opt] boolean online if nil returns all players, if true online players only, if false returns online players only
+@treturn table a table of players that are in this group; filtered if online param is given
+
+@usage-- Get all players in this group
+local online_players = group:get_players()
+
+@usage-- Get all online players in this group
+local online_players = group:get_players(true)
+
+]]
 function Permissions_Groups._prototype:get_players(online)
     local players = {}
     local group = self:get_raw()
@@ -273,9 +334,14 @@ function Permissions_Groups._prototype:get_players(online)
     return players
 end
 
---- Prints a message to every player in this group
--- @tparam string message the message that you want to send to the players
--- @treturn number the number of players that received the message
+--[[-- Prints a message to every player in this group
+@tparam string message the message that you want to send to the players
+@treturn number the number of players that received the message
+
+@usage-- Print a message to all players in thie group
+group:print('Hello, World!')
+
+]]
 function Permissions_Groups._prototype:print(message)
     local players = self:get_players(true)
     for _,player in pairs(players) do

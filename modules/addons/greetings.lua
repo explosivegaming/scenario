@@ -1,4 +1,5 @@
---greets players on join
+--- Greets players on join
+-- @addon greetings
 
 local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.event

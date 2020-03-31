@@ -145,7 +145,7 @@ function Gui.toolbar_button(sprite,tooltip,authenticator)
 end
 
 --[[-- Styles a top flow button depending on the state given
-@tparam LuaGuiElement the button element to style
+@tparam LuaGuiElement button the button element to style
 @tparam boolean state The state the button is in
 
 @usage-- Sets the button to the visible style

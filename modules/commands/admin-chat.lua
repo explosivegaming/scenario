@@ -13,7 +13,7 @@ require 'config.expcore.command_general_parse'
 Commands.new_command('admin-chat','Sends a message in chat that only admins can see.')
 :add_param('message',false)
 :enable_auto_concat()
-:set_flag('admin_only',true)
+:set_flag('admin_only')
 :add_alias('ac')
 :register(function(player,message,raw)
     local player_name_colour = format_chat_player_name(player)

@@ -4,7 +4,7 @@
 ]]
 
 local Gui = require 'expcore.gui.prototype'
-local Event = require 'utils.event' --- @dep utils.event
+local Event = require 'utils.event'
 
 --- Core Defines.
 -- @section coreDefines

@@ -170,7 +170,7 @@ Roles.new_role('Veteran','Vet')
 :allow{
     'command/chat-bot',
 }
-:set_auto_promote_condition(function(player)
+:set_auto_assign_condition(function(player)
     if player.online_time > 10*216000 then
         return true
     end
@@ -198,7 +198,7 @@ Roles.new_role('Regular','Reg')
     'command/go-to-spawn',
     'command/me',
 }
-:set_auto_promote_condition(function(player)
+:set_auto_assign_condition(function(player)
     if player.online_time > 3*216000 then
         return true
     end

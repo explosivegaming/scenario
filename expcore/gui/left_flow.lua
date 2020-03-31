@@ -4,7 +4,7 @@
 ]]
 
 local Gui = require 'expcore.gui.prototype'
-local mod_gui = require 'mod-gui' --- @dep mod-gui
+local mod_gui = require 'mod-gui'
 
 local hide_left_flow = Gui.core_defines.hide_left_flow.name
 
@@ -82,7 +82,7 @@ end
 --[[-- Draw all the left elements onto the left flow, internal use only with on join
 @tparam LuaPlayer player the player that you want to draw the elements for
 
-@usage Draw all the left elements
+@usage-- Draw all the left elements
 Gui.draw_left_flow(player)
 
 ]]
