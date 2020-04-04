@@ -178,7 +178,7 @@ local function emit_player_roles_updated(player,type,roles,by_player_name,skip_g
         player.play_sound{path='utility/game_lost'}
     end
     script.raise_event(event,{
-        name=Roles.player_roles_updated,
+        name=event,
         tick=game.tick,
         player_index=player.index,
         by_player_index=by_player_index,

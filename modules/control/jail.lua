@@ -114,10 +114,10 @@ function Jail.jail_player(player,by_player_name,reason)
     local roles = get_roles(player)
     old_roles[player.name] = roles
 
-    assign_roles(player,'Jail',by_player_name,true)
-    unassign_roles(player,old_roles,by_player_name,true)
+    assign_roles(player, 'Jail', by_player_name, nil, true)
+    unassign_roles(player, roles, by_player_name, nil, true)
 
-    event_emit(Jail.events.on_player_jailed,player,by_player_name,reason)
+    event_emit(Jail.events.on_player_jailed, player, by_player_name, reason)
 
     return true
 end
@@ -134,10 +134,10 @@ function Jail.unjail_player(player,by_player_name)
     if not has_role(player,'Jail') then return end
     local roles = old_roles[player.name] or {}
 
-    assign_roles(player,roles,by_player_name,true)
-    unassign_roles(player,'Jail',by_player_name,true)
+    assign_roles(player, roles, by_player_name, nil, true)
+    unassign_roles(player, 'Jail', by_player_name, nil, true)
 
-    event_emit(Jail.events.on_player_unjailed,player,by_player_name)
+    event_emit(Jail.events.on_player_unjailed, player, by_player_name)
 
     return true
 end
@@ -174,8 +174,8 @@ function Jail.temp_ban_player(player,by_player_name,reason)
         local roles = get_roles(player)
         old_roles[player.name] = roles
 
-        assign_roles(player,'Jail',by_player_name,true)
-        unassign_roles(player,roles,by_player_name,true)
+        assign_roles(player, 'Jail', by_player_name, nil, true)
+        unassign_roles(player, roles, by_player_name, nil, true)
     end
 
     local inv = player.get_main_inventory()
@@ -202,8 +202,8 @@ function Jail.untemp_ban_player(player,by_player_name)
     if has_role(player,'Jail') then
         local roles = old_roles[player.name]
 
-        assign_roles(player,roles,by_player_name,true)
-        unassign_roles(player,'Jail',by_player_name,true)
+        assign_roles(player, roles, by_player_name, nil, true)
+        unassign_roles(player, 'Jail', by_player_name, nil, true)
     end
 
     event_emit(Jail.events.on_player_untemp_banned,player,by_player_name)

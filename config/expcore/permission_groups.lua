@@ -13,7 +13,7 @@ Permission_Groups.new_group('Admin')
 :disallow{
     'add_permission_group', -- admin
     'delete_permission_group',
-    --'edit_permission_group', -- removed for admin till role script added
+    'edit_permission_group',
     'import_permissions_string',
     'map_editor_action',
     'toggle_map_editor',
