@@ -129,6 +129,58 @@ if config.player_warnings then
     end)
 end
 
+--- When a player is jailed or unjailed
+if config.player_jail then
+    local Jail = require 'modules.control.jail'
+    Event.add(Jail.events.on_player_jailed,function(event)
+        local player_name = get_player_name(event)
+        emit_event{
+            title='Jail',
+            description='A player has been jailed',
+            color=Colors.yellow,
+            ['Player:']='<inline>'..player_name,
+            ['By:']='<inline>'..event.by_player_name,
+            ['Reason:']=event.reason
+        }
+    end)
+    Event.add(Jail.events.on_player_unjailed,function(event)
+        local player_name = get_player_name(event)
+        emit_event{
+            title='Unjail',
+            description='A player has been unjailed',
+            color=Colors.green,
+            ['Player:']='<inline>'..player_name,
+            ['By:']='<inline>'..event.by_player_name
+        }
+    end)
+end
+
+--- When a player is tempbanned
+if config.player_temp_ban then
+    local Jail = require 'modules.control.jail'
+    Event.add(Jail.events.on_player_temp_banned,function(event)
+        local player_name = get_player_name(event)
+        emit_event{
+            title='Temp Ban',
+            description='A player has been temp banned',
+            color=Colors.red,
+            ['Player:']='<inline>'..player_name,
+            ['By:']='<inline>'..event.by_player_name,
+            ['Reason:']=event.reason
+        }
+    end)
+    Event.add(Jail.events.on_player_untemp_banned,function(event)
+        local player_name = get_player_name(event)
+        emit_event{
+            title='Temp Ban Removed',
+            description='A player has been untemp banned',
+            color=Colors.green,
+            ['Player:']='<inline>'..player_name,
+            ['By:']='<inline>'..event.by_player_name
+        }
+    end)
+end
+
 --- Ban and unban
 if config.player_bans then
     Event.add(defines.events.on_player_banned,function(event)
