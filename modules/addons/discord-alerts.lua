@@ -282,7 +282,7 @@ Event.add(defines.events.on_console_command,function(event)
                 description='/'..event.command..' was used',
                 color=Colors.grey,
                 ['By:']='<inline>'..player_name,
-                ['Details:']=event.parameters
+                ['Details:'] = event.parameters ~= '' and event.parameters or nil
             }
         end
     end
