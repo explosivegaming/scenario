@@ -9,6 +9,7 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.game
+local format_time = _C.format_time --- @dep expcore.common
 
 local tabs = {}
 local function Tab(caption,tooltip,element_define)
@@ -98,7 +99,8 @@ Gui.element(function(_,parent)
 
     -- Add the other information to the gui
     container.add{ type='flow' }.style.height = 4
-    Gui.centered_label(sub_content(container), frame_width, {'readme.welcome-general', server_details.reset_time})
+    local online_time = format_time(game.tick,{days=true,hours=true,minutes=true,long=true})
+    Gui.centered_label(sub_content(container), frame_width, {'readme.welcome-general', server_details.reset_time, online_time})
     Gui.centered_label(sub_content(container), frame_width, {'readme.welcome-roles', table.concat(role_names,', ')})
     Gui.centered_label(sub_content(container), frame_width, {'readme.welcome-chat'})
 

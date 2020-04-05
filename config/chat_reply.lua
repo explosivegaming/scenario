@@ -24,7 +24,6 @@ return {
         ['softmod']={'info.softmod'},
         ['script']={'info.softmod'},
         ['loop']={'chat-bot.loops'},
-        ['loops']={'chat-bot.loops'},
         ['rhd']={'info.lhd'},
         ['lhd']={'info.lhd'},
         ['roundabout']={'chat-bot.loops'},
@@ -44,9 +43,6 @@ return {
         end,
         ['online']=function()
             return {'chat-bot.players-online',#game.connected_players}
-        end,
-        ['time']=function()
-            return {'chat-bot.map-time',format_time(game.tick,{days=true,hours=true,minutes=true,seconds=true,long=true})}
         end,
         ['r!verify']=function(player)
             return {'chat-bot.verify',player.name}
