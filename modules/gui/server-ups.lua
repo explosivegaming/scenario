@@ -13,7 +13,7 @@ local Commands = require 'expcore.commands' --- @dep expcore.commands
 local server_ups =
 Gui.element{
     type = 'label',
-    caption = 'Server UPS = 60.0'
+    caption = 'SUPS = 60.0'
 }
 :style{
     font = 'default-game'
@@ -38,7 +38,7 @@ local function set_location(event)
     local label = player.gui.screen[server_ups.name]
     local res = player.display_resolution
     local uis = player.display_scale
-    label.location = { x=res.width-465*uis, y=30*uis }
+    label.location = { x=res.width-423*uis, y=30*uis }
 end
 
 -- Draw the label when the player joins
@@ -52,7 +52,7 @@ end)
 -- Update the caption for all online players
 Event.on_nth_tick(60,function()
     if global.ext and global.ext.server_ups then
-        local caption = 'Server UPS = '..global.ext.server_ups
+        local caption = 'SUPS = '..global.ext.server_ups
         for _,player in pairs(game.connected_players) do
             player.gui.screen[server_ups.name].caption = caption
         end

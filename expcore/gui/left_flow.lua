@@ -93,7 +93,13 @@ function Gui.draw_left_flow(player)
 
     for name, open_on_join in pairs(Gui.left_elements) do
         -- Draw the element to the left flow
-        local left_element = Gui.defines[name](left_flow)
+        local draw_success, left_element = pcall(function()
+            return Gui.defines[name](left_flow)
+        end)
+
+        if not draw_success then
+            error('There as been an error with an element draw function:\n\t'..left_element)
+        end
 
         -- Check if it should be open by default
         local visible = type(open_on_join) == 'boolean' and open_on_join or false

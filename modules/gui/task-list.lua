@@ -341,7 +341,7 @@ Gui.element(function(event_trigger,parent)
     -- Add any existing tasks
     local task_ids = Tasks.get_force_task_ids(player.force.name)
     if #task_ids > 0 then
-        no_tasks_style.visible = false
+        no_tasks_label.visible = false
         for _,task_id in ipairs(task_ids) do
             update_task(player,scroll_table,task_id)
         end
