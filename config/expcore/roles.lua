@@ -3,20 +3,6 @@
 
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 
--- Use these to adjust for ticks ie game.tick < 5*minutes
-local seconds, minutes, hours = 60, 3600, 216000
-
---[[
-    -- cant use a factory as it has up values ;-;
-    local function playtime(time_required)
-        return function(player)
-            if player.online_time > time_required then
-                return true
-            end
-        end
-    end
-]]
-
 --- Role flags that will run when a player changes roles
 Roles.define_flag_trigger('is_admin',function(player,state)
     player.admin = state
@@ -100,7 +86,7 @@ Roles.new_role('Trainee','TrMod')
 :set_flag('is_admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
-:set_parent('Donator')
+:set_parent('Veteran')
 :allow{
     'command/admin-chat',
     'command/teleport',
@@ -110,28 +96,42 @@ Roles.new_role('Trainee','TrMod')
     'command/give-warning',
     'command/get-warnings',
     'command/get-reports',
+    'command/jail',
+    'command/unjail',
     'command/kick',
     'command/ban',
 }
 
 --- Trusted Roles
-Roles.new_role('Sponsor','Spon')
+Roles.new_role('Board Member','Board')
 :set_permission_group('Trusted')
 :set_custom_color{r=247,g=246,b=54}
 :set_flag('is_spectator')
 :set_flag('report-immune')
 :set_flag('instance-respawn')
-:set_parent('Pay to Win')
+:set_parent('Sponsor')
 :allow{
+    'command/goto',
+    'command/repair',
 }
 
-Roles.new_role('Pay to Win','P2W')
+Roles.new_role('Senior Backer','Backer')
 :set_permission_group('Trusted')
 :set_custom_color{r=238,g=172,b=44}
 :set_flag('is_spectator')
 :set_flag('report-immune')
 :set_flag('instance-respawn')
-:set_parent('Donator')
+:set_parent('Sponsor')
+:allow{
+}
+
+Roles.new_role('Sponsor','Spon')
+:set_permission_group('Trusted')
+:set_custom_color{r=238,g=172,b=44}
+:set_flag('is_spectator')
+:set_flag('report-immune')
+:set_flag('instance-respawn')
+:set_parent('Supporter')
 :allow{
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
@@ -143,7 +143,7 @@ Roles.new_role('Pay to Win','P2W')
     'fast-tree-decon',
 }
 
-Roles.new_role('Donator','Don')
+Roles.new_role('Supporter','Sup')
 :set_permission_group('Trusted')
 :set_custom_color{r=230,g=99,b=34}
 :set_flag('is_spectator')
@@ -170,7 +170,7 @@ Roles.new_role('Veteran','Vet')
 :allow{
     'command/chat-bot',
 }
-:set_auto_promote_condition(function(player)
+:set_auto_assign_condition(function(player)
     if player.online_time > 10*216000 then
         return true
     end
@@ -197,8 +197,9 @@ Roles.new_role('Regular','Reg')
     'command/rainbow',
     'command/go-to-spawn',
     'command/me',
+    'standard-decon'
 }
-:set_auto_promote_condition(function(player)
+:set_auto_assign_condition(function(player)
     if player.online_time > 3*216000 then
         return true
     end
@@ -242,9 +243,10 @@ Roles.define_role_order{
     'Administrator',
     'Moderator',
     'Trainee',
+    'Board Member',
+    'Senior Backer',
     'Sponsor',
-    'Pay to Win',
-    'Donator',
+    'Supporter',
     'Partner',
     'Veteran',
     'Member',
@@ -254,44 +256,44 @@ Roles.define_role_order{
 }
 
 Roles.override_player_roles{
-    Cooldude2606={'Senior Administrator','Administrator','Moderator','Member'},
-    arty714={'Senior Administrator','Administrator','Moderator','Member'},
-    mark9064={'Administrator','Moderator','Member'},
-    Drahc_pro={'Administrator','Moderator','Member'},
-    aldldl={'Sponsor','Administrator','Moderator','Member'},
-    LoicB={'Sponsor','Trainee','Member'},
-    ookl={'Sponsor','Moderator','Member'},
-    cydes={'Pay to Win','Moderator','Member'},
-    darklich14={'Pay to Win','Moderator','Member'},
-    porelos={'Pay to Win','Moderator','Member'},
-    SilentLog={'Pay to Win','Moderator','Member'},
-    UUBlueFire={'Pay to Win','Moderator','Member'},
-    XenoCyber={'Pay to Win','Moderator','Member'},
-    Chromaddict={'Donator','Moderator','Member'},
-    eissturm={'Donator','Moderator','Member'},
-    freek18={'Donator','Moderator','Member'},
-    M74132={'Donator','Moderator','Member'},
-    thadius856={'Donator','Moderator','Member'},
-    ['7h3w1z4rd']={'Moderator','Member'},
-    AssemblyStorm={'Moderator','Member'},
-    bombershark={'Moderator','Member'},
-    CmonMate497={'Moderator','Member'},
-    facere={'Moderator','Member'},
-    FlipHalfling90={'Moderator','Member'},
-    Gizan={'Pay to Win','Moderator','Member'},
-    Hobbitkicker={'Moderator','Member'},
-    jessi_gaming={'Trainee','Member'},
-    Koroto={'Moderator','Member'},
-    mafisch3={'Moderator','Member'},
-    maplesyrup01={'Moderator','Member'},
-    NextIdea={'Moderator','Member'},
-    Phoenix27833={'Moderator','Member'},
-    Rezz={'Moderator','Member'},
-    Ruuyji={'Moderator','Member'},
-    samy115={'Moderator','Member'},
-    scarbvis={'Moderator','Member'},
-    Tcheko={'Moderator','Member'},
-    WhomstThouAmMe={'Moderator','Member'},
-    Windbomb={'Moderator','Member'},
-    tovernaar123={'Member'},
+    ["Cooldude2606"]={"Senior Administrator","Moderator","Senior Backer","Supporter"},
+    ["arty714"]={"Senior Administrator","Senior Backer","Supporter"},
+    ["Drahc_pro"]={"Administrator","Moderator","Veteran","Member"},
+    ["mark9064"]={"Administrator","Moderator","Member"},
+    ["aldldl"]={"Administrator","Moderator","Senior Backer","Sponsor","Supporter","Member"},
+
+    ["ookl"]={"Moderator","Senior Backer","Sponsor","Supporter","Partner","Member"},
+    ["hamsterbryan"]={"Moderator","Senior Backer","Supporter","Member"},
+    ["M74132"]={"Moderator","Senior Backer","Sponsor","Supporter","Member"},
+    ["LoicB"]={"Moderator","Senior Backer","Supporter","Veteran","Member"},
+    ["UUBlueFire"]={"Moderator","Senior Backer","Supporter","Member"},
+
+    ["thadius856"]={"Moderator","Supporter","Member"},
+    ["XenoCyber"]={"Moderator","Supporter","Partner","Member"},
+    ["cydes"]={"Moderator","Supporter","Member"},
+    ["darklich14"]={"Moderator","Supporter","Member"},
+    ["SilentLog"]={"Moderator","Supporter","Member"},
+    ["freek18"]={"Moderator","Supporter","Member"},
+    ["porelos"]={"Moderator","Supporter","Member"},
+
+    ["7h3w1z4rd"]={"Moderator","Member"},
+    ["Windbomb"]={"Moderator","Member"},
+    ["Phoenix27833"]={"Moderator","Member"},
+    ["banakeg"]={"Moderator","Member"},
+    ["maplesyrup01"]={"Moderator","Member"},
+    ["FlipHalfling90"]={"Moderator","Member"},
+    ["Ruuyji"]={"Moderator","Member"},
+    ["Gizan"]={"Moderator"},
+    ["samy115"]={"Moderator","Member"},
+    ["Hobbitkicker"]={"Moderator","Member"},
+    ["facere"]={"Moderator","Member"},
+    ["whoami32"]={"Moderator","Member"},
+    ["NextIdea"]={"Moderator","Member"},
+    ["mafisch3"]={"Moderator","Member"},
+    ["Tcheko"]={"Moderator","Member"},
+    ["AssemblyStorm"]={"Moderator","Veteran","Member"},
+    ["connormkii"]={"Moderator","Veteran","Member"},
+    ["Koroto"]={"Moderator","Veteran","Member"},
+    ["scarbvis"]={"Moderator","Member"},
+    ["CmonMate497"]={"Moderator","Member"}
 }

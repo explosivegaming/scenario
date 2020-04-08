@@ -5,24 +5,17 @@
 -- this file is the landing point for all scenarios please DO NOT edit directly, further comments are to aid development
 
 log('[START] -----| Explosive Gaming Scenario Loader |-----')
-
--- Info on the data lifecycle and how we use it: https://github.com/Refactorio/RedMew/wiki/The-data-lifecycle
 log('[INFO] Setting up lua environment')
-require 'resources.data_stages'
-_LIFECYCLE = _STAGE.control -- Control stage
 
--- Overrides the _G.print function
-require 'utils.print_override'
-
--- Omitting the math library is a very bad idea
-require 'utils.math'
-
--- Global Debug and make sure our version file is registered
-Debug = require 'utils.debug' --- @dep utils.debug
-require 'resources.version'
-
--- Global require function used to extract parts of a module, because simply being in common is not good enough
-ext_require = require('expcore.common').ext_require --- @dep expcore.common.ext_require
+-- Require the global overrides
+require 'overrides.stages' -- Data stages used in factorio, often used to test for runtime
+require 'overrides.print' -- Overrides the _G.print function
+require 'overrides.math' -- Omitting the math library is a very bad idea
+require 'overrides.table' -- Adds alot more functions to the table module
+inspect = require 'overrides.inspect' -- Used to covert any value into human readable string
+Debug = require 'overrides.debug' -- Global Debug module
+_C = require('expcore.common') -- _C is used to store lots of common functions expected to be used
+global.expgaming_version = '6.0.0' -- The current version for exp gaming scenario
 
 -- Please go to config/file_loader.lua to edit the files that are loaded
 log('[INFO] Getting file loader config')
@@ -52,7 +45,7 @@ end
 
 -- Override the default require; require can no longer load new scripts
 log('[INFO] Require Overright! No more requires can be made!')
-require 'utils.require_override'
+require 'overrides.require'
 
 -- Logs all errors again to make it make it easy to find
 log('[INFO] All files loaded with '..#errors..' errors:')

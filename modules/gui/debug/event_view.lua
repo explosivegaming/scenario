@@ -1,5 +1,5 @@
 local Event = require 'utils.event'
-local table = require 'utils.table'
+local table = require 'overrides.table'
 local Gui = require 'utils.gui'
 local Model = require 'modules.gui.debug.model'
 

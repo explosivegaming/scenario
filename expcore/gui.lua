@@ -1,1 +1,1 @@
-return require 'expcore.gui.require'
+return require 'expcore.gui._require'

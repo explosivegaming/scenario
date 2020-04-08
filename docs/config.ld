@@ -2,7 +2,7 @@ file = '../'
 dir = '../docs'
 project = 'ExpGaming Scenario'
 title = 'ExpGaming Scenario'
-description = 'Explosive Gaming\'s server scenario for 0.17'
+description = 'Explosive Gaming\'s server scenario for 0.18'
 
 convert_opt = true
 sort = false

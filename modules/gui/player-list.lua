@@ -9,9 +9,9 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Store = require 'expcore.store' --- @dep expcore.store
 local Game = require 'utils.game' --- @dep utils.game
 local Event = require 'utils.event' --- @dep utils.event
-local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
-local config = require 'config.action_buttons' --- @dep config.action_buttons
-local Colors = require 'resources.color_presets' --- @dep resources.color_presets
+local config = require 'config.gui.player_list_actions' --- @dep config.gui.player_list_actions
+local Colors = require 'utils.color_presets' --- @dep utils.color_presets
+local format_time = _C.format_time --- @dep expcore.common
 
 -- Stores the name of the player a player has selected
 local selected_player_store = Store.register(function(player)
@@ -94,7 +94,7 @@ Gui.element(function(event_trigger,parent,player_data)
     open_action_bar(toggle_action_bar_flow)
 
     -- Add the player name
-    local player_name_flow = parent.add{ type = 'flow', 'player-name-'..player_data.index }
+    local player_name_flow = parent.add{ type = 'flow', name = 'player-name-'..player_data.index }
     local player_name = player_name_flow.add{
         type = 'label',
         name = event_trigger,
@@ -359,11 +359,17 @@ end)
 
 --- When a player leaves only remove they entry
 Event.add(defines.events.on_player_left_game,function(event)
-    local remove_player = event.player
+    local remove_player = Game.get_player_by_index(event.player_index)
     for _,player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player,player_list_container)
         local scroll_table = frame.container.scroll.table
         remove_player_base(scroll_table,remove_player)
+
+        local selected_player_name = Store.get(selected_player_store,player)
+        if selected_player_name == remove_player.name then
+            Store.clear(selected_player_store,player)
+            Store.clear(selected_action_store,player)
+        end
     end
 end)
 

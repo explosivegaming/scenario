@@ -7,10 +7,10 @@
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
-local config = require 'config.rockets' --- @dep config.rockets
-local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
-local Colors = require 'resources.color_presets' --- @dep resources.color_presets
+local config = require 'config.gui.rockets' --- @dep config.gui.rockets
+local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 local Rockets = require 'modules.control.rockets' --- @dep modules.control.rockets
+local format_time = _C.format_time --- @dep expcore.common
 
 local time_formats = {
 	caption = function(value) return format_time(value, {minutes=true, seconds=true}) end,
@@ -38,7 +38,7 @@ local function check_player_permissions(player,action)
 end
 
 --- Button to toggle the auto launch on a rocket silo
--- @elemeent toggle_launch
+-- @element toggle_launch
 local toggle_launch =
 Gui.element{
 	type = 'sprite-button',
@@ -73,11 +73,7 @@ Gui.element{
 	local rocket_silo_name = element.parent.name:sub(8)
     local silo_data = Rockets.get_silo_data_by_name(rocket_silo_name)
     if silo_data.entity.launch_rocket() then
-        silo_data.awaiting_reset = true
         element.enabled = false
-        local progress_label = element.parent.parent[rocket_silo_name].label
-        progress_label.caption = {'rocket-info.progress-launched'}
-        progress_label.style.font_color = Colors.green
     else
         player.print({'rocket-info.launch-failed'},Colors.orange_red)
     end
@@ -554,6 +550,14 @@ local function update_rocket_gui_progress(force_name)
 		update_build_progress(container.progress.table,progress)
 	end
 end
+
+--- Event used to set a rocket silo to be awaiting reset
+Event.add(defines.events.on_rocket_launch_ordered,function(event)
+	local silo = event.rocket_silo
+	local silo_data = Rockets.get_silo_data(silo)
+	silo_data.awaiting_reset = true
+	update_rocket_gui_progress(silo.force.name)
+end)
 
 Event.on_nth_tick(150,function()
 	for _,force in pairs(game.forces) do

@@ -27,7 +27,7 @@
 
 local Event = require 'utils.event' --- @dep utils.event
 local Global = require 'utils.global' --- @dep utils.global
-local config = require 'config.rockets' --- @dep config.rockets
+local config = require 'config.gui.rockets' --- @dep config.rockets
 
 local largest_rolling_avg = 0
 for _,avg_over in pairs(config.stats.rolling_avg) do
@@ -135,12 +135,14 @@ end
 function Rockets.get_rolling_average(force_name,count)
     local force = game.forces[force_name]
     local rocket_count = force.rockets_launched
+    if rocket_count == 0 then return 0 end
+    local last_launch_time = rocket_times[force_name][rocket_count]
     local start_rocket_time = 0
     if count < rocket_count then
         start_rocket_time = rocket_times[force_name][rocket_count-count+1]
         rocket_count = count
     end
-    return rocket_count > 0 and math.floor((game.tick-start_rocket_time)/rocket_count) or 0
+    return math.floor((last_launch_time-start_rocket_time)/rocket_count)
 end
 
 --- Event used to update the stats and the hui when a rocket is launched

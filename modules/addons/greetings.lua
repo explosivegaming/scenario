@@ -1,10 +1,11 @@
---greets players on join
+--- Greets players on join
+-- @addon greetings
 
 local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.event
 local config = require 'config.join_messages' --- @dep config.join_messages
 local Global = require 'utils.global' --- @dep utils.global
-require 'utils.table'
+require 'overrides.table'
 
 Global.register(config,function(tbl)
     config = tbl

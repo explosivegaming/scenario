@@ -453,7 +453,7 @@ function Store.map(store,updater)
 
     -- Get all that data in the store and check its a table
     local data = data_store[store]
-    if not type(data) == 'table' then
+    if type(data) ~= 'table' then
         return
     end
 

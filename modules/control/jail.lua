@@ -23,7 +23,7 @@
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Game = require 'utils.game' --- @dep utils.game
 local Global = require 'utils.global' --- @dep utils.global
-local move_items = ext_require('expcore.common','move_items') --- @dep expcore.common
+local move_items = _C.move_items --- @dep expcore.common
 
 local valid_player = Game.get_player_from_any
 local assign_roles = Roles.assign_player
@@ -114,10 +114,10 @@ function Jail.jail_player(player,by_player_name,reason)
     local roles = get_roles(player)
     old_roles[player.name] = roles
 
-    assign_roles(player,'Jail',by_player_name,true)
-    unassign_roles(player,old_roles,by_player_name,true)
+    assign_roles(player, 'Jail', by_player_name, nil, true)
+    unassign_roles(player, roles, by_player_name, nil, true)
 
-    event_emit(Jail.events.on_player_jailed,player,by_player_name,reason)
+    event_emit(Jail.events.on_player_jailed, player, by_player_name, reason)
 
     return true
 end
@@ -134,10 +134,10 @@ function Jail.unjail_player(player,by_player_name)
     if not has_role(player,'Jail') then return end
     local roles = old_roles[player.name] or {}
 
-    assign_roles(player,roles,by_player_name,true)
-    unassign_roles(player,'Jail',by_player_name,true)
+    assign_roles(player, roles, by_player_name, nil, true)
+    unassign_roles(player, 'Jail', by_player_name, nil, true)
 
-    event_emit(Jail.events.on_player_unjailed,player,by_player_name)
+    event_emit(Jail.events.on_player_unjailed, player, by_player_name)
 
     return true
 end
@@ -174,8 +174,8 @@ function Jail.temp_ban_player(player,by_player_name,reason)
         local roles = get_roles(player)
         old_roles[player.name] = roles
 
-        assign_roles(player,'Jail',by_player_name,true)
-        unassign_roles(player,roles,by_player_name,true)
+        assign_roles(player, 'Jail', by_player_name, nil, true)
+        unassign_roles(player, roles, by_player_name, nil, true)
     end
 
     local inv = player.get_main_inventory()
@@ -202,8 +202,8 @@ function Jail.untemp_ban_player(player,by_player_name)
     if has_role(player,'Jail') then
         local roles = old_roles[player.name]
 
-        assign_roles(player,roles,by_player_name,true)
-        unassign_roles(player,'Jail',by_player_name,true)
+        assign_roles(player, roles, by_player_name, nil, true)
+        unassign_roles(player, 'Jail', by_player_name, nil, true)
     end
 
     event_emit(Jail.events.on_player_untemp_banned,player,by_player_name)

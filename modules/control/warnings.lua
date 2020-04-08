@@ -113,8 +113,8 @@ function Warnings.add_warning(player,by_player_name,reason)
 
     local warning_count = #warnings
 
-    script.raise_event(Warnings.on_warning_added,{
-        name = Warnings.on_warning_added,
+    script.raise_event(Warnings.events.on_warning_added,{
+        name = Warnings.events.on_warning_added,
         tick = game.tick,
         player_index = player.index,
         warning_count = warning_count,
@@ -146,8 +146,8 @@ end
 -- @tparam string removed_by_name the name of the player who is doing the action
 -- @tparam number warning_count the number of warnings that the player how has
 local function warning_removed_event(player,warning_by_name,removed_by_name,warning_count)
-    script.raise_event(Warnings.on_warning_removed,{
-        name = Warnings.on_warning_removed,
+    script.raise_event(Warnings.events.on_warning_removed,{
+        name = Warnings.events.on_warning_removed,
         tick = game.tick,
         player_index = player.index,
         warning_count = warning_count,
@@ -234,8 +234,8 @@ function Warnings.add_script_warning(player,reason)
 
     local warning_count = #warnings
 
-    script.raise_event(Warnings.on_script_warning_added,{
-        name = Warnings.on_script_warning_added,
+    script.raise_event(Warnings.events.on_script_warning_added,{
+        name = Warnings.events.on_script_warning_added,
         tick = game.tick,
         player_index = player.index,
         warning_count = warning_count,
@@ -253,8 +253,8 @@ end
 -- @tparam LuaPlayer player the player who is having a script warning removed
 -- @tparam number warning_count the number of warning that the player has
 local function script_warning_removed_event(player,warning_count)
-    script.raise_event(Warnings.on_script_warning_removed,{
-        name = Warnings.on_script_warning_removed,
+    script.raise_event(Warnings.events.on_script_warning_removed,{
+        name = Warnings.events.on_script_warning_removed,
         tick = game.tick,
         player_index = player.index,
         warning_count = warning_count

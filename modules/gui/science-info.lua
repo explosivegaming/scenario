@@ -7,9 +7,9 @@
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.gui
 local Event = require 'utils.event' --- @dep utils.event
-local format_time = ext_require('expcore.common','format_time') --- @dep expcore.common
-local config = require 'config.science' --- @dep config.science
+local config = require 'config.gui.science' --- @dep config.gui.science
 local Production = require 'modules.control.production' --- @dep modules.control.production
+local format_time = _C.format_time --- @dep expcore.common
 
 local null_time_short = {'science-info.eta-time',format_time(0,{hours=true,minutes=true,seconds=true,time=true,null=true})}
 local null_time_long = format_time(0,{hours=true,minutes=true,seconds=true,long=true,null=true})

@@ -12,8 +12,8 @@ local Game = require 'utils.game' --- @dep utils.game
 local Reports = require 'modules.control.reports' --- @dep modules.control.reports
 local Warnings = require 'modules.control.warnings' --- @dep modules.control.warnings
 local Jail = require 'modules.control.jail' --- @dep modules.control.jail
-local Colors = require 'resources.color_presets' --- @dep resources.color_presets
-local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
+local Colors = require 'utils.color_presets' --- @dep utils.color_presets
+local format_chat_player_name = _C.format_chat_player_name --- @dep expcore.common
 
 local selected_player_store = ''
 local selected_action_store = ''

@@ -32,8 +32,8 @@
 
 ]]
 
-local Colors = require 'resources.color_presets' --- @dep resources.color_presets
-local format_number = ext_require('util','format_number') --- @dep util
+local Colors = require 'utils.color_presets' --- @dep utils.color_presets
+local format_number = require('util').format_number --- @dep util
 
 local precision_index = defines.flow_precision_index
 local Production = {}

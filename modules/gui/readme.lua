@@ -9,6 +9,7 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.game
+local format_time = _C.format_time --- @dep expcore.common
 
 local tabs = {}
 local function Tab(caption,tooltip,element_define)
@@ -98,7 +99,8 @@ Gui.element(function(_,parent)
 
     -- Add the other information to the gui
     container.add{ type='flow' }.style.height = 4
-    Gui.centered_label(sub_content(container), frame_width, {'readme.welcome-general', server_details.reset_time})
+    local online_time = format_time(game.tick,{days=true,hours=true,minutes=true,long=true})
+    Gui.centered_label(sub_content(container), frame_width, {'readme.welcome-general', server_details.reset_time, online_time})
     Gui.centered_label(sub_content(container), frame_width, {'readme.welcome-roles', table.concat(role_names,', ')})
     Gui.centered_label(sub_content(container), frame_width, {'readme.welcome-chat'})
 
@@ -205,20 +207,22 @@ Gui.element(function(_,parent)
     -- Find which players will go where
     local done = {}
     local groups = {
-        Administrator = { _title={'readme.backers-management'}, _width=230 },
-        Sponsor = { _title={'readme.backers-board'}, _width=145 }, -- change role to board
-        Donator = { _title={'readme.backers-backers'}, _width=196 }, -- change to backer
-        Moderator = { _title={'readme.backers-staff'}, _width=235 },
-        Active = { _title={'readme.backers-active'}, _width=235 },
+        { _roles={'Senior Administrator','Administrator'}, _title={'readme.backers-management'}, _width=230 },
+        { _roles={'Board Member','Senior Backer'}, _title={'readme.backers-board'}, _width=145 }, -- change role to board
+        { _roles={'Sponsor','Supporter'}, _title={'readme.backers-backers'}, _width=196 }, -- change to backer
+        { _roles={'Moderator','Trainee'}, _title={'readme.backers-staff'}, _width=235 },
+        { _roles={}, _title={'readme.backers-active'}, _width=235 },
     }
 
     -- Fill by player roles
     for player_name, player_roles in pairs(Roles.config.players) do
-        for role_name, players in pairs(groups) do
-            if table.contains(player_roles, role_name) then
-                done[player_name] = true
-                table.insert(players,player_name)
-                break
+        for _, players in ipairs(groups) do
+            for _, role_name in pairs(players._roles) do
+                if table.contains(player_roles, role_name) then
+                    done[player_name] = true
+                    table.insert(players,player_name)
+                    break
+                end
             end
         end
     end
@@ -235,7 +239,7 @@ Gui.element(function(_,parent)
 
     -- Add the different tables
     local scroll_pane = title_table_scroll(container)
-    for _, players in pairs(groups) do
+    for _, players in ipairs(groups) do
         local table = title_table(scroll_pane, players._width, players._title, 4)
         for _,player_name in ipairs(players) do
             Gui.centered_label(table, 140, player_name)
@@ -325,6 +329,14 @@ end)
 
 --- When a player joins clear center unless the player has something open
 Event.add(defines.events.on_player_joined_game,function(event)
+    local player = Game.get_player_by_index(event.player_index)
+    if not player.opened then
+        player.gui.center.clear()
+    end
+end)
+
+--- When a player respawns clear center unless the player has something open
+Event.add(defines.events.on_player_respawned,function(event)
     local player = Game.get_player_by_index(event.player_index)
     if not player.opened then
         player.gui.center.clear()

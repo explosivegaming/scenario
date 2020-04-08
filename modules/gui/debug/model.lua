@@ -1,5 +1,5 @@
 local Gui = require 'utils.gui' --- @dep utils.gui
-local table = require 'utils.table' --- @dep utils.table
+local table = require 'overrides.table' --- @dep overrides.table
 
 local gui_names = Gui.names
 local type = type

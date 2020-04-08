@@ -5,8 +5,8 @@
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Jail = require 'modules.control.jail' --- @dep modules.control.jail
-local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
-require 'config.expcore-commands.parse_roles'
+local format_chat_player_name = _C.format_chat_player_name --- @dep expcore.common
+require 'config.expcore.command_role_parse'
 
 --- Puts a player into jail and removes all other roles.
 -- @command jail
@@ -20,7 +20,8 @@ Commands.new_command('jail','Puts a player into jail and removes all other roles
     reason = reason or 'Non Given.'
     local action_player_name_color = format_chat_player_name(action_player)
     local by_player_name_color = format_chat_player_name(player)
-    if Jail.jail_player(action_player,player.name,reason) then
+    local player_name = player and player.name or '<server>'
+    if Jail.jail_player(action_player, player_name, reason) then
         game.print{'expcom-jail.give',action_player_name_color,by_player_name_color,reason}
     else
         return Commands.error{'expcom-jail.already-jailed',action_player_name_color}
@@ -37,7 +38,8 @@ Commands.new_command('unjail','Removes a player from jail.')
 :register(function(player,action_player,raw)
     local action_player_name_color = format_chat_player_name(action_player)
     local by_player_name_color = format_chat_player_name(player)
-    if Jail.unjail_player(action_player,player.name) then
+    local player_name = player and player.name or '<server>'
+    if Jail.unjail_player(action_player, player_name) then
         game.print{'expcom-jail.remove',action_player_name_color,by_player_name_color}
     else
         return Commands.error{'expcom-jail.not-jailed',action_player_name_color}

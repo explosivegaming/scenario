@@ -7,9 +7,9 @@
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Event = require 'utils.event' --- @dep utils.event
 local Roles = require 'expcore.roles' --- @dep expcore.roles
-local config = require 'config.tasks' --- @dep config.tasks
-local format_time,table_keys = ext_require('expcore.common','format_time','table_keys') --- @dep expcore.common
+local config = require 'config.gui.tasks' --- @dep config.gui.tasks
 local Tasks = require 'modules.control.tasks' --- @dep modules.control.tasks
+local format_time = _C.format_time --- @dep expcore.common
 
 -- Styles used for sprite buttons
 local Styles = {
@@ -223,7 +223,7 @@ end)
 local function update_task(player,task_table,task_id)
     local task = Tasks.get_task(task_id)
     local task_ids = Tasks.get_force_task_ids(player.force.name)
-    local task_number = table.index_of(task_ids, task_id)
+    local task_number = table.get_index(task_ids, task_id)
 
     -- Task no longer exists so should be removed from the list
     if not task then
@@ -240,7 +240,7 @@ local function update_task(player,task_table,task_id)
     -- Update the edit flow
     local edit_flow = task_table['edit-'..task_id]
     local player_allowed_edit = check_player_permissions(player,task)
-    local players_editing = table_keys(task.curently_editing)
+    local players_editing = table.get_keys(task.curently_editing)
     local edit_task_element = edit_flow[edit_task.name]
     local discard_task_element = edit_flow[discard_task.name]
 
@@ -341,7 +341,7 @@ Gui.element(function(event_trigger,parent)
     -- Add any existing tasks
     local task_ids = Tasks.get_force_task_ids(player.force.name)
     if #task_ids > 0 then
-        no_tasks_style.visible = false
+        no_tasks_label.visible = false
         for _,task_id in ipairs(task_ids) do
             update_task(player,scroll_table,task_id)
         end

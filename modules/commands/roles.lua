@@ -5,11 +5,8 @@
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Roles = require 'expcore.roles' --- @dep expcore.roles
-local Colours = require 'resources.color_presets' --- @dep resources.color_presets
-local format_chat_player_name, format_chat_colour_localized = ext_require('expcore.common',
-    'format_chat_player_name',
-    'format_chat_colour_localized'
-)
+local Colours = require 'utils.color_presets' --- @dep utils.color_presets
+local format_chat_player_name, format_chat_colour_localized = _C.format_chat_player_name, _C.format_chat_colour_localized
 
 --- Assigns a role to a player
 -- @command assign-role
@@ -18,7 +15,7 @@ local format_chat_player_name, format_chat_colour_localized = ext_require('expco
 Commands.new_command('assign-role','Assigns a role to a player')
 :add_param('player',false,'player-role')
 :add_param('role',false,'role')
-:set_flag('admin-only',true)
+:set_flag('admin-only')
 :add_alias('rpromote','assign','role','add-role')
 :register(function(player,action_player,role,raw)
     local player_highest = Roles.get_player_highest_role(player)
@@ -36,7 +33,7 @@ end)
 Commands.new_command('unassign-role','Unassigns a role from a player')
 :add_param('player',false,'player-role')
 :add_param('role',false,'role')
-:set_flag('admin-only',true)
+:set_flag('admin-only')
 :add_alias('rdemote','unassign','rerole','remove-role')
 :register(function(player,action_player,role,raw)
     local player_highest = Roles.get_player_highest_role(player)

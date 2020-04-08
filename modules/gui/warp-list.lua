@@ -10,10 +10,10 @@ local Global = require 'utils.global' --- @dep utils.global
 local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.game
 local Roles = require 'expcore.roles' --- @dep expcore.roles
-local Colors = require 'resources.color_presets' --- @dep resources.color_presets
-local config = require 'config.warps' --- @dep config.warps
-local format_time,table_keys = ext_require('expcore.common','format_time','table_keys') --- @dep expcore.common
+local Colors = require 'utils.color_presets' --- @dep utils.color_presets
+local config = require 'config.gui.warps' --- @dep config.gui.warps
 local Warps = require 'modules.control.warps' --- @dep modules.control.warps
+local format_time = _C.format_time --- @dep expcore.common
 
 -- Stores a boolean value indexed by player name
 local player_in_range_store = Store.register(function(player)
@@ -319,7 +319,7 @@ local function update_warp(player,warp_table,warp_id)
     -- Update the edit flow
     local edit_flow = warp_table['edit-'..warp_id]
     local player_allowed_edit = check_player_permissions(player,'allow_edit_warp',warp)
-    local players_editing = table_keys(warp.currently_editing)
+    local players_editing = table.get_keys(warp.currently_editing)
     local edit_warp_element = edit_flow[edit_warp.name]
     local discard_warp_element = edit_flow[discard_warp.name]
 

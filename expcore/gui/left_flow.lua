@@ -4,7 +4,7 @@
 ]]
 
 local Gui = require 'expcore.gui.prototype'
-local mod_gui = require 'mod-gui' --- @dep mod-gui
+local mod_gui = require 'mod-gui'
 
 local hide_left_flow = Gui.core_defines.hide_left_flow.name
 
@@ -82,7 +82,7 @@ end
 --[[-- Draw all the left elements onto the left flow, internal use only with on join
 @tparam LuaPlayer player the player that you want to draw the elements for
 
-@usage Draw all the left elements
+@usage-- Draw all the left elements
 Gui.draw_left_flow(player)
 
 ]]
@@ -93,7 +93,13 @@ function Gui.draw_left_flow(player)
 
     for name, open_on_join in pairs(Gui.left_elements) do
         -- Draw the element to the left flow
-        local left_element = Gui.defines[name](left_flow)
+        local draw_success, left_element = pcall(function()
+            return Gui.defines[name](left_flow)
+        end)
+
+        if not draw_success then
+            error('There as been an error with an element draw function:\n\t'..left_element)
+        end
 
         -- Check if it should be open by default
         local visible = type(open_on_join) == 'boolean' and open_on_join or false
