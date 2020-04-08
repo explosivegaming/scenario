@@ -22,7 +22,7 @@ Gui.top_flow_button_style = mod_gui.button_style
 
 --- The style that should be used for buttons on the top flow when their flow is visible
 -- @field Gui.top_flow_button_visible_style
-Gui.top_flow_button_visible_style = 'menu_button_continue'
+Gui.top_flow_button_visible_style = 'shortcut_bar_button_green'
 
 --[[-- Gets the flow refered to as the top flow, each player has one top flow
 @function Gui.get_top_flow(player)
@@ -156,12 +156,19 @@ Gui.toolbar_button_style(button, false)
 
 ]]
 function Gui.toolbar_button_style(button, state)
+    local size = 36
     if state then
         button.style = Gui.top_flow_button_visible_style
+        button.style.padding = -1
+        button.style.margin = -1
+        size = 38
     else
         button.style = Gui.top_flow_button_style
+        button.style.padding = -2
+        button.style.margin = 0
     end
-    button.style.minimal_width = 36
-    button.style.height = 36
-    button.style.padding = -2
+    button.style.natural_width = size
+    button.style.natural_height = size
+    button.style.height = size
+    button.style.minimal_width = size
 end

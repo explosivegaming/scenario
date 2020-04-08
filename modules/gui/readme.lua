@@ -263,32 +263,32 @@ Gui.element(function(event_trigger,parent)
     local container = parent.add{
         name = event_trigger,
         type = 'frame',
-        style = 'invisible_frame'
+        style = 'outer_frame'
     }
 
     -- Add the left hand side of the frame back, removed because of frame_tabbed_pane style
     local left_alignment = Gui.alignment(container, nil, nil, 'bottom')
     left_alignment.style.padding = {32,0,0,0}
 
-    local left_side =
+    --[[local left_side =
     left_alignment.add{
         type = 'frame',
         style = 'frame_without_right_side'
     }
     left_side.style.vertically_stretchable = true
     left_side.style.padding = 0
-    left_side.style.width = 5
+    left_side.style.width = 5]]
 
     -- Add the tab pane
     local tab_pane = container.add{
         name = 'pane',
         type = 'tabbed-pane',
-        style = 'frame_tabbed_pane'
+        --style = 'frame_tabbed_pane'
     }
 
     -- Add the different content areas
     for _,tab_details in ipairs(tabs) do
-        local tab = tab_pane.add{ type = 'tab', style = 'frame_tab', caption = tab_details[1], tooltip = tab_details[2] }
+        local tab = tab_pane.add{ type = 'tab', --[[style = 'frame_tab',]] caption = tab_details[1], tooltip = tab_details[2] }
         tab_pane.add_tab(tab, tab_details[3](tab_pane))
     end
 
