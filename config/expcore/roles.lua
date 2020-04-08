@@ -197,6 +197,7 @@ Roles.new_role('Regular','Reg')
     'command/rainbow',
     'command/go-to-spawn',
     'command/me',
+    'standard-decon'
 }
 :set_auto_assign_condition(function(player)
     if player.online_time > 3*216000 then

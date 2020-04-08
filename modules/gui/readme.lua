@@ -334,3 +334,11 @@ Event.add(defines.events.on_player_joined_game,function(event)
         player.gui.center.clear()
     end
 end)
+
+--- When a player respawns clear center unless the player has something open
+Event.add(defines.events.on_player_respawned,function(event)
+    local player = Game.get_player_by_index(event.player_index)
+    if not player.opened then
+        player.gui.center.clear()
+    end
+end)

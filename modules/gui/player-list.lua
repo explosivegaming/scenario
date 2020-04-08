@@ -94,7 +94,7 @@ Gui.element(function(event_trigger,parent,player_data)
     open_action_bar(toggle_action_bar_flow)
 
     -- Add the player name
-    local player_name_flow = parent.add{ type = 'flow', 'player-name-'..player_data.index }
+    local player_name_flow = parent.add{ type = 'flow', name = 'player-name-'..player_data.index }
     local player_name = player_name_flow.add{
         type = 'label',
         name = event_trigger,
@@ -364,6 +364,12 @@ Event.add(defines.events.on_player_left_game,function(event)
         local frame = Gui.get_left_element(player,player_list_container)
         local scroll_table = frame.container.scroll.table
         remove_player_base(scroll_table,remove_player)
+
+        local selected_player_name = Store.get(selected_player_store,player)
+        if selected_player_name == remove_player.name then
+            Store.clear(selected_player_store,player)
+            Store.clear(selected_action_store,player)
+        end
     end
 end)
 

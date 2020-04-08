@@ -85,7 +85,7 @@ Permission_Groups.new_group('Guest')
     'set_auto_launch_rocket',
     'change_programmable_speaker_parameters', -- guest
     'change_train_stop_station',
-    'deconstruct',
+    --'deconstruct',
     'remove_cables',
     'remove_train_station',
     'reset_assembling_machine',

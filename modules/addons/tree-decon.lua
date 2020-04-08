@@ -16,21 +16,37 @@ end)
 
 -- Add trees to queue when marked, only allows simple entities and for players with role permission
 Event.add(defines.events.on_marked_for_deconstruction, function(event)
-    -- Check the player is allowed fast decon
-    local player = Game.get_player_by_index(event.player_index)
-    if chache[player.name] ~= true and not Roles.player_allowed(player, 'fast-tree-decon') then
-        chache[player.name] = false
+    -- Check which type of decon a player is allowed
+    local index = event.player_index
+    if chache[index] == nil then
+        local player = Game.get_player_by_index(index)
+        if Roles.player_allowed(player, 'fast-tree-decon') then chache[index] = 'fast'
+        elseif Roles.player_allowed(player, 'standard-decon') then chache[index] = 'standard'
+        else chache[index] = player.force end
+    end
+
+    -- Check what should happen to this entity
+    local entity = event.entity
+    local allow = chache[index]
+    if not entity or not entity.valid then return end
+
+    -- Not allowed to decon this entity
+    local last_user = entity.last_user
+    if last_user and allow ~= 'standard' and allow ~= 'fast' then
+        entity.cancel_deconstruction(allow)
         return
     end
-    chache[player.name] = true
 
-    -- Check that the entity is allowed to be isntant deconed
+    -- Allowed to decon this entity, but not fast
+    if allow ~= 'fast' then return end
+
+    -- Allowed fast decon on this entity, just trees
     local head = tree_queue._head + 1
-    local entity = event.entity
-    if entity and entity.valid and not entity.last_user and entity.type ~= 'cliff' then
+    if not last_user and entity.type ~= 'cliff' then
         tree_queue[head] = entity
         tree_queue._head = head
     end
+
 end)
 
 -- Remove trees at random till the queue is empty
