@@ -359,7 +359,7 @@ end)
 
 --- When a player leaves only remove they entry
 Event.add(defines.events.on_player_left_game,function(event)
-    local remove_player = event.player
+    local remove_player = Game.get_player_by_index(event.player_index)
     for _,player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player,player_list_container)
         local scroll_table = frame.container.scroll.table
