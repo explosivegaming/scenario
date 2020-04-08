@@ -1,62 +1,403 @@
---[[-- Core Module - Common Library
-    - Adds some commonly used functions used in many modules
-    @core Common-Library
-    @alias Common
+--[[-- Core Module - Common
+- Adds some commonly used functions used in many modules
+@core Common
+@alias Common
 ]]
 
-local Colours = require 'resources.color_presets' --- @dep resources.color_presets
+local Colours = require 'utils.color_presets' --- @dep utils.color_presets
 local Game = require 'utils.game' --- @dep utils.game
 local Util = require 'util' --- @dep util
-require 'utils.table'
-require 'utils.math'
 
 local Common = {}
 
---- Compare types faster for faster validation of params
--- @usage type_check('foo','string') -- return true
--- @usage type_check('foo') -- return false
--- @tparam any value the value to be tested
--- @tparam[opt=nil] string test_type the type to test for if not given then it tests for nil
--- @treturn boolean is v of type test_type
-function Common.type_check(value,test_type)
+--- Type Checking.
+-- @section typeCheck
+
+--[[-- Asserts the argument is of type test_type
+@tparam any value the value to be tested
+@tparam[opt=nil] string test_type the type to test for if not given then it tests for nil
+@treturn boolean is v of type test_type
+
+@usage-- Check for a string value
+local is_string = type_check(value, 'string')
+
+@usage-- Check for a nil value
+local is_nil = type_check(value)
+
+]]
+function Common.type_check(value, test_type)
     return test_type and value and type(value) == test_type or not test_type and not value or false
 end
 
---- Raises an error if the value is of the wrong type
--- @usage type_check_error('foo','number','Value must be a number') -- will raise error "Value must be a number"
--- @tparam any value the value that you want to test the type of
--- @tparam string test_type the type that the value should be
--- @tparam string error_message the error message that is returned
--- @tparam number level the level to call the error on (level = 1 means the caller)
--- @treturn boolean true if no error was called
-function Common.type_check_error(value,test_type,error_message,level)
+--[[-- Raises an error if the value is of the wrong type
+@tparam any value the value that you want to test the type of
+@tparam string test_type the type that the value should be
+@tparam string error_message the error message that is returned
+@tparam number level the level to call the error on (level = 1 is the caller)
+@treturn boolean true if no error was called
+
+@usage-- Raise error if value is not a number
+type_error(value, 'number', 'Value must be a number')
+
+]]
+function Common.type_error(value, test_type, error_message, level)
     level = level and level+1 or 2
-    return Common.test_type(value,test_type) or error(error_message,level)
+    return Common.type_check(value,test_type) or error(error_message,level)
 end
 
---- Raises an error when the value is the incorrect type, uses a consistent error message format
--- @usage param_check('foo','number','repeat_count',2) -- will raise error "Invalid param #02 given to <anon>; repeat_count is not of type number"
--- @tparam any value the value that you want to test the type of
--- @tparam string test_type the type that the value should be
--- @tparam string param_name the name of the param
--- @tparam number param_number the number param it is
--- @treturn boolean true if no error was raised
-function Common.param_check(value,test_type,param_name,param_number)
+--[[-- Asserts the argument is one of type test_types
+@param value the variable to check
+@param test_types the type as a table of strings
+@treturn boolean true if value is one of test_types
+
+@usage-- Check for a string or table
+local is_string_or_table = multi_type_check(value, {'string','table'})
+
+]]
+function Common.multi_type_check(value, test_types)
+    local vtype = type(value)
+    for _, arg_type in ipairs(test_types) do
+        if vtype == arg_type then
+            return true
+        end
+    end
+    return false
+end
+
+--[[-- Raises an error if the value is of the wrong type
+@tparam any value the value that you want to test the type of
+@tparam table test_types the type as a table of strings
+@tparam string error_message the error message that is returned
+@tparam number level the level to call the error on (level = 1 is the caller)
+@treturn boolean true if no error was called
+
+@usage-- Raise error if value is not a string or table
+multi_type_error('foo', {'string','table'}, 'Value must be a string or table')
+
+]]
+function Common.multi_type_error(value, test_types, error_message, level)
+    level = level and level+1 or 2
+    return Common.mult_type_check(value, test_types) or error(error_message,level)
+end
+
+--[[-- Raises an error when the value is the incorrect type, uses a consistent error message format
+@tparam any value the value that you want to test the type of
+@tparam string test_type the type that the value should be
+@tparam number param_number the number param it is
+@tparam[opt] string param_name the name of the param
+@treturn boolean true if no error was raised
+
+@usage-- Output: "Bad argument #2 to "<anon>"; argument is of type string expected number"
+validate_argument_type(value, 'number', 2)
+
+@usage-- Output: "Bad argument #2 to "<anon>"; "repeat_count" is of type string expected number"
+validate_argument_type(value, 'number', 2, 'repeat_count')
+
+]]
+function Common.validate_argument_type(value, test_type, param_number, param_name)
     if not Common.test_type(value,test_type) then
         local function_name = debug.getinfo(2,'n').name or '<anon>'
-        local error_message = string.format('Invalid param #%2d given to %s; %s is not of type %s',param_number,function_name,param_name,test_type)
+        local error_message
+        if param_name then
+            error_message = string.format('Bad argument #%d to %q; %q is of type %s expected %s', param_number, function_name, param_name, type(value), test_type)
+        else
+            error_message = string.format('Bad argument #%d to %q; argument is of type %s expected %s', param_number, function_name, type(value), test_type)
+        end
         return error(error_message,3)
     end
     return true
 end
 
---- Will return a value of any type to the player/server console, allows colour for in-game players
--- @usage player_return('Hello, World!') -- returns 'Hello, World!' to game.player or server console
--- @usage player_return('Hello, World!','green') -- returns 'Hello, World!' to game.player with colour green or server console
--- @usage player_return('Hello, World!',nil,player) -- returns 'Hello, World!' to the given player
--- @param value any value of any type that will be returned to the player or console
--- @tparam[opt=defines.colour.white] ?defines.color|string colour the colour of the text for the player, ignored when printing to console
--- @tparam[opt=game.player] LuaPlayer player  the player that return will go to, if no game.player then returns to server
+--[[-- Raises an error when the value is the incorrect type, uses a consistent error message format
+@tparam any value the value that you want to test the type of
+@tparam string test_types the types that the value should be
+@tparam number param_number the number param it is
+@tparam[opt] string param_name the name of the param
+@treturn boolean true if no error was raised
+
+@usage-- Output: "Bad argument #2 to "<anon>"; argument is of type number expected string or table"
+validate_argument_type(value, {'string','table'}, 2)
+
+@usage-- Output: "Bad argument #2 to "<anon>"; "player" is of type number expected string or table"
+validate_argument_type(value, {'string','table'}, 2, 'player')
+
+]]
+function Common.validate_argument_multi_type(value, test_types, param_number, param_name)
+    if not Common.multi_type_check(value,test_types) then
+        local function_name = debug.getinfo(2,'n').name or '<anon>'
+        local error_message
+        if param_name then
+            error_message = string.format('Bad argument #%2d to %q; %q is of type %s expected %s', param_number, function_name, param_name, type(value), table.concat(test_types,' or '))
+        else
+            error_message = string.format('Bad argument #%2d to %q; argument is of type %s expected %s', param_number, function_name, type(value), table.concat(test_types,' or '))
+        end
+        return error(error_message,3)
+    end
+    return true
+end
+
+--- Will raise an error if called during runtime
+-- @usage error_if_runtime()
+function Common.error_if_runtime()
+    if _LIFECYCLE == 8 then
+        local function_name = debug.getinfo(2,'n').name or '<anon>'
+        error(function_name..' can not be called during runtime',3)
+    end
+end
+
+--- Will raise an error if the function is a closure
+-- @usage error_if_runetime_closure(func)
+function Common.error_if_runetime_closure(func)
+    if _LIFECYCLE == 8 and Debug.is_closure(func) then
+        local function_name = debug.getinfo(2,'n').name or '<anon>'
+        error(function_name..' can not be called during runtime with a closure',3)
+    end
+end
+
+--- Value Returns.
+-- @section valueReturns
+
+--[[-- Tests if a string contains a given substring.
+@tparam string s the string to check for the substring
+@tparam string contains the substring to test for
+@treturn boolean true if the substring was found in the string
+
+@usage-- Test if a string contains a sub string
+local found = string_contains(str, 'foo')
+
+]]
+function Common.string_contains(s, contains)
+    return s and string.find(s, contains) ~= nil
+end
+
+--[[-- Used to resolve a value that could also be a function returning that value
+@tparam any value the value which you want to test is not nil and if it is a function then call the function
+@treturn any the value given or returned by value if it is a function
+
+@usage-- Default value handling
+-- if default value is not a function then it is returned
+-- if default value is a function then it is called with the first argument being self
+local value = Common.resolve_value(self.defaut_value, self)
+
+]]
+function Common.resolve_value(value,...)
+    return value and type(value) == 'function' and value(...) or value
+end
+
+--- Converts a varible into its boolean value, nil and false return false
+-- @treturn boolean the boolean form of the varible
+-- @usage local bool = cast_bool(var)
+function Common.cast_bool(var)
+    return var and true or false
+end
+
+--- Returns either the second or third argument based on the first argument
+-- @usage ternary(input_string == 'test', 'Input is test', 'Input is not test')
+function Common.ternary(c, t, f)
+    return c and t or f
+end
+
+--- Returns a string for a number with comma seperators
+-- @usage comma_value(input_number)
+function Common.comma_value(n) -- credit http://richard.warburton.it
+    local left, num, right = string.match(n, '^([^%d]*%d)(%d*)(.-)$')
+    return left .. (num:reverse():gsub('(%d%d%d)', '%1,'):reverse()) .. right
+end
+
+--[[-- Sets a table element to value while also returning value.
+@tparam table tbl to change the element of
+@tparam string key the key to set the value of
+@tparam any value the value to set the key as
+@treturn any the value that was set
+
+@usage-- Set and return value
+local value = set_and_return(players, player.name, player.online_time)
+
+]]
+function Common.set_and_return(tbl, key, value)
+    tbl[key] = value
+    return value
+end
+
+--[[-- Writes a table object to a file in json format
+@tparam string path the path of the file to write include / to use dir
+@tparam table tbl the table that will be converted to a json string and wrote to file
+
+@usage-- Write a lua table as a json to script-outpt/dump
+write_json('dump', tbl)
+
+]]
+function Common.write_json(path,tbl)
+    game.write_file(path,game.table_to_json(tbl)..'\n',true,0)
+end
+
+--[[-- Calls a require that will not error if the file is not found
+@usage local file = opt_require('file.not.present') -- will not cause any error
+@tparam string path the path that you want to require
+@return the returns from that file or nil, error if not loaded
+
+@usage-- Require a file without causing errors, for when a file might not exist
+local Module = opt_require 'expcore.common'
+
+]]
+function Common.opt_require(path)
+    local success, rtn = pcall(require,path)
+    if success then return rtn
+    else return nil,rtn end
+end
+
+--[[-- Returns a desync safe file path for the current file
+@tparam[opt=0] number offset the offset in the stack to get, 0 is current file
+@treturn string the file path
+
+@usage-- Get the current file path
+local file_path = get_file_path()
+
+]]
+function Common.get_file_path(offset)
+    offset = offset or 0
+    return debug.getinfo(offset+2, 'S').source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+end
+
+--[[-- Converts a table to an enum
+@tparam table tbl table the that will be converted
+@treturn table the new table that acts like an enum
+
+@usage-- Make an enum
+local colors = enum{
+    'red',
+    'green',
+    'blue'
+}
+
+]]
+function Common.enum(tbl)
+    local rtn = {}
+    for k,v in pairs(tbl) do
+        if type(k) ~= 'number' then
+            rtn[v]=k
+        end
+    end
+    for k,v in pairs(tbl) do
+        if type(k) == 'number' then
+            table.insert(rtn,v)
+        end
+    end
+    for k,v in pairs(rtn) do
+        rtn[v]=k
+    end
+    return rtn
+end
+
+--[[-- Returns the closest match to the input
+@tparam table options table a of options for the auto complete
+@tparam string input string the input that will be completed
+@tparam[opt=false] boolean use_key when true the keys of options will be used as the options
+@tparam[opt=false] boolean rtn_key when true the the key will be returned rather than the value
+@return the list item found that matches the input
+
+@usage-- Get the element that includes "foo"
+local value = auto_complete(tbl, "foo")
+
+@usage-- Get the element with a key that includes "foo"
+local value = auto_complete(tbl, "foo", true)
+
+@usage-- Get the key with that includes "foo"
+local key = auto_complete(tbl, "foo", true, true)
+
+]]
+function Common.auto_complete(options,input,use_key,rtn_key)
+    local rtn = {}
+    if type(input) ~= 'string' then return end
+    input = input:lower()
+    for key,value in pairs(options) do
+        local check = use_key and key or value
+        if Common.string_contains(string.lower(check),input) then
+            return rtn_key and key or value
+        end
+    end
+end
+
+--- Formating.
+-- @section formating
+
+--[[-- Returns a valid string with the name of the actor of a command.
+@tparam string player_name the name of the player to use rather than server, used only if game.player is nil
+@treturn string the name of the current actor
+
+@usage-- Get the current actor
+local player_name = get_actor()
+
+]]
+function Common.get_actor(player_name)
+    return game.player and game.player.name or player_name or '<server>'
+end
+
+--[[-- Returns a message with valid chat tags to change its colour
+@tparam string message the message that will be in the output
+@tparam table color a color which contains r,g,b as its keys
+@treturn string the message with the color tags included
+
+@usage-- Use factorio tags to color a chat message
+local message = format_chat_colour('Hello, World!', { r=355, g=100, b=100 })
+
+]]
+function Common.format_chat_colour(message,color)
+    color = color or Colours.white
+    local color_tag = '[color='..math.round(color.r,3)..','..math.round(color.g,3)..','..math.round(color.b,3)..']'
+    return string.format('%s%s[/color]',color_tag,message)
+end
+
+--[[-- Returns a message with valid chat tags to change its colour, using localization
+@tparam ?string|table message the message that will be in the output
+@tparam table color a color which contains r,g,b as its keys
+@treturn table the message with the color tags included
+
+@usage-- Use factorio tags and locale strings to color a chat message
+local message = format_chat_colour_localized('Hello, World!', { r=355, g=100, b=100 })
+
+]]
+function Common.format_chat_colour_localized(message,color)
+    color = color or Colours.white
+    color = math.round(color.r,3)..','..math.round(color.g,3)..','..math.round(color.b,3)
+    return {'color-tag',color,message}
+end
+
+--[[-- Returns the players name in the players color
+@tparam LuaPlayer player the player to use the name and color of
+@tparam[opt=false] boolean raw_string when true a string is returned rather than a localized string
+@treturn table the players name with tags for the players color
+
+@usage-- Format a players name using the players color as a string
+local message = format_chat_player_name(game.player, true)
+
+]]
+function Common.format_chat_player_name(player,raw_string)
+    player = Game.get_player_from_any(player)
+    local player_name = player and player.name or '<Server>'
+    local player_chat_colour = player and player.chat_color or Colours.white
+    if raw_string then
+        return Common.format_chat_colour(player_name,player_chat_colour)
+    else
+        return Common.format_chat_colour_localized(player_name,player_chat_colour)
+    end
+end
+
+--[[-- Will return a value of any type to the player/server console, allows colour for in-game players
+@tparam any value a value of any type that will be returned to the player or console
+@tparam[opt=defines.colour.white] ?defines.color|string colour the colour of the text for the player, ignored when printing to console
+@tparam[opt=game.player] LuaPlayer player  the player that return will go to, if no game.player then returns to server
+
+@usage-- Return a value to the current actor, rcon included
+player_return('Hello, World!')
+
+@usage-- Return a value to the current actor, with color
+player_return('Hello, World!', 'green')
+
+@usage-- Return to a player other than the current
+player_return('Hello, World!', nil, player)
+
+]]
 function Common.player_return(value,colour,player)
     colour = Common.type_check(colour,'table') and colour or Colours[colour] ~= Colours.white and Colours[colour] or Colours.white
     player = player or game.player
@@ -91,44 +432,26 @@ function Common.player_return(value,colour,player)
     else rcon.print(returnAsString) end
 end
 
---- Writes a table object to a file in json format
--- @tparam string path the path of the file to write include / to use dir
--- @tparam table tbl the table that will be converted to a json string and wrote to file
-function Common.write_json(path,tbl)
-    game.write_file(path,game.table_to_json(tbl)..'\n',true,0)
-end
-
---- Calls a require that will not error if the file is not found
--- @usage local file = opt_require('file.not.present') -- will not cause any error
--- @tparam string path the path that you want to require
--- @return the returns from that file or nil, error if not loaded
-function Common.opt_require(path)
-    local success, rtn = pcall(require,path)
-    if success then return rtn
-    else return nil,rtn end
-end
-
---- Calls a require and returns only the keys given, file must return a table
--- @usage local extract, param_check = ext_require('expcore.common','extract','param_check') --- @dep expcore.common
--- @tparam string path the path that you want to require
--- @tparam string ... the name of the keys that you want returned
--- @return the keys in the order given
-function Common.ext_require(path,...)
-    local rtn = require(path)
-    if type(rtn) ~= 'table' then
-        error('File did not return a table, can not extract keys.',2)
-    end
-    return Common.extract_keys(rtn,...)
-end
-
---- Formats tick into a clean format, denominations from highest to lowest
--- long will use words rather than letters
+--[[-- Formats tick into a clean format, denominations from highest to lowest
 -- time will use : separates
--- string will return a string not a locale string
 -- when a denomination is false it will overflow into the next one
--- @tparam number ticks the number of ticks that represents a time
--- @tparam table options table a of options to use for the format
--- @treturn string a locale string that can be used
+@tparam number ticks the number of ticks that represents a time
+@tparam table options table a of options to use for the format
+@treturn string a locale string that can be used
+
+@usage-- Output: "0h 5m"
+local time = format_time(18000, { hours=true, minutes=true, string=true })
+
+@usage-- Output: "0 hours and 5 minutes"
+local time = format_time(18000, { hours=true, minutes=true, string=true, long=true })
+
+@usage-- Output: "00:05:00"
+local time = format_time(18000, { hours=true, minutes=true, seconds=true, string=true })
+
+@usage-- Output: "--:--:--"
+local time = format_time(18000, { hours=true, minutes=true, seconds=true, string=true, null=true })
+
+]]
 function Common.format_time(ticks,options)
     -- Sets up the options
     options = options or {
@@ -213,12 +536,21 @@ function Common.format_time(ticks,options)
     return rtn
 end
 
---- Moves items to the position and stores them in the closest entity of the type given
--- @tparam table items items which are to be added to the chests, ['name']=count
--- @tparam[opt=navies] LuaSurface surface the surface that the items will be moved to
--- @tparam[opt={0,0}] table position the position that the items will be moved to {x=100,y=100}
--- @tparam[opt=32] number radius the radius in which the items are allowed to be placed
--- @tparam[opt=iron-chest] string chest_type the chest type that the items should be moved into
+--- Factorio.
+-- @section factorio
+
+--[[-- Moves items to the position and stores them in the closest entity of the type given
+@tparam table items items which are to be added to the chests, ['name']=count
+@tparam[opt=navies] LuaSurface surface the surface that the items will be moved to
+@tparam[opt={0,0}] table position the position that the items will be moved to {x=100,y=100}
+@tparam[opt=32] number radius the radius in which the items are allowed to be placed
+@tparam[opt=iron-chest] string chest_type the chest type that the items should be moved into
+@treturn LuaEntity the last chest that had items inserted into it
+
+@usage-- Copy all the items in a players inventory and place them in chests at {0,0}
+move_items(game.player.get_main_inventory().get_contents())
+
+]]
 function Common.move_items(items,surface,position,radius,chest_type)
     chest_type = chest_type or 'iron-chest'
     surface = surface or game.surfaces[1]
@@ -264,14 +596,19 @@ function Common.move_items(items,surface,position,radius,chest_type)
     return last_chest
 end
 
---[[-- https://github.com/Refactorio/RedMew/blob/9184b2940f311d8c9c891e83429fc57ec7e0c4a2/map_gen/maps/diggy/debug.lua#L31
-    Prints a colored value on a location.
-    @param value between -1 and 1
-    @param surface LuaSurface
-    @param position Position {x, y}
-    @param scale float
-    @param offset float
-    @param immutable bool if immutable, only set, never do a surface lookup, values never change
+--[[-- Prints a colored value on a location, color is based on the value.
+nb: src is below but the gradent has been edited
+https://github.com/Refactorio/RedMew/blob/9184b2940f311d8c9c891e83429fc57ec7e0c4a2/map_gen/maps/diggy/debug.lua#L31
+@tparam number value the value to show must be between -1 and 1, scale can be used to achive this
+@tparam LuaSurface surface the surface to palce the value on
+@tparam table position {x, y} the possition to palce the value at
+@tparam[opt=1] number scale how much to scale the colours by
+@tparam[opt=0] number offset the offset in the +x +y direction
+@tparam[opt=false] boolean immutable if immutable, only set, never do a surface lookup, values never change
+
+@usage-- Place a 0 at {0,0}
+print_grid_value(0, game.player.surface, { x=0, y=0 })
+
 ]]
 function Common.print_grid_value(value, surface, position, scale, offset, immutable)
     local is_string = type(value) == 'string'
@@ -286,23 +623,9 @@ function Common.print_grid_value(value, surface, position, scale, offset, immuta
         scale = scale or 1
         offset = offset or 0
         position = {x = position.x + offset, y = position.y + offset}
-        local r = math.max(1, value) / scale
-        local g = 1 - math.abs(value) / scale
-        local b = math.min(1, value) / scale
-
-        if (r > 0) then
-            r = 0
-        end
-
-        if (b < 0) then
-            b = 0
-        end
-
-        if (g < 0) then
-            g = 0
-        end
-
-        r = math.abs(r)
+        local r = math.clamp(-value/scale, 0, 1)
+        local g = math.clamp(1-math.abs(value)/scale, 0, 1)
+        local b = math.clamp(value/scale, 0, 1)
 
         color = { r = r, g = g, b = b}
 
@@ -332,370 +655,18 @@ function Common.print_grid_value(value, surface, position, scale, offset, immuta
     }.active = false
 end
 
---[[--
-    Prints a colored value on a location. When given a color_value and a delta_color,
-    will change the color of the text from the base to base + value * delta. This will
-    make the color of the text range from 'base_color' to 'base_color + delta_color'
-    as the color_value ranges from 0 to 1
-    @param value of number to be displayed
-    @param surface LuaSurface
-    @param position Position {x, y}
-    @param offset float position offset
-    @param immutable bool if immutable, only set, never do a surface lookup, values never change
-    @param color_value float How far along the range of values of colors the value is to be displayed
-    @param base_color {r,g,b} The color for the text to be if color_value is 0
-    @param delta_color {r,g,b} The amount to correct the base_color if color_value is 1
-    @param under_bound {r,g,b} The color to be used if color_value < 0
-    @param over_bound {r,g,b} The color to be used if color_value > 1
+--[[-- Clears all flying text entities on a surface
+@tparam LuaSurface surface the surface to clear
+
+@usage-- Remove all flying text on the surface
+clear_flying_text(game.player.surface)
+
 ]]
-function Common.print_colored_grid_value(value, surface, position, offset, immutable,
-        color_value, base_color, delta_color, under_bound, over_bound)
-    local is_string = type(value) == 'string'
-    -- default values:
-    local color = base_color or Colours.white
-    local d_color = delta_color or Colours.black
-    local u_color = under_bound or color
-    local o_color = over_bound or color
-
-    if (color_value < 0) then
-        color = u_color
-    elseif (color_value > 1) then
-        color = o_color
-    else
-        color = {
-            r = color.r + color_value * d_color.r,
-            g = color.g + color_value * d_color.g,
-            b = color.b + color_value * d_color.b
-        }
-    end
-
-    local text = value
-
-    if type(immutable) ~= 'boolean' then
-        immutable = false
-    end
-
-    if not is_string then
-        offset = offset or 0
-        position = {x = position.x + offset, y = position.y + offset}
-
-        -- round at precision of 2
-        text = math.floor(100 * value) * 0.01
-
-        if (0 == text) then
-            text = '0.00'
-        end
-    end
-
-    if not immutable then
-        local text_entity = surface.find_entity('flying-text', position)
-
-        if text_entity then
-            text_entity.text = text
-            text_entity.color = color
-            return
-        end
-    end
-
-    surface.create_entity{
-        name = 'flying-text',
-        color = color,
-        text = text,
-        position = position
-    }.active = false
-end
-
---- Clears all flying text entities on a surface
--- @tparam LuaSurface surface the surface to clear
 function Common.clear_flying_text(surface)
     local entities = surface.find_entities_filtered{name ='flying-text'}
     for _,entity in pairs(entities) do
         if entity and entity.valid then
             entity.destroy()
-        end
-    end
-end
-
---- Tests if a string contains a given substring.
--- @tparam string s the string to check for the substring
--- @tparam string contains the substring to test for
--- @treturn boolean true if the substring was found in the string
-function Common.string_contains(s, contains)
-    return s and string.find(s, contains) ~= nil
-end
-
---- Extracts certain keys from a table
--- @usage local key_three, key_one = extract({key_one='foo',key_two='bar',key_three=true},'key_three','key_one')
--- @tparam table tbl table the which contains the keys
--- @tparam string ... the names of the keys you want extracted
--- @return the keys in the order given
-function Common.extract_keys(tbl,...)
-    local values = {}
-    for _,key in pairs({...}) do
-        table.insert(values,tbl[key])
-    end
-    return unpack(values)
-end
-
---- Converts a table to an enum
--- @tparam table tbl table the that will be converted
--- @treturn table the new table that acts like an enum
-function Common.enum(tbl)
-    local rtn = {}
-    for k,v in pairs(tbl) do
-        if type(k) ~= 'number' then
-            rtn[v]=k
-        end
-    end
-    for k,v in pairs(tbl) do
-        if type(k) == 'number' then
-            table.insert(rtn,v)
-        end
-    end
-    for k,v in pairs(rtn) do
-        rtn[v]=k
-    end
-    return rtn
-end
-
---- Returns the closest match to the input
--- @tparam table options table a of options for the auto complete
--- @tparam string input string the input that will be completed
--- @tparam[opt=false] boolean use_key when true the keys of options will be used as the options
--- @tparam[opt=false] boolean rtn_key when true the the key will be returned rather than the value
--- @return the list item found that matches the input
-function Common.auto_complete(options,input,use_key,rtn_key)
-    local rtn = {}
-    if type(input) ~= 'string' then return end
-    input = input:lower()
-    for key,value in pairs(options) do
-        local check = use_key and key or value
-        if Common.string_contains(string.lower(check),input) then
-            local result = rtn_key and key or value
-            table.insert(rtn,result)
-        end
-    end
-    return rtn[1]
-end
-
---- Default table comparator sort function.
--- @local
--- @param x one comparator operand
--- @param y the other comparator operand
--- @return true if x logically comes before y in a list, false otherwise
-local function sortFunc(x, y) --sorts tables with mixed index types.
-    local tx = type(x)
-    local ty = type(y)
-    if tx == ty then
-        if type(x) == 'string' then
-            return string.lower(x) < string.lower(y)
-        else
-            return x < y
-        end
-    elseif tx == 'number' then
-        return true --only x is a number and goes first
-    else
-        return false --only y is a number and goes first
-    end
-end
-
---- Returns a copy of all of the values in the table.
--- @tparam table tbl the to copy the keys from, or an empty table if tbl is nil
--- @tparam[opt] boolean sorted whether to sort the keys (slower) or keep the random order from pairs()
--- @tparam[opt] boolean as_string whether to try and parse the values as strings, or leave them as their existing type
--- @treturn array an array with a copy of all the values in the table
-function Common.table_values(tbl, sorted, as_string)
-    if not tbl then return {} end
-    local valueset = {}
-    local n = 0
-    if as_string then --checking as_string /before/ looping is faster
-        for _, v in pairs(tbl) do
-            n = n + 1
-            valueset[n] = tostring(v)
-        end
-    else
-        for _, v in pairs(tbl) do
-            n = n + 1
-            valueset[n] = v
-        end
-    end
-    if sorted then
-        table.sort(valueset,sortFunc)
-    end
-    return valueset
-end
-
---- Returns a copy of all of the keys in the table.
--- @tparam table tbl the to copy the keys from, or an empty table if tbl is nil
--- @tparam[opt] boolean sorted whether to sort the keys (slower) or keep the random order from pairs()
--- @tparam[opt] boolean as_string whether to try and parse the keys as strings, or leave them as their existing type
--- @treturn array an array with a copy of all the keys in the table
-function Common.table_keys(tbl, sorted, as_string)
-    if not tbl then return {} end
-    local keyset = {}
-    local n = 0
-    if as_string then --checking as_string /before/ looping is faster
-        for k, _ in pairs(tbl) do
-            n = n + 1
-            keyset[n] = tostring(k)
-        end
-    else
-        for k, _ in pairs(tbl) do
-            n = n + 1
-            keyset[n] = k
-        end
-    end
-    if sorted then
-        table.sort(keyset,sortFunc)
-    end
-    return keyset
-end
-
---- Returns the list is a sorted way that would be expected by people (this is by key)
--- @tparam table tbl the table to be sorted
--- @treturn table the sorted table
-function Common.table_alphanumsort(tbl)
-    local o = Common.table_keys(tbl)
-    local function padnum(d) local dec, n = string.match(d, "(%.?)0*(.+)")
-        return #dec > 0 and ("%.12f"):format(d) or ("%s%03d%s"):format(dec, #n, n) end
-    table.sort(o, function(a,b)
-        return tostring(a):gsub("%.?%d+",padnum)..("%3d"):format(#b)
-           < tostring(b):gsub("%.?%d+",padnum)..("%3d"):format(#a) end)
-    local _tbl = {}
-    for _,k in pairs(o) do _tbl[k] = tbl[k] end
-    return _tbl
-end
-
---- Returns the list is a sorted way that would be expected by people (this is by key) (faster alternative than above)
--- @tparam table tbl the table to be sorted
--- @treturn table the sorted table
-function Common.table_keysort(tbl)
-    local o = Common.table_keys(tbl,true)
-    local _tbl = {}
-    for _,k in pairs(o) do _tbl[k] = tbl[k] end
-    return _tbl
-end
-
---- Returns a message with valid chat tags to change its colour
--- @tparam string message the message that will be in the output
--- @tparam table color a color which contains r,g,b as its keys
--- @treturn string the message with the color tags included
-function Common.format_chat_colour(message,color)
-    color = color or Colours.white
-    local color_tag = '[color='..math.round(color.r,3)..','..math.round(color.g,3)..','..math.round(color.b,3)..']'
-    return string.format('%s%s[/color]',color_tag,message)
-end
-
---- Returns a message with valid chat tags to change its colour, using localization
--- @tparam ?string|table message the message that will be in the output
--- @tparam table color a color which contains r,g,b as its keys
--- @treturn table the message with the color tags included
-function Common.format_chat_colour_localized(message,color)
-    color = color or Colours.white
-    color = math.round(color.r,3)..','..math.round(color.g,3)..','..math.round(color.b,3)
-    return {'color-tag',color,message}
-end
-
---- Returns the players name in the players color
--- @tparam LuaPlayer player the player to use the name and color of
--- @tparam[opt=false] boolean raw_string when true a is returned rather than a localized string
--- @treturn table the players name with tags for the players color
-function Common.format_chat_player_name(player,raw_string)
-    player = Game.get_player_from_any(player)
-    local player_name = player and player.name or '<Server>'
-    local player_chat_colour = player and player.chat_color or Colours.white
-    if raw_string then
-        return Common.format_chat_colour(player_name,player_chat_colour)
-    else
-        return Common.format_chat_colour_localized(player_name,player_chat_colour)
-    end
-end
-
---- Returns a desync safe file path for the current file
--- @tparam[opt=0] number offset the offset in the stack to get, 0 is current file
--- @treturn string the file path
-function Common.get_file_path(offset)
-    offset = offset or 0
-    return debug.getinfo(offset+2, 'S').source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
-end
-
---[[-- Much faster method for inserting items into an array
-@tparam table tbl the table that will have the values added to it
-@tparam[opt] number start_index the index at which values will be added, nil means end of the array
-@tparam table values the new values that will be added to the table
-@treturn table the table that was passed as the first argument
-@usage-- Adding 1000 values into the middle of the array
-local tbl = {}
-local values = {}
-for i = 1,1000 do tbl[i] = i values[i] = i end
-Common.array_insert(tbl,500,values) -- around 0.4ms
-]]
-function Common.array_insert(tbl,start_index,values)
-    if not values then
-        values = start_index
-        start_index = nil
-    end
-
-    if start_index then
-        local starting_length = #tbl
-        local adding_length = #values
-        local move_to = start_index+adding_length+1
-        for offset = starting_length-start_index, 0, -1 do
-            tbl[move_to+offset] = tbl[starting_length+offset]
-        end
-        start_index = start_index-1
-    else
-        start_index = #tbl
-    end
-
-    for offset, item in ipairs(values) do
-        tbl[start_index+offset] = item
-    end
-
-    return tbl
-end
-
---[[-- Much faster method for inserting keys into a table
-@tparam table tbl the table that will have keys added to it
-@tparam[opt] number start_index the index at which values will be added, nil means end of the array, numbered indexs only
-@tparam table tbl2 the table that may contain both string and numbered keys
-@treturn table the table passed as the first argument
-@usage-- Merging two tables
-local tbl = {}
-local tbl2 = {}
-for i = 1,100 do tbl[i] = i tbl['_'..i] = i tbl2[i] = i tbl2['__'..i] = i end
-Common.table_insert(tbl,50,tbl2)
-]]
-function Common.table_insert(tbl,start_index,tbl2)
-    if not tbl2 then
-        tbl2 = start_index
-        start_index = nil
-    end
-
-    Common.array_insert(tbl,start_index,tbl2)
-    for key, value in pairs(tbl2) do
-        if not tonumber(key) then
-            tbl[key] = value
-        end
-    end
-
-    return tbl
-end
-
---[[-- Used to resolve a value that could also be a function returning that value
-@tparam any value the value which you want to test is not nil and if it is a function then call the function
-@treturn any the value given or returned by value if it is a function
-@usage-- Default value handling
--- if default value is not a function then it is returned
--- if it is a function then it is called with the first argument being self
-local value = Common.resolve_value(self.defaut_value,self)
-]]
-function Common.resolve_value(value,...)
-    if value then
-        if type(value) == 'function' then
-            return value(...)
-        else
-            return value
         end
     end
 end

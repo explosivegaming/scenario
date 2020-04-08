@@ -13,6 +13,7 @@ return {
     'modules.commands.tag',
     'modules.commands.teleport',
     'modules.commands.cheat-mode',
+    'modules.commands.ratio',
     'modules.commands.interface',
     'modules.commands.help',
     'modules.commands.roles',
@@ -27,6 +28,8 @@ return {
     'modules.commands.bonus',
     'modules.commands.home',
     -- QoL Addons
+    'modules.addons.station-auto-name',
+    'modules.addons.greetings',
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',
     'modules.addons.death-logger',
@@ -38,18 +41,20 @@ return {
     'modules.addons.random-player-colours',
     'modules.addons.discord-alerts',
     'modules.addons.chat-reply',
+    'modules.addons.tree-decon',
     -- GUI
+    'modules.gui.readme',
     'modules.gui.rocket-info',
     'modules.gui.science-info',
     'modules.gui.warp-list',
     'modules.gui.task-list',
     'modules.gui.player-list',
+    'modules.gui.server-ups',
     'modules.commands.debug',
     -- Config Files
-    'config.expcore-commands.auth_admin', -- commands tagged with admin_only are blocked for non admins
-    'config.expcore-commands.auth_roles', -- commands must be allowed via the role config
-    'config.expcore-commands.auth_runtime_disable', -- allows commands to be enabled and disabled during runtime
-    'config.permission_groups', -- loads some predefined permission groups
-    'config.roles', -- loads some predefined roles
-    'expcore.gui.test' -- loads multiple gui defines to test the gui system
+    'config.expcore.command_auth_admin', -- commands tagged with admin_only are blocked for non admins
+    'config.expcore.command_auth_roles', -- commands must be allowed via the role config
+    'config.expcore.command_runtime_disable', -- allows commands to be enabled and disabled during runtime
+    'config.expcore.permission_groups', -- loads some predefined permission groups
+    'config.expcore.roles', -- loads some predefined roles
 }

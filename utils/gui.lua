@@ -1,11 +1,7 @@
-local Token = require 'utils.token' --- @dep utils.token
-local Event = require 'utils.event' --- @dep utils.event
-local Game = require 'utils.game' --- @dep utils.game
 local Global = require 'utils.global' --- @dep utils.global
-local mod_gui = require 'mod-gui' --- @dep mod-gui
+local ExpGui = require 'expcore.gui' --- @dep expcore.gui
 
 local Gui = {}
-
 local data = {}
 
 Global.register(
@@ -15,12 +11,9 @@ Global.register(
     end
 )
 
-local top_elements = {}
-local on_visible_handlers = {}
-local on_pre_hidden_handlers = {}
-
 function Gui.uid_name()
-    return tostring(Token.uid())
+    local new_element = ExpGui.element()
+    return new_element.name
 end
 
 -- Associates data with the LuaGuiElement. If data is nil then removes the data
@@ -75,219 +68,62 @@ function Gui.clear(element)
     element.clear()
 end
 
-local function handler_factory(event_id)
-    local handlers
-
-    local function on_event(event)
-        local element = event.element
-        if not element or not element.valid then
-            return
-        end
-
-        local handler = handlers[element.name]
-        if not handler then
-            return
-        end
-
-        local player = Game.get_player_by_index(event.player_index)
-        if not player or not player.valid then
-            return
-        end
-        event.player = player
-
-        handler(event)
-    end
-
+local function handler_factory(event_name)
     return function(element_name, handler)
-        if not handlers then
-            handlers = {}
-            Event.add(event_id, on_event)
-        end
-
-        handlers[element_name] = handler
+        local element = ExpGui.defines[element_name]
+        if not element then return end
+        element[event_name](element,function(_,_,event)
+            handler(event)
+        end)
     end
-end
-
-local function custom_handler_factory(handlers)
-    return function(element_name, handler)
-        handlers[element_name] = handler
-    end
-end
-
-local function custom_raise(handlers, element, player)
-    local handler = handlers[element.name]
-    if not handler then
-        return
-    end
-
-    handler({element = element, player = player})
 end
 
 -- Register a handler for the on_gui_checked_state_changed event for LuaGuiElements with element_name.
 -- Can only have one handler per element name.
 -- Guarantees that the element and the player are valid when calling the handler.
 -- Adds a player field to the event table.
-Gui.on_checked_state_changed = handler_factory(defines.events.on_gui_checked_state_changed)
+Gui.on_checked_state_changed = handler_factory('on_checked_changed')
 
 -- Register a handler for the on_gui_click event for LuaGuiElements with element_name.
 -- Can only have one handler per element name.
 -- Guarantees that the element and the player are valid when calling the handler.
 -- Adds a player field to the event table.
-Gui.on_click = handler_factory(defines.events.on_gui_click)
+Gui.on_click = handler_factory('on_click')
 
 -- Register a handler for the on_gui_closed event for a custom LuaGuiElements with element_name.
 -- Can only have one handler per element name.
 -- Guarantees that the element and the player are valid when calling the handler.
 -- Adds a player field to the event table.
-Gui.on_custom_close = handler_factory(defines.events.on_gui_closed)
+Gui.on_custom_close = handler_factory('on_closed')
 
 -- Register a handler for the on_gui_elem_changed event for LuaGuiElements with element_name.
 -- Can only have one handler per element name.
 -- Guarantees that the element and the player are valid when calling the handler.
 -- Adds a player field to the event table.
-Gui.on_elem_changed = handler_factory(defines.events.on_gui_elem_changed)
+Gui.on_elem_changed = handler_factory('on_elem_changed')
 
 -- Register a handler for the on_gui_selection_state_changed event for LuaGuiElements with element_name.
 -- Can only have one handler per element name.
 -- Guarantees that the element and the player are valid when calling the handler.
 -- Adds a player field to the event table.
-Gui.on_selection_state_changed = handler_factory(defines.events.on_gui_selection_state_changed)
+Gui.on_selection_state_changed = handler_factory('on_selection_changed')
 
 -- Register a handler for the on_gui_text_changed event for LuaGuiElements with element_name.
 -- Can only have one handler per element name.
 -- Guarantees that the element and the player are valid when calling the handler.
 -- Adds a player field to the event table.
-Gui.on_text_changed = handler_factory(defines.events.on_gui_text_changed)
+Gui.on_text_changed = handler_factory('on_text_changed')
 
 -- Register a handler for the on_gui_value_changed event for LuaGuiElements with element_name.
 -- Can only have one handler per element name.
 -- Guarantees that the element and the player are valid when calling the handler.
 -- Adds a player field to the event table.
-Gui.on_value_changed = handler_factory(defines.events.on_gui_value_changed)
-
--- Register a handler for when the player shows the top LuaGuiElements with element_name.
--- Assuming the element_name has been added with Gui.allow_player_to_toggle_top_element_visibility.
--- Can only have one handler per element name.
--- Guarantees that the element and the player are valid when calling the handler.
--- Adds a player field to the event table.
-Gui.on_player_show_top = custom_handler_factory(on_visible_handlers)
-
--- Register a handler for when the player hides the top LuaGuiElements with element_name.
--- Assuming the element_name has been added with Gui.allow_player_to_toggle_top_element_visibility.
--- Can only have one handler per element name.
--- Guarantees that the element and the player are valid when calling the handler.
--- Adds a player field to the event table.
-Gui.on_pre_player_hide_top = custom_handler_factory(on_pre_hidden_handlers)
-
---- Allows the player to show / hide this element.
--- The element must be in Gui.get_top_element_flow(player)
--- This function must be called in the control stage, i.e not inside an event.
--- @param element_name<string> This name must be globally unique.
-function Gui.allow_player_to_toggle_top_element_visibility(element_name)
-    if _LIFECYCLE ~= _STAGE.control then
-        error('can only be called during the control stage', 2)
-    end
-    top_elements[#top_elements + 1] = element_name
-end
+Gui.on_value_changed = handler_factory('on_value_changed')
 
 --- Returns the flow where top elements can be added and will be effected by google visibility
 -- For the toggle to work it must be registed with Gui.allow_player_to_toggle_top_element_visibility(element_name)
 -- @tparam LuaPlayer player pointer to the player who has the gui
 -- @treturn LuaGuiElement the top element flow
-function Gui.get_top_element_flow(player)
-    player = Game.get_player_from_any(player)
-    return mod_gui.get_button_flow(player)
-end
-
-local toggle_button_name = Gui.uid_name()
-Gui.top_toggle_button_name = toggle_button_name
-
-Event.add(
-    defines.events.on_player_created,
-    function(event)
-        local player = Game.get_player_by_index(event.player_index)
-
-        if not player or not player.valid then
-            return
-        end
-
-        local top = Gui.get_top_element_flow(player)
-
-        local b = top.add {
-            type = 'button',
-            name = toggle_button_name,
-            style = mod_gui.button_style,
-            caption = '<',
-            tooltip = {'gui_util.button_tooltip'}
-        }
-        local style = b.style
-        style.width = 18
-        style.height = 36
-        style.left_padding = 0
-        style.top_padding = 0
-        style.right_padding = 0
-        style.bottom_padding = 0
-        style.font = 'default-small-bold'
-    end
-)
-
-Gui.on_click(
-    toggle_button_name,
-    function(event)
-        local button = event.element
-        local player = event.player
-        local top = Gui.get_top_element_flow(player)
-
-        if button.caption == '<' then
-            for i = 1, #top_elements do
-                local name = top_elements[i]
-                local ele = top[name]
-                if ele and ele.valid then
-                    if ele.visible then
-                        custom_raise(on_pre_hidden_handlers, ele, player)
-                        ele.visible = false
-                    end
-                end
-            end
-
-            button.caption = '>'
-            button.style.height = 24
-        else
-            for i = 1, #top_elements do
-                local name = top_elements[i]
-                local ele = top[name]
-                if ele and ele.valid then
-                    if not ele.visible then
-                        ele.visible = true
-                        custom_raise(on_visible_handlers, ele, player)
-                    end
-                end
-            end
-
-            button.caption = '<'
-            button.style.height = 36
-        end
-    end
-)
-
-if _DEBUG then
-    local concat = table.concat
-
-    local names = {}
-    Gui.names = names
-
-    function Gui.uid_name()
-        local info = debug.getinfo(2, 'Sl')
-        local filepath = info.source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
-        local line = info.currentline
-
-        local token = tostring(Token.uid())
-
-        local name = concat {token, ' - ', filepath, ':line:', line}
-        names[token] = name
-
-        return token
-    end
-end
+Gui.get_top_element_flow = ExpGui.get_top_flow
 
 return Gui

@@ -29,7 +29,7 @@
     <a href="index.html"><h1>ExpGaming Scenario</h1></a>
 
     <!-- project description -->
-    <p class="project-desc">Explosive Gaming's server scenario for 0.17</p>
+    <p class="project-desc">Explosive Gaming's server scenario for 0.18</p>
 
     <!-- project full description -->
     </div>
@@ -45,42 +45,39 @@
     <h2>Core</h2>
     <table class="module_list">
     <tr>
-    <td class="name"><a href="core/Commands.html">Commands</a></td>
-    <td class="summary"><span>Core Module - Commands
-    - Factorio command making module that makes commands with better parse and more modularity</span></td>
+    <td class="name"><a href="core/Async.html">Async</a></td>
+    <td class="summary"><span>Core Module - Async
+- An extention of task and token to allow a single require to register and run async functions.</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="core/Common-Library.html">Common-Library</a></td>
-    <td class="summary"><span>Core Module - Common Library
-    - Adds some commonly used functions used in many modules</span></td>
+    <td class="name"><a href="core/Commands.html">Commands</a></td>
+    <td class="summary"><span>Core Module - Commands
+- Factorio command making module that makes commands with better parse and more modularity</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="core/Common.html">Common</a></td>
+    <td class="summary"><span>Core Module - Common
+- Adds some commonly used functions used in many modules</span></td>
     </tr>
     <tr>
     <td class="name"><a href="core/Gui.html">Gui</a></td>
     <td class="summary"><span>Core Module - Gui
-    - This file is used to require all the different elements of the gui module
-    - each module has an outline here but for more details see their separate files in ./gui
-    - please read the files for more documentation that cant be shown here
-    - please note there is a rework planned but not started</span></td>
+- Used to simplify gui creation using factory functions called element defines</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="core/Permissions-Groups.html">Permissions-Groups</a></td>
+    <td class="name"><a href="core/Groups.html">Groups</a></td>
     <td class="summary"><span>Core Module - Permission Groups
-    - Permission group making for factorio so you never have to make one by hand again</span></td>
+- Permission group making for factorio so you never have to make one by hand again</span></td>
     </tr>
     <tr>
     <td class="name"><a href="core/Roles.html">Roles</a></td>
     <td class="summary"><span>Core Module - Roles
-    - Factorio role system to manage custom permissions.</span></td>
+- Factorio role system to manage custom permissions.</span></td>
     </tr>
     <tr>
     <td class="name"><a href="core/Store.html">Store</a></td>
     <td class="summary"><span>Core Module - Store
 - Used to store and watch for updates for values in the global table</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="core/Sudo.html">Sudo</a></td>
-    <td class="summary"><span>Core Module - Sudo
-    - An extention of task and token to allow a single require to register and run functions bypassing all permissions.</span></td>
     </tr>
     </table>
     <h2>Control</h2>
@@ -154,6 +151,10 @@
     <td class="summary"><span>Sends alert messages to our discord server when certain events are triggered</span></td>
     </tr>
     <tr>
+    <td class="name"><a href="addons/greetings.html">greetings</a></td>
+    <td class="summary"><span>Greets players on join</span></td>
+    </tr>
+    <tr>
     <td class="name"><a href="addons/Pollution-Grading.html">Pollution-Grading</a></td>
     <td class="summary"><span>Makes polution look much nice of the map, ie not one big red mess</span></td>
     </tr>
@@ -169,13 +170,22 @@
     <td class="name"><a href="addons/Spawn-Area.html">Spawn-Area</a></td>
     <td class="summary"><span>Adds a custom spawn area with chests and afk turrets</span></td>
     </tr>
+    <tr>
+    <td class="name"><a href="addons/Tree-Decon.html">Tree-Decon</a></td>
+    <td class="summary"><span>Makes trees which are marked for decon "decay" quickly to allow faster building</span></td>
+    </tr>
     </table>
     <h2>Guis</h2>
     <table class="module_list">
     <tr>
     <td class="name"><a href="guis/Player-List.html">Player-List</a></td>
     <td class="summary"><span>Gui Module - Player List
-    - Adds a player list to show names and play time; also includes action buttons which can apply to players</span></td>
+    - Adds a player list to show names and play time; also includes action buttons which can preform actions to players</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="guis/Readme.html">Readme</a></td>
+    <td class="summary"><span>Gui Module - Readme
+    - Adds a main gui that contains lots of important information about our server</span></td>
     </tr>
     <tr>
     <td class="name"><a href="guis/Rocket-Info.html">Rocket-Info</a></td>
@@ -188,9 +198,14 @@
     - Adds a science info gui that shows production usage and net for the different science packs as well as an eta</span></td>
     </tr>
     <tr>
+    <td class="name"><a href="guis/server-ups.html">server-ups</a></td>
+    <td class="summary"><span>Gui Module - Server UPS
+    - Adds a server ups counter in the top right and a command to toggle is</span></td>
+    </tr>
+    <tr>
     <td class="name"><a href="guis/Task-List.html">Task-List</a></td>
     <td class="summary"><span>Gui Module - Task List
-    - Adds a task list to the game which players can add remove and edit items on</span></td>
+    - Adds a task list to the game which players can add, remove and edit items on</span></td>
     </tr>
     <tr>
     <td class="name"><a href="guis/Warps-List.html">Warps-List</a></td>
@@ -311,14 +326,6 @@
  core files should be required by modules and not be present in this list;</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="configs/Player-List.html">Player-List</a></td>
-    <td class="summary"><span>Config for the different action buttons that show on the player list;
- each button has the button define(s) given along side an auth function, and optional reason callback;
- if a reason callback is used then Store.set(action_name_store,player.name,'BUTTON_NAME') should be called during on_click;
- buttons can be removed from the gui by commenting them out of the config at the bottom of this file;
- the key used for the name of the button is the permission name used by the role system;</span></td>
-    </tr>
-    <tr>
     <td class="name"><a href="configs/Advanced-Start.html">Advanced-Start</a></td>
     <td class="summary"><span>This file is used to setup the map starting settings and the items players will start with</span></td>
     </tr>
@@ -355,11 +362,6 @@
     <td class="summary"><span>This will make commands only work if the role has been allowed it in the role config</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="configs/Commands-Auth-Runtime-Disable.html">Commands-Auth-Runtime-Disable</a></td>
-    <td class="summary"><span>This config for command auth allows commands to be globally enabled and disabled during runtime;
- this config adds Commands.disable and Commands.enable to enable and disable commands for all users</span></td>
-    </tr>
-    <tr>
     <td class="name"><a href="configs/Commands-Parse.html">Commands-Parse</a></td>
     <td class="summary"><span>This file contains some common command param parse functions;
 this file is less of a config and more of a requirement but you may wish to change how some behave;
@@ -372,11 +374,44 @@ see ./expcore/commands.lua for more details</span></td>
     <td class="summary"><span>Adds some parse functions that can be used with the role system</span></td>
     </tr>
     <tr>
+    <td class="name"><a href="configs/Commands-Auth-Runtime-Disable.html">Commands-Auth-Runtime-Disable</a></td>
+    <td class="summary"><span>This config for command auth allows commands to be globally enabled and disabled during runtime;
+ this config adds Commands.disable and Commands.enable to enable and disable commands for all users</span></td>
+    </tr>
+    <tr>
     <td class="name"><a href="configs/Permission-Groups.html">Permission-Groups</a></td>
     <td class="summary"><span>Use this file to add new permission groups to the game;
  start with Permission_Groups.new_group('name');
  then use either :allow_all() or :disallow_all() to set the default for non specified actions;
  then use :allow{} and :disallow{} to specify certain actions to allow/disallow</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="configs/Roles.html">Roles</a></td>
+    <td class="summary"><span>This is the main config file for the role system; file includes defines for roles and role flags and default values</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="configs/Player-List.html">Player-List</a></td>
+    <td class="summary"><span>Config for the different action buttons that show on the player list;
+ each button has the button define(s) given along side an auth function, and optional reason callback;
+ if a reason callback is used then Store.set(action_name_store,player.name,'BUTTON_NAME') should be called during on_click;
+ buttons can be removed from the gui by commenting them out of the config at the bottom of this file;
+ the key used for the name of the button is the permission name used by the role system;</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="configs/Rockets.html">Rockets</a></td>
+    <td class="summary"><span>This file controls what will show in each section of the rocket info gui</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="configs/Science.html">Science</a></td>
+    <td class="summary"><span>Config file for the science info gui</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="configs/Tasks.html">Tasks</a></td>
+    <td class="summary"><span>Config file for the tasks gui</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="configs/Warps.html">Warps</a></td>
+    <td class="summary"><span>This file contains all the different settings for the warp system and gui</span></td>
     </tr>
     <tr>
     <td class="name"><a href="configs/Pollution-Grading.html">Pollution-Grading</a></td>
@@ -395,18 +430,6 @@ see ./expcore/commands.lua for more details</span></td>
     <td class="summary"><span>Config file for the repair command</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="configs/Rockets.html">Rockets</a></td>
-    <td class="summary"><span>This file controls what will show in each section of the rocket info gui</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="configs/Roles.html">Roles</a></td>
-    <td class="summary"><span>This is the main config file for the role system; file includes defines for roles and role flags and default values</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="configs/Science.html">Science</a></td>
-    <td class="summary"><span>Config file for the science info gui</span></td>
-    </tr>
-    <tr>
     <td class="name"><a href="configs/Scorched-Earth.html">Scorched-Earth</a></td>
     <td class="summary"><span>This file controls the placement/degrading of tiles as players build and walk</span></td>
     </tr>
@@ -415,16 +438,8 @@ see ./expcore/commands.lua for more details</span></td>
     <td class="summary"><span>Used to config the spawn generation settings yes there is alot here i know just ignore the long tables at the end (they were generated with a command)</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="configs/Tasks.html">Tasks</a></td>
-    <td class="summary"><span>Config file for the tasks gui</span></td>
-    </tr>
-    <tr>
     <td class="name"><a href="configs/Warnings.html">Warnings</a></td>
     <td class="summary"><span>Config file for the warning system, this is very similar to reports but is for the use of moderators rather than normal users.</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="configs/Warps.html">Warps</a></td>
-    <td class="summary"><span>This file contains all the different settings for the warp system and gui</span></td>
     </tr>
     </table>
     <h2>Modules</h2>
@@ -437,21 +452,20 @@ see ./expcore/commands.lua for more details</span></td>
  this file is the landing point for all scenarios please DO NOT edit directly, further comments are to aid development</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/utils.alien_evolution_progress.html">utils.alien_evolution_progress</a></td>
-    <td class="summary"><span>info
-    Original (javascript) version: https://hastebin.com/udakacavap.js
-    Can be tested against: https://wiki.factorio.com/Enemies#Spawn_chances_by_evolution_factor</span></td>
+    <td class="name"><a href="modules/modules.addons.station-auto-name.html">modules.addons.station-auto-name</a></td>
+    <td class="summary"><span>LuaPlayerBuiltEntityEventFilters
+Events.set_event_filter(defines.events.on_built_entity, {{filter = "name", name = "fast-inserter"}})</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/utils.core.html">utils.core</a></td>
-    <td class="summary"><span>This file contains core utilities used by the redmew scenario.</span></td>
+    <td class="name"><a href="modules/overrides.debug.html">overrides.debug</a></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/utils.debug.html">utils.debug</a></td>
+    <td class="name"><a href="modules/overrides.math.html">overrides.math</a></td>
+    <td class="summary"><span>Takes two points and calculates the slope of a line</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/utils.dump_env.html">utils.dump_env</a></td>
-    <td class="summary"><span>A small debugging tool that writes the contents of _ENV to a file when the game loads.</span></td>
+    <td class="name"><a href="modules/overrides.table.html">overrides.table</a></td>
+    <td class="summary"><span>Searches a table to remove a specific element without an index</span></td>
     </tr>
     <tr>
     <td class="name"><a href="modules/utils.event.html">utils.event</a></td>
@@ -462,30 +476,9 @@ see ./expcore/commands.lua for more details</span></td>
     <td class="summary"><span>Do not use this function, use Event.add instead as it has safety checks.</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="modules/utils.math.html">utils.math</a></td>
-    <td class="summary"><span>Takes two points and calculates the slope of a line</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/utils.recipe_locker.html">utils.recipe_locker</a></td>
-    <td class="summary"><span>A module to prevent recipes from being unlocked by research.</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/utils.state_machine.html">utils.state_machine</a></td>
-    <td class="summary"><span>This module provides a classical mealy/moore state machine.</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/utils.table.html">utils.table</a></td>
-    <td class="summary"><span>Searches a table to remove a specific element without an index</span></td>
-    </tr>
-    <tr>
     <td class="name"><a href="modules/utils.task.html">utils.task</a></td>
     <td class="summary"><span>Threading simulation module
  Task.sleep()</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="modules/utils.timestamp.html">utils.timestamp</a></td>
-    <td class="summary"><span>source https://github.com/daurnimator/luatz/blob/master/luatz/timetable.lua
- edited down to just what is needed.</span></td>
     </tr>
     </table>
     <h2>Topics</h2>
@@ -514,7 +507,7 @@ see ./expcore/commands.lua for more details</span></td>
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2019-10-15 22:37:40 UTC</i>
+    <i>Last updated 2020-03-31 23:28:20 UTC</i>
     </div>
     </div>
     </div>

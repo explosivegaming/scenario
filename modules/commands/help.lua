@@ -5,7 +5,7 @@
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Global = require 'utils.global' --- @dep utils.global
-require 'config.expcore-commands.parse_general'
+require 'config.expcore.command_general_parse'
 
 local results_per_page = 5
 
@@ -18,7 +18,8 @@ end)
 -- @command chelp
 -- @tparam string keyword the keyword that will be looked for
 -- @tparam number page the page of help to view, must be in range of pages
-Commands.new_command('chelp','Searches for a keyword in all commands you are allowed to use.')
+Commands.new_command('search-help','Searches for a keyword in all commands you are allowed to use.')
+:add_alias('chelp','shelp','commands')
 :add_param('keyword',true)
 :add_param('page',true,'integer')
 :set_defaults{keyword='',page=1}

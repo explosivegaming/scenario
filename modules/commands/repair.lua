@@ -5,7 +5,7 @@
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local config = require 'config.repair' --- @dep config.repair
-require 'config.expcore-commands.parse_general'
+require 'config.expcore.command_general_parse'
 
 local max_time_to_live = 4294967295 -- unit32 max
 --- Repairs entities on your force around you

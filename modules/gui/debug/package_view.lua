@@ -1,5 +1,5 @@
 local Gui = require 'utils.gui' --- @dep utils.gui
-local Color = require 'resources.color_presets' --- @dep resources.color_presets
+local Color = require 'utils.color_presets' --- @dep utils.color_presets
 local Model = require 'modules.gui.debug.model' --- @dep modules.gui.debug.model
 
 local dump_function = Model.dump_function
@@ -17,9 +17,9 @@ local ignore = {
     math = true,
     debug = true,
     serpent = true,
-    ['utils.math'] = true,
+    ['overrides.math'] = true,
     util = true,
-    ['utils.inspect'] = true,
+    ['overrides.inspect'] = true,
     ['mod-gui'] = true
 }
 

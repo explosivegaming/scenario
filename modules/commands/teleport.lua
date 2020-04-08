@@ -4,7 +4,7 @@
 ]]
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
-require 'config.expcore-commands.parse_general'
+require 'config.expcore.command_general_parse'
 
 local function teleport(from_player,to_player)
     local surface = to_player.surface
@@ -23,7 +23,7 @@ Commands.new_command('teleport','Teleports a player to another player.')
 :add_param('from_player',false,'player-alive')
 :add_param('to_player',false,'player-online')
 :add_alias('tp')
-:set_flag('admin_only',true)
+:set_flag('admin_only')
 :register(function(player,from_player,to_player,raw)
     if from_player.index == to_player.index then
         -- return if attempting to teleport to self
@@ -40,7 +40,7 @@ end)
 -- @tparam LuaPlayer player the player that will be teleported, must be alive
 Commands.new_command('bring','Teleports a player to you.')
 :add_param('player',false,'player-alive')
-:set_flag('admin_only',true)
+:set_flag('admin_only')
 :register(function(player,from_player,raw)
     if from_player.index == player.index then
         -- return if attempting to teleport to self
@@ -58,7 +58,7 @@ end)
 Commands.new_command('goto','Teleports you to a player.')
 :add_param('player',false,'player-online')
 :add_alias('tp-me','tpme')
-:set_flag('admin_only',true)
+:set_flag('admin_only')
 :register(function(player,to_player,raw)
     if to_player.index == player.index then
         -- return if attempting to teleport to self

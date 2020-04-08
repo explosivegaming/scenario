@@ -5,7 +5,7 @@ local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.game
 local Global = require 'utils.global' --- @dep utils.global
 local config = require 'config.death_logger' --- @dep config.death_logger
-local format_time,move_items = ext_require('expcore.common','format_time','move_items') --- @dep expcore.common
+local format_time,move_items = _C.format_time, _C.move_items --- @dep expcore.common
 
 local deaths = {
     archive={} -- deaths moved here after body is gone

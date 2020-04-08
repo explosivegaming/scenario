@@ -28,7 +28,7 @@ Event.add(defines.events.on_console_chat,function(event)
                 else
                     player.print{'chat-bot.disallow'}
                 end
-            else
+            elseif not allowed then
                 player.print{'chat-bot.reply',reply}
             end
         end

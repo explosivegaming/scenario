@@ -5,7 +5,7 @@
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Global = require 'utils.global' --- @dep utils.global
-require 'config.expcore-commands.parse_general'
+require 'config.expcore.command_general_parse'
 
 local homes = {}
 Global.register(homes,function(tbl)

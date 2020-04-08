@@ -4,8 +4,8 @@
 ]]
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
-local move_items = ext_require('expcore.common','move_items') --- @dep expcore.common
-require 'config.expcore-commands.parse_roles'
+local move_items = _C.move_items --- @dep expcore.common
+require 'config.expcore.command_role_parse'
 
 --- Clears a players inventory
 -- @command clear-inventory

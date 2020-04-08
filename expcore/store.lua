@@ -27,7 +27,7 @@ local player_scores = Store.register(function(player) -- Use player name as the 
 end)
 
 -- When any key in the store is changed this function will trigger
-Store.watch(player_scores,function(value,key)
+Store.watch(player_scores,function(value,key,old_value)
     game.print(key..' now has a score of '..value)
 end)
 
@@ -175,7 +175,7 @@ local player_scores = Store.register(function(player)
 end)
 
 -- Register the watcher so that when we change the value the message is printed
-Store.watch(player_scores,function(value,key)
+Store.watch(player_scores,function(value,key,old_value)
     game.print(key..' now has a score of '..value)
 end)
 
@@ -274,18 +274,21 @@ Store.clear(player_scores)
 ]]
 function Store.clear(store,key)
     key = Store.validate(store,key,2)
+    local old_value
 
     -- Check if there is a key being used
     if key then
         if type(data_store[store]) == 'table' then
+            old_value = data_store[store][key]
             data_store[store][key] = nil
         end
     else
+        old_value = data_store[store]
         data_store[store] = nil
     end
 
     -- Trigger any watch functions
-    Store.raw_trigger(store,key,nil)
+    Store.raw_trigger(store,key,nil,old_value)
 end
 
 --[[-- Used to set the data in a store, will trigger any watchers, key is optional depending on if you are using them
@@ -325,19 +328,22 @@ function Store.set(store,key,value)
 
     -- Check the store is valid
     key = Store.validate(store,key,2)
+    local old_value
 
     -- If there is a key being used then the store must be a able
     if key then
         if type(data_store[store]) ~= 'table' then
             data_store[store] = {_value = data_store[store]}
         end
+        old_value = data_store[store][key]
         data_store[store][key] = value
     else
+        old_value = data_store[store]
         data_store[store] = value
     end
 
     -- Trigger any watchers
-    Store.raw_trigger(store,key,value)
+    Store.raw_trigger(store,key,value,old_value)
 end
 
 --[[-- Used to update the data in a store, use this with tables, will trigger any watchers, key is optional depending on if you are using them
@@ -386,7 +392,7 @@ function Store.update(store,key,updater)
 
     -- Check the store is valid
     key = Store.validate(store,key,2)
-    local value
+    local value, old_value
 
     -- If a key is used then the store must be a table
     if key then
@@ -397,6 +403,7 @@ function Store.update(store,key,updater)
         -- Call the updater and if it returns a value then set this value
         local rtn = updater(data_store[store][key])
         if rtn then
+            old_value = data_store[store][key]
             data_store[store][key] = rtn
         end
         value = data_store[store][key]
@@ -405,6 +412,7 @@ function Store.update(store,key,updater)
         -- Call the updater and if it returns a value then set this value
         local rtn = updater(data_store[store])
         if rtn then
+            old_value = data_store[store][key]
             data_store[store] = rtn
         end
         value = data_store[store]
@@ -412,7 +420,7 @@ function Store.update(store,key,updater)
     end
 
     -- Trigger any watchers
-    Store.raw_trigger(store,key,value)
+    Store.raw_trigger(store,key,value,old_value)
 end
 
 --[[-- Used to update all values that are in a store, similar to Store.update but acts on all keys at once, will trigger watchers for every key present
@@ -445,7 +453,7 @@ function Store.map(store,updater)
 
     -- Get all that data in the store and check its a table
     local data = data_store[store]
-    if not type(data) == 'table' then
+    if type(data) ~= 'table' then
         return
     end
 
@@ -455,7 +463,7 @@ function Store.map(store,updater)
         if rtn then
             data[key] = rtn
         end
-        Store.raw_trigger(store,key,data[key])
+        Store.raw_trigger(store,key,data[key],value)
     end
 end
 
@@ -476,9 +484,10 @@ function Store.trigger(store,key)
     -- Get the data from the data store
     local data = data_store[store]
     if key then
-        Store.raw_trigger(store,key,data[key])
+        data = data[key]
+        Store.raw_trigger(store,key,data,data)
     else
-        Store.raw_trigger(store,key,data)
+        Store.raw_trigger(store,key,data,data)
     end
 end
 
@@ -486,6 +495,7 @@ end
 @tparam number store the uid of the store that you want to trigger
 @tparam[opt] ?string|any key the key that you want to trigger, must be a string unless you have a serializer
 @tparam[opt] any value the new value that is at this key or store, passed directly to the watcher
+@tparam[opt] any old_value the old value that was at this key or store often the same if value is a table, passed directly to the watcher
 
 @usage-- Triggering a manule call of the watchers
 -- The type of store we use does not really matter for this as long as you pass it what you watchers are expecting
@@ -493,16 +503,16 @@ local scenario_diffculty = Store.register()
 
 -- Trigger the watchers with a fake change of diffculty
 -- This is mostly used internally but it can be useful in other cases
-Store.raw_trigger(scenario_diffculty,nil,'normal')
+Store.raw_trigger(scenario_diffculty,nil,'normal','normal')
 
 ]]
-function Store.raw_trigger(store,key,value)
+function Store.raw_trigger(store,key,value,old_value)
     key = Store.validate(store,key,2)
 
     -- Get the watchers and then loop over them
     local watchers = Store.watchers[store] or {}
     for _,watcher in pairs(watchers) do
-        local success, err = pcall(watcher,value,key)
+        local success, err = pcall(watcher,value,key,old_value)
         if not success then
             error('Store watcher casued an error:\n\t'..err)
         end

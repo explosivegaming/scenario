@@ -22,6 +22,7 @@ Event.add(defines.events.on_player_created, function(event)
             local stats = player.force.item_production_statistics
             local made = stats.get_input_count(item)
             local success,count = pcall(callback,made,stats.get_input_count,player)
+            count = math.floor(count)
             if success and count > 0 then
                 player.insert{name=item,count=count}
             end

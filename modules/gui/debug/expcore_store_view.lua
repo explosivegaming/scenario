@@ -1,6 +1,6 @@
 local Gui = require 'utils.gui' --- @dep utils.gui
 local Store = require 'expcore.store' --- @dep utils.global
-local Color = require 'resources.color_presets' --- @dep resources.color_presets
+local Color = require 'utils.color_presets' --- @dep utils.color_presets
 local Model = require 'modules.gui.debug.model' --- @dep modules.gui.debug.model
 
 local dump = Model.dump
@@ -24,8 +24,8 @@ function Public.show(container)
     local left_panel_style = left_panel.style
     left_panel_style.width = 300
 
-    for store_id, token_name in pairs(Store.file_paths) do
-        local header = left_panel.add({type = 'flow'}).add {type = 'label', name = header_name, caption = store_id..' - '..token_name}
+    for store_id, file_path in pairs(Store.file_paths) do
+        local header = left_panel.add({type = 'flow'}).add {type = 'label', name = header_name, caption = store_id..' - '..file_path}
         Gui.set_data(header, store_id)
     end
 

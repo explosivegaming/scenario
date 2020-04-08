@@ -1,12 +1,12 @@
 --- Gives players random colours when they join, also applies preset colours to those who have them
 -- @addon Player-Colours
 
-local Colours = require 'resources.color_presets' --- @dep resources.color_presets
+local Colours = require 'utils.color_presets' --- @dep utils.color_presets
 local Game = require 'utils.game' --- @dep utils.game
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.preset_player_colours' --- @dep config.preset_player_colours
 local Global = require 'utils.global' --- @dep utils.global
-require 'utils.table'
+require 'overrides.table'
 
 Global.register(config,function(tbl)
     config = tbl

@@ -24,8 +24,7 @@ Warps.make_warp_tag(warp_id)
 local Store = require 'expcore.store' --- @dep expcore.store
 local Global = require 'utils.global' --- @dep utils.global
 local Token = require 'utils.token' --- @dep utils.token
-local config = require 'config.warps' --- @dep config.warps
-local table_values,table_keysort = ext_require('expcore.common','table_values','table_keysort') --- @dep expcore.common
+local config = require 'config.gui.warps' --- @dep config.warps
 
 local Warps = {}
 
@@ -64,7 +63,7 @@ Store.watch(warp_store,function(warp,warp_id)
         end
 
         -- Sort the warp names in alphabetical order
-        local new_warp_ids = table_values(table_keysort(warp_names))
+        local new_warp_ids = table.get_values(table.keysort(warp_names))
         table.insert(new_warp_ids,1,spawn_id)
         new_warp_ids.spawn = spawn_id
         force_warps[force_name] = new_warp_ids
@@ -150,7 +149,7 @@ function Warps.make_warp_area(warp_id)
     local position = warp.position
     local posx = position.x
     local posy = position.y
-    local radius = config.activation_range
+    local radius = config.standard_proximity_radius
     local radius2 = radius^2
 
     -- Get the tile that is being replaced, store.update not needed as we dont want it to trigger
@@ -203,7 +202,7 @@ function Warps.remove_warp_area(warp_id)
     local warp = Store.get(warp_store,warp_id)
     local position = warp.position
     local surface = warp.surface
-    local radius = config.activation_range
+    local radius = config.standard_proximity_radius
     local radius2 = radius^2
 
     -- Check that a warp area was created previously

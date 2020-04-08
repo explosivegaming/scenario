@@ -5,8 +5,8 @@
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Roles = require 'expcore.roles' --- @dep expcore.roles
-require 'config.expcore-commands.parse_general'
-require 'config.expcore-commands.parse_roles'
+require 'config.expcore.command_general_parse'
+require 'config.expcore.command_role_parse'
 
 --- Sets your player tag.
 -- @command tag

@@ -4,8 +4,8 @@
 ]]
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
-local format_chat_player_name = ext_require('expcore.common','format_chat_player_name') --- @dep expcore.common
-require 'config.expcore-commands.parse_general'
+local format_chat_player_name = _C.format_chat_player_name --- @dep expcore.common
+require 'config.expcore.command_general_parse'
 
 --- Sends a message in chat that only admins can see
 -- @command admin-chat
@@ -13,7 +13,7 @@ require 'config.expcore-commands.parse_general'
 Commands.new_command('admin-chat','Sends a message in chat that only admins can see.')
 :add_param('message',false)
 :enable_auto_concat()
-:set_flag('admin_only',true)
+:set_flag('admin_only')
 :add_alias('ac')
 :register(function(player,message,raw)
     local player_name_colour = format_chat_player_name(player)
