@@ -56,7 +56,7 @@ Event.add(defines.events.on_tick, function()
 
     local max_remove = math.floor(head/100)+1
     local remove_count = math.random(0, max_remove)
-    while remove_count > 0 do
+    while remove_count > 0 and head > 0 do
         local remove_index = math.random(1,head)
         local entity = tree_queue[remove_index]
         tree_queue[remove_index] = tree_queue[head]
