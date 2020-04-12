@@ -211,7 +211,7 @@ Gui.element(function(_,parent)
         { _roles={'Board Member','Senior Backer'}, _title={'readme.backers-board'}, _width=145 }, -- change role to board
         { _roles={'Sponsor','Supporter'}, _title={'readme.backers-backers'}, _width=196 }, -- change to backer
         { _roles={'Moderator','Trainee'}, _title={'readme.backers-staff'}, _width=235 },
-        { _roles={}, _title={'readme.backers-active'}, _width=235 },
+        { _roles={}, _time=3*3600*60, _title={'readme.backers-active'}, _width=235 },
     }
 
     -- Fill by player roles
@@ -220,7 +220,7 @@ Gui.element(function(_,parent)
             for _, role_name in pairs(players._roles) do
                 if table.contains(player_roles, role_name) then
                     done[player_name] = true
-                    table.insert(players,player_name)
+                    table.insert(players, player_name)
                     break
                 end
             end
@@ -228,11 +228,12 @@ Gui.element(function(_,parent)
     end
 
     -- Fill by active times
-    local active_time = 3*3600*60
     for _, player in pairs(game.players) do
         if not done[player.name] then
-            if player.online_time > active_time then
-                table.insert(groups.Active,player.name)
+            for _, players in ipairs(groups) do
+                if players._time and player.online_time > players._time then
+                    table.insert(players, player.name)
+                end
             end
         end
     end
