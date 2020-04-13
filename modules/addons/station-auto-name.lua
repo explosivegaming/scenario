@@ -33,8 +33,13 @@ function(event)
             local item_name = recourse_closed.name
             if item_name then -- prevent errors if something went wrong
                 local item_name2 = item_name:gsub("^%l", string.upper):gsub('-',' ') -- removing the - and making first letter capital
+                
+                local Item_ore_fluid = "item"
+                if item_name == "crude-oil" then
+                    Item_ore_fluid = "fluid"
+                end
                 --Final string:
-                enetety.backer_name = string.format("[L] [img=item.%s] %s %s (%s)",item_name,item_name2,enetety.backer_name,Angle( enetety ))
+                enetety.backer_name = string.format("[L] [img=%s.%s] %s %s (%s)",Item_ore_fluid,item_name,item_name2,enetety.backer_name,Angle( enetety ))
             end
         end
     end
