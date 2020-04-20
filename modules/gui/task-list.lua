@@ -34,7 +34,7 @@ local function check_player_permissions(player,task)
         elseif allow_edit_task == 'admin' then
             return player.admin
         elseif allow_edit_task == 'expcore.roles' then
-            return Roles.player_allowed(player,config.edit_tasks_role_permission)
+            return Roles.player_allowed(player,config.expcore_roles_allow_edit_task)
         end
 
         -- Return false as all other condidtions have not been met
@@ -49,7 +49,7 @@ local function check_player_permissions(player,task)
         elseif allow_add_task == 'admin' then
             return player.admin
         elseif allow_add_task == 'expcore.roles' then
-            return Roles.player_allowed(player,config.expcore_roles_add_permission)
+            return Roles.player_allowed(player,config.expcore_roles_allow_add_task)
         end
 
         -- Return false as all other condidtions have not been met
