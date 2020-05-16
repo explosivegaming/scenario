@@ -141,7 +141,8 @@ Roles.new_role('Sponsor','Spon')
     'command/home-get',
     'command/return',
     'fast-tree-decon',
-    'command/load-quickbar'
+    'command/load-quickbar',
+    'command/save-quickbar'
 }
 
 Roles.new_role('Supporter','Sup')
