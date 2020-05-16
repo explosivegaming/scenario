@@ -10,9 +10,8 @@ local config = require 'config.preset_player_quickbar' --- @dep config.preset_pl
 require 'config.expcore.command_general_parse'
 
 
---- Changes the amount of bonus you receive
--- @command bonus
--- @tparam number amount range 0-50 the percent increase for your bonus
+--- Loads your quickbar preset
+-- @command load-quickbar
 Commands.new_command('load-quickbar','Loads your preset Quickbar items')
 :register(function(player)
     if config.players[player.name] then
