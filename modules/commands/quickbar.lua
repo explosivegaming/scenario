@@ -14,12 +14,12 @@ require 'config.expcore.command_general_parse'
 -- @command load-quickbar
 Commands.new_command('load-quickbar','Loads your preset Quickbar items')
 :register(function(player)
-    if config.players[player.name] then
-        local custom_quickbar = config.players[player.name]
+    if config[player.name] then
+        local custom_quickbar = config[player.name]
         for i, item_name in ipairs(custom_quickbar) do
           player.set_quick_bar_slot(i, item_name)
         end
     else
-        Commands.print('Quickbar preset not found','red')
+        Commands.error('Quickbar preset not found')
     end
 end)
