@@ -27,6 +27,7 @@ return {
     'modules.commands.find',
     'modules.commands.bonus',
     'modules.commands.home',
+    'modules.commands.quickbar',
     -- QoL Addons
     'modules.addons.station-auto-name',
     'modules.addons.greetings',
