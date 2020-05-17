@@ -35,7 +35,7 @@ Commands.new_command('save-quickbar','Saves your Quickbar preset items to file')
     for i=1, 100 do
         local slot = player.get_quick_bar_slot(i)
         if slot ~= nil then
-            table.insert(quickbar_names, i, slot.name)
+            quickbar_names[i] = slot.name
         end
     end
     game.write_file("quickbar_preset.txt", player.name .. " = " .. serpent.line(quickbar_names) .. "\n", true)
