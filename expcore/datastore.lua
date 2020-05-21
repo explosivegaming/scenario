@@ -4,6 +4,7 @@ local Event = require 'utils.event' --- @dep utils.event
 local DatastoreManager = {}
 local Datastores = {}
 local Datastore = {}
+local copy = table.deep_copy
 
 --- Save datastores in the global table
 global.datastores = Datastores
@@ -129,6 +130,15 @@ function Datastore:write_action(action, key, value)
     game.write_file('datastore.pipe', table.concat(data, ' ')..'\n', true, 0)
 end
 
+--- Set a callback that will be used to serialize keys which aren't strings
+function Datastore:set_serializer(callback)
+    assert(type(callback) == 'function', 'Callback must be a function')
+    self.serializer = callback
+end
+
+--- Create a new datastore which is combined into this one
+Datastore.combine = DatastoreManager.combine
+
 --- Request a value from an external source
 function Datastore:request(key)
     if self.combined then return self.combined:request(key) end
@@ -138,11 +148,11 @@ end
 
 --- Save a value to an external source
 function Datastore:save(key)
-    if self.combined then return self.combined:save(key) end
+    if self.combined then self.combined:save(key) end
     if not self.save_to_disk then return end
     key = self:serialize(key)
     local value = self:raw_get(key)
-    value = self:raise_event('on_save', key, value)
+    value = self:raise_event('on_save', key, copy(value))
     local action = self.propagateChanges and 'propagate' or 'save'
     self:write_action(action, key, value)
 end
@@ -151,6 +161,7 @@ end
 function Datastore:unload(key)
     if self.combined then return self.combined:unload(key) end
     key = self:serialize(key)
+    self:raise_event('on_unload', key, copy(self:raw_get(key)))
     self:save(key)
     self:raw_set(key)
 end
@@ -174,7 +185,7 @@ function Datastore:get(key, default)
     key = self:serialize(key)
     local value = self:raw_get(key)
     if value ~= nil then return value end
-    return table.deep_copy(default)
+    return copy(default)
 end
 
 --- Set a value in local storage
@@ -243,12 +254,6 @@ end
 function Datastore:unload_all(callback)
     local data = self:get_all(callback)
     for key in pairs(data) do self:unload(key) end
-end
-
---- Set a callback that will be used to serialize keys which aren't strings
-function Datastore:set_serializer(callback)
-    assert(type(callback) == 'function', 'Callback must be a function')
-    self.serializer = callback
 end
 
 ----- Events -----

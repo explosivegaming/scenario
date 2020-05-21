@@ -220,6 +220,8 @@ local default = Roles.new_role('Guest','')
     'command/report',
     'command/ratio',
     'command/server-ups',
+    'command/data-policy',
+    'command/set-data-policy',
     'gui/player-list',
     'gui/rocket-info',
     'gui/science-info',
