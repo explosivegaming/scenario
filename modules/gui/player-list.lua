@@ -128,6 +128,7 @@ end)
         local old_selected_player_name = Store.get(selected_player_store,player)
         if selected_player_name == old_selected_player_name then
             Store.clear(selected_player_store,player)
+            Store.clear(selected_action_store,player)
         else
             Store.set(selected_player_store,player,selected_player_name)
         end

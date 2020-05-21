@@ -134,28 +134,12 @@ return {
     black = {r = 0, g = 0, b = 0},
     silver = {r = 192, g = 192, b = 192},
     dim_grey = {r = 105, g = 105, b = 105},
-    dim_gray = {r = 105, g = 105, b = 105},
     grey = {r = 128, g = 128, b = 128},
-    gray = {r = 128, g = 128, b = 128},
     dark_grey = {r = 169, g = 169, b = 169},
-    dark_gray = {r = 169, g = 169, b = 169},
     light_grey = {r = 211, g = 211, b = 211},
-    light_gray = {r = 211, g = 211, b = 211},
     gainsboro = {r = 220, g = 220, b = 220},
     white_smoke = {r = 245, g = 245, b = 245},
     white = {r = 255, g = 255, b = 255},
-    jailed = {r = 255, g = 255, b = 255},
-    probation = {r = 255, g = 255, b = 255},
-    guest = {r = 255, g = 255, b = 255},
-    auto_trusted = {r = 192, g = 192, b = 192},
-    regular = {r = 0.155, g = 0.540, b = 0.898},
-    admin = {r = 0.093, g = 0.768, b = 0.172},
-    donator = {r = 172.6, g = 70.2, b = 215.8},
-    [-10] = {r = 255, g = 255, b = 255}, -- probation
-    [0] = {r = 255, g = 255, b = 255}, -- guest
-    [10] = {r = 192, g = 192, b = 192}, -- auto_trusted
-    [20] = {r = 0.155, g = 0.540, b = 0.898}, -- regular
-    [30] = {r = 0.093, g = 0.768, b = 0.172}, -- admin
     success = {r = 0, g = 255, b = 0},
     warning = {r = 255, g = 255, b = 0},
     fail = {r = 255, g = 0, b = 0},
