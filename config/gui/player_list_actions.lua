@@ -14,6 +14,7 @@ local Warnings = require 'modules.control.warnings' --- @dep modules.control.war
 local Jail = require 'modules.control.jail' --- @dep modules.control.jail
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 local format_chat_player_name = _C.format_chat_player_name --- @dep expcore.common
+local move_items = _C.move_items --- @dep expcore.common
 
 local selected_player_store = ''
 local selected_action_store = ''
@@ -185,7 +186,7 @@ local function kick_player_callback(player,reason)
     game.kick_player(selected_player,reason)
 end
 
---- Bans the action player, requires a reason
+--- Bans the action player, requires a reason. Player's items placed in spawn chests
 -- @element ban_player
 local ban_player = new_button('utility/danger_icon',{'player-list.ban-player'})
 :on_click(function(player)
@@ -194,6 +195,9 @@ end)
 
 local function ban_player_callback(player,reason)
     local selected_player = get_action_player_name(player)
+    local inv = player.get_main_inventory()
+    move_items(inv.get_contents())
+    inv.clear()
     game.ban_player(selected_player,reason)
 end
 
