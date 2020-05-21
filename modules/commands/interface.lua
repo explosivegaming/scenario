@@ -29,12 +29,8 @@ end
 
 local interface_env = {} -- used as a persistent sandbox for interface commands
 local interface_callbacks = {} -- saves callbacks which can load new values per use
-Global.register({
-    interface_env = interface_env,
-    interface_callbacks = interface_callbacks
-},function(tbl)
-    interface_env = tbl.interface_env
-    interface_callbacks = tbl.interface_callbacks
+Global.register(interface_env,function(tbl)
+    interface_env = tbl
 end)
 
 --- Adds a callback function when the interface command is used
