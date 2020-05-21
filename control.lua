@@ -12,10 +12,10 @@ require 'overrides.stages' -- Data stages used in factorio, often used to test f
 require 'overrides.print' -- Overrides the _G.print function
 require 'overrides.math' -- Omitting the math library is a very bad idea
 require 'overrides.table' -- Adds alot more functions to the table module
+global.version = require 'overrides.version' -- The current version for exp gaming scenario
 inspect = require 'overrides.inspect' -- Used to covert any value into human readable string
 Debug = require 'overrides.debug' -- Global Debug module
-_C = require('expcore.common') -- _C is used to store lots of common functions expected to be used
-global.expgaming_version = '6.0.0' -- The current version for exp gaming scenario
+_C = require 'expcore.common' -- _C is used to store lots of common functions expected to be used
 
 -- Please go to config/file_loader.lua to edit the files that are loaded
 log('[INFO] Getting file loader config')
