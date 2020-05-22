@@ -4,14 +4,15 @@ local Event = require 'utils.event' --- @dep utils.event
 local DatastoreManager = {}
 local Datastores = {}
 local Datastore = {}
+local Data = {}
 local copy = table.deep_copy
 
 --- Save datastores in the global table
-global.datastores = Datastores
+global.datastores = Data
 Event.on_load(function()
-    Datastores = global.datastores
-    for _, datastore in pairs(Datastores) do
-        setmetatable(datastore, DatastoreManager.metatable)
+    Data = global.datastores
+    for tableName, datastore in pairs(Datastores) do
+        datastore.data = Data[tableName]
     end
 end)
 
@@ -20,40 +21,52 @@ end)
 
 --- Metatable used on datastores
 DatastoreManager.metatable = {
+    __index = function(self, key) return rawget(self.children, key) or rawget(Datastore, key) end,
     __newidnex = function(_, _, _) error('Datastore can not be modified', 2) end,
-    __call = function(self, ...) return self:get(...) end,
-    __index = Datastore
+    __call = function(self, ...) return self:get(...) end
 }
 
---- Make a new datastore
+--- Make a new datastore connection, if a connection already exists then it is returned
 function DatastoreManager.connect(tableName, saveToDisk, autoSave, propagateChanges)
     if Datastores[tableName] then return Datastores[tableName] end
+    if _LIFECYCLE ~= _STAGE.control then
+        -- Only allow this function to be called during the control stage
+        error('New datastore connection can not be created during runtime', 2)
+    end
 
     local new_datastore = {
         name = tableName,
+        table_name = tableName,
         auto_save = autoSave or false,
         save_to_disk = saveToDisk or false,
         propagate_changes = propagateChanges or false,
         serializer = false,
-        combined = false,
+        parent = false,
+        children = {},
+        metadata = {},
         events = {},
         data = {}
     }
 
+    Data[tableName] = new_datastore.data
     Datastores[tableName] = new_datastore
     return setmetatable(new_datastore, DatastoreManager.metatable)
 end
 
---- Make a new datastore that is contained within another
+--- Make a new datastore that stores its data inside of another one
 function DatastoreManager.combine(datastore, subTableName)
-    local new_datastore = DatastoreManager.connect(subTableName)
+    local new_datastore = DatastoreManager.connect(datastore.name..'.'..subTableName)
+    datastore.children[subTableName] = new_datastore
     new_datastore.serializer = datastore.serializer
     new_datastore.auto_save = datastore.auto_save
-    new_datastore.combined = datastore
+    new_datastore.table_name = subTableName
+    new_datastore.parent = datastore
+    Data[new_datastore.name] = nil
+    new_datastore.data = nil
     return new_datastore
 end
 
---- Ingest the result from a request
+--- Ingest the result from a request, this is used through a rcon interface to sync data
 local function ingest_error(err) print('Datastore ingest error, Unable to parse json:', err) end
 function DatastoreManager.ingest(action, tableName, key, valueJson)
     local datastore = assert(Datastores[tableName], 'Datastore ingest error, Datastore not found '..tostring(tableName))
@@ -71,14 +84,14 @@ function DatastoreManager.ingest(action, tableName, key, valueJson)
     elseif action == 'propagate' then
         local success, value = xpcall(game.json_to_table, ingest_error, valueJson)
         if not success or value == nil then return end
-        value = datastore:raise_event('on_received', key, value)
+        value = datastore:raise_event('on_load', key, value)
         datastore:set(key, value)
 
     end
 
 end
 
---- Commonly used serializer, returns the objects name
+--- Commonly used serializer, returns the name of the object
 function DatastoreManager.name_serializer(rawKey)
     return rawKey.name
 end
@@ -86,33 +99,31 @@ end
 ----- Datastore -----
 -- @section datastore
 
---- Internal, Get the data following combine logic
-function Datastore:raw_get(key, isTable)
-    if self.combined then
-        local data = self.combined:raw_get(key, true)
-        if data[self.name] == nil and isTable then
-            data[self.name] = {}
-        end
-        return data[self.name]
-    else
-        if self.data[key] == nil and isTable then
-            self.data[key] = {}
-        end
-        return self.data[key]
+--- Internal, Get data following combine logic
+function Datastore:raw_get(key, fromChild)
+    local data = self.data
+    if self.parent then
+        data = self.parent:raw_get(key, true)
+        key  = self.table_name
     end
+    local value = data[key]
+    if value ~= nil then return value end
+    if fromChild then value = {} end
+    data[key] = value
+    return value
 end
 
---- Internal, Set the data following combine logic
+--- Internal, Set data following combine logic
 function Datastore:raw_set(key, value)
-    if self.combined then
-        local data = self.combined:raw_get(key, true)
-        data[self.name] = value
+    if self.parent then
+        local data = self.parent:raw_get(key, true)
+        data[self.table_name] = value
     else
         self.data[key] = value
     end
 end
 
---- Internal, return the serialized key
+--- Internal, Return the serialized key
 local function serialize_error(err) error('An error ocurred in a datastore serializer: '..err) end
 function Datastore:serialize(rawKey)
     if type(rawKey) == 'string' then return rawKey end
@@ -121,7 +132,7 @@ function Datastore:serialize(rawKey)
     return success and key or nil
 end
 
---- Internal, writes an event to the output file to be saved and/or propagated
+--- Internal, Writes an event to the output file to be saved and/or propagated
 function Datastore:write_action(action, key, value)
     local data = {action, self.name, '"'..key..'"'}
     if value ~= nil then
@@ -136,30 +147,37 @@ function Datastore:set_serializer(callback)
     self.serializer = callback
 end
 
---- Create a new datastore which is combined into this one
+--- Set metadata tags on this datastore which can be accessed by other scripts
+function Datastore:set_metadata(tags)
+    local metadata = self.metadata
+    for key, value in pairs(tags) do
+        metadata[key] = value
+    end
+end
+
+--- Create a new datastore which is stores its data inside of this datastore
 Datastore.combine = DatastoreManager.combine
 
---- Request a value from an external source
+--- Request a value from an external source, will trigger on_load when data is received
 function Datastore:request(key)
-    if self.combined then return self.combined:request(key) end
+    if self.parent then return self.parent:request(key) end
     key = self:serialize(key)
     self:write_action('request', key)
 end
 
---- Save a value to an external source
+--- Save a value to an external source, will trigger on_save before data is saved, save_to_disk must be set to true
 function Datastore:save(key)
-    if self.combined then self.combined:save(key) end
+    if self.parent then self.parent:save(key) end
     if not self.save_to_disk then return end
     key = self:serialize(key)
-    local value = self:raw_get(key)
-    value = self:raise_event('on_save', key, copy(value))
+    local value  = self:raise_event('on_save', key, copy(self:raw_get(key)))
     local action = self.propagateChanges and 'propagate' or 'save'
     self:write_action(action, key, value)
 end
 
---- Save a value to an external source and remove locally
+--- Save a value to an external source and remove locally, will trigger on_unload then on_save, save_to_disk is not required for on_unload
 function Datastore:unload(key)
-    if self.combined then return self.combined:unload(key) end
+    if self.parent then return self.parent:unload(key) end
     key = self:serialize(key)
     self:raise_event('on_unload', key, copy(self:raw_get(key)))
     self:save(key)
@@ -177,10 +195,10 @@ function Datastore:remove(key)
     key = self:serialize(key)
     self:raw_set(key)
     self:write_action('remove', key)
-    if self.combined and self.combined.auto_save then return self.combined:save(key) end
+    if self.parent and self.parent.auto_save then return self.parent:save(key) end
 end
 
---- Get a value from local storage
+--- Get a value from local storage, option to have a default value
 function Datastore:get(key, default)
     key = self:serialize(key)
     local value = self:raw_get(key)
@@ -188,7 +206,7 @@ function Datastore:get(key, default)
     return copy(default)
 end
 
---- Set a value in local storage
+--- Set a value in local storage, will trigger on_update then on_save, save_to_disk and auto_save is required for on_save
 function Datastore:set(key, value)
     key = self:serialize(key)
     self:raw_set(key, value)
@@ -197,14 +215,14 @@ function Datastore:set(key, value)
     return value
 end
 
---- Increment the value in local storage, only works for number values
+--- Increment the value in local storage, only works for number values, will trigger on_update then on_save, save_to_disk and auto_save is required for on_save
 function Datastore:increment(key, delta)
     key = self:serialize(key)
     local value = self:raw_get(key) or 0
     return Datastore:set(key, value + (delta or 1))
 end
 
---- Use a callback function to update the value locally
+--- Use a function to update the value locally, will trigger on_update then on_save, save_to_disk and auto_save is required for on_save
 local function update_error(err) error('An error ocurred in datastore update: '..err, 2) end
 function Datastore:update(key, callback)
     key = self:serialize(key)
@@ -218,7 +236,7 @@ function Datastore:update(key, callback)
     end
 end
 
---- Used to filter elements from a table
+--- Internal, Used to filter elements from a table
 local function filter_error(err) print('An error ocurred in a datastore filter:', err) end
 local function filter(tbl, callback)
     if not callback then return tbl end
@@ -230,15 +248,15 @@ local function filter(tbl, callback)
     return rtn
 end
 
---- Get all keys in the datastore, optional filter callback
+--- Get all keys in this datastore, optional filter callback
 function Datastore:get_all(callback)
-    if not self.combined then
+    if not self.parent then
         return filter(self.data, callback)
     else
-        local name = self.name
-        local data = self.combined:get_all()
+        local table_name = self.table_name
+        local data = self.parent:get_all()
         for key, value in pairs(data) do
-            data[key] = value[name]
+            data[key] = value[table_name]
         end
         return filter(data, callback)
     end
@@ -259,19 +277,33 @@ end
 ----- Events -----
 -- @section events
 
---- Raise a custom event on this datastore
+--- Internal, Raise an event on this datastore
 local function event_error(err) print('An error ocurred in a datastore event handler:', err) end
-function Datastore:raise_event(event_name, key, value)
+function Datastore:raise_event(event_name, key, value, source)
+    -- Raise the event for the children of this datastore
+    if source ~= 'child' then
+        for table_name, child in pairs(self.children) do
+            value[table_name] = child:raise_event(event_name, key, value[table_name], 'parent')
+        end
+    end
+
+    -- Raise the event for this datastore
     local handlers = self.events[event_name]
-    if not handlers then return value end
-    for _, handler in ipairs(handlers) do
-        local success, new_value = xpcall(handler, event_error, key, value)
-        if success and new_value ~= nil then value = new_value end
+    if handlers then
+        for _, handler in ipairs(handlers) do
+            local success, new_value = xpcall(handler, event_error, key, value)
+            if success and new_value ~= nil then value = new_value end
+        end
+    end
+
+    -- Raise the event for the parent of this datastore
+    if source ~= 'parent' and self.parent then
+        self.parent:raise_event(event_name, key, self.parent:raw_get(key), 'child')
     end
     return value
 end
 
---- Returns a function which will add a callback to an event
+--- Internal, Returns a function which will add a callback to an event
 local function event_factory(event_name)
     return function(self, callback)
         assert(type(callback) == 'function', 'Handler must be a function')
@@ -284,19 +316,19 @@ local function event_factory(event_name)
     end
 end
 
---- Register a callback that triggers only when data is received
-Datastore.on_received = event_factory('on_received')
+--- Register a callback that triggers when data is loaded from an external source, returned value is saved locally
+Datastore.on_load = event_factory('on_load')
 
---- Register a callback that triggers before data is saved
+--- Register a callback that triggers before data is saved, returned value is saved externally
 Datastore.on_save = event_factory('on_save')
 
---- Register a callback that triggers before data is unloaded
+--- Register a callback that triggers before data is unloaded, returned value is ignored
 Datastore.on_unload = event_factory('on_unload')
 
---- Register a callback that triggers when a message is received
+--- Register a callback that triggers when a message is received, returned value is ignored
 Datastore.on_message = event_factory('on_message')
 
---- Register a callback that triggers any time a value is changed
+--- Register a callback that triggers any time a value is changed, returned value is ignored
 Datastore.on_update = event_factory('on_update')
 
 ----- Module Return -----

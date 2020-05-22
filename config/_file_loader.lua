@@ -6,6 +6,7 @@
 return {
     --'example.file_not_loaded',
     'modules.factorio-control', -- base factorio free play scenario
+    'expcore.player_data',
 
     --- Game Commands
     'modules.commands.me',
