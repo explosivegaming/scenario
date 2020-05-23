@@ -91,6 +91,13 @@ function DatastoreManager.ingest(action, tableName, key, valueJson)
 
 end
 
+--- Debug, Use to get all datastores, or return debug info on a datastore
+function DatastoreManager.debug(tableName)
+    if not tableName then return Datastores end
+    local datastore = assert(Datastores[tableName], 'Datastore not found '..tostring(tableName))
+    return datastore:debug()
+end
+
 --- Commonly used serializer, returns the name of the object
 function DatastoreManager.name_serializer(rawKey)
     return rawKey.name
@@ -98,6 +105,30 @@ end
 
 ----- Datastore -----
 -- @section datastore
+
+--- Debug, Get the debug info for this datastore
+function Datastore:debug()
+    local debug_info = {}
+
+    if self.parent then
+        debug_info.parent = self.parent.name
+    else
+        debug_info.settings = { auto_save = self.auto_save, save_to_disk = self.save_to_disk, propagate_changes = self.propagate_changes, serializer = not not self.serializer }
+    end
+
+    local children = {}
+    for name in pairs(self.children) do children[#children+1] = name end
+    if #children > 0 then debug_info.children = children end
+
+    local events = {}
+    for name, handlers in pairs(self.events) do events[name] = #handlers end
+    if next(events) then debug_info.events = events end
+
+    if next(self.metadata) then debug_info.metadata = self.metadata end
+    debug_info.data = self:get_all()
+
+    return debug_info
+end
 
 --- Internal, Get data following combine logic
 function Datastore:raw_get(key, fromChild)
@@ -171,7 +202,7 @@ function Datastore:save(key)
     if not self.save_to_disk then return end
     key = self:serialize(key)
     local value  = self:raise_event('on_save', key, copy(self:raw_get(key)))
-    local action = self.propagateChanges and 'propagate' or 'save'
+    local action = self.propagate_changes and 'propagate' or 'save'
     self:write_action(action, key, value)
 end
 
@@ -253,9 +284,8 @@ function Datastore:get_all(callback)
     if not self.parent then
         return filter(self.data, callback)
     else
-        local table_name = self.table_name
-        local data = self.parent:get_all()
-        for key, value in pairs(data) do
+        local data, table_name = {}, self.table_name
+        for key, value in pairs(self.parent:get_all()) do
             data[key] = value[table_name]
         end
         return filter(data, callback)
