@@ -270,7 +270,8 @@ end
 local function update_build_progress(parent,progress_data)
 	local show_message = true
 	for _, silo_data in ipairs(progress_data) do
-		parent.no_silos.visible = false
+		parent.parent.no_silos.visible = false
+		parent.visible = true
 		local silo_name = silo_data.silo_name
 		local progress_label = parent[silo_name]
 		if silo_data.remove then
@@ -310,7 +311,7 @@ local function update_build_progress(parent,progress_data)
 			end
 		end
 	end
-	if show_message then parent.no_silos.visible = true end
+	if show_message then parent.parent.no_silos.visible = true parent.visible = false end
 end
 
 --- Gets the label data for all the different stats
@@ -494,13 +495,13 @@ Gui.element(function(event_trigger,parent)
 		if check_player_permissions(player,'toggle_active') then col_count = col_count+1 end
 		local progress = section(container,'progress',col_count)
 		-- Label used when there are no active silos
-        local no_silos = progress.add{
+        local no_silos = progress.parent.add{
             type = 'label',
             name = 'no_silos',
             caption = {'rocket-info.progress-no-silos'}
 		}
 		no_silos.style.padding = {1,2}
-		update_build_progress(progress,get_progress_data(force_name))
+		update_build_progress(progress, get_progress_data(force_name))
 	end
 
 	-- Return the exteral container
@@ -580,23 +581,22 @@ Event.add(defines.events.on_robot_built_entity,on_built)
 
 --- Redraw the progress section on role change
 local function role_update_event(event)
+	if not config.progress.show_progress then return end
 	local player = game.players[event.player_index]
 	local container = Gui.get_left_element(player,rocket_list_container).container
-	local progress = container.progress
-	if config.progress.show_progress then
-		progress.destroy()
-		local col_count = 3
-        if check_player_permissions(player,'remote_launch') then col_count = col_count+1 end
-		if check_player_permissions(player,'toggle_active') then col_count = col_count+1 end
-		progress = section(container,'progress',col_count)
-		-- Label used when there are no active silos
-        progress.add{
-            type = 'label',
-            name = 'no_silos',
-            caption = {'rocket-info.progress-no-silos'}
-        }
-		update_build_progress(progress,get_progress_data(player.force.name))
-	end
+	local progress_scroll = container.progress
+	Gui.destroy_if_valid(progress_scroll.table)
+
+	local col_count = 3
+	if check_player_permissions(player,'remote_launch') then col_count = col_count+1 end
+	if check_player_permissions(player,'toggle_active') then col_count = col_count+1 end
+	local progress = progress_scroll.add{
+        type = 'table',
+        name = 'table',
+        column_count = col_count
+    }
+
+	update_build_progress(progress, get_progress_data(player.force.name))
 end
 
 Event.add(Roles.events.on_role_assigned,role_update_event)
