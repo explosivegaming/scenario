@@ -1,3 +1,45 @@
+--[[-- Core Module - PlayerData
+- A module used to store player data in a central datastore to minimize data requests and saves.
+@core PlayerData
+
+@usage-- Adding a colour setting for players
+local PlayerData = require 'expcore.player_data'
+local PlayerColors = PlayerData.Settings:combine('Color')
+
+-- Set the players color when their data is loaded
+PlayerColors:on_load(function(player_name, color)
+    local player = game.players[player_name]
+    player.color = color
+end)
+
+-- Overwrite the saved color with the players current color
+PlayerColors:on_save(function(player_name, _)
+    local player = game.players[player_name]
+    return player.color -- overwrite existing data with the current color
+end)
+
+@usage-- Add a playtime statistic for players
+local Event = require 'utils.event'
+local PlayerData = require 'expcore.player_data'
+local Playtime = PlayerData.Statistics:combine('Playtime')
+
+-- When playtime reaches an hour interval tell the player and say thanks
+Playtime:on_update(function(player_name, playtime)
+    if playtime % 60 == 0 then
+        local hours = playtime / 60
+        local player = game.players[player_name]
+        player.print('Thanks for playing on our servers, you have played for '..hours..' hours!')
+    end
+end)
+
+-- Update playtime for players, data is only loaded for online players so update_all can be used
+Event.add_on_nth_tick(3600, function()
+    Playtime:update_all(function(player_name, playtime)
+        return playtime + 1
+    end)
+end)
+
+]]
 
 local Event = require 'utils.event' --- @dep utils.event
 local Datastore = require 'expcore.datastore' --- @dep expcore.datastore
@@ -60,9 +102,9 @@ end)
 ----- Module Return -----
 return {
     All = PlayerData, -- Root for all of a players data
-    Statistics = PlayerData:combine('PlayerStatistics'), -- Common place for stats
-    Settings = PlayerData:combine('PlayerSettings'), -- Common place for settings
-    Required = PlayerData:combine('PlayerRequired'), -- Common place for required data
+    Statistics = PlayerData:combine('Statistics'), -- Common place for stats
+    Settings = PlayerData:combine('Settings'), -- Common place for settings
+    Required = PlayerData:combine('Required'), -- Common place for required data
     DataSavingPreference = DataSavingPreference, -- Stores what data groups will be saved
     PreferenceEnum = PreferenceEnum -- Enum for the allowed options for data saving preference
 }
