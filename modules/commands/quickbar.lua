@@ -4,14 +4,11 @@
 ]]
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
-local Roles = require 'expcore.roles' --- @dep expcore.roles
-local Game = require 'utils.game' --- @dep utils.game
 local config = require 'config.preset_player_quickbar' --- @dep config.preset_player_quickbar
-
 
 --- Loads your quickbar preset
 -- @command load-quickbar
-Commands.new_command('load-quickbar','Loads your preset Quickbar items')
+Commands.new_command('load-quickbar', 'Loads your preset Quickbar items')
 :add_alias('load-toolbar')
 :register(function(player)
     if config[player.name] then
@@ -28,7 +25,7 @@ end)
 
 --- Saves your quickbar preset to the script-output folder
 -- @command save-quickbar
-Commands.new_command('save-quickbar','Saves your Quickbar preset items to file')
+Commands.new_command('save-quickbar', 'Saves your Quickbar preset items to file')
 :add_alias('save-toolbar')
 :register(function(player)
     local quickbar_names = {}

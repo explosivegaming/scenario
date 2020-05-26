@@ -1,4 +1,3 @@
---luacheck:ignore global require
 local loaded = package.loaded
 local raw_require = require
 

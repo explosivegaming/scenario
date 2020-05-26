@@ -4,6 +4,7 @@
     @alias player_list
 ]]
 
+-- luacheck:ignore 211/Colors
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Store = require 'expcore.store' --- @dep expcore.store
@@ -24,7 +25,7 @@ local selected_action_store = Store.register(function(player)
 end)
 
 -- Set the config to use these stores
-config.set_store_uids(selected_player_store,selected_action_store)
+config.set_store_uids(selected_player_store, selected_action_store)
 
 --- Button used to open the action bar
 -- @element open_action_bar
@@ -40,13 +41,13 @@ Gui.element{
     width = 8,
     height = 14
 }
-:on_click(function(player,element,_)
+:on_click(function(player, element, _)
     local selected_player_name = element.parent.name
-    local old_selected_player_name = Store.get(selected_player_store,player)
+    local old_selected_player_name = Store.get(selected_player_store, player)
     if selected_player_name == old_selected_player_name then
-        Store.clear(selected_player_store,player)
+        Store.clear(selected_player_store, player)
     else
-        Store.set(selected_player_store,player,selected_player_name)
+        Store.set(selected_player_store, player, selected_player_name)
     end
 end)
 
@@ -59,10 +60,10 @@ Gui.element{
     tooltip = {'player-list.close-action-bar'},
     style = 'shortcut_bar_button_red'
 }
-:style(Gui.sprite_style(30,-1,{ top_margin = -1, right_margin = -1 }))
-:on_click(function(player,_)
-    Store.clear(selected_player_store,player)
-    Store.clear(selected_action_store,player)
+:style(Gui.sprite_style(30, -1, { top_margin = -1, right_margin = -1 }))
+:on_click(function(player, _)
+    Store.clear(selected_player_store, player)
+    Store.clear(selected_action_store, player)
 end)
 
 --- Button used to confirm a reason
@@ -74,21 +75,21 @@ Gui.element{
     tooltip = {'player-list.reason-confirm'},
     style = 'shortcut_bar_button_green'
 }
-:style(Gui.sprite_style(30,-1,{ left_margin = -2, right_margin = -1 }))
-:on_click(function(player,element)
+:style(Gui.sprite_style(30, -1, { left_margin = -2, right_margin = -1 }))
+:on_click(function(player, element)
     local reason = element.parent.entry.text or 'Non Given'
-    local action_name = Store.get(selected_action_store,player)
+    local action_name = Store.get(selected_action_store, player)
     local reason_callback = config.buttons[action_name].reason_callback
-    reason_callback(player,reason)
-    Store.clear(selected_player_store,player)
-    Store.clear(selected_action_store,player)
+    reason_callback(player, reason)
+    Store.clear(selected_player_store, player)
+    Store.clear(selected_action_store, player)
     element.parent.entry.text = ''
 end)
 
 --- Set of elements that are used to make up a row of the player table
 -- @element add_player_base
 local add_player_base =
-Gui.element(function(event_trigger,parent,player_data)
+Gui.element(function(event_trigger, parent, player_data)
     -- Add the button to open the action bar
     local toggle_action_bar_flow = parent.add{ type = 'flow', name = player_data.name }
     open_action_bar(toggle_action_bar_flow)
@@ -99,13 +100,13 @@ Gui.element(function(event_trigger,parent,player_data)
         type = 'label',
         name = event_trigger,
         caption = player_data.name,
-        tooltip = {'player-list.open-map',player_data.name,player_data.tag,player_data.role_name}
+        tooltip = {'player-list.open-map', player_data.name, player_data.tag, player_data.role_name}
     }
-    player_name.style.padding = {0,2,0,0}
+    player_name.style.padding = {0, 2,0, 0}
     player_name.style.font_color = player_data.chat_color
 
     -- Add the time played label
-    local alignment = Gui.alignment(parent,'player-time-'..player_data.index)
+    local alignment = Gui.alignment(parent, 'player-time-'..player_data.index)
     local time_label = alignment.add{
         name = 'label',
         type = 'label',
@@ -116,34 +117,34 @@ Gui.element(function(event_trigger,parent,player_data)
 
     return time_label
 end)
-:on_click(function(player,element,event)
+:on_click(function(player, element, event)
     local selected_player_name = element.caption
     local selected_player = Game.get_player_from_any(selected_player_name)
     if event.button == defines.mouse_button_type.left then
         -- LMB will open the map to the selected player
         local position = selected_player.position
-        event.player.zoom_to_world(position,1.75)
+        event.player.zoom_to_world(position, 1.75)
     else
         -- RMB will toggle the settings
-        local old_selected_player_name = Store.get(selected_player_store,player)
+        local old_selected_player_name = Store.get(selected_player_store, player)
         if selected_player_name == old_selected_player_name then
-            Store.clear(selected_player_store,player)
-            Store.clear(selected_action_store,player)
+            Store.clear(selected_player_store, player)
+            Store.clear(selected_action_store, player)
         else
-            Store.set(selected_player_store,player,selected_player_name)
+            Store.set(selected_player_store, player, selected_player_name)
         end
     end
 end)
 
 -- Removes the three elements that are added as part of the base
-local function remove_player_base(parent,player)
+local function remove_player_base(parent, player)
     Gui.destroy_if_valid(parent[player.name])
     Gui.destroy_if_valid(parent['player-name-'..player.index])
     Gui.destroy_if_valid(parent['player-time-'..player.index])
 end
 
 -- Update the time label for a player using there player time data
-local function update_player_base(parent,player_time)
+local function update_player_base(parent, player_time)
     local time_element = parent[player_time.element_name]
     if time_element and time_element.valid then
         time_element.label.caption = player_time.caption
@@ -154,15 +155,15 @@ end
 --- Adds all the buttons and flows that make up the action bar
 -- @element add_action_bar
 local add_action_bar_buttons =
-Gui.element(function(_,parent)
+Gui.element(function(_, parent)
     close_action_bar(parent)
     -- Loop over all the buttons in the config
-    for action_name,button_data in pairs(config.buttons) do
+    for action_name, button_data in pairs(config.buttons) do
         -- Added the permission flow
         local permission_flow = parent.add{ type = 'flow', name = action_name }
         permission_flow.visible = false
         -- Add the buttons under that permission
-        for _,button in ipairs(button_data) do
+        for _, button in ipairs(button_data) do
             button(permission_flow)
         end
     end
@@ -173,7 +174,7 @@ end)
 --- Updates the visible state of the action bar buttons
 local function update_action_bar(element)
     local player = Gui.get_player_from_element(element)
-    local selected_player_name = Store.get(selected_player_store,player)
+    local selected_player_name = Store.get(selected_player_store, player)
 
     if not selected_player_name then
         -- Hide the action bar when no player is selected
@@ -184,16 +185,16 @@ local function update_action_bar(element)
         if not selected_player.connected then
             -- If the player is offline then reest stores
             element.visible = false
-            Store.clear(selected_player_store,player)
-            Store.clear(selected_action_store,player)
+            Store.clear(selected_player_store, player)
+            Store.clear(selected_action_store, player)
 
         else
             -- Otherwise check what actions the player is allowed to use
             element.visible = true
-            for action_name,buttons in pairs(config.buttons) do
-                if buttons.auth and not buttons.auth(player,selected_player) then
+            for action_name, buttons in pairs(config.buttons) do
+                if buttons.auth and not buttons.auth(player, selected_player) then
                     element[action_name].visible = false
-                elseif Roles.player_allowed(player,action_name) then
+                elseif Roles.player_allowed(player, action_name) then
                     element[action_name].visible = true
                 end
             end
@@ -205,36 +206,36 @@ end
 --- Main player list container for the left flow
 -- @element player_list_container
 local player_list_container =
-Gui.element(function(event_trigger,parent)
+Gui.element(function(event_trigger, parent)
     -- Draw the internal container
-    local container = Gui.container(parent,event_trigger,200)
+    local container = Gui.container(parent, event_trigger, 200)
 
     -- Draw the scroll table for the players
-    local scroll_table = Gui.scroll_table(container,184,3)
+    local scroll_table = Gui.scroll_table(container, 184, 3)
 
     -- Change the style of the scroll table
     local scroll_table_style = scroll_table.style
-    scroll_table_style.padding = {1,0,1,2}
+    scroll_table_style.padding = {1, 0,1, 2}
 
     -- Add the action bar
-    local action_bar = Gui.footer(container,nil,nil,false,'action_bar')
+    local action_bar = Gui.footer(container, nil, nil, false, 'action_bar')
 
     -- Change the style of the action bar
     local action_bar_style = action_bar.style
     action_bar_style.height = 35
-    action_bar_style.padding = {1,3}
+    action_bar_style.padding = {1, 3}
     action_bar.visible = false
 
     -- Add the buttons to the action bar
     add_action_bar_buttons(action_bar)
 
     -- Add the reason bar
-    local reason_bar = Gui.footer(container,nil,nil,false,'reason_bar')
+    local reason_bar = Gui.footer(container, nil, nil, false, 'reason_bar')
 
     -- Change the style of the reason bar
     local reason_bar_style = reason_bar.style
     reason_bar_style.height = 35
-    reason_bar_style.padding = {-1,3}
+    reason_bar_style.padding = {-1, 3}
     reason_bar.visible = false
 
     -- Add the text entry for the reason bar
@@ -263,15 +264,15 @@ end)
 --- Button on the top flow used to toggle the player list container
 -- @element toggle_left_element
 Gui.left_toolbar_button('entity/character', {'player-list.main-tooltip'}, player_list_container, function(player)
-    return Roles.player_allowed(player,'gui/player-list')
+    return Roles.player_allowed(player, 'gui/player-list')
 end)
 
 -- Get caption and tooltip format for a player
-local function get_time_formats(online_time,afk_time)
+local function get_time_formats(online_time, afk_time)
     local tick = game.tick > 0 and game.tick or 1
-    local percent = math.round(online_time/tick,3)*100
+    local percent = math.round(online_time/tick, 3)*100
     local caption = format_time(online_time)
-    local tooltip = {'player-list.afk-time', percent, format_time(afk_time,{minutes=true,long=true})}
+    local tooltip = {'player-list.afk-time', percent, format_time(afk_time, {minutes=true, long=true})}
     return caption, tooltip
 end
 
@@ -297,20 +298,20 @@ end
 local function get_player_list_order()
     -- Sort all the online players into roles
     local players = {}
-    for _,player in pairs(game.connected_players) do
+    for _, player in pairs(game.connected_players) do
         local highest_role = Roles.get_player_highest_role(player)
         if not players[highest_role.name] then
             players[highest_role.name] = {}
         end
-        table.insert(players[highest_role.name],player)
+        table.insert(players[highest_role.name], player)
     end
 
     -- Sort the players from roles into a set order
     local ctn = 0
     local player_list_order = {}
-    for _,role_name in pairs(Roles.config.order) do
+    for _, role_name in pairs(Roles.config.order) do
         if players[role_name] then
-            for _,player in pairs(players[role_name]) do
+            for _, player in pairs(players[role_name]) do
                 ctn = ctn + 1
                 -- Add the player data to the array
                 local caption, tooltip = get_time_formats(player.online_time, player.afk_time)
@@ -329,8 +330,8 @@ local function get_player_list_order()
 
     --[[Adds fake players to the player list
     for i = 1, 10 do
-        local online_time = math.random(1,tick)
-        local afk_time = math.random(online_time-(tick/10),tick)
+        local online_time = math.random(1, tick)
+        local afk_time = math.random(online_time-(tick/10), tick)
         local caption, tooltip = get_time_formats(online_time, afk_time)
         player_list_order[ctn+i] = {
             name='Player '..i,
@@ -347,29 +348,29 @@ local function get_player_list_order()
 end
 
 --- Update the play times every 30 sections
-Event.on_nth_tick(1800,function()
+Event.on_nth_tick(1800, function()
     local player_times = get_player_times()
-    for _,player in pairs(game.connected_players) do
-        local frame = Gui.get_left_element(player,player_list_container)
+    for _, player in pairs(game.connected_players) do
+        local frame = Gui.get_left_element(player, player_list_container)
         local scroll_table = frame.container.scroll.table
-        for _,player_time in pairs(player_times) do
-            update_player_base(scroll_table,player_time)
+        for _, player_time in pairs(player_times) do
+            update_player_base(scroll_table, player_time)
         end
     end
 end)
 
 --- When a player leaves only remove they entry
-Event.add(defines.events.on_player_left_game,function(event)
+Event.add(defines.events.on_player_left_game, function(event)
     local remove_player = Game.get_player_by_index(event.player_index)
-    for _,player in pairs(game.connected_players) do
-        local frame = Gui.get_left_element(player,player_list_container)
+    for _, player in pairs(game.connected_players) do
+        local frame = Gui.get_left_element(player, player_list_container)
         local scroll_table = frame.container.scroll.table
-        remove_player_base(scroll_table,remove_player)
+        remove_player_base(scroll_table, remove_player)
 
-        local selected_player_name = Store.get(selected_player_store,player)
+        local selected_player_name = Store.get(selected_player_store, player)
         if selected_player_name == remove_player.name then
-            Store.clear(selected_player_store,player)
-            Store.clear(selected_action_store,player)
+            Store.clear(selected_player_store, player)
+            Store.clear(selected_action_store, player)
         end
     end
 end)
@@ -377,27 +378,27 @@ end)
 --- All other events require a full redraw of the table
 local function redraw_player_list()
     local player_list_order = get_player_list_order()
-    for _,player in pairs(game.connected_players) do
-        local frame = Gui.get_left_element(player,player_list_container)
+    for _, player in pairs(game.connected_players) do
+        local frame = Gui.get_left_element(player, player_list_container)
         local scroll_table = frame.container.scroll.table
         scroll_table.clear()
-        for _,next_player_data in ipairs(player_list_order) do
-            add_player_base(scroll_table,next_player_data)
+        for _, next_player_data in ipairs(player_list_order) do
+            add_player_base(scroll_table, next_player_data)
         end
     end
 end
 
-Event.add(defines.events.on_player_joined_game,redraw_player_list)
-Event.add(Roles.events.on_role_assigned,redraw_player_list)
-Event.add(Roles.events.on_role_unassigned,redraw_player_list)
+Event.add(defines.events.on_player_joined_game, redraw_player_list)
+Event.add(Roles.events.on_role_assigned, redraw_player_list)
+Event.add(Roles.events.on_role_unassigned, redraw_player_list)
 
 --- When the action player is changed the action bar will update
-Store.watch(selected_player_store,function(value,player_name)
+Store.watch(selected_player_store, function(value, player_name)
     local player = Game.get_player_from_any(player_name)
-    local frame = Gui.get_left_element(player,player_list_container)
+    local frame = Gui.get_left_element(player, player_list_container)
     local scroll_table = frame.container.scroll.table
     update_action_bar(frame.container.action_bar)
-    for _,next_player in pairs(game.connected_players) do
+    for _, next_player in pairs(game.connected_players) do
         local element = scroll_table[next_player.name][open_action_bar.name]
         local style = 'frame_button'
         if next_player.name == value then
@@ -412,20 +413,20 @@ Store.watch(selected_player_store,function(value,player_name)
 end)
 
 --- When the action name is changed the reason input will update
-Store.watch(selected_action_store,function(value,player_name)
+Store.watch(selected_action_store, function(value, player_name)
     local player = Game.get_player_from_any(player_name)
-    local frame = Gui.get_left_element(player,player_list_container)
+    local frame = Gui.get_left_element(player, player_list_container)
     local element = frame.container.reason_bar
     if value then
         -- if there is a new value then check the player is still online
-        local selected_player_name = Store.get(selected_player_store,player_name)
+        local selected_player_name = Store.get(selected_player_store, player_name)
         local selected_player = Game.get_player_from_any(selected_player_name)
         if selected_player.connected then
             element.visible = true
         else
             -- Clear if the player is offline
-            Store.clear(selected_player_store,player_name)
-            Store.clear(selected_action_store,player_name)
+            Store.clear(selected_player_store, player_name)
+            Store.clear(selected_action_store, player_name)
         end
 
     else

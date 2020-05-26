@@ -17,21 +17,21 @@ local Gui = require 'expcore.gui.prototype'
 @treturn LuaGuiElement the alignment flow that was created
 
 @usage-- Adding a right align flow
-local alignment = Gui.alignment(element,'example_right_alignment')
+local alignment = Gui.alignment(element, 'example_right_alignment')
 
 @usage-- Adding a horizontal center and top align flow
-local alignment = Gui.alignment(element,'example_center_top_alignment','center','top')
+local alignment = Gui.alignment(element, 'example_center_top_alignment', 'center', 'top')
 
 ]]
 Gui.alignment =
-Gui.element(function(_,parent,name,_,_)
+Gui.element(function(_, parent, name, _,_)
     return parent.add{
         name = name or 'alignment',
         type = 'flow',
     }
 end)
-:style(function(style,_,_,horizontal_align,vertical_align)
-    style.padding = {1,2}
+:style(function(style, _,_, horizontal_align, vertical_align)
+    style.padding = {1, 2}
     style.vertical_align = vertical_align or 'center'
     style.horizontal_align = horizontal_align or 'right'
     style.vertically_stretchable  = style.vertical_align ~= 'center'
@@ -47,11 +47,11 @@ end)
 @treturn LuaGuiElement the table that was created
 
 @usage-- Adding a scroll table with max height of 200 and column count of 3
-local scroll_table = Gui.scroll_table(element,200,3)
+local scroll_table = Gui.scroll_table(element, 200, 3)
 
 ]]
 Gui.scroll_table =
-Gui.element(function(_,parent,height,column_count,name)
+Gui.element(function(_, parent, height, column_count, name)
     -- Draw the scroll
     local scroll_pane =
     parent.add{
@@ -65,7 +65,7 @@ Gui.element(function(_,parent,height,column_count,name)
 
     -- Set the style of the scroll pane
     local scroll_style = scroll_pane.style
-    scroll_style.padding = {1,3}
+    scroll_style.padding = {1, 3}
     scroll_style.maximal_height = height
     scroll_style.horizontally_stretchable = true
 
@@ -105,7 +105,7 @@ local header = Gui.header(
 
 ]]
 Gui.header =
-Gui.element(function(_,parent,caption,tooltip,add_alignment,name)
+Gui.element(function(_, parent, caption, tooltip, add_alignment, name)
     -- Draw the header
     local header =
     parent.add{
@@ -116,7 +116,7 @@ Gui.element(function(_,parent,caption,tooltip,add_alignment,name)
 
     -- Change the style of the header
     local style = header.style
-    style.padding = {2,4}
+    style.padding = {2, 4}
     style.use_header_filler = false
     style.horizontally_stretchable = true
 
@@ -153,7 +153,7 @@ local footer = Gui.footer(
 
 ]]
 Gui.footer =
-Gui.element(function(_,parent,caption,tooltip,add_alignment,name)
+Gui.element(function(_, parent, caption, tooltip, add_alignment, name)
     -- Draw the header
     local footer =
     parent.add{
@@ -164,7 +164,7 @@ Gui.element(function(_,parent,caption,tooltip,add_alignment,name)
 
     -- Change the style of the footer
     local style = footer.style
-    style.padding = {2,4}
+    style.padding = {2, 4}
     style.use_header_filler = false
     style.horizontally_stretchable = true
 
@@ -190,11 +190,11 @@ end)
 @tparam number width the minimal width that the frame will have
 
 @usage-- Adding a container as a base
-local container = Gui.container(parent,'my_container',200)
+local container = Gui.container(parent, 'my_container', 200)
 
 ]]
 Gui.container =
-Gui.element(function(_,parent,name,_)
+Gui.element(function(_, parent, name, _)
     -- Draw the external container
     local frame =
     parent.add{
@@ -210,7 +210,7 @@ Gui.element(function(_,parent,name,_)
         style = 'window_content_frame_packed'
     }
 end)
-:style(function(style,element,_,width)
+:style(function(style, element, _,width)
     style.vertically_stretchable = false
     local frame_style = element.parent.style
     frame_style.padding = 2
@@ -227,16 +227,16 @@ local bar = Gui.bar(parent, 100)
 
 ]]
 Gui.bar =
-Gui.element(function(_,parent)
+Gui.element(function(_, parent)
     return parent.add{
         type = 'progressbar',
         size = 1,
         value = 1
     }
 end)
-:style(function(style,_,width)
+:style(function(style, _,width)
     style.height = 3
-    style.color = {r=255,g=255,b=255}
+    style.color = {r=255, g=255, b=255}
     if width then style.width = width
     else style.horizontally_stretchable = true end
 end)
@@ -253,7 +253,7 @@ local label = Gui.centered_label(parent, 100, 'This is centered')
 
 ]]
 Gui.centered_label =
-Gui.element(function(_,parent,width,caption,tooltip)
+Gui.element(function(_, parent, width, caption, tooltip)
     local label = parent.add{
         type = 'label',
         caption = caption,
@@ -281,11 +281,11 @@ local label = Gui.centered_label(parent, 100, 'This is centered')
 
 ]]
 Gui.title_label =
-Gui.element(function(_,parent,width,caption,tooltip)
+Gui.element(function(_, parent, width, caption, tooltip)
     local title_flow = parent.add{ type='flow' }
     title_flow.style.vertical_align = 'center'
 
-    Gui.bar(title_flow,width)
+    Gui.bar(title_flow, width)
     local title_label = title_flow.add{
         type = 'label',
         caption = caption,

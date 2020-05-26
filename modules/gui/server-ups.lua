@@ -21,8 +21,8 @@ Gui.element{
 
 --- Toggles if the server ups is visbile
 -- @command server-ups
-Commands.new_command('server-ups','Toggle the server ups display')
-:add_alias('sups','ups')
+Commands.new_command('server-ups', 'Toggle the server ups display')
+:add_alias('sups', 'ups')
 :register(function(player)
     local label = player.gui.screen[server_ups.name]
     if not global.ext or not global.ext.server_ups then
@@ -42,7 +42,7 @@ local function set_location(event)
 end
 
 -- Draw the label when the player joins
-Event.add(defines.events.on_player_created,function(event)
+Event.add(defines.events.on_player_created, function(event)
     local player = game.players[event.player_index]
     local label = server_ups(player.gui.screen)
     label.visible = false
@@ -50,15 +50,15 @@ Event.add(defines.events.on_player_created,function(event)
 end)
 
 -- Update the caption for all online players
-Event.on_nth_tick(60,function()
+Event.on_nth_tick(60, function()
     if global.ext and global.ext.server_ups then
         local caption = 'SUPS = '..global.ext.server_ups
-        for _,player in pairs(game.connected_players) do
+        for _, player in pairs(game.connected_players) do
             player.gui.screen[server_ups.name].caption = caption
         end
     end
 end)
 
 -- Update when res or ui scale changes
-Event.add(defines.events.on_player_display_resolution_changed,set_location)
-Event.add(defines.events.on_player_display_scale_changed,set_location)
+Event.add(defines.events.on_player_display_resolution_changed, set_location)
+Event.add(defines.events.on_player_display_scale_changed, set_location)

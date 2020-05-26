@@ -22,9 +22,9 @@ local Gui = {
     _prototype_element = {},
     --- The prototype metatable applied to new element defines
     _mt_element = {
-        __call = function(self,parent,...)
-            local element = self._draw(self.name,parent,...)
-            if self._style then self._style(element.style,element,...) end
+        __call = function(self, parent, ...)
+            local element = self._draw(self.name, parent, ...)
+            if self._style then self._style(element.style, element, ...) end
             return element
         end
     }
@@ -50,7 +50,7 @@ Gui.element{
 @usage-- Using element defines with a custom factory function
 -- This method can be used if you still want to be able register event handlers but it is too complex to be compatible with LuaGuiElement.add
 local example_flow_with_button =
-Gui.element(function(event_trigger,parent,...)
+Gui.element(function(event_trigger, parent, ...)
     -- ... shows that all other arguments from the factory call are passed to this function
     -- parent is the element which was passed to the factory function where you should add your new element
     -- here we are adding a flow which we will then later add a button to
@@ -90,7 +90,7 @@ function Gui.element(element_define)
     if type(element_define) == 'table' then
         Gui.debug_info[name].draw = element_define
         element_define.name = name
-        element._draw = function(_,parent)
+        element._draw = function(_, parent)
             return parent.add(element_define)
         end
     else
@@ -131,7 +131,7 @@ Gui.element{
     caption = 'Example Button',
     style = 'forward_button' -- factorio styles can be applied here
 }
-:style(function(style,element,...)
+:style(function(style, element, ...)
     -- style is the current style object for the elemenent
     -- element is the element that is being changed
     -- ... shows that all other arguments from the factory call are passed to this function
@@ -147,7 +147,7 @@ function Gui._prototype_element:style(style_define)
     if type(style_define) == 'table' then
         Gui.debug_info[self.name].style = style_define
         self._style = function(style)
-            for key,value in pairs(style_define) do
+            for key, value in pairs(style_define) do
                 style[key] = value
             end
         end
@@ -171,8 +171,8 @@ element_deinfe:on_custom_event('my_custom_event', function(event)
 end)
 
 ]]
-function Gui._prototype_element:on_custom_event(event_name,handler)
-    table.insert(Gui.debug_info[self.name].events,event_name)
+function Gui._prototype_element:on_custom_event(event_name, handler)
+    table.insert(Gui.debug_info[self.name].events, event_name)
     Gui.events[event_name] = event_name
     self[event_name] = handler
     return self
@@ -210,7 +210,7 @@ function Gui._prototype_element:raise_custom_event(event)
     end
     event.player = player
 
-    local success, err = pcall(handler,player,element,event)
+    local success, err = pcall(handler, player, element, event)
     if not success then
         error('There as been an error with an event handler for a gui element:\n\t'..err)
     end
@@ -227,8 +227,8 @@ local function event_handler_factory(event_name)
         element_define:raise_custom_event(event)
     end)
 
-    return function(self,handler)
-        table.insert(Gui.debug_info[self.name].events,debug.getinfo(1, "n").name)
+    return function(self, handler)
+        table.insert(Gui.debug_info[self.name].events, debug.getinfo(1, "n").name)
         self[event_name] = handler
         return self
     end

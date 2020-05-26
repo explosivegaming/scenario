@@ -8,7 +8,7 @@ local Commands = require 'expcore.commands' --- @dep expcore.commands
 
 --- Opens the debug pannel for viewing tables.
 -- @command debug
-Commands.new_command('debug','Opens the debug pannel for viewing tables.')
+Commands.new_command('debug', 'Opens the debug pannel for viewing tables.')
 :register(function(player)
     DebugView.open_dubug(player)
 end)

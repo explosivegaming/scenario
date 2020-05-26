@@ -18,10 +18,10 @@
     Rockets.get_silos('player')
 
     -- You can get the launch time for a rocket, meaning what game tick the 50th rocket was launched
-    Rockets.get_rocket_time('player',50)
+    Rockets.get_rocket_time('player', 50)
 
     -- The rolling average will work out the time to launch one rocket based on the last X rockets
-    Rockets.get_rolling_average('player',10)
+    Rockets.get_rolling_average('player', 10)
 
 ]]
 
@@ -30,7 +30,7 @@ local Global = require 'utils.global' --- @dep utils.global
 local config = require 'config.gui.rockets' --- @dep config.rockets
 
 local largest_rolling_avg = 0
-for _,avg_over in pairs(config.stats.rolling_avg) do
+for _, avg_over in pairs(config.stats.rolling_avg) do
     if avg_over > largest_rolling_avg then
         largest_rolling_avg = avg_over
     end
@@ -49,7 +49,7 @@ Global.register({
     rocket_times = rocket_times,
     rocket_stats = rocket_stats,
     rocket_silos = rocket_silos
-},function(tbl)
+}, function(tbl)
     Rockets.times = tbl.rocket_times
     Rockets.stats = tbl.rocket_stats
     Rockets.silos = tbl.rocket_silos
@@ -94,9 +94,9 @@ end
 -- @treturn table an array of silo data that all belong to this force
 function Rockets.get_silos(force_name)
     local rtn = {}
-    for _,silo_data in pairs(rocket_silos) do
+    for _, silo_data in pairs(rocket_silos) do
         if silo_data.force == force_name then
-            table.insert(rtn,silo_data)
+            table.insert(rtn, silo_data)
         end
     end
     return rtn
@@ -106,7 +106,7 @@ end
 -- @tparam string force_name the name of the force to get the count for
 -- @tparam number rocket_number the number of the rocket to get the launch time for
 -- @treturn number the game tick that the rocket was lanuched on
-function Rockets.get_rocket_time(force_name,rocket_number)
+function Rockets.get_rocket_time(force_name, rocket_number)
     return rocket_times[force_name] and rocket_times[force_name][rocket_number] or nil
 end
 
@@ -122,7 +122,7 @@ end
 -- @treturn number the total number of rockets launched this game
 function Rockets.get_game_rocket_count()
     local rtn = 0
-    for _,force in pairs(game.forces) do
+    for _, force in pairs(game.forces) do
         rtn = rtn + force.rockets_launched
     end
     return rtn
@@ -132,7 +132,7 @@ end
 -- @tparam string force_name the name of the force to get the average for
 -- @tparam number count the distance to get the rolling average over
 -- @treturn number the number of ticks required to launch one rocket
-function Rockets.get_rolling_average(force_name,count)
+function Rockets.get_rolling_average(force_name, count)
     local force = game.forces[force_name]
     local rocket_count = force.rockets_launched
     if rocket_count == 0 then return 0 end
@@ -146,7 +146,7 @@ function Rockets.get_rolling_average(force_name,count)
 end
 
 --- Event used to update the stats and the hui when a rocket is launched
-Event.add(defines.events.on_rocket_launched,function(event)
+Event.add(defines.events.on_rocket_launched, function(event)
     local entity = event.rocket_silo
     local silo_data = Rockets.get_silo_data(entity)
     local force = event.rocket_silo.force
@@ -177,7 +177,7 @@ Event.add(defines.events.on_rocket_launched,function(event)
     rocket_times[force_name][rockets_launched] = event.tick
 
     local remove_rocket = rockets_launched-largest_rolling_avg
-    if remove_rocket > 0 and not table.contains(config.milestones,remove_rocket) then
+    if remove_rocket > 0 and not table.contains(config.milestones, remove_rocket) then
         rocket_times[force_name][remove_rocket] = nil
     end
 
@@ -186,7 +186,7 @@ Event.add(defines.events.on_rocket_launched,function(event)
 end)
 
 --- When a launch is reiggered it will await reset
-Event.add(defines.events.on_rocket_launch_ordered,function(event)
+Event.add(defines.events.on_rocket_launch_ordered, function(event)
     local entity = event.rocket_silo
     local silo_data = Rockets.get_silo_data(entity)
     silo_data.awaiting_reset = true
@@ -212,7 +212,7 @@ local function on_built(event)
     end
 end
 
-Event.add(defines.events.on_built_entity,on_built)
-Event.add(defines.events.on_robot_built_entity,on_built)
+Event.add(defines.events.on_built_entity, on_built)
+Event.add(defines.events.on_robot_built_entity, on_built)
 
 return Rockets

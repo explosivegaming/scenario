@@ -4,9 +4,9 @@
 @alias Tasks
 
 @usage-- Making and then editing a new task
-local task_id = Tasks.add_task(game.player.force.name,nil,game.player.name)
+local task_id = Tasks.add_task(game.player.force.name, nil, game.player.name)
 
-Tasks.update_task(task_id,'We need more iron!',game.player.name)
+Tasks.update_task(task_id, 'We need more iron!', game.player.name)
 
 ]]
 
@@ -18,7 +18,7 @@ local Tasks = {}
 
 -- Global lookup table for force name to task ids
 local force_tasks = {}
-Global.register(force_tasks,function(tbl)
+Global.register(force_tasks, function(tbl)
     force_tasks = tbl
 end)
 
@@ -38,10 +38,10 @@ Tasks.store = task_store
 @treturn string the uid of the task which was created
 
 @usage-- Adding a new task for your force
-local task_id = Tasks.add_task(game.player.force.name,nil,game.player.name)
+local task_id = Tasks.add_task(game.player.force.name, nil, game.player.name)
 
 ]]
-function Tasks.add_task(force_name,task_number,player_name,task_message)
+function Tasks.add_task(force_name, task_number, player_name, task_message)
     -- Get a new task id
     local task_id = tostring(Token.uid())
     task_message = task_message or 'New Task'
@@ -55,9 +55,9 @@ function Tasks.add_task(force_name,task_number,player_name,task_message)
 
     -- Insert the task id into the forces tasks
     if task_number then
-        table.insert(tasks,task_number,task_id)
+        table.insert(tasks, task_number, task_id)
     else
-        table.insert(tasks,task_id)
+        table.insert(tasks, task_id)
     end
 
     -- Create the editing table
@@ -67,7 +67,7 @@ function Tasks.add_task(force_name,task_number,player_name,task_message)
     end
 
     -- Add the new task to the store
-    Store.set(task_store,task_id,{
+    Store.set(task_store, task_id, {
         task_id = task_id,
         force_name = force_name,
         message = task_message,
@@ -87,10 +87,10 @@ Tasks.remove_task(task_id)
 
 ]]
 function Tasks.remove_task(task_id)
-    local task = Store.get(task_store,task_id)
+    local task = Store.get(task_store, task_id)
     local force_name = task.force_name
-    table.remove_element(force_tasks[force_name],task_id)
-    Store.clear(task_store,task_id)
+    table.remove_element(force_tasks[force_name], task_id)
+    Store.clear(task_store, task_id)
 end
 
 --[[-- Update the message and last edited information for a task
@@ -99,11 +99,11 @@ end
 @tparam[opt='server'] string player_name the name of the player who made the edit
 
 @usage-- Updating the message for on a task
-Task.update_task(task_id,'We need more iron!',game.player.name)
+Task.update_task(task_id, 'We need more iron!', game.player.name)
 
 ]]
-function Tasks.update_task(task_id,new_message,player_name)
-    Store.update(task_store,task_id,function(task)
+function Tasks.update_task(task_id, new_message, player_name)
+    Store.update(task_store, task_id, function(task)
         task.last_edit_name = player_name or '<server>'
         task.last_edit_time = game.tick
         task.message = new_message
@@ -116,11 +116,11 @@ end
 @tparam boolean state the new state to set editing to
 
 @usage-- Setting your editing state to true
-Tasks.set_editing(task_id,game.player.name,true)
+Tasks.set_editing(task_id, game.player.name, true)
 
 ]]
-function Tasks.set_editing(task_id,player_name,state)
-    Store.update(task_store,task_id,function(task)
+function Tasks.set_editing(task_id, player_name, state)
+    Store.update(task_store, task_id, function(task)
         task.curently_editing[player_name] = state
     end)
 end
@@ -135,7 +135,7 @@ end)
 
 ]]
 function Tasks.on_update(handler)
-    Store.watch(task_store,handler)
+    Store.watch(task_store, handler)
 end
 
 --- Getters.
@@ -151,7 +151,7 @@ local task = Tasks.get_task(task_id)
 
 ]]
 function Tasks.get_task(task_id)
-    return Store.get(task_store,task_id)
+    return Store.get(task_store, task_id)
 end
 
 --[[-- Gets all the task ids that a force has
@@ -172,11 +172,11 @@ end
 @treturn boolean weather the player is currently editing this task
 
 @usage-- Check if a player is editing a task or not
-local editing = Tasks.get_editing(task_id,game.player.name)
+local editing = Tasks.get_editing(task_id, game.player.name)
 
 ]]
-function Tasks.get_editing(task_id,player_name)
-    local task = Store.get(task_store,task_id)
+function Tasks.get_editing(task_id, player_name)
+    local task = Store.get(task_store, task_id)
     return task.curently_editing[player_name]
 end
 

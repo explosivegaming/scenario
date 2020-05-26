@@ -6,7 +6,7 @@ local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Global = require 'utils.global' --- @dep utils.global
 
 local disabled_commands = {}
-Global.register(disabled_commands,function(tbl)
+Global.register(disabled_commands, function(tbl)
     disabled_commands = tbl
 end)
 
@@ -22,7 +22,8 @@ function Commands.enable(command_name)
     disabled_commands[command_name] = nil
 end
 
-Commands.add_authenticator(function(player,command,tags,reject)
+-- luacheck:ignore 212/player 212/tags
+Commands.add_authenticator(function(player, command, tags, reject)
     if disabled_commands[command] then
         return reject{'command-auth.command-disabled'}
     else
