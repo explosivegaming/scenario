@@ -513,7 +513,7 @@ end)
 
 --- Button on the top flow used to toggle the container
 -- @element toggle_left_element
-Gui.left_toolbar_button('entity/rocket-silo', {'rocket-info.main-tooltip'}, rocket_list_container, function(player)
+Gui.left_toolbar_button('item/satellite', {'rocket-info.main-tooltip'}, rocket_list_container, function(player)
     return Roles.player_allowed(player, 'gui/rocket-info')
 end)
 
