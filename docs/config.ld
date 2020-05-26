@@ -1,4 +1,4 @@
-file = '../'
+file = { '../', exclude = { '../.install', '../.lua', '../.luarocks' } }
 dir = '../docs'
 project = 'ExpGaming Scenario'
 title = 'ExpGaming Scenario'
