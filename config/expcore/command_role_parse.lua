@@ -12,14 +12,15 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local auto_complete = _C.auto_complete --- @dep expcore.common
 require 'config.expcore.command_general_parse'
 
-Commands.add_parse('role',function(input,player,reject)
+-- luacheck:ignore 212/player
+Commands.add_parse('role',function(input, player, reject)
     if not input then return end
     local roles = Roles.config.order
     local rev_roles = {}
-    for i=#roles,1,-1 do
-        table.insert(rev_roles,roles[i])
+    for i=#roles, 1,-1 do
+        table.insert(rev_roles, roles[i])
     end
-    local role = auto_complete(rev_roles,input)
+    local role = auto_complete(rev_roles, input)
     role = Roles.get_role_by_name(role)
     if not role then
         return reject{'expcore-role.reject-role'}
@@ -28,8 +29,8 @@ Commands.add_parse('role',function(input,player,reject)
     end
 end)
 
-Commands.add_parse('player-role',function(input,player,reject)
-    local input_player = Commands.parse('player',input,player,reject)
+Commands.add_parse('player-role',function(input, player, reject)
+    local input_player = Commands.parse('player',input, player, reject)
     if not input_player then return end -- nil check
     local player_highest = Roles.get_player_highest_role(player)
     local input_player_highest = Roles.get_player_highest_role(input_player)
@@ -40,14 +41,14 @@ Commands.add_parse('player-role',function(input,player,reject)
     end
 end)
 
-Commands.add_parse('player-role-online',function(input,player,reject)
-    local input_player = Commands.parse('player-role',input,player,reject)
+Commands.add_parse('player-role-online',function(input, player, reject)
+    local input_player = Commands.parse('player-role',input, player, reject)
     if not input_player then return end -- nil check
-    return Commands.parse('player-online',input_player,player,reject)
+    return Commands.parse('player-online',input_player, player, reject)
 end)
 
-Commands.add_parse('player-role-alive',function(input,player,reject)
-    local input_player = Commands.parse('player-role',input,player,reject)
+Commands.add_parse('player-role-alive',function(input, player, reject)
+    local input_player = Commands.parse('player-role',input, player, reject)
     if not input_player then return end -- nil check
-    return Commands.parse('player-alive',input_player,player,reject)
+    return Commands.parse('player-alive',input_player, player, reject)
 end)

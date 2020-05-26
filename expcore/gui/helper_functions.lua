@@ -30,7 +30,7 @@ end
 local new_enabled_state = Gui.toggle_enabled_state(element)
 
 ]]
-function Gui.toggle_enabled_state(element,state)
+function Gui.toggle_enabled_state(element, state)
     if not element or not element.valid then return end
     if state == nil then state = not element.enabled end
     element.enabled = state
@@ -46,7 +46,7 @@ end
 local new_visible_state = Gui.toggle_visible_state(element)
 
 ]]
-function Gui.toggle_visible_state(element,state)
+function Gui.toggle_visible_state(element, state)
     if not element or not element.valid then return end
     if state == nil then state = not element.visible end
     element.visible = state
@@ -82,7 +82,7 @@ Gui.element{
 :style(Gui.sprite_style(20))
 
 ]]
-function Gui.sprite_style(size,padding,style)
+function Gui.sprite_style(size, padding, style)
     style = style or {}
     style.padding = padding or -2
     style.height = size

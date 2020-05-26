@@ -7,7 +7,7 @@ local config = require 'config.join_messages' --- @dep config.join_messages
 local Global = require 'utils.global' --- @dep utils.global
 require 'overrides.table'
 
-Global.register(config,function(tbl)
+Global.register(config, function(tbl)
     config = tbl
 end)
 
@@ -16,9 +16,9 @@ function(event)
     local player = Game.get_player_by_index(event.player_index)
     local custom_message = config[player.name]
     if custom_message then
-        game.print(custom_message,player.color)
+        game.print(custom_message, player.color)
     else
-        player.print{'greetings.greet',{'links.discord'}}
+        player.print{'greetings.greet', {'links.discord'}}
     end
 
 end

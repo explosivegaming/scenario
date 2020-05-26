@@ -9,13 +9,13 @@ local Store = require 'expcore.store' --- @dep expcore.store
 local scenario_diffculty = Store.register()
 
 -- When the store is changed this function will trigger
-Store.watch(scenario_diffculty,function(value)
+Store.watch(scenario_diffculty, function(value)
     game.print('The scenario diffculty has been set to '..value)
 end)
 
-Store.set(scenario_diffculty,'hard') -- Set the value stored to 'hard'
+Store.set(scenario_diffculty, 'hard') -- Set the value stored to 'hard'
 Store.get(scenario_diffculty) -- Returns 'hard'
-Store.update(scenario_diffculty,function(value) -- Will set value to 'normal' if no value is present
+Store.update(scenario_diffculty, function(value) -- Will set value to 'normal' if no value is present
     return not value and 'normal'
 end)
 
@@ -27,13 +27,13 @@ local player_scores = Store.register(function(player) -- Use player name as the 
 end)
 
 -- When any key in the store is changed this function will trigger
-Store.watch(player_scores,function(value,key,old_value)
+Store.watch(player_scores, function(value, key, old_value)
     game.print(key..' now has a score of '..value)
 end)
 
-Store.set(player_scores,game.player,10) -- Set your score to 10
-Store.get(scenario_diffculty,game.player) -- Returns 10
-Store.update(scenario_diffculty,game.player,function(value) -- Add 1 to your score
+Store.set(player_scores, game.player, 10) -- Set your score to 10
+Store.get(scenario_diffculty, game.player) -- Returns 10
+Store.update(scenario_diffculty, game.player, function(value) -- Add 1 to your score
     return value + 1
 end)
 
@@ -79,33 +79,33 @@ local player_scores = Store.register(function(player)
 end)
 
 -- player_scores is a valid store and key will be your player name
-local key = Store.validate(player_scores,game.player)
+local key = Store.validate(player_scores, game.player)
 
 ]]
-function Store.validate(store,key,error_stack)
+function Store.validate(store, key, error_stack)
     error_stack = error_stack or 1
 
     if type(store) ~= 'number' then
         -- Store is not a number and so if not valid
-        error('Store uid given is not a number; recived type '..type(store),error_stack+1)
+        error('Store uid given is not a number; recived type '..type(store), error_stack+1)
     elseif store > Store.uid then
         -- Store is a number but it is out of range, ie larger than the current highest uid
-        error('Store uid is out of range; recived '..tostring(store),error_stack+1)
+        error('Store uid is out of range; recived '..tostring(store), error_stack+1)
     elseif key ~= nil and type(key) ~= 'string' and Store.serializers[store] == nil then
         -- Key is present but is not a string and there is no serializer registered
-        error('Store key is not a string and no serializer has been registered; recived '..type(key),error_stack+1)
+        error('Store key is not a string and no serializer has been registered; recived '..type(key), error_stack+1)
     elseif key ~= nil then
         -- Key is present and so it is serialized and returned
         local serializer = Store.serializers[store]
         if type(key) ~= 'string' then
-            local success, serialized_key = pcall(serializer,key)
+            local success, serialized_key = pcall(serializer, key)
 
             if not success then
                 -- Serializer casued an error while serializing the key
-                error('Store watcher casued an error:\n\t'..key,error_stack+1)
+                error('Store watcher casued an error:\n\t'..key, error_stack+1)
             elseif type(serialized_key) ~= 'string' then
                 -- Serializer was successful but failed to return a string value
-                error('Store key serializer did not return a string; recived type '..type(key),error_stack+1)
+                error('Store key serializer did not return a string; recived type '..type(key), error_stack+1)
             end
 
             return serialized_key
@@ -161,12 +161,12 @@ end
 local scenario_diffculty = Store.register()
 
 -- Register the watcher so that when we change the value the message is printed
-Store.watch(scenario_diffculty,function(value)
+Store.watch(scenario_diffculty, function(value)
     game.print('The scenario diffculty has been set to '..value)
 end)
 
 -- Set a new value for the diffculty and see that it has printed to the game
-Store.set(scenario_diffculty,'hard')
+Store.set(scenario_diffculty, 'hard')
 
 @usage-- Printing the changed value to all players, with keys
 -- Register the new store, we are not using player names as the keys so it would be useful to accept LuaPlayer objects
@@ -175,21 +175,21 @@ local player_scores = Store.register(function(player)
 end)
 
 -- Register the watcher so that when we change the value the message is printed
-Store.watch(player_scores,function(value,key,old_value)
+Store.watch(player_scores, function(value, key, old_value)
     game.print(key..' now has a score of '..value)
 end)
 
 -- Set a new value for your score and see that it has printed to the game
-Store.set(player_scores,game.player,10)
+Store.set(player_scores, game.player, 10)
 
 ]]
-function Store.watch(store,watcher)
+function Store.watch(store, watcher)
     if _LIFECYCLE ~= _STAGE.control then
         -- Only allow this function to be called during the control stage
         error('Store watcher can not be registered durring runtime', 2)
     end
 
-    Store.validate(store,nil,2)
+    Store.validate(store, nil, 2)
 
     -- Add the watchers table if it does not exist
     local watchers = Store.watchers[store]
@@ -224,14 +224,14 @@ local player_scores = Store.register(function(player)
 end)
 
 -- Get your current score
-local my_score = Store.get(player_scores,game.player)
+local my_score = Store.get(player_scores, game.player)
 
 -- Get all scores
 lcoal scores = Store.get(player_scores)
 
 ]]
-function Store.get(store,key)
-    key = Store.validate(store,key,2)
+function Store.get(store, key)
+    key = Store.validate(store, key, 2)
 
     -- Get the data from the data store
     local data = data_store[store]
@@ -266,14 +266,14 @@ local player_scores = Store.register(function(player)
 end)
 
 -- Clear your score
-Store.clear(player_scores,game.player)
+Store.clear(player_scores, game.player)
 
 -- Clear all scores
 Store.clear(player_scores)
 
 ]]
-function Store.clear(store,key)
-    key = Store.validate(store,key,2)
+function Store.clear(store, key)
+    key = Store.validate(store, key, 2)
     local old_value
 
     -- Check if there is a key being used
@@ -288,7 +288,7 @@ function Store.clear(store,key)
     end
 
     -- Trigger any watch functions
-    Store.raw_trigger(store,key,nil,old_value)
+    Store.raw_trigger(store, key, nil, old_value)
 end
 
 --[[-- Used to set the data in a store, will trigger any watchers, key is optional depending on if you are using them
@@ -301,7 +301,7 @@ end
 local scenario_diffculty = Store.register()
 
 -- Set the new scenario diffculty
-Store.set(scenario_diffculty,'hard')
+Store.set(scenario_diffculty, 'hard')
 
 @usage-- Set data in a store with keys
 -- Register the new store, we are not using player names as the keys so it would be useful to accept LuaPlayer objects
@@ -310,16 +310,16 @@ local player_scores = Store.register(function(player)
 end)
 
 -- Set your current score
-Store.set(player_scores,game.player,10)
+Store.set(player_scores, game.player, 10)
 
 -- Set all scores, note this might not have much use
-Store.set(player_scores,{
+Store.set(player_scores, {
     [game.player.name] = 10,
     ['SomeOtherPlayer'] = 0
 })
 
 ]]
-function Store.set(store,key,value)
+function Store.set(store, key, value)
     -- Allow for key to be optional
     if value == nil then
         value = key
@@ -327,7 +327,7 @@ function Store.set(store,key,value)
     end
 
     -- Check the store is valid
-    key = Store.validate(store,key,2)
+    key = Store.validate(store, key, 2)
     local old_value
 
     -- If there is a key being used then the store must be a able
@@ -343,7 +343,7 @@ function Store.set(store,key,value)
     end
 
     -- Trigger any watchers
-    Store.raw_trigger(store,key,value,old_value)
+    Store.raw_trigger(store, key, value, old_value)
 end
 
 --[[-- Used to update the data in a store, use this with tables, will trigger any watchers, key is optional depending on if you are using them
@@ -356,10 +356,10 @@ end
 local game_score = Store.register()
 
 -- Setting a default value
-Store.set(game_score,0)
+Store.set(game_score, 0)
 
 -- We now will update the game score by one, we return the value so that it is set as the new value in the store
-Store.update(game_score,function(value)
+Store.update(game_score, function(value)
     return value + 1
 end)
 
@@ -370,7 +370,7 @@ local player_data = Store.register(function(player)
 end)
 
 -- Setting a default value for your player, used to show the table structure
-Store.set(player_data,game.player,{
+Store.set(player_data, game.player, {
     group = 'Admin',
     role = 'Owner',
     show_group_config = false
@@ -378,12 +378,12 @@ Store.set(player_data,game.player,{
 
 -- Updating the show_group_config key in your player data, note that it would be harder to call set every time
 -- We do not need to return anything in this case as we are not replacing all the data
-Store.update(player_data,game.player,function(data)
+Store.update(player_data, game.player, function(data)
     data.show_group_config = not data.show_group_config
 end)
 
 ]]
-function Store.update(store,key,updater)
+function Store.update(store, key, updater)
     -- Allow for key to be nil
     if updater == nil then
         updater = key
@@ -391,7 +391,7 @@ function Store.update(store,key,updater)
     end
 
     -- Check the store is valid
-    key = Store.validate(store,key,2)
+    key = Store.validate(store, key, 2)
     local value, old_value
 
     -- If a key is used then the store must be a table
@@ -420,7 +420,7 @@ function Store.update(store,key,updater)
     end
 
     -- Trigger any watchers
-    Store.raw_trigger(store,key,value,old_value)
+    Store.raw_trigger(store, key, value, old_value)
 end
 
 --[[-- Used to update all values that are in a store, similar to Store.update but acts on all keys at once, will trigger watchers for every key present
@@ -434,7 +434,7 @@ local player_data = Store.register(function(player)
 end)
 
 -- Setting a default value for your player, used to show the table structure
-Store.set(player_data,game.player,{
+Store.set(player_data, game.player, {
     group = 'Admin',
     role = 'Owner',
     show_group_config = false
@@ -443,13 +443,13 @@ Store.set(player_data,game.player,{
 -- Updating the show_group_config key for all players, note that it would be harder to call set every time
 -- We do not need to return anything in this case as we are not replacing all the data
 -- We also have access to the current key being updated if needed
-Store.map(player_data,function(data,key)
+Store.map(player_data, function(data, key)
     data.show_group_config = not data.show_group_config
 end)
 
 ]]
-function Store.map(store,updater)
-    Store.validate(store,nil,2)
+function Store.map(store, updater)
+    Store.validate(store, nil, 2)
 
     -- Get all that data in the store and check its a table
     local data = data_store[store]
@@ -458,12 +458,12 @@ function Store.map(store,updater)
     end
 
     -- Loop over all the keys and call the updater, setting value if returned, and calling watcher functions
-    for key,value in pairs(data) do
-        local rtn = updater(value,key)
+    for key, value in pairs(data) do
+        local rtn = updater(value, key)
         if rtn then
             data[key] = rtn
         end
-        Store.raw_trigger(store,key,data[key],value)
+        Store.raw_trigger(store, key, data[key], value)
     end
 end
 
@@ -478,16 +478,16 @@ local scenario_diffculty = Store.register()
 Store.trigger(scenario_diffculty)
 
 ]]
-function Store.trigger(store,key)
-    key = Store.validate(store,key,2)
+function Store.trigger(store, key)
+    key = Store.validate(store, key, 2)
 
     -- Get the data from the data store
     local data = data_store[store]
     if key then
         data = data[key]
-        Store.raw_trigger(store,key,data,data)
+        Store.raw_trigger(store, key, data, data)
     else
-        Store.raw_trigger(store,key,data,data)
+        Store.raw_trigger(store, key, data, data)
     end
 end
 
@@ -503,16 +503,16 @@ local scenario_diffculty = Store.register()
 
 -- Trigger the watchers with a fake change of diffculty
 -- This is mostly used internally but it can be useful in other cases
-Store.raw_trigger(scenario_diffculty,nil,'normal','normal')
+Store.raw_trigger(scenario_diffculty, nil, 'normal', 'normal')
 
 ]]
-function Store.raw_trigger(store,key,value,old_value)
-    key = Store.validate(store,key,2)
+function Store.raw_trigger(store, key, value, old_value)
+    key = Store.validate(store, key, 2)
 
     -- Get the watchers and then loop over them
     local watchers = Store.watchers[store] or {}
-    for _,watcher in pairs(watchers) do
-        local success, err = pcall(watcher,value,key,old_value)
+    for _, watcher in pairs(watchers) do
+        local success, err = pcall(watcher, value, key, old_value)
         if not success then
             error('Store watcher casued an error:\n\t'..err)
         end

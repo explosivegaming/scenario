@@ -4,7 +4,7 @@
 local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.game
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
-local write_json,format_time = _C.write_json, _C.format_time --- @dep expcore.common
+local write_json, format_time = _C.write_json, _C.format_time --- @dep expcore.common
 local config = require 'config.discord_alerts' --- @dep config.discord_alerts
 
 local function get_player_name(event)
@@ -16,8 +16,8 @@ local function to_hex(color)
     local hex_digits = '0123456789ABCDEF'
     local function hex(bit)
         local major, minor = math.modf(bit/16)
-        major,minor = major+1,minor*16+1
-        return hex_digits:sub(major,major)..hex_digits:sub(minor,minor)
+        major, minor = major+1, minor*16+1
+        return hex_digits:sub(major, major)..hex_digits:sub(minor, minor)
     end
 
     return '0x'..hex(color.r)..hex(color.g)..hex(color.b)
@@ -33,24 +33,24 @@ local function emit_event(args)
     end
 
     local tick = args.tick or 0
-    local tick_formated = format_time(tick,{hours = true,minutes = true,string = true,long = true})
+    local tick_formated = format_time(tick, {hours = true, minutes = true, string = true, long = true})
 
     local players_online = 0
     local admins_online = 0
-    for _,player in pairs(game.connected_players) do
+    for _, player in pairs(game.connected_players) do
         players_online = players_online+1
         if player.admin then
             admins_online = admins_online + 1
         end
     end
 
-    local done = {title=true,color=true,description=true}
+    local done = {title=true, color=true, description=true}
     local fields = {{
         name='Server Details',
-        value=string.format('Server name: ${serverName} Players: %d Admins: %d Time: %s',players_online,admins_online,tick_formated)
+        value=string.format('Server name: ${serverName} Players: %d Admins: %d Time: %s', players_online, admins_online, tick_formated)
     }}
 
-    for key,value in pairs(args) do
+    for key, value in pairs(args) do
         if not done[key] then
             done[key] = true
             local field = {
@@ -59,17 +59,17 @@ local function emit_event(args)
                 inline=false
             }
 
-            local new_value, inline = value:gsub('<inline>','',1)
+            local new_value, inline = value:gsub('<inline>', '', 1)
             if inline then
                 field.value = new_value
                 field.inline = true
             end
 
-            table.insert(fields,field)
+            table.insert(fields, field)
         end
     end
 
-    write_json('log/discord.log',{
+    write_json('log/discord.log', {
         title=title,
         description=description,
         color=color,
@@ -80,8 +80,8 @@ end
 --- Reports added and removed
 if config.player_reports then
     local Reports = require 'modules.control.reports' --- @dep modules.control.reports
-    Event.add(Reports.events.on_player_reported,function(event)
-        local player_name,by_player_name = get_player_name(event)
+    Event.add(Reports.events.on_player_reported, function(event)
+        local player_name, by_player_name = get_player_name(event)
         emit_event{
             title='Report',
             description='A player was reported',
@@ -91,7 +91,7 @@ if config.player_reports then
             ['Reason:']=event.reason
         }
     end)
-    Event.add(Reports.events.on_report_removed,function(event)
+    Event.add(Reports.events.on_report_removed, function(event)
         local player_name = get_player_name(event)
         emit_event{
             title='Report Removed',
@@ -106,8 +106,8 @@ end
 --- Warnings added and removed
 if config.player_warnings then
     local Warnings = require 'modules.control.warnings' --- @dep modules.control.warnings
-    Event.add(Warnings.events.on_warning_added,function(event)
-        local player_name,by_player_name = get_player_name(event)
+    Event.add(Warnings.events.on_warning_added, function(event)
+        local player_name, by_player_name = get_player_name(event)
         emit_event{
             title='Warning',
             description='A player has been given a warning',
@@ -117,8 +117,8 @@ if config.player_warnings then
             ['Reason:']=event.reason
         }
     end)
-    Event.add(Warnings.events.on_warning_removed,function(event)
-        local player_name,by_player_name = get_player_name(event)
+    Event.add(Warnings.events.on_warning_removed, function(event)
+        local player_name, by_player_name = get_player_name(event)
         emit_event{
             title='Warning Removed',
             description='A player has a warning removed',
@@ -132,8 +132,8 @@ end
 --- When a player is jailed or unjailed
 if config.player_jail then
     local Jail = require 'modules.control.jail'
-    Event.add(Jail.events.on_player_jailed,function(event)
-        local player_name,by_player_name = get_player_name(event)
+    Event.add(Jail.events.on_player_jailed, function(event)
+        local player_name, by_player_name = get_player_name(event)
         emit_event{
             title='Jail',
             description='A player has been jailed',
@@ -143,8 +143,8 @@ if config.player_jail then
             ['Reason:']=event.reason
         }
     end)
-    Event.add(Jail.events.on_player_unjailed,function(event)
-        local player_name,by_player_name = get_player_name(event)
+    Event.add(Jail.events.on_player_unjailed, function(event)
+        local player_name, by_player_name = get_player_name(event)
         emit_event{
             title='Unjail',
             description='A player has been unjailed',
@@ -158,8 +158,8 @@ end
 --- When a player is tempbanned
 if config.player_temp_ban then
     local Jail = require 'modules.control.jail'
-    Event.add(Jail.events.on_player_temp_banned,function(event)
-        local player_name,by_player_name = get_player_name(event)
+    Event.add(Jail.events.on_player_temp_banned, function(event)
+        local player_name, by_player_name = get_player_name(event)
         emit_event{
             title='Temp Ban',
             description='A player has been temp banned',
@@ -169,8 +169,8 @@ if config.player_temp_ban then
             ['Reason:']=event.reason
         }
     end)
-    Event.add(Jail.events.on_player_untemp_banned,function(event)
-        local player_name,by_player_name = get_player_name(event)
+    Event.add(Jail.events.on_player_untemp_banned, function(event)
+        local player_name, by_player_name = get_player_name(event)
         emit_event{
             title='Temp Ban Removed',
             description='A player has been untemp banned',
@@ -183,7 +183,7 @@ end
 
 --- Ban and unban
 if config.player_bans then
-    Event.add(defines.events.on_player_banned,function(event)
+    Event.add(defines.events.on_player_banned, function(event)
         if event.by_player then
             local by_player = Game.get_player_by_index(event.by_player)
             emit_event{
@@ -196,7 +196,7 @@ if config.player_bans then
             }
         end
     end)
-    Event.add(defines.events.on_player_unbanned,function(event)
+    Event.add(defines.events.on_player_unbanned, function(event)
         if event.by_player then
             local by_player = Game.get_player_by_index(event.by_player)
             emit_event{
@@ -212,7 +212,7 @@ end
 
 --- Mute and unmute
 if config.player_mutes then
-    Event.add(defines.events.on_player_muted,function(event)
+    Event.add(defines.events.on_player_muted, function(event)
         local player_name = get_player_name(event)
         emit_event{
             title='Muted',
@@ -221,7 +221,7 @@ if config.player_mutes then
             ['Player:']='<inline>'..player_name
         }
     end)
-    Event.add(defines.events.on_player_unmuted,function(event)
+    Event.add(defines.events.on_player_unmuted, function(event)
         local player_name = get_player_name(event)
         emit_event{
             title='Un-Muted',
@@ -234,7 +234,7 @@ end
 
 --- Kick
 if config.player_kicks then
-    Event.add(defines.events.on_player_kicked,function(event)
+    Event.add(defines.events.on_player_kicked, function(event)
         if event.by_player then
             local player_name = get_player_name(event)
             local by_player = Game.get_player_by_index(event.by_player)
@@ -252,7 +252,7 @@ end
 
 --- Promote and demote
 if config.player_promotes then
-    Event.add(defines.events.on_player_promoted,function(event)
+    Event.add(defines.events.on_player_promoted, function(event)
         local player_name = get_player_name(event)
         emit_event{
             title='Promote',
@@ -261,7 +261,7 @@ if config.player_promotes then
             ['Player:']='<inline>'..player_name
         }
     end)
-    Event.add(defines.events.on_player_demoted,function(event)
+    Event.add(defines.events.on_player_demoted, function(event)
         local player_name = get_player_name(event)
         emit_event{
             title='Demote',
@@ -273,12 +273,12 @@ if config.player_promotes then
 end
 
 --- Other commands
-Event.add(defines.events.on_console_command,function(event)
+Event.add(defines.events.on_console_command, function(event)
     if event.player_index then
         local player_name = get_player_name(event)
         if config[event.command] then
             emit_event{
-                title=event.command:gsub('^%l',string.upper),
+                title=event.command:gsub('^%l', string.upper),
                 description='/'..event.command..' was used',
                 color=Colors.grey,
                 ['By:']='<inline>'..player_name,

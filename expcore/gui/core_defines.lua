@@ -23,7 +23,7 @@ Gui.element{
     width = 18,
     height = 36
 }
-:on_click(function(player,_,_)
+:on_click(function(player, _,_)
     Gui.toggle_top_flow(player)
 end)
 Gui.core_defines.hide_top_flow = hide_top_flow
@@ -42,7 +42,7 @@ Gui.element{
     width = 18,
     height = 20
 }
-:on_click(function(player,_,_)
+:on_click(function(player, _,_)
     Gui.toggle_top_flow(player)
 end)
 Gui.core_defines.show_top_flow = show_top_flow
@@ -61,13 +61,13 @@ Gui.element{
     width = 18,
     height = 20
 }
-:on_click(function(player,_,_)
+:on_click(function(player, _,_)
     Gui.hide_left_flow(player)
 end)
 Gui.core_defines.hide_left_flow = hide_left_flow
 
 --- Draw the core elements when a player joins the game
-Event.add(defines.events.on_player_created,function(event)
+Event.add(defines.events.on_player_created, function(event)
     local player = game.players[event.player_index]
 
     -- Draw the top flow

@@ -5,7 +5,7 @@ local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.pollution_grading' --- @dep config.pollution_grading
 
 local delay = config.update_delay * 3600 -- convert from minutes to ticks
-Event.on_nth_tick(delay,function()
+Event.on_nth_tick(delay, function()
     local surface = game.surfaces[1]
     local true_max = surface.get_pollution(config.reference_point)
     local max = true_max*config.max_scalar

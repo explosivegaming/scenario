@@ -35,14 +35,14 @@ local Permissions_Groups = {
 
 -- Async function to add players to permission groups
 local add_to_permission_group =
-Async.register(function(permission_group,player)
+Async.register(function(permission_group, player)
     permission_group.add_player(player)
 end)
 Permissions_Groups.async_token_add_to_permission_group = add_to_permission_group
 
 -- Async function to remove players from permission groups
 local remove_from_permission_group =
-Async.register(function(permission_group,player)
+Async.register(function(permission_group, player)
     permission_group.remove_player(player)
 end)
 Permissions_Groups.async_token_remove_from_permission_group = remove_from_permission_group
@@ -64,7 +64,7 @@ function Permissions_Groups.new_group(name)
         name=name,
         actions={},
         allow_all_actions=true
-    },{
+    }, {
         __index= Permissions_Groups._prototype
     })
     Permissions_Groups.groups[name] = group
@@ -111,7 +111,7 @@ Groups.reload_permissions()
 
 ]]
 function Permissions_Groups.reload_permissions()
-    for _,group in pairs(Permissions_Groups.groups) do
+    for _, group in pairs(Permissions_Groups.groups) do
         group:create()
     end
 end
@@ -125,7 +125,7 @@ end
 Groups.set_player_group(game.player, 'Admin')
 
 ]]
-function Permissions_Groups.set_player_group(player,group)
+function Permissions_Groups.set_player_group(player, group)
     player = Game.get_player_from_any(player)
     group = Permissions_Groups.get_group_by_name(group)
     if not group or not player then return false end
@@ -146,7 +146,7 @@ end
 group:set_action('toggle_map_editor', false)
 
 ]]
-function Permissions_Groups._prototype:set_action(action,state)
+function Permissions_Groups._prototype:set_action(action, state)
     if type(action) == 'string' then
         action = defines.input_action[action]
     end
@@ -168,8 +168,8 @@ function Permissions_Groups._prototype:allow(actions)
     if type(actions) ~= 'table' then
         actions = {actions}
     end
-    for _,action in pairs(actions) do
-        self:set_action(action,true)
+    for _, action in pairs(actions) do
+        self:set_action(action, true)
     end
     return self
 end
@@ -192,8 +192,8 @@ function Permissions_Groups._prototype:disallow(actions)
     if type(actions) ~= 'table' then
         actions = {actions}
     end
-    for _,action in pairs(actions) do
-        self:set_action(action,false)
+    for _, action in pairs(actions) do
+        self:set_action(action, false)
     end
     return self
 end
@@ -257,8 +257,8 @@ function Permissions_Groups._prototype:create()
     if not group then
         group = game.permissions.create_group(self.name)
     end
-    for _,action in pairs(defines.input_action) do
-        group.set_allows_action(action,self:is_allowed(action))
+    for _, action in pairs(defines.input_action) do
+        group.set_allows_action(action, self:is_allowed(action))
     end
     return group
 end
@@ -324,9 +324,9 @@ function Permissions_Groups._prototype:get_players(online)
         if online == nil then
             return group.players
         else
-            for _,player in pairs(group.players) do
+            for _, player in pairs(group.players) do
                 if player.connected == online then
-                    table.insert(player,player)
+                    table.insert(player, player)
                 end
             end
         end
@@ -344,7 +344,7 @@ group:print('Hello, World!')
 ]]
 function Permissions_Groups._prototype:print(message)
     local players = self:get_players(true)
-    for _,player in pairs(players) do
+    for _, player in pairs(players) do
         player.print(message)
     end
     return #players

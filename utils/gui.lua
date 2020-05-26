@@ -72,7 +72,7 @@ local function handler_factory(event_name)
     return function(element_name, handler)
         local element = ExpGui.defines[element_name]
         if not element then return end
-        element[event_name](element,function(_,_,event)
+        element[event_name](element, function(_, _,event)
             handler(event)
         end)
     end

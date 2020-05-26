@@ -1,0 +1,41 @@
+name: CI PR Checker
+
+on: pull_request
+
+jobs:
+  luacheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_BASE_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: Lint
+        uses: Roang-zero1/factorio-mod-luacheck@master
+        with:
+          luacheckrc_url: https://raw.githubusercontent.com/explosivegaming/scenario/${{ steps.extract_branch.outputs.branch }}/.luacheckrc
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install Lua
+        uses: leafo/gh-actions-lua@v5
+
+      - name: Install LuaRocks
+        uses: leafo/gh-actions-luarocks@v2
+
+      - name: Install LDoc
+        run: luarocks install ldoc 1.4.4-1
+
+      - name: Generate Documents
+        working-directory: docs
+        run: ldoc -i .

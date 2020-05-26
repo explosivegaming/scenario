@@ -9,15 +9,15 @@
 
     -- This will move 'MrBiter' to the jail role and remove all other roles from them
     -- the player name and reason are only so they can be included in the event for user feedback
-    Jail.jail_player('MrBiter','Cooldude2606','Likes biters too much')
+    Jail.jail_player('MrBiter', 'Cooldude2606', 'Likes biters too much')
 
     -- This will give 'MrBiter' all his roles back and remove him from jail
     -- again as above the player name is only used in the event for user feedback
-    Jail.unjail_player('MrBiter','Cooldude2606')
+    Jail.unjail_player('MrBiter', 'Cooldude2606')
 
     -- Temp ban works the same as jail but will store the reason and move the players items to spawn
     -- this is meant to be used as a more permiment jail but not as strong as a ban
-    Jail.temp_ban_player('MrBiter','Cooldude2606','Likes biters too much')
+    Jail.temp_ban_player('MrBiter', 'Cooldude2606', 'Likes biters too much')
 ]]
 
 local Roles = require 'expcore.roles' --- @dep expcore.roles
@@ -65,7 +65,7 @@ local temp_bans = Jail.temp_bans
 Global.register({
     old_roles = old_roles,
     temp_bans = temp_bans
-},function(tbl)
+}, function(tbl)
     Jail.old_roles = tbl.old_roles
     Jail.temp_bans = tbl.temp_bans
     old_roles = Jail.old_roles
@@ -77,8 +77,8 @@ end)
 -- @tparam LuaPlayer player the player who is being acted on
 -- @tparam string by_player_name the player who is doing the action
 -- @tparam string reason the reason for the action (jail and tempban only)
-local function event_emit(event,player,by_player_name,reason)
-    script.raise_event(event,{
+local function event_emit(event, player, by_player_name, reason)
+    script.raise_event(event, {
         name=event,
         tick=game.tick,
         player_index=player.index,
@@ -95,7 +95,7 @@ end
 -- @tparam LuaPlayer player the player to check if they are in jail
 -- @treturn boolean whether the player is currently in jail
 function Jail.is_jailed(player)
-    return has_role(player,'Jail')
+    return has_role(player, 'Jail')
 end
 
 --- Moves a player to jail and removes all other roles
@@ -103,14 +103,14 @@ end
 -- @tparam string by_player_name the name of the player who is doing the jailing
 -- @tparam[opt='Non given.'] string reason the reason that the player is being jailed
 -- @treturn boolean wheather the user was jailed successfully
-function Jail.jail_player(player,by_player_name,reason)
+function Jail.jail_player(player, by_player_name, reason)
     player = valid_player(player)
     if not player then return end
     if not by_player_name then return end
 
     reason = reason or 'Non given.'
 
-    if has_role(player,'Jail') then return end
+    if has_role(player, 'Jail') then return end
     local roles = get_roles(player)
     old_roles[player.name] = roles
 
@@ -126,12 +126,12 @@ end
 -- @tparam LuaPlayer player the player that will be unjailed
 -- @tparam string by_player_name the name of the player that is doing the unjail
 -- @treturn boolean whether the player was unjailed successfully
-function Jail.unjail_player(player,by_player_name)
+function Jail.unjail_player(player, by_player_name)
     player = valid_player(player)
     if not player then return end
     if not by_player_name then return end
 
-    if not has_role(player,'Jail') then return end
+    if not has_role(player, 'Jail') then return end
     local roles = old_roles[player.name] or {}
 
     assign_roles(player, roles, by_player_name, nil, true)
@@ -160,7 +160,7 @@ end
 -- @tparam string by_player_name the name of the player who is doing the temp ban
 -- @tparam[opt='Non given.'] string reason the reason that the player is being temp banned
 -- @treturn boolean whether the player was successfully temp banned
-function Jail.temp_ban_player(player,by_player_name,reason)
+function Jail.temp_ban_player(player, by_player_name, reason)
     player = valid_player(player)
     if not player then return end
     if not by_player_name then return end
@@ -168,9 +168,9 @@ function Jail.temp_ban_player(player,by_player_name,reason)
     reason = reason or 'Non given.'
 
     if temp_bans[player.name] then return end
-    temp_bans[player.name] = {reason,by_player_name}
+    temp_bans[player.name] = {reason, by_player_name}
 
-    if not has_role(player,'Jail') then
+    if not has_role(player, 'Jail') then
         local roles = get_roles(player)
         old_roles[player.name] = roles
 
@@ -182,7 +182,7 @@ function Jail.temp_ban_player(player,by_player_name,reason)
     move_items(inv.get_contents())
     inv.clear()
 
-    event_emit(Jail.events.on_player_temp_banned,player,by_player_name,reason)
+    event_emit(Jail.events.on_player_temp_banned, player, by_player_name, reason)
 
     return true
 end
@@ -191,7 +191,7 @@ end
 -- @tparam LuaPlayer player the player who is being removed from temp ban
 -- @tparam string by_player_name the name of the player who is doing the untemp ban
 -- @treturn boolean whether the player was successfully removed
-function Jail.untemp_ban_player(player,by_player_name)
+function Jail.untemp_ban_player(player, by_player_name)
     player = valid_player(player)
     if not player then return end
     if not by_player_name then return end
@@ -199,14 +199,14 @@ function Jail.untemp_ban_player(player,by_player_name)
     if not temp_bans[player.name] then return end
     temp_bans[player.name] = nil
 
-    if has_role(player,'Jail') then
+    if has_role(player, 'Jail') then
         local roles = old_roles[player.name]
 
         assign_roles(player, roles, by_player_name, nil, true)
         unassign_roles(player, 'Jail', by_player_name, nil, true)
     end
 
-    event_emit(Jail.events.on_player_untemp_banned,player,by_player_name)
+    event_emit(Jail.events.on_player_untemp_banned, player, by_player_name)
 
     return true
 end
