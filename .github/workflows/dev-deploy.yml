@@ -17,14 +17,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Checkout submodules
-        uses: textbook/git-checkout-submodule-action@master
-        with:
-          remote: true
-
-      - name: Update .luacheckrc
-        run: cp ./Factorio-luacheckrc/.luacheckrc .
-
       - name: Install Lua
         uses: leafo/gh-actions-lua@v5
         
