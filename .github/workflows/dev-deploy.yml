@@ -19,10 +19,10 @@ jobs:
 
       - name: Install Lua
         uses: leafo/gh-actions-lua@v5
-        
+
       - name: Install LuaRocks
         uses: leafo/gh-actions-luarocks@v2
-      
+
       - name: Install LDoc
         run: luarocks install ldoc 1.4.4-1
 

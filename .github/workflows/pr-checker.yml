@@ -18,7 +18,7 @@ jobs:
         uses: Roang-zero1/factorio-mod-luacheck@master
         with:
           luacheckrc_url: https://raw.githubusercontent.com/explosivegaming/scenario/${{ steps.extract_branch.outputs.branch }}/.luacheckrc
-        
+
   docs:
     runs-on: ubuntu-latest
     steps:
@@ -29,10 +29,10 @@ jobs:
 
       - name: Install Lua
         uses: leafo/gh-actions-lua@v5
-        
+
       - name: Install LuaRocks
         uses: leafo/gh-actions-luarocks@v2
-      
+
       - name: Install LDoc
         run: luarocks install ldoc 1.4.4-1
 
