@@ -1,4 +1,4 @@
-name: CI Luacheck
+name: CI PR Checker
 
 on: pull_request
 
