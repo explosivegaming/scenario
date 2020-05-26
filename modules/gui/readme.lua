@@ -27,12 +27,14 @@ Gui.element(function(_,parent)
     return parent.add{
         type = 'frame',
         direction = 'vertical',
-        style = 'image_frame'
+        style = 'inside_deep_frame'
     }
 end)
 :style{
     horizontally_stretchable = true,
-    horizontal_align = 'center'
+    horizontal_align = 'center',
+    padding = {2, 2},
+    top_margin = 2
 }
 
 --- Table which has a title above it above it
