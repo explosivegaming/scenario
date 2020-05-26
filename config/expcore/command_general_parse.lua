@@ -39,12 +39,12 @@ end)
 Commands.add_parse('string-options',function(input, player, reject, options)
     if not input then return end -- nil check
     input = input:lower()
-    for option in options do
+    for _, option in ipairs(options) do
         if input == option:lower() then
-            return true
+            return option
         end
     end
-    return reject{'reject-string-options',options:concat(', ')}
+    return reject{'expcore-commands.reject-string-options', table.concat(options, ', ')}
 end)
 
 Commands.add_parse('string-max-length',function(input, player, reject, max_length)

@@ -6,7 +6,9 @@
 return {
     --'example.file_not_loaded',
     'modules.factorio-control', -- base factorio free play scenario
-    -- Game Commands
+    'expcore.player_data',
+
+    --- Game Commands
     'modules.commands.me',
     'modules.commands.kill',
     'modules.commands.admin-chat',
@@ -28,7 +30,8 @@ return {
     'modules.commands.bonus',
     'modules.commands.home',
     'modules.commands.quickbar',
-    -- QoL Addons
+
+    --- Addons
     'modules.addons.station-auto-name',
     'modules.addons.greetings',
     'modules.addons.chat-popups',
@@ -43,7 +46,8 @@ return {
     'modules.addons.discord-alerts',
     'modules.addons.chat-reply',
     'modules.addons.tree-decon',
-    -- GUI
+
+    --- GUI
     'modules.gui.readme',
     'modules.gui.rocket-info',
     'modules.gui.science-info',
@@ -52,7 +56,8 @@ return {
     'modules.gui.player-list',
     'modules.gui.server-ups',
     'modules.commands.debug',
-    -- Config Files
+
+    --- Config Files
     'config.expcore.command_auth_admin', -- commands tagged with admin_only are blocked for non admins
     'config.expcore.command_auth_roles', -- commands must be allowed via the role config
     'config.expcore.command_runtime_disable', -- allows commands to be enabled and disabled during runtime
