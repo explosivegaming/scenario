@@ -163,7 +163,7 @@ Event.on_load(function()
     end
 end)
 
------ Datastore Manager -----
+----- Datastore Manager
 -- @section datastoreManager
 
 --- Metatable used on datastores
@@ -224,6 +224,7 @@ function DatastoreManager.combine(datastoreName, subDatastoreName)
     return datastore:combine(subDatastoreName)
 end
 
+local function ingest_error(err) print('Datastore ingest error, Unable to parse json:', err) end
 --[[-- Ingest the result from a request, this is used through a rcon interface to sync data
 @tparam string action The action that should be done, can be: remove, message, propagate, or request
 @tparam string datastoreName The name of the datastore that should have the action done to it
@@ -234,7 +235,6 @@ end
 Datastore.ingest('request', 'ExampleData', 'TestKey', 'Foo')
 
 ]]
-local function ingest_error(err) print('Datastore ingest error, Unable to parse json:', err) end
 function DatastoreManager.ingest(action, datastoreName, key, valueJson)
     local datastore = assert(Datastores[datastoreName], 'Datastore ingest error, Datastore not found '..tostring(datastoreName))
     assert(type(action) == 'string', 'Datastore ingest error, Action is not a string got: '..type(action))
@@ -289,7 +289,7 @@ function DatastoreManager.name_serializer(rawKey)
     return rawKey.name
 end
 
------ Datastore Internal -----
+----- Datastore Internal
 -- @section datastore-internal
 
 --[[-- Debug, Get the debug info for this datastore
@@ -398,8 +398,8 @@ function Datastore:write_action(action, key, value)
     game.write_file('datastore.pipe', table.concat(data, ' ')..'\n', true, 0)
 end
 
------ Datastore -----
--- @section datastore
+----- Datastore Local
+-- @section datastore-local
 
 --[[-- Create a new datastore which is stores its data inside of this datastore
 @tparam string subDatastoreName The name of the datastore that will have its data stored in this datastore
@@ -615,7 +615,7 @@ function Datastore:update_all(callback)
     end
 end
 
------ Datastore External -----
+----- Datastore External
 -- @section datastore-external
 
 --[[-- Request a value from an external source, will trigger on_load when data is received
@@ -717,7 +717,7 @@ function Datastore:unload_all(callback)
     for key in pairs(data) do self:unload(key) end
 end
 
------ Events -----
+----- Events
 -- @section events
 
 local function event_error(err) print('An error ocurred in a datastore event handler:', err) end
@@ -826,5 +826,5 @@ end)
 ]]
 Datastore.on_update = event_factory('on_update')
 
------ Module Return -----
+----- Module Return
 return DatastoreManager
