@@ -94,6 +94,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Death-Logger.html"><span class="module-name-item">Death-Logger</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/greetings.html"><span class="module-name-item">greetings</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Inventory-Clear.html"><span class="module-name-item">Inventory-Clear</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Player-Colours.html"><span class="module-name-item">Player-Colours</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Scorched-Earth.html"><span class="module-name-item">Scorched-Earth</span></a></div></li>
@@ -132,6 +133,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Kill.html"><span class="module-name-item">Kill</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Me.html"><span class="module-name-item">Me</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Quickbar.html"><span class="module-name-item">Quickbar</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Rainbow.html"><span class="module-name-item">Rainbow</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Repair.html"><span class="module-name-item">Repair</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
@@ -166,9 +168,11 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Science.html"><span class="module-name-item">Science</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Tasks.html"><span class="module-name-item">Tasks</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Warps.html"><span class="module-name-item">Warps</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/inventory_clear.html"><span class="module-name-item">inventory_clear</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Popup-Messages.html"><span class="module-name-item">Popup-Messages</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Preset-Player-Colours.html"><span class="module-name-item">Preset-Player-Colours</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Preset-Player-Quickbar.html"><span class="module-name-item">Preset-Player-Quickbar</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Repair.html"><span class="module-name-item">Repair</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Scorched-Earth.html"><span class="module-name-item">Scorched-Earth</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Spawn-Area.html"><span class="module-name-item">Spawn-Area</span></a></div></li>
@@ -195,8 +199,8 @@
     <li class="nav-item">
     <h2>Topics</h2>
     <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/license.html"><span class="module-name-item">license</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/README.md.html"><span class="module-name-item">README.md</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/LICENSE.html"><span class="module-name-item">LICENSE</span></a></div></li>
     </ul>
     </li>
     </ul>
@@ -261,7 +265,7 @@ Gui.element{
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Making a factory function for a button which is contained within a flow
 </span><span class="comment">-- This method is for when you still want to register event handlers but cant use the table method
 </span><span class="keyword">local</span> example_flow_with_button =
-Gui.element(<span class="keyword">function</span>(event_trigger,parent,...)
+Gui.element(<span class="keyword">function</span>(event_trigger, parent, ...)
     <span class="comment">-- ... shows that all other arguments from the factory call are passed to this function
 </span>    <span class="comment">-- Here we are adding a flow which we will then later add a button to
 </span>    <span class="keyword">local</span> flow =
@@ -301,7 +305,7 @@ Gui.element{
     caption = <span class="string">'Example Button'</span>,
     style = <span class="string">'forward_button'</span> <span class="comment">-- factorio styles can be applied here
 </span>}
-:style(<span class="keyword">function</span>(style,element,...)
+:style(<span class="keyword">function</span>(style, element, ...)
     <span class="comment">-- style is the current style object for the elemenent
 </span>    <span class="comment">-- element is the element that is being changed
 </span>    <span class="comment">-- ... shows that all other arguments from the factory call are passed to this function
@@ -316,7 +320,7 @@ Gui.element{
     <span class="global">type</span> = <span class="string">'button'</span>,
     caption = <span class="string">'Example Button'</span>
 }
-:on_click(<span class="keyword">function</span>(player,element,event)
+:on_click(<span class="keyword">function</span>(player, element, event)
     <span class="comment">-- player is the player who interacted with the element to cause the event
 </span>    <span class="comment">-- element is a refrence to the element which caused the event
 </span>    <span class="comment">-- event is a raw refrence to the event data if player and element are not enough
@@ -337,20 +341,20 @@ Gui.element{
     width = <span class="number">18</span>,
     height = <span class="number">20</span>
 }
-:on_click(<span class="keyword">function</span>(player,_,_)
+:on_click(<span class="keyword">function</span>(player, _,_)
     Gui.hide_left_flow(player)
 <span class="keyword">end</span>)</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Eample from defines, Gui.alignment, called like: Gui.alignment(parent, name, horizontal_align, vertical_align)
 </span><span class="comment">-- Notice how _ are used to blank arguments that are not needed in that context and how they line up with above
 </span>Gui.alignment =
-Gui.element(<span class="keyword">function</span>(_,parent,name,_,_)
+Gui.element(<span class="keyword">function</span>(_, parent, name, _,_)
     <span class="keyword">return</span> parent.add{
         name = name <span class="keyword">or</span> <span class="string">'alignment'</span>,
         <span class="global">type</span> = <span class="string">'flow'</span>,
     }
 <span class="keyword">end</span>)
-:style(<span class="keyword">function</span>(style,_,_,horizontal_align,vertical_align)
-    style.padding = {<span class="number">1</span>,<span class="number">2</span>}
+:style(<span class="keyword">function</span>(style, _,_, horizontal_align, vertical_align)
+    style.padding = {<span class="number">1</span>, <span class="number">2</span>}
     style.vertical_align = vertical_align <span class="keyword">or</span> <span class="string">'center'</span>
     style.horizontal_align = horizontal_align <span class="keyword">or</span> <span class="string">'right'</span>
     style.vertically_stretchable  = style.vertical_align ~= <span class="string">'center'</span>
@@ -1170,9 +1174,9 @@ Gui.element(<span class="keyword">function</span>(_,parent,name,_,_)
     <!-- usage start -->
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a right align flow
-</span><span class="keyword">local</span> alignment = Gui.alignment(element,<span class="string">'example_right_alignment'</span>)</code></pre>
+</span><span class="keyword">local</span> alignment = Gui.alignment(element, <span class="string">'example_right_alignment'</span>)</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a horizontal center and top align flow
-</span><span class="keyword">local</span> alignment = Gui.alignment(element,<span class="string">'example_center_top_alignment'</span>,<span class="string">'center'</span>,<span class="string">'top'</span>)</code></pre>
+</span><span class="keyword">local</span> alignment = Gui.alignment(element, <span class="string">'example_center_top_alignment'</span>, <span class="string">'center'</span>, <span class="string">'top'</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -1274,7 +1278,7 @@ Gui.element(<span class="keyword">function</span>(_,parent,name,_,_)
     <!-- usage start -->
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a scroll table with max height of 200 and column count of 3
-</span><span class="keyword">local</span> scroll_table = Gui.scroll_table(element,<span class="number">200</span>,<span class="number">3</span>)</code></pre>
+</span><span class="keyword">local</span> scroll_table = Gui.scroll_table(element, <span class="number">200</span>, <span class="number">3</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -1607,7 +1611,7 @@ Gui.element(<span class="keyword">function</span>(_,parent,name,_,_)
     <!-- usage start -->
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a container as a base
-</span><span class="keyword">local</span> container = Gui.container(parent,<span class="string">'my_container'</span>,<span class="number">200</span>)</code></pre>
+</span><span class="keyword">local</span> container = Gui.container(parent, <span class="string">'my_container'</span>, <span class="number">200</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -2921,7 +2925,7 @@ Gui.element{
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Using element defines with a custom factory function
 </span><span class="comment">-- This method can be used if you still want to be able register event handlers but it is too complex to be compatible with LuaGuiElement.add
 </span><span class="keyword">local</span> example_flow_with_button =
-Gui.element(<span class="keyword">function</span>(event_trigger,parent,...)
+Gui.element(<span class="keyword">function</span>(event_trigger, parent, ...)
     <span class="comment">-- ... shows that all other arguments from the factory call are passed to this function
 </span>    <span class="comment">-- parent is the element which was passed to the factory function where you should add your new element
 </span>    <span class="comment">-- here we are adding a flow which we will then later add a button to
@@ -3021,7 +3025,7 @@ Gui.element{
     caption = <span class="string">'Example Button'</span>,
     style = <span class="string">'forward_button'</span> <span class="comment">-- factorio styles can be applied here
 </span>}
-:style(<span class="keyword">function</span>(style,element,...)
+:style(<span class="keyword">function</span>(style, element, ...)
     <span class="comment">-- style is the current style object for the elemenent
 </span>    <span class="comment">-- element is the element that is being changed
 </span>    <span class="comment">-- ... shows that all other arguments from the factory call are passed to this function
@@ -4150,7 +4154,7 @@ element_define:raise_custom_event{
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Toggle your flow
 </span>Gui.toggle_top_flow(game.player)</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Open your top flow
-</span>Gui.toggle_top_flow(game.player,<span class="keyword">true</span>)</code></pre>
+</span>Gui.toggle_top_flow(game.player, <span class="keyword">true</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -4405,7 +4409,7 @@ Gui.left_toolbar_button(<span class="string">'entity/inserter'</span>, <span cla
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2020-03-31 23:28:20 UTC</i>
+    <i>Last updated 2020-05-26 17:59:21 UTC</i>
     </div>
     </div>
     </div>

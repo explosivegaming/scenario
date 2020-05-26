@@ -5,7 +5,7 @@
     <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Discord-Alerts addon</title>
+    <title>Inventory-Clear addon</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
     <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
@@ -55,9 +55,9 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Compilatron.html"><span class="module-name-item">Compilatron</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Damage-Popups.html"><span class="module-name-item">Damage-Popups</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Death-Logger.html"><span class="module-name-item">Death-Logger</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../addons/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/greetings.html"><span class="module-name-item">greetings</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Inventory-Clear.html"><span class="module-name-item">Inventory-Clear</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../addons/Inventory-Clear.html"><span class="module-name-item">Inventory-Clear</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Player-Colours.html"><span class="module-name-item">Player-Colours</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Scorched-Earth.html"><span class="module-name-item">Scorched-Earth</span></a></div></li>
@@ -146,7 +146,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Chat-Reply.html"><span class="module-name-item">Chat-Reply</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Compilatron.html"><span class="module-name-item">Compilatron</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Death-Logger.html"><span class="module-name-item">Death-Logger</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../configs/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Auth-Admin.html"><span class="module-name-item">Commands-Auth-Admin</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Auth-Roles.html"><span class="module-name-item">Commands-Auth-Roles</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Parse.html"><span class="module-name-item">Commands-Parse</span></a></div></li>
@@ -223,8 +223,8 @@
 
     <!-- module content header start -->
 
-    <h2><span class="body-module-name"><strong><em>Discord-Alerts</em></strong></span> addon</h2>
-    <p>Sends alert messages to our discord server when certain events are triggered</p>
+    <h2><span class="body-module-name"><strong><em>Inventory-Clear</em></strong></span> addon</h2>
+    <p>Will move players items to spawn when they are banned or kicked, option to clear on leave</p>
     <p></p>
 
 
@@ -247,22 +247,10 @@
     <td class="name"><a href="#utils.event">utils.event</a></td>
     </tr>
     <tr>
-    <td class="name"><a href="#utils.game">utils.game</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#utils.color_presets">utils.color_presets</a></td>
+    <td class="name"><a href="#config.inventory_clear">config.inventory_clear</a></td>
     </tr>
     <tr>
     <td class="name"><a href="#expcore.common">expcore.common</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#config.discord_alerts">config.discord_alerts</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#modules.control.reports">modules.control.reports</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#modules.control.warnings">modules.control.warnings</a></td>
     </tr>
     </tbody>
     </table>
@@ -301,33 +289,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#utils.game" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="utils.game">utils.game</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#utils.color_presets" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="utils.color_presets">utils.color_presets</span>
+    <a href="#config.inventory_clear" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="config.inventory_clear">config.inventory_clear</span>
     </div>
     </dt>
     <dd>
@@ -353,81 +316,6 @@
     <div class="block section-item-header">
     <a href="#expcore.common" class="fragment-hashtag">#</a>
     <span class="section-item-title" id="expcore.common">expcore.common</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#config.discord_alerts" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="config.discord_alerts">config.discord_alerts</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#modules.control.reports" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="modules.control.reports">modules.control.reports</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#modules.control.warnings" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="modules.control.warnings">modules.control.warnings</span>
     </div>
     </dt>
     <dd>

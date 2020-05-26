@@ -5,7 +5,7 @@
     <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Science config</title>
+    <title>Preset-Player-Quickbar config</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
     <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
@@ -37,14 +37,6 @@
 
 <!-- sidebar navigation -->
 <!-- list of items in a module -->
-    <ul class="nav nav-module-contents">
-    <li class="nav-item">
-    <h2>Sections</h2>
-    <ul class="nav">
-    <li class="nav-item"><a href="#Settings"><span class="fragment-hashtag">#</span> Settings</a></li>
-    </ul>
-    </li>
-    </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
     <h2>Configs</h2>
@@ -65,14 +57,14 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Roles.html"><span class="module-name-item">Roles</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Player-List.html"><span class="module-name-item">Player-List</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Rockets.html"><span class="module-name-item">Rockets</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../configs/Science.html"><span class="module-name-item">Science</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Science.html"><span class="module-name-item">Science</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Tasks.html"><span class="module-name-item">Tasks</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Warps.html"><span class="module-name-item">Warps</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/inventory_clear.html"><span class="module-name-item">inventory_clear</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Popup-Messages.html"><span class="module-name-item">Popup-Messages</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Preset-Player-Colours.html"><span class="module-name-item">Preset-Player-Colours</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Preset-Player-Quickbar.html"><span class="module-name-item">Preset-Player-Quickbar</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../configs/Preset-Player-Quickbar.html"><span class="module-name-item">Preset-Player-Quickbar</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Repair.html"><span class="module-name-item">Repair</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Scorched-Earth.html"><span class="module-name-item">Scorched-Earth</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Spawn-Area.html"><span class="module-name-item">Spawn-Area</span></a></div></li>
@@ -200,14 +192,6 @@
     </div>
     <div class="up-to-top">
     <!-- list of items in a module -->
-    <ul class="nav nav-module-contents">
-    <li class="nav-item">
-    <h4>Jump to Section</h4>
-    <ul class="nav">
-    <li class="nav-item"><a href="#Settings"><span class="fragment-hashtag">#</span> Settings</a></li>
-    </ul>
-    </li>
-    </ul>
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
     </div>
@@ -223,8 +207,8 @@
 
     <!-- module content header start -->
 
-    <h2><span class="body-module-name"><strong><em>Science</em></strong></span> config</h2>
-    <p>Config file for the science info gui</p>
+    <h2><span class="body-module-name"><strong><em>Preset-Player-Quickbar</em></strong></span> config</h2>
+    <p>Preset quickbar items that players can load</p>
     <p></p>
 
 
@@ -237,112 +221,11 @@
     <!-- module content header end -->
 
     <!-- module section list start -->
-    <table class="section-content-list">
-    <thead>
-    <h3><a href="#Settings">Settings</a></h3>
-    <span></span>
-    </thead>
-    <tbody>
-    <tr>
-    <td class="name"><a href="#show_eta">show_eta</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#color_clamp">color_clamp</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#color_flux">color_flux</a></td>
-    </tr>
-    </tbody>
-    </table>
     <!-- module section list end -->
 
     <br />
 
     <!-- section start -->
-    <h3><span id="Settings" class="section-title"><a href="#Settings">Settings</a></span></h3>
-    <dl class="section-body-container">
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#show_eta" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="show_eta">show_eta</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> when true the eta for research completion will be shown</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#color_clamp" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="color_clamp">color_clamp</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> the amount required for the text to show as green or red</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#color_flux" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="color_flux">color_flux</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> the ammount of flucuation allowed in production before icon change</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    </dl>
 
     <!-- section end -->
 

@@ -92,6 +92,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Death-Logger.html"><span class="module-name-item">Death-Logger</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/greetings.html"><span class="module-name-item">greetings</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Inventory-Clear.html"><span class="module-name-item">Inventory-Clear</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Player-Colours.html"><span class="module-name-item">Player-Colours</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Scorched-Earth.html"><span class="module-name-item">Scorched-Earth</span></a></div></li>
@@ -130,6 +131,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Kill.html"><span class="module-name-item">Kill</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Me.html"><span class="module-name-item">Me</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Quickbar.html"><span class="module-name-item">Quickbar</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Rainbow.html"><span class="module-name-item">Rainbow</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Repair.html"><span class="module-name-item">Repair</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
@@ -164,9 +166,11 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Science.html"><span class="module-name-item">Science</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Tasks.html"><span class="module-name-item">Tasks</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Warps.html"><span class="module-name-item">Warps</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/inventory_clear.html"><span class="module-name-item">inventory_clear</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Popup-Messages.html"><span class="module-name-item">Popup-Messages</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Preset-Player-Colours.html"><span class="module-name-item">Preset-Player-Colours</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Preset-Player-Quickbar.html"><span class="module-name-item">Preset-Player-Quickbar</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Repair.html"><span class="module-name-item">Repair</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Scorched-Earth.html"><span class="module-name-item">Scorched-Earth</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Spawn-Area.html"><span class="module-name-item">Spawn-Area</span></a></div></li>
@@ -193,8 +197,8 @@
     <li class="nav-item">
     <h2>Topics</h2>
     <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/license.html"><span class="module-name-item">license</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/README.md.html"><span class="module-name-item">README.md</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/LICENSE.html"><span class="module-name-item">LICENSE</span></a></div></li>
     </ul>
     </li>
     </ul>
@@ -266,7 +270,7 @@
         msg = <span class="string">':'</span>..msg
     <span class="keyword">end</span>
 
-    <span class="keyword">for</span> <span class="number">1</span> = <span class="number">1</span>,repeat_count <span class="keyword">do</span>
+    <span class="keyword">for</span> <span class="number">1</span> = <span class="number">1</span>, repeat_count <span class="keyword">do</span>
         Command.<span class="global">print</span>(<span class="number">1.</span>.msg)
     <span class="keyword">end</span>
 <span class="keyword">end</span>)</code></pre>
@@ -331,7 +335,7 @@
         <span class="comment">-- this is where that smiley param is used
 </span>        msg = <span class="string">':'</span>..msg
     <span class="keyword">end</span>
-    <span class="keyword">for</span> <span class="number">1</span> = <span class="number">1</span>,repeat_count <span class="keyword">do</span>
+    <span class="keyword">for</span> <span class="number">1</span> = <span class="number">1</span>, repeat_count <span class="keyword">do</span>
         <span class="comment">-- this print function will return ANY value to the user in a desync safe manor, this includes if the command was used through rcon
 </span>        Command.<span class="global">print</span>(<span class="number">1.</span>.msg)
     <span class="keyword">end</span>
@@ -339,7 +343,7 @@
 </span><span class="keyword">end</span>)
 
 <span class="comment">-- Other values that can be returned from register
-</span>Commands.<span class="global">print</span>(any,colour[opt]) <span class="comment">-- this will return any value value to the user including if it is ran through rcon console
+</span>Commands.<span class="global">print</span>(any, colour[opt]) <span class="comment">-- this will return any value value to the user including if it is ran through rcon console
 </span>Commands.error(message[opt]) <span class="comment">-- this returns a warning to the user, aka an error that does not prevent execution of the command
 </span><span class="keyword">return</span> Commands.error(message[opt]) <span class="comment">-- this returns an error to the user, and will halt the command execution, ie no success message is returned
 </span>Commands.success(message[opt]) <span class="comment">-- used to return a success message however don't use this method see below
@@ -417,7 +421,7 @@
 <span class="keyword">if</span> <span class="keyword">not</span> input <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span> <span class="comment">-- nil check
 </span>
 <span class="comment">-- Example Code:
-</span>Commands.add_parse(<span class="string">'number-range-int'</span>,<span class="keyword">function</span>(input, player, reject, range_min, range_max)
+</span>Commands.add_parse(<span class="string">'number-range-int'</span>, <span class="keyword">function</span>(input, player, reject, range_min, range_max)
     <span class="keyword">local</span> rtn = <span class="global">tonumber</span>(input) <span class="keyword">and</span> <span class="global">math</span>.floor(<span class="global">tonumber</span>(input)) <span class="keyword">or</span> <span class="keyword">nil</span> <span class="comment">-- converts input to number
 </span>    <span class="keyword">if</span> <span class="keyword">not</span> rtn <span class="keyword">or</span> rtn &lt; range_min <span class="keyword">or</span> rtn &gt; range_max <span class="keyword">then</span>
         <span class="comment">-- the input is either not a number or is outside the range
@@ -1997,7 +2001,7 @@ nb: this must be the last function ran on the command and must be done for the c
     <span class="keyword">local</span> msg = <span class="string">') '</span>..player.name
     <span class="keyword">if</span> smiley <span class="keyword">then</span> msg = <span class="string">':'</span>..msg <span class="keyword">end</span>
 
-    <span class="keyword">for</span> <span class="number">1</span> = <span class="number">1</span>,repeat_count <span class="keyword">do</span>
+    <span class="keyword">for</span> <span class="number">1</span> = <span class="number">1</span>, repeat_count <span class="keyword">do</span>
         Command.<span class="global">print</span>(<span class="number">1.</span>.msg)
     <span class="keyword">end</span>
 <span class="keyword">end</span>)</code></pre>
@@ -2175,7 +2179,7 @@ nb: use error(error_message) within your callback to trigger do not trigger dire
     <!-- usage start -->
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Used in the command system to log handler errors
-</span><span class="keyword">local</span> success, err = <span class="global">pcall</span>(command_data.callback, player, unpack(params))
+</span><span class="keyword">local</span> success, err = <span class="global">pcall</span>(command_data.callback, player, <span class="global">unpack</span>(params))
 <span class="keyword">if</span> Commands.internal_error(success, command_data.name, err) <span class="keyword">then</span>
     <span class="keyword">return</span> command_log(player, command_data, <span class="string">'Internal Error: Command Callback Fail'</span>, raw_params, command_event.parameter, err)
 <span class="keyword">end</span></code></pre>
@@ -2382,7 +2386,7 @@ nb: returning any value from your callback will trigger this function, return th
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2020-03-31 23:28:20 UTC</i>
+    <i>Last updated 2020-05-26 17:59:21 UTC</i>
     </div>
     </div>
     </div>

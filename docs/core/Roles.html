@@ -93,6 +93,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Death-Logger.html"><span class="module-name-item">Death-Logger</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/greetings.html"><span class="module-name-item">greetings</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Inventory-Clear.html"><span class="module-name-item">Inventory-Clear</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Player-Colours.html"><span class="module-name-item">Player-Colours</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Scorched-Earth.html"><span class="module-name-item">Scorched-Earth</span></a></div></li>
@@ -131,6 +132,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Kill.html"><span class="module-name-item">Kill</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Me.html"><span class="module-name-item">Me</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Quickbar.html"><span class="module-name-item">Quickbar</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Rainbow.html"><span class="module-name-item">Rainbow</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Repair.html"><span class="module-name-item">Repair</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
@@ -165,9 +167,11 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Science.html"><span class="module-name-item">Science</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Tasks.html"><span class="module-name-item">Tasks</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Warps.html"><span class="module-name-item">Warps</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/inventory_clear.html"><span class="module-name-item">inventory_clear</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Popup-Messages.html"><span class="module-name-item">Popup-Messages</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Preset-Player-Colours.html"><span class="module-name-item">Preset-Player-Colours</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Preset-Player-Quickbar.html"><span class="module-name-item">Preset-Player-Quickbar</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Repair.html"><span class="module-name-item">Repair</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Scorched-Earth.html"><span class="module-name-item">Scorched-Earth</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Spawn-Area.html"><span class="module-name-item">Spawn-Area</span></a></div></li>
@@ -194,8 +198,8 @@
     <li class="nav-item">
     <h2>Topics</h2>
     <ul class="nav">
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/readme.md.html"><span class="module-name-item">readme.md</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/license.html"><span class="module-name-item">license</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/README.md.html"><span class="module-name-item">README.md</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../topics/LICENSE.html"><span class="module-name-item">LICENSE</span></a></div></li>
     </ul>
     </li>
     </ul>
@@ -249,13 +253,13 @@
     <pre class="code" data-lang="Lua"><code><span class="comment">--- Using Role System (assignment):
 </span><span class="comment">--When a map first starts you will want to define on mass all the players you expect to join and the roles to give them:
 </span>Roles.override_player_roles{
-    Cooldude2606 = {<span class="string">'Owner'</span>,<span class="string">'Admin'</span>,<span class="string">'Member'</span>},
+    Cooldude2606 = {<span class="string">'Owner'</span>, <span class="string">'Admin'</span>, <span class="string">'Member'</span>},
     NotCooldude2606 = {<span class="string">'Member'</span>}
 }
 
 <span class="comment">--Once the game is running you still want to be able to give role and remove them which is when you would use:
-</span>Roles.assign_player(player,<span class="string">'Admin'</span>,by_player_name) <span class="comment">-- this will give the "Admin" role to the player
-</span>Roles.unassign_player(player,{<span class="string">'Admin'</span>,<span class="string">'Moderator'</span>},by_player_name) <span class="comment">-- this will remove "Admin" and "Moderator" role in one go
+</span>Roles.assign_player(player, <span class="string">'Admin'</span>, by_player_name) <span class="comment">-- this will give the "Admin" role to the player
+</span>Roles.unassign_player(player, {<span class="string">'Admin'</span>, <span class="string">'Moderator'</span>}, by_player_name) <span class="comment">-- this will remove "Admin" and "Moderator" role in one go
 </span></code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">--- Using Role System (role testing):
 </span><span class="comment">--To comparer two players you can comparer the index of they highest roles, can be used when you want to allow a "write" down type system:
@@ -265,9 +269,9 @@
 </span>Roles.get_player_roles(player) <span class="comment">-- the return is an array that can be looped over however this is not in particular order
 </span>
 <span class="comment">--Finally you may want to test if a player has a certain role, flag or action allowed which is when you would use:
-</span>Roles.player_has_role(player,<span class="string">'Admin'</span>) <span class="comment">-- you can provide a role name if you only want a name based system
-</span>Roles.player_has_flag(player,<span class="string">'is_donator'</span>) <span class="comment">-- your roles can be grouped together with flags such as is_donator
-</span>Roles.player_allowed(player,<span class="string">'game modifiers'</span>) <span class="comment">-- or you can have an action based system where each action is something the player can do
+</span>Roles.player_has_role(player, <span class="string">'Admin'</span>) <span class="comment">-- you can provide a role name if you only want a name based system
+</span>Roles.player_has_flag(player, <span class="string">'is_donator'</span>) <span class="comment">-- your roles can be grouped together with flags such as is_donator
+</span>Roles.player_allowed(player, <span class="string">'game modifiers'</span>) <span class="comment">-- or you can have an action based system where each action is something the player can do
 </span></code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">--- Example Flag Define:
 </span><span class="comment">--Flags can be used to group multiple roles and actions under one catch all, for example if you want a piece of code to only
@@ -275,7 +279,7 @@
 </span><span class="comment">--a player has that tag present:
 </span>
 <span class="comment">-- give you donators a speed boost when they join; these functions aren't required but can be useful
-</span>Roles.define_flag_trigger(<span class="string">'is_donator'</span>,<span class="keyword">function</span>(player,state)
+</span>Roles.define_flag_trigger(<span class="string">'is_donator'</span>, <span class="keyword">function</span>(player, state)
     <span class="keyword">if</span> state <span class="keyword">then</span>
         player.character_running_speed_modifier = <span class="number">1.5</span>
     <span class="keyword">else</span>
@@ -288,29 +292,29 @@
 :set_flag(<span class="string">'is_donator'</span>)
 
 <span class="comment">-- and in your code you would test for
-</span><span class="keyword">if</span> Roles.player_has_flag(player,<span class="string">'is_donator'</span>) <span class="keyword">then</span>
+</span><span class="keyword">if</span> Roles.player_has_flag(player, <span class="string">'is_donator'</span>) <span class="keyword">then</span>
     <span class="comment">-- some donator only code
 </span><span class="keyword">end</span></code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">--- Example Role Define:
 </span><span class="comment">--You can't use a role system without any roles so first you must define your roles; each role has a minimum of a name with
 </span><span class="comment">--the option for a shorthand:
-</span>Roles.new_role(<span class="string">'Administrator'</span>,<span class="string">'Admin'</span>)
+</span>Roles.new_role(<span class="string">'Administrator'</span>, <span class="string">'Admin'</span>)
 
 <span class="comment">--Next you will want to add any extras you want to have, such as a tag, colour, permission group or any custom flags:
-</span>Roles.new_role(<span class="string">'Administrator'</span>,<span class="string">'Admin'</span>)
+</span>Roles.new_role(<span class="string">'Administrator'</span>, <span class="string">'Admin'</span>)
 :set_custom_tag(<span class="string">'[Admin]'</span>)
-:set_custom_color(<span class="string">'red'</span>) <span class="comment">-- this can be {r=0,g=0,b=0} or a predefined value
+:set_custom_color(<span class="string">'red'</span>) <span class="comment">-- this can be {r=0, g=0, b=0} or a predefined value
 </span>:set_permission_group(<span class="string">'Staff'</span>) <span class="comment">-- a second argument can be added if you have not used the custom permission group config
 </span>:set_flag(<span class="string">'is_admin'</span>)
 
 <span class="comment">--You will then want to decide if you want to allow all actions, this should of course be used sparely:
-</span>Roles.new_role(<span class="string">'Administrator'</span>,<span class="string">'Admin'</span>)
+</span>Roles.new_role(<span class="string">'Administrator'</span>, <span class="string">'Admin'</span>)
 ...extras...
 :set_allow_all()
 
 <span class="comment">--If you don't do this want this as i would advise you do then you will want to define what the role can do; this comes with
 </span><span class="comment">--an optional inheritance system if you like those sort of things in which case disallow may also be of some use to you:
-</span>Roles.new_role(<span class="string">'Administrator'</span>,<span class="string">'Admin'</span>)
+</span>Roles.new_role(<span class="string">'Administrator'</span>, <span class="string">'Admin'</span>)
 ...extras...
 :set_parent(<span class="string">'Moderator'</span>) <span class="comment">-- the admin can do anything that a moderator can do
 </span>:allow{ <span class="comment">-- these actions can be anything just try to keep them without conflicts
@@ -319,7 +323,7 @@
 }
 
 <span class="comment">--Here is what the finished admin role would look like:
-</span>Roles.new_role(<span class="string">'Administrator'</span>,<span class="string">'Admin'</span>)
+</span>Roles.new_role(<span class="string">'Administrator'</span>, <span class="string">'Admin'</span>)
 :set_custom_tag(<span class="string">'[Admin]'</span>)
 :set_custom_color(<span class="string">'red'</span>)
 :set_permission_group(<span class="string">'Staff'</span>)
@@ -413,7 +417,7 @@ Roles.define_role_order{
     </tr>
     <tr>
     <td class="name"><a href="#get_role_from_any">get_role_from_any(any)</a></td>
-    <td class="summary">Gets a role from a name,index or role object (where it is just returned)
+    <td class="summary">Gets a role from a name, index or role object (where it is just returned)
 nb: this function is used for the input for most outward facing functions</td>
     </tr>
     <tr>
@@ -531,7 +535,7 @@ nb: this function is used for the input for most outward facing functions</td>
     </tr>
     <tr>
     <td class="name"><a href="#Roles._prototype:clear_flags">Roles._prototype:clear_flags()</a></td>
-    <td class="summary">Clears all flags from this role, individual flags can be removed with set_flag(name,false)</td>
+    <td class="summary">Clears all flags from this role, individual flags can be removed with set_flag(name, false)</td>
     </tr>
     <tr>
     <td class="name"><a href="#Roles._prototype:has_flag">Roles._prototype:has_flag(name)</a></td>
@@ -884,7 +888,7 @@ nb: this is one way, failing false after already gaining the role will not revok
     <!-- usage start -->
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Print a message to the given roles
-</span>Roles.print_to_roles({<span class="string">'Administrator'</span>,<span class="string">'Moderator'</span>}, <span class="string">'Hello, World!'</span>)</code></pre>
+</span>Roles.print_to_roles({<span class="string">'Administrator'</span>, <span class="string">'Moderator'</span>}, <span class="string">'Hello, World!'</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -1156,7 +1160,7 @@ nb: this is one way, failing false after already gaining the role will not revok
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Gets a role from a name,index or role object (where it is just returned)
+    <p class="section-item-summary">Gets a role from a name, index or role object (where it is just returned)
 nb: this function is used for the input for most outward facing functions</p>
     <p class="section-item-description"></p>
 
@@ -1643,8 +1647,8 @@ nb: this function is used for the input for most outward facing functions</p>
 </span>Roles.override_player_roles(<span class="string">'Cooldude2606'</span>, {<span class="string">'Moderator'</span>})</code></pre>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Override all existing roles, effects all users not just ones listed
 </span>Roles.override_player_roles{
-    [<span class="string">'Cooldude2606'</span>] = {<span class="string">'Administrator'</span>,<span class="string">'Moderator'</span>},
-    [<span class="string">'arty714'</span>] = {<span class="string">'Administrator'</span>,<span class="string">'Moderator'</span>},
+    [<span class="string">'Cooldude2606'</span>] = {<span class="string">'Administrator'</span>, <span class="string">'Moderator'</span>},
+    [<span class="string">'arty714'</span>] = {<span class="string">'Administrator'</span>, <span class="string">'Moderator'</span>},
 }</code></pre>
     <!-- usage end -->
 
@@ -2537,7 +2541,7 @@ nb: this function is used for the input for most outward facing functions</p>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Clears all flags from this role, individual flags can be removed with set_flag(name,false)</p>
+    <p class="section-item-summary">Clears all flags from this role, individual flags can be removed with set_flag(name, false)</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -3334,7 +3338,7 @@ nb: this is one way, failing false after already gaining the role will not revok
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2020-03-31 23:28:20 UTC</i>
+    <i>Last updated 2020-05-26 17:59:21 UTC</i>
     </div>
     </div>
     </div>
