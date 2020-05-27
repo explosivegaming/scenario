@@ -54,6 +54,7 @@ PlayerData:set_serializer(Datastore.name_serializer) -- use player name
 local DataSavingPreference = PlayerData:combine('DataSavingPreference')
 local PreferenceEnum = { 'All', 'Statistics', 'Settings', 'Required' }
 for k,v in ipairs(PreferenceEnum) do PreferenceEnum[v] = k end
+DataSavingPreference:set_default('All')
 
 --- Sets your data saving preference
 -- @command set-data-preference
@@ -68,12 +69,12 @@ end)
 -- @command data-preference
 Commands.new_command('data-preference', 'Shows you what your current data saving preference is')
 :register(function(player)
-    return {'expcore-data.get-preference', DataSavingPreference:get(player, 'All')}
+    return {'expcore-data.get-preference', DataSavingPreference:get(player)}
 end)
 
 --- Remove data that the player doesnt want to have stored
 PlayerData:on_save(function(player_name, player_data)
-    local dataPreference = DataSavingPreference:get(player_name, 'All')
+    local dataPreference = DataSavingPreference:get(player_name)
     dataPreference = PreferenceEnum[dataPreference]
     if dataPreference == PreferenceEnum.All then return player_data end
 
@@ -86,7 +87,7 @@ end)
 
 --- Display your data preference when your data loads
 DataSavingPreference:on_load(function(player_name, dataPreference)
-    game.players[player_name].print{'expcore-data.get-preference', dataPreference or 'All'}
+    game.players[player_name].print{'expcore-data.get-preference', dataPreference or DataSavingPreference.default}
 end)
 
 --- Load player data when they join

@@ -224,7 +224,6 @@ function DatastoreManager.combine(datastoreName, subDatastoreName)
     return datastore:combine(subDatastoreName)
 end
 
-local function ingest_error(err) print('Datastore ingest error, Unable to parse json:', err) end
 --[[-- Ingest the result from a request, this is used through a rcon interface to sync data
 @tparam string action The action that should be done, can be: remove, message, propagate, or request
 @tparam string datastoreName The name of the datastore that should have the action done to it
@@ -244,15 +243,14 @@ function DatastoreManager.ingest(action, datastoreName, key, valueJson)
         datastore:raw_set(key)
 
     elseif action == 'message' then
-        local success, value = xpcall(game.json_to_table, ingest_error, valueJson)
-        if not success then return end
-        if value == nil then value = valueJson end
+        local success, value = pcall(game.json_to_table, valueJson)
+        if not success or value == nil then value = tonumber(valueJson) or valueJson end
         datastore:raise_event('on_message', key, value)
 
     elseif action == 'propagate' or action == 'request' then
-        local success, value = xpcall(game.json_to_table, ingest_error, valueJson)
-        if not success then return end
-        if value == nil then value = valueJson end
+        local success, value = pcall(game.json_to_table, valueJson)
+        if not success or value == nil then value = tonumber(valueJson) or valueJson end
+        datastore:raw_set(key) -- clear any existing data
         value = datastore:raise_event('on_load', key, value)
         datastore:set(key, value)
 
@@ -437,6 +435,20 @@ function Datastore:set_serializer(callback)
     self.serializer = callback
 end
 
+--[[-- Set a default value to be returned by get if no other default is given, using will mean get will never return nil, set using the default will set to nil to save space
+@tparam any default The value that will be deep copied by get if the value is nil and no other default is given
+@tparam boolean allowSet When true if the default is passed as the value for set it will be set rather than setting nil
+
+@usage-- Set a default value to be returned by get
+local ExampleData = Datastore.connect('ExampleData')
+ExampleData:set_default('Foo')
+
+]]
+function Datastore:set_default(value, allowSet)
+    self.default = value
+    self.allow_set_to_default = allowSet
+end
+
 --[[-- Set metadata tags on this datastore which can be accessed by other scripts
 @tparam table tags A table of tags that you want to set in the metadata for this datastore
 
@@ -456,7 +468,7 @@ function Datastore:set_metadata(tags)
     end
 end
 
---[[-- Get a value from local storage, option to have a default value
+--[[-- Get a value from local storage, option to have a default value, do not edit the data returned as changes may not save, use update if you want to make changes
 @tparam any key The key that you want to get the value of, must be a string unless a serializer is set
 @tparam[opt] any default The default value that will be returned if no value is found in the datastore
 
@@ -469,7 +481,7 @@ function Datastore:get(key, default)
     key = self:serialize(key)
     local value = self:raw_get(key)
     if value ~= nil then return value end
-    return copy(default)
+    return copy(default or self.default)
 end
 
 --[[-- Set a value in local storage, will trigger on_update then on_save, save_to_disk and auto_save is required for on_save
@@ -483,7 +495,11 @@ ExampleData:set('TestKey', 'Foo')
 ]]
 function Datastore:set(key, value)
     key = self:serialize(key)
-    self:raw_set(key, value)
+    if value == self.default and not self.allow_set_to_default then
+        self:raw_set(key)
+    else
+        self:raw_set(key, value)
+    end
     self:raise_event('on_update', key, value)
     if self.auto_save then self:save(key) end
     return value
@@ -528,7 +544,7 @@ function Datastore:update(key, callback)
     end
 end
 
---[[-- Remove a value locally and on the external source, works regardless of propagateChanges
+--[[-- Remove a value locally and on the external source, works regardless of propagateChanges, requires save_to_disk for external changes
 @tparam any key The key that you want to remove locally and externally, must be a string unless a serializer is set
 
 @usage-- Remove a key locally and externally
@@ -539,7 +555,8 @@ ExampleData:remove('TestKey')
 function Datastore:remove(key)
     key = self:serialize(key)
     self:raw_set(key)
-    self:write_action('remove', key)
+    self:raise_event('on_update', key)
+    if self.save_to_disk then self:write_action('remove', key) end
     if self.parent and self.parent.auto_save then return self.parent:save(key) end
 end
 
@@ -734,7 +751,8 @@ value = self:raise_event('on_save', key, value)
 ]]
 function Datastore:raise_event(event_name, key, value, source)
     -- Raise the event for the children of this datastore
-    if source ~= 'child' then
+    if source ~= 'child' and next(self.children) then
+        if type(value) ~= 'table' then value = self:raw_get(key, true) end
         for value_name, child in pairs(self.children) do
             value[value_name] = child:raise_event(event_name, key, value[value_name], 'parent')
         end
@@ -753,6 +771,9 @@ function Datastore:raise_event(event_name, key, value, source)
     if source ~= 'parent' and self.parent then
         self.parent:raise_event(event_name, key, self.parent:raw_get(key), 'child')
     end
+
+    -- If this is the save event and the table is empty then return nil
+    if event_name == 'on_save' and next(self.children) and not next(value) then return end
     return value
 end
 
