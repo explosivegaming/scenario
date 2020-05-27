@@ -33,7 +33,7 @@ jobs:
       - name: Commit changes
         uses: EndBug/add-and-commit@v4
         with:
-          message: "Automattic Doc Update"
+          message: "Automatic Doc Update"
           add: "./docs/** .luacheckrc"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
