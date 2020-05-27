@@ -488,12 +488,16 @@ PlayerData.Statistics:combine(<span class="string">'JoinCount'</span>)
     <td class="summary">Set a callback that will be used to serialize keys which aren't strings</td>
     </tr>
     <tr>
+    <td class="name"><a href="#set_default">set_default(default, allowSet)</a></td>
+    <td class="summary">Set a default value to be returned by get if no other default is given, using will mean get will never return nil, set using the default will set to nil to save space</td>
+    </tr>
+    <tr>
     <td class="name"><a href="#set_metadata">set_metadata(tags)</a></td>
     <td class="summary">Set metadata tags on this datastore which can be accessed by other scripts</td>
     </tr>
     <tr>
     <td class="name"><a href="#get">get(key[, default])</a></td>
-    <td class="summary">Get a value from local storage, option to have a default value</td>
+    <td class="summary">Get a value from local storage, option to have a default value, do not edit the data returned as changes may not save, use update if you want to make changes</td>
     </tr>
     <tr>
     <td class="name"><a href="#set">set(key, value)</a></td>
@@ -509,7 +513,7 @@ PlayerData.Statistics:combine(<span class="string">'JoinCount'</span>)
     </tr>
     <tr>
     <td class="name"><a href="#remove">remove(key)</a></td>
-    <td class="summary">Remove a value locally and on the external source, works regardless of propagateChanges</td>
+    <td class="summary">Remove a value locally and on the external source, works regardless of propagateChanges, requires save_to_disk for external changes</td>
     </tr>
     <tr>
     <td class="name"><a href="#get_all">get_all([callback])</a></td>
@@ -1589,6 +1593,76 @@ ExampleData:set_serializer(<span class="keyword">function</span>(rawKey)
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
+    <a href="#set_default" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="set_default">set_default(default, allowSet)</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Set a default value to be returned by get if no other default is given, using will mean get will never return nil, set using the default will set to nil to save space</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>default</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><span class="type">any</span></span>)
+
+     The value that will be deep copied by get if the value is nil and no other default is given
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>allowSet</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#boolean">boolean</a></span>)
+
+     When true if the default is passed as the value for set it will be set rather than setting nil
+
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Set a default value to be returned by get
+</span><span class="keyword">local</span> ExampleData = Datastore.connect(<span class="string">'ExampleData'</span>)
+ExampleData:set_default(<span class="string">'Foo'</span>)</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
     <a href="#set_metadata" class="fragment-hashtag">#</a>
     <span class="section-item-title" id="set_metadata">set_metadata(tags)</span>
     </div>
@@ -1654,7 +1728,7 @@ ExampleData:set_metadata{
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Get a value from local storage, option to have a default value</p>
+    <p class="section-item-summary">Get a value from local storage, option to have a default value, do not edit the data returned as changes may not save, use update if you want to make changes</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -1938,7 +2012,7 @@ ExampleData:increment(<span class="string">'TestKey'</span>, <span class="keywor
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Remove a value locally and on the external source, works regardless of propagateChanges</p>
+    <p class="section-item-summary">Remove a value locally and on the external source, works regardless of propagateChanges, requires save_to_disk for external changes</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -2863,7 +2937,7 @@ ExampleData:on_update(<span class="keyword">function</span>(key, value)
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2020-05-27 17:31:25 UTC</i>
+    <i>Last updated 2020-05-27 19:47:13 UTC</i>
     </div>
     </div>
     </div>
