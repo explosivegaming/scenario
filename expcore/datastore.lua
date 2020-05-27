@@ -395,7 +395,7 @@ function Datastore:write_action(action, key, value)
     if value ~= nil then
         data[4] = type(value) == 'table' and '"'..game.table_to_json(value)..'"' or '"'..tostring(value)..'"'
     end
-    game.write_file('datastore.pipe', table.concat(data, ' ')..'\n', true, 0)
+    game.write_file('datastore.out', table.concat(data, ' ')..'\n', true, 0)
 end
 
 ----- Datastore Local
