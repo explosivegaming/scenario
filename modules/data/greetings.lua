@@ -1,8 +1,9 @@
 --- Greets players on join
 -- @addon greetings
 
-local Commands = require 'expcore.commands' ---@dep expcore.commands
 local config = require 'config.join_messages' --- @dep config.join_messages
+local Commands = require 'expcore.commands' ---@dep expcore.commands
+require 'config.expcore.command_general_parse'
 
 --- Stores the join message that the player have
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
@@ -23,7 +24,7 @@ end)
 -- @command join-message
 -- @tparam string message The custom join message that will be used
 Commands.new_command('join-message', 'Sets your custom join message')
-:add_param('message', false)
+:add_param('message', false, 'string-max-length', 255)
 :enable_auto_concat()
 :register(function(player, message)
     if not player then return end
