@@ -29,7 +29,6 @@ return {
     'modules.commands.find',
     'modules.commands.bonus',
     'modules.commands.home',
-    'modules.commands.quickbar',
 
     --- Addons
     'modules.addons.chat-popups',
@@ -48,6 +47,7 @@ return {
     --- Data
     'modules.data.player-colours',
     'modules.data.greetings',
+    'modules.data.quickbar',
 
     --- GUI
     'modules.gui.readme',

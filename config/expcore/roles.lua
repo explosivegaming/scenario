@@ -140,9 +140,7 @@ Roles.new_role('Sponsor','Spon')
     'command/home-set',
     'command/home-get',
     'command/return',
-    'fast-tree-decon',
-    'command/load-quickbar',
-    'command/save-quickbar'
+    'fast-tree-decon'
 }
 
 Roles.new_role('Supporter','Sup')
@@ -152,7 +150,9 @@ Roles.new_role('Supporter','Sup')
 :set_parent('Veteran')
 :allow{
     'command/jail',
-    'command/unjail'
+    'command/unjail',
+    'command/join-message',
+    'command/save-quickbar'
 }
 
 Roles.new_role('Partner','Part')

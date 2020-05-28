@@ -15,7 +15,7 @@ CustomMessages:on_load(function(player_name, player_message)
     if custom_message then
         game.print(custom_message, player.color)
     else
-        player.print{'expcom-join-message.greet', {'links.discord'}}
+        player.print{'join-message.greet', {'links.discord'}}
     end
 end)
 
@@ -28,5 +28,5 @@ Commands.new_command('join-message', 'Sets your custom join message')
 :register(function(player, message)
     if not player then return end
     CustomMessages:set(player, message)
-    return {'expcom-join-message.message-set'}
+    return {'join-message.message-set'}
 end)
