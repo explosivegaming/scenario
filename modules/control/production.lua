@@ -187,21 +187,21 @@ end
 -- Functions used to format production values
 -- @section formating
 
---- Returns a color value bassed on the value that was given
--- @tparam number clamp value which seperates the different colours
--- @tparam number active_value first value tested, tested against clamp
--- @tparam number passive_value second value tested, tested against 0
+--- Returns a color value based on the value that was given
+-- @tparam number cutoff value which separates the different colours
+-- @tparam number active_value first value tested, tested against cutoff
+-- @tparam number passive_value second value tested, tested against 0 when active is 0
 -- @treturn table contains r,g,b keys
-function Production.get_color(clamp,active_value,passive_value)
-    if active_value > clamp then
+function Production.get_color(cutoff, active_value, passive_value)
+    if active_value > cutoff then
         return Colors.light_green
-    elseif active_value < -clamp then
+    elseif active_value < -cutoff then
         return Colors.indian_red
     elseif active_value ~= 0 then
         return Colors.orange
     elseif passive_value and passive_value > 0 then
         return Colors.orange
-    elseif passive_value and passive_value ~= 0 then
+    elseif passive_value and passive_value < 0 then
         return Colors.indian_red
     else
         return Colors.grey
