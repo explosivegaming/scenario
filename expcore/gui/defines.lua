@@ -105,7 +105,7 @@ local header = Gui.header(
 
 ]]
 Gui.header =
-Gui.element(function(_, parent, caption, tooltip, add_alignment, name)
+Gui.element(function(_, parent, caption, tooltip, add_alignment, name, label_name)
     -- Draw the header
     local header =
     parent.add{
@@ -123,7 +123,7 @@ Gui.element(function(_, parent, caption, tooltip, add_alignment, name)
     -- Draw the caption label
     if caption then
         header.add{
-            name = 'header_label',
+            name = label_name or 'header_label',
             type = 'label',
             style = 'heading_1_label',
             caption = caption,

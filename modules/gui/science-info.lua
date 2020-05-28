@@ -56,8 +56,8 @@ Gui.element(function(_, parent, production_label_data)
 end)
 
 -- Get the data that is used with the production label
-local function get_production_label_data(name, tooltip, value, secondary)
-    local data_colour = Production.get_color(config.color_clamp, value, secondary)
+local function get_production_label_data(name, tooltip, value, cutout, secondary)
+    local data_colour = Production.get_color(config.color_cutoff * cutout, value, secondary)
     local surfix, caption = Production.format_number(value)
 
     return {
@@ -147,10 +147,9 @@ local function get_science_pack_data(player, science_pack)
 
     -- Check that some packs have been made
     local total = Production.get_production_total(force, science_pack)
+    if total.made == 0 then return end
     local minute = Production.get_production(force, science_pack, defines.flow_precision_index.one_minute)
-    if total.made == 0 then
-        return
-    end
+    local hour = Production.get_production(force, science_pack, defines.flow_precision_index.one_hour)
 
     -- Get the icon style
     local icon_style = 'slot_button'
@@ -170,17 +169,17 @@ local function get_science_pack_data(player, science_pack)
         positive = get_production_label_data(
             'pos-'..science_pack,
             {'science-info.pos-tooltip', total.made},
-            minute.made
+            minute.made, hour.made
         ),
         negative = get_production_label_data(
             'neg-'..science_pack,
             {'science-info.neg-tooltip', total.used},
-            -minute.used
+            -minute.used, hour.used
         ),
         net = get_production_label_data(
             'net-'..science_pack,
             {'science-info.net-tooltip', total.net},
-            minute.net,
+            minute.net, minute.net > 0 and hour.net or 0,
             minute.made+minute.used
         )
     }
@@ -337,7 +336,7 @@ Event.on_nth_tick(60, function()
         local scroll_table = container.scroll.table
         local pack_data = force_pack_data[force_name]
         if not pack_data then
-            -- No data in chache so it needs to be generated
+            -- No data in cache so it needs to be generated
             pack_data = {}
             force_pack_data[force_name] = pack_data
             for _, science_pack in ipairs(config) do
@@ -347,8 +346,8 @@ Event.on_nth_tick(60, function()
             end
 
         else
-            -- Data found in chache is no need to generate it
-            for _, next_data in ipairs(pack_data) do
+            -- Data found in cache is no need to generate it
+            for _, next_data in pairs(pack_data) do
                 update_science_pack(scroll_table, next_data)
             end
 

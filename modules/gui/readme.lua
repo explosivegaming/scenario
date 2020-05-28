@@ -187,7 +187,8 @@ Gui.element(function(_, parent)
     -- Add the external links
     local external_links = title_table(scroll_pane, 235, {'readme.servers-external'}, 2)
     for _, key in ipairs{'discord', 'website', 'patreon', 'status', 'github'} do
-        Gui.centered_label(external_links, 110, key:gsub("^%l", string.upper))
+        local upper_key = key:gsub("^%l", string.upper)
+        Gui.centered_label(external_links, 110, upper_key)
         Gui.centered_label(external_links, 460, {'links.'..key}, {'readme.servers-open-in-browser'})
     end
 
