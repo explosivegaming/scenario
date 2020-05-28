@@ -42,7 +42,7 @@ return {
     'modules.addons.compilatron',
     'modules.addons.scorched-earth',
     'modules.addons.pollution-grading',
-    'modules.addons.random-player-colours',
+    'modules.addons.player-colours',
     'modules.addons.discord-alerts',
     'modules.addons.chat-reply',
     'modules.addons.tree-decon',
