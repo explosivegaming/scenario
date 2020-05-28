@@ -1,6 +1,6 @@
 --[[-- Commands Module - Tag
     - Adds a command that allows players to have a custom tag after their name
-    @commands Tag
+    @data Tag
 ]]
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands

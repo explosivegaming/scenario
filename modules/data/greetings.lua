@@ -1,5 +1,5 @@
 --- Greets players on join
--- @addon greetings
+-- @data Greetings
 
 local config = require 'config.join_messages' --- @dep config.join_messages
 local Commands = require 'expcore.commands' ---@dep expcore.commands

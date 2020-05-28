@@ -1,6 +1,6 @@
 --[[-- Commands Module - Quickbar
     - Adds a command that allows players to load Quickbar presets
-    @commands Quickbar
+    @data Quickbar
 ]]
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands

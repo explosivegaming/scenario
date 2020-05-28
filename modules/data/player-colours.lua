@@ -1,5 +1,5 @@
 --- Gives players random colours when they join, also applies preset colours to those who have them
--- @addon Player-Colours
+-- @data Player-Colours
 
 local Event = require 'utils.event' --- @dep utils.event
 local Colours = require 'utils.color_presets' --- @dep utils.color_presets

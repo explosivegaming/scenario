@@ -1,14 +1,12 @@
 --[[-- Commands Module - Bonus
     - Adds a command that allows players to have increased stats
-    @commands Bonus
+    @data Bonus
 ]]
 
-local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
-local Game = require 'utils.game' --- @dep utils.game
-local Store = require 'expcore.store' --- @dep expcore.store
 local config = require 'config.bonuses' --- @dep config.bonuses
+local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
 
 --- Stores the bonus for the player
