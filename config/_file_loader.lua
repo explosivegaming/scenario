@@ -32,8 +32,6 @@ return {
     'modules.commands.quickbar',
 
     --- Addons
-    'modules.addons.station-auto-name',
-    'modules.addons.greetings',
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',
     'modules.addons.death-logger',
@@ -42,10 +40,14 @@ return {
     'modules.addons.compilatron',
     'modules.addons.scorched-earth',
     'modules.addons.pollution-grading',
-    'modules.addons.player-colours',
+    'modules.addons.station-auto-name',
     'modules.addons.discord-alerts',
     'modules.addons.chat-reply',
     'modules.addons.tree-decon',
+
+    --- Data
+    'modules.data.player-colours',
+    'modules.data.greetings',
 
     --- GUI
     'modules.gui.readme',
