@@ -132,15 +132,8 @@ local Roles = {
 }
 
 --- When global is loaded it will have the metatable re-assigned to the roles
-Global.register(Roles.config, function(tbl)
-    Roles.config = tbl
-    for _, role in pairs(Roles.config.roles) do
-        setmetatable(role, {__index=Roles._prototype})
-        local parent = Roles.config.roles[role.parent]
-        if parent then
-            setmetatable(role.allowed_actions, {__index=parent.allowed_actions})
-        end
-    end
+Global.register(Roles.config.players, function(tbl)
+    Roles.config.players = tbl
 end)
 
 --- Getter.
@@ -432,9 +425,11 @@ Roles.override_player_roles{
 }
 
 ]]
-function Roles.override_player_roles(player_name, roles)
+function Roles.override_player_roles(player_name,roles)
+    local player_roles = Roles.config.players
     if not roles then
-        Roles.config.players = player_name
+        for k in pairs(player_roles) do player_roles[k] = nil end
+        for k, new_roles in pairs(player_name) do player_roles[k] = new_roles end
     else
         Roles.config.players[player_name] = roles
     end
@@ -821,7 +816,7 @@ end)
 
 ]]
 function Roles._prototype:set_auto_assign_condition(callback)
-    _C.error_if_runetime_closure(callback)
+    _C.error_if_runtime()
     self.auto_promote_condition = callback
     return self
 end

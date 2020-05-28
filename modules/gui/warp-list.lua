@@ -258,7 +258,7 @@ Gui.element(function(event_trigger, parent, warp)
         type = 'sprite-button',
         sprite = 'item/'..warp.icon,
         tooltip = {'warp-list.goto-tooltip', warp_position.x, warp_position.y},
-        style = 'slot_sized_button'
+        style = 'slot_button'
     }
 end)
 :style(Styles.sprite32)
