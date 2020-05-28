@@ -69,7 +69,7 @@ local function emit_event(args)
         end
     end
 
-    write_json('log/discord.log',{
+    write_json('ext/discord.out',{
         title=title,
         description=description,
         color=color,

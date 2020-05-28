@@ -57,7 +57,7 @@ Gui.element{
     type = 'sprite-button',
     sprite = 'utility/close_black',
     tooltip = {'player-list.close-action-bar'},
-    style = 'shortcut_bar_button_red'
+    style = 'slot_sized_button_red'
 }
 :style(Gui.sprite_style(30,-1,{ top_margin = -1, right_margin = -1 }))
 :on_click(function(player,_)
@@ -72,7 +72,7 @@ Gui.element{
     type = 'sprite-button',
     sprite = 'utility/confirm_slot',
     tooltip = {'player-list.reason-confirm'},
-    style = 'shortcut_bar_button_green'
+    style = 'slot_sized_button_green'
 }
 :style(Gui.sprite_style(30,-1,{ left_margin = -2, right_margin = -1 }))
 :on_click(function(player,element)

@@ -139,7 +139,7 @@ local task_editing
 local confirm_edit =
 Gui.element{
     type = 'sprite-button',
-    sprite = 'utility/downloaded',
+    sprite = 'utility/confirm_slot',
     tooltip = {'task-list.confirm-tooltip'},
     style = 'shortcut_bar_button_green'
 }
