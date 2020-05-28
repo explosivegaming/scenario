@@ -108,8 +108,9 @@ Gui.element(function(_, parent, science_pack_data)
 
     -- Change the style of the icon
     local pack_icon_style = pack_icon.style
+    pack_icon.ignored_by_interaction = true
     pack_icon_style.height = 55
-    if icon_style == 'quick_bar_slot_button' then
+    if icon_style == 'slot_button' then
         pack_icon_style.padding = {0, -2}
         pack_icon_style.width = 36
     end
@@ -152,14 +153,14 @@ local function get_science_pack_data(player, science_pack)
     end
 
     -- Get the icon style
-    local icon_style = 'quick_bar_slot_button'
+    local icon_style = 'slot_button'
     local flux = Production.get_fluctuations(force, science_pack, defines.flow_precision_index.one_minute)
     if minute.net > 0 and flux.net > -config.color_flux/2 then
-        icon_style = 'green_slot_button'
+        icon_style = 'slot_sized_button_green'
     elseif flux.net < -config.color_flux then
-        icon_style = 'red_slot_button'
+        icon_style = 'slot_sized_button_red'
     elseif minute.made > 0 then
-        icon_style = 'selected_slot_button'
+        icon_style = 'yellow_slot_button'
     end
 
     -- Return the pack data
@@ -198,7 +199,7 @@ local function update_science_pack(pack_table, science_pack_data)
 
     local pack_icon_style = pack_icon.style
     pack_icon_style.height = 55
-    if icon_style == 'quick_bar_slot_button' then
+    if icon_style == 'slot_button' then
         pack_icon_style.padding = {0, -2}
         pack_icon_style.width = 36
     end
