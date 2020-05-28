@@ -440,6 +440,14 @@ Gui.element{
 	end
 end)
 
+-- Used to assign an event to the header label to trigger a toggle
+-- @element header_toggle
+local header_toggle = Gui.element()
+:on_click(function(_, element, event)
+	event.element = element.parent.alignment[toggle_section.name]
+	toggle_section:raise_custom_event(event)
+end)
+
 -- Draw a section header and main scroll
 -- @element rocket_list_container
 local section =
@@ -450,7 +458,8 @@ Gui.element(function(_,parent,section_name,table_size)
 		{'rocket-info.section-caption-'..section_name},
         {'rocket-info.section-tooltip-'..section_name},
 		true,
-		section_name..'-header'
+		section_name..'-header',
+		header_toggle.name
 	)
 
 	-- Right aligned button to toggle the section
@@ -535,11 +544,6 @@ end
 Event.add(defines.events.on_rocket_launched,function(event)
     local force = event.rocket_silo.force
 	update_rocket_gui_all(force.name)
-	if force.rockets_launched == 1 then
-		for _,player in pairs(force.players) do
-			Gui.update_top_flow(player)
-		end
-	end
 end)
 
 --- Update only the progress gui for a force
