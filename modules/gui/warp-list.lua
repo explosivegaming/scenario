@@ -159,7 +159,7 @@ local warp_icon_button
 local confirm_edit =
 Gui.element{
     type = 'sprite-button',
-    sprite = 'utility/downloaded',
+    sprite = 'utility/confirm_slot',
     tooltip = {'warp-list.confirm-tooltip'},
     style = 'shortcut_bar_button_green'
 }
@@ -258,7 +258,7 @@ Gui.element(function(event_trigger,parent,warp)
         type = 'sprite-button',
         sprite = 'item/'..warp.icon,
         tooltip = {'warp-list.goto-tooltip',warp_position.x,warp_position.y},
-        style = 'quick_bar_slot_button'
+        style = 'slot_sized_button'
     }
 end)
 :style(Styles.sprite32)
