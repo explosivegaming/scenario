@@ -151,8 +151,7 @@ Roles.new_role('Supporter','Sup')
 :allow{
     'command/jail',
     'command/unjail',
-    'command/join-message',
-    'command/save-quickbar'
+    'command/join-message'
 }
 
 Roles.new_role('Partner','Part')
@@ -187,7 +186,8 @@ Roles.new_role('Member','Mem')
     'gui/task-list/add',
     'gui/task-list/edit',
     'gui/warp-list/add',
-    'gui/warp-list/edit'
+    'gui/warp-list/edit',
+    'command/save-quickbar'
 }
 
 Roles.new_role('Regular','Reg')

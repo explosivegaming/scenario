@@ -153,6 +153,7 @@ local Datastores = {}
 local Datastore = {}
 local Data = {}
 local copy = table.deep_copy
+local trace = debug.traceback
 
 --- Save datastores in the global table
 global.datastores = Data
@@ -250,7 +251,6 @@ function DatastoreManager.ingest(action, datastoreName, key, valueJson)
     elseif action == 'propagate' or action == 'request' then
         local success, value = pcall(game.json_to_table, valueJson)
         if not success or value == nil then value = tonumber(valueJson) or valueJson end
-        datastore:raw_set(key) -- clear any existing data
         value = datastore:raise_event('on_load', key, value)
         datastore:set(key, value)
 
@@ -360,7 +360,7 @@ function Datastore:raw_set(key, value)
     end
 end
 
-local function serialize_error(err) error('An error ocurred in a datastore serializer: '..err) end
+local function serialize_error(err) error('An error ocurred in a datastore serializer: '..trace(err)) end
 --[[-- Internal, Return the serialized key
 @tparam any rawKey The key that needs to be serialized, if it is already a string then it is returned
 @treturn string The key after it has been serialized
@@ -389,11 +389,11 @@ self:write_action('save', 'TestKey', 'Foo')
 
 ]]
 function Datastore:write_action(action, key, value)
-    local data = {action, self.name, '"'..key..'"'}
+    local data = {action, self.name, key}
     if value ~= nil then
-        data[4] = type(value) == 'table' and '"'..game.table_to_json(value)..'"' or '"'..tostring(value)..'"'
+        data[4] = type(value) == 'table' and game.table_to_json(value) or tostring(value)
     end
-    game.write_file('datastore.out', table.concat(data, ' ')..'\n', true, 0)
+    game.write_file('ext/datastore.out', table.concat(data, ' ')..'\n', true, 0)
 end
 
 ----- Datastore Local
@@ -520,7 +520,7 @@ function Datastore:increment(key, delta)
     return Datastore:set(key, value + (delta or 1))
 end
 
-local function update_error(err) error('An error ocurred in datastore update: '..err, 2) end
+local function update_error(err) error('An error ocurred in datastore update: '..trace(err), 2) end
 --[[-- Use a function to update the value locally, will trigger on_update then on_save, save_to_disk and auto_save is required for on_save
 @tparam any key The key that you want to apply the update to, must be a string unless a serializer is set
 @tparam function callback The function that will be used to update the value at this key
@@ -560,7 +560,7 @@ function Datastore:remove(key)
     if self.parent and self.parent.auto_save then return self.parent:save(key) end
 end
 
-local function filter_error(err) print('An error ocurred in a datastore filter:', err) end
+local function filter_error(err) print('An error ocurred in a datastore filter:'..trace(err)) end
 --[[-- Internal, Used to filter elements from a table
 @tparam table tbl The table that will have the filter applied to it
 @tparam[opt] function callback The function that will be used as a filter, if none giving then the provided table is returned
@@ -737,7 +737,7 @@ end
 ----- Events
 -- @section events
 
-local function event_error(err) print('An error ocurred in a datastore event handler:', err) end
+local function event_error(err) print('An error ocurred in a datastore event handler: '..trace(err)) end
 --[[-- Internal, Raise an event on this datastore
 @tparam string event_name The name of the event to raise for this datastore
 @tparam string key The key that this event is being raised for
@@ -752,7 +752,7 @@ value = self:raise_event('on_save', key, value)
 function Datastore:raise_event(event_name, key, value, source)
     -- Raise the event for the children of this datastore
     if source ~= 'child' and next(self.children) then
-        if type(value) ~= 'table' then value = self:raw_get(key, true) end
+        if type(value) ~= 'table' then value = {} end
         for value_name, child in pairs(self.children) do
             value[value_name] = child:raise_event(event_name, key, value[value_name], 'parent')
         end
@@ -769,7 +769,7 @@ function Datastore:raise_event(event_name, key, value, source)
 
     -- Raise the event for the parent of this datastore
     if source ~= 'parent' and self.parent then
-        self.parent:raise_event(event_name, key, self.parent:raw_get(key), 'child')
+        self.parent:raise_event(event_name, key, self.parent:raw_get(key, true), 'child')
     end
 
     -- If this is the save event and the table is empty then return nil

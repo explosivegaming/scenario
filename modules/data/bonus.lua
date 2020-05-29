@@ -23,8 +23,8 @@ local function apply_bonus(player, amount)
 end
 
 --- When store is updated apply new bonus to the player
-PlayerBonus.on_update(function(player_name, player_bonus)
-    apply_bonus(game.player[player_name], player_bonus or 0)
+PlayerBonus:on_update(function(player_name, player_bonus)
+    apply_bonus(game.players[player_name], player_bonus or 0)
 end)
 
 --- Changes the amount of bonus you receive

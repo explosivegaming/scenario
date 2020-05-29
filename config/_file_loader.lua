@@ -12,7 +12,6 @@ return {
     'modules.commands.me',
     'modules.commands.kill',
     'modules.commands.admin-chat',
-    'modules.commands.tag',
     'modules.commands.teleport',
     'modules.commands.cheat-mode',
     'modules.commands.ratio',
@@ -27,7 +26,6 @@ return {
     'modules.commands.spawn',
     'modules.commands.warnings',
     'modules.commands.find',
-    'modules.commands.bonus',
     'modules.commands.home',
 
     --- Addons
@@ -48,6 +46,9 @@ return {
     'modules.data.player-colours',
     'modules.data.greetings',
     'modules.data.quickbar',
+    'modules.data.alt-view',
+    'modules.data.tag',
+    'modules.data.bonus',
 
     --- GUI
     'modules.gui.readme',

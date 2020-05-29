@@ -16,7 +16,7 @@ local PlayerTags = PlayerData.Settings:combine('Tag')
 PlayerTags:on_update(function(player_name, player_tag)
     local player = game.players[player_name]
     if player_tag == nil or player_tag == '' then
-        player_tag.tag = ''
+        player.tag = ''
     else
         player.tag = '- '..player_tag
     end
