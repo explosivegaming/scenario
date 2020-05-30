@@ -10,7 +10,7 @@ return {
     -- Warp cooldowns
     bypass_warp_cooldown = 'expcore.roles', --- @setting bypass_warp_cooldown dictates who the warp cooldown is applied to; values: all, admin, expcore.roles, none
     expcore_roles_bypass_warp_cooldown = 'gui/warp-list/bypass-cooldown', --- @setting expcore_roles_bypass_warp_cooldown if expcore.roles is used then this is the required permission
-    cooldown_duraction = 60, --- @setting cooldown_duraction the duration of the warp cooldown in seconds
+    cooldown_duration = 60, --- @setting cooldown_duration the duration of the warp cooldown in seconds
 
     -- Warp proximity
     bypass_warp_proximity = 'expcore.roles', --- @setting bypass_warp_proximity dictates who the warp proximity is applied to; values: all, admin, expcore.roles, none

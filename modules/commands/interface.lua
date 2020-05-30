@@ -15,7 +15,6 @@ local interface_modules = {
     ['output']=Common.player_return,
     ['Group']='expcore.permission_groups',
     ['Roles']='expcore.roles',
-    ['Store']='expcore.store',
     ['Gui']='expcore.gui',
     ['Async']='expcore.async',
     ['Datastore']='expcore.datastore'

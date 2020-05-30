@@ -7,7 +7,6 @@
 
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
-local Store = require 'expcore.store' --- @dep expcore.store
 local Game = require 'utils.game' --- @dep utils.game
 local Reports = require 'modules.control.reports' --- @dep modules.control.reports
 local Warnings = require 'modules.control.warnings' --- @dep modules.control.warnings
@@ -15,11 +14,9 @@ local Jail = require 'modules.control.jail' --- @dep modules.control.jail
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 local format_chat_player_name = _C.format_chat_player_name --- @dep expcore.common
 
-local selected_player_store = ''
-local selected_action_store = ''
-local function set_store_uids(player,action)
-    selected_player_store = player
-    selected_action_store = action
+local SelectedPlayer, SelectedAction
+local function set_datastores(player, action)
+    SelectedPlayer, SelectedAction = player, action
 end
 
 -- auth that will only allow when on player's of lower roles
@@ -33,13 +30,13 @@ end
 
 -- gets the action player and a coloured name for the action to be used on
 local function get_action_player_name(player)
-    local selected_player_name = Store.get(selected_player_store,player)
+    local selected_player_name = SelectedPlayer:get(player)
     local selected_player = Game.get_player_from_any(selected_player_name)
     local selected_player_color = format_chat_player_name(selected_player)
     return selected_player_name, selected_player_color
 end
 
--- telports one player to another
+-- teleports one player to another
 local function teleport(from_player,to_player)
     local surface = to_player.surface
     local position = surface.find_non_colliding_position('character',to_player.position,32,1)
@@ -109,7 +106,7 @@ local report_player = new_button('utility/spawn_flag',{'player-list.report-playe
     if Reports.is_reported(selected_player_name,player.name) then
         player.print({'expcom-report.already-reported'},Colors.orange_red)
     else
-        Store.set(selected_action_store,player,'command/report')
+        SelectedAction:set(player, 'command/report')
     end
 end)
 
@@ -125,7 +122,7 @@ end
 -- @element warn_player
 local warn_player = new_button('utility/spawn_flag',{'player-list.warn-player'})
 :on_click(function(player)
-    Store.set(selected_action_store,player,'command/give-warning')
+    SelectedAction:set(player, 'command/give-warning')
 end)
 
 local function warn_player_callback(player,reason)
@@ -143,7 +140,7 @@ local jail_player = new_button('utility/multiplayer_waiting_icon',{'player-list.
     if Jail.is_jailed(selected_player_name) then
         player.print({'expcom-jail.already-jailed', selected_player_color},Colors.orange_red)
     else
-        Store.set(selected_action_store,player,'command/jail')
+        SelectedAction:set(player, 'command/jail')
     end
 end)
 
@@ -162,7 +159,7 @@ local temp_ban_player = new_button('utility/warning_white',{'player-list.temp-ba
     if Jail.is_jailed(selected_player_name) then
         player.print({'expcom-jail.already-banned', selected_player_color},Colors.orange_red)
     else
-        Store.set(selected_action_store,player,'command/temp-ban')
+        SelectedAction:set(player, 'command/temp-ban')
     end
 end)
 
@@ -177,7 +174,7 @@ end
 -- @element kick_player
 local kick_player = new_button('utility/warning_icon',{'player-list.kick-player'})
 :on_click(function(player)
-    Store.set(selected_action_store,player,'command/kick')
+    SelectedAction:set(player, 'command/kick')
 end)
 
 local function kick_player_callback(player,reason)
@@ -189,7 +186,7 @@ end
 -- @element ban_player
 local ban_player = new_button('utility/danger_icon',{'player-list.ban-player'})
 :on_click(function(player)
-    Store.set(selected_action_store,player,'command/ban')
+    SelectedAction:set(player, 'command/ban')
 end)
 
 local function ban_player_callback(player,reason)
@@ -198,7 +195,7 @@ local function ban_player_callback(player,reason)
 end
 
 return {
-    set_store_uids = set_store_uids,
+    set_datastores = set_datastores,
     buttons = {
         ['command/teleport'] = {
             auth=function(player,selected_player)
