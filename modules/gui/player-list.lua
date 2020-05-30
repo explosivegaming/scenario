@@ -7,25 +7,21 @@
 -- luacheck:ignore 211/Colors
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
-local Store = require 'expcore.store' --- @dep expcore.store
+local Datastore = require 'expcore.datastore' --- @dep expcore.datastore
 local Game = require 'utils.game' --- @dep utils.game
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.gui.player_list_actions' --- @dep config.gui.player_list_actions
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 local format_time = _C.format_time --- @dep expcore.common
 
--- Stores the name of the player a player has selected
-local selected_player_store = Store.register(function(player)
-    return player.name
-end)
-
--- Stores the current action that a player wants to do
-local selected_action_store = Store.register(function(player)
-    return player.name
-end)
+--- Stores all data for the warp gui
+local PlayerListData = Datastore.connect('PlayerListData')
+PlayerListData:set_serializer(Datastore.name_serializer)
+local SelectedPlayer = PlayerListData:combine('SelectedPlayer')
+local SelectedAction = PlayerListData:combine('SelectedAction')
 
 -- Set the config to use these stores
-config.set_store_uids(selected_player_store, selected_action_store)
+config.set_datastores(SelectedPlayer, SelectedAction)
 
 --- Button used to open the action bar
 -- @element open_action_bar
@@ -43,11 +39,11 @@ Gui.element{
 }
 :on_click(function(player, element, _)
     local selected_player_name = element.parent.name
-    local old_selected_player_name = Store.get(selected_player_store, player)
+    local old_selected_player_name = SelectedPlayer:get(player)
     if selected_player_name == old_selected_player_name then
-        Store.clear(selected_player_store, player)
+        SelectedPlayer:remove(player)
     else
-        Store.set(selected_player_store, player, selected_player_name)
+        SelectedPlayer:set(player, selected_player_name)
     end
 end)
 
@@ -62,8 +58,8 @@ Gui.element{
 }
 :style(Gui.sprite_style(30, -1, { top_margin = -1, right_margin = -1 }))
 :on_click(function(player, _)
-    Store.clear(selected_player_store, player)
-    Store.clear(selected_action_store, player)
+    SelectedPlayer:remove(player)
+    SelectedAction:remove(player)
 end)
 
 --- Button used to confirm a reason
@@ -78,11 +74,11 @@ Gui.element{
 :style(Gui.sprite_style(30, -1, { left_margin = -2, right_margin = -1 }))
 :on_click(function(player, element)
     local reason = element.parent.entry.text or 'Non Given'
-    local action_name = Store.get(selected_action_store, player)
+    local action_name = SelectedAction:get(player)
     local reason_callback = config.buttons[action_name].reason_callback
     reason_callback(player, reason)
-    Store.clear(selected_player_store, player)
-    Store.clear(selected_action_store, player)
+    SelectedPlayer:remove(player)
+    SelectedAction:remove(player)
     element.parent.entry.text = ''
 end)
 
@@ -126,12 +122,12 @@ end)
         event.player.zoom_to_world(position, 1.75)
     else
         -- RMB will toggle the settings
-        local old_selected_player_name = Store.get(selected_player_store, player)
+        local old_selected_player_name = SelectedPlayer:get(player)
         if selected_player_name == old_selected_player_name then
-            Store.clear(selected_player_store, player)
-            Store.clear(selected_action_store, player)
+            SelectedPlayer:remove(player)
+            SelectedAction:remove(player)
         else
-            Store.set(selected_player_store, player, selected_player_name)
+            SelectedPlayer:set(player, selected_player_name)
         end
     end
 end)
@@ -174,7 +170,7 @@ end)
 --- Updates the visible state of the action bar buttons
 local function update_action_bar(element)
     local player = Gui.get_player_from_element(element)
-    local selected_player_name = Store.get(selected_player_store, player)
+    local selected_player_name = SelectedPlayer:get(player)
 
     if not selected_player_name then
         -- Hide the action bar when no player is selected
@@ -185,8 +181,8 @@ local function update_action_bar(element)
         if not selected_player.connected then
             -- If the player is offline then reest stores
             element.visible = false
-            Store.clear(selected_player_store, player)
-            Store.clear(selected_action_store, player)
+            SelectedPlayer:remove(player)
+            SelectedAction:remove(player)
 
         else
             -- Otherwise check what actions the player is allowed to use
@@ -367,10 +363,10 @@ Event.add(defines.events.on_player_left_game, function(event)
         local scroll_table = frame.container.scroll.table
         remove_player_base(scroll_table, remove_player)
 
-        local selected_player_name = Store.get(selected_player_store, player)
+        local selected_player_name = SelectedPlayer:get(player)
         if selected_player_name == remove_player.name then
-            Store.clear(selected_player_store, player)
-            Store.clear(selected_action_store, player)
+            SelectedPlayer:remove(player)
+            SelectedAction:remove(player)
         end
     end
 end)
@@ -393,7 +389,7 @@ Event.add(Roles.events.on_role_assigned, redraw_player_list)
 Event.add(Roles.events.on_role_unassigned, redraw_player_list)
 
 --- When the action player is changed the action bar will update
-Store.watch(selected_player_store, function(value, player_name)
+SelectedPlayer:on_update(function(player_name, selected_player)
     local player = Game.get_player_from_any(player_name)
     local frame = Gui.get_left_element(player, player_list_container)
     local scroll_table = frame.container.scroll.table
@@ -401,7 +397,7 @@ Store.watch(selected_player_store, function(value, player_name)
     for _, next_player in pairs(game.connected_players) do
         local element = scroll_table[next_player.name][open_action_bar.name]
         local style = 'frame_button'
-        if next_player.name == value then
+        if next_player.name == selected_player then
             style = 'tool_button'
         end
         element.style = style
@@ -413,20 +409,20 @@ Store.watch(selected_player_store, function(value, player_name)
 end)
 
 --- When the action name is changed the reason input will update
-Store.watch(selected_action_store, function(value, player_name)
+SelectedAction:on_update(function(player_name, selected_action)
     local player = Game.get_player_from_any(player_name)
     local frame = Gui.get_left_element(player, player_list_container)
     local element = frame.container.reason_bar
-    if value then
+    if selected_action then
         -- if there is a new value then check the player is still online
-        local selected_player_name = Store.get(selected_player_store, player_name)
+        local selected_player_name = SelectedPlayer:get(player_name)
         local selected_player = Game.get_player_from_any(selected_player_name)
         if selected_player.connected then
             element.visible = true
         else
             -- Clear if the player is offline
-            Store.clear(selected_player_store, player_name)
-            Store.clear(selected_action_store, player_name)
+            SelectedPlayer:remove(player)
+            SelectedAction:remove(player)
         end
 
     else
