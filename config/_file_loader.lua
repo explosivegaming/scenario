@@ -43,6 +43,7 @@ return {
     'modules.addons.tree-decon',
 
     --- Data
+    'modules.data.statistics',
     'modules.data.player-colours',
     'modules.data.greetings',
     'modules.data.quickbar',

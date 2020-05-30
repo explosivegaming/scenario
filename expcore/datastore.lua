@@ -391,7 +391,7 @@ self:write_action('save', 'TestKey', 'Foo')
 function Datastore:write_action(action, key, value)
     local data = {action, self.name, key}
     if value ~= nil then
-        data[4] = type(value) == 'table' and game.table_to_json(value) or tostring(value)
+        data[4] = type(value) == 'table' and game.table_to_json(value) or value
     end
     game.write_file('ext/datastore.out', table.concat(data, ' ')..'\n', true, 0)
 end
@@ -517,7 +517,7 @@ ExampleData:increment('TestNumber')
 function Datastore:increment(key, delta)
     key = self:serialize(key)
     local value = self:raw_get(key) or 0
-    return Datastore:set(key, value + (delta or 1))
+    return self:set(key, value + (delta or 1))
 end
 
 local function update_error(err) error('An error ocurred in datastore update: '..trace(err), 2) end
@@ -560,7 +560,7 @@ function Datastore:remove(key)
     if self.parent and self.parent.auto_save then return self.parent:save(key) end
 end
 
-local function filter_error(err) print('An error ocurred in a datastore filter:'..trace(err)) end
+local function filter_error(err) log('An error ocurred in a datastore filter:'..trace(err)) end
 --[[-- Internal, Used to filter elements from a table
 @tparam table tbl The table that will have the filter applied to it
 @tparam[opt] function callback The function that will be used as a filter, if none giving then the provided table is returned
@@ -737,7 +737,7 @@ end
 ----- Events
 -- @section events
 
-local function event_error(err) print('An error ocurred in a datastore event handler: '..trace(err)) end
+local function event_error(err) log('An error ocurred in a datastore event handler: '..trace(err)) end
 --[[-- Internal, Raise an event on this datastore
 @tparam string event_name The name of the event to raise for this datastore
 @tparam string key The key that this event is being raised for

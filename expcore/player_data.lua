@@ -83,26 +83,30 @@ end)
 --- Async function called after 5 seconds with no player data loaded
 local check_data_loaded = Async.register(function(player)
     local player_data = PlayerData:get(player)
-    if not player_data then
+    if not player_data or not player_data.valid then
         player.print{'expcore-data.data-failed'}
-        Datastore.ingest('request', 'PlayerData', player.name, '{"failed_load":true}')
+        Datastore.ingest('request', 'PlayerData', player.name, '{"valid":false}')
     end
 end)
 
 --- When player data loads tell the player if the load had failed previously
 PlayerData:on_load(function(player_name, player_data)
-    if not player_data or player_data.failed_load then return end
+    if not player_data or not player_data.valid then return end
     local existing_data = PlayerData:get(player_name)
-    if existing_data and existing_data.failed_load then
+    if existing_data and existing_data.valid == false then
         game.players[player_name].print{'expcore-data.data-restore'}
     end
+    player_data.valid = true
 end)
 
 --- Remove data that the player doesnt want to have stored
 PlayerData:on_save(function(player_name, player_data)
     local dataPreference = DataSavingPreference:get(player_name)
     dataPreference = PreferenceEnum[dataPreference]
-    if dataPreference == PreferenceEnum.All then return player_data end
+    if dataPreference == PreferenceEnum.All then
+        player_data.valid = nil
+        return player_data
+    end
 
     local saved_player_data = { PlayerRequired = player_data.PlayerRequired, DataSavingPreference = PreferenceEnum[dataPreference] }
     if dataPreference <= PreferenceEnum.Settings then saved_player_data.PlayerSettings = player_data.PlayerSettings end
@@ -119,17 +123,17 @@ end)
 --- Load player data when they join
 Event.add(defines.events.on_player_joined_game, function(event)
     local player = game.players[event.player_index]
-    PlayerData:request(player)
     Async.wait(300, check_data_loaded, player)
+    PlayerData:request(player)
 end)
 
 --- Unload player data when they leave
 Event.add(defines.events.on_player_left_game, function(event)
     local player = game.players[event.player_index]
     local player_data = PlayerData:get(player)
-    if player_data.failed_load then
-        PlayerData:raw_set(player)
-    else PlayerData:unload(player) end
+    if player_data.valid == true then
+        PlayerData:unload(player)
+    else PlayerData:raw_set(player) end
 end)
 
 ----- Module Return -----
