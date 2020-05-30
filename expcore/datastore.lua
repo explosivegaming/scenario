@@ -251,7 +251,8 @@ function DatastoreManager.ingest(action, datastoreName, key, valueJson)
     elseif action == 'propagate' or action == 'request' then
         local success, value = pcall(game.json_to_table, valueJson)
         if not success or value == nil then value = tonumber(valueJson) or valueJson end
-        value = datastore:raise_event('on_load', key, value)
+        local old_value = datastore:raw_get(key)
+        value = datastore:raise_event('on_load', key, value, old_value)
         datastore:set(key, value)
 
     end
@@ -495,12 +496,13 @@ ExampleData:set('TestKey', 'Foo')
 ]]
 function Datastore:set(key, value)
     key = self:serialize(key)
+    local old_value = self:raw_get(key)
     if value == self.default and not self.allow_set_to_default then
         self:raw_set(key)
     else
         self:raw_set(key, value)
     end
-    self:raise_event('on_update', key, value)
+    self:raise_event('on_update', key, value, old_value)
     if self.auto_save then self:save(key) end
     return value
 end
@@ -535,11 +537,12 @@ end)
 function Datastore:update(key, callback)
     key = self:serialize(key)
     local value = self:raw_get(key)
+    local old_value = copy(self:raw_get(key))
     local success, new_value = xpcall(callback, update_error, key, value)
     if success and new_value ~= nil then
         self:set(key, new_value)
     else
-        self:raise_event('on_update', key, value)
+        self:raise_event('on_update', key, value, old_value)
         if self.auto_save then self:save(key) end
     end
 end
@@ -554,8 +557,9 @@ ExampleData:remove('TestKey')
 ]]
 function Datastore:remove(key)
     key = self:serialize(key)
+    local old_value = self:raw_get(key)
     self:raw_set(key)
-    self:raise_event('on_update', key)
+    self:raise_event('on_update', key, old_value)
     if self.save_to_disk then self:write_action('remove', key) end
     if self.parent and self.parent.auto_save then return self.parent:save(key) end
 end
@@ -622,11 +626,12 @@ end)
 function Datastore:update_all(callback)
     local data = self:get_all()
     for key, value in pairs(data) do
+        local old_value = copy(value)
         local success, new_value = xpcall(callback, update_error, key, value)
         if success and new_value ~= nil then
             self:set(key, new_value)
         else
-            self:raise_event('on_update', key, value)
+            self:raise_event('on_update', key, value, old_value)
             if self.auto_save then self:save(key) end
         end
     end
@@ -749,12 +754,13 @@ local function event_error(err) log('An error ocurred in a datastore event handl
 value = self:raise_event('on_save', key, value)
 
 ]]
-function Datastore:raise_event(event_name, key, value, source)
+function Datastore:raise_event(event_name, key, value, old_value, source)
     -- Raise the event for the children of this datastore
     if source ~= 'child' and next(self.children) then
         if type(value) ~= 'table' then value = {} end
         for value_name, child in pairs(self.children) do
-            value[value_name] = child:raise_event(event_name, key, value[value_name], 'parent')
+            local old_child_value = old_value and old_value[value_name] or nil
+            value[value_name] = child:raise_event(event_name, key, value[value_name], old_child_value, 'parent')
         end
     end
 
@@ -762,14 +768,15 @@ function Datastore:raise_event(event_name, key, value, source)
     local handlers = self.events[event_name]
     if handlers then
         for _, handler in ipairs(handlers) do
-            local success, new_value = xpcall(handler, event_error, key, value)
+            local success, new_value = xpcall(handler, event_error, key, value, old_value)
             if success and new_value ~= nil then value = new_value end
         end
     end
 
     -- Raise the event for the parent of this datastore
     if source ~= 'parent' and self.parent then
-        self.parent:raise_event(event_name, key, self.parent:raw_get(key, true), 'child')
+        local parent_value = self.parent:raw_get(key, true)
+        self.parent:raise_event(event_name, key, parent_value, parent_value, 'child')
     end
 
     -- If this is the save event and the table is empty then return nil

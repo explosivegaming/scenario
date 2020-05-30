@@ -90,9 +90,8 @@ local check_data_loaded = Async.register(function(player)
 end)
 
 --- When player data loads tell the player if the load had failed previously
-PlayerData:on_load(function(player_name, player_data)
+PlayerData:on_load(function(player_name, player_data, existing_data)
     if not player_data or player_data.valid == false then return end
-    local existing_data = PlayerData:get(player_name)
     if existing_data and existing_data.valid == false then
         game.players[player_name].print{'expcore-data.data-restore'}
     end
