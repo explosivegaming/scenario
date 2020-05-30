@@ -10,21 +10,20 @@ Tasks.update_task(task_id, 'We need more iron!', game.player.name)
 
 ]]
 
-local Store = require 'expcore.store' --- @dep expcore.store
+local Datastore = require 'expcore.datastore' --- @dep expcore.datastore
 local Global = require 'utils.global' --- @dep utils.global
-local Token = require 'utils.token' --- @dep utils.token
+
+--- Stores all data for the warp gui
+local TaskData = Datastore.connect('TaskData')
+TaskData:set_serializer(function(raw_key) return raw_key.task_id end)
 
 local Tasks = {}
 
 -- Global lookup table for force name to task ids
-local force_tasks = {}
+local force_tasks = {_uid=1}
 Global.register(force_tasks, function(tbl)
     force_tasks = tbl
 end)
-
--- Task store is keyed by task id, value is a table
-local task_store = Store.register()
-Tasks.store = task_store
 
 --- Setters.
 -- functions used to created and alter tasks
@@ -43,8 +42,9 @@ local task_id = Tasks.add_task(game.player.force.name, nil, game.player.name)
 ]]
 function Tasks.add_task(force_name, task_number, player_name, task_message)
     -- Get a new task id
-    local task_id = tostring(Token.uid())
+    local task_id = tostring(force_tasks._uid)
     task_message = task_message or 'New Task'
+    force_tasks._uid = force_tasks._uid + 1
 
     -- Get the existing tasks for this force
     local tasks = force_tasks[force_name]
@@ -67,13 +67,13 @@ function Tasks.add_task(force_name, task_number, player_name, task_message)
     end
 
     -- Add the new task to the store
-    Store.set(task_store, task_id, {
+    TaskData:set(task_id, {
         task_id = task_id,
         force_name = force_name,
         message = task_message,
         last_edit_name = player_name or '<server>',
         last_edit_time = game.tick,
-        curently_editing = editing
+        currently_editing = editing
     })
 
     return task_id
@@ -87,10 +87,10 @@ Tasks.remove_task(task_id)
 
 ]]
 function Tasks.remove_task(task_id)
-    local task = Store.get(task_store, task_id)
+    local task = TaskData:get(task_id)
     local force_name = task.force_name
     table.remove_element(force_tasks[force_name], task_id)
-    Store.clear(task_store, task_id)
+    TaskData:remove(task_id)
 end
 
 --[[-- Update the message and last edited information for a task
@@ -103,7 +103,7 @@ Task.update_task(task_id, 'We need more iron!', game.player.name)
 
 ]]
 function Tasks.update_task(task_id, new_message, player_name)
-    Store.update(task_store, task_id, function(task)
+    TaskData:update(task_id, function(_, task)
         task.last_edit_name = player_name or '<server>'
         task.last_edit_time = game.tick
         task.message = new_message
@@ -120,8 +120,8 @@ Tasks.set_editing(task_id, game.player.name, true)
 
 ]]
 function Tasks.set_editing(task_id, player_name, state)
-    Store.update(task_store, task_id, function(task)
-        task.curently_editing[player_name] = state
+    TaskData:update(task_id, function(_, task)
+        task.currently_editing[player_name] = state
     end)
 end
 
@@ -135,7 +135,7 @@ end)
 
 ]]
 function Tasks.on_update(handler)
-    Store.watch(task_store, handler)
+    TaskData:on_update(handler)
 end
 
 --- Getters.
@@ -151,7 +151,7 @@ local task = Tasks.get_task(task_id)
 
 ]]
 function Tasks.get_task(task_id)
-    return Store.get(task_store, task_id)
+    return TaskData:get(task_id)
 end
 
 --[[-- Gets all the task ids that a force has
@@ -176,8 +176,8 @@ local editing = Tasks.get_editing(task_id, game.player.name)
 
 ]]
 function Tasks.get_editing(task_id, player_name)
-    local task = Store.get(task_store, task_id)
-    return task.curently_editing[player_name]
+    local task = TaskData:get(task_id)
+    return task.currently_editing[player_name]
 end
 
 -- Module Return

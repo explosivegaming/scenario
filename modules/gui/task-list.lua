@@ -240,7 +240,7 @@ local function update_task(player, task_table, task_id)
     -- Update the edit flow
     local edit_flow = task_table['edit-'..task_id]
     local player_allowed_edit = check_player_permissions(player, task)
-    local players_editing = table.get_keys(task.curently_editing)
+    local players_editing = table.get_keys(task.currently_editing)
     local edit_task_element = edit_flow[edit_task.name]
     local discard_task_element = edit_flow[discard_task.name]
 
@@ -257,7 +257,7 @@ local function update_task(player, task_table, task_id)
     -- Check if the player is was editing and/or currently editing
     local task_entry = task_flow[task_editing.name] or task_label(task_flow, task)
     local player_was_editing = task_entry.type == 'textfield'
-    local player_is_editing = task.curently_editing[player.name]
+    local player_is_editing = task.currently_editing[player.name]
 
     -- Update the task flow
     if not player_was_editing and not player_is_editing then
@@ -361,14 +361,14 @@ Gui.left_toolbar_button('utility/not_enough_repair_packs_icon', {'task-list.main
     return Roles.player_allowed(player, 'gui/task-list')
 end)
 
---- When a new task is added it will udpate the task list for everyone on that force
-Tasks.on_update(function(task, task_id, removed_task)
+--- When a new task is added it will update the task list for everyone on that force
+Tasks.on_update(function(task_id, task, old_task)
     -- Get the force to update, task is nil when removed
     local force
     if task then
         force = game.forces[task.force_name]
     else
-        force = game.forces[removed_task.force_name]
+        force = game.forces[old_task.force_name]
     end
 
     -- Update the task for all the players on the force

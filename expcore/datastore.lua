@@ -559,7 +559,7 @@ function Datastore:remove(key)
     key = self:serialize(key)
     local old_value = self:raw_get(key)
     self:raw_set(key)
-    self:raise_event('on_update', key, old_value)
+    self:raise_event('on_update', key, nil, old_value)
     if self.save_to_disk then self:write_action('remove', key) end
     if self.parent and self.parent.auto_save then return self.parent:save(key) end
 end

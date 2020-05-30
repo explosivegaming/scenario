@@ -25,7 +25,7 @@ local Datastore = require 'expcore.datastore' --- @dep expcore.datastore
 local Global = require 'utils.global' --- @dep utils.global
 local config = require 'config.gui.warps' --- @dep config.warps
 
---- Stores all data for the warp gui
+--- Stores all data for the warp system
 local WrapData = Datastore.connect('WrapData')
 WrapData:set_serializer(function(raw_key) return raw_key.warp_id end)
 
