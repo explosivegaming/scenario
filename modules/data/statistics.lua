@@ -50,32 +50,24 @@ if config.DistanceTraveled then
     end)
 end
 
---- Add MachinesRemoved if it is enabled
-if config.MachinesRemoved then
-    local stat = Statistics:combine('MachinesRemoved')
+--- Add MachinesRemoved and TreesDestroyed and config.OreMined if it is enabled
+if config.MachinesRemoved or config.TreesDestroyed or config.OreMined then
+    local machines, trees, ore
+    if config.MachinesRemoved then machines = Statistics:combine('MachinesRemoved') end
+    if config.TreesDestroyed then trees = Statistics:combine('TreesDestroyed') end
+    if config.OreMined then ore = Statistics:combine('OreMined') end
     local function on_event(event)
         if not event.player_index then return end  -- Check player is valid
         local player = game.players[event.player_index]
         if not player.valid or not player.connected then return end
         local entity = event.entity -- Check entity is valid
-        if not entity.valid or entity.force ~= player.force then return end
-        stat:increment(player)
+        if not entity.valid then return end
+        if entity.type == 'resource' then ore:increment(player)
+        elseif entity.type == 'tree' then trees:increment(player)
+        elseif entity.force == player.force then machines:increment(player) end
     end
     Event.add(defines.events.on_marked_for_deconstruction, on_event)
     Event.add(defines.events.on_player_mined_entity, on_event)
-end
-
---- Add OreMined if it is enabled
-if config.OreMined then
-    local stat = Statistics:combine('OreMined')
-    Event.add(defines.events.on_player_mined_entity, function(event)
-        if not event.player_index then return end  -- Check player is valid
-        local player = game.players[event.player_index]
-        if not player.valid or not player.connected then return end
-        local entity = event.entity -- Check entity is valid
-        if not entity.valid or entity.type ~= 'resource' then return end
-        stat:increment(player)
-    end)
 end
 
 --- Add DamageDealt if it is enabled
@@ -106,18 +98,41 @@ if config.DamageDealt then
     end)
 end
 
+--- Add RocketsLaunched if it is enabled
+if config.RocketsLaunched then
+    local stat = Statistics:combine('RocketsLaunched')
+    Event.add(defines.events.on_rocket_launched, function(event)
+        local silo = event.rocket_silo -- Check silo is valid
+        if not silo or not silo.valid then return end
+        local force = silo.force -- Check force is valid
+        if not force or not force.valid then return end
+        for _, player in pairs(force.connected_players) do
+            stat:increment(player)
+        end
+    end)
+end
+
+--- Add RocketsLaunched if it is enabled
+if config.ResearchCompleted then
+    local stat = Statistics:combine('ResearchCompleted')
+    Event.add(defines.events.on_research_finished, function(event)
+        local research  = event.research  -- Check research  is valid
+        if event.by_script or not research or not research.valid then return end
+        local force = research.force -- Check force is valid
+        if not force or not force.valid then return end
+        for _, player in pairs(force.connected_players) do
+            stat:increment(player)
+        end
+    end)
+end
+
 --- Add all the remaining statistics from the config
 for statistic, event_name in pairs(config.counters) do
     local stat = Statistics:combine(statistic)
     Event.add(event_name, function(event)
-        if event.player_index then
-            local player = game.players[event.player_index]
-            if not player.valid or not player.connected then return end
-            stat:increment(player)
-        else
-            for _, player in pairs(game.connected_players) do
-                stat:increment(player)
-            end
-        end
+        if not event.player_index then return end
+        local player = game.players[event.player_index]
+        if not player.valid or not player.connected then return end
+        stat:increment(player)
     end)
 end
