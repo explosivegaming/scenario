@@ -140,9 +140,7 @@ Roles.new_role('Sponsor','Spon')
     'command/home-set',
     'command/home-get',
     'command/return',
-    'fast-tree-decon',
-    'command/load-quickbar',
-    'command/save-quickbar'
+    'fast-tree-decon'
 }
 
 Roles.new_role('Supporter','Sup')
@@ -152,7 +150,8 @@ Roles.new_role('Supporter','Sup')
 :set_parent('Veteran')
 :allow{
     'command/jail',
-    'command/unjail'
+    'command/unjail',
+    'command/join-message'
 }
 
 Roles.new_role('Partner','Part')
@@ -187,7 +186,8 @@ Roles.new_role('Member','Mem')
     'gui/task-list/add',
     'gui/task-list/edit',
     'gui/warp-list/add',
-    'gui/warp-list/edit'
+    'gui/warp-list/edit',
+    'command/save-quickbar'
 }
 
 Roles.new_role('Regular','Reg')
@@ -220,8 +220,9 @@ local default = Roles.new_role('Guest','')
     'command/report',
     'command/ratio',
     'command/server-ups',
-    'command/data-preference',
-    'command/set-data-preference',
+    'command/save-data',
+    'command/preference',
+    'command/set-preference',
     'gui/player-list',
     'gui/rocket-info',
     'gui/science-info',

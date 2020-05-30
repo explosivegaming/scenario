@@ -42,6 +42,7 @@ end)
 ]]
 
 local Event = require 'utils.event' --- @dep utils.event
+local Async = require 'expcore.async' --- @dep expcore.async
 local Datastore = require 'expcore.datastore' --- @dep expcore.datastore
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse' --- @dep config.expcore.command_general_parse
@@ -58,7 +59,7 @@ DataSavingPreference:set_default('All')
 
 --- Sets your data saving preference
 -- @command set-data-preference
-Commands.new_command('set-data-preference', 'Allows you to set your data saving preference')
+Commands.new_command('set-preference', 'Allows you to set your data saving preference')
 :add_param('option', false, 'string-options', PreferenceEnum)
 :register(function(player, option)
     DataSavingPreference:set(player, option)
@@ -67,16 +68,45 @@ end)
 
 --- Gets your data saving preference
 -- @command data-preference
-Commands.new_command('data-preference', 'Shows you what your current data saving preference is')
+Commands.new_command('preference', 'Shows you what your current data saving preference is')
 :register(function(player)
     return {'expcore-data.get-preference', DataSavingPreference:get(player)}
+end)
+
+--- Gets your data and writes it to a file
+Commands.new_command('save-data', 'Writes all your player data to a file on your computer')
+:register(function(player)
+    player.print{'expcore-data.get-data'}
+    game.write_file('expgaming_player_data.json', game.table_to_json(PlayerData:get(player, {})), false, player.index)
+end)
+
+--- Async function called after 5 seconds with no player data loaded
+local check_data_loaded = Async.register(function(player)
+    local player_data = PlayerData:get(player)
+    if not player_data or not player_data.valid then
+        player.print{'expcore-data.data-failed'}
+        Datastore.ingest('request', 'PlayerData', player.name, '{"valid":false}')
+    end
+end)
+
+--- When player data loads tell the player if the load had failed previously
+PlayerData:on_load(function(player_name, player_data)
+    if not player_data or player_data.valid == false then return end
+    local existing_data = PlayerData:get(player_name)
+    if existing_data and existing_data.valid == false then
+        game.players[player_name].print{'expcore-data.data-restore'}
+    end
+    player_data.valid = true
 end)
 
 --- Remove data that the player doesnt want to have stored
 PlayerData:on_save(function(player_name, player_data)
     local dataPreference = DataSavingPreference:get(player_name)
     dataPreference = PreferenceEnum[dataPreference]
-    if dataPreference == PreferenceEnum.All then return player_data end
+    if dataPreference == PreferenceEnum.All then
+        player_data.valid = nil
+        return player_data
+    end
 
     local saved_player_data = { PlayerRequired = player_data.PlayerRequired, DataSavingPreference = PreferenceEnum[dataPreference] }
     if dataPreference <= PreferenceEnum.Settings then saved_player_data.PlayerSettings = player_data.PlayerSettings end
@@ -92,12 +122,18 @@ end)
 
 --- Load player data when they join
 Event.add(defines.events.on_player_joined_game, function(event)
-    PlayerData:request(game.players[event.player_index])
+    local player = game.players[event.player_index]
+    Async.wait(300, check_data_loaded, player)
+    PlayerData:request(player)
 end)
 
 --- Unload player data when they leave
 Event.add(defines.events.on_player_left_game, function(event)
-    PlayerData:unload(game.players[event.player_index])
+    local player = game.players[event.player_index]
+    local player_data = PlayerData:get(player)
+    if player_data.valid == true then
+        PlayerData:unload(player)
+    else PlayerData:raw_set(player) end
 end)
 
 ----- Module Return -----
