@@ -28,8 +28,20 @@ local config = require 'config.warnings' --- @dep config.warnings
 
 local valid_player = Game.get_player_from_any
 
+--- Stores the quickbar filters for a player
+local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
+local PlayerWarnings = PlayerData.Required:combine('Warnings')
+PlayerWarnings:set_metadata{
+    stringify = function(value)
+        if not value then return 'You have no warnings against you' end
+        local count = 0
+        for _ in pairs(value) do count = count + 1 end
+        return 'You have '..count..' warnings against you'
+    end
+}
+
 local Warnings = {
-    user_warnings={},
+    user_warnings=PlayerWarnings,
     user_script_warnings={},
     events = {
         --- When a warning is added to a player
@@ -52,7 +64,7 @@ local Warnings = {
         -- @tparam string reason the reason that the player was given a warning
         -- @tparam number warning_count the new number of warnings that the player has
         on_script_warning_added = script.generate_event_name(),
-        --- When a warning is remnoved from a player, by the script
+        --- When a warning is removed from a player, by the script
         -- @event on_script_warning_removed
         -- @tparam number player_index the index of the player who is having the warning removed
         -- @tparam number warning_count the new number of warnings that the player has
@@ -60,30 +72,24 @@ local Warnings = {
     }
 }
 
-local user_warnings = Warnings.user_warnings
 local user_script_warnings = Warnings.user_script_warnings
-Global.register({
-    user_warnings = user_warnings,
-    user_script_warnings = user_script_warnings
-}, function(tbl)
-    Warnings.user_warnings = tbl.user_warnings
-    Warnings.user_script_warnings = tbl.user_script_warnings
-    user_warnings = Warnings.user_warnings
-    user_script_warnings = Warnings.user_script_warnings
+Global.register(user_script_warnings, function(tbl)
+    Warnings.user_script_warnings = tbl
+    user_script_warnings = tbl
 end)
 
---- Gets an array of warnings that the player has, always returns a list even if emtpy
+--- Gets an array of warnings that the player has, always returns a list even if empty
 -- @tparam LuaPlayer player the player to get the warning for
 -- @treturn table an array of all the warnings on this player, contains tick, by_player_name and reason
 function Warnings.get_warnings(player)
-    return user_warnings[player.name] or {}
+    return PlayerWarnings:get(player.name, {})
 end
 
 --- Gets the number of warnings that a player has on them
 -- @tparam LuaPlayer player the player to count the warnings for
 -- @treturn number the number of warnings that the player has
 function Warnings.count_warnings(player)
-    local warnings = user_warnings[player.name] or {}
+    local warnings = PlayerWarnings:get(player.name, {})
     return #warnings
 end
 
@@ -99,19 +105,21 @@ function Warnings.add_warning(player, by_player_name, reason)
 
     reason = reason or 'Non given.'
 
-    local warnings = user_warnings[player.name]
-    if not warnings then
-        warnings = {}
-        user_warnings[player.name] = warnings
-    end
+    local warning_count
+    PlayerWarnings:update(player.name, function(_, warnings)
+        local warning = {
+            by_player_name = by_player_name,
+            reason = reason
+        }
 
-    table.insert(warnings, {
-        tick = game.tick,
-        by_player_name = by_player_name,
-        reason = reason
-    })
-
-    local warning_count = #warnings
+        if not warnings then
+            warning_count = 1
+            return {warning}
+        else
+            table.insert(warnings, warning)
+            warning_count = #warnings
+        end
+    end)
 
     script.raise_event(Warnings.events.on_warning_added, {
         name = Warnings.events.on_warning_added,
@@ -122,7 +130,7 @@ function Warnings.add_warning(player, by_player_name, reason)
         reason = reason
     })
 
-    local action = config.actions[#warnings]
+    local action = config.actions[warning_count]
     if action then
         local _type = type(action)
         if _type == 'function' then
@@ -156,7 +164,7 @@ local function warning_removed_event(player, warning_by_name, removed_by_name, w
     })
 end
 
---- Removes a warning from a player, always removes the earlyist warning, fifo
+--- Removes a warning from a player, always removes the earliest warning, fifo
 -- @tparam LuaPlayer player the player to remove a warning from
 -- @tparam string by_player_name the name of the player who is doing the action
 -- @treturn number the number of warnings that the player has
@@ -165,14 +173,17 @@ function Warnings.remove_warning(player, by_player_name)
     if not player then return end
     if not by_player_name then return end
 
-    local warnings = user_warnings[player.name]
-    if not warnings then return end
+    local warning, warning_count
+    PlayerWarnings:update(player.name, function(_, warnings)
+        if not warnings then return end
+        warning = table.remove(warnings, 1)
+        warning_count = #warnings
+    end)
 
-    local warning = table.remove(warnings, 1)
+    if not warning then return end
+    warning_removed_event(player, warning.by_player_name, by_player_name, warning_count)
 
-    warning_removed_event(player, warning.by_player_name, by_player_name, #warnings)
-
-    return #warnings
+    return warning_count
 end
 
 --- Removes all warnings from a player, will trigger remove event for each warning
@@ -184,7 +195,7 @@ function Warnings.clear_warnings(player, by_player_name)
     if not player then return end
     if not by_player_name then return end
 
-    local warnings = user_warnings[player.name]
+    local warnings = PlayerWarnings:get(player)
     if not warnings then return end
 
     local warning_count = #warnings
@@ -192,7 +203,7 @@ function Warnings.clear_warnings(player, by_player_name)
         warning_removed_event(player, warning.by_player_name, by_player_name, warning_count-n)
     end
 
-    user_warnings[player.name] = nil
+    PlayerWarnings:remove(player)
     return true
 end
 
@@ -249,7 +260,7 @@ function Warnings.add_script_warning(player, reason)
     return warning_count
 end
 
---- Script warning removed event tigger due to it being looped in clear script warnings
+--- Script warning removed event trigger due to it being looped in clear script warnings
 -- @tparam LuaPlayer player the player who is having a script warning removed
 -- @tparam number warning_count the number of warning that the player has
 local function script_warning_removed_event(player, warning_count)

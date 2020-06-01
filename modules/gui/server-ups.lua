@@ -8,6 +8,14 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Event = require 'utils.event' --- @dep utils.event
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 
+--- Stores the visible state of server ups
+local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
+local UsesServerUps = PlayerData.Settings:combine('UsesServerUps')
+UsesServerUps:set_default(false)
+UsesServerUps:set_metadata{
+    stringify = function(value) return value and 'Visible' or 'Hidden' end
+}
+
 --- Label to show the server ups
 -- @element server_ups
 local server_ups =
@@ -19,6 +27,14 @@ Gui.element{
     font = 'default-game'
 }
 
+--- Change the visible state when your data loads
+UsesServerUps:on_load(function(player_name, visible)
+    local player = game.players[player_name]
+    local label = player.gui.screen[server_ups.name]
+    if not global.ext or not global.ext.server_ups then visible = false end
+    label.visible = visible
+end)
+
 --- Toggles if the server ups is visbile
 -- @command server-ups
 Commands.new_command('server-ups', 'Toggle the server ups display')
@@ -29,6 +45,7 @@ Commands.new_command('server-ups', 'Toggle the server ups display')
         return Commands.error{'expcom-server-ups.no-ext'}
     end
     label.visible = not label.visible
+    UsesServerUps:set(player, label.visible)
 end)
 
 -- Set the location of the label

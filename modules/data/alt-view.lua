@@ -3,10 +3,13 @@
 
 local Event = require 'utils.event' ---@dep utils.event
 
---- Stores the join message that the player have
+--- Stores the visible state of alt mode
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 local UsesAlt = PlayerData.Settings:combine('UsesAlt')
 UsesAlt:set_default(false)
+UsesAlt:set_metadata{
+    stringify = function(value) return value and 'Visible' or 'Hidden' end
+}
 
 --- When your data loads apply alt view if you have it enabled
 UsesAlt:on_load(function(player_name, uses_alt)

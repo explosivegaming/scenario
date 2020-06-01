@@ -291,8 +291,8 @@ Gui.element(function(_, parent)
         local value = child:get(player_name)
         if value ~= nil or metadata.show_always then
             if metadata.stringify then value = metadata.stringify(value) end
-            Gui.centered_label(settings, 150, metadata.name or {'exp-required.'..name}, metadata.tooltip or {'exp-required.'..name..'-tooltip'})
-            Gui.centered_label(settings, 420, tostring(value), metadata.value_tooltip or {'exp-required.'..name..'-value-tooltip'})
+            Gui.centered_label(required, 150, metadata.name or {'exp-required.'..name}, metadata.tooltip or {'exp-required.'..name..'-tooltip'})
+            Gui.centered_label(required, 420, tostring(value), metadata.value_tooltip or {'exp-required.'..name..'-value-tooltip'})
         end
     end
 
@@ -302,11 +302,10 @@ Gui.element(function(_, parent)
         for name, child in pairs(PlayerData.Settings.children) do
             local metadata = child.metadata
             local value = child:get(player_name)
-            if value ~= nil or metadata.show_always then
-                if metadata.stringify then value = metadata.stringify(value) end
-                Gui.centered_label(settings, 150, metadata.name or {'exp-settings.'..name}, metadata.tooltip or {'exp-settings.'..name..'-tooltip'})
-                Gui.centered_label(settings, 420, tostring(value), metadata.value_tooltip or {'exp-settings.'..name..'-value-tooltip'})
-            end
+            if metadata.stringify then value = metadata.stringify(value) end
+            if value == nil then value = 'None set' end
+            Gui.centered_label(settings, 150, metadata.name or {'exp-settings.'..name}, metadata.tooltip or {'exp-settings.'..name..'-tooltip'})
+            Gui.centered_label(settings, 420, tostring(value), metadata.value_tooltip or {'exp-settings.'..name..'-value-tooltip'})
         end
     end
 
@@ -324,9 +323,7 @@ Gui.element(function(_, parent)
                 Gui.centered_label(statistics, 130, format_number(value or 0), metadata.value_tooltip or {'exp-statistics.'..name..'-tooltip'})
             end
         end
-        if count > 0 then
-            for i = 1, count do Gui.centered_label(statistics, 140) end
-        end
+        if count > 0 then for i = 1, count do Gui.centered_label(statistics, 140) end end
     end
 
     -- Add the misc area
