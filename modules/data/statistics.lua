@@ -8,6 +8,9 @@ local afk_required = 5*3600 -- 5 minutes
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 local AllPlayerData = PlayerData.All
 local Statistics = PlayerData.Statistics
+Statistics:set_metadata{
+    display_order = config.display_order
+}
 
 --- Update your statistics with any which happened before the data was valid
 Statistics:on_load(function(player_name, player_statistics)
@@ -85,7 +88,7 @@ if config.DamageDealt then
 end
 
 --- Add Kills if it is enabled
-if config.DamageDealt then
+if config.Kills then
     local stat = Statistics:combine('Kills')
     Event.add(defines.events.on_entity_died, function(event)
         local character = event.cause -- Check character is valid

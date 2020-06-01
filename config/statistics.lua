@@ -26,6 +26,21 @@ return {
         Deaths = e.on_player_died,
         JoinCount = e.on_player_joined_game,
         TilesRemoved = e.on_player_mined_tile,
-        CapsulesUsed = e.on_player_used_capsule
+        CapsulesUsed = e.on_player_used_capsule,
+        EntityRepaired= e.on_player_repaired_entity
+    },
+    display_order = { --- @setting display_order The order that the statistics should be shown in when in a gui or command
+        'MapsPlayed', 'JoinCount',
+        'Playtime', 'AfkTime',
+        'ChatMessages', 'CommandsUsed',
+        'RocketsLaunched', 'ResearchCompleted',
+        'MachinesBuilt', 'MachinesRemoved',
+        'TilesBuilt', 'TilesRemoved',
+        'TreesDestroyed', 'OreMined',
+        'ItemsCrafted', 'ItemsPickedUp',
+        'Kills', 'Deaths',
+        'DamageDealt', 'DistanceTraveled',
+        'CapsulesUsed', 'EntityRepaired',
+        'DeconstructionPlanerUsed', 'MapTagsMade',
     }
 }

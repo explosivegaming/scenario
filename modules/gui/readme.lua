@@ -11,6 +11,7 @@ local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.game
 local format_time = _C.format_time --- @dep expcore.common
+local format_number = require('util').format_number --- @dep util
 
 local tabs = {}
 local function Tab(caption, tooltip, element_define)
@@ -282,16 +283,16 @@ Gui.element(function(_, parent)
 
     -- Add the required area
     local required = title_table(scroll_pane, 250, {'readme.data-required'}, 2)
-    Gui.centered_label(required, 140, preference_meta.name, preference_meta.tooltip)
-    Gui.centered_label(required, 430, enum[preference], preference_meta.value_tooltip)
+    Gui.centered_label(required, 150, preference_meta.name, preference_meta.tooltip)
+    Gui.centered_label(required, 420, enum[preference], preference_meta.value_tooltip)
 
     for name, child in pairs(PlayerData.Required.children) do
         local metadata = child.metadata
         local value = child:get(player_name)
         if value ~= nil or metadata.show_always then
             if metadata.stringify then value = metadata.stringify(value) end
-            Gui.centered_label(required, 140, metadata.name or name, metadata.tooltip)
-            Gui.centered_label(required, 430, tostring(value), metadata.value_tooltip)
+            Gui.centered_label(settings, 150, metadata.name or {'exp-required.'..name}, metadata.tooltip or {'exp-required.'..name..'-tooltip'})
+            Gui.centered_label(settings, 420, tostring(value), metadata.value_tooltip or {'exp-required.'..name..'-value-tooltip'})
         end
     end
 
@@ -303,8 +304,8 @@ Gui.element(function(_, parent)
             local value = child:get(player_name)
             if value ~= nil or metadata.show_always then
                 if metadata.stringify then value = metadata.stringify(value) end
-                Gui.centered_label(settings, 140, metadata.name or name, metadata.tooltip)
-                Gui.centered_label(settings, 430, tostring(value), metadata.value_tooltip)
+                Gui.centered_label(settings, 150, metadata.name or {'exp-settings.'..name}, metadata.tooltip or {'exp-settings.'..name..'-tooltip'})
+                Gui.centered_label(settings, 420, tostring(value), metadata.value_tooltip or {'exp-settings.'..name..'-value-tooltip'})
             end
         end
     end
@@ -313,13 +314,14 @@ Gui.element(function(_, parent)
     if preference <= enum.Statistics then
         local count = 4
         local statistics = title_table(scroll_pane, 250, {'readme.data-statistics'}, 4)
-        for name, child in pairs(PlayerData.Statistics.children) do
+        for _, name in pairs(PlayerData.Statistics.metadata.display_order) do
+            local child = PlayerData.Statistics[name]
             local metadata = child.metadata
             local value = child:get(player_name)
             if value ~= nil or metadata.show_always then
                 count = count - 2
-                Gui.centered_label(statistics, 140, metadata.name or name, metadata.tooltip)
-                Gui.centered_label(statistics, 140, tostring(value), metadata.value_tooltip)
+                Gui.centered_label(statistics, 150, metadata.name or {'exp-statistics.'..name}, metadata.tooltip or {'exp-statistics.'..name..'-tooltip'})
+                Gui.centered_label(statistics, 130, format_number(value or 0), metadata.value_tooltip or {'exp-statistics.'..name..'-tooltip'})
             end
         end
         if count > 0 then
@@ -338,8 +340,8 @@ Gui.element(function(_, parent)
                 local value = child:get(player_name)
                 if value ~= nil or metadata.show_always then
                     if metadata.stringify then value = metadata.stringify(value) end
-                    Gui.centered_label(misc, 140, metadata.name or name, metadata.tooltip)
-                    Gui.centered_label(misc, 430, tostring(value), metadata.value_tooltip)
+                    Gui.centered_label(misc, 150, metadata.name or name, metadata.tooltip)
+                    Gui.centered_label(misc, 420, tostring(value), metadata.value_tooltip)
                 end
             end
         end
