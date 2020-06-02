@@ -13,6 +13,7 @@ local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 local UsesServerUps = PlayerData.Settings:combine('UsesServerUps')
 UsesServerUps:set_default(false)
 UsesServerUps:set_metadata{
+    permission = 'command/server-ups',
     stringify = function(value) return value and 'Visible' or 'Hidden' end
 }
 

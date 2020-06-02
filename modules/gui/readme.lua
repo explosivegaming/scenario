@@ -302,10 +302,12 @@ Gui.element(function(_, parent)
         for name, child in pairs(PlayerData.Settings.children) do
             local metadata = child.metadata
             local value = child:get(player_name)
-            if metadata.stringify then value = metadata.stringify(value) end
-            if value == nil then value = 'None set' end
-            Gui.centered_label(settings, 150, metadata.name or {'exp-settings.'..name}, metadata.tooltip or {'exp-settings.'..name..'-tooltip'})
-            Gui.centered_label(settings, 420, tostring(value), metadata.value_tooltip or {'exp-settings.'..name..'-value-tooltip'})
+            if not metadata.permission or Roles.player_allowed(player, metadata.permission) then
+                if metadata.stringify then value = metadata.stringify(value) end
+                if value == nil then value = 'None set' end
+                Gui.centered_label(settings, 150, metadata.name or {'exp-settings.'..name}, metadata.tooltip or {'exp-settings.'..name..'-tooltip'})
+                Gui.centered_label(settings, 420, tostring(value), metadata.value_tooltip or {'exp-settings.'..name..'-value-tooltip'})
+            end
         end
     end
 

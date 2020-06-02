@@ -14,6 +14,7 @@ local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 local PlayerBonus = PlayerData.Settings:combine('Bonus')
 PlayerBonus:set_default(0)
 PlayerBonus:set_metadata{
+    permission = 'command/bonus',
     stringify = function(value)
         if not value or value == 0 then return 'None set' end
         return (value*100)..'%'
