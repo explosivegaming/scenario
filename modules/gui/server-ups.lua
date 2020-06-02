@@ -37,7 +37,7 @@ end)
 
 --- Toggles if the server ups is visbile
 -- @command server-ups
-Commands.new_command('server-ups', 'Toggle the server ups display')
+Commands.new_command('server-ups', 'Toggle the server UPS display')
 :add_alias('sups', 'ups')
 :register(function(player)
     local label = player.gui.screen[server_ups.name]

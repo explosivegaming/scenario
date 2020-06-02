@@ -1,6 +1,7 @@
 
 local Event = require 'utils.event' ---@dep utils.event
 local config = require 'config.statistics' ---@dep config.statistics
+local format_time = _C.format_time
 local floor = math.floor
 local afk_required = 5*3600 -- 5 minutes
 
@@ -29,11 +30,20 @@ Statistics:on_load(function(player_name, player_statistics)
     return player_statistics
 end)
 
+--- Used to format time in minute format
+local function format_minutes(value)
+    return format_time(value*3600, {
+        long = true,
+        hours = true,
+        minutes = true
+    })
+end
+
 --- Add Playtime and AfkTime if it is enabled
 if config.Playtime or config.AfkTime then
     local playtime, afk_time
-    if config.Playtime then playtime = Statistics:combine('Playtime') end
-    if config.AfkTime then afk_time = Statistics:combine('AfkTime') end
+    if config.Playtime then playtime = Statistics:combine('Playtime') playtime:set_metadata{stringify=format_minutes} end
+    if config.AfkTime then afk_time = Statistics:combine('AfkTime') afk_time:set_metadata{stringify=format_minutes} end
     Event.on_nth_tick(3600, function()
         if game.tick == 0 then return end
         for _, player in pairs(game.connected_players) do
@@ -43,9 +53,10 @@ if config.Playtime or config.AfkTime then
     end)
 end
 
---- Add DistanceTraveled if it is enabled
-if config.DistanceTraveled then
-    local stat = Statistics:combine('DistanceTraveled')
+--- Add DistanceTravelled if it is enabled
+if config.DistanceTravelled then
+    local stat = Statistics:combine('DistanceTravelled')
+    stat:set_metadata{unit=' tiles'}
     Event.add(defines.events.on_player_changed_position, function(event)
         local player = game.players[event.player_index]
         if not player.valid or not player.connected or player.afk_time > afk_required then return end

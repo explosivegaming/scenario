@@ -33,10 +33,10 @@ local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 local PlayerWarnings = PlayerData.Required:combine('Warnings')
 PlayerWarnings:set_metadata{
     stringify = function(value)
-        if not value then return 'You have no warnings against you' end
+        if not value then return 'You have no warnings' end
         local count = 0
         for _ in pairs(value) do count = count + 1 end
-        return 'You have '..count..' warnings against you'
+        return 'You have '..count..' warnings'
     end
 }
 
@@ -262,7 +262,7 @@ end
 
 --- Script warning removed event trigger due to it being looped in clear script warnings
 -- @tparam LuaPlayer player the player who is having a script warning removed
--- @tparam number warning_count the number of warning that the player has
+-- @tparam number warning_count the number of warnings that the player has
 local function script_warning_removed_event(player, warning_count)
     script.raise_event(Warnings.events.on_script_warning_removed, {
         name = Warnings.events.on_script_warning_removed,

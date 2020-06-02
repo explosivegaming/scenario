@@ -284,7 +284,7 @@ Gui.element(function(_, parent)
     -- Add the required area
     local required = title_table(scroll_pane, 250, {'readme.data-required'}, 2)
     Gui.centered_label(required, 150, preference_meta.name, preference_meta.tooltip)
-    Gui.centered_label(required, 420, enum[preference], preference_meta.value_tooltip)
+    Gui.centered_label(required, 420, {'expcore-data.preference-'..enum[preference]}, preference_meta.value_tooltip)
 
     for name, child in pairs(PlayerData.Required.children) do
         local metadata = child.metadata
@@ -319,8 +319,10 @@ Gui.element(function(_, parent)
             local value = child:get(player_name)
             if value ~= nil or metadata.show_always then
                 count = count - 2
+                if metadata.stringify then value = metadata.stringify(value)
+                else value = format_number(value or 0) end
                 Gui.centered_label(statistics, 150, metadata.name or {'exp-statistics.'..name}, metadata.tooltip or {'exp-statistics.'..name..'-tooltip'})
-                Gui.centered_label(statistics, 130, format_number(value or 0), metadata.value_tooltip or {'exp-statistics.'..name..'-tooltip'})
+                Gui.centered_label(statistics, 130, {'readme.data-format', value, metadata.unit or ''}, metadata.value_tooltip or {'exp-statistics.'..name..'-tooltip'})
             end
         end
         if count > 0 then for i = 1, count do Gui.centered_label(statistics, 140) end end
