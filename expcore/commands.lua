@@ -748,8 +748,7 @@ function Commands.run_command(command_event)
     -- Extract quoted arguments
     local raw_input = command_event.parameter or ''
     local quote_params = {}
-    local input_string = (' '..raw_input):gsub(' "[^"]-"', function(match)
-        local word = match:sub(2)
+    local input_string = raw_input:gsub('"[^"]-"', function(word)
         local no_spaces = word:gsub('%s', '%%s')
         quote_params[no_spaces] = word:sub(2, -2)
         return ' '..no_spaces..' '
