@@ -103,7 +103,7 @@ function Warnings.add_warning(player, by_player_name, reason)
     if not player then return end
     if not by_player_name then return end
 
-    reason = reason or 'Non given.'
+    reason = reason or 'None given.'
 
     local warning_count
     PlayerWarnings:update(player.name, function(_, warnings)
