@@ -8,6 +8,13 @@ local config = require 'config.preset_player_colours' --- @dep config.preset_pla
 --- Stores the colour that the player wants
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 local PlayerColours = PlayerData.Settings:combine('Colour')
+PlayerColours:set_metadata{
+    stringify = function(value)
+        if not value then return 'None set' end
+        local c = value[1]
+        return string.format('Red: %d Green: %d Blue: %d', c[1], c[2], c[3])
+    end
+}
 
 --- Used to compact player colours to take less space
 local floor = math.floor

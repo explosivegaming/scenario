@@ -36,12 +36,14 @@ Commands.new_command('get-warnings', 'Gets the number of warnings a player has. 
         local warnings = Warnings.get_warnings(player)
         local script_warnings = Warnings.get_script_warnings(player)
         local player_name_color = format_chat_player_name(player)
-        Commands.print{'expcom-warnings.player', player_name_color, warnings, script_warnings, config.temp_warning_limit}
+        Commands.print{'expcom-warnings.player', player_name_color, #warnings, #script_warnings, config.temp_warning_limit}
+        for _, warning in ipairs(warnings) do
+            Commands.print{'expcom-warnings.player-detail', format_chat_player_name(warning.by_player_name), warning.reason}
+        end
     else
         local rtn = {}
-        local user_warnings = Warnings.user_warnings
         local user_script_warnings = Warnings.user_script_warnings
-        for player_name, warnings in pairs(user_warnings) do
+        for player_name, warnings in pairs(Warnings.user_warnings:get_all()) do
             rtn[player_name] = {#warnings, 0}
         end
         for player_name, warnings in pairs(user_script_warnings) do
@@ -50,7 +52,7 @@ Commands.new_command('get-warnings', 'Gets the number of warnings a player has. 
             end
             rtn[player_name][2] = #warnings
         end
-        Commands.print{'expcom-warnings.list-tilte'}
+        Commands.print{'expcom-warnings.list-title'}
         for player_name, warnings in pairs(rtn) do
             local player_name_color = format_chat_player_name(player_name)
             Commands.print{'expcom-warnings.list', player_name_color, warnings[1], warnings[2], config.temp_warning_limit}

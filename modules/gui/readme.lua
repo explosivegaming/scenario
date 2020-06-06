@@ -7,9 +7,11 @@
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Commands = require 'expcore.commands' --- @dep expcore.commands
+local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 local Event = require 'utils.event' --- @dep utils.event
 local Game = require 'utils.game' --- @dep utils.game
 local format_time = _C.format_time --- @dep expcore.common
+local format_number = require('util').format_number --- @dep util
 
 local tabs = {}
 local function Tab(caption, tooltip, element_define)
@@ -258,6 +260,97 @@ Gui.element(function(_, parent)
 
     return container
 end))
+
+--- Content area for the player data tab
+-- @element commands_content
+Tab({'readme.data-tab'}, {'readme.data-tooltip'},
+Gui.element(function(_, parent)
+    local container = parent.add{ type='flow', direction='vertical' }
+    local player = Gui.get_player_from_element(parent)
+    local player_name = player.name
+
+    local enum = PlayerData.PreferenceEnum
+    local preference = PlayerData.DataSavingPreference:get(player_name)
+    local preference_meta = PlayerData.DataSavingPreference.metadata
+    preference = enum[preference]
+
+    -- Add the title and description to the content
+    Gui.title_label(container, title_width, {'readme.data-tab'})
+    Gui.centered_label(container, frame_width, {'readme.data-general'})
+    Gui.bar(container)
+    container.add{ type='flow' }
+    local scroll_pane = title_table_scroll(container)
+
+    -- Add the required area
+    local required = title_table(scroll_pane, 250, {'readme.data-required'}, 2)
+    Gui.centered_label(required, 150, preference_meta.name, preference_meta.tooltip)
+    Gui.centered_label(required, 420, {'expcore-data.preference-'..enum[preference]}, preference_meta.value_tooltip)
+
+    for name, child in pairs(PlayerData.Required.children) do
+        local metadata = child.metadata
+        local value = child:get(player_name)
+        if value ~= nil or metadata.show_always then
+            if metadata.stringify then value = metadata.stringify(value) end
+            Gui.centered_label(required, 150, metadata.name or {'exp-required.'..name}, metadata.tooltip or {'exp-required.'..name..'-tooltip'})
+            Gui.centered_label(required, 420, tostring(value), metadata.value_tooltip or {'exp-required.'..name..'-value-tooltip'})
+        end
+    end
+
+    -- Add the settings area
+    if preference <= enum.Settings then
+        local settings = title_table(scroll_pane, 255, {'readme.data-settings'}, 2)
+        for name, child in pairs(PlayerData.Settings.children) do
+            local metadata = child.metadata
+            local value = child:get(player_name)
+            if not metadata.permission or Roles.player_allowed(player, metadata.permission) then
+                if metadata.stringify then value = metadata.stringify(value) end
+                if value == nil then value = 'None set' end
+                Gui.centered_label(settings, 150, metadata.name or {'exp-settings.'..name}, metadata.tooltip or {'exp-settings.'..name..'-tooltip'})
+                Gui.centered_label(settings, 420, tostring(value), metadata.value_tooltip or {'exp-settings.'..name..'-value-tooltip'})
+            end
+        end
+    end
+
+    -- Add the statistics area
+    if preference <= enum.Statistics then
+        local count = 4
+        local statistics = title_table(scroll_pane, 250, {'readme.data-statistics'}, 4)
+        for _, name in pairs(PlayerData.Statistics.metadata.display_order) do
+            local child = PlayerData.Statistics[name]
+            local metadata = child.metadata
+            local value = child:get(player_name)
+            if value ~= nil or metadata.show_always then
+                count = count - 2
+                if metadata.stringify then value = metadata.stringify(value)
+                else value = format_number(value or 0) end
+                Gui.centered_label(statistics, 150, metadata.name or {'exp-statistics.'..name}, metadata.tooltip or {'exp-statistics.'..name..'-tooltip'})
+                Gui.centered_label(statistics, 130, {'readme.data-format', value, metadata.unit or ''}, metadata.value_tooltip or {'exp-statistics.'..name..'-tooltip'})
+            end
+        end
+        if count > 0 then for i = 1, count do Gui.centered_label(statistics, 140) end end
+    end
+
+    -- Add the misc area
+    local skip = {DataSavingPreference=true, Settings=true, Statistics=true, Required=true}
+    local count = 0; for _ in pairs(PlayerData.All.children) do count = count + 1 end
+    if preference <= enum.All and count > 4 then
+        local misc = title_table(scroll_pane, 232, {'readme.data-misc'}, 2)
+        for name, child in pairs(PlayerData.All.children) do
+            if not skip[name] then
+                local metadata = child.metadata
+                local value = child:get(player_name)
+                if value ~= nil or metadata.show_always then
+                    if metadata.stringify then value = metadata.stringify(value) end
+                    Gui.centered_label(misc, 150, metadata.name or name, metadata.tooltip)
+                    Gui.centered_label(misc, 420, tostring(value), metadata.value_tooltip)
+                end
+            end
+        end
+    end
+
+    return container
+end))
+
 
 --- Main readme container for the center flow
 -- @element readme

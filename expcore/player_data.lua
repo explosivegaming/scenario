@@ -56,6 +56,11 @@ local DataSavingPreference = PlayerData:combine('DataSavingPreference')
 local PreferenceEnum = { 'All', 'Statistics', 'Settings', 'Required' }
 for k,v in ipairs(PreferenceEnum) do PreferenceEnum[v] = k end
 DataSavingPreference:set_default('All')
+DataSavingPreference:set_metadata{
+    name = {'expcore-data.preference'},
+    tooltip = {'expcore-data.preference-tooltip'},
+    value_tooltip ={'expcore-data.preference-value-tooltip'}
+}
 
 --- Sets your data saving preference
 -- @command set-data-preference

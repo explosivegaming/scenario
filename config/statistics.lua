@@ -5,7 +5,7 @@ local e = defines.events -- order as per lua api as it was easier just to go dow
 return {
     Playtime = true, --- @setting Playtime If playtime is tracked for a player, play time measured in minutes
     AfkTime = true, --- @setting AfkTime If afk time is tracked for a player, play time measured in minutes, afk is once a player does nothing for 5 minutes
-    DistanceTraveled = true, --- @setting DistanceTraveled If distance traveled is checked, only counts if not afk
+    DistanceTravelled = true, --- @setting DistanceTravelled If distance Travelled is checked, only counts if not afk
     MachinesRemoved = true, --- @setting MachinesRemoved If removed machines are tracked, includes marked for decon and player mined entity
     TreesDestroyed = true, --- @setting OreMined If ore mined is tracked for a player, includes marked for decon and player mined entity but only trees
     OreMined = true, --- @setting OreMined If ore mined is tracked for a player, includes player mined entity but only ore
@@ -22,10 +22,25 @@ return {
         TilesBuilt = e.on_player_built_tile,
         ItemsCrafted = e.on_player_crafted_item,
         MapsPlayed = e.on_player_created,
-        DeconstructionPlanerUsed = e.on_player_deconstructed_area,
+        DeconstructionPlannerUsed = e.on_player_deconstructed_area,
         Deaths = e.on_player_died,
         JoinCount = e.on_player_joined_game,
         TilesRemoved = e.on_player_mined_tile,
-        CapsulesUsed = e.on_player_used_capsule
+        CapsulesUsed = e.on_player_used_capsule,
+        EntityRepaired= e.on_player_repaired_entity
+    },
+    display_order = { --- @setting display_order The order that the statistics should be shown in when in a gui or command
+        'Playtime', 'AfkTime',
+        'MapsPlayed', 'JoinCount',
+        'ChatMessages', 'CommandsUsed',
+        'RocketsLaunched', 'ResearchCompleted',
+        'MachinesBuilt', 'MachinesRemoved',
+        'TilesBuilt', 'TilesRemoved',
+        'TreesDestroyed', 'OreMined',
+        'ItemsCrafted', 'ItemsPickedUp',
+        'Kills', 'Deaths',
+        'DamageDealt', 'DistanceTravelled',
+        'CapsulesUsed', 'EntityRepaired',
+        'DeconstructionPlannerUsed', 'MapTagsMade',
     }
 }

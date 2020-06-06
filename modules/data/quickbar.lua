@@ -9,6 +9,15 @@ local config = require 'config.preset_player_quickbar' --- @dep config.preset_pl
 --- Stores the quickbar filters for a player
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 local PlayerFilters = PlayerData.Settings:combine('QuickbarFilters')
+PlayerFilters:set_metadata{
+    permission = 'command/save-quickbar',
+    stringify = function(value)
+        if not value then return 'No filters set' end
+        local count = 0
+        for _ in pairs(value) do count = count + 1 end
+        return count..' filters set'
+    end
+}
 
 --- Loads your quickbar preset
 PlayerFilters:on_load(function(player_name, filters)

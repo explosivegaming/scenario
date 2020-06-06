@@ -8,6 +8,9 @@ require 'config.expcore.command_general_parse'
 --- Stores the join message that the player have
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 local CustomMessages = PlayerData.Settings:combine('JoinMessage')
+CustomMessages:set_metadata{
+    permission = 'command/join-message'
+}
 
 --- When a players data loads show their message
 CustomMessages:on_load(function(player_name, player_message)

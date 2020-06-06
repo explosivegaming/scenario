@@ -11,6 +11,9 @@ require 'config.expcore.command_role_parse'
 --- Stores the tag for a player
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 local PlayerTags = PlayerData.Settings:combine('Tag')
+PlayerTags:set_metadata{
+    permission = 'command/tag'
+}
 
 --- When your tag is updated then apply the changes
 PlayerTags:on_update(function(player_name, player_tag)
