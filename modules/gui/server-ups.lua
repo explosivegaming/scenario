@@ -7,6 +7,7 @@
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Event = require 'utils.event' --- @dep utils.event
 local Commands = require 'expcore.commands' --- @dep expcore.commands
+local External = require 'expcore.external' --- @dep expcore.external
 
 --- Stores the visible state of server ups
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
@@ -42,7 +43,8 @@ Commands.new_command('server-ups', 'Toggle the server UPS display')
 :add_alias('sups', 'ups')
 :register(function(player)
     local label = player.gui.screen[server_ups.name]
-    if not global.ext or not global.ext.server_ups then
+    if not External.valid() then
+        label.visible = false
         return Commands.error{'expcom-server-ups.no-ext'}
     end
     label.visible = not label.visible
@@ -69,8 +71,8 @@ end)
 
 -- Update the caption for all online players
 Event.on_nth_tick(60, function()
-    if global.ext and global.ext.server_ups then
-        local caption = 'SUPS = '..global.ext.server_ups
+    if External.valid() then
+        local caption = 'SUPS = '..External.get_server_ups()
         for _, player in pairs(game.connected_players) do
             player.gui.screen[server_ups.name].caption = caption
         end
