@@ -73,7 +73,7 @@ function External.get_servers_filtered(search)
     search = search:lower()
     for server_id, server in pairs(servers) do
         local str = concat{server.name, server.short_name, server.id}
-        if str:lower():match(search, 1, true) then found_servers[server_id] = server end
+        if str:lower():find(search, 1, true) then found_servers[server_id] = server end
     end
     return found_servers
 end
@@ -143,9 +143,8 @@ External.request_connection(player, 'eu-01', true)
 
 ]]
 function External.request_connection(player, server_id, self_requested)
-    assert(ext, 'No external data was found, use External.valid() to ensure external data exists.')
-    local servers = assert(ext.servers, 'No server list was found, please ensure that the external service is running')
-    local server = servers[server_id] or { address = server_id, name = 'Unknown Server', description = 'This server is not ran by us, please check the address of the server.' }
+    local server = { address = server_id, name = 'Unknown Server', description = 'This server is not ran by us, please check the address of the server.' }
+    if ext and ext.servers and ext.servers[server_id] then server = ext.servers[server_id] end
     local message = 'Please press the connect button below to join.'
     if not self_requested then message = 'You have been asked to switch to a different server.\n'..message end
     player.connect_to_server{

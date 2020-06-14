@@ -27,6 +27,7 @@ return {
     'modules.commands.warnings',
     'modules.commands.find',
     'modules.commands.home',
+    'modules.commands.connect',
 
     --- Addons
     'modules.addons.chat-popups',

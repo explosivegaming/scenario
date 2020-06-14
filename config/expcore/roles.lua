@@ -49,6 +49,7 @@ Roles.new_role('Administrator','Admin')
 :allow{
     'gui/warp-list/bypass-cooldown',
     'gui/warp-list/bypass-proximity',
+    'command/connect-all',
 }
 
 Roles.new_role('Moderator','Mod')
@@ -75,6 +76,7 @@ Roles.new_role('Moderator','Mod')
     'command/home-set',
     'command/home-get',
     'command/return',
+    'command/connect-player',
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
     'fast-tree-decon',
@@ -223,6 +225,7 @@ local default = Roles.new_role('Guest','')
     'command/save-data',
     'command/preference',
     'command/set-preference',
+    'command/connect',
     'gui/player-list',
     'gui/rocket-info',
     'gui/science-info',
