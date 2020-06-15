@@ -14,17 +14,10 @@ end
 
 ]]
 
-local Event = require 'utils.event' --- @dep utils.event
+local ext, var
 local concat = table.concat
 
 local External = {}
-
---- Makes local links to the data is global.ext if it exists
-local ext, var
-Event.on_load(function()
-    ext = global.ext
-    if ext then var = ext.var end
-end)
 
 --[[-- Checks that local links are valid, will try to add the links if invalid
 @treturn boolean If the external data is valid, if false you should not call any other methods from External
@@ -36,14 +29,14 @@ end
 
 ]]
 function External.valid()
-    if ext ~= nil and ext == global.ext then
-        return true
-    elseif global.ext ~= nil then
+    if global.ext == nil then return false end
+    if ext == global.ext and var == ext.var then
+        return var ~= nil
+    else
         ext = global.ext
         var = ext.var
         return var ~= nil
     end
-    return false
 end
 
 --[[-- Gets a table of all the servers, key is the server id, value is the server details
