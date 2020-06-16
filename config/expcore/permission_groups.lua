@@ -93,7 +93,9 @@ Permission_Groups.new_group('Guest')
     'use_artillery_remote',
     'launch_rocket',
     'cancel_research',
-    'activate_cut'
+    'activate_cut',
+    'flush_opened_entity_fluid',
+    'flush_opened_entity_specific_fluid'
 }
 
 Permission_Groups.new_group('Restricted')
