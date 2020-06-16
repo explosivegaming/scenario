@@ -620,12 +620,13 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing),function()
             -- Change the enabled state of the add warp button
             local frame = Gui.get_left_element(player,warp_list_container)
             local add_warp_element = frame.container.header.alignment[add_new_warp.name]
+            local old_closest_warp_name = add_warp_element.tooltip[2] or closest_warp.name
             local was_able_to_make_warp = add_warp_element.enabled
             local can_make_warp = closest_distance > mr2
             if can_make_warp and not was_able_to_make_warp then
                 add_warp_element.enabled = true
                 add_warp_element.tooltip = {'warp-list.add-tooltip'}
-            elseif not can_make_warp and was_able_to_make_warp then
+            elseif not can_make_warp and was_able_to_make_warp or old_closest_warp_name ~= closest_warp.name then
                 add_warp_element.enabled = false
                 add_warp_element.tooltip = {'warp-list.too-close',closest_warp.name}
             end
