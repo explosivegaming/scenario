@@ -161,13 +161,10 @@ end
 -- @tparam LuaPlayer player the player who is having the report removed from them
 -- @tparam string reported_by_name the player who had the report
 -- @tparam string removed_by_name the player who is clearing the report
-<<<<<<< HEAD
-local function report_removed_event(player, reported_by_name, removed_by_name)
+-- @tparam number batch the index of this event in a batch, always one when not a batch
+-- @tparam number batch_count the number of reports removed in this batch, always one when not a batch
+local function report_removed_event(player, reported_by_name, removed_by_name, batch, batch_count)
     script.raise_event(Reports.events.on_report_removed, {
-=======
-local function report_removed_event(player,reported_by_name,removed_by_name,batch,batch_count)
-    script.raise_event(Reports.events.on_report_removed,{
->>>>>>> 6.0.11
         name = Reports.events.on_report_removed,
         tick = game.tick,
         player_index = player.index,

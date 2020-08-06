@@ -155,6 +155,8 @@ end
 -- @tparam string warning_by_name the name of the player who made the warning
 -- @tparam string removed_by_name the name of the player who is doing the action
 -- @tparam number warning_count the number of warnings that the player how has
+-- @tparam number batch the index of this event in a batch, always one when not a batch
+-- @tparam number batch_count the number of reports removed in this batch, always one when not a batch
 local function warning_removed_event(player, warning_by_name, removed_by_name, warning_count, batch, batch_count)
     script.raise_event(Warnings.events.on_warning_removed, {
         name = Warnings.events.on_warning_removed,
