@@ -92,13 +92,15 @@ if config.player_reports then
         }
     end)
     Event.add(Reports.events.on_report_removed,function(event)
+        if event.batch ~= 1 then return end
         local player_name = get_player_name(event)
         emit_event{
-            title='Report Removed',
+            title='Reports Removed',
             description='A player has a report removed',
             color=Colors.green,
             ['Player:']='<inline>'..player_name,
-            ['By:']='<inline>'..event.removed_by_name
+            ['By:']='<inline>'..event.removed_by_name,
+            ['Amount:']='<inline>'..event.batch_count
         }
     end)
 end
@@ -118,13 +120,15 @@ if config.player_warnings then
         }
     end)
     Event.add(Warnings.events.on_warning_removed,function(event)
-        local player_name,by_player_name = get_player_name(event)
+        if event.batch ~= 1 then return end
+        local player_name = get_player_name(event)
         emit_event{
-            title='Warning Removed',
+            title='Warnings Removed',
             description='A player has a warning removed',
             color=Colors.green,
             ['Player:']='<inline>'..player_name,
-            ['By:']='<inline>'..by_player_name
+            ['By:']='<inline>'..event.removed_by_name,
+            ['Amount:']='<inline>'..event.batch_count
         }
     end)
 end

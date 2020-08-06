@@ -43,6 +43,8 @@ local Reports = {
         -- @tparam number player_index the player index of the player who has the report removed
         -- @tparam string reported_by_name the name of the player who made the removed report
         -- @tparam string removed_by_name the name of the player who removed the report
+        -- @tparam number batch_count the number of reports removed in this batch, always one when not a batch
+        -- @tparam number batch the index of this event in a batch, always one when not a batch
         on_report_removed = script.generate_event_name()
     }
 }
@@ -159,13 +161,15 @@ end
 -- @tparam LuaPlayer player the player who is having the report removed from them
 -- @tparam string reported_by_name the player who had the report
 -- @tparam string removed_by_name the player who is clearing the report
-local function report_removed_event(player,reported_by_name,removed_by_name)
+local function report_removed_event(player,reported_by_name,removed_by_name,batch,batch_count)
     script.raise_event(Reports.events.on_report_removed,{
         name = Reports.events.on_report_removed,
         tick = game.tick,
         player_index = player.index,
         reported_by_name = reported_by_name,
-        removed_by_name = removed_by_name
+        removed_by_name = removed_by_name,
+        batch_count = batch_count or 1,
+        batch = batch or 1
     })
 end
 
@@ -207,8 +211,10 @@ function Reports.remove_all(player,removed_by_name)
         return false
     end
 
+    local ctn, total = 0, #reports
     for reported_by_name,_ in pairs(reports) do
-        report_removed_event(player,reported_by_name,removed_by_name)
+        ctn = ctn + 1
+        report_removed_event(player, reported_by_name, removed_by_name, ctn, total)
     end
 
     user_reports[player.name] = nil

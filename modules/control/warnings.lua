@@ -45,6 +45,8 @@ local Warnings = {
         -- @tparam string warning_by_name the name of the player who gave the warning
         -- @tparam string removed_by_name the name of the player who is removing the warning
         -- @tparam number warning_count the new number of warnings that the player has
+        -- @tparam number batch_count the number of warnings removed in this batch, always one when not a batch
+        -- @tparam number batch the index of this event in a batch, always one when not a batch
         on_warning_removed = script.generate_event_name(),
         --- When a warning is added to a player, by the script
         -- @event on_script_warning_added
@@ -145,14 +147,16 @@ end
 -- @tparam string warning_by_name the name of the player who made the warning
 -- @tparam string removed_by_name the name of the player who is doing the action
 -- @tparam number warning_count the number of warnings that the player how has
-local function warning_removed_event(player,warning_by_name,removed_by_name,warning_count)
+local function warning_removed_event(player,warning_by_name,removed_by_name,warning_count,batch,batch_count)
     script.raise_event(Warnings.events.on_warning_removed,{
         name = Warnings.events.on_warning_removed,
         tick = game.tick,
         player_index = player.index,
         warning_count = warning_count,
         warning_by_name = warning_by_name,
-        removed_by_name = removed_by_name
+        removed_by_name = removed_by_name,
+        batch_count = batch_count or 1,
+        batch = batch or 1
     })
 end
 
@@ -189,7 +193,7 @@ function Warnings.clear_warnings(player,by_player_name)
 
     local warning_count = #warnings
     for n,warning in pairs(warnings) do
-        warning_removed_event(player,warning.by_player_name,by_player_name,warning_count-n)
+        warning_removed_event(player,warning.by_player_name,by_player_name,warning_count-n,n,warning_count)
     end
 
     user_warnings[player.name] = nil
