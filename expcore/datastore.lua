@@ -437,7 +437,7 @@ function Datastore:set_serializer(callback)
 end
 
 --[[-- Set a default value to be returned by get if no other default is given, using will mean get will never return nil, set using the default will set to nil to save space
-@tparam any default The value that will be deep copied by get if the value is nil and no other default is given
+@tparam any value The value that will be deep copied by get if the value is nil and no other default is given
 @tparam boolean allowSet When true if the default is passed as the value for set it will be set rather than setting nil
 
 @usage-- Set a default value to be returned by get
@@ -747,6 +747,7 @@ local function event_error(err) log('An error ocurred in a datastore event handl
 @tparam string event_name The name of the event to raise for this datastore
 @tparam string key The key that this event is being raised for
 @tparam[opt] any value The current value that this key has, might be a deep copy of the value
+@tparam[opt] any old_value The previous value that this key has, might be a deep copy of the value
 @tparam[opt] string source Where this call came from, used to do event recursion so can be parent or child
 @treturn any The value that is left after being passed through all the event handlers
 
