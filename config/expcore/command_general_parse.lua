@@ -38,13 +38,8 @@ end)
 
 Commands.add_parse('string-options',function(input, player, reject, options)
     if not input then return end -- nil check
-    input = input:lower()
-    for _, option in ipairs(options) do
-        if input == option:lower() then
-            return option
-        end
-    end
-    return reject{'expcore-commands.reject-string-options', table.concat(options, ', ')}
+    local option = _C.auto_complete(options, input)
+    return option or reject{'expcore-commands.reject-string-options', table.concat(options, ', ')}
 end)
 
 Commands.add_parse('string-max-length',function(input, player, reject, max_length)

@@ -4,12 +4,12 @@
     @alias readme
 ]]
 
+local Event = require 'utils.event' --- @dep utils.event
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
-local Event = require 'utils.event' --- @dep utils.event
-local Game = require 'utils.game' --- @dep utils.game
+local External = require 'expcore.external' --- @dep expcore.external
 local format_time = _C.format_time --- @dep expcore.common
 local format_number = require('util').format_number --- @dep util
 
@@ -18,9 +18,9 @@ local function Tab(caption, tooltip, element_define)
     tabs[#tabs+1] = {caption, tooltip, element_define}
 end
 
-local frame_width = 595 -- controls width of top descritions
+local frame_width = 595 -- controls width of top descriptions
 local title_width = 270 -- controls the centering of the titles
-local scroll_hieght = 275 -- controls the height of the scrolls
+local scroll_height = 275 -- controls the height of the scrolls
 
 --- Sub content area used within the content areas
 -- @element sub_content
@@ -70,15 +70,52 @@ Gui.element{
 }
 :style{
     padding = {1, 3},
-    maximal_height = scroll_hieght,
+    maximal_height = scroll_height,
     horizontally_stretchable = true,
 }
+
+--- Used to connect to servers in server list
+-- @element join_server
+local join_server =
+Gui.element(function(event_trigger, parent, server_id, wrong_version)
+    local status = wrong_version and 'Version' or External.get_server_status(server_id) or 'Offline'
+    local flow = parent.add{ name = server_id, type = 'flow' }
+    local button = flow.add{
+        name = event_trigger,
+        type = 'sprite-button',
+        sprite = 'utility/circuit_network_panel_white', --- network panel white, warning white, download white
+        hovered_sprite = 'utility/circuit_network_panel_black', --- network panel black, warning black, download black
+        tooltip = {'readme.servers-connect-'..status, wrong_version}
+    }
+
+    if status == 'Offline' then
+        button.enabled = false
+        button.sprite = 'utility/circuit_network_panel_black'
+    elseif status == 'Version' then
+        button.enabled = false
+        button.sprite = 'utility/shuffle'
+    elseif status == 'Password' then
+        button.sprite = 'utility/warning_white'
+        button.hovered_sprite = 'utility/warning'
+    elseif status == 'Modded' then
+        button.sprite = 'utility/downloading_white'
+        button.hovered_sprite = 'utility/downloading'
+    end
+
+    return button
+end)
+:style(Gui.sprite_style(20, -1))
+:on_click(function(player, element, _)
+    local server_id = element.parent.name
+    External.request_connection(player, server_id, true)
+end)
 
 --- Content area for the welcome tab
 -- @element welcome_content
 Tab({'readme.welcome-tab'}, {'readme.welcome-tooltip'},
 Gui.element(function(_, parent)
-    local server_details = global.server_details or { name='ExpGaming S0 - Local', description='Failed to load description: disconnected from sync api.', reset_time='Non Set', branch='Unknown'}
+    local server_details = { name='ExpGaming S0 - Local', welcome='Failed to load description: disconnected from external api.', reset_time='Non Set', branch='Unknown'}
+    if External.valid() then server_details = External.get_current_server() end
     local container = parent.add{ type='flow', direction='vertical' }
     local player = Gui.get_player_from_element(parent)
 
@@ -91,7 +128,7 @@ Gui.element(function(_, parent)
 
     -- Add the title and description to the top flow
     Gui.title_label(top_vertical_flow, 62, 'Welcome to '..server_details.name)
-    Gui.centered_label(top_vertical_flow, 380, server_details.description)
+    Gui.centered_label(top_vertical_flow, 380, server_details.welcome)
     Gui.bar(container)
 
     -- Get the names of the roles the player has
@@ -124,7 +161,7 @@ Gui.element(function(_, parent)
     container.add{ type='flow' }
 
     -- Add a table for the rules
-    local rules = Gui.scroll_table(container, scroll_hieght, 1)
+    local rules = Gui.scroll_table(container, scroll_height, 1)
     rules.style = 'bordered_table'
     rules.style.cell_padding = 4
 
@@ -150,7 +187,7 @@ Gui.element(function(_, parent)
     container.add{ type='flow' }
 
     -- Add a table for the commands
-    local commands = Gui.scroll_table(container, scroll_hieght, 2)
+    local commands = Gui.scroll_table(container, scroll_height, 2)
     commands.style = 'bordered_table'
     commands.style.cell_padding = 0
 
@@ -177,13 +214,23 @@ Gui.element(function(_, parent)
 
     -- Draw the scroll
     local scroll_pane = title_table_scroll(container)
-    scroll_pane.style.maximal_height = scroll_hieght + 20 -- the text is a bit shorter
+    scroll_pane.style.maximal_height = scroll_height + 20 -- the text is a bit shorter
 
     -- Add the factorio servers
-    local factorio_servers = title_table(scroll_pane, 225, {'readme.servers-factorio'}, 2)
-    for i = 1, 8 do
-        Gui.centered_label(factorio_servers, 110, {'readme.servers-'..i})
-        Gui.centered_label(factorio_servers, 460, {'readme.servers-d'..i})
+    if External.valid() then
+        local factorio_servers = title_table(scroll_pane, 225, {'readme.servers-factorio'}, 3)
+        local current_version = External.get_current_server().version
+        for server_id, server in pairs(External.get_servers()) do
+            Gui.centered_label(factorio_servers, 110, server.short_name)
+            Gui.centered_label(factorio_servers, 436, server.description)
+            join_server(factorio_servers, server_id, current_version ~= server.version and server.version)
+        end
+    else
+        local factorio_servers = title_table(scroll_pane, 225, {'readme.servers-factorio'}, 2)
+        for i = 1, 8 do
+            Gui.centered_label(factorio_servers, 110, {'readme.servers-'..i})
+            Gui.centered_label(factorio_servers, 460, {'readme.servers-d'..i})
+        end
     end
 
     -- Add the external links
@@ -418,7 +465,7 @@ end)
 
 --- When a player joins the game for the first time show this gui
 Event.add(defines.events.on_player_created, function(event)
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     local element = readme(player.gui.center)
     element.pane.selected_tab_index = 1
     player.opened = element
@@ -426,7 +473,7 @@ end)
 
 --- When a player joins clear center unless the player has something open
 Event.add(defines.events.on_player_joined_game, function(event)
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     if not player.opened then
         player.gui.center.clear()
     end
@@ -434,7 +481,7 @@ end)
 
 --- When a player respawns clear center unless the player has something open
 Event.add(defines.events.on_player_respawned, function(event)
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     if not player.opened then
         player.gui.center.clear()
     end

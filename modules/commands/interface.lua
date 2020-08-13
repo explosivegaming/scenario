@@ -5,25 +5,23 @@
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Global = require 'utils.global' --- @dep utils.global
-local Common = require 'expcore.common' --- @dep expcore.common
 
 -- modules that are loaded into the interface env to be accessed
 local interface_modules = {
-    ['Game']='utils.game',
-    ['_C']=Common,
-    ['Commands']=Commands,
-    ['output']=Common.player_return,
-    ['Group']='expcore.permission_groups',
-    ['Roles']='expcore.roles',
-    ['Gui']='expcore.gui',
-    ['Async']='expcore.async',
-    ['Datastore']='expcore.datastore'
+    ['Commands'] = Commands,
+    ['output'] = _C.player_return,
+    ['Group'] = 'expcore.permission_groups',
+    ['Roles'] = 'expcore.roles',
+    ['Gui'] = 'expcore.gui',
+    ['Async'] = 'expcore.async',
+    ['Datastore'] = 'expcore.datastore',
+    ['External'] = 'expcore.external'
 }
 
 -- loads all the modules given in the above table
 for key, value in pairs(interface_modules) do
     if type(value) == 'string' then
-        interface_modules[key] = Common.opt_require(value)
+        interface_modules[key] = _C.opt_require(value)
     end
 end
 
