@@ -2,7 +2,6 @@
 -- @addon Discord-Alerts
 
 local Event = require 'utils.event' --- @dep utils.event
-local Game = require 'utils.game' --- @dep utils.game
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 local write_json, format_time = _C.write_json, _C.format_time --- @dep expcore.common
 local config = require 'config.discord_alerts' --- @dep config.discord_alerts

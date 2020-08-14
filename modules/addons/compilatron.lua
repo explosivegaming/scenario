@@ -3,7 +3,6 @@
 
 local Event = require 'utils.event' --- @dep utils.event
 local Global = require 'utils.global' --- @dep utils.global
-local Game = require 'utils.game' --- @dep utils.game
 local Task = require 'utils.task' --- @dep utils.task
 local Token = require 'utils.token' --- @dep utils.token
 local config = require 'config.compilatron' --- @dep config.compilatron
