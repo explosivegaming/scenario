@@ -10,7 +10,7 @@ local send_text = Game.print_player_floating_text -- (player_index, text, color)
 
 Event.add(defines.events.on_console_chat, function(event)
     if not event.player_index or event.player_index < 1 then return end
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
 
     -- Some basic sanity checks
     if not player then return end

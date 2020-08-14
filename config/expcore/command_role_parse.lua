@@ -44,11 +44,11 @@ end)
 Commands.add_parse('player-role-online',function(input, player, reject)
     local input_player = Commands.parse('player-role',input, player, reject)
     if not input_player then return end -- nil check
-    return Commands.parse('player-online',input_player, player, reject)
+    return Commands.parse('player-online',input_player.name, player, reject)
 end)
 
 Commands.add_parse('player-role-alive',function(input, player, reject)
     local input_player = Commands.parse('player-role',input, player, reject)
     if not input_player then return end -- nil check
-    return Commands.parse('player-alive',input_player, player, reject)
+    return Commands.parse('player-alive',input_player.name, player, reject)
 end)

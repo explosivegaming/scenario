@@ -7,7 +7,6 @@
 
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
-local Game = require 'utils.game' --- @dep utils.game
 local Reports = require 'modules.control.reports' --- @dep modules.control.reports
 local Warnings = require 'modules.control.warnings' --- @dep modules.control.warnings
 local Jail = require 'modules.control.jail' --- @dep modules.control.jail
@@ -31,7 +30,7 @@ end
 -- gets the action player and a coloured name for the action to be used on
 local function get_action_player_name(player)
     local selected_player_name = SelectedPlayer:get(player)
-    local selected_player = Game.get_player_from_any(selected_player_name)
+    local selected_player = game.players[selected_player_name]
     local selected_player_color = format_chat_player_name(selected_player)
     return selected_player_name, selected_player_color
 end
@@ -64,7 +63,7 @@ end
 local goto_player = new_button('utility/export',{'player-list.goto-player'})
 :on_click(function(player)
     local selected_player_name = get_action_player_name(player)
-    local selected_player = Game.get_player_from_any(selected_player_name)
+    local selected_player = game.players[selected_player_name]
     if not player.character or not selected_player.character then
         player.print({'expcore-commands.reject-player-alive'},Colors.orange_red)
     else
@@ -77,7 +76,7 @@ end)
 local bring_player = new_button('utility/import',{'player-list.bring-player'})
 :on_click(function(player)
     local selected_player_name = get_action_player_name(player)
-    local selected_player = Game.get_player_from_any(selected_player_name)
+    local selected_player = game.players[selected_player_name]
     if not player.character or not selected_player.character then
         player.print({'expcore-commands.reject-player-alive'},Colors.orange_red)
     else
@@ -90,7 +89,7 @@ end)
 local kill_player = new_button('utility/too_far',{'player-list.kill-player'})
 :on_click(function(player)
     local selected_player_name = get_action_player_name(player)
-    local selected_player = Game.get_player_from_any(selected_player_name)
+    local selected_player = game.players[selected_player_name]
     if selected_player.character then
         selected_player.character.die()
     else

@@ -2,12 +2,11 @@
 -- @addon Advanced-Start
 
 local Event = require 'utils.event' --- @dep utils.event
-local Game = require 'utils.game' --- @dep utils.game
 local config = require 'config.advanced_start' --- @dep config.advanced_start
 local items = config.items
 
 Event.add(defines.events.on_player_created, function(event)
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     -- game init settings
     if event.player_index == 1 then
         player.force.friendly_fire = config.friendly_fire

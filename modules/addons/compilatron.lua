@@ -3,7 +3,6 @@
 
 local Event = require 'utils.event' --- @dep utils.event
 local Global = require 'utils.global' --- @dep utils.global
-local Game = require 'utils.game' --- @dep utils.game
 local Task = require 'utils.task' --- @dep utils.task
 local Token = require 'utils.token' --- @dep utils.token
 local config = require 'config.compilatron' --- @dep config.compilatron
@@ -95,7 +94,7 @@ end
 -- When the first player is created this will create all compilatrons that are resisted in the config
 Event.add(defines.events.on_player_created, function(event)
     if event.player_index ~= 1 then return end
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     for location in pairs(locations) do
         Public.spawn_compilatron(player.surface, location)
     end

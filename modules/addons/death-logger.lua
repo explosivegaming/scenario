@@ -2,7 +2,6 @@
 -- @addon Death-Logger
 
 local Event = require 'utils.event' --- @dep utils.event
-local Game = require 'utils.game' --- @dep utils.game
 local Global = require 'utils.global' --- @dep utils.global
 local config = require 'config.death_logger' --- @dep config.death_logger
 local format_time, move_items = _C.format_time, _C.move_items --- @dep expcore.common
@@ -17,7 +16,7 @@ end)
 
 --- Creates a new death marker and saves it to the given death
 local function create_map_tag(death)
-    local player = Game.get_player_from_any(death.player_name)
+    local player = game.players[death.player_name]
     local message = player.name..' died'
     if config.include_time_of_death then
         local time = format_time(death.time_of_death, {hours=true, minutes=true, string=true})
@@ -59,7 +58,7 @@ end
 
 -- when a player dies a new death is added to the records and a map marker is made
 Event.add(defines.events.on_player_died, function(event)
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     local corpse = player.surface.find_entity('character-corpse', player.position)
     if config.use_chests_as_bodies then
         local items = corpse.get_inventory(defines.inventory.character_corpse).get_contents()

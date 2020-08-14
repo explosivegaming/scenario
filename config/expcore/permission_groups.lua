@@ -5,7 +5,6 @@
 -- @config Permission-Groups
 
 --local Event = require 'utils.event' -- @dep utils.event
---local Game = require 'utils.game' -- @dep utils.game
 local Permission_Groups = require 'expcore.permission_groups' --- @dep expcore.permission_groups
 
 Permission_Groups.new_group('Admin')
@@ -120,17 +119,17 @@ local function assign_group(player)
 end
 
 Event.add(defines.events.on_player_joined_game,function(event)
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     assign_group(player)
 end)
 
 Event.add(defines.events.on_player_promoted,function(event)
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     assign_group(player)
 end)
 
 Event.add(defines.events.on_player_demoted,function(event)
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     assign_group(player)
 end)
 

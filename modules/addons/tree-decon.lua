@@ -2,7 +2,6 @@
 -- @addon Tree-Decon
 
 local Event = require 'utils.event' --- @dep utils.event
-local Game = require 'utils.game' --- @dep utils.game
 local Global = require 'utils.global' --- @dep utils.global
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 
@@ -19,7 +18,7 @@ Event.add(defines.events.on_marked_for_deconstruction, function(event)
     -- Check which type of decon a player is allowed
     local index = event.player_index
     if chache[index] == nil then
-        local player = Game.get_player_by_index(index)
+        local player = game.players[index]
         if Roles.player_allowed(player, 'fast-tree-decon') then chache[index] = 'fast'
         elseif Roles.player_allowed(player, 'standard-decon') then chache[index] = 'standard'
         else chache[index] = player.force end

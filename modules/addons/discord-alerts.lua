@@ -2,13 +2,12 @@
 -- @addon Discord-Alerts
 
 local Event = require 'utils.event' --- @dep utils.event
-local Game = require 'utils.game' --- @dep utils.game
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 local write_json, format_time = _C.write_json, _C.format_time --- @dep expcore.common
 local config = require 'config.discord_alerts' --- @dep config.discord_alerts
 
 local function get_player_name(event)
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     return player.name, event.by_player_name
 end
 
@@ -32,8 +31,8 @@ local function emit_event(args)
         color = to_hex(color)
     end
 
-    local tick = args.tick or 0
-    local tick_formated = format_time(tick, {hours = true, minutes = true, string = true, long = true})
+    local tick = args.tick or game.tick
+    local tick_formatted = format_time(tick, {days = true, hours = true, minutes = true, string = true, long = true})
 
     local players_online = 0
     local admins_online = 0
@@ -47,7 +46,7 @@ local function emit_event(args)
     local done = {title=true, color=true, description=true}
     local fields = {{
         name='Server Details',
-        value=string.format('Server name: ${serverName} Players: %d Admins: %d Time: %s', players_online, admins_online, tick_formated)
+        value=string.format('Server: ${serverName} Time: %s\nTotal: %d Online: %d Admins: %d', tick_formatted, #game.players, players_online, admins_online)
     }}
 
     for key, value in pairs(args) do
@@ -86,9 +85,9 @@ if config.player_reports then
             title='Report',
             description='A player was reported',
             color=Colors.yellow,
-            ['Player:']='<inline>'..player_name,
-            ['By:']='<inline>'..by_player_name,
-            ['Reason:']=event.reason
+            ['Player']='<inline>'..player_name,
+            ['By']='<inline>'..by_player_name,
+            ['Reason']=event.reason
         }
     end)
     Event.add(Reports.events.on_report_removed, function(event)
@@ -98,9 +97,9 @@ if config.player_reports then
             title='Reports Removed',
             description='A player has a report removed',
             color=Colors.green,
-            ['Player:']='<inline>'..player_name,
-            ['By:']='<inline>'..event.removed_by_name,
-            ['Amount:']='<inline>'..event.batch_count
+            ['Player']='<inline>'..player_name,
+            ['By']='<inline>'..event.removed_by_name,
+            ['Amount']='<inline>'..event.batch_count
         }
     end)
 end
@@ -114,9 +113,9 @@ if config.player_warnings then
             title='Warning',
             description='A player has been given a warning',
             color=Colors.yellow,
-            ['Player:']='<inline>'..player_name,
-            ['By:']='<inline>'..by_player_name,
-            ['Reason:']=event.reason
+            ['Player']='<inline>'..player_name,
+            ['By']='<inline>'..by_player_name,
+            ['Reason']=event.reason
         }
     end)
     Event.add(Warnings.events.on_warning_removed, function(event)
@@ -126,9 +125,9 @@ if config.player_warnings then
             title='Warnings Removed',
             description='A player has a warning removed',
             color=Colors.green,
-            ['Player:']='<inline>'..player_name,
-            ['By:']='<inline>'..event.removed_by_name,
-            ['Amount:']='<inline>'..event.batch_count
+            ['Player']='<inline>'..player_name,
+            ['By']='<inline>'..event.removed_by_name,
+            ['Amount']='<inline>'..event.batch_count
         }
     end)
 end
@@ -142,9 +141,9 @@ if config.player_jail then
             title='Jail',
             description='A player has been jailed',
             color=Colors.yellow,
-            ['Player:']='<inline>'..player_name,
-            ['By:']='<inline>'..by_player_name,
-            ['Reason:']=event.reason
+            ['Player']='<inline>'..player_name,
+            ['By']='<inline>'..by_player_name,
+            ['Reason']=event.reason
         }
     end)
     Event.add(Jail.events.on_player_unjailed, function(event)
@@ -153,8 +152,8 @@ if config.player_jail then
             title='Unjail',
             description='A player has been unjailed',
             color=Colors.green,
-            ['Player:']='<inline>'..player_name,
-            ['By:']='<inline>'..by_player_name
+            ['Player']='<inline>'..player_name,
+            ['By']='<inline>'..by_player_name
         }
     end)
 end
@@ -168,9 +167,9 @@ if config.player_temp_ban then
             title='Temp Ban',
             description='A player has been temp banned',
             color=Colors.red,
-            ['Player:']='<inline>'..player_name,
-            ['By:']='<inline>'..by_player_name,
-            ['Reason:']=event.reason
+            ['Player']='<inline>'..player_name,
+            ['By']='<inline>'..by_player_name,
+            ['Reason']=event.reason
         }
     end)
     Event.add(Jail.events.on_player_untemp_banned, function(event)
@@ -179,8 +178,8 @@ if config.player_temp_ban then
             title='Temp Ban Removed',
             description='A player has been untemp banned',
             color=Colors.green,
-            ['Player:']='<inline>'..player_name,
-            ['By:']='<inline>'..by_player_name
+            ['Player']='<inline>'..player_name,
+            ['By']='<inline>'..by_player_name
         }
     end)
 end
@@ -189,26 +188,26 @@ end
 if config.player_bans then
     Event.add(defines.events.on_player_banned, function(event)
         if event.by_player then
-            local by_player = Game.get_player_by_index(event.by_player)
+            local by_player = game.players[event.by_player]
             emit_event{
                 title='Banned',
                 description='A player has been banned',
                 color=Colors.red,
-                ['Player:']='<inline>'..event.player_name,
-                ['By:']='<inline>'..by_player.name,
-                ['Reason:']=event.reason
+                ['Player']='<inline>'..event.player_name,
+                ['By']='<inline>'..by_player.name,
+                ['Reason']=event.reason
             }
         end
     end)
     Event.add(defines.events.on_player_unbanned, function(event)
         if event.by_player then
-            local by_player = Game.get_player_by_index(event.by_player)
+            local by_player = game.players[event.by_player]
             emit_event{
                 title='Un-Banned',
                 description='A player has been un-banned',
                 color=Colors.green,
-                ['Player:']='<inline>'..event.player_name,
-                ['By:']='<inline>'..by_player.name
+                ['Player']='<inline>'..event.player_name,
+                ['By']='<inline>'..by_player.name
             }
         end
     end)
@@ -222,7 +221,7 @@ if config.player_mutes then
             title='Muted',
             description='A player has been muted',
             color=Colors.yellow,
-            ['Player:']='<inline>'..player_name
+            ['Player']='<inline>'..player_name
         }
     end)
     Event.add(defines.events.on_player_unmuted, function(event)
@@ -231,7 +230,7 @@ if config.player_mutes then
             title='Un-Muted',
             description='A player has been un-muted',
             color=Colors.green,
-            ['Player:']='<inline>'..player_name
+            ['Player']='<inline>'..player_name
         }
     end)
 end
@@ -241,14 +240,14 @@ if config.player_kicks then
     Event.add(defines.events.on_player_kicked, function(event)
         if event.by_player then
             local player_name = get_player_name(event)
-            local by_player = Game.get_player_by_index(event.by_player)
+            local by_player = game.players[event.by_player]
             emit_event{
                 title='Kick',
                 description='A player has been kicked',
                 color=Colors.orange,
-                ['Player:']='<inline>'..player_name,
-                ['By:']='<inline>'..by_player.name,
-                ['Reason:']=event.reason
+                ['Player']='<inline>'..player_name,
+                ['By']='<inline>'..by_player.name,
+                ['Reason']=event.reason
             }
         end
     end)
@@ -262,7 +261,7 @@ if config.player_promotes then
             title='Promote',
             description='A player has been promoted',
             color=Colors.green,
-            ['Player:']='<inline>'..player_name
+            ['Player']='<inline>'..player_name
         }
     end)
     Event.add(defines.events.on_player_demoted, function(event)
@@ -271,7 +270,7 @@ if config.player_promotes then
             title='Demote',
             description='A player has been demoted',
             color=Colors.yellow,
-            ['Player:']='<inline>'..player_name
+            ['Player']='<inline>'..player_name
         }
     end)
 end
@@ -285,8 +284,8 @@ Event.add(defines.events.on_console_command, function(event)
                 title=event.command:gsub('^%l', string.upper),
                 description='/'..event.command..' was used',
                 color=Colors.grey,
-                ['By:']='<inline>'..player_name,
-                ['Details:'] = event.parameters ~= '' and event.parameters or nil
+                ['By']='<inline>'..player_name,
+                ['Details'] = event.parameters ~= '' and event.parameters or nil
             }
         end
     end

@@ -78,7 +78,8 @@ Gui.element{
 -- @element join_server
 local join_server =
 Gui.element(function(event_trigger, parent, server_id, wrong_version)
-    local status = wrong_version and 'Version' or External.get_server_status(server_id) or 'Offline'
+    local status = External.get_server_status(server_id) or 'Offline'
+    if wrong_version then status = 'Version' end
     local flow = parent.add{ name = server_id, type = 'flow' }
     local button = flow.add{
         name = event_trigger,
@@ -88,7 +89,7 @@ Gui.element(function(event_trigger, parent, server_id, wrong_version)
         tooltip = {'readme.servers-connect-'..status, wrong_version}
     }
 
-    if status == 'Offline' then
+    if status == 'Offline' or status == 'Current' then
         button.enabled = false
         button.sprite = 'utility/circuit_network_panel_black'
     elseif status == 'Version' then
