@@ -31,8 +31,8 @@ local function emit_event(args)
         color = to_hex(color)
     end
 
-    local tick = args.tick or 0
-    local tick_formated = format_time(tick, {hours = true, minutes = true, string = true, long = true})
+    local tick = args.tick or game.tick
+    local tick_formatted = format_time(tick, {hours = true, minutes = true, string = true, long = true})
 
     local players_online = 0
     local admins_online = 0
@@ -46,7 +46,7 @@ local function emit_event(args)
     local done = {title=true, color=true, description=true}
     local fields = {{
         name='Server Details',
-        value=string.format('Server name: ${serverName} Players: %d Admins: %d Time: %s', players_online, admins_online, tick_formated)
+        value=string.format('Server name: ${serverName} Players: %d Admins: %d Time: %s', players_online, admins_online, tick_formatted)
     }}
 
     for key, value in pairs(args) do
