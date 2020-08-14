@@ -26,6 +26,11 @@ local function compact(colour)
     }
 end
 
+--- Returns a colour that is a bit lighter than the one given
+local function lighten(c)
+    return {r = 1 - (1 - c.r) * 0.5, g = 1 - (1 - c.g) * 0.5, b = 1 - (1 - c.b) * 0.5, a = 1}
+end
+
 --- When your data loads apply the players colour, or a random on if none is saved
 PlayerColours:on_load(function(player_name, player_colour)
     if not player_colour then
@@ -37,7 +42,7 @@ PlayerColours:on_load(function(player_name, player_colour)
             while config.disallow[colour_name] do
                 colour_name = table.get_random_dictionary_entry(Colours, true)
             end
-            player_colour = {Colours[colour_name], Colours[colour_name]}
+            player_colour = {Colours[colour_name], lighten(Colours[colour_name])}
         end
     end
 
