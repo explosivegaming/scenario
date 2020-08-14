@@ -1001,7 +1001,7 @@ Event.add(defines.events.on_player_joined_game, role_update)
 -- Every 60 seconds the auto promote check is preformed
 Event.on_nth_tick(3600, function()
     local promotes = {}
-    for _, player in ipairs(game.connected_players) do
+    for _, player in pairs(game.connected_players) do
         for _, role in ipairs(Roles.config.roles) do
             if role.auto_promote_condition then
                 local success, err = pcall(role.auto_promote_condition, player)
