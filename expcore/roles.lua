@@ -946,7 +946,7 @@ function Roles._prototype:get_players(online)
             if role_name == self.name then
                 local player = game.players[player_name]
                 -- Filter by online state if required
-                if online == nil or player.connected == online then
+                if player and (online == nil or player.connected == online) then
                     players[#players+1] = player
                 end
                 break
