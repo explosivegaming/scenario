@@ -120,17 +120,17 @@ local function assign_group(player)
 end
 
 Event.add(defines.events.on_player_joined_game,function(event)
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     assign_group(player)
 end)
 
 Event.add(defines.events.on_player_promoted,function(event)
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     assign_group(player)
 end)
 
 Event.add(defines.events.on_player_demoted,function(event)
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     assign_group(player)
 end)
 

@@ -8,7 +8,6 @@
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Datastore = require 'expcore.datastore' --- @dep expcore.datastore
-local Game = require 'utils.game' --- @dep utils.game
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.gui.player_list_actions' --- @dep config.gui.player_list_actions
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
@@ -115,7 +114,7 @@ Gui.element(function(event_trigger, parent, player_data)
 end)
 :on_click(function(player, element, event)
     local selected_player_name = element.caption
-    local selected_player = Game.get_player_from_any(selected_player_name)
+    local selected_player = game.players[selected_player_name]
     if event.button == defines.mouse_button_type.left then
         -- LMB will open the map to the selected player
         local position = selected_player.position
@@ -177,7 +176,7 @@ local function update_action_bar(element)
         element.visible = false
 
     else
-        local selected_player = Game.get_player_from_any(selected_player_name)
+        local selected_player = game.players[selected_player_name]
         if not selected_player.connected then
             -- If the player is offline then reest stores
             element.visible = false
@@ -357,7 +356,7 @@ end)
 
 --- When a player leaves only remove they entry
 Event.add(defines.events.on_player_left_game, function(event)
-    local remove_player = Game.get_player_by_index(event.player_index)
+    local remove_player = game.players[event.player_index]
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, player_list_container)
         local scroll_table = frame.container.scroll.table
@@ -390,7 +389,7 @@ Event.add(Roles.events.on_role_unassigned, redraw_player_list)
 
 --- When the action player is changed the action bar will update
 SelectedPlayer:on_update(function(player_name, selected_player)
-    local player = Game.get_player_from_any(player_name)
+    local player = game.players[player_name]
     local frame = Gui.get_left_element(player, player_list_container)
     local scroll_table = frame.container.scroll.table
     update_action_bar(frame.container.action_bar)
@@ -410,13 +409,13 @@ end)
 
 --- When the action name is changed the reason input will update
 SelectedAction:on_update(function(player_name, selected_action)
-    local player = Game.get_player_from_any(player_name)
+    local player = game.players[player_name]
     local frame = Gui.get_left_element(player, player_list_container)
     local element = frame.container.reason_bar
     if selected_action then
         -- if there is a new value then check the player is still online
         local selected_player_name = SelectedPlayer:get(player_name)
-        local selected_player = Game.get_player_from_any(selected_player_name)
+        local selected_player = game.players[selected_player_name]
         if selected_player.connected then
             element.visible = true
         else

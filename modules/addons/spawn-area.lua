@@ -134,7 +134,7 @@ end)
 
 Event.add(defines.events.on_player_created, function(event)
     if event.player_index ~= 1 then return end
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     local p = {x=0, y=0}
     local s = player.surface
     spawn_base(s, p)

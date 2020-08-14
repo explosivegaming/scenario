@@ -8,7 +8,7 @@ local write_json, format_time = _C.write_json, _C.format_time --- @dep expcore.c
 local config = require 'config.discord_alerts' --- @dep config.discord_alerts
 
 local function get_player_name(event)
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     return player.name, event.by_player_name
 end
 
@@ -189,7 +189,7 @@ end
 if config.player_bans then
     Event.add(defines.events.on_player_banned, function(event)
         if event.by_player then
-            local by_player = Game.get_player_by_index(event.by_player)
+            local by_player = game.players[event.by_player]
             emit_event{
                 title='Banned',
                 description='A player has been banned',
@@ -202,7 +202,7 @@ if config.player_bans then
     end)
     Event.add(defines.events.on_player_unbanned, function(event)
         if event.by_player then
-            local by_player = Game.get_player_by_index(event.by_player)
+            local by_player = game.players[event.by_player]
             emit_event{
                 title='Un-Banned',
                 description='A player has been un-banned',
@@ -241,7 +241,7 @@ if config.player_kicks then
     Event.add(defines.events.on_player_kicked, function(event)
         if event.by_player then
             local player_name = get_player_name(event)
-            local by_player = Game.get_player_by_index(event.by_player)
+            local by_player = game.players[event.by_player]
             emit_event{
                 title='Kick',
                 description='A player has been kicked',

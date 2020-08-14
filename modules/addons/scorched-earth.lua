@@ -2,7 +2,6 @@
 -- @addon Scorched-Earth
 
 local Event = require 'utils.event' --- @dep utils.event
-local Game = require 'utils.game' --- @dep utils.game
 local Global = require 'utils.global' --- @dep utils.global
 local print_grid_value, clear_flying_text = _C.print_grid_value, _C.clear_flying_text --- @dep expcore.common
 local config = require 'config.scorched_earth' --- @dep config.scorched_earth
@@ -94,7 +93,7 @@ end
 
 -- When the player changes position the tile will have a chance to downgrade, debug check is here
 Event.add(defines.events.on_player_changed_position, function(event)
-    local player = Game.get_player_by_index(event.player_index)
+    local player = game.players[event.player_index]
     local surface = player.surface
     local position = player.position
     local strength = get_tile_strength(surface, position)
@@ -133,7 +132,7 @@ end)
 
 -- Used as a way to access the global table
 return function(player_name, state)
-    local player = Game.get_player_from_any(player_name)
+    local player = game.players[player_name]
     clear_flying_text(player.surface)
     debug_players[player_name] = state
 end

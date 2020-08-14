@@ -9,7 +9,7 @@ local config = require 'config.chat_reply' --- @dep config.chat_reply
 Event.add(defines.events.on_console_chat, function(event)
     local player_index = event.player_index
     if not player_index or player_index < 1 then return end
-    local player = Game.get_player_by_index(player_index)
+    local player = game.players[player_index]
     local message = event.message:lower():gsub("%s+", "")
     local allowed = true
     if config.command_admin_only and not player.admin then allowed = false end

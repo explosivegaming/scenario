@@ -20,7 +20,6 @@ see ./expcore/commands.lua for more details
 ]]
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
-local Game = require 'utils.game' --- @dep utils.game
 
 -- luacheck:ignore 212/player
 Commands.add_parse('boolean',function(input, player)
@@ -94,7 +93,7 @@ end)
 
 Commands.add_parse('player',function(input, player, reject)
     if not input then return end -- nil check
-    local input_player = Game.get_player_from_any(input)
+    local input_player = game.players[input]
     if not input_player then
         return reject{'expcore-commands.reject-player',input}
     else
