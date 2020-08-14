@@ -101,16 +101,18 @@ end
 
 --[[-- Gets the status of the given server
 @tparam string server_id The internal server if for the server you want the status of
-@treturn string The status of the given server, one of: Online, Modded, Protected, Offline
+@tparam boolean raw When true Current will not be returned as status but rather the raw status for the server
+@treturn string The status of the given server, one of: Online, Modded, Protected, Current, Offline
 
 @usage-- Get the status of the given server
 local status = External.get_server_status('eu-01')
 
 ]]
-function External.get_server_status(server_id)
+function External.get_server_status(server_id, raw)
     assert(var, 'No external data was found, use External.valid() to ensure external data exists.')
     local servers = assert(var.status, 'No server status was found, please ensure that the external service is running')
-    return servers[server_id]
+    local current = assert(ext.current, 'No current id was found, please ensure that the external service is running')
+    return not raw and server_id == current and 'Current' or servers[server_id]
 end
 
 --[[-- Gets the ups of the current server
