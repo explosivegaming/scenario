@@ -89,7 +89,7 @@ if config.DamageDealt then
     local stat = Statistics:combine('DamageDealt')
     Event.add(defines.events.on_entity_damaged, function(event)
         local character = event.cause -- Check character is valid
-        if not character.valid or character.type ~= 'character' then return end
+        if not character or not character.valid or character.type ~= 'character' then return end
         local player = character.player -- Check player is valid
         if not player.valid or not player.connected then return end
         local entity = event.entity -- Check entity is valid
