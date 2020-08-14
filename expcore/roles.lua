@@ -153,12 +153,11 @@ local function emit_player_roles_updated(player, type, roles, by_player_name, sk
         event = Roles.events.on_role_unassigned
     end
     -- convert the roles to objects and get the names of the roles
-    local index, role_names, valid_roles = 0, {}, {}
+    local index, role_names = 0, {}
     for _, role in ipairs(roles) do
         role = Roles.get_role_from_any(role)
         if role then
             index = index + 1
-            valid_roles[index] = role
             role_names[index] = role.name
         end
     end
@@ -176,7 +175,7 @@ local function emit_player_roles_updated(player, type, roles, by_player_name, sk
         tick=game.tick,
         player_index=player.index,
         by_player_index=by_player_index,
-        roles=valid_roles
+        roles=role_names
     })
     write_json('log/roles.log', {
         player_name=player.name,
