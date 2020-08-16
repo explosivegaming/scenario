@@ -23,32 +23,27 @@ local function Angle(entity)
     end
     return 'W'
 end
-local custom_string = '%&%ren#med%&%'
 
-local function ends_with(str, ending)
-    return ending == "" or str:sub(-#ending) == ending
- end
+local custom_string = ' *'
+local custom_string_len = #custom_string
 
 local function station_name_changer(event)
     local entity = event.created_entity
     local name = entity.name
     if name ==  "entity-ghost" then
-        if name == "train-stop" then
-            local backername = entity.backer_name
-            if backername ~= '' then
-                entity.backer_name = backername..custom_string
-            end
-        end
-        return
-    end
-
-    if name == "train-stop" then --only do the event if its a train stop
+        if entity.ghost_name ~= "train-stop" then return end
         local backername = entity.backer_name
-        if ends_with(backername,custom_string) then
-            game.print(#backername);
-            entity.backer_name = backername:sub(1, #backername - #custom_string)
+        if backername ~= '' then
+            entity.backer_name = backername..custom_string
+        end
+
+    elseif name == "train-stop" then --only do the event if its a train stop
+        local backername = entity.backer_name
+        if backername:sub(-custom_string_len) == custom_string then
+            entity.backer_name = backername:sub(1, -custom_string_len)
             return
         end
+
         local boundingBox = entity.bounding_box
         -- expanded box for recourse search:
         local bounding2 = { {boundingBox.left_top.x -100 ,boundingBox.left_top.y -100}  , {boundingBox.right_bottom.x +100, boundingBox.right_bottom.y +100 } }
@@ -85,13 +80,7 @@ local function station_name_changer(event)
         end
     end
 end
-local function set_station_name(entity, _)
-    if entity.name == "entity-ghost" then
-        game.print('hi')
-    end
-end
 
 -- Add handler to robot and player build entities
-Event.add(defines.events.on_entity_cloned, set_station_name)
 Event.add(defines.events.on_built_entity, station_name_changer)
 Event.add(defines.events.on_robot_built_entity, station_name_changer)
