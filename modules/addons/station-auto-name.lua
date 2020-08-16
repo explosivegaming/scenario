@@ -23,7 +23,7 @@ local function Angle(entity)
     end
     return 'W'
 end
-local custum_string = '%&%ren#med%&%'
+local custom_string = '%&%ren#med%&%'
 
 local function ends_with(str, ending)
     return ending == "" or str:sub(-#ending) == ending
@@ -33,11 +33,10 @@ local function station_name_changer(event)
     local entity = event.created_entity
     local name = entity.name
     if name ==  "entity-ghost" then
-        name = entity.ghost_name
         if name == "train-stop" then
             local backername = entity.backer_name
             if backername ~= '' then
-                entity.backer_name = backername..custum_string
+                entity.backer_name = backername..custom_string
             end
         end
         return
@@ -45,9 +44,9 @@ local function station_name_changer(event)
 
     if name == "train-stop" then --only do the event if its a train stop
         local backername = entity.backer_name
-        if ends_with(backername,custum_string) then
+        if ends_with(backername,custom_string) then
             game.print(#backername);
-            entity.backer_name = backername:sub(1, #backername - #custum_string)
+            entity.backer_name = backername:sub(1, #backername - #custom_string)
             return
         end
         local boundingBox = entity.bounding_box
@@ -86,7 +85,13 @@ local function station_name_changer(event)
         end
     end
 end
+local function set_station_name(entity, _)
+    if entity.name == "entity-ghost" then
+        game.print('hi')
+    end
+end
 
 -- Add handler to robot and player build entities
+Event.add(defines.events.on_entity_cloned, set_station_name)
 Event.add(defines.events.on_built_entity, station_name_changer)
 Event.add(defines.events.on_robot_built_entity, station_name_changer)
