@@ -21,13 +21,29 @@ local function Angle(entity)
             return direction
         end
     end
+    return 'W'
 end
+
+local custom_string = ' *'
+local custom_string_len = #custom_string
 
 local function station_name_changer(event)
     local entity = event.created_entity
     local name = entity.name
+    if name ==  "entity-ghost" then
+        if entity.ghost_name ~= "train-stop" then return end
+        local backername = entity.backer_name
+        if backername ~= '' then
+            entity.backer_name = backername..custom_string
+        end
 
-    if name == "train-stop" then --only do the event if its a train stop
+    elseif name == "train-stop" then --only do the event if its a train stop
+        local backername = entity.backer_name
+        if backername:sub(-custom_string_len) == custom_string then
+            entity.backer_name = backername:sub(1, -custom_string_len)
+            return
+        end
+
         local boundingBox = entity.bounding_box
         -- expanded box for recourse search:
         local bounding2 = { {boundingBox.left_top.x -100 ,boundingBox.left_top.y -100}  , {boundingBox.right_bottom.x +100, boundingBox.right_bottom.y +100 } }
