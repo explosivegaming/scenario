@@ -21,6 +21,7 @@ local function Angle(entity)
             return direction
         end
     end
+    return 'W'
 end
 local custum_string = '%&%ren#med%&%'
 
