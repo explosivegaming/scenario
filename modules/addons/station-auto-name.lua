@@ -22,12 +22,33 @@ local function Angle(entity)
         end
     end
 end
+local custum_string = '%&%ren#med%&%'
+
+local function ends_with(str, ending)
+    return ending == "" or str:sub(-#ending) == ending
+ end
 
 local function station_name_changer(event)
     local entity = event.created_entity
     local name = entity.name
+    if name ==  "entity-ghost" then
+        name = entity.ghost_name
+        if name == "train-stop" then
+            local backername = entity.backer_name
+            if backername ~= '' then
+                entity.backer_name = backername..custum_string
+            end
+        end
+        return
+    end
 
     if name == "train-stop" then --only do the event if its a train stop
+        local backername = entity.backer_name
+        if ends_with(backername,custum_string) then
+            game.print(#backername);
+            entity.backer_name = backername:sub(1, #backername - #custum_string)
+            return
+        end
         local boundingBox = entity.bounding_box
         -- expanded box for recourse search:
         local bounding2 = { {boundingBox.left_top.x -100 ,boundingBox.left_top.y -100}  , {boundingBox.right_bottom.x +100, boundingBox.right_bottom.y +100 } }
