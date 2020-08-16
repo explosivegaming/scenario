@@ -58,6 +58,7 @@ All are welcome to make pull requests and issues for this scenario, if you are i
 
 | Scenario Version* | Version Name | Factorio Version** |
 |---|---|---|
+| [v6.1][s6.1] | External Data Overhaul | [v1.0.0][f1.0.0] |
 | [v6.0][s6.0] | Gui / 0.18 Overhaul | [v0.18.17][f0.18.17] |
 | [v5.10][s5.10] | Data Store Rewrite | [v0.17.71][f0.17.71] |
 | [v5.9][s5.9] | Control Modules and Documentation | [v0.17.63][f0.17.63] |
@@ -80,6 +81,7 @@ All are welcome to make pull requests and issues for this scenario, if you are i
 
 \*\* Factorio versions show the version they were made for, often the minimum requirement.
 
+[s6.1]: https://github.com/explosivegaming/scenario/releases/tag/6.1.0
 [s6.0]: https://github.com/explosivegaming/scenario/releases/tag/6.0.0
 [s5.10]: https://github.com/explosivegaming/scenario/releases/tag/5.10.0
 [s5.9]: https://github.com/explosivegaming/scenario/releases/tag/5.9.0
@@ -98,6 +100,7 @@ All are welcome to make pull requests and issues for this scenario, if you are i
 [s1.0]: https://github.com/explosivegaming/scenario/releases/tag/v1.0
 [s0.1]: https://github.com/explosivegaming/scenario/releases/tag/v0.1
 
+[f1.0.0]: https://wiki.factorio.com/Version_history/1.0.0#1.0.0
 [f0.18.17]: https://wiki.factorio.com/Version_history/0.18.0#0.18.17
 [f0.17.71]: https://wiki.factorio.com/Version_history/0.17.0#0.17.71
 [f0.17.63]: https://wiki.factorio.com/Version_history/0.17.0#0.17.63
