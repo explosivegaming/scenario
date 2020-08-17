@@ -73,7 +73,8 @@ function Gui.update_top_flow(player)
         end
 
         -- Set the visible state
-        element.visible = is_visible and authenticator(player) or false
+        local allowed = type(authenticator) == 'function' and authenticator(player) or authenticator
+        element.visible = is_visible and allowed or false
     end
 end
 
@@ -86,10 +87,10 @@ end
 Gui.toggle_top_flow(game.player)
 
 @usage-- Open your top flow
-Gui.toggle_top_flow(game.player,true)
+Gui.toggle_top_flow(game.player, true)
 
 ]]
-function Gui.toggle_top_flow(player,state)
+function Gui.toggle_top_flow(player, state)
     -- Get the top flow and hide button
     local top_flow = Gui.get_top_flow(player)
     if state == nil then state = not top_flow.visible end
@@ -129,7 +130,7 @@ Gui.left_toolbar_button('entity/inserter', 'Nothing to see here', function(playe
 end)
 
 ]]
-function Gui.toolbar_button(sprite,tooltip,authenticator)
+function Gui.toolbar_button(sprite, tooltip, authenticator)
     return Gui.element{
         type = 'sprite-button',
         sprite = sprite,

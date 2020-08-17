@@ -54,10 +54,10 @@ end
 @usage-- Adding 1000 values into the middle of the array
 local tbl = {}
 local values = {}
-for i = 1,1000 do tbl[i] = i values[i] = i end
-table.array_insert(tbl,500,values) -- around 0.4ms
+for i = 1, 1000 do tbl[i] = i values[i] = i end
+table.array_insert(tbl, 500, values) -- around 0.4ms
 ]]
-function table.array_insert(tbl,start_index,values)
+function table.array_insert(tbl, start_index, values)
     if not values then
         values = start_index
         start_index = nil
@@ -90,16 +90,16 @@ end
 @usage-- Merging two tables
 local tbl = {}
 local tbl2 = {}
-for i = 1,100 do tbl[i] = i tbl['_'..i] = i tbl2[i] = i tbl2['__'..i] = i end
-table.table_insert(tbl,50,tbl2)
+for i = 1, 100 do tbl[i] = i tbl['_'..i] = i tbl2[i] = i tbl2['__'..i] = i end
+table.table_insert(tbl, 50, tbl2)
 ]]
-function table.table_insert(tbl,start_index,tbl2)
+function table.table_insert(tbl, start_index, tbl2)
     if not tbl2 then
         tbl2 = start_index
         start_index = nil
     end
 
-    table.array_insert(tbl,start_index,tbl2)
+    table.array_insert(tbl, start_index, tbl2)
     for key, value in pairs(tbl2) do
         if not tonumber(key) then
             tbl[key] = value
@@ -152,14 +152,14 @@ function table.array_contains(t, e)
 end
 
 --- Extracts certain keys from a table
--- @usage local key_three, key_one = extract({key_one='foo',key_two='bar',key_three=true},'key_three','key_one')
+-- @usage local key_three, key_one = extract({key_one='foo', key_two='bar', key_three=true}, 'key_three', 'key_one')
 -- @tparam table tbl table the which contains the keys
 -- @tparam string ... the names of the keys you want extracted
 -- @return the keys in the order given
-function table.extract_keys(tbl,...)
+function table.extract_keys(tbl, ...)
     local values = {}
-    for _,key in pairs({...}) do
-        table.insert(values,tbl[key])
+    for _, key in pairs({...}) do
+        table.insert(values, tbl[key])
     end
     return unpack(values)
 end
@@ -302,7 +302,7 @@ function table.get_values(tbl, sorted, as_string)
         end
     end
     if sorted then
-        table.sort(valueset,sortFunc)
+        table.sort(valueset, sortFunc)
     end
     return valueset
 end
@@ -328,7 +328,7 @@ function table.get_keys(tbl, sorted, as_string)
         end
     end
     if sorted then
-        table.sort(keyset,sortFunc)
+        table.sort(keyset, sortFunc)
     end
     return keyset
 end
@@ -340,11 +340,11 @@ function table.alphanumsort(tbl)
     local o = table.get_keys(tbl)
     local function padnum(d) local dec, n = string.match(d, "(%.?)0*(.+)")
         return #dec > 0 and ("%.12f"):format(d) or ("%s%03d%s"):format(dec, #n, n) end
-    table.sort(o, function(a,b)
-        return tostring(a):gsub("%.?%d+",padnum)..("%3d"):format(#b)
-           < tostring(b):gsub("%.?%d+",padnum)..("%3d"):format(#a) end)
+    table.sort(o, function(a, b)
+        return tostring(a):gsub("%.?%d+", padnum)..("%3d"):format(#b)
+           < tostring(b):gsub("%.?%d+", padnum)..("%3d"):format(#a) end)
     local _tbl = {}
-    for _,k in pairs(o) do _tbl[k] = tbl[k] end
+    for _, k in pairs(o) do _tbl[k] = tbl[k] end
     return _tbl
 end
 
@@ -352,9 +352,9 @@ end
 -- @tparam table tbl the table to be sorted
 -- @treturn table the sorted table
 function table.keysort(tbl)
-    local o = table.get_keys(tbl,true)
+    local o = table.get_keys(tbl, true)
     local _tbl = {}
-    for _,k in pairs(o) do _tbl[k] = tbl[k] end
+    for _, k in pairs(o) do _tbl[k] = tbl[k] end
     return _tbl
 end
 
@@ -365,7 +365,7 @@ end
   t must be a list in ascending order for the return value to be valid.
 
   Usage example:
-  local t = {1,3,5,7,9}
+  local t = {1, 3,5, 7,9}
   local x = 5
   local index = table.binary_search(t, x)
   if index < 0 then

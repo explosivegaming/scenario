@@ -16,11 +16,11 @@ Async.register(function(player)
 end)
 
 -- This will allow us to bypass the error by running one tick later outside of any player scope
-Async(promote_player,game.player)
+Async(promote_player, game.player)
 
 -- Here we make an sync function that we want to have a delay, note the delay is not defined here
 local print_message =
-Async.register(function(player,message)
+Async.register(function(player, message)
     player.print(message)
 end)
 
@@ -71,7 +71,7 @@ Async.register = Token.register
 Async.run(set_admin, player, true)
 
 ]]
-function Async.run(token,...)
+function Async.run(token, ...)
     Task.queue_task(internal_run, {
         token = token,
         params = {...}
@@ -87,15 +87,15 @@ end
 Async.wait(300, print_to_player, 'Hello, World!')
 
 ]]
-function Async.wait(ticks,token,...)
+function Async.wait(ticks, token, ...)
     Task.set_timeout_in_ticks(ticks, internal_run, {
         token = token,
         params = {...}
     })
 end
 
-return setmetatable(Async,{
-    __call = function(self,...)
+return setmetatable(Async, {
+    __call = function(self, ...)
         self.run(...)
     end
 })

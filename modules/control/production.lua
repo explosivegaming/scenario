@@ -14,21 +14,21 @@
 
     -- The get production function is used to get production, consumion and net
     -- it may be used for any item and with any precision level, use total for total
-    Production.get_production(game.forces.player,'iron-plate',defines.flow_precision_index.one_minute)
+    Production.get_production(game.forces.player, 'iron-plate', defines.flow_precision_index.one_minute)
 
     -- The fluctuations works by compearing recent production with the average over time
     -- again any precision may be used, apart from one_thousand_hours as there would be no valid average
-    Production.get_fluctuations(game.forces.player,'iron-plate',defines.flow_precision_index.one_minute)
+    Production.get_fluctuations(game.forces.player, 'iron-plate', defines.flow_precision_index.one_minute)
 
     -- ETA is calculated based on what function you use but all share a similar method
     -- for production eta it will take current production average given by the precision
     -- and work out how many ticks it will require to make the required amount (1000 by default)
-    Production.get_production_eta(game.forces.player,'iron-plate',defines.flow_precision_index.one_minute,250000)
+    Production.get_production_eta(game.forces.player, 'iron-plate', defines.flow_precision_index.one_minute, 250000)
 
     -- Both get_color and format_number are helper functions to help format production stats
-    -- get_color will return green,orange,red,or grey based on the active_value
-    -- the passive_value is used when active_value is 0 and can only return orange,red,or grey
-    Production.get_color(clamp,active_value,passive_value)
+    -- get_color will return green, orange, red, or grey based on the active_value
+    -- the passive_value is used when active_value is 0 and can only return orange, red, or grey
+    Production.get_color(clamp, active_value, passive_value)
 
 ]]
 
@@ -47,13 +47,13 @@ local Production = {}
 -- @treturn[1] defines.flow_precision_index the next precision value
 -- @treturn[1] number the multiplicive difference between the values
 function Production.precision_up(precision)
-    if precision == precision_index.one_second then return precision_index.one_minute,60
-    elseif precision == precision_index.one_minute then return precision_index.ten_minutes,10
-    elseif precision == precision_index.ten_minutes then return precision_index.one_hour,6
-    elseif precision == precision_index.one_hour then return precision_index.ten_hours,10
-    elseif precision == precision_index.ten_hours then return precision_index.fifty_hours,5
-    elseif precision == precision_index.fifty_hours then return precision_index.two_hundred_fifty_hours,5
-    elseif precision == precision_index.two_hundred_fifty_hours then return precision_index.one_thousand_hours,4
+    if precision == precision_index.one_second then return precision_index.one_minute, 60
+    elseif precision == precision_index.one_minute then return precision_index.ten_minutes, 10
+    elseif precision == precision_index.ten_minutes then return precision_index.one_hour, 6
+    elseif precision == precision_index.one_hour then return precision_index.ten_hours, 10
+    elseif precision == precision_index.ten_hours then return precision_index.fifty_hours, 5
+    elseif precision == precision_index.fifty_hours then return precision_index.two_hundred_fifty_hours, 5
+    elseif precision == precision_index.two_hundred_fifty_hours then return precision_index.one_thousand_hours, 4
     end
 end
 
@@ -62,13 +62,13 @@ end
 -- @treturn[1] defines.flow_precision_index the next precision value
 -- @treturn[1] number the multiplicive difference between the values
 function Production.precision_down(precision)
-    if precision == precision_index.one_minute then return precision_index.one_second,60
-    elseif precision == precision_index.ten_minutes then return precision_index.one_minute,10
-    elseif precision == precision_index.one_hour then return precision_index.ten_minutes,6
-    elseif precision == precision_index.ten_hours then return precision_index.one_hour,10
-    elseif precision == precision_index.fifty_hours then return precision_index.ten_hours,5
-    elseif precision == precision_index.two_hundred_fifty_hours then return precision_index.fifty_hours,5
-    elseif precision == precision_index.one_thousand_hours then return precision_index.two_hundred_fifty_hours,4
+    if precision == precision_index.one_minute then return precision_index.one_second, 60
+    elseif precision == precision_index.ten_minutes then return precision_index.one_minute, 10
+    elseif precision == precision_index.one_hour then return precision_index.ten_minutes, 6
+    elseif precision == precision_index.ten_hours then return precision_index.one_hour, 10
+    elseif precision == precision_index.fifty_hours then return precision_index.ten_hours, 5
+    elseif precision == precision_index.two_hundred_fifty_hours then return precision_index.fifty_hours, 5
+    elseif precision == precision_index.one_thousand_hours then return precision_index.two_hundred_fifty_hours, 4
     end
 end
 
@@ -95,7 +95,7 @@ end
 -- @tparam LuaForce force the force to get the data for
 -- @tparam string item_name the name of the item that you want the data about
 -- @treturn table contains total made, used and net
-function Production.get_production_total(force,item_name)
+function Production.get_production_total(force, item_name)
     local stats = force.item_production_statistics
     local made = stats.get_input_count(item_name) or 0
     local used = stats.get_output_count(item_name) or 0
@@ -113,10 +113,10 @@ end
 -- @tparam string item_name the name of the item that you want the data about
 -- @tparam defines.flow_precision_index precision the precision that you want the data given to
 -- @treturn table contains made, used and net
-function Production.get_production(force,item_name,precision)
+function Production.get_production(force, item_name, precision)
     local stats = force.item_production_statistics.get_flow_count
-    local made = stats{name=item_name,input=true,precision_index=precision} or 0
-    local used = stats{name=item_name,input=false,precision_index=precision} or 0
+    local made = stats{name=item_name, input=true, precision_index=precision} or 0
+    local used = stats{name=item_name, input=false, precision_index=precision} or 0
 
     return {
         made=made,
@@ -131,10 +131,10 @@ end
 -- @tparam string item_name the name of the item that you want the data about
 -- @tparam defines.flow_precision_index precision the precision that you want the data given to
 -- @treturn table contains made, used and net
-function Production.get_fluctuations(force,item_name,precision)
+function Production.get_fluctuations(force, item_name, precision)
     local percision_up = Production.precision_up(precision)
-    local current = Production.get_production(force,item_name,precision)
-    local previous = Production.get_production(force,item_name,percision_up)
+    local current = Production.get_production(force, item_name, precision)
+    local previous = Production.get_production(force, item_name, percision_up)
 
     return {
         made=(current.made/previous.made)-1,
@@ -150,10 +150,10 @@ end
 -- @tparam defines.flow_precision_index precision the precision that you want the data given to
 -- @tparam[opt=1000] number required the number of items that are required to be made
 -- @treturn number the number of ticks required to produce this ammount of items
-function Production.get_production_eta(force,item_name,precision,required)
+function Production.get_production_eta(force, item_name, precision, required)
     required = required or 1000
     local ticks = Production.precision_ticks(precision)
-    local production = Production.get_production(force,item_name,precision)
+    local production = Production.get_production(force, item_name, precision)
     return production.made == 0 and -1 or ticks*required/production.made
 end
 
@@ -163,10 +163,10 @@ end
 -- @tparam defines.flow_precision_index precision the precision that you want the data given to
 -- @tparam[opt=1000] number required the number of items that are required to be consumed
 -- @treturn number the number of ticks required to consume this ammount of items
-function Production.get_consumsion_eta(force,item_name,precision,required)
+function Production.get_consumsion_eta(force, item_name, precision, required)
     required = required or 1000
     local ticks = Production.precision_ticks(precision)
-    local production = Production.get_production(force,item_name,precision)
+    local production = Production.get_production(force, item_name, precision)
     return production.used == 0 and -1 or ticks*required/production.used
 end
 
@@ -176,10 +176,10 @@ end
 -- @tparam defines.flow_precision_index precision the precision that you want the data given to
 -- @tparam[opt=1000] number required the number of items that are required to be made but not used
 -- @treturn number the number of ticks required to produce, but not use, this ammount of items
-function Production.get_net_eta(force,item_name,precision,required)
+function Production.get_net_eta(force, item_name, precision, required)
     required = required or 1000
     local ticks = Production.precision_ticks(precision)
-    local production = Production.get_production(force,item_name,precision)
+    local production = Production.get_production(force, item_name, precision)
     return production.net == 0 and -1 or ticks*required/production.net
 end
 
@@ -213,19 +213,19 @@ end
 -- @treturn[1] string the sign for the number
 -- @treturn[1] string the surfix for any unit used
 function Production.format_number(value)
-    local rtn = format_number(math.round(value,1),true)
+    local rtn = format_number(math.round(value, 1), true)
     local surfix = rtn:sub(-1)
 
     if value > 0 then
         rtn = '+'..rtn
-    elseif value == 0 and rtn:sub(1,1) == '-' then
+    elseif value == 0 and rtn:sub(1, 1) == '-' then
         rtn = rtn:sub(2)
     end
 
     if not tonumber(surfix) then
-        return surfix,rtn:sub(1,-2)
+        return surfix, rtn:sub(1, -2)
     else
-        return '',rtn
+        return '', rtn
     end
 
 end

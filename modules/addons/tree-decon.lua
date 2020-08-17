@@ -2,7 +2,6 @@
 -- @addon Tree-Decon
 
 local Event = require 'utils.event' --- @dep utils.event
-local Game = require 'utils.game' --- @dep utils.game
 local Global = require 'utils.global' --- @dep utils.global
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 
@@ -18,8 +17,9 @@ end)
 Event.add(defines.events.on_marked_for_deconstruction, function(event)
     -- Check which type of decon a player is allowed
     local index = event.player_index
+    if not index then return end
     if chache[index] == nil then
-        local player = Game.get_player_by_index(index)
+        local player = game.players[index]
         if Roles.player_allowed(player, 'fast-tree-decon') then chache[index] = 'fast'
         elseif Roles.player_allowed(player, 'standard-decon') then chache[index] = 'standard'
         else chache[index] = player.force end
@@ -57,7 +57,7 @@ Event.add(defines.events.on_tick, function()
     local max_remove = math.floor(head/100)+1
     local remove_count = math.random(0, max_remove)
     while remove_count > 0 and head > 0 do
-        local remove_index = math.random(1,head)
+        local remove_index = math.random(1, head)
         local entity = tree_queue[remove_index]
         tree_queue[remove_index] = tree_queue[head]
         head = head - 1
@@ -71,7 +71,7 @@ end)
 
 -- Clear the chache
 Event.on_nth_tick(300, function()
-    for key,_ in pairs(chache) do
+    for key, _ in pairs(chache) do
         chache[key] = nil
     end
 end)

@@ -10,7 +10,7 @@ if use_silo_script then
 end
 
 local global = {}
-Global.register(global,function(tbl)
+Global.register(global, function(tbl)
     global = tbl
 end)
 
@@ -35,7 +35,7 @@ local respawn_items = function()
 end
 
 if use_silo_script then
-  for k,v in pairs(silo_script.get_events()) do
+  for k, v in pairs(silo_script.get_events()) do
       Event.add(k, v)
   end
 end

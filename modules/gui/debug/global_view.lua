@@ -8,7 +8,7 @@ local concat = table.concat
 
 local Public = {}
 
-local ignore = {tokens = true, data_store = true}
+local ignore = {tokens = true, data_store = true, datastores = true}
 
 local header_name = Gui.uid_name()
 local left_panel_name = Gui.uid_name()

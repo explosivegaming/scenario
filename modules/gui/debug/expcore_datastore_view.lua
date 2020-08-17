@@ -1,10 +1,9 @@
 local Gui = require 'utils.gui' --- @dep utils.gui
-local Store = require 'expcore.store' --- @dep utils.global
+local Datastore = require 'expcore.datastore' --- @dep expcore.datastore
 local Color = require 'utils.color_presets' --- @dep utils.color_presets
 local Model = require 'modules.gui.debug.model' --- @dep modules.gui.debug.model
 
 local dump = Model.dump
-local dump_text = Model.dump_text
 local concat = table.concat
 
 local Public = {}
@@ -15,7 +14,7 @@ local right_panel_name = Gui.uid_name()
 local input_text_box_name = Gui.uid_name()
 local refresh_name = Gui.uid_name()
 
-Public.name = 'Store'
+Public.name = 'Datastore'
 
 function Public.show(container)
     local main_flow = container.add {type = 'flow', direction = 'horizontal'}
@@ -24,9 +23,9 @@ function Public.show(container)
     local left_panel_style = left_panel.style
     left_panel_style.width = 300
 
-    for store_id, file_path in pairs(Store.file_paths) do
-        local header = left_panel.add({type = 'flow'}).add {type = 'label', name = header_name, caption = store_id..' - '..file_path}
-        Gui.set_data(header, store_id)
+    for name in pairs(table.keysort(Datastore.debug())) do
+        local header = left_panel.add({type = 'flow'}).add {type = 'label', name = header_name, caption = name}
+        Gui.set_data(header, name)
     end
 
     local right_flow = main_flow.add {type = 'flow', direction = 'vertical'}
@@ -70,7 +69,7 @@ Gui.on_click(
     header_name,
     function(event)
         local element = event.element
-        local store_id = Gui.get_data(element)
+        local tableName = Gui.get_data(element)
 
         local left_panel = element.parent.parent
         local data = Gui.get_data(left_panel)
@@ -85,22 +84,25 @@ Gui.on_click(
         element.style.font_color = Color.orange
         data.selected_header = element
 
-        input_text_box.text = concat {'global.data_store[', store_id, ']'}
+        input_text_box.text = tableName
         input_text_box.style.font_color = Color.black
 
-        local content = dump(Store.get(store_id)) or 'nil'
-        right_panel.text = content
+        local content = Datastore.debug(tableName)
+        local content_string = {}
+        for key, value in pairs(content) do
+            content_string[#content_string+1] = key:gsub('^%l', string.upper)..' = '..dump(value)
+        end
+        right_panel.text = concat(content_string, '\n')
     end
 )
 
-local function update_dump(text_input, data, player)
-    local suc, ouput = dump_text(text_input.text, player)
-    if not suc then
-        text_input.style.font_color = Color.red
-    else
-        text_input.style.font_color = Color.black
-        data.right_panel.text = ouput
+local function update_dump(text_input, data)
+    local content = Datastore.debug(text_input.text)
+    local content_string = {}
+    for key, value in pairs(content) do
+        content_string[#content_string+1] = key:gsub('^%l', string.upper)..' = '..dump(value)
     end
+    data.right_panel.text = concat(content_string, '\n')
 end
 
 Gui.on_text_changed(
@@ -109,7 +111,7 @@ Gui.on_text_changed(
         local element = event.element
         local data = Gui.get_data(element)
 
-        update_dump(element, data, event.player)
+        update_dump(element, data)
     end
 )
 
@@ -121,7 +123,7 @@ Gui.on_click(
 
         local input_text_box = data.input_text_box
 
-        update_dump(input_text_box, data, event.player)
+        update_dump(input_text_box, data)
     end
 )
 

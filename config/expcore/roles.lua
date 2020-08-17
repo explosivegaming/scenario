@@ -49,6 +49,7 @@ Roles.new_role('Administrator','Admin')
 :allow{
     'gui/warp-list/bypass-cooldown',
     'gui/warp-list/bypass-proximity',
+    'command/connect-all',
 }
 
 Roles.new_role('Moderator','Mod')
@@ -75,6 +76,7 @@ Roles.new_role('Moderator','Mod')
     'command/home-set',
     'command/home-get',
     'command/return',
+    'command/connect-player',
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
     'fast-tree-decon',
@@ -140,7 +142,7 @@ Roles.new_role('Sponsor','Spon')
     'command/home-set',
     'command/home-get',
     'command/return',
-    'fast-tree-decon',
+    'fast-tree-decon'
 }
 
 Roles.new_role('Supporter','Sup')
@@ -150,7 +152,8 @@ Roles.new_role('Supporter','Sup')
 :set_parent('Veteran')
 :allow{
     'command/jail',
-    'command/unjail'
+    'command/unjail',
+    'command/join-message'
 }
 
 Roles.new_role('Partner','Part')
@@ -185,7 +188,8 @@ Roles.new_role('Member','Mem')
     'gui/task-list/add',
     'gui/task-list/edit',
     'gui/warp-list/add',
-    'gui/warp-list/edit'
+    'gui/warp-list/edit',
+    'command/save-quickbar'
 }
 
 Roles.new_role('Regular','Reg')
@@ -218,6 +222,10 @@ local default = Roles.new_role('Guest','')
     'command/report',
     'command/ratio',
     'command/server-ups',
+    'command/save-data',
+    'command/preference',
+    'command/set-preference',
+    'command/connect',
     'gui/player-list',
     'gui/rocket-info',
     'gui/science-info',

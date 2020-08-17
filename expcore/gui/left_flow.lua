@@ -55,11 +55,11 @@ Gui.left_toolbar_button('entity/inserter', 'Nothing to see here', example_flow_w
 end)
 
 ]]
-function Gui.left_toolbar_button(sprite,tooltip,element_define,authenticator)
-    local button = Gui.toolbar_button(sprite,tooltip,authenticator)
+function Gui.left_toolbar_button(sprite, tooltip, element_define, authenticator)
+    local button = Gui.toolbar_button(sprite, tooltip, authenticator)
 
     -- Add on_click handler to handle click events comming from the player
-    button:on_click(function(player,_,_)
+    button:on_click(function(player, _,_)
         local top_flow = Gui.get_top_flow(player)
         local element = top_flow[button.name]
         local visibility_state  = Gui.toggle_left_element(player, element_define)
@@ -169,7 +169,7 @@ function Gui.hide_left_flow(player)
 
     -- Set the visible state of all elements in the flow
     hide_button.visible = false
-    for name,_ in pairs(Gui.left_elements) do
+    for name, _ in pairs(Gui.left_elements) do
         left_flow[name].visible = false
 
         -- Check if the the element has a toobar button attached
@@ -202,7 +202,7 @@ end
 local frame = Gui.get_left_element(game.player, example_flow_with_button)
 
 ]]
-function Gui.get_left_element(player,element_define)
+function Gui.get_left_element(player, element_define)
     local left_flow = Gui.get_left_flow(player)
     return left_flow[element_define.name]
 end
@@ -220,7 +220,7 @@ Gui.toggle_top_flow(game.player, example_flow_with_button)
 Gui.toggle_top_flow(game.player, example_flow_with_button, true)
 
 ]]
-function Gui.toggle_left_element(player,element_define,state)
+function Gui.toggle_left_element(player, element_define, state)
     local left_flow = Gui.get_left_flow(player)
     local top_flow = Gui.get_top_flow(player)
 

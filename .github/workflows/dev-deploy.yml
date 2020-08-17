@@ -1,0 +1,39 @@
+name: Dev Deploy
+
+on:
+  push:
+    branches:
+      - dev
+    paths-ignore:
+      - 'docs/**'
+      - '.luacheckrc'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install Lua
+        uses: leafo/gh-actions-lua@v5
+
+      - name: Install LuaRocks
+        uses: leafo/gh-actions-luarocks@v2
+
+      - name: Install LDoc
+        run: luarocks install ldoc 1.4.4-1
+
+      - name: Generate Documents
+        working-directory: docs
+        run: ldoc -i .
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v4
+        with:
+          message: "Automatic Doc Update"
+          add: "./docs/** .luacheckrc"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

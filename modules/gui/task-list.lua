@@ -18,7 +18,7 @@ local Styles = {
 }
 
 --- If a player is allowed to use the edit buttons
-local function check_player_permissions(player,task)
+local function check_player_permissions(player, task)
     if task then
         -- When a task is given check if the player can edit it
         local allow_edit_task = config.allow_edit_task
@@ -34,7 +34,7 @@ local function check_player_permissions(player,task)
         elseif allow_edit_task == 'admin' then
             return player.admin
         elseif allow_edit_task == 'expcore.roles' then
-            return Roles.player_allowed(player,config.expcore_roles_allow_edit_task)
+            return Roles.player_allowed(player, config.expcore_roles_allow_edit_task)
         end
 
         -- Return false as all other condidtions have not been met
@@ -49,7 +49,7 @@ local function check_player_permissions(player,task)
         elseif allow_add_task == 'admin' then
             return player.admin
         elseif allow_add_task == 'expcore.roles' then
-            return Roles.player_allowed(player,config.expcore_roles_allow_add_task)
+            return Roles.player_allowed(player, config.expcore_roles_allow_add_task)
         end
 
         -- Return false as all other condidtions have not been met
@@ -67,8 +67,8 @@ Gui.element{
     style = 'tool_button'
 }
 :style(Styles.sprite20)
-:on_click(function(player,_,_)
-    Tasks.add_task(player.force.name,nil,player.name)
+:on_click(function(player, _,_)
+    Tasks.add_task(player.force.name, nil, player.name)
 end)
 
 --- Button displayed next to tasks which the user is can edit, used to start editing a task
@@ -81,9 +81,9 @@ Gui.element{
     style = 'tool_button'
 }
 :style(Styles.sprite20)
-:on_click(function(player,element,_)
+:on_click(function(player, element, _)
     local task_id = element.parent.name:sub(6)
-    Tasks.set_editing(task_id,player.name,true)
+    Tasks.set_editing(task_id, player.name, true)
 end)
 
 --- Button displayed next to tasks which the user is can edit, used to delete a task from the list
@@ -96,7 +96,7 @@ Gui.element{
     style = 'tool_button'
 }
 :style(Styles.sprite20)
-:on_click(function(_,element,_)
+:on_click(function(_, element, _)
     local task_id = element.parent.name:sub(6)
     Tasks.remove_task(task_id)
 end)
@@ -104,7 +104,7 @@ end)
 --- Set of three elements which make up each row of the task table
 -- @element add_task_base
 local add_task_base =
-Gui.element(function(_,parent,task_id)
+Gui.element(function(_, parent, task_id)
     -- Add the task number label
     local task_number = parent.add{
         name = 'count-'..task_id,
@@ -118,7 +118,7 @@ Gui.element(function(_,parent,task_id)
     task_flow.style.padding = 0
 
     -- Add the two edit buttons outside the task flow
-    local edit_flow = Gui.alignment(parent,'edit-'..task_id)
+    local edit_flow = Gui.alignment(parent, 'edit-'..task_id)
     edit_task(edit_flow)
     discard_task(edit_flow)
 
@@ -127,7 +127,7 @@ Gui.element(function(_,parent,task_id)
 end)
 
 -- Removes the three elements that are added as part of the task base
-local function remove_task_base(parent,task_id)
+local function remove_task_base(parent, task_id)
     Gui.destroy_if_valid(parent['count-'..task_id])
     Gui.destroy_if_valid(parent['edit-'..task_id])
     Gui.destroy_if_valid(parent[task_id])
@@ -144,11 +144,11 @@ Gui.element{
     style = 'shortcut_bar_button_green'
 }
 :style(Styles.sprite22)
-:on_click(function(player,element,_)
+:on_click(function(player, element, _)
     local task_id = element.parent.name
     local new_message = element.parent[task_editing.name].text
-    Tasks.set_editing(task_id,player.name)
-    Tasks.update_task(task_id,new_message,player.name)
+    Tasks.set_editing(task_id, player.name)
+    Tasks.update_task(task_id, new_message, player.name)
 end)
 
 --- Button displayed next to tasks which the user is currently editing, used to discard changes
@@ -161,15 +161,15 @@ Gui.element{
     style = 'shortcut_bar_button_red'
 }
 :style(Styles.sprite22)
-:on_click(function(player,element,_)
+:on_click(function(player, element, _)
     local task_id = element.parent.name
-    Tasks.set_editing(task_id,player.name)
+    Tasks.set_editing(task_id, player.name)
 end)
 
 --- Editing state for a task, contrins a text field and the two edit buttons
 -- @element task_editing
 task_editing =
-Gui.element(function(event_trigger,parent,task)
+Gui.element(function(event_trigger, parent, task)
     local message = task.message
 
     -- Draw the element
@@ -192,17 +192,17 @@ end)
     maximal_width = 110,
     height = 20
 }
-:on_confirmed(function(player,element,_)
+:on_confirmed(function(player, element, _)
     local task_id = element.parent.name
     local new_message = element.text
-    Tasks.set_editing(task_id,player.name)
-    Tasks.update_task(task_id,new_message,player.name)
+    Tasks.set_editing(task_id, player.name)
+    Tasks.update_task(task_id, new_message, player.name)
 end)
 
 --- Default state for a task, contains only a label with the task message
 -- @element task_label
 local task_label =
-Gui.element(function(_,parent,task)
+Gui.element(function(_, parent, task)
     local message = task.message
     local last_edit_name = task.last_edit_name
     local last_edit_time = task.last_edit_time
@@ -220,7 +220,7 @@ end)
 }
 
 --- Updates a task for a player
-local function update_task(player,task_table,task_id)
+local function update_task(player, task_table, task_id)
     local task = Tasks.get_task(task_id)
     local task_ids = Tasks.get_force_task_ids(player.force.name)
     local task_number = table.get_index(task_ids, task_id)
@@ -228,19 +228,19 @@ local function update_task(player,task_table,task_id)
     -- Task no longer exists so should be removed from the list
     if not task then
         task_table.parent.no_tasks.visible = #task_ids == 0
-        remove_task_base(task_table,task_id)
+        remove_task_base(task_table, task_id)
         return
     end
 
     -- Get the task flow for this task
-    local task_flow = task_table[task_id] or add_task_base(task_table,task_id)
+    local task_flow = task_table[task_id] or add_task_base(task_table, task_id)
     task_table.parent.no_tasks.visible = false
     task_table['count-'..task_id].caption = task_number..')'
 
     -- Update the edit flow
     local edit_flow = task_table['edit-'..task_id]
-    local player_allowed_edit = check_player_permissions(player,task)
-    local players_editing = table.get_keys(task.curently_editing)
+    local player_allowed_edit = check_player_permissions(player, task)
+    local players_editing = table.get_keys(task.currently_editing)
     local edit_task_element = edit_flow[edit_task.name]
     local discard_task_element = edit_flow[discard_task.name]
 
@@ -248,16 +248,16 @@ local function update_task(player,task_table,task_id)
     discard_task_element.visible = player_allowed_edit
     if #players_editing > 0 then
         edit_task_element.hovered_sprite = 'utility/warning_icon'
-        edit_task_element.tooltip = {'task-list.edit-tooltip',table.concat(players_editing,', ')}
+        edit_task_element.tooltip = {'task-list.edit-tooltip', table.concat(players_editing, ', ')}
     else
         edit_task_element.hovered_sprite = edit_task_element.sprite
         edit_task_element.tooltip = {'task-list.edit-tooltip-none'}
     end
 
     -- Check if the player is was editing and/or currently editing
-    local task_entry = task_flow[task_editing.name] or task_label(task_flow,task)
+    local task_entry = task_flow[task_editing.name] or task_label(task_flow, task)
     local player_was_editing = task_entry.type == 'textfield'
-    local player_is_editing = task.curently_editing[player.name]
+    local player_is_editing = task.currently_editing[player.name]
 
     -- Update the task flow
     if not player_was_editing and not player_is_editing then
@@ -272,24 +272,24 @@ local function update_task(player,task_table,task_id)
         -- Player was editing but is no longer, remove text field and add label
         edit_task_element.enabled = true
         task_flow.clear()
-        task_label(task_flow,task)
+        task_label(task_flow, task)
 
     elseif not player_was_editing and player_is_editing then
         -- Player was not editing but now is, remove label and add text field
         edit_task_element.enabled = false
         task_flow.clear()
-        task_editing(task_flow,task).focus()
-        task_table.parent.scroll_to_element(task_flow,'top-third')
+        task_editing(task_flow, task).focus()
+        task_table.parent.scroll_to_element(task_flow, 'top-third')
 
     end
 end
 
 -- Update all the tasks for a player
-local function update_all_tasks(player,scroll_table)
+local function update_all_tasks(player, scroll_table)
     local task_ids = Tasks.get_force_task_ids(player.force.name)
     if #task_ids > 0 then
-        for _,task_id in ipairs(task_ids) do
-            update_task(player,scroll_table,task_id)
+        for _, task_id in ipairs(task_ids) do
+            update_task(player, scroll_table, task_id)
         end
     end
 end
@@ -297,9 +297,9 @@ end
 --- Main task list container for the left flow
 -- @element task_list_container
 local task_list_container =
-Gui.element(function(event_trigger,parent)
+Gui.element(function(event_trigger, parent)
     -- Draw the internal container
-    local container = Gui.container(parent,event_trigger,200)
+    local container = Gui.container(parent, event_trigger, 200)
 
     -- Draw the header
     local header = Gui.header(
@@ -315,7 +315,7 @@ Gui.element(function(event_trigger,parent)
     add_new_task_element.visible = check_player_permissions(player)
 
     -- Draw the scroll table for the tasks
-    local scroll_table = Gui.scroll_table(container,190,3)
+    local scroll_table = Gui.scroll_table(container, 190, 3)
     scroll_table.draw_horizontal_lines = true
     scroll_table.vertical_centering = false
 
@@ -334,7 +334,7 @@ Gui.element(function(event_trigger,parent)
 
     -- Change the style of the no tasks label
     local no_tasks_style = no_tasks_label.style
-    no_tasks_style.padding = {2,4}
+    no_tasks_style.padding = {2, 4}
     no_tasks_style.single_line = false
     no_tasks_style.width = 200
 
@@ -342,8 +342,8 @@ Gui.element(function(event_trigger,parent)
     local task_ids = Tasks.get_force_task_ids(player.force.name)
     if #task_ids > 0 then
         no_tasks_label.visible = false
-        for _,task_id in ipairs(task_ids) do
-            update_task(player,scroll_table,task_id)
+        for _, task_id in ipairs(task_ids) do
+            update_task(player, scroll_table, task_id)
         end
     end
 
@@ -358,27 +358,27 @@ end)
 --- Button on the top flow used to toggle the task list container
 -- @element toggle_left_element
 Gui.left_toolbar_button('utility/not_enough_repair_packs_icon', {'task-list.main-tooltip'}, task_list_container, function(player)
-    return Roles.player_allowed(player,'gui/task-list')
+    return Roles.player_allowed(player, 'gui/task-list')
 end)
 
---- When a new task is added it will udpate the task list for everyone on that force
-Tasks.on_update(function(task,task_id,removed_task)
+--- When a new task is added it will update the task list for everyone on that force
+Tasks.on_update(function(task_id, task, old_task)
     -- Get the force to update, task is nil when removed
     local force
     if task then
         force = game.forces[task.force_name]
     else
-        force = game.forces[removed_task.force_name]
+        force = game.forces[old_task.force_name]
     end
 
     -- Update the task for all the players on the force
     local task_ids = Tasks.get_force_task_ids(force.name)
-    for _,player in pairs(force.connected_players) do
-        local frame = Gui.get_left_element(player,task_list_container)
+    for _, player in pairs(force.connected_players) do
+        local frame = Gui.get_left_element(player, task_list_container)
         local scroll_table = frame.container.scroll.table
 
         -- Update the task that was changed
-        update_task(player,scroll_table,task_id)
+        update_task(player, scroll_table, task_id)
 
         -- Update the numbering of the other tasks if the task was removed
         if not task then
@@ -391,26 +391,26 @@ Tasks.on_update(function(task,task_id,removed_task)
 end)
 
 --- Update the tasks when the player joins
-Event.add(defines.events.on_player_joined_game,function(event)
+Event.add(defines.events.on_player_joined_game, function(event)
     local player = game.players[event.player_index]
-    local frame = Gui.get_left_element(player,task_list_container)
+    local frame = Gui.get_left_element(player, task_list_container)
     local scroll_table = frame.container.scroll.table
-    update_all_tasks(player,scroll_table)
+    update_all_tasks(player, scroll_table)
 end)
 
 --- Makes sure the right buttons are present when roles change
 local function role_update_event(event)
     local player = game.players[event.player_index]
-    local container = Gui.get_left_element(player,task_list_container).container
+    local container = Gui.get_left_element(player, task_list_container).container
 
     -- Update the tasks, incase the user can now edit them
     local scroll_table = container.scroll.table
-    update_all_tasks(player,scroll_table)
+    update_all_tasks(player, scroll_table)
 
     -- Update the new task button incase the user can now add them
     local add_new_task_element = container.header.alignment[add_new_task.name]
     add_new_task_element.visible = check_player_permissions(player)
 end
 
-Event.add(Roles.events.on_role_assigned,role_update_event)
-Event.add(Roles.events.on_role_unassigned,role_update_event)
+Event.add(Roles.events.on_role_assigned, role_update_event)
+Event.add(Roles.events.on_role_unassigned, role_update_event)

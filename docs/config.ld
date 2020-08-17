@@ -1,4 +1,4 @@
-file = '../'
+file = { '../', exclude = { '../.install', '../.lua', '../.luarocks' } }
 dir = '../docs'
 project = 'ExpGaming Scenario'
 title = 'ExpGaming Scenario'
@@ -19,6 +19,7 @@ new_type("core", "Core", true)
 new_type("control", "Control", true)
 new_type("addon", "Addons", true)
 new_type("gui", "Guis", true)
+new_type("data", "Data", true)
 new_type("commands", "Commands", true)
 new_type("config", "Configs", true, "Settings")
 

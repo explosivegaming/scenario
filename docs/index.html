@@ -60,6 +60,16 @@
 - Adds some commonly used functions used in many modules</span></td>
     </tr>
     <tr>
+    <td class="name"><a href="core/Datastore.html">Datastore</a></td>
+    <td class="summary"><span>Core Module - Datastore
+- A module used to store data in the global table with the option to have it sync to an external source.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="core/External.html">External</a></td>
+    <td class="summary"><span>Core Module - External
+- A module used to make accessing externally set data easier.</span></td>
+    </tr>
+    <tr>
     <td class="name"><a href="core/Gui.html">Gui</a></td>
     <td class="summary"><span>Core Module - Gui
 - Used to simplify gui creation using factory functions called element defines</span></td>
@@ -70,14 +80,14 @@
 - Permission group making for factorio so you never have to make one by hand again</span></td>
     </tr>
     <tr>
+    <td class="name"><a href="core/PlayerData.html">PlayerData</a></td>
+    <td class="summary"><span>Core Module - PlayerData
+- A module used to store player data in a central datastore to minimize data requests and saves.</span></td>
+    </tr>
+    <tr>
     <td class="name"><a href="core/Roles.html">Roles</a></td>
     <td class="summary"><span>Core Module - Roles
 - Factorio role system to manage custom permissions.</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="core/Store.html">Store</a></td>
-    <td class="summary"><span>Core Module - Store
-- Used to store and watch for updates for values in the global table</span></td>
     </tr>
     </table>
     <h2>Control</h2>
@@ -131,7 +141,7 @@
     </tr>
     <tr>
     <td class="name"><a href="addons/Chat-Reply.html">Chat-Reply</a></td>
-    <td class="summary"><span>Adds auto replies to chat messages; aswell as chat commands</span></td>
+    <td class="summary"><span>Adds auto replies to chat messages; as well as chat commands</span></td>
     </tr>
     <tr>
     <td class="name"><a href="addons/Compilatron.html">Compilatron</a></td>
@@ -151,16 +161,12 @@
     <td class="summary"><span>Sends alert messages to our discord server when certain events are triggered</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="addons/greetings.html">greetings</a></td>
-    <td class="summary"><span>Greets players on join</span></td>
+    <td class="name"><a href="addons/Inventory-Clear.html">Inventory-Clear</a></td>
+    <td class="summary"><span>Will move players items to spawn when they are banned or kicked, option to clear on leave</span></td>
     </tr>
     <tr>
     <td class="name"><a href="addons/Pollution-Grading.html">Pollution-Grading</a></td>
     <td class="summary"><span>Makes polution look much nice of the map, ie not one big red mess</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="addons/Player-Colours.html">Player-Colours</a></td>
-    <td class="summary"><span>Gives players random colours when they join, also applies preset colours to those who have them</span></td>
     </tr>
     <tr>
     <td class="name"><a href="addons/Scorched-Earth.html">Scorched-Earth</a></td>
@@ -213,17 +219,42 @@
     - Adds a warp list gui which allows players to add and remove warp points</span></td>
     </tr>
     </table>
+    <h2>Data</h2>
+    <table class="module_list">
+    <tr>
+    <td class="name"><a href="data/Alt-View.html">Alt-View</a></td>
+    <td class="summary"><span>Stores if you use alt mode or not and auto applies it</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="data/Bonus.html">Bonus</a></td>
+    <td class="summary"><span>Commands Module - Bonus
+    - Adds a command that allows players to have increased stats</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="data/Greetings.html">Greetings</a></td>
+    <td class="summary"><span>Greets players on join</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="data/Player-Colours.html">Player-Colours</a></td>
+    <td class="summary"><span>Gives players random colours when they join, also applies preset colours to those who have them</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="data/Quickbar.html">Quickbar</a></td>
+    <td class="summary"><span>Commands Module - Quickbar
+    - Adds a command that allows players to load Quickbar presets</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="data/Tag.html">Tag</a></td>
+    <td class="summary"><span>Commands Module - Tag
+    - Adds a command that allows players to have a custom tag after their name</span></td>
+    </tr>
+    </table>
     <h2>Commands</h2>
     <table class="module_list">
     <tr>
     <td class="name"><a href="commands/Admin-Chat.html">Admin-Chat</a></td>
     <td class="summary"><span>Commands Module - Admin Chat
     - Adds a command that allows admins to talk in a private chat</span></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="commands/Bonus.html">Bonus</a></td>
-    <td class="summary"><span>Commands Module - Bonus
-    - Adds a command that allows players to have increased stats</span></td>
     </tr>
     <tr>
     <td class="name"><a href="commands/Cheat-Mode.html">Cheat-Mode</a></td>
@@ -234,6 +265,11 @@
     <td class="name"><a href="commands/Clear-Inventory.html">Clear-Inventory</a></td>
     <td class="summary"><span>Commands Module - Clear Inventory
     - Adds a command that allows admins to clear people's inventorys</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="commands/Connect.html">Connect</a></td>
+    <td class="summary"><span>Commands Module - Connect
+    - Adds a commands that allows you to request a player move to another server</span></td>
     </tr>
     <tr>
     <td class="name"><a href="commands/Debug.html">Debug</a></td>
@@ -301,11 +337,6 @@
     - Adds a command that allows players to teleport to their spawn point</span></td>
     </tr>
     <tr>
-    <td class="name"><a href="commands/Tag.html">Tag</a></td>
-    <td class="summary"><span>Commands Module - Tag
-    - Adds a command that allows players to have a custom tag after their name</span></td>
-    </tr>
-    <tr>
     <td class="name"><a href="commands/Teleport.html">Teleport</a></td>
     <td class="summary"><span>Commands Module - Teleport
     - Adds a command that allows players to teleport to other players</span></td>
@@ -353,7 +384,7 @@
     </tr>
     <tr>
     <td class="name"><a href="configs/Commands-Auth-Admin.html">Commands-Auth-Admin</a></td>
-    <td class="summary"><span>This is a very simple config file which adds a admin only auth functio;
+    <td class="summary"><span>This is a very simple config file which adds a admin only auth function;
  not much to change here its more so it can be enabled and disabled from ./config/file_loader.lua;
  either way you can change the requirements to be "admin" if you wanted to</span></td>
     </tr>
@@ -366,7 +397,7 @@
     <td class="summary"><span>This file contains some common command param parse functions;
 this file is less of a config and more of a requirement but you may wish to change how some behave;
 as such you need to be confident with lua but you edit this config file;
-use Commands.add_parse('name',function(input,player,reject) end) to add a parse;
+use Commands.add_parse('name',function(input, player, reject) end) to add a parse;
 see ./expcore/commands.lua for more details</span></td>
     </tr>
     <tr>
@@ -414,6 +445,10 @@ see ./expcore/commands.lua for more details</span></td>
     <td class="summary"><span>This file contains all the different settings for the warp system and gui</span></td>
     </tr>
     <tr>
+    <td class="name"><a href="configs/inventory_clear.html">inventory_clear</a></td>
+    <td class="summary"><span>Config to control when players items are removed, this is a list of event names that will trigger inventory clear</span></td>
+    </tr>
+    <tr>
     <td class="name"><a href="configs/Pollution-Grading.html">Pollution-Grading</a></td>
     <td class="summary"><span>This controls how pollution is viewed on the map</span></td>
     </tr>
@@ -426,6 +461,10 @@ see ./expcore/commands.lua for more details</span></td>
     <td class="summary"><span>Preset colours that players get when they join the server, if not in the list then will be given a random colour (which isnt disallowed)</span></td>
     </tr>
     <tr>
+    <td class="name"><a href="configs/Preset-Player-Quickbar.html">Preset-Player-Quickbar</a></td>
+    <td class="summary"><span>Preset quickbar items that players can load</span></td>
+    </tr>
+    <tr>
     <td class="name"><a href="configs/Repair.html">Repair</a></td>
     <td class="summary"><span>Config file for the repair command</span></td>
     </tr>
@@ -436,6 +475,10 @@ see ./expcore/commands.lua for more details</span></td>
     <tr>
     <td class="name"><a href="configs/Spawn-Area.html">Spawn-Area</a></td>
     <td class="summary"><span>Used to config the spawn generation settings yes there is alot here i know just ignore the long tables at the end (they were generated with a command)</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="configs/Statistics.html">Statistics</a></td>
+    <td class="summary"><span>A list of all tracked statistics and the events which trigger them</span></td>
     </tr>
     <tr>
     <td class="name"><a href="configs/Warnings.html">Warnings</a></td>
@@ -484,10 +527,10 @@ Events.set_event_filter(defines.events.on_built_entity, {{filter = "name", name 
     <h2>Topics</h2>
     <table class="module_list">
     <tr>
-    <td class="name"><a href="topics/readme.md.html">readme.md</a></td>
+    <td class="name"><a href="topics/README.md.html">README.md</a></td>
     </tr>
     <tr>
-    <td class="name"><a href="topics/license.html">license</a></td>
+    <td class="name"><a href="topics/LICENSE.html">LICENSE</a></td>
     </tr>
     </table>
     <!-- module list on the main page end -->
@@ -507,7 +550,7 @@ Events.set_event_filter(defines.events.on_built_entity, {{filter = "name", name 
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2020-03-31 23:28:20 UTC</i>
+    <i>Last updated 2020-08-17 14:39:39 UTC</i>
     </div>
     </div>
     </div>

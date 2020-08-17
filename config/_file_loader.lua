@@ -6,11 +6,12 @@
 return {
     --'example.file_not_loaded',
     'modules.factorio-control', -- base factorio free play scenario
-    -- Game Commands
+    'expcore.player_data',
+
+    --- Game Commands
     'modules.commands.me',
     'modules.commands.kill',
     'modules.commands.admin-chat',
-    'modules.commands.tag',
     'modules.commands.teleport',
     'modules.commands.cheat-mode',
     'modules.commands.ratio',
@@ -25,11 +26,10 @@ return {
     'modules.commands.spawn',
     'modules.commands.warnings',
     'modules.commands.find',
-    'modules.commands.bonus',
     'modules.commands.home',
-    -- QoL Addons
-    'modules.addons.station-auto-name',
-    'modules.addons.greetings',
+    'modules.commands.connect',
+
+    --- Addons
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',
     'modules.addons.death-logger',
@@ -38,11 +38,21 @@ return {
     'modules.addons.compilatron',
     'modules.addons.scorched-earth',
     'modules.addons.pollution-grading',
-    'modules.addons.random-player-colours',
+    'modules.addons.station-auto-name',
     'modules.addons.discord-alerts',
     'modules.addons.chat-reply',
     'modules.addons.tree-decon',
-    -- GUI
+
+    --- Data
+    'modules.data.statistics',
+    'modules.data.player-colours',
+    'modules.data.greetings',
+    'modules.data.quickbar',
+    'modules.data.alt-view',
+    'modules.data.tag',
+    'modules.data.bonus',
+
+    --- GUI
     'modules.gui.readme',
     'modules.gui.rocket-info',
     'modules.gui.science-info',
@@ -51,7 +61,8 @@ return {
     'modules.gui.player-list',
     'modules.gui.server-ups',
     'modules.commands.debug',
-    -- Config Files
+
+    --- Config Files
     'config.expcore.command_auth_admin', -- commands tagged with admin_only are blocked for non admins
     'config.expcore.command_auth_roles', -- commands must be allowed via the role config
     'config.expcore.command_runtime_disable', -- allows commands to be enabled and disabled during runtime

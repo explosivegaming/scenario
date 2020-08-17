@@ -11,19 +11,19 @@ local config = require 'config.gui.science' --- @dep config.gui.science
 local Production = require 'modules.control.production' --- @dep modules.control.production
 local format_time = _C.format_time --- @dep expcore.common
 
-local null_time_short = {'science-info.eta-time',format_time(0,{hours=true,minutes=true,seconds=true,time=true,null=true})}
-local null_time_long = format_time(0,{hours=true,minutes=true,seconds=true,long=true,null=true})
+local null_time_short = {'science-info.eta-time', format_time(0, {hours=true, minutes=true, seconds=true, time=true, null=true})}
+local null_time_long = format_time(0, {hours=true, minutes=true, seconds=true, long=true, null=true})
 
 --- Data label that contains the value and the surfix
 -- @element production_label
 local production_label =
-Gui.element(function(_,parent,production_label_data)
+Gui.element(function(_, parent, production_label_data)
     local name = production_label_data.name
     local tooltip = production_label_data.tooltip
     local color = production_label_data.color
 
     -- Add an alignment for the number
-    local alignment = Gui.alignment(parent,name)
+    local alignment = Gui.alignment(parent, name)
 
     -- Add the main value label
     local element =
@@ -42,7 +42,7 @@ Gui.element(function(_,parent,production_label_data)
     parent.add{
         name = 'surfix-'..name,
         type = 'label',
-        caption = {'science-info.unit',production_label_data.surfix},
+        caption = {'science-info.unit', production_label_data.surfix},
         tooltip = tooltip
     }
 
@@ -70,20 +70,20 @@ local function get_production_label_data(name, tooltip, value, cutout, secondary
 end
 
 -- Updates a prodution label to match the current data
-local function update_production_label(parent,production_label_data)
+local function update_production_label(parent, production_label_data)
     local name = production_label_data.name
     local tooltip = production_label_data.tooltip
     local color = production_label_data.color
 
     -- Update the production label
-    local production_label_element = parent[name] and parent[name].label or production_label(parent,production_label_data)
+    local production_label_element = parent[name] and parent[name].label or production_label(parent, production_label_data)
     production_label_element.caption = production_label_data.caption
     production_label_element.tooltip = production_label_data.tooltip
     production_label_element.style.font_color = color
 
     -- Update the surfix label
     local surfix_element = parent['surfix-'..name]
-    surfix_element.caption = {'science-info.unit',production_label_data.surfix}
+    surfix_element.caption = {'science-info.unit', production_label_data.surfix}
     surfix_element.tooltip = tooltip
     surfix_element.style.font_color = color
 
@@ -92,7 +92,7 @@ end
 --- Adds 4 elements that show the data for a science pack
 -- @element science_pack_base
 local science_pack_base =
-Gui.element(function(_,parent,science_pack_data)
+Gui.element(function(_, parent, science_pack_data)
     local science_pack = science_pack_data.science_pack
 
     -- Draw the icon for the science pack
@@ -111,7 +111,7 @@ Gui.element(function(_,parent,science_pack_data)
     pack_icon.ignored_by_interaction = true
     pack_icon_style.height = 55
     if icon_style == 'slot_button' then
-        pack_icon_style.padding = {0,-2}
+        pack_icon_style.padding = {0, -2}
         pack_icon_style.width = 36
     end
 
@@ -122,7 +122,7 @@ Gui.element(function(_,parent,science_pack_data)
         type = 'frame',
         style = 'bordered_frame'
     }
-    delta_flow.style.padding = {0,3}
+    delta_flow.style.padding = {0, 3}
 
     -- Draw the delta flow table
     local delta_table =
@@ -142,7 +142,7 @@ Gui.element(function(_,parent,science_pack_data)
     return pack_icon
 end)
 
-local function get_science_pack_data(player,science_pack)
+local function get_science_pack_data(player, science_pack)
     local force = player.force
 
     -- Check that some packs have been made
@@ -186,28 +186,28 @@ local function get_science_pack_data(player,science_pack)
 
 end
 
-local function update_science_pack(pack_table,science_pack_data)
+local function update_science_pack(pack_table, science_pack_data)
     if not science_pack_data then return end
     local science_pack = science_pack_data.science_pack
     pack_table.parent.non_made.visible = false
 
     -- Update the icon
-    local pack_icon = pack_table['icon-'..science_pack] or science_pack_base(pack_table,science_pack_data)
+    local pack_icon = pack_table['icon-'..science_pack] or science_pack_base(pack_table, science_pack_data)
     local icon_style = science_pack_data.icon_style
     pack_icon.style = icon_style
 
     local pack_icon_style = pack_icon.style
     pack_icon_style.height = 55
     if icon_style == 'slot_button' then
-        pack_icon_style.padding = {0,-2}
+        pack_icon_style.padding = {0, -2}
         pack_icon_style.width = 36
     end
 
     -- Update the production labels
     local delta_table = pack_table['delta-'..science_pack].table
-    update_production_label(delta_table,science_pack_data.positive)
-    update_production_label(delta_table,science_pack_data.negative)
-    update_production_label(pack_table,science_pack_data.net)
+    update_production_label(delta_table, science_pack_data.positive)
+    update_production_label(delta_table, science_pack_data.negative)
+    update_production_label(pack_table, science_pack_data.net)
 
 end
 
@@ -226,7 +226,7 @@ local function get_eta_label_data(player)
     local remaining = research.research_unit_count*(1-progress)
 
     -- Check for the limiting science pack
-    for _,ingredient in pairs(research.research_unit_ingredients) do
+    for _, ingredient in pairs(research.research_unit_ingredients) do
         local pack_name = ingredient.name
         local required = ingredient.amount * remaining
         local time = Production.get_consumsion_eta(force, pack_name, defines.flow_precision_index.one_minute, required)
@@ -238,14 +238,14 @@ local function get_eta_label_data(player)
     -- Return the caption and tooltip
     return limit and limit > 0 and {
         research = true,
-        caption = format_time(limit,{hours=true,minutes=true,seconds=true,time=true}),
-        tooltip = format_time(limit,{hours=true,minutes=true,seconds=true,long=true})
+        caption = format_time(limit, {hours=true, minutes=true, seconds=true, time=true}),
+        tooltip = format_time(limit, {hours=true, minutes=true, seconds=true, long=true})
     } or { research = false }
 
 end
 
 -- Updates the eta label
-local function update_eta_label(element,eta_label_data)
+local function update_eta_label(element, eta_label_data)
     -- If no research selected show null
     if not eta_label_data.research then
         element.caption = null_time_short
@@ -254,24 +254,24 @@ local function update_eta_label(element,eta_label_data)
     end
 
     -- Update the element
-    element.caption = {'science-info.eta-time',eta_label_data.caption}
+    element.caption = {'science-info.eta-time', eta_label_data.caption}
     element.tooltip = eta_label_data.tooltip
 end
 
 --- Main task list container for the left flow
 -- @element task_list_container
 local science_info_container =
-Gui.element(function(event_trigger,parent)
+Gui.element(function(event_trigger, parent)
     local player = Gui.get_player_from_element(parent)
 
     -- Draw the internal container
-    local container = Gui.container(parent,event_trigger,200)
+    local container = Gui.container(parent, event_trigger, 200)
 
     -- Draw the header
     Gui.header(container, {'science-info.main-caption'}, {'science-info.main-tooltip'})
 
     -- Draw the scroll table for the tasks
-    local scroll_table = Gui.scroll_table(container,178,4)
+    local scroll_table = Gui.scroll_table(container, 178, 4)
 
     -- Draw the no packs label
     local no_packs_label =
@@ -283,7 +283,7 @@ Gui.element(function(event_trigger,parent)
 
     -- Change the style of the no packs label
     local no_packs_style = no_packs_label.style
-    no_packs_style.padding = {2,4}
+    no_packs_style.padding = {2, 4}
     no_packs_style.single_line = false
     no_packs_style.width = 200
 
@@ -303,13 +303,13 @@ Gui.element(function(event_trigger,parent)
         }
 
         -- Update the eta
-        update_eta_label(eta_label,get_eta_label_data(player))
+        update_eta_label(eta_label, get_eta_label_data(player))
 
     end
 
     -- Add packs which have been made
-    for _,science_pack in ipairs(config) do
-        update_science_pack(scroll_table,get_science_pack_data(player,science_pack))
+    for _, science_pack in ipairs(config) do
+        update_science_pack(scroll_table, get_science_pack_data(player, science_pack))
     end
 
     -- Return the exteral container
@@ -320,16 +320,16 @@ end)
 --- Button on the top flow used to toggle the task list container
 -- @element toggle_left_element
 Gui.left_toolbar_button('entity/lab', {'science-info.main-tooltip'}, science_info_container, function(player)
-    return Roles.player_allowed(player,'gui/science-info')
+    return Roles.player_allowed(player, 'gui/science-info')
 end)
 
 --- Updates the gui every 1 second
-Event.on_nth_tick(60,function()
+Event.on_nth_tick(60, function()
     local force_pack_data = {}
     local force_eta_data = {}
-    for _,player in pairs(game.connected_players) do
+    for _, player in pairs(game.connected_players) do
         local force_name = player.force.name
-        local frame = Gui.get_left_element(player,science_info_container)
+        local frame = Gui.get_left_element(player, science_info_container)
         local container = frame.container
 
         -- Update the science packs

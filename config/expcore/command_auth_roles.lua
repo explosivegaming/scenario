@@ -4,7 +4,8 @@
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 
-Commands.add_authenticator(function(player,command,tags,reject)
+-- luacheck:ignore 212/tags
+Commands.add_authenticator(function(player, command, tags, reject)
     if Roles.player_allowed(player,'command/'..command) then
         return true
     else

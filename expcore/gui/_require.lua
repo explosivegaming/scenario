@@ -18,7 +18,7 @@ Gui.element{
 @usage-- Making a factory function for a button which is contained within a flow
 -- This method is for when you still want to register event handlers but cant use the table method
 local example_flow_with_button =
-Gui.element(function(event_trigger,parent,...)
+Gui.element(function(event_trigger, parent, ...)
     -- ... shows that all other arguments from the factory call are passed to this function
     -- Here we are adding a flow which we will then later add a button to
     local flow =
@@ -60,7 +60,7 @@ Gui.element{
     caption = 'Example Button',
     style = 'forward_button' -- factorio styles can be applied here
 }
-:style(function(style,element,...)
+:style(function(style, element, ...)
     -- style is the current style object for the elemenent
     -- element is the element that is being changed
     -- ... shows that all other arguments from the factory call are passed to this function
@@ -76,7 +76,7 @@ Gui.element{
     type = 'button',
     caption = 'Example Button'
 }
-:on_click(function(player,element,event)
+:on_click(function(player, element, event)
     -- player is the player who interacted with the element to cause the event
     -- element is a refrence to the element which caused the event
     -- event is a raw refrence to the event data if player and element are not enough
@@ -98,21 +98,21 @@ Gui.element{
     width = 18,
     height = 20
 }
-:on_click(function(player,_,_)
+:on_click(function(player, _,_)
     Gui.hide_left_flow(player)
 end)
 
 @usage-- Eample from defines, Gui.alignment, called like: Gui.alignment(parent, name, horizontal_align, vertical_align)
 -- Notice how _ are used to blank arguments that are not needed in that context and how they line up with above
 Gui.alignment =
-Gui.element(function(_,parent,name,_,_)
+Gui.element(function(_, parent, name, _,_)
     return parent.add{
         name = name or 'alignment',
         type = 'flow',
     }
 end)
-:style(function(style,_,_,horizontal_align,vertical_align)
-    style.padding = {1,2}
+:style(function(style, _,_, horizontal_align, vertical_align)
+    style.padding = {1, 2}
     style.vertical_align = vertical_align or 'center'
     style.horizontal_align = horizontal_align or 'right'
     style.vertically_stretchable  = style.vertical_align ~= 'center'

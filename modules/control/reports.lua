@@ -10,13 +10,13 @@
     -- This will place a report on "MrBiter" (must be a valid player) the report will have been made
     -- by "Cooldude2606" (must be the player name) with the reason 'Liking biters too much' this can be
     -- seen by using Reports.get_report.
-    Reports.report_player('MrBiter','Cooldude2606','Liking biters too much') -- true
+    Reports.report_player('MrBiter', 'Cooldude2606', 'Liking biters too much') -- true
 
     -- The other get methods can be used to get all the reports on a player or to test if a player is reported.
-    Reports.get_report('MrBiter','Cooldude2606') -- 'Liking biters too much'
+    Reports.get_report('MrBiter', 'Cooldude2606') -- 'Liking biters too much'
 
     -- This will remove the warning on 'MrBiter' (must be a valid player) which was made by 'Cooldude2606'.
-    Reports.remove_report('MrBiter','Cooldude2606') -- true
+    Reports.remove_report('MrBiter', 'Cooldude2606') -- true
 
     -- This will remove all the report that have been made against 'MrBiter'. Note that the remove event will
     -- be triggered once per report issused.
@@ -43,12 +43,14 @@ local Reports = {
         -- @tparam number player_index the player index of the player who has the report removed
         -- @tparam string reported_by_name the name of the player who made the removed report
         -- @tparam string removed_by_name the name of the player who removed the report
+        -- @tparam number batch_count the number of reports removed in this batch, always one when not a batch
+        -- @tparam number batch the index of this event in a batch, always one when not a batch
         on_report_removed = script.generate_event_name()
     }
 }
 
 local user_reports = Reports.user_reports
-Global.register(user_reports,function(tbl)
+Global.register(user_reports, function(tbl)
     Reports.user_reports = tbl
     user_reports = Reports.user_reports
 end)
@@ -71,7 +73,7 @@ end
 -- @tparam LuaPlayer player the player to get the report for
 -- @tparam string by_player_name the name of the player who made the report
 -- @treturn ?string|nil string is the reason that the player was reported, if the player is not reported
-function Reports.get_report(player,by_player_name)
+function Reports.get_report(player, by_player_name)
     player = valid_player(player)
     if not player then return end
     if not by_player_name then return end
@@ -84,7 +86,7 @@ end
 -- @tparam LuaPlayer player the player to check if reported
 -- @tparam[opt] string by_player_name when given will check if reported by this player
 -- @treturn boolean if the player has been reported
-function Reports.is_reported(player,by_player_name)
+function Reports.is_reported(player, by_player_name)
     player = valid_player(player)
     if not player then return end
 
@@ -100,15 +102,15 @@ end
 -- @tparam LuaPlayer player the player to count the reports for
 -- @tparam[opt] function custom_count when given this function will be used to count the reports
 -- @treturn number the number of reports that the user has
-function Reports.count_reports(player,custom_count)
+function Reports.count_reports(player, custom_count)
     player = valid_player(player)
     if not player then return end
 
     local reports = user_reports[player.name] or {}
     if custom_count then
         local ctn = 0
-        for by_player_name,reason in pairs(reports) do
-            ctn = ctn + custom_count(player,by_player_name,reason)
+        for by_player_name, reason in pairs(reports) do
+            ctn = ctn + custom_count(player, by_player_name, reason)
         end
         return ctn
     else
@@ -125,7 +127,7 @@ end
 -- @tparam string by_player_name the name of the player that is making the report
 -- @tparam[opt='Non given.'] string reason the reason that the player is being reported
 -- @treturn boolean whether the report was added successfully
-function Reports.report_player(player,by_player_name,reason)
+function Reports.report_player(player, by_player_name, reason)
     player = valid_player(player)
     if not player then return end
     local player_name = player.name
@@ -144,7 +146,7 @@ function Reports.report_player(player,by_player_name,reason)
         reports[by_player_name] = reason
     end
 
-    script.raise_event(Reports.events.on_player_reported,{
+    script.raise_event(Reports.events.on_player_reported, {
         name = Reports.events.on_player_reported,
         tick = game.tick,
         player_index = player.index,
@@ -159,13 +161,17 @@ end
 -- @tparam LuaPlayer player the player who is having the report removed from them
 -- @tparam string reported_by_name the player who had the report
 -- @tparam string removed_by_name the player who is clearing the report
-local function report_removed_event(player,reported_by_name,removed_by_name)
-    script.raise_event(Reports.events.on_report_removed,{
+-- @tparam number batch the index of this event in a batch, always one when not a batch
+-- @tparam number batch_count the number of reports removed in this batch, always one when not a batch
+local function report_removed_event(player, reported_by_name, removed_by_name, batch, batch_count)
+    script.raise_event(Reports.events.on_report_removed, {
         name = Reports.events.on_report_removed,
         tick = game.tick,
         player_index = player.index,
         reported_by_name = reported_by_name,
-        removed_by_name = removed_by_name
+        removed_by_name = removed_by_name,
+        batch_count = batch_count or 1,
+        batch = batch or 1
     })
 end
 
@@ -174,7 +180,7 @@ end
 -- @tparam string reported_by_name the name of the player that made the report
 -- @tparam string removed_by_name the name of the player who removed the report
 -- @treturn boolean whether the report was removed successfully
-function Reports.remove_report(player,reported_by_name,removed_by_name)
+function Reports.remove_report(player, reported_by_name, removed_by_name)
     player = valid_player(player)
     if not player then return end
 
@@ -188,7 +194,7 @@ function Reports.remove_report(player,reported_by_name,removed_by_name)
         return false
     end
 
-    report_removed_event(player,reported_by_name,removed_by_name)
+    report_removed_event(player, reported_by_name, removed_by_name)
 
     reports[reported_by_name] = nil
     return true
@@ -198,7 +204,7 @@ end
 -- @tparam LuaPlayer player the player to remove the reports from
 -- @tparam string removed_by_name the name of the player who removed the report
 -- @treturn boolean whether the reports were removed successfully
-function Reports.remove_all(player,removed_by_name)
+function Reports.remove_all(player, removed_by_name)
     player = valid_player(player)
     if not player then return end
 
@@ -206,9 +212,10 @@ function Reports.remove_all(player,removed_by_name)
     if not reports then
         return false
     end
-
-    for reported_by_name,_ in pairs(reports) do
-        report_removed_event(player,reported_by_name,removed_by_name)
+    local ctn, total = 0, #reports
+    for reported_by_name, _ in pairs(reports) do
+        ctn = ctn + 1
+        report_removed_event(player, reported_by_name, removed_by_name, ctn, total)
     end
 
     user_reports[player.name] = nil

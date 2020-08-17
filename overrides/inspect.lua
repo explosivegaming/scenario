@@ -99,10 +99,10 @@ end
 -- tables aren't pure sequences. So we implement our own # operator.
 local function getSequenceLength(t)
   local len = 1
-  local v = rawget(t,len)
+  local v = rawget(t, len)
   while v ~= nil do
     len = len + 1
-    v = rawget(t,len)
+    v = rawget(t, len)
   end
   return len - 1
 end
@@ -110,7 +110,7 @@ end
 local function getNonSequentialKeys(t)
   local keys = {}
   local sequenceLength = getSequenceLength(t)
-  for k,_ in pairs(t) do
+  for k, _ in pairs(t) do
     if not isSequenceKey(k, sequenceLength) then table.insert(keys, k) end
   end
   table.sort(keys, sortKeys)
@@ -133,7 +133,7 @@ local function countTableAppearances(t, tableAppearances)
   if type(t) == 'table' then
     if not tableAppearances[t] then
       tableAppearances[t] = 1
-      for k,v in pairs(t) do
+      for k, v in pairs(t) do
         countTableAppearances(k, tableAppearances)
         countTableAppearances(v, tableAppearances)
       end
@@ -172,7 +172,7 @@ local function processRecursive(process, item, path, visited)
       visited[item] = processedCopy
       local processedKey
 
-      for k,v in pairs(processed) do
+      for k, v in pairs(processed) do
         processedKey = processRecursive(process, k, makePath(path, k, inspect.KEY), visited)
         if processedKey ~= nil then
           processedCopy[processedKey] = processRecursive(process, v, makePath(path, processedKey), visited)
@@ -258,14 +258,14 @@ function Inspector:putTable(t)
 
       local count = 0
       for i=1, sequenceLength do
-        if count > 0 then self:puts(',') end
+        if count > 0 then self:puts(', ') end
         self:puts(' ')
         self:putValue(t[i])
         count = count + 1
       end
 
-      for _,k in ipairs(nonSequentialKeys) do
-        if count > 0 then self:puts(',') end
+      for _, k in ipairs(nonSequentialKeys) do
+        if count > 0 then self:puts(', ') end
         self:tabify()
         self:putKey(k)
         self:puts(' = ')
@@ -274,7 +274,7 @@ function Inspector:putTable(t)
       end
 
       if mt then
-        if count > 0 then self:puts(',') end
+        if count > 0 then self:puts(', ') end
         self:tabify()
         self:puts('<metatable> = ')
         self:putValue(mt)
@@ -302,7 +302,7 @@ function Inspector:putValue(v)
   elseif tv == 'table' then
     self:putTable(v)
   else
-    self:puts('<',tv,' ',self:getId(v),'>')
+    self:puts('<', tv, ' ', self:getId(v), '>')
   end
 end
 
