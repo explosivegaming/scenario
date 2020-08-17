@@ -229,7 +229,7 @@ function Warps.remove_warp_area(warp_id)
             {position.x+radius, position.y+radius}
         }
     }
-    for _, entity in pairs(entities) do if entity.name ~= 'player' then entity.destroy() end end
+    for _, entity in pairs(entities) do if entity and entity.valid and entity.name ~= 'player' then entity.destroy() end end
 end
 
 --[[-- Set a warp to be the spawn point for a force, force must own this warp

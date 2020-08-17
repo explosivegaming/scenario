@@ -128,6 +128,7 @@ end)
 Event.add(defines.events.on_player_joined_game, function(event)
     local player = game.players[event.player_index]
     Async.wait(300, check_data_loaded, player)
+    PlayerData:raw_set(player.name)
     PlayerData:request(player)
 end)
 
@@ -135,7 +136,7 @@ end)
 Event.add(defines.events.on_player_left_game, function(event)
     local player = game.players[event.player_index]
     local player_data = PlayerData:get(player)
-    if player_data.valid == true then
+    if player_data and player_data.valid == true then
         PlayerData:unload(player)
     else PlayerData:raw_set(player.name) end
 end)

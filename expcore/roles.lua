@@ -153,12 +153,11 @@ local function emit_player_roles_updated(player, type, roles, by_player_name, sk
         event = Roles.events.on_role_unassigned
     end
     -- convert the roles to objects and get the names of the roles
-    local index, role_names, valid_roles = 0, {}, {}
+    local index, role_names = 0, {}
     for _, role in ipairs(roles) do
         role = Roles.get_role_from_any(role)
         if role then
             index = index + 1
-            valid_roles[index] = role
             role_names[index] = role.name
         end
     end
@@ -176,7 +175,7 @@ local function emit_player_roles_updated(player, type, roles, by_player_name, sk
         tick=game.tick,
         player_index=player.index,
         by_player_index=by_player_index,
-        roles=valid_roles
+        roles=role_names
     })
     write_json('log/roles.log', {
         player_name=player.name,
@@ -946,7 +945,7 @@ function Roles._prototype:get_players(online)
             if role_name == self.name then
                 local player = game.players[player_name]
                 -- Filter by online state if required
-                if online == nil or player.connected == online then
+                if player and (online == nil or player.connected == online) then
                     players[#players+1] = player
                 end
                 break
@@ -1001,7 +1000,7 @@ Event.add(defines.events.on_player_joined_game, role_update)
 -- Every 60 seconds the auto promote check is preformed
 Event.on_nth_tick(3600, function()
     local promotes = {}
-    for _, player in ipairs(game.connected_players) do
+    for _, player in pairs(game.connected_players) do
         for _, role in ipairs(Roles.config.roles) do
             if role.auto_promote_condition then
                 local success, err = pcall(role.auto_promote_condition, player)
