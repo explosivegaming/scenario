@@ -14,7 +14,6 @@ return {
             {'info.softmod'},
             {'info.wiki'},
             {'info.redmew'},
-            {'info.feedback'},
             {'info.custom-commands'},
             {'info.status'},
             {'info.lhd'},
