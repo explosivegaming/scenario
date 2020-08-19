@@ -4,10 +4,13 @@
     @alias autofill
 ]]
 
+local Game = require 'utils.game' --- @dep utils.game
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Global = require 'utils.global' --- @dep utils.global
 local config = require 'config.gui.autofill' --- @dep config.gui.autofill
 local Event = require 'utils.event' --- @dep utils.event
+
+local print_text = Game.print_floating_text -- (surface, position, text, color)
 
 --- Table that stores if autofill is enabled or not
 local autofill_player_settings = {}
@@ -71,8 +74,18 @@ Gui.element(function(event_trigger, parent, amount)
 end)
 :style{
     maximal_width = 90,
-    height = 28
+    height = 32,
+    padding = -2
 }
+:on_confirmed(function(player, element, _)
+    local parent_name = element.parent.name
+    for _, setting in pairs(autofill_player_settings[player.name]) do
+        if 'amount-setting-'..setting.item == parent_name then
+            setting.amount = tonumber(element.text)
+            player.print({'autofill.confirmed', setting.amount, '[img=item/'..setting.item..']'})
+        end
+    end
+end)
 
 local add_autofill_setting =
 Gui.element(function(_, parent, item_name, amount)
@@ -118,3 +131,62 @@ Event.add(defines.events.on_player_created, function(event)
         autofill_player_settings[player.name] = config.default_settings
     end
 end)
+
+local function inventories_contains_inventory(inventories, inventory)
+    for _, inv in pairs(inventories) do
+        if inv == inventory then
+            return true
+        end
+    end
+    return false
+end
+
+local function entity_build(event)
+    -- Check if player exists
+    local player = game.players[event.player_index]
+    if not player then
+        return
+    end
+    -- Check if the entity is in the config and enabled
+    local entity = event.created_entity
+    local entity_configs = config.entities[entity.name]
+    if not entity_configs then
+        return
+    end
+
+    -- Loop over each entity config and try to furfill the request amount
+    for _,entity_config in pairs(entity_configs) do
+        if not entity_config.enabled then
+            break
+        end
+        local player_inventory = player.get_main_inventory()
+        local entity_inventory = entity.get_inventory(entity_config.inventory)
+        for _, setting in pairs(autofill_player_settings[player.name]) do
+            if not setting.enabled or not inventories_contains_inventory(setting.inventories, entity_config.inventory) then
+                goto continue
+            end
+            local item = setting.item
+            local preferd_amount = setting.amount
+            local item_amount = player_inventory.get_item_count(item)
+            if item_amount ~= 0 then
+                local inserted
+                if item_amount >= preferd_amount then
+                    if not entity_inventory.can_insert({name=item, count=preferd_amount}) then
+                        goto continue
+                    end
+                    inserted = entity_inventory.insert({name=item, count=preferd_amount})
+                    player_inventory.remove({name=item, count=inserted})
+                    print_text(entity.surface, entity.position, {'autofill.filled', '[img=entity/'..entity.name..']', inserted, '[img=item/'..item..']' }, { r = 0, g = 255, b = 0, a = 1})
+                else
+                    inserted = entity_inventory.insert({name=item, count=item_amount})
+                    player_inventory.remove({name=item, count=inserted})
+                    print_text(entity.surface, entity.position, {'autofill.filled', '[img=entity/'..entity.name..']', inserted, '[img=item/'..item..']' }, { r = 255, g = 165, b = 0, a = 1})
+                end
+                goto continue
+            end
+            ::continue::
+        end
+    end
+end
+
+Event.add(defines.events.on_built_entity, entity_build)
