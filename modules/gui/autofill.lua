@@ -9,6 +9,7 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Global = require 'utils.global' --- @dep utils.global
 local config = require 'config.gui.autofill' --- @dep config.gui.autofill
 local Event = require 'utils.event' --- @dep utils.event
+local table = require 'overrides.table' --- @dep overrides.table
 
 local print_text = Game.print_floating_text -- (surface, position, text, color)
 
@@ -128,7 +129,7 @@ Gui.left_toolbar_button(config.icon, {'autofill.main-tooltip'}, autofill_contain
 Event.add(defines.events.on_player_created, function(event)
     local player = game.players[event.player_index]
     if not autofill_player_settings[player.name] then
-        autofill_player_settings[player.name] = config.default_settings
+        autofill_player_settings[player.name] = table.deep_copy(config.default_settings)
     end
 end)
 
