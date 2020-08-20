@@ -138,15 +138,6 @@ Event.add(defines.events.on_player_created, function(event)
     end
 end)
 
-local function inventories_contains_inventory(inventories, inventory)
-    for _, inv in pairs(inventories) do
-        if inv == inventory then
-            return true
-        end
-    end
-    return false
-end
-
 local function entity_build(event)
     -- Check if player exists
     local player = game.players[event.player_index]
@@ -168,7 +159,7 @@ local function entity_build(event)
         local player_inventory = player.get_main_inventory()
         local entity_inventory = entity.get_inventory(entity_config.inventory)
         for _, setting in pairs(autofill_player_settings[player.name]) do
-            if not setting.enabled or not inventories_contains_inventory(setting.inventories, entity_config.inventory) then
+            if not setting.enabled or not table.contains(setting.inventories, entity_config.inventory) then
                 goto continue
             end
             local item = setting.item
