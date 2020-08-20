@@ -150,39 +150,50 @@ local function entity_build(event)
     if not entity_configs then
         return
     end
+    -- Get the inventory of the player
+    local player_inventory = player.get_main_inventory()
 
-    -- Loop over each entity config and try to furfill the request amount
-    for _,entity_config in pairs(entity_configs) do
-        if not entity_config.enabled then
-            break
+    local text_position = { x = entity.position.x, y = entity.position.y }
+    -- Loop over all possible item settings to insert into the entity
+    for _, setting in pairs(autofill_player_settings[player.name]) do
+        if not setting.enabled then
+            goto end_setting
         end
-        local player_inventory = player.get_main_inventory()
-        local entity_inventory = entity.get_inventory(entity_config.inventory)
-        for _, setting in pairs(autofill_player_settings[player.name]) do
-            if not setting.enabled or not table.contains(setting.inventories, entity_config.inventory) then
-                goto continue
+        -- Loop over possible inventories for this setting to put into the vehicle
+        for _, inventory in pairs(setting.inventories) do
+            -- Check in the configs if the inventory type exists and is enabled for this vehicle
+            if not entity_configs[inventory] or not entity_configs[inventory].enabled then
+                goto end_inventory
             end
+
+            -- Get the inventory of the entity
+            local entity_inventory = entity.get_inventory(inventory)
+            if not entity_inventory then
+                goto end_inventory
+            end
+
             local item = setting.item
             local preferd_amount = setting.amount
             local item_amount = player_inventory.get_item_count(item)
             if item_amount ~= 0 then
                 local inserted
+                text_position.y = text_position.y - 0.2
                 if item_amount >= preferd_amount then
                     if not entity_inventory.can_insert({name=item, count=preferd_amount}) then
-                        goto continue
+                        goto end_inventory
                     end
                     inserted = entity_inventory.insert({name=item, count=preferd_amount})
                     player_inventory.remove({name=item, count=inserted})
-                    print_text(entity.surface, entity.position, {'autofill.filled', rich_img('entity', entity.name), inserted, rich_img('item', item) }, { r = 0, g = 255, b = 0, a = 1})
+                    print_text(entity.surface, text_position, {'autofill.filled', rich_img('entity', entity.name), inserted, rich_img('item', item) }, { r = 0, g = 255, b = 0, a = 1})
                 else
                     inserted = entity_inventory.insert({name=item, count=item_amount})
                     player_inventory.remove({name=item, count=inserted})
-                    print_text(entity.surface, entity.position, {'autofill.filled', rich_img('entity', entity.name), inserted, rich_img('item', item) }, { r = 255, g = 165, b = 0, a = 1})
+                    print_text(entity.surface, text_position, {'autofill.filled', rich_img('entity', entity.name), inserted, rich_img('item', item) }, { r = 255, g = 165, b = 0, a = 1})
                 end
-                goto continue
             end
-            ::continue::
+            ::end_inventory::
         end
+        ::end_setting::
     end
 end
 

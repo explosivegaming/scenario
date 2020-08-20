@@ -6,38 +6,38 @@ return {
 	icon = 'item/piercing-rounds-magazine', --- @setting icon that will be used for the toolbar
 	entities = {
 		['car'] = {
-			{
+			[defines.inventory.fuel] = {
 				type = 'fuel',
 				inventory = defines.inventory.fuel,
 				enabled = true
 			},
-			{
+			[defines.inventory.car_ammo] = {
 				type = 'ammo',
 				inventory = defines.inventory.car_ammo,
 				enabled = true
 			}
 		},
 		['locomotive'] = {
-			{
+			[defines.inventory.fuel] = {
 				type = 'fuel',
 				inventory = defines.inventory.fuel,
 				enabled = true
 			}
 		},
 		['tank'] = {
-			{
+			[defines.inventory.fuel] = {
 				type = 'fuel',
 				inventory = defines.inventory.fuel,
 				enabled = true
 			},
-			{
+			[defines.inventory.car_ammo] = {
 				type = 'ammo',
 				inventory = defines.inventory.car_ammo,
 				enabled = true
 			}
 		},
 		['gun-turret'] = {
-			{
+			[defines.inventory.turret_ammo] = {
 				type = 'ammo',
 				inventory = defines.inventory.turret_ammo,
 				enabled = true
