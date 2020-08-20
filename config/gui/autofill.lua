@@ -29,6 +29,11 @@ return {
 				type = 'fuel',
 				inventory = defines.inventory.fuel,
 				enabled = true
+			},
+			{
+				type = 'ammo',
+				inventory = defines.inventory.car_ammo,
+				enabled = true
 			}
 		},
 		['gun-turret'] = {

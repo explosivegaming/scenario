@@ -21,11 +21,15 @@ end)
 
 local autofill_container
 
+local function rich_img(type, value)
+    return '[img='..type..'/'..value..']'
+end
+
 --- Draw a section header and main scroll
 -- @element autofill_section_container
 local section =
 Gui.element(function(_, parent, section_name, table_size)
-	-- Draw the header for the section
+    -- Draw the header for the section
     Gui.header(
         parent,
         {'autofill.'..section_name..'-caption'},
@@ -39,12 +43,12 @@ Gui.element(function(_, parent, section_name, table_size)
 end)
 
 local toggle_item_button =
-Gui.element(function(event_trigger, parent, item_name)
+Gui.element(function(event_trigger, parent, setting)
     return parent.add{
         name = event_trigger,
         type = 'sprite-button',
-        sprite = 'item/'..item_name,
-        tooltip = {'autofill.toggle-tooltip'},
+        sprite = 'item/'..setting.item,
+        tooltip = {'autofill.toggle-tooltip', rich_img('item', setting.item), setting.type},
         style = 'shortcut_bar_button_red'
     }
 end)
@@ -64,12 +68,12 @@ end)
 end)
 
 local amount_textfield =
-Gui.element(function(event_trigger, parent, amount)
+Gui.element(function(event_trigger, parent, setting)
     return parent.add{
         name = event_trigger,
         type = 'textfield',
-        text = amount,
-        tooltip = {'autofill.amount-tooltip'},
+        text = setting.amount,
+        tooltip = {'autofill.amount-tooltip', setting.type},
         clear_and_focus_on_right_click = true
     }
 end)
@@ -89,13 +93,13 @@ end)
 end)
 
 local add_autofill_setting =
-Gui.element(function(_, parent, item_name, amount)
-    local toggle_flow = parent.add{ type = 'flow', name = 'toggle-setting-'..item_name }
-    local amount_flow = parent.add{ type = 'flow', name = 'amount-setting-'..item_name }
+Gui.element(function(_, parent, setting)
+    local toggle_flow = parent.add{ type = 'flow', name = 'toggle-setting-'..setting.item }
+    local amount_flow = parent.add{ type = 'flow', name = 'amount-setting-'..setting.item }
     toggle_flow.style.padding = 0
     amount_flow.style.padding = 0
-    toggle_item_button(toggle_flow, item_name)
-    amount_textfield(amount_flow, amount)
+    toggle_item_button(toggle_flow, setting)
+    amount_textfield(amount_flow, setting)
 end)
 
 --- Main gui container for the left flow
@@ -104,15 +108,16 @@ autofill_container =
 Gui.element(function(event_trigger, parent)
     -- Draw the internal container
     local container = Gui.container(parent, event_trigger, 100)
+
     -- Draw the header
     local ammo_table = section(container, 'ammo', 2)
     local fuel_table = section(container, 'fuel', 2)
 
     for _, setting in pairs(config.default_settings) do
         if setting.type == 'ammo' then
-            add_autofill_setting(ammo_table, setting.item, setting.amount)
+            add_autofill_setting(ammo_table, setting)
         elseif  setting.type == 'fuel' then
-            add_autofill_setting(fuel_table, setting.item, setting.amount)
+            add_autofill_setting(fuel_table, setting)
         end
     end
 
@@ -177,11 +182,11 @@ local function entity_build(event)
                     end
                     inserted = entity_inventory.insert({name=item, count=preferd_amount})
                     player_inventory.remove({name=item, count=inserted})
-                    print_text(entity.surface, entity.position, {'autofill.filled', '[img=entity/'..entity.name..']', inserted, '[img=item/'..item..']' }, { r = 0, g = 255, b = 0, a = 1})
+                    print_text(entity.surface, entity.position, {'autofill.filled', rich_img('entity', entity.name), inserted, rich_img('item', item) }, { r = 0, g = 255, b = 0, a = 1})
                 else
                     inserted = entity_inventory.insert({name=item, count=item_amount})
                     player_inventory.remove({name=item, count=inserted})
-                    print_text(entity.surface, entity.position, {'autofill.filled', '[img=entity/'..entity.name..']', inserted, '[img=item/'..item..']' }, { r = 255, g = 165, b = 0, a = 1})
+                    print_text(entity.surface, entity.position, {'autofill.filled', rich_img('entity', entity.name), inserted, rich_img('item', item) }, { r = 255, g = 165, b = 0, a = 1})
                 end
                 goto continue
             end
