@@ -12,6 +12,7 @@ local tank = 'tank'
 local spidertron = 'spidertron'
 local locomotive = 'locomotive'
 local gun_turret = 'gun-turret'
+local burner_mining_drill = 'burner-mining-drill'
 local stone_furnace = 'stone-furnace'
 local steel_furnace = 'steel-furnace'
 
@@ -29,6 +30,7 @@ local config = {
 		spidertron = spidertron,
 		locomotive = locomotive,
 		gun_turret = gun_turret,
+		burner_mining_drill = burner_mining_drill,
 		stone_furnace = stone_furnace,
 		steel_furnace = steel_furnace
 	},
@@ -126,7 +128,7 @@ local default_autofill_item_settings = {
 	},
 	{
 		category = config.categories.fuel,
-		entity = {config.entities.car, config.entities.tank, config.entities.locomotive, config.entities.stone_furnace, config.entities.steel_furnace},
+		entity = {config.entities.car, config.entities.tank, config.entities.locomotive, config.entities.burner_mining_drill, config.entities.stone_furnace, config.entities.steel_furnace},
 		type = {defines.inventory.fuel},
 		name = 'nuclear-fuel',
 		amount = 1,
@@ -134,7 +136,7 @@ local default_autofill_item_settings = {
 	},
 	{
 		category = config.categories.fuel,
-		entity = {config.entities.car, config.entities.tank, config.entities.locomotive, config.entities.stone_furnace, config.entities.steel_furnace},
+		entity = {config.entities.car, config.entities.tank, config.entities.locomotive, config.entities.burner_mining_drill, config.entities.stone_furnace, config.entities.steel_furnace},
 		type = {defines.inventory.fuel},
 		name = 'rocket-fuel',
 		amount = 10,
@@ -142,7 +144,7 @@ local default_autofill_item_settings = {
 	},
 	{
 		category = config.categories.fuel,
-		entity = {config.entities.car, config.entities.tank, config.entities.locomotive, config.entities.stone_furnace, config.entities.steel_furnace},
+		entity = {config.entities.car, config.entities.tank, config.entities.locomotive, config.entities.burner_mining_drill, config.entities.stone_furnace, config.entities.steel_furnace},
 		type = {defines.inventory.fuel},
 		name = 'solid-fuel',
 		amount = 10,
@@ -150,7 +152,7 @@ local default_autofill_item_settings = {
 	},
 	{
 		category = config.categories.fuel,
-		entity = {config.entities.car, config.entities.tank, config.entities.locomotive, config.entities.stone_furnace, config.entities.steel_furnace},
+		entity = {config.entities.car, config.entities.tank, config.entities.locomotive, config.entities.burner_mining_drill, config.entities.stone_furnace, config.entities.steel_furnace},
 		type = {defines.inventory.fuel},
 		name = 'coal',
 		amount = 10,
@@ -201,6 +203,8 @@ generate_default_setting(config.entities.tank, defines.inventory.car_ammo, true)
 generate_default_setting(config.entities.spidertron, defines.inventory.car_ammo, true)
 
 generate_default_setting(config.entities.gun_turret, defines.inventory.turret_ammo, true)
+
+generate_default_setting(config.entities.burner_mining_drill, defines.inventory.fuel, true)
 
 generate_default_setting(config.entities.stone_furnace, defines.inventory.fuel, true)
 

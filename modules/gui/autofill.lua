@@ -25,8 +25,9 @@ local function rich_img(type, value)
     return '[img='..type..'/'..value..']'
 end
 
--- Button to toggle a section dropdown
--- @element toggle_section
+--- Toggle enitity button, used for toggling autofill for the specific entity
+-- All entity autofill settings will be ignored if its disabled
+-- @element toggle_item_button
 local toggle_section =
 Gui.element{
 	type = 'sprite-button',
@@ -49,31 +50,23 @@ toggle_section
         element.hovered_sprite = 'utility/expand'
         element.tooltip = {'autofill.toggle-section-tooltip'}
     end
-    local event = {}
-    for _, child in pairs(element.parent.parent.children) do
-        if child.alignment and child.alignment[toggle_section.name] then
-            if element.parent.name ~= child.name then
-                event.element = child.alignment[toggle_section.name]
-                toggle_section:raise_custom_event(event)
-            end
-        end
-    end
 end)
 
--- Used to assign an event to the header label to trigger a toggle
+--- Used to assign an event to the header label to trigger a toggle
 -- @element header_toggle
 local header_toggle = Gui.element()
 :on_click(function(_, element, event)
     event.element = element.parent.alignment[toggle_section.name]
     toggle_section:raise_custom_event(event)
 end)
--- Used to assign an event to the header label to trigger a toggle
+
+--- Used to assign an event to the header label to trigger a toggle
 -- @element header_toggle
 local entity_toggle = Gui.element(function(event_trigger, parent, entity_name)
     return parent.add{
         name = event_trigger,
         type = 'sprite-button',
-        sprite = 'item/'..entity_name,
+        sprite = 'utility/confirm_slot',
         tooltip = {'autofill.toggle-entity-tooltip', rich_img('item', entity_name)},
         style = 'shortcut_bar_button_green'
     }
@@ -86,9 +79,11 @@ end)
     if not setting then return end
     if setting.enabled then
         setting.enabled = false
+        element.sprite = 'utility/close_black'
         element.style = 'shortcut_bar_button_red'
     else
         setting.enabled = true
+        element.sprite = 'utility/confirm_slot'
         element.style = 'shortcut_bar_button_green'
     end
 end)
@@ -100,7 +95,7 @@ Gui.element(function(_, parent, section_name, table_size)
     -- Draw the header for the section
     local header = Gui.header(
         parent,
-        {'entity-name.'..section_name},
+        {'autofill.toggle-section-caption', rich_img('item', section_name), {'entity-name.'..section_name}},
         {'autofill.toggle-section-tooltip'},
 		true,
 		section_name..'-header',
@@ -111,15 +106,19 @@ Gui.element(function(_, parent, section_name, table_size)
     entity_toggle(header, section_name)
     toggle_section(header)
 
-    -- Table used to display the settings
-    local scroll_table = Gui.scroll_table(parent, 999, table_size, section_name)
-    scroll_table.parent.visible = false
+    local section_table = parent.add{
+        type = 'table',
+        name = section_name,
+        column_count = table_size
+    }
 
-    return scroll_table
+    section_table.visible = false
+
+    return section_table
 end)
 
-
-
+--- Toggle item button, used for toggling autofill for the specific item
+-- @element toggle_item_button
 local toggle_item_button =
 Gui.element(function(event_trigger, parent, item)
     return parent.add{
@@ -133,7 +132,7 @@ end)
 :style(Gui.sprite_style(32, nil, { right_margin = -3 }))
 :on_click(function(player, element)
     local item_name = string.sub(element.parent.name, 1 + string.len('toggle-setting-'), -1)
-    local entity_name = element.parent.parent.parent.parent.parent.parent.name
+    local entity_name = element.parent.parent.parent.parent.name
     if not autofill_player_settings[player.name] then return end
     local setting = autofill_player_settings[player.name][entity_name]
     if not setting then return end
@@ -148,6 +147,9 @@ end)
     end
 end)
 
+
+--- Amount text field for a autofill item
+-- @element amount_textfield
 local amount_textfield =
 Gui.element(function(event_trigger, parent, item)
     return parent.add{
@@ -165,7 +167,7 @@ end)
 }
 :on_confirmed(function(player, element, _)
     local item_name = string.sub(element.parent.name, 1 + string.len('toggle-setting-'), -1)
-    local entity_name = element.parent.parent.parent.parent.parent.parent.name
+    local entity_name = element.parent.parent.parent.parent.name
     if not autofill_player_settings[player.name] then return end
     local setting = autofill_player_settings[player.name][entity_name]
     if not setting then return end
@@ -175,6 +177,8 @@ end)
     player.print({'autofill.confirmed', item.amount, rich_img('item', item.name), rich_img('entity', entity_name) })
 end)
 
+--- Autofill setting, contains a button and a textbox
+-- @element add_autofill_setting
 local add_autofill_setting =
 Gui.element(function(_, parent, item)
     local toggle_flow = parent.add{ type = 'flow', name = 'toggle-setting-'..item.name }
@@ -185,6 +189,8 @@ Gui.element(function(_, parent, item)
     amount_textfield(amount_flow, item)
 end)
 
+--- Toggle item button empty, just a filler gui element
+-- @element toggle_item_button_empty
 local toggle_item_button_empty =
 Gui.element(function(_, parent, i)
     return parent.add{
@@ -195,6 +201,8 @@ end)
 :style(Gui.sprite_style(32, nil, { right_margin = -3 }))
 
 
+--- Amount text field empty, just a filler gui element
+-- @element amount_textfield_empty
 local amount_textfield_empty =
 Gui.element(function(_, parent, i)
     return parent.add{
@@ -204,6 +212,8 @@ Gui.element(function(_, parent, i)
 end)
 :style{ maximal_width = 40, height = 31, padding = -2 }
 
+--- Autofill setting empty, contains filler button and textfield gui elements
+-- @element add_empty_autofill_setting
 local add_empty_autofill_setting =
 Gui.element(function(_, parent, i)
     local toggle_flow = parent.add{ type = 'flow', name = 'toggle-setting-empty-'..i }
@@ -223,19 +233,33 @@ autofill_container =
 Gui.element(function(event_trigger, parent)
     -- Draw the internal container
     local container = Gui.container(parent, event_trigger)
-    container.parent.style.minimal_width = 245
-    -- Draw the header
+    container.parent.style.minimal_width = 257
+    -- Draw the scroll container
+    local scroll_table = Gui.scroll_table(container, 400, 1, 'autofill-scroll-table')
+    scroll_table.style.vertical_spacing = 0
+    scroll_table.parent.vertical_scroll_policy = 'always'
+    -- Loop over each default entity config
     for _, setting in pairs(config.default_entities) do
         local table_sizes = {}
         local tables = {}
-        local entity_table = section(container, setting.entity, 3)
+        -- Draw a section for the element
+        local entity_table = section(scroll_table, setting.entity, 3)
+        -- Loop over each item category
         for _, category in pairs(config.categories) do
             if not table_sizes[category] then table_sizes[category] = 0 end
+            -- Draw a alignment gui to make sure the gui is floating to the top of the parent
             local alignment = Gui.alignment(entity_table, category..'-'..setting.entity, 'center', 'top')
             alignment.style.padding = 0
-            local category_table = Gui.scroll_table(alignment, 999, 2, category)
+            -- Draw table
+            local category_table = alignment.add{
+                type = 'table',
+                name = 'category-table',
+                column_count = 2
+            }
+            category_table.style.vertical_spacing = 1
             category_table.parent.style.padding = 0
             tables[category] = category_table
+            -- Add item autofill setting gui elements to the table
             for _, item in pairs(setting.items) do
                 if item.category == category then
                     add_autofill_setting(category_table, item)
@@ -244,6 +268,7 @@ Gui.element(function(event_trigger, parent)
             end
         end
 
+        -- Add empty gui elements for the categories with less items than the other categories
         local t = table.get_values(table_sizes)
         table.sort(t)
         local biggest = t[#t]
@@ -269,8 +294,6 @@ Event.add(defines.events.on_player_created, function(event)
     if not autofill_player_settings[player.name] then
         autofill_player_settings[player.name] = table.deep_copy(config.default_entities)
     end
-
-    print(game.table_to_json(autofill_player_settings[player.name]))
 end)
 
 local function entity_build(event)
@@ -285,15 +308,17 @@ local function entity_build(event)
     -- Check if player has settings
     if not autofill_player_settings[player.name] then return end
 
+    local entity_settings = autofill_player_settings[player.name][entity.name]
     -- Check if autofill for the entity is enabled
-    if not autofill_player_settings[player.name][entity.name] then return end
+    if not entity_settings then return end
+    if not entity_settings.enabled then return end
 
     -- Get the inventory of the player
     local player_inventory = player.get_main_inventory()
 
     local text_position = { x = entity.position.x, y = entity.position.y }
     -- Loop over all possible items to insert into the entity
-    for _, item in pairs(autofill_player_settings[player.name][entity.name].items) do
+    for _, item in pairs(entity_settings.items) do
         -- Check if the item is enabled or goto next item
         if not item.enabled then goto end_item end
 
