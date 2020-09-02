@@ -157,7 +157,10 @@ Gui.element(function(event_trigger, parent, item)
         type = 'textfield',
         text = item.amount,
         tooltip = {'autofill.amount-tooltip', item.category, rich_img('item', item.entity) },
-        clear_and_focus_on_right_click = true
+        clear_and_focus_on_right_click = true,
+        numeric = true,
+        allow_decimal = false,
+        allow_negative = false
     }
 end)
 :style{
@@ -165,7 +168,10 @@ end)
     height = 31,
     padding = -2
 }
-:on_confirmed(function(player, element, _)
+:on_text_changed(function(player, element, _)
+    local value = tonumber(element.text)
+    if not value then value = 0 end
+    local clamped = math.clamp(value, 0, 1000)
     local item_name = string.sub(element.parent.name, 1 + string.len('toggle-setting-'), -1)
     local entity_name = element.parent.parent.parent.parent.name
     if not autofill_player_settings[player.name] then return end
@@ -173,8 +179,12 @@ end)
     if not setting then return end
     local item = setting.items[item_name]
     if not item then return end
-    item.amount = tonumber(element.text)
-    player.print({'autofill.confirmed', item.amount, rich_img('item', item.name), rich_img('entity', entity_name) })
+    item.amount = clamped
+    if clamped ~= value then
+        element.text = clamped
+        player.print({'autofill.invalid', item.amount, rich_img('item', item.name), rich_img('entity', entity_name) })
+        return
+    end
 end)
 
 --- Autofill setting, contains a button and a textbox
