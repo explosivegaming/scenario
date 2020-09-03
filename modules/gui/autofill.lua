@@ -35,7 +35,6 @@ Gui.element{
 	hovered_sprite = 'utility/expand',
 	tooltip = {'autofill.toggle-section-tooltip'}
 }
-toggle_section
 :style(Gui.sprite_style(20))
 :on_click(function(_, element, _)
 	local header_flow = element.parent
