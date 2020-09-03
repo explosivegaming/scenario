@@ -155,7 +155,7 @@ Gui.element(function(event_trigger, parent, item)
         name = event_trigger,
         type = 'textfield',
         text = item.amount,
-        tooltip = {'autofill.amount-tooltip', item.category, rich_img('item', item.entity) },
+        tooltip = {'autofill.amount-tooltip', item.category },
         clear_and_focus_on_right_click = true,
         numeric = true,
         allow_decimal = false,
@@ -340,19 +340,19 @@ local function entity_build(event)
         if item_amount ~= 0 then
             local inserted
             text_position.y = text_position.y - 0.2
+            local color = { r = 0, g = 255, b = 0, a = 1}
             if item_amount >= preferd_amount then
                 -- Can item be inserted? no, goto next item!
                 if not entity_inventory.can_insert({name=item.name, count=preferd_amount}) then
                     goto end_item
                 end
                 inserted = entity_inventory.insert({name=item.name, count=preferd_amount})
-                player_inventory.remove({name=item.name, count=inserted})
-                print_text(entity.surface, text_position, {'autofill.filled', rich_img('entity', entity.name), inserted, rich_img('item', item.name) }, { r = 0, g = 255, b = 0, a = 1})
             else
                 inserted = entity_inventory.insert({name=item.name, count=item_amount})
-                player_inventory.remove({name=item.name, count=inserted})
-                print_text(entity.surface, text_position, {'autofill.filled', rich_img('entity', entity.name), inserted, rich_img('item', item.name) }, { r = 255, g = 165, b = 0, a = 1})
+                color = { r = 255, g = 165, b = 0, a = 1}
             end
+            player_inventory.remove({name=item.name, count=inserted})
+            print_text(entity.surface, text_position, {'autofill.inserted', inserted, rich_img('item', item.name), rich_img('entity', entity.name) }, color)
         end
         ::end_item::
     end
