@@ -3,36 +3,23 @@
 
 local table = require 'overrides.table' --- @dep overrides.table
 
-local ammo = 'ammo'
-local fuel = 'fuel'
-local shell = 'shell'
-
-local car = 'car'
-local tank = 'tank'
-local spidertron = 'spidertron'
-local locomotive = 'locomotive'
-local gun_turret = 'gun-turret'
-local burner_mining_drill = 'burner-mining-drill'
-local stone_furnace = 'stone-furnace'
-local steel_furnace = 'steel-furnace'
-
 local config = {
 	-- General config
 	icon = 'item/piercing-rounds-magazine', --- @setting icon that will be used for the toolbar
 	categories = {
-		ammo = ammo,
-		fuel = fuel,
-		shell = shell
+		ammo = 'ammo',
+		fuel = 'fuel',
+		shell = 'shell'
 	},
 	entities = {
-		car = car,
-		tank = tank,
-		spidertron = spidertron,
-		locomotive = locomotive,
-		gun_turret = gun_turret,
-		burner_mining_drill = burner_mining_drill,
-		stone_furnace = stone_furnace,
-		steel_furnace = steel_furnace
+		car = 'car',
+		tank = 'tank',
+		spidertron = 'spidertron',
+		locomotive = 'locomotive',
+		gun_turret = 'gun-turret',
+		burner_mining_drill = 'burner-mining-drill',
+		stone_furnace = 'stone-furnace',
+		steel_furnace = 'steel-furnace'
 	},
 	default_entities = {}
 }
