@@ -3,30 +3,6 @@
 
 local table = require 'overrides.table' -- @dep overrides.table
 
----@class AutofillEntity
----@field entity string
----@field enabled boolean
----@field items AutofillItem[]
-
----@class AutofillItem
----@field entity string
----@field category string
----@field inv number
----@field name string
----@field amount number
----@field enabled boolean
-
----@class DefaultItem
----@field name string
----@field amount number
----@field enabled boolean
-
----@class DefaultCategory
----@field category string
----@field entity string[]
----@field inv number[]
----@field items DefaultItem[]
-
 local config = {
 	-- General config
 	icon = 'item/piercing-rounds-magazine', -- @setting icon that will be used for the toolbar
@@ -45,11 +21,9 @@ local config = {
 		stone_furnace = 'stone-furnace',
 		steel_furnace = 'steel-furnace'
 	},
-	---@type AutofillEntity[]
 	default_entities = {}
 }
 
----@type DefaultCategory[]
 local default_categories = {
 	{
 		category = config.categories.ammo,
@@ -103,9 +77,6 @@ local default_categories = {
 	}
 }
 
----@param entity AutofillEntity
----@param inv string
----@return AutofillItem[]
 local function get_items_by_inv(entity, inv)
 	local items = entity.items
 	for _, category in pairs(default_categories) do
@@ -127,9 +98,6 @@ local function get_items_by_inv(entity, inv)
 	return items
 end
 
----@param entity_name string
----@param inv number
----@param enabled boolean
 local function generate_default_setting(entity_name, inv, enabled)
 	if not config.default_entities[entity_name] then
 		config.default_entities[entity_name] = {
