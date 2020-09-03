@@ -181,7 +181,7 @@ end)
     item.amount = clamped
     if clamped ~= value then
         element.text = clamped
-        player.print({'autofill.invalid', item.amount, rich_img('item', item.name), rich_img('entity', entity_name) })
+        player.print{'autofill.invalid', item.amount, rich_img('item', item.name), rich_img('entity', entity_name) }
         return
     end
 end)
