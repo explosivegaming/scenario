@@ -343,15 +343,15 @@ local function entity_build(event)
             local color = { r = 0, g = 255, b = 0, a = 1}
             if item_amount >= preferd_amount then
                 -- Can item be inserted? no, goto next item!
-                if not entity_inventory.can_insert({name=item.name, count=preferd_amount}) then
+                if not entity_inventory.can_insert{name=item.name, count=preferd_amount} then
                     goto end_item
                 end
-                inserted = entity_inventory.insert({name=item.name, count=preferd_amount})
+                inserted = entity_inventory.insert{name=item.name, count=preferd_amount}
             else
-                inserted = entity_inventory.insert({name=item.name, count=item_amount})
+                inserted = entity_inventory.insert{name=item.name, count=item_amount}
                 color = { r = 255, g = 165, b = 0, a = 1}
             end
-            player_inventory.remove({name=item.name, count=inserted})
+            player_inventory.remove{name=item.name, count=inserted}
             print_text(entity.surface, text_position, {'autofill.inserted', inserted, rich_img('item', item.name), rich_img('entity', entity.name) }, color)
         end
         ::end_item::
