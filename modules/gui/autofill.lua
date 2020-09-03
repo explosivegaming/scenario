@@ -4,12 +4,12 @@
     @alias autofill
 ]]
 
-local Game = require 'utils.game' --- @dep utils.game
-local Gui = require 'expcore.gui' --- @dep expcore.gui
-local Global = require 'utils.global' --- @dep utils.global
-local config = require 'config.gui.autofill' --- @dep config.gui.autofill
-local Event = require 'utils.event' --- @dep utils.event
-local table = require 'overrides.table' --- @dep overrides.table
+local Game = require 'utils.game' -- @dep utils.game
+local Gui = require 'expcore.gui' -- @dep expcore.gui
+local Global = require 'utils.global' -- @dep utils.global
+local config = require 'config.gui.autofill' -- @dep config.gui.autofill
+local Event = require 'utils.event' -- @dep utils.event
+local table = require 'overrides.table' -- @dep overrides.table
 
 local print_text = Game.print_floating_text -- (surface, position, text, color)
 
@@ -333,7 +333,7 @@ local function entity_build(event)
         if not item.enabled then goto end_item end
 
         -- Get the inventory of the entity or goto next item
-        local entity_inventory = entity.get_inventory(item.type)
+        local entity_inventory = entity.get_inventory(item.inv)
         if not entity_inventory then goto end_item end
 
         local preferd_amount = item.amount
