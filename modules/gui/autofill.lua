@@ -25,8 +25,7 @@ local function rich_img(type, value)
     return '[img='..type..'/'..value..']'
 end
 
---- Toggle enitity button, used for toggling autofill for the specific entity
--- All entity autofill settings will be ignored if its disabled
+--- Toggle entity section visibility
 -- @element toggle_item_button
 local toggle_section =
 Gui.element{
@@ -59,8 +58,9 @@ local header_toggle = Gui.element()
     toggle_section:raise_custom_event(event)
 end)
 
---- Used to assign an event to the header label to trigger a toggle
--- @element header_toggle
+--- Toggle enitity button, used for toggling autofill for the specific entity
+-- All entity autofill settings will be ignored if its disabled
+-- @element entity_toggle
 local entity_toggle = Gui.element(function(event_trigger, parent, entity_name)
     return parent.add{
         name = event_trigger,
