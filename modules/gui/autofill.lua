@@ -239,6 +239,7 @@ Gui.element(function(event_trigger, parent)
         local tables = {}
         -- Draw a section for the element
         local entity_table = section(scroll_table, setting.entity, 3)
+        entity_table.style.padding = 5
         -- Loop over each item category
         for _, category in pairs(config.categories) do
             if not table_sizes[category] then table_sizes[category] = 0 end
