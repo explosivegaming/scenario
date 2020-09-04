@@ -242,11 +242,14 @@ autofill_container =
 Gui.element(function(event_trigger, parent)
     -- Draw the internal container
     local container = Gui.container(parent, event_trigger)
-    container.parent.style.minimal_width = 257
     -- Draw the scroll container
     local scroll_table = Gui.scroll_table(container, 400, 1, 'autofill-scroll-table')
-    scroll_table.style.vertical_spacing = 0
+    -- Set the scroll panel to always show the scrollbar (not doing this will result in a changing gui size)
     scroll_table.parent.vertical_scroll_policy = 'always'
+    -- Scroll panel has by default padding
+    scroll_table.parent.style.padding = 0
+    -- Remove the default gap that is added in a table between elements
+    scroll_table.style.vertical_spacing = 0
     -- Loop over each default entity config
     for _, setting in pairs(config.default_entities) do
         local table_sizes = {}
