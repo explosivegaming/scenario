@@ -198,40 +198,23 @@ Gui.element(function(_, parent, item)
     amount_textfield(amount_flow, item)
 end)
 
---- Toggle item button empty, just a filler gui element
--- @element toggle_item_button_empty
-local toggle_item_button_empty =
-Gui.element(function(_, parent, i)
-    return parent.add{
-        name = 'toggle-setting-empty-frame-'..i,
-        type = 'sprite-button'
-    }
-end)
-:style(Gui.sprite_style(32, nil, { right_margin = -3 }))
-
-
---- Amount text field empty, just a filler gui element
--- @element amount_textfield_empty
-local amount_textfield_empty =
-Gui.element(function(_, parent, i)
-    return parent.add{
-        name = 'amount-setting-empty-frame-'..i,
-        type = 'textfield'
-    }
-end)
-:style{ maximal_width = 40, height = 31, padding = -2 }
-
 --- Autofill setting empty, contains filler button and textfield gui elements
 -- @element add_empty_autofill_setting
 local add_empty_autofill_setting =
-Gui.element(function(_, parent, i)
-    local toggle_flow = parent.add{ type = 'flow', name = 'toggle-setting-empty-'..i }
-    local amount_flow = parent.add{ type = 'flow', name = 'amount-setting-empty-'..i }
-    toggle_flow.style.padding = 0
-    amount_flow.style.padding = 0
-    local toggle_element = toggle_item_button_empty(toggle_flow, i)
+Gui.element(function(_, parent)
+    local toggle_element = parent.add{
+        type = 'sprite-button'
+    }
+    toggle_element.style.right_margin = -3
+    toggle_element.style.width = 32
+    toggle_element.style.height = 32
     toggle_element.enabled = false
-    local amount_element = amount_textfield_empty(amount_flow, i)
+    local amount_element = parent.add{
+        type = 'textfield'
+    }
+    amount_element.style.maximal_width = 40
+    amount_element.style.height = 31
+    amount_element.style.padding = -2
     amount_element.enabled = false
 end)
 
@@ -286,7 +269,7 @@ Gui.element(function(event_trigger, parent)
         local biggest = t[#t]
         for category, size in pairs(table_sizes) do
             for i=biggest-size,1,-1 do
-                add_empty_autofill_setting(tables[category], i)
+                add_empty_autofill_setting(tables[category])
             end
         end
     end
