@@ -72,7 +72,7 @@ local entity_toggle = Gui.element(function(event_trigger, parent, entity_name)
 end)
 :style(Gui.sprite_style(22))
 :on_click(function(player, element, _)
-    local entity_name = string.sub(element.parent.parent.name, 0, -(1 + string.len('-header')))
+    local entity_name = string.match(element.parent.parent.name,'(.*)%-header')
     if not autofill_player_settings[player.name] then return end
     local setting = autofill_player_settings[player.name][entity_name]
     if not setting then return end
@@ -130,7 +130,7 @@ Gui.element(function(event_trigger, parent, item)
 end)
 :style(Gui.sprite_style(32, nil, { right_margin = -3 }))
 :on_click(function(player, element)
-    local item_name = string.sub(element.parent.name, 1 + string.len('toggle-setting-'), -1)
+    local item_name = string.match(element.parent.name,'toggle%-setting%-(.*)')
     local entity_name = element.parent.parent.parent.parent.name
     if not autofill_player_settings[player.name] then return end
     local setting = autofill_player_settings[player.name][entity_name]
@@ -171,7 +171,7 @@ end)
     local value = tonumber(element.text)
     if not value then value = 0 end
     local clamped = math.clamp(value, 0, 1000)
-    local item_name = string.sub(element.parent.name, 1 + string.len('toggle-setting-'), -1)
+    local item_name = string.match(element.parent.name,'amount%-setting%-(.*)')
     local entity_name = element.parent.parent.parent.parent.name
     if not autofill_player_settings[player.name] then return end
     local setting = autofill_player_settings[player.name][entity_name]
