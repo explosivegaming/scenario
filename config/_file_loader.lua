@@ -59,6 +59,7 @@ return {
     'modules.gui.warp-list',
     'modules.gui.task-list',
     'modules.gui.player-list',
+    'modules.gui.paint',
     'modules.gui.server-ups',
     'modules.commands.debug',
 
