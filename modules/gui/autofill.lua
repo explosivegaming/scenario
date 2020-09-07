@@ -130,7 +130,7 @@ Gui.element(function(event_trigger, parent, item)
 end)
 :style(Gui.sprite_style(32, nil, { right_margin = -3 }))
 :on_click(function(player, element)
-    local item_name = string.match(element.parent.name,'toggle%-setting%-(.*)')
+    local item_name = element.parent.tooltip
     local entity_name = element.parent.parent.parent.parent.name
     if not autofill_player_settings[player.name] then return end
     local setting = autofill_player_settings[player.name][entity_name]
@@ -171,7 +171,7 @@ end)
     local value = tonumber(element.text)
     if not value then value = 0 end
     local clamped = math.clamp(value, 0, 1000)
-    local item_name = string.match(element.parent.name,'amount%-setting%-(.*)')
+    local item_name = element.parent.tooltip
     local entity_name = element.parent.parent.parent.parent.name
     if not autofill_player_settings[player.name] then return end
     local setting = autofill_player_settings[player.name][entity_name]
@@ -190,8 +190,8 @@ end)
 -- @element add_autofill_setting
 local add_autofill_setting =
 Gui.element(function(_, parent, item)
-    local toggle_flow = parent.add{ type = 'flow', name = 'toggle-setting-'..item.name }
-    local amount_flow = parent.add{ type = 'flow', name = 'amount-setting-'..item.name }
+    local toggle_flow = parent.add{ type = 'flow', name = 'toggle-setting-'..item.name, tooltip = item.name }
+    local amount_flow = parent.add{ type = 'flow', name = 'amount-setting-'..item.name, tooltip = item.name }
     toggle_flow.style.padding = 0
     amount_flow.style.padding = 0
     toggle_item_button(toggle_flow, item)
