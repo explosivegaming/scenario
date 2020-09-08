@@ -241,21 +241,23 @@ Gui.element(function(event_trigger, parent)
         local tables = {}
         -- Draw a section for the element
         local entity_table = section(scroll_table, setting.entity, 3)
+        -- Add some padding around the table
         entity_table.style.padding = 3
+        -- Make sure each collumn is alignment top center
+        entity_table.style.column_alignments[1] = 'top-center'
+        entity_table.style.column_alignments[2] = 'top-center'
+        entity_table.style.column_alignments[3] = 'top-center'
         -- Loop over each item category
         for _, category in pairs(config.categories) do
             if not table_sizes[category] then table_sizes[category] = 0 end
-            -- Draw a alignment gui to make sure the gui is floating to the top of the parent
-            local alignment = Gui.alignment(entity_table, category..'-'..setting.entity, 'center', 'top')
-            alignment.style.padding = 0
             -- Draw table
-            local category_table = alignment.add{
+            local category_table = entity_table.add{
                 type = 'table',
-                name = 'category-table',
+                name = category..'-category',
                 column_count = 2
             }
+            -- Add padding between each item
             category_table.style.vertical_spacing = 1
-            category_table.parent.style.padding = 0
             tables[category] = category_table
             -- Add item autofill setting gui elements to the table
             for _, item in pairs(setting.items) do
