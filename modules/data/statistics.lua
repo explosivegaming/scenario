@@ -7,7 +7,7 @@ local floor = math.floor
 local afk_required = 5*3600 -- 5 minutes
 
 --- Stores players who have been created, required to avoid loss of data
-local new_players, MapsPlayed = {}, nil
+local new_players = {}
 Global.register(new_players, function(tbl)
     new_players = tbl
 end)
@@ -25,6 +25,7 @@ Statistics:on_load(function(player_name, player_statistics)
     local existing_data = AllPlayerData:get(player_name)
     if existing_data and existing_data.valid then return end
     local counters = config.counters
+
     -- Merge all data from before you data loaded
     for key, value in pairs(Statistics:get(player_name, {})) do
         if config[key] or counters[key] then
@@ -35,11 +36,14 @@ Statistics:on_load(function(player_name, player_statistics)
             end
         end
     end
+
     -- Increment your maps played if this is your first time on this map
     if new_players[player_name] then
         new_players[player_name] = nil
-        MapsPlayed:increment(player_name)
+        local ctn = player_statistics.MapsPlayed
+        player_statistics.MapsPlayed = ctn and ctn + 1 or 1
     end
+
     return player_statistics
 end)
 
@@ -54,9 +58,8 @@ end
 
 --- Add MapsPlayed if it is enabled
 if config.MapsPlayed then
-    MapsPlayed = Statistics:combine('MapsPlayed')
-    MapsPlayed:set_metadata{unit=' maps'}
-    Event.add(defines.events.on_player_joined_game, function(event)
+    Statistics:combine('MapsPlayed')
+    Event.add(defines.events.on_player_created, function(event)
         local player = game.players[event.player_index]
         new_players[player.name] = true
     end)
