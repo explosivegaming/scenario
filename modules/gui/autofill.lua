@@ -233,6 +233,8 @@ Gui.element(function(event_trigger, parent)
     scroll_table.parent.style.padding = 0
     -- Remove the default gap that is added in a table between elements
     scroll_table.style.vertical_spacing = 0
+    -- Center the first collumn in the table
+    scroll_table.style.column_alignments[1] = 'center'
     -- Loop over each default entity config
     for _, setting in pairs(config.default_entities) do
         local table_sizes = {}
