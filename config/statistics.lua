@@ -3,6 +3,7 @@
 
 local e = defines.events -- order as per lua api as it was easier just to go down the list
 return {
+    MapsPlayed = true, --- @setting MapsPlayed If the number of maps which a player has played should be tracked
     Playtime = true, --- @setting Playtime If playtime is tracked for a player, play time measured in minutes
     AfkTime = true, --- @setting AfkTime If afk time is tracked for a player, play time measured in minutes, afk is once a player does nothing for 5 minutes
     DistanceTravelled = true, --- @setting DistanceTravelled If distance Travelled is checked, only counts if not afk
@@ -21,7 +22,6 @@ return {
         ItemsPickedUp = e.on_picked_up_item,
         TilesBuilt = e.on_player_built_tile,
         ItemsCrafted = e.on_player_crafted_item,
-        MapsPlayed = e.on_player_created,
         DeconstructionPlannerUsed = e.on_player_deconstructed_area,
         Deaths = e.on_player_died,
         JoinCount = e.on_player_joined_game,

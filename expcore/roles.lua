@@ -123,7 +123,8 @@ local Roles = {
         roles    = {}, -- Contains the raw info for the roles, indexed by role name
         flags    = {}, -- Contains functions that run when a flag is added/removed from a player
         internal = {}, -- Contains all internally accessed roles, such as root, default
-        players  = {}  -- Contains the roles that players have
+        players  = {}, -- Contains the roles that players have
+        auto_assign = {} -- Contains references to all roles which have auto assign conditions
     },
     events = {
         on_role_assigned   = script.generate_event_name(),
@@ -807,7 +808,7 @@ end
 
 --[[-- Sets an auto assign condition that is checked every 60 seconds, if true is returned then the player will receive the role
 nb: this is one way, failing false after already gaining the role will not revoke the role
-@tparam function callback receives only one param which is player to promote, return true to promote the player
+@tparam function callback receives only one param which is player to assign, return true to assign the player
 @treturn Roles._prototype allows chaining
 
 @usage-- Give this role to a user if there are admin, ran every 60 seconds
@@ -818,8 +819,20 @@ end)
 ]]
 function Roles._prototype:set_auto_assign_condition(callback)
     _C.error_if_runtime()
-    self.auto_promote_condition = callback
+    self.auto_assign_condition = true
+    Roles.config.auto_assign[self.name] = callback
     return self
+end
+
+--[[-- Get the auto assign condition for this role, returns nil if no condition is set
+@treturn function The callback which was assigned as the auto assign condition
+
+@usage-- Give this role to a user if there are admin, ran every 60 seconds
+local condition = role:get_auto_assign_condition()
+
+]]
+function Roles._prototype:get_auto_assign_condition()
+    return Roles.config.auto_assign[self.name]
 end
 
 --[[-- Sets the role to not allow players to have auto assign effect them, useful to keep people locked to a role
@@ -827,12 +840,12 @@ end
 @treturn Roles._prototype allows chaining
 
 @usage-- Make a role stop players from being auto assigned to other roles
-role:set_block_auto_promote()
+role:set_block_auto_assign()
 
 ]]
-function Roles._prototype:set_block_auto_promote(state)
+function Roles._prototype:set_block_auto_assign(state)
     if state == nil then state = true end
-    self.block_auto_promote = not not state -- forces a boolean value
+    self.block_auto_assign = not not state -- forces a boolean value
     return self
 end
 
@@ -993,35 +1006,43 @@ local function role_update(event)
     end
 end
 
+--- Used internally to test if a player should be auto assigned a role
+local function auto_assign(event)
+    local player = game.players[event.player_index]
+    local roles = Roles.config.players[player.name] or {}
+
+    local lookup = {}
+    for _, role in ipairs(roles) do lookup[role] = true end
+
+    local assigns, ctn = {}, 0
+    for role, condition in pairs(Roles.config.auto_assign) do
+        if not lookup[role] then
+            local success, rtn = pcall(condition, player)
+            if not success then
+                log{'expcore-roles.error-log-format-assign', role.name, rtn}
+            elseif rtn == true then
+                ctn = ctn + 1
+                assigns[ctn] = role
+            end
+        end
+    end
+
+    if ctn > 0 then Roles.assign_player(player, assigns) end
+end
+
 --- When a player joined or has a role change then the update is triggered
 Event.add(Roles.events.on_role_assigned, role_update)
 Event.add(Roles.events.on_role_unassigned, role_update)
 Event.add(defines.events.on_player_joined_game, role_update)
--- Every 60 seconds the auto promote check is preformed
+
+--- Every 60 seconds and on join auto role assignment is checked
+Event.add(defines.events.on_player_joined_game, auto_assign)
 Event.on_nth_tick(3600, function()
-    local promotes = {}
-    for _, player in pairs(game.connected_players) do
-        for _, role in ipairs(Roles.config.roles) do
-            if role.auto_promote_condition then
-                local success, err = pcall(role.auto_promote_condition, player)
-                if not success then
-                    log{'expcore-roles.error-log-format-promote', role.name, err}
-                else
-                    if err == true and not Roles.player_has_role(player, role) then
-                        if promotes[player.name] then
-                            table.insert(promotes[player.name], role.name)
-                        else
-                            promotes[player.name] = {role.name}
-                        end
-                    end
-                end
-            end
-        end
-    end
-    for player_name, roles in pairs(promotes) do
-        Roles.assign_player(player_name, roles)
+    for _, player in ipairs(game.connected_players) do
+        auto_assign{ player_index = player.index }
     end
 end)
+
 
 -- Return Roles
 return Roles

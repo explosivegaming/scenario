@@ -2,6 +2,8 @@
 -- @config Roles
 
 local Roles = require 'expcore.roles' --- @dep expcore.roles
+local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
+local Statistics = PlayerData.Statistics
 
 --- Role flags that will run when a player changes roles
 Roles.define_flag_trigger('is_admin',function(player,state)
@@ -166,6 +168,7 @@ Roles.new_role('Partner','Part')
     'command/unjail'
 }
 
+local hours10, hours250 = 10*216000, 250*60
 Roles.new_role('Veteran','Vet')
 :set_permission_group('Trusted')
 :set_custom_color{r=140,g=120,b=200}
@@ -174,8 +177,12 @@ Roles.new_role('Veteran','Vet')
     'command/chat-bot',
 }
 :set_auto_assign_condition(function(player)
-    if player.online_time > 10*216000 then
+    if player.online_time >= hours10 then
         return true
+    else
+        local stats = Statistics:get(player, {})
+        local playTime, afkTime, mapCount = stats.Playtime or 0, stats.AfkTime or 0, stats.MapsPlayed or 0
+        return playTime - afkTime >= hours250 and mapCount >= 25
     end
 end)
 
@@ -192,6 +199,7 @@ Roles.new_role('Member','Mem')
     'command/save-quickbar'
 }
 
+local hours3, hours15 = 3*216000, 15*60
 Roles.new_role('Regular','Reg')
 :set_permission_group('Standard')
 :set_custom_color{r=79,g=155,b=163}
@@ -204,8 +212,12 @@ Roles.new_role('Regular','Reg')
     'standard-decon'
 }
 :set_auto_assign_condition(function(player)
-    if player.online_time > 3*216000 then
+    if player.online_time >= hours3 then
         return true
+    else
+        local stats = Statistics:get(player, {})
+        local playTime, afkTime, mapCount = stats.Playtime or 0, stats.AfkTime or 0, stats.MapsPlayed or 0
+        return playTime - afkTime >= hours15 and mapCount >= 5
     end
 end)
 
@@ -238,7 +250,7 @@ local default = Roles.new_role('Guest','')
 Roles.new_role('Jail')
 :set_permission_group('Restricted')
 :set_custom_color{r=50,g=50,b=50}
-:set_block_auto_promote(true)
+:set_block_auto_assign(true)
 :disallow(default.allowed)
 
 --- System defaults which are required to be set
