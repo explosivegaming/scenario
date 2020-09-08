@@ -174,6 +174,7 @@ Roles.new_role('Veteran','Vet')
     'command/chat-bot',
 }
 :set_auto_assign_condition(function(player)
+    game.print('Checked auto assign vet')
     if player.online_time > 10*216000 then
         return true
     end
@@ -204,6 +205,7 @@ Roles.new_role('Regular','Reg')
     'standard-decon'
 }
 :set_auto_assign_condition(function(player)
+    game.print('Checked auto assign reg')
     if player.online_time > 3*216000 then
         return true
     end
@@ -238,7 +240,7 @@ local default = Roles.new_role('Guest','')
 Roles.new_role('Jail')
 :set_permission_group('Restricted')
 :set_custom_color{r=50,g=50,b=50}
-:set_block_auto_promote(true)
+:set_block_auto_assign(true)
 :disallow(default.allowed)
 
 --- System defaults which are required to be set
