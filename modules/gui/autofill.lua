@@ -131,7 +131,7 @@ end)
 :style(Gui.sprite_style(32, nil, { right_margin = -3 }))
 :on_click(function(player, element)
     local item_name = element.parent.tooltip
-    local entity_name = element.parent.parent.parent.parent.name
+    local entity_name = element.parent.parent.parent.name
     if not autofill_player_settings[player.name] then return end
     local setting = autofill_player_settings[player.name][entity_name]
     if not setting then return end
