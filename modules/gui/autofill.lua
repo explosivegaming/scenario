@@ -330,7 +330,7 @@ local function entity_build(event)
         local item_amount = player_inventory.get_item_count(item.name)
         if item_amount ~= 0 then
             local inserted
-            text_position.y = text_position.y - 0.2
+            text_position.y = text_position.y - 0.5
             local color = { r = 0, g = 255, b = 0, a = 1}
             if item_amount >= preferd_amount then
                 -- Can item be inserted? no, goto next item!
