@@ -39,7 +39,8 @@ Commands.new_command('save-quickbar', 'Saves your Quickbar preset items to file'
     local filters = {}
     for i = 1, 100 do
         local slot = player.get_quick_bar_slot(i)
-        if slot ~= nil then
+        -- Need to filter out blueprint and blueprint books because the slot is a LuaItemPrototype and does not contain a way to export blueprint data
+        if slot ~= nil and slot.name ~= "blueprint" and slot.name ~= "blueprint-book" then
             filters[i] = slot.name
         end
     end
