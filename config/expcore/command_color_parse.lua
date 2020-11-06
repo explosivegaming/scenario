@@ -4,7 +4,7 @@
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Colours = require 'utils.color_presets' --- @dep utils.color_presets
 
-Commands.add_parse('color',function(input, player, reject)
+Commands.add_parse('color',function(input, _, reject)
   if not input then return end
   local color = Colours[input]
   if not color then
