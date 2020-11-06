@@ -5,7 +5,7 @@
     <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Rockets config</title>
+    <title>Commands-Color-Parse config</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
     <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
@@ -41,7 +41,7 @@
     <li class="nav-item">
     <h2>Sections</h2>
     <ul class="nav">
-    <li class="nav-item"><a href="#Settings"><span class="fragment-hashtag">#</span> Settings</a></li>
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
     </ul>
     </li>
     </ul>
@@ -58,7 +58,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Auth-Admin.html"><span class="module-name-item">Commands-Auth-Admin</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Auth-Roles.html"><span class="module-name-item">Commands-Auth-Roles</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Color-Parse.html"><span class="module-name-item">Commands-Color-Parse</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../configs/Commands-Color-Parse.html"><span class="module-name-item">Commands-Color-Parse</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Parse.html"><span class="module-name-item">Commands-Parse</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Parse-Roles.html"><span class="module-name-item">Commands-Parse-Roles</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Auth-Runtime-Disable.html"><span class="module-name-item">Commands-Auth-Runtime-Disable</span></a></div></li>
@@ -66,7 +66,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Roles.html"><span class="module-name-item">Roles</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Autofill.html"><span class="module-name-item">Autofill</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Player-List.html"><span class="module-name-item">Player-List</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../configs/Rockets.html"><span class="module-name-item">Rockets</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Rockets.html"><span class="module-name-item">Rockets</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Science.html"><span class="module-name-item">Science</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Tasks.html"><span class="module-name-item">Tasks</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Warps.html"><span class="module-name-item">Warps</span></a></div></li>
@@ -106,7 +106,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../control/Rockets.html"><span class="module-name-item">Rockets</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Rockets.html"><span class="module-name-item">Rockets</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Tasks.html"><span class="module-name-item">Tasks</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warps.html"><span class="module-name-item">Warps</span></a></div></li>
@@ -219,7 +219,7 @@
     <li class="nav-item">
     <h4>Jump to Section</h4>
     <ul class="nav">
-    <li class="nav-item"><a href="#Settings"><span class="fragment-hashtag">#</span> Settings</a></li>
+    <li class="nav-item"><a href="#Dependencies"><span class="fragment-hashtag">#</span> Dependencies</a></li>
     </ul>
     </li>
     </ul>
@@ -238,8 +238,8 @@
 
     <!-- module content header start -->
 
-    <h2><span class="body-module-name"><strong><em>Rockets</em></strong></span> config</h2>
-    <p>This file controls what will show in each section of the rocket info gui</p>
+    <h2><span class="body-module-name"><strong><em>Commands-Color-Parse</em></strong></span> config</h2>
+    <p>This will make commands only work when a valid color from the presets has been selected</p>
     <p></p>
 
 
@@ -254,66 +254,15 @@
     <!-- module section list start -->
     <table class="section-content-list">
     <thead>
-    <h3><a href="#Settings">Settings</a></h3>
+    <h3><a href="#Dependencies">Dependencies</a></h3>
     <span></span>
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#stats">stats</a></td>
+    <td class="name"><a href="#expcore.commands">expcore.commands</a></td>
     </tr>
     <tr>
-    <td class="name"><a href="#show_stats">show_stats</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#show_first_rocket">show_first_rocket</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#show_last_rocket">show_last_rocket</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#show_fastest_rocket">show_fastest_rocket</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#show_total_rockets">show_total_rockets</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#show_game_avg">show_game_avg</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#rolling_avg">rolling_avg</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#milestones">milestones</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#show_milestones">show_milestones</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#progress">progress</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#show_progress">show_progress</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#allow_zoom_to_map">allow_zoom_to_map</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#allow_remote_launch">allow_remote_launch</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#remote_launch_admins_only">remote_launch_admins_only</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#remote_launch_role_permission">remote_launch_role_permission</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#allow_toggle_active">allow_toggle_active</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#toggle_active_admins_only">toggle_active_admins_only</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#toggle_active_role_permission">toggle_active_role_permission</a></td>
+    <td class="name"><a href="#utils.color_presets">utils.color_presets</a></td>
     </tr>
     </tbody>
     </table>
@@ -322,20 +271,18 @@
     <br />
 
     <!-- section start -->
-    <h3><span id="Settings" class="section-title"><a href="#Settings">Settings</a></span></h3>
+    <h3><span id="Dependencies" class="section-title"><a href="#Dependencies">Dependencies</a></span></h3>
     <dl class="section-body-container">
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#stats" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="stats">stats</span>
+    <a href="#expcore.commands" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.commands">expcore.commands</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> The data that will show in the stats section</p>
 
     <!-- parameters start -->
     <!-- parameters end -->
@@ -354,474 +301,13 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#show_stats" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="show_stats">show_stats</span>
+    <a href="#utils.color_presets" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.color_presets">utils.color_presets</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> false will hide this section all together</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#show_first_rocket" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="show_first_rocket">show_first_rocket</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> false will not show when the first rocket was launched</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#show_last_rocket" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="show_last_rocket">show_last_rocket</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> false will not show when the last rocket was launched</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#show_fastest_rocket" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="show_fastest_rocket">show_fastest_rocket</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> false will not show the time taken for the fastest rocket</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#show_total_rockets" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="show_total_rockets">show_total_rockets</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> false will not show the total number of rockets launched</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#show_game_avg" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="show_game_avg">show_game_avg</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> false will hide the avg across the entire map time</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#rolling_avg" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="rolling_avg">rolling_avg</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> each number will be one statistic; 5 means the avg time taken for the last 5 rockets</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#milestones" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="milestones">milestones</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> each number will be one statistic; 5 means the time that the 5th rocket was launched</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#show_milestones" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="show_milestones">show_milestones</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> false will hide this section all together</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#progress" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="progress">progress</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> The data and buttons in the build progress section</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#show_progress" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="show_progress">show_progress</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> false will hide this section altogether</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#allow_zoom_to_map" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="allow_zoom_to_map">allow_zoom_to_map</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> false will disable the zoom to map feature</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#allow_remote_launch" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="allow_remote_launch">allow_remote_launch</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> false removes the remote launch button for all players</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#remote_launch_admins_only" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="remote_launch_admins_only">remote_launch_admins_only</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> true will remove the remote launch button for all non (game) admins</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#remote_launch_role_permission" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="remote_launch_role_permission">remote_launch_role_permission</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> value used by custom permission system to allow or disallow the button</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#allow_toggle_active" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="allow_toggle_active">allow_toggle_active</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> false removes the remote toggle auto launch button for all players</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#toggle_active_admins_only" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="toggle_active_admins_only">toggle_active_admins_only</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> true will remove the toggle auto launch button for all non (game) admins</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#toggle_active_role_permission" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="toggle_active_role_permission">toggle_active_role_permission</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> value used by custom permission system to allow or disallow the button</p>
 
     <!-- parameters start -->
     <!-- parameters end -->
