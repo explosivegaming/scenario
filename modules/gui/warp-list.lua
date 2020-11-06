@@ -249,11 +249,18 @@ local update_wrap_buttons
 warp_icon_button =
 Gui.element(function(event_trigger, parent, warp)
     local warp_position = warp.position
+
+    -- The SpritePath type is not the same as the SignalID type
+    local sprite = warp.icon.type .. '/' ..warp.icon.name
+    if warp.icon.type == 'virtual' then
+        sprite = 'virtual-signal/' ..warp.icon.name
+    end
+
     -- Draw the element
     return parent.add{
         name = event_trigger,
         type = 'sprite-button',
-        sprite = 'item/'..warp.icon,
+        sprite = sprite,
         tooltip = {'warp-list.goto-tooltip', warp_position.x, warp_position.y},
         style = 'slot_button'
     }
@@ -278,9 +285,9 @@ Gui.element(function(_, parent, warp)
     return parent.add{
         name = warp_icon_button.name,
         type = 'choose-elem-button',
-        elem_type = 'item',
-        item = warp.icon,
-        tooltip = {'warp-list.goto-edit'},
+        elem_type = 'signal',
+        signal = {type = warp.icon.type, name = warp.icon.name},
+        tooltip = {'warp-list.goto-edit'}
     }
 end)
 :style(Styles.sprite32)
@@ -373,7 +380,12 @@ local function update_warp(player, warp_table, warp_id)
         local last_edit_time = warp.last_edit_time
         warp_label_element.caption = warp_name
         warp_label_element.tooltip = {'warp-list.last-edit', last_edit_name, format_time(last_edit_time)}
-        icon_entry.sprite = 'item/'..warp_icon
+        -- The SpritePath type is not the same as the SignalID type
+        local sprite = warp_icon.type .. '/' ..warp_icon.name
+        if warp_icon.type == 'virtual' then
+            sprite = 'virtual-signal/' ..warp_icon.name
+        end
+        icon_entry.sprite = sprite
 
     elseif player_was_editing and not player_is_editing then
         -- Player was editing but is no longer, remove text field and add label
@@ -475,7 +487,7 @@ end)
 
 --- Button on the top flow used to toggle the warp list container
 -- @element warp_list_toggle
-Gui.left_toolbar_button('item/'..config.default_icon, {'warp-list.main-tooltip', config.standard_proximity_radius}, warp_list_container, function(player)
+Gui.left_toolbar_button(config.default_icon.type ..'/'..config.default_icon.name, {'warp-list.main-tooltip', config.standard_proximity_radius}, warp_list_container, function(player)
     return Roles.player_allowed(player, 'gui/warp-list')
 end)
 :on_custom_event(Gui.events.on_visibility_changed_by_click, function(player, _,event)
