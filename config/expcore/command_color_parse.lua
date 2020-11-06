@@ -8,9 +8,8 @@ Commands.add_parse('color',function(input, player, reject)
   if not input then return end
   local color = Colours[input]
   if not color then
-    player.print("invalid")
-      return reject{'expcore-commands.reject-color'}
+    return reject{'expcore-commands.reject-color'}
   else
-      return input
+    return input
   end
 end)
