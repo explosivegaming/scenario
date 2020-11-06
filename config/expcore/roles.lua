@@ -153,6 +153,7 @@ Roles.new_role('Supporter','Sup')
 :set_flag('is_spectator')
 :set_parent('Veteran')
 :allow{
+    'command/tag-color',
     'command/jail',
     'command/unjail',
     'command/join-message'
