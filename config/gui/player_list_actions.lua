@@ -84,19 +84,6 @@ local bring_player = new_button('utility/import',{'player-list.bring-player'})
     end
 end)
 
---- Kills the action player, if there are alive
--- @element kill_player
-local kill_player = new_button('utility/too_far',{'player-list.kill-player'})
-:on_click(function(player)
-    local selected_player_name = get_action_player_name(player)
-    local selected_player = game.players[selected_player_name]
-    if selected_player.character then
-        selected_player.character.die()
-    else
-        player.print({'expcom-kill.already-dead'},Colors.orange_red)
-    end
-end)
-
 --- Reports the action player, requires a reason to be given
 -- @element report_player
 local report_player = new_button('utility/spawn_flag',{'player-list.report-player'})
@@ -202,16 +189,6 @@ return {
             end, -- cant teleport to your self
             goto_player,
             bring_player
-        },
-        ['command/kill'] = {
-            auth=function(player,selected_player)
-                if player.name == selected_player.name then
-                    return true
-                elseif Roles.player_allowed(player,'command/kill/always') then
-                    return auth_lower_role(player,selected_player)
-                end
-            end, -- player must be lower role, or your self
-            kill_player
         },
         ['command/report'] = {
             auth=function(player,selected_player)
