@@ -308,27 +308,36 @@ Gui.element{
 
 local warp_list_container
 --- Update the warp buttons for a player
-function update_wrap_buttons(player, timer, in_range)
+function update_wrap_buttons(player, timer, warp_id)
     -- Get the warp table
     local frame = Gui.get_left_element(player, warp_list_container)
     local scroll_table = frame.container.scroll.table
 
     -- Check if the buttons should be active
     timer = timer or PlayerCooldown:get(player)
-    in_range = in_range or PlayerInRange:get(player)
-    local button_disabled = timer > 0 or not in_range
+    warp_id = warp_id or PlayerInRange:get(player)
+    local button_disabled = timer > 0 or not warp_id
+
+    local warp = warp_id and Warps.get_warp(warp_id)
 
     -- Change the enabled state of the warp buttons
     local warp_ids = Warps.get_force_warp_ids(player.force.name)
-    for _, warp_id in pairs(warp_ids) do
-        local element = scroll_table['icon-'..warp_id][warp_icon_button.name]
+    for _, next_warp_id in pairs(warp_ids) do
+        local element = scroll_table['icon-'..next_warp_id][warp_icon_button.name]
         if element and element.valid then
-            element.enabled = not button_disabled
             if button_disabled then
                 element.tooltip = {'warp-list.goto-disabled'}
+                element.enabled = false
             else
-                local position = Warps.get_warp(warp_id).position
-                element.tooltip = {'warp-list.goto-tooltip', position.x, position.y}
+                local next_warp = Warps.get_warp(next_warp_id)
+                if warp.electic_pole and next_warp.electic_pole and warp.electic_pole.electric_network_id == next_warp.electic_pole.electric_network_id then
+                    local position = next_warp.position
+                    element.tooltip = {'warp-list.goto-tooltip', position.x, position.y}
+                    element.enabled = true
+                else
+                    element.tooltip = {'warp-list.goto-different-network'}
+                    element.enabled = false
+                end
             end
         end
     end
@@ -506,17 +515,17 @@ Warps.on_update(function(_, warp, old_warp)
 end)
 
 --- When the player leaves or enters range of a warp this is triggered
-PlayerInRange:on_update(function(player_name, player_in_range)
+PlayerInRange:on_update(function(player_name, warp_id)
     local player = game.players[player_name]
 
     -- Change if the frame is visible based on if the player is in range
     if not keep_gui_open[player.name] then
-        Gui.toggle_left_element(player, warp_list_container, player_in_range)
+        Gui.toggle_left_element(player, warp_list_container, warp_id ~= nil)
     end
 
     -- Check if the player requires proximity
     if not check_player_permissions(player, 'bypass_warp_proximity') then
-        update_wrap_buttons(player, nil, player_in_range)
+        update_wrap_buttons(player, nil, warp_id)
     end
 end)
 
@@ -595,9 +604,9 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing), function()
             -- Check the dist to the closest warp
             local in_range = closest_warp.warp_id == warp_ids.spawn and closest_distance < rs2 or closest_distance < r2
             if was_in_range and not in_range then
-                PlayerInRange:set(player, false)
+                PlayerInRange:set(player, nil)
             elseif not was_in_range and in_range then
-                PlayerInRange:set(player, true)
+                PlayerInRange:set(player, closest_warp.warp_id)
             end
 
             -- Change the enabled state of the add warp button

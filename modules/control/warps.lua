@@ -187,6 +187,11 @@ function Warps.make_warp_area(warp_id)
         entity.health = 0
         entity.minable = false
         entity.rotatable = false
+
+        -- Save reference of the last power pole
+        if entity.type == 'electric-pole' then
+            warp.electic_pole = entity
+        end
     end
 end
 
