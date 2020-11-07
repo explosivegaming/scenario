@@ -5,7 +5,7 @@ return {
     -- General config
     update_smoothing = 10, --- @setting update_smoothing the amount of smoothing applied to updates to the cooldown timer, higher is better, max is 60
     minimum_distance = 100, --- @setting minimum_distance the minimum distance that is allowed between warps on the same force
-    default_icon = 'discharge-defense-equipment', --- @setting default_icon the default icon that will be used for warps
+    default_icon = { type = 'item', name = 'discharge-defense-equipment' }, --- @setting default_icon the default icon that will be used for warps
 
     -- Warp cooldowns
     bypass_warp_cooldown = 'expcore.roles', --- @setting bypass_warp_cooldown dictates who the warp cooldown is applied to; values: all, admin, expcore.roles, none

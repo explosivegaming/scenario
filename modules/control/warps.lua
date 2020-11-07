@@ -90,7 +90,7 @@ function Warps.make_warp_tag(warp_id)
     local tag = warp.tag
     if tag and tag.valid then
         tag.text = 'Warp: '..name
-        tag.icon = {type='item', name=icon}
+        tag.icon = icon
         return false
     end
 
@@ -102,7 +102,7 @@ function Warps.make_warp_tag(warp_id)
     tag = force.add_chart_tag(surface, {
         position = {position.x+0.5, position.y+0.5},
         text = 'Warp: '..name,
-        icon = {type='item', name=icon}
+        icon = icon
     })
 
     -- Add the tag to this warp, store.update not needed as we dont want it to trigger
@@ -221,15 +221,17 @@ function Warps.remove_warp_area(warp_id)
     end
     surface.set_tiles(tiles)
 
-    -- Remove all the entities that are in the area
-    local entities = surface.find_entities_filtered{
-        force='neutral',
-        area={
-            {position.x-radius, position.y-radius},
-            {position.x+radius, position.y+radius}
-        }
+    local area = {
+        {position.x-radius, position.y-radius},
+        {position.x+radius, position.y+radius}
     }
+
+    -- Remove all the entities that are in the area
+    local entities = surface.find_entities_filtered{ force='neutral', area=area }
     for _, entity in pairs(entities) do if entity and entity.valid and entity.name ~= 'player' then entity.destroy() end end
+
+    -- Rechart map area, usefull if warp is not covered by a radar
+    game.forces[warp.force_name].chart(surface, area)
 end
 
 --[[-- Set a warp to be the spawn point for a force, force must own this warp
@@ -323,7 +325,7 @@ function Warps.add_warp(force_name, surface, position, player_name, warp_name)
         warp_id = warp_id,
         force_name = force_name,
         name = warp_name,
-        icon = config.default_icon,
+        icon = { type = config.default_icon.type, name = config.default_icon.name },
         surface = surface,
         position = {
             x = math.floor(position.x),
