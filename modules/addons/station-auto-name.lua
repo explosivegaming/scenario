@@ -40,7 +40,7 @@ local function station_name_changer(event)
     elseif name == "train-stop" then --only do the event if its a train stop
         local backername = entity.backer_name
         if backername:sub(-custom_string_len) == custom_string then
-            entity.backer_name = backername:sub(1, -custom_string_len)
+            entity.backer_name = backername:sub(1, -custom_string_len-1)
             return
         end
 
