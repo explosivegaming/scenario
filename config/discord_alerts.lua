@@ -9,7 +9,6 @@ return {
     player_kicks=true,
     player_promotes=false,
     player_jail=true,
-    player_temp_ban=true,
     ['config']=true,
     ['purge']=true,
     ['c']=true,
