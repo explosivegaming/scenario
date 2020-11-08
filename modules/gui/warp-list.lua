@@ -30,8 +30,7 @@ end)
 
 --- Styles used for sprite buttons
 local Styles = {
-    sprite20 = Gui.sprite_style(20),
-    sprite22 = Gui.sprite_style(20, nil, { right_margin = -3 }),
+    sprite22 = { height = 22, width = 22, padding = -2 },
     sprite32 = { height = 32, width = 32, left_margin = 1 }
 }
 
@@ -73,9 +72,9 @@ Gui.element{
     type = 'sprite-button',
     sprite = 'utility/add',
     tooltip = {'warp-list.add-tooltip'},
-    style = 'tool_button'
+    style = 'shortcut_bar_button'
 }
-:style(Styles.sprite20)
+:style(Styles.sprite22)
 :on_click(function(player, _)
     -- Add the new warp
     local force_name = player.force.name
@@ -86,167 +85,10 @@ Gui.element{
     Warps.make_warp_area(warp_id)
 end)
 
---- Removes a warp from the list, including the physical area and map tag
--- @element discard_warp
-local discard_warp =
-Gui.element{
-    type = 'sprite-button',
-    sprite = 'utility/trash',
-    tooltip = {'warp-list.discard-tooltip'},
-    style = 'tool_button'
-}
-:style(Styles.sprite20)
-:on_click(function(_, element)
-    local warp_id = element.parent.name:sub(6)
-    Warps.remove_warp(warp_id)
-end)
 
---- Opens edit mode for the warp
--- @element edit_warp
-local edit_warp =
-Gui.element{
-    type = 'sprite-button',
-    sprite = 'utility/rename_icon_normal',
-    tooltip = {'warp-list.edit-tooltip-none'},
-    style = 'tool_button'
-}
-:style(Styles.sprite20)
-:on_click(function(player, element)
-    local warp_id = element.parent.name:sub(6)
-    Warps.set_editing(warp_id, player.name, true)
-end)
-
---- Set of three elements which make up each row of the warp table
--- @element add_warp_base
-local add_warp_base =
-Gui.element(function(_, parent, warp_id)
-    -- Add the icon flow
-    local icon_flow =
-    parent.add{
-        name = 'icon-'..warp_id,
-        type = 'flow',
-        caption = warp_id
-    }
-    icon_flow.style.padding = 0
-
-    -- Add a flow which will contain the warp name and edit buttons
-    local warp_flow = parent.add{ type = 'flow', name = warp_id }
-    warp_flow.style.padding = 0
-
-    -- Add the two edit buttons outside the warp flow
-    local edit_flow = Gui.alignment(parent, 'edit-'..warp_id)
-    edit_warp(edit_flow)
-    discard_warp(edit_flow)
-
-    -- Return the warp flow as the main element
-    return warp_flow
-end)
-
--- Removes the three elements that are added as part of the warp base
-local function remove_warp_base(parent, warp_id)
-    Gui.destroy_if_valid(parent['icon-'..warp_id])
-    Gui.destroy_if_valid(parent['edit-'..warp_id])
-    Gui.destroy_if_valid(parent[warp_id])
-end
-
---- Confirms the edit to name or icon of the warp
--- @element confirm_edit
-local warp_editing
-local warp_icon_button
-local confirm_edit =
-Gui.element{
-    type = 'sprite-button',
-    sprite = 'utility/confirm_slot',
-    tooltip = {'warp-list.confirm-tooltip'},
-    style = 'shortcut_bar_button_green'
-}
-:style(Styles.sprite22)
-:on_click(function(player, element)
-    local warp_id = element.parent.name
-    local warp_name = element.parent[warp_editing.name].text
-    local warp_icon = element.parent.parent['icon-'..warp_id][warp_icon_button.name].elem_value
-    Warps.set_editing(warp_id, player.name)
-    Warps.update_warp(warp_id, warp_name, warp_icon, player.name)
-end)
-
---- Cancels the editing changes of the selected warp name or icon
--- @element cancel_edit
-local cancel_edit =
-Gui.element{
-    type = 'sprite-button',
-    sprite = 'utility/close_black',
-    tooltip = {'warp-list.cancel-tooltip'},
-    style = 'shortcut_bar_button_red'
-}
-:style(Styles.sprite22)
-:on_click(function(player, element)
-    local warp_id = element.parent.name
-    Warps.set_editing(warp_id, player.name)
-end)
-
---- Editing state for a warp, contains a text field and the two edit buttons
--- @element warp_editing
-warp_editing =
-Gui.element(function(event_trigger, parent, warp)
-    local name = warp.name
-
-    -- Draw the element
-    local element =
-    parent.add{
-        name = event_trigger,
-        type = 'textfield',
-        text = name,
-        clear_and_focus_on_right_click = true
-    }
-
-    -- Add the edit buttons
-    cancel_edit(parent)
-    confirm_edit(parent)
-
-    -- Return the element
-    return element
-end)
-:style{
-    maximal_width = 110,
-    height = 20
-}
-:on_confirmed(function(player, element, _)
-    local warp_id = element.parent.name
-    local warp_name = element.text
-    local warp_icon = element.parent.parent['icon-'..warp_id][warp_icon_button.name].elem_value
-    Warps.set_editing(warp_id, player.name)
-    Warps.update_warp(warp_id, warp_name, warp_icon, player.name)
-end)
-
---- Default state for a warp, contains only a label with the warp name
--- @element warp_label
-local warp_label =
-Gui.element(function(event_trigger, parent, warp)
-    local last_edit_name = warp.last_edit_name
-    local last_edit_time = warp.last_edit_time
-    -- Draw the element
-    return parent.add{
-        name = event_trigger,
-        type = 'label',
-        caption = warp.name,
-        tooltip = {'warp-list.last-edit', last_edit_name, format_time(last_edit_time)}
-    }
-end)
-:style{
-    single_line = false,
-    maximal_width = 150
-}
-:on_click(function(player, element, _)
-    local warp_id = element.parent.name
-    local warp = Warps.get_warp(warp_id)
-    local position = warp.position
-    player.zoom_to_world(position, 1.5)
-end)
-
-local update_wrap_buttons
---- Default state for the warp icon, when pressed teleports the player
+--- Warp icon button, this will trigger a warp when the player is able to
 -- @element warp_icon_button
-warp_icon_button =
+local warp_icon_button =
 Gui.element(function(event_trigger, parent, warp)
     local warp_position = warp.position
 
@@ -274,16 +116,17 @@ end)
     -- Reset the warp cooldown if the player does not have unlimited warps
     if not check_player_permissions(player, 'bypass_warp_cooldown') then
         PlayerCooldown:set(player, config.cooldown_duration)
-        update_wrap_buttons(player)
     end
+
+    PlayerInRange:set(player, warp_id)
 end)
 
---- Editing state for the warp icon, chose elem used to chosse icon
+--- The button that is visible when the warp is in edit state
 -- @element warp_icon_editing
 local warp_icon_editing =
-Gui.element(function(_, parent, warp)
+Gui.element(function(event_trigger, parent, warp)
     return parent.add{
-        name = warp_icon_button.name,
+        name = event_trigger,
         type = 'choose-elem-button',
         elem_type = 'signal',
         signal = {type = warp.icon.type, name = warp.icon.name},
@@ -291,6 +134,179 @@ Gui.element(function(_, parent, warp)
     }
 end)
 :style(Styles.sprite32)
+
+--- Warp label, visible if the player is not in edit state
+-- @element warp_label
+local warp_label =
+Gui.element(function(event_trigger, parent, warp)
+    local last_edit_name = warp.last_edit_name
+    local last_edit_time = warp.last_edit_time
+    -- Draw the element
+    return parent.add{
+        name = event_trigger,
+        type = 'label',
+        caption = warp.name,
+        tooltip = {'warp-list.last-edit', last_edit_name, format_time(last_edit_time)}
+    }
+end)
+:style{
+    single_line = false,
+    horizontally_stretchable = true
+}
+:on_click(function(player, element, _)
+    local warp_id = element.parent.caption
+    local warp = Warps.get_warp(warp_id)
+    local position = warp.position
+    player.zoom_to_world(position, 1.5)
+end)
+
+--- Warp textfield, visible if the player is in edit state
+-- @element warp_textfield
+local warp_textfield =
+Gui.element(function(event_trigger, parent, warp)
+    -- Draw the element
+    local element =
+    parent.add{
+        name = event_trigger,
+        type = 'textfield',
+        text = warp.name,
+        clear_and_focus_on_right_click = true
+    }
+
+    -- Return the element
+    return element
+end)
+:style{
+    maximal_width = 81,
+    height = 22,
+    padding = -2
+}
+:on_confirmed(function(player, element, _)
+    local warp_id = element.parent.caption
+    local warp_name = element.text
+    local warp_icon = element.parent.parent['icon-'..warp_id][warp_icon_editing.name].elem_value
+    Warps.set_editing(warp_id, player.name)
+    Warps.update_warp(warp_id, warp_name, warp_icon, player.name)
+end)
+
+
+--- Confirms the edit to name or icon of the warp
+-- @element confirm_edit_button
+local confirm_edit_button =
+Gui.element{
+    type = 'sprite-button',
+    sprite = 'utility/confirm_slot',
+    tooltip = {'warp-list.confirm-tooltip'},
+    style = 'shortcut_bar_button_green'
+}
+:style(Styles.sprite22)
+:on_click(function(player, element)
+    local warp_id = element.parent.caption
+    local warp_name = element.parent.parent['name-'..warp_id][warp_textfield.name].text
+    local warp_icon = element.parent.parent['icon-'..warp_id][warp_icon_editing.name].elem_value
+    Warps.set_editing(warp_id, player.name)
+    Warps.update_warp(warp_id, warp_name, warp_icon, player.name)
+end)
+
+--- Cancels the editing changes of the selected warp name or icon
+-- @element cancel_edit_button
+local cancel_edit_button =
+Gui.element{
+    type = 'sprite-button',
+    sprite = 'utility/close_black',
+    tooltip = {'warp-list.cancel-tooltip'},
+    style = 'shortcut_bar_button_red'
+}
+:style(Styles.sprite22)
+:on_click(function(player, element)
+    local warp_id = element.parent.caption
+    Warps.set_editing(warp_id, player.name)
+end)
+
+--- Removes a warp from the list, including the physical area and map tag
+-- @element remove_warp_button
+local remove_warp_button =
+Gui.element{
+    type = 'sprite-button',
+    sprite = 'utility/trash',
+    tooltip = {'warp-list.discard-tooltip'},
+    style = 'shortcut_bar_button_red'
+}
+:style(Styles.sprite22)
+:on_click(function(_, element)
+    local warp_id = element.parent.caption
+    Warps.remove_warp(warp_id)
+end)
+
+--- Opens edit mode for the warp
+-- @element edit_warp_button
+local edit_warp_button =
+Gui.element{
+    type = 'sprite-button',
+    sprite = 'utility/rename_icon_normal',
+    tooltip = {'warp-list.edit-tooltip-none'},
+    style = 'shortcut_bar_button'
+}
+:style(Styles.sprite22)
+:on_click(function(player, element)
+    local warp_id = element.parent.caption
+    Warps.set_editing(warp_id, player.name, true)
+end)
+
+local update_wrap_buttons
+--- Set of three elements which make up each row of the warp table
+-- @element add_warp_elements
+local add_warp_elements =
+Gui.element(function(_, parent, warp)
+    -- Add icon flow this will contain the warp button and warp icon edit button
+    local icon_flow = parent.add{
+        name = 'icon-'..warp.warp_id,
+        type = 'flow',
+        caption = warp.warp_id
+    }
+    icon_flow.style.padding = 0
+
+    -- Add the button and the icon edit button
+    warp_icon_button(icon_flow, warp)
+    warp_icon_editing(icon_flow, warp)
+
+    -- Add name flow this will contain the warp label and textbox
+    local name_flow = parent.add{
+        type = 'flow',
+        name = 'name-'..warp.warp_id,
+        caption = warp.warp_id
+    }
+    name_flow.style.padding = 0
+
+    -- Add the label and textfield of the warp
+    warp_label(name_flow, warp)
+    warp_textfield(name_flow, warp)
+
+
+    -- Add button flow this will contain buttons to manage this specific warp
+    local button_flow = parent.add{
+        type = 'flow',
+        name = 'button-'..warp.warp_id,
+        caption = warp.warp_id
+    }
+    button_flow.style.padding = 0
+
+    -- Add both edit state buttons
+    confirm_edit_button(button_flow)
+    cancel_edit_button(button_flow)
+    edit_warp_button(button_flow)
+    remove_warp_button(button_flow)
+
+    -- Return the warp flow elements
+    return { icon_flow, name_flow, button_flow }
+end)
+
+-- Removes the three elements that are added as part of the warp base
+local function remove_warp_elements(parent, warp_id)
+    Gui.destroy_if_valid(parent['icon-'..warp_id])
+    Gui.destroy_if_valid(parent['name-'..warp_id])
+    Gui.destroy_if_valid(parent['button-'..warp_id])
+end
 
 --- This timer controls when a player is able to warp, eg every 60 seconds
 -- @element warp_timer
@@ -307,6 +323,46 @@ Gui.element{
 }
 
 local warp_list_container
+
+-- Helper function to style and enable or disable a button element
+local function update_icon_button(element, on_cooldown, warp, warp_player_is_on)
+    -- Check if button element is valid
+    if not element or not element.valid then return end
+
+    local label_style = element.parent.parent['name-'..warp.warp_id][warp_label.name].style
+
+    if not warp_player_is_on then
+        element.tooltip = {'warp-list.goto-disabled'}
+        element.enabled = false
+        label_style.font_color = { 1, 1, 1, 0.7 }
+        return
+    end
+
+    if warp_player_is_on.warp_id == warp.warp_id then
+        element.tooltip = {'warp-list.goto-same-warp'}
+        element.enabled = false
+        label_style.font_color = { 1, 1, 1, 0.7 }
+    elseif on_cooldown then
+        element.tooltip = {'warp-list.goto-cooldown'}
+        element.enabled = false
+        label_style.font_color = { 1, 1, 1, 0.7 }
+    else
+        -- Check if the warps are in the same electricity network
+        local warp_electric_network_id = warp and warp.electric_pole.electric_network_id or -1
+        local player_warp_electric_network_id = warp_player_is_on and warp_player_is_on.electric_pole.electric_network_id or -1
+        if warp_electric_network_id == player_warp_electric_network_id then
+            local position = warp_player_is_on.position
+            element.tooltip = {'warp-list.goto-tooltip', position.x, position.y}
+            element.enabled = true
+            label_style.font_color = { 1, 1, 1, 1 }
+        else
+            element.tooltip = {'warp-list.goto-different-network'}
+            element.enabled = false
+            label_style.font_color = { 1, 0, 0, 0.7 }
+        end
+    end
+end
+
 --- Update the warp buttons for a player
 function update_wrap_buttons(player, timer, warp_id)
     -- Get the warp table
@@ -316,30 +372,16 @@ function update_wrap_buttons(player, timer, warp_id)
     -- Check if the buttons should be active
     timer = timer or PlayerCooldown:get(player)
     warp_id = warp_id or PlayerInRange:get(player)
-    local button_disabled = timer > 0 or not warp_id
+    local on_cooldown = timer > 0
 
-    local warp = warp_id and Warps.get_warp(warp_id)
+    local warp_player_is_on = warp_id and Warps.get_warp(warp_id) or nil
 
     -- Change the enabled state of the warp buttons
     local warp_ids = Warps.get_force_warp_ids(player.force.name)
     for _, next_warp_id in pairs(warp_ids) do
         local element = scroll_table['icon-'..next_warp_id][warp_icon_button.name]
-        if element and element.valid then
-            if button_disabled then
-                element.tooltip = {'warp-list.goto-disabled'}
-                element.enabled = false
-            else
-                local next_warp = Warps.get_warp(next_warp_id)
-                if warp.electic_pole and next_warp.electic_pole and warp.electic_pole.electric_network_id == next_warp.electic_pole.electric_network_id then
-                    local position = next_warp.position
-                    element.tooltip = {'warp-list.goto-tooltip', position.x, position.y}
-                    element.enabled = true
-                else
-                    element.tooltip = {'warp-list.goto-different-network'}
-                    element.enabled = false
-                end
-            end
-        end
+        local next_warp = Warps.get_warp(next_warp_id)
+        update_icon_button(element, on_cooldown, next_warp, warp_player_is_on)
     end
 end
 
@@ -347,25 +389,41 @@ end
 local function update_warp(player, warp_table, warp_id)
     local warp = Warps.get_warp(warp_id)
 
-    -- Warp no longer exists so should be removed from the list
+    -- If the warp does no longer exist then remove the warp elements from the warp table
     if not warp then
-        remove_warp_base(warp_table, warp_id)
+        remove_warp_elements(warp_table, warp_id)
         return
     end
 
-    -- Get the warp flow for this warp
-    local warp_flow = warp_table[warp_id] or add_warp_base(warp_table, warp_id)
+    -- Check if the warp elements are created, if they are not then create a new set of them
+    if not warp_table['icon-'..warp_id] then
+        add_warp_elements(warp_table, warp)
+    end
     local icon_flow = warp_table['icon-'..warp_id]
+    local name_flow = warp_table['name-'..warp_id]
+    local button_flow = warp_table['button-'..warp_id]
 
-    -- Update the edit flow
-    local edit_flow = warp_table['edit-'..warp_id]
+    -- Create local references to the elements for this warp
+    local warp_icon_element = icon_flow[warp_icon_button.name]
+    local warp_icon_edit_element = icon_flow[warp_icon_editing.name]
+
+    local label_element = name_flow[warp_label.name]
+    local textfield_element = name_flow[warp_textfield.name]
+
+    local cancel_edit_element = button_flow[cancel_edit_button.name]
+    local confirm_edit_element = button_flow[confirm_edit_button.name]
+
+    local edit_warp_element = button_flow[edit_warp_button.name]
+    local remove_warp_element = button_flow[remove_warp_button.name]
+
+    -- Hide the edit button if the player is not allowed to edit the warp
     local player_allowed_edit = check_player_permissions(player, 'allow_edit_warp', warp)
     local players_editing = table.get_keys(warp.currently_editing)
-    local edit_warp_element = edit_flow[edit_warp.name]
-    local discard_warp_element = edit_flow[discard_warp.name]
-
+    -- button_flow.visible = player_allowed_edit
     edit_warp_element.visible = player_allowed_edit
-    discard_warp_element.visible = player_allowed_edit
+    remove_warp_element.visible = player_allowed_edit
+
+    -- Set the tooltip of the edit button
     if #players_editing > 0 then
         edit_warp_element.hovered_sprite = 'utility/warning_icon'
         edit_warp_element.tooltip = {'warp-list.edit-tooltip', table.concat(players_editing, ', ')}
@@ -374,54 +432,43 @@ local function update_warp(player, warp_table, warp_id)
         edit_warp_element.tooltip = {'warp-list.edit-tooltip-none'}
     end
 
-    -- Check if the player is was editing and/or currently editing
-    local warp_label_element = warp_flow[warp_label.name] or warp_label(warp_flow, warp)
-    local icon_entry = icon_flow[warp_icon_button.name] or warp_icon_button(icon_flow, warp)
-    local player_was_editing = icon_entry.type == 'choose-elem-button'
+    -- Set the warp elements visibility based on if the user is editing or not
     local player_is_editing = warp.currently_editing[player.name]
-
-    -- Update the warp and icon flow
-    if not player_was_editing and not player_is_editing then
-        -- Update the warp name label and icon
-        local warp_name = warp.name
-        local warp_icon = warp.icon
-        local last_edit_name = warp.last_edit_name
-        local last_edit_time = warp.last_edit_time
-        warp_label_element.caption = warp_name
-        warp_label_element.tooltip = {'warp-list.last-edit', last_edit_name, format_time(last_edit_time)}
-        -- The SpritePath type is not the same as the SignalID type
-        local sprite = warp_icon.type .. '/' ..warp_icon.name
-        if warp_icon.type == 'virtual' then
-            sprite = 'virtual-signal/' ..warp_icon.name
-        end
-        icon_entry.sprite = sprite
-
-    elseif player_was_editing and not player_is_editing then
-        -- Player was editing but is no longer, remove text field and add label
-        edit_warp_element.enabled = true
-        warp_flow.clear()
-        warp_label(warp_flow, warp)
-
-        icon_flow.clear()
-        local warp_icon_element = warp_icon_button(icon_flow, warp)
-        local timer = PlayerCooldown:get(player)
-        local in_range = PlayerInRange:get(player)
-        local apply_proximity = not check_player_permissions(player, 'bypass_warp_proximity')
-        if timer > 0 or (apply_proximity and not in_range) then
-            warp_icon_element.enabled = false
-            warp_icon_element.tooltip = {'warp-list.goto-disabled'}
-        end
-
-    elseif not player_was_editing and player_is_editing then
-        -- Player was not editing but now is, remove label and add text field
-        edit_warp_element.enabled = false
-        warp_flow.clear()
-        warp_editing(warp_flow, warp).focus()
-        warp_table.parent.scroll_to_element(warp_flow, 'top-third')
-        icon_flow.clear()
-        warp_icon_editing(icon_flow, warp)
-
+    if player_is_editing then
+        -- Set the icon elements visibility
+        warp_icon_element.visible = false
+        warp_icon_edit_element.visible = true
+        -- Set the name elements visibility
+        label_element.visible = false
+        textfield_element.visible = true
+        textfield_element.focus()
+        warp_table.parent.scroll_to_element(textfield_element, 'top-third')
+        -- Set the edit buttons
+        cancel_edit_element.visible = true
+        confirm_edit_element.visible = true
+        -- Set the warp buttons
+        edit_warp_element.visible = false
+        remove_warp_element.visible = false
+    else
+        -- Set the icon elements visibility
+        warp_icon_element.visible = true
+        warp_icon_edit_element.visible = false
+        -- Set the name elements visibility
+        label_element.visible = true
+        textfield_element.visible = false
+        -- Set the edit buttons
+        cancel_edit_element.visible = false
+        confirm_edit_element.visible = false
+        -- Set the warp buttons
+        edit_warp_element.visible = true and player_allowed_edit
+        remove_warp_element.visible = true and player_allowed_edit
     end
+
+    local timer = PlayerCooldown:get(player)
+    local current_warp_id = PlayerInRange:get(player)
+    local to_warp = current_warp_id and Warps.get_warp(current_warp_id) or nil
+    local apply_proximity = not check_player_permissions(player, 'bypass_warp_proximity')
+    update_icon_button(warp_icon_element, timer > 0 or (apply_proximity and not current_warp_id), warp, to_warp)
 end
 
 -- Update all the warps for a player
@@ -469,6 +516,8 @@ Gui.element(function(event_trigger, parent)
 
     -- Draw the scroll table for the warps
     local scroll_table = Gui.scroll_table(container, 250, 3)
+    -- Set the scroll panel to always show the scrollbar (not doing this will result in a changing gui size)
+    scroll_table.parent.vertical_scroll_policy = 'always'
 
     -- Change the style of the scroll table
     local scroll_table_style = scroll_table.style
@@ -640,6 +689,13 @@ Event.add(defines.events.on_player_created, function(event)
         spawn_id = Warps.add_warp(force.name, player.surface, spawn_position, nil, 'Spawn')
         Warps.set_spawn_warp(spawn_id, force)
         Warps.make_warp_tag(spawn_id)
+
+        local entities = player.surface.find_entities_filtered{ type = 'electric-pole', position = spawn_position, radius = 20, limit = 1 }
+        if entities and entities[1] then
+            local warp = Warps.get_warp(spawn_id)
+            warp.electric_pole = entities[1]
+            player.print('found')
+        end
     end
 end)
 
