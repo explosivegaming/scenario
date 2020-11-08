@@ -12,7 +12,7 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 local config = require 'config.gui.warps' --- @dep config.gui.warps
 local Warps = require 'modules.control.warps' --- @dep modules.control.warps
-local format_time = _C.format_time --- @dep expcore.common
+local format_time, player_return = _C.format_time, _C.player_return --- @dep expcore.common
 
 --- Stores all data for the warp gui
 local WrapGuiData = Datastore.connect('WrapGuiData')
@@ -80,6 +80,17 @@ Gui.element{
     local force_name = player.force.name
     local surface = player.surface
     local position = player.position
+
+    -- Check if the warp is too close to water
+    local water_tiles = surface.find_tiles_filtered{collision_mask = "water-tile", radius =  config.standard_proximity_radius + 1, position = position, limit = 1}
+    if #water_tiles > 0 then
+        player_return({'expcore-commands.command-fail', {'warp-list.too-close-to-water', config.standard_proximity_radius + 1}}, 'orange_red', player)
+        local play_sound = 'utility/wire_pickup'
+        if game.player then game.player.play_sound{path=play_sound} end
+        return
+    end
+
+    -- Create the warp
     local warp_id = Warps.add_warp(force_name, surface, position, player.name)
     Warps.make_warp_tag(warp_id)
     Warps.make_warp_area(warp_id)
