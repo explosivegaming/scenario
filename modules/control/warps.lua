@@ -177,10 +177,6 @@ function Warps.make_warp_area(warp_id)
             warp.electric_pole = entity
         end
     end
-
-    local radius = config.standard_proximity_radius
-    rendering.draw_circle{ color = {0,1,0,.5}, radius = 0.1, filled = true, target = position, surface = surface, draw_on_ground = true }
-    rendering.draw_circle{ color = {0,1,0,.5}, radius = radius, filled = false, target = position, surface = surface, draw_on_ground = true }
 end
 
 --[[-- Remove the warp area for a warp
