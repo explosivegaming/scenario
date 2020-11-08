@@ -481,7 +481,7 @@ local function update_all_warps(player, warp_table)
 end
 
 -- Update all warps for all players on a force
-local function update_all_wrap_force(force)
+local function update_all_warp_force(force)
     local warp_ids = Warps.get_force_warp_ids(force.name)
     for _, player in pairs(force.connected_players) do
         local frame = Gui.get_left_element(player, warp_list_container)
@@ -557,9 +557,9 @@ end)
 Warps.on_update(function(_, warp, old_warp)
     -- Get the force to update, warp is nil when removed
     if warp then
-        update_all_wrap_force(game.forces[warp.force_name])
+        update_all_warp_force(game.forces[warp.force_name])
     else
-        update_all_wrap_force(game.forces[old_warp.force_name])
+        update_all_warp_force(game.forces[old_warp.force_name])
     end
 end)
 
