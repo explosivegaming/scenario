@@ -148,31 +148,15 @@ function Warps.make_warp_area(warp_id)
     local position = warp.position
     local posx = position.x
     local posy = position.y
-    local radius = config.standard_proximity_radius
-    local radius2 = radius^2
 
     -- Get the tile that is being replaced, store.update not needed as we dont want it to trigger
     local old_tile = surface.get_tile(position).name
     warp.old_tile = old_tile
 
-    -- Make a circle that acts as a base for the warp structure
-    local base_tile = config.base_tile
-    local base_tiles = {}
-    for x = -radius, radius do
-        local x2 = x^2
-        for y = -radius, radius do
-            local y2 = y^2
-            if x2+y2 < radius2 then
-                table.insert(base_tiles, {name=base_tile, position={x+posx, y+posy}})
-            end
-        end
-    end
-    surface.set_tiles(base_tiles)
-
     -- Add a tile pattern on top of the base
     local tiles = {}
-    for _, pos in pairs(config.tiles) do
-        table.insert(tiles, {name=base_tile, position={pos[1]+posx, pos[2]+posy}})
+    for _, tile in pairs(config.tiles) do
+        table.insert(tiles, {name=tile[1], position={tile[2]+posx, tile[3]+posy}})
     end
     surface.set_tiles(tiles)
 
@@ -193,6 +177,10 @@ function Warps.make_warp_area(warp_id)
             warp.electric_pole = entity
         end
     end
+
+    local radius = config.standard_proximity_radius
+    rendering.draw_circle{ color = {0,1,0,.5}, radius = 0.1, filled = true, target = position, surface = surface, draw_on_ground = true }
+    rendering.draw_circle{ color = {0,1,0,.5}, radius = radius, filled = false, target = position, surface = surface, draw_on_ground = true }
 end
 
 --[[-- Remove the warp area for a warp
@@ -207,22 +195,15 @@ function Warps.remove_warp_area(warp_id)
     local position = warp.position
     local surface = warp.surface
     local radius = config.standard_proximity_radius
-    local radius2 = radius^2
 
     -- Check that a warp area was created previously
     local base_tile = warp.old_tile
     if not base_tile then return end
 
-    -- Reset all the tiles that were replaced
+    -- Loop over warp tiles and set them to the old tile that was below
     local tiles = {}
-    for x = -radius, radius do
-        local x2 = x^2
-        for y = -radius, radius do
-            local y2 = y^2
-            if x2+y2 < radius2 then
-                table.insert(tiles, {name=base_tile, position={x+position.x, y+position.y}})
-            end
-        end
+    for _, tile in pairs(config.tiles) do
+        table.insert(tiles, {name=base_tile, position={tile[2]+position.x, tile[3]+position.y}})
     end
     surface.set_tiles(tiles)
 

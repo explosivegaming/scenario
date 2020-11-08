@@ -29,13 +29,24 @@ return {
 
     -- Warp area generation
     entities = { --- @setting entities The entities which are created for warp areas
-        {'small-lamp',-3,-2},{'small-lamp',-3,2},{'small-lamp',3,-2},{'small-lamp',3,2},
-        {'small-lamp',-2,-3},{'small-lamp',2,-3},{'small-lamp',-2,3},{'small-lamp',2,3},
-        {'small-electric-pole',-3,-3},{'small-electric-pole',3,3},{'small-electric-pole',-3,3},{'small-electric-pole',3,-3}
+        {'small-lamp', -4, -2}, {'small-lamp', -2, -4}, {'small-electric-pole',-3,-3}, -- Top left corner
+        {'small-lamp', 3, -2}, {'small-lamp', 1, -4}, {'small-electric-pole',2,-3}, -- Top right corner
+        {'small-lamp', 3, 1}, {'small-lamp', 1, 3}, {'small-electric-pole',2,2}, -- Bottom right corner
+        {'small-lamp', -4, 1}, {'small-lamp', -2, 3}, {'small-electric-pole',-3,2}, -- Bottom left corner
     },
-    base_tile = 'tutorial-grid', --- @setting base_tile The tile which is used for the warp areas
     tiles = { --- @setting tiles The tiles which are created for warp areas
-        {-3,-2},{-3,-1},{-3,0},{-3,1},{-3,2},{3,-2},{3,-1},{3,0},{3,1},{3,2},
-        {-2,-3},{-1,-3},{0,-3},{1,-3},{2,-3},{-2,3},{-1,3},{0,3},{1,3},{2,3}
+        {"black-refined-concrete",-4,-2},{"black-refined-concrete",-4,-1},{"black-refined-concrete",-4,0},{"black-refined-concrete",-4,1},
+        {"black-refined-concrete",-3,-3},{"purple-refined-concrete",-3,-2},{"purple-refined-concrete",-3,-1},{"purple-refined-concrete",-3,0},
+        {"purple-refined-concrete",-3,1},{"black-refined-concrete",-3,2},{"black-refined-concrete",-2,-4},{"purple-refined-concrete",-2,-3},
+        {"purple-refined-concrete",-2,-2},{"purple-refined-concrete",-2,-1},{"purple-refined-concrete",-2,0},{"purple-refined-concrete",-2,1},
+        {"purple-refined-concrete",-2,2},{"black-refined-concrete",-2,3},{"black-refined-concrete",-1,-4},{"purple-refined-concrete",-1,-3},
+        {"purple-refined-concrete",-1,-2},{"purple-refined-concrete",-1,-1},{"purple-refined-concrete",-1,0},{"purple-refined-concrete",-1,1},
+        {"purple-refined-concrete",-1,2},{"black-refined-concrete",-1,3},{"black-refined-concrete",0,-4},{"purple-refined-concrete",0,-3},
+        {"purple-refined-concrete",0,-2},{"purple-refined-concrete",0,-1},{"purple-refined-concrete",0,0},{"purple-refined-concrete",0,1},
+        {"purple-refined-concrete",0,2},{"black-refined-concrete",0,3},{"black-refined-concrete",1,-4},{"purple-refined-concrete",1,-3},
+        {"purple-refined-concrete",1,-2},{"purple-refined-concrete",1,-1},{"purple-refined-concrete",1,0},{"purple-refined-concrete",1,1},
+        {"purple-refined-concrete",1,2},{"black-refined-concrete",1,3},{"black-refined-concrete",2,-3},{"purple-refined-concrete",2,-2},
+        {"purple-refined-concrete",2,-1},{"purple-refined-concrete",2,0},{"purple-refined-concrete",2,1},{"black-refined-concrete",2,2},
+        {"black-refined-concrete",3,-2},{"black-refined-concrete",3,-1},{"black-refined-concrete",3,0},{"black-refined-concrete",3,1}
     }
 }
