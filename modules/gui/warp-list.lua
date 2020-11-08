@@ -348,8 +348,8 @@ local function update_icon_button(element, on_cooldown, warp, warp_player_is_on)
         label_style.font_color = { 1, 1, 1, 0.7 }
     else
         -- Check if the warps are in the same electricity network
-        local warp_electric_network_id = warp and warp.electric_pole.electric_network_id or -1
-        local player_warp_electric_network_id = warp_player_is_on and warp_player_is_on.electric_pole.electric_network_id or -1
+        local warp_electric_network_id = warp.electric_pole and warp.electric_pole.electric_network_id or -1
+        local player_warp_electric_network_id = warp_player_is_on.electric_pole and warp_player_is_on.electric_pole.electric_network_id or -2
         if warp_electric_network_id == player_warp_electric_network_id then
             local position = warp_player_is_on.position
             element.tooltip = {'warp-list.goto-tooltip', position.x, position.y}
