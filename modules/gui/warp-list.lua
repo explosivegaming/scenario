@@ -694,7 +694,6 @@ Event.add(defines.events.on_player_created, function(event)
         if entities and entities[1] then
             local warp = Warps.get_warp(spawn_id)
             warp.electric_pole = entities[1]
-            player.print('found')
         end
     end
 end)
