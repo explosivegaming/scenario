@@ -190,7 +190,7 @@ function Warps.make_warp_area(warp_id)
 
         -- Save reference of the last power pole
         if entity.type == 'electric-pole' then
-            warp.electic_pole = entity
+            warp.electric_pole = entity
         end
     end
 end
