@@ -77,7 +77,45 @@ Event.add(defines.events.on_player_died, function(event)
         create_map_tag(death)
     end
     table.insert(deaths, death)
+
+    -- Draw a light attached to the corpse with the player color
+    if config.show_light_at_corpse then
+        rendering.draw_light{
+            sprite = 'utility/light_medium',
+            color = player.color,
+            target = corpse,
+            force = player.force,
+            surface = player.surface
+        }
+    end
 end)
+
+-- Draw lines to the player corpse
+if config.show_line_to_corpse then
+    Event.add(defines.events.on_player_respawned, function(event)
+        local player = game.players[event.player_index]
+
+        for _, death in pairs(deaths) do
+            -- Check if the death body is from the player
+            -- Check if the corpse entity is still valid
+            if death.player_name == player.name and death.corpse and death.corpse.valid then
+                local line_color = player.color
+                line_color.a = .3
+                rendering.draw_line{
+                    color = line_color,
+                    from = player.character,
+                    to = death.corpse,
+                    players = { event.player_index },
+                    width = 2,
+                    dash_length = 1,
+                    gap_length = 1,
+                    surface = player.surface,
+                    draw_on_ground = true
+                }
+            end
+        end
+    end)
+end
 
 -- every 5 min all bodies are checked for valid map tags
 if config.show_map_markers then
