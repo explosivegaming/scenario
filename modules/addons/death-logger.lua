@@ -6,6 +6,9 @@ local Global = require 'utils.global' --- @dep utils.global
 local config = require 'config.death_logger' --- @dep config.death_logger
 local format_time, move_items = _C.format_time, _C.move_items --- @dep expcore.common
 
+-- Max amount of ticks a corpse can be alive
+local corpse_lifetime = 60*60*15
+
 local deaths = {
     archive={} -- deaths moved here after body is gone
     --{player_name='Cooldude2606', time_of_death='15H 15M', position={x=0, y=0}, corpse=LuaEntity, tag=LuaCustomChartTag}
@@ -95,7 +98,16 @@ if config.show_line_to_corpse then
     Event.add(defines.events.on_player_respawned, function(event)
         local player = game.players[event.player_index]
 
-        for _, death in pairs(deaths) do
+        -- New deaths are added at the end of the deaths array, this is why
+        -- we are itterating over the array in reverse. This saves on the amount
+        -- of itterations we do.
+        for index = #deaths, 1, -1 do
+            local death = deaths[index]
+
+            -- If the corpse has already expired break out of the loop because
+            -- all the deaths that will follow will be expired.
+            if game.tick - death.time_of_death > corpse_lifetime then break end
+
             -- Check if the death body is from the player
             -- Check if the corpse entity is still valid
             if death.player_name == player.name and death.corpse and death.corpse.valid then
