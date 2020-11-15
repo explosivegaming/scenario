@@ -208,9 +208,19 @@ function Warps.remove_warp_area(warp_id)
         {position.x+radius, position.y+radius}
     }
 
-    -- Remove all the entities that are in the area
-    local entities = surface.find_entities_filtered{ force='neutral', area=area }
-    for _, entity in pairs(entities) do if entity and entity.valid and entity.name ~= 'player' then entity.destroy() end end
+    -- Remove warp structure entities
+    local entity_names = {}
+    for _, entity in pairs(config.entities) do
+        table.insert(entity_names, entity[1])
+    end
+    local entities = surface.find_entities_filtered{ force='neutral', area=area, name = entity_names }
+    for _, entity in pairs(entities) do
+        -- Destroy them, this will leave corpses of the entities that it distroyed.
+        if entity and entity.valid and entity.destructible == false then
+            entity.destructible = true
+            entity.die(entity.force)
+        end
+    end
 
     -- Rechart map area, usefull if warp is not covered by a radar
     game.forces[warp.force_name].chart(surface, area)

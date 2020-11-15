@@ -82,11 +82,52 @@ Gui.element{
     local position = player.position
 
     -- Check if the warp is too close to water
-    local water_tiles = surface.find_tiles_filtered{collision_mask = "water-tile", radius =  config.standard_proximity_radius + 1, position = position, limit = 1}
+    local water_tiles = surface.find_tiles_filtered{ collision_mask = "water-tile", radius =  config.standard_proximity_radius + 1, position = position }
     if #water_tiles > 0 then
         player_return({'expcore-commands.command-fail', {'warp-list.too-close-to-water', config.standard_proximity_radius + 1}}, 'orange_red', player)
         local play_sound = 'utility/wire_pickup'
         if game.player then game.player.play_sound{path=play_sound} end
+        for _, tile in pairs(water_tiles) do
+            rendering.draw_sprite{
+                sprite = 'utility/rail_path_not_possible',
+                x_scale = 0.5,
+                y_scale = 0.5,
+                target = tile.position,
+                surface = surface,
+                players = {player},
+                time_to_live = 60
+            }
+        end
+        return
+    end
+
+    -- Check if there are player entities in the way (has a bigger radius because the enities that can be placed by a player are larger)
+    local entities = surface.find_entities_filtered{
+        radius =  config.standard_proximity_radius + 4.5,
+        position = position,
+        collision_mask = {
+            'item-layer', 'object-layer', 'player-layer', 'water-tile'
+        }
+    }
+    -- Remove 1 because that is the current player
+    if #entities-1 > 0 then
+        player_return({'expcore-commands.command-fail', {'warp-list.too-close-to-entities', config.standard_proximity_radius + 4.5}}, 'orange_red', player)
+        local play_sound = 'utility/wire_pickup'
+        if game.player then game.player.play_sound{path=play_sound} end
+        local character = player.character
+        for _, entity in pairs(entities) do
+            if entity ~= character then
+                rendering.draw_sprite{
+                    sprite = 'utility/rail_path_not_possible',
+                    x_scale = 0.5,
+                    y_scale = 0.5,
+                    target = entity,
+                    surface = surface,
+                    players = {player},
+                    time_to_live = 60
+                }
+            end
+        end
         return
     end
 
@@ -162,6 +203,8 @@ Gui.element(function(event_trigger, parent, warp)
 end)
 :style{
     single_line = false,
+    left_padding = 2,
+    right_padding = 2,
     horizontally_stretchable = true
 }
 :on_click(function(player, element, _)
@@ -188,9 +231,11 @@ Gui.element(function(event_trigger, parent, warp)
     return element
 end)
 :style{
-    maximal_width = 81,
+    maximal_width = 97,
     height = 22,
-    padding = -2
+    padding = -2,
+    left_margin = 2,
+    right_margin = 2,
 }
 :on_confirmed(function(player, element, _)
     local warp_id = element.parent.caption
@@ -336,40 +381,54 @@ Gui.element{
 local warp_list_container
 
 -- Helper function to style and enable or disable a button element
-local function update_icon_button(element, on_cooldown, warp, warp_player_is_on)
+local function update_icon_button(element, on_cooldown, warp, warp_player_is_on, bypass_warp_proximity)
     -- Check if button element is valid
     if not element or not element.valid then return end
 
     local label_style = element.parent.parent['name-'..warp.warp_id][warp_label.name].style
 
-    if not warp_player_is_on then
+    if not warp_player_is_on and not bypass_warp_proximity then
         element.tooltip = {'warp-list.goto-disabled'}
         element.enabled = false
-        label_style.font_color = { 1, 1, 1, 0.7 }
+        label_style.font_color = Colors.light_grey
         return
     end
 
-    if warp_player_is_on.warp_id == warp.warp_id then
+    if warp_player_is_on and warp_player_is_on.warp_id == warp.warp_id then
         element.tooltip = {'warp-list.goto-same-warp'}
         element.enabled = false
-        label_style.font_color = { 1, 1, 1, 0.7 }
+        label_style.font_color = Colors.light_grey
     elseif on_cooldown then
         element.tooltip = {'warp-list.goto-cooldown'}
         element.enabled = false
-        label_style.font_color = { 1, 1, 1, 0.7 }
+        label_style.font_color = Colors.light_grey
     else
+        if not warp_player_is_on and bypass_warp_proximity then
+            local position = warp.position
+            element.tooltip = {'warp-list.goto-bypass', position.x, position.y}
+            element.enabled = true
+            label_style.font_color = Colors.dark_turquoise
+            return
+        end
         -- Check if the warps are in the same electricity network
         local warp_electric_network_id = warp.electric_pole and warp.electric_pole.electric_network_id or -1
         local player_warp_electric_network_id = warp_player_is_on.electric_pole and warp_player_is_on.electric_pole.electric_network_id or -2
         if warp_electric_network_id == player_warp_electric_network_id then
-            local position = warp_player_is_on.position
+            local position = warp.position
             element.tooltip = {'warp-list.goto-tooltip', position.x, position.y}
             element.enabled = true
-            label_style.font_color = { 1, 1, 1, 1 }
+            label_style.font_color = Colors.white
         else
+            if bypass_warp_proximity then
+                local position = warp.position
+                element.tooltip = {'warp-list.goto-bypass-different-network', position.x, position.y}
+                element.enabled = true
+                label_style.font_color = Colors.orange
+                return
+            end
             element.tooltip = {'warp-list.goto-different-network'}
             element.enabled = false
-            label_style.font_color = { 1, 0, 0, 0.7 }
+            label_style.font_color = Colors.crimson
         end
     end
 end
@@ -389,10 +448,11 @@ function update_wrap_buttons(player, timer, warp_id)
 
     -- Change the enabled state of the warp buttons
     local warp_ids = Warps.get_force_warp_ids(player.force.name)
+    local bypass_warp_proximity = check_player_permissions(player, 'bypass_warp_proximity')
     for _, next_warp_id in pairs(warp_ids) do
         local element = scroll_table['icon-'..next_warp_id][warp_icon_button.name]
         local next_warp = Warps.get_warp(next_warp_id)
-        update_icon_button(element, on_cooldown, next_warp, warp_player_is_on)
+        update_icon_button(element, on_cooldown, next_warp, warp_player_is_on, bypass_warp_proximity)
     end
 end
 
@@ -478,8 +538,8 @@ local function update_warp(player, warp_table, warp_id)
     local timer = PlayerCooldown:get(player)
     local current_warp_id = PlayerInRange:get(player)
     local to_warp = current_warp_id and Warps.get_warp(current_warp_id) or nil
-    local apply_proximity = not check_player_permissions(player, 'bypass_warp_proximity')
-    update_icon_button(warp_icon_element, timer > 0 or (apply_proximity and not current_warp_id), warp, to_warp)
+    local bypass_warp_proximity = check_player_permissions(player, 'bypass_warp_proximity')
+    update_icon_button(warp_icon_element, timer > 0, warp, to_warp, bypass_warp_proximity)
 end
 
 -- Update all the warps for a player
@@ -510,7 +570,7 @@ end
 warp_list_container =
 Gui.element(function(event_trigger, parent)
     -- Draw the internal container
-    local container = Gui.container(parent, event_trigger, 200)
+    local container = Gui.container(parent, event_trigger, 220)
 
     -- Draw the header
     local header = Gui.header(
@@ -583,10 +643,7 @@ PlayerInRange:on_update(function(player_name, warp_id)
         Gui.toggle_left_element(player, warp_list_container, warp_id ~= nil)
     end
 
-    -- Check if the player requires proximity
-    if not check_player_permissions(player, 'bypass_warp_proximity') then
-        update_wrap_buttons(player, nil, warp_id)
-    end
+    update_wrap_buttons(player, nil, warp_id)
 end)
 
 --- Update the warp cooldown progress bars to match the current cooldown
