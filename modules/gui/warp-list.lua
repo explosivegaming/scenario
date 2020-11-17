@@ -387,14 +387,18 @@ local function update_icon_button(element, on_cooldown, warp, warp_player_is_on,
 
     local label_style = element.parent.parent['name-'..warp.warp_id][warp_label.name].style
 
-    if not warp_player_is_on and not bypass_warp_proximity then
-        element.tooltip = {'warp-list.goto-disabled'}
-        element.enabled = false
-        label_style.font_color = Colors.light_grey
-        return
-    end
-
-    if warp_player_is_on and warp_player_is_on.warp_id == warp.warp_id then
+    if not warp_player_is_on then
+        if bypass_warp_proximity then
+            local position = warp.position
+            element.tooltip = {'warp-list.goto-bypass', position.x, position.y}
+            element.enabled = true
+            label_style.font_color = Colors.dark_turquoise
+        else
+            element.tooltip = {'warp-list.goto-disabled'}
+            element.enabled = false
+            label_style.font_color = Colors.light_grey
+        end
+    elseif warp_player_is_on and warp_player_is_on.warp_id == warp.warp_id then
         element.tooltip = {'warp-list.goto-same-warp'}
         element.enabled = false
         label_style.font_color = Colors.light_grey
@@ -403,14 +407,6 @@ local function update_icon_button(element, on_cooldown, warp, warp_player_is_on,
         element.enabled = false
         label_style.font_color = Colors.light_grey
     else
-        if not warp_player_is_on and bypass_warp_proximity then
-            local position = warp.position
-            element.tooltip = {'warp-list.goto-bypass', position.x, position.y}
-            element.enabled = true
-            label_style.font_color = Colors.dark_turquoise
-            return
-        end
-        -- Check if the warps are in the same electricity network
         local warp_electric_network_id = warp.electric_pole and warp.electric_pole.electric_network_id or -1
         local player_warp_electric_network_id = warp_player_is_on.electric_pole and warp_player_is_on.electric_pole.electric_network_id or -2
         if warp_electric_network_id == player_warp_electric_network_id then
@@ -418,14 +414,12 @@ local function update_icon_button(element, on_cooldown, warp, warp_player_is_on,
             element.tooltip = {'warp-list.goto-tooltip', position.x, position.y}
             element.enabled = true
             label_style.font_color = Colors.white
+        elseif bypass_warp_proximity then
+            local position = warp.position
+            element.tooltip = {'warp-list.goto-bypass-different-network', position.x, position.y}
+            element.enabled = true
+            label_style.font_color = Colors.orange
         else
-            if bypass_warp_proximity then
-                local position = warp.position
-                element.tooltip = {'warp-list.goto-bypass-different-network', position.x, position.y}
-                element.enabled = true
-                label_style.font_color = Colors.orange
-                return
-            end
             element.tooltip = {'warp-list.goto-different-network'}
             element.enabled = false
             label_style.font_color = Colors.crimson
