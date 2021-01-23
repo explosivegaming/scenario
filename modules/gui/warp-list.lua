@@ -33,6 +33,15 @@ local Styles = {
     sprite22 = { height = 22, width = 22, padding = -2 },
     sprite32 = { height = 32, width = 32, left_margin = 1 }
 }
+--- Status icon of a warp
+local warp_status_icons = {
+	cooldown = '[img=utility/multiplayer_waiting_icon]',
+    not_available = '[img=utility/not_available]',
+	bypass = '[img=utility/side_menu_bonus_icon]',
+	current = '[img=utility/side_menu_map_icon]',
+	connected = '[img=utility/logistic_network_panel_white]',
+	different = '[img=utility/warning_white]',
+}
 
 --- Returns if a player is allowed to edit the given warp
 --- If a player is allowed to use the edit buttons
@@ -214,6 +223,22 @@ end)
     player.zoom_to_world(position, 1.5)
 end)
 
+--- Warp status, visible if the player is not in edit state
+--- This will show if the warp is connected or not
+-- @element warp_status
+local warp_status =
+Gui.element(function(event_trigger, parent)
+    -- Draw the element
+    return parent.add{
+        name = event_trigger,
+        type = 'label',
+        caption = '[img=utility/electricity_icon_unplugged]', -- Temporary icon
+    }
+end)
+:style{
+    single_line = false,
+}
+
 --- Warp textfield, visible if the player is in edit state
 -- @element warp_textfield
 local warp_textfield =
@@ -231,7 +256,7 @@ Gui.element(function(event_trigger, parent, warp)
     return element
 end)
 :style{
-    maximal_width = 97,
+    maximal_width = 73,
     height = 22,
     padding = -2,
     left_margin = 2,
@@ -335,6 +360,7 @@ Gui.element(function(_, parent, warp)
     name_flow.style.padding = 0
 
     -- Add the label and textfield of the warp
+    warp_status(name_flow)
     warp_label(name_flow, warp)
     warp_textfield(name_flow, warp)
 
@@ -386,26 +412,31 @@ local function update_icon_button(element, on_cooldown, warp, warp_player_is_on,
     if not element or not element.valid then return end
 
     local label_style = element.parent.parent['name-'..warp.warp_id][warp_label.name].style
+    local warp_status_element = element.parent.parent['name-'..warp.warp_id][warp_status.name]
 
     if not warp_player_is_on then
         if bypass_warp_proximity then
             local position = warp.position
             element.tooltip = {'warp-list.goto-bypass', position.x, position.y}
             element.enabled = true
-            label_style.font_color = Colors.dark_turquoise
+            warp_status_element.caption = warp_status_icons.bypass
+            label_style.font = 'default-semibold'
         else
             element.tooltip = {'warp-list.goto-disabled'}
             element.enabled = false
-            label_style.font_color = Colors.light_grey
+            warp_status_element.caption = warp_status_icons.not_available
+            label_style.font = 'default'
         end
-    elseif warp_player_is_on and warp_player_is_on.warp_id == warp.warp_id then
+    elseif warp_player_is_on.warp_id == warp.warp_id then
         element.tooltip = {'warp-list.goto-same-warp'}
         element.enabled = false
-        label_style.font_color = Colors.light_grey
+        warp_status_element.caption = warp_status_icons.current
+        label_style.font = 'default'
     elseif on_cooldown then
         element.tooltip = {'warp-list.goto-cooldown'}
         element.enabled = false
-        label_style.font_color = Colors.light_grey
+        warp_status_element.caption = warp_status_icons.cooldown
+        label_style.font = 'default'
     else
         local warp_electric_network_id = warp.electric_pole and warp.electric_pole.electric_network_id or -1
         local player_warp_electric_network_id = warp_player_is_on.electric_pole and warp_player_is_on.electric_pole.electric_network_id or -2
@@ -413,16 +444,19 @@ local function update_icon_button(element, on_cooldown, warp, warp_player_is_on,
             local position = warp.position
             element.tooltip = {'warp-list.goto-tooltip', position.x, position.y}
             element.enabled = true
-            label_style.font_color = Colors.white
+            warp_status_element.caption = warp_status_icons.connected
+            label_style.font = 'default-semibold'
         elseif bypass_warp_proximity then
             local position = warp.position
             element.tooltip = {'warp-list.goto-bypass-different-network', position.x, position.y}
             element.enabled = true
-            label_style.font_color = Colors.orange
+            warp_status_element.caption = warp_status_icons.bypass
+            label_style.font = 'default-semibold'
         else
             element.tooltip = {'warp-list.goto-different-network'}
             element.enabled = false
-            label_style.font_color = Colors.crimson
+            warp_status_element.caption = warp_status_icons.different
+            label_style.font = 'default'
         end
     end
 end
@@ -486,7 +520,6 @@ local function update_warp(player, warp_table, warp_id)
     local players_editing = table.get_keys(warp.currently_editing)
     -- button_flow.visible = player_allowed_edit
     edit_warp_element.visible = player_allowed_edit
-    remove_warp_element.visible = player_allowed_edit
 
     -- Set the tooltip of the edit button
     if #players_editing > 0 then
@@ -570,7 +603,17 @@ Gui.element(function(event_trigger, parent)
     local header = Gui.header(
         container,
         {'warp-list.main-caption'},
-        {'warp-list.sub-tooltip', config.cooldown_duration, config.standard_proximity_radius},
+        {
+            'warp-list.sub-tooltip',
+            config.cooldown_duration,
+            config.standard_proximity_radius,
+            {'warp-list.sub-tooltip-current',warp_status_icons.current},
+            {'warp-list.sub-tooltip-connected',warp_status_icons.connected},
+            {'warp-list.sub-tooltip-different',warp_status_icons.different},
+            {'warp-list.sub-tooltip-bypass',warp_status_icons.bypass},
+            {'warp-list.sub-tooltip-not_available',warp_status_icons.not_available},
+            {'warp-list.sub-tooltip-cooldown',warp_status_icons.cooldown},
+        },
         true
     )
 
