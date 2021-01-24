@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install Lua
-        uses: leafo/gh-actions-lua@v5
+        uses: leafo/gh-actions-lua@v8.0.0
 
       - name: Install LuaRocks
         uses: leafo/gh-actions-luarocks@v2
