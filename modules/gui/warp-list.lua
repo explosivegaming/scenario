@@ -35,12 +35,12 @@ local Styles = {
 }
 --- Status icon of a warp
 local warp_status_icons = {
-	cooldown = '[img=utility/multiplayer_waiting_icon]',
+    cooldown = '[img=utility/multiplayer_waiting_icon]',
     not_available = '[img=utility/not_available]',
-	bypass = '[img=utility/side_menu_bonus_icon]',
-	current = '[img=utility/side_menu_map_icon]',
-	connected = '[img=utility/logistic_network_panel_white]',
-	different = '[img=utility/warning_white]',
+    bypass = '[img=utility/side_menu_bonus_icon]',
+    current = '[img=utility/side_menu_map_icon]',
+    connected = '[img=utility/logistic_network_panel_white]',
+    different = '[img=utility/warning_white]',
 }
 
 --- Returns if a player is allowed to edit the given warp
@@ -119,7 +119,7 @@ Gui.element{
         }
     }
     -- Remove 1 because that is the current player
-    if #entities-1 > 0 then
+    if #entities > 1 then
         player_return({'expcore-commands.command-fail', {'warp-list.too-close-to-entities', config.standard_proximity_radius + 4.5}}, 'orange_red', player)
         local play_sound = 'utility/wire_pickup'
         if game.player then game.player.play_sound{path=play_sound} end
@@ -244,16 +244,12 @@ end)
 local warp_textfield =
 Gui.element(function(event_trigger, parent, warp)
     -- Draw the element
-    local element =
-    parent.add{
+    return parent.add{
         name = event_trigger,
         type = 'textfield',
         text = warp.name,
         clear_and_focus_on_right_click = true
     }
-
-    -- Return the element
-    return element
 end)
 :style{
     maximal_width = 73,
@@ -334,7 +330,7 @@ Gui.element{
     Warps.set_editing(warp_id, player.name, true)
 end)
 
-local update_wrap_buttons
+local update_all_warp_elements
 --- Set of three elements which make up each row of the warp table
 -- @element add_warp_elements
 local add_warp_elements =
@@ -407,14 +403,16 @@ Gui.element{
 local warp_list_container
 
 -- Helper function to style and enable or disable a button element
-local function update_icon_button(element, on_cooldown, warp, warp_player_is_on, bypass_warp_proximity)
+local function update_warp_elements(element, warp, warp_player_is_on, on_cooldown, bypass_warp_proximity)
     -- Check if button element is valid
     if not element or not element.valid then return end
 
     local label_style = element.parent.parent['name-'..warp.warp_id][warp_label.name].style
     local warp_status_element = element.parent.parent['name-'..warp.warp_id][warp_status.name]
 
+    -- If player is not on a warp
     if not warp_player_is_on then
+        -- If player is allowed to warp without being on a warp. If not then disable the warp location
         if bypass_warp_proximity then
             local position = warp.position
             element.tooltip = {'warp-list.goto-bypass', position.x, position.y}
@@ -429,12 +427,14 @@ local function update_icon_button(element, on_cooldown, warp, warp_player_is_on,
             warp_status_element.caption = warp_status_icons.not_available
             label_style.font = 'default'
         end
+    -- If player is on the warp that is being updated
     elseif warp_player_is_on.warp_id == warp.warp_id then
         element.tooltip = {'warp-list.goto-same-warp'}
         element.enabled = false
         warp_status_element.tooltip = {'warp-list.goto-same-warp'}
         warp_status_element.caption = warp_status_icons.current
         label_style.font = 'default'
+    -- If player is on cooldown
     elseif on_cooldown then
         element.tooltip = {'warp-list.goto-cooldown'}
         element.enabled = false
@@ -442,6 +442,7 @@ local function update_icon_button(element, on_cooldown, warp, warp_player_is_on,
         warp_status_element.caption = warp_status_icons.cooldown
         label_style.font = 'default'
     else
+        -- If the warp the player is standing on is the same as the warp that is being updated
         local warp_electric_network_id = warp.electric_pole and warp.electric_pole.electric_network_id or -1
         local player_warp_electric_network_id = warp_player_is_on.electric_pole and warp_player_is_on.electric_pole.electric_network_id or -2
         if warp_electric_network_id == player_warp_electric_network_id then
@@ -451,6 +452,7 @@ local function update_icon_button(element, on_cooldown, warp, warp_player_is_on,
             warp_status_element.tooltip = {'warp-list.goto-tooltip', position.x, position.y}
             warp_status_element.caption = warp_status_icons.connected
             label_style.font = 'default-semibold'
+        -- If the warp is not in the same network but the player is allowed to warp without being on a warp
         elseif bypass_warp_proximity then
             local position = warp.position
             element.tooltip = {'warp-list.goto-bypass-different-network', position.x, position.y}
@@ -458,6 +460,7 @@ local function update_icon_button(element, on_cooldown, warp, warp_player_is_on,
             warp_status_element.tooltip = {'warp-list.goto-bypass-different-network', position.x, position.y}
             warp_status_element.caption = warp_status_icons.bypass
             label_style.font = 'default-semibold'
+        -- If the warp is in a different network than the one the player is standing on
         else
             element.tooltip = {'warp-list.goto-different-network'}
             element.enabled = false
@@ -469,25 +472,26 @@ local function update_icon_button(element, on_cooldown, warp, warp_player_is_on,
 end
 
 --- Update the warp buttons for a player
-function update_wrap_buttons(player, timer, warp_id)
+function update_all_warp_elements(player, timer, warp_id)
     -- Get the warp table
     local frame = Gui.get_left_element(player, warp_list_container)
     local scroll_table = frame.container.scroll.table
 
-    -- Check if the buttons should be active
+    -- Check if the player is currenty on cooldown
     timer = timer or PlayerCooldown:get(player)
-    warp_id = warp_id or PlayerInRange:get(player)
     local on_cooldown = timer > 0
-
+    -- Get the warp the player is on
+    warp_id = warp_id or PlayerInRange:get(player)
     local warp_player_is_on = warp_id and Warps.get_warp(warp_id) or nil
+    -- Check player permission
+    local bypass_warp_proximity = check_player_permissions(player, 'bypass_warp_proximity')
 
     -- Change the enabled state of the warp buttons
     local warp_ids = Warps.get_force_warp_ids(player.force.name)
-    local bypass_warp_proximity = check_player_permissions(player, 'bypass_warp_proximity')
     for _, next_warp_id in pairs(warp_ids) do
         local element = scroll_table['icon-'..next_warp_id][warp_icon_button.name]
         local next_warp = Warps.get_warp(next_warp_id)
-        update_icon_button(element, on_cooldown, next_warp, warp_player_is_on, bypass_warp_proximity)
+        update_warp_elements(element, next_warp, warp_player_is_on, on_cooldown, bypass_warp_proximity)
     end
 end
 
@@ -560,7 +564,7 @@ local function update_warp(player, warp_table, warp_id)
         -- The SpritePath type is not the same as the SignalID type
         local sprite = warp.icon.type .. '/' ..warp.icon.name
         if warp.icon.type == 'virtual' then
-                sprite = 'virtual-signal/' ..warp.icon.name
+            sprite = 'virtual-signal/' ..warp.icon.name
         end
         warp_icon_element.sprite = sprite
         -- Set icon edit to the warps icon
@@ -570,6 +574,7 @@ local function update_warp(player, warp_table, warp_id)
         label_element.visible = true
         label_element.caption = warp.name
         textfield_element.visible = false
+        textfield_element.text = warp.name
         -- Set the edit buttons
         cancel_edit_element.visible = false
         confirm_edit_element.visible = false
@@ -582,7 +587,7 @@ local function update_warp(player, warp_table, warp_id)
     local current_warp_id = PlayerInRange:get(player)
     local to_warp = current_warp_id and Warps.get_warp(current_warp_id) or nil
     local bypass_warp_proximity = check_player_permissions(player, 'bypass_warp_proximity')
-    update_icon_button(warp_icon_element, timer > 0, warp, to_warp, bypass_warp_proximity)
+    update_warp_elements(warp_icon_element, warp, to_warp, timer > 0, bypass_warp_proximity)
 end
 
 -- Update all the warps for a player
@@ -695,7 +700,7 @@ PlayerInRange:on_update(function(player_name, warp_id)
         Gui.toggle_left_element(player, warp_list_container, warp_id ~= nil)
     end
 
-    update_wrap_buttons(player, nil, warp_id)
+    update_all_warp_elements(player, nil, warp_id)
 end)
 
 --- Update the warp cooldown progress bars to match the current cooldown
@@ -714,7 +719,7 @@ PlayerCooldown:on_update(function(player_name, player_cooldown)
 
     -- Trigger update of buttons if cooldown is now 0
     if player_cooldown == 0 then
-        update_wrap_buttons(player, player_cooldown, nil)
+        update_all_warp_elements(player, player_cooldown, nil)
     end
 end)
 
