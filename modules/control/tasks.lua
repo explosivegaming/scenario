@@ -31,7 +31,6 @@ end)
 
 --[[-- Add a new task for a force, the task can be placed into a certain position for that force
 @tparam string force_name the name of the force to add the task for
-@tparam[opt] number task_number the order place to add the task to, appends to end if omited
 @tparam[opt] string player_name the player who added this task, will cause them to be listed under editing
 @tparam[opt] string task_message the message that is used for this task, if not given default is used
 @treturn string the uid of the task which was created
@@ -40,25 +39,21 @@ end)
 local task_id = Tasks.add_task(game.player.force.name, nil, game.player.name)
 
 ]]
-function Tasks.add_task(force_name, task_number, player_name, task_message)
+function Tasks.add_task(force_name, player_name, task_message)
     -- Get a new task id
     local task_id = tostring(force_tasks._uid)
     task_message = task_message or 'New Task'
     force_tasks._uid = force_tasks._uid + 1
 
     -- Get the existing tasks for this force
-    local tasks = force_tasks[force_name]
-    if not tasks then
-        force_tasks[force_name] = {}
-        tasks = force_tasks[force_name]
+    local task_ids = force_tasks[force_name]
+    if not task_ids then
+        task_ids = {}
+        force_tasks[force_name] = task_ids
     end
 
     -- Insert the task id into the forces tasks
-    if task_number then
-        table.insert(tasks, task_number, task_id)
-    else
-        table.insert(tasks, task_id)
-    end
+    table.insert(task_ids, task_id)
 
     -- Create the editing table
     local editing = {}
