@@ -94,8 +94,7 @@ Gui.element{
     local water_tiles = surface.find_tiles_filtered{ collision_mask = "water-tile", radius =  config.standard_proximity_radius + 1, position = position }
     if #water_tiles > 0 then
         player_return({'expcore-commands.command-fail', {'warp-list.too-close-to-water', config.standard_proximity_radius + 1}}, 'orange_red', player)
-        local play_sound = 'utility/wire_pickup'
-        if game.player then game.player.play_sound{path=play_sound} end
+        if game.player then game.player.play_sound{ path = 'utility/wire_pickup' } end
         for _, tile in pairs(water_tiles) do
             rendering.draw_sprite{
                 sprite = 'utility/rail_path_not_possible',
