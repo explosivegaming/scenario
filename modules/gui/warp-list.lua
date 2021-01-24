@@ -419,22 +419,26 @@ local function update_icon_button(element, on_cooldown, warp, warp_player_is_on,
             local position = warp.position
             element.tooltip = {'warp-list.goto-bypass', position.x, position.y}
             element.enabled = true
+            warp_status_element.tooltip = {'warp-list.goto-bypass', position.x, position.y}
             warp_status_element.caption = warp_status_icons.bypass
             label_style.font = 'default-semibold'
         else
             element.tooltip = {'warp-list.goto-disabled'}
             element.enabled = false
+            warp_status_element.tooltip = {'warp-list.goto-disabled'}
             warp_status_element.caption = warp_status_icons.not_available
             label_style.font = 'default'
         end
     elseif warp_player_is_on.warp_id == warp.warp_id then
         element.tooltip = {'warp-list.goto-same-warp'}
         element.enabled = false
+        warp_status_element.tooltip = {'warp-list.goto-same-warp'}
         warp_status_element.caption = warp_status_icons.current
         label_style.font = 'default'
     elseif on_cooldown then
         element.tooltip = {'warp-list.goto-cooldown'}
         element.enabled = false
+        warp_status_element.tooltip = {'warp-list.goto-cooldown'}
         warp_status_element.caption = warp_status_icons.cooldown
         label_style.font = 'default'
     else
@@ -444,17 +448,20 @@ local function update_icon_button(element, on_cooldown, warp, warp_player_is_on,
             local position = warp.position
             element.tooltip = {'warp-list.goto-tooltip', position.x, position.y}
             element.enabled = true
+            warp_status_element.tooltip = {'warp-list.goto-tooltip', position.x, position.y}
             warp_status_element.caption = warp_status_icons.connected
             label_style.font = 'default-semibold'
         elseif bypass_warp_proximity then
             local position = warp.position
             element.tooltip = {'warp-list.goto-bypass-different-network', position.x, position.y}
             element.enabled = true
+            warp_status_element.tooltip = {'warp-list.goto-bypass-different-network', position.x, position.y}
             warp_status_element.caption = warp_status_icons.bypass
             label_style.font = 'default-semibold'
         else
             element.tooltip = {'warp-list.goto-different-network'}
             element.enabled = false
+            warp_status_element.tooltip = {'warp-list.goto-different-network'}
             warp_status_element.caption = warp_status_icons.different
             label_style.font = 'default'
         end
