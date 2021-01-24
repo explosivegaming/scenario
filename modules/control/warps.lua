@@ -359,6 +359,11 @@ Warps.update_warp(warp_id, 'My Warp', 'iron-plate', game.player.name)
 ]]
 function Warps.update_warp(warp_id, new_name, new_icon, player_name)
     WrapData:update(warp_id, function(_, warp)
+        -- If the icon is not valid then replace with the old icon
+        if new_icon and not new_icon.name or not new_icon.type then
+            new_icon = warp.icon
+        end
+
         warp.last_edit_name = player_name or '<server>'
         warp.last_edit_time = game.tick
         warp.name = new_name or warp.name

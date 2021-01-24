@@ -550,9 +550,18 @@ local function update_warp(player, warp_table, warp_id)
     else
         -- Set the icon elements visibility
         warp_icon_element.visible = true
+        -- The SpritePath type is not the same as the SignalID type
+        local sprite = warp.icon.type .. '/' ..warp.icon.name
+        if warp.icon.type == 'virtual' then
+                sprite = 'virtual-signal/' ..warp.icon.name
+        end
+        warp_icon_element.sprite = sprite
+        -- Set icon edit to the warps icon
+        warp_icon_edit_element.elem_value = warp.icon
         warp_icon_edit_element.visible = false
         -- Set the name elements visibility
         label_element.visible = true
+        label_element.caption = warp.name
         textfield_element.visible = false
         -- Set the edit buttons
         cancel_edit_element.visible = false
@@ -585,7 +594,6 @@ local function update_all_warp_force(force)
         local frame = Gui.get_left_element(player, warp_list_container)
         local warp_table = frame.container.scroll.table
 
-        warp_table.clear()
         for _, warp_id in ipairs(warp_ids) do
             update_warp(player, warp_table, warp_id)
         end
