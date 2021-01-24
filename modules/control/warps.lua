@@ -37,6 +37,12 @@ Global.register(force_warps, function(tbl)
     force_warps = tbl
 end)
 
+-- Create a array of entity names that will be added to the remove filter
+local remove_warp_area_entity_names = {}
+for _, entity in pairs(config.entities) do
+    table.insert(remove_warp_area_entity_names, entity[1])
+end
+
 -- When a warp is updated change its chat tag and resort the warp order
 WrapData:on_update(function(warp_id, warp, old_warp)
     if warp then
@@ -193,13 +199,13 @@ function Warps.remove_warp_area(warp_id)
     local radius = config.standard_proximity_radius
 
     -- Check that a warp area was created previously
-    local base_tile = warp.old_tile
-    if not base_tile then return end
+    local old_tile = warp.old_tile
+    if not old_tile then return end
 
     -- Loop over warp tiles and set them to the old tile that was below
     local tiles = {}
     for _, tile in pairs(config.tiles) do
-        table.insert(tiles, {name=base_tile, position={tile[2]+position.x, tile[3]+position.y}})
+        table.insert(tiles, {name=old_tile, position={tile[2]+position.x, tile[3]+position.y}})
     end
     surface.set_tiles(tiles)
 
@@ -209,11 +215,7 @@ function Warps.remove_warp_area(warp_id)
     }
 
     -- Remove warp structure entities
-    local entity_names = {}
-    for _, entity in pairs(config.entities) do
-        table.insert(entity_names, entity[1])
-    end
-    local entities = surface.find_entities_filtered{ force='neutral', area=area, name = entity_names }
+    local entities = surface.find_entities_filtered{ force='neutral', area=area, name = remove_warp_area_entity_names }
     for _, entity in pairs(entities) do
         -- Destroy them, this will leave corpses of the entities that it distroyed.
         if entity and entity.valid and entity.destructible == false then
