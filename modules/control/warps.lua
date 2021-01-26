@@ -46,6 +46,7 @@ end
 -- When a warp is updated change its chat tag and resort the warp order
 WrapData:on_update(function(warp_id, warp, old_warp)
     if warp then
+        warp.updates = warp.updates + 1
         -- Update the map chart tag if there is one
         if warp.tag then
             Warps.make_warp_tag(warp_id)
@@ -327,7 +328,8 @@ function Warps.add_warp(force_name, surface, position, player_name, warp_name)
         },
         last_edit_name = player_name or '<server>',
         last_edit_time = game.tick,
-        currently_editing = editing
+        currently_editing = editing,
+        updates = 0,
     })
 
     return warp_id

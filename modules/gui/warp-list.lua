@@ -36,7 +36,7 @@ local Styles = {
 --- Status icon of a warp
 local warp_status_icons = {
     cooldown = '[img=utility/multiplayer_waiting_icon]',
-    not_available = '[img=utility/not_available]',
+    not_available = '[img=utility/set_bar_slot]',
     bypass = '[img=utility/side_menu_bonus_icon]',
     current = '[img=utility/side_menu_map_icon]',
     connected = '[img=utility/logistic_network_panel_white]',
@@ -210,7 +210,7 @@ Gui.element(function(event_trigger, parent, warp)
     }
 end)
 :style{
-    single_line = false,
+    single_line = true,
     left_padding = 2,
     right_padding = 2,
     horizontally_stretchable = true
@@ -235,6 +235,8 @@ Gui.element(function(event_trigger, parent)
     }
 end)
 :style{
+    -- when editing mode because textbox is larger the icon would move up.
+    top_padding = 1,
     single_line = false,
 }
 
@@ -251,7 +253,12 @@ Gui.element(function(event_trigger, parent, warp)
     }
 end)
 :style{
-    maximal_width = 73,
+    -- Needed fields to make it squashable and strechable.
+    minimal_width = 10,
+    maximal_width = 300,
+    horizontally_squashable = "on",
+    horizontally_stretchable = "on",
+    -- Other styling
     height = 22,
     padding = -2,
     left_margin = 2,
@@ -296,6 +303,12 @@ Gui.element{
 :style(Styles.sprite22)
 :on_click(function(player, element)
     local warp_id = element.parent.caption
+    -- Check if this is this is the first edit, if so remove the warp.
+    local warp = Warps.get_warp(warp_id)
+    if warp.updates == 1 then
+        Warps.remove_warp(warp_id)
+        return
+    end
     Warps.set_editing(warp_id, player.name)
 end)
 
@@ -305,7 +318,7 @@ local remove_warp_button =
 Gui.element{
     type = 'sprite-button',
     sprite = 'utility/trash',
-    tooltip = {'warp-list.discard-tooltip'},
+    tooltip = {'warp-list.remove-tooltip'},
     style = 'shortcut_bar_button_red'
 }
 :style(Styles.sprite22)
@@ -615,8 +628,12 @@ end
 -- @element warp_list_container
 warp_list_container =
 Gui.element(function(event_trigger, parent)
+    local player = Gui.get_player_from_element(parent)
+    -- Check if user has permission to add warps
+    local allow_add_warp = check_player_permissions(player, 'allow_add_warp')
+
     -- Draw the internal container
-    local container = Gui.container(parent, event_trigger, 220)
+    local container = Gui.container(parent, event_trigger, allow_add_warp and 268 or 220)
 
     -- Draw the header
     local header = Gui.header(
@@ -637,9 +654,8 @@ Gui.element(function(event_trigger, parent)
     )
 
     -- Draw the new warp button
-    local player = Gui.get_player_from_element(parent)
     local add_new_warp_element = add_new_warp(header)
-    add_new_warp_element.visible = check_player_permissions(player, 'allow_add_warp')
+    add_new_warp_element.visible = allow_add_warp
 
     -- Draw the scroll table for the warps
     local scroll_table = Gui.scroll_table(container, 250, 3)
@@ -834,6 +850,11 @@ end)
 local function role_update_event(event)
     local player = game.players[event.player_index]
     local container = Gui.get_left_element(player, warp_list_container).container
+
+    -- Check if user has permission to add warps
+    local allow_add_warp = check_player_permissions(player, 'allow_add_warp')
+    -- Update container size depending on if the player is allowed to add warps
+    container.parent.style.width = allow_add_warp and 268 or 220
 
     -- Update the warps, incase the user can now edit them
     local scroll_table = container.scroll.table
