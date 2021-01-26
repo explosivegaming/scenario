@@ -44,11 +44,9 @@ local Jail = {
 }
 
 local old_roles = Jail.old_roles
-Global.register({
-    old_roles = old_roles
-}, function(tbl)
-    Jail.old_roles = tbl.old_roles
-    old_roles = Jail.old_roles
+Global.register(old_roles, function(tbl)
+    Jail.old_roles = tbl
+    old_roles = tbl
 end)
 
 --- Used to emit the jail related events
