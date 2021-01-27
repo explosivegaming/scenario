@@ -137,25 +137,6 @@ local function jail_player_callback(player,reason)
     Jail.jail_player(selected_player_name,player.name,reason)
 end
 
---- Temp bans the action player, requires a reason
--- @element temp_ban_player
-local temp_ban_player = new_button('utility/warning_white',{'player-list.temp-ban-player'})
-:on_click(function(player)
-    local selected_player_name, selected_player_color = get_action_player_name(player)
-    if Jail.is_jailed(selected_player_name) then
-        player.print({'expcom-jail.already-banned', selected_player_color},Colors.orange_red)
-    else
-        SelectedAction:set(player, 'command/temp-ban')
-    end
-end)
-
-local function temp_ban_player_callback(player,reason)
-    local selected_player, selected_player_color = get_action_player_name(player)
-    local by_player_name_color = format_chat_player_name(player)
-    game.print{'expcom-jail.temp-ban', selected_player_color,by_player_name_color,reason}
-    Jail.temp_ban_player(selected_player,player.name,reason)
-end
-
 --- Kicks the action player, requires a reason
 -- @element kick_player
 local kick_player = new_button('utility/warning_icon',{'player-list.kick-player'})
@@ -208,11 +189,6 @@ return {
             auth=auth_lower_role,
             reason_callback=jail_player_callback,
             jail_player
-        },
-        ['command/temp-ban'] = {
-            auth=auth_lower_role,
-            reason_callback=temp_ban_player_callback,
-            temp_ban_player
         },
         ['command/kick'] = {
             auth=auth_lower_role,
