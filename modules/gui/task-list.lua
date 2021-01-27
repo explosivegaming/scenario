@@ -205,6 +205,7 @@ Gui.element(function(_, parent, task)
         caption = '#)'
     }
     task_number.style.padding = 0
+    task_number.style.font = 'default-semibold'
 
     -- Add name flow this will contain the task label and textbox
     local task_flow = parent.add{
