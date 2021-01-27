@@ -87,8 +87,16 @@ Gui.element(function(event_trigger, parent, task)
     return element
 end)
 :style{
-    maximal_width = 131,
-    height = 20
+    -- Needed fields to make it squashable and strechable.
+    minimal_width = 10,
+    maximal_width = 300,
+    horizontally_squashable = "on",
+    horizontally_stretchable = "on",
+    -- Other styling
+    height = 22,
+    padding = -2,
+    left_margin = 2,
+    right_margin = 2,
 }
 :on_confirmed(function(player, element, _)
     local task_id = element.parent.name
@@ -113,7 +121,7 @@ Gui.element(function(event_trigger, parent, task)
 end)
 :style{
     single_line = false,
-    maximal_width = 150,
+    vertically_stretchable = true,
     horizontally_stretchable = true
 }
 
@@ -196,7 +204,7 @@ Gui.element(function(_, parent, task)
         type = 'label',
         caption = '#)'
     }
-    task_number.style.left_margin = 1
+    task_number.style.padding = 0
 
     -- Add name flow this will contain the task label and textbox
     local task_flow = parent.add{
@@ -326,7 +334,7 @@ end
 local task_list_container =
 Gui.element(function(event_trigger, parent)
     -- Draw the internal container
-    local container = Gui.container(parent, event_trigger, 230)
+    local container = Gui.container(parent, event_trigger, 268)
 
     -- Draw the header
     local header = Gui.header(
@@ -343,14 +351,15 @@ Gui.element(function(event_trigger, parent)
 
     -- Draw the scroll table for the tasks
     local scroll_table = Gui.scroll_table(container, 190, 3)
+    -- Set the scroll panel to always show the scrollbar (not doing this will result in a changing gui size)
     scroll_table.parent.vertical_scroll_policy = 'always'
     scroll_table.draw_horizontal_lines = true
     scroll_table.vertical_centering = false
 
     -- Change the style of the scroll table
     local scroll_table_style = scroll_table.style
-    scroll_table_style.top_cell_padding = 3
-    scroll_table_style.bottom_cell_padding = 3
+    scroll_table_style.top_cell_padding = 2
+    scroll_table_style.bottom_cell_padding = 4
 
     -- Draw the no tasks label
     local no_tasks_label =
