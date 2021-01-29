@@ -120,8 +120,7 @@ Gui.element{
     -- Remove 1 because that is the current player
     if #entities > 1 then
         player_return({'expcore-commands.command-fail', {'warp-list.too-close-to-entities', config.standard_proximity_radius + 4.5}}, 'orange_red', player)
-        local play_sound = 'utility/wire_pickup'
-        if game.player then game.player.play_sound{path=play_sound} end
+        if game.player then game.player.play_sound{path='utility/wire_pickup'} end
         local character = player.character
         for _, entity in pairs(entities) do
             if entity ~= character then
@@ -862,7 +861,7 @@ local function role_update_event(event)
 
     -- Update the new warp button incase the user can now add them
     local add_new_warp_element = container.header.alignment[add_new_warp.name]
-    add_new_warp_element.visible = check_player_permissions(player, 'allow_add_warp')
+    add_new_warp_element.visible = allow_add_warp
 end
 
 Event.add(Roles.events.on_role_assigned, role_update_event)
