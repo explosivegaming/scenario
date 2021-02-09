@@ -174,6 +174,7 @@ Roles.new_role('Veteran','Vet')
 :set_parent('Member')
 :allow{
     'command/chat-bot',
+    'command/last-location'
 }
 :set_auto_assign_condition(function(player)
     if player.online_time >= hours10 then
