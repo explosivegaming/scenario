@@ -10,7 +10,7 @@ require 'config.expcore.command_general_parse'
 --- Get the last location of a player.
 -- @command last-location
 -- @tparam LuaPlayer player the player that you want a location of
-Commands.new_command('last-location', 'Sends you a warning')
+Commands.new_command('last-location', 'Sends you the last location of a player')
 :add_param('player', false, 'player-role')
 :set_flag('admin_only')
 :register(function(player, action_player)
