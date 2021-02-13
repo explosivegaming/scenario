@@ -19,8 +19,9 @@ Commands.new_command('assign-role', 'Assigns a role to a player')
 :add_alias('rpromote', 'assign', 'role', 'add-role')
 :register(function(player, action_player, role)
     local player_highest = Roles.get_player_highest_role(player)
+    local player_name = player and player.name or '<server>'
     if player_highest.index < role.index then
-        Roles.assign_player(action_player, role, player.name)
+        Roles.assign_player(action_player, role, player_name)
     else
         return Commands.error{'expcom-roles.higher-role'}
     end
@@ -37,8 +38,9 @@ Commands.new_command('unassign-role', 'Unassigns a role from a player')
 :add_alias('rdemote', 'unassign', 'rerole', 'remove-role')
 :register(function(player, action_player, role)
     local player_highest = Roles.get_player_highest_role(player)
+    local player_name = player and player.name or '<server>'
     if player_highest.index < role.index then
-        Roles.unassign_player(action_player, role, player.name)
+        Roles.unassign_player(action_player, role, player_name)
     else
         return Commands.error{'expcom-roles.higher-role'}
     end
