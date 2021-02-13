@@ -31,32 +31,27 @@ PlayerFilters:on_load(function(player_name, filters)
     end
 end)
 
+local ignoredItems = {
+    ["blueprint"] = true,
+    ["blueprint-book"] = true,
+    ["deconstruction-planner"] = true,
+    ["spidertron-remote"] = true,
+    ["upgrade-planner"] = true
+}
+
 --- Saves your quickbar preset to the script-output folder
 -- @command save-quickbar
 Commands.new_command('save-quickbar', 'Saves your Quickbar preset items to file')
 :add_alias('save-toolbar')
 :register(function(player)
     local filters = {}
-    local ignoredItems = {
-        "blueprint",
-        "blueprint-book",
-        "deconstruction-planner",
-        "spidertron-remote",
-        "upgrade-planner"
-    }
-    local function contains(list, x)
-        for _, v in pairs(list) do
-            if v == x then return true end
-        end
-        return false
-    end
 
     for i = 1, 100 do
         local slot = player.get_quick_bar_slot(i)
         -- Need to filter out blueprint and blueprint books because the slot is a LuaItemPrototype and does not contain a way to export blueprint data
         if slot ~= nil then
-            local ignored = contains(ignoredItems, slot.name)
-            if ignored == false then
+            local ignored = ignoredItems[slot.name]
+            if ignored ~= true then
                 filters[i] = slot.name
             end
         end
