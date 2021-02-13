@@ -155,7 +155,8 @@ Roles.new_role('Supporter','Sup')
 :allow{
     'command/jail',
     'command/unjail',
-    'command/join-message'
+    'command/join-message',
+    'command/join-message-clear'
 }
 
 Roles.new_role('Partner','Part')
