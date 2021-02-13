@@ -34,3 +34,10 @@ Commands.new_command('join-message', 'Sets your custom join message')
     CustomMessages:set(player, message)
     return {'join-message.message-set'}
 end)
+
+Commands.new_command('join-message-clear', 'Clear your join message')
+:register(function(player, message)
+    if not player then return end
+    CustomMessages:remove(player)
+    return {'join-message.message-cleared'}
+end)

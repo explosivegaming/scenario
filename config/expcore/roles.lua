@@ -154,7 +154,8 @@ Roles.new_role('Supporter','Sup')
     'command/tag-color',
     'command/jail',
     'command/unjail',
-    'command/join-message'
+    'command/join-message',
+    'command/join-message-clear'
 }
 
 Roles.new_role('Partner','Part')
