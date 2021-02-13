@@ -69,15 +69,3 @@ Commands.new_command('save-quickbar', 'Saves your Quickbar preset items to file'
 
     return {'quickbar.saved'}
 end)
-
-    local player = game.players[player_name]
-    for i, item_name in pairs(filters) do
-        if (item_name ~= nil and ignoredItems[item_name] ~= true) then
-            local ignored = contains(ignoredItems, item_name)
-            if ignored == false then
-                game.print(item_name)
-                game.print(ignoredItems[item_name])
-                player.set_quick_bar_slot(i, item_name)
-            end
-        end
-    end

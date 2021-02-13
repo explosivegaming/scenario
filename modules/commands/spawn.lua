@@ -23,13 +23,15 @@ Commands.new_command('go-to-spawn', 'Teleport to spawn')
 :add_param('player', true, 'player-role-alive')
 :set_defaults{
     player=function(player)
-        if player.connected and player.character and player.character.health > 0 then
+        if player and player.connected and player.character and player.character.health > 0 then
             return player
         end
     end
 }
 :add_alias('spawn', 'tp-spawn')
 :register(function(player, action_player)
+    if not player then return Commands.error{'expcom-spawn.unavailable'} end
+    if not player.name and not action_player.name then return Commands.error{'expcom-spawn.unavailable'} end
     if not action_player then
         return Commands.error{'expcom-spawn.unavailable'}
     elseif action_player == player then

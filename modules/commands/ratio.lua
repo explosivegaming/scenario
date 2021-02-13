@@ -20,6 +20,7 @@ end
 Commands.new_command('ratio', 'This command will give the input and output ratios of the selected machine. Use the parameter for calculating the machines needed for that amount of items per second.')
       :add_param('itemsPerSecond', true, 'number')
       :register(function(player, itemsPerSecond)
+            if not player return Commands.error{'expcom-general.no-player-origin'}
             local machine = player.selected -- selected machine
             if not machine then --nil check
                   return Commands.error{'expcom-ratio.notSelecting'}

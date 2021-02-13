@@ -10,5 +10,6 @@ local Commands = require 'expcore.commands' --- @dep expcore.commands
 -- @command debug
 Commands.new_command('debug', 'Opens the debug pannel for viewing tables.')
 :register(function(player)
+    if not player then return {'expcom-general.no-player-origin'} end
     DebugView.open_dubug(player)
 end)

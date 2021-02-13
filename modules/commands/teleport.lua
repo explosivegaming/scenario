@@ -42,6 +42,7 @@ Commands.new_command('bring', 'Teleports a player to you.')
 :add_param('player', false, 'player-alive')
 :set_flag('admin_only')
 :register(function(player, from_player)
+    if not player then return Commands.error{'expcom-tp.no-position-found'} end
     if from_player.index == player.index then
         -- return if attempting to teleport to self
         return Commands.error{'expcom-tp.to-self'}
@@ -60,6 +61,7 @@ Commands.new_command('goto', 'Teleports you to a player.')
 :add_alias('tp-me', 'tpme')
 :set_flag('admin_only')
 :register(function(player, to_player)
+    if not player then return Commands.error{'expcom-tp.no-position-found'} end
     if to_player.index == player.index then
         -- return if attempting to teleport to self
         return Commands.error{'expcom-tp.to-self'}
