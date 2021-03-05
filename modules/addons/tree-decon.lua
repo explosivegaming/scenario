@@ -15,6 +15,7 @@ end)
 
 -- Add trees to queue when marked, only allows simple entities and for players with role permission
 Event.add(defines.events.on_marked_for_deconstruction, function(event)
+    game.print("marked for decon!")
     -- Check which type of decon a player is allowed
     local index = event.player_index
     if not index then return end
@@ -29,6 +30,9 @@ Event.add(defines.events.on_marked_for_deconstruction, function(event)
     local entity = event.entity
     local allow = chache[index]
     if not entity or not entity.valid then return end
+
+    -- allow the entity to be marked for decon if the player built it
+    if last_user.name == game.get_player(event.player_index).name then return end
 
     -- Not allowed to decon this entity
     local last_user = entity.last_user
