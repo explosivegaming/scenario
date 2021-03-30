@@ -275,10 +275,28 @@ function Warps.teleport_player(warp_id, player)
         y=warp.position.y+0.5
     }
 
-    -- Teleport the player
-    local goto_position = surface.find_non_colliding_position('character', position, 32, 1)
-    if player.driving then player.driving = false end
-    player.teleport(goto_position, surface)
+    if player.vehicle then
+        -- Teleport the entity
+        local entity = player.vehicle
+        local goto_position = surface.find_non_colliding_position(entity.name, position, 32, 1)
+        -- Surface teleport can only be done for players and cars at the moment. (with surface as an peramitor it gives this error)
+        if entity.type == "car" then
+            entity.teleport(goto_position, surface)
+        elseif surface.index == entity.surface.index then
+            -- Try teleport the entity
+            if not entity.teleport(goto_position) then
+                player.driving = false
+                -- Need to calculate new goto_position because entities have different collision boxes
+                goto_position = surface.find_non_colliding_position('character', position, 32, 1)
+                player.teleport(goto_position, surface)
+            end
+        end
+    else
+        -- Teleport the player
+        local goto_position = surface.find_non_colliding_position('character', position, 32, 1)
+        if player.driving then player.driving = false end
+        player.teleport(goto_position, surface)
+    end
 end
 
 --- Setters.
