@@ -402,7 +402,7 @@ end
 local warp_timer =
 Gui.element{
     type = 'progressbar',
-    tooltip = {'warp-list.timer-tooltip', config.cooldown_duration},
+    tooltip = {'warp-list.timer-tooltip-zero', config.cooldown_duration},
     minimum_value = 0,
     maximum_value = config.cooldown_duration*config.update_smoothing
 }
@@ -463,7 +463,7 @@ local function update_warp_elements(element, warp, warp_player_is_on, on_cooldow
             warp_status_element.tooltip = {'warp-list.goto-tooltip', position.x, position.y}
             warp_status_element.caption = warp_status_icons.connected
             label_style.font = 'default-semibold'
-        -- If the warp is not in the same network but the player is allowed to warp without being on a warp
+        -- If the warp is not on the same network but the player is allowed to warp without being on a warp
         elseif bypass_warp_proximity then
             local position = warp.position
             element.tooltip = {'warp-list.goto-bypass-different-network', position.x, position.y}
@@ -471,7 +471,7 @@ local function update_warp_elements(element, warp, warp_player_is_on, on_cooldow
             warp_status_element.tooltip = {'warp-list.goto-bypass-different-network', position.x, position.y}
             warp_status_element.caption = warp_status_icons.bypass
             label_style.font = 'default-semibold'
-        -- If the warp is in a different network than the one the player is standing on
+        -- If the warp is on a different network than the one the player is standing on
         else
             element.tooltip = {'warp-list.goto-different-network'}
             element.enabled = false
@@ -540,7 +540,6 @@ local function update_warp(player, warp_table, warp_id)
     -- Hide the edit button if the player is not allowed to edit the warp
     local player_allowed_edit = check_player_permissions(player, 'allow_edit_warp', warp)
     local players_editing = table.get_keys(warp.currently_editing)
-    -- button_flow.visible = player_allowed_edit
     edit_warp_element.visible = player_allowed_edit
 
     -- Set the tooltip of the edit button
@@ -645,9 +644,9 @@ Gui.element(function(event_trigger, parent)
             {'warp-list.sub-tooltip-current',warp_status_icons.current},
             {'warp-list.sub-tooltip-connected',warp_status_icons.connected},
             {'warp-list.sub-tooltip-different',warp_status_icons.different},
-            {'warp-list.sub-tooltip-bypass',warp_status_icons.bypass},
-            {'warp-list.sub-tooltip-not_available',warp_status_icons.not_available},
             {'warp-list.sub-tooltip-cooldown',warp_status_icons.cooldown},
+            {'warp-list.sub-tooltip-not_available',warp_status_icons.not_available},
+            {'warp-list.sub-tooltip-bypass',warp_status_icons.bypass},
         },
         true
     )
@@ -670,12 +669,14 @@ Gui.element(function(event_trigger, parent)
     local warp_timer_element = warp_timer(container)
 
     -- Change the progress of the warp timer
-    local progress = 1
     local timer = PlayerCooldown:get(player)
     if timer > 0 then
-        progress = 1 - (timer/config.cooldown_duration)
+        warp_timer_element.tooltip = {'warp-list.timer-tooltip', timer}
+        warp_timer_element.value = 1 - (timer/config.cooldown_duration)
+    else
+        warp_timer_element.tooltip = {'warp-list.timer-tooltip-zero', config.cooldown_duration}
+        warp_timer_element.value = 1
     end
-    warp_timer_element.value = progress
 
     -- Add any existing warps
     update_all_warps(player, scroll_table)
@@ -725,11 +726,13 @@ PlayerCooldown:on_update(function(player_name, player_cooldown)
     local warp_timer_element = frame.container[warp_timer.name]
 
     -- Set the progress
-    local progress = 1
     if player_cooldown and player_cooldown > 0 then
-        progress = 1 - (player_cooldown/config.cooldown_duration)
+        warp_timer_element.tooltip = {'warp-list.timer-tooltip', player_cooldown}
+        warp_timer_element.value = 1 - (player_cooldown/config.cooldown_duration)
+    else
+        warp_timer_element.tooltip = {'warp-list.timer-tooltip-zero', config.cooldown_duration}
+        warp_timer_element.value = 1
     end
-    warp_timer_element.value = progress
 
     -- Trigger update of buttons if cooldown is now 0
     if player_cooldown == 0 then
