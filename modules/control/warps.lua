@@ -37,13 +37,13 @@ Global.register(force_warps, function(tbl)
     force_warps = tbl
 end)
 
--- Create a array of entity names that will be added to the remove filter
+-- Create an array of entity names that will be added to the remove filter
 local remove_warp_area_entity_names = {}
 for _, entity in pairs(config.entities) do
     table.insert(remove_warp_area_entity_names, entity[1])
 end
 
--- When a warp is updated change its chat tag and resort the warp order
+-- When a warp is updated change its chat tag and restore the warp order
 WrapData:on_update(function(warp_id, warp, old_warp)
     if warp then
         warp.updates = warp.updates + 1
@@ -156,7 +156,7 @@ function Warps.make_warp_area(warp_id)
     local posx = position.x
     local posy = position.y
 
-    -- Get the tile that is being replaced, store.update not needed as we dont want it to trigger
+    -- Get the tile that is being replaced, store.update not needed as we don't want it to trigger
     local old_tile = surface.get_tile(position).name
     warp.old_tile = old_tile
 
@@ -203,7 +203,7 @@ function Warps.remove_warp_area(warp_id)
     local old_tile = warp.old_tile
     if not old_tile then return end
 
-    -- Loop over warp tiles and set them to the old tile that was below
+    -- Restore the original tiles before the creation of the warp
     local tiles = {}
     for _, tile in pairs(config.tiles) do
         table.insert(tiles, {name=old_tile, position={tile[2]+position.x, tile[3]+position.y}})
@@ -218,14 +218,14 @@ function Warps.remove_warp_area(warp_id)
     -- Remove warp structure entities
     local entities = surface.find_entities_filtered{ force='neutral', area=area, name = remove_warp_area_entity_names }
     for _, entity in pairs(entities) do
-        -- Destroy them, this will leave corpses of the entities that it distroyed.
+        -- Destroy them, this will leave corpses of the entities that it destroyed.
         if entity and entity.valid and entity.destructible == false then
             entity.destructible = true
             entity.die(entity.force)
         end
     end
 
-    -- Rechart map area, usefull if warp is not covered by a radar
+    -- Rechart map area, useful if warp is not covered by a radar
     game.forces[warp.force_name].chart(surface, area)
 end
 

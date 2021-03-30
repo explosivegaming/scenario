@@ -234,7 +234,7 @@ Gui.element(function(event_trigger, parent)
     }
 end)
 :style{
-    -- when editing mode because textbox is larger the icon would move up.
+    -- When editing mode because textbox is larger the icon would move up.
     top_padding = 1,
     single_line = false,
 }
@@ -252,7 +252,7 @@ Gui.element(function(event_trigger, parent, warp)
     }
 end)
 :style{
-    -- Needed fields to make it squashable and strechable.
+    -- Required fields to make it squashable and strechable.
     minimal_width = 10,
     maximal_width = 300,
     horizontally_squashable = "on",
@@ -302,7 +302,7 @@ Gui.element{
 :style(Styles.sprite22)
 :on_click(function(player, element)
     local warp_id = element.parent.caption
-    -- Check if this is this is the first edit, if so remove the warp.
+    -- Check if this is the first edit, if so remove the warp.
     local warp = Warps.get_warp(warp_id)
     if warp.updates == 1 then
         Warps.remove_warp(warp_id)
@@ -346,7 +346,7 @@ local update_all_warp_elements
 -- @element add_warp_elements
 local add_warp_elements =
 Gui.element(function(_, parent, warp)
-    -- Add icon flow this will contain the warp button and warp icon edit button
+    -- Add icon flow, this will contain the warp button and warp icon edit button
     local icon_flow = parent.add{
         name = 'icon-'..warp.warp_id,
         type = 'flow',
@@ -358,7 +358,7 @@ Gui.element(function(_, parent, warp)
     warp_icon_button(icon_flow, warp)
     warp_icon_editing(icon_flow, warp)
 
-    -- Add name flow this will contain the warp label and textbox
+    -- Add name flow, this will contain the warp label and textbox
     local name_flow = parent.add{
         type = 'flow',
         name = 'name-'..warp.warp_id,
@@ -372,7 +372,7 @@ Gui.element(function(_, parent, warp)
     warp_textfield(name_flow, warp)
 
 
-    -- Add button flow this will contain buttons to manage this specific warp
+    -- Add button flow, this will contain buttons to manage this specific warp
     local button_flow = parent.add{
         type = 'flow',
         name = 'button-'..warp.warp_id,
@@ -510,13 +510,13 @@ end
 local function update_warp(player, warp_table, warp_id)
     local warp = Warps.get_warp(warp_id)
 
-    -- If the warp does no longer exist then remove the warp elements from the warp table
+    -- If the warp no longer exists then remove the warp elements from the warp table
     if not warp then
         remove_warp_elements(warp_table, warp_id)
         return
     end
 
-    -- Check if the warp elements are created, if they are not then create a new set of them
+    -- Create the warp elements if they do not already exist
     if not warp_table['icon-'..warp_id] then
         add_warp_elements(warp_table, warp)
     end
@@ -551,7 +551,7 @@ local function update_warp(player, warp_table, warp_id)
         edit_warp_element.tooltip = {'warp-list.edit-tooltip-none'}
     end
 
-    -- Set the warp elements visibility based on if the user is editing or not
+    -- Set the visibility of the warp elements based on whether the user is editing or not
     local player_is_editing = warp.currently_editing[player.name]
     if player_is_editing then
         -- Set the icon elements visibility
@@ -855,7 +855,7 @@ local function role_update_event(event)
 
     -- Check if user has permission to add warps
     local allow_add_warp = check_player_permissions(player, 'allow_add_warp')
-    -- Update container size depending on if the player is allowed to add warps
+    -- Update container size depending on whether the player is allowed to add warps
     container.parent.style.width = allow_add_warp and 268 or 220
 
     -- Update the warps, incase the user can now edit them
