@@ -303,40 +303,45 @@
     <td class="summary">Will add a new warp to the list, checks if the player is too close to an existing one</td>
     </tr>
     <tr>
-    <td class="name"><a href="#discard_warp">discard_warp</a></td>
-    <td class="summary">Removes a warp from the list, including the physical area and map tag</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#edit_warp">edit_warp</a></td>
-    <td class="summary">Opens edit mode for the warp</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#add_warp_base">add_warp_base</a></td>
-    <td class="summary">Set of three elements which make up each row of the warp table</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#confirm_edit">confirm_edit</a></td>
-    <td class="summary">Confirms the edit to name or icon of the warp</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#cancel_edit">cancel_edit</a></td>
-    <td class="summary">Cancels the editing changes of the selected warp name or icon</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#warp_editing">warp_editing</a></td>
-    <td class="summary">Editing state for a warp, contains a text field and the two edit buttons</td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#warp_label">warp_label</a></td>
-    <td class="summary">Default state for a warp, contains only a label with the warp name</td>
-    </tr>
-    <tr>
     <td class="name"><a href="#warp_icon_button">warp_icon_button</a></td>
-    <td class="summary">Default state for the warp icon, when pressed teleports the player</td>
+    <td class="summary">Warp icon button, this will trigger a warp when the player is able to</td>
     </tr>
     <tr>
     <td class="name"><a href="#warp_icon_editing">warp_icon_editing</a></td>
-    <td class="summary">Editing state for the warp icon, chose elem used to chosse icon</td>
+    <td class="summary">The button that is visible when the warp is in edit state</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#warp_label">warp_label</a></td>
+    <td class="summary">Warp label, visible if the player is not in edit state</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#warp_status">warp_status</a></td>
+    <td class="summary">Warp status, visible if the player is not in edit state
+ This will show if the warp is connected or not</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#warp_textfield">warp_textfield</a></td>
+    <td class="summary">Warp textfield, visible if the player is in edit state</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#confirm_edit_button">confirm_edit_button</a></td>
+    <td class="summary">Confirms the edit to name or icon of the warp</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#cancel_edit_button">cancel_edit_button</a></td>
+    <td class="summary">Cancels the editing changes of the selected warp name or icon</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#remove_warp_button">remove_warp_button</a></td>
+    <td class="summary">Removes a warp from the list, including the physical area and map tag</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#edit_warp_button">edit_warp_button</a></td>
+    <td class="summary">Opens edit mode for the warp</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#add_warp_elements">add_warp_elements</a></td>
+    <td class="summary">Set of three elements which make up each row of the warp table</td>
     </tr>
     <tr>
     <td class="name"><a href="#warp_timer">warp_timer</a></td>
@@ -359,7 +364,7 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#update_wrap_buttons">update_wrap_buttons(player, timer, in_range)</a></td>
+    <td class="name"><a href="#update_all_warp_elements">update_all_warp_elements(player, timer, warp_id)</a></td>
     <td class="summary">Update the warp buttons for a player</td>
     </tr>
     </tbody>
@@ -629,195 +634,6 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#discard_warp" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="discard_warp">discard_warp</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Removes a warp from the list, including the physical area and map tag</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#edit_warp" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="edit_warp">edit_warp</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Opens edit mode for the warp</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#add_warp_base" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="add_warp_base">add_warp_base</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Set of three elements which make up each row of the warp table</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#confirm_edit" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="confirm_edit">confirm_edit</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Confirms the edit to name or icon of the warp</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#cancel_edit" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="cancel_edit">cancel_edit</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Cancels the editing changes of the selected warp name or icon</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#warp_editing" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="warp_editing">warp_editing</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Editing state for a warp, contains a text field and the two edit buttons</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#warp_label" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="warp_label">warp_label</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary">Default state for a warp, contains only a label with the warp name</p>
-    <p class="section-item-description"></p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
     <a href="#warp_icon_button" class="fragment-hashtag">#</a>
     <span class="section-item-title" id="warp_icon_button">warp_icon_button</span>
     </div>
@@ -825,7 +641,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Default state for the warp icon, when pressed teleports the player</p>
+    <p class="section-item-summary">Warp icon button, this will trigger a warp when the player is able to</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -852,7 +668,224 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Editing state for the warp icon, chose elem used to chosse icon</p>
+    <p class="section-item-summary">The button that is visible when the warp is in edit state</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#warp_label" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="warp_label">warp_label</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Warp label, visible if the player is not in edit state</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#warp_status" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="warp_status">warp_status</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Warp status, visible if the player is not in edit state
+ This will show if the warp is connected or not</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#warp_textfield" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="warp_textfield">warp_textfield</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Warp textfield, visible if the player is in edit state</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#confirm_edit_button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="confirm_edit_button">confirm_edit_button</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Confirms the edit to name or icon of the warp</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#cancel_edit_button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="cancel_edit_button">cancel_edit_button</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Cancels the editing changes of the selected warp name or icon</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#remove_warp_button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="remove_warp_button">remove_warp_button</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Removes a warp from the list, including the physical area and map tag</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#edit_warp_button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="edit_warp_button">edit_warp_button</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Opens edit mode for the warp</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#add_warp_elements" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="add_warp_elements">add_warp_elements</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Set of three elements which make up each row of the warp table</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -956,8 +989,8 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#update_wrap_buttons" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="update_wrap_buttons">update_wrap_buttons(player, timer, in_range)</span>
+    <a href="#update_all_warp_elements" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="update_all_warp_elements">update_all_warp_elements(player, timer, warp_id)</span>
     </div>
     </dt>
     <dd>
@@ -1005,7 +1038,7 @@
 
     <li class="section-subitem-li">
 
-    <strong><em>in_range</em></strong>
+    <strong><em>warp_id</em></strong>
 
     <strong> : </strong>
 
@@ -1045,7 +1078,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2021-03-30 01:19:32 UTC</i>
+    <i>Last updated 2021-03-30 02:59:11 UTC</i>
     </div>
     </div>
     </div>
