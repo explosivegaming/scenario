@@ -174,7 +174,7 @@ end)
 
     -- Reset the warp cooldown if the player does not have unlimited warps
     if not check_player_permissions(player, 'bypass_warp_cooldown') then
-        PlayerCooldown:set(player, config.cooldown_duration)
+        PlayerCooldown:set(player, config.update_smoothing*config.cooldown_duration)
     end
 
     PlayerInRange:set(player, warp_id)
@@ -671,8 +671,8 @@ Gui.element(function(event_trigger, parent)
     -- Change the progress of the warp timer
     local timer = PlayerCooldown:get(player)
     if timer > 0 then
-        warp_timer_element.tooltip = {'warp-list.timer-tooltip', timer}
-        warp_timer_element.value = 1 - (timer/config.cooldown_duration)
+        warp_timer_element.tooltip = {'warp-list.timer-tooltip', math.floor(timer/config.update_smoothing)}
+        warp_timer_element.value = 1 - (timer/config.update_smoothing/config.cooldown_duration)
     else
         warp_timer_element.tooltip = {'warp-list.timer-tooltip-zero', config.cooldown_duration}
         warp_timer_element.value = 1
@@ -727,8 +727,8 @@ PlayerCooldown:on_update(function(player_name, player_cooldown)
 
     -- Set the progress
     if player_cooldown and player_cooldown > 0 then
-        warp_timer_element.tooltip = {'warp-list.timer-tooltip', player_cooldown}
-        warp_timer_element.value = 1 - (player_cooldown/config.cooldown_duration)
+        warp_timer_element.tooltip = {'warp-list.timer-tooltip', math.floor(player_cooldown/config.update_smoothing)}
+        warp_timer_element.value = 1 - (player_cooldown/config.update_smoothing/config.cooldown_duration)
     else
         warp_timer_element.tooltip = {'warp-list.timer-tooltip-zero', config.cooldown_duration}
         warp_timer_element.value = 1
