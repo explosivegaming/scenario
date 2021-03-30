@@ -37,9 +37,16 @@ Global.register(force_warps, function(tbl)
     force_warps = tbl
 end)
 
--- When a warp is updated change its chat tag and resort the warp order
+-- Create an array of entity names that will be added to the remove filter
+local remove_warp_area_entity_names = {}
+for _, entity in pairs(config.entities) do
+    table.insert(remove_warp_area_entity_names, entity[1])
+end
+
+-- When a warp is updated change its chat tag and restore the warp order
 WrapData:on_update(function(warp_id, warp, old_warp)
     if warp then
+        warp.updates = warp.updates + 1
         -- Update the map chart tag if there is one
         if warp.tag then
             Warps.make_warp_tag(warp_id)
@@ -148,31 +155,15 @@ function Warps.make_warp_area(warp_id)
     local position = warp.position
     local posx = position.x
     local posy = position.y
-    local radius = config.standard_proximity_radius
-    local radius2 = radius^2
 
-    -- Get the tile that is being replaced, store.update not needed as we dont want it to trigger
+    -- Get the tile that is being replaced, store.update not needed as we don't want it to trigger
     local old_tile = surface.get_tile(position).name
     warp.old_tile = old_tile
 
-    -- Make a circle that acts as a base for the warp structure
-    local base_tile = config.base_tile
-    local base_tiles = {}
-    for x = -radius, radius do
-        local x2 = x^2
-        for y = -radius, radius do
-            local y2 = y^2
-            if x2+y2 < radius2 then
-                table.insert(base_tiles, {name=base_tile, position={x+posx, y+posy}})
-            end
-        end
-    end
-    surface.set_tiles(base_tiles)
-
     -- Add a tile pattern on top of the base
     local tiles = {}
-    for _, pos in pairs(config.tiles) do
-        table.insert(tiles, {name=base_tile, position={pos[1]+posx, pos[2]+posy}})
+    for _, tile in pairs(config.tiles) do
+        table.insert(tiles, {name=tile[1], position={tile[2]+posx, tile[3]+posy}})
     end
     surface.set_tiles(tiles)
 
@@ -187,6 +178,11 @@ function Warps.make_warp_area(warp_id)
         entity.health = 0
         entity.minable = false
         entity.rotatable = false
+
+        -- Save reference of the last power pole
+        if entity.type == 'electric-pole' then
+            warp.electric_pole = entity
+        end
     end
 end
 
@@ -202,22 +198,15 @@ function Warps.remove_warp_area(warp_id)
     local position = warp.position
     local surface = warp.surface
     local radius = config.standard_proximity_radius
-    local radius2 = radius^2
 
     -- Check that a warp area was created previously
-    local base_tile = warp.old_tile
-    if not base_tile then return end
+    local old_tile = warp.old_tile
+    if not old_tile then return end
 
-    -- Reset all the tiles that were replaced
+    -- Restore the original tiles before the creation of the warp
     local tiles = {}
-    for x = -radius, radius do
-        local x2 = x^2
-        for y = -radius, radius do
-            local y2 = y^2
-            if x2+y2 < radius2 then
-                table.insert(tiles, {name=base_tile, position={x+position.x, y+position.y}})
-            end
-        end
+    for _, tile in pairs(config.tiles) do
+        table.insert(tiles, {name=old_tile, position={tile[2]+position.x, tile[3]+position.y}})
     end
     surface.set_tiles(tiles)
 
@@ -226,11 +215,17 @@ function Warps.remove_warp_area(warp_id)
         {position.x+radius, position.y+radius}
     }
 
-    -- Remove all the entities that are in the area
-    local entities = surface.find_entities_filtered{ force='neutral', area=area }
-    for _, entity in pairs(entities) do if entity and entity.valid and entity.name ~= 'player' then entity.destroy() end end
+    -- Remove warp structure entities
+    local entities = surface.find_entities_filtered{ force='neutral', area=area, name = remove_warp_area_entity_names }
+    for _, entity in pairs(entities) do
+        -- Destroy them, this will leave corpses of the entities that it destroyed.
+        if entity and entity.valid and entity.destructible == false then
+            entity.destructible = true
+            entity.die(entity.force)
+        end
+    end
 
-    -- Rechart map area, usefull if warp is not covered by a radar
+    -- Rechart map area, useful if warp is not covered by a radar
     game.forces[warp.force_name].chart(surface, area)
 end
 
@@ -351,7 +346,8 @@ function Warps.add_warp(force_name, surface, position, player_name, warp_name)
         },
         last_edit_name = player_name or '<server>',
         last_edit_time = game.tick,
-        currently_editing = editing
+        currently_editing = editing,
+        updates = 0,
     })
 
     return warp_id
@@ -385,6 +381,11 @@ Warps.update_warp(warp_id, 'My Warp', 'iron-plate', game.player.name)
 ]]
 function Warps.update_warp(warp_id, new_name, new_icon, player_name)
     WrapData:update(warp_id, function(_, warp)
+        -- If the icon is not valid then replace with the old icon
+        if new_icon and not new_icon.name or not new_icon.type then
+            new_icon = warp.icon
+        end
+
         warp.last_edit_name = player_name or '<server>'
         warp.last_edit_time = game.tick
         warp.name = new_name or warp.name
