@@ -20,6 +20,14 @@ end)
 
 ----- Public Functions -----
 
+--- Test if a player is in spectator mode
+-- @tparam LuaPlayer player The player to test the controller type of
+-- @treturn boolean True if the player is in spectator mode
+function Public.is_spectating(player)
+    assert(player and player.valid, 'Invalid player given to follower')
+    return player.controller_type == defines.controllers.spectator
+end
+
 --- Puts a player into spectator while maintaining an association to their character
 -- @tparam LuaPlayer player The player that will be placed into spectator
 -- @treturn boolean Returns false if the player was already in spectator
@@ -45,6 +53,14 @@ function Public.stop_spectate(player)
     else
         player.ticks_to_respawn = 300
     end
+end
+
+--- Test if a player is in follow mode
+-- @tparam LuaPlayer player The player to test the follow mode of
+-- @treturn boolean True if the player is in follow mode
+function Public.is_following(player)
+    assert(player and player.valid, 'Invalid player given to follower')
+    return following[player.index] ~= nil
 end
 
 --- Puts a player into spectator and follows an entity as it moves
