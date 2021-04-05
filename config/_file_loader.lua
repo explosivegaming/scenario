@@ -43,6 +43,7 @@ return {
     'modules.addons.discord-alerts',
     'modules.addons.chat-reply',
     'modules.addons.tree-decon',
+    'modules.addons.report-jail',
 
     --- Data
     'modules.data.statistics',
