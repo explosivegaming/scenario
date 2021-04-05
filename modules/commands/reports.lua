@@ -28,6 +28,8 @@ Commands.new_command('report', 'Reports a player and notifies moderators')
     if not input then return end
     if Roles.player_has_flag(input, 'report-immune') then
         return reject{'expcom-report.player-immune'}
+    elseif player == input then
+        return reject{'expcom-report.self-report'}
     else
         return input
     end
