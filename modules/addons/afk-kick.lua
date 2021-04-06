@@ -18,14 +18,14 @@ Global.register(primitives, function(tbl)
     primitives = tbl
 end)
 
---- Kicks an afk player, used to give to for gui to show
+--- Kicks an afk player, used to add a delay so the gui has time to appear
 local kick_player =
 Async.register(function(player)
     if game.tick - primitives.last_active < config.kick_time then return end -- Safety Catch
-    game.kick_player(player, 'Afk while no active players on the server')
+    game.kick_player(player, 'AFK while no active players on the server')
 end)
 
---- Check for an active player every 5 minutes
+--- Check for an active player every update_time number of ticks
 Event.on_nth_tick(config.update_time, function()
     -- Check for active players
     for _, player in ipairs(game.connected_players) do
@@ -50,7 +50,7 @@ Event.on_nth_tick(config.update_time, function()
         player.gui.screen.add{
             type = 'frame',
             name = 'afk-kick',
-            caption = 'All players were kicked because everyone was afk.',
+            caption = {'afk-kick.message'},
         }.location = { x=res.width*(0.5 - 0.11*uis), y=res.height*(0.5 - 0.14*uis) }
 
         -- Kick the player, some delay needed because network delay
