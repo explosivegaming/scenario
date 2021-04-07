@@ -59,7 +59,7 @@ local function emit_event(args)
             }
 
             local new_value, inline = value:gsub('<inline>', '', 1)
-            if inline then
+            if inline > 0 then
                 field.value = new_value
                 field.inline = true
             end
