@@ -54,11 +54,11 @@ local function sort_players(players, func)
     -- Loop over all provided players
     for index, player in ipairs(players) do
         local value = func(player)
-        -- Check if the item will make the top 10 elements
+        -- Check if the item will make the top 5 elements
         if value > threshold or index <= 5 then
             local inserted = false
             values[player] = value
-            -- Find where in the top 10 to insert the element
+            -- Find where in the top 5 to insert the element
             for next_index, next_player in ipairs(sorted) do
                 if value > values[next_player] then
                     table.insert(sorted, next_index, player)
@@ -133,7 +133,7 @@ Commands.new_command('search-recent', 'Display players who hold an item sorted b
     display_players(player, top_players, item)
 end)
 
---- Return the index of the player, higher means they joined more recently
+--- Return the the amount of an item a player has divided by their playtime
 local function combined_sort(data)
     return data.count/data.online_time
 end
