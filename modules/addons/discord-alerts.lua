@@ -87,6 +87,7 @@ if config.player_reports then
             color=Colors.yellow,
             ['Player']='<inline>'..player_name,
             ['By']='<inline>'..by_player_name,
+            ['Report Count']='<inline>'..Reports.count_reports(player_name),
             ['Reason']=event.reason
         }
     end)
@@ -99,7 +100,7 @@ if config.player_reports then
             color=Colors.green,
             ['Player']='<inline>'..player_name,
             ['By']='<inline>'..event.removed_by_name,
-            ['Amount']='<inline>'..event.batch_count
+            ['Report Count']='<inline>'..event.batch_count
         }
     end)
 end
@@ -109,12 +110,14 @@ if config.player_warnings then
     local Warnings = require 'modules.control.warnings' --- @dep modules.control.warnings
     Event.add(Warnings.events.on_warning_added, function(event)
         local player_name, by_player_name = get_player_name(event)
+        local player = game.get_player(player_name)
         emit_event{
             title='Warning',
             description='A player has been given a warning',
             color=Colors.yellow,
             ['Player']='<inline>'..player_name,
             ['By']='<inline>'..by_player_name,
+            ['Warning Count']='<inline>'..Warnings.count_warnings(player),
             ['Reason']=event.reason
         }
     end)
@@ -127,7 +130,7 @@ if config.player_warnings then
             color=Colors.green,
             ['Player']='<inline>'..player_name,
             ['By']='<inline>'..event.removed_by_name,
-            ['Amount']='<inline>'..event.batch_count
+            ['Warning Count']='<inline>'..event.batch_count
         }
     end)
 end
