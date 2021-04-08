@@ -1,4 +1,4 @@
---- When a player is reported by players with a greater combined delta playtime, the player is automatically jailed
+--- When a player is reported, the player is automatically jailed if the combined playtime of the reporters exceeds the reported player
 -- @addon report-jail
 
 local Event = require 'utils.event' ---@dep utils.event
@@ -6,7 +6,7 @@ local Jail = require 'modules.control.jail' ---@dep modules.control.jail
 local Reports = require 'modules.control.reports' --- @dep modules.control.reports
 local format_chat_player_name = _C.format_chat_player_name --- @dep expcore.common
 
---- Returns the playtime of the reporter, used to sum the playtime of all reporters
+--- Returns the playtime of the reporter. Used when calculating the total playtime of all reporters
 local function reporter_playtime(_, by_player_name, _)
     local player = game.get_player(by_player_name)
     if player == nil then return 0 end
