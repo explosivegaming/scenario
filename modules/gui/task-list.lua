@@ -121,7 +121,7 @@ local no_tasks_found =
             type = "label",
             style = "bold_label",
             caption = {"", "[img=utility/warning_white] ", {"task-list.no-tasks"}},
-            tooltip = "Add task"
+            tooltip = {"task-list.no-tasks-tooltip"}
         }
         return header
     end
@@ -250,6 +250,19 @@ local view_task_close_button =
         PlayerSelected:set(player, nil)
     end
 )
+local view_task_delete_button =
+    Gui.element {
+    type = "button",
+    caption = {"", "[img=utility/trash] ", {"task-list.delete"}},
+    tooltip = {"task-list.delete-tooltip"},
+    style = "shortcut_bar_button_red"
+}:style(Styles.footer_button):on_click(
+    function(player, _, _)
+        local selected = PlayerSelected:get(player)
+        PlayerSelected:set(player, nil)
+        Tasks.remove_task(selected)
+    end
+)
 
 local task_view_footer =
     Gui.element(
@@ -267,7 +280,7 @@ local task_view_footer =
         label.style.single_line = false
 
         local action_flow = subfooter_actions(footer)
-
+        view_task_delete_button(action_flow)
         view_task_edit_button(action_flow)
         view_task_close_button(action_flow)
         return footer
@@ -467,13 +480,14 @@ Gui.left_toolbar_button(
 local update_task = function(player, task_list_element, task_id)
     local task = Tasks.get_task(task_id)
     local task_ids = Tasks.get_force_task_ids(player.force.name)
+    -- Set visibility of the no_tasks_found element
+    task_list_element.parent.parent.no_tasks_found_element.visible = #task_ids == 0
 
     -- Task no longer exists so should be removed from the list
     if not task then
-        task_list_element["task-" .. task_id] = nil
+        task_list_element["task-" .. task_id].destroy()
         return
     end
-    task_list_element.parent.parent.no_tasks_found_element.visible = #task_ids == 0
 
     local element
     -- If task does not exist yet add it to the list
@@ -511,8 +525,10 @@ local update_task_view_footer = function(player, task_id)
 
     local message_element = view_flow.message
     local edit_button_element = view_flow.actions[view_task_edit_button.name]
+    local delete_button_element = view_flow.actions[view_task_delete_button.name]
 
     edit_button_element.visible = has_permission
+    delete_button_element.visible = has_permission
     message_element.caption = task.message
 
     local players_editing = table.get_keys(task.currently_editing)
