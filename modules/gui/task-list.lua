@@ -361,8 +361,6 @@ local edit_task_discard_button =
         local selected = PlayerSelected:get(player)
         Tasks.set_editing(selected, player.name, nil)
         PlayerIsEditing:set(player, false)
-        -- Redraw selected
-        PlayerSelected:set(player, selected)
     end
 )
 local task_edit_footer =
@@ -577,8 +575,11 @@ PlayerIsCreating:on_update(
         local create = frame.container.create
 
         -- Clear the textfield
-        frame.container.create[task_message_textfield.name].text = ""
-        frame.container.create.actions[create_task_confirm_button.name].enabled = false
+        local message_element = frame.container.create[task_message_textfield.name]
+        local confirm_button_element = frame.container.create.actions[create_task_confirm_button.name]
+        message_element.focus()
+        message_element.text = ""
+        confirm_button_element.enabled = false
 
         if new_state then
             create.visible = true
