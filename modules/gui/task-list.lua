@@ -29,7 +29,7 @@ local Styles = {
         padding = -2
     },
     footer_button = {
-        height = 22,
+        height = 29,
         maximal_width = 268,
         horizontally_stretchable = true,
         padding = -2
