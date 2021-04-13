@@ -32,17 +32,19 @@ end)
 --[[-- Add a new task for a force, the task can be placed into a certain position for that force
 @tparam string force_name the name of the force to add the task for
 @tparam[opt] string player_name the player who added this task, will cause them to be listed under editing
-@tparam[opt] string task_message the message that is used for this task, if not given default is used
+@tparam[opt] string task_title the message title that is used for this task, if not given default is used
+@tparam[opt] string task_body the message body that is used for this task, if not given default is used
 @treturn string the uid of the task which was created
 
 @usage-- Adding a new task for your force
 local task_id = Tasks.add_task(game.player.force.name, nil, game.player.name)
 
 ]]
-function Tasks.add_task(force_name, player_name, task_message)
+function Tasks.add_task(force_name, player_name, message_title, message_body)
     -- Get a new task id
     local task_id = tostring(force_tasks._uid)
-    task_message = task_message or 'New Task'
+    message_title = message_title or 'New Task'
+    message_body = message_body or 'Do x or y'
     force_tasks._uid = force_tasks._uid + 1
 
     -- Get the existing tasks for this force
@@ -65,7 +67,8 @@ function Tasks.add_task(force_name, player_name, task_message)
     TaskData:set(task_id, {
         task_id = task_id,
         force_name = force_name,
-        message = task_message,
+        title = message_title,
+        body = message_body,
         last_edit_name = player_name or '<server>',
         last_edit_time = game.tick,
         currently_editing = editing
@@ -90,18 +93,20 @@ end
 
 --[[-- Update the message and last edited information for a task
 @tparam string task_id the uid of the task that you want to update
-@tparam string new_message the message that you want to have for the task
+@tparam string message_title the message title that you want to have for the task
+@tparam string message_body the message body that you want to have for the task
 @tparam[opt='server'] string player_name the name of the player who made the edit
 
 @usage-- Updating the message for on a task
 Task.update_task(task_id, 'We need more iron!', game.player.name)
 
 ]]
-function Tasks.update_task(task_id, new_message, player_name)
+function Tasks.update_task(task_id, message_title, message_body, player_name)
     TaskData:update(task_id, function(_, task)
         task.last_edit_name = player_name or '<server>'
         task.last_edit_time = game.tick
-        task.message = new_message
+        task.title = message_title
+        task.body = message_body
     end)
 end
 

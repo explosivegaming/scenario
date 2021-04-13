@@ -190,7 +190,7 @@ local task_list_item =
             name = event_trigger,
             type = "button",
             style = "list_box_item",
-            caption = task.message
+            caption = task.title
         }
         button.style.horizontally_stretchable = true
         button.style.horizontally_squashable = true
@@ -289,14 +289,23 @@ local task_view_footer =
         local footer = subfooter_frame(parent, "view")
         subfooter_label(footer, {"task-list.view-footer-header"})
 
-        local label =
+        local title_label =
             footer.add {
             type = "label",
-            name = "message",
+            name = "title",
             caption = "New task"
         }
-        label.style.padding = 4
-        label.style.single_line = false
+        title_label.style.padding = 4
+        title_label.style.font = "default-bold"
+        title_label.style.single_line = false
+        local body_label =
+            footer.add {
+            type = "label",
+            name = "body",
+            caption = "Do x or y"
+        }
+        body_label.style.padding = 4
+        body_label.style.single_line = false
 
         local action_flow = subfooter_actions(footer)
         view_task_delete_button(action_flow)
@@ -306,6 +315,29 @@ local task_view_footer =
     end
 )
 
+local message_pattern = "(.-)\n(.*)"
+
+--- Parce a string into a message object with title and body
+-- @tparam string str message data
+local function parse_message(str)
+    -- Trimm the spaces of the string
+    local trimmed = (string.gsub(str, "^%s*(.-)%s*$", "%1"))
+    local message = { title = "", body = "" }
+    -- If it doesn't match the patter return the str as a title
+    local match = string.match(trimmed, message_pattern)
+    if not match then
+        message.title = trimmed
+        return message
+    end
+    -- If message has multiple lines
+    for key, value in string.gmatch(trimmed, message_pattern) do
+        message.title = key
+        message.body = value
+        break
+    end
+    return message
+end
+
 -- Button variable initialisation because it is used inside the textfield element events
 local edit_task_confirm_button
 local create_task_confirm_button
@@ -314,11 +346,12 @@ local create_task_confirm_button
 -- @element task_message_textfield
 local task_message_textfield =
     Gui.element {
-    type = "textfield",
+    type = "text-box",
     text = ""
 }:style(
     {
         maximal_width = 268,
+        minimal_height = 100,
         horizontally_stretchable = true
     }
 ):on_text_changed(
@@ -332,29 +365,6 @@ local task_message_textfield =
             element.parent.actions[create_task_confirm_button.name].enabled = valid
         elseif isEditing then
             element.parent.actions[edit_task_confirm_button.name].enabled = valid
-        end
-    end
-):on_confirmed(
-    function(player, element, _)
-        local isEditing = PlayerIsEditing:get(player)
-        local isCreating = PlayerIsCreating:get(player)
-
-        local message = element.text
-        local valid = string.len(element.text) > 5
-        if not valid then
-            return
-        end
-
-        if isCreating then
-            PlayerIsCreating:set(player, false)
-
-            local task_id = Tasks.add_task(player.force.name, player.name, message)
-            PlayerSelected:set(player, task_id)
-        elseif isEditing then
-            local selected = PlayerSelected:get(player)
-            PlayerIsEditing:set(player, false)
-            Tasks.update_task(selected, message, player.name)
-            Tasks.set_editing(selected, player.name, nil)
         end
     end
 )
@@ -372,7 +382,8 @@ edit_task_confirm_button =
         local selected = PlayerSelected:get(player)
         PlayerIsEditing:set(player, false)
         local new_message = element.parent.parent[task_message_textfield.name].text
-        Tasks.update_task(selected, new_message, player.name)
+        local parsed = parse_message(new_message)
+        Tasks.update_task(selected, parsed.title, parsed.body, player.name)
         Tasks.set_editing(selected, player.name, nil)
     end
 )
@@ -425,8 +436,8 @@ create_task_confirm_button =
     function(player, element, _)
         local message = element.parent.parent[task_message_textfield.name].text
         PlayerIsCreating:set(player, false)
-
-        local task_id = Tasks.add_task(player.force.name, player.name, message)
+        local parsed = parse_message(message)
+        local task_id = Tasks.add_task(player.force.name, player.name, parsed.title, parsed.body)
         PlayerSelected:set(player, task_id)
     end
 )
@@ -535,7 +546,7 @@ local update_task = function(player, task_list_element, task_id)
     else
         -- If the task exists update the caption
         element = task_list_element["task-" .. task_id]
-        element[task_list_item.name].caption = task.message
+        element[task_list_item.name].caption = task.title
     end
     -- Set tooltip
     local last_edit_name = task.last_edit_name
@@ -552,7 +563,7 @@ local update_task_edit_footer = function(player, task_id)
     local message_element = edit_flow[task_message_textfield.name]
 
     message_element.focus()
-    message_element.text = task.message
+    message_element.text = task.title .. "\n" .. task.body
 end
 
 -- Update the footer task view
@@ -562,13 +573,15 @@ local update_task_view_footer = function(player, task_id)
     local view_flow = frame.container.view
     local has_permission = check_player_permissions(player, task)
 
-    local message_element = view_flow.message
+    local title_element = view_flow.title
+    local body_element = view_flow.body
     local edit_button_element = view_flow.actions[view_task_edit_button.name]
     local delete_button_element = view_flow.actions[view_task_delete_button.name]
 
     edit_button_element.visible = has_permission
     delete_button_element.visible = has_permission
-    message_element.caption = task.message
+    title_element.caption = task.title
+    body_element.caption = task.body
 
     local players_editing = table.get_keys(task.currently_editing)
     if #players_editing > 0 then
