@@ -92,6 +92,7 @@ Roles.new_role('Trainee','TrMod')
 :set_parent('Veteran')
 :allow{
     'command/admin-chat',
+    'command/admin-marker',
     'command/teleport',
     'command/bring',
     'command/goto',
