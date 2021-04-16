@@ -323,17 +323,13 @@ local function parse_message(str)
     -- Trimm the spaces of the string
     local trimmed = (string.gsub(str, "^%s*(.-)%s*$", "%1"))
     local message = { title = "", body = "" }
-    -- If it doesn't match the patter return the str as a title
-    local match = string.match(trimmed, message_pattern)
-    if not match then
+    local title, body = string.match(trimmed, message_pattern)
+    if not title then
+        -- If it doesn't match the patter return the str as a title
         message.title = trimmed
-        return message
-    end
-    -- If message has multiple lines
-    for key, value in string.gmatch(trimmed, message_pattern) do
-        message.title = key
-        message.body = value
-        break
+    else
+        message.title = title
+        message.body = body
     end
     return message
 end
