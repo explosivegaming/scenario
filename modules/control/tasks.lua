@@ -40,11 +40,11 @@ end)
 local task_id = Tasks.add_task(game.player.force.name, nil, game.player.name)
 
 ]]
-function Tasks.add_task(force_name, player_name, message_title, message_body)
+function Tasks.add_task(force_name, player_name, task_title, task_body)
     -- Get a new task id
     local task_id = tostring(force_tasks._uid)
-    message_title = message_title or 'New Task'
-    message_body = message_body or 'Do x or y'
+    task_title = task_title or 'New Task'
+    task_body = task_body or 'Do x or y'
     force_tasks._uid = force_tasks._uid + 1
 
     -- Get the existing tasks for this force
@@ -67,8 +67,8 @@ function Tasks.add_task(force_name, player_name, message_title, message_body)
     TaskData:set(task_id, {
         task_id = task_id,
         force_name = force_name,
-        title = message_title,
-        body = message_body,
+        title = task_title,
+        body = task_body,
         last_edit_name = player_name or '<server>',
         last_edit_time = game.tick,
         currently_editing = editing
