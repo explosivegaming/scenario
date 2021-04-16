@@ -48,8 +48,10 @@ function Public.stop_spectate(player)
     local character = spectating[player.index]
     spectating[player.index] = nil
     if character and character.valid then
+        local opened = player.opened
         player.teleport(character.position, character.surface)
         player.set_controller{ type = defines.controllers.character, character = character }
+        if opened then player.opened = opened end -- Maintain opened after controller change
     else
         player.ticks_to_respawn = 300
     end
@@ -118,8 +120,12 @@ Gui.element(function(event_trigger, parent, target)
 
     return label
 end)
-:on_close(Public.stop_follow)
 :on_click(Public.stop_follow)
+:on_close(function(player)
+    -- Dont call set_controller during on_close as it invalidates the controller
+    -- Setting an invalid position (as to not equal their current) will call stop_follow on the next tick
+    following[player.index][3] = {}
+end)
 
 ----- Events -----
 
@@ -148,7 +154,7 @@ end
 Event.add(defines.events.on_tick, update_all)
 
 -- Check for player leaving
-Event.add(defines.events.on_player_left_game, function(event)
+Event.add(defines.events.on_pre_player_left_game, function(event)
     local player = game.players[event.player_index]
     Public.stop_follow(player)
     for _, data in pairs(following) do
