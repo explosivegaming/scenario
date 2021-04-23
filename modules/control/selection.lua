@@ -62,6 +62,12 @@ function Selection.stop(player)
     end
 end
 
+--- Get the selection arguments for a player
+function Selection.get_arguments(player)
+    if not selections[player.index] then return end
+    return selections[player.index].arguments
+end
+
 --- Alias to Event.add(defines.events.on_player_selected_area)
 function Selection.on_selection(handler)
     return Event.add(defines.events.on_player_selected_area, handler)
