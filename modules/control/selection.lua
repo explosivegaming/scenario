@@ -18,12 +18,13 @@ Global.register({
 end)
 
 --- Let a player select an area by providing a selection planner
-function Selection.start(player, single_use, ...)
+function Selection.start(player, selection_name, single_use, ...)
     game.print('Start selection')
     -- Assign the arguments if the player is valid
     if not player or not player.valid then return end
     game.print('Valid Player')
     selections[player.index] = {
+        name = selection_name,
         arguments = { ... },
         single_use = single_use == true,
         character = player.character
@@ -68,16 +69,32 @@ function Selection.get_arguments(player)
     return selections[player.index].arguments
 end
 
---- Alias to Event.add(defines.events.on_player_selected_area)
-function Selection.on_selection(handler)
-    return Event.add(defines.events.on_player_selected_area, handler)
+--- Filter on_player_selected_area to this custom selection, pretends with player and appends with selection arguments
+function Selection.on_selection(selection_name, handler)
+    return Event.add(defines.events.on_player_selected_area, function(event)
+        local selection = selections[event.player_index]
+        if not selection or selection.name ~= selection_name then return end
+        local player = game.get_player(event.player_index)
+        handler(player, event, unpack(selection.arguments))
+    end)
 end
 
---- Alias to Event.add(defines.events.on_player_alt_selected_area)
-function Selection.on_alt_selection(handler)
-    return Event.add(defines.events.on_player_alt_selected_area, handler)
+--- Filter on_player_alt_selected_area to this custom selection, pretends with player and appends with selection arguments
+function Selection.on_alt_selection(selection_name, handler)
+    return Event.add(defines.events.on_player_alt_selected_area, function(event)
+        local selection = selections[event.player_index]
+        if not selection or selection.name ~= selection_name then return end
+        local player = game.get_player(event.player_index)
+        handler(player, event, unpack(selection.arguments))
+    end)
 end
 
+--- Stop selection if the selection tool is removed from the cursor
+Event.add(defines.events.on_player_cursor_stack_changed, function(event)
+    local player = game.get_player(event.player_index)
+    if player.cursor_stack.is_selection_tool then return end
+    Selection.stop(player)
+end)
 --- Stop selection after an event such as death or leaving the game
 local function stop_after_event(event)
     local player = game.get_player(event.player_index)
@@ -86,14 +103,6 @@ end
 
 Event.add(defines.events.on_pre_player_left_game, stop_after_event)
 Event.add(defines.events.on_pre_player_died, stop_after_event)
-
---- Stop selection if the selection tool is removed from the cursor
-Event.add(defines.events.on_player_cursor_stack_changed, function(event)
-    local player = game.get_player(event.player_index)
-    if player.cursor_stack.is_selection_tool then return end
-    Selection.stop(player)
-end)
-
 --- Stop selection after a single use if the option was used
 local function stop_after_use(event)
     if not selections[event.player_index] then return end
