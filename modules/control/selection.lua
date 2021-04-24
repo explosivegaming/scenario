@@ -18,11 +18,12 @@ Global.register({
 end)
 
 --- Let a player select an area by providing a selection planner
+-- @tparam LuaPlayer player The player to place into selection mode
+-- @tparam string selection_name The name of the selection to start, used with on_selection
+-- @tparam[opt=false] boolean single_use When true the selection will stop after first use
 function Selection.start(player, selection_name, single_use, ...)
-    game.print('Start selection')
     -- Assign the arguments if the player is valid
     if not player or not player.valid then return end
-    game.print('Valid Player')
     selections[player.index] = {
         name = selection_name,
         arguments = { ... },
@@ -32,18 +33,17 @@ function Selection.start(player, selection_name, single_use, ...)
 
     -- Give a selection tool if one is not in use
     if player.cursor_stack.is_selection_tool then return end
-    game.print('Give item')
     player.clear_cursor() -- Clear the current item
     player.cursor_stack.set_stack(selection_tool)
 
     -- Make a slot to place the selection tool even if inventory is full
     if not player.character then return end
-    game.print('Give slot')
     player.character_inventory_slots_bonus = player.character_inventory_slots_bonus + 1
     player.hand_location = { inventory = defines.inventory.character_main, slot = #player.get_main_inventory() }
 end
 
 --- Stop a player selection by removing the selection planner
+-- @tparam LuaPlayer player The player to exit out of selection mode
 function Selection.stop(player)
     if not selections[player.index] then return end
     local character = selections[player.index].character
@@ -64,14 +64,23 @@ function Selection.stop(player)
 end
 
 --- Get the selection arguments for a player
+-- @tparam LuaPlayer player The player to get the selection arguments for
 function Selection.get_arguments(player)
     if not selections[player.index] then return end
     return selections[player.index].arguments
 end
 
+--- Test if a player is selecting something
+-- @tparam LuaPlayer player The player to test
+function Selection.is_selecting(player)
+    return player.cursor_stack.is_selection_tool
+end
+
 --- Filter on_player_selected_area to this custom selection, pretends with player and appends with selection arguments
+-- @tparam string selection_name The name of the selection to listen for
+-- @tparam function handler The event handler
 function Selection.on_selection(selection_name, handler)
-    return Event.add(defines.events.on_player_selected_area, function(event)
+    Event.add(defines.events.on_player_selected_area, function(event)
         local selection = selections[event.player_index]
         if not selection or selection.name ~= selection_name then return end
         local player = game.get_player(event.player_index)
@@ -80,8 +89,10 @@ function Selection.on_selection(selection_name, handler)
 end
 
 --- Filter on_player_alt_selected_area to this custom selection, pretends with player and appends with selection arguments
+-- @param string selection_name The name of the selection to listen for
+-- @param function handler The event handler
 function Selection.on_alt_selection(selection_name, handler)
-    return Event.add(defines.events.on_player_alt_selected_area, function(event)
+    Event.add(defines.events.on_player_alt_selected_area, function(event)
         local selection = selections[event.player_index]
         if not selection or selection.name ~= selection_name then return end
         local player = game.get_player(event.player_index)
