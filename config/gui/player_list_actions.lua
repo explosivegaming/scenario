@@ -173,6 +173,7 @@ return {
         },
         ['command/report'] = {
             auth=function(player,selected_player)
+                if player == selected_player then return false end
                 if not Roles.player_allowed(player,'command/give-warning') then
                     return not Roles.player_has_flag(selected_player,'report-immune')
                 end
