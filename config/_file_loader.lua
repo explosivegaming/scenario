@@ -44,6 +44,7 @@ return {
     'modules.addons.chat-reply',
     'modules.addons.tree-decon',
     'modules.addons.afk-kick',
+    'modules.addons.report-jail',
 
     --- Data
     'modules.data.statistics',
