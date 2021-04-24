@@ -1012,9 +1012,14 @@ local function auto_assign(event)
     local roles = Roles.config.players[player.name] or {}
 
     local lookup = {}
-    for _, role in ipairs(roles) do lookup[role] = true end
+    -- Create a lookup table for existing roles, and check for block auto assign
+    for _, role in ipairs(roles) do
+        if role.block_auto_assign then return end
+        lookup[role] = true
+    end
 
     local assigns, ctn = {}, 0
+    -- Check roles with auto assign conditions and run the handler
     for role, condition in pairs(Roles.config.auto_assign) do
         if not lookup[role] then
             local success, rtn = pcall(condition, player)
@@ -1027,6 +1032,7 @@ local function auto_assign(event)
         end
     end
 
+    -- Assign new roles if any were passed
     if ctn > 0 then Roles.assign_player(player, assigns) end
 end
 
