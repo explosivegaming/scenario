@@ -1,6 +1,6 @@
 return {
     ignore_admins = true, --- @setting ignore_admins If admins are ignored by the protection filter
-    ignore_role = 'Regular', --- @setting ignore_role This role will be ignored by the protection filter, leave nil if expcore.roles is not used
+    ignore_permission = 'bypass-entity-protection', --- @setting ignore_permission Players with this permission will be ignored by the protection filter, leave nil if expcore.roles is not used
     repeat_count = 5, --- @setting repeat_count Number of protected entities to be removed to count as repeated
     repeat_lifetime = 3600*20, --- @setting repeat_lifetime How old repeats must be before being removed
     refresh_rate = 3600*5, --- @setting refresh_rate How often old repeats will be removed

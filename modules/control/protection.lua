@@ -32,12 +32,9 @@ for _, config_key in ipairs{'always_protected_names', 'always_protected_types', 
 end
 
 -- convert ignore role if present
-if config.ignore_role then
-    local Roles = require 'expcore.roles'
-    local role = Roles.get_role_by_name(config.ignore_role)
-    config.ignore_role = function(player)
-        return Roles.player_has_role(player, role)
-    end
+local Roles
+if config.ignore_permission then
+    Roles = require 'expcore.roles'  --- @dep expcore.roles
 end
 
 ----- Global Variables -----
@@ -157,7 +154,7 @@ Event.add(defines.events.on_pre_player_mined_item, function(event)
     local player = game.get_player(event.player_index)
     -- Check if the player should be ignored
     if config.ignore_admins and player.admin then return end
-    if config.ignore_role and config.ignore_role(player) then return end
+    if config.ignore_permission and Roles.player_allowed(player, config.ignore_permission) then return end
 
     -- Check if the entity is protected
     if check_always_protected(entity) or EntityProtection.is_entity_protected(entity)
