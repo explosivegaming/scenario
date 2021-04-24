@@ -6,7 +6,20 @@
 
 local Event = require 'utils.event' --- @dep utils.event
 local Global = require 'utils.global' --- @dep utils.global
-local Selection = {}
+local Selection = {
+    events = {
+        --- When a player enterers selection mode
+        -- @event on_player_selection_start
+        -- @tparam number player_index the player index of the player who entered selection mode
+        -- @tparam string selection the name of the selection being made
+        on_player_selection_start = script.generate_event_name(),
+        --- When a player leaves selection mode
+        -- @event on_player_selection_end
+        -- @tparam number player_index the player index of the player who left selection mode
+        -- @tparam string selection the name of the selection which ended
+        on_player_selection_end = script.generate_event_name(),
+    }
+}
 
 local selection_tool = { name='selection-tool' }
 
@@ -22,14 +35,32 @@ end)
 -- @tparam string selection_name The name of the selection to start, used with on_selection
 -- @tparam[opt=false] boolean single_use When true the selection will stop after first use
 function Selection.start(player, selection_name, single_use, ...)
-    -- Assign the arguments if the player is valid
     if not player or not player.valid then return end
+    if selections[player.index] then
+        -- Raise the end event if a selection was already in progress
+        script.raise_event(Selection.events.on_player_selection_end, {
+            name = Selection.events.on_player_selection_end,
+            tick = game.tick,
+            player_index = player.index,
+            selection = selections[player.index].name
+        })
+    end
+
+    -- Set the selection data
     selections[player.index] = {
         name = selection_name,
         arguments = { ... },
         single_use = single_use == true,
         character = player.character
     }
+
+    -- Raise the event
+    script.raise_event(Selection.events.on_player_selection_start, {
+        name = Selection.events.on_player_selection_start,
+        tick = game.tick,
+        player_index = player.index,
+        selection = selection_name
+    })
 
     -- Give a selection tool if one is not in use
     if player.cursor_stack.is_selection_tool then return end
@@ -47,7 +78,16 @@ end
 function Selection.stop(player)
     if not selections[player.index] then return end
     local character = selections[player.index].character
+    local selection = selections[player.index].name
     selections[player.index] = nil
+
+    -- Raise the event
+    script.raise_event(Selection.events.on_player_selection_end, {
+        name = Selection.events.on_player_selection_end,
+        tick = game.tick,
+        player_index = player.index,
+        selection = selection
+    })
 
     -- Remove the selection tool
     if player.cursor_stack.is_selection_tool then
@@ -78,8 +118,8 @@ function Selection.is_selecting(player, selection_name)
         if not selections[player.index] then return false end
         return selections[player.index].name == selection_name
     else
-    return player.cursor_stack.is_selection_tool
-end
+        return player.cursor_stack.is_selection_tool
+    end
 end
 
 --- Filter on_player_selected_area to this custom selection, appends the selection arguments

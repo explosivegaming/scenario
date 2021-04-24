@@ -8,6 +8,8 @@ local Global = require 'utils.global' --- @dep utils.global
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.protection' --- @dep config.protection
 local EntityProtection = {
+    protected_entity_names = table.deep_copy(config.always_protected_names),
+    protected_entity_types = table.deep_copy(config.always_protected_types),
     events = {
         --- When a player mines a protected entity
         -- @event on_player_mined_protected
@@ -59,12 +61,12 @@ end)
 
 --- Get the key used in protected_entities
 local function get_entity_key(entity)
-    return string.format('%i,%i', entity.position.x, entity.position.y)
+    return string.format('%i,%i', math.floor(entity.position.x), math.floor(entity.position.y))
 end
 
 --- Get the key used in protected_areas
 local function get_area_key(area)
-    return string.format('%i,%i', area.left_top.x, area.left_top.y)
+    return string.format('%i,%i', math.floor(area.left_top.x), math.floor(area.left_top.y))
 end
 
 --- Check if an entity is always protected
@@ -99,7 +101,7 @@ end
 
 --- Get all protected entities on a surface
 function EntityProtection.get_entities(surface)
-    return protected_entities[surface.index]
+    return protected_entities[surface.index] or {}
 end
 
 --- Check if an entity is protected
@@ -129,7 +131,7 @@ end
 
 --- Get all protected areas on a surface
 function EntityProtection.get_areas(surface)
-    return protected_areas[surface.index]
+    return protected_areas[surface.index] or {}
 end
 
 --- Check if an entity is protected
