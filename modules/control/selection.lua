@@ -82,27 +82,25 @@ function Selection.is_selecting(player, selection_name)
 end
 end
 
---- Filter on_player_selected_area to this custom selection, pretends with player and appends with selection arguments
+--- Filter on_player_selected_area to this custom selection, appends the selection arguments
 -- @tparam string selection_name The name of the selection to listen for
 -- @tparam function handler The event handler
 function Selection.on_selection(selection_name, handler)
     Event.add(defines.events.on_player_selected_area, function(event)
         local selection = selections[event.player_index]
         if not selection or selection.name ~= selection_name then return end
-        local player = game.get_player(event.player_index)
-        handler(player, event, unpack(selection.arguments))
+        handler(event, unpack(selection.arguments))
     end)
 end
 
---- Filter on_player_alt_selected_area to this custom selection, pretends with player and appends with selection arguments
+--- Filter on_player_alt_selected_area to this custom selection, appends the selection arguments
 -- @param string selection_name The name of the selection to listen for
 -- @param function handler The event handler
 function Selection.on_alt_selection(selection_name, handler)
     Event.add(defines.events.on_player_alt_selected_area, function(event)
         local selection = selections[event.player_index]
         if not selection or selection.name ~= selection_name then return end
-        local player = game.get_player(event.player_index)
-        handler(player, event, unpack(selection.arguments))
+        handler(event, unpack(selection.arguments))
     end)
 end
 

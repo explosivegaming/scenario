@@ -98,6 +98,8 @@ Roles.new_role('Trainee','TrMod')
     'command/give-warning',
     'command/get-warnings',
     'command/get-reports',
+    'command/protect-entity',
+    'command/protect-area',
     'command/jail',
     'command/unjail',
     'command/kick',

@@ -29,6 +29,7 @@ return {
     'modules.commands.home',
     'modules.commands.connect',
     'modules.commands.last-location',
+    'modules.commands.protection',
 
     --- Addons
     'modules.addons.chat-popups',

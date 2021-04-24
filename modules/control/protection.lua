@@ -104,6 +104,7 @@ end
 
 --- Check if an entity is protected
 function EntityProtection.is_entity_protected(entity)
+    if check_always_protected(entity) then return true end
     local entities = protected_entities[entity.surface.index]
     if not entities then return false end
     return entities[get_entity_key(entity)] == entity
@@ -158,7 +159,7 @@ Event.add(defines.events.on_pre_player_mined_item, function(event)
     if config.ignore_permission and Roles.player_allowed(player, config.ignore_permission) then return end
 
     -- Check if the entity is protected
-    if check_always_protected(entity) or EntityProtection.is_entity_protected(entity)
+    if EntityProtection.is_entity_protected(entity)
     or EntityProtection.is_position_protected(entity.surface, entity.position)
     then
         -- Update repeats
@@ -189,5 +190,15 @@ Event.on_nth_tick(config.refresh_rate, function()
         end
     end
 end)
+
+--- When an entity is removed remove it from the protection list
+local function event_remove_entity(event)
+    EntityProtection.remove_entity(event.entity)
+end
+
+Event.add(defines.events.on_pre_player_mined_item, event_remove_entity)
+Event.add(defines.events.on_robot_pre_mined, event_remove_entity)
+Event.add(defines.events.on_entity_died, event_remove_entity)
+Event.add(defines.events.script_raised_destroy, event_remove_entity)
 
 return EntityProtection

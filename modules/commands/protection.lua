@@ -52,12 +52,12 @@ Commands.new_command('protect-area', 'Toggles area protection selection, hold sh
         Selection.stop(player)
     else
         Selection.start(player, SelectionProtectArea)
-        return Commands.success{'expcom-protection.entered-entity-selection'}
+        return Commands.success{'expcom-protection.entered-area-selection'}
     end
 end)
 
 --- When an area is selected to add protection to entities
-Selection.on_selection(SelectionProtectEntity, function(_, event)
+Selection.on_selection(SelectionProtectEntity, function(event)
     for _, entity in ipairs(event.entities) do
         EntityProtection.add_entity(entity)
     end
@@ -65,7 +65,7 @@ Selection.on_selection(SelectionProtectEntity, function(_, event)
 end)
 
 --- When an area is selected to remove protection from entities
-Selection.on_alt_selection(SelectionProtectEntity, function(_, event)
+Selection.on_alt_selection(SelectionProtectEntity, function(event)
     for _, entity in ipairs(event.entities) do
         EntityProtection.remove_entity(entity)
     end
@@ -73,7 +73,7 @@ Selection.on_alt_selection(SelectionProtectEntity, function(_, event)
 end)
 
 --- When an area is selected to add protection to the area
-Selection.on_selection(SelectionProtectEntity, function(_, event)
+Selection.on_selection(SelectionProtectArea, function(event)
     local area = aabb_align_expand(event.area)
     local areas = EntityProtection.get_areas(event.surface)
     for _, next_area in pairs(areas) do
@@ -86,13 +86,19 @@ Selection.on_selection(SelectionProtectEntity, function(_, event)
 end)
 
 --- When an area is selected to remove protection from the area
-Selection.on_alt_selection(SelectionProtectEntity, function(_, event)
+Selection.on_alt_selection(SelectionProtectArea, function(event)
     local area = aabb_align_expand(event.area)
     local areas = EntityProtection.get_areas(event.surface)
     for _, next_area in pairs(areas) do
         if aabb_area_enclosed(next_area, area) then
-            EntityProtection.remove_area(event.surface, area)
+            EntityProtection.remove_area(event.surface, next_area)
             Commands.print{'expcom-protection.unprotected-area'}
         end
     end
+end)
+
+--- When there is a repeat offence print it in chat
+Event.add(EntityProtection.events.on_repeat_violation, function(event)
+    local player_name = format_chat_player_name(event.player_index)
+    Roles.print_to_roles_higher('Regular', {'expcom-protection.repeat-offence', player_name, event.entity.localised_name, event.entity.position.x, event.entity.position.y})
 end)
