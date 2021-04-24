@@ -61,9 +61,11 @@ local function show_protected_entity(player, entity)
         sprite = 'utility/notification',
         target = entity,
         target_offset = {
-            (rb.x-entity.position.x)*0.8,
-            (rb.y-entity.position.y)*0.8
+            (rb.x-entity.position.x)*0.75,
+            (rb.y-entity.position.y)*0.75
         },
+        x_scale = 2,
+        y_scale = 2,
         surface = entity.surface,
         players = { player }
     }
