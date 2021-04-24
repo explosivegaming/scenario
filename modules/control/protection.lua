@@ -154,6 +154,7 @@ Event.add(defines.events.on_pre_player_mined_item, function(event)
     local player = game.get_player(event.player_index)
     -- Check if the player should be ignored
     if config.ignore_admins and player.admin then return end
+    if entity.last_user.index == player.index then return end
     if config.ignore_permission and Roles.player_allowed(player, config.ignore_permission) then return end
 
     -- Check if the entity is protected
@@ -172,6 +173,7 @@ Event.add(defines.events.on_pre_player_mined_item, function(event)
         event.name = EntityProtection.events.on_player_mined_protected
         script.raise_event(EntityProtection.events.on_player_mined_protected, event)
         if check_skip_repeat(entity) or player_repeats.count >= config.repeat_count then
+            player_repeats.count = 0 -- Reset to avoid spamming of events
             event.name = EntityProtection.events.on_repeat_violation
             script.raise_event(EntityProtection.events.on_repeat_violation, event)
         end
