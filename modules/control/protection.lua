@@ -6,7 +6,39 @@
 
 local Global = require 'utils.global' --- @dep utils.global
 local Event = require 'utils.event' --- @dep utils.event
-local EntityProtection = {}
+local config = require 'config.protection' --- @dep config.protection
+local EntityProtection = {
+    events = {
+        --- When a player mines a protected entity
+        -- @event on_player_mined_protected
+        -- @tparam number player_index the player index of the player who got mined the entity
+        -- @tparam LuaEntity entity the entity which was mined
+        on_player_mined_protected = script.generate_event_name(),
+        --- When a player mines a many protected entities
+        -- @event on_repeat_violation
+        -- @tparam number player_index the player index of the player who got mined the entities
+        -- @tparam LuaEntity entity the last entity which was mined
+        on_repeat_violation = script.generate_event_name(),
+    }
+}
+
+-- convert config tables into lookup tables
+for _, config_key in ipairs{'always_protected_names', 'always_protected_types', 'skip_repeat_names', 'skip_repeat_types'} do
+    local tbl = config[config_key]
+    for key, value in ipairs(tbl) do
+        tbl[key] = nil
+        tbl[value] = true
+    end
+end
+
+-- convert ignore role if present
+if config.ignore_role then
+    local Roles = require 'expcore.roles'
+    local role = Roles.get_role_by_name(config.ignore_role)
+    config.ignore_role = function(player)
+        return Roles.player_has_role(player, role)
+    end
+end
 
 ----- Global Variables -----
 --- Variables stored in the global table
@@ -28,35 +60,135 @@ end)
 ----- Local Functions -----
 --- Functions used internally to search and add to the protected array
 
+--- Get the key used in protected_entities
+local function get_entity_key(entity)
+    return string.format('%i,%i', entity.position.x, entity.position.y)
+end
+
+--- Get the key used in protected_areas
+local function get_area_key(area)
+    return string.format('%i,%i', area.left_top.x, area.left_top.y)
+end
+
+--- Check if an entity is always protected
+local function check_always_protected(entity)
+    return config.always_protected_names[entity.name] or config.always_protected_types[entity.type] or false
+end
+
+--- Check if an entity skips repeated
+local function check_skip_repeat(entity)
+    return config.skip_repeat_names[entity.name] or config.skip_repeat_types[entity.type] or false
+end
 
 ----- Public Functions -----
 --- Functions used to add and remove protected entities
 
 --- Add an entity to the protected list
 function EntityProtection.add_entity(entity)
-
+    local entities = protected_entities[entity.surface.index]
+    if not entities then
+        entities = {}
+        protected_entities[entity.surface.index] = entities
+    end
+    entities[get_entity_key(entity)] = entity
 end
 
 --- Remove an entity from the protected list
 function EntityProtection.remove_entity(entity)
+    local entities = protected_entities[entity.surface.index]
+    if not entities then return end
+    entities[get_entity_key(entity)] = nil
+end
 
+--- Get all protected entities on a surface
+function EntityProtection.get_entities(surface)
+    return protected_entities[surface.index]
+end
+
+--- Check if an entity is protected
+function EntityProtection.is_entity_protected(entity)
+    local entities = protected_entities[entity.surface.index]
+    if not entities then return false end
+    return entities[get_entity_key(entity)] == entity
 end
 
 --- Add an area to the protected list
-function EntityProtection.add_area(area)
-
+function EntityProtection.add_area(surface, area)
+    local areas = protected_areas[surface.index]
+    if not areas then
+        areas = {}
+        protected_areas[surface.index] = areas
+    end
+    areas[get_area_key(area)] = area
 end
 
 --- Remove an area from the protected list
-function EntityProtection.remove_area(area)
+function EntityProtection.remove_area(surface, area)
+    local areas = protected_areas[surface.index]
+    if not areas then return end
+    areas[get_area_key(area)] = nil
+end
 
+--- Get all protected areas on a surface
+function EntityProtection.get_areas(surface)
+    return protected_areas[surface.index]
+end
+
+--- Check if an entity is protected
+function EntityProtection.is_position_protected(surface, position)
+    local areas = protected_areas[surface.index]
+    if not areas then return false end
+    for _, area in pairs(areas) do
+        if area.left_top.x <= position.x and area.left_top.y <= position.y
+        and area.right_bottom.x >= position.x and area.right_bottom.y >= position.y
+        then
+            return true
+        end
+    end
+    return false
 end
 
 ----- Events -----
 --- All events registered by this module
 
-Event.add(defines.events.on_player_mined_item, function(event)
-    
+--- Raise events for protected entities
+Event.add(defines.events.on_pre_player_mined_item, function(event)
+    local entity = event.entity
+    local player = game.get_player(event.player_index)
+    -- Check if the player should be ignored
+    if config.ignore_admins and player.admin then return end
+    if config.ignore_role and config.ignore_role(player) then return end
+
+    -- Check if the entity is protected
+    if check_always_protected(entity) or EntityProtection.is_entity_protected(entity)
+    or EntityProtection.is_position_protected(entity.surface, entity.position)
+    then
+        -- Update repeats
+        local player_repeats = repeats[player.name]
+        if not player_repeats then
+            player_repeats = { last = game.tick, count = 0 }
+            repeats[player.name] = player_repeats
+        end
+        player_repeats.last = game.tick
+        player_repeats.count = player_repeats.count + 1
+        -- Send events
+        event.name = EntityProtection.events.on_player_mined_protected
+        script.raise_event(EntityProtection.events.on_player_mined_protected, event)
+        if check_skip_repeat(entity) or player_repeats.count >= config.repeat_count then
+            event.name = EntityProtection.events.on_repeat_violation
+            script.raise_event(EntityProtection.events.on_repeat_violation, event)
+        end
+    end
+end)
+
+--- Remove old repeats
+Event.on_nth_tick(config.refresh_rate, function()
+    local old = game.tick - config.repeat_lifetime
+    for player_name, player_repeats in pairs(repeats) do
+        if player_repeats.last <= old then
+            repeats[player_name] = nil
+        end
+    end
 end)
 
 return EntityProtection
