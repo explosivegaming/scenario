@@ -72,8 +72,14 @@ end
 
 --- Test if a player is selecting something
 -- @tparam LuaPlayer player The player to test
-function Selection.is_selecting(player)
+-- @tparam[opt] string selection_name If given will only return true if the selection is this selection
+function Selection.is_selecting(player, selection_name)
+    if selection_name ~= nil then
+        if not selections[player.index] then return false end
+        return selections[player.index].name == selection_name
+    else
     return player.cursor_stack.is_selection_tool
+end
 end
 
 --- Filter on_player_selected_area to this custom selection, pretends with player and appends with selection arguments
