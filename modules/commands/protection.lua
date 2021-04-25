@@ -128,7 +128,7 @@ Selection.on_selection(SelectionProtectEntity, function(event)
         EntityProtection.add_entity(entity)
         show_protected_entity(player, entity)
     end
-    return Commands.success{'expcom-protection.protected-entities', #event.entities}
+    player.print{'expcom-protection.protected-entities', #event.entities}
 end)
 
 --- When an area is selected to remove protection from entities
@@ -138,22 +138,22 @@ Selection.on_alt_selection(SelectionProtectEntity, function(event)
         EntityProtection.remove_entity(entity)
         remove_render(player, get_entity_key(entity))
     end
-    return Commands.success{'expcom-protection.unprotected-entities', #event.entities}
+    player.print{'expcom-protection.unprotected-entities', #event.entities}
 end)
 
 --- When an area is selected to add protection to the area
 Selection.on_selection(SelectionProtectArea, function(event)
     local area = aabb_align_expand(event.area)
     local areas = EntityProtection.get_areas(event.surface)
+    local player = game.get_player(event.player_index)
     for _, next_area in pairs(areas) do
         if aabb_area_enclosed(area, next_area) then
-            return Commands.error{'expcom-protection.already-protected'}
+            return player.print{'expcom-protection.already-protected'}
         end
     end
-    local player = game.get_player(event.player_index)
     EntityProtection.add_area(event.surface, area)
     show_protected_area(player, event.surface, area)
-    return Commands.success{'expcom-protection.protected-area'}
+    player.print{'expcom-protection.protected-area'}
 end)
 
 --- When an area is selected to remove protection from the area
@@ -164,7 +164,7 @@ Selection.on_alt_selection(SelectionProtectArea, function(event)
     for _, next_area in pairs(areas) do
         if aabb_area_enclosed(next_area, area) then
             EntityProtection.remove_area(event.surface, next_area)
-            Commands.print{'expcom-protection.unprotected-area'}
+            player.print{'expcom-protection.unprotected-area'}
             remove_render(player, get_area_key(next_area))
         end
     end
