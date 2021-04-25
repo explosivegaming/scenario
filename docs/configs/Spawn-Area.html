@@ -118,6 +118,7 @@
     <h2>Addons</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Advanced-Start.html"><span class="module-name-item">Advanced-Start</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/afk-kick.html"><span class="module-name-item">afk-kick</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Chat-Popups.html"><span class="module-name-item">Chat-Popups</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Chat-Reply.html"><span class="module-name-item">Chat-Reply</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Compilatron.html"><span class="module-name-item">Compilatron</span></a></div></li>
@@ -126,6 +127,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Inventory-Clear.html"><span class="module-name-item">Inventory-Clear</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/report-jail.html"><span class="module-name-item">report-jail</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Scorched-Earth.html"><span class="module-name-item">Scorched-Earth</span></a></div></li>
     <li class="nav-item active"><div class="nav-item-block-active block"><a href="../addons/Spawn-Area.html"><span class="module-name-item">Spawn-Area</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Tree-Decon.html"><span class="module-name-item">Tree-Decon</span></a></div></li>
@@ -165,6 +167,7 @@
     <h2>Commands</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Admin-Chat.html"><span class="module-name-item">Admin-Chat</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Admin-Markers.html"><span class="module-name-item">Admin-Markers</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Cheat-Mode.html"><span class="module-name-item">Cheat-Mode</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Clear-Inventory.html"><span class="module-name-item">Clear-Inventory</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Connect.html"><span class="module-name-item">Connect</span></a></div></li>
@@ -181,6 +184,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Repair.html"><span class="module-name-item">Repair</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Roles.html"><span class="module-name-item">Roles</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/InventorySearch.html"><span class="module-name-item">InventorySearch</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Spawn.html"><span class="module-name-item">Spawn</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Teleport.html"><span class="module-name-item">Teleport</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
@@ -260,34 +264,7 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#infinite_ammo_turrets">infinite_ammo_turrets</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#enabled">enabled</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#ammo_type">ammo_type</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#locations">locations</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#afk_belts">afk_belts</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#enabled">enabled</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#locations">locations</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#corrections">corrections</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#protect_entities">protect_entities</a></td>
-    </tr>
-    <tr>
-    <td class="name"><a href="#offset">offset</a></td>
+    <td class="name"><a href="#spawn_area">spawn_area</a></td>
     </tr>
     <tr>
     <td class="name"><a href="#deconstruction_radius">deconstruction_radius</a></td>
@@ -299,13 +276,85 @@
     <td class="name"><a href="#pattern_radius">pattern_radius</a></td>
     </tr>
     <tr>
-    <td class="name"><a href="#pattern_tile">pattern_tile</a></td>
+    <td class="name"><a href="#turrets">turrets</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#enabled">enabled</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#ammo_type">ammo_type</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#refill_time">refill_time</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#offset">offset</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#locations">locations</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#afk_belts">afk_belts</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#enabled">enabled</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#belt_type">belt_type</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#protected">protected</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#offset">offset</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#locations">locations</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#water">water</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#enabled">enabled</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#water_tile">water_tile</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#offset">offset</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#locations">locations</a></td>
     </tr>
     <tr>
     <td class="name"><a href="#entities">entities</a></td>
     </tr>
     <tr>
-    <td class="name"><a href="#tiles">tiles</a></td>
+    <td class="name"><a href="#enabled">enabled</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#protected">protected</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#operable">operable</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#offset">offset</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#locations">locations</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#enabled">enabled</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#pattern_tile">pattern_tile</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#offset">offset</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#locations">locations</a></td>
     </tr>
     </tbody>
     </table>
@@ -319,258 +368,15 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#infinite_ammo_turrets" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="infinite_ammo_turrets">infinite_ammo_turrets</span>
+    <a href="#spawn_area" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="spawn_area">spawn_area</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
     <p class="section-item-summary"></p>
-    <p class="section-item-description"> These turrets will have they ammo refilled automatically and can not be looted</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#enabled" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="enabled">enabled</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> weather the turrets will be created and refilled</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#ammo_type" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="ammo_type">ammo_type</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> the ammo type that will be used</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#locations" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="locations">locations</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> locations of all turrets, this is default it can be changed during runtime</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#afk_belts" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="afk_belts">afk_belts</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> setting relating to afk belts round the spawn point</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#enabled" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="enabled">enabled</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> weather afk belts will be generated</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#locations" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="locations">locations</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> top left connors of any afk belt loops to be added</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#corrections" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="corrections">corrections</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> Some settings that have no where else to go</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#protect_entities" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="protect_entities">protect_entities</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> if the spawn entites will be protected</p>
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#offset" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="offset">offset</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-    <p class="section-item-summary"></p>
-    <p class="section-item-description"> a global offset value to correct the x and y values of the tables below</p>
+    <p class="section-item-description"> Settings relating to the whole spawn area</p>
 
     <!-- parameters start -->
     <!-- parameters end -->
@@ -597,7 +403,7 @@
     <div class="section-item-body">
 
     <p class="section-item-summary"></p>
-    <p class="section-item-description"> when the spawn is made this area will have all entities removed first</p>
+    <p class="section-item-description"> All entities within this radius will be removed</p>
 
     <!-- parameters start -->
     <!-- parameters end -->
@@ -624,7 +430,7 @@
     <div class="section-item-body">
 
     <p class="section-item-summary"></p>
-    <p class="section-item-description"> this is the tile that will spawn in the deconstruction radius</p>
+    <p class="section-item-description"> Tile to be placed in the deconstruction radius, use nil for map gen</p>
 
     <!-- parameters start -->
     <!-- parameters end -->
@@ -651,7 +457,7 @@
     <div class="section-item-body">
 
     <p class="section-item-summary"></p>
-    <p class="section-item-description"> this is the radius of the pattern all water in this area will be filled</p>
+    <p class="section-item-description"> All water within this radius will be land filled</p>
 
     <!-- parameters start -->
     <!-- parameters end -->
@@ -670,15 +476,448 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#pattern_tile" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="pattern_tile">pattern_tile</span>
+    <a href="#turrets" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="turrets">turrets</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
     <p class="section-item-summary"></p>
-    <p class="section-item-description"> the tile that is used for the pattern</p>
+    <p class="section-item-description"> Settings relating to adding turrets to spawn</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#enabled" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="enabled">enabled</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> Whether turrets will be added to spawn</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#ammo_type" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="ammo_type">ammo_type</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The ammo type that will be used during refills</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#refill_time" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="refill_time">refill_time</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The time in ticks between each refill of the turrets, only change if having lag issues</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#offset" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="offset">offset</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The position offset to apply to turrets</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#locations" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="locations">locations</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The locations of all turrets, this list can change during runtime</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#afk_belts" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="afk_belts">afk_belts</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> Settings relating to adding afk belts to spawn</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#enabled" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="enabled">enabled</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> Whether afk belts will be added to spawn</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#belt_type" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="belt_type">belt_type</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The belt to be used as afk belts</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#protected" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="protected">protected</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> Whether belts will be protected from player interaction</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#offset" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="offset">offset</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The position offset to apply to afk belts</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#locations" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="locations">locations</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The locations to spawn afk belts at, given as the top left position</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#water" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="water">water</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> Settings relating to adding water to spawn</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#enabled" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="enabled">enabled</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> Whether water tiles will be added to spawn</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#water_tile" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="water_tile">water_tile</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The tile to be used as the water tile</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#offset" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="offset">offset</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The position offset to apply to water tiles</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#locations" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="locations">locations</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The location of the water tiles {x,y}
+ Each is a 3x3 with the closest tile to 0,0 removed</p>
 
     <!-- parameters start -->
     <!-- parameters end -->
@@ -705,7 +944,7 @@
     <div class="section-item-body">
 
     <p class="section-item-summary"></p>
-    <p class="section-item-description"> All entities that will be created as part of spawn {entity-name,x-pos,y-pos}</p>
+    <p class="section-item-description"> Settings relating to adding entities to spawn</p>
 
     <!-- parameters start -->
     <!-- parameters end -->
@@ -724,15 +963,231 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#tiles" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="tiles">tiles</span>
+    <a href="#enabled" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="enabled">enabled</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
     <p class="section-item-summary"></p>
-    <p class="section-item-description"> The location of the "pattern" tiles {x-pos,y-pos}</p>
+    <p class="section-item-description"> Whether entities will be added to spawn</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#protected" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="protected">protected</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> Whether entities will be protected from player interaction</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#operable" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="operable">operable</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> Whether entities can be opened by players, must be true if chests are used</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#offset" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="offset">offset</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The position offset to apply to entities</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#locations" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="locations">locations</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The location and names of entities {name,x,y}</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#enabled" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="enabled">enabled</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> Whether pattern tiles will be added to spawn</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#pattern_tile" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="pattern_tile">pattern_tile</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The tile to be used for the pattern</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#offset" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="offset">offset</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The position offset to apply to pattern tiles</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#locations" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="locations">locations</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> The location of the pattern tiles {x,y}</p>
 
     <!-- parameters start -->
     <!-- parameters end -->
@@ -763,7 +1218,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2021-03-30 03:10:11 UTC</i>
+    <i>Last updated 2021-04-25 19:21:13 UTC</i>
     </div>
     </div>
     </div>

@@ -92,6 +92,7 @@ Roles.new_role('Trainee','TrMod')
 :set_parent('Veteran')
 :allow{
     'command/admin-chat',
+    'command/admin-marker',
     'command/teleport',
     'command/bring',
     'command/goto',
@@ -104,6 +105,10 @@ Roles.new_role('Trainee','TrMod')
     'command/ban',
     'command/spectate',
     'command/follow',
+    'command/search',
+    'command/search-amount',
+    'command/search-recent',
+    'command/search-online',
 }
 
 --- Trusted Roles
