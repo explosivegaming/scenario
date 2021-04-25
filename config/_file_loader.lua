@@ -12,6 +12,7 @@ return {
     'modules.commands.me',
     'modules.commands.kill',
     'modules.commands.admin-chat',
+    'modules.commands.admin-markers',
     'modules.commands.teleport',
     'modules.commands.cheat-mode',
     'modules.commands.ratio',
