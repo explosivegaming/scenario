@@ -43,8 +43,6 @@ local task_id = Tasks.add_task(game.player.force.name, nil, game.player.name)
 function Tasks.add_task(force_name, player_name, task_title, task_body)
     -- Get a new task id
     local task_id = tostring(force_tasks._uid)
-    task_title = task_title or 'New Task'
-    task_body = task_body or 'Do x or y'
     force_tasks._uid = force_tasks._uid + 1
 
     -- Get the existing tasks for this force
@@ -67,8 +65,8 @@ function Tasks.add_task(force_name, player_name, task_title, task_body)
     TaskData:set(task_id, {
         task_id = task_id,
         force_name = force_name,
-        title = task_title,
-        body = task_body,
+        title = task_title or '',
+        body = task_body or '',
         last_edit_name = player_name or '<server>',
         last_edit_time = game.tick,
         currently_editing = editing
@@ -93,20 +91,20 @@ end
 
 --[[-- Update the message and last edited information for a task
 @tparam string task_id the uid of the task that you want to update
-@tparam string message_title the message title that you want to have for the task
-@tparam string message_body the message body that you want to have for the task
-@tparam[opt='server'] string player_name the name of the player who made the edit
+@tparam string player_name the name of the player who made the edit
+@tparam string task_title the message title that you want to have for the task
+@tparam string task_body the message body that you want to have for the task
 
 @usage-- Updating the message for on a task
 Task.update_task(task_id, 'We need more iron!', game.player.name)
 
 ]]
-function Tasks.update_task(task_id, message_title, message_body, player_name)
+function Tasks.update_task(task_id, player_name, task_title, task_body)
     TaskData:update(task_id, function(_, task)
-        task.last_edit_name = player_name or '<server>'
+        task.last_edit_name = player_name
         task.last_edit_time = game.tick
-        task.title = message_title
-        task.body = message_body
+        task.title = task_title
+        task.body = task_body
     end)
 end
 

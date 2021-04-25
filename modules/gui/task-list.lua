@@ -219,7 +219,7 @@ local task_list =
         }
         scroll_pane.style.horizontally_stretchable = true
         scroll_pane.style.padding = 0
-        scroll_pane.style.maximal_height = 300
+        scroll_pane.style.maximal_height = 280
 
         local flow =
             scroll_pane.add {
@@ -292,8 +292,7 @@ local task_view_footer =
         local title_label =
             footer.add {
             type = "label",
-            name = "title",
-            caption = "New task"
+            name = "title"
         }
         title_label.style.padding = 4
         title_label.style.font = "default-bold"
@@ -301,8 +300,7 @@ local task_view_footer =
         local body_label =
             footer.add {
             type = "label",
-            name = "body",
-            caption = "Do x or y"
+            name = "body"
         }
         body_label.style.padding = 4
         body_label.style.single_line = false
@@ -321,7 +319,7 @@ local message_pattern = "(.-)\n(.*)"
 -- @tparam string str message data
 local function parse_message(str)
     -- Trimm the spaces of the string
-    local trimmed = (string.gsub(str, "^%s*(.-)%s*$", "%1"))
+    local trimmed = string.gsub(str, "^%s*(.-)%s*$", "%1")
     local message = { title = "", body = "" }
     local title, body = string.match(trimmed, message_pattern)
     if not title then
@@ -379,7 +377,7 @@ edit_task_confirm_button =
         PlayerIsEditing:set(player, false)
         local new_message = element.parent.parent[task_message_textfield.name].text
         local parsed = parse_message(new_message)
-        Tasks.update_task(selected, parsed.title, parsed.body, player.name)
+        Tasks.update_task(selected, player.name, parsed.title, parsed.body)
         Tasks.set_editing(selected, player.name, nil)
     end
 )
