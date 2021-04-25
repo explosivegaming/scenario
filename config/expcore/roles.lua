@@ -103,6 +103,10 @@ Roles.new_role('Trainee','TrMod')
     'command/unjail',
     'command/kick',
     'command/ban',
+    'command/search',
+    'command/search-amount',
+    'command/search-recent',
+    'command/search-online',
 }
 
 --- Trusted Roles

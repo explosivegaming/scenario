@@ -30,6 +30,7 @@ return {
     'modules.commands.home',
     'modules.commands.connect',
     'modules.commands.last-location',
+    'modules.commands.search',
 
     --- Addons
     'modules.addons.chat-popups',
@@ -44,6 +45,8 @@ return {
     'modules.addons.discord-alerts',
     'modules.addons.chat-reply',
     'modules.addons.tree-decon',
+    'modules.addons.afk-kick',
+    'modules.addons.report-jail',
 
     --- Data
     'modules.data.statistics',

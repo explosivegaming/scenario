@@ -72,9 +72,10 @@ Gui.element{
 }
 :style(Gui.sprite_style(30, -1, { left_margin = -2, right_margin = -1 }))
 :on_click(function(player, element)
-    local reason = element.parent.entry.text or 'Non Given'
+    local reason = element.parent.entry.text
     local action_name = SelectedAction:get(player)
     local reason_callback = config.buttons[action_name].reason_callback
+    if reason == nil or not reason:find("/S") then reason = 'no reason given' end
     reason_callback(player, reason)
     SelectedPlayer:remove(player)
     SelectedAction:remove(player)
