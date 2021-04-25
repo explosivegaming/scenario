@@ -60,7 +60,7 @@ local function maintain_tag(event)
     if not markers[tag.force.name..tag.tag_number] then return end
     local player = game.get_player(event.player_index)
     if player.admin then
-        -- Player is added, tell them it was an admin marker
+        -- Player is admin, tell them it was an admin marker
         Commands.print({'expcom-admin-marker.edit'}, nil, player)
     elseif event.name == defines.events.on_chart_tag_modified then
         -- Tag was modified, revert the changes
