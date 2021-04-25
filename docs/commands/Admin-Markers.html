@@ -5,7 +5,7 @@
     <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Admin-Chat commands</title>
+    <title>Admin-Markers commands</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
     <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
@@ -50,8 +50,8 @@
     <li class="nav-item">
     <h2>Commands</h2>
     <ul class="nav">
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../commands/Admin-Chat.html"><span class="module-name-item">Admin-Chat</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Admin-Markers.html"><span class="module-name-item">Admin-Markers</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Admin-Chat.html"><span class="module-name-item">Admin-Chat</span></a></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../commands/Admin-Markers.html"><span class="module-name-item">Admin-Markers</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Cheat-Mode.html"><span class="module-name-item">Cheat-Mode</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Clear-Inventory.html"><span class="module-name-item">Clear-Inventory</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Connect.html"><span class="module-name-item">Connect</span></a></div></li>
@@ -245,9 +245,9 @@
 
     <!-- module content header start -->
 
-    <h2><span class="body-module-name"><strong><em>Admin-Chat</em></strong></span> commands</h2>
-    <p>Commands Module - Admin Chat
-    - Adds a command that allows admins to talk in a private chat</p>
+    <h2><span class="body-module-name"><strong><em>Admin-Markers</em></strong></span> commands</h2>
+    <p>Commands Module - Admin Markers
+    - Adds a command that creates map markers which can only be edited by admins</p>
     <p></p>
 
 
@@ -270,7 +270,10 @@
     <td class="name"><a href="#expcore.commands">expcore.commands</a></td>
     </tr>
     <tr>
-    <td class="name"><a href="#expcore.common">expcore.common</a></td>
+    <td class="name"><a href="#utils.global">utils.global</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#utils.event">utils.event</a></td>
     </tr>
     </tbody>
     </table>
@@ -281,8 +284,8 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#admin-chat">admin-chat</a></td>
-    <td class="summary">Sends a message in chat that only admins can see</td>
+    <td class="name"><a href="#admin-marker">admin-marker</a></td>
+    <td class="summary">Toggle admin marker mode, can only be applied to yourself</td>
     </tr>
     </tbody>
     </table>
@@ -321,8 +324,33 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#expcore.common" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="expcore.common">expcore.common</span>
+    <a href="#utils.global" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.global">utils.global</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#utils.event" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="utils.event">utils.event</span>
     </div>
     </dt>
     <dd>
@@ -349,40 +377,17 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#admin-chat" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="admin-chat">admin-chat</span>
+    <a href="#admin-marker" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="admin-marker">admin-marker</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Sends a message in chat that only admins can see</p>
+    <p class="section-item-summary">Toggle admin marker mode, can only be applied to yourself</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
-    <strong>Command Parameters:</strong>
-
-    <ul>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>message</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the message to send in the admin chat
-
-    </li>
-
-
-    </ul>
-
     <!-- parameters end -->
 
     <!-- returns start -->
