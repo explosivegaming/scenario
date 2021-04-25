@@ -103,6 +103,8 @@ Roles.new_role('Trainee','TrMod')
     'command/unjail',
     'command/kick',
     'command/ban',
+    'command/spectate',
+    'command/follow',
     'command/search',
     'command/search-amount',
     'command/search-recent',
@@ -120,6 +122,8 @@ Roles.new_role('Board Member','Board')
 :allow{
     'command/goto',
     'command/repair',
+    'command/spectate',
+    'command/follow',
 }
 
 Roles.new_role('Senior Backer','Backer')
