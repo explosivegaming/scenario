@@ -22,15 +22,15 @@ end)
 
 --- Test if a player is in spectator mode
 -- @tparam LuaPlayer player The player to test the controller type of
--- @treturn boolean True if the player is in spectator mode
+-- @treturn boolean Returns true if the player is in spectator mode
 function Public.is_spectating(player)
     assert(player and player.valid, 'Invalid player given to follower')
     return player.controller_type == defines.controllers.spectator
 end
 
---- Puts a player into spectator while maintaining an association to their character
--- @tparam LuaPlayer player The player that will be placed into spectator
--- @treturn boolean Returns false if the player was already in spectator
+--- Puts a player into spectator mode while maintaining an association to their character
+-- @tparam LuaPlayer player The player that will be placed into spectator mode
+-- @treturn boolean Returns false if the player was already in spectator mode
 function Public.start_spectate(player)
     assert(player and player.valid, 'Invalid player given to follower')
     if spectating[player.index] or not player.character then return false end
@@ -41,8 +41,8 @@ function Public.start_spectate(player)
     return true
 end
 
---- Return a player from spectator back to their character, if the character was killed then respawn the character
--- @tparam LuaPlayer player The player that will leave spectator
+--- Return a player from spectator mode back to their character, if their character was killed then respawn them
+-- @tparam LuaPlayer player The player that will leave spectator mode
 function Public.stop_spectate(player)
     assert(player and player.valid, 'Invalid player given to follower')
     local character = spectating[player.index]
@@ -59,13 +59,13 @@ end
 
 --- Test if a player is in follow mode
 -- @tparam LuaPlayer player The player to test the follow mode of
--- @treturn boolean True if the player is in follow mode
+-- @treturn boolean Returns true if the player is in follow mode
 function Public.is_following(player)
     assert(player and player.valid, 'Invalid player given to follower')
     return following[player.index] ~= nil
 end
 
---- Puts a player into spectator and follows an entity as it moves
+--- Puts a player into spectator mode and follows an entity as it moves
 -- @tparam LuaPlayer player The player that will follow the entity
 -- @tparam ?LuaPlayer|LuaEntity entity The player or entity that will be followed
 function Public.start_follow(player, entity)
@@ -79,8 +79,8 @@ function Public.start_follow(player, entity)
     following[player.index] = { player, entity, entity.position, spectate }
 end
 
---- Stops a player from following their current entity, can also return a player from spectate
--- @tparam LuaPlayer player The player that you want to stop following their entity
+--- Returns camera control to the player, will return a player to their character if start_follow placed them into spectator mode
+-- @tparam LuaPlayer player The player that will regain control of their camera
 function Public.stop_follow(player)
     assert(player and player.valid, 'Invalid player given to follower')
     if following[player.index] and following[player.index][4] then Public.stop_spectate(player) end
@@ -89,7 +89,7 @@ function Public.stop_follow(player)
     following[player.index] = nil
 end
 
---- Used to stop all players following an entity or player
+--- Returns camera control to all players, will return a player to their character if start_follow placed them into spectator mode
 function Public.stop_all()
     for key, data in pairs(following) do
         Public.stop_follow(data[1])
@@ -122,7 +122,7 @@ Gui.element(function(event_trigger, parent, target)
 end)
 :on_click(Public.stop_follow)
 :on_close(function(player)
-    -- Dont call set_controller during on_close as it invalidates the controller
+    -- Don't call set_controller during on_close as it invalidates the controller
     -- Setting an invalid position (as to not equal their current) will call stop_follow on the next tick
     following[player.index][3] = {}
 end)

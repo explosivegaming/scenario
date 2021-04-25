@@ -1,5 +1,5 @@
 --[[-- Commands Module - Spectate
-    - Adds a commands relating to spectate and follow
+    - Adds commands relating to spectate and follow
     @commands Spectate
 ]]
 
