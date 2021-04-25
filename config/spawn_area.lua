@@ -8,7 +8,7 @@ return {
         landfill_radius = 50, --- @setting pattern_radius All water within this radius will be land filled
     },
     turrets = { --- @setting turrets Settings relating to adding turrets to spawn
-        enabled = true, --- @setting enabled Weather turrets will be added to spawn
+        enabled = true, --- @setting enabled Whether turrets will be added to spawn
         ammo_type = 'uranium-rounds-magazine', --- @setting ammo_type The ammo type that will be used during refills
         refill_time = 60*60*5, --- @setting refill_time The time in ticks between each refill of the turrets, only change if having lag issues
         offset = { x=0, y=0 }, --- @setting offset The position offset to apply to turrets
@@ -20,9 +20,9 @@ return {
         }
     },
     afk_belts = { --- @setting afk_belts Settings relating to adding afk belts to spawn
-        enabled = true, --- @setting enabled Weather afk belts will be added to spawn
-        belt_type = 'transport-belt', --- @setting belt_type The belt to used used as afk belts
-        protected = true, --- @setting protected Weather belts will be protected from player interaction
+        enabled = true, --- @setting enabled Whether afk belts will be added to spawn
+        belt_type = 'transport-belt', --- @setting belt_type The belt to be used as afk belts
+        protected = true, --- @setting protected Whether belts will be protected from player interaction
         offset = { x=0, y=0 }, --- @setting offset The position offset to apply to afk belts
         locations={ --- @setting locations The locations to spawn afk belts at, given as the top left position
             {-5, -5}, { 5, -5},
@@ -30,7 +30,7 @@ return {
         }
     },
     water = { --- @setting water Settings relating to adding water to spawn
-        enabled = true, --- @setting enabled Weather water tiles will be added to spawn
+        enabled = true, --- @setting enabled Whether water tiles will be added to spawn
         water_tile = 'water-mud', --- @setting water_tile The tile to be used as the water tile
         offset = { x=0, y=0 }, --- @setting offset The position offset to apply to water tiles
         locations = { --- @setting locations The location of the water tiles {x,y}
@@ -42,9 +42,9 @@ return {
         }
     },
     entities = { --- @setting entities Settings relating to adding entities to spawn
-        enabled = true,  --- @setting enabled Weather entities will be added to spawn
-        protected = true, --- @setting protected Weather entities will be protected from player interaction
-        operable = true, --- @setting operable Weather entities can be opened by players, must be true if chests are used
+        enabled = true,  --- @setting enabled Whether entities will be added to spawn
+        protected = true, --- @setting protected Whether entities will be protected from player interaction
+        operable = true, --- @setting operable Whether entities can be opened by players, must be true if chests are used
         offset = { x=0, y=-2 }, --- @setting offset The position offset to apply to entities
         locations = { --- @setting locations The location and names of entities {name,x,y}
             {"stone-wall",-10,-5},{"stone-wall",-10,-4},{"stone-wall",-10,-3},{"stone-wall",-10,-2},{"stone-wall",-10,-1},{"stone-wall",-10,0},{"stone-wall",-10,3},{"stone-wall",-10,4},{"stone-wall",-10,5},
@@ -64,7 +64,7 @@ return {
         }
     },
     pattern = {
-        enabled = true, --- @setting enabled Weather pattern tiles will be added to spawn
+        enabled = true, --- @setting enabled Whether pattern tiles will be added to spawn
         pattern_tile = 'stone-path', --- @setting pattern_tile The tile to be used for the pattern
         offset = { x=0, y=-2 }, --- @setting offset The position offset to apply to pattern tiles
         locations = { --- @setting locations The location of the pattern tiles {x,y}

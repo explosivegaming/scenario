@@ -78,7 +78,7 @@ local function spawn_belts(surface, position)
     end
 end
 
--- Generates extra tiles in a set pattern set out in the config
+-- Generates extra tiles in a set pattern as defined in the config
 local function spawn_pattern(surface, position)
     position = apply_offset(position, config.pattern.offset)
     local tiles_to_make = {}
@@ -89,7 +89,7 @@ local function spawn_pattern(surface, position)
     surface.set_tiles(tiles_to_make)
 end
 
--- Generates extra water as set out in the config
+-- Generates extra water as defined in the config
 local function spawn_water(surface, position)
     position = apply_offset(position, config.water.offset)
     local tiles_to_make = {}
@@ -136,7 +136,7 @@ local function spawn_area(surface, position)
                 -- If it is inside the decon radius always set the tile
                 table.insert(tiles_to_make, {name=decon_tile, position=pos})
             elseif dst < fr2 and surface.get_tile(pos).collides_with('player-layer') then
-                -- If it is inside the fill radius only set the tile if its water
+                -- If it is inside the fill radius only set the tile if it is water
                 table.insert(tiles_to_make, {name=fill_tile, position=pos})
             end
         end
