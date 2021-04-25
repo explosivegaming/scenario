@@ -16,7 +16,7 @@ local EntityProtection = {
         -- @tparam number player_index the player index of the player who got mined the entity
         -- @tparam LuaEntity entity the entity which was mined
         on_player_mined_protected = script.generate_event_name(),
-        --- When a player mines a many protected entities
+        --- When a player repeatedly mines protected entities
         -- @event on_repeat_violation
         -- @tparam number player_index the player index of the player who got mined the entities
         -- @tparam LuaEntity entity the last entity which was mined
@@ -24,8 +24,8 @@ local EntityProtection = {
     }
 }
 
--- convert config tables into lookup tables
-for _, config_key in ipairs{'always_protected_names', 'always_protected_types', 'skip_repeat_names', 'skip_repeat_types'} do
+-- Convert config tables into lookup tables
+for _, config_key in ipairs{'always_protected_names', 'always_protected_types', 'always_trigger_repeat_names', 'always_trigger_repeat_types'} do
     local tbl = config[config_key]
     for key, value in ipairs(tbl) do
         tbl[key] = nil
@@ -33,10 +33,10 @@ for _, config_key in ipairs{'always_protected_names', 'always_protected_types', 
     end
 end
 
--- convert ignore role if present
+-- Require roles if a permission is assigned in the config
 local Roles
 if config.ignore_permission then
-    Roles = require 'expcore.roles'  --- @dep expcore.roles
+    Roles = require 'expcore.roles' --- @dep expcore.roles
 end
 
 ----- Global Variables -----
@@ -74,9 +74,9 @@ local function check_always_protected(entity)
     return config.always_protected_names[entity.name] or config.always_protected_types[entity.type] or false
 end
 
---- Check if an entity skips repeated
-local function check_skip_repeat(entity)
-    return config.skip_repeat_names[entity.name] or config.skip_repeat_types[entity.type] or false
+--- Check if an entity always triggers repeat protection
+local function check_always_trigger_repeat(entity)
+    return config.always_trigger_repeat_names[entity.name] or config.always_trigger_repeat_types[entity.type] or false
 end
 
 ----- Public Functions -----
@@ -175,7 +175,7 @@ Event.add(defines.events.on_pre_player_mined_item, function(event)
         -- Send events
         event.name = EntityProtection.events.on_player_mined_protected
         script.raise_event(EntityProtection.events.on_player_mined_protected, event)
-        if check_skip_repeat(entity) or player_repeats.count >= config.repeat_count then
+        if check_always_trigger_repeat(entity) or player_repeats.count >= config.repeat_count then
             player_repeats.count = 0 -- Reset to avoid spamming of events
             event.name = EntityProtection.events.on_repeat_violation
             script.raise_event(EntityProtection.events.on_repeat_violation, event)

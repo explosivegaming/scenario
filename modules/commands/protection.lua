@@ -1,5 +1,5 @@
 --[[-- Commands Module - Protection
-    - Adds a commands that can add and remove protection
+    - Adds commands that can add and remove protection
     @commands Protection
 ]]
 
@@ -72,7 +72,7 @@ local function show_protected_entity(player, entity)
     renders[player.index][key] = render_id
 end
 
---- Show a protected are to a player
+--- Show a protected area to a player
 local function show_protected_area(player, surface, area)
     local key = get_area_key(area)
     if renders[player.index][key] then return end
@@ -200,7 +200,7 @@ Event.add(Selection.events.on_player_selection_start, function(event)
     end
 end)
 
---- When selection ends show hide protected entities on screen and protected areas
+--- When selection ends hide protected entities and protected areas
 Event.add(Selection.events.on_player_selection_end, function(event)
     if event.selection ~= SelectionProtectEntity and event.selection ~= SelectionProtectArea then return end
     for _, id in pairs(renders[event.player_index]) do

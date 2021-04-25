@@ -8,7 +8,7 @@ local Event = require 'utils.event' --- @dep utils.event
 local Global = require 'utils.global' --- @dep utils.global
 local Selection = {
     events = {
-        --- When a player enterers selection mode
+        --- When a player enters selection mode
         -- @event on_player_selection_start
         -- @tparam number player_index the player index of the player who entered selection mode
         -- @tparam string selection the name of the selection being made
@@ -158,7 +158,8 @@ end
 
 Event.add(defines.events.on_pre_player_left_game, stop_after_event)
 Event.add(defines.events.on_pre_player_died, stop_after_event)
---- Stop selection after a single use if the option was used
+
+--- Stop selection after a single use if single_use was true during Selection.start
 local function stop_after_use(event)
     if not selections[event.player_index] then return end
     if not selections[event.player_index].single_use then return end

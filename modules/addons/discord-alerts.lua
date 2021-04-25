@@ -76,7 +76,7 @@ local function emit_event(args)
     })
 end
 
---- Repeat protected entity mining
+--- Repeated protected entity mining
 if config.entity_protection then
     local EntityProtection = require 'modules.control.protection' --- @dep modules.control.protection
     Event.add(EntityProtection.events.on_repeat_violation, function(event)
