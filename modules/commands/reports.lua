@@ -9,6 +9,15 @@ local Reports = require 'modules.control.reports' --- @dep modules.control.repor
 local format_chat_player_name = _C.format_chat_player_name--- @dep expcore.common
 require 'config.expcore.command_general_parse'
 
+--- Print a message to all players who match the value of admin
+local function print_to_players(admin, message)
+    for _, player in ipairs(game.connected_players) do
+        if player.admin == admin then
+            player.print(message)
+        end
+    end
+end
+
 --- Reports a player and notifies moderators
 -- @command report
 -- @tparam LuaPlayer player the player to report, some players are immune
@@ -19,6 +28,8 @@ Commands.new_command('report', 'Reports a player and notifies moderators')
     if not input then return end
     if Roles.player_has_flag(input, 'report-immune') then
         return reject{'expcom-report.player-immune'}
+    elseif player == input then
+        return reject{'expcom-report.self-report'}
     else
         return input
     end
@@ -30,8 +41,8 @@ end)
     local action_player_name_color = format_chat_player_name(action_player)
     local by_player_name_color = format_chat_player_name(player)
     if Reports.report_player(action_player, player.name, reason) then
-        game.print{'expcom-report.non-admin', action_player_name_color, reason}
-        Roles.print_to_roles_higher('Trainee', {'expcom-report.admin', action_player_name_color, by_player_name_color, reason})
+        print_to_players(false, {'expcom-report.non-admin', action_player_name_color, reason})
+        print_to_players(true,  {'expcom-report.admin', action_player_name_color, by_player_name_color, reason})
     else
         return Commands.error{'expcom-report.already-reported'}
     end

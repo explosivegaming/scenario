@@ -12,6 +12,7 @@ return {
     'modules.commands.me',
     'modules.commands.kill',
     'modules.commands.admin-chat',
+    'modules.commands.admin-markers',
     'modules.commands.teleport',
     'modules.commands.cheat-mode',
     'modules.commands.ratio',
@@ -30,6 +31,8 @@ return {
     'modules.commands.connect',
     'modules.commands.last-location',
     'modules.commands.protection',
+    'modules.commands.spectate',
+    'modules.commands.search',
 
     --- Addons
     'modules.addons.chat-popups',
@@ -44,6 +47,8 @@ return {
     'modules.addons.discord-alerts',
     'modules.addons.chat-reply',
     'modules.addons.tree-decon',
+    'modules.addons.afk-kick',
+    'modules.addons.report-jail',
 
     --- Data
     'modules.data.statistics',
