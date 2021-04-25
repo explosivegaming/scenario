@@ -2,6 +2,7 @@
 -- @config Discord-Alerts
 
 return {
+    entity_protection=true,
     player_reports=true,
     player_warnings=true,
     player_bans=true,

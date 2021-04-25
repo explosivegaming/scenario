@@ -30,6 +30,7 @@ return {
     'modules.commands.home',
     'modules.commands.connect',
     'modules.commands.last-location',
+    'modules.commands.protection',
     'modules.commands.spectate',
     'modules.commands.search',
 

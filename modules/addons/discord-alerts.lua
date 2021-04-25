@@ -76,6 +76,21 @@ local function emit_event(args)
     })
 end
 
+--- Repeated protected entity mining
+if config.entity_protection then
+    local EntityProtection = require 'modules.control.protection' --- @dep modules.control.protection
+    Event.add(EntityProtection.events.on_repeat_violation, function(event)
+        local player_name = get_player_name(event)
+        emit_event{
+            title='Entity Protection',
+            description='A player removed protected entities',
+            color=Colors.yellow,
+            ['Player']='<inline>'..player_name,
+            ['Entity']='<inline>'..event.entity.name
+        }
+    end)
+end
+
 --- Reports added and removed
 if config.player_reports then
     local Reports = require 'modules.control.reports' --- @dep modules.control.reports
