@@ -254,12 +254,13 @@ local view_task_edit_button =
 --- Button to close the view task footer
 -- @element view_task_close_button
 local view_task_close_button =
-    Gui.element {
-    type = "button",
-    caption = {"", "[img=utility/close_black] ", {"task-list.close"}},
-    tooltip = {"task-list.close-tooltip"},
-    style = "shortcut_bar_button"
-}:style(Styles.footer_button):on_click(
+Gui.element{
+	type = "sprite-button",
+	sprite = "utility/collapse_dark",
+	hovered_sprite = "utility/collapse",
+	tooltip = {"task-list.close-tooltip"}
+}
+:style(Styles.sprite22):on_click(
     function(player, _, _)
         PlayerSelected:set(player, nil)
     end
@@ -287,8 +288,10 @@ local task_view_footer =
     Gui.element(
     function(_, parent)
         local footer = subfooter_frame(parent, "view")
-        subfooter_label(footer, {"task-list.view-footer-header"})
-
+        local vertical_flow = footer.add{ type = "flow" }
+        subfooter_label(vertical_flow, {"task-list.view-footer-header"})
+        local alignment = Gui.alignment(vertical_flow)
+        view_task_close_button(alignment)
         local title_label =
             footer.add {
             type = "label",
@@ -308,7 +311,6 @@ local task_view_footer =
         local action_flow = subfooter_actions(footer)
         view_task_delete_button(action_flow)
         view_task_edit_button(action_flow)
-        view_task_close_button(action_flow)
         return footer
     end
 )
