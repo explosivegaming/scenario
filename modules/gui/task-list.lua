@@ -288,9 +288,9 @@ local task_view_footer =
     Gui.element(
     function(_, parent)
         local footer = subfooter_frame(parent, "view")
-        local vertical_flow = footer.add{ type = "flow" }
-        subfooter_label(vertical_flow, {"task-list.view-footer-header"})
-        local alignment = Gui.alignment(vertical_flow)
+        local flow = footer.add{ type = "flow" }
+        subfooter_label(flow, {"task-list.view-footer-header"})
+        local alignment = Gui.alignment(flow)
         view_task_close_button(alignment)
         local title_label =
             footer.add {
