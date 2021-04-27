@@ -32,12 +32,12 @@ end)
 --[[-- Add a new task for a force, the task can be placed into a certain position for that force
 @tparam string force_name the name of the force to add the task for
 @tparam[opt] string player_name the player who added this task, will cause them to be listed under editing
-@tparam[opt] string task_title the message title that is used for this task, if not given default is used
-@tparam[opt] string task_body the message body that is used for this task, if not given default is used
+@tparam[opt] string task_title the task title, if not given default is used
+@tparam[opt] string task_body the task body, if not given default is used
 @treturn string the uid of the task which was created
 
 @usage-- Adding a new task for your force
-local task_id = Tasks.add_task(game.player.force.name, nil, game.player.name)
+local task_id = Tasks.add_task(game.player.force.name, game.player.name, nil, nil)
 
 ]]
 function Tasks.add_task(force_name, player_name, task_title, task_body)
@@ -90,13 +90,13 @@ function Tasks.remove_task(task_id)
 end
 
 --[[-- Update the message and last edited information for a task
-@tparam string task_id the uid of the task that you want to update
+@tparam string task_id the uid of the task to update
 @tparam string player_name the name of the player who made the edit
-@tparam string task_title the message title that you want to have for the task
-@tparam string task_body the message body that you want to have for the task
+@tparam string task_title the title of the task to update to
+@tparam string task_body the body of the task to update to
 
 @usage-- Updating the message for on a task
-Task.update_task(task_id, 'We need more iron!', game.player.name)
+Task.update_task(task_id, game.player.name, 'We need more iron!', 'Build more iron outposts.')
 
 ]]
 function Tasks.update_task(task_id, player_name, task_title, task_body)

@@ -92,7 +92,7 @@ local add_new_task =
         PlayerIsEditing:set(player, false)
         -- Clear selected
         PlayerSelected:set(player, nil)
-        -- Open create task footer
+        -- Open task create footer
         PlayerIsCreating:set(player, true)
     end
 )
@@ -204,7 +204,7 @@ local task_list_item =
 )
 
 --- Scrollable list of all tasks
--- @element no_tasks_found
+-- @element task_list
 local task_list =
     Gui.element(
     function(_, parent)
@@ -235,8 +235,8 @@ local task_list =
 )
 
 --- Button element inside the task view footer to start editing a task
--- @element view_task_edit_button
-local view_task_edit_button =
+-- @element task_view_edit_button
+local task_view_edit_button =
     Gui.element {
     type = "button",
     caption = {"", "[img=utility/rename_icon_normal] ", {"task-list.edit"}},
@@ -251,9 +251,9 @@ local view_task_edit_button =
     end
 )
 
---- Button to close the view task footer
--- @element view_task_close_button
-local view_task_close_button =
+--- Button to close the task view footer
+-- @element task_view_close_button
+local task_view_close_button =
 Gui.element{
 	type = "sprite-button",
 	sprite = "utility/collapse_dark",
@@ -266,9 +266,9 @@ Gui.element{
     end
 )
 
---- Button to delete the task
--- @element view_task_delete_button
-local view_task_delete_button =
+--- Button to delete the task inside the task view footer
+-- @element task_view_delete_button
+local task_view_delete_button =
     Gui.element {
     type = "button",
     caption = {"", "[img=utility/trash] ", {"task-list.delete"}},
@@ -282,7 +282,7 @@ local view_task_delete_button =
     end
 )
 
---- Subfooter inside the tasklist container
+--- Subfooter inside the tasklist container that holds all the elements for viewing a task
 -- @element task_view_footer
 local task_view_footer =
     Gui.element(
@@ -291,7 +291,7 @@ local task_view_footer =
         local flow = footer.add{ type = "flow" }
         subfooter_label(flow, {"task-list.view-footer-header"})
         local alignment = Gui.alignment(flow)
-        view_task_close_button(alignment)
+        task_view_close_button(alignment)
         local title_label =
             footer.add {
             type = "label",
@@ -309,8 +309,8 @@ local task_view_footer =
         body_label.style.single_line = false
 
         local action_flow = subfooter_actions(footer)
-        view_task_delete_button(action_flow)
-        view_task_edit_button(action_flow)
+        task_view_delete_button(action_flow)
+        task_view_edit_button(action_flow)
         return footer
     end
 )
@@ -335,10 +335,10 @@ local function parse_message(str)
 end
 
 -- Button variable initialisation because it is used inside the textfield element events
-local edit_task_confirm_button
-local create_task_confirm_button
+local task_edit_confirm_button
+local task_create_confirm_button
 
---- Textfield element used in both the create and edit footers
+--- Textfield element used in both the task create and edit footers
 -- @element task_message_textfield
 local task_message_textfield =
     Gui.element {
@@ -358,16 +358,16 @@ local task_message_textfield =
         local valid = string.len(element.text) > 5
 
         if isCreating then
-            element.parent.actions[create_task_confirm_button.name].enabled = valid
+            element.parent.actions[task_create_confirm_button.name].enabled = valid
         elseif isEditing then
-            element.parent.actions[edit_task_confirm_button.name].enabled = valid
+            element.parent.actions[task_edit_confirm_button.name].enabled = valid
         end
     end
 )
 
---- Button to confirm the changes
--- @element edit_task_confirm_button
-edit_task_confirm_button =
+--- Button to confirm the changes inside the task edit footer
+-- @element task_edit_confirm_button
+task_edit_confirm_button =
     Gui.element {
     type = "button",
     caption = {"", "[img=utility/check_mark] ", {"task-list.confirm"}},
@@ -384,7 +384,7 @@ edit_task_confirm_button =
     end
 )
 
---- Button to discard the changes
+--- Button to discard the changes inside the task edit footer
 -- @element edit_task_discard_button
 local edit_task_discard_button =
     Gui.element {
@@ -400,7 +400,7 @@ local edit_task_discard_button =
     end
 )
 
---- Subfooter inside the tasklist container
+--- Subfooter inside the tasklist container that holds all the elements for editing a task
 -- @element task_edit_footer
 local task_edit_footer =
     Gui.element(
@@ -413,15 +413,15 @@ local task_edit_footer =
         local action_flow = subfooter_actions(footer)
 
         edit_task_discard_button(action_flow)
-        edit_task_confirm_button(action_flow)
+        task_edit_confirm_button(action_flow)
 
         return footer
     end
 )
 
---- Button to confirm the changes
--- @element create_task_confirm_button
-create_task_confirm_button =
+--- Button to confirm the changes inside the task create footer
+-- @element task_create_confirm_button
+task_create_confirm_button =
     Gui.element {
     type = "button",
     caption = {"", "[img=utility/check_mark] ", {"task-list.confirm"}},
@@ -438,9 +438,9 @@ create_task_confirm_button =
     end
 )
 
---- Button to discard the changes
--- @element create_task_discard_button
-local create_task_discard_button =
+--- Button to discard the changes inside the task create footer
+-- @element task_create_discard_button
+local task_create_discard_button =
     Gui.element {
     type = "button",
     caption = {"", "[img=utility/close_black] ", {"task-list.discard"}},
@@ -452,7 +452,7 @@ local create_task_discard_button =
     end
 )
 
---- Subfooter inside the tasklist container
+--- Subfooter inside the tasklist container that holds all the elements to create a new task
 -- @element task_create_footer
 local task_create_footer =
     Gui.element(
@@ -464,8 +464,8 @@ local task_create_footer =
 
         local action_flow = subfooter_actions(footer)
 
-        create_task_discard_button(action_flow)
-        create_task_confirm_button(action_flow)
+        task_create_discard_button(action_flow)
+        task_create_confirm_button(action_flow)
 
         return footer
     end
@@ -571,8 +571,8 @@ local update_task_view_footer = function(player, task_id)
 
     local title_element = view_flow.title
     local body_element = view_flow.body
-    local edit_button_element = view_flow.actions[view_task_edit_button.name]
-    local delete_button_element = view_flow.actions[view_task_delete_button.name]
+    local edit_button_element = view_flow.actions[task_view_edit_button.name]
+    local delete_button_element = view_flow.actions[task_view_delete_button.name]
 
     edit_button_element.visible = has_permission
     delete_button_element.visible = has_permission
@@ -581,28 +581,27 @@ local update_task_view_footer = function(player, task_id)
 
     local players_editing = table.get_keys(task.currently_editing)
     if #players_editing > 0 then
-        -- edit_task_element.hovered_sprite = 'utility/warning_icon'
         edit_button_element.tooltip = {"task-list.edit-tooltip", table.concat(players_editing, ", ")}
     else
-        -- edit_task_element.hovered_sprite = edit_task_element.sprite
         edit_button_element.tooltip = {"task-list.edit-tooltip-none"}
     end
 end
 
 --- When a new task is added it will update the task list for everyone on that force
+--- Or when a task is updated it will update the specific task elements
 Tasks.on_update(
-    function(task_id, task, old_task)
+    function(task_id, curr_state, prev_state)
         -- Get the force to update, task is nil when removed
         local force
-        if task then
-            force = game.forces[task.force_name]
+        if curr_state then
+            force = game.forces[curr_state.force_name]
         else
-            force = game.forces[old_task.force_name]
+            force = game.forces[prev_state.force_name]
         end
 
         -- Update the task for all the players on the force
         for _, player in pairs(force.connected_players) do
-            -- Update the task view if the player has the changed task selected
+            -- Update the task view elements if the player currently being looped over has this specific task selected
             local selected = PlayerSelected:get(player)
             if selected == task_id then
                 update_task_view_footer(player, selected)
@@ -619,7 +618,7 @@ Tasks.on_update(
 
 -- When a player is creating a new task.
 PlayerIsCreating:on_update(
-    function(player_name, new_state, _)
+    function(player_name, curr_state, _)
         local player = game.players[player_name]
 
         local frame = Gui.get_left_element(player, task_list_container)
@@ -627,12 +626,12 @@ PlayerIsCreating:on_update(
 
         -- Clear the textfield
         local message_element = frame.container.create[task_message_textfield.name]
-        local confirm_button_element = frame.container.create.actions[create_task_confirm_button.name]
+        local confirm_button_element = frame.container.create.actions[task_create_confirm_button.name]
         message_element.focus()
         message_element.text = ""
         confirm_button_element.enabled = false
 
-        if new_state then
+        if curr_state then
             create.visible = true
         else
             create.visible = false
@@ -642,7 +641,7 @@ PlayerIsCreating:on_update(
 
 -- When a player selects a different warp from the list
 PlayerSelected:on_update(
-    function(player_name, new_state, old_state)
+    function(player_name, curr_state, prev_state)
         local player = game.players[player_name]
 
         local frame = Gui.get_left_element(player, task_list_container)
@@ -651,23 +650,23 @@ PlayerSelected:on_update(
         local edit_flow = frame.container.edit
         local isEditing = PlayerIsEditing:get(player)
 
-        -- If the selection has a old state re-enable the button list element
-        if old_state then
-            task_list_element["task-" .. old_state][task_list_item.name].enabled = true
+        -- If the selection has an previous state re-enable the button list element
+        if prev_state then
+            task_list_element["task-" .. prev_state][task_list_item.name].enabled = true
         end
 
-        if new_state then
+        if curr_state then
             -- Disable the selected element
-            task_list_element["task-" .. new_state][task_list_item.name].enabled = false
+            task_list_element["task-" .. curr_state][task_list_item.name].enabled = false
 
             -- Update the view footer
-            update_task_view_footer(player, new_state)
+            update_task_view_footer(player, curr_state)
 
-            -- Depending on if the player is currently editing change the current edit session to the new task
+            -- Depending on if the player is currently editing change the current task edit footer to the current task
             if isEditing then
-                update_task_edit_footer(player, new_state)
-                Tasks.set_editing(old_state, player.name, nil)
-                Tasks.set_editing(new_state, player.name, true)
+                update_task_edit_footer(player, curr_state)
+                Tasks.set_editing(prev_state, player.name, nil)
+                Tasks.set_editing(curr_state, player.name, true)
                 view_flow.visible = false
                 edit_flow.visible = true
             else
@@ -675,9 +674,9 @@ PlayerSelected:on_update(
                 edit_flow.visible = false
             end
         else
-            -- If new state nil then hide footer elements and set editing to nil for old_state
-            if old_state then
-                Tasks.set_editing(old_state, player.name, nil)
+            -- If curr_state nil then hide footer elements and set editing to nil for prev_state
+            if prev_state then
+                Tasks.set_editing(prev_state, player.name, nil)
             end
             view_flow.visible = false
             edit_flow.visible = false
@@ -687,7 +686,7 @@ PlayerSelected:on_update(
 
 -- When the edit view opens or closes
 PlayerIsEditing:on_update(
-    function(player_name, new_state, _)
+    function(player_name, curr_state, _)
         local player = game.players[player_name]
 
         local frame = Gui.get_left_element(player, task_list_container)
@@ -695,7 +694,7 @@ PlayerIsEditing:on_update(
         local edit_flow = frame.container.edit
 
         local selected = PlayerSelected:get(player)
-        if new_state then
+        if curr_state then
             update_task_edit_footer(player, selected)
             view_flow.visible = false
             edit_flow.visible = true
@@ -714,7 +713,8 @@ local function role_update_event(event)
     local selected = PlayerSelected:get(player)
     if selected then
         update_task_view_footer(player, selected)
-        -- Set selected to the same value, this will make sure if player was in a editing state he will leave it if no permissions.
+        -- Resetting the players selected task to make sure the player does not see an
+        -- button to edit the task.
         PlayerSelected:set(selected)
     end
 
