@@ -317,7 +317,7 @@ local task_view_footer =
 
 local message_pattern = "(.-)\n(.*)"
 
---- Parce a string into a message object with title and body
+--- Parse a string into a message object with title and body
 -- @tparam string str message data
 local function parse_message(str)
     -- Trimm the spaces of the string
