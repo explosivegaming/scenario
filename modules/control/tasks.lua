@@ -32,7 +32,7 @@ end)
 --[[-- Add a new task for a force, the task can be placed into a certain position for that force
 @tparam string force_name the name of the force to add the task for
 @tparam[opt] string player_name the player who added this task, will cause them to be listed under editing
-@tparam[opt] string task_title the message title that is used for this task, if not given default is used
+@tparam[opt] string task_title the message title that is used for the task, if not given the default is used
 @tparam[opt] string task_body the message body that is used for this task, if not given default is used
 @treturn string the uid of the task which was created
 
