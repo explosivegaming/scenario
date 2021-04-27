@@ -320,12 +320,12 @@ local message_pattern = "(.-)\n(.*)"
 --- Parse a string into a message object with title and body
 -- @tparam string str message data
 local function parse_message(str)
-    -- Trimm the spaces of the string
+    -- Trim the spaces of the string
     local trimmed = string.gsub(str, "^%s*(.-)%s*$", "%1")
     local message = { title = "", body = "" }
     local title, body = string.match(trimmed, message_pattern)
     if not title then
-        -- If it doesn't match the patter return the str as a title
+        -- If it doesn't match the pattern return the str as a title
         message.title = trimmed
     else
         message.title = title
@@ -501,7 +501,7 @@ local task_list_container =
         task_view_footer_element.visible = false
         task_edit_footer_element.visible = false
         task_create_footer_element.visible = false
-        -- Return the exteral container
+        -- Return the external container
         return container.parent
     end
 ):add_to_left_flow(
@@ -675,7 +675,7 @@ PlayerSelected:on_update(
                 edit_flow.visible = false
             end
         else
-            -- If new state nil then hide footer elements and set editing to nil for old_state
+            -- If new state is nil then hide footer elements and set editing to nil for old_state
             if old_state then
                 Tasks.set_editing(old_state, player.name, nil)
             end
@@ -718,7 +718,7 @@ local function role_update_event(event)
         PlayerSelected:set(selected)
     end
 
-    -- Update the new task button and create footer incase the user can now add them
+    -- Update the new task button and create footer in case the user can now add them
     local has_permission = check_player_permissions(player)
     local add_new_task_element = container.header.alignment[add_new_task.name]
     add_new_task_element.visible = has_permission
