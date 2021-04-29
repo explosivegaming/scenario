@@ -626,7 +626,7 @@ Tasks.on_update(
             -- Update the task view elements if the player currently being looped over has this specific task selected
             local selected = PlayerSelected:get(player)
             if selected == task_id then
-                if task then
+                if curr_state then
                     update_task_view_footer(player, selected)
                 else
                     PlayerSelected:set(player, nil)
