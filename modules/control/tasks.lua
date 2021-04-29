@@ -55,12 +55,6 @@ function Tasks.add_task(force_name, player_name, task_title, task_body)
     -- Insert the task id into the forces tasks
     table.insert(task_ids, task_id)
 
-    -- Create the editing table
-    local editing = {}
-    if player_name then
-        editing[player_name] = true
-    end
-
     -- Add the new task to the store
     TaskData:set(task_id, {
         task_id = task_id,
@@ -69,7 +63,7 @@ function Tasks.add_task(force_name, player_name, task_title, task_body)
         body = task_body or '',
         last_edit_name = player_name or '<server>',
         last_edit_time = game.tick,
-        currently_editing = editing
+        currently_editing = {}
     })
 
     return task_id
