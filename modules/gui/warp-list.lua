@@ -687,7 +687,7 @@ end)
 :add_to_left_flow()
 
 --- Button on the top flow used to toggle the warp list container
--- @element warp_list_toggle
+-- @element toggle_warp_list
 Gui.left_toolbar_button(config.default_icon.type ..'/'..config.default_icon.name, {'warp-list.main-tooltip', config.standard_proximity_radius}, warp_list_container, function(player)
     return Roles.player_allowed(player, 'gui/warp-list')
 end)

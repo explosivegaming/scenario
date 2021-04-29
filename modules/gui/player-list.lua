@@ -258,7 +258,7 @@ end)
 :add_to_left_flow(true)
 
 --- Button on the top flow used to toggle the player list container
--- @element toggle_left_element
+-- @element toggle_player_list
 Gui.left_toolbar_button('entity/character', {'player-list.main-tooltip'}, player_list_container, function(player)
     return Roles.player_allowed(player, 'gui/player-list')
 end)

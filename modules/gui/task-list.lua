@@ -356,7 +356,7 @@ end)
 end)
 
 --- Button on the top flow used to toggle the task list container
--- @element toggle_left_element
+-- @element toggle_task_list
 Gui.left_toolbar_button('utility/not_enough_repair_packs_icon', {'task-list.main-tooltip'}, task_list_container, function(player)
     return Roles.player_allowed(player, 'gui/task-list')
 end)
