@@ -92,16 +92,21 @@ Roles.new_role('Trainee','TrMod')
 :set_parent('Veteran')
 :allow{
     'command/admin-chat',
+    'command/admin-marker',
     'command/teleport',
     'command/bring',
     'command/goto',
     'command/give-warning',
     'command/get-warnings',
     'command/get-reports',
+    'command/protect-entity',
+    'command/protect-area',
     'command/jail',
     'command/unjail',
     'command/kick',
     'command/ban',
+    'command/spectate',
+    'command/follow',
     'command/search',
     'command/search-amount',
     'command/search-recent',
@@ -119,6 +124,8 @@ Roles.new_role('Board Member','Board')
 :allow{
     'command/goto',
     'command/repair',
+    'command/spectate',
+    'command/follow',
 }
 
 Roles.new_role('Senior Backer','Backer')
@@ -214,7 +221,8 @@ Roles.new_role('Regular','Reg')
     'command/rainbow',
     'command/go-to-spawn',
     'command/me',
-    'standard-decon'
+    'standard-decon',
+    'bypass-entity-protection'
 }
 :set_auto_assign_condition(function(player)
     if player.online_time >= hours3 then
