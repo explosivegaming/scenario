@@ -626,7 +626,11 @@ Tasks.on_update(
             -- Update the task view elements if the player currently being looped over has this specific task selected
             local selected = PlayerSelected:get(player)
             if selected == task_id then
-                update_task_view_footer(player, selected)
+                if task then
+                    update_task_view_footer(player, selected)
+                else
+                    PlayerSelected:set(player, nil)
+                end
             end
 
             local frame = Gui.get_left_element(player, task_list_container)
@@ -697,7 +701,7 @@ PlayerSelected:on_update(
             end
         else
             -- If curr_state nil then hide footer elements and set editing to nil for prev_state
-            if prev_state then
+            if prev_state and Tasks.get_task(prev_state) then
                 Tasks.set_editing(prev_state, player.name, nil)
             end
             view_flow.visible = false
