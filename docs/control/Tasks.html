@@ -312,7 +312,7 @@ Tasks.update_task(task_id, <span class="string">'We need more iron!'</span>, gam
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#add_task">add_task(force_name[, task_number][, player_name][, task_message])</a></td>
+    <td class="name"><a href="#add_task">add_task(force_name[, player_name][, task_title][, task_body])</a></td>
     <td class="summary">Add a new task for a force, the task can be placed into a certain position for that force</td>
     </tr>
     <tr>
@@ -320,7 +320,7 @@ Tasks.update_task(task_id, <span class="string">'We need more iron!'</span>, gam
     <td class="summary">Removes a task and any data that is linked with it</td>
     </tr>
     <tr>
-    <td class="name"><a href="#update_task">update_task(task_id, new_message[, player_name='server'])</a></td>
+    <td class="name"><a href="#update_task">update_task(task_id, player_name, task_title, task_body)</a></td>
     <td class="summary">Update the message and last edited information for a task</td>
     </tr>
     <tr>
@@ -596,7 +596,7 @@ Tasks.update_task(task_id, <span class="string">'We need more iron!'</span>, gam
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#add_task" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="add_task">add_task(force_name[, task_number][, player_name][, task_message])</span>
+    <span class="section-item-title" id="add_task">add_task(force_name[, player_name][, task_title][, task_body])</span>
     </div>
     </dt>
     <dd>
@@ -632,23 +632,6 @@ Tasks.update_task(task_id, <span class="string">'We need more iron!'</span>, gam
 
     <li class="section-subitem-li">
 
-    <strong><em>task_number</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
-
-     the order place to add the task to, appends to end if omited
-
-    (<em>optional</em>)
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
     <strong><em>player_name</em></strong>
 
     <strong> : </strong>
@@ -666,13 +649,30 @@ Tasks.update_task(task_id, <span class="string">'We need more iron!'</span>, gam
 
     <li class="section-subitem-li">
 
-    <strong><em>task_message</em></strong>
+    <strong><em>task_title</em></strong>
 
     <strong> : </strong>
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the message that is used for this task, if not given default is used
+     the task title, if not given default is used
+
+    (<em>optional</em>)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>task_body</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the task body, if not given default is used
 
     (<em>optional</em>)
     </li>
@@ -699,7 +699,7 @@ Tasks.update_task(task_id, <span class="string">'We need more iron!'</span>, gam
     <!-- usage start -->
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Adding a new task for your force
-</span><span class="keyword">local</span> task_id = Tasks.add_task(game.player.force.name, <span class="keyword">nil</span>, game.player.name)</code></pre>
+</span><span class="keyword">local</span> task_id = Tasks.add_task(game.player.force.name, game.player.name, <span class="keyword">nil</span>, <span class="keyword">nil</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -760,7 +760,7 @@ Tasks.update_task(task_id, <span class="string">'We need more iron!'</span>, gam
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
     <a href="#update_task" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="update_task">update_task(task_id, new_message[, player_name='server'])</span>
+    <span class="section-item-title" id="update_task">update_task(task_id, player_name, task_title, task_body)</span>
     </div>
     </dt>
     <dd>
@@ -786,23 +786,7 @@ Tasks.update_task(task_id, <span class="string">'We need more iron!'</span>, gam
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the uid of the task that you want to update
-
-    </li>
-
-
-
-
-
-    <li class="section-subitem-li">
-
-    <strong><em>new_message</em></strong>
-
-    <strong> : </strong>
-
-    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
-
-     the message that you want to have for the task
+     the uid of the task to update
 
     </li>
 
@@ -820,7 +804,38 @@ Tasks.update_task(task_id, <span class="string">'We need more iron!'</span>, gam
 
      the name of the player who made the edit
 
-    (<em>default</em>: 'server')
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>task_title</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the title of the task to update to
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>task_body</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the body of the task to update to
+
     </li>
 
 
@@ -838,7 +853,7 @@ Tasks.update_task(task_id, <span class="string">'We need more iron!'</span>, gam
     <!-- usage start -->
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Updating the message for on a task
-</span>Task.update_task(task_id, <span class="string">'We need more iron!'</span>, game.player.name)</code></pre>
+</span>Task.update_task(task_id, game.player.name, <span class="string">'We need more iron!'</span>, <span class="string">'Build more iron outposts.'</span>)</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -997,7 +1012,7 @@ Tasks.update_task(task_id, <span class="string">'We need more iron!'</span>, gam
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2021-04-25 23:23:05 UTC</i>
+    <i>Last updated 2021-04-29 22:05:19 UTC</i>
     </div>
     </div>
     </div>
