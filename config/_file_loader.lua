@@ -12,6 +12,7 @@ return {
     'modules.commands.me',
     'modules.commands.kill',
     'modules.commands.admin-chat',
+    'modules.commands.admin-markers',
     'modules.commands.teleport',
     'modules.commands.cheat-mode',
     'modules.commands.ratio',
@@ -29,6 +30,8 @@ return {
     'modules.commands.home',
     'modules.commands.connect',
     'modules.commands.last-location',
+    'modules.commands.protection',
+    'modules.commands.spectate',
     'modules.commands.search',
 
     --- Addons

@@ -83,8 +83,10 @@
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Jail.html"><span class="module-name-item">Jail</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Production.html"><span class="module-name-item">Production</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Protection.html"><span class="module-name-item">Protection</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Rockets.html"><span class="module-name-item">Rockets</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Selection.html"><span class="module-name-item">Selection</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Tasks.html"><span class="module-name-item">Tasks</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../control/Warps.html"><span class="module-name-item">Warps</span></a></div></li>
@@ -130,6 +132,7 @@
     <h2>Commands</h2>
     <ul class="nav">
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Admin-Chat.html"><span class="module-name-item">Admin-Chat</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Admin-Markers.html"><span class="module-name-item">Admin-Markers</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Cheat-Mode.html"><span class="module-name-item">Cheat-Mode</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Clear-Inventory.html"><span class="module-name-item">Clear-Inventory</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Connect.html"><span class="module-name-item">Connect</span></a></div></li>
@@ -142,12 +145,14 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Kill.html"><span class="module-name-item">Kill</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/LastLocation.html"><span class="module-name-item">LastLocation</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Me.html"><span class="module-name-item">Me</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Protection.html"><span class="module-name-item">Protection</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Rainbow.html"><span class="module-name-item">Rainbow</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Repair.html"><span class="module-name-item">Repair</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Reports.html"><span class="module-name-item">Reports</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Roles.html"><span class="module-name-item">Roles</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/InventorySearch.html"><span class="module-name-item">InventorySearch</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Spawn.html"><span class="module-name-item">Spawn</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Spectate.html"><span class="module-name-item">Spectate</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Teleport.html"><span class="module-name-item">Teleport</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../commands/Warnings.html"><span class="module-name-item">Warnings</span></a></div></li>
     </ul>
@@ -275,6 +280,9 @@
     <td class="name"><a href="#expcore.roles">expcore.roles</a></td>
     </tr>
     <tr>
+    <td class="name"><a href="#expcore.datastore">expcore.datastore</a></td>
+    </tr>
+    <tr>
     <td class="name"><a href="#config.gui.tasks">config.gui.tasks</a></td>
     </tr>
     <tr>
@@ -293,35 +301,75 @@
     <tbody>
     <tr>
     <td class="name"><a href="#add_new_task">add_new_task</a></td>
-    <td class="summary">Button displayed in the ehader bar, used to add a new task</td>
+    <td class="summary">Button displayed in the header bar, used to add a new task</td>
     </tr>
     <tr>
-    <td class="name"><a href="#edit_task">edit_task</a></td>
-    <td class="summary">Button displayed next to tasks which the user is can edit, used to start editing a task</td>
+    <td class="name"><a href="#no_tasks_found">no_tasks_found</a></td>
+    <td class="summary">Header displayed when no tasks are in the task list</td>
     </tr>
     <tr>
-    <td class="name"><a href="#discard_task">discard_task</a></td>
-    <td class="summary">Button displayed next to tasks which the user is can edit, used to delete a task from the list</td>
+    <td class="name"><a href="#subfooter_frame">subfooter_frame</a></td>
+    <td class="summary">Frame element with the right styling</td>
     </tr>
     <tr>
-    <td class="name"><a href="#add_task_base">add_task_base</a></td>
-    <td class="summary">Set of three elements which make up each row of the task table</td>
+    <td class="name"><a href="#subfooter_label">subfooter_label</a></td>
+    <td class="summary">Label element preset</td>
     </tr>
     <tr>
-    <td class="name"><a href="#confirm_edit">confirm_edit</a></td>
-    <td class="summary">Button displayed next to tasks which the user is currently editing, used to save changes</td>
+    <td class="name"><a href="#subfooter_actions">subfooter_actions</a></td>
+    <td class="summary">Action flow that contains action buttons</td>
     </tr>
     <tr>
-    <td class="name"><a href="#cancel_edit">cancel_edit</a></td>
-    <td class="summary">Button displayed next to tasks which the user is currently editing, used to discard changes</td>
+    <td class="name"><a href="#task_list_item">task_list_item</a></td>
+    <td class="summary">Button element with a flow around it to fix duplicate name inside of the scroll flow</td>
     </tr>
     <tr>
-    <td class="name"><a href="#task_editing">task_editing</a></td>
-    <td class="summary">Editing state for a task, contrins a text field and the two edit buttons</td>
+    <td class="name"><a href="#task_list">task_list</a></td>
+    <td class="summary">Scrollable list of all tasks</td>
     </tr>
     <tr>
-    <td class="name"><a href="#task_label">task_label</a></td>
-    <td class="summary">Default state for a task, contains only a label with the task message</td>
+    <td class="name"><a href="#task_view_edit_button">task_view_edit_button</a></td>
+    <td class="summary">Button element inside the task view footer to start editing a task</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#task_view_close_button">task_view_close_button</a></td>
+    <td class="summary">Button to close the task view footer</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#task_view_delete_button">task_view_delete_button</a></td>
+    <td class="summary">Button to delete the task inside the task view footer</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#task_view_footer">task_view_footer</a></td>
+    <td class="summary">Subfooter inside the tasklist container that holds all the elements for viewing a task</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#task_message_textfield">task_message_textfield</a></td>
+    <td class="summary">Textfield element used in both the task create and edit footers</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#task_edit_confirm_button">task_edit_confirm_button</a></td>
+    <td class="summary">Button to confirm the changes inside the task edit footer</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#edit_task_discard_button">edit_task_discard_button</a></td>
+    <td class="summary">Button to discard the changes inside the task edit footer</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#task_edit_footer">task_edit_footer</a></td>
+    <td class="summary">Subfooter inside the tasklist container that holds all the elements for editing a task</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#task_create_confirm_button">task_create_confirm_button</a></td>
+    <td class="summary">Button to confirm the changes inside the task create footer</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#task_create_discard_button">task_create_discard_button</a></td>
+    <td class="summary">Button to discard the changes inside the task create footer</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#task_create_footer">task_create_footer</a></td>
+    <td class="summary">Subfooter inside the tasklist container that holds all the elements to create a new task</td>
     </tr>
     <tr>
     <td class="name"><a href="#task_list_container">task_list_container</a></td>
@@ -395,6 +443,31 @@
     <div class="block section-item-header">
     <a href="#expcore.roles" class="fragment-hashtag">#</a>
     <span class="section-item-title" id="expcore.roles">expcore.roles</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#expcore.datastore" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="expcore.datastore">expcore.datastore</span>
     </div>
     </dt>
     <dd>
@@ -503,7 +576,7 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Button displayed in the ehader bar, used to add a new task</p>
+    <p class="section-item-summary">Button displayed in the header bar, used to add a new task</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -523,14 +596,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#edit_task" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="edit_task">edit_task</span>
+    <a href="#no_tasks_found" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="no_tasks_found">no_tasks_found</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Button displayed next to tasks which the user is can edit, used to start editing a task</p>
+    <p class="section-item-summary">Header displayed when no tasks are in the task list</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -550,14 +623,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#discard_task" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="discard_task">discard_task</span>
+    <a href="#subfooter_frame" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="subfooter_frame">subfooter_frame</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Button displayed next to tasks which the user is can edit, used to delete a task from the list</p>
+    <p class="section-item-summary">Frame element with the right styling</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -577,14 +650,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#add_task_base" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="add_task_base">add_task_base</span>
+    <a href="#subfooter_label" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="subfooter_label">subfooter_label</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Set of three elements which make up each row of the task table</p>
+    <p class="section-item-summary">Label element preset</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -604,14 +677,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#confirm_edit" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="confirm_edit">confirm_edit</span>
+    <a href="#subfooter_actions" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="subfooter_actions">subfooter_actions</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Button displayed next to tasks which the user is currently editing, used to save changes</p>
+    <p class="section-item-summary">Action flow that contains action buttons</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -631,14 +704,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#cancel_edit" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="cancel_edit">cancel_edit</span>
+    <a href="#task_list_item" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_list_item">task_list_item</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Button displayed next to tasks which the user is currently editing, used to discard changes</p>
+    <p class="section-item-summary">Button element with a flow around it to fix duplicate name inside of the scroll flow</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -658,14 +731,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#task_editing" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="task_editing">task_editing</span>
+    <a href="#task_list" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_list">task_list</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Editing state for a task, contrins a text field and the two edit buttons</p>
+    <p class="section-item-summary">Scrollable list of all tasks</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -685,14 +758,284 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#task_label" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="task_label">task_label</span>
+    <a href="#task_view_edit_button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_view_edit_button">task_view_edit_button</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Default state for a task, contains only a label with the task message</p>
+    <p class="section-item-summary">Button element inside the task view footer to start editing a task</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#task_view_close_button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_view_close_button">task_view_close_button</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Button to close the task view footer</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#task_view_delete_button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_view_delete_button">task_view_delete_button</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Button to delete the task inside the task view footer</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#task_view_footer" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_view_footer">task_view_footer</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Subfooter inside the tasklist container that holds all the elements for viewing a task</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#task_message_textfield" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_message_textfield">task_message_textfield</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Textfield element used in both the task create and edit footers</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#task_edit_confirm_button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_edit_confirm_button">task_edit_confirm_button</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Button to confirm the changes inside the task edit footer</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#edit_task_discard_button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="edit_task_discard_button">edit_task_discard_button</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Button to discard the changes inside the task edit footer</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#task_edit_footer" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_edit_footer">task_edit_footer</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Subfooter inside the tasklist container that holds all the elements for editing a task</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#task_create_confirm_button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_create_confirm_button">task_create_confirm_button</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Button to confirm the changes inside the task create footer</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#task_create_discard_button" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_create_discard_button">task_create_discard_button</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Button to discard the changes inside the task create footer</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#task_create_footer" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="task_create_footer">task_create_footer</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Subfooter inside the tasklist container that holds all the elements to create a new task</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -778,7 +1121,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2021-04-24 20:27:05 UTC</i>
+    <i>Last updated 2021-04-29 22:05:19 UTC</i>
     </div>
     </div>
     </div>

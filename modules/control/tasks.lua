@@ -31,49 +31,39 @@ end)
 
 --[[-- Add a new task for a force, the task can be placed into a certain position for that force
 @tparam string force_name the name of the force to add the task for
-@tparam[opt] number task_number the order place to add the task to, appends to end if omited
 @tparam[opt] string player_name the player who added this task, will cause them to be listed under editing
-@tparam[opt] string task_message the message that is used for this task, if not given default is used
+@tparam[opt] string task_title the task title, if not given default is used
+@tparam[opt] string task_body the task body, if not given default is used
 @treturn string the uid of the task which was created
 
 @usage-- Adding a new task for your force
-local task_id = Tasks.add_task(game.player.force.name, nil, game.player.name)
+local task_id = Tasks.add_task(game.player.force.name, game.player.name, nil, nil)
 
 ]]
-function Tasks.add_task(force_name, task_number, player_name, task_message)
+function Tasks.add_task(force_name, player_name, task_title, task_body)
     -- Get a new task id
     local task_id = tostring(force_tasks._uid)
-    task_message = task_message or 'New Task'
     force_tasks._uid = force_tasks._uid + 1
 
     -- Get the existing tasks for this force
-    local tasks = force_tasks[force_name]
-    if not tasks then
-        force_tasks[force_name] = {}
-        tasks = force_tasks[force_name]
+    local task_ids = force_tasks[force_name]
+    if not task_ids then
+        task_ids = {}
+        force_tasks[force_name] = task_ids
     end
 
     -- Insert the task id into the forces tasks
-    if task_number then
-        table.insert(tasks, task_number, task_id)
-    else
-        table.insert(tasks, task_id)
-    end
-
-    -- Create the editing table
-    local editing = {}
-    if player_name then
-        editing[player_name] = true
-    end
+    table.insert(task_ids, task_id)
 
     -- Add the new task to the store
     TaskData:set(task_id, {
         task_id = task_id,
         force_name = force_name,
-        message = task_message,
+        title = task_title or '',
+        body = task_body or '',
         last_edit_name = player_name or '<server>',
         last_edit_time = game.tick,
-        currently_editing = editing
+        currently_editing = {}
     })
 
     return task_id
@@ -94,19 +84,21 @@ function Tasks.remove_task(task_id)
 end
 
 --[[-- Update the message and last edited information for a task
-@tparam string task_id the uid of the task that you want to update
-@tparam string new_message the message that you want to have for the task
-@tparam[opt='server'] string player_name the name of the player who made the edit
+@tparam string task_id the uid of the task to update
+@tparam string player_name the name of the player who made the edit
+@tparam string task_title the title of the task to update to
+@tparam string task_body the body of the task to update to
 
 @usage-- Updating the message for on a task
-Task.update_task(task_id, 'We need more iron!', game.player.name)
+Task.update_task(task_id, game.player.name, 'We need more iron!', 'Build more iron outposts.')
 
 ]]
-function Tasks.update_task(task_id, new_message, player_name)
+function Tasks.update_task(task_id, player_name, task_title, task_body)
     TaskData:update(task_id, function(_, task)
-        task.last_edit_name = player_name or '<server>'
+        task.last_edit_name = player_name
         task.last_edit_time = game.tick
-        task.message = new_message
+        task.title = task_title
+        task.body = task_body
     end)
 end
 
