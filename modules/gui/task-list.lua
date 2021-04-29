@@ -471,6 +471,27 @@ local task_create_footer =
     end
 )
 
+--- Clear and repopulate the task list with all current tasks
+local repopulate_task_list = function(task_list_element)
+    local force = Gui.get_player_from_element(task_list_element).force
+    local task_ids = Tasks.get_force_task_ids(force.name)
+    task_list_element.clear()
+
+    -- Set visibility of the no_tasks_found element depending on the amount of tasks still in the task manager
+    task_list_element.parent.parent.no_tasks_found_element.visible = #task_ids == 0
+
+    -- Add each task to the flow
+    for _, task_id in ipairs(task_ids) do
+        -- Add the task
+        local task = Tasks.get_task(task_id)
+        local element = task_list_item(task_list_element, task)
+        -- Set tooltip
+        local last_edit_name = task.last_edit_name
+        local last_edit_time = task.last_edit_time
+        element[task_list_item.name].tooltip = {"task-list.last-edit", last_edit_name, format_time(last_edit_time)}
+    end
+end
+
 --- Main task list container for the left flow
 -- @element task_list_container
 local task_list_container =
@@ -493,7 +514,8 @@ local task_list_container =
         no_tasks_found(container)
 
         -- Draw task list element
-        task_list(container)
+        local task_list_element = task_list(container)
+        repopulate_task_list(task_list_element)
 
         local task_view_footer_element = task_view_footer(container)
         local task_edit_footer_element = task_edit_footer(container)
@@ -713,9 +735,9 @@ local function role_update_event(event)
     local selected = PlayerSelected:get(player)
     if selected then
         update_task_view_footer(player, selected)
-        -- Resetting the players selected task to make sure the player does not see an
+        PlayerSelected:set(player, selected)
         -- button to edit the task.
-        PlayerSelected:set(selected)
+        -- Resetting the players selected task to make sure the player does not see an
     end
 
     -- Update the new task button and create footer in case the user can now add them
@@ -724,9 +746,29 @@ local function role_update_event(event)
     add_new_task_element.visible = has_permission
     local isCreating = PlayerIsCreating:get(player)
     if isCreating and not has_permission then
-        PlayerIsCreating:set(false)
+        PlayerIsCreating:set(player, false)
     end
 end
 
 Event.add(Roles.events.on_role_assigned, role_update_event)
 Event.add(Roles.events.on_role_unassigned, role_update_event)
+
+--- Redraw all tasks and clear editing/creating after joining or changing force
+local function reset_task_list(event)
+    -- Repopulate the task list
+    local player = game.players[event.player_index]
+    local frame = Gui.get_left_element(player, task_list_container)
+    local task_list_element = frame.container.scroll.task_list
+    repopulate_task_list(task_list_element)
+
+    -- Check if the selected task is still valid
+    local selected = PlayerSelected:get(player)
+    if selected and Tasks.get_task(selected) ~= nil then
+        PlayerIsCreating:set(player, false)
+        PlayerIsEditing:set(player, false)
+        PlayerSelected:set(player, nil)
+    end
+end
+
+Event.add(defines.events.on_player_joined_game, reset_task_list)
+Event.add(defines.events.on_player_changed_force, reset_task_list)
