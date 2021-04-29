@@ -99,7 +99,7 @@ function Gui.toggle_top_flow(player, state)
     local left_flow = Gui.get_left_flow(player)
     local show_button = left_flow.gui_core_buttons[show_top_flow]
 
-    -- Change the visibility of the flow and show button
+    -- Change the visibility of the top flow and show top flow button
     show_button.visible = not state
     top_flow.visible = state
 
