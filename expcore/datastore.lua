@@ -522,7 +522,7 @@ function Datastore:increment(key, delta)
     return self:set(key, value + (delta or 1))
 end
 
-local function update_error(err) log('An error ocurred in datastore update: '..trace(err)) end
+local function update_error(err) log('An error occurred in datastore update: '..trace(err)) end
 --[[-- Use a function to update the value locally, will trigger on_update then on_save, save_to_disk and auto_save is required for on_save
 @tparam any key The key that you want to apply the update to, must be a string unless a serializer is set
 @tparam function callback The function that will be used to update the value at this key
