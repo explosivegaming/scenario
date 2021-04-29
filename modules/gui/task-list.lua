@@ -675,6 +675,7 @@ PlayerSelected:on_update(
         local view_flow = frame.container.view
         local edit_flow = frame.container.edit
         local isEditing = PlayerIsEditing:get(player)
+        local isCreating = PlayerIsCreating:get(player)
 
         -- If the selection has an previous state re-enable the button list element
         if prev_state then
@@ -687,6 +688,11 @@ PlayerSelected:on_update(
 
             -- Update the view footer
             update_task_view_footer(player, curr_state)
+
+            -- If a player is creating then remove the creation dialogue
+            if isCreating then
+                PlayerIsCreating:set(player, false)
+            end
 
             -- Depending on if the player is currently editing change the current task edit footer to the current task
             if isEditing then
