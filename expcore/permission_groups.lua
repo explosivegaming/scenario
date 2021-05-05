@@ -142,15 +142,15 @@ end
 @tparam boolean state the state that you want to set it to, true = allow, false = disallow
 @treturn Permissions_Groups._prototype returns self so function can be chained
 
-@usage-- Set an action to be disalowed
+@usage-- Set an action to be disallowed
 group:set_action('toggle_map_editor', false)
 
 ]]
 function Permissions_Groups._prototype:set_action(action, state)
-    if type(action) == 'string' then
-        action = defines.input_action[action]
-    end
-    self.actions[action] = state
+    local input_action = defines.input_action[action]
+    if input_action == nil then input_action = action end
+    assert(type(input_action) == 'number', tostring(action)..' is not a valid input action')
+    self.actions[input_action] = state
     return self
 end
 
