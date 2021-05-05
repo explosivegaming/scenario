@@ -85,6 +85,11 @@ end)
         element.sprite = 'utility/confirm_slot'
         element.style = 'shortcut_bar_button_green'
     end
+    -- Correct the button size
+    local style = element.style
+    style.padding = -2
+    style.height = 22
+    style.width = 22
 end)
 
 --- Draw a section header and main scroll

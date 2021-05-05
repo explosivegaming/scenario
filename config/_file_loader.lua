@@ -63,12 +63,12 @@ return {
     'modules.gui.readme',
     'modules.gui.rocket-info',
     'modules.gui.science-info',
+    'modules.gui.autofill',
     'modules.gui.warp-list',
     'modules.gui.task-list',
     'modules.gui.player-list',
     'modules.gui.server-ups',
     'modules.commands.debug',
-    'modules.gui.autofill',
 
     --- Config Files
     'config.expcore.command_auth_admin', -- commands tagged with admin_only are blocked for non admins
