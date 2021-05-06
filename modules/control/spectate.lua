@@ -35,9 +35,11 @@ function Public.start_spectate(player)
     assert(player and player.valid, 'Invalid player given to follower')
     if spectating[player.index] or not player.character then return false end
     local character = player.character
+    local opened = player.opened
     player.set_controller{ type = defines.controllers.spectator }
     player.associate_character(character)
     spectating[player.index] = character
+    if opened then player.opened = opened end -- Maintain opened after controller change
     return true
 end
 

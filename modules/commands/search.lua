@@ -55,7 +55,7 @@ local function sort_players(players, func)
     for index, player in ipairs(players) do
         local value = func(player)
         -- Check if the item will make the top 5 elements
-        if value > threshold or index <= 5 then
+        if index <= 5 or value > threshold then
             local inserted = false
             values[player] = value
             -- Find where in the top 5 to insert the element

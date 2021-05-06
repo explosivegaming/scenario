@@ -157,7 +157,7 @@ Event.add(defines.events.on_pre_player_mined_item, function(event)
     local player = game.get_player(event.player_index)
     -- Check if the player should be ignored
     if config.ignore_admins and player.admin then return end
-    if entity.last_user.index == player.index then return end
+    if entity.last_user == nil or entity.last_user.index == player.index then return end
     if config.ignore_permission and Roles.player_allowed(player, config.ignore_permission) then return end
 
     -- Check if the entity is protected
