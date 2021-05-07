@@ -18,36 +18,38 @@ Debug = require 'overrides.debug' -- Global Debug module
 _C = require 'expcore.common' -- _C is used to store lots of common functions expected to be used
 
 -- Please go to config/file_loader.lua to edit the files that are loaded
-log('[INFO] Getting file loader config')
-local files = require 'config._file_loader' --- @dep config._file_loader
+log('[INFO] Reading loader config')
+local files = require 'config._file_loader'
+
+-- Error handler for loading files
+local errors = {}
+local error_count = 0
+local error_format = '[ERROR] %s :: %s'
+local currently_loading = nil
+local function error_handler(err)
+    error_count = error_count + 1
+    if err:find('module '..currently_loading..' not found;', nil, true) then
+        log('[ERROR] File not found: '..currently_loading)
+        errors[error_count] = error_format:format(currently_loading, err)
+    else
+        log('[ERROR] Failed to load: '..currently_loading)
+        errors[error_count] = debug.traceback(error_format:format(currently_loading, err))
+    end
+end
 
 -- Loads all files from the config and logs that they are loaded
 local total_file_count = string.format('%3d', #files)
-local errors = {}
 for index, path in pairs(files) do
-
-    -- Loads the next file in the list
+    currently_loading = path
     log(string.format('[INFO] Loading file %3d/%s (%s)', index, total_file_count, path))
-    local success, file = pcall(require, path)
-
-    -- Error Checking
-    if not success then
-        -- Failed to load a file
-        log('[ERROR] Failed to load file: '..path)
-        table.insert(errors, '[ERROR] '..path..' :: '..file)
-    elseif type(file) == 'string' and file:find('not found') then
-        -- Returned a file not found message
-        log('[ERROR] File not found: '..path)
-        table.insert(errors, '[ERROR] '..path..' :: Not Found')
-    end
-
+    xpcall(require, error_handler, path)
 end
 
 -- Override the default require; require can no longer load new scripts
-log('[INFO] Require Overright! No more requires can be made!')
+log('[INFO] Require Overwrite! No more requires can be made!')
 require 'overrides.require'
 
 -- Logs all errors again to make it make it easy to find
-log('[INFO] All files loaded with '..#errors..' errors:')
-for _, error in pairs(errors) do log(error) end
+log('[INFO] All files loaded with '..error_count..' errors:')
+for _, error in ipairs(errors) do log(error) end
 log('[END] -----| Explosive Gaming Scenario Loader |-----')
