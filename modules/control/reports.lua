@@ -132,7 +132,7 @@ function Reports.report_player(player, by_player_name, reason)
     if not player then return end
     local player_name = player.name
 
-    reason = reason or 'Non given.'
+    if reason == nil or not reason:find("/S") then reason = 'No reason given' end
 
     local reports = user_reports[player_name]
     if not reports then

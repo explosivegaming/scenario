@@ -6,6 +6,14 @@ local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 local write_json, format_time = _C.write_json, _C.format_time --- @dep expcore.common
 local config = require 'config.discord_alerts' --- @dep config.discord_alerts
 
+local playtime_format = { short = true, hours = true, minutes = true, string = true }
+local function append_playtime(player_name)
+    if not config.show_playtime then return player_name end
+    local player = game.get_player(player_name)
+    if not player then return player_name end
+    return player.name..' ('..format_time(player.online_time, playtime_format)..')'
+end
+
 local function get_player_name(event)
     local player = game.players[event.player_index]
     return player.name, event.by_player_name
@@ -59,7 +67,7 @@ local function emit_event(args)
             }
 
             local new_value, inline = value:gsub('<inline>', '', 1)
-            if inline then
+            if inline > 0 then
                 field.value = new_value
                 field.inline = true
             end
@@ -76,6 +84,21 @@ local function emit_event(args)
     })
 end
 
+--- Repeated protected entity mining
+if config.entity_protection then
+    local EntityProtection = require 'modules.control.protection' --- @dep modules.control.protection
+    Event.add(EntityProtection.events.on_repeat_violation, function(event)
+        local player_name = get_player_name(event)
+        emit_event{
+            title='Entity Protection',
+            description='A player removed protected entities',
+            color=Colors.yellow,
+            ['Player']='<inline>'..append_playtime(player_name),
+            ['Entity']='<inline>'..event.entity.name
+        }
+    end)
+end
+
 --- Reports added and removed
 if config.player_reports then
     local Reports = require 'modules.control.reports' --- @dep modules.control.reports
@@ -85,8 +108,9 @@ if config.player_reports then
             title='Report',
             description='A player was reported',
             color=Colors.yellow,
-            ['Player']='<inline>'..player_name,
-            ['By']='<inline>'..by_player_name,
+            ['Player']='<inline>'..append_playtime(player_name),
+            ['By']='<inline>'..append_playtime(by_player_name),
+            ['Report Count']='<inline>'..Reports.count_reports(player_name),
             ['Reason']=event.reason
         }
     end)
@@ -99,7 +123,7 @@ if config.player_reports then
             color=Colors.green,
             ['Player']='<inline>'..player_name,
             ['By']='<inline>'..event.removed_by_name,
-            ['Amount']='<inline>'..event.batch_count
+            ['Report Count']='<inline>'..event.batch_count
         }
     end)
 end
@@ -109,12 +133,14 @@ if config.player_warnings then
     local Warnings = require 'modules.control.warnings' --- @dep modules.control.warnings
     Event.add(Warnings.events.on_warning_added, function(event)
         local player_name, by_player_name = get_player_name(event)
+        local player = game.get_player(player_name)
         emit_event{
             title='Warning',
             description='A player has been given a warning',
             color=Colors.yellow,
             ['Player']='<inline>'..player_name,
             ['By']='<inline>'..by_player_name,
+            ['Warning Count']='<inline>'..Warnings.count_warnings(player),
             ['Reason']=event.reason
         }
     end)
@@ -127,7 +153,7 @@ if config.player_warnings then
             color=Colors.green,
             ['Player']='<inline>'..player_name,
             ['By']='<inline>'..event.removed_by_name,
-            ['Amount']='<inline>'..event.batch_count
+            ['Warning Count']='<inline>'..event.batch_count
         }
     end)
 end
@@ -151,32 +177,6 @@ if config.player_jail then
         emit_event{
             title='Unjail',
             description='A player has been unjailed',
-            color=Colors.green,
-            ['Player']='<inline>'..player_name,
-            ['By']='<inline>'..by_player_name
-        }
-    end)
-end
-
---- When a player is tempbanned
-if config.player_temp_ban then
-    local Jail = require 'modules.control.jail'
-    Event.add(Jail.events.on_player_temp_banned, function(event)
-        local player_name, by_player_name = get_player_name(event)
-        emit_event{
-            title='Temp Ban',
-            description='A player has been temp banned',
-            color=Colors.red,
-            ['Player']='<inline>'..player_name,
-            ['By']='<inline>'..by_player_name,
-            ['Reason']=event.reason
-        }
-    end)
-    Event.add(Jail.events.on_player_untemp_banned, function(event)
-        local player_name, by_player_name = get_player_name(event)
-        emit_event{
-            title='Temp Ban Removed',
-            description='A player has been untemp banned',
             color=Colors.green,
             ['Player']='<inline>'..player_name,
             ['By']='<inline>'..by_player_name

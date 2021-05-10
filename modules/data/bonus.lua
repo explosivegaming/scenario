@@ -24,6 +24,7 @@ PlayerBonus:set_metadata{
 --- Apply a bonus amount to a player
 local function apply_bonus(player, amount)
     if not amount then return end
+    if not player.character then return end
     for bonus, min_max in pairs(config) do
         local increase = min_max[2]*amount
         player[bonus] = min_max[1]+increase

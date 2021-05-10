@@ -95,12 +95,17 @@
     <tr>
     <td class="name"><a href="control/Jail.html">Jail</a></td>
     <td class="summary"><span>Control Module - Jail
-    - Adds a way to jail players and temp ban players.</span></td>
+    - Adds a way to jail players.</span></td>
     </tr>
     <tr>
     <td class="name"><a href="control/Production.html">Production</a></td>
     <td class="summary"><span>Control Module - Production
     - Common functions used to track production of items</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="control/Protection.html">Protection</a></td>
+    <td class="summary"><span>Control Module - Protection
+    - Controls protected entities</span></td>
     </tr>
     <tr>
     <td class="name"><a href="control/Reports.html">Reports</a></td>
@@ -111,6 +116,11 @@
     <td class="name"><a href="control/Rockets.html">Rockets</a></td>
     <td class="summary"><span>Control Module - Rockets
     - Stores rocket stats for each force.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="control/Selection.html">Selection</a></td>
+    <td class="summary"><span>Control Module - Selection
+    - Controls players who have a selection planner, mostly event handlers</span></td>
     </tr>
     <tr>
     <td class="name"><a href="control/Tasks.html">Tasks</a></td>
@@ -133,6 +143,10 @@
     <tr>
     <td class="name"><a href="addons/Advanced-Start.html">Advanced-Start</a></td>
     <td class="summary"><span>Adds a better method of player starting items based on production levels.</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="addons/afk-kick.html">afk-kick</a></td>
+    <td class="summary"><span>Kicks players when all players on the server are afk</span></td>
     </tr>
     <tr>
     <td class="name"><a href="addons/Chat-Popups.html">Chat-Popups</a></td>
@@ -169,6 +183,14 @@
     <td class="summary"><span>Makes polution look much nice of the map, ie not one big red mess</span></td>
     </tr>
     <tr>
+    <td class="name"><a href="addons/protection-jail.html">protection-jail</a></td>
+    <td class="summary"><span>When a player triggers protection multiple times they are automatically jailed</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="addons/report-jail.html">report-jail</a></td>
+    <td class="summary"><span>When a player is reported, the player is automatically jailed if the combined playtime of the reporters exceeds the reported player</span></td>
+    </tr>
+    <tr>
     <td class="name"><a href="addons/Scorched-Earth.html">Scorched-Earth</a></td>
     <td class="summary"><span>When a player walks around the tiles under them will degrade over time, the same is true when entites are built</span></td>
     </tr>
@@ -183,6 +205,11 @@
     </table>
     <h2>Guis</h2>
     <table class="module_list">
+    <tr>
+    <td class="name"><a href="guis/Autofill.html">Autofill</a></td>
+    <td class="summary"><span>Gui Module - Autofill
+    - Adds a button to enable Autofill</span></td>
+    </tr>
     <tr>
     <td class="name"><a href="guis/Player-List.html">Player-List</a></td>
     <td class="summary"><span>Gui Module - Player List
@@ -257,6 +284,11 @@
     - Adds a command that allows admins to talk in a private chat</span></td>
     </tr>
     <tr>
+    <td class="name"><a href="commands/Admin-Markers.html">Admin-Markers</a></td>
+    <td class="summary"><span>Commands Module - Admin Markers
+    - Adds a command that creates map markers which can only be edited by admins</span></td>
+    </tr>
+    <tr>
     <td class="name"><a href="commands/Cheat-Mode.html">Cheat-Mode</a></td>
     <td class="summary"><span>Commands Module - Cheat Mode
     - Adds a command that allows players to enter cheat mode</span></td>
@@ -299,7 +331,7 @@
     <tr>
     <td class="name"><a href="commands/Jail.html">Jail</a></td>
     <td class="summary"><span>Commands Module - Jail
-    - Adds a commands that allow admins to jail, unjail, and temp ban players</span></td>
+    - Adds a commands that allow admins to jail and unjail</span></td>
     </tr>
     <tr>
     <td class="name"><a href="commands/Kill.html">Kill</a></td>
@@ -307,9 +339,19 @@
     - Adds a command that allows players to kill them selfs and others</span></td>
     </tr>
     <tr>
+    <td class="name"><a href="commands/LastLocation.html">LastLocation</a></td>
+    <td class="summary"><span>Commands Module - Last location
+    - Adds a command that will return the last location of a player</span></td>
+    </tr>
+    <tr>
     <td class="name"><a href="commands/Me.html">Me</a></td>
     <td class="summary"><span>Commands Module - Me
     - Adds a command that adds * around your message in the chat</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="commands/Protection.html">Protection</a></td>
+    <td class="summary"><span>Commands Module - Protection
+    - Adds commands that can add and remove protection</span></td>
     </tr>
     <tr>
     <td class="name"><a href="commands/Rainbow.html">Rainbow</a></td>
@@ -332,9 +374,19 @@
     - Adds a commands that allow interaction with the role system</span></td>
     </tr>
     <tr>
+    <td class="name"><a href="commands/InventorySearch.html">InventorySearch</a></td>
+    <td class="summary"><span>Commands Module - Inventory Search
+    - Adds commands that will search all players inventories for an item</span></td>
+    </tr>
+    <tr>
     <td class="name"><a href="commands/Spawn.html">Spawn</a></td>
     <td class="summary"><span>Commands Module - Spawn
     - Adds a command that allows players to teleport to their spawn point</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="commands/Spectate.html">Spectate</a></td>
+    <td class="summary"><span>Commands Module - Spectate
+    - Adds commands relating to spectate and follow</span></td>
     </tr>
     <tr>
     <td class="name"><a href="commands/Teleport.html">Teleport</a></td>
@@ -393,6 +445,10 @@
     <td class="summary"><span>This will make commands only work if the role has been allowed it in the role config</span></td>
     </tr>
     <tr>
+    <td class="name"><a href="configs/Commands-Color-Parse.html">Commands-Color-Parse</a></td>
+    <td class="summary"><span>This will make commands only work when a valid color from the presets has been selected</span></td>
+    </tr>
+    <tr>
     <td class="name"><a href="configs/Commands-Parse.html">Commands-Parse</a></td>
     <td class="summary"><span>This file contains some common command param parse functions;
 this file is less of a config and more of a requirement but you may wish to change how some behave;
@@ -419,6 +475,10 @@ see ./expcore/commands.lua for more details</span></td>
     <tr>
     <td class="name"><a href="configs/Roles.html">Roles</a></td>
     <td class="summary"><span>This is the main config file for the role system; file includes defines for roles and role flags and default values</span></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="configs/Autofill.html">Autofill</a></td>
+    <td class="summary"><span>This file contains all the different settings for the autofill system and gui</span></td>
     </tr>
     <tr>
     <td class="name"><a href="configs/Player-List.html">Player-List</a></td>
@@ -550,7 +610,7 @@ Events.set_event_filter(defines.events.on_built_entity, {{filter = "name", name 
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2020-08-17 14:39:39 UTC</i>
+    <i>Last updated 2021-05-10 20:09:49 UTC</i>
     </div>
     </div>
     </div>

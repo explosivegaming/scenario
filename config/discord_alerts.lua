@@ -2,6 +2,8 @@
 -- @config Discord-Alerts
 
 return {
+    show_playtime=true,
+    entity_protection=true,
     player_reports=true,
     player_warnings=true,
     player_bans=true,
@@ -9,7 +11,6 @@ return {
     player_kicks=true,
     player_promotes=false,
     player_jail=true,
-    player_temp_ban=true,
     ['config']=true,
     ['purge']=true,
     ['c']=true,

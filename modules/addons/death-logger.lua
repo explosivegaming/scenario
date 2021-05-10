@@ -6,6 +6,9 @@ local Global = require 'utils.global' --- @dep utils.global
 local config = require 'config.death_logger' --- @dep config.death_logger
 local format_time, move_items = _C.format_time, _C.move_items --- @dep expcore.common
 
+-- Max amount of ticks a corpse can be alive
+local corpse_lifetime = 60*60*15
+
 local deaths = {
     archive={} -- deaths moved here after body is gone
     --{player_name='Cooldude2606', time_of_death='15H 15M', position={x=0, y=0}, corpse=LuaEntity, tag=LuaCustomChartTag}
@@ -77,7 +80,54 @@ Event.add(defines.events.on_player_died, function(event)
         create_map_tag(death)
     end
     table.insert(deaths, death)
+
+    -- Draw a light attached to the corpse with the player color
+    if config.show_light_at_corpse then
+        rendering.draw_light{
+            sprite = 'utility/light_medium',
+            color = player.color,
+            target = corpse,
+            force = player.force,
+            surface = player.surface
+        }
+    end
 end)
+
+-- Draw lines to the player corpse
+if config.show_line_to_corpse then
+    Event.add(defines.events.on_player_respawned, function(event)
+        local player = game.players[event.player_index]
+
+        -- New deaths are added at the end of the deaths array, this is why
+        -- we are itterating over the array in reverse. This saves on the amount
+        -- of itterations we do.
+        for index = #deaths, 1, -1 do
+            local death = deaths[index]
+
+            -- If the corpse has already expired break out of the loop because
+            -- all the deaths that will follow will be expired.
+            if game.tick - death.time_of_death > corpse_lifetime then break end
+
+            -- Check if the death body is from the player
+            -- Check if the corpse entity is still valid
+            if death.player_name == player.name and death.corpse and death.corpse.valid then
+                local line_color = player.color
+                line_color.a = .3
+                rendering.draw_line{
+                    color = line_color,
+                    from = player.character,
+                    to = death.corpse,
+                    players = { event.player_index },
+                    width = 2,
+                    dash_length = 1,
+                    gap_length = 1,
+                    surface = player.surface,
+                    draw_on_ground = true
+                }
+            end
+        end
+    end)
+end
 
 -- every 5 min all bodies are checked for valid map tags
 if config.show_map_markers then

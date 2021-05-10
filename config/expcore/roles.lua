@@ -20,7 +20,7 @@ end)
 
 --- Admin Roles
 Roles.new_role('System','SYS')
-:set_permission_group('Admin')
+:set_permission_group('Default', true)
 :set_flag('is_admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
@@ -71,7 +71,6 @@ Roles.new_role('Moderator','Mod')
     'command/go-to-spawn/always',
     'command/clear-reports',
     'command/clear-warnings',
-    'command/clear-temp-ban',
     'command/clear-inventory',
     'command/bonus',
     'command/home',
@@ -93,17 +92,25 @@ Roles.new_role('Trainee','TrMod')
 :set_parent('Veteran')
 :allow{
     'command/admin-chat',
+    'command/admin-marker',
     'command/teleport',
     'command/bring',
     'command/goto',
-    'command/temp-ban',
     'command/give-warning',
     'command/get-warnings',
     'command/get-reports',
+    'command/protect-entity',
+    'command/protect-area',
     'command/jail',
     'command/unjail',
     'command/kick',
     'command/ban',
+    'command/spectate',
+    'command/follow',
+    'command/search',
+    'command/search-amount',
+    'command/search-recent',
+    'command/search-online',
 }
 
 --- Trusted Roles
@@ -117,6 +124,8 @@ Roles.new_role('Board Member','Board')
 :allow{
     'command/goto',
     'command/repair',
+    'command/spectate',
+    'command/follow',
 }
 
 Roles.new_role('Senior Backer','Backer')
@@ -153,9 +162,11 @@ Roles.new_role('Supporter','Sup')
 :set_flag('is_spectator')
 :set_parent('Veteran')
 :allow{
+    'command/tag-color',
     'command/jail',
     'command/unjail',
-    'command/join-message'
+    'command/join-message',
+    'command/join-message-clear'
 }
 
 Roles.new_role('Partner','Part')
@@ -175,6 +186,7 @@ Roles.new_role('Veteran','Vet')
 :set_parent('Member')
 :allow{
     'command/chat-bot',
+    'command/last-location'
 }
 :set_auto_assign_condition(function(player)
     if player.online_time >= hours10 then
@@ -209,7 +221,8 @@ Roles.new_role('Regular','Reg')
     'command/rainbow',
     'command/go-to-spawn',
     'command/me',
-    'standard-decon'
+    'standard-decon',
+    'bypass-entity-protection'
 }
 :set_auto_assign_condition(function(player)
     if player.online_time >= hours3 then

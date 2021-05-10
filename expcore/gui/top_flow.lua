@@ -91,13 +91,15 @@ Gui.toggle_top_flow(game.player, true)
 
 ]]
 function Gui.toggle_top_flow(player, state)
-    -- Get the top flow and hide button
-    local top_flow = Gui.get_top_flow(player)
+    -- Get the top flow, we need the parent as we want to toggle the outer frame
+    local top_flow = Gui.get_top_flow(player).parent
     if state == nil then state = not top_flow.visible end
 
-    -- Change the visiblty of the flow
+    -- Get the show button for the top flow
     local left_flow = Gui.get_left_flow(player)
     local show_button = left_flow.gui_core_buttons[show_top_flow]
+
+    -- Change the visibility of the top flow and show top flow button
     show_button.visible = not state
     top_flow.visible = state
 

@@ -318,7 +318,7 @@ end)
 :add_to_left_flow()
 
 --- Button on the top flow used to toggle the task list container
--- @element toggle_left_element
+-- @element toggle_science_info
 Gui.left_toolbar_button('entity/lab', {'science-info.main-tooltip'}, science_info_container, function(player)
     return Roles.player_allowed(player, 'gui/science-info')
 end)
