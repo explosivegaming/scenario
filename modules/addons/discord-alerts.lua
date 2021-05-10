@@ -6,11 +6,12 @@ local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 local write_json, format_time = _C.write_json, _C.format_time --- @dep expcore.common
 local config = require 'config.discord_alerts' --- @dep config.discord_alerts
 
+local playtime_format = { short = true, hours = true, minutes = true, string = true }
 local function append_playtime(player_name)
     if not config.show_playtime then return player_name end
     local player = game.get_player(player_name)
     if not player then return player_name end
-    return player.name..' ('..format_time(player.online_time)..')'
+    return player.name..' ('..format_time(player.online_time, playtime_format)..')'
 end
 
 local function get_player_name(event)
