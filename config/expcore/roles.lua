@@ -20,7 +20,7 @@ end)
 
 --- Admin Roles
 Roles.new_role('System','SYS')
-:set_permission_group('Admin')
+:set_permission_group('Default', true)
 :set_flag('is_admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')

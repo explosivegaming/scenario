@@ -6,6 +6,14 @@ local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 local write_json, format_time = _C.write_json, _C.format_time --- @dep expcore.common
 local config = require 'config.discord_alerts' --- @dep config.discord_alerts
 
+local playtime_format = { short = true, hours = true, minutes = true, string = true }
+local function append_playtime(player_name)
+    if not config.show_playtime then return player_name end
+    local player = game.get_player(player_name)
+    if not player then return player_name end
+    return player.name..' ('..format_time(player.online_time, playtime_format)..')'
+end
+
 local function get_player_name(event)
     local player = game.players[event.player_index]
     return player.name, event.by_player_name
@@ -85,7 +93,7 @@ if config.entity_protection then
             title='Entity Protection',
             description='A player removed protected entities',
             color=Colors.yellow,
-            ['Player']='<inline>'..player_name,
+            ['Player']='<inline>'..append_playtime(player_name),
             ['Entity']='<inline>'..event.entity.name
         }
     end)
@@ -100,8 +108,8 @@ if config.player_reports then
             title='Report',
             description='A player was reported',
             color=Colors.yellow,
-            ['Player']='<inline>'..player_name,
-            ['By']='<inline>'..by_player_name,
+            ['Player']='<inline>'..append_playtime(player_name),
+            ['By']='<inline>'..append_playtime(by_player_name),
             ['Report Count']='<inline>'..Reports.count_reports(player_name),
             ['Reason']=event.reason
         }

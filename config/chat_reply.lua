@@ -16,7 +16,6 @@ return {
         ['discord'] = {'info.discord'},
         ['expgaming'] = {'info.website'},
         ['website'] = {'info.website'},
-        ['wiki'] = {'info.wiki'},
         ['status'] = {'info.status'},
         ['github'] = {'info.github'},
         ['patreon'] = {'info.patreon'},

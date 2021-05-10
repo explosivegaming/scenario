@@ -12,7 +12,6 @@ return {
             {'info.read-readme'},
             {'info.discord'},
             {'info.softmod'},
-            {'info.wiki'},
             {'info.redmew'},
             {'info.custom-commands'},
             {'info.status'},

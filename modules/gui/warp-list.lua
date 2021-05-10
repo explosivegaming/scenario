@@ -616,6 +616,7 @@ local function update_all_warp_force(force)
         local frame = Gui.get_left_element(player, warp_list_container)
         local warp_table = frame.container.scroll.table
 
+        warp_table.clear() -- Needed to re-sort the warps
         for _, warp_id in ipairs(warp_ids) do
             update_warp(player, warp_table, warp_id)
         end
