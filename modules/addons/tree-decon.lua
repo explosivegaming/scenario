@@ -27,7 +27,7 @@ end)
 	local status = HasEnabledDecon:get(player)
 	HasEnabledDecon:set(player, not status)
 	Gui.toolbar_button_style(element, not status)
-	player.print({'tree-decon.toggle-msg'} .. " " .. (status and {'tree-decon.disabled'} or {'tree-decon.enabled'}))
+	player.print(status and {'tree-decon.toggle-msg', {'tree-decon.disabled'}} or {'tree-decon.toggle-msg', {'tree-decon.enabled'}})
 end)
 
 
