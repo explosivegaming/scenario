@@ -73,7 +73,8 @@ function Gui.update_top_flow(player)
         end
 
         -- Set the visible state
-        local allowed = type(authenticator) == 'function' and authenticator(player) or authenticator
+        local allowed = authenticator
+        if type(allowed) == 'function' then allowed = allowed(player) end
         element.visible = is_visible and allowed or false
     end
 end
