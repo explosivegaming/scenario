@@ -24,11 +24,11 @@
 
 ## Explosive Gaming
 
-Explosive Gaming (often ExpGaming) is a server hosting community with a strong focus on [Factorio](factorio) and games with similar themes. We are best known for our weekly reset Factorio server with a vanilla+ scenario. Although our servers tend to attract the more experienced players, our servers are open to everyone. You can find us through our [website], [discord], or the public server list with the name ExpGaming.
+Explosive Gaming (often ExpGaming) is a server hosting community with a strong focus on [Factorio][factorio] and games with similar themes. We are best known for our weekly reset Factorio server with a vanilla+ scenario. Although our servers tend to attract the more experienced players, our servers are open to everyone. You can find us through our [website], [discord], or the public server list with the name ExpGaming.
 
 ## Use and Installation
 
-1) Download our [git repository](stable-dl) for the stable release. For the latest features you can download our [dev branch](experimental-dl). See [releases](#releases) for other major releases.
+1) Download our [git repository][stable-dl] for the stable release. For the latest features you can download our [dev branch][experimental-dl]. See [releases](#releases) for other major releases.
 
 2) Extract the downloaded zip file into your Factorio scenario directory:
     * Windows: `%appdata%\Factorio\scenarios`
@@ -40,7 +40,7 @@ Explosive Gaming (often ExpGaming) is a server hosting community with a strong f
 
 5) Once you have made your config changes: open Factorio, select either single or multiplayer, select (host) new game, and finally select our scenario which will be called `scenario-master` or `scenario-dev` under user scenarios.
 
-6) You will now be asked to generate your map and the scenario will load all selected modules. If any module does not load as expected please check `factorio-current.log` in your Factorio directory for errors and report them to our [issues page](issues).
+6) You will now be asked to generate your map and the scenario will load all selected modules. If any module does not load as expected please check `factorio-current.log` in your Factorio directory for errors and report them to our [issues page][issues].
 
 ## Contributing
 
@@ -48,7 +48,7 @@ All are welcome to make bug reports, feature requests, and pull requests for our
 
 For developers wanting to add features please follow these guidelines:
 
-* All code is documented using ldoc, the end result can be found [here](docs).
+* All code is documented using ldoc, the end result can be found [here][docs].
 * Changes should be made on your own fork and merged into `dev` through a pull request.
 * Pull requests are automatically linted and documentation checked.
 * Pull requests are manually reviewed to maintain code and language quality.
@@ -79,7 +79,7 @@ For developers wanting to add features please follow these guidelines:
 | [1.0][s1.0] | Modulation | [0.15][f0.15] |
 | [0.1][s0.1] | First Tracked Version | [0.14][f0.14] |
 
-\* Scenario patch releases have been omitted and can be found [here](https://github.com/explosivegaming/scenario/releases).
+\* Scenario patch releases have been omitted and can be found [here][releases].
 
 \*\* Factorio versions show the version they were made for, often the minimum requirement to run the scenario.
 
@@ -128,6 +128,7 @@ The Explosive Gaming codebase is licensed under the [GNU General Public License 
 
 [stable-dl]: https://github.com/explosivegaming/scenario/archive/master.zip
 [experimental-dl]: https://github.com/explosivegaming/scenario/archive/dev.zip
+[releases]: https://github.com/explosivegaming/scenario/releases
 [factorio]: https://factorio.com
 [docs]: https://explosivegaming.github.io/scenario
 [issues]: https://github.com/explosivegaming/scenario/issues/new/choose
