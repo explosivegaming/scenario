@@ -4,6 +4,8 @@
 local Event = require 'utils.event' --- @dep utils.event
 local Global = require 'utils.global' --- @dep utils.global
 local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Gui = require 'expcore.gui' --- @dep expcore.gui
+local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 
 -- Global queue used to store trees that need to be removed, also chache for player roles
 local chache = {}
@@ -12,6 +14,22 @@ Global.register({ tree_queue, chache }, function(tbl)
     tree_queue = tbl[1]
     chache = tbl[2]
 end)
+
+
+-- Left menu button to toggle between fast decon and normal decon marking
+local HasEnabledDecon = PlayerData.Settings:combine('HasEnabledDecon')
+HasEnabledDecon:set_default(false)
+
+Gui.toolbar_button("entity/tree-01", {'tree-decon.main-tooltip'}, function (player)
+	return Roles.player_allowed(player, "fast-tree-decon")
+end)
+:on_click(function(player, element)
+	local status = HasEnabledDecon:get(player)
+	HasEnabledDecon:set(player, not status)
+	Gui.toolbar_button_style(element, not status)
+	player.print(status and {'tree-decon.toggle-msg', {'tree-decon.disabled'}} or {'tree-decon.toggle-msg', {'tree-decon.enabled'}})
+end)
+
 
 -- Add trees to queue when marked, only allows simple entities and for players with role permission
 Event.add(defines.events.on_marked_for_deconstruction, function(event)
