@@ -4,6 +4,7 @@
 local Event = require 'utils.event' --- @dep utils.event
 local Global = require 'utils.global' --- @dep utils.global
 local Roles = require 'expcore.roles' --- @dep expcore.roles
+local Gui = require 'expcore.gui' --- @dep expcore.gui
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 
 -- Global queue used to store trees that need to be removed, also chache for player roles
