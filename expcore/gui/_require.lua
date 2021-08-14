@@ -128,4 +128,17 @@ require 'expcore.gui.left_flow'
 require 'expcore.gui.helper_functions'
 require 'expcore.gui.defines'
 
+local Roles = _C.opt_require('expcore.roles')
+local Event = _C.opt_require('utils.event')
+
+if Roles and Event then
+	Event.add(Roles.events.on_role_assigned, function(e)
+		Gui.update_top_flow(game.get_player(e.player_index))
+	end)
+	Event.add(Roles.events.on_role_unassigned, function(e)
+		Gui.update_top_flow(game.get_player(e.player_index))
+	end)
+end
+
+
 return Gui
