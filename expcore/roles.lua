@@ -114,6 +114,7 @@ local Event = require 'utils.event' --- @dep utils.event
 local Groups = require 'expcore.permission_groups' --- @dep expcore.permission_groups
 local Async = require 'expcore.async' --- @dep expcore.async
 local Colours = require 'utils.color_presets' --- @dep utils.color_presets
+local Gui = require 'expcore.gui' --- @dep expcore.gui
 local write_json = _C.write_json --- @dep expcore.common
 
 local Roles = {
@@ -378,6 +379,7 @@ function Roles.assign_player(player, roles, by_player_name, skip_checks, silent)
     end
     if valid_player then
         emit_player_roles_updated(valid_player, 'assign', roles, by_player_name, silent)
+		Gui.update_top_flow(valid_player)
     end
 end
 
@@ -410,6 +412,7 @@ function Roles.unassign_player(player, roles, by_player_name, skip_checks, silen
     end
     if valid_player then
         emit_player_roles_updated(valid_player, 'unassign', roles, by_player_name, silent)
+		Gui.update_top_flow(valid_player)
     end
 end
 
