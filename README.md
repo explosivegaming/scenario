@@ -48,7 +48,7 @@ All are welcome to make bug reports, feature requests, and pull requests for our
 
 For developers wanting to add features please follow these guidelines:
 
-* All code is documented using ldoc, the end result can be found [here](online-docs).
+* All code is documented using ldoc, the end result can be found [here](docs).
 * Changes should be made on your own fork and merged into `dev` through a pull request.
 * Pull requests are automatically linted and documentation checked.
 * Pull requests are manually reviewed to maintain code and language quality.
@@ -128,8 +128,8 @@ The Explosive Gaming codebase is licensed under the [GNU General Public License 
 
 [stable-dl]: https://github.com/explosivegaming/scenario/archive/master.zip
 [experimental-dl]: https://github.com/explosivegaming/scenario/archive/dev.zip
-[factorio]: https://factorio.com/
-[online-docs]: https://explosivegaming.github.io/scenario/
+[factorio]: https://factorio.com
+[docs]: https://explosivegaming.github.io/scenario
 [issues]: https://github.com/explosivegaming/scenario/issues/new/choose
 [website]: https://explosivegaming.nl
 [discord]: https://discord.explosivegaming.nl
