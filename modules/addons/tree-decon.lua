@@ -58,6 +58,10 @@ Event.add(defines.events.on_marked_for_deconstruction, function(event)
     -- Allowed to decon this entity, but not fast
     if allow ~= 'fast' then return end
 
+
+    local player = game.get_player(index)
+    if not HasEnabledDecon:get(player) then return end
+
     -- Allowed fast decon on this entity, just trees
     local head = tree_queue._head + 1
     if not last_user and entity.type ~= 'cliff' then
