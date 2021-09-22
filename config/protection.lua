@@ -3,6 +3,7 @@ return {
     ignore_permission = 'bypass-entity-protection', --- @setting ignore_permission Players with this permission will be ignored by the protection filter, leave nil if expcore.roles is not used
     repeat_count = 5, --- @setting repeat_count Number of protected entities that must be removed within repeat_lifetime in order to trigger repeated removal protection
     repeat_lifetime = 3600*20, --- @setting repeat_lifetime The length of time, in ticks, that protected removals will be remembered for
+    repeat_endtime = 3600*30, --- @setting repeat_endtime The length of time, in ticks, that entity protection will stop applying for players (with their playtime) and they will not be jailed for protected entities. 0 for disabled
     refresh_rate = 3600*5, --- @setting refresh_rate How often the age of protected removals are checked against repeat_lifetime
     always_protected_names = { --- @setting always_protected_names Names of entities which are always protected
 

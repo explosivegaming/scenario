@@ -160,6 +160,9 @@ Event.add(defines.events.on_pre_player_mined_item, function(event)
     if entity.last_user == nil or entity.last_user.index == player.index then return end
     if config.ignore_permission and Roles.player_allowed(player, config.ignore_permission) then return end
 
+    -- Check if player played long enough to be ignored
+    if config.repeat_endtime ~= 0 and config.repeat_endtime < player.online_time then return end
+
     -- Check if the entity is protected
     if EntityProtection.is_entity_protected(entity)
     or EntityProtection.is_position_protected(entity.surface, entity.position)
