@@ -1,4 +1,3 @@
-local Event = require 'utils.event' ---@dep utils.event
 local Datastore = require 'expcore.datastore' --- @dep expcore.datastore
 
 local graftorioGlobal = Datastore.connect('graftorio')
