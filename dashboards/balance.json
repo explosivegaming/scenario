@@ -1,0 +1,1992 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "limit": 100,
+        "name": "Annotations & Alerts",
+        "showIn": 0,
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Some live-stats for the Brave New World series",
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 2,
+  "iteration": 1632591454165,
+  "links": [
+    {
+      "$$hashKey": "object:119",
+      "icon": "external link",
+      "tags": ["factorio"],
+      "type": "dashboards"
+    }
+  ],
+  "panels": [
+    {
+      "collapsed": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 28,
+      "panels": [],
+      "title": "Science / minute",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 0,
+        "y": 1
+      },
+      "id": 21,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"automation-science-pack\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "B",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"automation-science-pack\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Red",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 3,
+        "y": 1
+      },
+      "id": 22,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"logistic-science-pack\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "C",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"logistic-science-pack\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Green",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 6,
+        "y": 1
+      },
+      "id": 46,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"military-science-pack\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[5m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "H",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"military-science-pack\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[5m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Military",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 9,
+        "y": 1
+      },
+      "id": 23,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"chemical-science-pack\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "E",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"chemical-science-pack\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Blue",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 12,
+        "y": 1
+      },
+      "id": 24,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"production-science-pack\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "F",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"production-science-pack\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Purple",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 15,
+        "y": 1
+      },
+      "id": 25,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"utility-science-pack\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "G",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"utility-science-pack\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Yellow",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 18,
+        "y": 1
+      },
+      "id": 26,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"space-science-pack\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[5m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "H",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"space-science-pack\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[5m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Space",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
+      "id": 30,
+      "panels": [],
+      "title": "Circuits / minute",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 0,
+        "y": 8
+      },
+      "id": 31,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"electronic-circuit\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"electronic-circuit\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "B",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Green",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 8,
+        "y": 8
+      },
+      "id": 33,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"advanced-circuit\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "B",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"advanced-circuit\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Red",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 16,
+        "y": 8
+      },
+      "id": 32,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"processing-unit\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "C",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"processing-unit\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Blue",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 8,
+      "panels": [],
+      "title": "Materials / minute",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 4,
+        "x": 0,
+        "y": 15
+      },
+      "id": 34,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"iron-plate\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "B",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"iron-plate\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Iron",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 4,
+        "y": 15
+      },
+      "id": 35,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"copper-plate\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"copper-plate\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "B",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Copper",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 9,
+        "y": 15
+      },
+      "id": 36,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"plastic-bar\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "D",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"plastic-bar\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Plastic",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 14,
+        "y": 15
+      },
+      "id": 37,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"steel-plate\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "C",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"steel-plate\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Steel",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 19,
+        "y": 15
+      },
+      "id": 45,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"stone-brick\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "C",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"stone-brick\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Stone Bricks",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "id": 44,
+      "panels": [],
+      "title": "Components / minute",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 4,
+        "x": 0,
+        "y": 22
+      },
+      "id": 38,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"battery\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "E",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"battery\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Battery",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 4,
+        "y": 22
+      },
+      "id": 39,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"flying-robot-frame\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "E",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"flying-robot-frame\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[1m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Flying Robot Frame",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 9,
+        "y": 22
+      },
+      "id": 40,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"low-density-structure\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[2m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "E",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"low-density-structure\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[2m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Low Density Structure",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 14,
+        "y": 22
+      },
+      "id": 41,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"rocket-control-unit\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[2m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "E",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"rocket-control-unit\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[2m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Rocket Control Unit",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(255, 255, 255)",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -100000000000
+              },
+              {
+                "color": "yellow",
+                "value": -100
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 19,
+        "y": 22
+      },
+      "id": 42,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["last"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "expr": "rate(factorio_item_production_output{name=\"rocket-fuel\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[2m])*80",
+          "interval": "",
+          "legendFormat": "Consumption",
+          "refId": "E",
+          "target": "randomWalk('myName')"
+        },
+        {
+          "expr": "rate(factorio_item_production_input{name=\"rocket-fuel\", instance=\"localhost:$nodePort\", job=\"$jobName\"}[2m])*80",
+          "interval": "",
+          "legendFormat": "Production",
+          "refId": "A",
+          "target": "randomWalk('myName')"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Rocket Fuel",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Delta",
+            "binary": {
+              "left": "Production",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Consumption"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": ["factorio"],
+  "templating": {
+    "list": [
+      {
+        "description": null,
+        "error": null,
+        "hide": 2,
+        "label": null,
+        "name": "nodePort",
+        "query": "9100",
+        "skipUrlSync": false,
+        "type": "constant"
+      },
+      {
+        "description": null,
+        "error": null,
+        "hide": 2,
+        "label": null,
+        "name": "jobName",
+        "query": "dev",
+        "skipUrlSync": false,
+        "type": "constant"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": false,
+    "refresh_intervals": ["30s", "1m", "5m"]
+  },
+  "timezone": "",
+  "title": "Balance",
+  "uid": "Ynvz0a4Mz",
+  "version": 10
+}
