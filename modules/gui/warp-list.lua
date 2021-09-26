@@ -765,7 +765,7 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing), function()
 
         -- Check if the force has any warps
         local closest_warp
-        local closest_distance
+        local closest_distance = MAX_INT32_POS
         if #warp_ids > 0 then
             local surface = player.surface
             local pos = player.position
@@ -792,29 +792,29 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing), function()
                     end
                 end
             end
-            
-            if closest_warp then
-              -- Check the dist to the closest warp
-              local in_range = closest_warp.warp_id == warp_ids.spawn and closest_distance < rs2 or closest_distance < r2
-              if was_in_range and not in_range then
-                  PlayerInRange:set(player, nil)
-              elseif not was_in_range and in_range then
-                  PlayerInRange:set(player, closest_warp.warp_id)
-              end
 
-              -- Change the enabled state of the add warp button
-              local frame = Gui.get_left_element(player, warp_list_container)
-              local add_warp_element = frame.container.header.alignment[add_new_warp.name]
-              local old_closest_warp_name = add_warp_element.tooltip[2] or closest_warp.name
-              local was_able_to_make_warp = add_warp_element.enabled
-              local can_make_warp = closest_distance > mr2
-              if can_make_warp and not was_able_to_make_warp then
-                  add_warp_element.enabled = true
-                  add_warp_element.tooltip = {'warp-list.add-tooltip'}
-              elseif not can_make_warp and was_able_to_make_warp or old_closest_warp_name ~= closest_warp.name then
-                  add_warp_element.enabled = false
-                  add_warp_element.tooltip = {'warp-list.too-close', closest_warp.name}
-              end
+            
+            -- Check the dist to the closest warp
+            local in_range = false
+            if closest_warp then in_range = closest_warp.warp_id == warp_ids.spawn and closest_distance < rs2 or closest_distance < r2 end
+            if was_in_range and not in_range then
+                PlayerInRange:set(player, nil)
+            elseif not was_in_range and in_range then
+                PlayerInRange:set(player, closest_warp.warp_id)
+            end
+
+            -- Change the enabled state of the add warp button
+            local frame = Gui.get_left_element(player, warp_list_container)
+            local add_warp_element = frame.container.header.alignment[add_new_warp.name]
+            local old_closest_warp_name = add_warp_element.tooltip[2] or closest_warp.name
+            local was_able_to_make_warp = add_warp_element.enabled
+            local can_make_warp = closest_distance and closest_distance > mr2 or false
+            if can_make_warp and not was_able_to_make_warp then
+                add_warp_element.enabled = true
+                add_warp_element.tooltip = {'warp-list.add-tooltip'}
+            elseif not can_make_warp and was_able_to_make_warp or closest_warp and old_closest_warp_name ~= closest_warp.name then
+                add_warp_element.enabled = false
+                add_warp_element.tooltip = {'warp-list.too-close', closest_warp.name}
             end
         end
 
