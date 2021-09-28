@@ -764,8 +764,8 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing), function()
         end
 
         -- Check if the force has any warps
-        local closest_warp
-        local closest_distance = MAX_INT32_POS
+        local closest_warp = nil
+        local closest_distance = nil
         if #warp_ids > 0 then
             local surface = player.surface
             local pos = player.position
@@ -806,9 +806,10 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing), function()
             -- Change the enabled state of the add warp button
             local frame = Gui.get_left_element(player, warp_list_container)
             local add_warp_element = frame.container.header.alignment[add_new_warp.name]
-            local old_closest_warp_name = add_warp_element.tooltip[2] or closest_warp.name
+            local old_closest_warp_name = add_warp_element.tooltip[2] or closest_warp and closest_warp.name
             local was_able_to_make_warp = add_warp_element.enabled
-            local can_make_warp = closest_distance and closest_distance > mr2 or false
+            local can_make_warp = closest_distance and closest_distance > mr2 or true
+            log(tostring(can_make_warp) .. " " .. tostring(closest_distance) .. " " .. tostring(mr2) .. " " .. tostring(was_able_to_make_warp))
             if can_make_warp and not was_able_to_make_warp then
                 add_warp_element.enabled = true
                 add_warp_element.tooltip = {'warp-list.add-tooltip'}
