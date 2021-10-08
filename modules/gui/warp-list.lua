@@ -793,7 +793,6 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing), function()
                 end
             end
 
-            
             -- Check the dist to the closest warp
             local in_range = closest_warp ~= nil and (closest_warp.warp_id == warp_ids.spawn and closest_distance < rs2 or closest_distance < r2)
             if was_in_range and not in_range then
