@@ -795,7 +795,7 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing), function()
 
             
             -- Check the dist to the closest warp
-            local in_range = closest_warp ~= nil and (closest_warp.warp_id == warp_ids.spawn and closest_distance < rs2 or closest_distance < r2) or false
+            local in_range = closest_warp ~= nil and (closest_warp.warp_id == warp_ids.spawn and closest_distance < rs2 or closest_distance < r2)
             if was_in_range and not in_range then
                 PlayerInRange:set(player, nil)
             elseif not was_in_range and in_range then
@@ -808,7 +808,7 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing), function()
             local old_closest_warp_name = add_warp_element.tooltip[2] or closest_warp and closest_warp.name
             local was_able_to_make_warp = add_warp_element.enabled
             local can_make_warp = closest_distance ~= nil and closest_distance > mr2
-            if not closest_distance then can_make_warp = true end
+            if closest_distance == nil then can_make_warp = true end
             if can_make_warp and not was_able_to_make_warp then
                 add_warp_element.enabled = true
                 add_warp_element.tooltip = {'warp-list.add-tooltip'}
