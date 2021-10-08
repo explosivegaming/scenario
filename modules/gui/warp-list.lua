@@ -807,8 +807,7 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing), function()
             local add_warp_element = frame.container.header.alignment[add_new_warp.name]
             local old_closest_warp_name = add_warp_element.tooltip[2] or closest_warp and closest_warp.name
             local was_able_to_make_warp = add_warp_element.enabled
-            local can_make_warp = closest_distance ~= nil and closest_distance > mr2
-            if closest_distance == nil then can_make_warp = true end
+            local can_make_warp = closest_distance == nil or closest_distance > mr2
             if can_make_warp and not was_able_to_make_warp then
                 add_warp_element.enabled = true
                 add_warp_element.tooltip = {'warp-list.add-tooltip'}
