@@ -38,3 +38,14 @@ Event.add(defines.events.on_player_mined_entity, function (e)
 	local ent = e.entity
 	add_log(get_secs() .. player.name .. ",mined_entity," .. ent.name .. "," .. pos_tostring(ent.position) .. "," .. tostring(ent.direction) .. "," .. tostring(ent.orientation))
 end)
+
+Event.add(defines.events.on_player_ammo_inventory_changed, function (e)
+	local player = game.get_player(e.player_index)
+	if Roles.player_has_flag(player, "deconlog-bypass") then return end
+	local ammo_inv = player.get_inventory(defines.inventory.character_ammo)
+	local item = ammo_inv[player.character.selected_gun_index]
+	if not item or not item.valid or not item.valid_for_read then return end
+	if item.name == "atomic-bomb" then
+		add_log(get_secs() .. player.name .. ",shot-bomb," .. pos_tostring(player.position) .. "," .. pos_tostring(player.shooting_state.position))
+	end
+end)
