@@ -5,7 +5,7 @@
     <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Discord-Alerts config</title>
+    <title>Deconlog config</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../spectre.min.css" type="text/css" />
     <link rel="stylesheet" href="../spectre-icons.min.css" type="text/css" />
@@ -37,6 +37,14 @@
 
 <!-- sidebar navigation -->
 <!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h2>Sections</h2>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Settings"><span class="fragment-hashtag">#</span> Settings</a></li>
+    </ul>
+    </li>
+    </ul>
     <ul class="nav nav-modules">
     <li class="nav-item">
     <h2>Configs</h2>
@@ -47,8 +55,8 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Chat-Reply.html"><span class="module-name-item">Chat-Reply</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Compilatron.html"><span class="module-name-item">Compilatron</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Death-Logger.html"><span class="module-name-item">Death-Logger</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Deconlog.html"><span class="module-name-item">Deconlog</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../configs/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../configs/Deconlog.html"><span class="module-name-item">Deconlog</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Auth-Admin.html"><span class="module-name-item">Commands-Auth-Admin</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Auth-Roles.html"><span class="module-name-item">Commands-Auth-Roles</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Color-Parse.html"><span class="module-name-item">Commands-Color-Parse</span></a></div></li>
@@ -119,8 +127,8 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Compilatron.html"><span class="module-name-item">Compilatron</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Damage-Popups.html"><span class="module-name-item">Damage-Popups</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Death-Logger.html"><span class="module-name-item">Death-Logger</span></a></div></li>
-    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Deconlog.html"><span class="module-name-item">Deconlog</span></a></div></li>
-    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../addons/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item active"><div class="nav-item-block-active block"><a href="../addons/Deconlog.html"><span class="module-name-item">Deconlog</span></a><i class="icon icon-arrow-left icon-arrow-left-custom"></i></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Inventory-Clear.html"><span class="module-name-item">Inventory-Clear</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/protection-jail.html"><span class="module-name-item">protection-jail</span></a></div></li>
@@ -219,6 +227,14 @@
     </div>
     <div class="up-to-top">
     <!-- list of items in a module -->
+    <ul class="nav nav-module-contents">
+    <li class="nav-item">
+    <h4>Jump to Section</h4>
+    <ul class="nav">
+    <li class="nav-item"><a href="#Settings"><span class="fragment-hashtag">#</span> Settings</a></li>
+    </ul>
+    </li>
+    </ul>
     <a href="#">Top <i class="icon icon-upward"></i></a>
     </div>
     </div>
@@ -234,8 +250,8 @@
 
     <!-- module content header start -->
 
-    <h2><span class="body-module-name"><strong><em>Discord-Alerts</em></strong></span> config</h2>
-    <p>Config file used to enable and disable different push messages for discord</p>
+    <h2><span class="body-module-name"><strong><em>Deconlog</em></strong></span> config</h2>
+    <p>This config controls whether actions such as deconning by players without sufficient permissions is logged or not</p>
     <p></p>
 
 
@@ -248,11 +264,142 @@
     <!-- module content header end -->
 
     <!-- module section list start -->
+    <table class="section-content-list">
+    <thead>
+    <h3><a href="#Settings">Settings</a></h3>
+    <span></span>
+    </thead>
+    <tbody>
+    <tr>
+    <td class="name"><a href="#decon_area">decon_area</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#built_entity">built_entity</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#mined_entity">mined_entity</a></td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#fired_nuke">fired_nuke</a></td>
+    </tr>
+    </tbody>
+    </table>
     <!-- module section list end -->
 
     <br />
 
     <!-- section start -->
+    <h3><span id="Settings" class="section-title"><a href="#Settings">Settings</a></span></h3>
+    <dl class="section-body-container">
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#decon_area" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="decon_area">decon_area</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> whether to log when an area is being deconstructed</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#built_entity" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="built_entity">built_entity</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> whether to log when an entity is built</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#mined_entity" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="mined_entity">mined_entity</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> whether to log when an entity is mined</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#fired_nuke" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="fired_nuke">fired_nuke</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary"></p>
+    <p class="section-item-description"> whether to log when a nuke is fired</p>
+
+    <!-- parameters start -->
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <!-- usage end -->
+
+    </dd>
+    </dl>
 
     <!-- section end -->
 
