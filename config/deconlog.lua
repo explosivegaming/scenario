@@ -1,3 +1,4 @@
+--- This config controls whether actions such as deconning by players without sufficient permissions is logged or not
 -- @config Deconlog
 
 return {

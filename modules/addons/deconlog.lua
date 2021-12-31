@@ -22,7 +22,7 @@ Event.on_init(function()
 	game.write_file(filepath, "\n", false, 0) -- write data
 end)
 
-if cofnig.decon_area then
+if config.decon_area then
 	Event.add(defines.events.on_player_deconstructed_area, function (e)
 		local player = game.get_player(e.player_index)
 		if Roles.player_has_flag(player, "deconlog-bypass") then return end
