@@ -50,7 +50,8 @@ return {
     'modules.addons.afk-kick',
     'modules.addons.report-jail',
     'modules.addons.protection-jail',
-		'modules.addons.deconlog',
+    'modules.addons.deconlog',
+    'modules.graftorio.require', -- graftorio plugin
 
     --- Data
     'modules.data.statistics',
