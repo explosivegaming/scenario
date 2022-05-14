@@ -595,6 +595,64 @@ function Common.move_items(items, surface, position, radius, chest_type)
     return last_chest
 end
 
+--[[-- Moves items to the position and stores them in the closest entity of the type given
+@tparam table items items which are to be added to the chests, an array of LuaItemStack
+@tparam[opt=navies] LuaSurface surface the surface that the items will be moved to
+@tparam[opt={0, 0}] table position the position that the items will be moved to {x=100, y=100}
+@tparam[opt=32] number radius the radius in which the items are allowed to be placed
+@tparam[opt=iron-chest] string chest_type the chest type that the items should be moved into
+@treturn LuaEntity the last chest that had items inserted into it
+
+@usage-- Copy all the items in a players inventory and place them in chests at {0, 0}
+move_items(game.player.get_main_inventory())
+
+]]
+function Common.move_items_stack(items, surface, position, radius, chest_type)
+	chest_type = chest_type or 'iron-chest'
+	surface = surface or game.surfaces[1]
+	if position and type(position) ~= 'table' then return end
+	if type(items) ~= 'table' then return end
+	-- Finds all entities of the given type
+	local p = position or {x=0, y=0}
+	local r = radius or 32
+	local entities = surface.find_entities_filtered{area={{p.x-r, p.y-r}, {p.x+r, p.y+r}}, name=chest_type} or {}
+	local count = #entities
+	local current = 1
+	-- Makes a new empty chest when it is needed
+	local function make_new_chest()
+			local pos = surface.find_non_colliding_position(chest_type, position, 32, 1)
+			local chest = surface.create_entity{name=chest_type, position=pos, force='neutral'}
+			table.insert(entities, chest)
+			count = count + 1
+			return chest
+	end
+	-- Function used to round robin the items into all chests
+	local function next_chest(item)
+			local chest = entities[current]
+			if count == 0 then return make_new_chest() end
+			if chest.get_inventory(defines.inventory.chest).can_insert(item) then
+					-- If the item can be inserted then the chest is returned
+					current = current+1
+					if current > count then current = 1 end
+					return chest
+			else
+					-- Other wise it is removed from the list
+					table.remove(entities, current)
+					count = count - 1
+			end
+	end
+	-- Inserts the items into the chests
+	local last_chest
+	for i=1,#items do
+			local item = items[i]
+			local chest = next_chest(item)
+			if not chest or not chest.valid then return error(string.format('Cant move item %s to %s{%s, %s} no valid chest in radius', item_name, surface.name, p.x, p.y)) end
+			chest.insert(item)
+			last_chest = chest
+	end
+	return last_chest
+end
+
 --[[-- Prints a colored value on a location, color is based on the value.
 nb: src is below but the gradent has been edited
 https://github.com/Refactorio/RedMew/blob/9184b2940f311d8c9c891e83429fc57ec7e0c4a2/map_gen/maps/diggy/debug.lua#L31
