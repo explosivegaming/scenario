@@ -1,5 +1,6 @@
 local Event = require("utils.event")
 local general = require("modules.graftorio.general")
+local config = require("config.graftorio")
 
 local lib = {}
 
@@ -114,7 +115,7 @@ lib.collect_loginet = function()
 					stats.to_charge_robot_count = (stats.to_charge_robot_count) + cell.to_charge_robot_count
 				end
 
-				if settings.general.data["graftorio-logistic-items"].value then
+				if config.modules.logistorage then
 					for name, v in pairs(network.get_contents()) do
 						stats.items[name] = (stats.items[name] or 0) + v
 					end

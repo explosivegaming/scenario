@@ -1,6 +1,7 @@
 return {
 	modules = {
-		["forcestats"]=true,
-		["general"]=true,
+		["forcestats"] = true,
+		["logistorage"] = false,
+		["general"] = true,
 	}
 }
