@@ -645,10 +645,12 @@ function Common.move_items_stack(items, surface, position, radius, chest_type)
 	local last_chest
 	for i=1,#items do
 			local item = items[i]
-			local chest = next_chest(item)
-			if not chest or not chest.valid then return error(string.format('Cant move item %s to %s{%s, %s} no valid chest in radius', item_name, surface.name, p.x, p.y)) end
-			chest.insert(item)
-			last_chest = chest
+			if item.valid_for_read then
+				local chest = next_chest(item)
+				if not chest or not chest.valid then return error(string.format('Cant move item %s to %s{%s, %s} no valid chest in radius', item_name, surface.name, p.x, p.y)) end
+				chest.insert(item)
+				last_chest = chest
+			end
 	end
 	return last_chest
 end
