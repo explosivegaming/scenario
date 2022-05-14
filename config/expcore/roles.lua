@@ -52,6 +52,7 @@ Roles.new_role('Administrator','Admin')
     'gui/warp-list/bypass-cooldown',
     'gui/warp-list/bypass-proximity',
     'command/connect-all',
+		'command/collectdata'
 }
 
 Roles.new_role('Moderator','Mod')

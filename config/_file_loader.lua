@@ -72,6 +72,8 @@ return {
     'modules.gui.server-ups',
     'modules.commands.debug',
 
+		'modules.graftorio.require', -- graftorio
+
     --- Config Files
     'config.expcore.command_auth_admin', -- commands tagged with admin_only are blocked for non admins
     'config.expcore.command_auth_roles', -- commands must be allowed via the role config
