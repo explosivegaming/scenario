@@ -173,9 +173,7 @@ Event.on_nth_tick(60, function()
 	for _, force in pairs(game.forces) do
 		if not general.data.output[force.name].research then general.data.output[force.name].research = {} end
 
-		local force_research = general.data.output[force.name].research or {}
-
-		force_research = {}
+		local force_research = {}
 		-- this works even if the queue is disabled, but it will always be just 1 long in that case
 		for _, research in pairs(force.research_queue) do
 			table.insert(force_research, {
