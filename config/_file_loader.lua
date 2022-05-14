@@ -51,6 +51,7 @@ return {
     'modules.addons.report-jail',
     'modules.addons.protection-jail',
 		'modules.addons.deconlog',
+		'modules.addons.nukeprotect',
 
     --- Data
     'modules.data.statistics',

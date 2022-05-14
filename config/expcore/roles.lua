@@ -223,7 +223,8 @@ Roles.new_role('Regular','Reg')
     'command/go-to-spawn',
     'command/me',
     'standard-decon',
-    'bypass-entity-protection'
+    'bypass-entity-protection',
+		'bypass-nukeprotect'
 }
 :set_auto_assign_condition(function(player)
     if player.online_time >= hours3 then
