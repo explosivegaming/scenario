@@ -539,6 +539,7 @@ end
 -- @section factorio
 
 --[[-- Moves items to the position and stores them in the closest entity of the type given
+-- Copies the items by prototype name, but keeps them in the original inventory
 @tparam table items items which are to be added to the chests, ['name']=count
 @tparam[opt=navies] LuaSurface surface the surface that the items will be moved to
 @tparam[opt={0, 0}] table position the position that the items will be moved to {x=100, y=100}
@@ -596,6 +597,7 @@ function Common.move_items(items, surface, position, radius, chest_type)
 end
 
 --[[-- Moves items to the position and stores them in the closest entity of the type given
+-- Differs from move_items by accepting a table of LuaItemStack and transferring them into the inventory - not copying
 @tparam table items items which are to be added to the chests, an array of LuaItemStack
 @tparam[opt=navies] LuaSurface surface the surface that the items will be moved to
 @tparam[opt={0, 0}] table position the position that the items will be moved to {x=100, y=100}
@@ -647,7 +649,7 @@ function Common.move_items_stack(items, surface, position, radius, chest_type)
 			local item = items[i]
 			if item.valid_for_read then
 				local chest = next_chest(item)
-				if not chest or not chest.valid then return error(string.format('Cant move item %s to %s{%s, %s} no valid chest in radius', item_name, surface.name, p.x, p.y)) end
+				if not chest or not chest.valid then return error(string.format('Cant move item %s to %s{%s, %s} no valid chest in radius', item.name, surface.name, p.x, p.y)) end
 				chest.insert(item)
 				last_chest = chest
 			end
