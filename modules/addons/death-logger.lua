@@ -4,7 +4,7 @@
 local Event = require 'utils.event' --- @dep utils.event
 local Global = require 'utils.global' --- @dep utils.global
 local config = require 'config.death_logger' --- @dep config.death_logger
-local format_time, move_items = _C.format_time, _C.move_items --- @dep expcore.common
+local format_time, move_items = _C.format_time, _C.move_items_stack --- @dep expcore.common
 
 -- Max amount of ticks a corpse can be alive
 local corpse_lifetime = 60*60*15
@@ -64,7 +64,7 @@ Event.add(defines.events.on_player_died, function(event)
     local player = game.players[event.player_index]
     local corpse = player.surface.find_entity('character-corpse', player.position)
     if config.use_chests_as_bodies then
-        local items = corpse.get_inventory(defines.inventory.character_corpse).get_contents()
+        local items = corpse.get_inventory(defines.inventory.character_corpse)
         local chest = move_items(items, corpse.surface, corpse.position)
         chest.destructible = false
         corpse.destroy()
@@ -140,7 +140,7 @@ end
 if config.auto_collect_bodies then
     Event.add(defines.events.on_character_corpse_expired, function(event)
         local corpse = event.corpse
-        local items = corpse.get_inventory(defines.inventory.character_corpse).get_contents()
+        local items = corpse.get_inventory(defines.inventory.character_corpse)
         move_items(items, corpse.surface, {x=0, y=0})
     end)
 end
