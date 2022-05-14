@@ -6,7 +6,6 @@
 
 local Colours = require 'utils.color_presets' --- @dep utils.color_presets
 local Game = require 'utils.game' --- @dep utils.game
-local Util = require 'util' --- @dep util
 
 local Common = {}
 
