@@ -538,17 +538,17 @@ end
 --- Factorio.
 -- @section factorio
 
---[[-- Moves items to the position and stores them in the closest entity of the type given
+--[[-- Copies items to the position and stores them in the closest entity of the type given
 -- Copies the items by prototype name, but keeps them in the original inventory
 @tparam table items items which are to be added to the chests, an array of LuaItemStack
-@tparam[opt=navies] LuaSurface surface the surface that the items will be moved to
-@tparam[opt={0, 0}] table position the position that the items will be moved to {x=100, y=100}
+@tparam[opt=navies] LuaSurface surface the surface that the items will be copied to
+@tparam[opt={0, 0}] table position the position that the items will be copied to {x=100, y=100}
 @tparam[opt=32] number radius the radius in which the items are allowed to be placed
-@tparam[opt=iron-chest] string chest_type the chest type that the items should be moved into
+@tparam[opt=iron-chest] string chest_type the chest type that the items should be copied into
 @treturn LuaEntity the last chest that had items inserted into it
 
 @usage-- Copy all the items in a players inventory and place them in chests at {0, 0}
-move_items(game.player.get_main_inventory().get_contents())
+copy_items_stack(game.player.get_main_inventory().get_contents())
 
 ]]
 function Common.copy_items_stack(items, surface, position, radius, chest_type)
@@ -609,7 +609,7 @@ end
 @treturn LuaEntity the last chest that had items inserted into it
 
 @usage-- Copy all the items in a players inventory and place them in chests at {0, 0}
-move_items(game.player.get_main_inventory())
+move_items_stack(game.player.get_main_inventory())
 
 ]]
 function Common.move_items_stack(items, surface, position, radius, chest_type)
