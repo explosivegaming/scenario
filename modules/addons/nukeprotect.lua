@@ -6,70 +6,52 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local config = require 'config.nukeprotect' --- @dep config.nukeprotect
 local move_items_stack = _C.move_items_stack --- @dep expcore.common
 
-Event.add(defines.events.on_player_ammo_inventory_changed, function(event)
-	local player = game.get_player(event.player_index)
 
+local function check_items(player, type)
 	-- if the player has perms to be ignored, then they should be
 	if config.ignore_permisison and Roles.player_allowed(player, config.ignore_permisison) then return end
+	-- if the players
+	if config.ignore_admins and player.admin then return end
 
-	local inv = player.get_inventory(defines.inventory.character_ammo)
-
-	for i = 1, #inv do
-		local item = inv[i]
-		if item.valid and item.valid_for_read and config.ammo[item.name] then
-			player.print({ "nukeprotect.ammo", { "item-name." .. item.name } })
+	local inventory = player.get_inventory(type)
+	for i = 1, #inventory do
+		local item = inventory[i]
+		if item.valid and item.valid_for_read and config[tostring(type)][item.name] then
+			player.print({ "nukeprotect.found", { "item-name." .. item.name } })
+			-- insert the items into the table so all items are transferred at once
 			move_items_stack({ item })
 		end
 	end
-end)
+end
 
-Event.add(defines.events.on_player_armor_inventory_changed, function(event)
-	local player = game.get_player(event.player_index)
+if table_size(config[tostring(defines.inventory.character_ammo)]) > 0 then
+	Event.add(defines.events.on_player_ammo_inventory_changed, function(event)
+		local player = game.get_player(event.player_index)
 
-	-- if the player has perms to be ignored, then they should be
-	if config.ignore_permisison and Roles.player_allowed(player, config.ignore_permisison) then return end
+		check_items(player, defines.inventory.character_ammo)
+	end)
+end
 
-	local inv = player.get_inventory(defines.inventory.character_armor)
+if table_size(config[tostring(defines.inventory.character_armor)]) > 0 then
+	Event.add(defines.events.on_player_armor_inventory_changed, function(event)
+		local player = game.get_player(event.player_index)
 
-	for i = 1, #inv do
-		local item = inv[i]
-		if item.valid and item.valid_for_read and config.armor[item.name] then
-			player.print({ "nukeprotect.armor", { "item-name." .. item.name } })
-			move_items_stack({ item })
-		end
-	end
-end)
+		check_items(player, defines.inventory.character_armor)
+	end)
+end
 
-Event.add(defines.events.on_player_gun_inventory_changed, function(event)
-	local player = game.get_player(event.player_index)
+if table_size(config[tostring(defines.inventory.character_guns)]) > 0 then
+	Event.add(defines.events.on_player_gun_inventory_changed, function(event)
+		local player = game.get_player(event.player_index)
 
-	-- if the player has perms to be ignored, then they should be
-	if config.ignore_permisison and Roles.player_allowed(player, config.ignore_permisison) then return end
+		check_items(player, defines.inventory.character_guns)
+	end)
+end
 
-	local inv = player.get_inventory(defines.inventory.character_guns)
+if table_size(config[tostring(defines.inventory.character_main)]) > 0 then
+	Event.add(defines.events.on_player_main_inventory_changed, function(event)
+		local player = game.get_player(event.player_index)
 
-	for i = 1, #inv do
-		local item = inv[i]
-		if item.valid and item.valid_for_read and config.gun[item.name] then
-			player.print({ "nukeprotect.gun", { "item-name." .. item.name } })
-			move_items_stack({ item })
-		end
-	end
-end)
-
-Event.add(defines.events.on_player_main_inventory_changed, function(event)
-	local player = game.get_player(event.player_index)
-
-	-- if the player has perms to be ignored, then they should be
-	if config.ignore_permisison and Roles.player_allowed(player, config.ignore_permisison) then return end
-
-	local inv = player.get_inventory(defines.inventory.character_main)
-
-	for i = 1, #inv do
-		local item = inv[i]
-		if item.valid and item.valid_for_read and config.main[item.name] then
-			player.print({ "nukeprotect.main", { "item-name." .. item.name } })
-			move_items_stack({ item })
-		end
-	end
-end)
+		check_items(player, defines.inventory.character_main)
+	end)
+end
