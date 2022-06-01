@@ -50,6 +50,7 @@ return {
     'modules.addons.afk-kick',
     'modules.addons.report-jail',
     'modules.addons.protection-jail',
+		'modules.addons.deconlog',
 
     --- Data
     'modules.data.statistics',
@@ -70,6 +71,8 @@ return {
     'modules.gui.player-list',
     'modules.gui.server-ups',
     'modules.commands.debug',
+
+		'modules.graftorio.require', -- graftorio
 
     --- Config Files
     'config.expcore.command_auth_admin', -- commands tagged with admin_only are blocked for non admins

@@ -52,6 +52,7 @@ Roles.new_role('Administrator','Admin')
     'gui/warp-list/bypass-cooldown',
     'gui/warp-list/bypass-proximity',
     'command/connect-all',
+		'command/collectdata'
 }
 
 Roles.new_role('Moderator','Mod')
@@ -202,6 +203,7 @@ end)
 Roles.new_role('Member','Mem')
 :set_permission_group('Standard')
 :set_custom_color{r=24,g=172,b=188}
+:set_flag("deconlog-bypass")
 :set_parent('Regular')
 :allow{
     'gui/task-list/add',

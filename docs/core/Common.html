@@ -92,6 +92,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Compilatron.html"><span class="module-name-item">Compilatron</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Damage-Popups.html"><span class="module-name-item">Damage-Popups</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Death-Logger.html"><span class="module-name-item">Death-Logger</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Deconlog.html"><span class="module-name-item">Deconlog</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Inventory-Clear.html"><span class="module-name-item">Inventory-Clear</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
@@ -172,6 +173,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Chat-Reply.html"><span class="module-name-item">Chat-Reply</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Compilatron.html"><span class="module-name-item">Compilatron</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Death-Logger.html"><span class="module-name-item">Death-Logger</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Deconlog.html"><span class="module-name-item">Deconlog</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Auth-Admin.html"><span class="module-name-item">Commands-Auth-Admin</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Auth-Roles.html"><span class="module-name-item">Commands-Auth-Roles</span></a></div></li>
@@ -422,7 +424,13 @@
     <tbody>
     <tr>
     <td class="name"><a href="#move_items">move_items(items[, surface=navies][, position={0][, radius=32][, chest_type=iron-chest])</a></td>
-    <td class="summary">Moves items to the position and stores them in the closest entity of the type given</td>
+    <td class="summary">Moves items to the position and stores them in the closest entity of the type given
+-- Copies the items by prototype name, but keeps them in the original inventory</td>
+    </tr>
+    <tr>
+    <td class="name"><a href="#move_items_stack">move_items_stack(items[, surface=navies][, position={0][, radius=32][, chest_type=iron-chest])</a></td>
+    <td class="summary">Moves items to the position and stores them in the closest entity of the type given
+-- Differs from move_items by accepting a table of LuaItemStack and transferring them into the inventory - not copying</td>
     </tr>
     <tr>
     <td class="name"><a href="#print_grid_value">print_grid_value(value, surface, position[, scale=1][, offset=0][, immutable=false])</a></td>
@@ -2456,7 +2464,8 @@
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Moves items to the position and stores them in the closest entity of the type given</p>
+    <p class="section-item-summary">Moves items to the position and stores them in the closest entity of the type given
+-- Copies the items by prototype name, but keeps them in the original inventory</p>
     <p class="section-item-description"></p>
 
     <!-- parameters start -->
@@ -2571,6 +2580,135 @@
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Copy all the items in a players inventory and place them in chests at {0, 0}
 </span>move_items(game.player.get_main_inventory().get_contents())</code></pre>
+    <!-- usage end -->
+
+    </dd>
+    <dt>
+    <div class="divider divider-custom"></div>
+    <div class="block section-item-header">
+    <a href="#move_items_stack" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="move_items_stack">move_items_stack(items[, surface=navies][, position={0][, radius=32][, chest_type=iron-chest])</span>
+    </div>
+    </dt>
+    <dd>
+    <div class="section-item-body">
+
+    <p class="section-item-summary">Moves items to the position and stores them in the closest entity of the type given
+-- Differs from move_items by accepting a table of LuaItemStack and transferring them into the inventory - not copying</p>
+    <p class="section-item-description"></p>
+
+    <!-- parameters start -->
+    <strong>Parameters:</strong>
+
+    <ul>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>items</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+
+     items which are to be added to the chests, an array of LuaItemStack
+
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>surface</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaSurface.html">LuaSurface</a></span>)
+
+     the surface that the items will be moved to
+
+    (<em>default</em>: navies)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>position</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
+
+     the position that the items will be moved to {x=100, y=100}
+
+    (<em>default</em>: {0)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>radius</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="https://www.lua.org/pil/2.3.html">number</a></span>)
+
+     the radius in which the items are allowed to be placed
+
+    (<em>default</em>: 32)
+    </li>
+
+
+
+
+
+    <li class="section-subitem-li">
+
+    <strong><em>chest_type</em></strong>
+
+    <strong> : </strong>
+
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
+
+     the chest type that the items should be moved into
+
+    (<em>default</em>: iron-chest)
+    </li>
+
+
+    </ul>
+
+    <!-- parameters end -->
+
+    <!-- returns start -->
+    <strong>Returns:</strong>
+    <ul>
+    <li>
+    (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaEntity.html">LuaEntity</a></span>)
+    <span class="return-text">the last chest that had items inserted into it</span>
+    </li>
+    </ul>
+    <!-- returns end -->
+
+
+    <!-- see also start -->
+    <!-- see also end -->
+
+    <!-- usage start -->
+    <strong>Usage:</strong>
+    <pre class="code" data-lang="Lua"><code><span class="comment">-- Copy all the items in a players inventory and place them in chests at {0, 0}
+</span>move_items(game.player.get_main_inventory())</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -2780,7 +2918,7 @@ https://github.com/Refactorio/RedMew/blob/9184b2940f311d8c9c891e83429fc57ec7e0c4
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2021-05-10 20:09:49 UTC</i>
+    <i>Last updated 2022-05-14 20:36:58 UTC</i>
     </div>
     </div>
     </div>
