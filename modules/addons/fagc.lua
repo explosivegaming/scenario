@@ -5,15 +5,15 @@ local Event = require 'utils.event' --- @dep utils.event
 
 -- Clear the file on startup to minimize its size
 Event.on_init(function(e)
-	game.write_file("fagc-actions.txt", "", true, 0)
+	game.write_file("fagc-actions.txt", "", false, 0)
 end)
 
 Event.add(defines.events.on_player_banned, function(e)
-	local text = "ban;\"" .. e.player_name .. "\";\"" .. (e.by_player or "") .. "\";\"" .. (e.reason or "") .. "\""
+	local text = "ban;" .. e.player_name .. ";" .. (e.by_player or "") .. ";" .. (e.reason or "") .. "\n"
 	game.write_file("fagc-actions.txt", text, true, 0)
 end)
 
 Event.add(defines.events.on_player_unbanned, function(e)
-	local text = "unban;\"" .. e.player_name .. "\";\"" .. (e.by_player or "") .. "\";\"" .. (e.reason or "") .. "\""
+	local text = "unban;" .. e.player_name .. ";" .. (e.by_player or "") .. ";" .. (e.reason or "") .. "\n"
 	game.write_file("fagc-actions.txt", text, true, 0)
 end)
