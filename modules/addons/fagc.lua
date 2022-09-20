@@ -4,7 +4,7 @@
 local Event = require 'utils.event' --- @dep utils.event
 
 -- Clear the file on startup to minimize its size
-Event.on_init(function(e)
+Event.on_init(function()
 	game.write_file("fagc-actions.txt", "", false, 0)
 end)
 
