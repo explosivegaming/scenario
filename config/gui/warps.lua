@@ -1,6 +1,9 @@
 --- This file contains all the different settings for the warp system and gui
 -- @config Warps
 
+--- This file contains all the different settings for the warp system and gui
+-- @config Warps
+
 return {
     -- General config
     update_smoothing = 10, --- @setting update_smoothing the amount of smoothing applied to updates to the cooldown timer, higher is better, max is 60
@@ -10,7 +13,7 @@ return {
     -- Warp cooldowns
     bypass_warp_cooldown = 'expcore.roles', --- @setting bypass_warp_cooldown dictates who the warp cooldown is applied to; values: all, admin, expcore.roles, none
     expcore_roles_bypass_warp_cooldown = 'gui/warp-list/bypass-cooldown', --- @setting expcore_roles_bypass_warp_cooldown if expcore.roles is used then this is the required permission
-    cooldown_duration = 60, --- @setting cooldown_duration the duration of the warp cooldown in seconds
+    cooldown_duration = 30, --- @setting cooldown_duration the duration of the warp cooldown in seconds
 
     -- Warp proximity
     bypass_warp_proximity = 'expcore.roles', --- @setting bypass_warp_proximity dictates who the warp proximity is applied to; values: all, admin, expcore.roles, none
@@ -29,10 +32,10 @@ return {
 
     -- Warp area generation
     entities = { --- @setting entities The entities which are created for warp areas
-        {'small-lamp', -4, -2}, {'small-lamp', -2, -4}, {'small-electric-pole',-3,-3}, -- Top left corner
-        {'small-lamp', 3, -2}, {'small-lamp', 1, -4}, {'small-electric-pole',2,-3}, -- Top right corner
-        {'small-lamp', 3, 1}, {'small-lamp', 1, 3}, {'small-electric-pole',2,2}, -- Bottom right corner
-        {'small-lamp', -4, 1}, {'small-lamp', -2, 3}, {'small-electric-pole',-3,2}, -- Bottom left corner
+        {'small-lamp', -4, -2}, {'small-lamp', -2, -4}, {'medium-electric-pole',-3,-3}, -- Top left corner
+        {'small-lamp', 3, -2}, {'small-lamp', 1, -4}, {'medium-electric-pole',2,-3}, -- Top right corner
+        {'small-lamp', 3, 1}, {'small-lamp', 1, 3}, {'medium-electric-pole',2,2}, -- Bottom right corner
+        {'small-lamp', -4, 1}, {'small-lamp', -2, 3}, {'medium-electric-pole',-3,2}, -- Bottom left corner
     },
     tiles = { --- @setting tiles The tiles which are created for warp areas
         {"black-refined-concrete",-4,-2},{"black-refined-concrete",-4,-1},{"black-refined-concrete",-4,0},{"black-refined-concrete",-4,1},
