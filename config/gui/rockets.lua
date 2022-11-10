@@ -3,7 +3,7 @@
 
 return {
     stats = { --- @setting stats The data that will show in the stats section
-        show_stats=true, --- @setting show_stats false will hide this section all together
+        show_stats=false, --- @setting show_stats false will hide this section all together
         show_first_rocket = true, --- @setting show_first_rocket false will not show when the first rocket was launched
         show_last_rocket = true, --- @setting show_last_rocket false will not show when the last rocket was launched
         show_fastest_rocket = true, --- @setting show_fastest_rocket false will not show the time taken for the fastest rocket
