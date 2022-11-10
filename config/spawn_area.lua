@@ -3,12 +3,12 @@
 
 return {
     spawn_area = { --- @setting spawn_area Settings relating to the whole spawn area
-        deconstruction_radius = 20, --- @setting deconstruction_radius All entities within this radius will be removed
+        deconstruction_radius = 0, --- @setting deconstruction_radius All entities within this radius will be removed
         deconstruction_tile = 'refined-concrete', --- @setting deconstruction_tile Tile to be placed in the deconstruction radius, use nil for map gen
         landfill_radius = 50, --- @setting pattern_radius All water within this radius will be land filled
     },
     turrets = { --- @setting turrets Settings relating to adding turrets to spawn
-        enabled = true, --- @setting enabled Whether turrets will be added to spawn
+        enabled = false, --- @setting enabled Whether turrets will be added to spawn
         ammo_type = 'uranium-rounds-magazine', --- @setting ammo_type The ammo type that will be used during refills
         refill_time = 60*60*5, --- @setting refill_time The time in ticks between each refill of the turrets, only change if having lag issues
         offset = { x=0, y=0 }, --- @setting offset The position offset to apply to turrets
@@ -20,7 +20,7 @@ return {
         }
     },
     afk_belts = { --- @setting afk_belts Settings relating to adding afk belts to spawn
-        enabled = true, --- @setting enabled Whether afk belts will be added to spawn
+        enabled = false, --- @setting enabled Whether afk belts will be added to spawn
         belt_type = 'fast-transport-belt', --- @setting belt_type The belt to be used as afk belts
         protected = true, --- @setting protected Whether belts will be protected from player interaction
         offset = { x=0, y=0 }, --- @setting offset The position offset to apply to afk belts
@@ -30,7 +30,7 @@ return {
         }
     },
     water = { --- @setting water Settings relating to adding water to spawn
-        enabled = true, --- @setting enabled Whether water tiles will be added to spawn
+        enabled = false, --- @setting enabled Whether water tiles will be added to spawn
         water_tile = 'water-mud', --- @setting water_tile The tile to be used as the water tile
         offset = { x=0, y=0 }, --- @setting offset The position offset to apply to water tiles
         locations = { --- @setting locations The location of the water tiles {x,y}
@@ -42,7 +42,7 @@ return {
         }
     },
     entities = { --- @setting entities Settings relating to adding entities to spawn
-        enabled = true,  --- @setting enabled Whether entities will be added to spawn
+        enabled = false,  --- @setting enabled Whether entities will be added to spawn
         protected = true, --- @setting protected Whether entities will be protected from player interaction
         operable = true, --- @setting operable Whether entities can be opened by players, must be true if chests are used
         offset = { x=0, y=-2 }, --- @setting offset The position offset to apply to entities
@@ -64,7 +64,7 @@ return {
         }
     },
     pattern = {
-        enabled = true, --- @setting enabled Whether pattern tiles will be added to spawn
+        enabled = false, --- @setting enabled Whether pattern tiles will be added to spawn
         pattern_tile = 'refined-concrete', --- @setting pattern_tile The tile to be used for the pattern
         offset = { x=0, y=-2 }, --- @setting offset The position offset to apply to pattern tiles
         locations = { --- @setting locations The location of the pattern tiles {x,y}

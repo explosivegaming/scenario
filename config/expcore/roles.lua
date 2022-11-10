@@ -46,11 +46,13 @@ Roles.new_role('Administrator','Admin')
 :set_flag('instance-respawn')
 :set_parent('Senior Moderator')
 :allow{
+    --[[
     'command/connect-all',
 	'command/collectdata',
     'command/interface',
     'command/debug',
     'command/toggle-cheat-mode'
+    ]]
 }
 
 Roles.new_role('Senior Moderator','SMod')
@@ -73,6 +75,12 @@ Roles.new_role('Moderator','Mod')
 :set_flag('instance-respawn')
 :set_parent('Trainee')
 :allow{
+    'command/connect-all',
+	'command/collectdata',
+    'command/interface',
+    'command/debug',
+    'command/toggle-cheat-mode',
+
     'command/assign-role',
     'command/unassign-role',
     'command/kill/always',
