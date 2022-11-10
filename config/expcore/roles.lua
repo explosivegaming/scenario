@@ -314,26 +314,6 @@ Roles.define_role_order{
 }
 
 Roles.override_player_roles{
-    ["PHIDIAS0303"]={"Senior Administrator", "Moderator", "Board Member", "Member"},
-    ["smashed.burger"]={"Trainee", "Member"},
-
-    ["aldldl"]={"Moderator","Member"},
-    ["arty714"]={"Moderator", "Member"},
-    ["Cooldude2606"]={"Moderator", "Member"},
-    ["Drahc_pro"]={"Moderator", "Member"},
-    ["mark9064"]={"Moderator","Member"},
-
-    ["7h3w1z4rd"]={"Moderator","Member"},
-    ["FlipHalfling90"]={"Moderator","Member"},
-    ["hamsterbryan"]={"Moderator","Member"},
-    ["HunterOfGames"]={"Moderator","Member"},
-    ["NextIdea"]={"Moderator","Member"},
-    ["TheKernel32"]={"Moderator","Member"},
-    ["TheKernel64"]={"Moderator","Member"},
-    ["tovernaar123"]={"Moderator","Member"},
-    ["UUBlueFire"]={"Moderator","Member"},
-
-
     ["AssemblyStorm"]={"Moderator", "Member"},
     ["banakeg"]={"Moderator","Member"},
     ["CmonMate497"]={"Moderator","Member"},
