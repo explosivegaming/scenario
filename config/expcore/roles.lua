@@ -100,10 +100,8 @@ Roles.new_role('Trainee','TrMod')
 :set_flag('report-immune')
 :set_parent('Board Member')
 :allow{
-    --[[
     'gui/warp-list/bypass-cooldown',
     'gui/warp-list/bypass-proximity',
-    ]]
     'command/admin-chat',
     'command/admin-marker',
     'command/teleport',
@@ -169,10 +167,8 @@ Roles.new_role('Supporter','Sup')
 :set_flag('is_spectator')
 :set_parent('Veteran')
 :allow{
-    --[[
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
-    ]]
     'command/tag-color',
     'command/jail',
     'command/unjail',
@@ -289,12 +285,10 @@ local default = Roles.new_role('Guest','')
     'command/set-preference',
     'command/connect',
     'gui/player-list',
-    --[[
     'gui/rocket-info',
     'gui/science-info',
     'gui/task-list',
     'gui/warp-list',
-    ]]
     'gui/readme'
 }
 
