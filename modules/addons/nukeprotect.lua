@@ -24,34 +24,13 @@ local function check_items(player, type)
 	end
 end
 
-if table_size(config[tostring(defines.inventory.character_ammo)]) > 0 then
-	Event.add(defines.events.on_player_ammo_inventory_changed, function(event)
-		local player = game.get_player(event.player_index)
-
-		check_items(player, defines.inventory.character_ammo)
-	end)
-end
-
-if table_size(config[tostring(defines.inventory.character_armor)]) > 0 then
-	Event.add(defines.events.on_player_armor_inventory_changed, function(event)
-		local player = game.get_player(event.player_index)
-
-		check_items(player, defines.inventory.character_armor)
-	end)
-end
-
-if table_size(config[tostring(defines.inventory.character_guns)]) > 0 then
-	Event.add(defines.events.on_player_gun_inventory_changed, function(event)
-		local player = game.get_player(event.player_index)
-
-		check_items(player, defines.inventory.character_guns)
-	end)
-end
-
-if table_size(config[tostring(defines.inventory.character_main)]) > 0 then
-	Event.add(defines.events.on_player_main_inventory_changed, function(event)
-		local player = game.get_player(event.player_index)
-
-		check_items(player, defines.inventory.character_main)
-	end)
+for _, inventory in ipairs(config.inventories) do
+	if #inventory.items > 0 then
+		Event.add(inventory.event, function(event)
+			local player = game.get_player(event.player_index)
+			if player and player.valid then
+				check_items(player, inventory.inventory)
+			end
+		end)
+	end
 end
