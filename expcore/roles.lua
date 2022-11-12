@@ -115,6 +115,7 @@ local Groups = require 'expcore.permission_groups' --- @dep expcore.permission_g
 local Async = require 'expcore.async' --- @dep expcore.async
 local Colours = require 'utils.color_presets' --- @dep utils.color_presets
 local write_json = _C.write_json --- @dep expcore.common
+local JailOldRole = require 'modules.control.jail_old_role' --- @dep modules.control.jail
 
 local Roles = {
     _prototype={},
@@ -368,7 +369,15 @@ function Roles.assign_player(player, roles, by_player_name, skip_checks, silent)
     if not skip_checks and not valid_player then return end
     if not player then return end
     if type(roles) ~= 'table' or roles.name then
-        roles = {roles}
+        roles = { roles }
+    end
+    if Roles.player_has_role(player, "Jail") then
+        local to_assign = JailOldRole.old_roles[valid_player.name] or {}
+        for _, role in ipairs(roles) do
+            table.insert(to_assign, role)
+        end
+        JailOldRole.old_roles[valid_player.name] = to_assign
+        return
     end
     for _, role in ipairs(roles) do
         role = Roles.get_role_from_any(role)

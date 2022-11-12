@@ -19,6 +19,7 @@
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Game = require 'utils.game' --- @dep utils.game
 local Global = require 'utils.global' --- @dep utils.global
+local JailOldRole = require 'modules.control.jail_old_role' --- @dep modules.control.jail_old_role
 
 local valid_player = Game.get_player_from_any
 local assign_roles = Roles.assign_player
@@ -89,7 +90,7 @@ function Jail.jail_player(player, by_player_name, reason)
 
     if has_role(player, 'Jail') then return end
     local roles = get_roles(player)
-    old_roles[player.name] = roles
+    JailOldRole.old_roles[player.name] = roles
 
     player.walking_state = { walking = false }
     player.riding_state = { acceleration = defines.riding.acceleration.nothing, direction = player.riding_state.direction }
@@ -116,14 +117,25 @@ function Jail.unjail_player(player, by_player_name)
     if not by_player_name then return end
 
     if not has_role(player, 'Jail') then return end
-    local roles = old_roles[player.name] or {}
+    local roles = JailOldRole.old_roles[player.name] or {}
 
-    assign_roles(player, roles, by_player_name, nil, true)
     unassign_roles(player, 'Jail', by_player_name, nil, true)
+    assign_roles(player, roles, by_player_name, nil, true)
 
     event_emit(Jail.events.on_player_unjailed, player, by_player_name)
 
     return true
+end
+
+function Jail.add_old_role(player, to_assign)
+    player = valid_player(player)
+    if not player then return end
+
+    if not has_role(player, 'Jail') then return end
+    local roles = JailOldRole.old_roles[player.name]
+    if not roles then return end
+
+    table.insert(roles, to_assign)
 end
 
 return Jail
