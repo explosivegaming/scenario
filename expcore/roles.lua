@@ -374,7 +374,9 @@ function Roles.assign_player(player, roles, by_player_name, skip_checks, silent)
     if Roles.player_has_role(player, "Jail") then
         local to_assign = JailOldRole.old_roles[valid_player.name] or {}
         for _, role in ipairs(roles) do
-            table.insert(to_assign, role)
+            if not to_assign[role] then
+                to_assign[role] = 1
+            end
         end
         JailOldRole.old_roles[valid_player.name] = to_assign
         return
