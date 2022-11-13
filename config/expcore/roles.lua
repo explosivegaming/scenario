@@ -267,6 +267,7 @@ Roles.new_role('Jail')
 :set_permission_group('Restricted')
 :set_custom_color{r=50,g=50,b=50}
 :set_block_auto_assign(true)
+:set_flag("defer_role_changes")
 :disallow(default.allowed)
 
 --- System defaults which are required to be set

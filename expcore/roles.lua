@@ -115,17 +115,17 @@ local Groups = require 'expcore.permission_groups' --- @dep expcore.permission_g
 local Async = require 'expcore.async' --- @dep expcore.async
 local Colours = require 'utils.color_presets' --- @dep utils.color_presets
 local write_json = _C.write_json --- @dep expcore.common
-local JailOldRole = require 'modules.control.jail_old_role' --- @dep modules.control.jail
 
 local Roles = {
-    _prototype={},
-    config={
-        order    = {}, -- Contains the order of the roles, lower index is better
-        roles    = {}, -- Contains the raw info for the roles, indexed by role name
-        flags    = {}, -- Contains functions that run when a flag is added/removed from a player
-        internal = {}, -- Contains all internally accessed roles, such as root, default
-        players  = {}, -- Contains the roles that players have
-        auto_assign = {} -- Contains references to all roles which have auto assign conditions
+    _prototype = {},
+    config = {
+        order          = {}, -- Contains the order of the roles, lower index is better
+        roles          = {}, -- Contains the raw info for the roles, indexed by role name
+        flags          = {}, -- Contains functions that run when a flag is added/removed from a player
+        internal       = {}, -- Contains all internally accessed roles, such as root, default
+        players        = {}, -- Contains the roles that players have
+        auto_assign    = {}, -- Contains references to all roles which have auto assign conditions
+        deferred_roles = {}, -- Contains the roles that are to be assigned to players when they are unjailed
     },
     events = {
         on_role_assigned   = script.generate_event_name(),
@@ -136,6 +136,9 @@ local Roles = {
 --- When global is loaded it will have the metatable re-assigned to the roles
 Global.register(Roles.config.players, function(tbl)
     Roles.config.players = tbl
+end)
+Global.register(Roles.config.deferred_roles, function(tbl)
+    Roles.config.deferred_roles = tbl
 end)
 
 --- Getter.
@@ -371,16 +374,17 @@ function Roles.assign_player(player, roles, by_player_name, skip_checks, silent)
     if type(roles) ~= 'table' or roles.name then
         roles = { roles }
     end
-    if Roles.player_has_role(player, "Jail") then
-        local to_assign = JailOldRole.old_roles[valid_player.name] or {}
+
+    -- if the player has a role that needs to defer the role changes, save the roles that need to be assigned later into a table
+    if valid_player and Roles.player_has_flag(player, "defer_role_changes") then
+        local assign_later = Roles.config.deferred_roles[valid_player.name] or {}
         for _, role in ipairs(roles) do
-            if not to_assign[role] then
-                to_assign[role] = 1
-            end
+            assign_later[role] = 1
         end
-        JailOldRole.old_roles[valid_player.name] = to_assign
+        Roles.config.deferred_roles[valid_player.name] = assign_later
         return
     end
+
     for _, role in ipairs(roles) do
         role = Roles.get_role_from_any(role)
         if role then
@@ -411,14 +415,34 @@ function Roles.unassign_player(player, roles, by_player_name, skip_checks, silen
     if not skip_checks and not valid_player then return end
     if not player then return end
     if type(roles) ~= 'table' or roles.name then
-        roles = {roles}
+        roles = { roles }
     end
+
+    local had_deferred_changes = false
+
     for _, role in ipairs(roles) do
         role = Roles.get_role_from_any(role)
         if role then
+            if role:has_flag("defer_role_changes") then
+                had_deferred_changes = true
+            end
             role:remove_player(valid_player or player, valid_player == nil, true)
         end
     end
+
+
+    -- if there are deferred role changes, apply them now
+    if had_deferred_changes then
+        local assign_later = Roles.config.deferred_roles[player.name] or {}
+        log(serpent.line(assign_later))
+        for role_name, _ in pairs(assign_later) do
+            local role = Roles.get_role_from_any(role_name)
+            if role then
+                role:add_player(valid_player or player, valid_player == nil, true)
+            end
+        end
+    end
+
     if valid_player then
         emit_player_roles_updated(valid_player, 'unassign', roles, by_player_name, silent)
     end
