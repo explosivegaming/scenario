@@ -434,7 +434,6 @@ function Roles.unassign_player(player, roles, by_player_name, skip_checks, silen
     -- if there are deferred role changes, apply them now
     if had_deferred_changes then
         local assign_later = Roles.config.deferred_roles[player.name] or {}
-        log(serpent.line(assign_later))
         for role_name, _ in pairs(assign_later) do
             local role = Roles.get_role_from_any(role_name)
             if role then
