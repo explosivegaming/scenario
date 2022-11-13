@@ -148,7 +148,7 @@ end)
 --- Internal function used to trigger a few different things when roles are changed
 -- this is the raw internal trigger as the other function is called at other times
 -- there is a second half called role_update which triggers after the event call, it also is called when a player joins
-local function emit_player_roles_updated(player, type, roles, by_player_name, skip_game_print)
+local function emit_player_roles_updated(player, type, roles, by_player_name, skip_game_print, deferred)
     by_player_name = game.player and game.player.name or by_player_name or '<server>'
     local by_player = game.players[by_player_name]
     local by_player_index = by_player and by_player.index or 0
@@ -168,7 +168,11 @@ local function emit_player_roles_updated(player, type, roles, by_player_name, sk
     end
     -- output to all the different locations: game print, player sound, event trigger and role log
     if not skip_game_print then
-        game.print({'expcore-roles.game-message-'..type, player.name, table.concat(role_names, ', '), by_player_name}, Colours.cyan)
+		if deferred then
+			game.print({'expcore-roles.game-message-deferred-'..type, player.name, table.concat(role_names, ', '), by_player_name}, Colours.cyan)
+		else
+			game.print({'expcore-roles.game-message-'..type, player.name, table.concat(role_names, ', '), by_player_name}, Colours.cyan)
+		end
     end
     if type == 'assign' then
         player.play_sound{path='utility/achievement_unlocked'}
@@ -378,10 +382,17 @@ function Roles.assign_player(player, roles, by_player_name, skip_checks, silent)
     -- if the player has a role that needs to defer the role changes, save the roles that need to be assigned later into a table
     if valid_player and Roles.player_has_flag(player, "defer_role_changes") then
         local assign_later = Roles.config.deferred_roles[valid_player.name] or {}
+		local were_changes = false
         for _, role in ipairs(roles) do
-            assign_later[role] = 1
+            if not assign_later[role] then
+				assign_later[role] = 1
+				were_changes = true
+			end
         end
         Roles.config.deferred_roles[valid_player.name] = assign_later
+		if were_changes then
+			emit_player_roles_updated(valid_player, 'assign', roles, by_player_name, silent, true)
+		end
         return
     end
 
