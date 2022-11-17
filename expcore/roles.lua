@@ -134,11 +134,9 @@ local Roles = {
 }
 
 --- When global is loaded it will have the metatable re-assigned to the roles
-Global.register(Roles.config.players, function(tbl)
-    Roles.config.players = tbl
-end)
-Global.register(Roles.config.deferred_roles, function(tbl)
-    Roles.config.deferred_roles = tbl
+Global.register({ Roles.config.players, Roles.config.deferred_roles }, function(tbl)
+    Roles.config.players = tbl[1]
+    Roles.config.deferred_roles = tbl[2]
 end)
 
 --- Getter.
@@ -382,17 +380,17 @@ function Roles.assign_player(player, roles, by_player_name, skip_checks, silent)
     -- if the player has a role that needs to defer the role changes, save the roles that need to be assigned later into a table
     if valid_player and Roles.player_has_flag(player, "defer_role_changes") then
         local assign_later = Roles.config.deferred_roles[valid_player.name] or {}
-		local were_changes = false
+        local were_changes = false
         for _, role in ipairs(roles) do
-            if not assign_later[role] then
-				assign_later[role] = 1
-				were_changes = true
-			end
+            if assign_later[role] ~= 1 then
+                assign_later[role] = 1
+                were_changes = true
+            end
         end
         Roles.config.deferred_roles[valid_player.name] = assign_later
-		if were_changes then
-			emit_player_roles_updated(valid_player, 'assign', roles, by_player_name, silent, true)
-		end
+        if were_changes then
+            emit_player_roles_updated(valid_player, 'assign', roles, by_player_name, silent, true)
+        end
         return
     end
 
@@ -429,26 +427,42 @@ function Roles.unassign_player(player, roles, by_player_name, skip_checks, silen
         roles = { roles }
     end
 
-    local had_deferred_changes = false
+    -- if the player has a role that needs to defer the role changes, save the roles that need to be unassigned later into a table
+    if Roles.player_has_flag(player, "defer_role_changes") then
+        local assign_later = Roles.config.deferred_roles[valid_player.name] or {}
+        local were_changes = false
+        for _, role in ipairs(roles) do
+            if assign_later[role] ~= -1 then
+                assign_later[role] = -1
+                were_changes = true
+            end
+        end
+        Roles.config.deferred_roles[valid_player.name] = assign_later
+        if were_changes then
+            emit_player_roles_updated(valid_player, 'unassign', roles, by_player_name, silent, true)
+        end
+        return
+    end
 
     for _, role in ipairs(roles) do
         role = Roles.get_role_from_any(role)
         if role then
-            if role:has_flag("defer_role_changes") then
-                had_deferred_changes = true
-            end
             role:remove_player(valid_player or player, valid_player == nil, true)
         end
     end
 
 
     -- if there are deferred role changes, apply them now
-    if had_deferred_changes then
+    if Roles.player_has_flag(valid_player, "defer_role_changes") then
         local assign_later = Roles.config.deferred_roles[player.name] or {}
-        for role_name, _ in pairs(assign_later) do
+        for role_name, assign in pairs(assign_later) do
             local role = Roles.get_role_from_any(role_name)
             if role then
-                role:add_player(valid_player or player, valid_player == nil, true)
+                if assign == 1 then
+                    role:add_player(valid_player or player, valid_player == nil, true)
+                elseif assign == -1 then
+                    role:remove_player(valid_player or player, valid_player == nil, true)
+                end
             end
         end
     end
