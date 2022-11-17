@@ -182,10 +182,8 @@ Roles.new_role('Partner','Part')
 :set_flag('is_spectator')
 :set_parent('Veteran')
 :allow{
-    --[[
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
-    ]]
     'command/tag-color',
     'command/jail',
     'command/unjail',
