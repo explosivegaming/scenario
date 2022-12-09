@@ -96,6 +96,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/FAGC.html"><span class="module-name-item">FAGC</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Inventory-Clear.html"><span class="module-name-item">Inventory-Clear</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Nukeprotect.html"><span class="module-name-item">Nukeprotect</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/protection-jail.html"><span class="module-name-item">protection-jail</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/report-jail.html"><span class="module-name-item">report-jail</span></a></div></li>
@@ -286,9 +287,6 @@
     <tr>
     <td class="name"><a href="#utils.game">utils.game</a></td>
     </tr>
-    <tr>
-    <td class="name"><a href="#util">util</a></td>
-    </tr>
     </tbody>
     </table>
     <table class="section-content-list">
@@ -424,8 +422,8 @@
     </thead>
     <tbody>
     <tr>
-    <td class="name"><a href="#move_items">move_items(items[, surface=navies][, position={0][, radius=32][, chest_type=iron-chest])</a></td>
-    <td class="summary">Moves items to the position and stores them in the closest entity of the type given
+    <td class="name"><a href="#copy_items_stack">copy_items_stack(items[, surface=navies][, position={0][, radius=32][, chest_type=iron-chest])</a></td>
+    <td class="summary">Copies items to the position and stores them in the closest entity of the type given
 -- Copies the items by prototype name, but keeps them in the original inventory</td>
     </tr>
     <tr>
@@ -480,31 +478,6 @@
     <div class="block section-item-header">
     <a href="#utils.game" class="fragment-hashtag">#</a>
     <span class="section-item-title" id="utils.game">utils.game</span>
-    </div>
-    </dt>
-    <dd>
-    <div class="section-item-body">
-
-
-    <!-- parameters start -->
-    <!-- parameters end -->
-
-    <!-- returns start -->
-    <!-- returns end -->
-
-
-    <!-- see also start -->
-    <!-- see also end -->
-
-    <!-- usage start -->
-    <!-- usage end -->
-
-    </dd>
-    <dt>
-    <div class="divider divider-custom"></div>
-    <div class="block section-item-header">
-    <a href="#util" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="util">util</span>
     </div>
     </dt>
     <dd>
@@ -2458,14 +2431,14 @@
     <dt>
     <div class="divider divider-custom"></div>
     <div class="block section-item-header">
-    <a href="#move_items" class="fragment-hashtag">#</a>
-    <span class="section-item-title" id="move_items">move_items(items[, surface=navies][, position={0][, radius=32][, chest_type=iron-chest])</span>
+    <a href="#copy_items_stack" class="fragment-hashtag">#</a>
+    <span class="section-item-title" id="copy_items_stack">copy_items_stack(items[, surface=navies][, position={0][, radius=32][, chest_type=iron-chest])</span>
     </div>
     </dt>
     <dd>
     <div class="section-item-body">
 
-    <p class="section-item-summary">Moves items to the position and stores them in the closest entity of the type given
+    <p class="section-item-summary">Copies items to the position and stores them in the closest entity of the type given
 -- Copies the items by prototype name, but keeps them in the original inventory</p>
     <p class="section-item-description"></p>
 
@@ -2486,7 +2459,7 @@
 
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
 
-     items which are to be added to the chests, ['name']=count
+     items which are to be added to the chests, an array of LuaItemStack
 
     </li>
 
@@ -2502,7 +2475,7 @@
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/LuaSurface.html">LuaSurface</a></span>)
 
-     the surface that the items will be moved to
+     the surface that the items will be copied to
 
     (<em>default</em>: navies)
     </li>
@@ -2519,7 +2492,7 @@
 
     (<span class="types"><a class="type" href="https://www.lua.org/pil/2.5.html">table</a></span>)
 
-     the position that the items will be moved to {x=100, y=100}
+     the position that the items will be copied to {x=100, y=100}
 
     (<em>default</em>: {0)
     </li>
@@ -2553,7 +2526,7 @@
 
     (<span class="types"><a class="type" href="http://lua-api.factorio.com/latest/Builtin-Types.html#string">string</a></span>)
 
-     the chest type that the items should be moved into
+     the chest type that the items should be copied into
 
     (<em>default</em>: iron-chest)
     </li>
@@ -2580,7 +2553,7 @@
     <!-- usage start -->
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Copy all the items in a players inventory and place them in chests at {0, 0}
-</span>move_items(game.player.get_main_inventory().get_contents())</code></pre>
+</span>copy_items_stack(game.player.get_main_inventory().get_contents())</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -2709,7 +2682,7 @@
     <!-- usage start -->
     <strong>Usage:</strong>
     <pre class="code" data-lang="Lua"><code><span class="comment">-- Copy all the items in a players inventory and place them in chests at {0, 0}
-</span>move_items(game.player.get_main_inventory())</code></pre>
+</span>move_items_stack(game.player.get_main_inventory())</code></pre>
     <!-- usage end -->
 
     </dd>
@@ -2919,7 +2892,7 @@ https://github.com/Refactorio/RedMew/blob/9184b2940f311d8c9c891e83429fc57ec7e0c4
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2022-10-31 15:14:44 UTC</i>
+    <i>Last updated 2022-12-09 21:09:59 UTC</i>
     </div>
     </div>
     </div>
