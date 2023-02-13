@@ -3,7 +3,7 @@
 
 return {
     spawn_area = { --- @setting spawn_area Settings relating to the whole spawn area
-        deconstruction_radius = 64, --- @setting deconstruction_radius All entities within this radius will be removed
+        deconstruction_radius = 96, --- @setting deconstruction_radius All entities within this radius will be removed
         tile_radius = 20,
         deconstruction_tile = 'refined-concrete', --- @setting deconstruction_tile Tile to be placed in the deconstruction radius, use nil for map gen
         landfill_radius = 96, --- @setting pattern_radius All water within this radius will be land filled
@@ -184,35 +184,35 @@ return {
             {   
                 enabled = true,
                 name = "iron-ore",
-                amount = 3000,
+                amount = 4000,
                 size = {26, 27},
                 offset = {-48,-32}
             },
             {
                 enabled = true,
                 name = "copper-ore",
-                amount = 3000,
+                amount = 4000,
                 size = {26, 27},
                 offset = {-48,0}
             },
             {
                 enabled = true,
                 name = "stone",
-                amount = 3000,
+                amount = 4000,
                 size = {22, 20},
                 offset = {-48,32}
             },
             {
                 enabled = true,
                 name = "coal",
-                amount = 3000,
+                amount = 4000,
                 size = {22, 20},
                 offset = {-48,-56}
             },
             {
                 enabled = false,
                 name = "uranium-ore",
-                amount = 3000,
+                amount = 4000,
                 size = {22, 20},
                 offset = {-48,-80}
             }
@@ -225,9 +225,9 @@ return {
                 enabled = true,
                 name = "crude-oil",
                 num_patches = 4,
-                amount = 8000000,
-                offset = {-56,-8},
-                offset_next = {0,4}
+                amount = 4000000,
+                offset = {-56,-12},
+                offset_next = {0,6}
             }
         }
     }
