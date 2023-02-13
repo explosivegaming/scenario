@@ -70,9 +70,10 @@ Event.add(defines.events.on_player_created, function(event)
 end)
 
 -- Update the caption for all online players
+-- percentage of game speed
 Event.on_nth_tick(60, function()
     if External.valid() then
-        local caption = 'SUPS = '..External.get_server_ups()
+        local caption = 'SUPS = '.. External.get_server_ups() .. ' (' .. string.format("%.1f ", External.get_server_ups() / 60) .. '%)'
         for _, player in pairs(game.connected_players) do
             player.gui.screen[server_ups.name].caption = caption
         end
