@@ -2,5 +2,6 @@
 -- @config Vlayer
 
 return {
-    enabled = True
+    enabled = true
+    land = false
 }
