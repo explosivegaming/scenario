@@ -184,6 +184,4 @@ end
     'NetPlayTime', 'AFKTimeRatio'
 ]]
 
-if config.ratio then
-    -- 1
-end
+
