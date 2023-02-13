@@ -320,10 +320,6 @@ Event.add(defines.events.on_init, function(event)
     global.phi.vlayer.power.circuit = {}
 end)
 
-Event.add(defines.events.on_player_created, function(event)
-    if event.player_index ~= 1 then return end
-end)
-
 Event.add(defines.events.on_tick, function(event)
     vlayer_handle()
 end)
