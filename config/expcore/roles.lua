@@ -261,7 +261,7 @@ Roles.new_role('Regular','Reg')
     'command/me',
     'standard-decon',
     'bypass-entity-protection',
-		'bypass-nukeprotect'
+	'bypass-nukeprotect'
 }
 :set_auto_assign_condition(function(player)
     if player.online_time >= hours1 then
