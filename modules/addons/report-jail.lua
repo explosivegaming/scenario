@@ -37,12 +37,12 @@ Event.add(Reports.events.on_player_reported, function(event)
     
     if not moderator_count_bool then
         -- if player.online_time ~= nil and player.MachinesRemoved ~= nil then
-        if has_role(player, 'Member') or has_role(player, 'Veteran') then
-            -- Combined playtime is greater than 200% of the reported's playtime
-            if total_playtime < player.online_time * 2 then 
-                return 
-            end
-
+        -- if has_role(player, 'Member') or has_role(player, 'Veteran') then
+        -- Combined playtime is greater than 200% of the reported's playtime
+        
+        if total_playtime < player.online_time * 2 then 
+            return 
+        elseif #Reports.get_reports(player) > 1 then
             local player_name_color = format_chat_player_name(player)
             Jail.jail_player(player, '<reports>', 'Reported by too many players, please wait for a moderator.')
             game.print{'report-jail.jail', player_name_color}
