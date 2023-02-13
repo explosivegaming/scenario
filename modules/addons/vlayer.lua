@@ -1,5 +1,5 @@
 --- Adds a virtual layer to store power to save space.
--- @addon Advanced-Start
+-- @addon Virtual Layer
 
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.vlayer' --- @dep config.advanced_start
@@ -322,7 +322,8 @@ end)
 
 Event.add(defines.events.on_player_created, function(event)
     if event.player_index ~= 1 then return end
-    
+end)
+
 Event.add(defines.events.on_tick, function(event)
     vlayer_handle()
 end)
