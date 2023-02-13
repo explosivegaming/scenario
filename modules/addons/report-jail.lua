@@ -42,7 +42,7 @@ Event.add(Reports.events.on_player_reported, function(event)
     
     if not moderator_count_bool then
         if Statistics
-        -- 1
+        -- 1    
     end
 
     if total_playtime < player.online_time*1.5 then return end
