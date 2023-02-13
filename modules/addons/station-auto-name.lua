@@ -75,7 +75,7 @@ local function station_name_changer(event)
                     Item_ore_fluid = "fluid"
                 end
                 --Final string:
-                entity.backer_name = string.format("[L] [img=%s.%s] %s %s (%s)", Item_ore_fluid, item_name, item_name2, entity.backer_name, Angle( entity ))
+                entity.backer_name = string.format("[L] [img=%s.%s] %s %s", Item_ore_fluid, item_name, item_name2, entity.backer_name)
             end
         end
     end

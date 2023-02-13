@@ -114,7 +114,9 @@ end
 -- Generates an area with no water or entities, no water area is larger
 local function spawn_area(surface, position)
     local dr = config.spawn_area.deconstruction_radius
+    local tr = config.spawn_area.tile_radius
     local dr2 = dr^2
+    local tr2 = tr^2
     local decon_tile = config.spawn_area.deconstruction_tile
 
     local fr = config.spawn_area.landfill_radius
@@ -132,7 +134,7 @@ local function spawn_area(surface, position)
             local y2 = (y+0.5)^2
             local dst = x2+y2
             local pos = {x=position.x+x, y=position.y+y}
-            if dst < dr2 then
+            if dst < tr2 then
                 -- If it is inside the decon radius always set the tile
                 table.insert(tiles_to_make, {name=decon_tile, position=pos})
             elseif dst < fr2 and surface.get_tile(pos).collides_with('player-layer') then
@@ -146,6 +148,28 @@ local function spawn_area(surface, position)
     local entities_to_remove = surface.find_entities_filtered{position=position, radius=dr, name='character', invert=true}
     for _, entity in pairs(entities_to_remove) do entity.destroy() end
     surface.set_tiles(tiles_to_make)
+end
+
+local function spawn_resource_tiles(surface)
+    for k, v in ipairs(config.resource_tiles.resources) do
+        if config.resource_tiles.resources[k].enabled then
+            for x=config.resource_tiles.resources[k].offset[1], config.resource_tiles.resources[k].offset[1] + config.resource_tiles.resources[k].size[1] do
+                for y=config.resource_tiles.resources[k].offset[2], config.resource_tiles.resources[k].offset[2] + config.resource_tiles.resources[k].size[2] do
+                    surface.create_entity({name=config.resource_tiles.resources[k].name, amount=config.resource_tiles.resources[k].amount, position={x, y}})
+                end
+            end
+        end
+    end
+end
+
+local function spawn_resource_patches(surface)
+    for k, v in ipairs(config.resource_patches.resources) do
+        if config.resource_patches.resources[k].enabled then
+            for i=1, config.resource_patches.resources[k].num_patches do
+                surface.create_entity({name=config.resource_patches.resources[k].name, amount=config.resource_patches.resources[k].amount, position={config.resource_patches.resources[k].offset[1] + config.resource_patches.resources[k].offset_next[1] * (i - 1), config.resource_patches.resources[k].offset[2] + config.resource_patches.resources[k].offset_next[2] * (i - 1)}})
+            end
+        end
+    end
 end
 
 -- Only add a event handler if the turrets are enabled
@@ -169,6 +193,8 @@ Event.add(defines.events.on_player_created, function(event)
     if config.afk_belts.enabled then spawn_belts(s, p) end
     if config.turrets.enabled then spawn_turrets() end
     if config.entities.enabled then spawn_entities(s, p) end
+    if config.resource_tiles.enabled then spawn_resource_tiles(s) end
+    if config.resource_patches.enabled then spawn_resource_patches(s) end
     player.teleport(p, s)
 end)
 

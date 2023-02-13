@@ -58,7 +58,7 @@ local function set_location(event)
     local label = player.gui.screen[server_ups.name]
     local res = player.display_resolution
     local uis = player.display_scale
-    label.location = { x=res.width-423*uis, y=30*uis }
+    label.location = { x=res.width-423*uis, y=90*uis }
 end
 
 -- Draw the label when the player joins
