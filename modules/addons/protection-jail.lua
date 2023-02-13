@@ -4,6 +4,7 @@
 local Event = require 'utils.event' ---@dep utils.event
 local Global = require 'utils.global' ---@dep utils.global
 local Jail = require 'modules.control.jail' ---@dep modules.control.jail
+local config = require 'config.protection-jail' --- @dep config.afk_kick
 local Protection = require 'modules.control.protection' --- @dep modules.control.protection
 local format_chat_player_name = _C.format_chat_player_name --- @dep expcore.common
 
@@ -26,9 +27,22 @@ Event.add(Protection.events.on_repeat_violation, function(event)
 
     -- Jail if needed
     if repeat_count[player.index] < 3 then return end
-    local player_name_color = format_chat_player_name(player)
-    Jail.jail_player(player, '<protection>', 'Removed too many protected entities, please wait for a moderator.')
-    game.print{'protection-jail.jail', player_name_color}
+    local moderator_count_bool = false
+
+    for _, player in ipairs(game.connected_players) do
+        if player.admin then
+            if player.afk_time < config.afk_time then
+                -- No instant jail if a moderator is active
+                moderator_count_bool = true
+            end
+        end
+    end
+    
+    if not moderator_count_bool then
+        local player_name_color = format_chat_player_name(player)
+        Jail.jail_player(player, '<protection>', 'Removed too many protected entities, please wait for a moderator.')
+        game.print{'protection-jail.jail', player_name_color}
+    end
 end)
 
 --- Clear the counter when they leave the game (stops a build up of data)
