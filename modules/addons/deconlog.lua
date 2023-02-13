@@ -34,9 +34,7 @@ if config.decon_area then
 		if Roles.player_has_flag(player, "deconlog-bypass") then return end
 
 		for _, player_ in pairs(game.connected_players) do
-			if player_ ~= player then
-				game.players[player_].print{player.name .. " tried to deconstruct the area " .. pos_to_gps_string(e.area.left_top) .. " to " .. pos_to_gps_string(e.area.right_bottom) .. " but were not allowed."}
-			end
+			game.players[player_].print{player.name .. " tried to deconstruct the area " .. pos_to_gps_string(e.area.left_top) .. " to " .. pos_to_gps_string(e.area.right_bottom) .. " but were not allowed."}
 		end
 
 		add_log(get_secs() .. "," .. player.name .. ",decon_area," .. pos_to_string(e.area.left_top) .. "," .. pos_to_string(e.area.right_bottom))
