@@ -3,6 +3,7 @@
 local Event = require 'utils.event' --- @dep utils.event
 
 --Credit to Cooldude2606 for using his lua magic to make this function.
+--[[
 local directions = {
     ['W'] = -0.875,
     ['NW'] = -0.625,
@@ -23,6 +24,7 @@ local function Angle(entity)
     end
     return 'W'
 end
+]]
 
 local custom_string = ' *'
 local custom_string_len = #custom_string
