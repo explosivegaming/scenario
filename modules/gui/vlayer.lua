@@ -4,3 +4,17 @@ local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.gui.vlayer' --- @dep config.gui.player_list_actions
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 
+--[[
+344,000
+369,000
+
+Power Production:
+Peak: 344 k x 60 kW
+Average sustained: 344 x 60 kW x 291 / 416
+
+Battery Storage:
+369k x 5.0 MJ = ....
+
+Net Power Production:
+- 5,000 MW 
+]]
