@@ -20,11 +20,6 @@ end
 --[[
     If there is active moderator, 
     then let moderator do it.
-
-    Else check then player data between join and report / exit.
-    If a lot of build / deconstruction happen in a short time then can jail.
-    
-    Else jail with two report.
 ]]
 Event.add(Reports.events.on_player_reported, function(event)
     local player = game.get_player(event.player_index)
@@ -41,8 +36,9 @@ Event.add(Reports.events.on_player_reported, function(event)
     end
     
     if not moderator_count_bool then
-        if Statistics
-        -- 1    
+        if Statistics.Playtime ~= nil and Statistics.MachinesRemoved ~= nil then
+            
+        end    
     end
 
     if total_playtime < player.online_time*1.5 then return end
