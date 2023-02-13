@@ -5,6 +5,8 @@ local Event = require 'utils.event' ---@dep utils.event
 local config = require 'config.report-jail' --- @dep config.afk_kick
 local Jail = require 'modules.control.jail' ---@dep modules.control.jail
 local Reports = require 'modules.control.reports' --- @dep modules.control.reports
+local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
+local Statistics = PlayerData.Statistics
 local format_chat_player_name = _C.format_chat_player_name --- @dep expcore.common
 
 --- Returns the playtime of the reporter. Used when calculating the total playtime of all reporters
@@ -39,6 +41,7 @@ Event.add(Reports.events.on_player_reported, function(event)
     end
     
     if not moderator_count_bool then
+        if Statistics
         -- 1
     end
 
