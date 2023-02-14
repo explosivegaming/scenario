@@ -72,6 +72,7 @@ return {
     'modules.gui.task-list',
     'modules.gui.player-list',
     'modules.gui.server-ups',
+    'modules.gui.vlayer',
     'modules.commands.debug',
 
 		'modules.graftorio.require', -- graftorio
