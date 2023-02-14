@@ -3,5 +3,9 @@
 
 return {
     enabled = true
-    land = false
+    land = {
+        enabled = false,
+        tile = "landfill",
+        result = 4
+    }
 }
