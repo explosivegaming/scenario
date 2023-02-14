@@ -3,6 +3,7 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.gui.vlayer' --- @dep config.gui.player_list_actions
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
+local format_number = require('util').format_number
 
 --[[
 344,000
@@ -22,35 +23,15 @@ Net Power Production:
 local vlayer_container =
 Gui.element(function(event_trigger, parent)
     local player = Gui.get_player_from_element(parent)
-    local container = Gui.container(parent, event_trigger, 300)
+    local container = Gui.container(parent, event_trigger, 400)
 
-    local header = Gui.header(container, 'VLAYER', '', true)
-
-    -- Draw the scroll table for the warps
-    local scroll_table = Gui.scroll_table(container, 250, 3)
-    -- Set the scroll panel to always show the scrollbar (not doing this will result in a changing gui size)
-    scroll_table.parent.vertical_scroll_policy = 'always'
-
-    -- Change the style of the scroll table
-    local scroll_table_style = scroll_table.style
-    scroll_table_style.top_cell_padding = 3
-    scroll_table_style.bottom_cell_padding = 3
-
-    -- Draw the warp cooldown progress bar
-    local warp_timer_element = warp_timer(container)
-
-    -- Change the progress of the warp timer
-    local timer = PlayerCooldown:get(player)
-    if timer > 0 then
-        warp_timer_element.tooltip = {'warp-list.timer-tooltip', math.floor(timer/config.update_smoothing)}
-        warp_timer_element.value = 1 - (timer/config.update_smoothing/config.cooldown_duration)
-    else
-        warp_timer_element.tooltip = {'warp-list.timer-tooltip-zero', config.cooldown_duration}
-        warp_timer_element.value = 1
-    end
-
-    -- Add any existing warps
-    update_all_warps(player, scroll_table)
+    -- local header = Gui.header(container, 'VLAYER', '', true)
+    
+    Gui.title_label(container, 400, 'VLAYER')
+    local solar_panel_display_title = Gui.centered_label(container, 150, 'Solar Panel')
+    local solar_panel_display_count = Gui.centered_label(container, 150, 0)
+    local battery_display_title = Gui.centered_label(container, 150, 'Accumulator')
+    local battery_display_count = Gui.centered_label(container, 150, 0)
 
     -- Return the external container
     return container.parent
@@ -68,5 +49,7 @@ Gui.left_toolbar_button(
 )
 
 Event.on_nth_tick(60, function()
+    vlayer_container.solar_panel_display_count = Gui.centered_label(container, 150, format_number(global.phi.vlayer.storage.item['solar-panel']))
+    vlayer_container.battery_display_count = Gui.centered_label(container, 150, format_number(global.phi.vlayer.storage.item['accumulator']))
     end
 end)
