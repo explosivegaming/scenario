@@ -19,6 +19,8 @@ Net Power Production:
 - 5,000 MW 
 ]]
 
+local vlayer_container
+
 Gui.left_toolbar_button(
     "item/solar-panel",
     {"vlayer.main-tooltip"},
@@ -27,14 +29,6 @@ Gui.left_toolbar_button(
         return Roles.player_allowed(player, "gui/vlayer")
     end
 )
-
-local vlayer_gui = 
-Gui.element{
-    type = 'sprite-button',
-    sprite = 'utility/close_black',
-    style = 'tool_button',
-    tooltip = {'expcore-gui.left-button-tooltip'}
-}
 
 Event.on_nth_tick(60, function()
     end
