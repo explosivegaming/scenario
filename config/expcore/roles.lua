@@ -295,7 +295,8 @@ local default = Roles.new_role('Guest','')
     'gui/science-info',
     'gui/task-list',
     'gui/warp-list',
-    'gui/readme'
+    'gui/readme',
+    'gui/vlayer',
 }
 
 --- Jail role
