@@ -41,7 +41,7 @@ Event.add(Reports.events.on_player_reported, function(event)
         -- Combined playtime is greater than 200% of the reported's playtime
         -- 30 min = 108,000
 
-        if (total_playtime < (player.online_time * 2)) and (total_playtime > 108000) then 
+        if ((player.online_time * 2) > total_playtime) and (player.online_time > 108000) then 
             return 
         elseif #Reports.get_reports(player) > 1 then
             local player_name_color = format_chat_player_name(player)
