@@ -29,22 +29,22 @@ Gui.element(function(event_trigger, parent)
     local alignment_1 = Gui.alignment(parent, 'l1')
     local alignment_2 = Gui.alignment(parent, 'l2')
     local solar_panel_display_title = alignment_1.add{
-        name = 'label',
+        name = 't',
         type = 'label',
         caption = 'Solar Panel'
     }
     local solar_panel_display_count = alignment_1.add{
-        name = 'label',
+        name = 'c',
         type = 'label',
         caption = 0
     }
     local battery_display_title = alignment_2.add{
-        name = 'label',
+        name = 't',
         type = 'label',
         caption = 'Accumulator'
     }
     local battery_display_count = alignment_2.add{
-        name = 'label',
+        name = 'c',
         type = 'label',
         caption = 0
     }
