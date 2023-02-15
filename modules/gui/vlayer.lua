@@ -27,11 +27,36 @@ Gui.element(function(event_trigger, parent)
 
     local header = Gui.header(container, 'VLAYER', '', true)
     local scroll_table = Gui.scroll_table(container, 300, 2)
+    local solar_panel_display_title =
+    scroll_table.parent.add{
+        name = 'solar_panel_display_title',
+        type = 'label',
+        caption = 'Solar Panel'
+    }
+    local solar_panel_display_count =
+    scroll_table.parent.add{
+        name = 'solar_panel_display_count',
+        type = 'label',
+        caption = '0'
+    }
+    local accumulator_display_title =
+    scroll_table.parent.add{
+        name = 'accumulator_display_title',
+        type = 'label',
+        caption = 'Accumulator'
+    }
+    local accumulator_display_count =
+    scroll_table.parent.add{
+        name = 'accumulator_display_count',
+        type = 'label',
+        caption = '0'
+    }
+    --[[
     local solar_panel_display_title = Gui.centered_label(scroll_table, 150, 'Solar Panel')
     local solar_panel_display_count = Gui.centered_label(scroll_table, 150, '0')
     local accumulator_display_title = Gui.centered_label(scroll_table, 150, 'Accumulator')
     local accumulator_display_count = Gui.centered_label(scroll_table, 150, '0')
-
+    ]]
     -- Return the external container
     return container.parent
 end)
