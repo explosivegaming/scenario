@@ -31,7 +31,7 @@ Gui.element(function(event_trigger, parent)
     scroll_table.add{
         name = 'solar_panel_display_title',
         type = 'label',
-        caption = '[img=virtual-signal/solar-panel] Solar Panel'
+        caption = '[img=entity/solar-panel] Solar Panel',
     }
     local solar_panel_display_count =
     scroll_table.add{
@@ -43,7 +43,7 @@ Gui.element(function(event_trigger, parent)
     scroll_table.add{
         name = 'accumulator_display_title',
         type = 'label',
-        caption = '[img=virtual-signal/accumulator] Accumulator'
+        caption = '[img=entity/accumulator] Accumulator',
     }
     local accumulator_display_count =
     scroll_table.add{
