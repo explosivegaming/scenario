@@ -26,10 +26,28 @@ Gui.element(function(event_trigger, parent)
     local container = Gui.container(parent, event_trigger, 400)
 
     local header = Gui.header(container, 'VLAYER', '', true)
-    local solar_panel_display_title = Gui.centered_label(container, 150, 'Solar Panel')
-    local solar_panel_display_count = Gui.centered_label(container, 150, 0)
-    local battery_display_title = Gui.centered_label(container, 150, 'Accumulator')
-    local battery_display_count = Gui.centered_label(container, 150, 0)
+    local alignment_1 = Gui.alignment(parent, 'l1')
+    local alignment_2 = Gui.alignment(parent, 'l2')
+    local solar_panel_display_title = alignment_1.add{
+        name = 'label',
+        type = 'label',
+        caption = 'Solar Panel'
+    }
+    local solar_panel_display_count = alignment_1.add{
+        name = 'label',
+        type = 'label',
+        caption = 0
+    }
+    local battery_display_title = alignment_2.add{
+        name = 'label',
+        type = 'label',
+        caption = 'Accumulator'
+    }
+    local battery_display_count = alignment_2.add{
+        name = 'label',
+        type = 'label',
+        caption = 0
+    }
 
     -- Return the external container
     return container.parent
@@ -40,10 +58,8 @@ Gui.left_toolbar_button("entity/solar-panel", {'vlayer.main-tooltip'}, vlayer_co
 	return Roles.player_allowed(player, "gui/vlayer")
 end)
 
---[[
 Event.on_nth_tick(60, function()
-    -- vlayer_container.solar_panel_display_count = Gui.centered_label(container, 150, format_number(global.phi.vlayer.storage.item['solar-panel']))
-    -- vlayer_container.battery_display_count = Gui.centered_label(container, 150, format_number(global.phi.vlayer.storage.item['accumulator']))
+    vlayer_container.solar_panel_display_count.caption = format_number(global.phi.vlayer.storage.item['solar-panel'])
+    vlayer_container.battery_display_count.caption = format_number(global.phi.vlayer.storage.item['accumulator'])
     end
 end)
-]]
