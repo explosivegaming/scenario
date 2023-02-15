@@ -36,12 +36,14 @@ Gui.element(function(event_trigger, parent)
 end)
 :add_to_left_flow()
 
-Gui.toolbar_button("entity/solar-panel", {'vlayer.main-tooltip'}, vlayer_container, function (player)
+Gui.left_toolbar_button("entity/solar-panel", {'vlayer.main-tooltip'}, vlayer_container, function (player)
 	return Roles.player_allowed(player, "gui/vlayer")
 end)
 
+--[[
 Event.on_nth_tick(60, function()
     -- vlayer_container.solar_panel_display_count = Gui.centered_label(container, 150, format_number(global.phi.vlayer.storage.item['solar-panel']))
     -- vlayer_container.battery_display_count = Gui.centered_label(container, 150, format_number(global.phi.vlayer.storage.item['accumulator']))
     end
 end)
+]]
