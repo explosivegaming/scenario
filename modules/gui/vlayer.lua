@@ -28,25 +28,25 @@ Gui.element(function(event_trigger, parent)
     local header = Gui.header(container, 'VLAYER', '', true)
     local scroll_table = Gui.scroll_table(container, 300, 2)
     local solar_panel_display_title =
-    scroll_table.parent.add{
+    scroll_table.add{
         name = 'solar_panel_display_title',
         type = 'label',
-        caption = 'Solar Panel'
+        caption = '[img=virtual-signal/solar-panel] Solar Panel'
     }
     local solar_panel_display_count =
-    scroll_table.parent.add{
+    scroll_table.add{
         name = 'solar_panel_display_count',
         type = 'label',
         caption = '0'
     }
     local accumulator_display_title =
-    scroll_table.parent.add{
+    scroll_table.add{
         name = 'accumulator_display_title',
         type = 'label',
-        caption = 'Accumulator'
+        caption = '[img=virtual-signal/accumulator] Accumulator'
     }
     local accumulator_display_count =
-    scroll_table.parent.add{
+    scroll_table.add{
         name = 'accumulator_display_count',
         type = 'label',
         caption = '0'
