@@ -36,13 +36,24 @@ Gui.element(function(event_trigger, parent)
 end)
 :add_to_left_flow()
 
+Gui.toolbar_button("entity/solar-panel", {'tree-decon.main-tooltip'}, function (player)
+	return Roles.player_allowed(player, "fast-tree-decon")
+end)
+:on_click(function(player, element)
+	local status = HasEnabledDecon:get(player)
+	HasEnabledDecon:set(player, not status)
+	Gui.toolbar_button_style(element, not status)
+	player.print(status and {'tree-decon.toggle-msg', {'tree-decon.disabled'}} or {'tree-decon.toggle-msg', {'tree-decon.enabled'}})
+end)
+
+
 Gui.left_toolbar_button("item/solar-panel", "VLAYER", vlayer_container,
 function(player)
     return Roles.player_allowed(player, "gui/vlayer")
 end)
 
 Event.on_nth_tick(60, function()
-    vlayer_container.solar_panel_display_count = Gui.centered_label(container, 150, format_number(global.phi.vlayer.storage.item['solar-panel']))
-    vlayer_container.battery_display_count = Gui.centered_label(container, 150, format_number(global.phi.vlayer.storage.item['accumulator']))
+    -- vlayer_container.solar_panel_display_count = Gui.centered_label(container, 150, format_number(global.phi.vlayer.storage.item['solar-panel']))
+    -- vlayer_container.battery_display_count = Gui.centered_label(container, 150, format_number(global.phi.vlayer.storage.item['accumulator']))
     end
 end)
