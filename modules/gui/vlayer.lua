@@ -59,7 +59,7 @@ Gui.left_toolbar_button("entity/solar-panel", {'vlayer.main-tooltip'}, vlayer_co
 end)
 
 Event.on_nth_tick(60, function()
-    vlayer_container.solar_panel_display_count.caption = format_number(global.phi.vlayer.storage.item['solar-panel'])
-    vlayer_container.battery_display_count.caption = format_number(global.phi.vlayer.storage.item['accumulator'])
+    --vlayer_container.solar_panel_display_count.caption = format_number(global.phi.vlayer.storage.item['solar-panel'])
+    --vlayer_container.battery_display_count.caption = format_number(global.phi.vlayer.storage.item['accumulator'])
     end
 end)
