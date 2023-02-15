@@ -51,12 +51,14 @@ Gui.element(function(event_trigger, parent)
         type = 'label',
         caption = '0'
     }
+    
     --[[
-    local solar_panel_display_title = Gui.centered_label(scroll_table, 150, 'Solar Panel')
-    local solar_panel_display_count = Gui.centered_label(scroll_table, 150, '0')
-    local accumulator_display_title = Gui.centered_label(scroll_table, 150, 'Accumulator')
-    local accumulator_display_count = Gui.centered_label(scroll_table, 150, '0')
+    local no_packs_style = no_packs_label.style
+    no_packs_style.padding = {2, 4}
+    no_packs_style.single_line = false
+    no_packs_style.width = 200
     ]]
+
     -- Return the external container
     return container.parent
 end)
