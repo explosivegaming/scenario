@@ -39,8 +39,9 @@ Event.add(Reports.events.on_player_reported, function(event)
         -- if player.online_time ~= nil and player.MachinesRemoved ~= nil then
         -- if has_role(player, 'Member') or has_role(player, 'Veteran') then
         -- Combined playtime is greater than 200% of the reported's playtime
-        
-        if total_playtime < player.online_time * 2 then 
+        -- 30 min = 108,000
+
+        if (total_playtime < (player.online_time * 2)) and (total_playtime > 108000) then 
             return 
         elseif #Reports.get_reports(player) > 1 then
             local player_name_color = format_chat_player_name(player)
