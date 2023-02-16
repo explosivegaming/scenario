@@ -6,8 +6,8 @@
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.bonuses' --- @dep config.bonuses
-local Commands = require 'expcore.commands' --- @dep expcore.commands
-require 'config.expcore.command_general_parse'
+-- local Commands = require 'expcore.commands' --- @dep expcore.commands
+-- require 'config.expcore.command_general_parse'
 
 -- Player will always use the highest value so auto assign with the role instead.
 --- Apply a bonus to a player
