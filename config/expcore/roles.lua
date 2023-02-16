@@ -149,7 +149,7 @@ Roles.new_role('Sponsor','Spon')
 :set_flag('instance-respawn')
 :set_parent('Supporter')
 :allow{
-    'command/bonus',
+    'bonus-2',
     'command/home',
     'command/home-set',
     'command/home-get',
@@ -186,7 +186,7 @@ Roles.new_role('Partner','Part')
     'command/unjail',
     'command/join-message',
     'command/join-message-clear',
-    'command/bonus',
+    'bonus-2',
     'command/last-location',
     'command/home',
     'command/home-set',
@@ -236,7 +236,8 @@ Roles.new_role('Member','Mem')
     'gui/task-list/edit',
     'gui/warp-list/add',
     'gui/warp-list/edit',
-    'command/save-quickbar'
+    'command/save-quickbar',
+    'bonus-1'
 }
 
 local hours2, hours15 = 2*216000, 15*60
