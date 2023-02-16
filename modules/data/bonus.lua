@@ -51,10 +51,13 @@ end)
 --- Remove bonus if a player no longer has access to the command
 local function role_update(event)
     local player = game.players[event.player_index]
-    if not Roles.player_allowed(player, 'command/bonus') then
-        PlayerBonus:remove(player)
-    end
+
+    -- if not (Roles.player_allowed(player, 'bonus-2') or Roles.player_allowed(player, 'bonus-1')) then
+    apply_bonus(player)
 end
+
+Event.add(Roles.events.on_role_assigned, role_update)
+Event.add(Roles.events.on_role_unassigned, role_update)
 
 --[[
 --- Stores the bonus for the player
@@ -85,11 +88,4 @@ Commands.new_command('bonus', 'Changes the amount of bonus you receive')
     Commands.print{'expcom-bonus.set', amount}
     Commands.print({'expcom-bonus.wip'}, 'orange')
 end)
-
-
-
-Event.add(Roles.events.on_role_assigned, role_update)
-Event.add(Roles.events.on_role_unassigned, role_update)
 ]]
-
-
