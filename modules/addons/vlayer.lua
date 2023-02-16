@@ -11,6 +11,9 @@ solar x 60 kW
 
 signal-S Power Production Sustained
 solar x 4365 / 104 kW
+
+signal-B Battery Max
+accu x 5 MJ
 ]]
 
 if not config.enabled then
