@@ -10,7 +10,7 @@ local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
 
 --- Apply a bonus to a player
-local function apply_bonus(player)
+local function apply_bonus(player, stage_)
     if not player.character then
         return 
     end
@@ -58,7 +58,7 @@ end)
 Commands.new_command('bonus', 'Changes the amount of bonus you receive')
 :add_param('amount', 'integer-range', 0, 2)
 :register(function(player, amount)
-    PlayerBonus:set(player, amount)
+    PlayerBonus:set(player, tostring(amount))
     Commands.print{'expcom-bonus.set', amount}
 end)
 
@@ -72,7 +72,7 @@ end)
 Event.add(defines.events.on_player_died, function(event)
     local player = game.players[event.player_index]
 
-    if Roles.player_has_flag(player, 'instance-respawn') then
+    if Roles.player_has_flag(player, 'instant-respawn') then
         player.ticks_to_respawn = 120
     end
 end)
