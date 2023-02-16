@@ -12,10 +12,6 @@ local config = require 'config.bonus' --- @dep config.bonuses
 -- Player will always use the highest value so auto assign with the role instead.
 --- Apply a bonus to a player
 local function apply_bonus(player)
-    if not amount then
-        return 
-    end
-
     if not player.character then
         return 
     end
