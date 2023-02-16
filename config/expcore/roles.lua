@@ -237,6 +237,7 @@ Roles.new_role('Member','Mem')
     'gui/warp-list/add',
     'gui/warp-list/edit',
     'command/save-quickbar',
+    'command/bonus'
     'bonus-1'
 }
 
