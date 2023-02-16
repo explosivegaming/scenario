@@ -6,6 +6,8 @@ local config = require 'config.vlayer' --- @dep config.advanced_start
 
 --[[
 TODO
+unit of energy is kJ
+
 signal-P Power Production Peak
 solar x 60 kW
 
