@@ -85,7 +85,9 @@ Roles.new_role('Moderator','Mod')
     'command/clear-reports',
     'command/clear-warnings',
     'command/clear-inventory',
-    'command/connect-player'
+    'command/connect-player',
+    'command/protect-entity',
+    'command/protect-area',
 }
 
 Roles.new_role('Trainee','TrMod')
@@ -96,7 +98,6 @@ Roles.new_role('Trainee','TrMod')
 :set_flag('report-immune')
 :set_parent('Board Member')
 :allow{
-    'gui/warp-list/bypass-cooldown',
     'gui/warp-list/bypass-proximity',
     'command/admin-chat',
     'command/admin-marker',
@@ -105,8 +106,6 @@ Roles.new_role('Trainee','TrMod')
     'command/give-warning',
     'command/get-warnings',
     'command/get-reports',
-    'command/protect-entity',
-    'command/protect-area',
     'command/kick',
     'command/ban',
     'command/follow',
@@ -125,6 +124,7 @@ Roles.new_role('Board Member','Board')
 :set_flag('instance-respawn')
 :set_parent('Sponsor')
 :allow{
+    'gui/warp-list/bypass-cooldown',
     'command/goto',
     'command/repair',
     'command/spectate',
@@ -169,7 +169,8 @@ Roles.new_role('Supporter','Sup')
     'command/jail',
     'command/unjail',
     'command/join-message',
-    'command/join-message-clear'
+    'command/join-message-clear',
+    'command/last-location'
 }
 
 Roles.new_role('Partner','Part')
@@ -186,6 +187,7 @@ Roles.new_role('Partner','Part')
     'command/join-message',
     'command/join-message-clear',
     'command/bonus',
+    'command/last-location',
     'command/home',
     'command/home-set',
     'command/home-get',
@@ -212,7 +214,6 @@ Roles.new_role('Veteran','Vet')
 :set_parent('Member')
 :allow{
     'command/chat-bot',
-    'command/last-location'
 }
 :set_auto_assign_condition(function(player)
     if player.online_time >= hours6 then
@@ -238,7 +239,7 @@ Roles.new_role('Member','Mem')
     'command/save-quickbar'
 }
 
-local hours1, hours15 = 1*216000, 15*60
+local hours2, hours15 = 2*216000, 15*60
 Roles.new_role('Regular','Reg')
 :set_permission_group('Standard')
 :set_custom_color{r=0,g=153,b=225}
@@ -253,7 +254,7 @@ Roles.new_role('Regular','Reg')
 	'bypass-nukeprotect'
 }
 :set_auto_assign_condition(function(player)
-    if player.online_time >= hours1 then
+    if player.online_time >= hours2 then
         return true
     else
         local stats = Statistics:get(player, {})
