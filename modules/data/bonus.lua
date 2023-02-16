@@ -20,12 +20,12 @@ local function apply_bonus(player)
         return 
     end
 
-    local stage_ = 0
+    local stage_ = '0'
 
     if Roles.player_allowed(player, "bonus-2") then
-        stage_ = 2
+        stage_ = '2'
     elseif  Roles.player_allowed(player, "bonus-1") then
-        stage_ = 1
+        stage_ = '1'
     end
 
     for k, v in pairs(config) do
@@ -56,7 +56,7 @@ local function role_update(event)
     apply_bonus(player)
 end
 
-Event.add(defines.events.on_player_created, role_update)
+Event.add(defines.events.on_player_joined_game, role_update)
 Event.add(Roles.events.on_role_assigned, role_update)
 Event.add(Roles.events.on_role_unassigned, role_update)
 
