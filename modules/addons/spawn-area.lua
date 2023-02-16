@@ -115,7 +115,6 @@ end
 local function spawn_area(surface, position)
     local dr = config.spawn_area.deconstruction_radius
     local tr = config.spawn_area.tile_radius
-    local dr2 = dr^2
     local tr2 = tr^2
     local decon_tile = config.spawn_area.deconstruction_tile
 
