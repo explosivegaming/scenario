@@ -227,7 +227,7 @@ function vlayer_power_storage_handle()
     0.45    Night   2,500   41s
     0.55    Sunrise 5,000   83s
 
-        player.surface.daytime = [0, 1)
+    player.surface.daytime = [0, 1)
     ]]
     -- 
     global.phi.vlayer.power.energy = global.phi.vlayer.power.energy
