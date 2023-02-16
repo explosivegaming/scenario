@@ -62,11 +62,10 @@ Commands.new_command('bonus', 'Changes the amount of bonus you receive')
     Commands.print{'expcom-bonus.set', amount}
 end)
 
-
 --- When a player respawns re-apply bonus
 Event.add(defines.events.on_player_respawned, function(event)
     local player = game.players[event.player_index]
-    apply_bonus(player)
+    PlayerBonus:set(player)
 end)
 
 --- When a player dies allow them to have instant respawn
