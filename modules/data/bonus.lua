@@ -19,7 +19,7 @@ PlayerBonus:set_metadata{
         if not value or value == 0 then
             return 'None set'
         end
-        
+
         return value
     end
 }
@@ -30,7 +30,7 @@ local function apply_bonus(player, stage_)
         return 
     end
 
-    if stage_ == 2 then
+    if stage_ >= 2 then
         if not Roles.player_allowed(player, "bonus-2") then
             stage_ = 0
         end
@@ -41,7 +41,7 @@ local function apply_bonus(player, stage_)
     end
 
     for k, v in pairs(config) do
-        player[config[k].name] = config[k].stage[toString(stage_)]
+        player[config[k].name] = config[k].stage['1'] * stage_
     end
 end
 
@@ -52,9 +52,9 @@ end)
 
 --- Changes the amount of bonus you receive
 -- @command bonus
--- @tparam number amount range 0-2 the increase for your bonus
+-- @tparam number amount range 0-10 the increase for your bonus
 Commands.new_command('bonus', 'Changes the amount of bonus you receive')
-:add_param('amount', 'integer-range', 0, 2)
+:add_param('amount', 'integer-range', 0, 10)
 :register(function(player, amount)
     PlayerBonus:set(player, amount)
     Commands.print{'expcom-bonus.set', amount}
