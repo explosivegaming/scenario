@@ -6,7 +6,7 @@ local config = require 'config.vlayer' --- @dep config.advanced_start
 
 --[[
 TODO
-signal-P Power Production Peak 
+signal-P Power Production Peak
 solar x 60 kW
 
 signal-S Power Production Sustained
@@ -23,7 +23,7 @@ end
 function vlayer_convert_chest(player)
     local entities = player.surface.find_entities_filtered{position=player.position, radius=16, name="steel-chest", force=player.force}
     
-    if (not entities or (#entities == 0)) then 
+    if (not entities or (#entities == 0)) then
         return nil
     end
         
@@ -186,7 +186,7 @@ function vlayer_power_input_handle()
     global.phi.vlayer.power.energy_history = global.phi.vlayer.power.energy
 
     for k, v in pairs(global.phi.vlayer.power.input) do
-        if (v.power == nil) or (not v.power.valid) or (bv.circuit == nil) or (not v.circuit.valid) then
+        if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
             global.phi.vlayer.power.input[k] = nil
         
         -- 1 000 000
@@ -196,9 +196,9 @@ function vlayer_power_input_handle()
                 
             if ((circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == "signal-M")) then
                 -- circuit is in MJ, divided by 60 ups
-                v.power.power_usage = math.min(b.power.energy - (1000000), math.floor(circuit_signal.count * 50000 / 3, global.phi.vlayer.power.limit.input))
+                v.power.power_usage = math.min(v.power.energy - (1000000), math.floor(circuit_signal.count * 50000 / 3, global.phi.vlayer.power.limit.input))
             else
-                v.power.power_usage = math.min(b.power.energy - (1000000), 0, global.phi.vlayer.power.limit.input)
+                v.power.power_usage = math.min(v.power.energy - (1000000), 0, global.phi.vlayer.power.limit.input)
             end
 
             global.phi.vlayer.power.energy = global.phi.vlayer.power.energy + v.power.power_usage
