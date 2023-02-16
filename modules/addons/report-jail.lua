@@ -26,9 +26,9 @@ Event.add(Reports.events.on_player_reported, function(event)
     local total_playtime = Reports.count_reports(player, reporter_playtime)
     local moderator_count_bool = false
 
-    for _, player in ipairs(game.connected_players) do
-        if player.admin then
-            if player.afk_time < config.afk_time then
+    for _, player_ in ipairs(game.connected_players) do
+        if player_.admin then
+            if player_.afk_time < config.afk_time then
                 -- No instant jail if a moderator is active
                 moderator_count_bool = true
             end
