@@ -56,9 +56,6 @@ Gui.element(function(event_trigger, parent)
         caption = '0',
         style = 'heading_1_label'
     }
-    
-    solar_panel_display_title.style.width=150
-    accumulator_display_title.style.width=150
 
     local power_production_peak_display_title =
     scroll_table.add{
@@ -88,8 +85,6 @@ Gui.element(function(event_trigger, parent)
         caption = '0 kW',
         style = 'heading_1_label'
     }
-    power_production_peak_display_title.style.width=150
-    power_production_sustained_display_title.style.width=150
 
     -- Return the external container
     return container.parent
