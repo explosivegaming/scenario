@@ -99,8 +99,8 @@ return {
         ['burner-mining-drill']=cutoff_time(10*minutes, 4, 0),
         ['stone-furnace']=cutoff_time(10*minutes, 4, 0),
         ['submachine-gun']=scale_amount_made(1, 1, 1),
-        ['piercing-rounds-magazine']=scale_amount_made(20, 1, 1),
-        ['construction-robot']=scale_amount_made(10, 1, 1)
+        ['piercing-rounds-magazine']=scale_amount_made(1, 20, 20),
+        ['construction-robot']=scale_amount_made(1, 10, 10)
     },
     armor = {
         enable=true,
