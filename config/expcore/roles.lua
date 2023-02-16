@@ -24,7 +24,7 @@ Roles.new_role('System','SYS')
 :set_flag('is_admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
-:set_flag('instance-respawn')
+:set_flag('instant-respawn')
 :set_allow_all()
 
 Roles.new_role('Senior Administrator','SAdmin')
@@ -33,7 +33,7 @@ Roles.new_role('Senior Administrator','SAdmin')
 :set_flag('is_admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
-:set_flag('instance-respawn')
+:set_flag('instant-respawn')
 :set_parent('Administrator')
 :set_allow_all()
 
@@ -43,7 +43,7 @@ Roles.new_role('Administrator','Admin')
 :set_flag('is_admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
-:set_flag('instance-respawn')
+:set_flag('instant-respawn')
 :set_parent('Senior Moderator')
 :set_allow_all()
 --[[
@@ -62,7 +62,7 @@ Roles.new_role('Senior Moderator','SMod')
 :set_flag('is_admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
-:set_flag('instance-respawn')
+:set_flag('instant-respawn')
 :set_parent('Moderator')
 :allow{
 }
@@ -73,7 +73,7 @@ Roles.new_role('Moderator','Mod')
 :set_flag('is_admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
-:set_flag('instance-respawn')
+:set_flag('instant-respawn')
 :set_parent('Trainee')
 :set_allow_all()
 :allow{
@@ -121,7 +121,7 @@ Roles.new_role('Board Member','Board')
 :set_custom_color{r=247,g=246,b=54}
 :set_flag('is_spectator')
 :set_flag('report-immune')
-:set_flag('instance-respawn')
+:set_flag('instant-respawn')
 :set_parent('Sponsor')
 :allow{
     'gui/warp-list/bypass-cooldown',
@@ -136,7 +136,7 @@ Roles.new_role('Senior Backer','Backer')
 :set_custom_color{r=238,g=172,b=44}
 :set_flag('is_spectator')
 :set_flag('report-immune')
-:set_flag('instance-respawn')
+:set_flag('instant-respawn')
 :set_parent('Sponsor')
 :allow{
 }
@@ -146,7 +146,7 @@ Roles.new_role('Sponsor','Spon')
 :set_custom_color{r=238,g=172,b=44}
 :set_flag('is_spectator')
 :set_flag('report-immune')
-:set_flag('instance-respawn')
+:set_flag('instant-respawn')
 :set_parent('Supporter')
 :allow{
     'bonus-2',
