@@ -128,16 +128,16 @@ return {
                 count=6
             },
             {
+                equipment='personal-roboport-equipment',
+                count=1 
+            },
+            {
                 equipment='battery-equipment',
                 count=1
             },
             {
                 equipment='solar-panel-equipment',
                 count=2
-            },
-            {
-                equipment='personal-roboport-equipment',
-                count=1 
             }
         }
     }
