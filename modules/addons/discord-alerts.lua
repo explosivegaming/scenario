@@ -93,8 +93,8 @@ if config.entity_protection then
             title='Entity Protection',
             description='A player removed protected entities',
             color=Colors.yellow,
-            ['Player']='<inline>'..append_playtime(player_name),
-            ['Entity']='<inline>'..event.entity.name
+            ['Player']='<inline>' .. append_playtime(player_name),
+            ['Entity']='<inline>' .. event.entity.name,
             ['Location']=game.players[event.player_index].position
         }
     end)
