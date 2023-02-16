@@ -28,7 +28,20 @@ Gui.element(function(event_trigger, parent)
 
     local header = Gui.header(container, 'VLAYER', '', true)
     local scroll_table = Gui.scroll_table(container, 300, 2)
-    local solar_panel_display_title =
+
+    scroll_table.add{
+        name = 'vlayer_1_display_title',
+        type = 'label',
+        caption = 'STORAGE',
+        style = 'heading_1_label'
+    }
+    scroll_table.add{
+        name = 'vlayer_2_display_title',
+        type = 'label',
+        caption = '',
+        style = 'heading_1_label'
+    }
+
     scroll_table.add{
         name = 'solar_panel_display_title',
         type = 'label',
@@ -42,7 +55,6 @@ Gui.element(function(event_trigger, parent)
         caption = '0',
         style = 'heading_1_label'
     }
-    local accumulator_display_title =
     scroll_table.add{
         name = 'accumulator_display_title',
         type = 'label',
@@ -57,11 +69,23 @@ Gui.element(function(event_trigger, parent)
         style = 'heading_1_label'
     }
 
-    local power_production_peak_display_title =
+    scroll_table.add{
+        name = 'vlayer_3_display_title',
+        type = 'label',
+        caption = 'Power Production',
+        style = 'heading_1_label'
+    }
+    scroll_table.add{
+        name = 'vlayer_4_display_title',
+        type = 'label',
+        caption = '',
+        style = 'heading_1_label'
+    }
+    
     scroll_table.add{
         name = 'power_production_peak_display_title',
         type = 'label',
-        caption = 'Power Production Peak',
+        caption = '[virtual-signal=signal-P] Peak',
         style = 'heading_1_label'
     }
     local power_production_peak_display_count =
@@ -71,11 +95,10 @@ Gui.element(function(event_trigger, parent)
         caption = '0 kW',
         style = 'heading_1_label'
     }
-    local power_production_sustained_display_title =
     scroll_table.add{
         name = 'power_production_sustained_display_title',
         type = 'label',
-        caption = 'Power Production Sustained',
+        caption = '[virtual-signal=signal-S] Sustained',
         style = 'heading_1_label'
     }
     local power_production_sustained_display_count =
