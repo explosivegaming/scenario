@@ -95,25 +95,49 @@ return {
         ['firearm-magazine']=cutoff_amount_made_unless(100, 10, 0,'piercing-rounds-magazine', 100),
         ['piercing-rounds-magazine']=cutoff_amount_made(100, 0, 10),
         ]]
-        
-        -- Plates
-        ['iron-plate']=scale_amount_made(100, 10, 10),
-        ['copper-plate']=scale_amount_made(100, 0, 8),
-        ['steel-plate']=scale_amount_made(100, 0, 4),
-        -- Secondary Items
-        ['electronic-circuit']=scale_amount_made(1000, 0, 6),
-        ['iron-gear-wheel']=scale_amount_made(1000, 0, 6),
-        -- Starting Items
+
+        ['coal']=200,
         ['burner-mining-drill']=cutoff_time(10*minutes, 4, 0),
         ['stone-furnace']=cutoff_time(10*minutes, 4, 0),
-        -- Armor
-        ['light-armor']=cutoff_amount_made_unless(5, 0,1,'heavy-armor',5),
-        ['heavy-armor']=cutoff_amount_made(5, 0,1),
-        -- Weapon
-        ['pistol']=cutoff_amount_made_unless(0, 1, 1,'submachine-gun',5),
-        ['submachine-gun']=cutoff_amount_made(5, 0, 1),
-        -- Ammo
-        ['firearm-magazine']=cutoff_amount_made_unless(100, 10, 0,'piercing-rounds-magazine', 100),
-        ['piercing-rounds-magazine']=cutoff_amount_made(100, 0, 10),
+        ['submachine-gun']=1,
+        ['piercing-rounds-magazine']=20,
+        ['construction-robot']=10
+    },
+    armor = {
+        main = 'modular-armor',
+        grid = {
+            {
+                equipment='solar-panel-equipment',
+                count=4
+            },
+            {
+                equipment='belt-immunity-equipment',
+                count=1
+            },
+            {
+                equipment='solar-panel-equipment',
+                count=4
+            },  
+            {
+                equipment='battery-equipment',
+                count=1
+            },
+            {
+                equipment='solar-panel-equipment',
+                count=8
+            },
+            {
+                equipment='battery-equipment',
+                count=1
+            },
+            {
+                equipment='solar-panel-equipment',
+                count=2
+            },
+            {
+                equipment='personal-roboport-equipment',
+                count=1 
+            }
+        }
     }
 }
