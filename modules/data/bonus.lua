@@ -5,7 +5,7 @@
 
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
-local config = require 'config.bonuses' --- @dep config.bonuses
+local config = require 'config.bonus' --- @dep config.bonuses
 -- local Commands = require 'expcore.commands' --- @dep expcore.commands
 -- require 'config.expcore.command_general_parse'
 
