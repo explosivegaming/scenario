@@ -14,8 +14,11 @@ solar x 60 kW
 signal-S Power Production Sustained
 solar x 4365 / 104 kW
 
-signal-B Battery Max
+signal-M Battery Max
 accu x 5 MJ
+
+signal-C
+accu level
 ]]
 
 if not config.enabled then
@@ -88,7 +91,7 @@ function vlayer_convert_chest_power_input(player)
                 vlayer_circuit.minable = false
                 vlayer_circuit.operable = true
                 vlayer_circuit.last_user = player
-                vlayer_circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-M"}, count=1})
+                vlayer_circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-C"}, count=1})
             
                 table.insert(global.phi.vlayer.power.input, {power=vlayer_power, circuit=vlayer_circuit})
             return true
@@ -196,7 +199,7 @@ function vlayer_power_input_handle()
         elseif (v.power.energy > (1000000)) then
             local circuit_signal = v.circuit.get_or_create_control_behavior().get_signal(1)
                 
-            if ((circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == "signal-M")) then
+            if ((circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == "signal-C")) then
                 -- circuit is in MJ, divided by 60 ups
                 v.power.power_usage = math.min(v.power.energy - (1000000), math.floor(circuit_signal.count * 50000 / 3, global.phi.vlayer.power.limit.input))
             else
@@ -228,7 +231,7 @@ function vlayer_power_output_handle()
                 v.power.power_production = 0
             end
 
-            v.circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-M"}, count=math.min(math.floor(global.phi.vlayer.power.energy/1000000), 2147483647)})
+            v.circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-C"}, count=math.min(math.floor(global.phi.vlayer.power.energy/1000000), 2147483647)})
         end
     end
 end
