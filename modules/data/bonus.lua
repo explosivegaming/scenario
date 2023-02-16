@@ -19,6 +19,7 @@ PlayerBonus:set_metadata{
         if not value or value == 0 then
             return 'None set'
         end
+        
         return value
     end
 }
