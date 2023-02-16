@@ -6,10 +6,32 @@
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.bonus' --- @dep config.bonuses
--- local Commands = require 'expcore.commands' --- @dep expcore.commands
--- require 'config.expcore.command_general_parse'
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+require 'config.expcore.command_general_parse'
 
--- Player will always use the highest value so auto assign with the role instead.
+-- Stores the bonus for the player
+local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
+local PlayerBonus = PlayerData.Settings:combine('Bonus')
+PlayerBonus:set_default(0)
+PlayerBonus:set_metadata{
+    permission = 'command/bonus',
+    stringify = function(value)
+        if not value or value == 0 then
+            return 'None set'
+        end
+
+        if (value ~= 0) or (value ~= 1) or (value ~= 2) then
+            value = 0
+        end
+
+        return value
+    end
+}
+
+PlayerBonus:on_update(function(player_name, player_bonus)
+    apply_bonus(game.players[player_name], player_bonus or 0)
+end)
+
 --- Apply a bonus to a player
 local function apply_bonus(player)
     if not player.character then
@@ -58,22 +80,10 @@ Event.add(Roles.events.on_role_assigned, role_update)
 Event.add(Roles.events.on_role_unassigned, role_update)
 
 --[[
---- Stores the bonus for the player
-local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
-local PlayerBonus = PlayerData.Settings:combine('Bonus')
-PlayerBonus:set_default(0)
-PlayerBonus:set_metadata{
-    permission = 'command/bonus',
-    stringify = function(value)
-        if not value or value == 0 then return 'None set' end
-        return (value*100)..'%'
-    end
-}
+
 
 --- When store is updated apply new bonus to the player
-PlayerBonus:on_update(function(player_name, player_bonus)
-    apply_bonus(game.players[player_name], player_bonus or 0)
-end)
+
 
 --- Changes the amount of bonus you receive
 -- @command bonus
