@@ -59,28 +59,28 @@ Gui.element(function(event_trigger, parent)
 
     local power_production_peak_display_title =
     scroll_table.add{
-        name = 'accumulator_display_title',
+        name = 'power_production_peak_display_title',
         type = 'label',
         caption = 'Power Production Peak',
         style = 'heading_1_label'
     }
     local power_production_peak_display_count =
     scroll_table.add{
-        name = 'accumulator_display_count',
+        name = 'power_production_peak_display_count',
         type = 'label',
         caption = '0 kW',
         style = 'heading_1_label'
     }
     local power_production_sustained_display_title =
     scroll_table.add{
-        name = 'accumulator_display_title',
+        name = 'power_production_sustained_display_title',
         type = 'label',
         caption = 'Power Production Sustained',
         style = 'heading_1_label'
     }
     local power_production_sustained_display_count =
     scroll_table.add{
-        name = 'accumulator_display_count',
+        name = 'power_production_sustained_display_count',
         type = 'label',
         caption = '0 kW',
         style = 'heading_1_label'
