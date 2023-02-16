@@ -72,13 +72,13 @@ Gui.element(function(event_trigger, parent)
     scroll_table.add{
         name = 'vlayer_3_display_title',
         type = 'label',
-        caption = 'Power Production (KW)',
+        caption = 'Power Production',
         style = 'heading_1_label'
     }
     scroll_table.add{
         name = 'vlayer_4_display_title',
         type = 'label',
-        caption = '',
+        caption = 'KW',
         style = 'heading_1_label'
     }
     
@@ -112,13 +112,13 @@ Gui.element(function(event_trigger, parent)
     scroll_table.add{
         name = 'vlayer_5_display_title',
         type = 'label',
-        caption = 'Battery (MJ)',
+        caption = 'Battery',
         style = 'heading_1_label'
     }
     scroll_table.add{
         name = 'vlayer_6_display_title',
         type = 'label',
-        caption = '',
+        caption = 'MJ',
         style = 'heading_1_label'
     }
     
