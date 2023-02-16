@@ -95,6 +95,7 @@ if config.entity_protection then
             color=Colors.yellow,
             ['Player']='<inline>'..append_playtime(player_name),
             ['Entity']='<inline>'..event.entity.name
+            ['Location']=game.players[event.player_index].position
         }
     end)
 end
