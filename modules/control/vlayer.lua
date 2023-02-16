@@ -215,6 +215,21 @@ function vlayer_power_input_handle()
 end
 
 function vlayer_power_storage_handle()
+    --[[
+    25,000 / 416 s
+    昼      208秒	ソーラー効率100%
+    夕方	83秒	1秒ごとにソーラー発電量が約1.2%ずつ下がり、やがて0%になる
+    夜	    41秒	ソーラー発電量が0%になる
+    朝方	83秒	1秒ごとにソーラー発電量が約1.2%ずつ上がり、やがて100%になる
+    
+    0.75    Day     12,500  208s
+    0.25    Sunset  5,000   83s
+    0.45    Night   2,500   41s
+    0.55    Sunrise 5,000   83s
+
+        player.surface.daytime = [0, 1)
+    ]]
+    -- 
     global.phi.vlayer.power.energy = global.phi.vlayer.power.energy
 end
 
