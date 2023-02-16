@@ -52,7 +52,9 @@ return {
     'modules.addons.protection-jail',
 		'modules.addons.deconlog',
 		'modules.addons.nukeprotect',
-    'modules.addons.vlayer',
+
+    -- Control
+    'modules.control.vlayer',
 
     --- Data
     'modules.data.statistics',
