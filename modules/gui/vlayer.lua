@@ -92,7 +92,7 @@ Gui.element(function(event_trigger, parent)
     scroll_table.add{
         name = 'power_production_peak_display_count',
         type = 'label',
-        caption = '0 kW',
+        caption = '0 KW',
         style = 'heading_1_label'
     }
     scroll_table.add{
@@ -105,7 +105,34 @@ Gui.element(function(event_trigger, parent)
     scroll_table.add{
         name = 'power_production_sustained_display_count',
         type = 'label',
-        caption = '0 kW',
+        caption = '0 KW',
+        style = 'heading_1_label'
+    }
+
+    scroll_table.add{
+        name = 'vlayer_5_display_title',
+        type = 'label',
+        caption = 'Battery',
+        style = 'heading_1_label'
+    }
+    scroll_table.add{
+        name = 'vlayer_6_display_title',
+        type = 'label',
+        caption = '',
+        style = 'heading_1_label'
+    }
+    
+    scroll_table.add{
+        name = 'battery_max_display_title',
+        type = 'label',
+        caption = '[virtual-signal=signal-B] Max',
+        style = 'heading_1_label'
+    }
+    local battery_max_display_count =
+    scroll_table.add{
+        name = 'battery_max_display_count',
+        type = 'label',
+        caption = '0 MJ',
         style = 'heading_1_label'
     }
 
@@ -126,7 +153,9 @@ Event.on_nth_tick(60, function()
         container.scroll.table.solar_panel_display_count.caption = format_number(global.phi.vlayer.storage.item['solar-panel'])
         container.scroll.table.accumulator_display_count.caption = format_number(global.phi.vlayer.storage.item['accumulator'])
         
-        container.scroll.table.power_production_peak_display_count.caption = format_number(global.phi.vlayer.storage.item['solar-panel'] * 60) .. ' kW'
-        container.scroll.table.power_production_sustained_display_count.caption = format_number(global.phi.vlayer.storage.item['solar-panel'] * 4365 / 104) .. ' kW'
+        container.scroll.table.power_production_peak_display_count.caption = format_number(global.phi.vlayer.storage.item['solar-panel'] * 60) .. ' KW'
+        container.scroll.table.power_production_sustained_display_count.caption = format_number(global.phi.vlayer.storage.item['solar-panel'] * 4365 / 104) .. ' KW'
+        
+        container.scroll.table.battery_max_display_count.caption = format_number(global.phi.vlayer.storage.item['accumulator'] * 5) .. ' MJ'
     end
 end)
