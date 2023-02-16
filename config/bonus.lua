@@ -6,21 +6,21 @@ return {
         name='character_mining_speed_modifier',
         stage = {
             '0' = 0,
-            '1' = 2.0
+            '1' = 2
         }
     },
     {
         name='character_running_speed_modifier',
         stage = {
             '0' = 0,
-            '1' = 2.0
+            '1' = 2
         }
     },
     {
         name='character_crafting_speed_modifier',
         stage = {
             '0' = 0,
-            '1' = 4.0
+            '1' = 4
         }
     },
     {
