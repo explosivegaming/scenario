@@ -29,11 +29,11 @@ local function apply_bonus(player, stage_)
         return 
     end
 
-    if stage_ = 2 then
+    if stage_ == 2 then
         if not Roles.player_allowed(player, "bonus-2") then
             stage_ = 0
         end
-    elseif stage_ = 1 then
+    elseif stage_ == 1 then
         if not Roles.player_allowed(player, "bonus-1") then
             stage_ = 0
         end
