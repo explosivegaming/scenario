@@ -64,11 +64,8 @@ Roles.new_role('Senior Moderator','SMod')
 :set_flag('report-immune')
 :set_flag('instance-respawn')
 :set_parent('Moderator')
-:set_allow_all()
---[[
 :allow{
 }
-]]
 
 Roles.new_role('Moderator','Mod')
 :set_permission_group('Admin')
@@ -79,14 +76,7 @@ Roles.new_role('Moderator','Mod')
 :set_flag('instance-respawn')
 :set_parent('Trainee')
 :set_allow_all()
---[[
 :allow{
-    'command/connect-all',
-	'command/collectdata',
-    'command/interface',
-    'command/debug',
-    'command/toggle-cheat-mode',
-
     'command/assign-role',
     'command/unassign-role',
     'command/kill/always',
@@ -97,7 +87,6 @@ Roles.new_role('Moderator','Mod')
     'command/clear-inventory',
     'command/connect-player'
 }
-]]
 
 Roles.new_role('Trainee','TrMod')
 :set_permission_group('Admin')
