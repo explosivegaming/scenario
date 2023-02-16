@@ -17,10 +17,9 @@ end)
 local created_items = function()
   return
   {
-    ["iron-plate"] = 20,
-    ["wood"] = 10,
+    ["coal"] = 200,
     ["submachine-gun"] = 1,
-    ["piercing-rounds-magazine"] = 10,
+    ["piercing-rounds-magazine"] = 20,
     ["burner-mining-drill"] = 4,
     ["stone-furnace"] = 4
   }
@@ -30,7 +29,7 @@ local respawn_items = function()
   return
   {
     ["submachine-gun"] = 1,
-    ["piercing-rounds-magazine"] = 10
+    ["piercing-rounds-magazine"] = 20
   }
 end
 
