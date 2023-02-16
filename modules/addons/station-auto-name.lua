@@ -70,14 +70,14 @@ local function station_name_changer(event)
 
             local item_name = recourse_closed.name
             if item_name then -- prevent errors if something went wrong
-                local item_name2 = item_name:gsub("^%l", string.upper):gsub('-', ' ') -- removing the - and making first letter capital
+                -- local item_name2 = item_name:gsub("^%l", string.upper):gsub('-', ' ') -- removing the - and making first letter capital
 
                 local Item_ore_fluid = "item"
                 if item_name == "crude-oil" then
                     Item_ore_fluid = "fluid"
                 end
                 --Final string:
-                entity.backer_name = string.format("[L] [img=%s.%s] %s %s", Item_ore_fluid, item_name, item_name2, entity.backer_name)
+                entity.backer_name = string.format("[L] [img=%s.%s]", Item_ore_fluid, item_name)
             end
         end
     end
