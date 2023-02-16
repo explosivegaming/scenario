@@ -4,44 +4,26 @@
 return {
     {
         name='character_mining_speed_modifier',
-        stage = {
-            '0' = 0,
-            '1' = 2
-        }
+        max = 2
     },
     {
         name='character_running_speed_modifier',
-        stage = {
-            '0' = 0,
-            '1' = 2
-        }
+        max = 2
     },
     {
         name='character_crafting_speed_modifier',
-        stage = {
-            '0' = 0,
-            '1' = 4
-        }
+        max = 4
     },
     {
         name='character_build_distance_bonus',
-        stage = {
-            '0' = 0,
-            '1' = 20
-        }
+        max = 20
     },
     {
         name='character_reach_distance_bonus',
-        stage = {
-            '0' = 0,
-            '1' = 20
-        }
+        max = 20
     },
     {
         name='character_inventory_slots_bonus',
-        stage = {
-            '0' = 0,
-            '1' = 100
-        }
+        max = 100
     }
 }
