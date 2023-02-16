@@ -95,7 +95,7 @@ return {
         ['piercing-rounds-magazine']=cutoff_amount_made(100, 0, 10),
         ]]
 
-        ['coal']=scale_amount_made(200, 1, 1),
+        ['coal']=cutoff_time(10*minutes, 200, 0),
         ['burner-mining-drill']=cutoff_time(10*minutes, 4, 0),
         ['stone-furnace']=cutoff_time(10*minutes, 4, 0),
         ['submachine-gun']=scale_amount_made(1, 1, 1),
