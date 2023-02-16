@@ -66,6 +66,12 @@ Event.add(defines.events.on_player_respawned, function(event)
     PlayerBonus:set(player)
 end)
 
+--- Remove bonus if a player no longer has access to the command
+local function role_update(event)
+    local player = game.players[event.player_index]
+    apply_bonus(player)
+end
+
 --- When a player dies allow them to have instant respawn
 Event.add(defines.events.on_player_died, function(event)
     local player = game.players[event.player_index]
@@ -74,14 +80,6 @@ Event.add(defines.events.on_player_died, function(event)
         player.ticks_to_respawn = 120
     end
 end)
-
---- Remove bonus if a player no longer has access to the command
-local function role_update(event)
-    local player = game.players[event.player_index]
-
-    -- if not (Roles.player_allowed(player, 'bonus-2') or Roles.player_allowed(player, 'bonus-1')) then
-    apply_bonus(player)
-end
 
 Event.add(defines.events.on_player_created, role_update)
 Event.add(defines.events.on_player_joined_game, role_update)
