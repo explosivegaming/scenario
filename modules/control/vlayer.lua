@@ -231,7 +231,12 @@ function vlayer_power_output_handle()
                 v.power.power_production = 0
             end
 
-            v.circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-C"}, count=math.min(math.floor(global.phi.vlayer.power.energy/1000), 2147483647)})
+            v.circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-P"}, count=math.min(math.floor(global.phi.vlayer.storage.item['solar-panel'] * 60), 2147483647)})
+            v.circuit.get_or_create_control_behavior().set_signal(2, {signal={type="virtual", name="signal-S"}, count=math.min(math.floor(global.phi.vlayer.storage.item['solar-panel'] * 4365 / 104), 2147483647)})
+            v.circuit.get_or_create_control_behavior().set_signal(3, {signal={type="virtual", name="signal-B"}, count=math.min(math.floor(global.phi.vlayer.storage.item['accumulator'] * 5), 2147483647)})
+            v.circuit.get_or_create_control_behavior().set_signal(4, {signal={type="virtual", name="signal-C"}, count=math.min(math.floor(global.phi.vlayer.power.energy / 1000), 2147483647)})
+            v.circuit.get_or_create_control_behavior().set_signal(5, {signal={type="item", name="solar-panel"}, count=math.min(math.floor(global.phi.vlayer.storage.item['solar-panel']), 2147483647)})
+            v.circuit.get_or_create_control_behavior().set_signal(6, {signal={type="item", name="accumulator"}, count=math.min(math.floor(global.phi.vlayer.storage.item['accumulator']), 2147483647)})
         end
     end
 end
