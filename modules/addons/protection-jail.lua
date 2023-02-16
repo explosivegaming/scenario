@@ -29,9 +29,9 @@ Event.add(Protection.events.on_repeat_violation, function(event)
     if repeat_count[player.index] < 3 then return end
     local moderator_count_bool = false
 
-    for _, player in ipairs(game.connected_players) do
-        if player.admin then
-            if player.afk_time < config.afk_time then
+    for _, player_ in ipairs(game.connected_players) do
+        if player_.admin then
+            if player_.afk_time < config.afk_time then
                 -- No instant jail if a moderator is active
                 moderator_count_bool = true
             end
