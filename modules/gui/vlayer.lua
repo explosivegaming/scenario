@@ -6,9 +6,6 @@ local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 local format_number = require('util').format_number
 
 --[[
-344,000
-369,000
-
 Power Production:
 Peak: 344 k x 60 kW
 Average sustained: 344 x 60 kW x 291 / 416
@@ -51,7 +48,7 @@ Gui.element(function(event_trigger, parent)
         type = 'label',
         caption = '0'
     }
-    
+
     --[[
     local no_packs_style = no_packs_label.style
     no_packs_style.padding = {2, 4}
