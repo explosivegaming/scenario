@@ -104,6 +104,7 @@ return {
         ['construction-robot']=10
     },
     armor = {
+        enable=true,
         main = 'modular-armor',
         grid = {
             {
