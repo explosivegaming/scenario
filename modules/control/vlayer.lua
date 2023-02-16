@@ -214,6 +214,10 @@ function vlayer_power_input_handle()
     end
 end
 
+function vlayer_power_storage_handle()
+    global.phi.vlayer.power.energy = global.phi.vlayer.power.energy
+end
+
 function vlayer_power_output_handle()
     local energy_available = math.floor(global.phi.vlayer.power.energy / (#global.phi.vlayer.power.output))
 
