@@ -170,6 +170,6 @@ Event.on_nth_tick(60, function()
         container.scroll.table.power_production_sustained_display_count.caption = format_number(global.phi.vlayer.storage.item['solar-panel'] * 4365 / 104) .. ' KW'
         
         container.scroll.table.battery_max_display_count.caption = format_number(global.phi.vlayer.storage.item['accumulator'] * 5) .. ' MJ'
-        container.scroll.table.battery_current_display_count.caption = format_number(math.floor(global.phi.vlayer.power.energy / 1000000)) .. ' MJ'
+        container.scroll.table.battery_current_display_count.caption = format_number(math.floor(global.phi.vlayer.power.energy / 1000)) .. ' MJ'
     end
 end)
