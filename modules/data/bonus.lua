@@ -41,7 +41,7 @@ local function apply_bonus(player, stage)
     end
 
     for k, v in pairs(config) do
-        player[config[k].name] = config[k].max * stage
+        player[config[k].name] = config[k].max * stage / 10
     end
 end
 
