@@ -25,23 +25,23 @@ PlayerBonus:set_metadata{
 }
 
 --- Apply a bonus to a player
-local function apply_bonus(player, stage_)
+local function apply_bonus(player, stage)
     if not player.character then
         return 
     end
 
-    if stage_ >= 2 then
+    if stage >= 2 then
         if not Roles.player_allowed(player, "bonus-2") then
-            stage_ = 0
+            stage = 0
         end
-    elseif stage_ == 1 then
+    elseif stage == 1 then
         if not Roles.player_allowed(player, "bonus-1") then
-            stage_ = 0
+            stage = 0
         end
     end
 
     for k, v in pairs(config) do
-        player[config[k].name] = config[k].stage['1'] * stage_
+        player[config[k].name] = config[k].max * stage
     end
 end
 
