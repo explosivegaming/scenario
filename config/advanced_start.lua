@@ -124,7 +124,7 @@ return {
             },
             {
                 equipment='solar-panel-equipment',
-                count=8
+                count=6
             },
             {
                 equipment='battery-equipment',
