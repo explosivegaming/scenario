@@ -4,6 +4,15 @@
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.vlayer' --- @dep config.advanced_start
 
+--[[
+TODO
+signal-P Power Production Peak 
+solar x 60 kW
+
+signal-S Power Production Sustained
+solar x 4365 / 104 kW
+]]
+
 if not config.enabled then
     return
 end
