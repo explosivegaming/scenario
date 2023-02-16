@@ -125,7 +125,6 @@ DataSavingPreference:on_load(function(player_name, dataPreference)
 end)
 
 --- Load player data when they join
---[[
 Event.add(defines.events.on_player_joined_game, function(event)
     local player = game.players[event.player_index]
     Async.wait(300, check_data_loaded, player)
@@ -141,7 +140,7 @@ Event.add(defines.events.on_player_left_game, function(event)
         PlayerData:unload(player)
     else PlayerData:raw_set(player.name) end
 end)
-]]
+
 ----- Module Return -----
 return {
     All = PlayerData, -- Root for all of a players data
