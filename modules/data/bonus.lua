@@ -8,6 +8,19 @@ local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.bonus' --- @dep config.bonuses
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
+-- Stores the bonus for the player
+local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
+local PlayerBonus = PlayerData.Settings:combine('Bonus')
+PlayerBonus:set_default(0)
+PlayerBonus:set_metadata{
+    permission = 'command/bonus',
+    stringify = function(value)
+        if not value or value == 0 then
+            return 'None set'
+        end
+        return value
+    end
+}
 
 --- Apply a bonus to a player
 local function apply_bonus(player, stage_)
@@ -26,23 +39,9 @@ local function apply_bonus(player, stage_)
     end
 
     for k, v in pairs(config) do
-        player[config[k].name] = config[k].stage[stage_]
+        player[config[k].name] = config[k].stage[toString(stage_)]
     end
 end
-
--- Stores the bonus for the player
-local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
-local PlayerBonus = PlayerData.Settings:combine('Bonus')
-PlayerBonus:set_default(0)
-PlayerBonus:set_metadata{
-    permission = 'command/bonus',
-    stringify = function(value)
-        if not value or value == 0 then
-            return 'None set'
-        end
-        return value
-    end
-}
 
 --- When store is updated apply new bonus to the player
 PlayerBonus:on_update(function(player_name, player_bonus)
