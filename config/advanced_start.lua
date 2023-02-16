@@ -74,23 +74,26 @@ return {
     items = { --- @setting items items and there condition for being given
         -- ['item-name'] = function(amount_made, production_stats, player) return <Number> end -- 0 means no items given
         -- Plates
+        --[[
+
+        ]]
         ['iron-plate']=scale_amount_made(100, 10, 10),
-        ['copper-plate']=scale_amount_made(100, 0,8),
-        ['steel-plate']=scale_amount_made(100, 0,4),
+        ['copper-plate']=scale_amount_made(100, 0, 8),
+        ['steel-plate']=scale_amount_made(100, 0, 4),
         -- Secondary Items
-        ['electronic-circuit']=scale_amount_made(1000, 0,6),
-        ['iron-gear-wheel']=scale_amount_made(1000, 0,6),
+        ['electronic-circuit']=scale_amount_made(1000, 0, 6),
+        ['iron-gear-wheel']=scale_amount_made(1000, 0, 6),
         -- Starting Items
-        ['burner-mining-drill']=cutoff_time(10*minutes, 4,0),
-        ['stone-furnace']=cutoff_time(10*minutes, 4,0),
+        ['burner-mining-drill']=cutoff_time(10*minutes, 4, 0),
+        ['stone-furnace']=cutoff_time(10*minutes, 4, 0),
         -- Armor
         ['light-armor']=cutoff_amount_made_unless(5, 0,1,'heavy-armor',5),
         ['heavy-armor']=cutoff_amount_made(5, 0,1),
         -- Weapon
-        ['pistol']=cutoff_amount_made_unless(0, 1,1,'submachine-gun',5),
-        ['submachine-gun']=cutoff_amount_made(5, 0,1),
+        ['pistol']=cutoff_amount_made_unless(0, 1, 1,'submachine-gun',5),
+        ['submachine-gun']=cutoff_amount_made(5, 0, 1),
         -- Ammo
-        ['firearm-magazine']=cutoff_amount_made_unless(100, 10, 0,'piercing-rounds-magazine',100),
-        ['piercing-rounds-magazine']=cutoff_amount_made(100, 0,10),
+        ['firearm-magazine']=cutoff_amount_made_unless(100, 10, 0,'piercing-rounds-magazine', 100),
+        ['piercing-rounds-magazine']=cutoff_amount_made(100, 0, 10),
     }
 }
