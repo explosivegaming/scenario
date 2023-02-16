@@ -73,7 +73,6 @@ return {
     chart_radius=10*32, --- @setting chart_radius the number of tiles that will be charted when the map starts
     items = { --- @setting items items and there condition for being given
         -- ['item-name'] = function(amount_made, production_stats, player) return <Number> end -- 0 means no items given
-        
         --[[
         -- Plates
         ['iron-plate']=scale_amount_made(100, 10, 10),
@@ -96,12 +95,12 @@ return {
         ['piercing-rounds-magazine']=cutoff_amount_made(100, 0, 10),
         ]]
 
-        ['coal']=200,
+        ['coal']=scale_amount_made(200, 1, 1),
         ['burner-mining-drill']=cutoff_time(10*minutes, 4, 0),
         ['stone-furnace']=cutoff_time(10*minutes, 4, 0),
-        ['submachine-gun']=1,
-        ['piercing-rounds-magazine']=20,
-        ['construction-robot']=10
+        ['submachine-gun']=scale_amount_made(1, 1, 1),
+        ['piercing-rounds-magazine']=scale_amount_made(20, 1, 1),
+        ['construction-robot']=scale_amount_made(10, 1, 1)
     },
     armor = {
         enable=true,
