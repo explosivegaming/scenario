@@ -9,6 +9,25 @@ local config = require 'config.bonus' --- @dep config.bonuses
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
 
+--- Apply a bonus to a player
+local function apply_bonus(player)
+    if not player.character then
+        return 
+    end
+
+    local stage_ = '0'
+
+    if Roles.player_allowed(player, "bonus-2") then
+        stage_ = '2'
+    elseif  Roles.player_allowed(player, "bonus-1") then
+        stage_ = '1'
+    end
+
+    for k, v in pairs(config) do
+        player[config[k].name] = config[k].stage[stage_]
+    end
+end
+
 -- Stores the bonus for the player
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 local PlayerBonus = PlayerData.Settings:combine('Bonus')
@@ -28,28 +47,21 @@ PlayerBonus:set_metadata{
     end
 }
 
+--- When store is updated apply new bonus to the player
 PlayerBonus:on_update(function(player_name, player_bonus)
     apply_bonus(game.players[player_name], player_bonus or 0)
 end)
 
---- Apply a bonus to a player
-local function apply_bonus(player)
-    if not player.character then
-        return 
-    end
+--- Changes the amount of bonus you receive
+-- @command bonus
+-- @tparam number amount range 0-2 the increase for your bonus
+Commands.new_command('bonus', 'Changes the amount of bonus you receive')
+:add_param('amount', 'integer-range', 0, 2)
+:register(function(player, amount)
+    PlayerBonus:set(player, amount)
+    Commands.print{'expcom-bonus.set', amount}
+end)
 
-    local stage_ = '0'
-
-    if Roles.player_allowed(player, "bonus-2") then
-        stage_ = '2'
-    elseif  Roles.player_allowed(player, "bonus-1") then
-        stage_ = '1'
-    end
-
-    for k, v in pairs(config) do
-        player[config[k].name] = config[k].stage[stage_]
-    end
-end
 
 --- When a player respawns re-apply bonus
 Event.add(defines.events.on_player_respawned, function(event)
@@ -78,22 +90,3 @@ Event.add(defines.events.on_player_created, role_update)
 Event.add(defines.events.on_player_joined_game, role_update)
 Event.add(Roles.events.on_role_assigned, role_update)
 Event.add(Roles.events.on_role_unassigned, role_update)
-
---[[
-
-
---- When store is updated apply new bonus to the player
-
-
---- Changes the amount of bonus you receive
--- @command bonus
--- @tparam number amount range 0-50 the percent increase for your bonus
-Commands.new_command('bonus', 'Changes the amount of bonus you receive')
-:add_param('amount', 'integer-range', 0,50)
-:register(function(player, amount)
-    local percent = amount/100
-    PlayerBonus:set(player, percent)
-    Commands.print{'expcom-bonus.set', amount}
-    Commands.print({'expcom-bonus.wip'}, 'orange')
-end)
-]]
