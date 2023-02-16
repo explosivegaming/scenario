@@ -194,16 +194,16 @@ function vlayer_power_input_handle()
         if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
             global.phi.vlayer.power.input[k] = nil
         
-        -- 1 000 000
+        -- 1 000
         -- 1 MJ
-        elseif (v.power.energy > (1000000)) then
+        elseif (v.power.energy > (1000)) then
             local circuit_signal = v.circuit.get_or_create_control_behavior().get_signal(1)
                 
             if ((circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == "signal-C")) then
                 -- circuit is in MJ, divided by 60 ups
-                v.power.power_usage = math.min(v.power.energy - (1000000), math.floor(circuit_signal.count * 50000 / 3, global.phi.vlayer.power.limit.input))
+                v.power.power_usage = math.min(v.power.energy - (1000), math.floor(circuit_signal.count * 50000 / 3, global.phi.vlayer.power.limit.input))
             else
-                v.power.power_usage = math.min(v.power.energy - (1000000), 0, global.phi.vlayer.power.limit.input)
+                v.power.power_usage = math.min(v.power.energy - (1000), 0, global.phi.vlayer.power.limit.input)
             end
 
             global.phi.vlayer.power.energy = global.phi.vlayer.power.energy + v.power.power_usage
@@ -231,7 +231,7 @@ function vlayer_power_output_handle()
                 v.power.power_production = 0
             end
 
-            v.circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-C"}, count=math.min(math.floor(global.phi.vlayer.power.energy/1000000), 2147483647)})
+            v.circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-C"}, count=math.min(math.floor(global.phi.vlayer.power.energy/1000), 2147483647)})
         end
     end
 end
@@ -271,7 +271,6 @@ function vlayer_storage_handle()
         end
     end
 end
-
 
 function vlayer_circuit_handle()
     for k, v in pairs(global.phi.vlayer.power.circuit) do
