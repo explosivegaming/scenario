@@ -125,7 +125,7 @@ Gui.element(function(event_trigger, parent)
     scroll_table.add{
         name = 'battery_max_display_title',
         type = 'label',
-        caption = '[virtual-signal=signal-B] Max',
+        caption = '[virtual-signal=signal-M] Max',
         style = 'heading_1_label'
     }
     local battery_max_display_count =
@@ -138,7 +138,7 @@ Gui.element(function(event_trigger, parent)
     scroll_table.add{
         name = 'battery_current_display_title',
         type = 'label',
-        caption = '[virtual-signal=signal-M] Current',
+        caption = '[virtual-signal=signal-C] Current',
         style = 'heading_1_label'
     }
     local battery_current_display_count =
