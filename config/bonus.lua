@@ -15,11 +15,27 @@ return {
         max = 4
     },
     {
+        name='character_reach_distance_bonus',
+        max = 20
+    },
+    {
+        name='character_resource_reach_distance_bonus',
+        max = 20
+    },
+    {
         name='character_build_distance_bonus',
         max = 20
     },
     {
-        name='character_reach_distance_bonus',
+        name='character_item_pickup_distance_bonus',
+        max = 10
+    },
+    {
+        name='character_loot_pickup_distance_bonus',
+        max = 10
+    },
+    {
+        name='character_item_drop_distance_bonus',
         max = 20
     },
     {
