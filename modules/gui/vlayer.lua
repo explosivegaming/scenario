@@ -134,7 +134,7 @@ function vlayer_convert_chest_power_output(player)
 end
 
 
-function layer_convert_chest_circuit(player)
+function vlayer_convert_chest_circuit(player)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
