@@ -34,6 +34,7 @@ return {
     'modules.commands.spectate',
     'modules.commands.search',
     'modules.commands.bot-queue',
+    'modules.commands.speed',
 
     --- Addons
     'modules.addons.chat-popups',
