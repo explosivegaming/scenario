@@ -149,6 +149,21 @@ Gui.element(function(event_trigger, parent)
         style = 'heading_1_label'
     }
 
+    if Roles.player_allowed(player, 'gui/vlayer') then
+        scroll_table.add{
+            name = 'vlayer_7_display_title',
+            type = 'label',
+            caption = 'Convert',
+            style = 'heading_1_label'
+        }
+        scroll_table.add{
+            name = 'vlayer_8_display_title',
+            type = 'label',
+            caption = '',
+            style = 'heading_1_label'
+        }
+    end
+
     -- Return the external container
     return container.parent
 end)
