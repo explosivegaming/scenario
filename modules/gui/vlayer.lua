@@ -3,7 +3,6 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.gui.vlayer' --- @dep config.gui.player_list_actions
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
-local vlayer = require 'modules.control.vlayer'
 local format_number = require('util').format_number
 
 --[[
@@ -22,13 +21,187 @@ Net Power Production:
 - 5,000 MW 
 ]]
 
+function vlayer_convert_chest(player)
+    local entities = player.surface.find_entities_filtered{position=player.position, radius=16, name="steel-chest", force=player.force}
+    
+    if (not entities or (#entities == 0)) then
+        return nil
+    end
+        
+    local target_chest = player.surface.get_closest(player.position, entities)
+
+    if (not target_chest) then
+        player.print("No Steel Chest Detected")
+        return nil
+    end
+
+    if (not target_chest.get_inventory(defines.inventory.chest).is_empty()) then
+        player.print("Chest is not emptied")
+        return nil
+    end
+
+    local pos = target_chest.position
+
+    if (not target_chest.destroy()) then
+        player.print("Unable to convert chest")
+        return nil
+    end
+
+    return {x=math.floor(pos.x),y=math.floor(pos.y)}
+end
+
+function vlayer_convert_chest_storage_input(player)
+    local pos = vlayer_convert_chest(player)
+
+    if (pos) then
+        local vlayer_storage = player.surface.create_entity{name="logistic-chest-storage", position={pos.x, pos.y}, force="neutral"}
+        vlayer_storage.destructible = false
+        vlayer_storage.minable = false
+        vlayer_storage.last_user = player
+    
+        table.insert(global.phi.vlayer.storage.input, {type="INPUT", storage=vlayer_storage})
+        return true
+    end
+
+    return false
+end
+
+function vlayer_convert_chest_power_input(player)
+    local pos = vlayer_convert_chest(player)
+
+    if (pos) then
+        if (player.surface.can_place_entity{name="electric-energy-interface", position=pos}) and 
+            (player.surface.can_place_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}}) then
+                local vlayer_power = player.surface.create_entity{name="electric-energy-interface", position=pos, force="neutral"}
+                vlayer_power.destructible = false
+                vlayer_power.minable = false
+                vlayer_power.operable = false
+                vlayer_power.last_user = player
+                vlayer_power.electric_buffer_size = global.phi.vlayer.power.limit.input
+                vlayer_power.power_production = 0
+                vlayer_power.power_usage = 0
+                vlayer_power.energy = 0
+            
+                local vlayer_circuit = player.surface.create_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}, force="neutral"}
+                vlayer_circuit.destructible = false
+                vlayer_circuit.minable = false
+                vlayer_circuit.operable = true
+                vlayer_circuit.last_user = player
+                vlayer_circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-C"}, count=1})
+            
+                table.insert(global.phi.vlayer.power.input, {power=vlayer_power, circuit=vlayer_circuit})
+            return true
+
+        else
+            player.print("Unable to build energy input")
+        end
+    end
+
+    return false
+end
+
+function vlayer_convert_chest_power_output(player)
+    local pos = vlayer_convert_chest(player)
+
+    if (pos) then
+        if (player.surface.can_place_entity{name="electric-energy-interface", position=pos}) and 
+            (player.surface.can_place_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}}) then
+                local vlayer_power = player.surface.create_entity{name="electric-energy-interface", position=pos, force="neutral"}
+                vlayer_power.destructible = false
+                vlayer_power.minable = false
+                vlayer_power.operable = false
+                vlayer_power.last_user = player
+                vlayer_power.electric_buffer_size = global.phi.vlayer.power.limit.output
+                vlayer_power.power_production = 0
+                vlayer_power.power_usage = 0
+                vlayer_power.energy = 0
+            
+                local vlayer_circuit = player.surface.create_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}, force="neutral"}
+                vlayer_circuit.destructible = false
+                vlayer_circuit.minable = false
+                vlayer_circuit.operable = false
+                vlayer_circuit.last_user = player
+            
+                table.insert(global.phi.vlayer.power.output, {power=vlayer_power, circuit=vlayer_circuit})
+            return true
+
+        else
+            player.print("Unable to build energy output")
+        end
+    end
+
+    return false
+end
+
+
+function vlayer_circuit(player)
+    local pos = vlayer_convert_chest(player)
+
+    if (pos) then
+        local circuit_i = player.surface.create_entity{name="constant-combinator", position=pos, force="neutral"}
+        circuit_i.destructible = false
+        circuit_i.minable = false
+        circuit_i.last_user = player
+        circuit_i.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-P"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(2, {signal={type="virtual", name="signal-S"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(3, {signal={type="virtual", name="signal-B"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(4, {signal={type="virtual", name="signal-C"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(5, {signal={type="virtual", name="signal-T"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(6, {signal={type="virtual", name="signal-D"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(7, {signal={type="item", name="solar-panel"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(8, {signal={type="item", name="accumulator"}, count=1})
+        
+        local circuit_o = player.surface.create_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}, force="neutral"}
+        circuit_o.destructible = false
+        circuit_o.minable = false
+        circuit_o.operable = false
+        circuit_o.last_user = player
+
+        table.insert(global.phi.vlayer.power.circuit, {input=circuit_i, output=circuit_o})
+    end
+end
+
+function vlayer_convert_undo(player)
+    local entities = player.surface.find_entities_filtered{name={"electric-energy-interface", "constant-combinator", "logistic-chest-storage"}, position=player.position, radius=16, force={"neutral"}}
+
+    if (#entities == 0) then
+        player.print("Entity not found")
+        return
+    end
+
+    local entity = player.surface.get_closest(player.position, entities)
+
+    if (entity) then
+        -- entity.last_user can also be used
+        if (player.admin) then
+            --[[
+            local name = entity.name
+
+            if (name == "electric-energy-interface") then
+                if (entity.electric_buffer_size == global.phi.vlayer.power.limit.input) then
+                    -- global.phi.vlayer.power.energy = global.phi.vlayer.power.energy + 0
+                else
+            ]]
+            
+            entity.destroy()
+            player.print("Entity removed")
+
+        else
+            player.print("You are not allowed to remove the enity")
+        end
+
+    else
+        player.print("Entity not found")
+    end
+end
+
 local button_power_input =
 Gui.Element{
   type = 'button',
   caption = 'Power Input',
   style = 'button'
 }:on_click(function(player)
-    vlayer.vlayer_convert_chest_power_input(player)
+    vlayer_convert_chest_power_input(player)
 end)
 
 local button_power_output =
@@ -37,7 +210,7 @@ Gui.Element{
   caption = 'Power Output',
   style = 'button'
 }:on_click(function(player)
-    vlayer.vlayer_convert_chest_power_output(player)
+    vlayer_convert_chest_power_output(player)
 end)
 
 local button_storage_input =
@@ -46,7 +219,7 @@ Gui.Element{
   caption = 'Storage Input',
   style = 'button'
 }:on_click(function(player)
-    vlayer.vlayer_convert_chest_storage_input(player)
+    vlayer_convert_chest_storage_input(player)
 end)
 
 local button_circuit =
@@ -55,7 +228,16 @@ Gui.Element{
   caption = 'Circuit',
   style = 'button'
 }:on_click(function(player)
-    vlayer.vlayer_convert_chest_circuit(player)
+    vlayer_convert_chest_circuit(player)
+end)
+
+local button_circuit =
+Gui.Element{
+  type = 'button',
+  caption = 'Remove',
+  style = 'button'
+}:on_click(function(player)
+    vlayer_convert_undo(player)
 end)
 
 local vlayer_container =
