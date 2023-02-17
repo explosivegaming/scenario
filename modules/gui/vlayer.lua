@@ -196,46 +196,51 @@ function vlayer_convert_remove(player)
 end
 
 local button_power_input =
-Gui.Element{
-  type = 'button',
-  caption = 'Power Input',
-  style = 'button'
+Gui.element{
+    name = 'power_input_button',
+    type = 'button',
+    caption = 'Power Input',
+    style = 'button'
 }:on_click(function(player)
     vlayer_convert_chest_power_input(player)
 end)
 
 local button_power_output =
-Gui.Element{
-  type = 'button',
-  caption = 'Power Output',
-  style = 'button'
+Gui.element{
+    name = 'power_output_button',
+    type = 'button',
+    caption = 'Power Output',
+    style = 'button'
 }:on_click(function(player)
     vlayer_convert_chest_power_output(player)
 end)
 
 local button_storage_input =
-Gui.Element{
-  type = 'button',
-  caption = 'Storage Input',
-  style = 'button'
+Gui.element{
+    name = 'storage_input_button',
+    type = 'button',
+    caption = 'Storage Input',
+    style = 'button'
 }:on_click(function(player)
     vlayer_convert_chest_storage_input(player)
 end)
 
 local button_circuit =
-Gui.Element{
-  type = 'button',
-  caption = 'Circuit',
-  style = 'button'
+Gui.element{
+    name = 'circuit_button',
+    type = 'button',
+    caption = 'Circuit',
+    style = 'button'
 }:on_click(function(player)
     vlayer_convert_chest_circuit(player)
 end)
 
 local button_remove =
-Gui.Element{
-  type = 'button',
-  caption = 'Remove',
-  style = 'button'
+Gui.element{
+    name = 'remove_button',
+    type = 'button',
+    caption = 'Remove',
+    style = 'button'
 }:on_click(function(player)
     vlayer_convert_remove(player)
 end)
