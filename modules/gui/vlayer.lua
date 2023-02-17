@@ -385,7 +385,7 @@ Gui.element(function(event_trigger, parent)
         button_power_output(scroll_table)
         button_storage_input(scroll_table)
         button_circuit(scroll_table)
-        button_undo(scroll_table)
+        button_remove(scroll_table)
     end
 
     -- Return the external container
