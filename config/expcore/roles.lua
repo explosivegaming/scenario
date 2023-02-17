@@ -113,6 +113,8 @@ Roles.new_role('Trainee','TrMod')
     'command/search-amount',
     'command/search-recent',
     'command/search-online',
+    'command/bot-queue-get',
+    'command/bot-queue-set',
 }
 
 --- Trusted Roles
