@@ -6,11 +6,26 @@
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
 
-Commands.new_command('poloff', 'Remove pollution')
+Commands.new_command('pol-clr', 'Clear pollution')
 :set_flag('admin_only')
-:register(function(player
-)
-    for _, player in pairs(game.connected_players) do
+:register(function(player)
+    game.player.surface.clear_pollution()
+
+    for _, player_ in pairs(game.connected_players) do
+        player_.print{'expcom-pol.clr', player}
     end
-    Commands.print{'expcom-repair.result', amount}
+
+    return Commands.success
+end)
+
+Commands.new_command('pol-off', 'Remove pollution')
+:set_flag('admin_only')
+:register(function(player)
+    game.map_settings.pollution.enabled = false
+
+    for _, player_ in pairs(game.connected_players) do
+        player_.print{'expcom-pol.off', player}
+    end
+    
+    return Commands.success
 end)
