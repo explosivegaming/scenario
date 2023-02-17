@@ -194,16 +194,16 @@ function vlayer_power_input_handle()
         if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
             global.phi.vlayer.power.input[k] = nil
         
-        -- 1 000
+        -- 1 000 000
         -- 1 MJ
-        elseif (v.power.energy > (1000)) then
+        elseif (v.power.energy > (1000000)) then
             local circuit_signal = v.circuit.get_or_create_control_behavior().get_signal(1)
                 
             if ((circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == "signal-C")) then
-                -- circuit is in MJ, divided by 60 ups
-                v.power.power_usage = math.min(v.power.energy - (1000), math.floor(circuit_signal.count * 50000 / 3, global.phi.vlayer.power.limit.input))
+                -- circuit is in MJ, divided by 60 ups (updated in 5)
+                v.power.power_usage = math.min(v.power.energy - (1000000), math.floor(circuit_signal.count * 250000 / 3, global.phi.vlayer.power.limit.input))
             else
-                v.power.power_usage = math.min(v.power.energy - (1000), 0, global.phi.vlayer.power.limit.input)
+                v.power.power_usage = math.min(v.power.energy - (1000000), 0, global.phi.vlayer.power.limit.input)
             end
 
             global.phi.vlayer.power.energy = global.phi.vlayer.power.energy + v.power.power_usage
@@ -235,29 +235,36 @@ function vlayer_power_storage_handle()
 
     if config.always_day then
         tick = 0
+        solar_eff = 1
     else
         tick = game.tick % 25000
+
+        if tick <= 5000 or tick > 17500 then
+            solar_eff = 1
+    
+        elseif tick <= 10000 then
+            solar_eff = 1 - ((tick - 5000) / 5000)
+    
+        elseif tick <= 12500 then
+            solar_eff = 0
+    
+        elseif tick <= 17500 then
+            solar_eff = (tick - 5000) / 5000
+        end
     end
 
-    if tick <= 5000 or tick > 17500 then
-        -- 100%
-        solar_eff = 1
-
-    elseif tick <= 10000 then
-        
-        solar_eff = 1 - ((tick - 5000) / 5000)
-
-    elseif tick <= 12500 then
-        solar_eff = 0
-
-    elseif tick <= 17500 then
-        solar_eff = (tick - 5000) / 5000
-    end
+    local new_energy = math.floor(global.phi.vlayer.storage.item['solar-panel'] * 5000 * solar_eff)
 
     if not config.battery_limit then
-        global.phi.vlayer.power.energy = global.phi.vlayer.power.energy + global.phi.vlayer.storage.item['solar-panel'] * 60
+        global.phi.vlayer.power.energy = global.phi.vlayer.power.energy + new_energy
     else
-        global.phi.vlayer.power.energy = global.phi.vlayer.power.energy
+        local battery_limit = global.phi.vlayer.storage.item['accumulator'] * 5000000
+
+        if (global.phi.vlayer.power.energy + new_energy) >= battery_limit then
+            global.phi.vlayer.power.energy = battery_limit
+        else
+            global.phi.vlayer.power.energy = global.phi.vlayer.power.energy + new_energy
+        end
     end
 end
 
@@ -281,7 +288,7 @@ function vlayer_power_output_handle()
             v.circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-P"}, count=math.min(math.floor(global.phi.vlayer.storage.item['solar-panel'] * 60), 2147483647)})
             v.circuit.get_or_create_control_behavior().set_signal(2, {signal={type="virtual", name="signal-S"}, count=math.min(math.floor(global.phi.vlayer.storage.item['solar-panel'] * 4365 / 104), 2147483647)})
             v.circuit.get_or_create_control_behavior().set_signal(3, {signal={type="virtual", name="signal-B"}, count=math.min(math.floor(global.phi.vlayer.storage.item['accumulator'] * 5), 2147483647)})
-            v.circuit.get_or_create_control_behavior().set_signal(4, {signal={type="virtual", name="signal-C"}, count=math.min(math.floor(global.phi.vlayer.power.energy / 1000), 2147483647)})
+            v.circuit.get_or_create_control_behavior().set_signal(4, {signal={type="virtual", name="signal-C"}, count=math.min(math.floor(global.phi.vlayer.power.energy), 2147483647)})
             v.circuit.get_or_create_control_behavior().set_signal(5, {signal={type="item", name="solar-panel"}, count=math.min(math.floor(global.phi.vlayer.storage.item['solar-panel']), 2147483647)})
             v.circuit.get_or_create_control_behavior().set_signal(6, {signal={type="item", name="accumulator"}, count=math.min(math.floor(global.phi.vlayer.storage.item['accumulator']), 2147483647)})
         end
@@ -363,12 +370,10 @@ end
 
 function vlayer_handle()
     vlayer_power_input_handle()
+    vlayer_power_storage_handle()
     vlayer_power_output_handle()
-
-    if ((game.tick % (60)) == 0) then
-        vlayer_storage_handle()
-        vlayer_circuit_handle()
-    end
+    vlayer_storage_handle()
+    vlayer_circuit_handle()
 end
 
 Event.add(defines.events.on_init, function(event)
@@ -389,6 +394,8 @@ Event.add(defines.events.on_init, function(event)
     global.phi.vlayer.power.circuit = {}
 end)
 
-Event.add(defines.events.on_tick, function(event)
+-- Event.add(defines.events.on_tick, function(event)
+Event.on_nth_tick(5, function(event)
     vlayer_handle()
 end)
+
