@@ -49,6 +49,15 @@ Gui.Element{
     vlayer.vlayer_convert_chest_storage_input(player)
 end)
 
+local button_circuit =
+Gui.Element{
+  type = 'button',
+  caption = 'Circuit',
+  style = 'button'
+}:on_click(function(player)
+    vlayer.vlayer_convert_chest_circuit(player)
+end)
+
 local vlayer_container =
 Gui.element(function(event_trigger, parent)
     local player = Gui.get_player_from_element(parent)
