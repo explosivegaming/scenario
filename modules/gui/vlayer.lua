@@ -134,7 +134,7 @@ function vlayer_convert_chest_power_output(player)
 end
 
 
-function vlayer_circuit(player)
+function layer_convert_chest_circuit(player)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
@@ -161,7 +161,7 @@ function vlayer_circuit(player)
     end
 end
 
-function vlayer_convert_undo(player)
+function vlayer_convert_remove(player)
     local entities = player.surface.find_entities_filtered{name={"electric-energy-interface", "constant-combinator", "logistic-chest-storage"}, position=player.position, radius=16, force={"neutral"}}
 
     if (#entities == 0) then
@@ -231,13 +231,13 @@ Gui.Element{
     vlayer_convert_chest_circuit(player)
 end)
 
-local button_circuit =
+local button_remove =
 Gui.Element{
   type = 'button',
   caption = 'Remove',
   style = 'button'
 }:on_click(function(player)
-    vlayer_convert_undo(player)
+    vlayer_convert_remove(player)
 end)
 
 local vlayer_container =
@@ -385,6 +385,7 @@ Gui.element(function(event_trigger, parent)
         button_power_output(scroll_table)
         button_storage_input(scroll_table)
         button_circuit(scroll_table)
+        button_undo(scroll_table)
     end
 
     -- Return the external container
