@@ -166,25 +166,25 @@ Gui.element(function(event_trigger, parent)
             name = 'vlayer_convert_power_input',
             type = 'button',
             caption = 'Power Input',
-            style = 'forward_button'
+            style = 'button'
         }
         scroll_table.add{
             name = 'vlayer_convert_power_output',
             type = 'button',
             caption = 'Power Output',
-            style = 'forward_button'
+            style = 'button'
         }
         scroll_table.add{
             name = 'vlayer_convert_storage_input',
             type = 'button',
             caption = 'Storage Input',
-            style = 'forward_button'
+            style = 'button'
         }
         scroll_table.add{
             name = 'vlayer_convert_circuit',
             type = 'button',
             caption = 'Circuit',
-            style = 'forward_button'
+            style = 'button'
         }
     end
 
