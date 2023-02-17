@@ -254,7 +254,11 @@ function vlayer_power_storage_handle()
         solar_eff = (tick - 5000) / 5000
     end
 
-    global.phi.vlayer.power.energy = global.phi.vlayer.power.energy
+    if not config.battery_limit then
+        global.phi.vlayer.power.energy = global.phi.vlayer.power.energy
+    else
+        global.phi.vlayer.power.energy = global.phi.vlayer.power.energy
+    end
 end
 
 function vlayer_power_output_handle()
