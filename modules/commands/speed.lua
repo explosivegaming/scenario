@@ -11,5 +11,5 @@ Commands.new_command('speed', 'Set game speed')
 :set_flag('admin_only')
 :register(function(player, amount)
     game.speed = amount
-    Commands.print{'The game speed is now __1__', amount}
+    Commands.print{'expcom-repair.result', amount}
 end)
