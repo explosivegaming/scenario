@@ -238,7 +238,8 @@ Roles.new_role('Member','Mem')
     'gui/warp-list/edit',
     'command/save-quickbar',
     'command/bonus',
-    'bonus-1'
+    'bonus-1',
+    'vlayer-2'
 }
 
 local hours2, hours15 = 2*216000, 15*60
@@ -288,7 +289,7 @@ local default = Roles.new_role('Guest','')
     'gui/task-list',
     'gui/warp-list',
     'gui/readme',
-    'gui/vlayer',
+    'vlayer-1',
 }
 
 --- Jail role
