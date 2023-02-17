@@ -25,5 +25,9 @@ return {
     {
         name='character_inventory_slots_bonus',
         max = 100
+    },
+    {
+        name='character_health_bonus',
+        max = 200
     }
 }
