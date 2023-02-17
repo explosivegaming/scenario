@@ -133,7 +133,6 @@ function vlayer_convert_chest_power_output(player)
     return false
 end
 
-
 function vlayer_convert_chest_circuit(player)
     local pos = vlayer_convert_chest(player)
 
@@ -184,6 +183,7 @@ function vlayer_convert_remove(player)
             ]]
             
             entity.destroy()
+            player.insert{name='steel-chest', count=1}
             player.print("Entity removed")
 
         else
