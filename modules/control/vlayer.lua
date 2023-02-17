@@ -255,7 +255,7 @@ function vlayer_power_storage_handle()
     end
 
     if not config.battery_limit then
-        global.phi.vlayer.power.energy = global.phi.vlayer.power.energy
+        global.phi.vlayer.power.energy = global.phi.vlayer.power.energy + global.phi.vlayer.storage.item['solar-panel'] * 60
     else
         global.phi.vlayer.power.energy = global.phi.vlayer.power.energy
     end
@@ -378,6 +378,7 @@ Event.add(defines.events.on_init, function(event)
     global.phi.vlayer.storage.item = {}
     global.phi.vlayer.storage.item['solar-panel'] = 0
     global.phi.vlayer.storage.item['accumulator'] = 0
+    -- global.phi.vlayer.storage.item['landfill'] = 0
     global.phi.vlayer.storage.input = {}
     global.phi.vlayer.power = {}
     global.phi.vlayer.power.limit = {input=0, output=0}
