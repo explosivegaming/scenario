@@ -145,8 +145,15 @@ function vlayer_circuit(player)
         circuit_i.destructible = false
         circuit_i.minable = false
         circuit_i.last_user = player
-        circuit_i.get_or_create_control_behavior().set_signal(1, {signal={type="item", name="solar-panel"}, count=1})
-        -- 
+        circuit_i.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-P"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(2, {signal={type="virtual", name="signal-S"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(3, {signal={type="virtual", name="signal-B"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(4, {signal={type="virtual", name="signal-C"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(5, {signal={type="item", name="solar-panel"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(6, {signal={type="item", name="accumulator"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(7, {signal={type="virtual", name="signal-T"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(8, {signal={type="virtual", name="signal-D"}, count=1})
+        
         local circuit_o = player.surface.create_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}, force="neutral"}
         circuit_o.destructible = false
         circuit_o.minable = false
