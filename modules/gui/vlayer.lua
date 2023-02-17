@@ -3,6 +3,7 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.gui.vlayer' --- @dep config.gui.player_list_actions
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
+local vlayer = require 'modules.control.vlayer'
 local format_number = require('util').format_number
 
 --[[
@@ -20,6 +21,33 @@ Battery Storage:
 Net Power Production:
 - 5,000 MW 
 ]]
+
+local button_power_input =
+Gui.Element{
+  type = 'button',
+  caption = 'Power Input',
+  style = 'button'
+}:on_click(function(player)
+    vlayer.vlayer_convert_chest_power_input(player)
+end)
+
+local button_power_output =
+Gui.Element{
+  type = 'button',
+  caption = 'Power Output',
+  style = 'button'
+}:on_click(function(player)
+    vlayer.vlayer_convert_chest_power_output(player)
+end)
+
+local button_storage_input =
+Gui.Element{
+  type = 'button',
+  caption = 'Storage Input',
+  style = 'button'
+}:on_click(function(player)
+    vlayer.vlayer_convert_chest_storage_input(player)
+end)
 
 local vlayer_container =
 Gui.element(function(event_trigger, parent)
@@ -162,30 +190,10 @@ Gui.element(function(event_trigger, parent)
             caption = '',
             style = 'heading_1_label'
         }
-        scroll_table.add{
-            name = 'vlayer_convert_power_input',
-            type = 'button',
-            caption = 'Power Input',
-            style = 'button'
-        }
-        scroll_table.add{
-            name = 'vlayer_convert_power_output',
-            type = 'button',
-            caption = 'Power Output',
-            style = 'button'
-        }
-        scroll_table.add{
-            name = 'vlayer_convert_storage_input',
-            type = 'button',
-            caption = 'Storage Input',
-            style = 'button'
-        }
-        scroll_table.add{
-            name = 'vlayer_convert_circuit',
-            type = 'button',
-            caption = 'Circuit',
-            style = 'button'
-        }
+        button_power_input(scroll_table)
+        button_power_output(scroll_table)
+        button_storage_input(scroll_table)
+        button_circuit(scroll_table)
     end
 
     -- Return the external container
