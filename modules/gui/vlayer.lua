@@ -149,7 +149,7 @@ Gui.element(function(event_trigger, parent)
         style = 'heading_1_label'
     }
 
-    if Roles.player_allowed(player, 'gui/vlayer') then
+    if Roles.player_allowed(player, 'vlayer-2') then
         scroll_table.add{
             name = 'vlayer_7_display_title',
             type = 'label',
@@ -170,7 +170,7 @@ end)
 :add_to_left_flow()
 
 Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_container, function (player)
-	return Roles.player_allowed(player, 'gui/vlayer')
+	return Roles.player_allowed(player, 'vlayer-1')
 end)
 
 Event.on_nth_tick(60, function()
