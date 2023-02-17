@@ -33,6 +33,7 @@ return {
     'modules.commands.protection',
     'modules.commands.spectate',
     'modules.commands.search',
+    'modules.commands.bot-queue',
 
     --- Addons
     'modules.addons.chat-popups',
