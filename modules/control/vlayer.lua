@@ -353,7 +353,7 @@ function vlayer_circuit_handle()
 
             local circuit_o = v.output.get_or_create_control_behavior()
             circuit_o.set_signal(1, {signal={type="virtual", name="signal-P"}, count=math.min(math.floor(global.phi.vlayer.storage.item['solar-panel'] * 60), 2147483647)})
-            circuit_o..set_signal(2, {signal={type="virtual", name="signal-S"}, count=math.min(math.floor(global.phi.vlayer.storage.item['solar-panel'] * 4365 / 104), 2147483647)})
+            circuit_o.set_signal(2, {signal={type="virtual", name="signal-S"}, count=math.min(math.floor(global.phi.vlayer.storage.item['solar-panel'] * 4365 / 104), 2147483647)})
             circuit_o.set_signal(3, {signal={type="virtual", name="signal-B"}, count=math.min(math.floor(global.phi.vlayer.storage.item['accumulator'] * 5), 2147483647)})
             circuit_o.set_signal(4, {signal={type="virtual", name="signal-C"}, count=math.min(math.floor(global.phi.vlayer.power.energy), 2147483647)})
             circuit_o.set_signal(5, {signal={type="virtual", name="signal-T"}, count=math.min(math.floor(game.tick), 2147483647)})
