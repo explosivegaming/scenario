@@ -8,5 +8,6 @@ return {
         tile = "landfill",
         result = 4
     },
+    always_day = false,
     battery_limit = true
 }
