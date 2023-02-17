@@ -291,6 +291,8 @@ function vlayer_power_output_handle()
             v.circuit.get_or_create_control_behavior().set_signal(4, {signal={type="virtual", name="signal-C"}, count=math.min(math.floor(global.phi.vlayer.power.energy), 2147483647)})
             v.circuit.get_or_create_control_behavior().set_signal(5, {signal={type="item", name="solar-panel"}, count=math.min(math.floor(global.phi.vlayer.storage.item['solar-panel']), 2147483647)})
             v.circuit.get_or_create_control_behavior().set_signal(6, {signal={type="item", name="accumulator"}, count=math.min(math.floor(global.phi.vlayer.storage.item['accumulator']), 2147483647)})
+            v.circuit.get_or_create_control_behavior().set_signal(7, {signal={type="virtual", name="signal-T"}, count=math.min(math.floor(game.tick), 2147483647)})
+            v.circuit.get_or_create_control_behavior().set_signal(8, {signal={type="virtual", name="signal-D"}, count=math.min(math.floor(game.tick % 25000), 2147483647)})
         end
     end
 end
