@@ -35,6 +35,7 @@ return {
     'modules.commands.search',
     'modules.commands.bot-queue',
     'modules.commands.speed',
+    'modules.commands.pollution',
 
     --- Addons
     'modules.addons.chat-popups',
