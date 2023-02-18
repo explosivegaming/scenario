@@ -11,11 +11,7 @@ Commands.new_command('bot-queue-get', 'Set bot queue')
 :register(function(player)
     local f = game.player.force.max_failed_attempts_per_tick_per_construction_queue
     local s = game.player.force.max_successful_attempts_per_tick_per_construction_queue
-    
-    for _, player_ in pairs(game.connected_players) do
-        player_.print{'expcom-bot-queue.result', s, f}
-    end
-
+    game.print{'expcom-bot-queue.result', s, f}
     return Commands.success
 end)
 
@@ -25,10 +21,6 @@ Commands.new_command('bot-queue-set', 'Set bot queue')
 :register(function(player, amount)
     game.player.force.max_failed_attempts_per_tick_per_construction_queue = 3 * amount
     game.player.force.max_successful_attempts_per_tick_per_construction_queue = 1 * amount
-
-    for _, player_ in pairs(game.connected_players) do
-        player_.print{'expcom-bot-queue.result', 1 * amount, 3 * amount}
-    end
-
+    player_.print{'expcom-bot-queue.result', 1 * amount, 3 * amount}
     return Commands.success
 end)
