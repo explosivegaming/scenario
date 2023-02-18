@@ -11,10 +11,6 @@ Commands.new_command('speed', 'Set game speed')
 :set_flag('admin_only')
 :register(function(player, amount)
     game.speed = string.format("%.3f", amount)
-
-    for _, player_ in pairs(game.connected_players) do
-        player_.print{'expcom-speed.result', string.format("%.3f", string.format("%.3f", amount))}
-    end
-
+    game.print{'expcom-speed.result', string.format("%.3f", string.format("%.3f", amount))}
     return Commands.success
 end)
