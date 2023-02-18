@@ -10,11 +10,7 @@ Commands.new_command('pol-clr', 'Clear pollution')
 :set_flag('admin_only')
 :register(function(player)
     game.player.surface.clear_pollution()
-
-    for _, player_ in pairs(game.connected_players) do
-        player_.print{'expcom-pol.clr', player}
-    end
-
+    game.print{'expcom-pol.clr', player}
     return Commands.success
 end)
 
@@ -22,10 +18,6 @@ Commands.new_command('pol-off', 'Remove pollution')
 :set_flag('admin_only')
 :register(function(player)
     game.map_settings.pollution.enabled = false
-
-    for _, player_ in pairs(game.connected_players) do
-        player_.print{'expcom-pol.off', player}
-    end
-    
+    game.print{'expcom-pol.off', player}
     return Commands.success
 end)
