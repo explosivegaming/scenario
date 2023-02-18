@@ -146,8 +146,8 @@ end)
 --- Internal function used to trigger a few different things when roles are changed
 -- this is the raw internal trigger as the other function is called at other times
 -- there is a second half called role_update which triggers after the event call, it also is called when a player joins
-local function emit_player_roles_updated(player, type, roles, by_player_name, skip_game_print, deferred)
-    by_player_name = game.player and game.player.name or by_player_name or '<server>'
+local function emit_player_roles_updated(player, type, roles, by_player_name, skip_game_print)
+    by_player_name = by_player_name or game.player and game.player.name or '<server>'
     local by_player = game.players[by_player_name]
     local by_player_index = by_player and by_player.index or 0
     -- get the event id from the type of emit
@@ -155,22 +155,14 @@ local function emit_player_roles_updated(player, type, roles, by_player_name, sk
     if type == 'unassign' then
         event = Roles.events.on_role_unassigned
     end
-    -- convert the roles to objects and get the names of the roles
-    local index, role_names = 0, {}
-    for _, role in ipairs(roles) do
-        role = Roles.get_role_from_any(role)
-        if role then
-            index = index + 1
-            role_names[index] = role.name
-        end
+    -- Get the names of the roles
+    local role_names = {}
+    for index, role in ipairs(roles) do
+        role_names[index] = role.name
     end
     -- output to all the different locations: game print, player sound, event trigger and role log
     if not skip_game_print then
-		if deferred then
-			game.print({'expcore-roles.game-message-deferred-'..type, player.name, table.concat(role_names, ', '), by_player_name}, Colours.cyan)
-		else
-			game.print({'expcore-roles.game-message-'..type, player.name, table.concat(role_names, ', '), by_player_name}, Colours.cyan)
-		end
+		game.print({'expcore-roles.game-message-'..type, player.name, table.concat(role_names, ', '), by_player_name}, Colours.cyan)
     end
     if type == 'assign' then
         player.play_sound{path='utility/achievement_unlocked'}
@@ -373,35 +365,46 @@ function Roles.assign_player(player, roles, by_player_name, skip_checks, silent)
     local valid_player = Game.get_player_from_any(player)
     if not skip_checks and not valid_player then return end
     if not player then return end
+
+    -- Convert the roles into a table (allows for optional array)
     if type(roles) ~= 'table' or roles.name then
         roles = { roles }
     end
 
-    -- if the player has a role that needs to defer the role changes, save the roles that need to be assigned later into a table
+    -- Convert to role objects
+    local role_objects = {}
+    for _, role in ipairs(roles) do
+        local role_object = Roles.get_role_from_any(role)
+        if role_object then table.insert(role_objects, role_object) end
+    end
+
+    -- If the player has a role that needs to defer the role changes, save the roles that need to be assigned later into a table
     if valid_player and Roles.player_has_flag(player, "defer_role_changes") then
         local assign_later = Roles.config.deferred_roles[valid_player.name] or {}
-        local were_changes = false
-        for _, role in ipairs(roles) do
-            if assign_later[role] ~= 1 then
-                assign_later[role] = 1
-                were_changes = true
+        for _, role in ipairs(role_objects) do
+            local role_change = assign_later[role.name]
+            if role_change then
+                role_change.count = role_change.count + 1
+                if role_change.count == 1 then
+                    role_change.by_player_name = by_player_name or "<server>"
+                    role_change.silent = silent
+                end
+            else
+                assign_later[role.name] = {
+                    count = 1, by_player_name = by_player_name or "<server>", silent = silent
+                }
             end
         end
         Roles.config.deferred_roles[valid_player.name] = assign_later
-        if were_changes then
-            emit_player_roles_updated(valid_player, 'assign', roles, by_player_name, silent, true)
-        end
         return
     end
 
-    for _, role in ipairs(roles) do
-        role = Roles.get_role_from_any(role)
-        if role then
-            role:add_player(valid_player or player, valid_player == nil, true)
-        end
+    for _, role in ipairs(role_objects) do
+        role:add_player(valid_player or player, valid_player == nil, true)
     end
+
     if valid_player then
-        emit_player_roles_updated(valid_player, 'assign', roles, by_player_name, silent)
+        emit_player_roles_updated(valid_player, 'assign', role_objects, by_player_name, silent)
     end
 end
 
@@ -423,52 +426,78 @@ function Roles.unassign_player(player, roles, by_player_name, skip_checks, silen
     local valid_player = Game.get_player_from_any(player)
     if not skip_checks and not valid_player then return end
     if not player then return end
+
+    -- Convert the roles into a table (allows for optional array)
     if type(roles) ~= 'table' or roles.name then
         roles = { roles }
     end
 
-    -- if the player has a role that needs to defer the role changes, save the roles that need to be unassigned later into a table
-    if Roles.player_has_flag(player, "defer_role_changes") then
+    -- Convert to role objects
+    local role_objects = {}
+    for _, role in ipairs(roles) do
+        local role_object = Roles.get_role_from_any(role)
+        if role_object then table.insert(role_objects, role_object) end
+    end
+
+    -- If the player has a role that needs to defer the role changes, save the roles that need to be unassigned later into a table
+    local defer_changes = Roles.player_has_flag(player, "defer_role_changes")
+    if defer_changes then
         local assign_later = Roles.config.deferred_roles[valid_player.name] or {}
-        local were_changes = false
-        for _, role in ipairs(roles) do
-            if assign_later[role] ~= -1 then
-                assign_later[role] = -1
-                were_changes = true
+        for _, role in ipairs(role_objects) do
+            local role_change = assign_later[role.name]
+            if role_change then
+                role_change.count = role_change.count - 1
+                if role_change.count == -1 then
+                    role_change.by_player_name = by_player_name or "<server>"
+                    role_change.silent = silent
+                end
+            else
+                assign_later[role.name] = {
+                    count = -1, by_player_name = by_player_name or "<server>", silent = silent
+                }
             end
         end
         Roles.config.deferred_roles[valid_player.name] = assign_later
-        if were_changes then
-            emit_player_roles_updated(valid_player, 'unassign', roles, by_player_name, silent, true)
-        end
-        return
     end
 
-    for _, role in ipairs(roles) do
-        role = Roles.get_role_from_any(role)
-        if role then
+    -- Remove the player from roles
+    local role_changes = {}
+    for _, role in ipairs(role_objects) do
+        if not defer_changes or role:has_flag("defer_role_changes") then
             role:remove_player(valid_player or player, valid_player == nil, true)
+            table.insert(role_changes, role)
         end
     end
 
-
-    -- if there are deferred role changes, apply them now
-    if Roles.player_has_flag(valid_player, "defer_role_changes") then
+    -- If there are deferred role changes, apply them now
+    if defer_changes and not Roles.player_has_flag(valid_player, "defer_role_changes") then
         local assign_later = Roles.config.deferred_roles[player.name] or {}
-        for role_name, assign in pairs(assign_later) do
+        local assigns, unassigns = {}, {}
+        for role_name, details in pairs(assign_later) do
             local role = Roles.get_role_from_any(role_name)
             if role then
-                if assign == 1 then
+                if details.count > 0 then
                     role:add_player(valid_player or player, valid_player == nil, true)
-                elseif assign == -1 then
+                    if not assigns[details.by_player_name] then assigns[details.by_player_name] = {} end
+                    if not details.silent then table.insert(assigns[details.by_player_name], role) end
+                elseif details.count < 0 then
                     role:remove_player(valid_player or player, valid_player == nil, true)
+                    if not unassigns[details.by_player_name] then unassigns[details.by_player_name] = {} end
+                    if not details.silent then table.insert(unassigns[details.by_player_name], role) end
                 end
             end
         end
+        for assign_by_player_name, assign_roles in pairs(assigns) do
+            if #assign_roles > 0 then emit_player_roles_updated(valid_player, 'assign', assign_roles, assign_by_player_name) end
+        end
+        for unassign_by_player_name, unassign_roles in pairs(unassigns) do
+            if #unassign_roles > 0 then emit_player_roles_updated(valid_player, 'unassign', unassign_roles, unassign_by_player_name) end
+        end
+        Roles.config.deferred_roles[player.name] = nil
     end
 
-    if valid_player then
-        emit_player_roles_updated(valid_player, 'unassign', roles, by_player_name, silent)
+    if valid_player and #role_changes > 0 then
+        emit_player_roles_updated(valid_player, 'unassign', role_changes, by_player_name, silent)
     end
 end
 
