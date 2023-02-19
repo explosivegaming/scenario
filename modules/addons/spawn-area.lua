@@ -172,12 +172,8 @@ local function spawn_resource_patches(surface)
 end
 
 local function refill_resource_patches(surface)
-    for k, v in ipairs(config.resource_refill.resources) do
-        if config.resource_refill.resources[k].enabled then
-            for _, ore in pairs(surface.find_entities_filtered{position = {0, 0}, radius=config.resource_refill.range, name=config.resource_refill.resources[k].name}) do
-                ore.amount = ore.amount + config.resource_refill.resources[k].amount
-            end
-        end
+    for _, ore in pairs(surface.find_entities_filtered{position = {0, 0}, radius=config.resource_refill.range, name=config.resource_refill.resources_name}) do
+        ore.amount = ore.amount + math.random(config.resource_refill.amount[1], config.resource_refill.amount[2])
     end
 end
 
