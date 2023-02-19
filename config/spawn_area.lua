@@ -180,7 +180,7 @@ return {
         }
     },
     resource_tiles = {
-        enabled = true,
+        enabled = false,
         resources = {
             {
                 enabled = true,
@@ -233,33 +233,33 @@ return {
         }
     },
     resource_refill = {
-        enabled = false,
+        enabled = true,
         range = 128,
         resources = {
             {
                 enabled = true,
                 name = "iron-ore",
-                amount = 4000
+                amount = 2000
             },
             {
                 enabled = true,
                 name = "copper-ore",
-                amount = 4000
+                amount = 2000
             },
             {
                 enabled = true,
                 name = "stone",
-                amount = 4000
+                amount = 2000
             },
             {
                 enabled = true,
                 name = "coal",
-                amount = 4000
+                amount = 2000
             },
             {
                 enabled = false,
                 name = "uranium-ore",
-                amount = 4000
+                amount = 2000
             }
         }
     }
