@@ -181,7 +181,7 @@ return {
         }
     },
     resource_tiles = {
-        enabled = false,
+        enabled = true,
         natural_generation = true,
         resources = {
             {
@@ -235,7 +235,44 @@ return {
         }
     },
     resource_refill = {
-        enabled = true,
-        range = 128
+        enabled = false,
+        range = 128,
+        resources = {
+            {
+                enabled = true,
+                name = "iron-ore",
+                amount = 4000,
+                size = {26, 27},
+                offset = {-64,-32}
+            },
+            {
+                enabled = true,
+                name = "copper-ore",
+                amount = 4000,
+                size = {26, 27},
+                offset = {-64,0}
+            },
+            {
+                enabled = true,
+                name = "stone",
+                amount = 4000,
+                size = {22, 20},
+                offset = {-64,32}
+            },
+            {
+                enabled = true,
+                name = "coal",
+                amount = 4000,
+                size = {22, 20},
+                offset = {-64,-56}
+            },
+            {
+                enabled = false,
+                name = "uranium-ore",
+                amount = 4000,
+                size = {22, 20},
+                offset = {-64,-80}
+            }
+        }
     }
 }
