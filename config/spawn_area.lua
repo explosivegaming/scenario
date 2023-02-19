@@ -235,32 +235,13 @@ return {
     resource_refill = {
         enabled = true,
         range = 128,
-        resources = {
-            {
-                enabled = true,
-                name = "iron-ore",
-                amount = 2000
-            },
-            {
-                enabled = true,
-                name = "copper-ore",
-                amount = 2000
-            },
-            {
-                enabled = true,
-                name = "stone",
-                amount = 2000
-            },
-            {
-                enabled = true,
-                name = "coal",
-                amount = 2000
-            },
-            {
-                enabled = false,
-                name = "uranium-ore",
-                amount = 2000
-            }
-        }
+        resources_name = {
+            "iron-ore",
+            "copper-ore",
+            "stone",
+            "coal",
+            "uranium-ore"
+        },
+        amount = {2000, 4000}
     }
 }
