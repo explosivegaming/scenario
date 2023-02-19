@@ -17,4 +17,12 @@ end}
 :set_flag('admin_only')
 :register(function(_, player)
     player.cheat_mode = not player.cheat_mode
+    return Commands.success
+end)
+
+Commands.new_command('toggle-all-research', 'Toggles all research for your force.')
+:set_flag('admin_only')
+:register(function(_, player)
+    game.player.force.research_all_technologies()
+    return Commands.success
 end)
