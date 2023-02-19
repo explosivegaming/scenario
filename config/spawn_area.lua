@@ -242,6 +242,6 @@ return {
             "coal",
             "uranium-ore"
         },
-        amount = {2000, 4000}
+        amount = {2500, 4000}
     }
 }
