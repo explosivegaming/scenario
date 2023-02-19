@@ -152,71 +152,9 @@ end
 local function spawn_resource_tiles(surface)
     for k, v in ipairs(config.resource_tiles.resources) do
         if config.resource_tiles.resources[k].enabled then
-            if config.resource_tiles.natural_generation then
-                local tiles  = config.resource_tiles.resources[k].size[1] * config.resource_tiles.resources[k].size[2]
-                local amount = config.resource_tiles.resources[k].amount * tiles
-                local total_bias = 0
-                local biases = {[0] = {[0] = 1}}
-                local t = 1
-
-                local function grow(grid, t)
-                    local old = {}
-                    local new_count = 0
-                    
-                    for x,_  in pairs(grid) do
-                        for y,__ in pairs(_) do
-                            table.insert(old, {x, y})
-                        end
-                    end 
-            
-                    for _, pos in pairs(old) do
-                        local x, y = pos[1], pos[2]
-                        local bias = grid[x][y]
-                            
-                        for dx=-1, 1, 1 do
-                            for dy=-1, 1, 1 do
-                                local a, b = x + dx, y + dy
-                                
-                                if (math.random() > 0.9) and (math.abs(a) < config.resource_tiles.resources[k].size[1]) and (math.abs(b) < config.resource_tiles.resources[k].size[2]) then
-                                    grid[a] = grid[a] or {}
-                        
-                                    if not grid[a][b] then
-                                        grid[a][b] = 1 - (t / tiles)
-                                        new_count = new_count + 1
-                                        
-                                        if (new_count + t) == tiles then 
-                                            return new_count 
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                        
-                        return new_count
-                    end
-                end
-
-                repeat 
-                    t = t + grow(biases, t)
-                until t >= tiles
-
-                for x, _ in pairs(biases) do
-                    for y, bias in pairs(_) do
-                        total_bias = total_bias + bias
-                    end
-                end
-
-                for x, _ in pairs(biases) do
-                    for y, bias in pairs(_) do
-                        surface.create_entity({name=config.resource_tiles.resources[k].name, amount=amount * (bias / total_bias), position = {config.resource_tiles.resources[k].offset[1] + x, config.resource_tiles.resources[k].offset[2] + y}})
-                    end
-                end
-
-            else
-                for x=config.resource_tiles.resources[k].offset[1], config.resource_tiles.resources[k].offset[1] + config.resource_tiles.resources[k].size[1] do
-                    for y=config.resource_tiles.resources[k].offset[2], config.resource_tiles.resources[k].offset[2] + config.resource_tiles.resources[k].size[2] do
-                        surface.create_entity({name=config.resource_tiles.resources[k].name, amount=config.resource_tiles.resources[k].amount, position={x, y}})
-                    end
+            for x=config.resource_tiles.resources[k].offset[1], config.resource_tiles.resources[k].offset[1] + config.resource_tiles.resources[k].size[1] do
+                for y=config.resource_tiles.resources[k].offset[2], config.resource_tiles.resources[k].offset[2] + config.resource_tiles.resources[k].size[2] do
+                    surface.create_entity({name=config.resource_tiles.resources[k].name, amount=config.resource_tiles.resources[k].amount, position={x, y}})
                 end
             end
         end
