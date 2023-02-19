@@ -152,7 +152,7 @@ end
 local function spawn_resource_tiles(surface)
     for k, v in ipairs(config.resource_tiles.resources) do
         if config.resource_tiles.resources[k].enabled then
-            if config.resource_tiles.resources[k].natural_generation then
+            if config.resource_tiles.natural_generation then
                 local tiles  = config.resource_tiles.resources[k].size[1] * config.resource_tiles.resources[k].size[2]
                 local amount = config.resource_tiles.resources[k].amount * tiles
                 local total_bias = 0
