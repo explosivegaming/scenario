@@ -4,7 +4,7 @@
 return {
     spawn_area = { --- @setting spawn_area Settings relating to the whole spawn area
         -- Enable predefined patches: 128, else: 32
-        deconstruction_radius = 128, -- @setting deconstruction_radius All entities within this radius will be removed
+        deconstruction_radius = 32, -- @setting deconstruction_radius All entities within this radius will be removed
         tile_radius = 20,
         deconstruction_tile = 'refined-concrete', --- @setting deconstruction_tile Tile to be placed in the deconstruction radius, use nil for map gen
         landfill_radius = 128, --- @setting pattern_radius All water within this radius will be land filled
