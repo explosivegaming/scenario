@@ -155,6 +155,7 @@ local function spawn_resource_tiles(surface)
             if config.resource_tiles.resources[k].natural_generation then
                 local tiles  = config.resource_tiles.resources[k].size[1] * config.resource_tiles.resources[k].size[2]
                 local amount = config.resource_tiles.resources[k].amount * tiles
+                local total_bias = 0
                 local biases = {[0] = {[0] = 1}}
                 local t = 1
 
@@ -198,8 +199,6 @@ local function spawn_resource_tiles(surface)
                 repeat 
                     t = t + grow(biases,t)
                 until t >= tiles
-
-                local total_bias = 0
 
                 for x, _ in pairs(biases) do
                     for y, bias in pairs(_) do
