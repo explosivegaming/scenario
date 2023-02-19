@@ -45,16 +45,14 @@ Roles.new_role('Administrator','Admin')
 :set_flag('report-immune')
 :set_flag('instant-respawn')
 :set_parent('Senior Moderator')
-:set_allow_all()
---[[
 :allow{
     'command/connect-all',
 	'command/collectdata',
     'command/interface',
     'command/debug',
-    'command/toggle-cheat-mode'
+    'command/toggle-cheat-mode',
+    'command/toggle-all-research'
 }
-]]
 
 Roles.new_role('Senior Moderator','SMod')
 :set_permission_group('Admin')
