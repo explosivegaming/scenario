@@ -234,11 +234,9 @@ local function spawn_resource_patches(surface)
 end
 
 local function refill_resource_patches(surface)
-    for k, v in ipairs(config.resource_patches.resources) do
-        if config.resource_patches.resources[k].enabled then
-            for i=1, config.resource_patches.resources[k].num_patches do
-                surface.create_entity({name=config.resource_patches.resources[k].name, amount=config.resource_patches.resources[k].amount, position={config.resource_patches.resources[k].offset[1] + config.resource_patches.resources[k].offset_next[1] * (i - 1), config.resource_patches.resources[k].offset[2] + config.resource_patches.resources[k].offset_next[2] * (i - 1)}})
-            end
+    for k, v in ipairs(config.resource_refill.resources) do
+        if config.resource_refill.resources[k].enabled then
+            -- pass
         end
     end
 end
