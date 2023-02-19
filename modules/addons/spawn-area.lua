@@ -174,7 +174,9 @@ end
 local function refill_resource_patches(surface)
     for k, v in ipairs(config.resource_refill.resources) do
         if config.resource_refill.resources[k].enabled then
-            -- pass
+            for _, ore in pairs(surface.find_entities_filtered{area={{-config.resource_refill.range, -config.resource_refill.range},{config.resource_refill.range, config.resource_refill.range}}, type="resource", name=config.resource_patches.resources[k].name}) do
+                ore.amount = ore.amount + config.resource_patches.resources[k].amount
+            end
         end
     end
 end
