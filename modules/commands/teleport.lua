@@ -10,10 +10,10 @@ function teleport(from_player, to_player)
     local surface = to_player.surface
     local position = surface.find_non_colliding_position('character', to_player.position, 32, 1)
     if not position then return false end -- return false if no new position
-    
-    if player.vehicle then
+
+    if from_player.vehicle then
         -- Teleport the entity
-        local entity = player.vehicle
+        local entity = from_player.vehicle
         local goto_position = surface.find_non_colliding_position(entity.name, position, 32, 1)
         -- Surface teleport can only be done for players and cars at the moment. (with surface as an peramitor it gives this error)
         if entity.type == "car" then
@@ -21,26 +21,18 @@ function teleport(from_player, to_player)
         elseif surface.index == entity.surface.index then
             -- Try teleport the entity
             if not entity.teleport(goto_position) then
-                player.driving = false
+                from_player.driving = false
                 -- Need to calculate new goto_position because entities have different collision boxes
                 goto_position = surface.find_non_colliding_position('character', position, 32, 1)
-                player.teleport(goto_position, surface)
+                from_player.teleport(goto_position, surface)
             end
         end
     else
         -- Teleport the player
         local goto_position = surface.find_non_colliding_position('character', position, 32, 1)
-        if player.driving then player.driving = false end
-        player.teleport(goto_position, surface)
+        if from_player.driving then from_player.driving = false end
+        from_player.teleport(goto_position, surface)
     end
-end
-
-local function teleport(from_player, to_player)
-    local surface = to_player.surface
-    local position = surface.find_non_colliding_position('character', to_player.position, 32, 1)
-    if not position then return false end -- return false if no new position
-    if from_player.driving then from_player.driving = false end -- kicks a player out a vehicle if in one
-    from_player.teleport(position, surface)
     return true
 end
 
@@ -87,7 +79,6 @@ end)
 Commands.new_command('goto', 'Teleports you to a player.')
 :add_param('player', false, 'player-online')
 :add_alias('tp-me', 'tpme')
-:set_flag('admin_only')
 :register(function(player, to_player)
     if to_player.index == player.index then
         -- return if attempting to teleport to self
