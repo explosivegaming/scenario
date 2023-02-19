@@ -171,6 +171,16 @@ local function spawn_resource_patches(surface)
     end
 end
 
+local function refill_resource_patches(surface)
+    for k, v in ipairs(config.resource_patches.resources) do
+        if config.resource_patches.resources[k].enabled then
+            for i=1, config.resource_patches.resources[k].num_patches do
+                surface.create_entity({name=config.resource_patches.resources[k].name, amount=config.resource_patches.resources[k].amount, position={config.resource_patches.resources[k].offset[1] + config.resource_patches.resources[k].offset_next[1] * (i - 1), config.resource_patches.resources[k].offset[2] + config.resource_patches.resources[k].offset_next[2] * (i - 1)}})
+            end
+        end
+    end
+end
+
 -- Only add a event handler if the turrets are enabled
 if config.turrets.enabled then
     Event.on_nth_tick(config.turrets.refill_time, function()
@@ -194,6 +204,7 @@ Event.add(defines.events.on_player_created, function(event)
     if config.entities.enabled then spawn_entities(s, p) end
     if config.resource_tiles.enabled then spawn_resource_tiles(s) end
     if config.resource_patches.enabled then spawn_resource_patches(s) end
+    if config.resource_refill.enabled then refill_resource_patches(s) end
     player.teleport(p, s)
 end)
 
