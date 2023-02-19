@@ -197,7 +197,7 @@ local function spawn_resource_tiles(surface)
                 end
 
                 repeat 
-                    t = t + grow(biases,t)
+                    t = t + grow(biases, t)
                 until t >= tiles
 
                 for x, _ in pairs(biases) do
