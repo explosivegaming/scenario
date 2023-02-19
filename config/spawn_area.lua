@@ -182,6 +182,7 @@ return {
     },
     resource_tiles = {
         enabled = false,
+        natural_generation = true,
         resources = {
             {
                 enabled = true,
