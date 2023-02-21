@@ -41,7 +41,9 @@ local function apply_bonus(player, stage)
     end
 
     for k, v in pairs(config.player) do
-        player[config.player[k].name] = config.player[k].max * stage / 10
+        if config.player[k].enabled then
+            player[config.player[k].name] = config.player[k].max * stage / 10
+        end
     end
 end
 
