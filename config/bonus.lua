@@ -45,9 +45,5 @@ return {
     {
         name='character_health_bonus',
         max = 200
-    },
-    {
-        name='healing_per_tick',
-        max=20
     }
 }
