@@ -20,6 +20,16 @@ accu x 5 MJ
 
 signal-C
 accu level
+
+Equipment recharge
+local armor = player.get_inventory(defines.inventory.character_armor)[1].grid
+
+armor.battery_capacity
+
+for i=1, #armor.equipment do
+    armor.equipment[i].type = ...
+    armor.equipment[i].energy < armor.equipment[i].max_energy * 0.90
+end
 ]]
 
 if not config.enabled then
