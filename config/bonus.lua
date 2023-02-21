@@ -2,7 +2,7 @@
 -- @config Bonuses
 
 return {
-    player = {
+    player_bonus = {
         {
             name = 'character_mining_speed_modifier',
             enabled = true,
@@ -59,7 +59,7 @@ return {
             max = 200
         }
     },
-    force = {
+    force_bonus = {
         {
             name = 'worker_robots_speed_modifier',
             enabled = false,
@@ -67,23 +67,23 @@ return {
         },
         {
             name = 'worker_robots_battery_modifier',
-            enabled = false,
-            max = 0
+            enabled = true,
+            max = 1
         },
         {
             name = 'worker_robots_storage_bonus',
-            enabled = false,
-            max = 0
+            enabled = true,
+            max = 1
         },
         {
             name = 'following_robots_lifetime_modifier',
-            enabled = false,
-            max = 0
+            enabled = true,
+            max = 1
         },
         {
             name = 'character_trash_slot_count',
             enabled = false,
-            max = 0
+            max = 20
         },
         {
             name = 'mining_drill_productivity_bonus',
@@ -102,6 +102,16 @@ return {
         },
         {
             name = 'laboratory_productivity_bonus',
+            enabled = false,
+            max = 0
+        },
+        {
+            name = 'inserter_stack_size_bonus',
+            enabled = false,
+            max = 0
+        },
+        {
+            name = 'stack_inserter_capacity_bonus',
             enabled = false,
             max = 0
         }
