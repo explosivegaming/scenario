@@ -3,6 +3,7 @@
 
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.vlayer' --- @dep config.advanced_start
+local Global = require 'utils.global' --- @dep utils.global
 
 --[[
 TODO
