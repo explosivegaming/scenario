@@ -60,8 +60,50 @@ return {
         }
     },
     force = {
-        name = 'laboratory_speed_modifier',
-        enabled = true,
-        max = 0
+        {
+            name = 'worker_robots_speed_modifier',
+            enabled = false,
+            max = 0
+        },
+        {
+            name = 'worker_robots_battery_modifier',
+            enabled = false,
+            max = 0
+        },
+        {
+            name = 'worker_robots_storage_bonus',
+            enabled = false,
+            max = 0
+        },
+        {
+            name = 'following_robots_lifetime_modifier',
+            enabled = false,
+            max = 0
+        },
+        {
+            name = 'character_trash_slot_count',
+            enabled = false,
+            max = 0
+        },
+        {
+            name = 'mining_drill_productivity_bonus',
+            enabled = false,
+            max = 0
+        },
+        {
+            name = 'train_braking_force_bonus',
+            enabled = false,
+            max = 0
+        },
+        {
+            name = 'laboratory_speed_modifier',
+            enabled = false,
+            max = 0
+        },
+        {
+            name = 'laboratory_productivity_bonus',
+            enabled = false,
+            max = 0
+        }
     }
 }
