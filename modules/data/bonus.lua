@@ -93,5 +93,6 @@ Event.add(defines.events.on_player_created, function(event)
         end
     end
 end)
+
 Event.add(Roles.events.on_role_assigned, role_update)
 Event.add(Roles.events.on_role_unassigned, role_update)
