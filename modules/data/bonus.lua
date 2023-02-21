@@ -41,8 +41,8 @@ local function apply_bonus(player, stage)
     end
 
     for k, v in pairs(config.player) do
-        if config.player[k].enabled then
-            player[config.player[k].name] = config.player[k].max * stage / 10
+        if config.player_bonus[k].enabled then
+            player[config.player_bonus[k].name] = config.player_bonus[k].max * stage / 10
         end
     end
 end
@@ -83,7 +83,15 @@ Event.add(defines.events.on_player_died, function(event)
     end
 end)
 
-Event.add(defines.events.on_player_created, role_update)
-Event.add(defines.events.on_player_joined_game, role_update)
+Event.add(defines.events.on_player_created, function(event)
+    if event.player_index ~= 1 then return end
+    local player = game.players[event.player_index]
+
+    for k, v in pairs(config.force_bonus) do
+        if config.force[k].enabled then
+            game.players[event.player_index].force[config.force_bonus[k].name] = config.force_bonus[k].max
+        end
+    end
+end)
 Event.add(Roles.events.on_role_assigned, role_update)
 Event.add(Roles.events.on_role_unassigned, role_update)
