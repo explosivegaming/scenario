@@ -58,6 +58,7 @@ return {
 
     -- Control
     'modules.control.vlayer',
+    'modules.control.miner',
 
     --- Data
     'modules.data.statistics',
