@@ -114,6 +114,11 @@ return {
             name = 'stack_inserter_capacity_bonus',
             enabled = false,
             max = 0
+        },
+        {
+            name = 'artillery_range_modifier',
+            enabled = false,
+            max = 0
         }
     }
 }
