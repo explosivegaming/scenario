@@ -13,6 +13,7 @@ return {
         bot = 50,
         inserter = 100,
         chest = 50,
-        rail = 200
+        rail = 200,
+        mod = 100,
     }
 }
