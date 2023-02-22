@@ -113,9 +113,13 @@ local function pl(player, amount)
 
     end
 
-    s(start + 20, {min = 0, max = 0, name = 'rocket-silo'})
     s(start + 26, {min = 0, max = 0, name = 'centrifuge'})
     s(start + 27, {min = 0, max = 0, name = 'lab'})
+    s(start + 20, {min = 0, max = 0, name = 'nuclear-reactor'})
+    s(start + 28, {min = 0, max = 0, name = 'heat-pipe'})
+    s(start + 29, {min = 0, max = 0, name = 'heat-exchanger'})
+    s(start + 30, {min = 0, max = 0, name = 'steam-turbine'})
+    s(start + 60, {min = 0, max = 0, name = 'rocket-silo'})
 
     -- pole
     if stats.get_input_count('substation') >= required.pole then
