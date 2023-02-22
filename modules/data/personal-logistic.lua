@@ -373,7 +373,8 @@ local function pl(player, amount)
         s(start + 118, {min = 0, max = 0, name = 'explosive-cannon-shell'})
         s(start + 119, {min = 0, max = 0, name = 'uranium-cannon-shell'})
         s(start + 120, {min = 0, max = 0, name = 'explosive-uranium-cannon-shell'})
-
+    end
+    
     s(start + 121, {min = 0, max = 0, name = 'artillery-shell'})
     s(start + 122, {min = 0, max = 0, name = 'poison-capsule'})
     s(start + 123, {min = 0, max = 0, name = 'slowdown-capsule'})
