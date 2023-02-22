@@ -241,7 +241,8 @@ Roles.new_role('Member','Mem')
     'command/save-quickbar',
     'command/bonus',
     'bonus-1',
-    'vlayer-2'
+    'vlayer-2',
+    'personal-logistic'
 }
 
 local hours2, hours15 = 2*216000, 15*60
