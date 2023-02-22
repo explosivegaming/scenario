@@ -21,16 +21,33 @@ local function pl(player, amount)
 
     -- belt
     if stats.get_input_count('express-transport-belt') >= required then
-        s(start, {min = 500 * amount, max = 500 * amount, name = 'transport-belt'})
-        s(start + 1, {min = 150 * amount, max = 150 * amount, name = 'underground-belt'})
-        s(start + 2, {min = 100 * amount, max = 100 * amount, name = 'splitter'})
+        s(start + 20, {min = 500 * amount, max = 500 * amount, name = 'express-transport-belt'})
+        s(start + 21, {min = 150 * amount, max = 150 * amount, name = 'express-underground-belt'})
+        s(start + 22, {min = 100 * amount, max = 100 * amount, name = 'express-splitter'})
+        s(start + 10, {min = 500 * amount, max = 500 * amount, name = 'fast-transport-belt'})
+        s(start + 11, {min = 150 * amount, max = 150 * amount, name = 'fast-underground-belt'})
+        s(start + 12, {min = 100 * amount, max = 100 * amount, name = 'fast-splitter'})
+        s(start + 0, {min = 0, max = 0, name = 'transport-belt'})
+        s(start + 1, {min = 0, max = 0, name = 'underground-belt'})
+        s(start + 2, {min = 0, max = 0, name = 'splitter'})
     elseif stats.get_input_count('fast-transport-belt') >= required then
-        s(start, {min = 500 * amount, max = 500 * amount, name = 'transport-belt'})
+        s(start + 20, {min = 0, max = 0, name = 'express-transport-belt'})
+        s(start + 21, {min = 0, max = 0, name = 'express-underground-belt'})
+        s(start + 22, {min = 0, max = 0, name = 'express-splitter'})
+        s(start + 10, {min = 500 * amount, max = 500 * amount, name = 'fast-transport-belt'})
+        s(start + 11, {min = 150 * amount, max = 150 * amount, name = 'fast-underground-belt'})
+        s(start + 12, {min = 100 * amount, max = 100 * amount, name = 'fast-splitter'})
+        s(start + 0, {min = 500 * amount, max = 500 * amount, name = 'transport-belt'})
         s(start + 1, {min = 150 * amount, max = 150 * amount, name = 'underground-belt'})
         s(start + 2, {min = 100 * amount, max = 100 * amount, name = 'splitter'})
-    end
-    if stats.get_input_count('transport-belt') >= required then
-        s(start, {min = 500 * amount, max = 500 * amount, name = 'transport-belt'})
+    elseif stats.get_input_count('transport-belt') >= required then
+        s(start + 20, {min = 0, max = 0, name = 'express-transport-belt'})
+        s(start + 21, {min = 0, max = 0, name = 'express-underground-belt'})
+        s(start + 22, {min = 0, max = 0, name = 'express-splitter'})
+        s(start + 10, {min = 0, max = 0, name = 'fast-transport-belt'})
+        s(start + 11, {min = 0, max = 0, name = 'fast-underground-belt'})
+        s(start + 12, {min = 0, max = 0, name = 'fast-splitter'})
+        s(start + 0, {min = 500 * amount, max = 500 * amount, name = 'transport-belt'})
         s(start + 1, {min = 150 * amount, max = 150 * amount, name = 'underground-belt'})
         s(start + 2, {min = 100 * amount, max = 100 * amount, name = 'splitter'})
     end
