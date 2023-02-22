@@ -385,6 +385,31 @@ local function pl(player, amount)
     s(start + 129, {min = 0, max = 0, name = 'spidertron'})
     s(start + 130, {min = 0, max = 0, name = 'spidertron-remote'})
 
+    -- Armor
+    if stats.get_input_count('power-armor-mk2') >= required.armor then
+        s(start + 131, {min = 0, max = 0, name = 'light-armor'})
+        s(start + 132, {min = 0, max = 0, name = 'heavy-armor'})
+        s(start + 133, {min = 0, max = 0, name = 'modular-armor'})
+        s(start + 134, {min = 0, max = 0, name = 'power-armor'})
+        s(start + 135, {min = 1, max = 1, name = 'power-armor-mk2'})
+    elseif stats.get_input_count('power-armor') >= required.armor then
+        s(start + 131, {min = 0, max = 0, name = 'light-armor'})
+        s(start + 132, {min = 0, max = 0, name = 'heavy-armor'})
+        s(start + 133, {min = 0, max = 0, name = 'modular-armor'})
+        s(start + 134, {min = 1, max = 1, name = 'power-armor'})
+        s(start + 135, {min = 0, max = 1, name = 'power-armor-mk2'})
+    elseif stats.get_input_count('modular-armor') >= required.armor then
+        s(start + 131, {min = 0, max = 0, name = 'light-armor'})
+        s(start + 132, {min = 0, max = 0, name = 'heavy-armor'})
+        s(start + 133, {min = 1, max = 1, name = 'modular-armor'})
+        s(start + 134, {min = 0, max = 1, name = 'power-armor'})
+        s(start + 135, {min = 0, max = 1, name = 'power-armor-mk2'})
+    else
+        s(start + 131, {min = 0, max = 0, name = 'light-armor'})
+        s(start + 132, {min = 0, max = 0, name = 'heavy-armor'})
+        s(start + 133, {min = 0, max = 1, name = 'modular-armor'})
+        s(start + 134, {min = 0, max = 1, name = 'power-armor'})
+        s(start + 135, {min = 0, max = 1, name = 'power-armor-mk2'})
     end
 end
 
