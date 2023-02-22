@@ -17,6 +17,8 @@ local function auto_handle(ore)
     miner.order_deconstruction(miner.force)
 end
 
-Event.add(defines.events.on_resource_depleted, function(event)
-    auto_handle(event.entity)
-end)
+if #game.active_mods = 1 then
+    Event.add(defines.events.on_resource_depleted, function(event)
+        auto_handle(event.entity)
+    end)
+end
