@@ -9,7 +9,7 @@ local function pl(player, amount)
     local c = player.clear_personal_logistic_slot
     local s = player.set_personal_logistic_slot
     
-    for i = start, 200 do
+    for i = start, 200 + start do
         c(i)
     end;
 
@@ -70,6 +70,32 @@ local function pl(player, amount)
         s(start + 34, {min = 100, max = 100, name = 'small-electric-pole'})
     end
 
+    -- inserter
+    if stats.get_input_count('stack-inserter') >= required then
+        s(start + 41, {min = 0, max = 0, name = 'burner-inserter'})
+        s(start + 42, {min = 0, max = 0, name = 'inserter'})
+        s(start + 43, {min = 50 * amount, max = 50 * amount, name = 'long-handed-inserter'})
+        s(start + 44, {min = 100 * amount, max = 100 * amount, name = 'fast-inserter'})
+        s(start + 45, {min = 50 * amount, max = 50 * amount, name = 'filter-inserter'})
+        s(start + 46, {min = 100 * amount, max = 100 * amount, name = 'stack-inserter'})
+        s(start + 47, {min = 50 * amount, max = 50 * amount, name = 'stack-filter-inserter'})
+    elseif stats.get_input_count('fast-inserter') >= required then
+        s(start + 41, {min = 0, max = 0, name = 'burner-inserter'})
+        s(start + 42, {min = 0, max = 0, name = 'inserter'})
+        s(start + 43, {min = 50 * amount, max = 50 * amount, name = 'long-handed-inserter'})
+        s(start + 44, {min = 100 * amount, max = 100 * amount, name = 'fast-inserter'})
+        s(start + 45, {min = 50 * amount, max = 50 * amount, name = 'filter-inserter'})
+        s(start + 46, {min = 0, max = 0, name = 'stack-inserter'})
+        s(start + 47, {min = 0, max = 0, name = 'stack-filter-inserter'})
+    else
+        s(start + 41, {min = 0, max = 50, name = 'burner-inserter'})
+        s(start + 42, {min = 50, max = 50, name = 'inserter'})
+        s(start + 43, {min = 50 * amount, max = 50 * amount, name = 'long-handed-inserter'})
+        s(start + 44, {min = 0, max = 0, name = 'fast-inserter'})
+        s(start + 45, {min = 0, max = 0, name = 'filter-inserter'})
+        s(start + 46, {min = 0, max = 0, name = 'stack-inserter'})
+        s(start + 47, {min = 0, max = 0, name = 'stack-filter-inserter'})
+    end
 end
 
 Commands.new_command('personal-logistic', 'Set Personal Logistic')
