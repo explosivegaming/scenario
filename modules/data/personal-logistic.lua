@@ -19,7 +19,7 @@ local function pl(player, amount)
     local c = player.clear_personal_logistic_slot
     local s = player.set_personal_logistic_slot
     
-    for i = start, 200 + start do
+    for i = start, 250 + start do
         c(i)
     end;
 
@@ -457,13 +457,76 @@ local function pl(player, amount)
         s(start + 144, {min = 0, max = 4, name = 'energy-shield-mk2-equipment'})
     end
 
-    s(145, {min = 0, max = 1, name = 'belt-immunity-equipment'})
-    s(146, {min = 0, max = 1, name = 'night-vision-equipment'})
-    s(147, {min = 0, max = 10, name = 'personal-laser-defense-equipment'})
-    s(148, {min = 0, max = 0, name = 'discharge-defense-equipment'})
-    s(149, {min = 0, max = 0, name = 'discharge-defense-remote'})
-    s(150, {min = 1, max = 1, name = 'artillery-targeting-remote'})
+    s(start + 145, {min = 0, max = 1, name = 'belt-immunity-equipment'})
+    s(start + 146, {min = 0, max = 1, name = 'night-vision-equipment'})
+    s(start + 147, {min = 0, max = 10, name = 'personal-laser-defense-equipment'})
+    s(start + 148, {min = 0, max = 0, name = 'discharge-defense-equipment'})
+    s(start + 149, {min = 0, max = 0, name = 'discharge-defense-remote'})
+    s(start + 150, {min = 1, max = 1, name = 'artillery-targeting-remote'})
 
+    -- Path
+    s(start + 151, {min = 0, max = 0, name = 'stone-brick'})
+    s(start + 152, {min = 0, max = 0, name = 'concrete'})
+    s(start + 153, {min = 0, max = 0, name = 'hazard-concrete'})
+    s(start + 154, {min = 0, max = 0, name = 'refined-concrete'})
+    s(start + 155, {min = 0, max = 0, name = 'refined-hazard-concrete'})
+
+    -- Ore
+    s(start + 161, {min = 0, max = 0, name = 'wood'})
+    s(start + 162, {min = 0, max = 0, name = 'coal'})
+    s(start + 163, {min = 0, max = 0, name = 'stone'})
+    s(start + 164, {min = 0, max = 0, name = 'iron-ore'})
+    s(start + 165, {min = 0, max = 0, name = 'copper-ore'})
+    s(start + 166, {min = 0, max = 0, name = 'uranium-ore'})
+    s(start + 167, {min = 0, max = 0, name = 'raw-fish'})
+    s(start + 168, {min = 0, max = 0, name = 'iron-stick'})
+    s(start + 169, {min = 0, max = 0, name = 'iron-gear-wheel'})
+    s(start + 170, {min = 0, max = 0, name = 'satellite'})
+
+    -- Barrel
+    s(start + 171, {min = 0, max = 0, name = 'crude-oil-barrel'})
+    s(start + 172, {min = 0, max = 0, name = 'heavy-oil-barrel'})
+    s(start + 173, {min = 0, max = 0, name = 'light-oil-barrel'})
+    s(start + 174, {min = 0, max = 0, name = 'lubricant-barrel'})
+    s(start + 175, {min = 0, max = 0, name = 'petroleum-gas-barrel'})
+    s(start + 176, {min = 0, max = 0, name = 'sulfuric-acid-barrel'})
+    s(start + 177, {min = 0, max = 0, name = 'water-barrel'})
+    s(start + 178, {min = 0, max = 0, name = 'empty-barrel'})
+    s(start + 179, {min = 0, max = 0, name = 'uranium-fuel-cell'})
+    s(start + 180, {min = 0, max = 0, name = 'used-up-uranium-fuel-cell'})
+
+    -- Science and Circuit
+    s(start + 181, {min = 0, max = 0, name = 'automation-science-pack'})
+    s(start + 182, {min = 0, max = 0, name = 'logistic-science-pack'})
+    s(start + 183, {min = 0, max = 0, name = 'military-science-pack'})
+    s(start + 184, {min = 0, max = 0, name = 'chemical-science-pack'})
+    s(start + 185, {min = 0, max = 0, name = 'production-science-pack'})
+    s(start + 186, {min = 0, max = 0, name = 'utility-science-pack'})
+    s(start + 187, {min = 0, max = 0, name = 'space-science-pack'})
+    s(start + 188, {min = 0, max = 0, name = 'electronic-circuit'})
+    s(start + 189, {min = 0, max = 0, name = 'advanced-circuit'})
+    s(start + 190, {min = 0, max = 0, name = 'processing-unit'})
+
+    -- Intermediate
+    s(start + 191, {min = 0, max = 0, name = 'iron-plate'})
+    s(start + 192, {min = 0, max = 0, name = 'copper-plate'})
+    s(start + 193, {min = 0, max = 0, name = 'steel-plate'})
+    s(start + 194, {min = 0, max = 0, name = 'plastic-bar'})
+    s(start + 195, {min = 0, max = 0, name = 'sulfur'})
+    s(start + 196, {min = 0, max = 0, name = 'battery'})
+    s(start + 197, {min = 0, max = 0, name = 'explosives'})
+
+    s(start + 201, {min = 0, max = 0, name = 'engine-unit'})
+    s(start + 202, {min = 0, max = 0, name = 'electric-engine-unit'})
+    s(start + 203, {min = 0, max = 0, name = 'flying-robot-frame'})
+    s(start + 204, {min = 0, max = 0, name = 'rocket-control-unit'})
+    s(start + 205, {min = 0, max = 0, name = 'low-density-structure'})
+    s(start + 206, {min = 0, max = 0, name = 'solid-fuel'})
+    s(start + 207, {min = 10, max = 10, name = 'rocket-fuel'})
+    s(start + 208, {min = 2, max = 2, name = 'nuclear-fuel'})
+    s(start + 209, {min = 0, max = 0, name = 'uranium-235'})
+    s(start + 210, {min = 0, max = 0, name = 'uranium-238'})
+    
 end
 
 Commands.new_command('personal-logistic', 'Set Personal Logistic')
