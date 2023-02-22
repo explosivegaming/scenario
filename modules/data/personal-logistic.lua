@@ -297,6 +297,59 @@ local function pl(player, amount)
         s(start + 90, {min = 0, max = 50 * amount, name = 'effectivity-module-3'})
     end
 
+    -- Defense
+    if stats.get_input_count('laser-turret') >= required.defense then
+        s(start + 91, {min = 100 * amount, max = 100 * amount, name = 'stone-wall'})
+        s(start + 92, {min = 50 * amount, max = 50 * amount, name = 'gate'})
+        s(start + 93, {min = 0, max = 0, name = 'gun-turret'})
+        s(start + 94, {min = 100 * amount, max = 100 * amount, name = 'laser-turret'})
+        s(start + 95, {min = 0, max = 0, name = 'flamethrower-turret'})
+        s(start + 96, {min = 0, max = 0, name = 'artillery-turret'})
+    else
+        s(start + 91, {min = 100 * amount, max = 100 * amount, name = 'stone-wall'})
+        s(start + 92, {min = 50 * amount, max = 50 * amount, name = 'gate'})
+        s(start + 93, {min = 0, max = 100 * amount, name = 'gun-turret'})
+        s(start + 94, {min = 0, max = 100 * amount, name = 'laser-turret'})
+        s(start + 95, {min = 0, max = 0, name = 'flamethrower-turret'})
+        s(start + 96, {min = 0, max = 0, name = 'artillery-turret'})
+    end
+
+    -- Rocket
+    if stats.get_input_count('atomic-bomb') >= required.rocket then
+        s(start + 101, {min = 0, max = 0, name = 'rocket'})
+        s(start + 102, {min = 0, max = 0, name = 'explosive-rocket'})
+        s(start + 103, {min = 100 * amount, max = 100 * amount, name = 'atomic-bomb'})
+        s(start + 104, {min = 1, max = 1, name = 'rocket-launcher'})
+        s(start + 105, {min = 1, max = 1, name = 'flamethrower'})
+        s(start + 106, {min = 0, max = 0, name = 'pistol'})
+        s(start + 107, {min = 0, max = 0, name = 'submachine-gun'})
+        s(start + 108, {min = 0, max = 0, name = 'shotgun'})
+        s(start + 109, {min = 0, max = 0, name = 'combat-shotgun'})
+        s(start + 110, {min = 0, max = 0, name = 'land-mine'})
+    elseif stats.get_input_count('explosive-rocket') >= required.rocket then
+        s(start + 101, {min = 0, max = 0, name = 'rocket'})
+        s(start + 102, {min = 2000 * amount, max = 2000 * amount, name = 'explosive-rocket'})
+        s(start + 103, {min = 0, max = 100 * amount, name = 'atomic-bomb'})
+        s(start + 104, {min = 1, max = 1, name = 'rocket-launcher'})
+        s(start + 105, {min = 1, max = 1, name = 'flamethrower'})
+        s(start + 106, {min = 0, max = 0, name = 'pistol'})
+        s(start + 107, {min = 0, max = 0, name = 'submachine-gun'})
+        s(start + 108, {min = 0, max = 0, name = 'shotgun'})
+        s(start + 109, {min = 0, max = 0, name = 'combat-shotgun'})
+        s(start + 110, {min = 0, max = 0, name = 'land-mine'})
+    else
+        s(start + 101, {min = 0, max = 0, name = 'rocket'})
+        s(start + 102, {min = 0, max = 2000 * amount, name = 'explosive-rocket'})
+        s(start + 103, {min = 0, max = 100 * amount, name = 'atomic-bomb'})
+        s(start + 104, {min = 0, max = 1, name = 'rocket-launcher'})
+        s(start + 105, {min = 0, max = 1, name = 'flamethrower'})
+        s(start + 106, {min = 0, max = 0, name = 'pistol'})
+        s(start + 107, {min = 0, max = 1, name = 'submachine-gun'})
+        s(start + 108, {min = 0, max = 0, name = 'shotgun'})
+        s(start + 109, {min = 0, max = 0, name = 'combat-shotgun'})
+        s(start + 110, {min = 0, max = 0, name = 'land-mine'})
+    end
+
 end
 
 Commands.new_command('personal-logistic', 'Set Personal Logistic')
