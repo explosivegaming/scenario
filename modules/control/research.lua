@@ -2,7 +2,7 @@ local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.research' --- @dep config.research
 
 local function research_notification(event)
-    game.print{'[color=255, 255, 255] Research Completed - [/color][technology=' .. event.research.name .. ']'}
+    game.print{'research.msg', event.research.name}
 end
 
 if config.enabled then
