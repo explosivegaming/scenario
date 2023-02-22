@@ -15,5 +15,6 @@ return {
         chest = 50,
         rail = 200,
         mod = 100,
+        defense = 100,
     }
 }
