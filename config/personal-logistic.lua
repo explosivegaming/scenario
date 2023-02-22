@@ -7,6 +7,8 @@ return {
         belt = 200,
         power = 50,
         miner = 50,
+        furnace = 50,
+        machine = 50,
         pole = 100,
         bot = 50,
         inserter = 100,
