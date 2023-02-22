@@ -77,12 +77,14 @@ local function pl(player, amount)
         s(start + 37, {min = 0, max = 0, name = 'logistic-robot'})
         s(start + 38, {min = 60 * amount, max = 60 * amount, name = 'cliff-explosives'})
         s(start + 39, {min = 100 * amount, max = 100 * amount, name = 'repair-pack'})
+        s(start + 40, {min = 500 * amount, max = 500 * amount, name = 'repair-pack'})
     else
         s(start + 35, {min = 0, max = 0, name = 'roboport'})
         s(start + 36, {min = 0, max = 0, name = 'construction-robot'})
         s(start + 37, {min = 0, max = 0, name = 'logistic-robot'})
         s(start + 38, {min = 60 * amount, max = 60 * amount, name = 'cliff-explosives'})
         s(start + 39, {min = 0, max = 100 * amount, name = 'repair-pack'})
+        s(start + 40, {min = 0, max = 0, name = 'repair-pack'})
     end
 
     -- inserter
@@ -150,23 +152,23 @@ local function pl(player, amount)
 
     -- Train
     if stats.get_input_count('rail') >= required.rail then
-        s(start + 51, {min = 1000 * amount, max = 1000 * amount, name = 'rail'})
-        s(start + 52, {min = 10 * amount, max = 10 * amount, name = 'train-stop'})
-        s(start + 53, {min = 100 * amount, max = 100 * amount, name = 'rail-signal'})
-        s(start + 54, {min = 100 * amount, max = 100 * amount, name = 'rail-chain-signal'})
-        s(start + 55, {min = 5 * amount, max = 5 * amount, name = 'locomotive'})
-        s(start + 56, {min = 10 * amount, max = 10 * amount, name = 'cargo-wagon'})
-        s(start + 57, {min = 5 * amount, max = 5 * amount, name = 'fluid-wagon'})
-        s(start + 58, {min = 0, max = 0, name = 'artillery-wagon'})
+        s(start + 61, {min = 1000 * amount, max = 1000 * amount, name = 'rail'})
+        s(start + 62, {min = 10 * amount, max = 10 * amount, name = 'train-stop'})
+        s(start + 63, {min = 100 * amount, max = 100 * amount, name = 'rail-signal'})
+        s(start + 64, {min = 100 * amount, max = 100 * amount, name = 'rail-chain-signal'})
+        s(start + 65, {min = 5 * amount, max = 5 * amount, name = 'locomotive'})
+        s(start + 66, {min = 10 * amount, max = 10 * amount, name = 'cargo-wagon'})
+        s(start + 67, {min = 5 * amount, max = 5 * amount, name = 'fluid-wagon'})
+        s(start + 68, {min = 0, max = 0, name = 'artillery-wagon'})
     else
-        s(start + 51, {min = 0, max = 0, name = 'rail'})
-        s(start + 52, {min = 0, max = 0, name = 'train-stop'})
-        s(start + 53, {min = 0, max = 0, name = 'rail-signal'})
-        s(start + 54, {min = 0, max = 0, name = 'rail-chain-signal'})
-        s(start + 55, {min = 0, max = 0, name = 'locomotive'})
-        s(start + 56, {min = 0, max = 0, name = 'cargo-wagon'})
-        s(start + 57, {min = 0, max = 0, name = 'fluid-wagon'})
-        s(start + 58, {min = 0, max = 0, name = 'artillery-wagon'})
+        s(start + 61, {min = 0, max = 0, name = 'rail'})
+        s(start + 62, {min = 0, max = 0, name = 'train-stop'})
+        s(start + 63, {min = 0, max = 0, name = 'rail-signal'})
+        s(start + 64, {min = 0, max = 0, name = 'rail-chain-signal'})
+        s(start + 65, {min = 0, max = 0, name = 'locomotive'})
+        s(start + 66, {min = 0, max = 0, name = 'cargo-wagon'})
+        s(start + 67, {min = 0, max = 0, name = 'fluid-wagon'})
+        s(start + 68, {min = 0, max = 0, name = 'artillery-wagon'})
     end
 
 end
