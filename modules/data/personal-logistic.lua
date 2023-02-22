@@ -52,6 +52,30 @@ local function pl(player, amount)
         s(start + 3, {min = 100 * amount, max = 100 * amount, name = 'splitter'})
     end
 
+    -- power
+    if stats.get_input_count('solar-panel') >= required.power then
+        s(start + 4, {min = 50 * amount, max = 50 * amount, name = 'solar-panel'})
+        s(start + 5, {min = 50 * amount, max = 50 * amount, name = 'accumulator'})
+        s(start + 6, {min = 0, max = 0, name = 'boiler'})
+        s(start + 7, {min = 0, max = 0, name = 'steam-engine'})
+    else
+        s(start + 4, {min = 0, max = 50 * amount, name = 'solar-panel'})
+        s(start + 5, {min = 0, max = 50 * amount, name = 'accumulator'})
+        s(start + 6, {min = 0, max = 0, name = 'boiler'})
+        s(start + 7, {min = 0, max = 0, name = 'steam-engine'})
+    end
+
+    -- miner
+    if stats.get_input_count('electric-mining-drill') >= required.miner then
+        s(start + 8, {min = 0, max = 0, name = 'burner-mining-drill'})
+        s(start + 9, {min = 250 * amount, max = 250 * amount, name = 'electric-mining-drill'})
+        s(start + 10, {min = 20 * amount, max = 20 * amount, name = 'pumpjack'})
+    else
+        s(start + 8, {min = 0, max = 50 * amount, name = 'burner-mining-drill'})
+        s(start + 9, {min = 0, max = 250 * amount, name = 'electric-mining-drill'})
+        s(start + 10, {min = 0, max = 20 * amount, name = 'pumpjack'})
+    end
+
     -- pole
     if stats.get_input_count('substation') >= required.pole then
         s(start + 31, {min = 50 * amount, max = 50 * amount, name = 'substation'})
@@ -77,14 +101,14 @@ local function pl(player, amount)
         s(start + 37, {min = 0, max = 0, name = 'logistic-robot'})
         s(start + 38, {min = 60 * amount, max = 60 * amount, name = 'cliff-explosives'})
         s(start + 39, {min = 100 * amount, max = 100 * amount, name = 'repair-pack'})
-        s(start + 40, {min = 500 * amount, max = 500 * amount, name = 'repair-pack'})
+        s(start + 40, {min = 500 * amount, max = 500 * amount, name = 'landfill'})
     else
         s(start + 35, {min = 0, max = 0, name = 'roboport'})
-        s(start + 36, {min = 0, max = 0, name = 'construction-robot'})
+        s(start + 36, {min = 0, max = 50 * amount, name = 'construction-robot'})
         s(start + 37, {min = 0, max = 0, name = 'logistic-robot'})
         s(start + 38, {min = 60 * amount, max = 60 * amount, name = 'cliff-explosives'})
         s(start + 39, {min = 0, max = 100 * amount, name = 'repair-pack'})
-        s(start + 40, {min = 0, max = 0, name = 'repair-pack'})
+        s(start + 40, {min = 0, max = 0, name = 'landfill'})
     end
 
     -- inserter
