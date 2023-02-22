@@ -156,6 +156,16 @@ local function pl(player, amount)
         s(start + 38, {min = 60 * amount, max = 60 * amount, name = 'cliff-explosives'})
         s(start + 39, {min = 100 * amount, max = 100 * amount, name = 'repair-pack'})
         s(start + 40, {min = 500 * amount, max = 500 * amount, name = 'landfill'})
+        -- Ore
+        s(start + 161, {min = 0, max = 0, name = 'wood'})
+        s(start + 162, {min = 0, max = 0, name = 'coal'})
+        s(start + 163, {min = 0, max = 0, name = 'stone'})
+        s(start + 164, {min = 0, max = 0, name = 'iron-ore'})
+        s(start + 165, {min = 0, max = 0, name = 'copper-ore'})
+        s(start + 166, {min = 0, max = 0, name = 'uranium-ore'})
+        s(start + 167, {min = 0, max = 0, name = 'raw-fish'})
+        s(start + 168, {min = 0, max = 0, name = 'iron-stick'})
+        s(start + 169, {min = 0, max = 0, name = 'iron-gear-wheel'})
     else
         s(start + 35, {min = 0, max = 0, name = 'roboport'})
         s(start + 36, {min = 0, max = 50 * amount, name = 'construction-robot'})
@@ -163,7 +173,19 @@ local function pl(player, amount)
         s(start + 38, {min = 60 * amount, max = 60 * amount, name = 'cliff-explosives'})
         s(start + 39, {min = 0, max = 100 * amount, name = 'repair-pack'})
         s(start + 40, {min = 0, max = 500 * amount, name = 'landfill'})
+        -- Ore
+        s(start + 161, {min = 0, max = 500 * amount, name = 'wood'})
+        s(start + 162, {min = 0, max = 500 * amount, name = 'coal'})
+        s(start + 163, {min = 0, max = 500 * amount, name = 'stone'})
+        s(start + 164, {min = 0, max = 500 * amount, name = 'iron-ore'})
+        s(start + 165, {min = 0, max = 500 * amount, name = 'copper-ore'})
+        s(start + 166, {min = 0, max = 500 * amount, name = 'uranium-ore'})
+        s(start + 167, {min = 0, max = 200 * amount, name = 'raw-fish'})
+        s(start + 168, {min = 0, max = 500 * amount, name = 'iron-stick'})
+        s(start + 169, {min = 0, max = 500 * amount, name = 'iron-gear-wheel'})
     end
+
+    s(start + 170, {min = 0, max = 0, name = 'satellite'})
 
     -- inserter
     if stats.get_input_count('stack-inserter') >= required.inserter then
@@ -470,18 +492,6 @@ local function pl(player, amount)
     s(start + 153, {min = 0, max = 0, name = 'hazard-concrete'})
     s(start + 154, {min = 0, max = 0, name = 'refined-concrete'})
     s(start + 155, {min = 0, max = 0, name = 'refined-hazard-concrete'})
-
-    -- Ore
-    s(start + 161, {min = 0, max = 0, name = 'wood'})
-    s(start + 162, {min = 0, max = 0, name = 'coal'})
-    s(start + 163, {min = 0, max = 0, name = 'stone'})
-    s(start + 164, {min = 0, max = 0, name = 'iron-ore'})
-    s(start + 165, {min = 0, max = 0, name = 'copper-ore'})
-    s(start + 166, {min = 0, max = 0, name = 'uranium-ore'})
-    s(start + 167, {min = 0, max = 0, name = 'raw-fish'})
-    s(start + 168, {min = 0, max = 0, name = 'iron-stick'})
-    s(start + 169, {min = 0, max = 0, name = 'iron-gear-wheel'})
-    s(start + 170, {min = 0, max = 0, name = 'satellite'})
 
     -- Barrel
     s(start + 171, {min = 0, max = 0, name = 'crude-oil-barrel'})
