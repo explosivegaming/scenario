@@ -251,6 +251,42 @@ local function pl(player, amount)
     s(start + 79, {min = 50 * amount, max = 50 * amount, name = 'programmable-speaker'})
     s(start + 80, {min = 20 * amount, max = 20 * amount, name = 'offshore-pump'})
 
+    -- Module
+    if stats.get_input_count('speed-module-3') >= required.mod then
+        s(start + 81, {min = 40 * amount, max = 40 * amount, name = 'beacon'})
+        s(start + 82, {min = 250 * amount, max = 250 * amount, name = 'speed-module'})
+        s(start + 83, {min = 0, max = 0, name = 'speed-module-2'})
+        s(start + 84, {min = 250 * amount, max = 250 * amount, name = 'speed-module-3'})
+        s(start + 85, {min = 0, max = 0, name = 'productivity-module'})
+        s(start + 86, {min = 0, max = 0, name = 'productivity-module-2'})
+        s(start + 87, {min = 150 * amount, max = 150 * amount, name = 'productivity-module-3'})
+        s(start + 88, {min = 0, max = 0, name = 'effectivity-module'})
+        s(start + 89, {min = 0, max = 0, name = 'effectivity-module-2'})
+        s(start + 90, {min = 50 * amount, max = 50 * amount, name = 'effectivity-module-3'})
+    elseif stats.get_input_count('speed-module-2') >= required.mod then
+        s(start + 81, {min = 40 * amount, max = 40 * amount, name = 'beacon'})
+        s(start + 82, {min = 250 * amount, max = 250 * amount, name = 'speed-module'})
+        s(start + 83, {min = 0, max = 50 * amount, name = 'speed-module-2'})
+        s(start + 84, {min = 0, max = 250 * amount, name = 'speed-module-3'})
+        s(start + 85, {min = 0, max = 0, name = 'productivity-module'})
+        s(start + 86, {min = 0, max = 0, name = 'productivity-module-2'})
+        s(start + 87, {min = 0, max = 150 * amount, name = 'productivity-module-3'})
+        s(start + 88, {min = 0, max = 0, name = 'effectivity-module'})
+        s(start + 89, {min = 0, max = 50 * amount, name = 'effectivity-module-2'})
+        s(start + 90, {min = 0, max = 50 * amount, name = 'effectivity-module-3'})
+    else
+        s(start + 81, {min = 40 * amount, max = 40 * amount, name = 'beacon'})
+        s(start + 82, {min = 250 * amount, max = 250 * amount, name = 'speed-module'})
+        s(start + 83, {min = 0, max = 50 * amount, name = 'speed-module-2'})
+        s(start + 84, {min = 0, max = 250 * amount, name = 'speed-module-3'})
+        s(start + 85, {min = 150 * amount, max = 150 * amount, name = 'productivity-module'})
+        s(start + 86, {min = 0, max = 0, name = 'productivity-module-2'})
+        s(start + 87, {min = 0, max = 150 * amount, name = 'productivity-module-3'})
+        s(start + 88, {min = 150 * amount, max = 150 * amount, name = 'effectivity-module'})
+        s(start + 89, {min = 0, max = 50 * amount, name = 'effectivity-module-2'})
+        s(start + 90, {min = 0, max = 50 * amount, name = 'effectivity-module-3'})
+    end
+
 end
 
 Commands.new_command('personal-logistic', 'Set Personal Logistic')
