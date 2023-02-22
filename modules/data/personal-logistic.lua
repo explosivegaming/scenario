@@ -20,7 +20,7 @@ local function pl(player, amount)
     end
 
     -- belt
-    if stats.get_input_count('express-transport-belt') >= required then
+    if stats.get_input_count('express-transport-belt') >= required.belt then
         s(start + 21, {min = 500 * amount, max = 500 * amount, name = 'express-transport-belt'})
         s(start + 22, {min = 150 * amount, max = 150 * amount, name = 'express-underground-belt'})
         s(start + 23, {min = 100 * amount, max = 100 * amount, name = 'express-splitter'})
@@ -30,7 +30,7 @@ local function pl(player, amount)
         s(start + 1, {min = 0, max = 0, name = 'transport-belt'})
         s(start + 2, {min = 0, max = 0, name = 'underground-belt'})
         s(start + 3, {min = 0, max = 0, name = 'splitter'})
-    elseif stats.get_input_count('fast-transport-belt') >= required then
+    elseif stats.get_input_count('fast-transport-belt') >= required.belt then
         s(start + 21, {min = 0, max = 0, name = 'express-transport-belt'})
         s(start + 22, {min = 0, max = 0, name = 'express-underground-belt'})
         s(start + 23, {min = 0, max = 0, name = 'express-splitter'})
@@ -53,12 +53,12 @@ local function pl(player, amount)
     end
 
     -- pole
-    if stats.get_input_count('substation') >= required then
+    if stats.get_input_count('substation') >= required.pole then
         s(start + 31, {min = 50 * amount, max = 50 * amount, name = 'substation'})
         s(start + 32, {min = 100 * amount, max = 100 * amount, name = 'big-electric-pole'})
         s(start + 33, {min = 100 * amount, max = 100 * amount, name = 'medium-electric-pole'})
         s(start + 34, {min = 0, max = 0, name = 'small-electric-pole'})
-    elseif stats.get_input_count('big-electric-pole') >= required and stats.get_input_count('big-electric-pole') >= required then
+    elseif stats.get_input_count('medium-electric-pole') >= required.pole then
         s(start + 31, {min = 0, max = 0, name = 'substation'})
         s(start + 32, {min = 100 * amount, max = 100 * amount, name = 'big-electric-pole'})
         s(start + 33, {min = 100 * amount, max = 100 * amount, name = 'medium-electric-pole'})
@@ -71,7 +71,7 @@ local function pl(player, amount)
     end
 
     -- inserter
-    if stats.get_input_count('stack-inserter') >= required then
+    if stats.get_input_count('stack-inserter') >= required.inserter then
         s(start + 41, {min = 0, max = 0, name = 'burner-inserter'})
         s(start + 42, {min = 0, max = 0, name = 'inserter'})
         s(start + 43, {min = 50 * amount, max = 50 * amount, name = 'long-handed-inserter'})
@@ -79,7 +79,7 @@ local function pl(player, amount)
         s(start + 45, {min = 50 * amount, max = 50 * amount, name = 'filter-inserter'})
         s(start + 46, {min = 100 * amount, max = 100 * amount, name = 'stack-inserter'})
         s(start + 47, {min = 50 * amount, max = 50 * amount, name = 'stack-filter-inserter'})
-    elseif stats.get_input_count('fast-inserter') >= required then
+    elseif stats.get_input_count('fast-inserter') >= required.inserter then
         s(start + 41, {min = 0, max = 0, name = 'burner-inserter'})
         s(start + 42, {min = 0, max = 0, name = 'inserter'})
         s(start + 43, {min = 50 * amount, max = 50 * amount, name = 'long-handed-inserter'})
@@ -95,6 +95,36 @@ local function pl(player, amount)
         s(start + 45, {min = 0, max = 0, name = 'filter-inserter'})
         s(start + 46, {min = 0, max = 0, name = 'stack-inserter'})
         s(start + 47, {min = 0, max = 0, name = 'stack-filter-inserter'})
+    end
+
+    -- Chest
+    if stats.get_input_count('logistic-chest-requester') >= required.chest then
+        s(start + 51, {min = 0, max = 0, name = 'wooden-chest'})
+        s(start + 52, {min = 0, max = 0, name = 'iron-chest'})
+        s(start + 53, {min = 50 * amount, max = 50 * amount, name = 'steel-chest'})
+        s(start + 54, {min = 50 * amount, max = 50 * amount, name = 'logistic-chest-passive-provider'})
+        s(start + 55, {min = 50 * amount, max = 50 * amount, name = 'logistic-chest-storage'})
+        s(start + 56, {min = 50 * amount, max = 50 * amount, name = 'logistic-chest-requester'})
+        s(start + 57, {min = 50 * amount, max = 50 * amount, name = 'logistic-chest-buffer'})
+        s(start + 58, {min = 50 * amount, max = 50 * amount, name = 'logistic-chest-active-provider'})
+    elseif stats.get_input_count('logistic-chest-passive-provider') >= required.chest then
+        s(start + 51, {min = 0, max = 0, name = 'wooden-chest'})
+        s(start + 52, {min = 0, max = 0, name = 'iron-chest'})
+        s(start + 53, {min = 50 * amount, max = 50 * amount, name = 'steel-chest'})
+        s(start + 54, {min = 50 * amount, max = 50 * amount, name = 'logistic-chest-passive-provider'})
+        s(start + 55, {min = 50 * amount, max = 50 * amount, name = 'logistic-chest-storage'})
+        s(start + 56, {min = 0, max = 0, name = 'logistic-chest-requester'})
+        s(start + 57, {min = 0, max = 0, name = 'logistic-chest-buffer'})
+        s(start + 58, {min = 0, max = 0, name = 'logistic-chest-active-provider'})
+    else
+        s(start + 51, {min = 0, max = 50 * amount, name = 'wooden-chest'})
+        s(start + 52, {min = 0, max = 50 * amount, name = 'iron-chest'})
+        s(start + 53, {min = 50 * amount, max = 50 * amount, name = 'steel-chest'})
+        s(start + 54, {min = 0, max = 0, name = 'logistic-chest-passive-provider'})
+        s(start + 55, {min = 0, max = 0, name = 'logistic-chest-storage'})
+        s(start + 56, {min = 0, max = 0, name = 'logistic-chest-requester'})
+        s(start + 57, {min = 0, max = 0, name = 'logistic-chest-buffer'})
+        s(start + 58, {min = 0, max = 0, name = 'logistic-chest-active-provider'})
     end
 end
 
