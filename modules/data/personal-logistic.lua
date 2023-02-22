@@ -2,6 +2,16 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local config = require 'config.personal-logistic' --- @dep config.personal-logistic
 
+--[[
+Command 2: 
+add filter based of inventory
+
+Command 3:
+add filter of those not in inventory: all 0
+
+game.item_prototypes
+]]
+
 local function pl(player, amount)
     local stats = player.force.item_production_statistics
     local start = config.start
