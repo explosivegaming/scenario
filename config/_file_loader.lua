@@ -59,6 +59,7 @@ return {
     -- Control
     'modules.control.vlayer',
     'modules.control.miner',
+    'modules.control.research',
 
     --- Data
     'modules.data.statistics',
