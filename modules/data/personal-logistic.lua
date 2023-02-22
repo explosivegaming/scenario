@@ -350,6 +350,42 @@ local function pl(player, amount)
         s(start + 110, {min = 0, max = 0, name = 'land-mine'})
     end
 
+    -- Ammo
+    if stats.get_input_count('uranium-rounds-magazine') >= required.ammo then
+        s(start + 111, {min = 0, max = 0, name = 'firearm-magazine'})
+        s(start + 112, {min = 0, max = 0, name = 'piercing-rounds-magazine'})
+        s(start + 113, {min = 0, max = 0, name = 'uranium-rounds-magazine'})
+        s(start + 114, {min = 100 * amount, max = 100 * amount, name = 'flamethrower-ammo'})
+        s(start + 115, {min = 0, max = 0, name = 'shotgun-shell'})
+        s(start + 116, {min = 0, max = 0, name = 'piercing-shotgun-shell'})
+        s(start + 117, {min = 0, max = 0, name = 'cannon-shell'})
+        s(start + 118, {min = 0, max = 0, name = 'explosive-cannon-shell'})
+        s(start + 119, {min = 0, max = 0, name = 'uranium-cannon-shell'})
+        s(start + 120, {min = 0, max = 0, name = 'explosive-uranium-cannon-shell'})
+    else
+        s(start + 111, {min = 0, max = 0, name = 'firearm-magazine'})
+        s(start + 112, {min = 0, max = 1000 * amount, name = 'piercing-rounds-magazine'})
+        s(start + 113, {min = 0, max = 0, name = 'uranium-rounds-magazine'})
+        s(start + 114, {min = 100 * amount, max = 100 * amount, name = 'flamethrower-ammo'})
+        s(start + 115, {min = 0, max = 0, name = 'shotgun-shell'})
+        s(start + 116, {min = 0, max = 0, name = 'piercing-shotgun-shell'})
+        s(start + 117, {min = 0, max = 0, name = 'cannon-shell'})
+        s(start + 118, {min = 0, max = 0, name = 'explosive-cannon-shell'})
+        s(start + 119, {min = 0, max = 0, name = 'uranium-cannon-shell'})
+        s(start + 120, {min = 0, max = 0, name = 'explosive-uranium-cannon-shell'})
+
+    s(start + 121, {min = 0, max = 0, name = 'artillery-shell'})
+    s(start + 122, {min = 0, max = 0, name = 'poison-capsule'})
+    s(start + 123, {min = 0, max = 0, name = 'slowdown-capsule'})
+    s(start + 124, {min = 0, max = 0, name = 'defender-capsule'})
+    s(start + 125, {min = 0, max = 0, name = 'distractor-capsule'})
+    s(start + 126, {min = 0, max = 0, name = 'destroyer-capsule'})
+    s(start + 127, {min = 0, max = 0, name = 'car'})
+    s(start + 128, {min = 0, max = 0, name = 'tank'})
+    s(start + 129, {min = 0, max = 0, name = 'spidertron'})
+    s(start + 130, {min = 0, max = 0, name = 'spidertron-remote'})
+
+    end
 end
 
 Commands.new_command('personal-logistic', 'Set Personal Logistic')
