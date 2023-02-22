@@ -526,7 +526,7 @@ local function pl(player, amount)
     s(start + 208, {min = 2, max = 2, name = 'nuclear-fuel'})
     s(start + 209, {min = 0, max = 0, name = 'uranium-235'})
     s(start + 210, {min = 0, max = 0, name = 'uranium-238'})
- ]]   
+   
 end
 
 Commands.new_command('personal-logistic', 'Set Personal Logistic')
