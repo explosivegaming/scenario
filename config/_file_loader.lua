@@ -68,6 +68,7 @@ return {
     'modules.data.alt-view',
     'modules.data.tag',
     'modules.data.bonus',
+    'modules.data.personal-logistic',
 
     --- GUI
     'modules.gui.readme',
