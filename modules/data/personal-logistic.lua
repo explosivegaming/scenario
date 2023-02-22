@@ -96,30 +96,26 @@ local function pl(player, amount)
         s(start + 17, {min = 0, max = 0, name = 'assembling-machine-1'})
         s(start + 18, {min = 0, max = 0, name = 'assembling-machine-2'})
         s(start + 19, {min = 50 * amount, max = 50 * amount, name = 'assembling-machine-3'})
-        s(start + 20, {min = 0, max = 0, name = 'rocket-silo'})
         s(start + 24, {min = 10 * amount, max = 10 * amount, name = 'oil-refinery'})
         s(start + 25, {min = 10 * amount, max = 10 * amount, name = 'chemical-plant'})
-        s(start + 26, {min = 0, max = 0, name = 'centrifuge'})
-        s(start + 27, {min = 0, max = 0, name = 'lab'})
     elseif stats.get_input_count('assembling-machine-2') >= required.machine then
         s(start + 17, {min = 0, max = 0, name = 'assembling-machine-1'})
         s(start + 18, {min = 50 * amount, max = 50 * amount, name = 'assembling-machine-2'})
         s(start + 19, {min = 0, max = 50 * amount, name = 'assembling-machine-3'}) 
-        s(start + 20, {min = 0, max = 0, name = 'rocket-silo'})
         s(start + 24, {min = 10 * amount, max = 10 * amount, name = 'oil-refinery'})
         s(start + 25, {min = 10 * amount, max = 10 * amount, name = 'chemical-plant'})
-        s(start + 26, {min = 0, max = 0, name = 'centrifuge'})
-        s(start + 27, {min = 0, max = 0, name = 'lab'})
     else
         s(start + 17, {min = 0, max = 50 * amount, name = 'assembling-machine-1'})
         s(start + 18, {min = 0, max = 50 * amount, name = 'assembling-machine-2'})
         s(start + 19, {min = 0, max = 50 * amount, name = 'assembling-machine-3'})
-        s(start + 20, {min = 0, max = 0, name = 'rocket-silo'})
         s(start + 24, {min = 0, max = 10 * amount, name = 'oil-refinery'})
         s(start + 25, {min = 0, max = 10 * amount, name = 'chemical-plant'})
-        s(start + 26, {min = 0, max = 0, name = 'centrifuge'})
-        s(start + 27, {min = 0, max = 0, name = 'lab'})
+
     end
+
+    s(start + 20, {min = 0, max = 0, name = 'rocket-silo'})
+    s(start + 26, {min = 0, max = 0, name = 'centrifuge'})
+    s(start + 27, {min = 0, max = 0, name = 'lab'})
 
     -- pole
     if stats.get_input_count('substation') >= required.pole then
@@ -153,7 +149,7 @@ local function pl(player, amount)
         s(start + 37, {min = 0, max = 0, name = 'logistic-robot'})
         s(start + 38, {min = 60 * amount, max = 60 * amount, name = 'cliff-explosives'})
         s(start + 39, {min = 0, max = 100 * amount, name = 'repair-pack'})
-        s(start + 40, {min = 0, max = 0, name = 'landfill'})
+        s(start + 40, {min = 0, max = 500 * amount, name = 'landfill'})
     end
 
     -- inserter
@@ -239,6 +235,17 @@ local function pl(player, amount)
         s(start + 67, {min = 0, max = 0, name = 'fluid-wagon'})
         s(start + 68, {min = 0, max = 0, name = 'artillery-wagon'})
     end
+
+    s(start + 71, {min = 50 * amount, max = 50 * amount, name = 'constant-combinator'})
+    s(start + 72, {min = 50 * amount, max = 50 * amount, name = 'arithmetic-combinator'})
+    s(start + 73, {min = 50 * amount, max = 50 * amount, name = 'decider-combinator'})
+    s(start + 74, {min = 100 * amount, max = 100 * amount, name = 'small-lamp'})
+    s(start + 75, {min = 200 * amount, max = 200 * amount, name = 'red-wire'})
+    s(start + 76, {min = 200 * amount, max = 200 * amount, name = 'green-wire'})
+    s(start + 77, {min = 200 * amount, max = 200 * amount, name = 'copper-cable'})
+    s(start + 78, {min = 50 * amount, max = 50 * amount, name = 'power-switch'})
+    s(start + 79, {min = 50 * amount, max = 50 * amount, name = 'programmable-speaker'})
+    s(start + 80, {min = 20 * amount, max = 20 * amount, name = 'offshore-pump'})
 
 end
 
