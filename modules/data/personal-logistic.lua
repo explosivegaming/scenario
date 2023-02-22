@@ -19,7 +19,7 @@ local function pl(player, amount)
     local c = player.clear_personal_logistic_slot
     local s = player.set_personal_logistic_slot
     
-    for i = start, 250 + start do
+    for i = start + 1, start + 250 do
         c(i)
     end;
 
@@ -120,7 +120,6 @@ local function pl(player, amount)
         s(start + 19, {min = 0, max = 50 * amount, name = 'assembling-machine-3'})
         s(start + 24, {min = 0, max = 10 * amount, name = 'oil-refinery'})
         s(start + 25, {min = 0, max = 10 * amount, name = 'chemical-plant'})
-
     end
 
     s(start + 26, {min = 0, max = 0, name = 'centrifuge'})
@@ -374,7 +373,7 @@ local function pl(player, amount)
         s(start + 119, {min = 0, max = 0, name = 'uranium-cannon-shell'})
         s(start + 120, {min = 0, max = 0, name = 'explosive-uranium-cannon-shell'})
     end
-    
+
     s(start + 121, {min = 0, max = 0, name = 'artillery-shell'})
     s(start + 122, {min = 0, max = 0, name = 'poison-capsule'})
     s(start + 123, {min = 0, max = 0, name = 'slowdown-capsule'})
@@ -527,7 +526,7 @@ local function pl(player, amount)
     s(start + 208, {min = 2, max = 2, name = 'nuclear-fuel'})
     s(start + 209, {min = 0, max = 0, name = 'uranium-235'})
     s(start + 210, {min = 0, max = 0, name = 'uranium-238'})
-    
+ ]]   
 end
 
 Commands.new_command('personal-logistic', 'Set Personal Logistic')
