@@ -385,6 +385,16 @@ local function pl(player, amount)
     s(start + 129, {min = 0, max = 0, name = 'spidertron'})
     s(start + 130, {min = 0, max = 0, name = 'spidertron-remote'})
 
+    if stats.get_input_count('cluster-grenade') >= required.ammo then
+        s(start + 97, {min = 0, max = 0, name = 'grenade'})
+        s(start + 98, {min = 0, max = 0, name = 'cluster-grenade'})
+    else
+        s(start + 97, {min = 0, max = 100 * amount, name = 'grenade'})
+        s(start + 98, {min = 0, max = 0, name = 'cluster-grenade'})
+    end
+
+    s(start + 99, {min = 50 * amount, max = 50 * amount, name = 'radar'})
+
     -- Armor
     if stats.get_input_count('power-armor-mk2') >= required.armor then
         s(start + 131, {min = 0, max = 0, name = 'light-armor'})
@@ -411,6 +421,49 @@ local function pl(player, amount)
         s(start + 134, {min = 0, max = 1, name = 'power-armor'})
         s(start + 135, {min = 0, max = 1, name = 'power-armor-mk2'})
     end
+
+    -- Armor Equipment
+    if stats.get_input_count('fusion-reactor-equipment') >= required.armor_equipment then
+        s(start + 136, {min = 0, max = 6, name = 'fusion-reactor-equipment'})
+        s(start + 137, {min = 0, max = 0, name = 'solar-panel-equipment'})
+    else
+        s(start + 136, {min = 0, max = 6, name = 'fusion-reactor-equipment'})
+        s(start + 137, {min = 0, max = 20, name = 'solar-panel-equipment'})
+    end
+
+    if stats.get_input_count('battery-mk2-equipment') >= required.armor_equipment then
+        s(start + 138, {min = 0, max = 0, name = 'battery-equipment'})
+        s(start + 139, {min = 0, max = 4, name = 'battery-mk2-equipment'})
+    else
+        s(start + 138, {min = 0, max = 4, name = 'battery-equipment'})
+        s(start + 139, {min = 0, max = 4, name = 'battery-mk2-equipment'})
+    end
+
+    s(start + 140, {min = 0, max = 2, name = 'exoskeleton-equipment'})
+
+    if stats.get_input_count('personal-roboport-mk2-equipment') >= required.armor_equipment then
+        s(start + 141, {min = 0, max = 0, name = 'personal-roboport-equipment'})
+        s(start + 142, {min = 0, max = 2, name = 'personal-roboport-mk2-equipment'})
+    else
+        s(start + 141, {min = 0, max = 2, name = 'personal-roboport-equipment'})
+        s(start + 142, {min = 0, max = 2, name = 'personal-roboport-mk2-equipment'})
+    end
+
+    if stats.get_input_count('energy-shield-mk2-equipment') >= required.armor_equipment then
+        s(start + 143, {min = 0, max = 0, name = 'energy-shield-equipment'})
+        s(start + 144, {min = 0, max = 4, name = 'energy-shield-mk2-equipment'})
+    else
+        s(start + 143, {min = 0, max = 4, name = 'energy-shield-equipment'})
+        s(start + 144, {min = 0, max = 4, name = 'energy-shield-mk2-equipment'})
+    end
+
+    s(145, {min = 0, max = 1, name = 'belt-immunity-equipment'})
+    s(146, {min = 0, max = 1, name = 'night-vision-equipment'})
+    s(147, {min = 0, max = 10, name = 'personal-laser-defense-equipment'})
+    s(148, {min = 0, max = 0, name = 'discharge-defense-equipment'})
+    s(149, {min = 0, max = 0, name = 'discharge-defense-remote'})
+    s(150, {min = 1, max = 1, name = 'artillery-targeting-remote'})
+
 end
 
 Commands.new_command('personal-logistic', 'Set Personal Logistic')
