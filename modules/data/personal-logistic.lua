@@ -40,7 +40,7 @@ local function pl(player, amount)
         s(start + 1, {min = 500 * amount, max = 500 * amount, name = 'transport-belt'})
         s(start + 2, {min = 150 * amount, max = 150 * amount, name = 'underground-belt'})
         s(start + 3, {min = 100 * amount, max = 100 * amount, name = 'splitter'})
-    elseif stats.get_input_count('transport-belt') >= required then
+    else
         s(start + 21, {min = 0, max = 0, name = 'express-transport-belt'})
         s(start + 22, {min = 0, max = 0, name = 'express-underground-belt'})
         s(start + 23, {min = 0, max = 0, name = 'express-splitter'})
@@ -51,6 +51,25 @@ local function pl(player, amount)
         s(start + 2, {min = 150 * amount, max = 150 * amount, name = 'underground-belt'})
         s(start + 3, {min = 100 * amount, max = 100 * amount, name = 'splitter'})
     end
+
+    -- pole
+    if stats.get_input_count('substation') >= required then
+        s(start + 31, {min = 50 * amount, max = 50 * amount, name = 'substation'})
+        s(start + 32, {min = 100 * amount, max = 100 * amount, name = 'big-electric-pole'})
+        s(start + 33, {min = 100 * amount, max = 100 * amount, name = 'medium-electric-pole'})
+        s(start + 34, {min = 0, max = 0, name = 'small-electric-pole'})
+    elseif stats.get_input_count('big-electric-pole') >= required and stats.get_input_count('big-electric-pole') >= required then
+        s(start + 31, {min = 0, max = 0, name = 'substation'})
+        s(start + 32, {min = 100 * amount, max = 100 * amount, name = 'big-electric-pole'})
+        s(start + 33, {min = 100 * amount, max = 100 * amount, name = 'medium-electric-pole'})
+        s(start + 34, {min = 0, max = 0, name = 'small-electric-pole'})
+    else
+        s(start + 31, {min = 0, max = 0, name = 'substation'})
+        s(start + 32, {min = 0, max = 0, name = 'big-electric-pole'})
+        s(start + 33, {min = 0, max = 0, name = 'medium-electric-pole'})
+        s(start + 34, {min = 100, max = 100, name = 'small-electric-pole'})
+    end
+
 end
 
 Commands.new_command('personal-logistic', 'Set Personal Logistic')
