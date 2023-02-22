@@ -19,12 +19,12 @@ local function pl(player, amount)
     local c = player.clear_personal_logistic_slot
     local s = player.set_personal_logistic_slot
     
-    for i = start + 1, start + 250 do
+    for i = start + 1, start + 220 do
         c(i)
     end;
 
     if amount == 0 then
-        return
+        return nil
     else
         amount = amount / 10
     end
