@@ -16,5 +16,6 @@ return {
         rail = 200,
         mod = 100,
         defense = 100,
+        rocket=100,
     }
 }
