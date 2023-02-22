@@ -50,9 +50,9 @@ function vlayer_power_input_handle()
                 
             if ((circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == "signal-C")) then
                 -- circuit is in MJ, divided by 60 ups (updated in 5)
-                v.power.power_usage = math.min(v.power.energy - (1000000), math.floor(circuit_signal.count * 250000 / 3, global.phi.vlayer.power.limit.input))
+                v.power.power_usage = math.min(v.power.energy - (1000000), math.floor(circuit_signal.count * 250000 / 3))
             else
-                v.power.power_usage = math.min(v.power.energy - (1000000), 0, global.phi.vlayer.power.limit.input)
+                v.power.power_usage = math.min(v.power.energy - (1000000), 0)
             end
 
             global.phi.vlayer.power.energy = global.phi.vlayer.power.energy + v.power.power_usage
@@ -227,25 +227,38 @@ function vlayer_handle()
 end
 
 Event.add(defines.events.on_init, function(event)
-    global.phi = {}
-    global.phi.vlayer = {}
-    global.phi.vlayer.storage = {}
-    global.phi.vlayer.storage.item = {}
-    global.phi.vlayer.storage.item['solar-panel'] = 0
-    global.phi.vlayer.storage.item['accumulator'] = 0
-    -- global.phi.vlayer.storage.item['landfill'] = 0
-    global.phi.vlayer.storage.input = {}
-    global.phi.vlayer.power = {}
-    global.phi.vlayer.power.limit = {input=0, output=0}
-    global.phi.vlayer.power.input = {}
-    global.phi.vlayer.power.output = {}
-    global.phi.vlayer.power.energy = 0
-    global.phi.vlayer.power.energy_history = 0
-    global.phi.vlayer.power.circuit = {}
+    local vlayer_storage_item = {}
+    local vlayer_storage_input = {}
+    local vlayer_power_limit = {}
+    local vlayer_power_input = {}
+    local vlayer_power_output = {}
+    local vlayer_power_energy = {}
+    local vlayer_power_circuit = {}
+
+    Global.register({
+        vlayer_storage_item = vlayer_storage_item
+        vlayer_storage_input = vlayer_storage_input
+        vlayer_power_limit = vlayer_power_limit
+        vlayer_power_input = vlayer_power_input
+        vlayer_power_output = vlayer_power_output
+        vlayer_power_energy = vlayer_power_energy
+        vlayer_power_circuit = vlayer_power_circuit
+    }, function(tbl)
+        vlayer_storage_item = tbl.vlayer_storage_item
+        vlayer_storage_input = tbl.vlayer_storage_input
+        vlayer_power_limit = tbl.vlayer_power_limit
+        vlayer_power_input = tbl.vlayer_power_input
+        vlayer_power_output = tbl.vlayer_power_output
+        vlayer_power_energy = tbl.vlayer_power_energy
+        vlayer_power_circuit = tbl.vlayer_power_circuit
+    end)
+
+    vlayer_storage_item['solar-panel'] = 0
+    vlayer_storage_item['accumulator'] = 0
+
 end)
 
 -- Event.add(defines.events.on_tick, function(event)
 Event.on_nth_tick(5, function(event)
     vlayer_handle()
 end)
-
