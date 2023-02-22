@@ -1,6 +1,6 @@
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Commands = require 'expcore.commands' --- @dep expcore.commands
-local config = require 'config.personal-logistic' --- @dep config.bonuses
+local config = require 'config.personal-logistic' --- @dep config.personal-logistic
 
 local function pl(player, amount)
     local stats = player.force.item_production_statistics
