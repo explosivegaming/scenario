@@ -67,7 +67,22 @@ local function pl(player, amount)
         s(start + 31, {min = 0, max = 0, name = 'substation'})
         s(start + 32, {min = 0, max = 0, name = 'big-electric-pole'})
         s(start + 33, {min = 0, max = 0, name = 'medium-electric-pole'})
-        s(start + 34, {min = 100, max = 100, name = 'small-electric-pole'})
+        s(start + 34, {min = 100 * amount, max = 100 * amount, name = 'small-electric-pole'})
+    end
+
+    -- bot
+    if stats.get_input_count('construction-robot') >= required.bot then
+        s(start + 35, {min = 20 * amount, max = 20 * amount, name = 'roboport'})
+        s(start + 36, {min = 50 * amount, max = 50 * amount, name = 'construction-robot'})
+        s(start + 37, {min = 0, max = 0, name = 'logistic-robot'})
+        s(start + 38, {min = 60 * amount, max = 60 * amount, name = 'cliff-explosives'})
+        s(start + 39, {min = 100 * amount, max = 100 * amount, name = 'repair-pack'})
+    else
+        s(start + 35, {min = 0, max = 0, name = 'roboport'})
+        s(start + 36, {min = 0, max = 0, name = 'construction-robot'})
+        s(start + 37, {min = 0, max = 0, name = 'logistic-robot'})
+        s(start + 38, {min = 60 * amount, max = 60 * amount, name = 'cliff-explosives'})
+        s(start + 39, {min = 0, max = 100 * amount, name = 'repair-pack'})
     end
 
     -- inserter
@@ -96,6 +111,12 @@ local function pl(player, amount)
         s(start + 46, {min = 0, max = 0, name = 'stack-inserter'})
         s(start + 47, {min = 0, max = 0, name = 'stack-filter-inserter'})
     end
+
+    -- pipe
+    s(start + 48, {min = 100 * amount, max = 100 * amount, name = 'pipe'})
+    s(start + 49, {min = 100 * amount, max = 100 * amount, name = 'pipe-to-ground'})
+    s(start + 50, {min = 50 * amount, max = 50 * amount, name = 'pump'})
+    s(start + 59, {min = 50 * amount, max = 50 * amount, name = 'storage-tank'})
 
     -- Chest
     if stats.get_input_count('logistic-chest-requester') >= required.chest then
