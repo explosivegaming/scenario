@@ -96,14 +96,20 @@ local function pl(player, amount)
         s(start + 17, {min = 0, max = 0, name = 'assembling-machine-1'})
         s(start + 18, {min = 0, max = 0, name = 'assembling-machine-2'})
         s(start + 19, {min = 50 * amount, max = 50 * amount, name = 'assembling-machine-3'})
+        s(start + 24, {min = 10 * amount, max = 10 * amount, name = 'oil-refinery'})
+        s(start + 25, {min = 10 * amount, max = 10 * amount, name = 'chemical-plant'})
     elseif stats.get_input_count('assembling-machine-2') >= required.machine then
         s(start + 17, {min = 0, max = 0, name = 'assembling-machine-1'})
         s(start + 18, {min = 50 * amount, max = 50 * amount, name = 'assembling-machine-2'})
         s(start + 19, {min = 0, max = 50 * amount, name = 'assembling-machine-3'}) 
+        s(start + 24, {min = 10 * amount, max = 10 * amount, name = 'oil-refinery'})
+        s(start + 25, {min = 10 * amount, max = 10 * amount, name = 'chemical-plant'})
     else
         s(start + 17, {min = 0, max = 50 * amount, name = 'assembling-machine-1'})
         s(start + 18, {min = 0, max = 50 * amount, name = 'assembling-machine-2'})
         s(start + 19, {min = 0, max = 50 * amount, name = 'assembling-machine-3'}) 
+        s(start + 24, {min = 0, max = 10 * amount, name = 'oil-refinery'})
+        s(start + 25, {min = 0, max = 10 * amount, name = 'chemical-plant'})
     end
 
     -- pole
