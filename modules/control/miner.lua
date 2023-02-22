@@ -3,7 +3,7 @@ local Event = require 'utils.event_core' --- @dep utils.event_core
 local function auto_handle(ore)
     local miner = ore.surface.find_entities_filtered{area={{ore.position.x-1, ore.position.y-1}, {ore.position.x+1, ore.position.y+1}}, type='mining-drill'}
     
-    if #miner = 0 then
+    if #miner == 0 then
         return
     end
 
