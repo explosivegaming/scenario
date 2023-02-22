@@ -6,7 +6,7 @@ local function auto_handle(ore)
     if #miner = 0 then
         return
     end
-    
+
     if miner.fluidbox and #miner.fluidbox > 0 then
         return nil
     end
@@ -22,8 +22,7 @@ local function auto_handle(ore)
     miner.order_deconstruction(miner.force)
 end
 
-if #game.active_mods = 1 then
-    Event.add(defines.events.on_resource_depleted, function(event)
-        auto_handle(event.entity)
-    end)
-end
+Event.add(defines.events.on_resource_depleted, function(event)
+    auto_handle(event.entity)
+end)
+
