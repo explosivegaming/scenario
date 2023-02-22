@@ -19,5 +19,6 @@ return {
         rocket = 100,
         ammo = 200,
         armor = 3,
+        equipment = 10,
     }
 }
