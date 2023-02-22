@@ -3,5 +3,10 @@
 
 return {
     start = 30,
-    production_required = 200
+    production_required = {
+        belt = 200,
+        pole = 100,
+        inserter = 100,
+        chest = 50
+    }
 }
