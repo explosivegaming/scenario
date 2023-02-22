@@ -76,6 +76,36 @@ local function pl(player, amount)
         s(start + 10, {min = 0, max = 20 * amount, name = 'pumpjack'})
     end
 
+    -- furnace
+    if stats.get_input_count('electric-furnace') >= required.furnace then
+        s(start + 14, {min = 0, max = 0, name = 'stone-furnace'})
+        s(start + 15, {min = 0, max = 0, name = 'steel-furnace'})
+        s(start + 16, {min = 50 * amount, max = 50 * amount, name = 'electric-furnace'})
+    elseif stats.get_input_count('steel-furnace') >= required.furnace then
+        s(start + 14, {min = 0, max = 0, name = 'stone-furnace'})
+        s(start + 15, {min = 50 * amount, max = 50 * amount, name = 'steel-furnace'})
+        s(start + 16, {min = 0, max = 50 * amount, name = 'electric-furnace'})   
+    else
+        s(start + 14, {min = 0, max = 50 * amount, name = 'stone-furnace'})
+        s(start + 15, {min = 0, max = 50 * amount, name = 'steel-furnace'})
+        s(start + 16, {min = 0, max = 50 * amount, name = 'electric-furnace'})   
+    end
+
+    -- machine
+    if stats.get_input_count('assembling-machine-3') >= required.machine then
+        s(start + 17, {min = 0, max = 0, name = 'assembling-machine-1'})
+        s(start + 18, {min = 0, max = 0, name = 'assembling-machine-2'})
+        s(start + 19, {min = 50 * amount, max = 50 * amount, name = 'assembling-machine-3'})
+    elseif stats.get_input_count('assembling-machine-2') >= required.machine then
+        s(start + 17, {min = 0, max = 0, name = 'assembling-machine-1'})
+        s(start + 18, {min = 50 * amount, max = 50 * amount, name = 'assembling-machine-2'})
+        s(start + 19, {min = 0, max = 50 * amount, name = 'assembling-machine-3'}) 
+    else
+        s(start + 17, {min = 0, max = 50 * amount, name = 'assembling-machine-1'})
+        s(start + 18, {min = 0, max = 50 * amount, name = 'assembling-machine-2'})
+        s(start + 19, {min = 0, max = 50 * amount, name = 'assembling-machine-3'}) 
+    end
+
     -- pole
     if stats.get_input_count('substation') >= required.pole then
         s(start + 31, {min = 50 * amount, max = 50 * amount, name = 'substation'})
