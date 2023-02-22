@@ -147,6 +147,28 @@ local function pl(player, amount)
         s(start + 57, {min = 0, max = 0, name = 'logistic-chest-buffer'})
         s(start + 58, {min = 0, max = 0, name = 'logistic-chest-active-provider'})
     end
+
+    -- Train
+    if stats.get_input_count('rail') >= required.rail then
+        s(start + 51, {min = 1000 * amount, max = 1000 * amount, name = 'rail'})
+        s(start + 52, {min = 10 * amount, max = 10 * amount, name = 'train-stop'})
+        s(start + 53, {min = 100 * amount, max = 100 * amount, name = 'rail-signal'})
+        s(start + 54, {min = 100 * amount, max = 100 * amount, name = 'rail-chain-signal'})
+        s(start + 55, {min = 5 * amount, max = 5 * amount, name = 'locomotive'})
+        s(start + 56, {min = 10 * amount, max = 10 * amount, name = 'cargo-wagon'})
+        s(start + 57, {min = 5 * amount, max = 5 * amount, name = 'fluid-wagon'})
+        s(start + 58, {min = 0, max = 0, name = 'artillery-wagon'})
+    else
+        s(start + 51, {min = 0, max = 0, name = 'rail'})
+        s(start + 52, {min = 0, max = 0, name = 'train-stop'})
+        s(start + 53, {min = 0, max = 0, name = 'rail-signal'})
+        s(start + 54, {min = 0, max = 0, name = 'rail-chain-signal'})
+        s(start + 55, {min = 0, max = 0, name = 'locomotive'})
+        s(start + 56, {min = 0, max = 0, name = 'cargo-wagon'})
+        s(start + 57, {min = 0, max = 0, name = 'fluid-wagon'})
+        s(start + 58, {min = 0, max = 0, name = 'artillery-wagon'})
+    end
+
 end
 
 Commands.new_command('personal-logistic', 'Set Personal Logistic')
