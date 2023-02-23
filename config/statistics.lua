@@ -43,11 +43,5 @@ return {
         'DamageDealt', 'DistanceTravelled',
         'CapsulesUsed', 'EntityRepaired',
         'DeconstructionPlannerUsed', 'MapTagsMade'
-        --[[
-        'DamageDeathRatio', 'KillDeathRatio',
-        'SessionTime', 'BuildRatio',
-        'RocketPerHour', 'TreeKillPerMinute',
-        'NetPlayTime', 'AFKTimeRatio'
-        ]]
     }
 }
