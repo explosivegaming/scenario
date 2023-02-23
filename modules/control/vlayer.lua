@@ -6,7 +6,6 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.vlayer' --- @dep config.gui.player_list_actions
 local Colors = require 'utils.color_presets' --- @dep utils.color_presets
-local vlayer = require 'modules.control.vlayer'
 local format_number = require('util').format_number
 
 --[[
@@ -53,6 +52,24 @@ Net Power Production:
 if not config.enabled then
     return
 end
+
+local vlayer = {}
+vlayer.storage = {}
+vlayer.storage.item = {}
+vlayer.storage.input = {}
+vlayer.storage.limit = {}
+vlayer.power = {}
+vlayer.power.limit = {}
+vlayer.power.input = {}
+vlayer.power.output = {}
+vlayer.power.energy = 0
+vlayer.power.circuit = {}
+vlayer.storage.item['solar-panel'] = 0
+vlayer.storage.item['accumulator'] = 0
+vlayer.storage.limit.input = config.interface_limit.storage_input
+vlayer.power.limit.input = config.interface_limit.energy_intput
+vlayer.power.limit.output = config.interface_limit.energy_output
+vlayer.power.limit.circuit = config.interface_limit.circuit
 
 function vlayer_power_input_handle()
     vlayer.power.energy_history = vlayer.power.energy
@@ -632,27 +649,6 @@ Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_co
 	return Roles.player_allowed(player, 'vlayer-1')
 end)
 
-Event.add(defines.events.on_init, function(event)
-    local vlayer = {}
-    vlayer.storage = {}
-    vlayer.storage.item = {}
-    vlayer.storage.input = {}
-    vlayer.storage.limit = {}
-    vlayer.power = {}
-    vlayer.power.limit = {}
-    vlayer.power.input = {}
-    vlayer.power.output = {}
-    vlayer.power.energy = 0
-    vlayer.power.circuit = {}
-    vlayer.storage.item['solar-panel'] = 0
-    vlayer.storage.item['accumulator'] = 0
-    vlayer.storage.limit.input = config.interface_limit.storage_input
-    vlayer.power.limit.input = config.interface_limit.energy_intput
-    vlayer.power.limit.output = config.interface_limit.energy_output
-    vlayer.power.limit.circuit = config.interface_limit.circuit
-end)
-
--- Event.add(defines.events.on_tick, function(event)
 Event.on_nth_tick(config.update_tick, function(event)
     vlayer_handle()
 
