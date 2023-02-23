@@ -154,7 +154,7 @@ function vlayer_power_storage_handle()
         end
     end
 
-    local new_energy = math.floor(vlayer.storage.item['solar-panel'] * 5000 * solar_eff)
+    local new_energy = math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * solar_eff)
 
     if not config.battery_limit then
         vlayer.power.energy = vlayer.power.energy + new_energy
@@ -664,7 +664,6 @@ Event.add(defines.events.on_init, function(event)
     vlayer.power.limit.input = config.interface_limit.energy_intput
     vlayer.power.limit.output = config.interface_limit.energy_output
     vlayer.power.limit.circuit = config.interface_limit.circuit
-    vlayer.power.limit.energy = 1000000000000
 end)
 
 -- Event.add(defines.events.on_tick, function(event)
