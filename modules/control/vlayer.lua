@@ -82,21 +82,35 @@ function vlayer_power_input_handle()
 end
 
 function vlayer_power_output_handle()
-    local energy_available = math.floor(vlayer.power.energy / (#vlayer.power.output))
+    local energy_required = {}
+    local energy_required_total = 0
+    local energy_average = 0
 
     for k, v in pairs(vlayer.power.output) do
         if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
             vlayer.power.output[k] = nil
-        
-        else
-            if (v.power.energy < (vlayer.power.limit.output)) then
-                local power_output_space = vlayer.power.limit.output - v.power.energy
-                v.power.power_production = math.min(power_output_space, energy_available)
-                vlayer.power.energy = vlayer.power.energy - v.power.power_production
-            
+        end
+
+        energy_required[k] = config.energy_limit - v.energy
+        energy_required_total = energy_required_total + energy_required[k]
+    end
+
+    if not (vlayer.power.energy >= energy_required_total) then
+        energy_average = math.floor(vlayer.power.energy / (#vlayer.power.output))
+    end
+
+    for k, v in pairs(vlayer.power.output) do
+        if (energy_required[k] > 0) then
+            if (energy_required[k] >= energy_average) then
+                v.power.power_production = energy_average
             else
-                v.power.power_production = 0
+                v.power.power_production = energy_required[k]
             end
+
+            vlayer.power.energy = vlayer.power.energy - v.power.power_production  
+            
+        else
+            v.power.power_production = 0
         end
     end
 end
