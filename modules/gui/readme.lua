@@ -13,6 +13,13 @@ local External = require 'expcore.external' --- @dep expcore.external
 local format_time = _C.format_time --- @dep expcore.common
 local format_number = require('util').format_number --- @dep util
 
+--[[
+'DamageDeathRatio', 'KillDeathRatio',
+'SessionTime', 'BuildRatio',
+'RocketPerHour', 'TreeKillPerMinute',
+'NetPlayTime', 'AFKTimeRatio'
+]]
+
 local tabs = {}
 local function Tab(caption, tooltip, element_define)
     tabs[#tabs+1] = {caption, tooltip, element_define}
