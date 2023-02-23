@@ -380,21 +380,22 @@ Gui.element(function(_, parent)
         for _, name in pairs(PlayerData.Statistics.metadata.display_order_ratio) do
             local child = PlayerData.Statistics[name.first]
             local metadata = child.metadata
-            local value_first = child:get(player_name)
+            local value_first = child:get(player_name) or 0
+
             child = PlayerData.Statistics[name.second]
             metadata = child.metadata
-            local value_second = child:get(player_name)
+            local value_second = child:get(player_name) or 0
 
             if name.method == '/' then
                 if (name.second ~= 0) then
-                    local value = math.floor((name.first / name.second) * name.multiplier)
+                    local value = math.floor((name.first / name.second) * name.multiplier) or 0
                 end
             else
-                local value = math.floor((name.first - name.second) * name.multiplier)
+                local value = math.floor((name.first - name.second) * name.multiplier) or 0
             end
             
             name = name.name
-            
+
             if value ~= nil or metadata.show_always then
                 count = count - 2
                 if metadata.stringify then value = metadata.stringify(value)
