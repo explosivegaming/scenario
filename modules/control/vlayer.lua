@@ -57,19 +57,13 @@ local vlayer = {}
 vlayer.storage = {}
 vlayer.storage.item = {}
 vlayer.storage.input = {}
-vlayer.storage.limit = {}
 vlayer.power = {}
-vlayer.power.limit = {}
 vlayer.power.input = {}
 vlayer.power.output = {}
 vlayer.power.energy = 0
 vlayer.power.circuit = {}
 vlayer.storage.item['solar-panel'] = 0
 vlayer.storage.item['accumulator'] = 0
-vlayer.storage.limit.input = config.interface_limit.storage_input
-vlayer.power.limit.input = config.interface_limit.energy_intput
-vlayer.power.limit.output = config.interface_limit.energy_output
-vlayer.power.limit.circuit = config.interface_limit.circuit
 
 function vlayer_power_input_handle()
     vlayer.power.energy_history = vlayer.power.energy
@@ -82,7 +76,6 @@ function vlayer_power_input_handle()
             local circuit_signal = v.circuit.get_or_create_control_behavior().get_signal(1)
                 
             if ((circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == "signal-C")) then
-                -- circuit is in MJ, divided by 60 ups
                 if circuit_signal.count == -1 then
                     v.power.power_usage = v.power.energy - (config.energy_input_min)
                 else
@@ -188,31 +181,23 @@ end
 
 function vlayer_storage_handle()
     for k, v in pairs(vlayer.storage.input) do
-        if ((v.entity == nil) or (not v.entity.valid)) then
+        if ((v.storage.entity == nil) or (not v.storage.entity.valid)) then
             vlayer.storage.input[k] = nil
         
-        elseif (chest_info.type == "INPUT") then
+        elseif (v.type == "INPUT") then
             local chest = chest.get_inventory(defines.inventory.chest)
 
             if (chest == nil) then 
-                return 
+                return
             elseif (chest.is_empty()) then 
-                return 
+                return
             end
         
             local chest_content = chest.get_contents()
-            local item_handle_status = false
 
             for item_name, count in pairs(chest_content) do
                 if (vlayer.storage.item[item_name] ~= nil) then
                     vlayer.storage.item[item_name] = vlayer.storage.item[item_name] + count
-                    item_handle_status = true
-                    
-                else
-                    item_handle_status = false
-                end
-
-                if (item_handle_status) then
                     chest_content.remove({name=item_name, count=count})
                 end
             end
@@ -309,6 +294,7 @@ function vlayer_convert_chest_storage_input(player)
         local vlayer_storage = player.surface.create_entity{name="logistic-chest-storage", position={pos.x, pos.y}, force="neutral"}
         vlayer_storage.destructible = false
         vlayer_storage.minable = false
+        vlayer_power.operable = true
         vlayer_storage.last_user = player
     
         table.insert(vlayer.storage.input, {type="INPUT", storage=vlayer_storage})
