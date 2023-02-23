@@ -66,13 +66,13 @@ vlayer.storage.item['solar-panel'] = 0
 vlayer.storage.item['accumulator'] = 0
 
 function vlayer_power_input_handle()
-    vlayer.power.energy_history = vlayer.power.energy
+    local vlayer_power_capacity = vlayer.storage.item['accumulator'] * 5000000 / (#vlayer.power.input + #vlayer.power.input)
 
     for k, v in pairs(vlayer.power.input) do
         if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
             vlayer.power.input[k] = nil
-        
         elseif (v.power.energy > (config.energy_input_min)) then
+            v.power.electric_buffer_size = vlayer_power_capacity
             local circuit_signal = v.circuit.get_or_create_control_behavior().get_signal(1)
                 
             if ((circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == "signal-C")) then
@@ -87,11 +87,13 @@ function vlayer_power_input_handle()
 
         else
             v.power.power_usage = 0
+            v.power.electric_buffer_size = vlayer_power_capacity
         end
     end
 end
 
 function vlayer_power_output_handle()
+    local vlayer_power_capacity = vlayer.storage.item['accumulator'] * 5000000 / (#vlayer.power.input + #vlayer.power.input)
     local energy_required = {}
     local energy_required_total = 0
     local energy_average = 0
@@ -99,10 +101,11 @@ function vlayer_power_output_handle()
     for k, v in pairs(vlayer.power.output) do
         if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
             vlayer.power.output[k] = nil
+        else
+            energy_required[k] = config.energy_limit - v.energy
+            energy_required_total = energy_required_total + energy_required[k]
+            v.power.electric_buffer_size = vlayer_power_capacity
         end
-
-        energy_required[k] = config.energy_limit - v.energy
-        energy_required_total = energy_required_total + energy_required[k]
     end
 
     if not (vlayer.power.energy >= energy_required_total) then
@@ -311,7 +314,7 @@ function vlayer_convert_chest_power_input(player)
             vlayer_power.minable = false
             vlayer_power.operable = false
             vlayer_power.last_user = player
-            vlayer_power.electric_buffer_size = config.energy_limit
+            vlayer_power.electric_buffer_size = 5000000
             vlayer_power.power_production = 0
             vlayer_power.power_usage = 0
             vlayer_power.energy = 0
@@ -341,7 +344,7 @@ function vlayer_convert_chest_power_output(player)
             vlayer_power.minable = false
             vlayer_power.operable = false
             vlayer_power.last_user = player
-            vlayer_power.electric_buffer_size = config.energy_limit
+            vlayer_power.electric_buffer_size = 5000000
             vlayer_power.power_production = 0
             vlayer_power.power_usage = 0
             vlayer_power.energy = 0
