@@ -63,13 +63,13 @@ return {
 
     --- Data
     'modules.data.statistics',
-    'modules.data.player-colours',
+    'modules.data.player_colours',
     'modules.data.greetings',
     'modules.data.quickbar',
     'modules.data.alt-view',
     'modules.data.tag',
     'modules.data.bonus',
-    'modules.data.personal-logistic',
+    'modules.data.personal_logistic',
 
     --- GUI
     'modules.gui.readme',
