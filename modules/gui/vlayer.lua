@@ -60,7 +60,7 @@ function vlayer_convert_chest_storage_input(player)
         vlayer_storage.minable = false
         vlayer_storage.last_user = player
     
-        table.insert(global.phi.vlayer.storage.input, {type="INPUT", storage=vlayer_storage})
+        table.insert(vlayer.vlayer.storage.input, {type="INPUT", storage=vlayer_storage})
         return true
     end
 
@@ -77,7 +77,7 @@ function vlayer_convert_chest_power_input(player)
             vlayer_power.minable = false
             vlayer_power.operable = false
             vlayer_power.last_user = player
-            vlayer_power.electric_buffer_size = global.phi.vlayer.power.limit.input
+            vlayer_power.electric_buffer_size = vlayer.vlayer.power.limit.input
             vlayer_power.power_production = 0
             vlayer_power.power_usage = 0
             vlayer_power.energy = 0
@@ -89,7 +89,7 @@ function vlayer_convert_chest_power_input(player)
             vlayer_circuit.last_user = player
             vlayer_circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-C"}, count=1})
             
-            table.insert(global.phi.vlayer.power.input, {power=vlayer_power, circuit=vlayer_circuit})
+            table.insert(vlayer.vlayer.power.input, {power=vlayer_power, circuit=vlayer_circuit})
             return true
 
         else
@@ -111,7 +111,7 @@ function vlayer_convert_chest_power_output(player)
                 vlayer_power.minable = false
                 vlayer_power.operable = false
                 vlayer_power.last_user = player
-                vlayer_power.electric_buffer_size = global.phi.vlayer.power.limit.output
+                vlayer_power.electric_buffer_size = vlayer.vlayer.power.limit.output
                 vlayer_power.power_production = 0
                 vlayer_power.power_usage = 0
                 vlayer_power.energy = 0
@@ -122,7 +122,7 @@ function vlayer_convert_chest_power_output(player)
                 vlayer_circuit.operable = false
                 vlayer_circuit.last_user = player
             
-                table.insert(global.phi.vlayer.power.output, {power=vlayer_power, circuit=vlayer_circuit})
+                table.insert(vlayer.vlayer.power.output, {power=vlayer_power, circuit=vlayer_circuit})
             return true
 
         else
@@ -156,7 +156,7 @@ function vlayer_convert_chest_circuit(player)
         circuit_o.operable = false
         circuit_o.last_user = player
 
-        table.insert(global.phi.vlayer.power.circuit, {input=circuit_i, output=circuit_o})
+        table.insert(vlayer.vlayer.power.circuit, {input=circuit_i, output=circuit_o})
     end
 end
 
@@ -177,8 +177,8 @@ function vlayer_convert_remove(player)
             local name = entity.name
 
             if (name == "electric-energy-interface") then
-                if (entity.electric_buffer_size == global.phi.vlayer.power.limit.input) then
-                    -- global.phi.vlayer.power.energy = global.phi.vlayer.power.energy + 0
+                if (entity.electric_buffer_size == vlayer.vlayer.power.limit.input) then
+                    -- vlayer.vlayer.power.energy = vlayer.vlayer.power.energy + 0
                 else
             ]]
             
@@ -407,13 +407,13 @@ Event.on_nth_tick(60, function()
         local frame = Gui.get_left_element(player, player_list_container)
         local container = frame.container
         
-        container.scroll.table.solar_panel_display_count.caption = format_number(global.phi.vlayer.storage.item['solar-panel'])
-        container.scroll.table.accumulator_display_count.caption = format_number(global.phi.vlayer.storage.item['accumulator'])
+        container.scroll.table.solar_panel_display_count.caption = format_number(vlayer.vlayer.storage.item['solar-panel'])
+        container.scroll.table.accumulator_display_count.caption = format_number(vlayer.vlayer.storage.item['accumulator'])
         
-        container.scroll.table.power_production_peak_display_count.caption = format_number(global.phi.vlayer.storage.item['solar-panel'] * 60)
-        container.scroll.table.power_production_sustained_display_count.caption = format_number(global.phi.vlayer.storage.item['solar-panel'] * 4365 / 104)
+        container.scroll.table.power_production_peak_display_count.caption = format_number(vlayer.vlayer.storage.item['solar-panel'] * 60)
+        container.scroll.table.power_production_sustained_display_count.caption = format_number(vlayer.vlayer.storage.item['solar-panel'] * 4365 / 104)
         
-        container.scroll.table.battery_max_display_count.caption = format_number(global.phi.vlayer.storage.item['accumulator'] * 5)
-        container.scroll.table.battery_current_display_count.caption = format_number(math.floor(global.phi.vlayer.power.energy / 1000000))
+        container.scroll.table.battery_max_display_count.caption = format_number(vlayer.vlayer.storage.item['accumulator'] * 5)
+        container.scroll.table.battery_current_display_count.caption = format_number(math.floor(vlayer.vlayer.power.energy / 1000000))
     end
 end)
