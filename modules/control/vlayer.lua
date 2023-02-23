@@ -355,25 +355,24 @@ function vlayer_convert_chest_power_output(player)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
-        if (player.surface.can_place_entity{name="electric-energy-interface", position=pos}) and 
-            (player.surface.can_place_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}}) then
-                local vlayer_power = player.surface.create_entity{name="electric-energy-interface", position=pos, force="neutral"}
-                vlayer_power.destructible = false
-                vlayer_power.minable = false
-                vlayer_power.operable = false
-                vlayer_power.last_user = player
-                vlayer_power.electric_buffer_size = config.energy_limit
-                vlayer_power.power_production = 0
-                vlayer_power.power_usage = 0
-                vlayer_power.energy = 0
+        if (player.surface.can_place_entity{name="electric-energy-interface", position=pos}) and (player.surface.can_place_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}}) then
+            local vlayer_power = player.surface.create_entity{name="electric-energy-interface", position=pos, force="neutral"}
+            vlayer_power.destructible = false
+            vlayer_power.minable = false
+            vlayer_power.operable = false
+            vlayer_power.last_user = player
+            vlayer_power.electric_buffer_size = config.energy_limit
+            vlayer_power.power_production = 0
+            vlayer_power.power_usage = 0
+            vlayer_power.energy = 0
             
-                local vlayer_circuit = player.surface.create_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}, force="neutral"}
-                vlayer_circuit.destructible = false
-                vlayer_circuit.minable = false
-                vlayer_circuit.operable = false
-                vlayer_circuit.last_user = player
+            local vlayer_circuit = player.surface.create_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}, force="neutral"}
+            vlayer_circuit.destructible = false
+            vlayer_circuit.minable = false
+            vlayer_circuit.operable = false
+            vlayer_circuit.last_user = player
             
-                table.insert(vlayer.power.output, {power=vlayer_power, circuit=vlayer_circuit})
+            table.insert(vlayer.power.output, {power=vlayer_power, circuit=vlayer_circuit})
             return true
 
         else
@@ -419,18 +418,22 @@ function vlayer_convert_remove(player)
         return
     end
 
-    local entity = player.surface.get_closest(player.position, entities)
+    for i=1, #entities do
+        local entity = player.surface.get_closest(player.position, entities)
 
-    if (entity) then
-        vlayer.power.energy = vlayer.power.energy + entity.energy
-        entity.energy = 0
+        if (entity) then
+            if (entity.name == 'electric-energy-interface') then
+                vlayer.power.energy = vlayer.power.energy + entity.energy
+                entity.energy = 0
+            end
 
-        entity.destroy()
-        player.insert{name='steel-chest', count=1}
-        player.print("Entity removed")
+            entity.destroy()
+            player.insert{name='steel-chest', count=1}
+            player.print("Entity removed")
 
-    else
-        player.print("Entity not found")
+        else
+            player.print("Entity not found")
+        end
     end
 end
 
