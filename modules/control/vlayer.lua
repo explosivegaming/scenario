@@ -313,7 +313,7 @@ function vlayer_convert_chest_power_input(player)
             vlayer_power.minable = false
             vlayer_power.operable = false
             vlayer_power.last_user = player
-            vlayer_power.electric_buffer_size = vlayer.power.limit.input
+            vlayer_power.electric_buffer_size = config.energy_limit
             vlayer_power.power_production = 0
             vlayer_power.power_usage = 0
             vlayer_power.energy = 0
@@ -347,7 +347,7 @@ function vlayer_convert_chest_power_output(player)
                 vlayer_power.minable = false
                 vlayer_power.operable = false
                 vlayer_power.last_user = player
-                vlayer_power.electric_buffer_size = vlayer.power.limit.output
+                vlayer_power.electric_buffer_size = config.energy_limit
                 vlayer_power.power_production = 0
                 vlayer_power.power_usage = 0
                 vlayer_power.energy = 0
