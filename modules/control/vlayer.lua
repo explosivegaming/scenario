@@ -407,7 +407,7 @@ function vlayer_convert_remove(player)
     if (entity) then
         vlayer.power.energy = vlayer.power.energy + entity.energy
         entity.energy = 0
-        
+
         entity.destroy()
         player.insert{name='steel-chest', count=1}
         player.print("Entity removed")
@@ -653,7 +653,7 @@ Event.add(defines.events.on_init, function(event)
 end)
 
 -- Event.add(defines.events.on_tick, function(event)
-Event.on_nth_tick(10, function(event)
+Event.on_nth_tick(config.update_tick, function(event)
     vlayer_handle()
 
     for _, player in pairs(game.connected_players) do
@@ -664,7 +664,7 @@ Event.on_nth_tick(10, function(event)
         container.scroll.table.accumulator_display_count.caption = format_number(vlayer.storage.item['accumulator'])
         
         container.scroll.table.power_production_peak_display_count.caption = format_number(vlayer.storage.item['solar-panel'] * 60)
-        container.scroll.table.power_production_sustained_display_count.caption = format_number(vlayer.storage.item['solar-panel'] * 4365 / 104)
+        container.scroll.table.power_production_sustained_display_count.caption = format_number(math.floor(vlayer.storage.item['solar-panel'] * 4365 / 104))
         
         container.scroll.table.battery_max_display_count.caption = format_number(vlayer.storage.item['accumulator'] * 5)
         container.scroll.table.battery_current_display_count.caption = format_number(math.floor(vlayer.power.energy / 1000000))
