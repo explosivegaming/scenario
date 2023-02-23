@@ -338,9 +338,9 @@ function vlayer_convert_chest_power_input(player)
             vlayer_circuit.minable = false
             vlayer_circuit.operable = true
             vlayer_circuit.last_user = player
-            vlayer_circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-C"}, count=1})
-            
             table.insert(vlayer.power.input, {power=vlayer_power, circuit=vlayer_circuit})
+
+            vlayer_circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-C"}, count=1})
             return true
 
         else
@@ -369,7 +369,7 @@ function vlayer_convert_chest_power_output(player)
             local vlayer_circuit = player.surface.create_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}, force="neutral"}
             vlayer_circuit.destructible = false
             vlayer_circuit.minable = false
-            vlayer_circuit.operable = false
+            vlayer_circuit.operable = true
             vlayer_circuit.last_user = player
             
             table.insert(vlayer.power.output, {power=vlayer_power, circuit=vlayer_circuit})
@@ -431,9 +431,6 @@ function vlayer_convert_remove(player)
             entity.destroy()
             player.insert{name='steel-chest', count=1}
             player.print("Entity removed")
-
-        else
-            player.print("Entity not found")
         end
     end
 end
