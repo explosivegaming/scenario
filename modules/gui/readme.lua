@@ -376,7 +376,7 @@ Gui.element(function(_, parent)
                 Gui.centered_label(statistics, 130, {'readme.data-format', value, metadata.unit or ''}, metadata.value_tooltip or {'exp-statistics.' .. name .. '-tooltip'})
             end
         end
-
+        --[[
         for _, name in pairs(PlayerData.Statistics.metadata.display_order_ratio) do
             local child = PlayerData.Statistics[name.first]
             local metadata = child.metadata
@@ -404,7 +404,7 @@ Gui.element(function(_, parent)
                 Gui.centered_label(statistics, 130, {'readme.data-format', value, metadata.unit or ''}, metadata.value_tooltip or {'exp-statistics.' .. name .. '-tooltip'})
             end
         end
-
+        ]]
         if count > 0 then for i = 1, count do Gui.centered_label(statistics, 140) end end
     end
 
