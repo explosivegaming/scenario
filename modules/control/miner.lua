@@ -1,4 +1,5 @@
 local Event = require 'utils.event_core' --- @dep utils.event_core
+local config = require 'config.miner' --- @dep config.miner
 
 local function auto_handle(ore)
     local miner = ore.surface.find_entities_filtered{area={{ore.position.x-1, ore.position.y-1}, {ore.position.x+1, ore.position.y+1}}, type='mining-drill'}
@@ -22,7 +23,8 @@ local function auto_handle(ore)
     miner.order_deconstruction(miner.force)
 end
 
-Event.add(defines.events.on_resource_depleted, function(event)
-    auto_handle(event.entity)
-end)
-
+if config.enabled then
+    Event.add(defines.events.on_resource_depleted, function(event)
+        auto_handle(event.entity)
+    end)
+end
