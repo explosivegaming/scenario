@@ -14,7 +14,6 @@ return {
     Kills = true, --- @setting Kills If kills are tracked for a player, includes all kills not on same force or neutral
     RocketsLaunched = true, --- @setting RocketsLaunched If the number of rockets launched should be tracked, done for all players on the force
     ResearchCompleted = true, --- @setting ResearchCompleted If the number of researches completed should be tracked, done for all players on the force
-    -- ratio = true,
     counters = { --- @setting counters Simple statistics that just go up by one each time an event happens
         MachinesBuilt = e.on_built_entity,
         MapTagsMade = e.on_chart_tag_added,
@@ -43,5 +42,11 @@ return {
         'DamageDealt', 'DistanceTravelled',
         'CapsulesUsed', 'EntityRepaired',
         'DeconstructionPlannerUsed', 'MapTagsMade'
+    },
+    display_order_ratio = {
+        'DamageDeathRatio', 'KillDeathRatio',
+        'SessionTime', 'BuildRatio',
+        'RocketPerHour', 'TreeKillPerMinute',
+        'NetPlayTime', 'AFKTimeRatio'
     }
 }
