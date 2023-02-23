@@ -171,13 +171,11 @@ end
 
 function vlayer_storage_handle()
     for k, v in pairs(vlayer.storage.input) do
-        local chest = v.entity
-
-        if ((chest == nil) or (not chest.valid)) then
+        if ((v.entity == nil) or (not v.entity.valid)) then
             vlayer.storage.input[k] = nil
         
         elseif (chest_info.type == "INPUT") then
-            chest = chest.get_inventory(defines.inventory.chest)
+            local chest = chest.get_inventory(defines.inventory.chest)
 
             if (chest == nil) then 
                 return 
@@ -407,24 +405,12 @@ function vlayer_convert_remove(player)
     local entity = player.surface.get_closest(player.position, entities)
 
     if (entity) then
-        -- entity.last_user can also be used
-        if (player.admin) then
-            --[[
-            local name = entity.name
-
-            if (name == "electric-energy-interface") then
-                if (entity.electric_buffer_size == vlayer.power.limit.input) then
-                    -- vlayer.power.energy = vlayer.power.energy + 0
-                else
-            ]]
-            
-            entity.destroy()
-            player.insert{name='steel-chest', count=1}
-            player.print("Entity removed")
-
-        else
-            player.print("You are not allowed to remove the enity")
-        end
+        vlayer.power.energy = vlayer.power.energy + entity.energy
+        entity.energy = 0
+        
+        entity.destroy()
+        player.insert{name='steel-chest', count=1}
+        player.print("Entity removed")
 
     else
         player.print("Entity not found")
