@@ -202,7 +202,9 @@ Gui.element{
     caption = 'Power Input',
     style = 'button'
 }:on_click(function(player)
-    vlayer_convert_chest_power_input(player)
+    if #vlayer.power.input < vlayer.power.limit.input then
+        vlayer_convert_chest_power_input(player)
+    end
 end)
 
 local button_power_output =
@@ -212,7 +214,9 @@ Gui.element{
     caption = 'Power Output',
     style = 'button'
 }:on_click(function(player)
-    vlayer_convert_chest_power_output(player)
+    if #vlayer.power.output < vlayer.power.limit.output then
+        vlayer_convert_chest_power_output(player)
+    end
 end)
 
 local button_storage_input =
@@ -222,7 +226,9 @@ Gui.element{
     caption = 'Storage Input',
     style = 'button'
 }:on_click(function(player)
-    vlayer_convert_chest_storage_input(player)
+    if #vlayer.storage.input < vlayer.storage.limit.input then
+        vlayer_convert_chest_storage_input(player)
+    end
 end)
 
 local button_circuit =
@@ -232,7 +238,9 @@ Gui.element{
     caption = 'Circuit',
     style = 'button'
 }:on_click(function(player)
-    vlayer_convert_chest_circuit(player)
+    if #vlayer.power.circuit < vlayer.power.limit.circuit then
+        vlayer_convert_chest_circuit(player)
+    end
 end)
 
 local button_remove =
