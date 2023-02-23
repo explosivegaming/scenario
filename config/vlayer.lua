@@ -11,7 +11,9 @@ return {
     always_day = false,
     battery_limit = true,
     interface_limit = {
-        energy_input=1,
-        energy_output=1
+        storage_input = 1,
+        energy_input = 1,
+        energy_output = 1,
+        circuit = 1
     }
 }
