@@ -38,10 +38,7 @@ if config.decon_area then
 
 		local area = math.abs((e.area.left_top.x - e.area.right_bottom.x) * (e.area.left_top.y - e.area.right_bottom.y))
 		local msg = player.name .. " tried to deconstruct the area " .. pos_to_gps_string(e.area.left_top) .. " to " .. pos_to_gps_string(e.area.right_bottom) .. "(" .. area .. " tiles)".. " but were not allowed."
-
-		for _, player_ in pairs(game.connected_players) do
-			game.players[player_].print{msg}
-		end
+		game.print(msg)
 
 		add_log(get_secs() .. "," .. msg)
 	end)
