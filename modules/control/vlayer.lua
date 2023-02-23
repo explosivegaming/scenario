@@ -312,10 +312,7 @@ function vlayer_convert_chest_storage_input(player)
         vlayer_storage.last_user = player
     
         table.insert(vlayer.storage.input, {type="INPUT", storage=vlayer_storage})
-        return true
     end
-
-    return false
 end
 
 function vlayer_convert_chest_power_input(player)
@@ -341,14 +338,11 @@ function vlayer_convert_chest_power_input(player)
             table.insert(vlayer.power.input, {power=vlayer_power, circuit=vlayer_circuit})
 
             vlayer_circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-C"}, count=1})
-            return true
 
         else
             player.print("Unable to build energy input")
         end
     end
-
-    return false
 end
 
 function vlayer_convert_chest_power_output(player)
@@ -373,14 +367,11 @@ function vlayer_convert_chest_power_output(player)
             vlayer_circuit.last_user = player
             
             table.insert(vlayer.power.output, {power=vlayer_power, circuit=vlayer_circuit})
-            return true
 
         else
             player.print("Unable to build energy output")
         end
     end
-
-    return false
 end
 
 function vlayer_convert_chest_circuit(player)
@@ -429,7 +420,6 @@ function vlayer_convert_remove(player)
             end
 
             entity.destroy()
-            player.insert{name='steel-chest', count=1}
             player.print("Entity removed")
         end
     end
@@ -442,7 +432,7 @@ Gui.element{
     caption = 'Power Input',
     style = 'button'
 }:on_click(function(player)
-    if #vlayer.power.input < vlayer.power.limit.input then
+    if #vlayer.power.input < config.interface_limit.energy_input then
         vlayer_convert_chest_power_input(player)
     end
 end)
@@ -454,7 +444,7 @@ Gui.element{
     caption = 'Power Output',
     style = 'button'
 }:on_click(function(player)
-    if #vlayer.power.output < vlayer.power.limit.output then
+    if #vlayer.power.output < config.interface_limit.energy_output then
         vlayer_convert_chest_power_output(player)
     end
 end)
@@ -466,7 +456,7 @@ Gui.element{
     caption = 'Storage Input',
     style = 'button'
 }:on_click(function(player)
-    if #vlayer.storage.input < vlayer.storage.limit.input then
+    if #vlayer.storage.input < config.interface_limit.storage_input then
         vlayer_convert_chest_storage_input(player)
     end
 end)
@@ -478,7 +468,7 @@ Gui.element{
     caption = 'Circuit',
     style = 'button'
 }:on_click(function(player)
-    if #vlayer.power.circuit < vlayer.power.limit.circuit then
+    if #vlayer.power.circuit < config.interface_limit.circuit then
         vlayer_convert_chest_circuit(player)
     end
 end)
