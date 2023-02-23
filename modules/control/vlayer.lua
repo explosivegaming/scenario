@@ -81,6 +81,26 @@ function vlayer_power_input_handle()
     end
 end
 
+function vlayer_power_output_handle()
+    local energy_available = math.floor(vlayer.power.energy / (#vlayer.power.output))
+
+    for k, v in pairs(vlayer.power.output) do
+        if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
+            vlayer.power.output[k] = nil
+        
+        else
+            if (v.power.energy < (vlayer.power.limit.output)) then
+                local power_output_space = vlayer.power.limit.output - v.power.energy
+                v.power.power_production = math.min(power_output_space, energy_available)
+                vlayer.power.energy = vlayer.power.energy - v.power.power_production
+            
+            else
+                v.power.power_production = 0
+            end
+        end
+    end
+end
+
 function vlayer_power_storage_handle()
     --[[
     25,000 / 416 s
@@ -131,26 +151,6 @@ function vlayer_power_storage_handle()
             vlayer.power.energy = battery_limit
         else
             vlayer.power.energy = vlayer.power.energy + new_energy
-        end
-    end
-end
-
-function vlayer_power_output_handle()
-    local energy_available = math.floor(vlayer.power.energy / (#vlayer.power.output))
-
-    for k, v in pairs(vlayer.power.output) do
-        if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
-            vlayer.power.output[k] = nil
-        
-        else
-            if (v.power.energy < (vlayer.power.limit.output)) then
-                local power_output_space = vlayer.power.limit.output - v.power.energy
-                v.power.power_production = math.min(power_output_space, energy_available)
-                vlayer.power.energy = vlayer.power.energy - v.power.power_production
-            
-            else
-                v.power.power_production = 0
-            end
         end
     end
 end
