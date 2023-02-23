@@ -390,6 +390,7 @@ function vlayer_convert_chest_circuit(player)
         local circuit_i = player.surface.create_entity{name="constant-combinator", position=pos, force="neutral"}
         circuit_i.destructible = false
         circuit_i.minable = false
+        circuit_i.operable = true
         circuit_i.last_user = player
         circuit_i.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-P"}, count=1})
         circuit_i.get_or_create_control_behavior().set_signal(2, {signal={type="virtual", name="signal-S"}, count=1})
@@ -403,7 +404,7 @@ function vlayer_convert_chest_circuit(player)
         local circuit_o = player.surface.create_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}, force="neutral"}
         circuit_o.destructible = false
         circuit_o.minable = false
-        circuit_o.operable = false
+        circuit_o.operable = true
         circuit_o.last_user = player
 
         table.insert(vlayer.power.circuit, {input=circuit_i, output=circuit_o})
