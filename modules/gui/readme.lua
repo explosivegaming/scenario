@@ -367,7 +367,7 @@ Gui.element(function(_, parent)
         for _, name in pairs(PlayerData.Statistics.metadata.display_order) do
             local child = PlayerData.Statistics[name]
             local metadata = child.metadata
-            local value = child:get(player_name)
+            local value = child:get(player_name) or 0
             if value ~= nil or metadata.show_always then
                 count = count - 2
                 if metadata.stringify then value = metadata.stringify(value)
