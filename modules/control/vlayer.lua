@@ -3,7 +3,6 @@
 
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.vlayer' --- @dep config.advanced_start
-local Global = require 'utils.global' --- @dep utils.global
 
 --[[
 TODO
@@ -227,6 +226,16 @@ function vlayer_handle()
 end
 
 Event.add(defines.events.on_init, function(event)
+    vlayer = {}
+    vlayer.storage = {}
+    vlayer.storage.item = {}
+    vlayer.storage.input = {}
+    vlayer.power = {}
+    vlayer.power.limit = {}
+    vlayer.power.input = {}
+    vlayer.power.output = {}
+    vlayer.power.energy = {}
+    vlayer.power.circuit = {}
     local vlayer_storage_item = {}
     local vlayer_storage_input = {}
     local vlayer_power_limit = {}
@@ -234,28 +243,8 @@ Event.add(defines.events.on_init, function(event)
     local vlayer_power_output = {}
     local vlayer_power_energy = {}
     local vlayer_power_circuit = {}
-
-    Global.register({
-        vlayer_storage_item = vlayer_storage_item
-        vlayer_storage_input = vlayer_storage_input
-        vlayer_power_limit = vlayer_power_limit
-        vlayer_power_input = vlayer_power_input
-        vlayer_power_output = vlayer_power_output
-        vlayer_power_energy = vlayer_power_energy
-        vlayer_power_circuit = vlayer_power_circuit
-    }, function(tbl)
-        vlayer_storage_item = tbl.vlayer_storage_item
-        vlayer_storage_input = tbl.vlayer_storage_input
-        vlayer_power_limit = tbl.vlayer_power_limit
-        vlayer_power_input = tbl.vlayer_power_input
-        vlayer_power_output = tbl.vlayer_power_output
-        vlayer_power_energy = tbl.vlayer_power_energy
-        vlayer_power_circuit = tbl.vlayer_power_circuit
-    end)
-
-    vlayer_storage_item['solar-panel'] = 0
-    vlayer_storage_item['accumulator'] = 0
-
+    vlayer.storage.item['solar-panel'] = 0
+    vlayer.storage.item['accumulator'] = 0
 end)
 
 -- Event.add(defines.events.on_tick, function(event)
