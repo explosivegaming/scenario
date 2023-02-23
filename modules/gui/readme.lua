@@ -13,13 +13,6 @@ local External = require 'expcore.external' --- @dep expcore.external
 local format_time = _C.format_time --- @dep expcore.common
 local format_number = require('util').format_number --- @dep util
 
---[[
-'DamageDeathRatio', 'KillDeathRatio',
-'SessionTime', 'BuildRatio',
-'RocketPerHour', 'TreeKillPerMinute',
-'NetPlayTime', 'AFKTimeRatio'
-]]
-
 local tabs = {}
 local function Tab(caption, tooltip, element_define)
     tabs[#tabs+1] = {caption, tooltip, element_define}
@@ -370,6 +363,7 @@ Gui.element(function(_, parent)
     if preference <= enum.Statistics then
         local count = 4
         local statistics = title_table(scroll_pane, 250, {'readme.data-statistics'}, 4)
+
         for _, name in pairs(PlayerData.Statistics.metadata.display_order) do
             local child = PlayerData.Statistics[name]
             local metadata = child.metadata
@@ -378,10 +372,24 @@ Gui.element(function(_, parent)
                 count = count - 2
                 if metadata.stringify then value = metadata.stringify(value)
                 else value = format_number(value or 0) end
-                Gui.centered_label(statistics, 150, metadata.name or {'exp-statistics.'..name}, metadata.tooltip or {'exp-statistics.'..name..'-tooltip'})
-                Gui.centered_label(statistics, 130, {'readme.data-format', value, metadata.unit or ''}, metadata.value_tooltip or {'exp-statistics.'..name..'-tooltip'})
+                Gui.centered_label(statistics, 150, metadata.name or {'exp-statistics.' .. name}, metadata.tooltip or {'exp-statistics.' .. name .. '-tooltip'})
+                Gui.centered_label(statistics, 130, {'readme.data-format', value, metadata.unit or ''}, metadata.value_tooltip or {'exp-statistics.' .. name .. '-tooltip'})
             end
         end
+
+        for _, name in pairs(PlayerData.Statistics.metadata.display_order) do
+            local child = PlayerData.Statistics[name]
+            local metadata = child.metadata
+            local value = child:get(player_name)
+            if value ~= nil or metadata.show_always then
+                count = count - 2
+                if metadata.stringify then value = metadata.stringify(value)
+                else value = format_number(value or 0) end
+                Gui.centered_label(statistics, 150, metadata.name or {'exp-statistics.' .. name}, metadata.tooltip or {'exp-statistics.' .. name .. '-tooltip'})
+                Gui.centered_label(statistics, 130, {'readme.data-format', value, metadata.unit or ''}, metadata.value_tooltip or {'exp-statistics.' .. name .. '-tooltip'})
+            end
+        end
+
         if count > 0 then for i = 1, count do Gui.centered_label(statistics, 140) end end
     end
 
