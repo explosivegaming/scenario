@@ -44,9 +44,61 @@ return {
         'DeconstructionPlannerUsed', 'MapTagsMade'
     },
     display_order_ratio = {
-        'DamageDeathRatio', 'KillDeathRatio',
-        'SessionTime', 'BuildRatio',
-        'RocketPerHour', 'TreeKillPerMinute',
-        'NetPlayTime', 'AFKTimeRatio'
+        {
+            name = 'DamageDeathRatio',
+            first = 'DamageDealt',
+            second = 'Deaths',
+            method = '/',
+            multiplier = 1
+        }, 
+        {
+            name = 'KillDeathRatio',
+            first = 'Kills',
+            second = 'Deaths',
+            method = '/',
+            multiplier = 1
+        }, 
+        {
+            name = 'SessionTime',
+            first = 'Playtime',
+            second = 'JoinCount',
+            method = '/',
+            multiplier = 1
+        }, 
+        {
+            name = 'BuildRatio',
+            first = 'MachinesBuilt',
+            second = 'MachinesRemoved',
+            method = '/',
+            multiplier = 1
+        }, 
+        {
+            name = 'RocketPerHour',
+            first = 'RocketsLaunched',
+            second = 'Playtime',
+            method = '/',
+            multiplier = 0.016666666
+        }, 
+        {
+            name = 'TreeKillPerMinute',
+            first = 'TreesDestroyed',
+            second = 'Playtime',
+            method = '/',
+            multiplier = 1
+        }, 
+        {
+            name = 'NetPlayTime',
+            first = 'Playtime',
+            second = 'AfkTime',
+            method = '-',
+            multiplier = 1
+        }, 
+        {
+            name = 'AFKTimeRatio',
+            first = 'AfkTime',
+            second = 'Playtime',
+            method = '/',
+            multiplier = 1
+        }
     }
 }
