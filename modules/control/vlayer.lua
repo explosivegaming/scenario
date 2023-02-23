@@ -230,6 +230,7 @@ Event.add(defines.events.on_init, function(event)
     vlayer.storage = {}
     vlayer.storage.item = {}
     vlayer.storage.input = {}
+    vlayer.storage.limit = {}
     vlayer.power = {}
     vlayer.power.limit = {}
     vlayer.power.input = {}
@@ -238,6 +239,11 @@ Event.add(defines.events.on_init, function(event)
     vlayer.power.circuit = {}
     vlayer.storage.item['solar-panel'] = 0
     vlayer.storage.item['accumulator'] = 0
+    vlayer.storage.limit.input = 1
+    vlayer.power.limit.input = 1
+    vlayer.power.limit.output = 1
+    vlayer.power.limit.circuit = 1
+    vlayer.power.limit.energy = 1000000000000
 end)
 
 -- Event.add(defines.events.on_tick, function(event)
