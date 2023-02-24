@@ -2,7 +2,7 @@
 -- @config Vlayer
 
 return {
-    enabled = true,
+    enabled = false,
     update_tick = 10,
     -- 1 MJ
     energy_input_min = 1000000,
