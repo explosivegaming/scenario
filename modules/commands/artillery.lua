@@ -11,6 +11,16 @@ local Selection = require 'modules.control.selection' --- @dep modules.control.s
 local SelectionAttackArea   = 'AttackArea'
 local enemy_forces = {}
 
+Event.add(defines.events.on_player_created, function(event)
+    if event.player_index ~= 1 then return end
+    local player = game.players[event.player_index]
+
+    for _, force in pairs(game.forces) do
+        if player.force.is_enemy(force) then
+        table.insert(enemy_forces, force)
+        end
+    end
+end)
 
 --- Align an aabb to the grid by expanding it
 local function aabb_align_expand(aabb)
@@ -35,14 +45,6 @@ end)
 Selection.on_selection(SelectionAttackArea, function(event)
     local area = aabb_align_expand(event.area)
     local player = game.get_player(event.player_index)
-
-    if table_size(enemy_forces) == 0 then
-        for _, force in pairs(game.forces) do
-            if game.players[1].force.is_enemy(force) then
-            table.insert(enemy_forces, force)
-            end
-        end
-    end
     
     for x=area.left_top.x, area.right_bottom.x do
         for y=area.left_top.x, area.right_bottom.y do
