@@ -11,6 +11,7 @@ Commands.new_command('player-data-json', 'Player Data Json Lookup')
 :add_alias('pdj')
 :register(function(player, player_)
     local msg = {}
+
     for _, name in pairs(PlayerData.Statistics.metadata.display_order) do
         local child = PlayerData.Statistics[name]
         local metadata = child.metadata
@@ -22,7 +23,7 @@ Commands.new_command('player-data-json', 'Player Data Json Lookup')
             value = format_number(value or 0)
         end
 
-        msg[metadata.name or {'exp-statistics.' .. name}] = value
+        table.insert({'exp-statistics.' .. name}, value)
 
     game.player.print(game.table_to_json(msg))
     return Commands.success -- prevents command complete message from showing
