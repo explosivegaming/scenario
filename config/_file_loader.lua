@@ -60,7 +60,6 @@ return {
     'modules.control.vlayer',
     'modules.control.miner',
     'modules.control.research',
-    'modules.control.player_data',
 
     --- Data
     'modules.data.statistics',
