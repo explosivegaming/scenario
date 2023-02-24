@@ -176,12 +176,3 @@ for statistic, event_name in pairs(config.counters) do
         stat:increment(player)
     end)
 end
-
---[[
-    'DamageDeathRatio', 'KillDeathRatio',
-    'SessionTime', 'BuildRatio',
-    'RocketPerHour', 'TreeKillPerMinute',
-    'NetPlayTime', 'AFKTimeRatio'
-]]
-
-
