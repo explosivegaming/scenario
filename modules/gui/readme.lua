@@ -368,30 +368,32 @@ Gui.element(function(_, parent)
             if PlayerData.Statistics[name] ~= nil then
                 local value = PlayerData.Statistics[name]:get(player_name)
                 local metadata = PlayerData.Statistics[name].metadata
-            end
 
-            if metadata.stringify then
-                metadata.stringify(value)
+                if metadata.stringify then
+                    metadata.stringify(value)
+                else
+                    value = format_number(value)
+                end
             else
-                value = format_number(value)
+                value = 0
             end
 
-            Gui.centered_label(statistics, 150, metadata.name or {'exp-statistics.' .. name}, metadata.tooltip or {'exp-statistics.' .. name .. '-tooltip'})
+            Gui.centered_label(statistics, 150, {'exp-statistics.' .. name}, {'exp-statistics.' .. name .. '-tooltip'})
             Gui.centered_label(statistics, 130, {'readme.data-format', value, metadata.unit or ''}, metadata.value_tooltip or {'exp-statistics.' .. name .. '-tooltip'})
         end
 
         for _, name in pairs(config_stat.display_order_ratio) do
             if PlayerData.Statistics[name.first] ~= nil then
-                local value_first = PlayerData.Statistics[name.first]:get(player_name)
+                local value_first = format_number(PlayerData.Statistics[name.first]:get(player_name))
+            else
+                value = 0
             end
-
-            value_first = format_number(value_first)
-
+        
             if PlayerData.Statistics[name.second] ~= nil then
-                local value_second = PlayerData.Statistics[name.second]:get(player_name)
+                local value_second = format_number(PlayerData.Statistics[name.second]:get(player_name))
+            else
+                value = 0
             end
-
-            value_second = format_number(value_second)
 
             if name.method == '/' then
                 if (name.second ~= 0) then
@@ -402,7 +404,7 @@ Gui.element(function(_, parent)
             end
 
             if value ~= nil or metadata.show_always then
-                Gui.centered_label(statistics, 150, metadata.name or {'exp-statistics.' .. name.name}, metadata.tooltip or {'exp-statistics.' .. name.name .. '-tooltip'})
+                Gui.centered_label(statistics, 150, {'exp-statistics.' .. name.name}, {'exp-statistics.' .. name.name .. '-tooltip'})
                 Gui.centered_label(statistics, 130, {'readme.data-format', value, metadata.unit or ''}, metadata.value_tooltip or {'exp-statistics.' .. name.name .. '-tooltip'})
             end
         end
