@@ -384,23 +384,23 @@ Gui.element(function(_, parent)
 
         for _, name in pairs(config_stat.display_order_ratio) do
             if PlayerData.Statistics[name.first] ~= nil then
-                local value_first = format_number(PlayerData.Statistics[name.first]:get(player_name))
+                local value_first = PlayerData.Statistics[name.first]:get(player_name)
             else
-                value = 0
+                local value_first = 0
             end
         
             if PlayerData.Statistics[name.second] ~= nil then
-                local value_second = format_number(PlayerData.Statistics[name.second]:get(player_name))
+                local value_second = PlayerData.Statistics[name.second]:get(player_name)
             else
-                value = 0
+                local value_second = 0
             end
 
             if name.method == '/' then
-                if (name.second ~= 0) then
-                    local value = math.floor((name.first / name.second) * name.multiplier) or 0
+                if (value_second ~= 0) then
+                    local value = format_number(math.floor((value_first / value_second) * name.multiplier))
                 end
             else
-                local value = math.floor((name.first - name.second) * name.multiplier) or 0
+                local value = format_number(math.floor((value_first - value_second) * name.multiplier))
             end
 
             if value ~= nil or metadata.show_always then
