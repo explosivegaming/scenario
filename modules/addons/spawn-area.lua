@@ -113,66 +113,40 @@ end
 
 -- Generates an area with no water or entities, no water area is larger
 local function spawn_area(surface, position)
-    if config.resource_refill.enabled then
-        local rr = config.resource_refill.range
-    else
-        local rr = 0
-    end
-
     local dr = config.spawn_area.deconstruction_radius
-    local fr = config.spawn_area.landfill_radius
     local tr = config.spawn_area.tile_radius
-    local fr2 = fr^2
     local tr2 = tr^2
-    local ttr = math.max(rr, dr, fr, tr)
     local decon_tile = config.spawn_area.deconstruction_tile
+
+    local fr = config.spawn_area.landfill_radius
+    local fr2 = fr^2
     local fill_tile = surface.get_tile(position).name
 
     -- Make sure a non water tile is used for each tile
-    if surface.get_tile(position).collides_with('player-layer') then
-        fill_tile = 'landfill'
-    end
-
-    if decon_tile == nil then
-        decon_tile = fill_tile
-    end
+    if surface.get_tile(position).collides_with('player-layer') then fill_tile = 'landfill' end
+    if decon_tile == nil then decon_tile = fill_tile end
 
     local tiles_to_make = {}
-    local entities = surface.find_entities_filtered{position=position, radius=dr, name='character', invert=true}
-
-    for _, entity in pairs(entities) do
-        entity.destroy()
-    end
-
-    for x = -ttr, ttr do
-        local x2 = x^2
-
-        for y = -ttr, ttr do
-            local y2 = y^2
+    for x = -fr, fr do -- loop over x
+        local x2 = (x+0.5)^2
+        for y = -fr, fr do -- loop over y
+            local y2 = (y+0.5)^2
+            local dst = x2+y2
             local pos = {x=position.x+x, y=position.y+y}
-
-            if (x2 <= dr2) or (y2 <= dr2) then
-                -- Remove entities then set the tiles
-                if (x2 <= tr2) or (y2 <= tr2) then
-                    -- If it is inside the decon radius always set the tile
-                    surface.set_tiles{{name=decon_tile, position=pos}}
-                elseif ((x2 <= fr2) or (y2 <= fr2)) and surface.get_tile(pos).collides_with('player-layer') then
-                    -- If it is inside the fill radius only set the tile if it is water
-                    surface.set_tiles{{name=fill_tile, position=pos}}
-                end
-
-            elseif ((x2 <= fr2) or (y2 <= fr2)) and surface.get_tile(pos).collides_with('player-layer') then
+            if dst < tr2 then
+                -- If it is inside the decon radius always set the tile
+                table.insert(tiles_to_make, {name=decon_tile, position=pos})
+            elseif dst < fr2 and surface.get_tile(pos).collides_with('player-layer') then
                 -- If it is inside the fill radius only set the tile if it is water
-                surface.set_tiles{{name=fill_tile, position=pos}}
-                --[[
-            else
-                for _, ore in pairs(surface.find_entities_filtered{position=pos, name=config.resource_refill.resources_name}) do
-                    ore.amount = ore.amount + math.random(config.resource_refill.amount[1], config.resource_refill.amount[2])
-                end 
-                ]]                   
+                table.insert(tiles_to_make, {name=fill_tile, position=pos})
             end
         end
     end
+
+    -- Remove entities then set the tiles
+    local entities_to_remove = surface.find_entities_filtered{position=position, radius=dr, name='character', invert=true}
+    for _, entity in pairs(entities_to_remove) do entity.destroy() end
+    surface.set_tiles(tiles_to_make)
 end
 
 local function spawn_resource_tiles(surface)
@@ -194,6 +168,12 @@ local function spawn_resource_patches(surface)
                 surface.create_entity({name=config.resource_patches.resources[k].name, amount=config.resource_patches.resources[k].amount, position={config.resource_patches.resources[k].offset[1] + config.resource_patches.resources[k].offset_next[1] * (i - 1), config.resource_patches.resources[k].offset[2] + config.resource_patches.resources[k].offset_next[2] * (i - 1)}})
             end
         end
+    end
+end
+
+local function refill_resource_patches(surface)
+    for _, ore in pairs(surface.find_entities_filtered{position = {0, 0}, radius=config.resource_refill.range, name=config.resource_refill.resources_name}) do
+        ore.amount = ore.amount + math.random(config.resource_refill.amount[1], config.resource_refill.amount[2])
     end
 end
 
@@ -220,6 +200,7 @@ Event.add(defines.events.on_player_created, function(event)
     if config.entities.enabled then spawn_entities(s, p) end
     if config.resource_tiles.enabled then spawn_resource_tiles(s) end
     if config.resource_patches.enabled then spawn_resource_patches(s) end
+    if config.resource_refill.enabled then refill_resource_patches(s) end
     player.teleport(p, s)
 end)
 
