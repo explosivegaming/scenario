@@ -137,6 +137,13 @@ local function spawn_area(surface, position)
         decon_tile = fill_tile
     end
 
+    local tiles_to_make = {}
+    local entities = surface.find_entities_filtered{position=position, radius=dr, name='character', invert=true}
+
+    for _, entity in pairs(entities) do
+        entity.destroy()
+    end
+
     for x = -ttr, ttr do
         local x2 = x^2
 
@@ -146,12 +153,6 @@ local function spawn_area(surface, position)
 
             if (x2 <= dr2) or (y2 <= dr2) then
                 -- Remove entities then set the tiles
-                local entities = surface.find_entities_filtered{position=position, name='character', invert=true}
-
-                for _, entity in pairs(entities) do
-                    entity.destroy()
-                end
-
                 if (x2 <= tr2) or (y2 <= tr2) then
                     -- If it is inside the decon radius always set the tile
                     surface.set_tiles{{name=decon_tile, position=pos}}
@@ -160,15 +161,15 @@ local function spawn_area(surface, position)
                     surface.set_tiles{{name=fill_tile, position=pos}}
                 end
 
+            elseif ((x2 <= fr2) or (y2 <= fr2)) and surface.get_tile(pos).collides_with('player-layer') then
+                -- If it is inside the fill radius only set the tile if it is water
+                surface.set_tiles{{name=fill_tile, position=pos}}
+                --[[
             else
-                if ((x2 <= fr2) or (y2 <= fr2)) and surface.get_tile(pos).collides_with('player-layer') then
-                    -- If it is inside the fill radius only set the tile if it is water
-                    surface.set_tiles{{name=fill_tile, position=pos}}
-                else
-                    for _, ore in pairs(surface.find_entities_filtered{position=pos, name=config.resource_refill.resources_name}) do
-                        ore.amount = ore.amount + math.random(config.resource_refill.amount[1], config.resource_refill.amount[2])
-                    end                    
-                end
+                for _, ore in pairs(surface.find_entities_filtered{position=pos, name=config.resource_refill.resources_name}) do
+                    ore.amount = ore.amount + math.random(config.resource_refill.amount[1], config.resource_refill.amount[2])
+                end 
+                ]]                   
             end
         end
     end
