@@ -3,6 +3,7 @@
 ]]
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
+local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 require 'config.expcore.command_general_parse'
 
 Commands.new_command('player-data-json', 'Player Data Json Lookup')
