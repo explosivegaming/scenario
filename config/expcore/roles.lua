@@ -51,7 +51,8 @@ Roles.new_role('Administrator','Admin')
     'command/interface',
     'command/debug',
     'command/toggle-cheat-mode',
-    'command/toggle-all-research'
+    'command/toggle-all-research',
+    'command/connect-player'
 }
 
 Roles.new_role('Senior Moderator','SMod')
@@ -75,17 +76,6 @@ Roles.new_role('Moderator','Mod')
 :set_parent('Trainee')
 :set_allow_all()
 :allow{
-    'command/assign-role',
-    'command/unassign-role',
-    'command/kill/always',
-    'command/clear-tag/always',
-    'command/go-to-spawn/always',
-    'command/clear-reports',
-    'command/clear-warnings',
-    'command/clear-inventory',
-    'command/connect-player',
-    'command/protect-entity',
-    'command/protect-area',
 }
 
 Roles.new_role('Trainee','TrMod')
@@ -97,6 +87,8 @@ Roles.new_role('Trainee','TrMod')
 :set_parent('Board Member')
 :allow{
     'gui/warp-list/bypass-proximity',
+    'command/assign-role',
+    'command/unassign-role',
     'command/admin-chat',
     'command/admin-marker',
     'command/teleport',
@@ -104,6 +96,9 @@ Roles.new_role('Trainee','TrMod')
     'command/give-warning',
     'command/get-warnings',
     'command/get-reports',
+    'command/clear-reports',
+    'command/clear-warnings',
+    'command/clear-inventory',
     'command/kick',
     'command/ban',
     'command/follow',
@@ -115,6 +110,11 @@ Roles.new_role('Trainee','TrMod')
     'command/bot-queue-set',
     'command/pol-off',
     'command/pol-clr',
+    'command/kill/always',
+    'command/clear-tag/always',
+    'command/go-to-spawn/always',
+    'command/protect-entity',
+    'command/protect-area'
 }
 
 --- Trusted Roles
@@ -131,6 +131,7 @@ Roles.new_role('Board Member','Board')
     'command/repair',
     'command/spectate',
     'command/follow',
+    'command/player-data-json'
 }
 
 Roles.new_role('Senior Backer','Backer')
