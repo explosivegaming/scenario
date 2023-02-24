@@ -366,8 +366,9 @@ Gui.element(function(_, parent)
 
         for _, name in pairs(config_stat.display_order) do
             if PlayerData.Statistics[name] ~= nil then
-                local value = PlayerData.Statistics[name]:get(player_name)
-                local metadata = PlayerData.Statistics[name].metadata
+                local a = PlayerData.Statistics[name]
+                local value = a:get(player_name)
+                local metadata = a.metadata
 
                 if metadata.stringify then
                     metadata.stringify(value)
@@ -383,16 +384,18 @@ Gui.element(function(_, parent)
                 Gui.centered_label(statistics, 130, '', '')
             end
         end
-        --[[
+
         for _, name in pairs(config_stat.display_order_ratio) do
             if PlayerData.Statistics[name.first] ~= nil then
-                local value_first = PlayerData.Statistics[name.first]:get(player_name)
+                local a = PlayerData.Statistics[name.first]
+                local value_first = a:get(player_name)
             else
                 local value_first = 0
             end
         
             if PlayerData.Statistics[name.second] ~= nil then
-                local value_second = PlayerData.Statistics[name.second]:get(player_name)
+                local b = PlayerData.Statistics[name.second]
+                local value_second = b:get(player_name)
             else
                 local value_second = 0
             end
@@ -405,12 +408,10 @@ Gui.element(function(_, parent)
                 local value = format_number(math.floor((value_first - value_second) * name.multiplier))
             end
 
-            if value ~= nil or metadata.show_always then
-                Gui.centered_label(statistics, 150, {'exp-statistics.' .. name.name}, {'exp-statistics.' .. name.name .. '-tooltip'})
-                Gui.centered_label(statistics, 130, {'readme.data-format', value, ''}, {'exp-statistics.' .. name.name .. '-tooltip'})
-            end
+            Gui.centered_label(statistics, 150, {'exp-statistics.' .. name.name}, {'exp-statistics.' .. name.name .. '-tooltip'})
+            Gui.centered_label(statistics, 130, {'readme.data-format', value, ''}, {'exp-statistics.' .. name.name .. '-tooltip'})
         end
-        ]]
+
         -- if count > 0 then for i = 1, count do Gui.centered_label(statistics, 140) end end
     end
 
