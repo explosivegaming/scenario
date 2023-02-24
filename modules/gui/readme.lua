@@ -12,7 +12,6 @@ local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 local External = require 'expcore.external' --- @dep expcore.external
 local format_time = _C.format_time --- @dep expcore.common
 local format_number = require('util').format_number --- @dep util
-local config_stat = require 'config.statistics' --- @dep config.statistics
 
 local tabs = {}
 local function Tab(caption, tooltip, element_define)
