@@ -23,6 +23,6 @@ Commands.new_command('player-data-json', 'Player Data Json Lookup')
 
         msg[metadata.name or {'exp-statistics.' .. name}] = value
 
-    player.print(game.table_to_json(msg))
+    game.player.print(game.table_to_json(msg))
     return Commands.success -- prevents command complete message from showing
 end)
