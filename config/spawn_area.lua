@@ -233,7 +233,7 @@ return {
         }
     },
     resource_refill = {
-        enabled = true,
+        enabled = false,
         range = 128,
         resources_name = {
             "iron-ore",
