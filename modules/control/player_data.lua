@@ -7,7 +7,7 @@ local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 require 'config.expcore.command_general_parse'
 
 Commands.new_command('player-data-json', 'Player Data Json Lookup')
-:add_param('player_', false)
+:add_param('player_', false, 'player-alive')
 :add_alias('pdj')
 :register(function(player, player_)
     local msg = {}
@@ -24,7 +24,8 @@ Commands.new_command('player-data-json', 'Player Data Json Lookup')
         end
 
         table.insert({'exp-statistics.' .. name}, value)
-
+    end
+    
     game.player.print(game.table_to_json(msg))
     return Commands.success -- prevents command complete message from showing
 end)
