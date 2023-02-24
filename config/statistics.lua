@@ -42,7 +42,8 @@ return {
         'DamageDealt', 'DistanceTravelled',
         'CapsulesUsed', 'EntityRepaired',
         'DeconstructionPlannerUsed', 'MapTagsMade'
-    },
+    }
+    --[[
     display_order_ratio = {
         {
             name = 'DamageDeathRatio',
@@ -101,4 +102,5 @@ return {
             multiplier = 1
         }
     }
+    ]]
 }
