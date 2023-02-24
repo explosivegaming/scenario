@@ -1,12 +1,13 @@
 --[[-- Commands Module - Player Data
-    @commands Admin-Chat
+    @commands pdj
 ]]
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
 
-Commands.new_command('admin-chat', 'Sends a message in chat that only admins can see.')
-:add_param('message', false)
+Commands.new_command('player-data-json', 'Player Data Json Lookup')
+:add_param('player_', false)
+:add_alias('pdj')
 :register(function(player, player_)
     local msg = {}
     for _, name in pairs(PlayerData.Statistics.metadata.display_order) do
