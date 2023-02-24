@@ -2,7 +2,7 @@
 -- @config Scorched-Earth
 
 return {
-    weakness_value=70, --- @setting weakness_value lower value will make tiles more likely to degrade
+    weakness_value=100, --- @setting weakness_value lower value will make tiles more likely to degrade
     strengths={ --- @setting strengths this decides how "strong" a tile is, bigger number means less likely to degrade
         -- debug: /interface require('modules.addons.worn-paths')(player.name,true)
         -- note: tiles are effected by the tiles around them, so player paths will not degrade as fast when made wider
