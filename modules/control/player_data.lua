@@ -4,13 +4,16 @@
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
+local format_time = _C.format_time --- @dep expcore.common
+local format_number = require('util').format_number --- @dep util
 require 'config.expcore.command_general_parse'
 
 Commands.new_command('player-data-json', 'Player Data Json Lookup')
 :add_param('player_', false, 'player-alive')
 :add_alias('pdj')
 :register(function(player, player_)
-    local msg = 'Player Data of ' .. player_ .. ' :'
+    game.player.print('Player Data of ' .. player_ .. ' :')
+    local msg = {}
 
     for _, name in pairs(PlayerData.Statistics.metadata.display_order) do
         local child = PlayerData.Statistics[name]
@@ -23,11 +26,7 @@ Commands.new_command('player-data-json', 'Player Data Json Lookup')
             value = format_number(value or 0)
         end
 
-        msg = msg .. ' ' .. {'exp-statistics.' .. name} .. ' ' .. value
-
-        if _ % 8 == 0 then
-            msg = msg .. '\n'
-        end
+        msg[{'exp-statistics.' .. name}] = value
     end
 
     game.player.print(msg)
