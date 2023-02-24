@@ -149,7 +149,6 @@ local function spawn_area(surface, position)
                 local entity = surface.find_entities_filtered{position=position, name='character', invert=true}
                 entity.destroy()
 
-                -- surface.set_tiles(tiles_to_make)
                 if (x2 <= tr2) or (y2 <= tr2) then
                     -- If it is inside the decon radius always set the tile
                     surface.set_tiles{{name=decon_tile, position=pos}}
@@ -159,16 +158,13 @@ local function spawn_area(surface, position)
                 end
 
             else
-                if (x2 <= tr2) or (y2 <= tr2) then
-                    -- If it is inside the decon radius always set the tile
-                    surface.set_tiles{{name=decon_tile, position=pos}}
-                elseif ((x2 <= fr2) or (y2 <= fr2)) and surface.get_tile(pos).collides_with('player-layer') then
+                if ((x2 <= fr2) or (y2 <= fr2)) and surface.get_tile(pos).collides_with('player-layer') then
                     -- If it is inside the fill radius only set the tile if it is water
                     surface.set_tiles{{name=fill_tile, position=pos}}
+                else
+                    local ore = surface.find_entities_filtered{position = pos, name=config.resource_refill.resources_name}
+                    ore.amount = ore.amount + math.random(config.resource_refill.amount[1], config.resource_refill.amount[2])
                 end
-
-                local ore = surface.find_entities_filtered{position = pos, name=config.resource_refill.resources_name}
-                ore.amount = ore.amount + math.random(config.resource_refill.amount[1], config.resource_refill.amount[2])
             end
         end
     end
