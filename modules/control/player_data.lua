@@ -23,7 +23,7 @@ Commands.new_command('player-data-json', 'Player Data Json Lookup')
             value = format_number(value or 0)
         end
 
-        table.insert(msg, {'exp-statistics.' .. name}, value)
+        msg[{'exp-statistics.' .. name}] = value
     end
 
     game.player.print(msg)
