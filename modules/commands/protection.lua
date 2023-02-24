@@ -36,8 +36,8 @@ end
 --- Align an aabb to the grid by expanding it
 local function aabb_align_expand(aabb)
     return {
-        left_top = { x = math.floor(aabb.left_top.x), y = math.floor(aabb.left_top.y) },
-        right_bottom = { x = math.ceil(aabb.right_bottom.x), y = math.ceil(aabb.right_bottom.y) }
+        left_top = {x = math.floor(aabb.left_top.x), y = math.floor(aabb.left_top.y)},
+        right_bottom = {x = math.ceil(aabb.right_bottom.x), y = math.ceil(aabb.right_bottom.y)}
     }
 end
 
@@ -50,7 +50,6 @@ end
 local function get_area_key(area)
     return string.format('%i,%i', math.floor(area.left_top.x), math.floor(area.left_top.y))
 end
-
 
 --- Show a protected entity to a player
 local function show_protected_entity(player, entity)
