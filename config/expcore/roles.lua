@@ -243,7 +243,8 @@ Roles.new_role('Member','Mem')
     'command/bonus',
     'bonus-1',
     'vlayer-2',
-    'personal-logistic'
+    'personal-logistic',
+    'command/auto-artillery-remote',
 }
 
 local hours2, hours15 = 2*216000, 15*60
