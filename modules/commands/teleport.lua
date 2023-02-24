@@ -69,6 +69,7 @@ Commands.new_command('bring', 'Teleports a player to you.')
     end
     if not teleport(from_player, player) then
         -- return if the teleport failed
+        from_player.print('Come here my friend')
         return Commands.error{'expcom-tp.no-position-found'}
     end
 end)
