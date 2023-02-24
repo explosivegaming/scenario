@@ -26,6 +26,6 @@ Commands.new_command('player-data-json', 'Player Data Json Lookup')
         table.insert(msg, {'exp-statistics.' .. name}, value)
     end
 
-    game.player.print(game.table_to_json(msg))
+    game.player.print(msg)
     return Commands.success -- prevents command complete message from showing
 end)
