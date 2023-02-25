@@ -162,7 +162,7 @@ local function emit_player_roles_updated(player, type, roles, by_player_name, sk
     end
     -- output to all the different locations: game print, player sound, event trigger and role log
     if not skip_game_print then
-		game.print({'expcore-roles.game-message-'..type, player.name, table.concat(role_names, ', '), by_player_name}, Colours.cyan)
+        game.print({'expcore-roles.game-message-'..type, player.name, table.concat(role_names, ', '), by_player_name}, Colours.cyan)
     end
     if type == 'assign' then
         player.play_sound{path='utility/achievement_unlocked'}
