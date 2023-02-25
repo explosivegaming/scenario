@@ -17,17 +17,14 @@ Event.add(defines.events.on_player_created, function(event)
 
     for _, force in pairs(game.forces) do
         if player.force.is_enemy(force) then
-        table.insert(enemy_forces, force)
+            table.insert(enemy_forces, force)
         end
     end
 end)
 
 --- Align an aabb to the grid by expanding it
 local function aabb_align_expand(aabb)
-    return {
-        left_top = {x = math.floor(aabb.left_top.x), y = math.floor(aabb.left_top.y)},
-        right_bottom = {x = math.ceil(aabb.right_bottom.x), y = math.ceil(aabb.right_bottom.y)}
-    }
+    return {left_top = {x = math.floor(aabb.left_top.x), y = math.floor(aabb.left_top.y)}, right_bottom = {x = math.ceil(aabb.right_bottom.x), y = math.ceil(aabb.right_bottom.y)}}
 end
 
 Commands.new_command('auto-artillery-remote', 'Select all enemy in the area')
