@@ -49,7 +49,7 @@ Selection.on_selection(SelectionAttackArea, function(event)
 
             for _, target in pairs(enemies) do
                 if string.find(turret.name, "worm") then
-                    surface.create_entity{name = 'artillery-flare', position = target, force = player.force, frame_speed = 0, vertical_speed = 0, height = 0, movement = {0, 0}}
+                    surface.create_entity{name = 'artillery-flare', position=target, force=player.force, frame_speed=0, vertical_speed=0, height=0, movement={0, 0}}
                 end
             end
         end
