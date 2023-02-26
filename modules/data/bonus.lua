@@ -86,7 +86,7 @@ end)
 Event.add(defines.events.on_player_created, function(event)
     if event.player_index ~= 1 then return end
 
-    for k, v in pairs(config.force_bonus) do
+    for k, _ in pairs(config.force_bonus) do
         if config.force_bonus[k].enabled then
             game.players[event.player_index].force[config.force_bonus[k].name] = game.players[event.player_index].force[config.force_bonus[k].name] + config.force_bonus[k].max
         end
