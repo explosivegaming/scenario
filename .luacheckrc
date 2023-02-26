@@ -28,7 +28,7 @@
 ------------------------------------------------------------------------------]]
 local LINE_LENGTH = false
 
-local IGNORE = {'21./%w+_$', '21./^_%w+$', '213/[ijk]', '213/index', '213/key'}
+local IGNORE = {'21./%w+_$', '21./^_%w+$', '213/[ijk]', '213/index', '213/key', '611'}
 
 -- These globals are not available to the factorio API
 local NOT_GLOBALS = {'coroutine', 'io', 'socket', 'dofile', 'loadfile'}
