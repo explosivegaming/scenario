@@ -480,7 +480,7 @@ Gui.element(function(event_trigger, parent)
     local player = Gui.get_player_from_element(parent)
     local container = Gui.container(parent, event_trigger, 300)
 
-    local header = Gui.header(container, 'VLAYER', '', true)
+    Gui.header(container, 'VLAYER', '', true)
     local scroll_table = Gui.scroll_table(container, 300, 2)
 
     scroll_table.add{
