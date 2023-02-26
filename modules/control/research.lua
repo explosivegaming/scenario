@@ -62,6 +62,12 @@ local function research_notification(event)
     end
 end
 
+Commands.new_command('auto-research', 'Automatically queue up research')
+:add_alias('ares')
+:register(function(player)
+    return Commands.success
+end)
+
 if config.enabled then
     Event.add(defines.events.on_research_finished, research_notification)
 end
