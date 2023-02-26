@@ -23,6 +23,7 @@ end
 
 --- Use to make a split point for the number of items given based on amount made
 -- ['firearm-magazine']=cutoff_amount_made(100, 10, 0) -- give 10 items until 100 items have been made
+--[[
 local function cutoff_amount_made(amount, before, after)
     return function(amount_made, items_made, player)
         if amount_made < amount then return before
@@ -30,9 +31,11 @@ local function cutoff_amount_made(amount, before, after)
         end
     end
 end
+]]
 
 --- Same as above but will not give any items if x amount has been made of another item, useful for tiers
 -- ['light-armor']=cutoff_amount_made_unless(5, 0,1,'heavy-armor',5) -- give light armor once 5 have been made unless 5 heavy armor has been made
+--[[
 local function cutoff_amount_made_unless(amount, before, after, second_item, second_amount)
     return function(amount_made, items_made, player)
         if items_made(second_item) < second_amount then
@@ -43,6 +46,7 @@ local function cutoff_amount_made_unless(amount, before, after, second_item, sec
         end
     end
 end
+]]
 
 -- Use for mass production items where you want the amount to change based on the amount already made
 -- ['iron-plate']=scale_amount_made(5*minutes, 10, 10) -- for first 5 minutes give 10 items then after apply a factor of 10
@@ -117,7 +121,7 @@ return {
             {
                 equipment='solar-panel-equipment',
                 count=4
-            },  
+            },
             {
                 equipment='battery-equipment',
                 count=1
@@ -128,7 +132,7 @@ return {
             },
             {
                 equipment='personal-roboport-equipment',
-                count=1 
+                count=1
             },
             {
                 equipment='battery-equipment',
