@@ -45,7 +45,21 @@ local inf_res = {
 }
 
 local function research_notification(event)
-    game.print{'research.msg', event.research.name}
+    if not (event.by_script) then
+        local is_inf_res = false
+        
+        for i=1, #inf_res do
+            if event.research.name == inf_res[i].name then
+                is_inf_res = true
+            end
+        end
+
+        if is_inf_res then
+            game.print{'research.inf_msg', event.research.name, event.research.level}
+        else
+            game.print{'research.msg', event.research.name}
+        end
+    end
 end
 
 if config.enabled then
