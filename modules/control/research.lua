@@ -65,6 +65,10 @@ local function research_notification(event)
 end
 
 local function res_queue(force)
+    if force.rockets_launched == 0 or force.technologies['mining-productivity-4'].level <= 4 then
+        return
+    end
+
     local res_q = force.research_queue
 
     if #res_q < config.queue_amount then
