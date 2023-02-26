@@ -6,7 +6,7 @@ local res_queue_enable = false
 local base_rate = 0
 
 if config.bonus.enabled then
-    for k, v in pairs(config_bonus.force_bonus) do
+    for k, _ in pairs(config_bonus.force_bonus) do
         if config_bonus.force_bonus[k].name == config.bonus.result then
             base_rate = config_bonus.force_bonus[k].max
         end
