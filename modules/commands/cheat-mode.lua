@@ -22,7 +22,7 @@ end)
 
 Commands.new_command('toggle-all-research', 'Toggles all research for your force.')
 :set_flag('admin_only')
-:register(function(_, __)
+:register(function(_, _)
     game.player.force.research_all_technologies()
     return Commands.success
 end)
