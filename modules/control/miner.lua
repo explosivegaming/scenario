@@ -9,7 +9,7 @@ local function auto_handle(event)
     end
 
     for _, entity in pairs(entities) do
-        if (entity.input_fluid_box ~= nil) or (entity.output_fluid_box ~= ni) then
+        if (entity.input_fluid_box ~= nil) or (entity.output_fluid_box ~= nil) then
             return
         end
 
