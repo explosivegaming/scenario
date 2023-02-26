@@ -186,9 +186,9 @@ local function vlayer_storage_handle()
         elseif (v.type == "INPUT") then
             local chest = chest.get_inventory(defines.inventory.chest)
 
-            if (chest == nil) then 
+            if (chest == nil) then
                 return
-            elseif (chest.is_empty()) then 
+            elseif (chest.is_empty()) then
                 return
             end
         
@@ -237,8 +237,8 @@ local function vlayer_circuit_handle()
                     if ((circuit_input_signal ~= nil) and (circuit_input_signal.signal ~= nil) and (circuit_input_signal.signal.type == "item")) then
                         local item_amount = vlayer.storage.item[circuit_signal[i]]
 
-                        if item_amount == nil then 
-                            item_amount = 0 
+                        if item_amount == nil then
+                            item_amount = 0
                         end
 
                         circuit_o.set_signal(i, {signal={type="item", name=circuit_signal[i]}, count=math.min(item_amount, 2147483647)})
