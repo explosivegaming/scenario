@@ -1,6 +1,8 @@
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.research' --- @dep config.research
 
+local res_queue_enable = false
+
 local inf_res = {
     {
         -- Mining Productivity
@@ -62,12 +64,12 @@ local function research_notification(event)
     end
 end
 
-local function res_queue(player)
-    local res_q = player.force.research_queue
+local function res_queue(force)
+    local res_q = force.research_queue
 
     if #res_q < config.queue_amount then
         for i=1, config.queue_amount - #res_q do
-            player.force.add_research(player.force.technologies['mining-productivity-4'])
+            force.add_research(force.technologies['mining-productivity-4'])
         end
     end
 end
@@ -75,13 +77,21 @@ end
 Commands.new_command('auto-research', 'Automatically queue up research')
 :add_alias('ares')
 :register(function(player)
-    res_queue(player)
+    res_queue_enable = not res_queue_enable
+
+    if res_queue_enable then
+        res_queue(player.force)
+    end
+
     return Commands.success
 end)
 
 if config.enabled then
     Event.add(defines.events.on_research_finished, function(event)
         research_notification(event)
-        res_queue(player)
+
+        if res_queue_enable then
+            res_queue(event.research.force)
+        end
     end)
 end
