@@ -1,9 +1,8 @@
-local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local config = require 'config.personal_logistic' --- @dep config.personal-logistic
 
 --[[
-Command 2: 
+Command 2:
 add filter based of inventory
 
 Command 3:
@@ -21,7 +20,7 @@ local function pl(player, amount)
     
     for i = start + 1, start + 220 do
         c(i)
-    end;
+    end
 
     if amount == 0 then
         return nil
