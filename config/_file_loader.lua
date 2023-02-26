@@ -33,7 +33,7 @@ return {
     'modules.commands.protection',
     'modules.commands.spectate',
     'modules.commands.search',
-    'modules.commands.bot-queue',
+    'modules.commands.bot_queue',
     'modules.commands.speed',
     'modules.commands.pollution',
 
