@@ -30,7 +30,7 @@ local function auto_handle(event)
                         return
                     end
 
-                    if next(drill.circuit_connected_entities.red) ~= nil or next(drill.circuit_connected_entities.green) ~= nil then
+                    if next(entity.circuit_connected_entities.red) ~= nil or next(entity.circuit_connected_entities.green) ~= nil then
                         -- Connected to Circuit Network
                         return
                     end
@@ -42,7 +42,7 @@ local function auto_handle(event)
                     if not entity.prototype.selectable_in_game then
                         return
                     end
-                    
+
                     if entity.has_flag('not-deconstructable') then
                         return
                     end
