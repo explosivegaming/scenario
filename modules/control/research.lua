@@ -1,4 +1,5 @@
 local Event = require 'utils.event' --- @dep utils.event
+local Commands = require 'expcore.commands' --- @dep expcore.commands
 local config = require 'config.research' --- @dep config.research
 local config_bonus = require 'config.bonus' --- @dep config.bonus
 
