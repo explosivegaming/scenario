@@ -2,22 +2,46 @@ local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.research' --- @dep config.research
 
 local inf_res = {
-    -- Mining Productivity
-    'mining-productivity-4',
-    -- Robot Speed
-    'worker-robots-speed-6',
-    -- Laser Damage
-    'energy-weapons-damage-7',
-    -- Explosive Damage
-    'stronger-explosives-7',
-    -- Bullet Damage
-    'physical-projectile-damage-7',
-    -- Flame Damage
-    'refined-flammables-7',
-    -- Artillery Range
-    'artillery-shell-range-1',
-    -- Artillery Speed
-    'artillery-shell-speed-1'
+    {
+        -- Mining Productivity
+        name = 'mining-productivity-4',
+        level = 4
+    },
+    {
+        -- Robot Speed
+        name = 'worker-robots-speed-6',
+        level = 6
+    },
+    {
+        -- Laser Damage
+        name = 'energy-weapons-damage-7',
+        level = 7
+    },
+    {
+        -- Explosive Damage
+        name = 'stronger-explosives-7',
+        level = 7
+    },
+    {
+        -- Bullet Damage
+        name = 'physical-projectile-damage-7',
+        level = 7
+    },
+    {
+        -- Flame Damage
+        name = 'refined-flammables-7',
+        level = 7
+    },
+    {
+        -- Artillery Range
+        name = 'artillery-shell-range-1',
+        level = 1
+    },
+    {
+        -- Artillery Speed
+        name = 'artillery-shell-speed-1',
+        level = 1
+    }
 }
 
 local function research_notification(event)
