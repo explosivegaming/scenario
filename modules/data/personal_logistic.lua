@@ -93,11 +93,11 @@ local function pl(player, amount)
     elseif stats.get_input_count('steel-furnace') >= required.furnace then
         s(start + 14, {min = 0, max = 0, name = 'stone-furnace'})
         s(start + 15, {min = 50 * amount, max = 50 * amount, name = 'steel-furnace'})
-        s(start + 16, {min = 0, max = 50 * amount, name = 'electric-furnace'})   
+        s(start + 16, {min = 0, max = 50 * amount, name = 'electric-furnace'})
     else
         s(start + 14, {min = 0, max = 50 * amount, name = 'stone-furnace'})
         s(start + 15, {min = 0, max = 50 * amount, name = 'steel-furnace'})
-        s(start + 16, {min = 0, max = 50 * amount, name = 'electric-furnace'})   
+        s(start + 16, {min = 0, max = 50 * amount, name = 'electric-furnace'})
     end
 
     -- machine
@@ -110,7 +110,7 @@ local function pl(player, amount)
     elseif stats.get_input_count('assembling-machine-2') >= required.machine then
         s(start + 17, {min = 0, max = 0, name = 'assembling-machine-1'})
         s(start + 18, {min = 50 * amount, max = 50 * amount, name = 'assembling-machine-2'})
-        s(start + 19, {min = 0, max = 50 * amount, name = 'assembling-machine-3'}) 
+        s(start + 19, {min = 0, max = 50 * amount, name = 'assembling-machine-3'})
         s(start + 24, {min = 10 * amount, max = 10 * amount, name = 'oil-refinery'})
         s(start + 25, {min = 10 * amount, max = 10 * amount, name = 'chemical-plant'})
     else
