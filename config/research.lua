@@ -8,7 +8,7 @@ return {
         enabled = false,
         result = 'laboratory_productivity_bonus',
         rate = 1
-    }
+    },
     --[[
     limit_research = false,
     limit_research_list = {
