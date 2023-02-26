@@ -163,10 +163,7 @@ local function vlayer_power_storage_handle()
         elseif tick <= 10000 then
             vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * (1 - ((tick - 5000) / 5000)))
     
-        elseif tick <= 12500 then
-            vlayer.power.energy = vlayer.power.energy
-    
-        elseif tick <= 17500 then
+        elseif tick > 12500 and tick <= 17500 then
             vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * ((tick - 5000) / 5000))
         end
     end
