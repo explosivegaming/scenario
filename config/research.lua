@@ -59,11 +59,5 @@ return {
             enabled = false,
             level = 1
         }
-        {
-            -- Artillery Range
-            name = 'artillery-shell-range-1',
-            enabled = false,
-            level = 1
-        }
     }
 }
