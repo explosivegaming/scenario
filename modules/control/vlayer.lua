@@ -191,7 +191,7 @@ local function vlayer_storage_handle()
             vlayer.storage.input[k] = nil
         
         elseif (v.type == "INPUT") then
-            local chest = chest.get_inventory(defines.inventory.chest)
+            local chest = v.storage.entity.get_inventory(defines.inventory.chest)
 
             if (chest == nil) then
                 return
