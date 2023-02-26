@@ -2,11 +2,11 @@
 -- @addon report-jail
 
 local Event = require 'utils.event' ---@dep utils.event
-local Roles = require 'expcore.roles' --- @dep expcore.roles
 local config = require 'config.report-jail' --- @dep config.afk_kick
 local Jail = require 'modules.control.jail' ---@dep modules.control.jail
 local Reports = require 'modules.control.reports' --- @dep modules.control.reports
 local format_chat_player_name = _C.format_chat_player_name --- @dep expcore.common
+-- local Roles = require 'expcore.roles' --- @dep expcore.roles
 -- local has_role = Roles.player_has_role
 -- local get_roles = Roles.get_player_roles
 
