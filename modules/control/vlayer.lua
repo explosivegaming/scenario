@@ -143,26 +143,23 @@ local function vlayer_power_storage_handle()
     player.surface.daytime = [0, 1)
     ]]
 
-    local tick = 0
-    local solar_eff = 0
-
     if config.always_day then
-        tick = 0
-        solar_eff = 1
+        local tick = 0
+        local solar_eff = 1
     else
-        tick = game.tick % 25000
+        local tick = game.tick % 25000
 
         if tick <= 5000 or tick > 17500 then
-            solar_eff = 1
+            local solar_eff = 1
     
         elseif tick <= 10000 then
-            solar_eff = 1 - ((tick - 5000) / 5000)
+            local solar_eff = 1 - ((tick - 5000) / 5000)
     
         elseif tick <= 12500 then
-            solar_eff = 0
+            local solar_eff = 0
     
         elseif tick <= 17500 then
-            solar_eff = (tick - 5000) / 5000
+            local solar_eff = (tick - 5000) / 5000
         end
     end
 
