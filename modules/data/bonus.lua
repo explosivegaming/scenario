@@ -27,7 +27,7 @@ PlayerBonus:set_metadata{
 --- Apply a bonus to a player
 local function apply_bonus(player, stage)
     if not player.character then
-        return 
+        return
     end
 
     if stage >= 2 then
