@@ -5,7 +5,6 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.vlayer' --- @dep config.vlayer
-local Colors = require 'utils.color_presets' --- @dep utils.color_presets
 local format_number = require('util').format_number
 
 --[[
@@ -46,7 +45,7 @@ Battery Storage:
 369k x 5.0 MJ = ....
 
 Net Power Production:
-- 5,000 MW 
+- 5,000 MW
 ]]
 
 if not config.enabled then
@@ -65,7 +64,7 @@ vlayer.power.circuit = {}
 vlayer.storage.item['solar-panel'] = 0
 vlayer.storage.item['accumulator'] = 0
 
-function vlayer_power_input_handle()
+local function vlayer_power_input_handle()
     local vlayer_power_capacity = (vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit) / (#vlayer.power.input + #vlayer.power.input)
 
     for k, v in pairs(vlayer.power.input) do
@@ -92,7 +91,7 @@ function vlayer_power_input_handle()
     end
 end
 
-function vlayer_power_output_handle()
+local function vlayer_power_output_handle()
     local vlayer_power_capacity = (vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit) / (#vlayer.power.input + #vlayer.power.input)
     local energy_required = {}
     local energy_required_total = 0
@@ -128,7 +127,7 @@ function vlayer_power_output_handle()
     end
 end
 
-function vlayer_power_storage_handle()
+local function vlayer_power_storage_handle()
     --[[
     25,000 / 416 s
     昼      208秒	ソーラー効率100%
@@ -182,7 +181,7 @@ function vlayer_power_storage_handle()
     end
 end
 
-function vlayer_storage_handle()
+local function vlayer_storage_handle()
     for k, v in pairs(vlayer.storage.input) do
         if ((v.storage.entity == nil) or (not v.storage.entity.valid)) then
             vlayer.storage.input[k] = nil
@@ -208,7 +207,7 @@ function vlayer_storage_handle()
     end
 end
 
-function vlayer_circuit_handle()
+local function vlayer_circuit_handle()
     for k, v in pairs(vlayer.power.circuit) do
         if (v.input == nil) or (v.output == nil) or (not v.input.valid) or (not v.output.valid) then
             vlayer.power.circuit[k] = nil
@@ -253,7 +252,7 @@ function vlayer_circuit_handle()
     end
 end
 
-function vlayer_handle()
+local function vlayer_handle()
     vlayer_power_input_handle()
     vlayer_power_storage_handle()
     vlayer_power_output_handle()
@@ -261,7 +260,7 @@ function vlayer_handle()
     vlayer_circuit_handle()
 end
 
-function vlayer_convert_chest(player)
+local function vlayer_convert_chest(player)
     local entities = player.surface.find_entities_filtered{position=player.position, radius=16, name="steel-chest", force=player.force}
     
     if (not entities or (#entities == 0)) then
@@ -290,7 +289,7 @@ function vlayer_convert_chest(player)
     return {x=math.floor(pos.x),y=math.floor(pos.y)}
 end
 
-function vlayer_convert_chest_storage_input(player)
+local function vlayer_convert_chest_storage_input(player)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
@@ -304,7 +303,7 @@ function vlayer_convert_chest_storage_input(player)
     end
 end
 
-function vlayer_convert_chest_power_input(player)
+local function vlayer_convert_chest_power_input(player)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
@@ -334,7 +333,7 @@ function vlayer_convert_chest_power_input(player)
     end
 end
 
-function vlayer_convert_chest_power_output(player)
+local function vlayer_convert_chest_power_output(player)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
@@ -363,7 +362,7 @@ function vlayer_convert_chest_power_output(player)
     end
 end
 
-function vlayer_convert_chest_circuit(player)
+local function vlayer_convert_chest_circuit(player)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
@@ -391,7 +390,7 @@ function vlayer_convert_chest_circuit(player)
     end
 end
 
-function vlayer_convert_remove(player)
+local function vlayer_convert_remove(player)
     local entities = player.surface.find_entities_filtered{name={"electric-energy-interface", "constant-combinator", "logistic-chest-storage"}, position=player.position, radius=16, force={"neutral"}}
 
     if (#entities == 0) then
