@@ -38,7 +38,7 @@ Event.add(Protection.events.on_repeat_violation, function(event)
         end
     end
     
-    if not moderator_count_bool then
+    if not (moderator_count_bool) then
         local player_name_color = format_chat_player_name(player)
         Jail.jail_player(player, '<protection>', 'Removed too many protected entities, please wait for a moderator.')
         game.print{'protection-jail.jail', player_name_color}
