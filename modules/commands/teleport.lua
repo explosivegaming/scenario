@@ -6,15 +6,20 @@
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
 
-function teleport(from_player, to_player)
+local function teleport(from_player, to_player)
     local surface = to_player.surface
     local position = surface.find_non_colliding_position('character', to_player.position, 32, 1)
-    if not position then return false end -- return false if no new position
+
+    -- return false if no new position
+    if not position then
+        return false
+    end
 
     if from_player.vehicle then
         -- Teleport the entity
         local entity = from_player.vehicle
         local goto_position = surface.find_non_colliding_position(entity.name, position, 32, 1)
+
         -- Surface teleport can only be done for players and cars at the moment. (with surface as an peramitor it gives this error)
         if entity.type == "car" then
             entity.teleport(goto_position, surface)
@@ -33,6 +38,7 @@ function teleport(from_player, to_player)
         if from_player.driving then from_player.driving = false end
         from_player.teleport(goto_position, surface)
     end
+    
     return true
 end
 
