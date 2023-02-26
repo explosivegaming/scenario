@@ -128,7 +128,7 @@ local function vlayer_power_output_handle()
                 v.power.power_production = energy_required[k]
             end
 
-            vlayer.power.energy = vlayer.power.energy - v.power.power_production  
+            vlayer.power.energy = vlayer.power.energy - v.power.power_production
             
         else
             v.power.power_production = 0
