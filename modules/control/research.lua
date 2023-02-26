@@ -1,7 +1,17 @@
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.research' --- @dep config.research
+local config_bonus = require 'config.bonus' --- @dep config.research
 
 local res_queue_enable = false
+local base_rate = 0
+
+if config.bonus.enabled then
+    for k, v in pairs(config_bonus.force_bonus) do
+        if config_bonus.force_bonus[k].name == config.bonus.result then
+            base_rate = config_bonus.force_bonus[k].max
+        end
+    end
+end
 
 local inf_res = {
     {
@@ -95,7 +105,7 @@ if config.enabled then
         research_notification(event)
 
         if config.bonus.enabled and force.technologies['mining-productivity-4'].level > 4 then
-            event.research.force[config.bonus.result] = force.technologies['mining-productivity-4'].level * config.bonus.rate
+            event.research.force[config.bonus.result] = base_rate + force.technologies['mining-productivity-4'].level * config.bonus.rate
         end
 
         if res_queue_enable then
