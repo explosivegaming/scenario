@@ -42,7 +42,7 @@ return {
     'modules.addons.damage-popups',
     'modules.addons.death-logger',
     'modules.addons.advanced-start',
-    'modules.addons.spawn-area',
+    'modules.addons.spawn_area',
     'modules.addons.compilatron',
     'modules.addons.scorched-earth',
     'modules.addons.pollution-grading',
