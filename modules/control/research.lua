@@ -68,6 +68,12 @@ local function research_notification(event)
         end
 
         if is_inf_res then
+            if event.research.name == 'mining-productivity-4' then
+                if config.bonus.enabled and force.technologies['mining-productivity-4'].level > 4 then
+                    event.research.force[config.bonus.result] = base_rate + force.technologies['mining-productivity-4'].level * config.bonus.rate
+                end
+            end
+
             game.print{'research.inf_msg', event.research.name, event.research.level}
         else
             game.print{'research.msg', event.research.name}
@@ -104,10 +110,6 @@ end)
 if config.enabled then
     Event.add(defines.events.on_research_finished, function(event)
         research_notification(event)
-
-        if config.bonus.enabled and force.technologies['mining-productivity-4'].level > 4 then
-            event.research.force[config.bonus.result] = base_rate + force.technologies['mining-productivity-4'].level * config.bonus.rate
-        end
 
         if res_queue_enable then
             res_queue(event.research.force)
