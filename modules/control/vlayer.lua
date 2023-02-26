@@ -171,7 +171,7 @@ local function vlayer_power_storage_handle()
     if config.battery_limit then
         local battery_limit = vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit
 
-        if layer.power.energy >= battery_limit then
+        if vlayer.power.energy >= battery_limit then
             vlayer.power.energy = battery_limit
         end
     end
