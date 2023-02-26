@@ -47,19 +47,14 @@ Battery Storage:
 Net Power Production:
 - 5,000 MW
 
-electric_buffer_size[RW]	:: double?	
+electric_buffer_size[RW]	:: double?
 The buffer size for the electric energy source.
 
-electric_input_flow_limit[R]	:: double?	
+electric_input_flow_limit[R]	:: double?
 The input flow limit for the electric energy source.
 
-electric_output_flow_limit[R]	:: double?	
+electric_output_flow_limit[R]	:: double?
 The output flow limit for the electric energy source.
-
-electric_drain[R]	:: double?	
-The electric drain for the electric energy source.
-
-electric_emissions[R]	:: double?
 ]]
 
 if not config.enabled then
