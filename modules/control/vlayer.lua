@@ -292,7 +292,7 @@ local function vlayer_convert_chest_storage_input(player)
         local vlayer_storage = player.surface.create_entity{name="logistic-chest-storage", position={pos.x, pos.y}, force="neutral"}
         vlayer_storage.destructible = false
         vlayer_storage.minable = false
-        vlayer_power.operable = true
+        vlayer_storage.operable = true
         vlayer_storage.last_user = player
     
         table.insert(vlayer.storage.input, {type="INPUT", storage=vlayer_storage})
@@ -494,7 +494,6 @@ Gui.element(function(event_trigger, parent)
         caption = '[img=entity/solar-panel] Solar Panel',
         style = 'heading_1_label'
     }
-    local solar_panel_display_count =
     scroll_table.add{
         name = 'solar_panel_display_count',
         type = 'label',
@@ -507,7 +506,6 @@ Gui.element(function(event_trigger, parent)
         caption = '[img=entity/accumulator] Accumulator',
         style = 'heading_1_label'
     }
-    local accumulator_display_count =
     scroll_table.add{
         name = 'accumulator_display_count',
         type = 'label',
@@ -534,7 +532,6 @@ Gui.element(function(event_trigger, parent)
         caption = '[virtual-signal=signal-P] Peak',
         style = 'heading_1_label'
     }
-    local power_production_peak_display_count =
     scroll_table.add{
         name = 'power_production_peak_display_count',
         type = 'label',
@@ -547,7 +544,6 @@ Gui.element(function(event_trigger, parent)
         caption = '[virtual-signal=signal-S] Sustained',
         style = 'heading_1_label'
     }
-    local power_production_sustained_display_count =
     scroll_table.add{
         name = 'power_production_sustained_display_count',
         type = 'label',
@@ -574,7 +570,6 @@ Gui.element(function(event_trigger, parent)
         caption = '[virtual-signal=signal-M] Max',
         style = 'heading_1_label'
     }
-    local battery_max_display_count =
     scroll_table.add{
         name = 'battery_max_display_count',
         type = 'label',
@@ -587,7 +582,6 @@ Gui.element(function(event_trigger, parent)
         caption = '[virtual-signal=signal-C] Current',
         style = 'heading_1_label'
     }
-    local battery_current_display_count =
     scroll_table.add{
         name = 'battery_current_display_count',
         type = 'label',
@@ -624,11 +618,11 @@ Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_co
 	return Roles.player_allowed(player, 'vlayer-1')
 end)
 
-Event.on_nth_tick(config.update_tick, function(event)
+Event.on_nth_tick(config.update_tick, function()
     vlayer_handle()
 
     for _, player in pairs(game.connected_players) do
-        local frame = Gui.get_left_element(player, player_list_container)
+        local frame = Gui.get_left_element(player, vlayer_container)
         local container = frame.container
         
         container.scroll.table.solar_panel_display_count.caption = format_number(vlayer.storage.item['solar-panel'])
