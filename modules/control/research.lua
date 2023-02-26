@@ -62,12 +62,26 @@ local function research_notification(event)
     end
 end
 
+local function res_queue(player)
+    local res_q = player.force.research_queue
+
+    if #res_q < config.queue_amount then
+        for i=1, config.queue_amount - #res_q do
+            player.force.add_research(player.force.technologies['mining-productivity-4'])
+        end
+    end
+end
+
 Commands.new_command('auto-research', 'Automatically queue up research')
 :add_alias('ares')
 :register(function(player)
+    res_queue(player)
     return Commands.success
 end)
 
 if config.enabled then
-    Event.add(defines.events.on_research_finished, research_notification)
+    Event.add(defines.events.on_research_finished, function(event)
+        research_notification(event)
+        res_queue(player)
+    end)
 end
