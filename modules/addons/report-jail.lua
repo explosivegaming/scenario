@@ -13,7 +13,11 @@ local format_chat_player_name = _C.format_chat_player_name --- @dep expcore.comm
 --- Returns the playtime of the reporter. Used when calculating the total playtime of all reporters
 local function reporter_playtime(_, by_player_name, _)
     local player = game.get_player(by_player_name)
-    if player == nil then return 0 end
+
+    if player == nil then
+        return 0
+    end
+    
     return player.online_time
 end
 
