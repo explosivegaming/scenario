@@ -6,9 +6,6 @@ local config = require 'config.report-jail' --- @dep config.afk_kick
 local Jail = require 'modules.control.jail' ---@dep modules.control.jail
 local Reports = require 'modules.control.reports' --- @dep modules.control.reports
 local format_chat_player_name = _C.format_chat_player_name --- @dep expcore.common
--- local Roles = require 'expcore.roles' --- @dep expcore.roles
--- local has_role = Roles.player_has_role
--- local get_roles = Roles.get_player_roles
 
 --- Returns the playtime of the reporter. Used when calculating the total playtime of all reporters
 local function reporter_playtime(_, by_player_name, _)
@@ -20,12 +17,6 @@ local function reporter_playtime(_, by_player_name, _)
     
     return player.online_time
 end
-
---- Tests the combined playtime of all reporters against the reported player
---[[
-    If there is active moderator,
-    then let moderator do it.
-]]
 
 Event.add(Reports.events.on_player_reported, function(event)
     local player = game.get_player(event.player_index)
@@ -42,11 +33,6 @@ Event.add(Reports.events.on_player_reported, function(event)
     end
     
     if not moderator_count_bool then
-        -- if player.online_time ~= nil and player.MachinesRemoved ~= nil then
-        -- if has_role(player, 'Member') or has_role(player, 'Veteran') then
-        -- Combined playtime is greater than 200% of the reported's playtime
-        -- 30 min = 108,000
-
         if ((player.online_time * 2) > total_playtime) and (player.online_time > 108000) then
             return
         elseif #Reports.get_reports(player) > 1 then
