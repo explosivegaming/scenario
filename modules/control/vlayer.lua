@@ -154,25 +154,23 @@ local function vlayer_power_storage_handle()
 
     if config.always_day then
         local tick = 0
-        local solar_eff = 1
+        local new_energy = math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick)
     else
         local tick = game.tick % 25000
 
         if tick <= 5000 or tick > 17500 then
-            local solar_eff = 1
+            local new_energy = math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick)
     
         elseif tick <= 10000 then
-            local solar_eff = 1 - ((tick - 5000) / 5000)
+            local new_energy = math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * (1 - ((tick - 5000) / 5000)))
     
         elseif tick <= 12500 then
-            local solar_eff = 0
+            local new_energy = 0
     
         elseif tick <= 17500 then
-            local solar_eff = (tick - 5000) / 5000
+            local new_energy = math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * ((tick - 5000) / 5000))
         end
     end
-
-    local new_energy = math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * solar_eff)
 
     if not config.battery_limit then
         vlayer.power.energy = vlayer.power.energy + new_energy
