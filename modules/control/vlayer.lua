@@ -153,34 +153,29 @@ local function vlayer_power_storage_handle()
     ]]
 
     if config.always_day then
-        local tick = 0
-        local new_energy = math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick)
+        vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick)
     else
         local tick = game.tick % 25000
 
         if tick <= 5000 or tick > 17500 then
-            local new_energy = math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick)
+            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick)
     
         elseif tick <= 10000 then
-            local new_energy = math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * (1 - ((tick - 5000) / 5000)))
+            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * (1 - ((tick - 5000) / 5000)))
     
         elseif tick <= 12500 then
-            local new_energy = 0
+            vlayer.power.energy = vlayer.power.energy
     
         elseif tick <= 17500 then
-            local new_energy = math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * ((tick - 5000) / 5000))
+            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * ((tick - 5000) / 5000))
         end
     end
 
-    if not config.battery_limit then
-        vlayer.power.energy = vlayer.power.energy + new_energy
-    else
+    if config.battery_limit then
         local battery_limit = vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit
 
-        if (vlayer.power.energy + new_energy) >= battery_limit then
+        if layer.power.energy >= battery_limit then
             vlayer.power.energy = battery_limit
-        else
-            vlayer.power.energy = vlayer.power.energy + new_energy
         end
     end
 end
