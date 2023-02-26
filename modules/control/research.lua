@@ -94,6 +94,10 @@ if config.enabled then
     Event.add(defines.events.on_research_finished, function(event)
         research_notification(event)
 
+        if config.bonus.enabled and force.technologies['mining-productivity-4'].level > 4 then
+            event.research.force[config.bonus.result] = force.technologies['mining-productivity-4'].level * config.bonus.rate
+        end
+
         if res_queue_enable then
             res_queue(event.research.force)
         end
