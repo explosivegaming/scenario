@@ -74,7 +74,7 @@ vlayer.storage.item['solar-panel'] = 0
 vlayer.storage.item['accumulator'] = 0
 
 local function vlayer_power_input_handle()
-    local vlayer_power_capacity = (vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit) / (#vlayer.power.input + #vlayer.power.input)
+    local vlayer_power_capacity = (vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit) / (#vlayer.power.input + #vlayer.power.output)
 
     for k, v in pairs(vlayer.power.input) do
         if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
@@ -101,7 +101,7 @@ local function vlayer_power_input_handle()
 end
 
 local function vlayer_power_output_handle()
-    local vlayer_power_capacity = (vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit) / (#vlayer.power.input + #vlayer.power.input)
+    local vlayer_power_capacity = (vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit) / (#vlayer.power.input + #vlayer.power.output)
     local energy_required = {}
     local energy_required_total = 0
     local energy_average = 0
@@ -171,7 +171,7 @@ local function vlayer_power_storage_handle()
     if config.battery_limit then
         local battery_limit = vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit
 
-        if vlayer.power.energy >= battery_limit then
+        if vlayer.power.energy > battery_limit then
             vlayer.power.energy = battery_limit
         end
     end
@@ -182,7 +182,7 @@ local function vlayer_storage_handle()
         if ((v.storage.entity == nil) or (not v.storage.entity.valid)) then
             vlayer.storage.input[k] = nil
         
-        elseif (v.type == "INPUT") then
+        else
             local chest = v.storage.entity.get_inventory(defines.inventory.chest)
 
             if (chest == nil) then
@@ -295,7 +295,7 @@ local function vlayer_convert_chest_storage_input(player)
         vlayer_storage.operable = true
         vlayer_storage.last_user = player
     
-        table.insert(vlayer.storage.input, {type="INPUT", storage=vlayer_storage})
+        table.insert(vlayer.storage.input, {storage=vlayer_storage})
     end
 end
 
