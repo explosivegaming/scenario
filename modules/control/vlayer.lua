@@ -196,7 +196,7 @@ local function vlayer_storage_handle()
             for item_name, count in pairs(chest_content) do
                 if (vlayer.storage.item[item_name] ~= nil) then
                     vlayer.storage.item[item_name] = vlayer.storage.item[item_name] + count
-                    chest_content.remove({name=item_name, count=count})
+                    chest.remove({name=item_name, count=count})
                 end
             end
         end
