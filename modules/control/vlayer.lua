@@ -74,7 +74,7 @@ vlayer.storage.item['solar-panel'] = 0
 vlayer.storage.item['accumulator'] = 0
 
 local function vlayer_power_input_handle()
-    local vlayer_power_capacity = (vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit) / (#vlayer.power.input + #vlayer.power.output)
+    local vlayer_power_capacity = (vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * (#vlayer.power.input + #vlayer.power.output)) / (#vlayer.power.input + #vlayer.power.output)
 
     for k, v in pairs(vlayer.power.input) do
         if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
@@ -101,7 +101,7 @@ local function vlayer_power_input_handle()
 end
 
 local function vlayer_power_output_handle()
-    local vlayer_power_capacity = (vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit) / (#vlayer.power.input + #vlayer.power.output)
+    local vlayer_power_capacity = (vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * (#vlayer.power.input + #vlayer.power.output)) / (#vlayer.power.input + #vlayer.power.output)
     local energy_required = {}
     local energy_required_total = 0
     local energy_average = 0
