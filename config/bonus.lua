@@ -36,17 +36,17 @@ return {
         {
             name = 'character_item_pickup_distance_bonus',
             enabled = true,
-            max = 10
+            max = 5
         },
         {
             name = 'character_loot_pickup_distance_bonus',
             enabled = true,
-            max = 10
+            max = 5
         },
         {
             name = 'character_item_drop_distance_bonus',
             enabled = true,
-            max = 20
+            max = 5
         },
         {
             name = 'character_inventory_slots_bonus',
