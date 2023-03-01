@@ -40,7 +40,7 @@ return {
         ["dirt-6"]=40,
         --["dirt-7"]=0, -- last tile, nothing to degrade to
         -- land fill chain
-        ["landfill"]=50,
+        -- ["landfill"]=50,
         --["water-shallow"]=90,
         --["water-mud"]=0, -- last tile, nothing to degrade to
     },
@@ -77,7 +77,7 @@ return {
         ["dirt-6"]='dirt-7',
         --["dirt-7"]=0, -- last tile, nothing to degrade to
         -- land fill chain
-        ["landfill"]='grass-2', -- 'water-shallow'
+        -- ["landfill"]='grass-2', -- 'water-shallow'
         --["water-shallow"]='water-mud',
         --["water-mud"]=0, -- last tile, nothing to degrade to
     },
