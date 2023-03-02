@@ -83,7 +83,7 @@ local function vlayer_power_input_handle()
             v.power.electric_buffer_size = vlayer_power_capacity
             local circuit_signal = v.circuit.get_or_create_control_behavior().get_signal(1)
                 
-            if ((circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == "signal-C")) then
+            if ((circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == 'signal-C')) then
                 if circuit_signal.count == -1 then
                     v.power.power_usage = v.power.energy - (config.energy_input_min)
                 else
@@ -210,37 +210,37 @@ local function vlayer_circuit_handle()
 
         else
             local circuit_i = v.input.get_or_create_control_behavior()
-            circuit_i.set_signal(1, {signal={type="virtual", name="signal-P"}, count=1})
-            circuit_i.set_signal(2, {signal={type="virtual", name="signal-S"}, count=1})
-            circuit_i.set_signal(3, {signal={type="virtual", name="signal-B"}, count=1})
-            circuit_i.set_signal(4, {signal={type="virtual", name="signal-C"}, count=1})
-            circuit_i.set_signal(5, {signal={type="virtual", name="signal-T"}, count=1})
-            circuit_i.set_signal(6, {signal={type="virtual", name="signal-D"}, count=1})
-            circuit_i.set_signal(7, {signal={type="item", name="solar-panel"}, count=1})
-            circuit_i.set_signal(8, {signal={type="item", name="accumulator"}, count=1})
+            circuit_i.set_signal(1, {signal={type='virtual', name='signal-P'}, count=1})
+            circuit_i.set_signal(2, {signal={type='virtual', name='signal-S'}, count=1})
+            circuit_i.set_signal(3, {signal={type='virtual', name='signal-B'}, count=1})
+            circuit_i.set_signal(4, {signal={type='virtual', name='signal-C'}, count=1})
+            circuit_i.set_signal(5, {signal={type='virtual', name='signal-T'}, count=1})
+            circuit_i.set_signal(6, {signal={type='virtual', name='signal-D'}, count=1})
+            circuit_i.set_signal(7, {signal={type='item', name='solar-panel'}, count=1})
+            circuit_i.set_signal(8, {signal={type='item', name='accumulator'}, count=1})
 
             local circuit_o = v.output.get_or_create_control_behavior()
-            circuit_o.set_signal(1, {signal={type="virtual", name="signal-P"}, count=math.min(math.floor(vlayer.storage.item['solar-panel'] * 60), 2147483647)})
-            circuit_o.set_signal(2, {signal={type="virtual", name="signal-S"}, count=math.min(math.floor(vlayer.storage.item['solar-panel'] * 4365 / 104), 2147483647)})
-            circuit_o.set_signal(3, {signal={type="virtual", name="signal-B"}, count=math.min(math.floor(vlayer.storage.item['accumulator'] * 5), 2147483647)})
-            circuit_o.set_signal(4, {signal={type="virtual", name="signal-C"}, count=math.min(math.floor(vlayer.power.energy), 2147483647)})
-            circuit_o.set_signal(5, {signal={type="virtual", name="signal-T"}, count=math.min(math.floor(game.tick), 2147483647)})
-            circuit_o.set_signal(6, {signal={type="virtual", name="signal-D"}, count=math.min(math.floor(game.tick % 25000), 2147483647)})
-            circuit_o.set_signal(7, {signal={type="item", name="solar-panel"}, count=math.min(math.floor(vlayer.storage.item['solar-panel']), 2147483647)})
-            circuit_o.set_signal(8, {signal={type="item", name="accumulator"}, count=math.min(math.floor(vlayer.storage.item['accumulator']), 2147483647)})
+            circuit_o.set_signal(1, {signal={type='virtual', name='signal-P'}, count=math.min(math.floor(vlayer.storage.item['solar-panel'] * 60), 2147483647)})
+            circuit_o.set_signal(2, {signal={type='virtual', name='signal-S'}, count=math.min(math.floor(vlayer.storage.item['solar-panel'] * 4365 / 104), 2147483647)})
+            circuit_o.set_signal(3, {signal={type='virtual', name='signal-B'}, count=math.min(math.floor(vlayer.storage.item['accumulator'] * 5), 2147483647)})
+            circuit_o.set_signal(4, {signal={type='virtual', name='signal-C'}, count=math.min(math.floor(vlayer.power.energy), 2147483647)})
+            circuit_o.set_signal(5, {signal={type='virtual', name='signal-T'}, count=math.min(math.floor(game.tick), 2147483647)})
+            circuit_o.set_signal(6, {signal={type='virtual', name='signal-D'}, count=math.min(math.floor(game.tick % 25000), 2147483647)})
+            circuit_o.set_signal(7, {signal={type='item', name='solar-panel'}, count=math.min(math.floor(vlayer.storage.item['solar-panel']), 2147483647)})
+            circuit_o.set_signal(8, {signal={type='item', name='accumulator'}, count=math.min(math.floor(vlayer.storage.item['accumulator']), 2147483647)})
 
             if circuit_i.signals_count >= 9 then
                 for i=9, circuit_i.signals_count do
                     local circuit_input_signal = circuit_i.get_signal(i)
     
-                    if ((circuit_input_signal ~= nil) and (circuit_input_signal.signal ~= nil) and (circuit_input_signal.signal.type == "item")) then
+                    if ((circuit_input_signal ~= nil) and (circuit_input_signal.signal ~= nil) and (circuit_input_signal.signal.type == 'item')) then
                         local item_amount = vlayer.storage.item[circuit_input_signal[i]]
 
                         if item_amount == nil then
                             item_amount = 0
                         end
 
-                        circuit_o.set_signal(i, {signal={type="item", name=circuit_input_signal[i]}, count=math.min(item_amount, 2147483647)})
+                        circuit_o.set_signal(i, {signal={type='item', name=circuit_input_signal[i]}, count=math.min(item_amount, 2147483647)})
                     end
                 end
             end
@@ -257,7 +257,7 @@ local function vlayer_handle()
 end
 
 local function vlayer_convert_chest(player)
-    local entities = player.surface.find_entities_filtered{position=player.position, radius=16, name="steel-chest", force=player.force}
+    local entities = player.surface.find_entities_filtered{position=player.position, radius=16, name='steel-chest', force=player.force}
     
     if (not entities or (#entities == 0)) then
         return nil
@@ -266,19 +266,19 @@ local function vlayer_convert_chest(player)
     local target_chest = player.surface.get_closest(player.position, entities)
 
     if (not target_chest) then
-        player.print("No Steel Chest Detected")
+        player.print('No Steel Chest Detected')
         return nil
     end
 
     if (not target_chest.get_inventory(defines.inventory.chest).is_empty()) then
-        player.print("Chest is not emptied")
+        player.print('Chest is not emptied')
         return nil
     end
 
     local pos = target_chest.position
 
     if (not target_chest.destroy()) then
-        player.print("Unable to convert chest")
+        player.print('Unable to convert chest')
         return nil
     end
 
@@ -289,7 +289,7 @@ local function vlayer_convert_chest_storage_input(player)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
-        local vlayer_storage = player.surface.create_entity{name="logistic-chest-storage", position={pos.x, pos.y}, force="neutral"}
+        local vlayer_storage = player.surface.create_entity{name='logistic-chest-storage', position={pos.x, pos.y}, force='neutral'}
         vlayer_storage.destructible = false
         vlayer_storage.minable = false
         vlayer_storage.operable = true
@@ -303,8 +303,8 @@ local function vlayer_convert_chest_power_input(player)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
-        if (player.surface.can_place_entity{name="electric-energy-interface", position=pos}) and (player.surface.can_place_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}}) then
-            local vlayer_power = player.surface.create_entity{name="electric-energy-interface", position=pos, force="neutral"}
+        if (player.surface.can_place_entity{name='electric-energy-interface', position=pos}) and (player.surface.can_place_entity{name='constant-combinator', position={x=pos.x+1, y=pos.y}}) then
+            local vlayer_power = player.surface.create_entity{name='electric-energy-interface', position=pos, force='neutral'}
             vlayer_power.destructible = false
             vlayer_power.minable = false
             vlayer_power.operable = false
@@ -314,17 +314,17 @@ local function vlayer_convert_chest_power_input(player)
             vlayer_power.power_usage = 0
             vlayer_power.energy = 0
             
-            local vlayer_circuit = player.surface.create_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}, force="neutral"}
+            local vlayer_circuit = player.surface.create_entity{name='constant-combinator', position={x=pos.x+1, y=pos.y}, force='neutral'}
             vlayer_circuit.destructible = false
             vlayer_circuit.minable = false
             vlayer_circuit.operable = true
             vlayer_circuit.last_user = player
             table.insert(vlayer.power.input, {power=vlayer_power, circuit=vlayer_circuit})
 
-            vlayer_circuit.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-C"}, count=1})
+            vlayer_circuit.get_or_create_control_behavior().set_signal(1, {signal={type='virtual', name='signal-C'}, count=1})
 
         else
-            player.print("Unable to build energy input")
+            player.print('Unable to build energy input')
         end
     end
 end
@@ -333,8 +333,8 @@ local function vlayer_convert_chest_power_output(player)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
-        if (player.surface.can_place_entity{name="electric-energy-interface", position=pos}) and (player.surface.can_place_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}}) then
-            local vlayer_power = player.surface.create_entity{name="electric-energy-interface", position=pos, force="neutral"}
+        if (player.surface.can_place_entity{name='electric-energy-interface', position=pos}) and (player.surface.can_place_entity{name='constant-combinator', position={x=pos.x+1, y=pos.y}}) then
+            local vlayer_power = player.surface.create_entity{name='electric-energy-interface', position=pos, force='neutral'}
             vlayer_power.destructible = false
             vlayer_power.minable = false
             vlayer_power.operable = false
@@ -344,7 +344,7 @@ local function vlayer_convert_chest_power_output(player)
             vlayer_power.power_usage = 0
             vlayer_power.energy = 0
             
-            local vlayer_circuit = player.surface.create_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}, force="neutral"}
+            local vlayer_circuit = player.surface.create_entity{name='constant-combinator', position={x=pos.x+1, y=pos.y}, force='neutral'}
             vlayer_circuit.destructible = false
             vlayer_circuit.minable = false
             vlayer_circuit.operable = true
@@ -353,7 +353,7 @@ local function vlayer_convert_chest_power_output(player)
             table.insert(vlayer.power.output, {power=vlayer_power, circuit=vlayer_circuit})
 
         else
-            player.print("Unable to build energy output")
+            player.print('Unable to build energy output')
         end
     end
 end
@@ -362,21 +362,21 @@ local function vlayer_convert_chest_circuit(player)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
-        local circuit_i = player.surface.create_entity{name="constant-combinator", position=pos, force="neutral"}
+        local circuit_i = player.surface.create_entity{name='constant-combinator', position=pos, force='neutral'}
         circuit_i.destructible = false
         circuit_i.minable = false
         circuit_i.operable = true
         circuit_i.last_user = player
-        circuit_i.get_or_create_control_behavior().set_signal(1, {signal={type="virtual", name="signal-P"}, count=1})
-        circuit_i.get_or_create_control_behavior().set_signal(2, {signal={type="virtual", name="signal-S"}, count=1})
-        circuit_i.get_or_create_control_behavior().set_signal(3, {signal={type="virtual", name="signal-B"}, count=1})
-        circuit_i.get_or_create_control_behavior().set_signal(4, {signal={type="virtual", name="signal-C"}, count=1})
-        circuit_i.get_or_create_control_behavior().set_signal(5, {signal={type="virtual", name="signal-T"}, count=1})
-        circuit_i.get_or_create_control_behavior().set_signal(6, {signal={type="virtual", name="signal-D"}, count=1})
-        circuit_i.get_or_create_control_behavior().set_signal(7, {signal={type="item", name="solar-panel"}, count=1})
-        circuit_i.get_or_create_control_behavior().set_signal(8, {signal={type="item", name="accumulator"}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(1, {signal={type='virtual', name='signal-P'}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(2, {signal={type='virtual', name='signal-S'}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(3, {signal={type='virtual', name='signal-B'}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(4, {signal={type='virtual', name='signal-C'}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(5, {signal={type='virtual', name='signal-T'}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(6, {signal={type='virtual', name='signal-D'}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(7, {signal={type='item', name='solar-panel'}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(8, {signal={type='item', name='accumulator'}, count=1})
         
-        local circuit_o = player.surface.create_entity{name="constant-combinator", position={x=pos.x+1, y=pos.y}, force="neutral"}
+        local circuit_o = player.surface.create_entity{name='constant-combinator', position={x=pos.x+1, y=pos.y}, force='neutral'}
         circuit_o.destructible = false
         circuit_o.minable = false
         circuit_o.operable = true
@@ -387,10 +387,10 @@ local function vlayer_convert_chest_circuit(player)
 end
 
 local function vlayer_convert_remove(player)
-    local entities = player.surface.find_entities_filtered{name={"electric-energy-interface", "constant-combinator", "logistic-chest-storage"}, position=player.position, radius=16, force={"neutral"}}
+    local entities = player.surface.find_entities_filtered{name={'electric-energy-interface', 'constant-combinator', 'logistic-chest-storage'}, position=player.position, radius=16, force={'neutral'}}
 
     if (#entities == 0) then
-        player.print("Entity not found")
+        player.print('Entity not found')
         return
     end
 
@@ -404,7 +404,7 @@ local function vlayer_convert_remove(player)
             end
 
             entity.destroy()
-            player.print("Entity removed")
+            player.print('Entity removed')
         end
     end
 end
