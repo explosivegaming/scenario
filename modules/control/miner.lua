@@ -19,31 +19,37 @@ local function auto_handle(event)
 
                 for _, resource in pairs(resources) do
                     if resource.amount > 0 then
+                        -- if any tile in the radius have resources
                         return
                     end
                 end
 
                 if entity.to_be_deconstructed(entity.force) then
+                    -- if it is already waiting to be deconstruct
                     return
                 else
                     if entity.fluidbox and #entity.fluidbox > 0 then
+                        -- if require fluid to mine
                         return
                     end
 
                     if next(entity.circuit_connected_entities.red) ~= nil or next(entity.circuit_connected_entities.green) ~= nil then
-                        -- Connected to Circuit Network
+                        -- connected to circuit network
                         return
                     end
 
                     if not entity.minable then
+                        -- if it is minable
                         return
                     end
 
                     if not entity.prototype.selectable_in_game then
+                        -- if it can select
                         return
                     end
 
                     if entity.has_flag('not-deconstructable') then
+                        -- if it can deconstruct
                         return
                     end
 
