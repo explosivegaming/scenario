@@ -9,7 +9,7 @@ local function auto_handle(event)
     end
 
     for _, entity in pairs(entities) do
-        if ((math.abs(entity.position.x - entity.position.x) < entity.prototype.mining_drill_radius) and (math.abs(entity.position.y - event.entity.position.y) < entity.prototype.mining_drill_radius)) then
+        if ((math.abs(entity.position.x - event.entity.position.x) < entity.prototype.mining_drill_radius) and (math.abs(entity.position.y - event.entity.position.y) < entity.prototype.mining_drill_radius)) then
             if entity.mining_target ~= nil and entity.mining_target.valid then
                 if entity.mining_target.amount > 0 then
                     return
