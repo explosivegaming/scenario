@@ -234,13 +234,13 @@ local function vlayer_circuit_handle()
                     local circuit_input_signal = circuit_i.get_signal(i)
     
                     if ((circuit_input_signal ~= nil) and (circuit_input_signal.signal ~= nil) and (circuit_input_signal.signal.type == 'item')) then
-                        local item_amount = vlayer.storage.item[circuit_input_signal[i]]
+                        local item_amount = vlayer.storage.item[circuit_input_signal.signal.name]
 
                         if item_amount == nil then
                             item_amount = 0
                         end
 
-                        circuit_o.set_signal(i, {signal={type='item', name=circuit_input_signal[i]}, count=math.min(item_amount, 2147483647)})
+                        circuit_o.set_signal(i, {signal={type='item', name=circuit_input_signal.signal.name}, count=math.min(item_amount, 2147483647)})
                     end
                 end
             end
