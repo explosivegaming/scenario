@@ -137,7 +137,7 @@ local function vlayer_power_output_handle()
             if (energy_required[k] > 0) then
                 if (energy_required[k] >= energy_average) then
                     v.power.energy = v.power.energy + energy_average
-                    
+
                     global.vlayer.power.energy = global.vlayer.power.energy - energy_average
                 else
                     v.power.energy = v.power.energy + energy_required[k]
@@ -185,7 +185,7 @@ local function vlayer_power_storage_handle()
         elseif tick <= 10000 then
             global.vlayer.power.energy = global.vlayer.power.energy + math.floor(global.vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * (1 - ((tick - 5000) / 5000)))
     
-        elseif tick > 12500 and tick <= 17500 then
+        elseif (tick > 12500) and (tick <= 17500) then
             global.vlayer.power.energy = global.vlayer.power.energy + math.floor(global.vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * ((tick - 5000) / 5000))
         end
     end
@@ -207,18 +207,12 @@ local function vlayer_storage_handle()
         else
             local chest = v.storage.input.storage.entity.get_inventory(defines.inventory.chest)
 
-            if (chest == nil) then
-                return
-            elseif (chest.is_empty()) then
-                return
-            end
-        
-            local chest_content = chest.get_contents()
-
-            for item_name, count in pairs(chest_content) do
-                if (global.vlayer.storage.item[item_name] ~= nil) then
-                    global.vlayer.storage.item[item_name] = global.vlayer.storage.item[item_name] + count
-                    chest.remove({name=item_name, count=count})
+            if (chest ~= nil) and (not chest.is_empty()) then
+                for item_name, count in pairs(chest.get_contents()) do
+                    if (global.vlayer.storage.item[item_name] ~= nil) then
+                        global.vlayer.storage.item[item_name] = global.vlayer.storage.item[item_name] + count
+                        chest.remove({name=item_name, count=count})
+                    end
                 end
             end
         end
