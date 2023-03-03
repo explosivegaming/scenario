@@ -117,7 +117,6 @@ local function vlayer_power_output_handle()
 
     local energy_required = {}
     local energy_required_total = 0
-    local energy_average = 0
 
     for k, v in pairs(global.vlayer.power.output) do
         if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
@@ -132,20 +131,19 @@ local function vlayer_power_output_handle()
     end
 
     if (global.vlayer.power.energy < energy_required_total) then
-        energy_average = math.floor(global.vlayer.power.energy / (#global.vlayer.power.output))
+        local energy_average = math.floor(global.vlayer.power.energy / (#global.vlayer.power.output))
 
         for k, v in pairs(global.vlayer.power.output) do
             if (energy_required[k] > 0) then
                 if (energy_required[k] >= energy_average) then
-                    v.power.energy = energy_average
+                    v.power.energy = v.power.energy + energy_average
+                    
+                    global.vlayer.power.energy = global.vlayer.power.energy - energy_average
                 else
-                    v.power.energy = energy_required[k]
-                end
-    
-                global.vlayer.power.energy = global.vlayer.power.energy - v.power.power_production
-                
-            else
-                v.power.power_production = 0
+                    v.power.energy = v.power.energy + energy_required[k]
+
+                    global.vlayer.power.energy = global.vlayer.power.energy - energy_required[k]
+                end           
             end
         end
 
