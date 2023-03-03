@@ -61,24 +61,24 @@ if not config.enabled then
     return
 end
 
-local vlayer = {}
-vlayer.storage = {}
-vlayer.storage.item = {}
-vlayer.storage.input = {}
-vlayer.power = {}
-vlayer.power.input = {}
-vlayer.power.output = {}
-vlayer.power.energy = 0
-vlayer.power.circuit = {}
-vlayer.storage.item['solar-panel'] = 0
-vlayer.storage.item['accumulator'] = 0
+global.vlayer = {}
+global.vlayer.storage = {}
+global.vlayer.storage.item = {}
+global.vlayer.storage.input = {}
+global.vlayer.power = {}
+global.vlayer.power.input = {}
+global.vlayer.power.output = {}
+global.vlayer.power.energy = 0
+global.vlayer.power.circuit = {}
+global.vlayer.storage.item['solar-panel'] = 0
+global.vlayer.storage.item['accumulator'] = 0
 
 local function vlayer_power_input_handle()
-    local vlayer_power_capacity = (vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * (#vlayer.power.input + #vlayer.power.output)) / (#vlayer.power.input + #vlayer.power.output)
+    local vlayer_power_capacity = (global.vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * (#global.vlayer.power.input + #global.vlayer.power.output)) / (#global.vlayer.power.input + #global.vlayer.power.output)
 
-    for k, v in pairs(vlayer.power.input) do
+    for k, v in pairs(global.vlayer.power.input) do
         if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
-            vlayer.power.input[k] = nil
+            global.vlayer.power.input[k] = nil
         elseif (v.power.energy > (config.energy_input_min)) then
             v.power.electric_buffer_size = vlayer_power_capacity
             local circuit_signal = v.circuit.get_or_create_control_behavior().get_signal(1)
@@ -91,7 +91,7 @@ local function vlayer_power_input_handle()
                 end
             end
 
-            vlayer.power.energy = vlayer.power.energy + v.power.power_usage
+            global.vlayer.power.energy = global.vlayer.power.energy + v.power.power_usage
 
         else
             v.power.power_usage = 0
@@ -101,14 +101,14 @@ local function vlayer_power_input_handle()
 end
 
 local function vlayer_power_output_handle()
-    local vlayer_power_capacity = (vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * (#vlayer.power.input + #vlayer.power.output)) / (#vlayer.power.input + #vlayer.power.output)
+    local vlayer_power_capacity = (global.vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * (#global.vlayer.power.input + #global.vlayer.power.output)) / (#global.vlayer.power.input + #global.vlayer.power.output)
     local energy_required = {}
     local energy_required_total = 0
     local energy_average = 0
 
-    for k, v in pairs(vlayer.power.output) do
+    for k, v in pairs(global.vlayer.power.output) do
         if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
-            vlayer.power.output[k] = nil
+            global.vlayer.power.output[k] = nil
         else
             energy_required[k] = config.energy_limit - v.energy
             energy_required_total = energy_required_total + energy_required[k]
@@ -116,11 +116,11 @@ local function vlayer_power_output_handle()
         end
     end
 
-    if not (vlayer.power.energy >= energy_required_total) then
-        energy_average = math.floor(vlayer.power.energy / (#vlayer.power.output))
+    if not (global.vlayer.power.energy >= energy_required_total) then
+        energy_average = math.floor(global.vlayer.power.energy / (#global.vlayer.power.output))
     end
 
-    for k, v in pairs(vlayer.power.output) do
+    for k, v in pairs(global.vlayer.power.output) do
         if (energy_required[k] > 0) then
             if (energy_required[k] >= energy_average) then
                 v.power.power_production = energy_average
@@ -128,7 +128,7 @@ local function vlayer_power_output_handle()
                 v.power.power_production = energy_required[k]
             end
 
-            vlayer.power.energy = vlayer.power.energy - v.power.power_production
+            global.vlayer.power.energy = global.vlayer.power.energy - v.power.power_production
             
         else
             v.power.power_production = 0
@@ -153,34 +153,34 @@ local function vlayer_power_storage_handle()
     ]]
 
     if config.always_day then
-        vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick)
+        global.vlayer.power.energy = global.vlayer.power.energy + math.floor(global.vlayer.storage.item['solar-panel'] * 60000 / config.update_tick)
     else
         local tick = game.tick % 25000
 
         if tick <= 5000 or tick > 17500 then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick)
+            global.vlayer.power.energy = global.vlayer.power.energy + math.floor(global.vlayer.storage.item['solar-panel'] * 60000 / config.update_tick)
     
         elseif tick <= 10000 then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * (1 - ((tick - 5000) / 5000)))
+            global.vlayer.power.energy = global.vlayer.power.energy + math.floor(global.vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * (1 - ((tick - 5000) / 5000)))
     
         elseif tick > 12500 and tick <= 17500 then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * ((tick - 5000) / 5000))
+            global.vlayer.power.energy = global.vlayer.power.energy + math.floor(global.vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * ((tick - 5000) / 5000))
         end
     end
 
     if config.battery_limit then
-        local battery_limit = vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit
+        local battery_limit = global.vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit
 
-        if vlayer.power.energy > battery_limit then
-            vlayer.power.energy = battery_limit
+        if global.vlayer.power.energy > battery_limit then
+            global.vlayer.power.energy = battery_limit
         end
     end
 end
 
 local function vlayer_storage_handle()
-    for k, v in pairs(vlayer.storage.input) do
+    for k, v in pairs(global.vlayer.storage.input) do
         if ((v.storage.entity == nil) or (not v.storage.entity.valid)) then
-            vlayer.storage.input[k] = nil
+            global.vlayer.storage.input[k] = nil
         
         else
             local chest = v.storage.input.storage.entity.get_inventory(defines.inventory.chest)
@@ -194,8 +194,8 @@ local function vlayer_storage_handle()
             local chest_content = chest.get_contents()
 
             for item_name, count in pairs(chest_content) do
-                if (vlayer.storage.item[item_name] ~= nil) then
-                    vlayer.storage.item[item_name] = vlayer.storage.item[item_name] + count
+                if (global.vlayer.storage.item[item_name] ~= nil) then
+                    global.vlayer.storage.item[item_name] = global.vlayer.storage.item[item_name] + count
                     chest.remove({name=item_name, count=count})
                 end
             end
@@ -204,9 +204,9 @@ local function vlayer_storage_handle()
 end
 
 local function vlayer_circuit_handle()
-    for k, v in pairs(vlayer.power.circuit) do
+    for k, v in pairs(global.vlayer.power.circuit) do
         if (v.input == nil) or (v.output == nil) or (not v.input.valid) or (not v.output.valid) then
-            vlayer.power.circuit[k] = nil
+            global.vlayer.power.circuit[k] = nil
 
         else
             local circuit_i = v.input.get_or_create_control_behavior()
@@ -220,14 +220,14 @@ local function vlayer_circuit_handle()
             circuit_i.set_signal(8, {signal={type='item', name='accumulator'}, count=1})
 
             local circuit_o = v.output.get_or_create_control_behavior()
-            circuit_o.set_signal(1, {signal={type='virtual', name='signal-P'}, count=((vlayer.storage.item['accumulator'] * 60) % 1000000000)})
-            circuit_o.set_signal(2, {signal={type='virtual', name='signal-S'}, count=((vlayer.storage.item['accumulator'] * 4365 / 104) % 1000000000)})
-            circuit_o.set_signal(3, {signal={type='virtual', name='signal-B'}, count=((vlayer.storage.item['accumulator'] * 5) % 1000000000)})
-            circuit_o.set_signal(4, {signal={type='virtual', name='signal-C'}, count=((vlayer.power.energy / 1000) % 1000000000)})
+            circuit_o.set_signal(1, {signal={type='virtual', name='signal-P'}, count=((global.vlayer.storage.item['accumulator'] * 60) % 1000000000)})
+            circuit_o.set_signal(2, {signal={type='virtual', name='signal-S'}, count=((global.vlayer.storage.item['accumulator'] * 4365 / 104) % 1000000000)})
+            circuit_o.set_signal(3, {signal={type='virtual', name='signal-B'}, count=((global.vlayer.storage.item['accumulator'] * 5) % 1000000000)})
+            circuit_o.set_signal(4, {signal={type='virtual', name='signal-C'}, count=((global.vlayer.power.energy / 1000) % 1000000000)})
             circuit_o.set_signal(5, {signal={type='virtual', name='signal-T'}, count=(game.tick % 1000000000)})
             circuit_o.set_signal(6, {signal={type='virtual', name='signal-D'}, count=(game.tick % 25000)})
-            circuit_o.set_signal(7, {signal={type='item', name='solar-panel'}, count=(vlayer.storage.item['solar-panel'] % 1000000000)})
-            circuit_o.set_signal(8, {signal={type='item', name='accumulator'}, count=(vlayer.storage.item['accumulator'] % 1000000000)})
+            circuit_o.set_signal(7, {signal={type='item', name='solar-panel'}, count=(global.vlayer.storage.item['solar-panel'] % 1000000000)})
+            circuit_o.set_signal(8, {signal={type='item', name='accumulator'}, count=(global.vlayer.storage.item['accumulator'] % 1000000000)})
         end
     end
 end
@@ -279,7 +279,7 @@ local function vlayer_convert_chest_storage_input(player)
         vlayer_storage.operable = true
         vlayer_storage.last_user = player
     
-        table.insert(vlayer.storage.input, {storage=vlayer_storage})
+        table.insert(global.vlayer.storage.input, {storage=vlayer_storage})
     end
 end
 
@@ -303,7 +303,7 @@ local function vlayer_convert_chest_power_input(player)
             vlayer_circuit.minable = false
             vlayer_circuit.operable = true
             vlayer_circuit.last_user = player
-            table.insert(vlayer.power.input, {power=vlayer_power, circuit=vlayer_circuit})
+            table.insert(global.vlayer.power.input, {power=vlayer_power, circuit=vlayer_circuit})
 
             vlayer_circuit.get_or_create_control_behavior().set_signal(1, {signal={type='virtual', name='signal-C'}, count=1})
 
@@ -334,7 +334,7 @@ local function vlayer_convert_chest_power_output(player)
             vlayer_circuit.operable = true
             vlayer_circuit.last_user = player
             
-            table.insert(vlayer.power.output, {power=vlayer_power, circuit=vlayer_circuit})
+            table.insert(global.vlayer.power.output, {power=vlayer_power, circuit=vlayer_circuit})
 
         else
             player.print('Unable to build energy output')
@@ -366,7 +366,7 @@ local function vlayer_convert_chest_circuit(player)
         circuit_o.operable = true
         circuit_o.last_user = player
 
-        table.insert(vlayer.power.circuit, {input=circuit_i, output=circuit_o})
+        table.insert(global.vlayer.power.circuit, {input=circuit_i, output=circuit_o})
     end
 end
 
@@ -383,7 +383,7 @@ local function vlayer_convert_remove(player)
 
         if (entity) then
             if (entity.name == 'electric-energy-interface') then
-                vlayer.power.energy = vlayer.power.energy + entity.energy
+                global.vlayer.power.energy = global.vlayer.power.energy + entity.energy
                 entity.energy = 0
             end
 
@@ -400,7 +400,7 @@ Gui.element{
     caption = 'Power Input',
     style = 'button'
 }:on_click(function(player)
-    if #vlayer.power.input < config.interface_limit.energy_input then
+    if #global.vlayer.power.input < config.interface_limit.energy_input then
         vlayer_convert_chest_power_input(player)
     end
 end)
@@ -412,7 +412,7 @@ Gui.element{
     caption = 'Power Output',
     style = 'button'
 }:on_click(function(player)
-    if #vlayer.power.output < config.interface_limit.energy_output then
+    if #global.vlayer.power.output < config.interface_limit.energy_output then
         vlayer_convert_chest_power_output(player)
     end
 end)
@@ -424,7 +424,7 @@ Gui.element{
     caption = 'Storage Input',
     style = 'button'
 }:on_click(function(player)
-    if #vlayer.storage.input < config.interface_limit.storage_input then
+    if #global.vlayer.storage.input < config.interface_limit.storage_input then
         vlayer_convert_chest_storage_input(player)
     end
 end)
@@ -436,7 +436,7 @@ Gui.element{
     caption = 'Circuit',
     style = 'button'
 }:on_click(function(player)
-    if #vlayer.power.circuit < config.interface_limit.circuit then
+    if #global.vlayer.power.circuit < config.interface_limit.circuit then
         vlayer_convert_chest_circuit(player)
     end
 end)
@@ -598,7 +598,7 @@ Gui.element(function(event_trigger, parent)
 end)
 :add_to_left_flow()
 
-Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_container, function (player)
+Gui.left_toolbar_button('entity/solar-panel', {'global.vlayer.main-tooltip'}, vlayer_container, function (player)
 	return Roles.player_allowed(player, 'vlayer-1')
 end)
 
@@ -609,13 +609,13 @@ Event.on_nth_tick(config.update_tick, function()
         local frame = Gui.get_left_element(player, vlayer_container)
         local container = frame.container
         
-        container.scroll.table.solar_panel_display_count.caption = format_number(vlayer.storage.item['solar-panel'])
-        container.scroll.table.accumulator_display_count.caption = format_number(vlayer.storage.item['accumulator'])
+        container.scroll.table.solar_panel_display_count.caption = format_number(global.vlayer.storage.item['solar-panel'])
+        container.scroll.table.accumulator_display_count.caption = format_number(global.vlayer.storage.item['accumulator'])
         
-        container.scroll.table.power_production_peak_display_count.caption = format_number(vlayer.storage.item['solar-panel'] * 60)
-        container.scroll.table.power_production_sustained_display_count.caption = format_number(math.floor(vlayer.storage.item['solar-panel'] * 4365 / 104))
+        container.scroll.table.power_production_peak_display_count.caption = format_number(global.vlayer.storage.item['solar-panel'] * 60)
+        container.scroll.table.power_production_sustained_display_count.caption = format_number(math.floor(global.vlayer.storage.item['solar-panel'] * 4365 / 104))
         
-        container.scroll.table.battery_max_display_count.caption = format_number(vlayer.storage.item['accumulator'] * 5)
-        container.scroll.table.battery_current_display_count.caption = format_number(math.floor(vlayer.power.energy / 1000000))
+        container.scroll.table.battery_max_display_count.caption = format_number(global.vlayer.storage.item['accumulator'] * 5)
+        container.scroll.table.battery_current_display_count.caption = format_number(math.floor(global.vlayer.power.energy / 1000000))
     end
 end)
