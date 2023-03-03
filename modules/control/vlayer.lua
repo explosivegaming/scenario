@@ -92,12 +92,12 @@ local function vlayer_power_input_handle()
                 if circuit_signal.count == -1 then
                     local max_allocate_energy = math.floor(v.power.energy / 2)
                 else
-                    local max_allocate_energy = math.min(math.floor(v.power.energy / 2), math.floor(circuit_signal.count * 100000 / 6 * config.update_tick))
+                    local max_allocate_energy = math.min(math.floor(v.power.energy / 2), math.floor(circuit_signal.count * 50000 / 3 * config.update_tick))
                 end
             end
 
             if max_allocate_energy > 0 then
-                if global.vlayer.energy < vlayer_power_capacity_total then
+                if global.vlayer.power.energy < vlayer_power_capacity_total then
                     if (global.vlayer.power.energy + max_allocate_energy) < vlayer_power_capacity_total then
                         global.vlayer.power.energy = global.vlayer.power.energy + max_allocate_energy
                     else
