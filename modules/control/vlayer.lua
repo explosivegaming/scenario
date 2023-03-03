@@ -84,26 +84,26 @@ local function vlayer_power_input_handle()
             local circuit_signal = v.circuit.get_or_create_control_behavior().get_signal(1)
             local max_allocate_energy = 0
             
+            v.power.electric_buffer_size = vlayer_power_capacity
+            v.power.power_usage = math.floor(vlayer_power_capacity / 60)
+
             if ((circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == 'signal-C')) then
                 if circuit_signal.count == -1 then
-                    max_allocate_energy = math.min(v.power.energy - config.energy_input_min, 0)
+                    max_allocate_energy = v.power.energy
                 else
-                    max_allocate_energy = math.min(v.power.energy - config.energy_input_min, math.floor(circuit_signal.count * 1000000 / config.update_tick))
+                    max_allocate_energy = math.min(v.power.energy, math.floor(circuit_signal.count * 1000000 / 60 * config.update_tick))
                 end
             end
 
-            if global.vlayer.energy >= vlayer_power_capacity_total then
-                return
+            if max_allocate_energy > 0 then
+                if global.vlayer.energy < vlayer_power_capacity_total then
+                    if (global.vlayer.power.energy + max_allocate_energy) < vlayer_power_capacity_total then
+                        global.vlayer.power.energy = global.vlayer.power.energy + max_allocate_energy
+                    else
+                        global.vlayer.power.energy = vlayer_power_capacity_total
+                    end
+                end
             end
-
-            v.power.electric_buffer_size = vlayer_power_capacity
-
-
-            global.vlayer.power.energy = global.vlayer.power.energy + v.power.power_usage
-
-        else
-            v.power.power_usage = 0
-            v.power.electric_buffer_size = vlayer_power_capacity
         end
     end
 end
@@ -304,7 +304,7 @@ local function vlayer_convert_chest_power_input(player)
             vlayer_power.last_user = player
             vlayer_power.electric_buffer_size = config.energy_base_limit
             vlayer_power.power_production = 0
-            vlayer_power.power_usage = 0
+            vlayer_power.power_usage = math.floor(config.energy_base_limit / 60)
             vlayer_power.energy = 0
             
             local vlayer_circuit = player.surface.create_entity{name='constant-combinator', position={x=pos.x+1, y=pos.y}, force='neutral'}
@@ -333,7 +333,7 @@ local function vlayer_convert_chest_power_output(player)
             vlayer_power.operable = false
             vlayer_power.last_user = player
             vlayer_power.electric_buffer_size = config.energy_base_limit
-            vlayer_power.power_production = 0
+            vlayer_power.power_production = math.floor(config.energy_base_limit / 60)
             vlayer_power.power_usage = 0
             vlayer_power.energy = 0
             
