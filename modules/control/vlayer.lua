@@ -99,14 +99,12 @@ local function vlayer_power_input_handle()
                 local max_allocate_energy = math.min(math.floor(v.power.energy / 2), math.floor(50000 / 3 * config.update_tick))
             end
 
-            if max_allocate_energy > 0 then
-                if global.vlayer.power.energy < vlayer_power_capacity_total then
-                    if (global.vlayer.power.energy + max_allocate_energy) < vlayer_power_capacity_total then
-                        global.vlayer.power.energy = global.vlayer.power.energy + max_allocate_energy
-                    else
-                        global.vlayer.power.energy = vlayer_power_capacity_total
-                    end
-                end
+            if (global.vlayer.power.energy + max_allocate_energy) < vlayer_power_capacity_total then
+                global.vlayer.power.energy = global.vlayer.power.energy + max_allocate_energy
+                v.power.energy = v.power.energy - max_allocate_energy
+            else
+                global.vlayer.power.energy = vlayer_power_capacity_total
+                v.power.energy = v.power.energy - (vlayer_power_capacity_total - global.vlayer.power.energy)
             end
         end
     end
