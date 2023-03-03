@@ -114,6 +114,7 @@ end
 local function vlayer_power_output_handle()
     local vlayer_power_capacity_total = (global.vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * (#global.vlayer.power.input + #global.vlayer.power.output))
     local vlayer_power_capacity = vlayer_power_capacity_total / (#global.vlayer.power.input + #global.vlayer.power.output)
+
     local energy_required = {}
     local energy_required_total = 0
     local energy_average = 0
@@ -122,28 +123,39 @@ local function vlayer_power_output_handle()
         if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
             global.vlayer.power.output[k] = nil
         else
-            energy_required[k] = config.energy_limit - v.energy
+            energy_required[k] = vlayer_power_capacity - v.power.energy
             energy_required_total = energy_required_total + energy_required[k]
+
             v.power.electric_buffer_size = vlayer_power_capacity
+            v.power.power_production = math.floor(vlayer_power_capacity / 60)
         end
     end
 
-    if not (global.vlayer.power.energy >= energy_required_total) then
+    if (global.vlayer.power.energy < energy_required_total) then
         energy_average = math.floor(global.vlayer.power.energy / (#global.vlayer.power.output))
-    end
 
-    for k, v in pairs(global.vlayer.power.output) do
-        if (energy_required[k] > 0) then
-            if (energy_required[k] >= energy_average) then
-                v.power.power_production = energy_average
+        for k, v in pairs(global.vlayer.power.output) do
+            if (energy_required[k] > 0) then
+                if (energy_required[k] >= energy_average) then
+                    v.power.energy = energy_average
+                else
+                    v.power.energy = energy_required[k]
+                end
+    
+                global.vlayer.power.energy = global.vlayer.power.energy - v.power.power_production
+                
             else
-                v.power.power_production = energy_required[k]
+                v.power.power_production = 0
             end
+        end
 
-            global.vlayer.power.energy = global.vlayer.power.energy - v.power.power_production
-            
-        else
-            v.power.power_production = 0
+    else
+        for k, v in pairs(global.vlayer.power.output) do
+            if (energy_required[k] > 0) then
+                v.power.energy = energy_required[k]
+    
+                global.vlayer.power.energy = global.vlayer.power.energy - energy_required[k]
+            end
         end
     end
 end
