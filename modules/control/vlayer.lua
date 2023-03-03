@@ -183,7 +183,7 @@ local function vlayer_storage_handle()
             vlayer.storage.input[k] = nil
         
         else
-            local chest = v.storage.entity.get_inventory(defines.inventory.chest)
+            local chest = v.storage.input.storage.entity.get_inventory(defines.inventory.chest)
 
             if (chest == nil) then
                 return
