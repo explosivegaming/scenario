@@ -89,9 +89,9 @@ local function vlayer_power_input_handle()
 
             if ((circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == 'signal-C')) then
                 if circuit_signal.count == -1 then
-                    max_allocate_energy = v.power.energy
+                    max_allocate_energy = math.floor(v.power.energy / 2)
                 else
-                    max_allocate_energy = math.min(v.power.energy, math.floor(circuit_signal.count * 1000000 / 60 * config.update_tick))
+                    max_allocate_energy = math.min(math.floor(v.power.energy / 2), math.floor(circuit_signal.count * 1000000 / 60 * config.update_tick))
                 end
             end
 
