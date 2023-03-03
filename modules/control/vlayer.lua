@@ -220,14 +220,14 @@ local function vlayer_circuit_handle()
             circuit_i.set_signal(8, {signal={type='item', name='accumulator'}, count=1})
 
             local circuit_o = v.output.get_or_create_control_behavior()
-            circuit_o.set_signal(1, {signal={type='virtual', name='signal-P'}, count=math.min(math.floor(vlayer.storage.item['solar-panel'] * 60), 2147483647)})
-            circuit_o.set_signal(2, {signal={type='virtual', name='signal-S'}, count=math.min(math.floor(vlayer.storage.item['solar-panel'] * 4365 / 104), 2147483647)})
-            circuit_o.set_signal(3, {signal={type='virtual', name='signal-B'}, count=math.min(math.floor(vlayer.storage.item['accumulator'] * 5), 2147483647)})
-            circuit_o.set_signal(4, {signal={type='virtual', name='signal-C'}, count=math.min(math.floor(vlayer.power.energy), 2147483647)})
-            circuit_o.set_signal(5, {signal={type='virtual', name='signal-T'}, count=math.min(math.floor(game.tick), 2147483647)})
-            circuit_o.set_signal(6, {signal={type='virtual', name='signal-D'}, count=math.min(math.floor(game.tick % 25000), 2147483647)})
-            circuit_o.set_signal(7, {signal={type='item', name='solar-panel'}, count=math.min(math.floor(vlayer.storage.item['solar-panel']), 2147483647)})
-            circuit_o.set_signal(8, {signal={type='item', name='accumulator'}, count=math.min(math.floor(vlayer.storage.item['accumulator']), 2147483647)})
+            circuit_o.set_signal(1, {signal={type='virtual', name='signal-P'}, count=((vlayer.storage.item['accumulator'] * 60) % 1000000000)})
+            circuit_o.set_signal(2, {signal={type='virtual', name='signal-S'}, count=((vlayer.storage.item['accumulator'] * 4365 / 104) % 1000000000)})
+            circuit_o.set_signal(3, {signal={type='virtual', name='signal-B'}, count=((vlayer.storage.item['accumulator'] * 5) % 1000000000)})
+            circuit_o.set_signal(4, {signal={type='virtual', name='signal-C'}, count=((vlayer.power.energy / 1000) % 1000000000)})
+            circuit_o.set_signal(5, {signal={type='virtual', name='signal-T'}, count=(game.tick % 1062500000)})
+            circuit_o.set_signal(6, {signal={type='virtual', name='signal-D'}, count=(game.tick % 25000)})
+            circuit_o.set_signal(7, {signal={type='item', name='solar-panel'}, count=(vlayer.storage.item['solar-panel'] % 1000000000)})
+            circuit_o.set_signal(8, {signal={type='item', name='accumulator'}, count=(vlayer.storage.item['accumulator'] % 1000000000)})
         end
     end
 end
