@@ -228,22 +228,6 @@ local function vlayer_circuit_handle()
             circuit_o.set_signal(6, {signal={type='virtual', name='signal-D'}, count=math.min(math.floor(game.tick % 25000), 2147483647)})
             circuit_o.set_signal(7, {signal={type='item', name='solar-panel'}, count=math.min(math.floor(vlayer.storage.item['solar-panel']), 2147483647)})
             circuit_o.set_signal(8, {signal={type='item', name='accumulator'}, count=math.min(math.floor(vlayer.storage.item['accumulator']), 2147483647)})
-
-            if circuit_i.signals_count >= 9 then
-                for i=9, circuit_i.signals_count do
-                    local circuit_input_signal = circuit_i.get_signal(i)
-    
-                    if ((circuit_input_signal ~= nil) and (circuit_input_signal.signal ~= nil) and (circuit_input_signal.signal.type == 'item')) then
-                        local item_amount = vlayer.storage.item[circuit_input_signal.signal.name]
-
-                        if item_amount == nil then
-                            item_amount = 0
-                        end
-
-                        circuit_o.set_signal(i, {signal={type='item', name=circuit_input_signal.signal.name}, count=math.min(item_amount, 2147483647)})
-                    end
-                end
-            end
         end
     end
 end
