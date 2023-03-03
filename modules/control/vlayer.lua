@@ -74,22 +74,30 @@ global.vlayer.storage.item['solar-panel'] = 0
 global.vlayer.storage.item['accumulator'] = 0
 
 local function vlayer_power_input_handle()
-    local vlayer_power_capacity = (global.vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * (#global.vlayer.power.input + #global.vlayer.power.output)) / (#global.vlayer.power.input + #global.vlayer.power.output)
+    local vlayer_power_capacity_total = (global.vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * (#global.vlayer.power.input + #global.vlayer.power.output))
+    local vlayer_power_capacity = vlayer_power_capacity_total / (#global.vlayer.power.input + #global.vlayer.power.output)
 
     for k, v in pairs(global.vlayer.power.input) do
         if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
             global.vlayer.power.input[k] = nil
-        elseif (v.power.energy > (config.energy_input_min)) then
-            v.power.electric_buffer_size = vlayer_power_capacity
+        else
             local circuit_signal = v.circuit.get_or_create_control_behavior().get_signal(1)
-                
+            local max_allocate_energy = 0
+            
             if ((circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == 'signal-C')) then
                 if circuit_signal.count == -1 then
-                    v.power.power_usage = v.power.energy - (config.energy_input_min)
+                    max_allocate_energy = math.min(v.power.energy - config.energy_input_min, 0)
                 else
-                    v.power.power_usage = math.min(v.power.energy - (config.energy_input_min), math.floor(circuit_signal.count * 1000000 / config.update_tick))
+                    max_allocate_energy = math.min(v.power.energy - config.energy_input_min, math.floor(circuit_signal.count * 1000000 / config.update_tick))
                 end
             end
+
+            if global.vlayer.energy >= vlayer_power_capacity_total then
+                return
+            end
+
+            v.power.electric_buffer_size = vlayer_power_capacity
+
 
             global.vlayer.power.energy = global.vlayer.power.energy + v.power.power_usage
 
@@ -101,7 +109,8 @@ local function vlayer_power_input_handle()
 end
 
 local function vlayer_power_output_handle()
-    local vlayer_power_capacity = (global.vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * (#global.vlayer.power.input + #global.vlayer.power.output)) / (#global.vlayer.power.input + #global.vlayer.power.output)
+    local vlayer_power_capacity_total = (global.vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * (#global.vlayer.power.input + #global.vlayer.power.output))
+    local vlayer_power_capacity = vlayer_power_capacity_total / (#global.vlayer.power.input + #global.vlayer.power.output)
     local energy_required = {}
     local energy_required_total = 0
     local energy_average = 0
