@@ -87,7 +87,10 @@ local function vlayer_power_input_handle()
             v.power.electric_buffer_size = vlayer_power_capacity
             v.power.power_usage = math.floor(vlayer_power_capacity / 60)
 
-            if ((circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == 'signal-C')) then
+            if (circuit_signal == nil) or (circuit_signal.signal == nil) or (circuit_signal.signal.name ~= 'signal-C') then
+                circuit_signal.set_signal(1, {signal={type='virtual', name='signal-C'}, count=1})
+                max_allocate_energy = math.min(math.floor(v.power.energy / 2), math.floor(1000000 / 60 * config.update_tick))
+            else
                 if circuit_signal.count == -1 then
                     max_allocate_energy = math.floor(v.power.energy / 2)
                 else
