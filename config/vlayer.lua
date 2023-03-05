@@ -11,8 +11,8 @@ return {
         tile = 'landfill',
         result = 4,
         requirement = {
-            'solar-panel' = 9,
-            'accumulator' = 4
+            solar_panel = 9,
+            accumulator = 4
         }
     },
     always_day = false,
