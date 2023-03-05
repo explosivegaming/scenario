@@ -67,62 +67,31 @@ global.vlayer.storage.item['solar-panel'] = 0
 global.vlayer.storage.item['accumulator'] = 0
 
 local function vlayer_power_handle()
-    local vlayer_power_capacity_total = (global.vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * (#global.vlayer.power.input + #global.vlayer.power.output))
-    local vlayer_power_capacity = vlayer_power_capacity_total / (#global.vlayer.power.input + #global.vlayer.power.output)
-    local energy_required = {}
-    local energy_required_total = 0
+    local vlayer_power_capacity_total = (global.vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * #global.vlayer.power.entity)
+    local vlayer_power_capacity = vlayer_power_capacity_total / #global.vlayer.power.entity
+    local vlayer_power_capacity_average = vlayer_power_capacity / 2
 
     for k, v in pairs(global.vlayer.power.entity) do
         if (v.power == nil) or (not v.power.valid)then
             global.vlayer.power.entity[k] = nil
         else
-            energy_required[k] = vlayer_power_capacity - v.power.energy
-            energy_required_total = energy_required_total + energy_required[k]
+            if v.power.energy < vlayer_power_capacity_average then
+                if global.vlayer.power.energy >= vlayer_power_capacity_average then
+                    local energy_change = vlayer_power_capacity_average - v.power.energy
+                    v.power.energy = v.power.energy + energy_change
+                    global.vlayer.power.energy = global.vlayer.power.energy - energy_change
+                end
+            else
+                if global.vlayer.power.energy < vlayer_power_capacity_total then
+                    local energy_change = v.power.energy - vlayer_power_capacity_average
+                    v.power.energy = v.power.energy - energy_change
+                    global.vlayer.power.energy = global.vlayer.power.energy + energy_change
+                end
+            end
 
             v.power.electric_buffer_size = vlayer_power_capacity
             v.power.power_production = math.floor(vlayer_power_capacity / 60)
             v.power.power_usage = math.floor(vlayer_power_capacity / 60)
-        end
-    end
-
-    if (global.vlayer.power.energy < energy_required_total) then
-        local energy_average = math.floor(global.vlayer.power.energy / (#global.vlayer.power.output))
-
-        for k, v in pairs(global.vlayer.power.output) do
-            if (energy_required[k] > 0) then
-                if (energy_required[k] >= energy_average) then
-                    v.power.energy = v.power.energy + energy_average
-
-                    global.vlayer.power.energy = global.vlayer.power.energy - energy_average
-                else
-                    v.power.energy = v.power.energy + energy_required[k]
-
-                    global.vlayer.power.energy = global.vlayer.power.energy - energy_required[k]
-                end
-            end
-        end
-
-    else
-        for k, v in pairs(global.vlayer.power.output) do
-            if (energy_required[k] > 0) then
-                v.power.energy = energy_required[k]
-    
-                global.vlayer.power.energy = global.vlayer.power.energy - energy_required[k]
-            end
-        end
-    end
-
-    for k, v in pairs(global.vlayer.power.entity) do
-        local max_allocate_energy = math.min(math.floor(v.power.energy / 2))
-
-        if global.vlayer.power.energy < vlayer_power_capacity_total then
-            if (global.vlayer.power.energy + max_allocate_energy) < vlayer_power_capacity_total then
-                global.vlayer.power.energy = global.vlayer.power.energy + max_allocate_energy
-                v.power.energy = v.power.energy - max_allocate_energy
-            else
-                global.vlayer.power.energy = vlayer_power_capacity_total
-                v.power.energy = v.power.energy - vlayer_power_capacity_total + global.vlayer.power.energy
-            end
         end
     end
 end
