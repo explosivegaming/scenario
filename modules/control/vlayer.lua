@@ -113,12 +113,10 @@ local function vlayer_storage_handle()
         else
             local chest = v.storage.entity.get_inventory(defines.inventory.chest)
 
-            if (chest ~= nil) and (not chest.is_empty()) then
-                for item_name, count in pairs(chest.get_contents()) do
-                    if (global.vlayer.storage.item[item_name] ~= nil) then
-                        global.vlayer.storage.item[item_name] = global.vlayer.storage.item[item_name] + count
-                        chest.remove({name=item_name, count=count})
-                    end
+            for item_name, count in pairs(chest.get_contents()) do
+                if (global.vlayer.storage.item[item_name] ~= nil) then
+                    global.vlayer.storage.item[item_name] = global.vlayer.storage.item[item_name] + count
+                    chest.remove({name=item_name, count=count})
                 end
             end
         end
