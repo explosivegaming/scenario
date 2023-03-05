@@ -129,7 +129,6 @@ local function vlayer_circuit_handle()
     for k, v in pairs(global.vlayer.power.circuit) do
         if (v.input == nil) or (v.output == nil) or (not v.input.valid) or (not v.output.valid) then
             global.vlayer.power.circuit[k] = nil
-
         else
             local circuit_i = v.input.get_or_create_control_behavior()
             circuit_i.set_signal(1, {signal={type='virtual', name='signal-P'}, count=1})
