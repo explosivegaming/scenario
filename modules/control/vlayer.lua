@@ -23,6 +23,9 @@ accu x 5 MJ
 signal-C
 accu level
 
+(v.power.energy / vlayer_power_capacity) - (global.vlayer.power.energy / vlayer_power_capacity_total)
+(v.power.energy * (#global.vlayer.power.input + #global.vlayer.power.output)) - (global.vlayer.power.energy))
+
 Equipment recharge
 local armor = player.get_inventory(defines.inventory.character_armor)[1].grid
 
@@ -57,58 +60,28 @@ global.vlayer.storage = {}
 global.vlayer.storage.item = {}
 global.vlayer.storage.input = {}
 global.vlayer.power = {}
-global.vlayer.power.input = {}
-global.vlayer.power.output = {}
+global.vlayer.power.entity = {}
 global.vlayer.power.energy = 0
 global.vlayer.power.circuit = {}
 global.vlayer.storage.item['solar-panel'] = 0
 global.vlayer.storage.item['accumulator'] = 0
 
-local function vlayer_power_input_handle()
+local function vlayer_power_handle()
     local vlayer_power_capacity_total = (global.vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * (#global.vlayer.power.input + #global.vlayer.power.output))
     local vlayer_power_capacity = vlayer_power_capacity_total / (#global.vlayer.power.input + #global.vlayer.power.output)
-
-    for k, v in pairs(global.vlayer.power.input) do
-        if (v.power == nil) or (not v.power.valid) then
-            global.vlayer.power.input[k] = nil
-        else
-            v.power.electric_buffer_size = vlayer_power_capacity
-            v.power.power_usage = math.floor(vlayer_power_capacity / 60)
-            local power_level = (v.power.energy / v.power.electric_buffer_size) - (global.vlayer.power.energy / vlayer_power_capacity_total)
-
-            if power_level > 0 then
-                local max_allocate_energy = math.floor(v.power.energy * power_level / 2)
-
-                if global.vlayer.power.energy < vlayer_power_capacity_total then
-                    if (global.vlayer.power.energy + max_allocate_energy) < vlayer_power_capacity_total then
-                        global.vlayer.power.energy = global.vlayer.power.energy + max_allocate_energy
-                        v.power.energy = v.power.energy - max_allocate_energy
-                    else
-                        global.vlayer.power.energy = vlayer_power_capacity_total
-                        v.power.energy = v.power.energy - vlayer_power_capacity_total + global.vlayer.power.energy
-                    end
-                end
-            end
-        end
-    end
-end
-
-local function vlayer_power_output_handle()
-    local vlayer_power_capacity_total = (global.vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * (#global.vlayer.power.input + #global.vlayer.power.output))
-    local vlayer_power_capacity = vlayer_power_capacity_total / (#global.vlayer.power.input + #global.vlayer.power.output)
-
     local energy_required = {}
     local energy_required_total = 0
 
-    for k, v in pairs(global.vlayer.power.output) do
-        if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
-            global.vlayer.power.output[k] = nil
+    for k, v in pairs(global.vlayer.power.entity) do
+        if (v.power == nil) or (not v.power.valid)then
+            global.vlayer.power.entity[k] = nil
         else
             energy_required[k] = vlayer_power_capacity - v.power.energy
             energy_required_total = energy_required_total + energy_required[k]
 
             v.power.electric_buffer_size = vlayer_power_capacity
             v.power.power_production = math.floor(vlayer_power_capacity / 60)
+            v.power.power_usage = math.floor(vlayer_power_capacity / 60)
         end
     end
 
@@ -135,6 +108,20 @@ local function vlayer_power_output_handle()
                 v.power.energy = energy_required[k]
     
                 global.vlayer.power.energy = global.vlayer.power.energy - energy_required[k]
+            end
+        end
+    end
+
+    for k, v in pairs(global.vlayer.power.entity) do
+        local max_allocate_energy = math.min(math.floor(v.power.energy / 2))
+
+        if global.vlayer.power.energy < vlayer_power_capacity_total then
+            if (global.vlayer.power.energy + max_allocate_energy) < vlayer_power_capacity_total then
+                global.vlayer.power.energy = global.vlayer.power.energy + max_allocate_energy
+                v.power.energy = v.power.energy - max_allocate_energy
+            else
+                global.vlayer.power.energy = vlayer_power_capacity_total
+                v.power.energy = v.power.energy - vlayer_power_capacity_total + global.vlayer.power.energy
             end
         end
     end
@@ -231,9 +218,8 @@ local function vlayer_circuit_handle()
 end
 
 local function vlayer_handle()
-    vlayer_power_input_handle()
     vlayer_power_storage_handle()
-    vlayer_power_output_handle()
+    vlayer_power_handle()
     vlayer_storage_handle()
     vlayer_circuit_handle()
 end
@@ -281,29 +267,7 @@ local function vlayer_convert_chest_storage_input(player)
     end
 end
 
-local function vlayer_convert_chest_power_input(player)
-    local pos = vlayer_convert_chest(player)
-
-    if (pos) then
-        if (player.surface.can_place_entity{name='electric-energy-interface', position=pos}) and (player.surface.can_place_entity{name='constant-combinator', position={x=pos.x+1, y=pos.y}}) then
-            local vlayer_power = player.surface.create_entity{name='electric-energy-interface', position=pos, force='neutral'}
-            vlayer_power.destructible = false
-            vlayer_power.minable = false
-            vlayer_power.operable = false
-            vlayer_power.last_user = player
-            vlayer_power.electric_buffer_size = config.energy_base_limit
-            vlayer_power.power_production = 0
-            vlayer_power.power_usage = math.floor(config.energy_base_limit / 60)
-            vlayer_power.energy = 0
-            
-            table.insert(global.vlayer.power.input, {power=vlayer_power})
-        else
-            player.print('Unable to build energy input')
-        end
-    end
-end
-
-local function vlayer_convert_chest_power_output(player)
+local function vlayer_convert_chest_power(player)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
@@ -315,12 +279,12 @@ local function vlayer_convert_chest_power_output(player)
             vlayer_power.last_user = player
             vlayer_power.electric_buffer_size = config.energy_base_limit
             vlayer_power.power_production = math.floor(config.energy_base_limit / 60)
-            vlayer_power.power_usage = 0
+            vlayer_power.power_usage = math.floor(config.energy_base_limit / 60)
             vlayer_power.energy = 0
             
-            table.insert(global.vlayer.power.output, {power=vlayer_power})
+            table.insert(global.vlayer.power.entity, {power=vlayer_power})
         else
-            player.print('Unable to build energy output')
+            player.print('Unable to build energy entity')
         end
     end
 end
@@ -376,27 +340,15 @@ local function vlayer_convert_remove(player)
     end
 end
 
-local button_power_input =
+local button_powers =
 Gui.element{
-    name = 'power_input_button',
+    name = 'power_button',
     type = 'button',
-    caption = 'Power Input',
+    caption = 'Power Entity',
     style = 'button'
 }:on_click(function(player)
-    if #global.vlayer.power.input < config.interface_limit.energy_input then
-        vlayer_convert_chest_power_input(player)
-    end
-end)
-
-local button_power_output =
-Gui.element{
-    name = 'power_output_button',
-    type = 'button',
-    caption = 'Power Output',
-    style = 'button'
-}:on_click(function(player)
-    if #global.vlayer.power.output < config.interface_limit.energy_output then
-        vlayer_convert_chest_power_output(player)
+    if #global.vlayer.power.entity < config.interface_limit.energy then
+        vlayer_convert_chest_power(player)
     end
 end)
 
@@ -569,8 +521,7 @@ Gui.element(function(event_trigger, parent)
             caption = '',
             style = 'heading_1_label'
         }
-        button_power_input(scroll_table)
-        button_power_output(scroll_table)
+        button_power(scroll_table)
         button_storage_input(scroll_table)
         button_circuit(scroll_table)
         button_remove(scroll_table)
