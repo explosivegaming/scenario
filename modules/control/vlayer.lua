@@ -69,27 +69,14 @@ local function vlayer_power_input_handle()
     local vlayer_power_capacity = vlayer_power_capacity_total / (#global.vlayer.power.input + #global.vlayer.power.output)
 
     for k, v in pairs(global.vlayer.power.input) do
-        if (v.power == nil) or (not v.power.valid) or (v.circuit == nil) or (not v.circuit.valid) then
+        if (v.power == nil) or (not v.power.valid) then
             global.vlayer.power.input[k] = nil
         else
             v.power.electric_buffer_size = vlayer_power_capacity
             v.power.power_usage = math.floor(vlayer_power_capacity / 60)
 
             if global.vlayer.power.energy < vlayer_power_capacity_total then
-                local circuit_signal = v.circuit.get_or_create_control_behavior().get_signal(1)
-
-                if (circuit_signal ~= nil) and (circuit_signal.signal ~= nil) and (circuit_signal.signal.name == 'signal-C') then
-                    if circuit_signal.count == -1 then
-                        local max_allocate_energy = math.floor(v.power.energy / 2)
-                    elseif circuit_signal.count > 0 then
-                        local max_allocate_energy = math.min(math.floor(v.power.energy / 2), math.floor(circuit_signal.count * 50000 / 3 * config.update_tick))
-                    else
-                        local max_allocate_energy = 0
-                    end
-                else
-                    v.circuit.get_or_create_control_behavior().set_signal(1, {signal={type='virtual', name='signal-C'}, count=1})
-                    local max_allocate_energy = math.min(math.floor(v.power.energy / 2), math.floor(50000 / 3 * config.update_tick))
-                end
+                local max_allocate_energy = math.floor(v.power.energy / 2)
 
                 if (global.vlayer.power.energy + max_allocate_energy) < vlayer_power_capacity_total then
                     global.vlayer.power.energy = global.vlayer.power.energy + max_allocate_energy
