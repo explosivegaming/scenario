@@ -74,10 +74,9 @@ local function vlayer_power_input_handle()
         else
             v.power.electric_buffer_size = vlayer_power_capacity
             v.power.power_usage = math.floor(vlayer_power_capacity / 60)
+            local max_allocate_energy = math.floor(v.power.energy / 2)
 
             if global.vlayer.power.energy < vlayer_power_capacity_total then
-                local max_allocate_energy = math.floor(v.power.energy / 2)
-
                 if (global.vlayer.power.energy + max_allocate_energy) < vlayer_power_capacity_total then
                     global.vlayer.power.energy = global.vlayer.power.energy + max_allocate_energy
                     v.power.energy = v.power.energy - max_allocate_energy
@@ -578,7 +577,7 @@ Gui.element(function(event_trigger, parent)
 end)
 :add_to_left_flow()
 
-Gui.left_toolbar_button('entity/solar-panel', {'global.vlayer.main-tooltip'}, vlayer_container, function (player)
+Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_container, function (player)
 	return Roles.player_allowed(player, 'vlayer-1')
 end)
 
