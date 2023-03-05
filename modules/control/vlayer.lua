@@ -306,15 +306,7 @@ local function vlayer_convert_chest_power_input(player)
             vlayer_power.power_usage = math.floor(config.energy_base_limit / 60)
             vlayer_power.energy = 0
             
-            local vlayer_circuit = player.surface.create_entity{name='constant-combinator', position={x=pos.x+1, y=pos.y}, force='neutral'}
-            vlayer_circuit.destructible = false
-            vlayer_circuit.minable = false
-            vlayer_circuit.operable = true
-            vlayer_circuit.last_user = player
-            table.insert(global.vlayer.power.input, {power=vlayer_power, circuit=vlayer_circuit})
-
-            vlayer_circuit.get_or_create_control_behavior().set_signal(1, {signal={type='virtual', name='signal-C'}, count=1})
-
+            table.insert(global.vlayer.power.input, {power=vlayer_power})
         else
             player.print('Unable to build energy input')
         end
@@ -336,14 +328,7 @@ local function vlayer_convert_chest_power_output(player)
             vlayer_power.power_usage = 0
             vlayer_power.energy = 0
             
-            local vlayer_circuit = player.surface.create_entity{name='constant-combinator', position={x=pos.x+1, y=pos.y}, force='neutral'}
-            vlayer_circuit.destructible = false
-            vlayer_circuit.minable = false
-            vlayer_circuit.operable = true
-            vlayer_circuit.last_user = player
-            
-            table.insert(global.vlayer.power.output, {power=vlayer_power, circuit=vlayer_circuit})
-
+            table.insert(global.vlayer.power.output, {power=vlayer_power})
         else
             player.print('Unable to build energy output')
         end
