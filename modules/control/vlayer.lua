@@ -143,7 +143,7 @@ local function vlayer_storage_handle()
             global.vlayer.storage.input[k] = nil
         
         else
-            local chest = v.storage.input.storage.entity.get_inventory(defines.inventory.chest)
+            local chest = v.storage.entity.get_inventory(defines.inventory.chest)
 
             if (chest ~= nil) and (not chest.is_empty()) then
                 for item_name, count in pairs(chest.get_contents()) do
