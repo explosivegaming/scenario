@@ -15,8 +15,7 @@ return {
     battery_limit = true,
     interface_limit = {
         storage_input = 1,
-        energy_input = 1,
-        energy_output = 1,
+        energy = 1,
         circuit = 1
     }
 }
