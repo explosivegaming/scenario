@@ -309,7 +309,7 @@ local function vlayer_convert_remove(player)
     end
 end
 
-local button_powers =
+local button_power =
 Gui.element{
     name = 'power_button',
     type = 'button',
