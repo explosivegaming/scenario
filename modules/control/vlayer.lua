@@ -8,24 +8,6 @@ local config = require 'config.vlayer' --- @dep config.vlayer
 local format_number = require('util').format_number
 
 --[[
-TODO
-unit of energy is kJ
-
-signal-P Power Production Peak
-solar x 60 kW
-
-signal-S Power Production Sustained
-solar x 4365 / 104 kW
-
-signal-M Battery Max
-accu x 5 MJ
-
-signal-C
-accu level
-
-(v.power.energy / vlayer_power_capacity) - (global.vlayer.power.energy / vlayer_power_capacity_total)
-(v.power.energy * (#global.vlayer.power.input + #global.vlayer.power.output)) - (global.vlayer.power.energy))
-
 Equipment recharge
 local armor = player.get_inventory(defines.inventory.character_armor)[1].grid
 
@@ -35,20 +17,6 @@ for i=1, #armor.equipment do
     armor.equipment[i].type = ...
     armor.equipment[i].energy < armor.equipment[i].max_energy * 0.90
 end
-
-Item Count:
-Solar Panel: 344,000
-Accumulator: 369,000
-
-Power Production:
-Peak: 344 k x 60 kW
-Average sustained: 344 x 60 kW x 291 / 416
-
-Battery Storage:
-369k x 5.0 MJ = ....
-
-Net Power Production:
-- 5,000 MW
 ]]
 
 if not config.enabled then
