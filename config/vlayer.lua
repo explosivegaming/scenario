@@ -4,8 +4,7 @@
 return {
     enabled = true,
     update_tick = 10,
-    -- 1 MJ
-    energy_input_min = 1000000,
+    -- 10 MJ
     energy_base_limit = 10000000,
     land = {
         enabled = false,
