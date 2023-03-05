@@ -80,10 +80,6 @@ local function vlayer_power_handle()
                     local energy_change = vlayer_power_capacity_average - v.power.energy
                     v.power.energy = v.power.energy + energy_change
                     global.vlayer.power.energy = global.vlayer.power.energy - energy_change
-                else
-                    local energy_change = vlayer_power_capacity_average - global.vlayer.power.energy
-                    v.power.energy = v.power.energy + energy_change
-                    global.vlayer.power.energy = global.vlayer.power.energy - energy_change
                 end
             else
                 if global.vlayer.power.energy < vlayer_power_capacity_total then
@@ -322,6 +318,8 @@ Gui.element{
 }:on_click(function(player)
     if #global.vlayer.power.entity < config.interface_limit.energy then
         vlayer_convert_chest_power(player)
+    else
+        player.print('Max limit reached')
     end
 end)
 
@@ -334,6 +332,8 @@ Gui.element{
 }:on_click(function(player)
     if #global.vlayer.storage.input < config.interface_limit.storage_input then
         vlayer_convert_chest_storage_input(player)
+    else
+        player.print('Max limit reached')
     end
 end)
 
@@ -346,6 +346,8 @@ Gui.element{
 }:on_click(function(player)
     if #global.vlayer.power.circuit < config.interface_limit.circuit then
         vlayer_convert_chest_circuit(player)
+    else
+        player.print('Max limit reached')
     end
 end)
 
@@ -522,7 +524,7 @@ Event.on_nth_tick(config.update_tick, function()
         container.scroll.table.power_production_peak_display_count.caption = format_number(global.vlayer.storage.item['solar-panel'] * 60)
         container.scroll.table.power_production_sustained_display_count.caption = format_number(math.floor(global.vlayer.storage.item['solar-panel'] * 4365 / 104))
         
-        container.scroll.table.battery_max_display_count.caption = format_number((global.vlayer.storage.item['accumulator'] * 5) + ((config.energy_base_limit / 1000000) * (#global.vlayer.power.input + #global.vlayer.power.output)))
+        container.scroll.table.battery_max_display_count.caption = format_number((global.vlayer.storage.item['accumulator'] * 5) + ((config.energy_base_limit / 1000000) * #global.vlayer.power.entity))
         container.scroll.table.battery_current_display_count.caption = format_number(math.floor(global.vlayer.power.energy / 1000000))
     end
 end)
