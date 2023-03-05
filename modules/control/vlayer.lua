@@ -74,15 +74,19 @@ local function vlayer_power_input_handle()
         else
             v.power.electric_buffer_size = vlayer_power_capacity
             v.power.power_usage = math.floor(vlayer_power_capacity / 60)
-            local max_allocate_energy = math.floor(v.power.energy / 2)
+            local power_level = (v.power.energy / v.power.electric_buffer_size) - (global.vlayer.power.energy / vlayer_power_capacity_total)
 
-            if global.vlayer.power.energy < vlayer_power_capacity_total then
-                if (global.vlayer.power.energy + max_allocate_energy) < vlayer_power_capacity_total then
-                    global.vlayer.power.energy = global.vlayer.power.energy + max_allocate_energy
-                    v.power.energy = v.power.energy - max_allocate_energy
-                else
-                    global.vlayer.power.energy = vlayer_power_capacity_total
-                    v.power.energy = v.power.energy - vlayer_power_capacity_total + global.vlayer.power.energy
+            if power_level > 0 then
+                local max_allocate_energy = math.floor(v.power.energy * power_level / 2)
+
+                if global.vlayer.power.energy < vlayer_power_capacity_total then
+                    if (global.vlayer.power.energy + max_allocate_energy) < vlayer_power_capacity_total then
+                        global.vlayer.power.energy = global.vlayer.power.energy + max_allocate_energy
+                        v.power.energy = v.power.energy - max_allocate_energy
+                    else
+                        global.vlayer.power.energy = vlayer_power_capacity_total
+                        v.power.energy = v.power.energy - vlayer_power_capacity_total + global.vlayer.power.energy
+                    end
                 end
             end
         end
