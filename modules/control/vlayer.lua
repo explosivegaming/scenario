@@ -31,6 +31,7 @@ global.vlayer.power = {}
 global.vlayer.power.entity = {}
 global.vlayer.power.energy = 0
 global.vlayer.power.circuit = {}
+
 global.vlayer.storage.item['solar-panel'] = 0
 global.vlayer.storage.item['accumulator'] = 0
 
@@ -109,7 +110,6 @@ local function vlayer_storage_handle()
     for k, v in pairs(global.vlayer.storage.input) do
         if ((v.storage.entity == nil) or (not v.storage.entity.valid)) then
             global.vlayer.storage.input[k] = nil
-        
         else
             local chest = v.storage.entity.get_inventory(defines.inventory.chest)
 
