@@ -8,7 +8,7 @@ return {
     energy_base_limit = 10000000,
     land = {
         enabled = false,
-        tile = 'landfill,
+        tile = 'landfill',
         result = 4,
         requirement = {
             'solar-panel' = 9,
