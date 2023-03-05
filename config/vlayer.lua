@@ -9,7 +9,11 @@ return {
     land = {
         enabled = false,
         tile = "landfill",
-        result = 4
+        result = 4,
+        requirement = {
+            'solar-panel' = 9,
+            'accumulator' = 4
+        }
     },
     always_day = false,
     battery_limit = true,
