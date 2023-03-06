@@ -36,6 +36,8 @@ return {
     'modules.commands.bot_queue',
     'modules.commands.speed',
     'modules.commands.pollution',
+    'modules.commands.train',
+    'modules.commands.friendy_fire',
 
     --- Addons
     'modules.addons.chat-popups',
