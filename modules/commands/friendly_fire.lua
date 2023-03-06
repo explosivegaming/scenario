@@ -1,4 +1,3 @@
-/c  = false
 --[[-- Commands Module - Set Friendly Fire
     - Adds a command that set all friendly fire
     @commands Set Friendly Fire
