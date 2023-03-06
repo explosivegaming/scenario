@@ -49,6 +49,10 @@ local function vlayer_power_handle()
                     local energy_change = vlayer_power_capacity_average - v.power.energy
                     v.power.energy = v.power.energy + energy_change
                     global.vlayer.power.energy = global.vlayer.power.energy - energy_change
+                else
+                    local energy_change = math.abs(math.floor((global.vlayer.power.energy - v.power.energy) / 2))
+                    v.power.energy = v.power.energy + energy_change
+                    global.vlayer.power.energy = global.vlayer.power.energy - energy_change
                 end
             else
                 if global.vlayer.power.energy < vlayer_power_capacity_total then
