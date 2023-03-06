@@ -69,12 +69,17 @@ local function spawn_belts(surface, position)
     position = apply_offset(position, config.afk_belts.offset)
     local belt_type = config.afk_belts.belt_type
     local belt_details = {{-0.5, -0.5, 2}, {0.5, -0.5, 4}, {-0.5, 0.5, 0}, {0.5, 0.5, 6}} -- x, y,dir
+    
     for _, belt_set in pairs(config.afk_belts.locations) do
         local set_position = apply_offset(position, belt_set)
+        
         for _, belt in pairs(belt_details) do
             local pos = apply_offset(set_position, belt)
             local belt_entity = surface.create_entity{name=belt_type, position=pos, direction=belt[3]}
-            if config.afk_belts.protected then protect_entity(belt_entity) end
+
+            if config.afk_belts.protected then
+                protect_entity(belt_entity)
+            end
         end
     end
 end
@@ -84,9 +89,11 @@ local function spawn_pattern(surface, position)
     position = apply_offset(position, config.pattern.offset)
     local tiles_to_make = {}
     local pattern_tile = config.pattern.pattern_tile
+
     for _, tile in pairs(config.pattern.locations) do
         table.insert(tiles_to_make, {name=pattern_tile, position=apply_offset(position, tile)})
     end
+
     surface.set_tiles(tiles_to_make)
 end
 
@@ -95,9 +102,11 @@ local function spawn_water(surface, position)
     position = apply_offset(position, config.water.offset)
     local tiles_to_make = {}
     local water_tile = config.water.water_tile
+
     for _, tile in pairs(config.water.locations) do
         table.insert(tiles_to_make, {name=water_tile, position=apply_offset(position, tile)})
     end
+    
     surface.set_tiles(tiles_to_make)
 end
 
@@ -105,9 +114,13 @@ end
 local function spawn_entities(surface, position)
     position = apply_offset(position, config.entities.offset)
     for _, entity in pairs(config.entities.locations) do
-        local pos = apply_offset(position, { x=entity[2], y=entity[3] })
+        local pos = apply_offset(position, {x=entity[2], y=entity[3]})
         entity = surface.create_entity{name=entity[1], position=pos}
-        if config.entities.protected then protect_entity(entity) end
+
+        if config.entities.protected then
+            protect_entity(entity)
+        end
+
         entity.operable = config.entities.operable
     end
 end
