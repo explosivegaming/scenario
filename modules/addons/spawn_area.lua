@@ -22,11 +22,13 @@ end
 
 -- Get or create the force used for entities in spawn
 local function get_spawn_force()
-    local force = game.forces['Spawn']
+    local force = game.forces['spawn']
     if force and force.valid then return force end
-    force = game.create_force('Spawn')
+    force = game.create_force('spawn')
     force.set_cease_fire('player', true)
-    game.forces['player'].set_cease_fire('Spawn', true)
+    force.set_friend('player', true)
+    game.forces['player'].set_cease_fire('spawn', true)
+    game.forces['player'].set_friend('spawn', true)
     return force
 end
 
@@ -69,7 +71,7 @@ local function spawn_belts(surface, position)
     position = apply_offset(position, config.afk_belts.offset)
     local belt_type = config.afk_belts.belt_type
     local belt_details = {{-0.5, -0.5, 2}, {0.5, -0.5, 4}, {-0.5, 0.5, 0}, {0.5, 0.5, 6}} -- x, y,dir
-    
+
     for _, belt_set in pairs(config.afk_belts.locations) do
         local set_position = apply_offset(position, belt_set)
         
