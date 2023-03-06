@@ -12,7 +12,7 @@ end)
 
 -- Apply an offset to a LuaPosition
 local function apply_offset(position, offset)
-    return { x = position.x + (offset.x or offset[1]), y = position.y + (offset.y or offset[2]) }
+    return {x=position.x + (offset.x or offset[1]), y=position.y + (offset.y or offset[2])}
 end
 
 -- Apply the offset to the turrets default position
@@ -40,7 +40,7 @@ local function protect_entity(entity, set_force)
         entity.minable = false
         entity.rotatable = false
         entity.operable = false
-        
+
         if set_force then
             entity.force = get_spawn_force()
         end
@@ -56,7 +56,8 @@ local function spawn_turrets()
 
         -- Makes a new turret if it is not found
         if not turret or not turret.valid then
-            turret = surface.create_entity{name='gun-turret', position=pos, force='spawn'}
+            -- force='spawn'
+            turret = surface.create_entity{name='gun-turret', position=pos}
             protect_entity(turret, true)
         end
 
@@ -79,7 +80,8 @@ local function spawn_belts(surface, position)
         
         for _, belt in pairs(belt_details) do
             local pos = apply_offset(set_position, belt)
-            local belt_entity = surface.create_entity{name=belt_type, position=pos, force='spawn', direction=belt[3]}
+            force='spawn'
+            local belt_entity = surface.create_entity{name=belt_type, position=pos, direction=belt[3]}
 
             if config.afk_belts.protected then
                 protect_entity(belt_entity)
@@ -119,7 +121,8 @@ local function spawn_entities(surface, position)
     position = apply_offset(position, config.entities.offset)
     for _, entity in pairs(config.entities.locations) do
         local pos = apply_offset(position, {x=entity[2], y=entity[3]})
-        entity = surface.create_entity{name=entity[1], position=pos, force='spawn'}
+        -- force='spawn'
+        entity = surface.create_entity{name=entity[1], position=pos}
 
         if config.entities.protected then
             protect_entity(entity)
