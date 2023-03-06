@@ -40,8 +40,10 @@ local function protect_entity(entity, set_force)
         entity.minable = false
         entity.rotatable = false
         entity.operable = false
-        -- if not set_force then entity.health = 0 end
-        -- if set_force then entity.force = get_spawn_force() end
+        
+        if set_force then
+            entity.force = get_spawn_force()
+        end
     end
 end
 
@@ -54,7 +56,7 @@ local function spawn_turrets()
 
         -- Makes a new turret if it is not found
         if not turret or not turret.valid then
-            turret = surface.create_entity{name='gun-turret', position=pos, force='Spawn'}
+            turret = surface.create_entity{name='gun-turret', position=pos, force='spawn'}
             protect_entity(turret, true)
         end
 
@@ -77,7 +79,7 @@ local function spawn_belts(surface, position)
         
         for _, belt in pairs(belt_details) do
             local pos = apply_offset(set_position, belt)
-            local belt_entity = surface.create_entity{name=belt_type, position=pos, direction=belt[3]}
+            local belt_entity = surface.create_entity{name=belt_type, position=pos, force='spawn', direction=belt[3]}
 
             if config.afk_belts.protected then
                 protect_entity(belt_entity)
@@ -117,7 +119,7 @@ local function spawn_entities(surface, position)
     position = apply_offset(position, config.entities.offset)
     for _, entity in pairs(config.entities.locations) do
         local pos = apply_offset(position, {x=entity[2], y=entity[3]})
-        entity = surface.create_entity{name=entity[1], position=pos}
+        entity = surface.create_entity{name=entity[1], position=pos, force='spawn'}
 
         if config.entities.protected then
             protect_entity(entity)
