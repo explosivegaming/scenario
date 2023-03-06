@@ -216,7 +216,6 @@ Roles.new_role('Veteran','Vet')
 :set_custom_color{r=0,g=153,b=225}
 :set_parent('Member')
 :allow{
-    'command/chat-bot',
 }
 :set_auto_assign_condition(function(player)
     if player.online_time >= hours6 then
@@ -244,7 +243,8 @@ Roles.new_role('Member','Mem')
     'bonus-1',
     'vlayer-2',
     'personal-logistic',
-    'command/auto-research',
+    'command/manual-train',
+    'command/chat-bot',
 }
 
 local hours2, hours15 = 2*216000, 15*60
