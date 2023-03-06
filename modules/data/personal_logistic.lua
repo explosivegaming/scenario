@@ -7,8 +7,10 @@ add filter based of inventory
 
 Command 3:
 add filter of those not in inventory: all 0
-
 game.item_prototypes
+
+Command 4:
+Spidertron request
 ]]
 
 local function pl(player, amount)
