@@ -8,11 +8,6 @@ local config = require 'config.vlayer' --- @dep config.vlayer
 local format_number = require('util').format_number
 
 --[[
-if mode 1 and limit 1:
-    pure accu mode
-else:
-    now
-
 Equipment recharge
 local armor = player.get_inventory(defines.inventory.character_armor)[1].grid
 
