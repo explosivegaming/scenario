@@ -110,10 +110,10 @@ end
 
 local function vlayer_storage_handle()
     for k, v in pairs(global.vlayer.storage.input) do
-        if ((v.storage.entity == nil) or (not v.storage.entity.valid)) then
+        if ((v.storage == nil) or (not v.storage.valid)) then
             global.vlayer.storage.input[k] = nil
         else
-            local chest = v.storage.entity.get_inventory(defines.inventory.chest)
+            local chest = v.storage.get_inventory(defines.inventory.chest)
 
             for item_name, count in pairs(chest.get_contents()) do
                 if (global.vlayer.storage.item[item_name] ~= nil) then
