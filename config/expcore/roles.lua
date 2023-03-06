@@ -52,7 +52,8 @@ Roles.new_role('Administrator','Admin')
     'command/debug',
     'command/toggle-cheat-mode',
     'command/toggle-all-research',
-    'command/connect-player'
+    'command/connect-player',
+    'command/friendly-fire'
 }
 
 Roles.new_role('Senior Moderator','SMod')
@@ -210,7 +211,7 @@ Roles.new_role('Senior Member','SMem')
 :allow{
 }
 
-local hours6, hours250 = 6*216000, 250*60
+local hours8, hours250 = 8*216000, 250*60
 Roles.new_role('Veteran','Vet')
 :set_permission_group('Trusted')
 :set_custom_color{r=0,g=153,b=225}
@@ -218,7 +219,7 @@ Roles.new_role('Veteran','Vet')
 :allow{
 }
 :set_auto_assign_condition(function(player)
-    if player.online_time >= hours6 then
+    if player.online_time >= hours8 then
         return true
     else
         local stats = Statistics:get(player, {})
