@@ -30,15 +30,16 @@ local function get_spawn_force()
     return force
 end
 
--- Protects an entity and sets its force to the spawn force
+-- Protects an entity
+-- and sets its force to the spawn force
 local function protect_entity(entity, set_force)
     if entity and entity.valid then
         entity.destructible = false
         entity.minable = false
         entity.rotatable = false
         entity.operable = false
-        if not set_force then entity.health = 0 end
-        if set_force then entity.force = get_spawn_force() end
+        -- if not set_force then entity.health = 0 end
+        -- if set_force then entity.force = get_spawn_force() end
     end
 end
 
@@ -57,8 +58,8 @@ local function spawn_turrets()
 
         -- Adds ammo to the turret
         local inv = turret.get_inventory(defines.inventory.turret_ammo)
-        if inv.can_insert{name=config.turrets.ammo_type, count=10} then
-            inv.insert{name=config.turrets.ammo_type, count=10}
+        if inv.can_insert{name=config.turrets.ammo_type, count=20} then
+            inv.insert{name=config.turrets.ammo_type, count=20}
         end
     end
 end
@@ -72,7 +73,7 @@ local function spawn_belts(surface, position)
         local set_position = apply_offset(position, belt_set)
         for _, belt in pairs(belt_details) do
             local pos = apply_offset(set_position, belt)
-            local belt_entity = surface.create_entity{name=belt_type, position=pos, force='neutral', direction=belt[3]}
+            local belt_entity = surface.create_entity{name=belt_type, position=pos, direction=belt[3]}
             if config.afk_belts.protected then protect_entity(belt_entity) end
         end
     end
@@ -105,7 +106,7 @@ local function spawn_entities(surface, position)
     position = apply_offset(position, config.entities.offset)
     for _, entity in pairs(config.entities.locations) do
         local pos = apply_offset(position, { x=entity[2], y=entity[3] })
-        entity = surface.create_entity{name=entity[1], position=pos, force='neutral'}
+        entity = surface.create_entity{name=entity[1], position=pos}
         if config.entities.protected then protect_entity(entity) end
         entity.operable = config.entities.operable
     end
