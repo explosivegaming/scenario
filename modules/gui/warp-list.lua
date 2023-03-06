@@ -828,11 +828,11 @@ Event.add(defines.events.on_player_created, function(event)
     local spawn_id = Warps.get_spawn_warp_id(force.name)
     if not spawn_id then
         local spawn_position = force.get_spawn_position(player.surface)
-        spawn_id = Warps.add_warp(force.name, player.surface, spawn_position, nil, 'Spawn')
+        spawn_id = Warps.add_warp(force.name, player.surface, spawn_position, nil, 'spawn')
         Warps.set_spawn_warp(spawn_id, force)
         Warps.make_warp_tag(spawn_id)
 
-        local entities = player.surface.find_entities_filtered{ type = 'electric-pole', position = spawn_position, radius = 20, limit = 1 }
+        local entities = player.surface.find_entities_filtered{type='electric-pole', position=spawn_position, radius=20, limit=1}
         if entities and entities[1] then
             local warp = Warps.get_warp(spawn_id)
             warp.electric_pole = entities[1]
