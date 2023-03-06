@@ -38,31 +38,24 @@ global.vlayer.storage.item['accumulator'] = 0
 local function vlayer_power_handle()
     local vlayer_power_capacity_total = (global.vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * #global.vlayer.power.entity)
     local vlayer_power_capacity = vlayer_power_capacity_total / #global.vlayer.power.entity
-    local vlayer_power_capacity_average = vlayer_power_capacity / 2
 
     for k, v in pairs(global.vlayer.power.entity) do
         if (v.power == nil) or (not v.power.valid)then
             global.vlayer.power.entity[k] = nil
         else
-            if v.power.energy < vlayer_power_capacity_average then
-                if global.vlayer.power.energy >= vlayer_power_capacity_average then
-                    local energy_change = vlayer_power_capacity_average - v.power.energy
-                    v.power.energy = v.power.energy + energy_change
-                    global.vlayer.power.energy = global.vlayer.power.energy - energy_change
-                else
-                    local energy_change = math.floor((v.power.energy + global.vlayer.power.energy) / 2)
-                    v.power.energy = energy_change
-                    global.vlayer.power.energy = energy_change
-                end
-            elseif global.vlayer.power.energy < vlayer_power_capacity_total then
-                local energy_change = v.power.energy - vlayer_power_capacity_average
-                v.power.energy = v.power.energy - energy_change
-                global.vlayer.power.energy = global.vlayer.power.energy + energy_change
-            end
-
             v.power.electric_buffer_size = vlayer_power_capacity
             v.power.power_production = math.floor(vlayer_power_capacity / 60)
             v.power.power_usage = math.floor(vlayer_power_capacity / 60)
+            local energy_average = math.floor((v.power.energy + global.vlayer.power.energy) / 2)
+
+            if global.vlayer.power.energy < vlayer_power_capacity then
+                v.power.energy = energy_average
+                global.vlayer.power.energy = energy_average
+            elseif v.power.energy < vlayer_power_capacity then
+                local energy_change = vlayer_power_capacity - v.power.energy
+                v.power.energy = v.power.energy + energy_change
+                global.vlayer.power.energy = global.vlayer.power.energy - energy_change
+            end
         end
     end
 end
@@ -135,18 +128,18 @@ local function vlayer_circuit_handle()
             circuit_i.set_signal(2, {signal={type='virtual', name='signal-S'}, count=1})
             circuit_i.set_signal(3, {signal={type='virtual', name='signal-B'}, count=1})
             circuit_i.set_signal(4, {signal={type='virtual', name='signal-C'}, count=1})
-            circuit_i.set_signal(5, {signal={type='virtual', name='signal-T'}, count=1})
-            circuit_i.set_signal(6, {signal={type='virtual', name='signal-D'}, count=1})
+            circuit_i.set_signal(5, {signal={type='virtual', name='signal-D'}, count=1})
+            circuit_i.set_signal(6, {signal={type='virtual', name='signal-T'}, count=1})
             circuit_i.set_signal(7, {signal={type='item', name='solar-panel'}, count=1})
             circuit_i.set_signal(8, {signal={type='item', name='accumulator'}, count=1})
 
             local circuit_o = v.output.get_or_create_control_behavior()
-            circuit_o.set_signal(1, {signal={type='virtual', name='signal-P'}, count=((global.vlayer.storage.item['accumulator'] * 60) % 1000000000)})
-            circuit_o.set_signal(2, {signal={type='virtual', name='signal-S'}, count=((global.vlayer.storage.item['accumulator'] * 4365 / 104) % 1000000000)})
+            circuit_o.set_signal(1, {signal={type='virtual', name='signal-P'}, count=(math.floor(global.vlayer.storage.item['solar-panel'] / 0.06) % 1000000000)})
+            circuit_o.set_signal(2, {signal={type='virtual', name='signal-S'}, count=(math.floor(global.vlayer.storage.item['solar-panel'] * 873 / 20800) % 1000000000)})
             circuit_o.set_signal(3, {signal={type='virtual', name='signal-B'}, count=((global.vlayer.storage.item['accumulator'] * 5) % 1000000000)})
-            circuit_o.set_signal(4, {signal={type='virtual', name='signal-C'}, count=((global.vlayer.power.energy / 100000) % 1000000000)})
-            circuit_o.set_signal(5, {signal={type='virtual', name='signal-T'}, count=(game.tick % 1000000000)})
-            circuit_o.set_signal(6, {signal={type='virtual', name='signal-D'}, count=(game.tick % 25000)})
+            circuit_o.set_signal(4, {signal={type='virtual', name='signal-C'}, count=((global.vlayer.power.energy / 1000000) % 1000000000)})
+            circuit_o.set_signal(5, {signal={type='virtual', name='signal-D'}, count=(math.floor(game.tick / 25000))})
+            circuit_o.set_signal(6, {signal={type='virtual', name='signal-T'}, count=(game.tick % 25000)})
             circuit_o.set_signal(7, {signal={type='item', name='solar-panel'}, count=(global.vlayer.storage.item['solar-panel'] % 1000000000)})
             circuit_o.set_signal(8, {signal={type='item', name='accumulator'}, count=(global.vlayer.storage.item['accumulator'] % 1000000000)})
         end
@@ -238,8 +231,8 @@ local function vlayer_convert_chest_circuit(player)
         circuit_i.get_or_create_control_behavior().set_signal(2, {signal={type='virtual', name='signal-S'}, count=1})
         circuit_i.get_or_create_control_behavior().set_signal(3, {signal={type='virtual', name='signal-B'}, count=1})
         circuit_i.get_or_create_control_behavior().set_signal(4, {signal={type='virtual', name='signal-C'}, count=1})
-        circuit_i.get_or_create_control_behavior().set_signal(5, {signal={type='virtual', name='signal-T'}, count=1})
-        circuit_i.get_or_create_control_behavior().set_signal(6, {signal={type='virtual', name='signal-D'}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(5, {signal={type='virtual', name='signal-D'}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(6, {signal={type='virtual', name='signal-T'}, count=1})
         circuit_i.get_or_create_control_behavior().set_signal(7, {signal={type='item', name='solar-panel'}, count=1})
         circuit_i.get_or_create_control_behavior().set_signal(8, {signal={type='item', name='accumulator'}, count=1})
         
@@ -383,7 +376,7 @@ Gui.element(function(event_trigger, parent)
     scroll_table.add{
         name = 'vlayer_4_display_title',
         type = 'label',
-        caption = 'KW',
+        caption = 'MW',
         style = 'heading_1_label'
     }
     
@@ -488,8 +481,8 @@ Event.on_nth_tick(config.update_tick, function()
         container.scroll.table.solar_panel_display_count.caption = format_number(global.vlayer.storage.item['solar-panel'])
         container.scroll.table.accumulator_display_count.caption = format_number(global.vlayer.storage.item['accumulator'])
         
-        container.scroll.table.power_production_peak_display_count.caption = format_number(global.vlayer.storage.item['solar-panel'] * 60)
-        container.scroll.table.power_production_sustained_display_count.caption = format_number(math.floor(global.vlayer.storage.item['solar-panel'] * 4365 / 104))
+        container.scroll.table.power_production_peak_display_count.caption = format_number(math.floor(global.vlayer.storage.item['solar-panel'] / 0.06))
+        container.scroll.table.power_production_sustained_display_count.caption = format_number(math.floor(global.vlayer.storage.item['solar-panel'] * 873 / 20800))
         
         container.scroll.table.battery_max_display_count.caption = format_number((global.vlayer.storage.item['accumulator'] * 5) + ((config.energy_base_limit / 1000000) * #global.vlayer.power.entity))
         container.scroll.table.battery_current_display_count.caption = format_number(math.floor(global.vlayer.power.energy / 1000000))
