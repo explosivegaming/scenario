@@ -244,6 +244,7 @@ Roles.new_role('Member','Mem')
     'bonus-1',
     'vlayer-2',
     'personal-logistic',
+    'command/auto-research',
     'command/manual-train',
     'command/chat-bot',
 }
