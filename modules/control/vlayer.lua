@@ -53,8 +53,14 @@ local function vlayer_power_handle()
                 global.vlayer.power.energy = energy_average
             elseif v.power.energy < vlayer_power_capacity then
                 local energy_change = vlayer_power_capacity - v.power.energy
-                v.power.energy = v.power.energy + energy_change
-                global.vlayer.power.energy = global.vlayer.power.energy - energy_change
+
+                if energy_change < global.vlayer.power.energy then
+                    v.power.energy = v.power.energy + energy_change
+                    global.vlayer.power.energy = global.vlayer.power.energy - energy_change
+                else
+                    v.power.energy = v.power.energy + global.vlayer.power.energy
+                    global.vlayer.power.energy = 0
+                end
             end
         end
     end
@@ -134,7 +140,7 @@ local function vlayer_circuit_handle()
             circuit_i.set_signal(8, {signal={type='item', name='accumulator'}, count=1})
 
             local circuit_o = v.output.get_or_create_control_behavior()
-            circuit_o.set_signal(1, {signal={type='virtual', name='signal-P'}, count=(math.floor(global.vlayer.storage.item['solar-panel'] / 0.06) % 1000000000)})
+            circuit_o.set_signal(1, {signal={type='virtual', name='signal-P'}, count=(math.floor(global.vlayer.storage.item['solar-panel'] * 0.06) % 1000000000)})
             circuit_o.set_signal(2, {signal={type='virtual', name='signal-S'}, count=(math.floor(global.vlayer.storage.item['solar-panel'] * 873 / 20800) % 1000000000)})
             circuit_o.set_signal(3, {signal={type='virtual', name='signal-B'}, count=((global.vlayer.storage.item['accumulator'] * 5) % 1000000000)})
             circuit_o.set_signal(4, {signal={type='virtual', name='signal-C'}, count=((global.vlayer.power.energy / 1000000) % 1000000000)})
@@ -481,7 +487,7 @@ Event.on_nth_tick(config.update_tick, function()
         container.scroll.table.solar_panel_display_count.caption = format_number(global.vlayer.storage.item['solar-panel'])
         container.scroll.table.accumulator_display_count.caption = format_number(global.vlayer.storage.item['accumulator'])
         
-        container.scroll.table.power_production_peak_display_count.caption = format_number(math.floor(global.vlayer.storage.item['solar-panel'] / 0.06))
+        container.scroll.table.power_production_peak_display_count.caption = format_number(math.floor(global.vlayer.storage.item['solar-panel'] * 0.06))
         container.scroll.table.power_production_sustained_display_count.caption = format_number(math.floor(global.vlayer.storage.item['solar-panel'] * 873 / 20800))
         
         container.scroll.table.battery_max_display_count.caption = format_number((global.vlayer.storage.item['accumulator'] * 5) + ((config.energy_base_limit / 1000000) * #global.vlayer.power.entity))
