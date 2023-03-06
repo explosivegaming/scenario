@@ -8,6 +8,11 @@ local config = require 'config.vlayer' --- @dep config.vlayer
 local format_number = require('util').format_number
 
 --[[
+if mode 1 and limit 1:
+    pure accu mode
+else:
+    now
+
 Equipment recharge
 local armor = player.get_inventory(defines.inventory.character_armor)[1].grid
 
@@ -132,7 +137,7 @@ local function vlayer_circuit_handle()
             local circuit_i = v.input.get_or_create_control_behavior()
             circuit_i.set_signal(1, {signal={type='virtual', name='signal-P'}, count=1})
             circuit_i.set_signal(2, {signal={type='virtual', name='signal-S'}, count=1})
-            circuit_i.set_signal(3, {signal={type='virtual', name='signal-B'}, count=1})
+            circuit_i.set_signal(3, {signal={type='virtual', name='signal-M'}, count=1})
             circuit_i.set_signal(4, {signal={type='virtual', name='signal-C'}, count=1})
             circuit_i.set_signal(5, {signal={type='virtual', name='signal-D'}, count=1})
             circuit_i.set_signal(6, {signal={type='virtual', name='signal-T'}, count=1})
@@ -142,7 +147,7 @@ local function vlayer_circuit_handle()
             local circuit_o = v.output.get_or_create_control_behavior()
             circuit_o.set_signal(1, {signal={type='virtual', name='signal-P'}, count=(math.floor(global.vlayer.storage.item['solar-panel'] * 0.06) % 1000000000)})
             circuit_o.set_signal(2, {signal={type='virtual', name='signal-S'}, count=(math.floor(global.vlayer.storage.item['solar-panel'] * 873 / 20800) % 1000000000)})
-            circuit_o.set_signal(3, {signal={type='virtual', name='signal-B'}, count=((global.vlayer.storage.item['accumulator'] * 5) % 1000000000)})
+            circuit_o.set_signal(3, {signal={type='virtual', name='signal-M'}, count=((global.vlayer.storage.item['accumulator'] * 5) % 1000000000)})
             circuit_o.set_signal(4, {signal={type='virtual', name='signal-C'}, count=((global.vlayer.power.energy / 1000000) % 1000000000)})
             circuit_o.set_signal(5, {signal={type='virtual', name='signal-D'}, count=(math.floor(game.tick / 25000))})
             circuit_o.set_signal(6, {signal={type='virtual', name='signal-T'}, count=(game.tick % 25000)})
@@ -235,7 +240,7 @@ local function vlayer_convert_chest_circuit(player)
         circuit_i.last_user = player
         circuit_i.get_or_create_control_behavior().set_signal(1, {signal={type='virtual', name='signal-P'}, count=1})
         circuit_i.get_or_create_control_behavior().set_signal(2, {signal={type='virtual', name='signal-S'}, count=1})
-        circuit_i.get_or_create_control_behavior().set_signal(3, {signal={type='virtual', name='signal-B'}, count=1})
+        circuit_i.get_or_create_control_behavior().set_signal(3, {signal={type='virtual', name='signal-M'}, count=1})
         circuit_i.get_or_create_control_behavior().set_signal(4, {signal={type='virtual', name='signal-C'}, count=1})
         circuit_i.get_or_create_control_behavior().set_signal(5, {signal={type='virtual', name='signal-D'}, count=1})
         circuit_i.get_or_create_control_behavior().set_signal(6, {signal={type='virtual', name='signal-T'}, count=1})
