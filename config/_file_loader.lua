@@ -58,7 +58,6 @@ return {
     'modules.addons.protection-jail',
 		'modules.addons.deconlog',
 		'modules.addons.nukeprotect',
-		'modules.addons.loaders',
 		'modules.addons.inserter',
 
     -- Control
