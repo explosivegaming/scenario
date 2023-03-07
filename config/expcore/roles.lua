@@ -132,7 +132,8 @@ Roles.new_role('Board Member','Board')
     'command/repair',
     'command/spectate',
     'command/follow',
-    'command/player-data-json'
+    -- 'command/player-data-json',
+    'command/personal-battery-recharge'
 }
 
 Roles.new_role('Senior Backer','Backer')
@@ -158,6 +159,9 @@ Roles.new_role('Sponsor','Spon')
     'command/home-set',
     'command/home-get',
     'command/return',
+    'command/jail',
+    'command/unjail',
+    'command/last-location',
     'fast-tree-decon'
 }
 
@@ -170,11 +174,8 @@ Roles.new_role('Supporter','Sup')
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
     'command/tag-color',
-    'command/jail',
-    'command/unjail',
     'command/join-message',
     'command/join-message-clear',
-    'command/last-location'
 }
 
 Roles.new_role('Partner','Part')
