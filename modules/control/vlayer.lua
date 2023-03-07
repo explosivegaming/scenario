@@ -5,6 +5,8 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.vlayer' --- @dep config.vlayer
+local Commands = require 'expcore.commands' --- @dep expcore.commands
+require 'config.expcore.command_general_parse'
 local format_number = require('util').format_number
 
 --[[
@@ -469,6 +471,14 @@ end)
 Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_container, function (player)
 	return Roles.player_allowed(player, 'vlayer-1')
 end)
+
+Commands.new_command('personal-battery-recharge', 'Recharge Player Battery with vlayer')
+:add_param('amount', 'number-range', 0.1, 1)
+:register(function(_, amount)
+
+    return Commands.success
+end)
+
 
 Event.on_nth_tick(config.update_tick, function()
     vlayer_handle()
