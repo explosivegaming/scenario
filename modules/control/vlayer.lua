@@ -11,14 +11,7 @@ local format_number = require('util').format_number
 
 --[[
 Equipment recharge
-local armor = player.get_inventory(defines.inventory.character_armor)[1].grid
 
-armor.battery_capacity
-
-for i=1, #armor.equipment do
-    armor.equipment[i].type = ...
-    armor.equipment[i].energy < armor.equipment[i].max_energy * 0.90
-end
 ]]
 
 if not config.enabled then
@@ -473,8 +466,25 @@ Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_co
 end)
 
 Commands.new_command('personal-battery-recharge', 'Recharge Player Battery with vlayer')
-:add_param('amount', 'number-range', 0.1, 1)
-:register(function(_, amount)
+:add_param('amount', 'number-range', 0.2, 1)
+:register(function(player, amount)
+    local armor = player.get_inventory(defines.inventory.character_armor)[1].grid
+
+    if armor.battery_capacity < amount then
+        for i=1, #armor.equipment do
+            if armor.equipment[i].energy < (armor.equipment[i].max_energy * amount) then
+                local energy_required = (armor.equipment[i].max_energy * amount) - armor.equipment[i].energy
+
+                if global.vlayer.power.energy >= energy_required then
+                    armor.equipment[i].energy = armor.equipment[i].max_energy * amount
+                    global.vlayer.power.energy = global.vlayer.power.energy - energy_required
+                else
+                    armor.equipment[i].energy = armor.equipment[i].energy + global.vlayer.power.energy
+                    global.vlayer.power.energy = 0
+                end
+            end
+        end
+    end
 
     return Commands.success
 end)
