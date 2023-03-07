@@ -195,7 +195,7 @@ local function vlayer_convert_chest_power(player)
             vlayer_power.minable = false
             vlayer_power.operable = false
             vlayer_power.last_user = player
-            vlayer_power.electric_buffer_size = math.floor(global.vlaconfig.energy_base_limit / 2)
+            vlayer_power.electric_buffer_size = math.floor(config.energy_base_limit / 2)
             vlayer_power.power_production = math.floor(config.energy_base_limit / 60)
             vlayer_power.power_usage = math.floor(config.energy_base_limit / 60)
             vlayer_power.energy = 0
