@@ -75,7 +75,6 @@ Roles.new_role('Moderator','Mod')
 :set_flag('report-immune')
 :set_flag('instant-respawn')
 :set_parent('Trainee')
-:set_allow_all()
 :allow{
 }
 
