@@ -78,6 +78,9 @@ Roles.new_role('Moderator','Mod')
 :set_flag('instant-respawn')
 :set_parent('Trainee')
 :allow{
+    'command/bot-queue-get',
+    'command/bot-queue-set',
+    'command/kill-all-biter'
 }
 
 Roles.new_role('Trainee','TrMod')
@@ -108,8 +111,6 @@ Roles.new_role('Trainee','TrMod')
     'command/search-amount',
     'command/search-recent',
     'command/search-online',
-    'command/bot-queue-get',
-    'command/bot-queue-set',
     'command/pol-off',
     'command/pol-clr',
     'command/kill/always',
@@ -117,7 +118,6 @@ Roles.new_role('Trainee','TrMod')
     'command/go-to-spawn/always',
     'command/protect-entity',
     'command/protect-area',
-    'command/kill-all-biter'
 }
 
 --- Trusted Roles
