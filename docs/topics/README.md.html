@@ -89,8 +89,11 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Compilatron.html"><span class="module-name-item">Compilatron</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Damage-Popups.html"><span class="module-name-item">Damage-Popups</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Death-Logger.html"><span class="module-name-item">Death-Logger</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Deconlog.html"><span class="module-name-item">Deconlog</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/FAGC.html"><span class="module-name-item">FAGC</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Inventory-Clear.html"><span class="module-name-item">Inventory-Clear</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Nukeprotect.html"><span class="module-name-item">Nukeprotect</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/Pollution-Grading.html"><span class="module-name-item">Pollution-Grading</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/protection-jail.html"><span class="module-name-item">protection-jail</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../addons/report-jail.html"><span class="module-name-item">report-jail</span></a></div></li>
@@ -169,6 +172,7 @@
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Chat-Reply.html"><span class="module-name-item">Chat-Reply</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Compilatron.html"><span class="module-name-item">Compilatron</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Death-Logger.html"><span class="module-name-item">Death-Logger</span></a></div></li>
+    <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Deconlog.html"><span class="module-name-item">Deconlog</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Discord-Alerts.html"><span class="module-name-item">Discord-Alerts</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Auth-Admin.html"><span class="module-name-item">Commands-Auth-Admin</span></a></div></li>
     <li class="nav-item"><div class="nav-item-block-inactive block"><a href="../configs/Commands-Auth-Roles.html"><span class="module-name-item">Commands-Auth-Roles</span></a></div></li>
@@ -256,20 +260,20 @@
 </p>
 <h1 align="center">ExpGaming Scenario Repository</h2>
 <p>## Explosive Gaming
-<p>Explosive Gaming (often ExpGaming) is a server hosting community with a strong focus on [Factorio](factorio) and games with similar themes. We are best known for our weekly reset Factorio server with a vanilla+ scenario. Although our servers tend to attract the more experienced players, our servers are open to everyone. You can find us through our [website], [discord], or the public server list with the name ExpGaming.
+<p>Explosive Gaming (often ExpGaming) is a server hosting community with a strong focus on [Factorio][factorio] and games with similar themes. We are best known for our weekly reset Factorio server with a vanilla+ scenario. Although our servers tend to attract the more experienced players, our servers are open to everyone. You can find us through our [website], [discord], or the public server list with the name ExpGaming.
 <p>## Use and Installation
-<p>1) Download our [git repository](stable-dl) for the stable release. For the latest features you can download our [dev branch](experimental-dl). See [releases](#releases) for other major releases.
+<p>1) Download our [git repository][stable-dl] for the stable release. For the latest features you can download our [dev branch][experimental-dl]. See [releases](#releases) for other major releases.
 <p>2) Extract the downloaded zip file into your Factorio scenario directory:
     * Windows: `%appdata%\Factorio\scenarios`
     * Linux: `~/.factorio/scenarios`
 <p>3) Within the scenario you can find `./config/_file_loader.lua` which contains a list of all the modules which will be loaded by the scenario. Comment out (or remove) features you do not want. Be aware modules may load other modules as dependencies even when removed from the list.
 <p>4) More advanced users can adjust other configs files within `./config` but please be aware some files will require a basic understanding of lua.
 <p>5) Once you have made your config changes: open Factorio, select either single or multiplayer, select (host) new game, and finally select our scenario which will be called `scenario-master` or `scenario-dev` under user scenarios.
-<p>6) You will now be asked to generate your map and the scenario will load all selected modules. If any module does not load as expected please check `factorio-current.log` in your Factorio directory for errors and report them to our [issues page](issues).
+<p>6) You will now be asked to generate your map and the scenario will load all selected modules. If any module does not load as expected please check `factorio-current.log` in your Factorio directory for errors and report them to our [issues page][issues].
 <p>## Contributing
 <p>All are welcome to make bug reports, feature requests, and pull requests for our scenario. We do not require you to have any lua or coding knowledge to make bug reports and feature requests. If you have any questions ask us in our [discord].
 <p>For developers wanting to add features please follow these guidelines:
-<p>* All code is documented using ldoc, the end result can be found [here](docs).
+<p>* All code is documented using ldoc, the end result can be found [here][docs].
 * Changes should be made on your own fork and merged into `dev` through a pull request.
 * Pull requests are automatically linted and documentation checked.
 * Pull requests are manually reviewed to maintain code and language quality.
@@ -297,7 +301,7 @@
 | [2.0][s2.0] | Localization and clean up | [0.15][f0.15] |
 | [1.0][s1.0] | Modulation | [0.15][f0.15] |
 | [0.1][s0.1] | First Tracked Version | [0.14][f0.14] |
-<p>\* Scenario patch releases have been omitted and can be found [here](https://github.com/explosivegaming/scenario/releases).
+<p>\* Scenario patch releases have been omitted and can be found [here][releases].
 <p>\*\* Factorio versions show the version they were made for, often the minimum requirement to run the scenario.
 <p>[s6.2]: https://github.com/explosivegaming/scenario/releases/tag/6.2.0
 [s6.1]: https://github.com/explosivegaming/scenario/releases/tag/6.1.0
@@ -340,8 +344,9 @@
 <p>The Explosive Gaming codebase is licensed under the [GNU General Public License v3.0](LICENSE)
 <p>[stable-dl]: https://github.com/explosivegaming/scenario/archive/master.zip
 [experimental-dl]: https://github.com/explosivegaming/scenario/archive/dev.zip
-[factorio]: https://factorio.com/
-[docs]: https://explosivegaming.github.io/scenario/
+[releases]: https://github.com/explosivegaming/scenario/releases
+[factorio]: https://factorio.com
+[docs]: https://explosivegaming.github.io/scenario
 [issues]: https://github.com/explosivegaming/scenario/issues/new/choose
 [website]: https://explosivegaming.nl
 [discord]: https://discord.explosivegaming.nl
@@ -377,7 +382,7 @@
     <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc </a></i>
     </div>
     <div class="content-footer column col-9 col-sm-12">
-    <i>Last updated 2021-05-10 20:09:49 UTC</i>
+    <i>Last updated 2022-12-09 21:09:59 UTC</i>
     </div>
     </div>
     </div>

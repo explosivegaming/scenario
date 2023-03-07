@@ -52,6 +52,7 @@ Roles.new_role('Administrator','Admin')
     'gui/warp-list/bypass-cooldown',
     'gui/warp-list/bypass-proximity',
     'command/connect-all',
+		'command/collectdata'
 }
 
 Roles.new_role('Moderator','Mod')
@@ -202,6 +203,7 @@ end)
 Roles.new_role('Member','Mem')
 :set_permission_group('Standard')
 :set_custom_color{r=24,g=172,b=188}
+:set_flag("deconlog-bypass")
 :set_parent('Regular')
 :allow{
     'gui/task-list/add',
@@ -222,7 +224,8 @@ Roles.new_role('Regular','Reg')
     'command/go-to-spawn',
     'command/me',
     'standard-decon',
-    'bypass-entity-protection'
+    'bypass-entity-protection',
+		'bypass-nukeprotect'
 }
 :set_auto_assign_condition(function(player)
     if player.online_time >= hours3 then
@@ -264,6 +267,7 @@ Roles.new_role('Jail')
 :set_permission_group('Restricted')
 :set_custom_color{r=50,g=50,b=50}
 :set_block_auto_assign(true)
+:set_flag("defer_role_changes")
 :disallow(default.allowed)
 
 --- System defaults which are required to be set
