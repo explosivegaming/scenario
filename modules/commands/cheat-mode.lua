@@ -33,3 +33,11 @@ Commands.new_command('toggle-always-day', 'Toggles always day in surface')
     game.player.surface.always_day = not game.player.surface.always_day
     return Commands.success
 end)
+
+Commands.new_command('kill-all-biter', 'Kill all biter (only)')
+:set_flag('admin_only')
+:register(function(_, _)
+    game.forces["enemy"].kill_all_units()
+    return Commands.success
+end)
+
