@@ -59,6 +59,7 @@ return {
 		'modules.addons.deconlog',
 		'modules.addons.nukeprotect',
 		'modules.addons.loaders',
+		'modules.addons.inserter',
 
     -- Control
     'modules.control.vlayer',
