@@ -9,11 +9,6 @@ local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
 local format_number = require('util').format_number
 
---[[
-Equipment recharge
-
-]]
-
 if not config.enabled then
     return
 end
