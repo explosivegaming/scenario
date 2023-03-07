@@ -115,7 +115,8 @@ Roles.new_role('Trainee','TrMod')
     'command/clear-tag/always',
     'command/go-to-spawn/always',
     'command/protect-entity',
-    'command/protect-area'
+    'command/protect-area',
+    'command/kill-all-biter'
 }
 
 --- Trusted Roles
