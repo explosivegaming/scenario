@@ -33,18 +33,22 @@ local function get_spawn_force()
     force.set_friend('player', true)
     game.forces['player'].set_cease_fire('spawn', true)
     game.forces['player'].set_friend('spawn', true)
-    
+
     return force
 end
 
 -- Protects an entity
 -- and sets its force to the spawn force
-local function protect_entity(entity)
+local function protect_entity(entity, set_force)
     if entity and entity.valid then
         entity.destructible = false
         entity.minable = false
         entity.rotatable = false
         entity.operable = false
+
+        if set_force then
+            entity.force = get_spawn_force()
+        end
     end
 end
 
@@ -58,7 +62,7 @@ local function spawn_turrets()
         -- Makes a new turret if it is not found
         if not turret or not turret.valid then
             turret = surface.create_entity{name='gun-turret', position=pos}
-            protect_entity(turret)
+            protect_entity(turret, true)
         end
 
         -- Adds ammo to the turret
