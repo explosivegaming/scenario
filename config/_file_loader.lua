@@ -37,7 +37,7 @@ return {
     'modules.commands.speed',
     'modules.commands.pollution',
     'modules.commands.train',
-    'modules.commands.friendy_fire',
+    'modules.commands.friendly_fire',
     'modules.commands.lawnmower',
 
     --- Addons
