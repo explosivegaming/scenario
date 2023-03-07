@@ -151,7 +151,7 @@ end)
     end
     -- Correct the button size
     local style = element.style
-    style.right_margin -3
+    style.right_margin = -3
     style.padding = -2
     style.height = 32
     style.width = 32
