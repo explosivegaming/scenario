@@ -248,6 +248,7 @@ Roles.new_role('Member','Mem')
     'command/auto-research',
     'command/manual-train',
     'command/chat-bot',
+    'command/lawnmower'
 }
 
 local hours2, hours15 = 2*216000, 15*60
