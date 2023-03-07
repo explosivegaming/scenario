@@ -496,7 +496,7 @@ Commands.new_command('waterfill', 'Change tile to water')
             inv.remove({name='cliff-explosives', count=1})
         end
     else
-        player.print{'waterfill-cliff'}
+        player.print{'vlayer.waterfill-cliff'}
     end
 
     return Commands.success
