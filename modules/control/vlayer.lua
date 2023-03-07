@@ -484,6 +484,21 @@ Commands.new_command('personal-battery-recharge', 'Recharge Player Battery with 
     return Commands.success
 end)
 
+Commands.new_command('waterfill', 'Change tile to water')
+:register(function(player)
+    local inv = player.get_main_inventory()
+    
+    if (inv.get_item_count('cliff-explosives')) >= 1 then
+        local pos = vlayer_convert_chest(player)
+
+        if (pos) then
+            player.surface.set_tiles({name='water-mud', position=pos})
+            inv.remove({name='cliff-explosives', count=1})
+        end
+    end
+
+    return Commands.success
+end)
 
 Event.on_nth_tick(config.update_tick, function()
     vlayer_handle()
