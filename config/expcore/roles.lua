@@ -53,7 +53,8 @@ Roles.new_role('Administrator','Admin')
     'command/toggle-cheat-mode',
     'command/toggle-all-research',
     'command/connect-player',
-    'command/friendly-fire'
+    'command/friendly-fire',
+    'command/toggle-always-day'
 }
 
 Roles.new_role('Senior Moderator','SMod')
