@@ -12,7 +12,7 @@ local max_time_to_live = 4294967295 -- unit32 max
 -- @command repair
 -- @tparam number range the range to repair stuff in, there is a max limit to this
 Commands.new_command('repair', 'Repairs entities on your force around you')
-:add_param('range', false, 'integer-range', 1,config.max_range)
+:add_param('range', false, 'integer-range', 1, config.max_range)
 :register(function(player, range)
     local revive_count = 0
     local heal_count = 0
