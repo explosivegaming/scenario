@@ -66,7 +66,7 @@ return {
         }
     },
     pattern = {
-        enabled = false, --- @setting enabled Whether pattern tiles will be added to spawn
+        enabled = true, --- @setting enabled Whether pattern tiles will be added to spawn
         pattern_tile = 'refined-concrete', --- @setting pattern_tile The tile to be used for the pattern
         offset = {x=0, y=-2}, --- @setting offset The position offset to apply to pattern tiles
         locations = { --- @setting locations The location of the pattern tiles {x,y}
