@@ -70,9 +70,11 @@ function Public.add_compilatron(entity, name)
     if not entity and not entity.valid then
         return
     end
+
     if name == nil then
         return
     end
+
     Public.compilatrons[name] = entity
     local message =
         entity.surface.create_entity(
@@ -87,7 +89,7 @@ end
 function Public.spawn_compilatron(surface, location)
     local position = locations[location]
     local pos = surface.find_non_colliding_position('compilatron', position, 1.5, 0.5)
-    local compi = surface.create_entity {name='compilatron', position=pos, force=game.forces.neutral}
+    local compi = surface.create_entity {name='compilatron', position=pos, force=game.player.force}
     Public.add_compilatron(compi, location)
 end
 
@@ -95,6 +97,7 @@ end
 Event.add(defines.events.on_player_created, function(event)
     if event.player_index ~= 1 then return end
     local player = game.players[event.player_index]
+
     for location in pairs(locations) do
         Public.spawn_compilatron(player.surface, location)
     end
