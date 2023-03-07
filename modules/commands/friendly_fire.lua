@@ -5,7 +5,6 @@
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
-local format_number = require('util').format_number
 
 -- For Modded Server Use
 Commands.new_command('friendly-fire', 'Set Friendly Fire')
