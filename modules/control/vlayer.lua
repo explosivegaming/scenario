@@ -495,6 +495,8 @@ Commands.new_command('waterfill', 'Change tile to water')
             player.surface.set_tiles({name='water-mud', position=pos})
             inv.remove({name='cliff-explosives', count=1})
         end
+    else
+        player.print{'waterfill-cliff'}
     end
 
     return Commands.success
