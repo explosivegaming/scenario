@@ -54,7 +54,8 @@ Roles.new_role('Administrator','Admin')
     'command/toggle-all-research',
     'command/connect-player',
     'command/friendly-fire',
-    'command/toggle-always-day'
+    'command/toggle-always-day',
+    'command/toggle-loader'
 }
 
 Roles.new_role('Senior Moderator','SMod')
