@@ -15,9 +15,12 @@ Commands.new_command('toggle-loader', 'Toggle Loaders')
     game.player.force.recipes["fast-loader"].enabled = new_status
     game.player.force.recipes["express-loader"].enabled = new_status
 
-    game.player.force.recipes.loader.hidden = not new_status
-    game.player.force.recipes["fast-loader"].hidden = not new_status
-    game.player.force.recipes["express-loader"].hidden = not new_status
+    --[[
+        Read only
+        game.player.force.recipes.loader.hidden = not new_status
+        game.player.force.recipes["fast-loader"].hidden = not new_status
+        game.player.force.recipes["express-loader"].hidden = not new_status
+    ]]
     
     return Commands.success
 end)
