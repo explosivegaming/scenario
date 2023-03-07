@@ -23,12 +23,17 @@ end
 -- Get or create the force used for entities in spawn
 local function get_spawn_force()
     local force = game.forces['spawn']
-    if force and force.valid then return force end
+
+    if force and force.valid then return
+        force
+    end
+
     force = game.create_force('spawn')
     force.set_cease_fire('player', true)
     force.set_friend('player', true)
     game.forces['player'].set_cease_fire('spawn', true)
     game.forces['player'].set_friend('spawn', true)
+    
     return force
 end
 
