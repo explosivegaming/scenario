@@ -4,11 +4,7 @@
 return {
     enabled = true,
     update_tick = 10,
-    --[[
-        standalone
-        vlayer
-    ]]
-    mode = 'standalone',
+    use_vlayer = false,
     -- 10 MJ
     energy_base_limit = 10000000,
     land = {
