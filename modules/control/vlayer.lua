@@ -142,8 +142,8 @@ local function vlayer_circuit_handle()
 end
 
 local function vlayer_handle()
-    vlayer_power_handle()
     vlayer_storage_handle()
+    vlayer_power_handle()
     vlayer_circuit_handle()
 end
 
