@@ -3,7 +3,7 @@ local Commands = require 'expcore.commands' --- @dep expcore.commands
 local config = require 'config.research' --- @dep config.research
 local config_bonus = require 'config.bonus' --- @dep config.bonus
 
-local res_queue = false
+local res_queue_enable = false
 local base_rate = 0
 
 if config.bonus.enabled then
