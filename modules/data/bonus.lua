@@ -91,6 +91,12 @@ Event.add(defines.events.on_player_created, function(event)
             game.players[event.player_index].force[config.force_bonus[k].name] = game.players[event.player_index].force[config.force_bonus[k].name] + config.force_bonus[k].max
         end
     end
+
+    for k, _ in pairs(config.surface_bonus) do
+        if config.surface_bonus[k].enabled then
+            game.players[event.player_index].surface[config.surface_bonus[k].name] = game.players[event.player_index].surface[config.surface_bonus[k].name] + config.surface_bonus[k].max
+        end
+    end
 end)
 
 Event.add(Roles.events.on_role_assigned, role_update)
