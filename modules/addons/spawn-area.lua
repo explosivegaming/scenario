@@ -24,8 +24,8 @@ end
 local function get_spawn_force()
     local force = game.forces['spawn']
 
-    if force and force.valid then return
-        force
+    if force and force.valid then
+        return force
     end
 
     force = game.create_force('spawn')
@@ -61,14 +61,14 @@ local function spawn_turrets()
 
         -- Makes a new turret if it is not found
         if not turret or not turret.valid then
-            turret = surface.create_entity{name='gun-turret', position=pos, force='player'}
+            turret = surface.create_entity{name='gun-turret', position=pos, force='spawn'}
             protect_entity(turret)
         end
 
         -- Adds ammo to the turret
         local inv = turret.get_inventory(defines.inventory.turret_ammo)
-        if inv.can_insert{name=config.turrets.ammo_type, count=20} then
-            inv.insert{name=config.turrets.ammo_type, count=20}
+        if inv.can_insert{name=config.turrets.ammo_type, count=10} then
+            inv.insert{name=config.turrets.ammo_type, count=10}
         end
     end
 end
@@ -84,7 +84,7 @@ local function spawn_belts(surface, position)
         
         for _, belt in pairs(belt_details) do
             local pos = apply_offset(set_position, belt)
-            local belt_entity = surface.create_entity{name=belt_type, position=pos, force='player', direction=belt[3]}
+            local belt_entity = surface.create_entity{name=belt_type, position=pos, force='spawn', direction=belt[3]}
 
             if config.afk_belts.protected then
                 protect_entity(belt_entity)
@@ -124,7 +124,7 @@ local function spawn_entities(surface, position)
     position = apply_offset(position, config.entities.offset)
     for _, entity in pairs(config.entities.locations) do
         local pos = apply_offset(position, {x=entity[2], y=entity[3]})
-        entity = surface.create_entity{name=entity[1], position=pos, force='player'}
+        entity = surface.create_entity{name=entity[1], position=pos, force='spawn'}
 
         if config.entities.protected then
             protect_entity(entity)
@@ -177,11 +177,11 @@ local function spawn_area(surface, position)
 end
 
 local function spawn_resource_tiles(surface)
-    for k, _ in ipairs(config.resource_tiles.resources) do
-        if config.resource_tiles.resources[k].enabled then
-            for x=config.resource_tiles.resources[k].offset[1], config.resource_tiles.resources[k].offset[1] + config.resource_tiles.resources[k].size[1] do
-                for y=config.resource_tiles.resources[k].offset[2], config.resource_tiles.resources[k].offset[2] + config.resource_tiles.resources[k].size[2] do
-                    surface.create_entity({name=config.resource_tiles.resources[k].name, amount=config.resource_tiles.resources[k].amount, position={x, y}})
+    for _, v in ipairs(config.resource_tiles.resources) do
+        if v.enabled then
+            for x=v.offset[1], v.offset[1] + v.size[1] do
+                for y=v.offset[2], v.offset[2] + v.size[2] do
+                    surface.create_entity({name=v.name, amount=v.amount, position={x, y}})
                 end
             end
         end
@@ -189,10 +189,10 @@ local function spawn_resource_tiles(surface)
 end
 
 local function spawn_resource_patches(surface)
-    for k, _ in ipairs(config.resource_patches.resources) do
-        if config.resource_patches.resources[k].enabled then
-            for i=1, config.resource_patches.resources[k].num_patches do
-                surface.create_entity({name=config.resource_patches.resources[k].name, amount=config.resource_patches.resources[k].amount, position={config.resource_patches.resources[k].offset[1] + config.resource_patches.resources[k].offset_next[1] * (i - 1), config.resource_patches.resources[k].offset[2] + config.resource_patches.resources[k].offset_next[2] * (i - 1)}})
+    for _, v in ipairs(config.resource_patches.resources) do
+        if v.enabled then
+            for i=1, v.num_patches do
+                surface.create_entity({name=v.name, amount=v.amount, position={v.offset[1] + v.offset_next[1] * (i - 1), v.offset[2] + v.offset_next[2] * (i - 1)}})
             end
         end
     end

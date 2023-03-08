@@ -33,19 +33,20 @@ return {
     'modules.commands.protection',
     'modules.commands.spectate',
     'modules.commands.search',
-    'modules.commands.bot_queue',
+    'modules.commands.bot-queue',
     'modules.commands.speed',
     'modules.commands.pollution',
     'modules.commands.train',
-    'modules.commands.friendly_fire',
+    'modules.commands.friendly-fire',
     'modules.commands.lawnmower',
+    'modules.commands.research',
 
     --- Addons
     'modules.addons.chat-popups',
     'modules.addons.damage-popups',
     'modules.addons.death-logger',
     'modules.addons.advanced-start',
-    'modules.addons.spawn_area',
+    'modules.addons.spawn-area',
     'modules.addons.compilatron',
     'modules.addons.scorched-earth',
     'modules.addons.pollution-grading',
@@ -63,17 +64,16 @@ return {
     -- Control
     'modules.control.vlayer',
     'modules.control.miner',
-    'modules.control.research',
 
     --- Data
     'modules.data.statistics',
-    'modules.data.player_colours',
+    'modules.data.player-colours',
     'modules.data.greetings',
     'modules.data.quickbar',
     'modules.data.alt-view',
     'modules.data.tag',
     'modules.data.bonus',
-    'modules.data.personal_logistic',
+    'modules.data.personal-logistic',
 
     --- GUI
     'modules.gui.readme',
@@ -84,6 +84,7 @@ return {
     'modules.gui.task-list',
     'modules.gui.player-list',
     'modules.gui.server-ups',
+    'modules.gui.vlayer',
     'modules.commands.debug',
 
 		'modules.graftorio.require', -- graftorio

@@ -12,15 +12,15 @@ local function add_log(data)
 	game.write_file(filepath, data .. "\n", true, 0) -- write data
 end
 
-local function get_secs ()
+local function get_secs()
 	return format_time(game.tick, { hours = true, minutes = true, seconds = true, string = true })
 end
 
-local function pos_to_string (pos)
+local function pos_to_string(pos)
 	return tostring(pos.x) .. "," .. tostring(pos.y)
 end
 
-local function pos_to_gps_string (pos)
+local function pos_to_gps_string(pos)
 	return "[gps=" .. tostring(pos.x) .. "," .. tostring(pos.y) .. "]"
 end
 
@@ -36,10 +36,9 @@ if config.decon_area then
 			return
 		end
 
-		local msg = player.name .. " tried to deconstruct the area " .. pos_to_gps_string(e.area.left_top) .. " to " .. pos_to_gps_string(e.area.right_bottom) .. " but were not allowed."
-		game.print(msg)
+		game.print(player.name .. " tried to deconstruct the area " .. pos_to_gps_string(e.area.left_top) .. " to " .. pos_to_gps_string(e.area.right_bottom) .. " but were not allowed.")
 
-		add_log(get_secs() .. "," .. msg)
+		add_log(get_secs() .. "," .. player.name .. ",decon_area," .. pos_to_string(e.area.left_top) .. "," .. pos_to_string(e.area.right_bottom))
 	end)
 end
 

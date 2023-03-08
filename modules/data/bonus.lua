@@ -30,26 +30,20 @@ local function apply_bonus(player, stage)
         return
     end
 
-    if stage >= 2 then
-        if not Roles.player_allowed(player, "bonus-2") then
-            stage = 0
-        end
-    elseif stage == 1 then
-        if not Roles.player_allowed(player, "bonus-1") then
-            stage = 0
-        end
-    end
-
-    for k, _ in pairs(config.player_bonus) do
-        if config.player_bonus[k].enabled then
-            player[config.player_bonus[k].name] = config.player_bonus[k].max * stage / 10
+    for _, bonus in pairs(config.player_bonus) do
+        if bonus.enabled then
+            if stage == 0 then
+                player[bonus.name] = bonus.min
+            else
+                player[bonus.name] = bonus.min + (bonus.max - bonus.min) * stage / 10
+            end
         end
     end
 end
 
 --- When store is updated apply new bonus to the player
-PlayerBonus:on_update(function(player_name, pb)
-    apply_bonus(game.players[player_name], pb or 0)
+PlayerBonus:on_update(function(player_name, player_bonus)
+    apply_bonus(game.players[player_name], player_bonus or 0)
 end)
 
 --- Changes the amount of bonus you receive
@@ -58,20 +52,33 @@ end)
 Commands.new_command('bonus', 'Changes the amount of bonus you receive')
 :add_param('amount', 'integer-range', 0, 10)
 :register(function(player, amount)
+    if amount > 2 then
+        if not Roles.player_allowed(player, "bonus-2") then
+            Commands.print{'expcom-bonus.perm', 2}
+            return
+        end
+    elseif amount <= 2 then
+        if not Roles.player_allowed(player, "bonus-1") then
+            Commands.print{'expcom-bonus.perm', 1}
+            return
+        end
+    end
+
     PlayerBonus:set(player, amount)
+
     Commands.print{'expcom-bonus.set', amount}
 end)
 
 --- When a player respawns re-apply bonus
 Event.add(defines.events.on_player_respawned, function(event)
     local player = game.players[event.player_index]
-    PlayerBonus:set(player)
+    apply_bonus(player, PlayerBonus:get(player))
 end)
 
 --- Remove bonus if a player no longer has access to the command
 local function role_update(event)
     local player = game.players[event.player_index]
-    apply_bonus(player)
+    apply_bonus(player, 0)
 end
 
 --- When a player dies allow them to have instant respawn

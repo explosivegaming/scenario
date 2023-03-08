@@ -111,7 +111,7 @@ Gui.element{
 
     -- Check if there are player entities in the way (has a bigger radius because the enities that can be placed by a player are larger)
     local entities = surface.find_entities_filtered{
-        radius =  config.standard_proximity_radius + 4.5,
+        radius =  config.standard_proximity_radius + 2.5,
         position = position,
         collision_mask = {
             'item-layer', 'object-layer', 'player-layer', 'water-tile'

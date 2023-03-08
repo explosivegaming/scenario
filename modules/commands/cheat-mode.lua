@@ -31,7 +31,7 @@ Commands.new_command('toggle-always-day', 'Toggles always day in surface')
 :set_flag('admin_only')
 :register(function(_, _)
     game.player.surface.always_day = not game.player.surface.always_day
-    return Commands.success
+    return Commands.success{'expcom-cheat.day', game.player.surface.always_day}
 end)
 
 Commands.new_command('kill-all-biter', 'Kill all biter (only)')

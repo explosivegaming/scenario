@@ -27,16 +27,12 @@ local function teleport(from_player, to_player)
             -- Try teleport the entity
             if not entity.teleport(goto_position) then
                 from_player.driving = false
-                -- Need to calculate new goto_position because entities have different collision boxes
-                goto_position = surface.find_non_colliding_position('character', position, 32, 1)
-                from_player.teleport(goto_position, surface)
+                from_player.teleport(position, surface)
             end
         end
     else
         -- Teleport the player
-        local goto_position = surface.find_non_colliding_position('character', position, 32, 1)
-        if from_player.driving then from_player.driving = false end
-        from_player.teleport(goto_position, surface)
+        from_player.teleport(position, surface)
     end
     
     return true
@@ -75,9 +71,9 @@ Commands.new_command('bring', 'Teleports a player to you.')
     end
     if not teleport(from_player, player) then
         -- return if the teleport failed
-        from_player.print('Come here my friend')
         return Commands.error{'expcom-tp.no-position-found'}
     end
+    from_player.print('Come here my friend')
 end)
 
 --- Teleports you to a player.

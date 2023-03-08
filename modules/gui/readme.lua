@@ -371,8 +371,8 @@ Gui.element(function(_, parent)
                 count = count - 2
                 if metadata.stringify then value = metadata.stringify(value)
                 else value = format_number(value or 0) end
-                Gui.centered_label(statistics, 150, metadata.name or {'exp-statistics.' .. name}, metadata.tooltip or {'exp-statistics.' .. name .. '-tooltip'})
-                Gui.centered_label(statistics, 130, {'readme.data-format', value, metadata.unit or ''}, metadata.value_tooltip or {'exp-statistics.' .. name .. '-tooltip'})
+                Gui.centered_label(statistics, 150, metadata.name or {'exp-statistics.'..name}, metadata.tooltip or {'exp-statistics.'..name..'-tooltip'})
+                Gui.centered_label(statistics, 130, {'readme.data-format', value, metadata.unit or ''}, metadata.value_tooltip or {'exp-statistics.'..name..'-tooltip'})
             end
         end
         if count > 0 then for i = 1, count do Gui.centered_label(statistics, 140) end end

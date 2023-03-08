@@ -112,36 +112,20 @@ return {
         grid = {
             {
                 equipment='solar-panel-equipment',
-                count=4
+                count=16
             },
             {
                 equipment='belt-immunity-equipment',
                 count=1
             },
             {
-                equipment='solar-panel-equipment',
-                count=4
-            },
-            {
                 equipment='battery-equipment',
-                count=1
-            },
-            {
-                equipment='solar-panel-equipment',
-                count=6
+                count=2
             },
             {
                 equipment='personal-roboport-equipment',
                 count=1
             },
-            {
-                equipment='battery-equipment',
-                count=1
-            },
-            {
-                equipment='solar-panel-equipment',
-                count=2
-            }
         }
     }
 }

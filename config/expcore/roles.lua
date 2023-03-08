@@ -235,7 +235,7 @@ end)
 Roles.new_role('Member','Mem')
 :set_permission_group('Standard')
 :set_custom_color{r=0,g=153,b=225}
-:set_flag("deconlog-bypass")
+:set_flag('deconlog-bypass')
 :set_parent('Regular')
 :allow{
     'gui/task-list/add',
@@ -245,7 +245,7 @@ Roles.new_role('Member','Mem')
     'command/save-quickbar',
     'command/bonus',
     'bonus-1',
-    'vlayer-2',
+    'gui/vlayer-edit',
     'personal-logistic',
     'command/auto-research',
     'command/manual-train',
@@ -300,7 +300,7 @@ local default = Roles.new_role('Guest','')
     'gui/task-list',
     'gui/warp-list',
     'gui/readme',
-    'vlayer-1',
+    'gui/vlayer',
 }
 
 --- Jail role
@@ -308,7 +308,7 @@ Roles.new_role('Jail')
 :set_permission_group('Restricted')
 :set_custom_color{r=185,g=187,b=160}
 :set_block_auto_assign(true)
-:set_flag("defer_role_changes")
+:set_flag('defer_role_changes')
 :disallow(default.allowed)
 
 --- System defaults which are required to be set
@@ -336,48 +336,45 @@ Roles.define_role_order{
 }
 
 Roles.override_player_roles{
-    ["PHIDIAS0303"]={"Senior Administrator", "Moderator", "Board Member", "Member"},
+    ['PHIDIAS0303']={'Senior Administrator', 'Moderator', 'Board Member', 'Member'},
 
-    ["aldldl"]={"Moderator","Member"},
-    ["arty714"]={"Moderator", "Member"},
-    ["Cooldude2606"]={"Moderator", "Member"},
-    ["Drahc_pro"]={"Moderator", "Member"},
-    ["mark9064"]={"Moderator","Member"},
+    ['aldldl']={'Moderator','Member'},
+    ['arty714']={'Moderator', 'Member'},
+    ['Cooldude2606']={'Moderator', 'Member'},
+    ['Drahc_pro']={'Moderator', 'Member'},
+    ['mark9064']={'Moderator','Member'},
 
-    ["7h3w1z4rd"]={"Moderator","Member"},
-    ["FlipHalfling90"]={"Moderator","Member"},
-    ["hamsterbryan"]={"Moderator","Member"},
-    ["HunterOfGames"]={"Moderator","Member"},
-    ["NextIdea"]={"Moderator","Member"},
-    ["TheKernel32"]={"Moderator","Member"},
-    ["TheKernel64"]={"Moderator","Member"},
-    ["tovernaar123"]={"Moderator","Member"},
-    ["UUBlueFire"]={"Moderator","Member"},
+    ['7h3w1z4rd']={'Moderator','Member'},
+    ['FlipHalfling90']={'Moderator','Member'},
+    ['hamsterbryan']={'Moderator','Member'},
+    ['HunterOfGames']={'Moderator','Member'},
+    ['NextIdea']={'Moderator','Member'},
+    ['TheKernel32']={'Moderator','Member'},
+    ['TheKernel64']={'Moderator','Member'},
+    ['tovernaar123']={'Moderator','Member'},
+    ['UUBlueFire']={'Moderator','Member'},
 
-    ["AssemblyStorm"]={"Moderator", "Member"},
-    ["banakeg"]={"Moderator","Member"},
-    ["CmonMate497"]={"Moderator","Member"},
-    ["connormkii"]={"Moderator", "Member"},
-    ["cydes"]={"Moderator","Member"},
-    ["darklich14"]={"Moderator","Member"},
-    ["facere"]={"Moderator","Member"},
-    ["freek18"]={"Moderator","Member"},
-    ["Gizan"]={"Moderator","Member"},
-    ["Hobbitkicker"]={"Moderator","Member"},
-    ["Koroto"]={"Moderator", "Member"},
-    ["LoicB"]={"Moderator","Member"},
-    ["M74132"]={"Moderator","Member"},
-    ["mafisch3"]={"Moderator","Member"},
-    ["maplesyrup01"]={"Moderator","Member"},
-    ["ookl"]={"Moderator","Member"},
-    ["Phoenix27833"]={"Moderator","Member"},
-    ["porelos"]={"Moderator","Member"},
-    ["Ruuyji"]={"Moderator","Member"},
-    ["samy115"]={"Moderator","Member"},
-    ["SilentLog"]={"Moderator","Member"},
-    ["Tcheko"]={"Moderator","Member"},
-    ["thadius856"]={"Moderator","Member"},
-    ["whoami32"]={"Moderator","Member"},
-    ["Windbomb"]={"Moderator","Member"},
-    ["XenoCyber"]={"Moderator","Member"}
+    ['AssemblyStorm']={'Moderator', 'Member'},
+    ['banakeg']={'Moderator','Member'},
+    ['connormkii']={'Moderator', 'Member'},
+    ['cydes']={'Moderator','Member'},
+    ['darklich14']={'Moderator','Member'},
+    ['facere']={'Moderator','Member'},
+    ['freek18']={'Moderator','Member'},
+    ['Gizan']={'Moderator','Member'},
+    ['LoicB']={'Moderator','Member'},
+    ['M74132']={'Moderator','Member'},
+    ['mafisch3']={'Moderator','Member'},
+    ['maplesyrup01']={'Moderator','Member'},
+    ['ookl']={'Moderator','Member'},
+    ['Phoenix27833']={'Moderator','Member'},
+    ['porelos']={'Moderator','Member'},
+    ['Ruuyji']={'Moderator','Member'},
+    ['samy115']={'Moderator','Member'},
+    ['SilentLog']={'Moderator','Member'},
+    ['Tcheko']={'Moderator','Member'},
+    ['thadius856']={'Moderator','Member'},
+    ['whoami32']={'Moderator','Member'},
+    ['Windbomb']={'Moderator','Member'},
+    ['XenoCyber']={'Moderator','Member'}
 }

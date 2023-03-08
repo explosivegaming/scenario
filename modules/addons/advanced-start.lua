@@ -31,16 +31,8 @@ Event.add(defines.events.on_player_created, function(event)
     if config.armor.enable then
         player.insert{name=config.armor.main, count=1}
 
-        if player and player.get_inventory(defines.inventory.character_armor) ~= nil and player.get_inventory(defines.inventory.character_armor)[1] ~= nil then
-            local armor = player.get_inventory(defines.inventory.character_armor)[1].grid
-
-            if armor ~= nil then
-                for i=1, #config.armor.grid do
-                    for j=1, config.armor.grid[i].count do
-                        armor.put({name=config.armor.grid[i].equipment})
-                    end
-                end
-            end
+        for _, item in pairs(config.armor.grid) do
+            player.insert{name=item.equipment, count=item.count}
         end
     end
 end)

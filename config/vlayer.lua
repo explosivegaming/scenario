@@ -21,5 +21,111 @@ return {
         storage_input = 1,
         energy = 1,
         circuit = 1
+    },
+    gui = {
+        style = 'heading_1_label',
+        type = 'label',
+        content = {
+            {
+                title = 'Storage',
+                type = nil,
+                name = nil
+            },
+            {
+                title = '',
+                type = nil,
+                name = nil
+            },
+            {
+                title = '[img=entity/solar-panel] Solar Panel',
+                type = nil,
+                name = nil
+            },
+            {
+                title = 0,
+                type = 'item',
+                name = 'solar-panel'
+            },
+            {
+                title = '[img=entity/accumulator] Accumulator',
+                type = nil,
+                name = nil
+            },
+            {
+                title = 0,
+                type = 'item',
+                name = 'accumulator'
+            },
+            {
+                title = 'Power Production',
+                type = nil,
+                name = nil
+            },
+            {
+                title = 'MW',
+                type = nil,
+                name = nil
+            },
+            {
+                title = '[virtual-signal=signal-P] Peak',
+                type = nil,
+                name = nil
+            },
+            {
+                title = '0',
+                type = 'signal',
+                name = 1
+            },
+            {
+                title = '[virtual-signal=signal-S] Sustained',
+                type = nil,
+                name = nil
+            },
+            {
+                title = '0',
+                type = 'signal',
+                name = 2
+            },
+            {
+                title = 'Battery',
+                type = nil,
+                name = nil
+            },
+            {
+                title = 'MJ',
+                type = nil,
+                name = nil
+            },
+            {
+                title = '[virtual-signal=signal-M] Max',
+                type = nil,
+                name = nil
+            },
+            {
+                title = '0',
+                type = 'signal',
+                name = 3
+            },
+            {
+                title = '[virtual-signal=signal-C] Current',
+                type = nil,
+                name = nil
+            },
+            {
+                title = '0',
+                type = 'signal',
+                name = 4
+            },
+            {
+                title = 'Convert',
+                type = nil,
+                name = nil
+            },
+            {
+                title = '',
+                type = nil,
+                name = nil
+            }
+        }
     }
 }

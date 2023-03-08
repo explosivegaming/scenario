@@ -19,7 +19,7 @@ return {
     ['measured-command']=true,
     ['banlist']=false,
     ['permissions']=false,
-    ['editor']=true,
+    ['editor']=false,
     ['cheat']=false,
     ['open']=false,
 }

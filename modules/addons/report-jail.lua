@@ -2,7 +2,6 @@
 -- @addon report-jail
 
 local Event = require 'utils.event' ---@dep utils.event
-local config = require 'config.report-jail' --- @dep config.afk_kick
 local Jail = require 'modules.control.jail' ---@dep modules.control.jail
 local Reports = require 'modules.control.reports' --- @dep modules.control.reports
 local format_chat_player_name = _C.format_chat_player_name --- @dep expcore.common
@@ -21,24 +20,10 @@ end
 Event.add(Reports.events.on_player_reported, function(event)
     local player = game.get_player(event.player_index)
     local total_playtime = Reports.count_reports(player, reporter_playtime)
-    local moderator_count_bool = false
 
-    for _, player_ in ipairs(game.connected_players) do
-        if player_.admin then
-            if player_.afk_time < config.afk_time then
-                -- No instant jail if a moderator is active
-                moderator_count_bool = true
-            end
-        end
-    end
-    
-    if not moderator_count_bool then
-        if ((player.online_time * 2) > total_playtime) and (player.online_time > 108000) then
-            return
-        elseif #Reports.get_reports(player) > 1 then
-            local player_name_color = format_chat_player_name(player)
-            Jail.jail_player(player, '<reports>', 'Reported by too many players, please wait for a moderator.')
-            game.print{'report-jail.jail', player_name_color}
-        end
+    if (Reports.count_reports(player) > 1) and (total_playtime > math.max(player.online_time * 2, 108000)) then
+        local player_name_color = format_chat_player_name(player)
+        Jail.jail_player(player, '<reports>', 'Reported by too many players, please wait for a moderator.')
+        game.print{'report-jail.jail', player_name_color}
     end
 end)

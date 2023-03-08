@@ -89,7 +89,7 @@ end
 function Public.spawn_compilatron(surface, location)
     local position = locations[location]
     local pos = surface.find_non_colliding_position('compilatron', position, 1.5, 0.5)
-    local compi = surface.create_entity {name='compilatron', position=pos, force=game.player.force}
+    local compi = surface.create_entity {name='compilatron', position=pos, force=game.forces.neutral}
     Public.add_compilatron(compi, location)
 end
 
