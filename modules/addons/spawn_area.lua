@@ -168,7 +168,11 @@ local function spawn_area(surface, position)
 
     -- Remove entities then set the tiles
     local entities_to_remove = surface.find_entities_filtered{position=position, radius=dr, name='character', invert=true}
-    for _, entity in pairs(entities_to_remove) do entity.destroy() end
+    
+    for _, entity in pairs(entities_to_remove) do
+        entity.destroy()
+    end
+
     surface.set_tiles(tiles_to_make)
 end
 
