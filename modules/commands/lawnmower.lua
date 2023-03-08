@@ -19,5 +19,13 @@ Commands.new_command('lawnmower', 'Clean up biter corpse and nuclear hole')
 		end
 	end
 
+	for x=player.position.x - range, player.position.x + range do
+		for y=player.position.y - range, player.position.y + range do
+			if player.surface.get_tile(x, y).name == 'nuclear-ground' then
+				player.surface.set_tiles({{name='grass-1', position={x, y}}})
+			end
+		end
+	end
+
     return Commands.success
 end)
