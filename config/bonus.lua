@@ -120,5 +120,12 @@ return {
             enabled = false,
             max = 0
         }
+    },
+    surface_bonus = {
+        {
+            name = 'solar_power_multiplier',
+            enabled = false,
+            max = 0
+        } 
     }
 }
