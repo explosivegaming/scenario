@@ -94,7 +94,7 @@ Event.add(defines.events.on_player_created, function(event)
 
     for k, _ in pairs(config.surface_bonus) do
         if config.surface_bonus[k].enabled then
-            game.players[event.player_index].surface[config.surface_bonus[k].name] = game.players[event.player_index].surface[config.surface_bonus[k].name] + config.surface_bonus[k].max
+            game.players[event.player_index].surface[config.surface_bonus[k].name] = config.surface_bonus[k].max
         end
     end
 end)
