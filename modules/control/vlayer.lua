@@ -492,7 +492,7 @@ Commands.new_command('waterfill', 'Change tile to water')
         local pos = vlayer_convert_chest(player)
 
         if (pos) then
-            if math.abs(player.position.x - pos.x) > 2 and math.abs(player.position.y - pos.y) > 2 then
+            if (player.position.x ~= pos.x) and (player.position.y ~= pos.y) then
                 player.surface.set_tiles({{name='water-mud', position=pos}})
                 inv.remove({name='cliff-explosives', count=1})
             else
