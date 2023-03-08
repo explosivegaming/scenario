@@ -72,13 +72,13 @@ local function vlayer_power_handle()
             v.power.power_production = math.floor(vlayer_power_capacity / 60)
             v.power.power_usage = math.floor(vlayer_power_capacity / 60)
 
-            if (v.power.energy + global.vlayer.power.energy) >= (vlayer_power_capacity * 2 - 1) then
-                local energy_average = math.floor(vlayer_power_capacity / 2)
-            else
-                local energy_average = math.floor((v.power.energy + global.vlayer.power.energy) / 2)
-            end
-
             if global.vlayer.power.energy < vlayer_power_capacity then
+                if (v.power.energy + global.vlayer.power.energy) >= (vlayer_power_capacity * 2 - 1) then
+                    local energy_average = math.floor(vlayer_power_capacity / 2)
+                else
+                    local energy_average = math.floor((v.power.energy + global.vlayer.power.energy) / 2)
+                end
+
                 v.power.energy = energy_average
                 global.vlayer.power.energy = energy_average
             elseif v.power.energy < vlayer_power_capacity then
