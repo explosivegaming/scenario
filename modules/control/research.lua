@@ -3,7 +3,7 @@ local Commands = require 'expcore.commands' --- @dep expcore.commands
 local config = require 'config.research' --- @dep config.research
 local config_bonus = require 'config.bonus' --- @dep config.bonus
 
-global.res_queue_enabled = false
+local res_queue = false
 local base_rate = 0
 
 if config.bonus.enabled then
@@ -98,9 +98,9 @@ end
 Commands.new_command('auto-research', 'Automatically queue up research')
 :add_alias('ares')
 :register(function(player)
-    global.res_queue_enabled = not global.res_queue_enabled
+    res_queue_enable = not res_queue_enable
 
-    if global.res_queue_enabled then
+    if res_queue_enable then
         res_queue(player.force)
     end
 
