@@ -39,7 +39,7 @@ local function vlayer_power_handle()
     0.55    Sunrise 5,000   83s
     ]]
 
-    local vlayer_power_capacity_total = math.floor((global.vlayer.storage.item['accumulator'] * 5000000 + config.energy_base_limit * #global.vlayer.power.entity) / 2)
+    local vlayer_power_capacity_total = math.floor(((global.vlayer.storage.item['accumulator'] * 5000000) + (config.energy_base_limit * #global.vlayer.power.entity)) / 2)
     local vlayer_power_capacity = math.floor(vlayer_power_capacity_total / #global.vlayer.power.entity)
 
     if config.always_day then
@@ -524,7 +524,7 @@ Event.on_nth_tick(config.update_tick, function()
         container.scroll.table.power_production_peak_display_count.caption = format_number(math.floor(global.vlayer.storage.item['solar-panel'] * 0.06))
         container.scroll.table.power_production_sustained_display_count.caption = format_number(math.floor(global.vlayer.storage.item['solar-panel'] * 873 / 20800))
         
-        container.scroll.table.battery_max_display_count.caption = format_number(math.floor((global.vlayer.storage.item['accumulator'] * 5) + ((config.energy_base_limit / 1000000) * #global.vlayer.power.entity) / 2))
+        container.scroll.table.battery_max_display_count.caption = format_number(math.floor(((global.vlayer.storage.item['accumulator'] * 5) + ((config.energy_base_limit / 1000000) * #global.vlayer.power.entity)) / 2))
         container.scroll.table.battery_current_display_count.caption = format_number(math.floor(global.vlayer.power.energy / 1000000))
     end
 end)
