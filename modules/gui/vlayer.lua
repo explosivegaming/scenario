@@ -127,11 +127,7 @@ Gui.element{
     type = 'button',
     caption = 'Power Entity',
     style = 'button'
-}
-:style(fucntion(e)
-    e.enabled = value
-end)
-:on_click(function(player)
+}:on_click(function(player)
     vlayer_convert_chest_power(player)
 
     if #vlayer.power.entity == config.interface_limit.energy then
