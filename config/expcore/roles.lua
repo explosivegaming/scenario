@@ -37,7 +37,9 @@ Roles.new_role('Senior Administrator','SAdmin')
 :allow{
     'command/interface',
     'command/debug',
-    'command/toggle-cheat-mode'
+    'command/toggle-cheat-mode',
+    'command/spawn-energy-surface-input',
+    'command/energy-surface'
 }
 
 Roles.new_role('Administrator','Admin')
