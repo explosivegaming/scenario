@@ -149,6 +149,12 @@ end)
         item.enabled = true
         element.style = 'shortcut_bar_button_green'
     end
+    -- Correct the button size
+    local style = element.style
+    style.right_margin = -3
+    style.padding = -2
+    style.height = 32
+    style.width = 32
 end)
 
 
@@ -177,7 +183,7 @@ end)
     if not value then value = 0 end
     local clamped = math.clamp(value, 0, 1000)
     local item_name = element.parent.tooltip
-    local entity_name = element.parent.parent.parent.parent.name
+    local entity_name = element.parent.parent.parent.name
     if not autofill_player_settings[player.name] then return end
     local setting = autofill_player_settings[player.name][entity_name]
     if not setting then return end

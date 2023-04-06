@@ -18,7 +18,6 @@
 
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Game = require 'utils.game' --- @dep utils.game
-local Global = require 'utils.global' --- @dep utils.global
 
 local valid_player = Game.get_player_from_any
 local assign_roles = Roles.assign_player
@@ -42,12 +41,6 @@ local Jail = {
         on_player_unjailed=script.generate_event_name(),
     }
 }
-
-local old_roles = Jail.old_roles
-Global.register(old_roles, function(tbl)
-    Jail.old_roles = tbl
-    old_roles = tbl
-end)
 
 --- Used to emit the jail related events
 -- @tparam number event the name of the event that will be emited
@@ -89,7 +82,6 @@ function Jail.jail_player(player, by_player_name, reason)
 
     if has_role(player, 'Jail') then return end
     local roles = get_roles(player)
-    old_roles[player.name] = roles
 
     player.walking_state = { walking = false }
     player.riding_state = { acceleration = defines.riding.acceleration.nothing, direction = player.riding_state.direction }
@@ -98,8 +90,9 @@ function Jail.jail_player(player, by_player_name, reason)
     player.picking_state = false
     player.repair_state = { repairing = false }
 
-    assign_roles(player, 'Jail', by_player_name, nil, true)
     unassign_roles(player, roles, by_player_name, nil, true)
+    assign_roles(player, 'Jail', by_player_name, nil, true)
+    assign_roles(player, roles, by_player_name, nil, true)
 
     event_emit(Jail.events.on_player_jailed, player, by_player_name, reason)
 
@@ -116,9 +109,7 @@ function Jail.unjail_player(player, by_player_name)
     if not by_player_name then return end
 
     if not has_role(player, 'Jail') then return end
-    local roles = old_roles[player.name] or {}
 
-    assign_roles(player, roles, by_player_name, nil, true)
     unassign_roles(player, 'Jail', by_player_name, nil, true)
 
     event_emit(Jail.events.on_player_unjailed, player, by_player_name)
