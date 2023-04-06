@@ -10,22 +10,15 @@ Commands.new_command('lawnmower', 'Clean up biter corpse, decoratives and nuclea
 :add_param('range', false, 'integer-range', 1, 200)
 :register(function(player, range)
 	local tile_to_do = {}
-
     player.surface.destroy_decoratives({position=player.position, radius=range})
-    
 	local entities = player.surface.find_entities_filtered{position=player.position, radius=range, type='corpse', name={'transport-caution-corpse', 'invisible-transport-caution-corpse'}, invert=true}
-    
 	for _, entity in pairs(entities) do
 		entity.destroy()
 	end
-
 	local tiles = player.surface.find_tiles_filtered{position=player.position, radius=range, name={'nuclear-ground'}}
-
 	for _, tile in pairs(tiles) do
 		table.insert(tile_to_do, {name='grass-1', position=tile.position})
 	end
-
 	player.surface.set_tiles(tile_to_do)
-	
     return Commands.success
 end)

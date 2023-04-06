@@ -21,25 +21,22 @@ local function pl(player, amount)
     for k, v in pairs(config.request) do
         c(config.start + v.key)
 
-        if v.upgrade_of ~= nil then
-            if v.type == nil then
-                s(config.start + v.key, {min=math.floor(v.min * amount), max=math.floor(v.max * amount), name=k})
-            else
-                if stats.get_input_count(k) >= config.production_required[v.type] then
-                    s(config.start + v.key, {min=math.floor(v.min * amount), max=math.floor(v.max * amount), name=k})
-
-                    local vuo = v.upgrade_of
-
-                    while (vuo ~= nil) do
-                        s(config.start + config.request[vuo].key, {min=0, max=0, name=vuo})
-                        vuo = config.request[vuo].upgrade_of
-                    end
-                else
-                    s(config.start + v.key, {min=0, max=math.floor(v.max * amount), name=k})
-                end
-            end
-        else
+        if v.upgrade_of ~= nil and v.type ~= nil then
             s(config.start + v.key, {min=math.floor(v.min * amount), max=math.floor(v.max * amount), name=k})
+
+        else
+            if stats.get_input_count(k) >= config.production_required[v.type] then
+                s(config.start + v.key, {min=math.floor(v.min * amount), max=math.floor(v.max * amount), name=k})
+
+                local vuo = v.upgrade_of
+
+                while (vuo ~= nil) do
+                    s(config.start + config.request[vuo].key, {min=0, max=0, name=vuo})
+                    vuo = config.request[vuo].upgrade_of
+                end
+            else
+                s(config.start + v.key, {min=0, max=math.floor(v.max * amount), name=k})
+            end
         end
     end
 end

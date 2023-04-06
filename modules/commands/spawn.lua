@@ -10,12 +10,10 @@ local function teleport(player)
     local surface = player.surface
     local spawn = player.force.get_spawn_position(surface)
     local position = surface.find_non_colliding_position('character', spawn, 32, 1)
-    
     -- return false if no new position
     if not position then
         return false
     end
-    
     if player.vehicle then
         -- Teleport the entity
         local entity = player.vehicle

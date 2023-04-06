@@ -15,6 +15,192 @@ return {
         rate = 5,
         limit = 20
     },
+    milestone = {
+        {
+            name = 'automation',
+            time = 600
+        },
+        {
+            name = 'logistics',
+            time = 300
+        },
+        {
+            name = 'steel-processing',
+            time = 300
+        },
+        {
+            name = 'logistic-science-pack',
+            time = 300
+        },
+        {
+            name = 'electronics',
+            time = 300
+        },
+        {
+            name = 'fast-inserter',
+            time = 300
+        },
+        {
+            name = 'steel-axe',
+            time = 300
+        },
+        {
+            name = 'automation-2',
+            time = 300
+        },
+        {
+            name = 'advanced-material-processing',
+            time = 300
+        },
+        {
+            name = 'engine',
+            time = 300
+        },
+        {
+            name = 'fluid-handling',
+            time = 300
+        },
+        {
+            name = 'oil-processing',
+            time = 300
+        },
+        {
+            name = 'sulfur-processing',
+            time = 300
+        },
+        {
+            name = 'plastics',
+            time = 300
+        },
+        {
+            name = 'advanced-electronics',
+            time = 300
+        },
+        {
+            name = 'chemical-science-pack',
+            time = 300
+        },
+        {
+            name = 'modules',
+            time = 300
+        },
+        {
+            name = 'logistics-2',
+            time = 300
+        },
+        {
+            name = 'railway',
+            time = 300
+        },
+        {
+            name = 'research-speed-1',
+            time = 300
+        },
+        {
+            name = 'research-speed-2',
+            time = 300
+        },
+        {
+            name = 'battery',
+            time = 300
+        },
+        {
+            name = 'concrete',
+            time = 300
+        },
+        {
+            name = 'flammables',
+            time = 300
+        },
+        {
+            name = 'low-density-structure',
+            time = 300
+        },
+        {
+            name = 'advanced-material-processing-2',
+            time = 300
+        },
+        {
+            name = 'productivity-module',
+            time = 300
+        },
+        {
+            name = 'production-science-pack',
+            time = 300
+        },
+        {
+            name = 'advanced-electronics-2',
+            time = 300
+        },
+        {
+            name = 'advanced-oil-processing',
+            time = 300
+        },
+        {
+            name = 'lubricant',
+            time = 300
+        },
+        {
+            name = 'electric-engine',
+            time = 300
+        },
+        {
+            name = 'robotics',
+            time = 300
+        },
+        {
+            name = 'construction-robotics',
+            time = 300
+        },
+        {
+            name = 'worker-robots-speed-1',
+            time = 300
+        },
+        {
+            name = 'worker-robots-speed-2',
+            time = 300
+        },
+        {
+            name = 'utility-science-pack',
+            time = 300
+        },
+        {
+            name = 'productivity-module-2',
+            time = 300
+        },
+        {
+            name = 'speed-module-2',
+            time = 300
+        },
+        {
+            name = 'rocket-fuel',
+            time = 300
+        },
+        {
+            name = 'effect-transmission',
+            time = 300
+        },
+        {
+            name = 'productivity-module-3',
+            time = 300
+        },
+        {
+            name = 'rocket-control-unit',
+            time = 300
+        },
+        {
+            name = 'speed-module-3',
+            time = 300
+        },
+        {
+            name = 'rocket-silo',
+            time = 300
+        },
+        {
+            name = 'space-science-pack',
+            time = 300
+        }
+    },
     inf_res = {
         {
             -- Mining Productivity

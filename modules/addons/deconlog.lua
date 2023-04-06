@@ -21,7 +21,7 @@ local function pos_to_string(pos)
 end
 
 local function pos_to_gps_string(pos)
-	return "[gps=" .. tostring(pos.x) .. "," .. tostring(pos.y) .. "]"
+	return '[gps=' .. tostring(pos.x) .. ',' .. tostring(pos.y) .. ']'
 end
 
 Event.on_init(function()
@@ -31,13 +31,10 @@ end)
 if config.decon_area then
 	Event.add(defines.events.on_player_deconstructed_area, function (e)
 		local player = game.get_player(e.player_index)
-		
 		if Roles.player_has_flag(player, "deconlog-bypass") then
 			return
 		end
-
 		game.print(player.name .. " tried to deconstruct the area " .. pos_to_gps_string(e.area.left_top) .. " to " .. pos_to_gps_string(e.area.right_bottom) .. " but were not allowed.")
-
 		add_log(get_secs() .. "," .. player.name .. ",decon_area," .. pos_to_string(e.area.left_top) .. "," .. pos_to_string(e.area.right_bottom))
 	end)
 end
@@ -46,11 +43,9 @@ if config.built_entity then
 	Event.add(defines.events.on_built_entity, function (e)
 		if not e.player_index then return end
 		local player = game.get_player(e.player_index)
-
 		if Roles.player_has_flag(player, "deconlog-bypass") then
 			return
 		end
-		
 		local ent = e.created_entity
 		add_log(get_secs() .. "," .. player.name .. ",built_entity," .. ent.name .. "," .. pos_to_string(ent.position) .. "," .. tostring(ent.direction) .. "," .. tostring(ent.orientation))
 	end)
@@ -59,7 +54,6 @@ end
 if config.mined_entity then
 	Event.add(defines.events.on_player_mined_entity, function (e)
 		local player = game.get_player(e.player_index)
-
 		if Roles.player_has_flag(player, "deconlog-bypass") then
 			return
 		end
@@ -71,13 +65,11 @@ end
 if config.fired_rocket then
 	Event.add(defines.events.on_player_ammo_inventory_changed, function (e)
 		local player = game.get_player(e.player_index)
-
 		if Roles.player_has_flag(player, "deconlog-bypass") then
 			return
 		end
 		local ammo_inv = player.get_inventory(defines.inventory.character_ammo)
 		local item = ammo_inv[player.character.selected_gun_index]
-
 		if not item or not item.valid or not item.valid_for_read then
 			return
 		end

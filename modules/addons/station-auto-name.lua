@@ -50,7 +50,6 @@ local function station_name_changer(event)
         local bounding2 = {{boundingBox.left_top.x-100 ,boundingBox.left_top.y-100}  , {boundingBox.right_bottom.x+100, boundingBox.right_bottom.y+100 }}
         -- gets all resources in bounding_box2:
         local recourses = game.surfaces[1].find_entities_filtered{area = bounding2, type = "resource"}
-        
         if #recourses > 0 then -- save cpu time if their are no recourses in bounding_box2
             local closest_distance
             local px, py = boundingBox.left_top.x, boundingBox.left_top.y
