@@ -158,7 +158,7 @@ Gui.element{
 }:on_click(function(player)
     vlayer_convert_chest_circuit(player)
 
-    if #vlayer.power.circuit == config.interface_limit.circuit then 
+    if #vlayer.power.circuit == config.interface_limit.circuit then
         button_circuit.enabled = false
     end
 end)
@@ -184,7 +184,7 @@ Gui.element{
         button_storage_input.enabled = true
     end
 
-    if #vlayer.power.circuit >= config.interface_limit.circuit then 
+    if #vlayer.power.circuit >= config.interface_limit.circuit then
         button_circuit.enabled = false
     else
         button_circuit.enabled = true
