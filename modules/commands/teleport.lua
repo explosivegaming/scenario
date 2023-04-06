@@ -34,7 +34,6 @@ local function teleport(from_player, to_player)
         -- Teleport the player
         from_player.teleport(position, surface)
     end
-    
     return true
 end
 

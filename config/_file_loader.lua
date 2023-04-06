@@ -9,6 +9,7 @@ return {
     'expcore.player_data',
 
     --- Game Commands
+    'modules.commands.debug',
     'modules.commands.me',
     'modules.commands.kill',
     'modules.commands.admin-chat',
@@ -40,6 +41,9 @@ return {
     'modules.commands.friendly-fire',
     'modules.commands.lawnmower',
     'modules.commands.research',
+    'modules.commands.vlayer',
+    'modules.commands.enemy',
+    'modules.commands.waterfill',
 
     --- Addons
     'modules.addons.chat-popups',
@@ -85,7 +89,7 @@ return {
     'modules.gui.player-list',
     'modules.gui.server-ups',
     'modules.gui.vlayer',
-    'modules.commands.debug',
+    'modules.gui.research',
 
 		'modules.graftorio.require', -- graftorio
 

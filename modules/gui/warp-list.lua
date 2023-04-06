@@ -828,7 +828,7 @@ Event.add(defines.events.on_player_created, function(event)
     local spawn_id = Warps.get_spawn_warp_id(force.name)
     if not spawn_id then
         local spawn_position = force.get_spawn_position(player.surface)
-        spawn_id = Warps.add_warp(force.name, player.surface, spawn_position, nil, 'spawn')
+        spawn_id = Warps.add_warp(force.name, player.surface, spawn_position, nil, 'Spawn')
         Warps.set_spawn_warp(spawn_id, force)
         Warps.make_warp_tag(spawn_id)
 

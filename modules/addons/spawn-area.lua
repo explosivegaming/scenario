@@ -81,7 +81,6 @@ local function spawn_belts(surface, position)
 
     for _, belt_set in pairs(config.afk_belts.locations) do
         local set_position = apply_offset(position, belt_set)
-        
         for _, belt in pairs(belt_details) do
             local pos = apply_offset(set_position, belt)
             local belt_entity = surface.create_entity{name=belt_type, position=pos, force='spawn', direction=belt[3]}
@@ -111,11 +110,9 @@ local function spawn_water(surface, position)
     position = apply_offset(position, config.water.offset)
     local tiles_to_make = {}
     local water_tile = config.water.water_tile
-
     for _, tile in pairs(config.water.locations) do
         table.insert(tiles_to_make, {name=water_tile, position=apply_offset(position, tile)})
     end
-    
     surface.set_tiles(tiles_to_make)
 end
 
@@ -168,11 +165,9 @@ local function spawn_area(surface, position)
 
     -- Remove entities then set the tiles
     local entities_to_remove = surface.find_entities_filtered{position=position, radius=dr, name='character', invert=true}
-    
     for _, entity in pairs(entities_to_remove) do
         entity.destroy()
     end
-
     surface.set_tiles(tiles_to_make)
 end
 

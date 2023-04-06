@@ -15,45 +15,50 @@ local seconds, minutes, hours = 60, 3600, 216000
 -- ['stone-furnace']=cutoff_time(5*minutes, 4,0) -- before 5 minutes give four items after 5 minutes give none
 local function cutoff_time(time, before, after)
     return function(amount_made, items_made, player)
-        if game.tick < time then return before
-        else return after
+        if game.tick < time then
+            return before
+        else
+            return after
         end
     end
 end
 
 --- Use to make a split point for the number of items given based on amount made
 -- ['firearm-magazine']=cutoff_amount_made(100, 10, 0) -- give 10 items until 100 items have been made
---[[
 local function cutoff_amount_made(amount, before, after)
     return function(amount_made, items_made, player)
-        if amount_made < amount then return before
-        else return after
+        if amount_made < amount then
+            return before
+        else
+            return after
         end
     end
 end
-]]
 
 --- Same as above but will not give any items if x amount has been made of another item, useful for tiers
 -- ['light-armor']=cutoff_amount_made_unless(5, 0,1,'heavy-armor',5) -- give light armor once 5 have been made unless 5 heavy armor has been made
---[[
 local function cutoff_amount_made_unless(amount, before, after, second_item, second_amount)
     return function(amount_made, items_made, player)
         if items_made(second_item) < second_amount then
-            if amount_made < amount then return before
-            else return after
+            if amount_made < amount then
+                return before
+            else
+                return after
             end
-        else return 0
+        else
+            return 0
         end
     end
 end
-]]
 
 -- Use for mass production items where you want the amount to change based on the amount already made
 -- ['iron-plate']=scale_amount_made(5*minutes, 10, 10) -- for first 5 minutes give 10 items then after apply a factor of 10
 local function scale_amount_made(amount, before, scalar)
     return function(amount_made, items_made, player)
-        if amount_made < amount then return before
-        else return (amount_made*scalar)/math.pow(game.tick/minutes, 2)
+        if amount_made < amount then
+            return before
+        else
+            return (amount_made * scalar) / ((game.tick / minutes) ^ 2)
         end
     end
 end
@@ -77,7 +82,6 @@ return {
     chart_radius=10*32, --- @setting chart_radius the number of tiles that will be charted when the map starts
     items = { --- @setting items items and there condition for being given
         -- ['item-name'] = function(amount_made, production_stats, player) return <Number> end -- 0 means no items given
-        --[[
         -- Plates
         ['iron-plate']=scale_amount_made(100, 10, 10),
         ['copper-plate']=scale_amount_made(100, 0, 8),
@@ -97,17 +101,12 @@ return {
         -- Ammo
         ['firearm-magazine']=cutoff_amount_made_unless(100, 10, 0,'piercing-rounds-magazine', 100),
         ['piercing-rounds-magazine']=cutoff_amount_made(100, 0, 10),
+        --[[
+            ['construction-robot']=scale_amount_made(1, 10, 1)
         ]]
-
-        ['coal']=cutoff_time(10*minutes, 200, 0),
-        ['burner-mining-drill']=cutoff_time(10*minutes, 4, 0),
-        ['stone-furnace']=cutoff_time(10*minutes, 4, 0),
-        ['submachine-gun']=scale_amount_made(1, 1, 1),
-        ['piercing-rounds-magazine']=scale_amount_made(1, 20, 1),
-        ['construction-robot']=scale_amount_made(1, 10, 1)
     },
     armor = {
-        enable=true,
+        enable=false,
         main = 'modular-armor',
         grid = {
             {

@@ -24,7 +24,6 @@ end
 local function research_notification(event)
     if not (event.by_script) then
         local is_inf_res = false
-        
         for i=1, #config.inf_res do
             if (event.research.name == config.inf_res[i].name) and (event.research.level >= config.inf_res[i].level) then
                 is_inf_res = true

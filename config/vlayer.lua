@@ -7,16 +7,17 @@ return {
     -- 10 MJ
     energy_base_limit = 10000000,
     land = {
-        enabled = false,
+        enabled = true,
         tile = 'landfill',
         result = 4,
         requirement = {
-            solar_panel = 9,
-            accumulator = 4
+            ['solar-panel'] = 9,
+            ['accumulator'] = 4
         }
     },
     always_day = false,
     battery_limit = true,
+    -- setting to a value greater than 1 will allow for wireless energy transfer
     interface_limit = {
         storage_input = 1,
         energy = 1,

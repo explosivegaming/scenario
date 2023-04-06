@@ -163,11 +163,9 @@ function Warps.make_warp_area(warp_id)
 
     -- Add a tile pattern on top of the base
     local tiles = {}
-    
     for _, tile in pairs(config.tiles) do
         table.insert(tiles, {name=tile[1], position={tile[2]+posx, tile[3]+posy}})
     end
-
     surface.set_tiles(tiles)
 
     -- Add entities to the warp structure
@@ -222,7 +220,6 @@ function Warps.remove_warp_area(warp_id)
 
     -- Remove warp structure entities
     local entities = surface.find_entities_filtered{ force='neutral', area=area, name = remove_warp_area_entity_names }
-    
     for _, entity in pairs(entities) do
         -- Destroy them, this will leave corpses of the entities that it destroyed.
         if entity and entity.valid and entity.destructible == false then
@@ -230,7 +227,6 @@ function Warps.remove_warp_area(warp_id)
             entity.die(entity.force)
         end
     end
-
     -- Rechart map area, useful if warp is not covered by a radar
     game.forces[warp.force_name].chart(surface, area)
 end
@@ -246,21 +242,16 @@ Warps.set_spawn_warp(warp_id, game.player.force)
 function Warps.set_spawn_warp(warp_id, force)
     -- Check the force owns this warp
     local warp = WrapData:get(warp_id)
-    
     if warp.force_name ~= force.name then
         return
     end
-
     -- Set this warp as the spawn
     local warp_ids = force_warps[warp.force_name]
-
     if not warp_ids then
         warp_ids = {}
         force_warps[warp.force_name] = warp_ids
     end
-
     warp_ids.spawn = warp_id
-
     -- Set the forces spawn to this warp
     force.set_spawn_position(warp.position, warp.surface)
 end

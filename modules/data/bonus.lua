@@ -30,12 +30,12 @@ local function apply_bonus(player, stage)
         return
     end
 
-    for _, bonus in pairs(config.player_bonus) do
-        if bonus.enabled then
+    for _, v in pairs(config.player_bonus) do
+        if v.enabled then
             if stage == 0 then
-                player[bonus.name] = bonus.min
+                player[v.name] = v.min
             else
-                player[bonus.name] = bonus.min + (bonus.max - bonus.min) * stage / 10
+                player[v.name] = v.min + (v.max - v.min) * stage / 10
             end
         end
     end
@@ -52,13 +52,13 @@ end)
 Commands.new_command('bonus', 'Changes the amount of bonus you receive')
 :add_param('amount', 'integer-range', 0, 10)
 :register(function(player, amount)
-    if amount > 2 then
-        if not Roles.player_allowed(player, "bonus-2") then
+    if amount > config.player_bonus_level then
+        if not Roles.player_allowed(player, 'command/bonus/2') then
             Commands.print{'expcom-bonus.perm', 2}
             return
         end
-    elseif amount <= 2 then
-        if not Roles.player_allowed(player, "bonus-1") then
+    elseif amount == config.player_bonus_level then
+        if not Roles.player_allowed(player, 'command/bonus') then
             Commands.print{'expcom-bonus.perm', 1}
             return
         end
@@ -78,7 +78,9 @@ end)
 --- Remove bonus if a player no longer has access to the command
 local function role_update(event)
     local player = game.players[event.player_index]
-    apply_bonus(player, 0)
+    if not Roles.player_allowed(player, 'command/bonus') then
+        apply_bonus(player, 0)
+    end
 end
 
 --- When a player dies allow them to have instant respawn
@@ -91,17 +93,19 @@ Event.add(defines.events.on_player_died, function(event)
 end)
 
 Event.add(defines.events.on_player_created, function(event)
-    if event.player_index ~= 1 then return end
+    if event.player_index ~= 1 then
+        return
+    end
 
-    for k, _ in pairs(config.force_bonus) do
-        if config.force_bonus[k].enabled then
-            game.players[event.player_index].force[config.force_bonus[k].name] = game.players[event.player_index].force[config.force_bonus[k].name] + config.force_bonus[k].max
+    for _, v in pairs(config.force_bonus) do
+        if v.enabled then
+            game.players[event.player_index].force[v.name] = game.players[event.player_index].force[v.name] + v.max
         end
     end
 
-    for k, _ in pairs(config.surface_bonus) do
-        if config.surface_bonus[k].enabled then
-            game.players[event.player_index].surface[config.surface_bonus[k].name] = config.surface_bonus[k].max
+    for _, v in pairs(config.surface_bonus) do
+        if v.enabled then
+            game.players[event.player_index].surface[v.name] = game.players[event.player_index].surface[v.name] + v.max
         end
     end
 end)
