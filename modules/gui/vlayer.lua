@@ -232,13 +232,12 @@ end)
 
 Event.on_nth_tick(config.update_tick, function()
     local frame = Gui.get_left_element(game.players[1], vlayer_container)
-    local circuit_o = vlayer.power.circuit[1].output.get_or_create_control_behavior()
 
-    for i=1, #vlayer.circuit.output do
+    for i=1, #config.gui.content do
         if config.gui.content[i].type == 'item' then
             frame.container.scroll.table['vlayer_display_' .. i].caption = format_number(vlayer.storage.item[config.gui.content[i].name])
         elseif config.gui.content[i].type == 'signal' then
-            frame.container.scroll.table['vlayer_display_' .. i].caption = format_number(circuit_o.get_signal(config.gui.content[i].name))
+            frame.container.scroll.table['vlayer_display_' .. i].caption = format_number(vlayer.circuit.output[config.gui.content[i].name])
         end
     end
 
