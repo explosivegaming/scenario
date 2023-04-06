@@ -44,7 +44,6 @@ vlayer.circuit.output[8] = {signal={type='item', name='accumulator'}, count=0}
 vlayer.storage.item['solar-panel'] = 0
 vlayer.storage.item['accumulator'] = 0
 
-end
 --[[
     25,000 / 416 s
     昼      208秒	ソーラー効率100%
