@@ -9,7 +9,7 @@ local format_number = require('util').format_number
 local vlayer = require 'modules.control.vlayer'
 
 local function vlayer_convert_chest(player)
-    local entities = player.surface.find_entities_filtered{position=player.position, radius=5, name='steel-chest', force=player.force}
+    local entities = player.surface.find_entities_filtered{position=player.position, radius=8, name='steel-chest', force=player.force}
     
     if (not entities or (#entities == 0)) then
         return nil
@@ -105,7 +105,7 @@ end
 local function vlayer_convert_remove(player)
     local entities = player.surface.find_entities_filtered{name={'electric-energy-interface', 'constant-combinator', 'logistic-chest-storage'}, position=player.position, radius=5, force={'neutral'}}
 
-    if (#entities == 0) then
+    if (not entities or #entities == 0) then
         player.print('Entity not found')
         return
     end
