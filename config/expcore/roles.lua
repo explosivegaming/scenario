@@ -204,7 +204,6 @@ Roles.new_role('Partner','Part')
     'command/spectate',
     'command/follow',
     'fast-tree-decon'
-}
 
 Roles.new_role('Senior Member','SMem')
 :set_permission_group('Trusted')
@@ -268,7 +267,7 @@ Roles.new_role('Regular','Reg')
 	'bypass-nukeprotect'
 }
 :set_auto_assign_condition(function(player)
-    if player.online_time >= hours2 then
+  if player.online_time >= hours2 then
         return true
     else
         local stats = Statistics:get(player, {})

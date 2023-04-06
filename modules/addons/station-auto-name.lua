@@ -75,7 +75,7 @@ local function station_name_changer(event)
                 if item_name == "crude-oil" then
                     Item_ore_fluid = "fluid"
                 end
-
+        
                 entity.backer_name = config.station_name:gsub('%icon', '[img=' .. Item_ore_fluid .. '.' .. item_name .. ']')
                     :gsub('%item_name', item_name2)
                     :gsub('%backer_name', entity.backer_name)

@@ -1,6 +1,9 @@
 --- This file contains all the different settings for the warp system and gui
 -- @config Warps
 
+--- This file contains all the different settings for the warp system and gui
+-- @config Warps
+
 return {
     -- General config
     update_smoothing = 10, --- @setting update_smoothing the amount of smoothing applied to updates to the cooldown timer, higher is better, max is 60
