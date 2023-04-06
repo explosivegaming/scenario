@@ -17,10 +17,30 @@ vlayer.power = {}
 vlayer.power.entity = {}
 vlayer.power.energy = 0
 vlayer.power.circuit = {}
+vlayer.circuit = {}
+vlayer.circuit.input = {}
+vlayer.circuit.output = {}
+vlayer.circuit.input[1] = {signal={type='virtual', name='signal-P'}, count=1}
+vlayer.circuit.input[2] = {signal={type='virtual', name='signal-S'}, count=1}
+vlayer.circuit.input[3] = {signal={type='virtual', name='signal-M'}, count=1}
+vlayer.circuit.input[4] = {signal={type='virtual', name='signal-C'}, count=1}
+vlayer.circuit.input[5] = {signal={type='virtual', name='signal-D'}, count=1}
+vlayer.circuit.input[6] = {signal={type='virtual', name='signal-T'}, count=1}
+vlayer.circuit.input[7] = {signal={type='item', name='solar-panel'}, count=1}
+vlayer.circuit.input[8] = {signal={type='item', name='accumulator'}, count=1}
 
 vlayer.storage.item['solar-panel'] = 0
 vlayer.storage.item['accumulator'] = 0
 
+circuit_o.set_signal(1, {signal={type='virtual', name='signal-P'}, count=(math.floor(vlayer.storage.item['solar-panel'] * 0.06) % 1000000000)})
+circuit_o.set_signal(2, {signal={type='virtual', name='signal-S'}, count=(math.floor(vlayer.storage.item['solar-panel'] * 873 / 20800) % 1000000000)})
+circuit_o.set_signal(3, {signal={type='virtual', name='signal-M'}, count=((vlayer.storage.item['accumulator'] * 5) % 1000000000)})
+circuit_o.set_signal(4, {signal={type='virtual', name='signal-C'}, count=(math.floor(vlayer.power.energy / 1000000) % 1000000000)})
+circuit_o.set_signal(5, {signal={type='virtual', name='signal-D'}, count=(math.floor(game.tick / 25000))})
+circuit_o.set_signal(6, {signal={type='virtual', name='signal-T'}, count=(game.tick % 25000)})
+circuit_o.set_signal(7, {signal={type='item', name='solar-panel'}, count=(vlayer.storage.item['solar-panel'] % 1000000000)})
+circuit_o.set_signal(8, {signal={type='item', name='accumulator'}, count=(vlayer.storage.item['accumulator'] % 1000000000)})
+end
 --[[
     25,000 / 416 s
     昼      208秒	ソーラー効率100%
@@ -103,6 +123,8 @@ Event.on_nth_tick(config.update_tick, function()
     end
 
     -- circuit handle
+    
+
     for k, v in pairs(vlayer.power.circuit) do
         if (v.input == nil) or (v.output == nil) or (not v.input.valid) or (not v.output.valid) then
             vlayer.power.circuit[k] = nil
