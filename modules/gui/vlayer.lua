@@ -238,7 +238,7 @@ Event.on_nth_tick(config.update_tick, function()
         if config.gui.content[i].type == 'item' then
             frame.container.scroll.table['vlayer_display_' .. i].caption = format_number(vlayer.storage.item[config.gui.content[i].name])
         elseif config.gui.content[i].type == 'signal' then
-            frame.container.scroll.table['vlayer_display_' .. i].caption = format_number(math.floor(circuit_o.get_signal(config.gui.content[i].name)))
+            frame.container.scroll.table['vlayer_display_' .. i].caption = format_number(circuit_o.get_signal(config.gui.content[i].name))
         end
     end
 
