@@ -83,17 +83,16 @@ Event.on_nth_tick(config.update_tick, function()
         else
             local chest = v.storage.get_inventory(defines.inventory.chest)
             local chest_content = chest.get_contents()
-            
+
             if config.land.enabled then
-                local chest_landfill = chest.get_item_count(config.land.tile)
+                local chest_landfill = chest_content[config.land.tile]
 
                 if chest_landfill > 0 then
                     vlayer.storage.item[config.land.tile] = vlayer.storage.item[config.land.tile] + chest_landfill
-                    chest.remove({name=config.land.tile, count=chest_landfill})
                     vlayer.circuit.output[7].signal = vlayer.circuit.output[7].signal + (chest_landfill * config.land.result)
+                    chest.remove({name=config.land.tile, count=chest_landfill})
+                    chest_content[config.land.tile] = nil
                 end
-
-                chest_content = chest.get_contents()
 
                 for item_name, count in pairs(chest_content) do
                     if (vlayer.storage.item[item_name] ~= nil) then
