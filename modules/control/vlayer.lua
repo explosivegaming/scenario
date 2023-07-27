@@ -81,7 +81,7 @@ Event.on_nth_tick(config.update_tick, function()
         else
             local chest = v.storage.get_inventory(defines.inventory.chest)
             local chest_content = chest.get_contents()
-            
+
             if config.land.enabled then
                 if chest_content[config.land.tile] > 0 then
                     vlayer.storage.item[config.land.tile] = vlayer.storage.item[config.land.tile] + chest_content[config.land.tile]
@@ -102,8 +102,8 @@ Event.on_nth_tick(config.update_tick, function()
                         else
                             item_delivery = math.floor(vlayer.circuit.output[7].signal / config.land.requirement[item_name])
                             vlayer.storage.item[item_name] = vlayer.storage.item[item_name] + item_delivery
-                            chest.remove({name=item_name, count=item_delivery})       
-                            vlayer.circuit.output[7].signal = vlayer.circuit.output[7].signal - (config.land.requirement[item_name] * item_delivery)     
+                            chest.remove({name=item_name, count=item_delivery})
+                            vlayer.circuit.output[7].signal = vlayer.circuit.output[7].signal - (config.land.requirement[item_name] * item_delivery)
                         end
                     elseif (vlayer_storage_item[item_name] ~= nil) then
                         local item_delivery = config.land.requirement[vlayer_storage_item[item_name].name] * count * vlayer_storage_item[item_name].multiplier
@@ -115,9 +115,9 @@ Event.on_nth_tick(config.update_tick, function()
                         else
                             item_delivery = math.floor(vlayer.circuit.output[7].signal / config.land.requirement[vlayer_storage_item[item_name].name] / vlayer_storage_item[item_name].multiplier)
                             vlayer.storage.item[vlayer_storage_item[item_name].name] = vlayer.storage.item[vlayer_storage_item[item_name].name] + item_delivery
-                            chest.remove({name=item_name, count=item_delivery})       
-                            vlayer.circuit.output[7].signal = vlayer.circuit.output[7].signal - (config.land.requirement[vlayer_storage_item[item_name].name] * item_delivery)     
-                        end 
+                            chest.remove({name=item_name, count=item_delivery})
+                            vlayer.circuit.output[7].signal = vlayer.circuit.output[7].signal - (config.land.requirement[vlayer_storage_item[item_name].name] * item_delivery)
+                        end
                     end
                 end
 
