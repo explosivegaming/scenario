@@ -68,6 +68,26 @@ return {
                 name = 7
             },
             {
+                title = '[virtual-signal=signal-1] Solar Panel Available',
+                type = nil,
+                name = nil
+            },
+            {
+                title = 0,
+                type = 'signal',
+                name = 8
+            },
+            {
+                title = '[virtual-signal=signal-2] Accumulator Available',
+                type = nil,
+                name = nil
+            },
+            {
+                title = 0,
+                type = 'signal',
+                name = 9
+            },
+            {
                 title = 'Power Production',
                 type = nil,
                 name = nil
