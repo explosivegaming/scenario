@@ -53,7 +53,9 @@ vlayer.circuit.output[9].signal = {type='item', name='accumulator'}
 
 vlayer.storage.item['solar-panel'] = 0
 vlayer.storage.item['accumulator'] = 0
-vlayer.storage.item[config.land.tile] = 0
+if config.land.enabled then
+    vlayer.storage.item[config.land.tile] = 0
+end
 local vlayer_storage_item = {}
 
 for i=2, 8 do
@@ -81,12 +83,14 @@ Event.on_nth_tick(config.update_tick, function()
         else
             local chest = v.storage.get_inventory(defines.inventory.chest)
             local chest_content = chest.get_contents()
-
+            
             if config.land.enabled then
-                if chest_content[config.land.tile] > 0 then
-                    vlayer.storage.item[config.land.tile] = vlayer.storage.item[config.land.tile] + chest_content[config.land.tile]
-                    chest.remove({name=config.land.tile, count=chest_content[config.land.tile]})
-                    vlayer.circuit.output[7].signal = vlayer.circuit.output[7].signal + (chest_content[config.land.tile] * config.land.result)
+                local chest_landfill = chest.get_item_count(config.land.tile)
+
+                if chest_landfill > 0 then
+                    vlayer.storage.item[config.land.tile] = vlayer.storage.item[config.land.tile] + chest_landfill
+                    chest.remove({name=config.land.tile, count=chest_landfill})
+                    vlayer.circuit.output[7].signal = vlayer.circuit.output[7].signal + (chest_landfill * config.land.result)
                 end
 
                 chest_content = chest.get_contents()
