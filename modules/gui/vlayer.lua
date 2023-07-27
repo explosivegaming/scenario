@@ -119,14 +119,13 @@ local function vlayer_convert_remove(player)
             vlayer.power.energy = vlayer.power.energy + entities[i].energy
             entities[i].energy = 0
         end
-        entities[i].destroy()
         local vlayer_print_short = {
             ['electric-energy-interface'] = 'energy interface',
             ['constant-combinator'] = 'circuit',
             ['logistic-chest-storage'] = 'input'
         }
         game.print(player.name .. ' removed a vlayer ' .. vlayer_print_short[entities[i].name] .. ' on ' .. pos_to_gps_string(entities[i].pos))
-        player.print('Entity removed')
+        entities[i].destroy()
     end
 end
 
