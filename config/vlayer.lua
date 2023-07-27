@@ -58,7 +58,7 @@ return {
                 name = 'accumulator'
             },
             {
-                title = '[img=item.landfill] Landfill',
+                title = '[virtual-signal=signal-L] Landfill',
                 type = nil,
                 name = nil
             },
