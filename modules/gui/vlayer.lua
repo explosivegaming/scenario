@@ -97,9 +97,9 @@ local function vlayer_convert_chest_circuit(player)
         circuit_ii.set_signal(4, {signal={type='virtual', name='signal-C'}, count=1})
         circuit_ii.set_signal(5, {signal={type='virtual', name='signal-D'}, count=1})
         circuit_ii.set_signal(6, {signal={type='virtual', name='signal-T'}, count=1})
-        circuit_ii.set_signal(7, {signal={type='item', name='solar-panel'}, count=1})
-        circuit_ii.set_signal(8, {signal={type='item', name='accumulator'}, count=1})
-        circuit_ii.set_signal(9, {signal={type='item', name=config.land.tile}, count=1})
+        circuit_ii.set_signal(7, {signal={type='virtual', name='signal-L'}, count=1})
+        circuit_ii.set_signal(8, {signal={type='item', name='solar-panel'}, count=1})
+        circuit_ii.set_signal(9, {signal={type='item', name='accumulator'}, count=1})
         local circuit_o = player.surface.create_entity{name='constant-combinator', position={x=pos.x+1, y=pos.y}, force='neutral'}
         circuit_o.destructible = false
         circuit_o.minable = false
