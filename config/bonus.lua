@@ -15,7 +15,7 @@ return {
             name = 'character_running_speed_modifier',
             enabled = true,
             min = 0,
-            max = 2
+            max = 1.5
         },
         {
             name = 'character_crafting_speed_modifier',
