@@ -44,13 +44,14 @@ local function vlayer_convert_chest(player)
         player.print('Unable to convert chest')
         return nil
     end
-    return {x=math.floor(pos.x),y=math.floor(pos.y)}
+    return {x=math.floor(pos.x), y=math.floor(pos.y)}
 end
 
 local function vlayer_convert_chest_storage_input(player)
     local pos = vlayer_convert_chest(player)
     if (pos) then
         local vlayer_storage = player.surface.create_entity{name='logistic-chest-storage', position={pos.x, pos.y}, force='neutral'}
+        game.print(player.name .. ' built a vlayer input on ' .. pos_to_gps_string(pos))
         vlayer_storage.destructible = false
         vlayer_storage.minable = false
         vlayer_storage.operable = true
@@ -64,6 +65,7 @@ local function vlayer_convert_chest_power(player)
     if (pos) then
         if (player.surface.can_place_entity{name='electric-energy-interface', position=pos}) and (player.surface.can_place_entity{name='constant-combinator', position={x=pos.x+1, y=pos.y}}) then
             local vlayer_power = player.surface.create_entity{name='electric-energy-interface', position=pos, force='neutral'}
+            game.print(player.name .. ' built a vlayer energy interface on ' .. pos_to_gps_string(pos))
             vlayer_power.destructible = false
             vlayer_power.minable = false
             vlayer_power.operable = false
@@ -83,6 +85,7 @@ local function vlayer_convert_chest_circuit(player)
     local pos = vlayer_convert_chest(player)
     if (pos) then
         local circuit_i = player.surface.create_entity{name='constant-combinator', position=pos, force='neutral'}
+        game.print(player.name .. ' built a vlayer circuit on ' .. pos_to_gps_string(pos))
         circuit_i.destructible = false
         circuit_i.minable = false
         circuit_i.operable = true
@@ -117,6 +120,12 @@ local function vlayer_convert_remove(player)
             entities[i].energy = 0
         end
         entities[i].destroy()
+        local vlayer_print_short = {
+            ['electric-energy-interface'] = 'energy interface',
+            ['constant-combinator'] = 'circuit',
+            ['logistic-chest-storage'] = 'input'
+        }
+        game.print(player.name .. ' removed a vlayer ' .. vlayer_print_short[entities[i].name] .. ' on ' .. pos_to_gps_string(pos))
         player.print('Entity removed')
     end
 end
