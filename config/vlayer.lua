@@ -68,7 +68,7 @@ return {
                 name = 7
             },
             {
-                title = '[virtual-signal=signal-A] Solar Panel Available',
+                title = '[virtual-signal=signal-A] Solar Available',
                 type = nil,
                 name = nil
             },
@@ -78,7 +78,7 @@ return {
                 name = 8
             },
             {
-                title = '[virtual-signal=signal-B] Accumulator Available',
+                title = '[virtual-signal=signal-B] Acc Available',
                 type = nil,
                 name = nil
             },
