@@ -53,7 +53,9 @@ vlayer.circuit.output[9].signal = {type='item', name='accumulator'}
 
 vlayer.storage.item['solar-panel'] = 0
 vlayer.storage.item['accumulator'] = 0
-vlayer.storage.item[config.land.tile] = 0
+if config.land.enabled then
+    vlayer.storage.item[config.land.tile] = 0
+end
 local vlayer_storage_item = {}
 
 for i=2, 8 do
