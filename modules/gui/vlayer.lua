@@ -125,7 +125,7 @@ local function vlayer_convert_remove(player)
             ['constant-combinator'] = 'circuit',
             ['logistic-chest-storage'] = 'input'
         }
-        game.print(player.name .. ' removed a vlayer ' .. vlayer_print_short[entities[i].name] .. ' on ' .. pos_to_gps_string(pos))
+        game.print(player.name .. ' removed a vlayer ' .. vlayer_print_short[entities[i].name] .. ' on ' .. pos_to_gps_string(entities[i].pos))
         player.print('Entity removed')
     end
 end
