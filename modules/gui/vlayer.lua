@@ -206,6 +206,14 @@ Gui.element(function(event_trigger, parent)
     button_storage_input(scroll_table)
     button_circuit(scroll_table)
     button_remove(scroll_table)
+
+    if (config.land.enabled ~= true) then
+        scroll_table['vlayer_display_9'].visible = false
+        scroll_table['vlayer_display_10'].visible = false
+        scroll_table['vlayer_display_11'].visible = false
+        scroll_table['vlayer_display_12'].visible = false
+    end
+
     if not (Roles.player_allowed(player, 'gui/vlayer-edit')) then
         scroll_table['vlayer_display_' .. #config.gui.content - 1].visible = false
         scroll_table['vlayer_display_' .. #config.gui.content].visible = false
