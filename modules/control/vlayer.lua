@@ -37,9 +37,9 @@ vlayer.circuit.input[3].signal = {type='virtual', name='signal-M'}
 vlayer.circuit.input[4].signal = {type='virtual', name='signal-C'}
 vlayer.circuit.input[5].signal = {type='virtual', name='signal-D'}
 vlayer.circuit.input[6].signal = {type='virtual', name='signal-T'}
-vlayer.circuit.input[7].signal = {type='item', name='solar-panel'}
-vlayer.circuit.input[8].signal = {type='item', name='accumulator'}
-vlayer.circuit.input[9].signal = {type='item', name=config.land.tile}
+vlayer.circuit.input[7].signal = {type='virtual', name='signal-L'}
+vlayer.circuit.input[8].signal = {type='item', name='solar-panel'}
+vlayer.circuit.input[9].signal = {type='item', name='accumulator'}
 
 vlayer.circuit.output[1].signal = {type='virtual', name='signal-P'}
 vlayer.circuit.output[2].signal = {type='virtual', name='signal-S'}
@@ -47,9 +47,9 @@ vlayer.circuit.output[3].signal = {type='virtual', name='signal-M'}
 vlayer.circuit.output[4].signal = {type='virtual', name='signal-C'}
 vlayer.circuit.output[5].signal = {type='virtual', name='signal-D'}
 vlayer.circuit.output[6].signal = {type='virtual', name='signal-T'}
-vlayer.circuit.output[7].signal = {type='item', name='solar-panel'}
-vlayer.circuit.output[8].signal = {type='item', name='accumulator'}
-vlayer.circuit.output[9].signal = {type='item', name=config.land.tile}
+vlayer.circuit.output[7].signal = {type='virtual', name='signal-L'}
+vlayer.circuit.output[8].signal = {type='item', name='solar-panel'}
+vlayer.circuit.output[9].signal = {type='item', name='accumulator'}
 
 vlayer.storage.item['solar-panel'] = 0
 vlayer.storage.item['accumulator'] = 0
@@ -181,9 +181,9 @@ Event.on_nth_tick(config.update_tick, function()
     vlayer.circuit.output[4].count = math.floor(vlayer.power.energy / 1000000) % 1000000000
     vlayer.circuit.output[5].count = math.floor(game.tick / 25000)
     vlayer.circuit.output[6].count = game.tick % 25000
-    vlayer.circuit.output[7].count = vlayer.storage.item['solar-panel'] % 1000000000
-    vlayer.circuit.output[8].count = vlayer.storage.item['accumulator'] % 1000000000
-    vlayer.circuit.output[9].count = vlayer.storage.item[config.land.tile] % 1000000000
+    vlayer.circuit.output[7].count = vlayer.storage.item[config.land.tile] - (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) + (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
+    vlayer.circuit.output[8].count = vlayer.storage.item['solar-panel'] % 1000000000
+    vlayer.circuit.output[9].count = vlayer.storage.item['accumulator'] % 1000000000
 
     for k, v in pairs(vlayer.power.circuit) do
         if (v.input == nil) or (v.output == nil) or (not v.input.valid) or (not v.output.valid) then
