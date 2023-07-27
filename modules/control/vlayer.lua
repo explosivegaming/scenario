@@ -83,7 +83,7 @@ Event.on_nth_tick(config.update_tick, function()
         else
             local chest = v.storage.get_inventory(defines.inventory.chest)
             local chest_content = chest.get_contents()
-            
+
             if config.land.enabled then
                 local chest_landfill = chest_content[config.land.tile]
 
