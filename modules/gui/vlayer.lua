@@ -11,6 +11,10 @@ local vlayer = require 'modules.control.vlayer'
 local vlayer_container
 local vlayer_display = {}
 
+local function pos_to_gps_string(pos)
+	return '[gps=' .. tostring(pos.x) .. ',' .. tostring(pos.y) .. ']'
+end
+
 for i=1, #config.gui.content do
     if config.gui.content[i].type == 'item' or config.gui.content[i].type == 'signal' then
         vlayer_display[i] = {

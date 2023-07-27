@@ -21,7 +21,7 @@ local function pos_to_string(pos)
 end
 
 local function pos_to_gps_string(pos)
-	return "[gps=" .. tostring(pos.x) .. "," .. tostring(pos.y) .. "]"
+	return '[gps=' .. tostring(pos.x) .. ',' .. tostring(pos.y) .. ']'
 end
 
 Event.on_init(function()
