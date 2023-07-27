@@ -38,8 +38,8 @@ vlayer.circuit.input[4].signal = {type='virtual', name='signal-C'}
 vlayer.circuit.input[5].signal = {type='virtual', name='signal-D'}
 vlayer.circuit.input[6].signal = {type='virtual', name='signal-T'}
 vlayer.circuit.input[7].signal = {type='virtual', name='signal-L'}
-vlayer.circuit.input[8].signal = {type='virtual', name='signal-1'}
-vlayer.circuit.input[9].signal = {type='virtual', name='signal-2'}
+vlayer.circuit.input[8].signal = {type='virtual', name='signal-A'}
+vlayer.circuit.input[9].signal = {type='virtual', name='signal-B'}
 vlayer.circuit.input[10].signal = {type='item', name='solar-panel'}
 vlayer.circuit.input[11].signal = {type='item', name='accumulator'}
 
@@ -50,8 +50,8 @@ vlayer.circuit.output[4].signal = {type='virtual', name='signal-C'}
 vlayer.circuit.output[5].signal = {type='virtual', name='signal-D'}
 vlayer.circuit.output[6].signal = {type='virtual', name='signal-T'}
 vlayer.circuit.output[7].signal = {type='virtual', name='signal-L'}
-vlayer.circuit.output[8].signal = {type='virtual', name='signal-1'}
-vlayer.circuit.output[9].signal = {type='virtual', name='signal-2'}
+vlayer.circuit.output[8].signal = {type='virtual', name='signal-A'}
+vlayer.circuit.output[9].signal = {type='virtual', name='signal-B'}
 vlayer.circuit.output[10].signal = {type='item', name='solar-panel'}
 vlayer.circuit.output[11].signal = {type='item', name='accumulator'}
 
