@@ -130,7 +130,7 @@ Event.on_nth_tick(config.update_tick, function()
                 vlayer.circuit.output[1].count = math.floor(vlayer.storage.item['solar-panel'] * 0.06 * game.surfaces['nauvis'].solar_power_multiplier)
                 vlayer.circuit.output[2].count = math.floor(vlayer.storage.item['solar-panel'] * 873 * game.surfaces['nauvis'].solar_power_multiplier / 20800)
                 vlayer.circuit.output[3].count = vlayer.storage.item['accumulator'] * 5
-                vlayer.circuit.output[7].count = (vlayer.storage.item[config.land.tile] * config.land.result) - (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) + (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
+                vlayer.circuit.output[7].count = (vlayer.storage.item[config.land.tile] * config.land.result) - (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) - (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
                 vlayer.circuit.output[8].count = vlayer.storage.item_a['solar-panel']
                 vlayer.circuit.output[9].count = vlayer.storage.item_a['accumulator']
                 vlayer.circuit.output[10].count = vlayer.storage.item['solar-panel']
