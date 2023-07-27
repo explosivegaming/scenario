@@ -24,7 +24,7 @@ vlayer.circuit = {}
 vlayer.circuit.input = {}
 vlayer.circuit.output = {}
 
-for i=1, 9 do
+for i=1, 11 do
     vlayer.circuit.input[i] = {}
     vlayer.circuit.output[i] = {}
     vlayer.circuit.input[i].count = 1
