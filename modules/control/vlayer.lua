@@ -57,8 +57,8 @@ vlayer.storage.item['accumulator'] = 0
 if config.land.enabled then
     vlayer.storage.item[config.land.tile] = 0
     vlayer.storage.item_a = {}
-    vlayer.storage.item['solar-panel'] = 0
-vlayer.storage.item['accumulator'] = 0
+    vlayer.storage.item_a['solar-panel'] = 0
+    vlayer.storage.item_a['accumulator'] = 0
 end
 
 local vlayer_storage_item = {}
