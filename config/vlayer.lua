@@ -58,14 +58,14 @@ return {
                 name = 'accumulator'
             },
             {
-                title = '[img=landfill] Landfill',
+                title = '[img=item.landfill] Landfill',
                 type = nil,
                 name = nil
             },
             {
                 title = 0,
-                type = 'item',
-                name = 'landfill'
+                type = 'signal',
+                name = 7
             },
             {
                 title = 'Power Production',
