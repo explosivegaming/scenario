@@ -39,7 +39,7 @@ vlayer.circuit.input[5].signal = {type='virtual', name='signal-D'}
 vlayer.circuit.input[6].signal = {type='virtual', name='signal-T'}
 vlayer.circuit.input[7].signal = {type='item', name='solar-panel'}
 vlayer.circuit.input[8].signal = {type='item', name='accumulator'}
-vlayer.circuit.input[9].signal = {type='item', name='landfill'}
+vlayer.circuit.input[9].signal = {type='item', name=config.land.tile}
 
 vlayer.circuit.output[1].signal = {type='virtual', name='signal-P'}
 vlayer.circuit.output[2].signal = {type='virtual', name='signal-S'}
@@ -49,11 +49,11 @@ vlayer.circuit.output[5].signal = {type='virtual', name='signal-D'}
 vlayer.circuit.output[6].signal = {type='virtual', name='signal-T'}
 vlayer.circuit.output[7].signal = {type='item', name='solar-panel'}
 vlayer.circuit.output[8].signal = {type='item', name='accumulator'}
-vlayer.circuit.output[9].signal = {type='item', name='landfill'}
+vlayer.circuit.output[9].signal = {type='item', name=config.land.tile}
 
 vlayer.storage.item['solar-panel'] = 0
 vlayer.storage.item['accumulator'] = 0
-vlayer.storage.item['landfill'] = 0
+vlayer.storage.item[config.land.tile] = 0
 local vlayer_storage_item = {}
 
 for i=2, 8 do
@@ -183,7 +183,7 @@ Event.on_nth_tick(config.update_tick, function()
     vlayer.circuit.output[6].count = game.tick % 25000
     vlayer.circuit.output[7].count = vlayer.storage.item['solar-panel'] % 1000000000
     vlayer.circuit.output[8].count = vlayer.storage.item['accumulator'] % 1000000000
-    vlayer.circuit.output[9].count = vlayer.storage.item['landfill'] % 1000000000
+    vlayer.circuit.output[9].count = vlayer.storage.item[config.land.tile] % 1000000000
 
     for k, v in pairs(vlayer.power.circuit) do
         if (v.input == nil) or (v.output == nil) or (not v.input.valid) or (not v.output.valid) then
