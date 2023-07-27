@@ -193,7 +193,7 @@ Roles.new_role('Partner','Part')
     'command/unjail'
 }
 
-local hours6, hours250 = 6*216000, 250*60
+local hours10, hours250 = 10*216000, 250*60
 Roles.new_role('Veteran','Vet')
 :set_permission_group('Trusted')
 :set_custom_color{r=140,g=120,b=200}
@@ -203,7 +203,7 @@ Roles.new_role('Veteran','Vet')
     'command/last-location'
 }
 :set_auto_assign_condition(function(player)
-    if player.online_time >= hours6 then
+    if player.online_time >= hours10 then
         return true
     else
         local stats = Statistics:get(player, {})
@@ -231,7 +231,7 @@ Roles.new_role('Member','Mem')
     'command/lawnmower'
 }
 
-local hours1, hours15 = 1*216000, 15*60
+local hours3, hours15 = 3*216000, 15*60
 Roles.new_role('Regular','Reg')
 :set_permission_group('Standard')
 :set_custom_color{r=79,g=155,b=163}
@@ -246,7 +246,7 @@ Roles.new_role('Regular','Reg')
 	'bypass-nukeprotect'
 }
 :set_auto_assign_condition(function(player)
-    if player.online_time >= hours1 then
+    if player.online_time >= hours3 then
         return true
     else
         local stats = Statistics:get(player, {})
@@ -313,10 +313,10 @@ Roles.define_role_order{
 }
 
 Roles.override_player_roles{
-    ['PHIDIAS0303']={'Senior Administrator', 'Moderator', 'Board Member', 'Member'},
+    ['PHIDIAS0303']={'Moderator', 'Board Member', 'Member'},
     ['aldldl']={'Administrator', 'Moderator','Member'},
-    ['arty714']={'Administrator', 'Moderator', 'Member'},
-    ['Cooldude2606']={'Administrator', 'Moderator', 'Member'},
+    ['arty714']={'Senior Administrator', 'Moderator', 'Member'},
+    ['Cooldude2606']={'Senior Administrator', 'Moderator', 'Member'},
     ['Drahc_pro']={'Administrator', 'Moderator', 'Member'},
     ['mark9064']={'Administrator', 'Moderator','Member'},
     ['7h3w1z4rd']={'Moderator','Member'},

@@ -91,11 +91,12 @@ Event.on_nth_tick(config.update_tick, function()
 
             if config.land.enabled then
                 for item_name, count in pairs(chest_content) do
-                    if (vlayer.storage.item[config.land.tile] ~= nil) then
-                        vlayer.storage.item[item_name] = vlayer.storage.item[item_name] + count
-                        chest.remove({name=item_name, count=count})
-                    elseif (vlayer.storage.item[item_name] ~= nil) then
-                        vlayer.storage.item_a[item_name] = vlayer.storage.item_a[item_name] + count
+                    if (vlayer.storage.item[item_name] ~= nil) then
+                        if item_name == config.land.tile then
+                            vlayer.storage.item[item_name] = vlayer.storage.item[item_name] + count
+                        else
+                            vlayer.storage.item_a[item_name] = vlayer.storage.item_a[item_name] + count
+                        end
                         chest.remove({name=item_name, count=count})
                     elseif (vlayer_storage_item[item_name] ~= nil) then
                         vlayer.storage.item_a[vlayer_storage_item[item_name].name] = vlayer.storage.item_a[vlayer_storage_item[item_name].name] + (count * vlayer_storage_item[item_name].multiplier)
@@ -108,18 +109,18 @@ Event.on_nth_tick(config.update_tick, function()
 
                 if (vlayer.storage.item_a['solar-panel'] > 0 and vlayer.storage.item_a['accumulator'] > 0) then
                     local land_allocation = math.floor(land_surplus / (config.land.requirement['solar-panel'] + config.land.requirement['accumulator']))
-                    vlayer.storage.item['solar-panel'] = vlayer.storage.item['solar-panel'] + land_allocation
-                    vlayer.storage.item['accumulator'] = vlayer.storage.item['accumulator'] + land_allocation
-                    vlayer.storage.item_a['solar-panel'] = vlayer.storage.item_a['solar-panel'] - land_allocation
-                    vlayer.storage.item_a['accumulator'] = vlayer.storage.item_a['accumulator'] - land_allocation
+                    vlayer.storage.item['solar-panel'] = vlayer.storage.item['solar-panel'] + math.min(vlayer.storage.item_a['solar-panel'], land_allocation)
+                    vlayer.storage.item_a['solar-panel'] = vlayer.storage.item_a['solar-panel'] - math.min(vlayer.storage.item_a['solar-panel'], land_allocation)
+                    vlayer.storage.item['accumulator'] = vlayer.storage.item['accumulator'] + math.min(vlayer.storage.item_a['accumulator'], land_allocation)
+                    vlayer.storage.item_a['accumulator'] = vlayer.storage.item_a['accumulator'] - math.min(vlayer.storage.item_a['accumulator'], land_allocation)
                 elseif (vlayer.storage.item_a['solar-panel'] > 0 and vlayer.storage.item_a['accumulator'] == 0) then
                     local land_allocation = math.floor(land_surplus / config.land.requirement['solar-panel'])
-                    vlayer.storage.item['solar-panel'] = vlayer.storage.item['solar-panel'] + land_allocation
-                    vlayer.storage.item_a['solar-panel'] = vlayer.storage.item_a['solar-panel'] - land_allocation
+                    vlayer.storage.item['solar-panel'] = vlayer.storage.item['solar-panel'] + math.min(vlayer.storage.item_a['solar-panel'], land_allocation)
+                    vlayer.storage.item_a['solar-panel'] = vlayer.storage.item_a['solar-panel'] - math.min(vlayer.storage.item_a['solar-panel'], land_allocation)
                 else
                     local land_allocation = math.floor(land_surplus / config.land.requirement['accumulator'])
-                    vlayer.storage.item['accumulator'] = vlayer.storage.item['accumulator'] + land_allocation
-                    vlayer.storage.item_a['accumulator'] = vlayer.storage.item_a['accumulator'] - land_allocation
+                    vlayer.storage.item['accumulator'] = vlayer.storage.item['accumulator'] + math.min(vlayer.storage.item_a['accumulator'], land_allocation)
+                    vlayer.storage.item_a['accumulator'] = vlayer.storage.item_a['accumulator'] - math.min(vlayer.storage.item_a['accumulator'], land_allocation)
                 end
 
                 vlayer.circuit.output[1].count = math.floor(vlayer.storage.item['solar-panel'] * 0.06 * game.surfaces['nauvis'].solar_power_multiplier)
