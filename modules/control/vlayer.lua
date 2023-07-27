@@ -106,7 +106,7 @@ Event.on_nth_tick(config.update_tick, function()
 
                 local land_req = (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) + (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
                 local land_surplus = (vlayer.storage.item[config.land.tile] * config.land.result) - land_req
-
+                
                 if (vlayer.storage.item_a['solar-panel'] > 0 and vlayer.storage.item_a['accumulator'] > 0) then
                     local land_allocation = math.floor(land_surplus / (config.land.requirement['solar-panel'] + config.land.requirement['accumulator']))
                     vlayer.storage.item['solar-panel'] = vlayer.storage.item['solar-panel'] + math.min(vlayer.storage.item_a['solar-panel'], land_allocation)
