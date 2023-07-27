@@ -28,7 +28,7 @@ for i=1, 9 do
     vlayer.circuit.input[i] = {}
     vlayer.circuit.output[i] = {}
     vlayer.circuit.input[i].count = 1
-    layer.circuit.output[i].count = 0
+    vlayer.circuit.output[i].count = 0
 end
 
 vlayer.circuit.input[1].signal = {type='virtual', name='signal-P'}
