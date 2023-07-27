@@ -193,7 +193,7 @@ Roles.new_role('Partner','Part')
     'command/unjail'
 }
 
-local hours10, hours250 = 10*216000, 250*60
+local hours6, hours250 = 6*216000, 250*60
 Roles.new_role('Veteran','Vet')
 :set_permission_group('Trusted')
 :set_custom_color{r=140,g=120,b=200}
@@ -203,7 +203,7 @@ Roles.new_role('Veteran','Vet')
     'command/last-location'
 }
 :set_auto_assign_condition(function(player)
-    if player.online_time >= hours10 then
+    if player.online_time >= hours6 then
         return true
     else
         local stats = Statistics:get(player, {})
@@ -231,7 +231,7 @@ Roles.new_role('Member','Mem')
     'command/lawnmower'
 }
 
-local hours3, hours15 = 3*216000, 15*60
+local hours1, hours15 = 1*216000, 15*60
 Roles.new_role('Regular','Reg')
 :set_permission_group('Standard')
 :set_custom_color{r=79,g=155,b=163}
@@ -246,7 +246,7 @@ Roles.new_role('Regular','Reg')
 	'bypass-nukeprotect'
 }
 :set_auto_assign_condition(function(player)
-    if player.online_time >= hours3 then
+    if player.online_time >= hours1 then
         return true
     else
         local stats = Statistics:get(player, {})
