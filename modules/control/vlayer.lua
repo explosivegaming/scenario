@@ -24,15 +24,15 @@ vlayer.circuit = {}
 vlayer.circuit.input = {}
 vlayer.circuit.output = {}
 
-vlayer.circuit.input[1] = {signal={type='virtual', name='signal-P'}, count=0}
-vlayer.circuit.input[2] = {signal={type='virtual', name='signal-S'}, count=0}
-vlayer.circuit.input[3] = {signal={type='virtual', name='signal-M'}, count=0}
-vlayer.circuit.input[4] = {signal={type='virtual', name='signal-C'}, count=0}
-vlayer.circuit.input[5] = {signal={type='virtual', name='signal-D'}, count=0}
-vlayer.circuit.input[6] = {signal={type='virtual', name='signal-T'}, count=0}
-vlayer.circuit.input[7] = {signal={type='item', name='solar-panel'}, count=0}
-vlayer.circuit.input[8] = {signal={type='item', name='accumulator'}, count=0}
-vlayer.circuit.input[9] = {signal={type='item', name='landfill'}, count=0}
+vlayer.circuit.input[1] = {signal={type='virtual', name='signal-P'}, count=1}
+vlayer.circuit.input[2] = {signal={type='virtual', name='signal-S'}, count=1}
+vlayer.circuit.input[3] = {signal={type='virtual', name='signal-M'}, count=1}
+vlayer.circuit.input[4] = {signal={type='virtual', name='signal-C'}, count=1}
+vlayer.circuit.input[5] = {signal={type='virtual', name='signal-D'}, count=1}
+vlayer.circuit.input[6] = {signal={type='virtual', name='signal-T'}, count=1}
+vlayer.circuit.input[7] = {signal={type='item', name='solar-panel'}, count=1}
+vlayer.circuit.input[8] = {signal={type='item', name='accumulator'}, count=1}
+vlayer.circuit.input[9] = {signal={type='item', name='landfill'}, count=1}
 
 vlayer.circuit.output[1] = {signal={type='virtual', name='signal-P'}, count=0}
 vlayer.circuit.output[2] = {signal={type='virtual', name='signal-S'}, count=0}
