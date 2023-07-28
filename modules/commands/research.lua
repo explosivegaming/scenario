@@ -4,12 +4,14 @@ local Global = require 'utils.global' --- @dep utils.global
 local config = require 'config.research' --- @dep config.research
 local config_bonus = Common.opt_require 'config.bonus' --- @dep config.bonus
 local Commands = require 'expcore.commands' --- @dep expcore.commands
+local format_time = _C.format_time --- @dep expcore.common
 
 local research = {}
 Global.register(research, function(tbl)
     research = tbl
 end)
 
+local research_time_format = {hours=true, minutes=true, seconds=true, time=true, string=true}
 research.res_queue_enable = false
 local base_rate = 0
 
@@ -37,7 +39,7 @@ local function research_notification(event)
                 end
             end
 
-            game.print{'expcom-res.inf', event.research.name, event.research.level}
+            game.print{'expcom-res.inf', format_time(game.tick, research_time_format), event.research.name, event.research.level}
         else
             if config.bonus_inventory.enabled then
                 if (event.research.force.mining_drill_productivity_bonus * 100) <= (config.bonus_inventory.limit * 10 / config.bonus_inventory.rate) then
@@ -49,7 +51,7 @@ local function research_notification(event)
                 end
             end
 
-            game.print{'expcom-res.msg', event.research.name}
+            game.print{'expcom-res.msg', format_time(game.tick, research_time_format), event.research.name}
         end
     end
 end
