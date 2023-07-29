@@ -24,6 +24,15 @@ local function pos_to_gps_string(pos)
 	return '[gps=' .. tostring(pos.x) .. ',' .. tostring(pos.y) .. ']'
 end
 
+--- Print a message to all players who match the value of admin
+local function print_to_players(admin, message)
+    for _, player in ipairs(game.connected_players) do
+        if player.admin == admin then
+            player.print(message)
+        end
+    end
+end
+
 Event.on_init(function()
 	game.write_file(filepath, "\n", false, 0) -- write data
 end)
@@ -34,7 +43,7 @@ if config.decon_area then
 		if Roles.player_has_flag(player, "deconlog-bypass") then
 			return
 		end
-		game.print(player.name .. " tried to deconstruct the area " .. pos_to_gps_string(e.area.left_top) .. " to " .. pos_to_gps_string(e.area.right_bottom) .. " but were not allowed.")
+		print_to_players(true, player.name .. ' tried to deconstruct the area ' .. pos_to_gps_string(e.area.left_top) .. ' to ' .. pos_to_gps_string(e.area.right_bottom) .. ' but were not allowed.')
 		add_log(get_secs() .. "," .. player.name .. ",decon_area," .. pos_to_string(e.area.left_top) .. "," .. pos_to_string(e.area.right_bottom))
 	end)
 end
