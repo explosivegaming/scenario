@@ -193,8 +193,8 @@ local function spawn_resource_patches(surface)
     end
 end
 
-local function refill_nearby_resource_patches(surface)
-    for _, ore in pairs(surface.find_entities_filtered{position=p.force.get_spawn_position('nauvis'), radius=config.resource_refill.range, name=config.resource_refill.resources_name}) do
+local function refill_nearby_resource_patches(surface, player)
+    for _, ore in pairs(surface.find_entities_filtered{position=player.force.get_spawn_position('nauvis'), radius=config.resource_refill.range, name=config.resource_refill.resources_name}) do
         ore.amount = ore.amount + math.random(config.resource_refill.amount[1], config.resource_refill.amount[2])
     end
 end
