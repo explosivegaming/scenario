@@ -75,7 +75,7 @@ local function station_name_changer(event)
                     item_type = 'fluid'
                 end
 
-                entity.backer_name = config.station_name:gsub('__icon__', '[img=' .. Item_type .. '.' .. item_name .. ']')
+                entity.backer_name = config.station_name:gsub('__icon__', '[img=' .. item_type .. '.' .. item_name .. ']')
                     :gsub('__item_name__', item_name2)
                     :gsub('__backer_name__', entity.backer_name)
                     :gsub('__direction__', Angle(entity))
