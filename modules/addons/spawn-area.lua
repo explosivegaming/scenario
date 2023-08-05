@@ -30,9 +30,9 @@ local function get_spawn_force()
 
     force = game.create_force('spawn')
     force.set_cease_fire('player', true)
-    force.set_friend('player', true)
+    -- force.set_friend('player', true)
     game.forces['player'].set_cease_fire('spawn', true)
-    game.forces['player'].set_friend('spawn', true)
+    -- game.forces['player'].set_friend('spawn', true)
 
     return force
 end
