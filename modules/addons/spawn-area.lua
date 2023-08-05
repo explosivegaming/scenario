@@ -210,7 +210,7 @@ if config.resource_refill_nearby.enabled then
             return
         end
 
-        for _, ore in pairs(surface.find_entities_filtered{position=game.players[1].force.get_spawn_position(game.players[1].surface), radius=config.resource_refill.range, name=config.resource_refill.resources_name}) do
+        for _, ore in pairs(game.players[1].surface.find_entities_filtered{position=game.players[1].force.get_spawn_position(game.players[1].surface), radius=config.resource_refill.range, name=config.resource_refill.resources_name}) do
             ore.amount = ore.amount + math.random(config.resource_refill.amount[1], config.resource_refill.amount[2])
         end
     end)
