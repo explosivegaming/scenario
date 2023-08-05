@@ -193,8 +193,8 @@ local function spawn_resource_patches(surface)
     end
 end
 
-local function refill_resource_patches(surface)
-    for _, ore in pairs(surface.find_entities_filtered{position = {0, 0}, radius=config.resource_refill.range, name=config.resource_refill.resources_name}) do
+local function refill_nearby_resource_patches(surface)
+    for _, ore in pairs(surface.find_entities_filtered{position=p.force.get_spawn_position('nauvis'), radius=config.resource_refill.range, name=config.resource_refill.resources_name}) do
         ore.amount = ore.amount + math.random(config.resource_refill.amount[1], config.resource_refill.amount[2])
     end
 end
@@ -222,7 +222,7 @@ Event.add(defines.events.on_player_created, function(event)
     if config.entities.enabled then spawn_entities(s, p) end
     if config.resource_tiles.enabled then spawn_resource_tiles(s) end
     if config.resource_patches.enabled then spawn_resource_patches(s) end
-    if config.resource_refill.enabled then refill_resource_patches(s) end
+    if config.resource_refill_nearby.enabled then refill_nearby_resource_patches(s, player) end
     player.teleport(p, s)
 end)
 

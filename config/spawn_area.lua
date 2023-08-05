@@ -232,7 +232,7 @@ return {
             }
         }
     },
-    resource_refill = {
+    resource_refill_nearby = {
         enabled = false,
         range = 128,
         resources_name = {
