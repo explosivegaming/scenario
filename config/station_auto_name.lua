@@ -7,5 +7,5 @@ return {
         %x
         %y
     ]]
-    station_name = '[L] %icon'
+    station_name = '[L] __icon__'
 }

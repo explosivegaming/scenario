@@ -70,17 +70,17 @@ local function station_name_changer(event)
             if item_name then -- prevent errors if something went wrong
                 local item_name2 = item_name:gsub("^%l", string.upper):gsub('-', ' ') -- removing the - and making first letter capital
 
-                local Item_ore_fluid = "item"
-                if item_name == "crude-oil" then
-                    Item_ore_fluid = "fluid"
+                local item_type = 'item'
+                if item_name == 'crude-oil' then
+                    item_type = 'fluid'
                 end
 
-                entity.backer_name = config.station_name:gsub('%icon', '[img=' .. Item_ore_fluid .. '.' .. item_name .. ']')
-                    :gsub('%item_name', item_name2)
-                    :gsub('%backer_name', entity.backer_name)
-                    :gsub('%direction', Angle(entity))
-                    :gsub('%x', entity.bounding_box.left_top.x)
-                    :gsub('%y', entity.bounding_box.left_top.y)
+                entity.backer_name = config.station_name:gsub('__icon__', '[img=' .. Item_type .. '.' .. item_name .. ']')
+                    :gsub('__item_name__', item_name2)
+                    :gsub('__backer_name__', entity.backer_name)
+                    :gsub('__direction__', Angle(entity))
+                    :gsub('__x__', entity.bounding_box.left_top.x)
+                    :gsub('__y__', entity.bounding_box.left_top.y)
             end
         end
     end
