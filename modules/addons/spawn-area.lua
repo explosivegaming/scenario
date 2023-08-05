@@ -206,6 +206,8 @@ if config.resource_refill_nearby.enabled then
     Event.on_nth_tick(36000, function()
         if game.tick < 10 then
             return
+        elseif game.tick > 36010 then
+            return
         end
 
         for _, ore in pairs(surface.find_entities_filtered{position=game.players[1].force.get_spawn_position(game.players[1].surface), radius=config.resource_refill.range, name=config.resource_refill.resources_name}) do
