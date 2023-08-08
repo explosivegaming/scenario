@@ -3,7 +3,7 @@
 
 local Event = require 'utils.event' ---@dep utils.event
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
-local LocalLanguage = PlayerData.Settings:combine('LocalLanguage')
+local LocalLanguage = PlayerData.Statistics:combine('LocalLanguage')
 LocalLanguage:set_default("Unknown")
 
 --- Creates translation request on_load of a player
