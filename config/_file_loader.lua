@@ -61,6 +61,7 @@ return {
     'modules.data.alt-view',
     'modules.data.tag',
     'modules.data.bonus',
+    'modules.data.language',
 
     --- GUI
     'modules.gui.readme',
