@@ -121,7 +121,9 @@ Roles.new_role('Trainee','TrMod')
     'command/pol-clr',
     'command/bot-queue-get',
     'command/bot-queue-set',
-    'command/kill-all-biter'
+    'command/game-speed',
+    'command/kill-biters',
+    'command/remove-biters'
 }
 
 --- Trusted Roles

@@ -19,14 +19,14 @@ Commands.new_command('waterfill', 'Change tile to water')
     local inv = player.get_main_inventory()
 
     if (inv.get_item_count('cliff-explosives')) == 0 then
-        return player.print{'vlayer.waterfill-cliff'}
+        return player.print{'expcom-waterfill.waterfill-cliff'}
     end
 
     if Selection.is_selecting(player, SelectionConvertArea) then
         Selection.stop(player)
     else
         Selection.start(player, SelectionConvertArea)
-        return Commands.success{'vlayer.entered-area-selection'}
+        return Commands.success{'expcom-waterfill.entered-area-selection'}
     end
 
     return Commands.success
@@ -45,15 +45,16 @@ Selection.on_selection(SelectionConvertArea, function(event)
     for _, entity in pairs(entities) do
         if inv >= 1 then
             if entity.get_inventory(defines.inventory.chest).is_empty() then
-                if (player.position.x ~= entity.position.x) and (player.position.y ~= entity.position.y) then
-                    entity.destroy()
+                if (math.floor(player.position.x) ~= math.floor(entity.position.x)) and (math.floor(player.position.y) ~= math.floor(entity.position.y)) then
                     table.insert(tiles_to_make, {name='water-mud', position=entity.position})
+                    entity.destroy()
                 else
-                    player.print{'vlayer.waterfill-distance'}
+                    player.print{'expcom-waterfill.waterfill-distance'}
                 end
             end
 
             inv = inv - 1
+            chest.remove({name='cliff-explosives', count=1})
         else
             break
         end

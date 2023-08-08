@@ -121,7 +121,7 @@ local function spawn_entities(surface, position)
     position = apply_offset(position, config.entities.offset)
     for _, entity in pairs(config.entities.locations) do
         local pos = apply_offset(position, {x=entity[2], y=entity[3]})
-        entity = surface.create_entity{name=entity[1], position=pos, force='spawn'}
+        entity = surface.create_entity{name=entity[1], position=pos, force='neutral'}
 
         if config.entities.protected then
             protect_entity(entity)
@@ -205,8 +205,6 @@ if config.resource_refill_nearby.enabled then
     -- could have a flag in global that early returns if true, and reset it on_tick
     Event.on_nth_tick(36000, function()
         if game.tick < 10 then
-            return
-        elseif game.tick > 36010 then
             return
         end
 

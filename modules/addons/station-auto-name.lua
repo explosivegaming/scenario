@@ -79,8 +79,8 @@ local function station_name_changer(event)
                     :gsub('__item_name__', item_name2)
                     :gsub('__backer_name__', entity.backer_name)
                     :gsub('__direction__', Angle(entity))
-                    :gsub('__x__', math.floor(entity.position.left_top.x))
-                    :gsub('__y__', math.floor(entity.position.left_top.y))
+                    :gsub('__x__', math.floor(entity.position.x))
+                    :gsub('__y__', math.floor(entity.position.y))
             end
         end
     end
