@@ -85,29 +85,32 @@ local function vlayer_convert_chest_circuit(player)
     local pos = vlayer_convert_chest(player)
     if (pos) then
         local circuit_i = player.surface.create_entity{name='constant-combinator', position=pos, force='neutral'}
-        game.print(player.name .. ' built a vlayer circuit on ' .. pos_to_gps_string(pos))
         circuit_i.destructible = false
         circuit_i.minable = false
         circuit_i.operable = true
         circuit_i.last_user = player
-        local circuit_ii = circuit_i.get_or_create_control_behavior()
-        circuit_ii.set_signal(1, {signal={type='virtual', name='signal-P'}, count=1})
-        circuit_ii.set_signal(2, {signal={type='virtual', name='signal-S'}, count=1})
-        circuit_ii.set_signal(3, {signal={type='virtual', name='signal-M'}, count=1})
-        circuit_ii.set_signal(4, {signal={type='virtual', name='signal-C'}, count=1})
-        circuit_ii.set_signal(5, {signal={type='virtual', name='signal-D'}, count=1})
-        circuit_ii.set_signal(6, {signal={type='virtual', name='signal-T'}, count=1})
-        circuit_ii.set_signal(7, {signal={type='virtual', name='signal-L'}, count=1})
-        circuit_ii.set_signal(8, {signal={type='virtual', name='signal-A'}, count=1})
-        circuit_ii.set_signal(9, {signal={type='virtual', name='signal-B'}, count=1})
-        circuit_ii.set_signal(10, {signal={type='item', name='solar-panel'}, count=1})
-        circuit_ii.set_signal(11, {signal={type='item', name='accumulator'}, count=1})
-        local circuit_o = player.surface.create_entity{name='constant-combinator', position={x=pos.x+1, y=pos.y}, force='neutral'}
+
+        local circuit_o = player.surface.create_entity{name='constant-combinator', position=pos, force='neutral'}
         circuit_o.destructible = false
         circuit_o.minable = false
         circuit_o.operable = true
         circuit_o.last_user = player
-        table.insert(vlayer.power.circuit, {input=circuit_i, output=circuit_o})
+
+        local circuit_oc = circuit_o.get_or_create_control_behavior()
+        circuit_oc.set_signal(1, {signal={type='virtual', name='signal-P'}, count=0})
+        circuit_oc.set_signal(2, {signal={type='virtual', name='signal-S'}, count=0})
+        circuit_oc.set_signal(3, {signal={type='virtual', name='signal-M'}, count=0})
+        circuit_oc.set_signal(4, {signal={type='virtual', name='signal-C'}, count=0})
+        circuit_oc.set_signal(5, {signal={type='virtual', name='signal-D'}, count=0})
+        circuit_oc.set_signal(6, {signal={type='virtual', name='signal-T'}, count=0})
+        circuit_oc.set_signal(7, {signal={type='virtual', name='signal-L'}, count=0})
+        circuit_oc.set_signal(8, {signal={type='virtual', name='signal-A'}, count=0})
+        circuit_oc.set_signal(9, {signal={type='virtual', name='signal-B'}, count=0})
+        circuit_oc.set_signal(10, {signal={type='item', name='solar-panel'}, count=0})
+        circuit_oc.set_signal(11, {signal={type='item', name='accumulator'}, count=0})
+
+        table.insert(vlayer.power.circuit, {output=circuit_o})
+        game.print(player.name .. ' built a vlayer circuit on ' .. pos_to_gps_string(pos))
     end
 end
 
@@ -138,9 +141,9 @@ local function vlayer_gui_update()
     local button_circuit_enabled = #vlayer.power.circuit >= config.interface_limit.circuit
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, vlayer_container)
-        frame.container.scroll.table['button_1'].enabled = button_power_enabled
-        frame.container.scroll.table['button_2'].enabled = button_storage_input_enabled
-        frame.container.scroll.table['button_3'].enabled = button_circuit_enabled
+        frame.container.scroll.table[button_power.name].enabled = button_power_enabled
+        frame.container.scroll.table[button_storage_input.name].enabled = button_storage_input_enabled
+        frame.container.scroll.table[button_circuit.name].enabled = button_circuit_enabled
     end
 end
 
@@ -217,10 +220,10 @@ Gui.element(function(event_trigger, parent)
     if not (Roles.player_allowed(player, 'gui/vlayer-edit')) then
         scroll_table['vlayer_display_' .. #config.gui.content - 1].visible = false
         scroll_table['vlayer_display_' .. #config.gui.content].visible = false
-        scroll_table['button_1'].visible = false
-        scroll_table['button_2'].visible = false
-        scroll_table['button_3'].visible = false
-        scroll_table['button_4'].visible = false
+        scroll_table[button_power.name].visible = false
+        scroll_table[button_storage_input.name].visible = false
+        scroll_table[button_circuit.name].visible = false
+        scroll_table[button_remove.name].visible = false
     end
     return container.parent
 end)

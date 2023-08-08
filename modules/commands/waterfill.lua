@@ -45,7 +45,7 @@ Selection.on_selection(SelectionConvertArea, function(event)
     for _, entity in pairs(entities) do
         if clf_exp >= 1 then
             if entity.get_inventory(defines.inventory.chest).is_empty() then
-                if (math.floor(player.position.x) ~= math.floor(entity.position.x)) and (math.floor(player.position.y) ~= math.floor(entity.position.y)) then
+                if (math.floor(player.position.x) ~= math.floor(entity.position.x)) or (math.floor(player.position.y) ~= math.floor(entity.position.y)) then
                     table.insert(tiles_to_make, {name='water-mud', position=entity.position})
                     entity.destroy()
                 else
