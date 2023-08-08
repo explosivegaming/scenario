@@ -124,10 +124,10 @@ local function vlayer_convert_remove(player)
         return
     end
 
-    for i=1, #entities do
-        if (entities[i].name == 'electric-energy-interface') then
-            vlayer.power.energy = vlayer.power.energy + entities[i].energy
-            entities[i].energy = 0
+    for _, v in pairs(entities) do
+        if (v.name == 'electric-energy-interface') then
+            vlayer.power.energy = vlayer.power.energy + v.energy
+            v.energy = 0
         end
 
         local vlayer_print_short = {
@@ -136,8 +136,8 @@ local function vlayer_convert_remove(player)
             ['logistic-chest-storage'] = 'input'
         }
 
-        game.print(player.name .. ' removed a vlayer ' .. vlayer_print_short[entities[i].name] .. ' on ' .. pos_to_gps_string(entities[i].pos))
-        entities[i].destroy()
+        game.print(player.name .. ' removed a vlayer ' .. vlayer_print_short[v.name] .. ' on ' .. pos_to_gps_string(v.pos))
+        v.destroy()
     end
 end
 
