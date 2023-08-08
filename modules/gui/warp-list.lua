@@ -119,7 +119,7 @@ Gui.element{
     }
     -- Remove 1 because that is the current player
     if #entities > 1 then
-        player_return({'expcore-commands.command-fail', {'warp-list.too-close-to-entities', config.standard_proximity_radius + 4.5}}, 'orange_red', player)
+        player_return({'expcore-commands.command-fail', {'warp-list.too-close-to-entities', config.standard_proximity_radius + 2.5}}, 'orange_red', player)
         if game.player then game.player.play_sound{path='utility/wire_pickup'} end
         local character = player.character
         for _, entity in pairs(entities) do

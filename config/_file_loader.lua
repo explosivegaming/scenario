@@ -64,10 +64,10 @@ return {
 		'modules.addons.deconlog',
 		'modules.addons.nukeprotect',
 		'modules.addons.inserter',
+    'modules.addons.miner',
 
     -- Control
     'modules.control.vlayer',
-    'modules.control.miner',
 
     --- Data
     'modules.data.statistics',

@@ -32,6 +32,16 @@ local function research_notification(event)
         end
     end
 
+    if config.bonus_inventory.enabled then
+        if (event.research.force.mining_drill_productivity_bonus * 10) <= (config.bonus_inventory.limit / config.bonus_inventory.rate) then
+            if event.research.force.technologies['toolbelt'].researched then
+                event.research.force[config.bonus_inventory.name] = (math.floor(event.research.force.mining_drill_productivity_bonus * 10) * config.bonus_inventory.rate) + 10
+            else
+                event.research.force[config.bonus_inventory.name] = math.floor(event.research.force.mining_drill_productivity_bonus * 10) * config.bonus_inventory.rate
+            end
+        end
+    end
+
     if is_inf_res then
         if config.bonus.enabled then
             if event.research.name == 'mining-productivity-4' and event.research.force.technologies['mining-productivity-4'].level > 4 then
@@ -43,16 +53,6 @@ local function research_notification(event)
             game.print{'expcom-res.inf', format_time(game.tick, research_time_format), event.research.name, event.research.level}
         end
     else
-        if config.bonus_inventory.enabled then
-            if (event.research.force.mining_drill_productivity_bonus * 10) <= (config.bonus_inventory.limit / config.bonus_inventory.rate) then
-                if event.research.force.technologies['toolbelt'].researched then
-                    event.research.force[config.bonus_inventory.name] = (math.floor(event.research.force.mining_drill_productivity_bonus * 10) * config.bonus_inventory.rate) + 10
-                else
-                    event.research.force[config.bonus_inventory.name] = math.floor(event.research.force.mining_drill_productivity_bonus * 10) * config.bonus_inventory.rate
-                end
-            end
-        end
-
         if not (event.by_script) then
             game.print{'expcom-res.msg', format_time(game.tick, research_time_format), event.research.name}
         end

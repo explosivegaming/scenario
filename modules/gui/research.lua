@@ -150,6 +150,10 @@ Gui.left_toolbar_button('item/space-science-pack', {'expcom-res.main-tooltip'}, 
 end)
 
 Event.add(defines.events.on_research_finished, function(event)
+	if event.research.name == nil then
+		return
+	end
+
 	local n_i = res_i[event.research.name]
 	research.time[n_i] = game.tick
 

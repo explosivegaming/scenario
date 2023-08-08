@@ -21,27 +21,12 @@ vlayer.power.energy = 0
 vlayer.power.circuit = {}
 
 vlayer.circuit = {}
-vlayer.circuit.input = {}
 vlayer.circuit.output = {}
 
 for i=1, 11 do
-    vlayer.circuit.input[i] = {}
     vlayer.circuit.output[i] = {}
-    vlayer.circuit.input[i].count = 1
     vlayer.circuit.output[i].count = 0
 end
-
-vlayer.circuit.input[1].signal = {type='virtual', name='signal-P'}
-vlayer.circuit.input[2].signal = {type='virtual', name='signal-S'}
-vlayer.circuit.input[3].signal = {type='virtual', name='signal-M'}
-vlayer.circuit.input[4].signal = {type='virtual', name='signal-C'}
-vlayer.circuit.input[5].signal = {type='virtual', name='signal-D'}
-vlayer.circuit.input[6].signal = {type='virtual', name='signal-T'}
-vlayer.circuit.input[7].signal = {type='virtual', name='signal-L'}
-vlayer.circuit.input[8].signal = {type='virtual', name='signal-A'}
-vlayer.circuit.input[9].signal = {type='virtual', name='signal-B'}
-vlayer.circuit.input[10].signal = {type='item', name='solar-panel'}
-vlayer.circuit.input[11].signal = {type='item', name='accumulator'}
 
 vlayer.circuit.output[1].signal = {type='virtual', name='signal-P'}
 vlayer.circuit.output[2].signal = {type='virtual', name='signal-S'}
@@ -212,11 +197,10 @@ Event.on_nth_tick(config.update_tick, function()
         if (v.input == nil) or (v.output == nil) or (not v.input.valid) or (not v.output.valid) then
             vlayer.power.circuit[k] = nil
         else
-            local circuit_i = v.input.get_or_create_control_behavior()
+            -- local circuit_i = v.input.get_or_create_control_behavior()
             local circuit_o = v.output.get_or_create_control_behavior()
 
-            for i=1, #vlayer.circuit.input do
-                circuit_i.set_signal(i, {signal=vlayer.circuit.input[i].signal, count=vlayer.circuit.input[i].count})
+            for i=1, #vlayer.circuit.output do
                 circuit_o.set_signal(i, {signal=vlayer.circuit.output[i].signal, count=vlayer.circuit.output[i].count})
             end
         end

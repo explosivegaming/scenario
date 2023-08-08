@@ -75,6 +75,7 @@ Roles.new_role('Moderator','Mod')
     'command/clear-reports',
     'command/clear-warnings',
     'command/clear-inventory',
+    'command/bonus',
     'command/bonus/2',
     'command/home',
     'command/home-set',
@@ -227,7 +228,7 @@ Roles.new_role('Member','Mem')
     'gui/warp-list/edit',
     'command/save-quickbar',
     'gui/vlayer-edit',
-    'personal-logistic',
+    'command/personal-logistic',
     'command/auto-research',
     'command/manual-train',
     'command/lawnmower'
