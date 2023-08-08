@@ -30,27 +30,33 @@ local function vlayer_convert_chest(player)
     if (not entities or (#entities == 0)) then
         return nil
     end
+
     local target_chest = player.surface.get_closest(player.position, entities)
     if (not target_chest) then
         player.print('No Steel Chest Detected')
         return nil
     end
+
     if (not target_chest.get_inventory(defines.inventory.chest).is_empty()) then
         player.print('Chest is not emptied')
         return nil
     end
+
     local pos = target_chest.position
+
     if (not target_chest.destroy()) then
         player.print('Unable to convert chest')
         return nil
     end
+
     return {x=math.floor(pos.x), y=math.floor(pos.y)}
 end
 
 local function vlayer_convert_chest_storage_input(player)
     local pos = vlayer_convert_chest(player)
+
     if (pos) then
-        local vlayer_storage = player.surface.create_entity{name='logistic-chest-storage', position={pos.x, pos.y}, force='neutral'}
+        local vlayer_storage = player.surface.create_entity{name='logistic-chest-storage', position=pos, force='neutral'}
         game.print(player.name .. ' built a vlayer input on ' .. pos_to_gps_string(pos))
         vlayer_storage.destructible = false
         vlayer_storage.minable = false
@@ -62,8 +68,9 @@ end
 
 local function vlayer_convert_chest_power(player)
     local pos = vlayer_convert_chest(player)
+
     if (pos) then
-        if (player.surface.can_place_entity{name='electric-energy-interface', position=pos}) and (player.surface.can_place_entity{name='constant-combinator', position={x=pos.x+1, y=pos.y}}) then
+        if (player.surface.can_place_entity{name='electric-energy-interface', position=pos})then
             local vlayer_power = player.surface.create_entity{name='electric-energy-interface', position=pos, force='neutral'}
             game.print(player.name .. ' built a vlayer energy interface on ' .. pos_to_gps_string(pos))
             vlayer_power.destructible = false
@@ -83,13 +90,8 @@ end
 
 local function vlayer_convert_chest_circuit(player)
     local pos = vlayer_convert_chest(player)
-    if (pos) then
-        local circuit_i = player.surface.create_entity{name='constant-combinator', position=pos, force='neutral'}
-        circuit_i.destructible = false
-        circuit_i.minable = false
-        circuit_i.operable = true
-        circuit_i.last_user = player
 
+    if (pos) then
         local circuit_o = player.surface.create_entity{name='constant-combinator', position=pos, force='neutral'}
         circuit_o.destructible = false
         circuit_o.minable = false
@@ -115,21 +117,25 @@ local function vlayer_convert_chest_circuit(player)
 end
 
 local function vlayer_convert_remove(player)
-    local entities = player.surface.find_entities_filtered{name={'electric-energy-interface', 'constant-combinator', 'logistic-chest-storage'}, position=player.position, radius=5, force={'neutral'}}
+    local entities = player.surface.find_entities_filtered{name={'electric-energy-interface', 'constant-combinator', 'logistic-chest-storage'}, position=player.position, radius=5, force='neutral'}
+
     if (not entities or #entities == 0) then
         player.print('Entity not found')
         return
     end
+
     for i=1, #entities do
         if (entities[i].name == 'electric-energy-interface') then
             vlayer.power.energy = vlayer.power.energy + entities[i].energy
             entities[i].energy = 0
         end
+
         local vlayer_print_short = {
             ['electric-energy-interface'] = 'energy interface',
             ['constant-combinator'] = 'circuit',
             ['logistic-chest-storage'] = 'input'
         }
+
         game.print(player.name .. ' removed a vlayer ' .. vlayer_print_short[entities[i].name] .. ' on ' .. pos_to_gps_string(entities[i].pos))
         entities[i].destroy()
     end
