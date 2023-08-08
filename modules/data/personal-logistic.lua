@@ -17,7 +17,7 @@ local function pl(player, amount)
     local stats = player.force.item_production_statistics
     local c = player.clear_personal_logistic_slot
     local s = player.set_personal_logistic_slot
-`
+
     for k, v in pairs(config.request) do
         c(config.start + v.key)
 
