@@ -194,10 +194,9 @@ Event.on_nth_tick(config.update_tick, function()
     vlayer.circuit.output[6].count = game.tick % 25000
 
     for k, v in pairs(vlayer.power.circuit) do
-        if (v.input == nil) or (v.output == nil) or (not v.input.valid) or (not v.output.valid) then
+        if (v.output == nil) or (not v.output.valid) then
             vlayer.power.circuit[k] = nil
         else
-            -- local circuit_i = v.input.get_or_create_control_behavior()
             local circuit_o = v.output.get_or_create_control_behavior()
 
             for i=1, #vlayer.circuit.output do
