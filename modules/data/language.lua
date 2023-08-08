@@ -21,7 +21,7 @@ Event.add(defines.events.on_string_translated, function(event)
 
   -- Check if the translation request was succesful
   if not event.translated then
-    game.print("Could not detect your language settings")
+    player.print("Could not detect your language settings")
     -- Raise error
     return
   end
