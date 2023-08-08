@@ -43,7 +43,12 @@ if config.decon_area then
 		if Roles.player_has_flag(player, "deconlog-bypass") then
 			return
 		end
-		print_to_players(true, player.name .. ' tried to deconstruct the area ' .. pos_to_gps_string(e.area.left_top) .. ' to ' .. pos_to_gps_string(e.area.right_bottom) .. ' but were not allowed.')
+
+		local items = e.surface.find_entities_filtered{area=e.area, force=e.player.force}
+		if items > 250 then
+			print_to_players(true, player.name .. ' tried to deconstruct the area ' .. pos_to_gps_string(e.area.left_top) .. ' to ' .. pos_to_gps_string(e.area.right_bottom) .. ' that have ' .. items .. ' items, but were not allowed.')
+		end
+
 		add_log(get_secs() .. "," .. player.name .. ",decon_area," .. pos_to_string(e.area.left_top) .. "," .. pos_to_string(e.area.right_bottom))
 	end)
 end

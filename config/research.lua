@@ -9,6 +9,7 @@ return {
         name = 'laboratory_productivity_bonus',
         rate = 1
     },
+    -- this enable 20 more inventory for each mining productivity level up to 4
     bonus_inventory = {
         enabled = true,
         name = 'character_inventory_slots_bonus',

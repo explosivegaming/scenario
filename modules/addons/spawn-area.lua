@@ -30,9 +30,9 @@ local function get_spawn_force()
 
     force = game.create_force('spawn')
     force.set_cease_fire('player', true)
-    force.set_friend('player', true)
+    -- force.set_friend('player', true)
     game.forces['player'].set_cease_fire('spawn', true)
-    game.forces['player'].set_friend('spawn', true)
+    -- game.forces['player'].set_friend('spawn', true)
 
     return force
 end
@@ -121,7 +121,7 @@ local function spawn_entities(surface, position)
     position = apply_offset(position, config.entities.offset)
     for _, entity in pairs(config.entities.locations) do
         local pos = apply_offset(position, {x=entity[2], y=entity[3]})
-        entity = surface.create_entity{name=entity[1], position=pos, force='spawn'}
+        entity = surface.create_entity{name=entity[1], position=pos, force='neutral'}
 
         if config.entities.protected then
             protect_entity(entity)
@@ -193,17 +193,24 @@ local function spawn_resource_patches(surface)
     end
 end
 
-local function refill_resource_patches(surface)
-    for _, ore in pairs(surface.find_entities_filtered{position = {0, 0}, radius=config.resource_refill.range, name=config.resource_refill.resources_name}) do
-        ore.amount = ore.amount + math.random(config.resource_refill.amount[1], config.resource_refill.amount[2])
-    end
-end
-
 -- Only add a event handler if the turrets are enabled
 if config.turrets.enabled then
     Event.on_nth_tick(config.turrets.refill_time, function()
         if game.tick < 10 then return end
         spawn_turrets()
+    end)
+end
+
+if config.resource_refill_nearby.enabled then
+    -- could have a flag in global that early returns if true, and reset it on_tick
+    Event.on_nth_tick(36000, function()
+        if game.tick < 10 then
+            return
+        end
+
+        for _, ore in pairs(game.players[1].surface.find_entities_filtered{position=game.players[1].force.get_spawn_position(game.players[1].surface), radius=config.resource_refill.range, name=config.resource_refill.resources_name}) do
+            ore.amount = ore.amount + math.random(config.resource_refill.amount[1], config.resource_refill.amount[2])
+        end
     end)
 end
 
@@ -222,7 +229,6 @@ Event.add(defines.events.on_player_created, function(event)
     if config.entities.enabled then spawn_entities(s, p) end
     if config.resource_tiles.enabled then spawn_resource_tiles(s) end
     if config.resource_patches.enabled then spawn_resource_patches(s) end
-    if config.resource_refill.enabled then refill_resource_patches(s) end
     player.teleport(p, s)
 end)
 

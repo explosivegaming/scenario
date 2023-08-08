@@ -8,7 +8,11 @@ require 'config.expcore.command_general_parse'
 
 -- For Modded Server Use
 Commands.new_command('toggle-friendly-fire', 'Toggle Friendly Fire')
-:register(function(_)
-    game.forces.player.friendly_fire = not game.forces.player.friendly_fire
-    return Commands.success{'expcom-ff.ff', game.forces.player.friendly_fire}
+:add_param('force', true, 'force')
+:set_defaults{force=function(player)
+    return player.force
+end}
+:register(function(_, force)
+    force.friendly_fire = not force.friendly_fire
+    return Commands.success{'expcom-ff.ff', force.friendly_fire}
 end)

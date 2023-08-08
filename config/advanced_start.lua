@@ -108,7 +108,7 @@ return {
     armor = {
         enable=false,
         main = 'modular-armor',
-        grid = {
+        item = {
             {
                 equipment='solar-panel-equipment',
                 count=16

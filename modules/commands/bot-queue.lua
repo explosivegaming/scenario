@@ -8,17 +8,17 @@ require 'config.expcore.command_general_parse'
 
 Commands.new_command('bot-queue-get', 'Get bot queue')
 :set_flag('admin_only')
-:register(function(_)
-    local f = game.player.force.max_failed_attempts_per_tick_per_construction_queue
-    local s = game.player.force.max_successful_attempts_per_tick_per_construction_queue
+:register(function(player)
+    local s = player.force.max_successful_attempts_per_tick_per_construction_queue
+    local f = player.force.max_failed_attempts_per_tick_per_construction_queue
     return Commands.success{'expcom-bot-queue.result', s, f}
 end)
 
 Commands.new_command('bot-queue-set', 'Set bot queue')
-:add_param('amount', 'integer-range', 1, 3)
+:add_param('amount', 'integer-range', 1, 20)
 :set_flag('admin_only')
-:register(function(_, amount)
-    game.player.force.max_failed_attempts_per_tick_per_construction_queue = 3 * amount
-    game.player.force.max_successful_attempts_per_tick_per_construction_queue = 1 * amount
-    return Commands.success{'expcom-bot-queue.result', 1 * amount, 3 * amount}
+:register(function(player, amount)
+    player.force.max_successful_attempts_per_tick_per_construction_queue = 3 * amount
+    player.force.max_failed_attempts_per_tick_per_construction_queue = 1 * amount
+    return Commands.success{'expcom-bot-queue.result', 3 * amount, 1 * amount}
 end)
