@@ -141,9 +141,9 @@ local function vlayer_gui_update()
     local button_circuit_enabled = #vlayer.power.circuit >= config.interface_limit.circuit
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, vlayer_container)
-        frame.container.scroll.table[button_power.name].enabled = button_power_enabled
-        frame.container.scroll.table[button_storage_input.name].enabled = button_storage_input_enabled
-        frame.container.scroll.table[button_circuit.name].enabled = button_circuit_enabled
+        frame.container.scroll.table['button_1'].enabled = button_power_enabled
+        frame.container.scroll.table['button_2'].enabled = button_storage_input_enabled
+        frame.container.scroll.table['button_3'].enabled = button_circuit_enabled
     end
 end
 

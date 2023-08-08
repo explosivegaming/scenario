@@ -1,6 +1,6 @@
 local Event = require 'utils.event_core' --- @dep utils.event_core
 
-local function miner_check(entity)
+local function miner_check(entity, event)
     if ((math.abs(entity.position.x - event.entity.position.x) < entity.prototype.mining_drill_radius) and (math.abs(entity.position.y - event.entity.position.y) < entity.prototype.mining_drill_radius)) then
         if entity.mining_target ~= nil and entity.mining_target.valid then
             if entity.mining_target.amount > 0 then
@@ -59,6 +59,6 @@ Event.add(defines.events.on_resource_depleted, function(event)
     end
 
     for _, entity in pairs(entities) do
-        miner_check(entity)
+        miner_check(entity, event)
     end
 end)
