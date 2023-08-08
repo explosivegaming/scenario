@@ -40,10 +40,10 @@ Selection.on_selection(SelectionConvertArea, function(event)
     local entities = player.surface.find_entities_filtered{area=area, name='steel-chest'}
     local tiles_to_make = {}
     local inv = player.get_main_inventory()
-    inv = inv.get_item_count('cliff-explosives')
+    local clf_exp = inv.get_item_count('cliff-explosives')
 
     for _, entity in pairs(entities) do
-        if inv >= 1 then
+        if clf_exp >= 1 then
             if entity.get_inventory(defines.inventory.chest).is_empty() then
                 if (math.floor(player.position.x) ~= math.floor(entity.position.x)) and (math.floor(player.position.y) ~= math.floor(entity.position.y)) then
                     table.insert(tiles_to_make, {name='water-mud', position=entity.position})
@@ -53,8 +53,8 @@ Selection.on_selection(SelectionConvertArea, function(event)
                 end
             end
 
-            inv = inv - 1
-            chest.remove({name='cliff-explosives', count=1})
+            clf_exp = clf_exp - 1
+            inv.remove({name='cliff-explosives', count=1})
         else
             break
         end

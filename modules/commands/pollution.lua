@@ -15,8 +15,8 @@ Commands.new_command('pollution-clear', 'Clear pollution')
 end}
 :register(function(player, surface)
     surface.clear_pollution()
+    return Commands.success{'expcom-pol.clr', player}
 end)
-return Commands.success{'expcom-pol.clr', player}
 
 Commands.new_command('pollution-off', 'Disable pollution')
 :set_flag('admin_only')
