@@ -14,7 +14,7 @@ local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 local PlayerBonus = PlayerData.Settings:combine('Bonus')
 PlayerBonus:set_default(0)
 PlayerBonus:set_metadata{
-    permission = 'command/bonus/2',
+    permission = 'command/bonus',
     stringify = function(value)
         if not value or value == 0 then
             return 'None set'
@@ -53,12 +53,12 @@ Commands.new_command('bonus', 'Changes the amount of bonus you receive')
 :add_param('amount', 'integer-range', 0, 10)
 :register(function(player, amount)
     if amount > config.player_bonus_level then
-        if not Roles.player_allowed(player, 'command/bonus') then
+        if not Roles.player_allowed(player, 'command/bonus/2') then
             Commands.print{'expcom-bonus.perm', 2}
             return
         end
-    elseif amount == config.player_bonus_level then
-        if not Roles.player_allowed(player, 'command/bonus/2') then
+    elseif amount <= config.player_bonus_level then
+        if not Roles.player_allowed(player, 'command/bonus') then
             Commands.print{'expcom-bonus.perm', 1}
             return
         end
@@ -78,7 +78,7 @@ end)
 --- Remove bonus if a player no longer has access to the command
 local function role_update(event)
     local player = game.players[event.player_index]
-    if not Roles.player_allowed(player, 'command/bonus/2') then
+    if not Roles.player_allowed(player, 'command/bonus') then
         apply_bonus(player, 0)
     end
 end
