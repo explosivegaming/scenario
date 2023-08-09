@@ -117,7 +117,7 @@ local function vlayer_convert_chest_circuit(player)
 end
 
 local function vlayer_convert_remove(player)
-    local entities = player.surface.find_entities_filtered{name={'electric-energy-interface', 'constant-combinator', 'logistic-chest-storage'}, position=player.position, radius=8, force='neutral', limit=1}
+    local entities = player.surface.find_entities_filtered{name={'logistic-chest-storage', 'constant-combinator', 'electric-energy-interface'}, position=player.position, radius=8, force='neutral', limit=1}
 
     if (not entities or #entities == 0) then
         player.print('Entity not found')
