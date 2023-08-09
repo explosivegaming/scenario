@@ -360,7 +360,7 @@ return {
         },
         -- ore
         ['wood'] = {
-            key = 161,
+            key = 151,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -368,7 +368,7 @@ return {
             max = 0
         },
         ['coal'] = {
-            key = 162,
+            key = 152,
             upgrade_of = nil,
             type = nil,
             stack = 50,
@@ -376,7 +376,7 @@ return {
             max = 0
         },
         ['stone'] = {
-            key = 163,
+            key = 153,
             upgrade_of = nil,
             type = nil,
             stack = 50,
@@ -384,7 +384,7 @@ return {
             max = 0
         },
         ['iron-ore'] = {
-            key = 164,
+            key = 154,
             upgrade_of = nil,
             type = nil,
             stack = 50,
@@ -392,7 +392,7 @@ return {
             max = 0
         },
         ['copper-ore'] = {
-            key = 165,
+            key = 155,
             upgrade_of = nil,
             type = nil,
             stack = 50,
@@ -400,7 +400,7 @@ return {
             max = 0
         },
         ['uranium-ore'] = {
-            key = 166,
+            key = 156,
             upgrade_of = nil,
             type = nil,
             stack = 50,
@@ -408,7 +408,7 @@ return {
             max = 0
         },
         ['raw-fish'] = {
-            key = 167,
+            key = 157,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -416,7 +416,7 @@ return {
             max = 0
         },
         ['iron-stick'] = {
-            key = 168,
+            key = 158,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -424,7 +424,7 @@ return {
             max = 0
         },
         ['iron-gear-wheel'] = {
-            key = 169,
+            key = 159,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -432,7 +432,7 @@ return {
             max = 0
         },
         ['satellite'] = {
-            key = 170,
+            key = 160,
             upgrade_of = nil,
             type = nil,
             stack = 1,
@@ -1300,7 +1300,7 @@ return {
         },
         -- path
         ['stone-brick'] = {
-            key = 151,
+            key = 100,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -1308,7 +1308,7 @@ return {
             max = 0
         },
         ['concrete'] = {
-            key = 152,
+            key = 69,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -1316,7 +1316,7 @@ return {
             max = 0
         },
         ['hazard-concrete'] = {
-            key = 153,
+            key = 70,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -1324,7 +1324,7 @@ return {
             max = 0
         },
         ['refined-concrete'] = {
-            key = 154,
+            key = 188,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -1332,7 +1332,7 @@ return {
             max = 0
         },
         ['refined-hazard-concrete'] = {
-            key = 155,
+            key = 189,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -1340,7 +1340,7 @@ return {
             max = 0
         },
         ['crude-oil-barrel'] = {
-            key = 171,
+            key = 161,
             upgrade_of = nil,
             type = nil,
             stack = 10,
@@ -1348,7 +1348,7 @@ return {
             max = 0
         },
         ['heavy-oil-barrel'] = {
-            key = 172,
+            key = 162,
             upgrade_of = nil,
             type = nil,
             stack = 10,
@@ -1356,7 +1356,7 @@ return {
             max = 0
         },
         ['light-oil-barrel'] = {
-            key = 173,
+            key = 163,
             upgrade_of = nil,
             type = nil,
             stack = 10,
@@ -1364,7 +1364,7 @@ return {
             max = 0
         },
         ['lubricant-barrel'] = {
-            key = 174,
+            key = 164,
             upgrade_of = nil,
             type = nil,
             stack = 10,
@@ -1372,7 +1372,7 @@ return {
             max = 0
         },
         ['petroleum-gas-barrel'] = {
-            key = 175,
+            key = 165,
             upgrade_of = nil,
             type = nil,
             stack = 10,
@@ -1380,7 +1380,7 @@ return {
             max = 0
         },
         ['sulfuric-acid-barrel'] = {
-            key = 176,
+            key = 166,
             upgrade_of = nil,
             type = nil,
             stack = 10,
@@ -1388,7 +1388,7 @@ return {
             max = 0
         },
         ['water-barrel'] = {
-            key = 177,
+            key = 167,
             upgrade_of = nil,
             type = nil,
             stack = 10,
@@ -1396,7 +1396,7 @@ return {
             max = 0
         },
         ['empty-barrel'] = {
-            key = 178,
+            key = 168,
             upgrade_of = nil,
             type = nil,
             stack = 10,
@@ -1404,7 +1404,7 @@ return {
             max = 0
         },
         ['uranium-fuel-cell'] = {
-            key = 179,
+            key = 169,
             upgrade_of = nil,
             type = nil,
             stack = 50,
@@ -1412,7 +1412,7 @@ return {
             max = 0
         },
         ['used-up-uranium-fuel-cell'] = {
-            key = 180,
+            key = 170,
             upgrade_of = nil,
             type = nil,
             stack = 50,
@@ -1421,7 +1421,7 @@ return {
         },
         -- science and circuit
         ['automation-science-pack'] = {
-            key = 181,
+            key = 171,
             upgrade_of = nil,
             type = nil,
             stack = 200,
@@ -1429,7 +1429,7 @@ return {
             max = 0
         },
         ['logistic-science-pack'] = {
-            key = 182,
+            key = 172,
             upgrade_of = nil,
             type = nil,
             stack = 200,
@@ -1437,7 +1437,7 @@ return {
             max = 0
         },
         ['military-science-pack'] = {
-            key = 183,
+            key = 173,
             upgrade_of = nil,
             type = nil,
             stack = 200,
@@ -1445,7 +1445,7 @@ return {
             max = 0
         },
         ['chemical-science-pack'] = {
-            key = 184,
+            key = 174,
             upgrade_of = nil,
             type = nil,
             stack = 200,
@@ -1453,7 +1453,7 @@ return {
             max = 0
         },
         ['production-science-pack'] = {
-            key = 185,
+            key = 175,
             upgrade_of = nil,
             type = nil,
             stack = 200,
@@ -1461,7 +1461,7 @@ return {
             max = 0
         },
         ['utility-science-pack'] = {
-            key = 186,
+            key = 176,
             upgrade_of = nil,
             type = nil,
             stack = 200,
@@ -1469,7 +1469,7 @@ return {
             max = 0
         },
         ['space-science-pack'] = {
-            key = 187,
+            key = 177,
             upgrade_of = nil,
             type = nil,
             stack = 2000,
@@ -1477,7 +1477,7 @@ return {
             max = 0
         },
         ['electronic-circuit'] = {
-            key = 188,
+            key = 178,
             upgrade_of = nil,
             type = nil,
             stack = 200,
@@ -1485,7 +1485,7 @@ return {
             max = 0
         },
         ['advanced-circuit'] = {
-            key = 189,
+            key = 179,
             upgrade_of = nil,
             type = nil,
             stack = 200,
@@ -1493,7 +1493,7 @@ return {
             max = 0
         },
         ['processing-unit'] = {
-            key = 190,
+            key = 180,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -1502,7 +1502,7 @@ return {
         },
         -- intermediate
         ['iron-plate'] = {
-            key = 191,
+            key = 181,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -1510,7 +1510,7 @@ return {
             max = 0
         },
         ['copper-plate'] = {
-            key = 192,
+            key = 182,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -1518,7 +1518,7 @@ return {
             max = 0
         },
         ['steel-plate'] = {
-            key = 193,
+            key = 183,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -1526,7 +1526,7 @@ return {
             max = 0
         },
         ['plastic-bar'] = {
-            key = 194,
+            key = 184,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -1534,7 +1534,7 @@ return {
             max = 0
         },
         ['sulfur'] = {
-            key = 195,
+            key = 185,
             upgrade_of = nil,
             type = nil,
             stack = 50,
@@ -1542,7 +1542,7 @@ return {
             max = 0
         },
         ['battery'] = {
-            key = 196,
+            key = 186,
             upgrade_of = nil,
             type = nil,
             stack = 200,
@@ -1550,7 +1550,7 @@ return {
             max = 0
         },
         ['explosives'] = {
-            key = 197,
+            key = 187,
             upgrade_of = nil,
             type = nil,
             stack = 50,
@@ -1558,7 +1558,7 @@ return {
             max = 0
         },
         ['engine-unit'] = {
-            key = 201,
+            key = 191,
             upgrade_of = nil,
             type = nil,
             stack = 50,
@@ -1566,7 +1566,7 @@ return {
             max = 0
         },
         ['electric-engine-unit'] = {
-            key = 202,
+            key = 192,
             upgrade_of = nil,
             type = nil,
             stack = 50,
@@ -1574,7 +1574,7 @@ return {
             max = 0
         },
         ['flying-robot-frame'] = {
-            key = 203,
+            key = 193,
             upgrade_of = nil,
             type = nil,
             stack = 50,
@@ -1582,7 +1582,7 @@ return {
             max = 0
         },
         ['rocket-control-unit'] = {
-            key = 204,
+            key = 194,
             upgrade_of = nil,
             type = nil,
             stack = 10,
@@ -1590,7 +1590,7 @@ return {
             max = 0
         },
         ['low-density-structure'] = {
-            key = 205,
+            key = 195,
             upgrade_of = nil,
             type = nil,
             stack = 10,
@@ -1598,7 +1598,7 @@ return {
             max = 0
         },
         ['solid-fuel'] = {
-            key = 206,
+            key = 196,
             upgrade_of = nil,
             type = nil,
             stack = 50,
@@ -1606,7 +1606,7 @@ return {
             max = 0
         },
         ['rocket-fuel'] = {
-            key = 207,
+            key = 197,
             upgrade_of = nil,
             type = nil,
             stack = 10,
@@ -1614,7 +1614,7 @@ return {
             max = 0
         },
         ['nuclear-fuel'] = {
-            key = 208,
+            key = 198,
             upgrade_of = nil,
             type = nil,
             stack = 1,
@@ -1622,7 +1622,7 @@ return {
             max = 0
         },
         ['uranium-235'] = {
-            key = 209,
+            key = 199,
             upgrade_of = nil,
             type = nil,
             stack = 100,
@@ -1630,7 +1630,7 @@ return {
             max = 0
         },
         ['uranium-238'] = {
-            key = 210,
+            key = 200,
             upgrade_of = nil,
             type = nil,
             stack = 100,
