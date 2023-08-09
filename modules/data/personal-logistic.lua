@@ -35,21 +35,28 @@ local function pl(player, amount)
                 v_max = math.ceil(v_max / v.stack) * v.stack
             end
 
-            if v.upgrade_of ~= nil and v.type ~= nil then
-                s(config.start + v.key, {min=v_min, max=v_max, name=k})
+            if v.upgrade_of == nil then
+                if v.type ~= nil then
+                    if stats.get_input_count(k) < config.production_required[v.type] then
+                        v_min = 0
+                    end
+                end
+
+                s(config.start + v.key, {name=k, min=v_min, max=v_max})
 
             else
-                if stats.get_input_count(k) >= config.production_required[v.type] then
-                    s(config.start + v.key, {min=v_min, max=v_max, name=k})
+                if v.type ~= nil then
+                    if stats.get_input_count(k) >= config.production_required[v.type] then
+                        s(config.start + v.key, {name=k, min=v_min, max=v_max})
+                        local vuo = v.upgrade_of
 
-                    local vuo = v.upgrade_of
-
-                    while (vuo ~= nil) do
-                        s(config.start + config.request[vuo].key, {min=0, max=0, name=vuo})
-                        vuo = config.request[vuo].upgrade_of
+                        while (vuo ~= nil) do
+                            s(config.start + config.request[vuo].key, {name=vuo, min=0, max=0})
+                            vuo = config.request[vuo].upgrade_of
+                        end
+                    else
+                        s(config.start + v.key, {name=k, min=0, max=v_max})
                     end
-                else
-                    s(config.start + v.key, {min=0, max=v_max, name=k})
                 end
             end
         end
