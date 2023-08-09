@@ -123,7 +123,7 @@ local function vlayer_convert_remove(player)
         player.print('Entity not found')
     else
         for _, v in pairs(entities) do
-            game.print(player.name .. ' removed a vlayer ' .. config.print_out[v.name] .. ' on ' .. pos_to_gps_string(v.pos))
+            game.print(player.name .. ' removed a vlayer ' .. config.print_out[v.name] .. ' on ' .. pos_to_gps_string(v.position))
             v.destroy()
         end
     end
