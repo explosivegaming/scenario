@@ -817,7 +817,7 @@ return {
             key = 90,
             upgrade_of = 'effectivity-module-2',
             type = 'module',
-            stack = 50
+            stack = 50,
             min = 50,
             max = 50
         },
