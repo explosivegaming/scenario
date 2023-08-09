@@ -116,7 +116,7 @@ return {
         ['boiler'] = {
             key = 6,
             upgrade_of = nil,
-            type = 'power',
+            type = nil,
             stack = 50,
             min = 0,
             max = 0
@@ -124,7 +124,7 @@ return {
         ['steam-engine'] = {
             key = 7,
             upgrade_of = nil,
-            type = 'power',
+            type = nil,
             stack = 10,
             min = 0,
             max = 0
