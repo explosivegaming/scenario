@@ -51,10 +51,8 @@ Roles.new_role('Administrator','Admin')
 :set_flag('instant-respawn')
 :set_parent('Moderator')
 :allow{
-    'gui/warp-list/bypass-proximity',
-    'gui/warp-list/bypass-cooldown',
     'command/connect-all',
-	'command/collectdata',
+	'command/collectdata'
 }
 
 Roles.new_role('Moderator','Mod')
@@ -77,6 +75,8 @@ Roles.new_role('Moderator','Mod')
     'command/clear-inventory',
     'command/bonus',
     'command/bonus/2',
+    'gui/warp-list/bypass-proximity',
+    'gui/warp-list/bypass-cooldown',
     'command/home',
     'command/home-set',
     'command/home-get',
