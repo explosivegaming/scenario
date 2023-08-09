@@ -1430,7 +1430,7 @@ return {
             min = 0,
             max = 0
         },
-        ['suluranium-238fur'] = {
+        ['uranium-238'] = {
             key = 210,
             upgrade_of = nil,
             type = nil,
