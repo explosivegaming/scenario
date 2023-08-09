@@ -117,27 +117,21 @@ local function vlayer_convert_chest_circuit(player)
 end
 
 local function vlayer_convert_remove(player)
-    local entities = player.surface.find_entities_filtered{name={'electric-energy-interface', 'constant-combinator', 'logistic-chest-storage'}, position=player.position, radius=5, force='neutral'}
+    local entities = player.surface.find_entities_filtered{name={'electric-energy-interface', 'constant-combinator', 'logistic-chest-storage'}, position=player.position, radius=5, force='neutral', limit=1}
 
     if (not entities or #entities == 0) then
         player.print('Entity not found')
-        return
-    end
-
-    for _, v in pairs(entities) do
-        if (v.name == 'electric-energy-interface') then
-            vlayer.power.energy = vlayer.power.energy + v.energy
-            v.energy = 0
+    else
+        for _, v in pairs(entities) do  
+            local vlayer_print_short = {
+                ['electric-energy-interface'] = 'energy interface',
+                ['constant-combinator'] = 'circuit',
+                ['logistic-chest-storage'] = 'input'
+            }
+    
+            game.print(player.name .. ' removed a vlayer ' .. vlayer_print_short[v.name] .. ' on ' .. pos_to_gps_string(v.pos))
+            v.destroy()
         end
-
-        local vlayer_print_short = {
-            ['electric-energy-interface'] = 'energy interface',
-            ['constant-combinator'] = 'circuit',
-            ['logistic-chest-storage'] = 'input'
-        }
-
-        game.print(player.name .. ' removed a vlayer ' .. vlayer_print_short[v.name] .. ' on ' .. pos_to_gps_string(v.pos))
-        v.destroy()
     end
 end
 
