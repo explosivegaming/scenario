@@ -30,7 +30,7 @@ local function pl(player, amount)
             local v_min = math.floor(v.min * amount)
             local v_max = math.floor(v.max * amount)
 
-            if v.stack ~= nil then
+            if v.stack ~= nil and v.stack ~= 1 and v.type ~= 'weapon' then
                 v_min = math.floor(v_min / v.stack) * v.stack
                 v_max = math.ceil(v_max / v.stack) * v.stack
             end
@@ -60,6 +60,10 @@ Commands.new_command('personal-logistic', 'Set Personal Logistic (0 to cancel al
 :add_param('amount', 'integer-range', 0, 10)
 :add_alias('pl')
 :register(function(player, amount)
-    pl(player, amount / 10)
-    return Commands.success
+    if force.technologies['logistic-robotics'].researched then
+        pl(player, amount / 10)
+        return Commands.success
+    else
+        player.print('Player logistic not researched')
+    end
 end)

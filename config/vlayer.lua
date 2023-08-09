@@ -23,6 +23,11 @@ return {
         energy = 1,
         circuit = 1
     },
+    print_out = {
+        ['electric-energy-interface'] = 'energy interface',
+        ['constant-combinator'] = 'circuit output',
+        ['logistic-chest-storage'] = 'storage input'
+    },
     gui = {
         style = 'heading_1_label',
         type = 'label',
