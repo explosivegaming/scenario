@@ -60,7 +60,7 @@ Commands.new_command('personal-logistic', 'Set Personal Logistic (0 to cancel al
 :add_param('amount', 'integer-range', 0, 10)
 :add_alias('pl')
 :register(function(player, amount)
-    if force.technologies['logistic-robotics'].researched then
+    if player.force.technologies['logistic-robotics'].researched then
         pl(player, amount / 10)
         return Commands.success
     else
