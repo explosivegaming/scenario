@@ -122,14 +122,8 @@ local function vlayer_convert_remove(player)
     if (not entities or #entities == 0) then
         player.print('Entity not found')
     else
-        for _, v in pairs(entities) do  
-            local vlayer_print_short = {
-                ['electric-energy-interface'] = 'energy interface',
-                ['constant-combinator'] = 'circuit',
-                ['logistic-chest-storage'] = 'input'
-            }
-    
-            game.print(player.name .. ' removed a vlayer ' .. vlayer_print_short[v.name] .. ' on ' .. pos_to_gps_string(v.pos))
+        for _, v in pairs(entities) do
+            game.print(player.name .. ' removed a vlayer ' .. config.print_out[v.name] .. ' on ' .. pos_to_gps_string(v.pos))
             v.destroy()
         end
     end

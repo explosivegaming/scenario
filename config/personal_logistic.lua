@@ -19,7 +19,8 @@ return {
         ['rocket'] = 20,
         ['ammo'] = 20,
         ['armor'] = 3,
-        ['armor_equipment'] = 4
+        ['armor_equipment'] = 4,
+        ['weapon'] = 0
     },
     request = {
         -- belt
@@ -27,6 +28,7 @@ return {
             key = 1,
             upgrade_of = nil,
             type = 'belt',
+            stack = 100,
             min = 500,
             max = 500
         },
@@ -34,6 +36,7 @@ return {
             key = 2,
             upgrade_of = nil,
             type = 'belt',
+            stack = 50,
             min = 150,
             max = 150
         },
@@ -41,6 +44,7 @@ return {
             key = 3,
             upgrade_of = nil,
             type = 'belt',
+            stack = 50,
             min = 100,
             max = 100
         },
@@ -48,6 +52,7 @@ return {
             key = 11,
             upgrade_of = 'transport-belt',
             type = 'belt',
+            stack = 100,
             min = 500,
             max = 500
         },
@@ -55,6 +60,7 @@ return {
             key = 12,
             upgrade_of = 'underground-belt',
             type = 'belt',
+            stack = 50,
             min = 150,
             max = 150
         },
@@ -62,6 +68,7 @@ return {
             key = 13,
             upgrade_of = 'splitter',
             type = 'belt',
+            stack = 50,
             min = 100,
             max = 100
         },
@@ -69,6 +76,7 @@ return {
             key = 21,
             upgrade_of = 'fast-transport-belt',
             type = 'belt',
+            stack = 100,
             min = 500,
             max = 500
         },
@@ -76,6 +84,7 @@ return {
             key = 22,
             upgrade_of = 'fast-underground-belt',
             type = 'belt',
+            stack = 50,
             min = 150,
             max = 150
         },
@@ -83,6 +92,7 @@ return {
             key = 23,
             upgrade_of = 'fast-splitter',
             type = 'belt',
+            stack = 50,
             min = 100,
             max = 100
         },
@@ -91,6 +101,7 @@ return {
             key = 4,
             upgrade_of = nil,
             type = 'power',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -98,6 +109,7 @@ return {
             key = 5,
             upgrade_of = nil,
             type = 'power',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -105,6 +117,7 @@ return {
             key = 6,
             upgrade_of = nil,
             type = 'power',
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -112,6 +125,7 @@ return {
             key = 7,
             upgrade_of = nil,
             type = 'power',
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -120,6 +134,7 @@ return {
             key = 8,
             upgrade_of = nil,
             type = 'miner',
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -127,6 +142,7 @@ return {
             key = 9,
             upgrade_of = 'burner-mining-drill',
             type = 'miner',
+            stack = 50,
             min = 250,
             max = 250
         },
@@ -134,6 +150,7 @@ return {
             key = 10,
             upgrade_of = nil,
             type = 'miner',
+            stack = 20,
             min = 20,
             max = 20
         },
@@ -142,6 +159,7 @@ return {
             key = 14,
             upgrade_of = nil,
             type = 'furnace',
+            stack = 50,
             min = 0,
             max = 50
         },
@@ -149,6 +167,7 @@ return {
             key = 15,
             upgrade_of = 'stone-furnace',
             type = 'furnace',
+            stack = 50,
             min = 0,
             max = 50
         },
@@ -156,6 +175,7 @@ return {
             key = 16,
             upgrade_of = 'steel-furnace',
             type = 'furnace',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -164,6 +184,7 @@ return {
             key = 17,
             upgrade_of = nil,
             type = 'machine',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -171,6 +192,7 @@ return {
             key = 18,
             upgrade_of = 'assembling-machine-1',
             type = 'machine',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -178,6 +200,7 @@ return {
             key = 19,
             upgrade_of = 'assembling-machine-2',
             type = 'machine',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -185,6 +208,7 @@ return {
             key = 24,
             upgrade_of = nil,
             type = 'machine',
+            stack = 10,
             min = 10,
             max = 10
         },
@@ -192,6 +216,7 @@ return {
             key = 25,
             upgrade_of = nil,
             type = 'machine',
+            stack = 10,
             min = 10,
             max = 10
         },
@@ -199,6 +224,7 @@ return {
             key = 26,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -206,6 +232,7 @@ return {
             key = 27,
             upgrade_of = nil,
             type = nil,
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -213,6 +240,7 @@ return {
             key = 20,
             upgrade_of = nil,
             type = nil,
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -220,6 +248,7 @@ return {
             key = 28,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -227,6 +256,7 @@ return {
             key = 29,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -234,6 +264,7 @@ return {
             key = 30,
             upgrade_of = nil,
             type = nil,
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -241,6 +272,7 @@ return {
             key = 60,
             upgrade_of = nil,
             type = nil,
+            stack = 1,
             min = 0,
             max = 0
         },
@@ -249,6 +281,7 @@ return {
             key = 31,
             upgrade_of = nil,
             type = 'pole',
+            stack = 50,
             min = 100,
             max = 100
         },
@@ -256,6 +289,7 @@ return {
             key = 32,
             upgrade_of = 'small-electric-pole',
             type = 'pole',
+            stack = 50,
             min = 100,
             max = 100
         },
@@ -263,6 +297,7 @@ return {
             key = 33,
             upgrade_of = nil,
             type = 'pole',
+            stack = 50,
             min = 100,
             max = 100
         },
@@ -270,6 +305,7 @@ return {
             key = 34,
             upgrade_of = nil,
             type = 'pole',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -278,6 +314,7 @@ return {
             key = 35,
             upgrade_of = nil,
             type = 'bot',
+            stack = 10,
             min = 20,
             max = 20
         },
@@ -285,6 +322,7 @@ return {
             key = 36,
             upgrade_of = nil,
             type = 'bot',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -292,6 +330,7 @@ return {
             key = 37,
             upgrade_of = nil,
             type = 'bot',
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -299,6 +338,7 @@ return {
             key = 38,
             upgrade_of = nil,
             type = 'bot',
+            stack = 20,
             min = 80,
             max = 80
         },
@@ -306,6 +346,7 @@ return {
             key = 39,
             upgrade_of = nil,
             type = 'bot',
+            stack = 100,
             min = 100,
             max = 100
         },
@@ -313,6 +354,7 @@ return {
             key = 40,
             upgrade_of = nil,
             type = 'bot',
+            stack = 100,
             min = 300,
             max = 300
         },
@@ -321,6 +363,7 @@ return {
             key = 161,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -328,6 +371,7 @@ return {
             key = 162,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -335,6 +379,7 @@ return {
             key = 163,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -342,6 +387,7 @@ return {
             key = 164,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -349,6 +395,7 @@ return {
             key = 165,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -356,6 +403,7 @@ return {
             key = 166,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -363,6 +411,7 @@ return {
             key = 167,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -370,6 +419,7 @@ return {
             key = 168,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -377,6 +427,7 @@ return {
             key = 169,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -384,6 +435,7 @@ return {
             key = 170,
             upgrade_of = nil,
             type = nil,
+            stack = 1,
             min = 0,
             max = 0
         },
@@ -392,6 +444,7 @@ return {
             key = 41,
             upgrade_of = nil,
             type = 'inserter',
+            stack = 50,
             min = 0,
             max = 50
         },
@@ -399,6 +452,7 @@ return {
             key = 42,
             upgrade_of = 'burner-inserter',
             type = 'inserter',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -406,6 +460,7 @@ return {
             key = 43,
             upgrade_of = nil,
             type = 'inserter',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -413,6 +468,7 @@ return {
             key = 44,
             upgrade_of = 'inserter',
             type = 'inserter',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -420,6 +476,7 @@ return {
             key = 45,
             upgrade_of = nil,
             type = 'inserter',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -427,6 +484,7 @@ return {
             key = 46,
             upgrade_of = 'fast-inserter',
             type = 'inserter',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -434,6 +492,7 @@ return {
             key = 47,
             upgrade_of = nil,
             type = 'inserter',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -442,6 +501,7 @@ return {
             key = 48,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 100,
             max = 100
         },
@@ -449,6 +509,7 @@ return {
             key = 49,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 100,
             max = 100
         },
@@ -456,6 +517,7 @@ return {
             key = 50,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -463,6 +525,7 @@ return {
             key = 59,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -471,6 +534,7 @@ return {
             key = 51,
             upgrade_of = nil,
             type = 'chest',
+            stack = 50,
             min = 0,
             max = 50
         },
@@ -478,6 +542,7 @@ return {
             key = 52,
             upgrade_of = 'wooden-chest',
             type = 'chest',
+            stack = 50,
             min = 0,
             max = 50
         },
@@ -485,6 +550,7 @@ return {
             key = 53,
             upgrade_of = 'iron-chest',
             type = 'chest',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -492,6 +558,7 @@ return {
             key = 54,
             upgrade_of = nil,
             type = 'chest',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -499,6 +566,7 @@ return {
             key = 55,
             upgrade_of = nil,
             type = 'chest',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -506,6 +574,7 @@ return {
             key = 56,
             upgrade_of = nil,
             type = 'chest',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -513,6 +582,7 @@ return {
             key = 57,
             upgrade_of = nil,
             type = 'chest',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -520,6 +590,7 @@ return {
             key = 58,
             upgrade_of = nil,
             type = 'chest',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -528,6 +599,7 @@ return {
             key = 61,
             upgrade_of = nil,
             type = 'rail',
+            stack = 100,
             min = 1000,
             max = 1000
         },
@@ -535,6 +607,7 @@ return {
             key = 62,
             upgrade_of = nil,
             type = 'rail',
+            stack = 10,
             min = 10,
             max = 10
         },
@@ -542,6 +615,7 @@ return {
             key = 63,
             upgrade_of = nil,
             type = 'rail',
+            stack = 50,
             min = 100,
             max = 100
         },
@@ -549,6 +623,7 @@ return {
             key = 64,
             upgrade_of = nil,
             type = 'rail',
+            stack = 50,
             min = 100,
             max = 100
         },
@@ -556,6 +631,7 @@ return {
             key = 65,
             upgrade_of = nil,
             type = 'rail',
+            stack = 5,
             min = 5,
             max = 5
         },
@@ -563,6 +639,7 @@ return {
             key = 66,
             upgrade_of = nil,
             type = 'rail',
+            stack = 5,
             min = 10,
             max = 10
         },
@@ -570,6 +647,7 @@ return {
             key = 67,
             upgrade_of = nil,
             type = 'rail',
+            stack = 5,
             min = 5,
             max = 5
         },
@@ -577,6 +655,7 @@ return {
             key = 68,
             upgrade_of = nil,
             type = 'rail',
+            stack = 5,
             min = 0,
             max = 0
         },
@@ -585,6 +664,7 @@ return {
             key = 71,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -592,6 +672,7 @@ return {
             key = 72,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -599,6 +680,7 @@ return {
             key = 73,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -606,6 +688,7 @@ return {
             key = 74,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 100,
             max = 100
         },
@@ -613,6 +696,7 @@ return {
             key = 75,
             upgrade_of = nil,
             type = nil,
+            stack = 200,
             min = 200,
             max = 200
         },
@@ -620,6 +704,7 @@ return {
             key = 76,
             upgrade_of = nil,
             type = nil,
+            stack = 200,
             min = 200,
             max = 200
         },
@@ -627,6 +712,7 @@ return {
             key = 77,
             upgrade_of = nil,
             type = nil,
+            stack = 200,
             min = 200,
             max = 200
         },
@@ -634,6 +720,7 @@ return {
             key = 78,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -641,6 +728,7 @@ return {
             key = 79,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -648,6 +736,7 @@ return {
             key = 80,
             upgrade_of = nil,
             type = nil,
+            stack = 20,
             min = 20,
             max = 20
         },
@@ -656,6 +745,7 @@ return {
             key = 81,
             upgrade_of = nil,
             type = 'module',
+            stack = 10,
             min = 40,
             max = 40
         },
@@ -663,6 +753,7 @@ return {
             key = 82,
             upgrade_of = nil,
             type = 'module',
+            stack = 50,
             min = 250,
             max = 250
         },
@@ -670,6 +761,7 @@ return {
             key = 83,
             upgrade_of = 'speed-module',
             type = 'module',
+            stack = 50,
             min = 0,
             max = 50
         },
@@ -677,6 +769,7 @@ return {
             key = 84,
             upgrade_of = 'speed-module-2',
             type = 'module',
+            stack = 50,
             min = 250,
             max = 250
         },
@@ -684,6 +777,7 @@ return {
             key = 85,
             upgrade_of = nil,
             type = 'module',
+            stack = 50,
             min = 150,
             max = 150
         },
@@ -691,6 +785,7 @@ return {
             key = 86,
             upgrade_of = 'productivity-module',
             type = 'module',
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -698,6 +793,7 @@ return {
             key = 87,
             upgrade_of = 'productivity-module-2',
             type = 'module',
+            stack = 50,
             min = 150,
             max = 150
         },
@@ -705,6 +801,7 @@ return {
             key = 88,
             upgrade_of = nil,
             type = 'module',
+            stack = 50,
             min = 250,
             max = 250
         },
@@ -712,6 +809,7 @@ return {
             key = 89,
             upgrade_of = 'effectivity-module',
             type = 'module',
+            stack = 50,
             min = 0,
             max = 50
         },
@@ -719,6 +817,7 @@ return {
             key = 90,
             upgrade_of = 'effectivity-module-2',
             type = 'module',
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -727,6 +826,7 @@ return {
             key = 91,
             upgrade_of = nil,
             type = 'defense',
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -734,6 +834,7 @@ return {
             key = 92,
             upgrade_of = nil,
             type = 'defense',
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -741,6 +842,7 @@ return {
             key = 93,
             upgrade_of = nil,
             type = 'defense',
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -748,6 +850,7 @@ return {
             key = 94,
             upgrade_of = nil,
             type = 'defense',
+            stack = 50,
             min = 100,
             max = 100
         },
@@ -755,6 +858,7 @@ return {
             key = 95,
             upgrade_of = nil,
             type = 'defense',
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -762,6 +866,7 @@ return {
             key = 96,
             upgrade_of = nil,
             type = 'defense',
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -770,6 +875,7 @@ return {
             key = 101,
             upgrade_of = nil,
             type = 'rocket',
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -777,6 +883,7 @@ return {
             key = 102,
             upgrade_of = 'rocket',
             type = 'rocket',
+            stack = 200,
             min = 2000,
             max = 2000
         },
@@ -784,48 +891,55 @@ return {
             key = 103,
             upgrade_of = 'explosive-rocket',
             type = 'rocket',
+            stack = 10,
             min = 50,
             max = 50
         },
         ['rocket-launcher'] = {
             key = 104,
             upgrade_of = nil,
-            type = nil,
+            type = 'weapon',
+            stack = 5,
             min = 1,
             max = 1
         },
         ['flamethrower'] = {
             key = 105,
             upgrade_of = nil,
-            type = nil,
+            type = 'weapon',
+            stack = 5,
             min = 0,
             max = 0
         },
         ['pistol'] = {
             key = 106,
             upgrade_of = nil,
-            type = nil,
+            type = 'weapon',
+            stack = 5,
             min = 0,
             max = 0
         },
         ['submachine-gun'] = {
             key = 107,
             upgrade_of = nil,
-            type = nil,
+            type = 'weapon',
+            stack = 5,
             min = 0,
             max = 0
         },
         ['shotgun'] = {
             key = 108,
             upgrade_of = nil,
-            type = nil,
+            type = 'weapon',
+            stack = 5,
             min = 0,
             max = 0
         },
         ['combat-shotgun'] = {
             key = 109,
             upgrade_of = nil,
-            type = nil,
+            type = 'weapon',
+            stack = 5,
             min = 0,
             max = 0
         },
@@ -833,6 +947,7 @@ return {
             key = 110,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -841,6 +956,7 @@ return {
             key = 111,
             upgrade_of = nil,
             type = 'ammo',
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -848,6 +964,7 @@ return {
             key = 112,
             upgrade_of = 'firearm-magazine',
             type = 'ammo',
+            stack = 200,
             min = 0,
             max = 1000
         },
@@ -855,6 +972,7 @@ return {
             key = 113,
             upgrade_of = 'piercing-rounds-magazine',
             type = 'ammo',
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -862,6 +980,7 @@ return {
             key = 114,
             upgrade_of = nil,
             type = 'ammo',
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -869,6 +988,7 @@ return {
             key = 115,
             upgrade_of = nil,
             type = 'ammo',
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -876,6 +996,7 @@ return {
             key = 116,
             upgrade_of = nil,
             type = 'ammo',
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -883,6 +1004,7 @@ return {
             key = 117,
             upgrade_of = nil,
             type = 'ammo',
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -890,6 +1012,7 @@ return {
             key = 118,
             upgrade_of = nil,
             type = 'ammo',
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -897,6 +1020,7 @@ return {
             key = 119,
             upgrade_of = nil,
             type = 'ammo',
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -904,6 +1028,7 @@ return {
             key = 120,
             upgrade_of = nil,
             type = 'ammo',
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -911,6 +1036,7 @@ return {
             key = 97,
             upgrade_of = nil,
             type = 'ammo',
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -918,6 +1044,7 @@ return {
             key = 98,
             upgrade_of = nil,
             type = 'ammo',
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -925,6 +1052,7 @@ return {
             key = 121,
             upgrade_of = nil,
             type = nil,
+            stack = 1,
             min = 0,
             max = 0
         },
@@ -932,6 +1060,7 @@ return {
             key = 122,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -939,6 +1068,7 @@ return {
             key = 123,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -946,6 +1076,7 @@ return {
             key = 124,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -953,6 +1084,7 @@ return {
             key = 125,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -960,6 +1092,7 @@ return {
             key = 126,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -967,6 +1100,7 @@ return {
             key = 127,
             upgrade_of = nil,
             type = nil,
+            stack = 1,
             min = 0,
             max = 0
         },
@@ -974,6 +1108,7 @@ return {
             key = 128,
             upgrade_of = nil,
             type = nil,
+            stack = 1,
             min = 0,
             max = 0
         },
@@ -981,6 +1116,7 @@ return {
             key = 129,
             upgrade_of = nil,
             type = nil,
+            stack = 1,
             min = 0,
             max = 0
         },
@@ -988,6 +1124,7 @@ return {
             key = 130,
             upgrade_of = nil,
             type = nil,
+            stack = 1,
             min = 0,
             max = 0
         },
@@ -995,6 +1132,7 @@ return {
             key = 99,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 50,
             max = 50
         },
@@ -1003,35 +1141,40 @@ return {
             key = 131,
             upgrade_of = nil,
             type = 'armor',
-            min = 1,
+            stack = 1,
+            min = 0,
             max = 1
         },
         ['heavy-armor'] = {
             key = 132,
             upgrade_of = 'light-armor',
             type = 'armor',
-            min = 1,
+            stack = 1,
+            min = 0,
             max = 1
         },
         ['modular-armor'] = {
             key = 133,
             upgrade_of = 'heavy-armor',
             type = 'armor',
-            min = 1,
+            stack = 1,
+            min = 0,
             max = 1
         },
         ['power-armor'] = {
             key = 134,
             upgrade_of = 'modular-armor',
             type = 'armor',
-            min = 1,
+            stack = 1,
+            min = 0,
             max = 1
         },
         ['power-armor-mk2'] = {
             key = 135,
             upgrade_of = 'power-armor',
             type = 'armor',
-            min = 1,
+            stack = 1,
+            min = 0,
             max = 1
         },
         -- armor equipment
@@ -1039,6 +1182,7 @@ return {
             key = 136,
             upgrade_of = nil,
             type = 'armor_equipment',
+            stack = 20,
             min = 0,
             max = 0
         },
@@ -1046,6 +1190,7 @@ return {
             key = 137,
             upgrade_of = 'solar-panel-equipment',
             type = 'armor_equipment',
+            stack = 20,
             min = 0,
             max = 0
         },
@@ -1053,6 +1198,7 @@ return {
             key = 138,
             upgrade_of = nil,
             type = 'armor_equipment',
+            stack = 20,
             min = 0,
             max = 0
         },
@@ -1060,6 +1206,7 @@ return {
             key = 139,
             upgrade_of = 'battery-equipment',
             type = 'armor_equipment',
+            stack = 20,
             min = 0,
             max = 0
         },
@@ -1067,6 +1214,7 @@ return {
             key = 140,
             upgrade_of = nil,
             type = 'armor_equipment',
+            stack = 20,
             min = 0,
             max = 0
         },
@@ -1074,6 +1222,7 @@ return {
             key = 141,
             upgrade_of = nil,
             type = 'armor_equipment',
+            stack = 20,
             min = 0,
             max = 0
         },
@@ -1081,6 +1230,7 @@ return {
             key = 142,
             upgrade_of = 'personal-roboport-equipment',
             type = 'armor_equipment',
+            stack = 20,
             min = 0,
             max = 0
         },
@@ -1088,6 +1238,7 @@ return {
             key = 143,
             upgrade_of = nil,
             type = 'armor_equipment',
+            stack = 20,
             min = 0,
             max = 0
         },
@@ -1095,6 +1246,7 @@ return {
             key = 144,
             upgrade_of = 'energy-shield-equipment',
             type = 'armor_equipment',
+            stack = 20,
             min = 0,
             max = 0
         },
@@ -1102,6 +1254,7 @@ return {
             key = 145,
             upgrade_of = nil,
             type = 'armor_equipment',
+            stack = 20,
             min = 0,
             max = 0
         },
@@ -1109,6 +1262,7 @@ return {
             key = 146,
             upgrade_of = nil,
             type = 'armor_equipment',
+            stack = 20,
             min = 0,
             max = 0
         },
@@ -1116,6 +1270,7 @@ return {
             key = 147,
             upgrade_of = nil,
             type = 'armor_equipment',
+            stack = 20,
             min = 0,
             max = 0
         },
@@ -1123,6 +1278,7 @@ return {
             key = 148,
             upgrade_of = nil,
             type = 'armor_equipment',
+            stack = 20,
             min = 0,
             max = 0
         },
@@ -1130,6 +1286,7 @@ return {
             key = 149,
             upgrade_of = nil,
             type = nil,
+            stack = 1,
             min = 0,
             max = 0
         },
@@ -1137,6 +1294,7 @@ return {
             key = 150,
             upgrade_of = nil,
             type = nil,
+            stack = 1,
             min = 1,
             max = 1
         },
@@ -1145,6 +1303,7 @@ return {
             key = 151,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -1152,6 +1311,7 @@ return {
             key = 152,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -1159,6 +1319,7 @@ return {
             key = 153,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -1166,6 +1327,7 @@ return {
             key = 154,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -1173,6 +1335,7 @@ return {
             key = 155,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -1180,6 +1343,7 @@ return {
             key = 171,
             upgrade_of = nil,
             type = nil,
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -1187,6 +1351,7 @@ return {
             key = 172,
             upgrade_of = nil,
             type = nil,
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -1194,6 +1359,7 @@ return {
             key = 173,
             upgrade_of = nil,
             type = nil,
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -1201,6 +1367,7 @@ return {
             key = 174,
             upgrade_of = nil,
             type = nil,
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -1208,6 +1375,7 @@ return {
             key = 175,
             upgrade_of = nil,
             type = nil,
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -1215,6 +1383,7 @@ return {
             key = 176,
             upgrade_of = nil,
             type = nil,
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -1222,6 +1391,7 @@ return {
             key = 177,
             upgrade_of = nil,
             type = nil,
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -1229,6 +1399,7 @@ return {
             key = 178,
             upgrade_of = nil,
             type = nil,
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -1236,6 +1407,7 @@ return {
             key = 179,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -1243,6 +1415,7 @@ return {
             key = 180,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -1251,6 +1424,7 @@ return {
             key = 181,
             upgrade_of = nil,
             type = nil,
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -1258,6 +1432,7 @@ return {
             key = 182,
             upgrade_of = nil,
             type = nil,
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -1265,6 +1440,7 @@ return {
             key = 183,
             upgrade_of = nil,
             type = nil,
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -1272,6 +1448,7 @@ return {
             key = 184,
             upgrade_of = nil,
             type = nil,
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -1279,6 +1456,7 @@ return {
             key = 185,
             upgrade_of = nil,
             type = nil,
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -1286,6 +1464,7 @@ return {
             key = 186,
             upgrade_of = nil,
             type = nil,
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -1293,6 +1472,7 @@ return {
             key = 187,
             upgrade_of = nil,
             type = nil,
+            stack = 2000,
             min = 0,
             max = 0
         },
@@ -1300,6 +1480,7 @@ return {
             key = 188,
             upgrade_of = nil,
             type = nil,
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -1307,6 +1488,7 @@ return {
             key = 189,
             upgrade_of = nil,
             type = nil,
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -1314,6 +1496,7 @@ return {
             key = 190,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -1322,6 +1505,7 @@ return {
             key = 191,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -1329,6 +1513,7 @@ return {
             key = 192,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -1336,6 +1521,7 @@ return {
             key = 193,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -1343,6 +1529,7 @@ return {
             key = 194,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -1350,6 +1537,7 @@ return {
             key = 195,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -1357,6 +1545,7 @@ return {
             key = 196,
             upgrade_of = nil,
             type = nil,
+            stack = 200,
             min = 0,
             max = 0
         },
@@ -1364,6 +1553,7 @@ return {
             key = 197,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -1371,6 +1561,7 @@ return {
             key = 201,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -1378,6 +1569,7 @@ return {
             key = 202,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -1385,6 +1577,7 @@ return {
             key = 203,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -1392,6 +1585,7 @@ return {
             key = 204,
             upgrade_of = nil,
             type = nil,
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -1399,6 +1593,7 @@ return {
             key = 205,
             upgrade_of = nil,
             type = nil,
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -1406,6 +1601,7 @@ return {
             key = 206,
             upgrade_of = nil,
             type = nil,
+            stack = 50,
             min = 0,
             max = 0
         },
@@ -1413,6 +1609,7 @@ return {
             key = 207,
             upgrade_of = nil,
             type = nil,
+            stack = 10,
             min = 0,
             max = 0
         },
@@ -1420,6 +1617,7 @@ return {
             key = 208,
             upgrade_of = nil,
             type = nil,
+            stack = 1,
             min = 0,
             max = 0
         },
@@ -1427,6 +1625,7 @@ return {
             key = 209,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         },
@@ -1434,6 +1633,7 @@ return {
             key = 210,
             upgrade_of = nil,
             type = nil,
+            stack = 100,
             min = 0,
             max = 0
         }
