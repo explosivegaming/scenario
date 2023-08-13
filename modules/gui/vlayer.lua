@@ -130,9 +130,10 @@ local function vlayer_convert_remove(player)
 end
 
 local function vlayer_gui_update()
-    local button_power_enabled = #vlayer.power.entity >= config.interface_limit.energy
-    local button_storage_input_enabled = #vlayer.storage.input >= config.interface_limit.storage_input
-    local button_circuit_enabled = #vlayer.power.circuit >= config.interface_limit.circuit
+    local button_power_enabled = #vlayer.power.entity < config.interface_limit.energy
+    local button_storage_input_enabled = #vlayer.storage.input < config.interface_limit.storage_input
+    local button_circuit_enabled = #vlayer.power.circuit < config.interface_limit.circuit
+
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, vlayer_container)
         frame.container.scroll.table['button_1'].enabled = button_power_enabled
@@ -220,9 +221,9 @@ Gui.element(function(event_trigger, parent)
         scroll_table[button_remove.name].visible = false
     end
 
-    scroll_table[button_power.name].enabled = (#vlayer.power.entity >= config.interface_limit.energy)
-    scroll_table[button_storage_input.name].enabled = (#vlayer.storage.input >= config.interface_limit.storage_input)
-    scroll_table[button_circuit.name].enabled = (#vlayer.power.circuit >= config.interface_limit.circuit)
+    scroll_table[button_power.name].enabled = (#vlayer.power.entity < config.interface_limit.energy)
+    scroll_table[button_storage_input.name].enabled = (#vlayer.storage.input < config.interface_limit.storage_input)
+    scroll_table[button_circuit.name].enabled = (#vlayer.power.circuit < config.interface_limit.circuit)
 
     return container.parent
 end)
