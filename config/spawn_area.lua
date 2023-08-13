@@ -187,40 +187,40 @@ return {
                 name = 'iron-ore',
                 amount = 4000,
                 size = {26, 27},
-                -- offset = {-64,-32}
-                offset = {-64,-64}
+                offset = {-64,-32}
+                -- offset = {-64,-64}
             },
             {
                 enabled = false,
                 name = 'copper-ore',
                 amount = 4000,
                 size = {26, 27},
-                -- offset = {-64, 0}
-                offset = {64, -64}
+                offset = {-64, 0}
+                -- offset = {64, -64}
             },
             {
                 enabled = false,
                 name = 'stone',
                 amount = 4000,
                 size = {22, 20},
-                -- offset = {-64, 32}
-                offset = {-64, 64}
+                offset = {-64, 32}
+                -- offset = {-64, 64}
             },
             {
                 enabled = false,
                 name = 'coal',
                 amount = 4000,
                 size = {22, 20},
-                -- offset = {-64, -64}
-                offset = {64, 64}
+                offset = {-64, -64}
+                -- offset = {64, 64}
             },
             {
                 enabled = false,
                 name = 'uranium-ore',
                 amount = 4000,
                 size = {22, 20},
-                -- offset = {-64, -96}
-                offset = {0, 64}
+                offset = {-64, -96}
+                -- offset = {0, 64}
             }
         }
     },
@@ -232,10 +232,10 @@ return {
                 name = 'crude-oil',
                 num_patches = 4,
                 amount = 4000000,
-                -- offset = {-80, -12},
-                offset = {-12, 64},
-                -- offset_next = {0, 6}
-                offset_next = {6, 0}
+                offset = {-80, -12},
+                -- offset = {-12, 64},
+                offset_next = {0, 6}
+                -- offset_next = {6, 0}
             }
         }
     },
