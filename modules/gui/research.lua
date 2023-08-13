@@ -152,6 +152,8 @@ end)
 Event.add(defines.events.on_research_finished, function(event)
 	if event.research.name == nil then
 		return
+	elseif res_i[event.research.name] == nil then
+		return
 	end
 
 	local n_i = res_i[event.research.name]

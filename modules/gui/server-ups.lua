@@ -75,7 +75,7 @@ end)
 -- percentage of game speed
 Event.on_nth_tick(60, function()
     if External.valid() then
-        local caption = 'SUPS = '.. External.get_server_ups() .. ' (' .. string.format('%.1f ', External.get_server_ups() * 5 / 3) .. '%)'
+        local caption = ' / '.. External.get_server_ups() .. ' (' .. string.format('%.1f ', External.get_server_ups() * 5 / 3) .. '%)'
         for _, player in pairs(game.connected_players) do
             player.gui.screen[server_ups.name].caption = caption
         end

@@ -27,8 +27,8 @@ local function pl(player, amount)
         local s = player.set_personal_logistic_slot
 
         for k, v in pairs(config.request) do
-            local v_min = math.floor(v.min * amount)
-            local v_max = math.floor(v.max * amount)
+            local v_min = math.ceil(v.min * amount)
+            local v_max = math.ceil(v.max * amount)
 
             if v.stack ~= nil and v.stack ~= 1 and v.type ~= 'weapon' then
                 v_min = math.floor(v_min / v.stack) * v.stack

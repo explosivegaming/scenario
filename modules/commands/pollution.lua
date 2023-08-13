@@ -23,5 +23,10 @@ Commands.new_command('pollution-off', 'Disable pollution')
 :add_alias('pol-off')
 :register(function(player)
     game.map_settings.pollution.enabled = false
+
+    for _, v in pairs(game.surfaces) do
+        v.clear_pollution()
+    end
+
     return Commands.success{'expcom-pol.off', player}
 end)
