@@ -219,6 +219,11 @@ Gui.element(function(event_trigger, parent)
         scroll_table[button_circuit.name].visible = false
         scroll_table[button_remove.name].visible = false
     end
+
+    scroll_table[button_power.name].enabled = (#vlayer.power.entity >= config.interface_limit.energy)
+    scroll_table[button_storage_input.name].enabled = (#vlayer.storage.input >= config.interface_limit.storage_input)
+    scroll_table[button_circuit.name].enabled = (#vlayer.power.circuit >= config.interface_limit.circuit)
+
     return container.parent
 end)
 :add_to_left_flow()

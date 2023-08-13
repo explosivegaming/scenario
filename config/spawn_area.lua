@@ -187,28 +187,32 @@ return {
                 name = 'iron-ore',
                 amount = 4000,
                 size = {26, 27},
-                offset = {-64,-32}
+                -- offset = {-64,-32}
+                offset = {-64,-64}
             },
             {
                 enabled = false,
                 name = 'copper-ore',
                 amount = 4000,
                 size = {26, 27},
-                offset = {-64, 0}
+                -- offset = {-64, 0}
+                offset = {64, -64}
             },
             {
                 enabled = false,
                 name = 'stone',
                 amount = 4000,
                 size = {22, 20},
-                offset = {-64, 32}
+                -- offset = {-64, 32}
+                offset = {-64, 64}
             },
             {
                 enabled = false,
                 name = 'coal',
                 amount = 4000,
                 size = {22, 20},
-                offset = {-64, -64}
+                -- offset = {-64, -64}
+                offset = {64, 64}
             },
             {
                 enabled = false,
@@ -216,7 +220,7 @@ return {
                 amount = 4000,
                 size = {22, 20},
                 -- offset = {-64, -96}
-                offset = {0, -64}
+                offset = {0, 64}
             }
         }
     },
