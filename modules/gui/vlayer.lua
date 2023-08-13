@@ -206,10 +206,9 @@ Gui.element(function(event_trigger, parent)
     button_remove(scroll_table)
 
     if (config.land.enabled ~= true) then
-        scroll_table['vlayer_display_9'].visible = false
-        scroll_table['vlayer_display_10'].visible = false
-        scroll_table['vlayer_display_11'].visible = false
-        scroll_table['vlayer_display_12'].visible = false
+        for i=7, 12 do
+            scroll_table['vlayer_display_' .. i].visible = false
+        end
     end
 
     if not (Roles.player_allowed(player, 'gui/vlayer-edit')) then
