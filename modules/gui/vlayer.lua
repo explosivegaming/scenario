@@ -129,6 +129,8 @@ local function vlayer_convert_remove(player)
     end
 end
 
+local vlayer_gui_update
+
 local button_power =
 Gui.element{
     name = 'button_1',
@@ -219,7 +221,7 @@ Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_co
 	return Roles.player_allowed(player, 'gui/vlayer')
 end)
 
-local function vlayer_gui_update()
+function vlayer_gui_update()
     local button_power_enabled = #vlayer.power.entity < config.interface_limit.energy
     local button_storage_input_enabled = #vlayer.storage.input < config.interface_limit.storage_input
     local button_circuit_enabled = #vlayer.power.circuit < config.interface_limit.circuit

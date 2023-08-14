@@ -60,7 +60,7 @@ local function set_location(event)
     local uis = player.display_scale
     -- below ups and clock
     -- label.location = {x=res.width-423*uis, y=50*uis}
-    label.location = {x=res.width-374*uis, y=30*uis}
+    label.location = {x=res.width-362*uis, y=31*uis}
 end
 
 -- Draw the label when the player joins
@@ -75,7 +75,7 @@ end)
 -- percentage of game speed
 Event.on_nth_tick(60, function()
     if External.valid() then
-        local caption = '/'.. External.get_server_ups() .. ' (' .. string.format('%.1f ', External.get_server_ups() * 5 / 3) .. '%)'
+        local caption = External.get_server_ups() .. ' (' .. string.format('%.1f ', External.get_server_ups() * 5 / 3) .. '%)'
         for _, player in pairs(game.connected_players) do
             player.gui.screen[server_ups.name].caption = caption
         end
