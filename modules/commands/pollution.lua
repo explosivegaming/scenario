@@ -28,5 +28,5 @@ Commands.new_command('pollution-off', 'Disable pollution')
         v.clear_pollution()
     end
 
-    return Commands.success{'expcom-pol.off', player}
+    return Commands.success{'expcom-pol.off', player.name}
 end)
