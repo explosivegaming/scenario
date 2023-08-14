@@ -31,15 +31,18 @@ return {
     on_remove = {
         ['electric-energy-interface'] = {
             a = 'power',
-            b = 'entity'
+            b = 'entity',
+            c = 'power'
         },
         ['constant-combinator'] = {
-            a = 'storage',
-            b = 'input'
+            a = 'power',
+            b = 'circuit',
+            c = 'output'
         },
         ['logistic-chest-storage'] = {
-            a = 'power',
-            b = 'circuit'
+            a = 'storage',
+            b = 'input',
+            c = 'storage'
         }
     },
     gui = {
