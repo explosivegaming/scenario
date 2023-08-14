@@ -28,6 +28,20 @@ return {
         ['constant-combinator'] = 'circuit output',
         ['logistic-chest-storage'] = 'storage input'
     },
+    on_remove = {
+        ['electric-energy-interface'] = {
+            a = 'power',
+            b = 'entity'
+        },
+        ['constant-combinator'] = {
+            a = 'storage',
+            b = 'input'
+        },
+        ['logistic-chest-storage'] = {
+            a = 'power',
+            b = 'circuit'
+        }
+    },
     gui = {
         style = 'heading_1_label',
         type = 'label',

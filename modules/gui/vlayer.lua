@@ -124,6 +124,7 @@ local function vlayer_convert_remove(player)
     else
         for _, v in pairs(entities) do
             game.print(player.name .. ' removed a vlayer ' .. config.print_out[v.name] .. ' on ' .. pos_to_gps_string(v.position))
+            vlayer[config.on_remove.a][config.on_remove.b] = nil
             v.destroy()
         end
     end
