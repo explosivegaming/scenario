@@ -78,6 +78,7 @@ return {
     'modules.data.tag',
     'modules.data.bonus',
     'modules.data.personal-logistic',
+    'modules.data.language',
 
     --- GUI
     'modules.gui.readme',
