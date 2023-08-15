@@ -111,7 +111,7 @@ Gui.element{
 
     -- Check if there are player entities in the way (has a bigger radius because the enities that can be placed by a player are larger)
     local entities = surface.find_entities_filtered{
-        radius =  config.standard_proximity_radius + 4.5,
+        radius =  config.standard_proximity_radius + 2.5,
         position = position,
         collision_mask = {
             'item-layer', 'object-layer', 'player-layer', 'water-tile'
@@ -119,7 +119,7 @@ Gui.element{
     }
     -- Remove 1 because that is the current player
     if #entities > 1 then
-        player_return({'expcore-commands.command-fail', {'warp-list.too-close-to-entities', config.standard_proximity_radius + 4.5}}, 'orange_red', player)
+        player_return({'expcore-commands.command-fail', {'warp-list.too-close-to-entities', config.standard_proximity_radius + 2.5}}, 'orange_red', player)
         if game.player then game.player.play_sound{path='utility/wire_pickup'} end
         local character = player.character
         for _, entity in pairs(entities) do
@@ -832,7 +832,7 @@ Event.add(defines.events.on_player_created, function(event)
         Warps.set_spawn_warp(spawn_id, force)
         Warps.make_warp_tag(spawn_id)
 
-        local entities = player.surface.find_entities_filtered{ type = 'electric-pole', position = spawn_position, radius = 20, limit = 1 }
+        local entities = player.surface.find_entities_filtered{type='electric-pole', position=spawn_position, radius=20, limit=1}
         if entities and entities[1] then
             local warp = Warps.get_warp(spawn_id)
             warp.electric_pole = entities[1]

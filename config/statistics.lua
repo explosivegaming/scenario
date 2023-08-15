@@ -41,6 +41,6 @@ return {
         'Kills', 'Deaths',
         'DamageDealt', 'DistanceTravelled',
         'CapsulesUsed', 'EntityRepaired',
-        'DeconstructionPlannerUsed', 'MapTagsMade',
+        'DeconstructionPlannerUsed', 'MapTagsMade'
     }
 }

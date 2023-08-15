@@ -3,6 +3,7 @@
 
 return {
 	players={ --- @setting players list of all players and the colour in rgb256 that they will recive upon joining
+		PHIDIAS0303={r=255,g=255,b=255},
 		BADgamerNL={r=255,g=20,b=147},
 		arty714={r=150,g=68,b=161},
 		Cooldude2606={r=57,g=192,b=207},

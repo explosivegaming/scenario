@@ -27,6 +27,14 @@ Event.add(defines.events.on_player_created, function(event)
             end
         end
     end
+
+    if config.armor.enable then
+        player.insert{name=config.armor.main, count=1}
+
+        for _, item in pairs(config.armor.item) do
+            player.insert{name=item.equipment, count=item.count}
+        end
+    end
 end)
 
 Event.on_init(function()

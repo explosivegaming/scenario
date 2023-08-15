@@ -10,7 +10,7 @@ local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 -- Global queue used to store trees that need to be removed, also chache for player roles
 local chache = {}
 local tree_queue = { _head=0 }
-Global.register({ tree_queue, chache }, function(tbl)
+Global.register({tree_queue, chache}, function(tbl)
     tree_queue = tbl[1]
     chache = tbl[2]
 end)

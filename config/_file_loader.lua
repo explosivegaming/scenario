@@ -9,6 +9,7 @@ return {
     'expcore.player_data',
 
     --- Game Commands
+    'modules.commands.debug',
     'modules.commands.me',
     'modules.commands.kill',
     'modules.commands.admin-chat',
@@ -33,6 +34,16 @@ return {
     'modules.commands.protection',
     'modules.commands.spectate',
     'modules.commands.search',
+    'modules.commands.bot-queue',
+    'modules.commands.speed',
+    'modules.commands.pollution',
+    'modules.commands.train',
+    'modules.commands.friendly-fire',
+    'modules.commands.lawnmower',
+    'modules.commands.research',
+    'modules.commands.vlayer',
+    'modules.commands.enemy',
+    'modules.commands.waterfill',
 
     --- Addons
     'modules.addons.chat-popups',
@@ -52,6 +63,11 @@ return {
     'modules.addons.protection-jail',
 		'modules.addons.deconlog',
 		'modules.addons.nukeprotect',
+		'modules.addons.inserter',
+    'modules.addons.miner',
+
+    -- Control
+    'modules.control.vlayer',
 
     --- Data
     'modules.data.statistics',
@@ -73,7 +89,8 @@ return {
     'modules.gui.task-list',
     'modules.gui.player-list',
     'modules.gui.server-ups',
-    'modules.commands.debug',
+    'modules.gui.vlayer',
+    'modules.gui.research',
 
 		'modules.graftorio.require', -- graftorio
 
