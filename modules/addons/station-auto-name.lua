@@ -1,6 +1,7 @@
 ---LuaPlayerBuiltEntityEventFilters
 ---Events.set_event_filter(defines.events.on_built_entity, {{filter = "name", name = "fast-inserter"}})
 local Event = require 'utils.event' --- @dep utils.event
+local config = require 'config.station_auto_name' --- @dep config.chat_reply
 
 --Credit to Cooldude2606 for using his lua magic to make this function.
 local directions = {
@@ -46,10 +47,9 @@ local function station_name_changer(event)
 
         local boundingBox = entity.bounding_box
         -- expanded box for recourse search:
-        local bounding2 = { {boundingBox.left_top.x -100 ,boundingBox.left_top.y -100}  , {boundingBox.right_bottom.x +100, boundingBox.right_bottom.y +100 } }
+        local bounding2 = {{boundingBox.left_top.x-100 ,boundingBox.left_top.y-100}  , {boundingBox.right_bottom.x+100, boundingBox.right_bottom.y+100 }}
         -- gets all resources in bounding_box2:
         local recourses = game.surfaces[1].find_entities_filtered{area = bounding2, type = "resource"}
-
         if #recourses > 0 then -- save cpu time if their are no recourses in bounding_box2
             local closest_distance
             local px, py = boundingBox.left_top.x, boundingBox.left_top.y
@@ -70,12 +70,17 @@ local function station_name_changer(event)
             if item_name then -- prevent errors if something went wrong
                 local item_name2 = item_name:gsub("^%l", string.upper):gsub('-', ' ') -- removing the - and making first letter capital
 
-                local Item_ore_fluid = "item"
-                if item_name == "crude-oil" then
-                    Item_ore_fluid = "fluid"
+                local item_type = 'item'
+                if item_name == 'crude-oil' then
+                    item_type = 'fluid'
                 end
-                --Final string:
-                entity.backer_name = string.format("[L] [img=%s.%s] %s %s (%s)", Item_ore_fluid, item_name, item_name2, entity.backer_name, Angle( entity ))
+
+                entity.backer_name = config.station_name:gsub('__icon__', '[img=' .. item_type .. '.' .. item_name .. ']')
+                    :gsub('__item_name__', item_name2)
+                    :gsub('__backer_name__', entity.backer_name)
+                    :gsub('__direction__', Angle(entity))
+                    :gsub('__x__', math.floor(entity.position.x))
+                    :gsub('__y__', math.floor(entity.position.y))
             end
         end
     end

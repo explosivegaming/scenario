@@ -2,7 +2,7 @@
 -- @config Scorched-Earth
 
 return {
-    weakness_value=50, --- @setting weakness_value lower value will make tiles more likely to degrade
+    weakness_value=70, --- @setting weakness_value lower value will make tiles more likely to degrade
     strengths={ --- @setting strengths this decides how "strong" a tile is, bigger number means less likely to degrade
         -- debug: /interface require('modules.addons.worn-paths')(player.name,true)
         -- note: tiles are effected by the tiles around them, so player paths will not degrade as fast when made wider
@@ -40,7 +40,7 @@ return {
         ["dirt-6"]=40,
         --["dirt-7"]=0, -- last tile, nothing to degrade to
         -- land fill chain
-        ["landfill"]=50,
+        -- ["landfill"]=50,
         --["water-shallow"]=90,
         --["water-mud"]=0, -- last tile, nothing to degrade to
     },
@@ -77,7 +77,7 @@ return {
         ["dirt-6"]='dirt-7',
         --["dirt-7"]=0, -- last tile, nothing to degrade to
         -- land fill chain
-        ["landfill"]='grass-2', -- 'water-shallow'
+        -- ["landfill"]='grass-2', -- 'water-shallow'
         --["water-shallow"]='water-mud',
         --["water-mud"]=0, -- last tile, nothing to degrade to
     },

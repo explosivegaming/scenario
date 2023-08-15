@@ -75,7 +75,7 @@ Gui.element{
     local reason = element.parent.entry.text
     local action_name = SelectedAction:get(player)
     local reason_callback = config.buttons[action_name].reason_callback
-    if reason == nil or not reason:find("/S") then reason = 'no reason given' end
+    if reason == nil or not reason:find("%S") then reason = 'no reason given' end
     reason_callback(player, reason)
     SelectedPlayer:remove(player)
     SelectedAction:remove(player)

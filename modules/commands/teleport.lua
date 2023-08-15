@@ -9,9 +9,31 @@ require 'config.expcore.command_general_parse'
 local function teleport(from_player, to_player)
     local surface = to_player.surface
     local position = surface.find_non_colliding_position('character', to_player.position, 32, 1)
-    if not position then return false end -- return false if no new position
-    if from_player.driving then from_player.driving = false end -- kicks a player out a vehicle if in one
-    from_player.teleport(position, surface)
+
+    -- return false if no new position
+    if not position then
+        return false
+    end
+
+    if from_player.vehicle then
+        -- Teleport the entity
+        local entity = from_player.vehicle
+        local goto_position = surface.find_non_colliding_position(entity.name, position, 32, 1)
+
+        -- Surface teleport can only be done for players and cars at the moment. (with surface as an peramitor it gives this error)
+        if entity.type == "car" then
+            entity.teleport(goto_position, surface)
+        elseif surface.index == entity.surface.index then
+            -- Try teleport the entity
+            if not entity.teleport(goto_position) then
+                from_player.driving = false
+                from_player.teleport(position, surface)
+            end
+        end
+    else
+        -- Teleport the player
+        from_player.teleport(position, surface)
+    end
     return true
 end
 
@@ -50,6 +72,7 @@ Commands.new_command('bring', 'Teleports a player to you.')
         -- return if the teleport failed
         return Commands.error{'expcom-tp.no-position-found'}
     end
+    from_player.print('Come here my friend')
 end)
 
 --- Teleports you to a player.
@@ -58,7 +81,6 @@ end)
 Commands.new_command('goto', 'Teleports you to a player.')
 :add_param('player', false, 'player-online')
 :add_alias('tp-me', 'tpme')
-:set_flag('admin_only')
 :register(function(player, to_player)
     if to_player.index == player.index then
         -- return if attempting to teleport to self

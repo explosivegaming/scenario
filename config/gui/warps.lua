@@ -5,7 +5,7 @@ return {
     -- General config
     update_smoothing = 10, --- @setting update_smoothing the amount of smoothing applied to updates to the cooldown timer, higher is better, max is 60
     minimum_distance = 100, --- @setting minimum_distance the minimum distance that is allowed between warps on the same force
-    default_icon = { type = 'item', name = 'discharge-defense-equipment' }, --- @setting default_icon the default icon that will be used for warps
+    default_icon = {type = 'item', name = 'discharge-defense-equipment'}, --- @setting default_icon the default icon that will be used for warps
 
     -- Warp cooldowns
     bypass_warp_cooldown = 'expcore.roles', --- @setting bypass_warp_cooldown dictates who the warp cooldown is applied to; values: all, admin, expcore.roles, none
@@ -29,24 +29,24 @@ return {
 
     -- Warp area generation
     entities = { --- @setting entities The entities which are created for warp areas
-        {'small-lamp', -4, -2}, {'small-lamp', -2, -4}, {'small-electric-pole',-3,-3}, -- Top left corner
-        {'small-lamp', 3, -2}, {'small-lamp', 1, -4}, {'small-electric-pole',2,-3}, -- Top right corner
-        {'small-lamp', 3, 1}, {'small-lamp', 1, 3}, {'small-electric-pole',2,2}, -- Bottom right corner
-        {'small-lamp', -4, 1}, {'small-lamp', -2, 3}, {'small-electric-pole',-3,2}, -- Bottom left corner
+        {'small-lamp', -4, -2}, {'small-lamp', -2, -4}, {'medium-electric-pole',-3,-3}, -- Top left corner
+        {'small-lamp', 3, -2}, {'small-lamp', 1, -4}, {'medium-electric-pole',2,-3}, -- Top right corner
+        {'small-lamp', 3, 1}, {'small-lamp', 1, 3}, {'medium-electric-pole',2,2}, -- Bottom right corner
+        {'small-lamp', -4, 1}, {'small-lamp', -2, 3}, {'medium-electric-pole',-3,2}, -- Bottom left corner
     },
     tiles = { --- @setting tiles The tiles which are created for warp areas
-        {"black-refined-concrete",-4,-2},{"black-refined-concrete",-4,-1},{"black-refined-concrete",-4,0},{"black-refined-concrete",-4,1},
-        {"black-refined-concrete",-3,-3},{"purple-refined-concrete",-3,-2},{"purple-refined-concrete",-3,-1},{"purple-refined-concrete",-3,0},
-        {"purple-refined-concrete",-3,1},{"black-refined-concrete",-3,2},{"black-refined-concrete",-2,-4},{"purple-refined-concrete",-2,-3},
-        {"purple-refined-concrete",-2,-2},{"purple-refined-concrete",-2,-1},{"purple-refined-concrete",-2,0},{"purple-refined-concrete",-2,1},
-        {"purple-refined-concrete",-2,2},{"black-refined-concrete",-2,3},{"black-refined-concrete",-1,-4},{"purple-refined-concrete",-1,-3},
-        {"purple-refined-concrete",-1,-2},{"purple-refined-concrete",-1,-1},{"purple-refined-concrete",-1,0},{"purple-refined-concrete",-1,1},
-        {"purple-refined-concrete",-1,2},{"black-refined-concrete",-1,3},{"black-refined-concrete",0,-4},{"purple-refined-concrete",0,-3},
-        {"purple-refined-concrete",0,-2},{"purple-refined-concrete",0,-1},{"purple-refined-concrete",0,0},{"purple-refined-concrete",0,1},
-        {"purple-refined-concrete",0,2},{"black-refined-concrete",0,3},{"black-refined-concrete",1,-4},{"purple-refined-concrete",1,-3},
-        {"purple-refined-concrete",1,-2},{"purple-refined-concrete",1,-1},{"purple-refined-concrete",1,0},{"purple-refined-concrete",1,1},
-        {"purple-refined-concrete",1,2},{"black-refined-concrete",1,3},{"black-refined-concrete",2,-3},{"purple-refined-concrete",2,-2},
-        {"purple-refined-concrete",2,-1},{"purple-refined-concrete",2,0},{"purple-refined-concrete",2,1},{"black-refined-concrete",2,2},
-        {"black-refined-concrete",3,-2},{"black-refined-concrete",3,-1},{"black-refined-concrete",3,0},{"black-refined-concrete",3,1}
+        {'black-refined-concrete',-4,-2}, {'black-refined-concrete',-4,-1}, {'black-refined-concrete',-4,0}, {'black-refined-concrete',-4,1},
+        {'black-refined-concrete',-3,-3}, {'purple-refined-concrete',-3,-2}, {'purple-refined-concrete',-3,-1}, {'purple-refined-concrete',-3,0},
+        {'purple-refined-concrete',-3,1}, {'black-refined-concrete',-3,2}, {'black-refined-concrete',-2,-4}, {'purple-refined-concrete',-2,-3},
+        {'purple-refined-concrete',-2,-2}, {'purple-refined-concrete',-2,-1}, {'purple-refined-concrete',-2,0}, {'purple-refined-concrete',-2,1},
+        {'purple-refined-concrete',-2,2}, {'black-refined-concrete',-2,3}, {'black-refined-concrete',-1,-4}, {'purple-refined-concrete',-1,-3},
+        {'purple-refined-concrete',-1,-2}, {'purple-refined-concrete',-1,-1}, {'purple-refined-concrete',-1,0}, {'purple-refined-concrete',-1,1},
+        {'purple-refined-concrete',-1,2}, {'black-refined-concrete',-1,3}, {'black-refined-concrete',0,-4}, {'purple-refined-concrete',0,-3},
+        {'purple-refined-concrete',0,-2}, {'purple-refined-concrete',0,-1}, {'purple-refined-concrete',0,0}, {'purple-refined-concrete',0,1},
+        {'purple-refined-concrete',0,2}, {'black-refined-concrete',0,3}, {'black-refined-concrete',1,-4}, {'purple-refined-concrete',1,-3},
+        {'purple-refined-concrete',1,-2}, {'purple-refined-concrete',1,-1}, {'purple-refined-concrete',1,0}, {'purple-refined-concrete',1,1},
+        {'purple-refined-concrete',1,2}, {'black-refined-concrete',1,3}, {'black-refined-concrete',2,-3}, {'purple-refined-concrete',2,-2},
+        {'purple-refined-concrete',2,-1}, {'purple-refined-concrete',2,0}, {'purple-refined-concrete',2,1}, {'black-refined-concrete',2,2},
+        {'black-refined-concrete',3,-2}, {'black-refined-concrete',3,-1}, {'black-refined-concrete',3,0}, {'black-refined-concrete',3,1}
     }
 }

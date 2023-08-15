@@ -95,8 +95,9 @@ function Warps.make_warp_tag(warp_id)
 
     -- Edit the existing tag if it is present
     local tag = warp.tag
+
     if tag and tag.valid then
-        tag.text = 'Warp: '..name
+        tag.text = 'Warp: ' .. name
         tag.icon = icon
         return false
     end
@@ -108,7 +109,7 @@ function Warps.make_warp_tag(warp_id)
 
     tag = force.add_chart_tag(surface, {
         position = {position.x+0.5, position.y+0.5},
-        text = 'Warp: '..name,
+        text = 'Warp: ' .. name,
         icon = icon
     })
 
@@ -205,9 +206,11 @@ function Warps.remove_warp_area(warp_id)
 
     -- Restore the original tiles before the creation of the warp
     local tiles = {}
+
     for _, tile in pairs(config.tiles) do
         table.insert(tiles, {name=old_tile, position={tile[2]+position.x, tile[3]+position.y}})
     end
+
     surface.set_tiles(tiles)
 
     local area = {
@@ -224,7 +227,6 @@ function Warps.remove_warp_area(warp_id)
             entity.die(entity.force)
         end
     end
-
     -- Rechart map area, useful if warp is not covered by a radar
     game.forces[warp.force_name].chart(surface, area)
 end
@@ -240,8 +242,9 @@ Warps.set_spawn_warp(warp_id, game.player.force)
 function Warps.set_spawn_warp(warp_id, force)
     -- Check the force owns this warp
     local warp = WrapData:get(warp_id)
-    if warp.force_name ~= force.name then return end
-
+    if warp.force_name ~= force.name then
+        return
+    end
     -- Set this warp as the spawn
     local warp_ids = force_warps[warp.force_name]
     if not warp_ids then
@@ -249,7 +252,6 @@ function Warps.set_spawn_warp(warp_id, force)
         force_warps[warp.force_name] = warp_ids
     end
     warp_ids.spawn = warp_id
-
     -- Set the forces spawn to this warp
     force.set_spawn_position(warp.position, warp.surface)
 end

@@ -32,6 +32,14 @@ function Public.open_dubug(player)
         return
     end
 
+    --[[
+        local screen_element = player.gui.screen
+
+        frame = screen_element.add{type = 'frame', name = main_frame_name, caption = 'Debuggertron 3000'}
+        frame.style.size = {900, 600}
+        frame.auto_center = true
+    ]]
+
     frame = center.add {type = 'frame', name = main_frame_name, caption = 'Debuggertron 3002', direction = 'vertical'}
     local frame_style = frame.style
     frame_style.height = 600

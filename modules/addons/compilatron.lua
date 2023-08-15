@@ -70,9 +70,11 @@ function Public.add_compilatron(entity, name)
     if not entity and not entity.valid then
         return
     end
+
     if name == nil then
         return
     end
+
     Public.compilatrons[name] = entity
     local message =
         entity.surface.create_entity(
@@ -95,6 +97,7 @@ end
 Event.add(defines.events.on_player_created, function(event)
     if event.player_index ~= 1 then return end
     local player = game.players[event.player_index]
+
     for location in pairs(locations) do
         Public.spawn_compilatron(player.surface, location)
     end

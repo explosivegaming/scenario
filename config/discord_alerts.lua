@@ -21,5 +21,5 @@ return {
     ['permissions']=true,
     ['editor']=true,
     ['cheat']=true,
-    ['open']=false,
+    ['open']=false
 }

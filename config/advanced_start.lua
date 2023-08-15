@@ -15,8 +15,10 @@ local seconds, minutes, hours = 60, 3600, 216000
 -- ['stone-furnace']=cutoff_time(5*minutes, 4,0) -- before 5 minutes give four items after 5 minutes give none
 local function cutoff_time(time, before, after)
     return function(amount_made, items_made, player)
-        if game.tick < time then return before
-        else return after
+        if game.tick < time then
+            return before
+        else
+            return after
         end
     end
 end
@@ -25,8 +27,10 @@ end
 -- ['firearm-magazine']=cutoff_amount_made(100, 10, 0) -- give 10 items until 100 items have been made
 local function cutoff_amount_made(amount, before, after)
     return function(amount_made, items_made, player)
-        if amount_made < amount then return before
-        else return after
+        if amount_made < amount then
+            return before
+        else
+            return after
         end
     end
 end
@@ -36,10 +40,13 @@ end
 local function cutoff_amount_made_unless(amount, before, after, second_item, second_amount)
     return function(amount_made, items_made, player)
         if items_made(second_item) < second_amount then
-            if amount_made < amount then return before
-            else return after
+            if amount_made < amount then
+                return before
+            else
+                return after
             end
-        else return 0
+        else
+            return 0
         end
     end
 end
@@ -48,8 +55,10 @@ end
 -- ['iron-plate']=scale_amount_made(5*minutes, 10, 10) -- for first 5 minutes give 10 items then after apply a factor of 10
 local function scale_amount_made(amount, before, scalar)
     return function(amount_made, items_made, player)
-        if amount_made < amount then return before
-        else return (amount_made*scalar)/math.pow(game.tick/minutes, 2)
+        if amount_made < amount then
+            return before
+        else
+            return (amount_made * scalar) / ((game.tick / minutes) ^ 2)
         end
     end
 end
@@ -75,22 +84,47 @@ return {
         -- ['item-name'] = function(amount_made, production_stats, player) return <Number> end -- 0 means no items given
         -- Plates
         ['iron-plate']=scale_amount_made(100, 10, 10),
-        ['copper-plate']=scale_amount_made(100, 0,8),
-        ['steel-plate']=scale_amount_made(100, 0,4),
+        ['copper-plate']=scale_amount_made(100, 0, 8),
+        ['steel-plate']=scale_amount_made(100, 0, 4),
         -- Secondary Items
-        ['electronic-circuit']=scale_amount_made(1000, 0,6),
-        ['iron-gear-wheel']=scale_amount_made(1000, 0,6),
+        ['electronic-circuit']=scale_amount_made(1000, 0, 6),
+        ['iron-gear-wheel']=scale_amount_made(1000, 0, 6),
         -- Starting Items
-        ['burner-mining-drill']=cutoff_time(10*minutes, 4,0),
-        ['stone-furnace']=cutoff_time(10*minutes, 4,0),
+        ['burner-mining-drill']=cutoff_time(10*minutes, 4, 0),
+        ['stone-furnace']=cutoff_time(10*minutes, 4, 0),
         -- Armor
         ['light-armor']=cutoff_amount_made_unless(5, 0,1,'heavy-armor',5),
         ['heavy-armor']=cutoff_amount_made(5, 0,1),
         -- Weapon
-        ['pistol']=cutoff_amount_made_unless(0, 1,1,'submachine-gun',5),
-        ['submachine-gun']=cutoff_amount_made(5, 0,1),
+        ['pistol']=cutoff_amount_made_unless(0, 1, 1,'submachine-gun',5),
+        ['submachine-gun']=cutoff_amount_made(5, 0, 1),
         -- Ammo
-        ['firearm-magazine']=cutoff_amount_made_unless(100, 10, 0,'piercing-rounds-magazine',100),
-        ['piercing-rounds-magazine']=cutoff_amount_made(100, 0,10),
+        ['firearm-magazine']=cutoff_amount_made_unless(100, 10, 0,'piercing-rounds-magazine', 100),
+        ['piercing-rounds-magazine']=cutoff_amount_made(100, 0, 10),
+        --[[
+            ['construction-robot']=scale_amount_made(1, 10, 1)
+        ]]
+    },
+    armor = {
+        enable=false,
+        main = 'modular-armor',
+        item = {
+            {
+                equipment='solar-panel-equipment',
+                count=16
+            },
+            {
+                equipment='belt-immunity-equipment',
+                count=1
+            },
+            {
+                equipment='battery-equipment',
+                count=2
+            },
+            {
+                equipment='personal-roboport-equipment',
+                count=1
+            },
+        }
     }
 }
