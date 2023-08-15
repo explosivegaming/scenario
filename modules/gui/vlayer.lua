@@ -125,12 +125,6 @@ local function vlayer_convert_remove(player)
         for _, v in pairs(entities) do
             game.print(player.name .. ' removed a vlayer ' .. config.print_out[v.name] .. ' on ' .. pos_to_gps_string(v.position))
             v.destroy()
-
-            for k, vl in pairs(vlayer[config.on_remove.a][config.on_remove.b]) do
-                if (vl[config.on_remove.c] == nil) or (not vl[config.on_remove.c].valid) then
-                    vlayer[config.on_remove.a][config.on_remove.b][k] = nil
-                end
-            end
         end
     end
 end
@@ -181,6 +175,25 @@ Gui.element{
     vlayer_gui_update()
 end)
 
+function vlayer_gui_update()
+    for k, vl in pairs(vlayer[config.on_remove.a][config.on_remove.b]) do
+        if (vl[config.on_remove.c] == nil) or (not vl[config.on_remove.c].valid) then
+            vlayer[config.on_remove.a][config.on_remove.b][k] = nil
+        end
+    end
+
+    local button_power_enabled = #vlayer.power.entity < config.interface_limit.energy
+    local button_storage_input_enabled = #vlayer.storage.input < config.interface_limit.storage_input
+    local button_circuit_enabled = #vlayer.power.circuit < config.interface_limit.circuit
+
+    for _, player in pairs(game.connected_players) do
+        local frame = Gui.get_left_element(player, vlayer_container)
+        frame.container.scroll.table[button_power.name].enabled = button_power_enabled
+        frame.container.scroll.table[button_storage_input.name].enabled = button_storage_input_enabled
+        frame.container.scroll.table[button_circuit.name].enabled = button_circuit_enabled
+    end
+end
+
 vlayer_container =
 Gui.element(function(event_trigger, parent)
     local player = Gui.get_player_from_element(parent)
@@ -226,19 +239,6 @@ end)
 Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_container, function(player)
 	return Roles.player_allowed(player, 'gui/vlayer')
 end)
-
-function vlayer_gui_update()
-    local button_power_enabled = #vlayer.power.entity < config.interface_limit.energy
-    local button_storage_input_enabled = #vlayer.storage.input < config.interface_limit.storage_input
-    local button_circuit_enabled = #vlayer.power.circuit < config.interface_limit.circuit
-
-    for _, player in pairs(game.connected_players) do
-        local frame = Gui.get_left_element(player, vlayer_container)
-        frame.container.scroll.table[button_power.name].enabled = button_power_enabled
-        frame.container.scroll.table[button_storage_input.name].enabled = button_storage_input_enabled
-        frame.container.scroll.table[button_circuit.name].enabled = button_circuit_enabled
-    end
-end
 
 Event.on_nth_tick(config.update_tick, function()
     for _, v in pairs(vlayer_display) do
