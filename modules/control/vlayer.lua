@@ -72,11 +72,11 @@ end
 Event.on_nth_tick(config.update_tick, function()
     -- storage handle
     for k, v in pairs(vlayer.storage.input) do
-        if ((v.storage == nil) or (not v.storage.valid)) then
-            vlayer.storage.input[k] = nil
+        if ((v == nil) or (not v.valid)) then
+            vlayer.input[k] = nil
 
         else
-            local chest = v.storage.get_inventory(defines.inventory.chest)
+            local chest = v.get_inventory(defines.inventory.chest)
             local chest_content = chest.get_contents()
 
             if config.land.enabled then
@@ -174,27 +174,27 @@ Event.on_nth_tick(config.update_tick, function()
     end
 
     for k, v in pairs(vlayer.power.entity) do
-        if (v.power == nil) or (not v.power.valid)then
+        if (v == nil) or (not v.valid)then
             vlayer.power.entity[k] = nil
 
         else
-            v.power.electric_buffer_size = vlayer_power_capacity
-            v.power.power_production = math.floor(vlayer_power_capacity / 60)
-            v.power.power_usage = math.floor(vlayer_power_capacity / 60)
+            v.electric_buffer_size = vlayer_power_capacity
+            v.power_production = math.floor(vlayer_power_capacity / 60)
+            v.power_usage = math.floor(vlayer_power_capacity / 60)
 
             if vlayer.power.energy < vlayer_power_capacity then
-                v.power.energy = math.floor((v.power.energy + vlayer.power.energy) / 2)
-                vlayer.power.energy = v.power.energy
+                v.energy = math.floor((v.energy + vlayer.power.energy) / 2)
+                vlayer.power.energy = v.energy
 
-            elseif v.power.energy < vlayer_power_capacity then
-                local energy_change = vlayer_power_capacity - v.power.energy
+            elseif v.energy < vlayer_power_capacity then
+                local energy_change = vlayer_power_capacity - v.energy
 
                 if energy_change < vlayer.power.energy then
-                    v.power.energy = v.power.energy + energy_change
+                    v.energy = v.energy + energy_change
                     vlayer.power.energy = vlayer.power.energy - energy_change
 
                 else
-                    v.power.energy = v.power.energy + vlayer.power.energy
+                    v.energy = v.energy + vlayer.power.energy
                     vlayer.power.energy = 0
                 end
             end
@@ -207,11 +207,11 @@ Event.on_nth_tick(config.update_tick, function()
     vlayer.circuit.output[6].count = game.tick % 25000
 
     for k, v in pairs(vlayer.power.circuit) do
-        if (v.output == nil) or (not v.output.valid) then
+        if (v == nil) or (not v.valid) then
             vlayer.power.circuit[k] = nil
 
         else
-            local circuit_o = v.output.get_or_create_control_behavior()
+            local circuit_o = v.get_or_create_control_behavior()
 
             for i=1, #vlayer.circuit.output do
                 circuit_o.set_signal(i, {signal=vlayer.circuit.output[i].signal, count=vlayer.circuit.output[i].count})

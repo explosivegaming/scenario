@@ -62,7 +62,7 @@ local function vlayer_convert_chest_storage_input(player)
         vlayer_storage.minable = false
         vlayer_storage.operable = true
         vlayer_storage.last_user = player
-        table.insert(vlayer.storage.input, {storage=vlayer_storage})
+        table.insert(vlayer.storage.input, vlayer_storage)
     end
 end
 
@@ -81,7 +81,7 @@ local function vlayer_convert_chest_power(player)
             vlayer_power.power_production = math.floor(config.energy_base_limit / 60)
             vlayer_power.power_usage = math.floor(config.energy_base_limit / 60)
             vlayer_power.energy = 0
-            table.insert(vlayer.power.entity, {power=vlayer_power})
+            table.insert(vlayer.power.entity, vlayer_power)
         else
             player.print('Unable to build energy entity')
         end
@@ -111,7 +111,7 @@ local function vlayer_convert_chest_circuit(player)
         circuit_oc.set_signal(10, {signal={type='item', name='solar-panel'}, count=0})
         circuit_oc.set_signal(11, {signal={type='item', name='accumulator'}, count=0})
 
-        table.insert(vlayer.power.circuit, {output=circuit_o})
+        table.insert(vlayer.power.circuit, circuit_o)
         game.print(player.name .. ' built a vlayer circuit on ' .. pos_to_gps_string(pos))
     end
 end
@@ -126,9 +126,25 @@ local function vlayer_convert_remove(player)
             game.print(player.name .. ' removed a vlayer ' .. config.print_out[v.name] .. ' on ' .. pos_to_gps_string(v.position))
             v.destroy()
 
-            for k, vl in pairs(vlayer[config.on_remove[v.name].a][config.on_remove[v.name].b]) do
-                if (vl[config.on_remove[v.name].c] == nil) or (not vl[config.on_remove[v.name].c].valid) then
-                    vlayer[config.on_remove[v.name].a][config.on_remove[v.name].b][k] = nil
+            if v.name == 'logistic-chest-storage' then
+                for k, vl in pairs(vlayer.storage.input) do
+                    if (vl == nil) or (not vl.valid) then
+                        vlayer.storage.input[k] = nil
+                    end
+                end
+
+            elseif v.name == 'constant-combinator' then
+                for k, vl in pairs(vlayer.power.circuit) do
+                    if (vl == nil) or (not vl.valid) then
+                        vlayer.power.circuit[k] = nil
+                    end
+                end
+
+            elseif v.name == 'electric-energy-interface' then
+                for k, vl in pairs(vlayer.power.entity) do
+                    if (vl == nil) or (not vl.valid) then
+                        vlayer.power.entity[k] = nil
+                    end
                 end
             end
         end
