@@ -124,29 +124,30 @@ local function vlayer_convert_remove(player)
     else
         for _, v in pairs(entities) do
             game.print(player.name .. ' removed a vlayer ' .. config.print_out[v.name] .. ' on ' .. pos_to_gps_string(v.position))
-            v.destroy()
 
             if v.name == 'logistic-chest-storage' then
                 for k, vl in pairs(vlayer.storage.input) do
-                    if (vl == nil) or (not vl.valid) then
+                    if not vl.valid then
                         vlayer.storage.input[k] = nil
                     end
                 end
 
             elseif v.name == 'constant-combinator' then
                 for k, vl in pairs(vlayer.power.circuit) do
-                    if (vl == nil) or (not vl.valid) then
+                    if not vl.valid then
                         vlayer.power.circuit[k] = nil
                     end
                 end
 
             elseif v.name == 'electric-energy-interface' then
                 for k, vl in pairs(vlayer.power.entity) do
-                    if (vl == nil) or (not vl.valid) then
+                    if not vl.valid then
                         vlayer.power.entity[k] = nil
                     end
                 end
             end
+
+            v.destroy()
         end
     end
 end
