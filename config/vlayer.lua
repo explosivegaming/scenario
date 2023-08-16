@@ -7,7 +7,7 @@ return {
     -- 10 MJ
     energy_base_limit = 10000000,
     land = {
-        enabled = true,
+        enabled = false,
         tile = 'landfill',
         result = 4,
         requirement = {

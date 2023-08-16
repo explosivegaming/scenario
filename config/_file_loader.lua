@@ -52,7 +52,7 @@ return {
     'modules.addons.advanced-start',
     'modules.addons.spawn-area',
     'modules.addons.compilatron',
-    'modules.addons.scorched-earth',
+    -- 'modules.addons.scorched-earth',
     'modules.addons.pollution-grading',
     'modules.addons.station-auto-name',
     'modules.addons.discord-alerts',
