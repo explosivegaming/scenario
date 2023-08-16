@@ -52,7 +52,7 @@ Roles.new_role('Administrator','Admin')
 :set_parent('Moderator')
 :allow{
     'command/connect-all',
-	'command/collectdata'
+	  'command/collectdata'
 }
 
 Roles.new_role('Moderator','Mod')

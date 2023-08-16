@@ -50,10 +50,12 @@ For developers wanting to add features please follow these guidelines:
 
 * All code is documented using ldoc, the end result can be found [here][docs].
 * Changes should be made on your own fork and merged into `dev` through a pull request.
-* Pull requests are automatically linted and documentation checked.
+* Each pull request should be limited to one feature or a few bug fixes.
+* Pull requests are automatically checked for lint and documentation errors.
 * Pull requests are manually reviewed to maintain code and language quality.
 * New features should have the branch names: `feature/feature-name`
 * Bug fixes should have the branch names: `fix/bug-name`
+* Commits should have meaningful messages.
 
 ## Releases
 
