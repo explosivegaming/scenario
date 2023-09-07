@@ -112,7 +112,7 @@ remote.add_interface("freeplay",
   get_ship_items = function()
     return {}
   end,
-  set_ship_items = function(tbl)
+  set_ship_items = function()
   return
   end,
   get_debris_items = function ()
