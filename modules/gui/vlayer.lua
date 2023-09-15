@@ -93,6 +93,7 @@ local function vlayer_convert_chest_circuit(player)
 
     if (pos) then
         local circuit_o = player.surface.create_entity{name='constant-combinator', position=pos, force='neutral'}
+        game.print(player.name .. ' built a vlayer circuit on ' .. pos_to_gps_string(pos))
         circuit_o.destructible = false
         circuit_o.minable = false
         circuit_o.operable = true
@@ -112,7 +113,6 @@ local function vlayer_convert_chest_circuit(player)
         circuit_oc.set_signal(11, {signal={type='item', name='accumulator'}, count=0})
 
         table.insert(vlayer.power.circuit, circuit_o)
-        game.print(player.name .. ' built a vlayer circuit on ' .. pos_to_gps_string(pos))
     end
 end
 
