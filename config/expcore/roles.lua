@@ -36,10 +36,6 @@ Roles.new_role('Senior Administrator','SAdmin')
 :set_flag('instant-respawn')
 :set_parent('Administrator')
 :allow{
-    'command/interface',
-    'command/debug',
-    'command/toggle-cheat-mode',
-    'command/research-all',
 }
 
 Roles.new_role('Administrator','Admin')
@@ -49,10 +45,25 @@ Roles.new_role('Administrator','Admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
 :set_flag('instant-respawn')
+:set_parent('Senior Moderator')
+:allow{
+    'command/interface',
+    'command/debug',
+    'command/toggle-cheat-mode',
+    'command/research-all',
+    'command/connect-all',
+	'command/collectdata'
+}
+
+Roles.new_role('Senior Moderator','SMod')
+:set_permission_group('Admin')
+:set_custom_color{r=0,g=170,b=0}
+:set_flag('is_admin')
+:set_flag('is_spectator')
+:set_flag('report-immune')
+:set_flag('instant-respawn')
 :set_parent('Moderator')
 :allow{
-    'command/connect-all',
-	  'command/collectdata'
 }
 
 Roles.new_role('Moderator','Mod')
@@ -66,27 +77,17 @@ Roles.new_role('Moderator','Mod')
 :allow{
     'command/assign-role',
     'command/unassign-role',
-    'command/repair',
     'command/kill/always',
     'command/clear-tag/always',
     'command/go-to-spawn/always',
     'command/clear-reports',
     'command/clear-warnings',
     'command/clear-inventory',
-    'command/bonus',
-    'command/bonus/2',
     'gui/warp-list/bypass-proximity',
     'gui/warp-list/bypass-cooldown',
-    'command/home',
-    'command/home-set',
-    'command/home-get',
-    'command/return',
     'command/connect-player',
-    'gui/rocket-info/toggle-active',
-    'gui/rocket-info/remote_launch',
     'command/toggle-friendly-fire',
     'command/toggle-always-day',
-    'fast-tree-decon'
 }
 
 Roles.new_role('Trainee','TrMod')
@@ -95,7 +96,7 @@ Roles.new_role('Trainee','TrMod')
 :set_flag('is_admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
-:set_parent('Veteran')
+:set_parent('Board Member')
 :allow{
     'command/admin-chat',
     'command/admin-marker',
@@ -116,8 +117,6 @@ Roles.new_role('Trainee','TrMod')
     'command/search-amount',
     'command/search-recent',
     'command/search-online',
-    'command/personal-battery-recharge',
-    'command/waterfill',
     'command/pollution-off',
     'command/pollution-clear',
     'command/bot-queue-get',
@@ -134,34 +133,15 @@ Roles.new_role('Board Member','Board')
 :set_flag('is_spectator')
 :set_flag('report-immune')
 :set_flag('instant-respawn')
-:set_parent('Sponsor')
+:set_parent('Supporter')
 :allow{
     'command/goto',
     'command/repair',
     'command/spectate',
     'command/follow',
     'command/personal-battery-recharge',
-    'command/waterfill'
-}
-
-Roles.new_role('Senior Backer','Backer')
-:set_permission_group('Trusted')
-:set_custom_color{r=238,g=172,b=44}
-:set_flag('is_spectator')
-:set_flag('report-immune')
-:set_flag('instant-respawn')
-:set_parent('Sponsor')
-:allow{
-}
-
-Roles.new_role('Sponsor','Spon')
-:set_permission_group('Trusted')
-:set_custom_color{r=238,g=172,b=44}
-:set_flag('is_spectator')
-:set_flag('report-immune')
-:set_flag('instant-respawn')
-:set_parent('Supporter')
-:allow{
+    'command/waterfill',
+    -- Sponsor
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
     'command/bonus',
@@ -177,7 +157,7 @@ Roles.new_role('Supporter','Sup')
 :set_permission_group('Trusted')
 :set_custom_color{r=230,g=99,b=34}
 :set_flag('is_spectator')
-:set_parent('Veteran')
+:set_parent('Senior Member')
 :allow{
     'command/tag-color',
     'command/jail',
@@ -190,10 +170,36 @@ Roles.new_role('Partner','Part')
 :set_permission_group('Trusted')
 :set_custom_color{r=140,g=120,b=200}
 :set_flag('is_spectator')
+:set_parent('Senior Member')
+:allow{
+    'command/goto',
+    'command/repair',
+    'command/spectate',
+    'command/follow',
+    'command/personal-battery-recharge',
+    'command/waterfill',
+    'gui/rocket-info/toggle-active',
+    'gui/rocket-info/remote_launch',
+    'command/bonus',
+    'command/bonus/2',
+    'command/home',
+    'command/home-set',
+    'command/home-get',
+    'command/return',
+    'fast-tree-decon',
+    'command/tag-color',
+    'command/jail',
+    'command/unjail',
+    'command/join-message',
+    'command/join-message-clear'
+}
+
+Roles.new_role('Senior Member','SMem')
+:set_permission_group('Trusted')
+:set_custom_color{r=140,g=120,b=200}
+:set_flag('is_spectator')
 :set_parent('Veteran')
 :allow{
-    'command/jail',
-    'command/unjail'
 }
 
 local hours6, hours250 = 6*216000, 250*60
@@ -228,6 +234,7 @@ Roles.new_role('Member','Mem')
     'gui/warp-list/edit',
     'command/save-quickbar',
     'gui/vlayer-edit',
+    'gui/module',
     'command/personal-logistic',
     'command/auto-research',
     'command/manual-train',
@@ -301,13 +308,13 @@ Roles.define_role_order{
     'System', -- Best to keep root at top
     'Senior Administrator',
     'Administrator',
+    'Senior Moderator',
     'Moderator',
     'Trainee',
     'Board Member',
-    'Senior Backer',
-    'Sponsor',
     'Supporter',
     'Partner',
+    'Senior Member',
     'Veteran',
     'Member',
     'Regular',
