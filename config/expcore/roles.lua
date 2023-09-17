@@ -234,7 +234,6 @@ Roles.new_role('Member','Mem')
     'gui/warp-list/edit',
     'command/save-quickbar',
     'gui/vlayer-edit',
-    'gui/module',
     'command/personal-logistic',
     'command/auto-research',
     'command/manual-train',
@@ -289,6 +288,7 @@ local default = Roles.new_role('Guest','')
     'gui/warp-list',
     'gui/readme',
     'gui/vlayer',
+    'gui/module',
     'gui/research'
 }
 
