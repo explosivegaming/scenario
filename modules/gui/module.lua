@@ -139,7 +139,7 @@ local function row_set(player, element)
         for i=1, config.module_slot_max do
             if i <= game.entity_prototypes[element.elem_value].module_inventory_size then
                 frame.container.scroll.table[name .. i].enabled = true
-                frame.container.scroll.table[name .. i].elem_value = config.machine[element.elem_value].d
+                frame.container.scroll.table[name .. i].elem_value = config.machine[element.elem_value]
             else
                 frame.container.scroll.table[name .. i].enabled = false
                 frame.container.scroll.table[name .. i].elem_value = nil
@@ -150,8 +150,10 @@ local function row_set(player, element)
         local frame = Gui.get_left_element(player, module_container)
         local mf = module_filter.normal
 
-        if config.machine[element.elem_value].p == false then
-            mf = module_filter.prod
+        if config.machine_prod_disallow[element.elem_value] ~= nil then
+            if config.machine_prod_disallow[element.elem_value] == true then
+                mf = module_filter.prod
+            end
         end
 
         for i=1, config.module_slot_max do

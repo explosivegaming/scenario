@@ -1,51 +1,20 @@
 return {
-    --[[
-        d = default
-        p = prouctivity allowed
-    ]]
     -- type of machine to handle together
     module_row = 4,
     module_slot_max = 4,
+    machine_prod_disallow = {
+        ['beacon'] = true
+    },
     machine = {
-        ['electric-mining-drill'] = {
-            d = 'effectivity-module',
-            p = true
-        },
-        ['assembling-machine-2'] = {
-            d = 'productivity-module',
-            p = true
-        },
-        ['assembling-machine-3'] = {
-            d = 'productivity-module-3',
-            p = true
-        },
-        ['electric-furnace'] = {
-            d = 'productivity-module-3',
-            p = true
-        },
-        ['beacon'] = {
-            d = 'speed-module-3',
-            p = false
-        },
-        ['oil-refinery'] = {
-            d = 'productivity-module-3',
-            p = true
-        },
-        ['chemical-plant'] = {
-            d = 'productivity-module-3',
-            p = true
-        },
-        ['centrifuge'] = {
-            d = 'productivity-module-3',
-            p = true
-        },
-        ['lab'] = {
-            d = 'productivity-module-3',
-            p = true
-        },
-        ['rocket-silo'] = {
-            d = 'productivity-module-3',
-            p = true
-        }
+        ['electric-mining-drill'] = 'effectivity-module',
+        ['assembling-machine-2'] = 'productivity-module',
+        ['assembling-machine-3'] = 'productivity-module-3',
+        ['electric-furnace'] = 'productivity-module-3',
+        ['beacon'] = 'speed-module-3',
+        ['oil-refinery'] = 'productivity-module-3',
+        ['chemical-plant'] = 'productivity-module-3',
+        ['centrifuge'] = 'productivity-module-3',
+        ['lab'] = 'productivity-module-3',
+        ['rocket-silo'] = 'productivity-module-3'
     }
 }
