@@ -91,6 +91,7 @@ return {
     'modules.gui.server-ups',
     'modules.gui.vlayer',
     'modules.gui.research',
+    'modules.gui.module',
 
 		'modules.graftorio.require', -- graftorio
 
