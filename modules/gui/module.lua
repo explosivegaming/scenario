@@ -67,14 +67,9 @@ Selection.on_selection(SelectionModuleArea, function(event)
                     end
                 end
             end
-            
+
             if m_module ~= nil then
-                local entities = player.surface.find_entities_filtered{area = area, name = m_machine, force = player.force}
-
-                -- machine current module, machine current recipe
-                for _, entity in pairs(entities) do
-                    local m_current_module = entity.get_module_inventory()
-
+                for _, entity in pairs(player.surface.find_entities_filtered{area = area, name = m_machine, force = player.force}) do
                     -- remove current logistic request
                     local machine_module_requested = player.surface.find_entities_filtered{area = {left_top = {x = entity.position.x - 0.1, y = entity.position.y - 0.1}, right_bottom={x = entity.position.x + 0.1, y = entity.position.y + 0.1}}, name = 'item-request-proxy', force = player.force}
 
@@ -96,10 +91,12 @@ Selection.on_selection(SelectionModuleArea, function(event)
                         end
                     end
 
+                    local m_current_module = entity.get_module_inventory()
+
                     if m_current_module ~= nil then
                         m_current_module = m_current_module.get_contents()
 
-                        if m_current_module ~= m_module[entity.name] then
+                        if m_current_module ~= m_module then
                             for n, c in pairs(m_current_module) do
                                 player.insert({name=n, count=c})
                             end
@@ -113,10 +110,10 @@ Selection.on_selection(SelectionModuleArea, function(event)
                     -- insert
                     if m_current_recipe ~= nil then
                         if module_allowed[m_current_recipe.name] then
-                            entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=m_module[entity.name]}
+                            entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=m_module}
                         end
                     else
-                        entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=m_module[entity.name]}
+                        entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=m_module}
                     end
                 end
             end
