@@ -50,82 +50,76 @@ Selection.on_selection(SelectionModuleArea, function(event)
     local player = game.get_player(event.player_index)
     local frame = Gui.get_left_element(player, module_container)
 
-    -- name, module list, row machine, column module
-    local mn = {}
-    local m = {}
-
     for i=1, config.module_row do
-        local mma = frame.container.scroll.table['module_mm_' .. i .. '_0'].elem_value
+        local m_machine = frame.container.scroll.table['module_mm_' .. i .. '_0'].elem_value
 
-        if mma ~= nil then
-            m[mma] = {}
+        if m_machine ~= nil then
+            local m_module = {}
 
             for j=1, config.module_slot_max do
                 local mmo = frame.container.scroll.table['module_mm_' .. i .. '_' .. j].elem_value
 
                 if mmo ~= nil then
-                    if m[mma][mmo] == nil then
-                        m[mma][mmo] = 1
+                    if m_module[mmo] == nil then
+                        m_module[mmo] = 1
                     else
-                        m[mma][mmo] = m[mma][mmo] + 1
+                        m_module[mmo] = m_module[mmo] + 1
                     end
                 end
             end
+            
+            if m_module ~= nil then
+                local entities = player.surface.find_entities_filtered{area = area, name = m_machine, force = player.force}
 
-            if m[mma] ~= nil then
-                table.insert(mn, mma)
-            end
-        end
-    end
+                -- machine current module, machine current recipe
+                for _, entity in pairs(entities) do
+                    local m_current_module = entity.get_module_inventory()
 
-    local entities = player.surface.find_entities_filtered{area = area, name = mn, force = player.force}
+                    -- remove current logistic request
+                    local machine_module_requested = player.surface.find_entities_filtered{area = {left_top = {x = entity.position.x - 0.1, y = entity.position.y - 0.1}, right_bottom={x = entity.position.x + 0.1, y = entity.position.y + 0.1}}, name = 'item-request-proxy', force = player.force}
 
-    -- machine current module, machine current recipe
-    for _, entity in pairs(entities) do
-        local mcm = entity.get_module_inventory()
+                    for _, machine_requested in pairs(machine_module_requested) do
+                        if machine_requested.proxy_target == entity then
+                            local request = machine_requested.item_requests
 
-        -- remove current logistic request
-        local machine_module_requested = player.surface.find_entities_filtered{area = {left_top = {x = entity.position.x - 0.1, y = entity.position.y - 0.1}, right_bottom={x = entity.position.x + 0.1, y = entity.position.y + 0.1}}, name = 'item-request-proxy', force = player.force}
+                            for module_name, _ in pairs(request) do
+                                if game.item_prototypes[module_name].type == 'module' then
+                                    request[module_name] = nil
+                                end
+                            end
 
-        for _, machine_requested in pairs(machine_module_requested) do
-            if machine_requested.proxy_target == entity then
-                local request = machine_requested.item_requests
+                            if next(request) == nil then
+                                request.destroy()
+                            else
+                                request.item_requests = request
+                            end
+                        end
+                    end
 
-                for module_name, _ in pairs(request) do
-                    if game.item_prototypes[module_name].type == 'module' then
-                        request[module_name] = nil
+                    if m_current_module ~= nil then
+                        m_current_module = m_current_module.get_contents()
+
+                        if m_current_module ~= m_module[entity.name] then
+                            for n, c in pairs(m_current_module) do
+                                player.insert({name=n, count=c})
+                            end
+
+                            m_current_module.clear()
+                        end
+                    end
+
+                    local m_current_recipe = entity.get_recipe()
+
+                    -- insert
+                    if m_current_recipe ~= nil then
+                        if module_allowed[m_current_recipe.name] then
+                            entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=m_module[entity.name]}
+                        end
+                    else
+                        entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=m_module[entity.name]}
                     end
                 end
-
-                if next(request) == nil then
-                    request.destroy()
-                else
-                    request.item_requests = request
-                end
             end
-        end
-
-        if mcm ~= nil then
-            mcm = mcm.get_contents()
-
-            if mcm ~= m[entity.name] then
-                for n, c in pairs(mcm) do
-                    player.insert({name=n, count=c})
-                end
-
-                mcm.clear()
-            end
-        end
-
-        local mcr = entity.get_recipe()
-
-        -- insert
-        if mcr ~= nil then
-            if module_allowed[mcr.name] then
-                entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=m[entity.name]}
-            end
-        else
-            entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=m[entity.name]}
         end
     end
 end)
@@ -151,7 +145,7 @@ local function row_set(player, element)
         local mf = module_filter.normal
 
         if config.machine_prod_disallow[element.elem_value] ~= nil then
-            if config.machine_prod_disallow[element.elem_value] == true then
+            if config.machine_prod_disallow[element.elem_value] then
                 mf = module_filter.prod
             end
         end
