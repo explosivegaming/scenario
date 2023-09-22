@@ -6,9 +6,11 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local player_list = {}
 
-for _, player in pairs(game.players) do
-    table.insert(player_list, {'', player.name})
+--[[
+for _, player in pairs(game.connected_players) do
+    table.insert(player_list, player.name)
 end
+]]
 
 local cctv_container
 
@@ -30,10 +32,10 @@ Gui.element(function(event_trigger, parent)
         vertical_scroll_policy = 'never'
     }
     frame.add{
-        type = 'minimap',
+        type = 'camera',
         name = 'cctv_display_m',
+        position = {x=0, y=0},
         surface_index = game.surfaces['nauvis'].index,
-        chart_player_index = 1,
         zoom = 0.75
     }
 
