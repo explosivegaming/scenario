@@ -7,11 +7,9 @@ local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.cctv' --- @dep config.cctv
 local player_list = {}
 
---[[
 for _, player in pairs(game.connected_players) do
     table.insert(player_list, player.name)
 end
-]]
 
 local cctv_container
 
@@ -57,7 +55,7 @@ local function gui_update()
     player_list = {}
 
     for _, player in pairs(game.connected_players) do
-        table.insert(player_list, {'', player.name})
+        table.insert(player_list, player.name)
     end
 
     for _, player in pairs(game.connected_players) do

@@ -1,3 +1,3 @@
 return {
-    update_tick = 60
+    update_tick = 10
 }
