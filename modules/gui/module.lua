@@ -10,7 +10,12 @@ local SelectionModuleArea = 'ModuleArea'
 
 --[[
     for some reason this dont work
-    game.item_prototypes['productivity-module'].limitations
+
+local module_allowed = {}
+
+for _, r in pairs(game.item_prototypes['productivity-module'].limitations) do
+    module_allowed[r] = true
+end
 ]]
 
 --- align an aabb to the grid by expanding it
@@ -106,7 +111,12 @@ local function clear_module(player, area, machine)
 
         if m_current_module ~= nil then
             local m_current_module_content = m_current_module.get_contents()
-            player.surface.spill_item_stack(entity.bounding_box.left_top, m_current_module_content, true, player.force, false)
+            if m_current_module_content ~= nil then
+                for _, m in pairs(m_current_module_content) do
+                    player.surface.spill_item_stack(entity.bounding_box.left_top, m, true, player.force, false)
+                end
+            end
+
             m_current_module.clear()
         end
     end
