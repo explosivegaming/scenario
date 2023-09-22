@@ -83,7 +83,7 @@ local function spawn_belts(surface, position)
         local set_position = apply_offset(position, belt_set)
         for _, belt in pairs(belt_details) do
             local pos = apply_offset(set_position, belt)
-            local belt_entity = surface.create_entity{name=belt_type, position=pos, force='spawn', direction=belt[3]}
+            local belt_entity = surface.create_entity{name=belt_type, position=pos, force='neutral', direction=belt[3]}
 
             if config.afk_belts.protected then
                 protect_entity(belt_entity)

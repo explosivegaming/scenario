@@ -39,7 +39,7 @@ Roles.new_role('Senior Administrator','SAdmin')
     'command/interface',
     'command/debug',
     'command/toggle-cheat-mode',
-    'command/research-all',
+    'command/research-all'
 }
 
 Roles.new_role('Administrator','Admin')
@@ -54,7 +54,7 @@ Roles.new_role('Administrator','Admin')
     'gui/warp-list/bypass-proximity',
     'gui/warp-list/bypass-cooldown',
     'command/connect-all',
-	'command/collectdata',
+	'command/collectdata'
 }
 
 Roles.new_role('Moderator','Mod')
