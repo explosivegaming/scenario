@@ -94,14 +94,50 @@ local elem_filter = {
     }}
 }
 
-local function apply_module(entity, m_module)
-    entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=m_module}
+local function clear_module(player, area, machine)
+    for _, entity in pairs(player.surface.find_entities_filtered{area=area, name='item-request-proxy', force=player.force}) do
+        local request = entity.surface.find_entity{name='item-request-proxy', position=entity.position}
+
+        if request ~= nil then
+            request.destroy{raise_destroy=true}
+        end
+
+        local m_current_module = entity.get_module_inventory()
+
+        if m_current_module ~= nil then
+            local m_current_module_content = m_current_module.get_contents()
+            player.surface.spill_item_stack(entity.bounding_box.left_top, m_current_module_content, true, player.force, false)
+            m_current_module.clear()
+        end
+    end
+end
+
+local function apply_module(player, area, machine, module)
+    for _, entity in pairs(player.surface.find_entities_filtered{area=area, name=machine, force=player.force}) do
+        local m_current_recipe = entity.get_recipe()
+
+        -- insert
+        if m_current_recipe ~= nil then
+            if module_allowed[m_current_recipe.name] ~= nil then
+                if module_allowed[m_current_recipe.name] then
+                    entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=module}
+                end
+            end
+        else
+            entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=module}
+        end
+    end
 end
 
 --- when an area is selected to add protection to the area
 Selection.on_selection(SelectionModuleArea, function(event)
     local area = aabb_align_expand(event.area)
     local player = game.get_player(event.player_index)
+
+    if player == nil then
+        return
+    end
+
     local frame = Gui.get_left_element(player, module_container)
 
     for i=1, config.module_row do
@@ -123,53 +159,8 @@ Selection.on_selection(SelectionModuleArea, function(event)
             end
 
             if m_module ~= nil then
-                for _, entity in pairs(player.surface.find_entities_filtered{area = area, name = m_machine, force = player.force}) do
-                    -- remove current logistic request
-                    local machine_module_requested = player.surface.find_entities_filtered{area = {left_top = {x = entity.position.x - 0.1, y = entity.position.y - 0.1}, right_bottom={x = entity.position.x + 0.1, y = entity.position.y + 0.1}}, name = 'item-request-proxy', force = player.force}
-
-                    for _, machine_requested in pairs(machine_module_requested) do
-                        if machine_requested.proxy_target == entity then
-                            local request = machine_requested.item_requests
-
-                            for module_name, _ in pairs(request) do
-                                if game.item_prototypes[module_name].type == 'module' then
-                                    request[module_name] = nil
-                                end
-                            end
-
-                            if next(request) == nil then
-                                request.destroy()
-                            else
-                                request.item_requests = request
-                            end
-                        end
-                    end
-
-                    local m_current_module = entity.get_module_inventory()
-
-                    if m_current_module ~= nil then
-                        m_current_module = m_current_module.get_contents()
-
-                        if m_current_module ~= m_module then
-                            for n, c in pairs(m_current_module) do
-                                player.insert({name=n, count=c})
-                            end
-
-                            m_current_module.clear()
-                        end
-                    end
-
-                    local m_current_recipe = entity.get_recipe()
-
-                    -- insert
-                    if m_current_recipe ~= nil then
-                        if module_allowed[m_current_recipe.name] ~= nil then
-                            apply_module(entity, m_module)
-                        end
-                    else
-                        apply_module(entity, m_module)
-                    end
-                end
+                clear_module(player, area, m_machine)
+                apply_module(player, area, m_machine, m_module)
             end
         end
     end

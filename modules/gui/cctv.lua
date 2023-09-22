@@ -7,7 +7,7 @@ local Event = require 'utils.event' --- @dep utils.event
 local player_list = {}
 
 for _, player in pairs(game.connected_players) do
-    table.insert(player_list, player)
+    table.insert(player_list, tostring(player.name))
 end
 
 local cctv_container
@@ -45,11 +45,12 @@ Gui.left_toolbar_button('entity/radar', 'CCTV GUI', cctv_container, function(pla
 	return Roles.player_allowed(player, 'gui/cctv')
 end)
 
+--[[
 local function gui_update()
     player_list = {}
 
     for _, player in pairs(game.connected_players) do
-        table.insert(player_list, player)
+        table.insert(player_list, player.name)
     end
 
     for _, player in pairs(game.connected_players) do
@@ -65,8 +66,6 @@ end)
 Event.add(defines.events.on_player_left_game, function(event)
     gui_update()
 end)
-
---[[
 
 player_list[frame.container.scroll.table['cctv_display_p'].selected_index]
 
