@@ -4,37 +4,9 @@
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Event = require 'utils.event' --- @dep utils.event
 local Roles = require 'expcore.roles' --- @dep expcore.roles
-local config = require 'config.module' --- @dep config.vlayer
+local config = require 'config.module' --- @dep config.module
 local Selection = require 'modules.control.selection' --- @dep modules.control.selection
 local SelectionModuleArea = 'ModuleArea'
-
-local module_container
-local machine_name = {}
-local module_filter = {}
-local module_allowed = {}
-
-module_filter.normal = {{
-    filter = 'type',
-    type = 'module'
-}}
-
-module_filter.prod = {{
-    filter = 'type',
-    type = 'module'
-}, {
-    filter = 'name',
-    name = 'productivity',
-    invert = true
-}}
-
-for k, _ in pairs(config.machine) do
-    table.insert(machine_name, k)
-end
-
-
-for _, r in pairs(game.item_prototypes['productivity-module'].limitations) do
-    module_allowed[r] = true
-end
 
 --- align an aabb to the grid by expanding it
 local function aabb_align_expand(aabb)
@@ -42,6 +14,40 @@ local function aabb_align_expand(aabb)
         left_top = {x = math.floor(aabb.left_top.x), y = math.floor(aabb.left_top.y)},
         right_bottom = {x = math.ceil(aabb.right_bottom.x), y = math.ceil(aabb.right_bottom.y)}
     }
+end
+
+local module_container
+
+local machine_name = {}
+
+for k, _ in pairs(config.machine) do
+    table.insert(machine_name, k)
+end
+
+local elem_filter = {
+    name = {{
+        filter = 'name',
+        name = machine_name
+    }},
+    normal = {{
+        filter = 'type',
+        type = 'module'
+    }},
+    prod = {{
+        filter = 'type',
+        type = 'module'
+    }, {
+        filter = 'name',
+        name = 'productivity',
+        invert = true
+    }}
+}
+
+--[[
+local module_allowed = {}
+
+for _, r in pairs(game.item_prototypes['productivity-module'].limitations) do
+    module_allowed[r] = true
 end
 
 --- when an area is selected to add protection to the area
@@ -135,15 +141,15 @@ local function row_set(player, element)
                 frame.container.scroll.table[name .. i].enabled = false
                 frame.container.scroll.table[name .. i].elem_value = nil
             end
-            frame.container.scroll.table[name .. i].elem_filters = module_filter.normal
+            frame.container.scroll.table[name .. i].elem_filters = elem_filter.normal
         end
     else
         local frame = Gui.get_left_element(player, module_container)
-        local mf = module_filter.normal
+        local mf = elem_filter.normal
 
         if config.machine_prod_disallow[element.elem_value] ~= nil then
             if config.machine_prod_disallow[element.elem_value] then
-                mf = module_filter.prod
+                mf = elem_filter.prod
             end
         end
 
@@ -154,6 +160,10 @@ local function row_set(player, element)
         end
     end
 end
+
+Event.add(defines.events.on_gui_elem_changed, function(event)
+    row_set(game.players[event.player_index], event.element)
+end)
 
 local button_apply =
 Gui.element{
@@ -169,6 +179,9 @@ Gui.element{
     end
 end)
 
+button_apply(container)
+]]
+
 module_container =
 Gui.element(function(event_trigger, parent)
     local container = Gui.container(parent, event_trigger, (config.module_slot_max + 2) * 36)
@@ -181,10 +194,7 @@ Gui.element(function(event_trigger, parent)
             name = 'module_mm_' .. i .. '_0',
             type = 'choose-elem-button',
             elem_type = 'entity',
-            elem_filters = {{
-                filter = 'name',
-                name = machine_name
-            }},
+            elem_filters = elem_filter.name,
             style = 'slot_button'
         }
 
@@ -193,21 +203,16 @@ Gui.element(function(event_trigger, parent)
                 name = 'module_mm_' .. i .. '_' .. j,
                 type = 'choose-elem-button',
                 elem_type = 'item',
-                elem_filters = module_filter.normal,
+                elem_filters = elem_filter.normal,
                 style = 'slot_button'
             }
         end
     end
 
-    button_apply(container)
     return container.parent
 end)
 :add_to_left_flow()
 
 Gui.left_toolbar_button('item/productivity-module-3', {'module.main-tooltip'}, module_container, function(player)
 	return Roles.player_allowed(player, 'gui/module')
-end)
-
-Event.add(defines.events.on_gui_elem_changed, function(event)
-    row_set(game.players[event.player_index], event.element)
 end)
