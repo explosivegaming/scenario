@@ -15,10 +15,10 @@ local cctv_container
 
 cctv_container =
 Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, 640)
+    local container = Gui.container(parent, event_trigger, 320)
     Gui.header(container, 'CCTV', '', true)
 
-    local scroll_table = Gui.scroll_table(container, 640, 1)
+    local scroll_table = Gui.scroll_table(container, 320, 1)
     scroll_table.add{
         type = 'drop-down',
         name = 'cctv_display_p',
@@ -39,8 +39,8 @@ Gui.element(function(event_trigger, parent)
         surface_index = game.surfaces['nauvis'].index,
         zoom = 0.75,
     }
-    camera.style.minimal_width = 640
-    camera.style.minimal_height = 480
+    camera.style.minimal_width = 320
+    camera.style.minimal_height = 240
 
     return container.parent
 end)
