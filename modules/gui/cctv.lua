@@ -19,7 +19,7 @@ Gui.element(function(event_trigger, parent)
 
     local scroll_table = Gui.scroll_table(container, 300, 1)
     scroll_table.add{
-        type = 'list-box',
+        type = 'drop-down',
         name = 'cctv_display_p',
         items = player_list
     }
@@ -32,7 +32,6 @@ Gui.element(function(event_trigger, parent)
     frame.add{
         type = 'minimap',
         name = 'cctv_display_m',
-        -- position = {x=0, y=0},
         surface_index = game.surfaces['nauvis'].index,
         chart_player_index = 1,
         zoom = 0.75
@@ -67,9 +66,15 @@ Event.add(defines.events.on_player_left_game, function(event)
     gui_update()
 end)
 
+--[[
+
+player_list[frame.container.scroll.table['cctv_display_p'].selected_index]
+
 Event.add(defines.events.on_gui_elem_changed, function(event)
     if event.element.elem_value ~= nil then
         local frame = Gui.get_left_element(event.player_index, cctv_container)
-        frame.container.scroll.table['cctv_display_f']['cctv_display_m'].chart_player_index = game.players[frame.container.scroll.table['cctv_display_p']].index
+        frame.container.scroll.table['cctv_display_f']['cctv_display_m'].chart_player_index = game.players[].index
     end
 end)
+
+]]

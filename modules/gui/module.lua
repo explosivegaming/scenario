@@ -8,6 +8,11 @@ local config = require 'config.module' --- @dep config.module
 local Selection = require 'modules.control.selection' --- @dep modules.control.selection
 local SelectionModuleArea = 'ModuleArea'
 
+--[[
+    for some reason this dont work
+    game.item_prototypes['productivity-module'].limitations
+]]
+
 --- align an aabb to the grid by expanding it
 local function aabb_align_expand(aabb)
     return {
@@ -23,6 +28,52 @@ local machine_name = {}
 for k, _ in pairs(config.machine) do
     table.insert(machine_name, k)
 end
+
+local module_allowed = {
+    ['advanced-circuit'] = true,
+    ['automation-science-pack'] = true,
+    ['battery'] = true,
+    ['chemical-science-pack'] = true,
+    ['copper-cable'] = true,
+    ['copper-plate'] = true,
+    ['electric-engine-unit'] = true,
+    ['electronic-circuit'] = true,
+    ['empty-barrel'] = true,
+    ['engine-unit'] = true,
+    ['explosives'] = true,
+    ['flying-robot-frame'] = true,
+    ['iron-gear-wheel'] = true,
+    ['iron-plate'] = true,
+    ['iron-stick'] = true,
+    ['logistic-science-pack'] = true,
+    ['low-density-structure'] = true,
+    ['lubricant'] = true,
+    ['military-science-pack'] = true,
+    ['nuclear-fuel'] = true,
+    ['plastic-bar'] = true,
+    ['processing-unit'] = true,
+    ['production-science-pack'] = true,
+    ['rocket-control-unit'] = true,
+    ['rocket-fuel'] = true,
+    ['rocket-part'] = true,
+    ['steel-plate'] = true,
+    ['stone-brick'] = true,
+    ['sulfur'] = true,
+    ['sulfuric-acid'] = true,
+    ['uranium-fuel-cell'] = true,
+    ['utility-science-pack'] = true,
+    ['basic-oil-processing'] = true,
+    ['advanced-oil-processing'] = true,
+    ['coal-liquefaction'] = true,
+    ['heavy-oil-cracking'] = true,
+    ['light-oil-cracking'] = true,
+    ['solid-fuel-from-light-oil'] = true,
+    ['solid-fuel-from-petroleum-gas'] = true,
+    ['solid-fuel-from-heavy-oil'] = true,
+    ['uranium-processing'] = true,
+    ['nuclear-fuel-reprocessing'] = true,
+    ['kovarex-enrichment-process'] = true
+}
 
 local elem_filter = {
     name = {{
@@ -43,11 +94,8 @@ local elem_filter = {
     }}
 }
 
---[[
-local module_allowed = {}
-
-for _, r in pairs(game.item_prototypes['productivity-module'].limitations) do
-    module_allowed[r] = true
+local function apply_module(entity, m_module)
+    entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=m_module}
 end
 
 --- when an area is selected to add protection to the area
@@ -115,11 +163,11 @@ Selection.on_selection(SelectionModuleArea, function(event)
 
                     -- insert
                     if m_current_recipe ~= nil then
-                        if module_allowed[m_current_recipe.name] then
-                            entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=m_module}
+                        if module_allowed[m_current_recipe.name] ~= nil then
+                            apply_module(entity, m_module)
                         end
                     else
-                        entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=m_module}
+                        apply_module(entity, m_module)
                     end
                 end
             end
@@ -179,9 +227,6 @@ Gui.element{
     end
 end)
 
-button_apply(container)
-]]
-
 module_container =
 Gui.element(function(event_trigger, parent)
     local container = Gui.container(parent, event_trigger, (config.module_slot_max + 2) * 36)
@@ -208,6 +253,8 @@ Gui.element(function(event_trigger, parent)
             }
         end
     end
+
+    button_apply(container)
 
     return container.parent
 end)
