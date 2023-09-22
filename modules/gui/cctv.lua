@@ -4,7 +4,12 @@
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
-local player_list = game.connected_players
+local player_list = {}
+
+for _, player in pairs(game.connected_players) do
+    table.insert(player_list, player)
+end
+
 local cctv_container
 
 cctv_container =
@@ -42,7 +47,11 @@ Gui.left_toolbar_button('entity/radar', 'CCTV GUI', cctv_container, function(pla
 end)
 
 local function gui_update()
-    player_list = game.connected_players
+    player_list = {}
+
+    for _, player in pairs(game.connected_players) do
+        table.insert(player_list, player)
+    end
 
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, cctv_container)
