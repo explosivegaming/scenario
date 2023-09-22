@@ -9,7 +9,7 @@ local Selection = require 'modules.control.selection' --- @dep modules.control.s
 local SelectionModuleArea = 'ModuleArea'
 
 --[[
-    for some reason this dont work
+for some reason this dont work
 
 local module_allowed = {}
 
