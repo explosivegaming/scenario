@@ -50,7 +50,6 @@ Gui.left_toolbar_button('entity/radar', 'CCTV GUI', cctv_container, function(pla
 	return Roles.player_allowed(player, 'gui/cctv')
 end)
 
---[[
 local function gui_update()
     player_list = {}
 
@@ -72,21 +71,10 @@ Event.add(defines.events.on_player_left_game, function(event)
     gui_update()
 end)
 
-player_list[frame.container.scroll.table['cctv_display_p'].selected_index]
-
-Event.add(defines.events.on_gui_elem_changed, function(event)
-    if event.element.elem_value ~= nil then
-        local frame = Gui.get_left_element(event.player_index, cctv_container)
-        frame.container.scroll.table['cctv_display_f']['cctv_display_m'].chart_player_index = game.players[].index
-    end
-end)
-
-]]
-
 Event.on_nth_tick(config.update_tick, function()
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, cctv_container)
-        frame.container.scroll.table['cctv_display_f']['cctv_display_m'].position = game.players[1].position
+        frame.container.scroll.table['cctv_display_f']['cctv_display_m'].position = game.players[player_list[frame.container.scroll.table['cctv_display_p'].selected_index]].position
     end
 end)
 
