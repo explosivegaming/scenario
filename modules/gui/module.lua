@@ -114,7 +114,7 @@ local function clear_module(player, area, machine)
 
             if m_current_module_content ~= nil then
                 for k, m in pairs(m_current_module_content) do
-                    player.surface.spill_item_stack(entity.bounding_box.left_top, {name=k, count=m}, true, player.force, false)
+                    player.surface.spill_item_stack{position=entity.bounding_box.left_top, items={name=k, count=m}, enable_looted=true, force=player.force, allow_belts=false}
                 end
             end
 
