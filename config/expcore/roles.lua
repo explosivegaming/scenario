@@ -282,7 +282,8 @@ local default = Roles.new_role('Guest','')
     'gui/warp-list',
     'gui/readme',
     'gui/vlayer',
-    'gui/research'
+    'gui/research',
+    'gui/module'
 }
 
 --- Jail role
