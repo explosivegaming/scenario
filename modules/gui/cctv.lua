@@ -59,7 +59,7 @@ local function gui_update()
 
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, cctv_container)
-        frame.container.scroll.table['cctv_display_p'] = player_list.items
+        frame.container.scroll.table['cctv_display_p'].items = player_list
     end
 end
 
