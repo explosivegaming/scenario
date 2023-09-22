@@ -100,20 +100,21 @@ local elem_filter = {
 }
 
 local function clear_module(player, area, machine)
-    for _, entity in pairs(player.surface.find_entities_filtered{area=area, name='item-request-proxy', force=player.force}) do
-        local request = entity.surface.find_entity{name='item-request-proxy', position=entity.position}
-
-        if request ~= nil then
-            request.destroy{raise_destroy=true}
+    for _, entity in pairs(player.surface.find_entities_filtered{area=area, name=machine, force=player.force}) do
+        for _, r in pairs(player.surface.find_entities_filtered{position=entity.position, name='item-request-proxy', force=player.force}) do
+            if r ~= nil then
+                r.destroy{raise_destroy=true}
+            end
         end
 
         local m_current_module = entity.get_module_inventory()
 
         if m_current_module ~= nil then
             local m_current_module_content = m_current_module.get_contents()
+
             if m_current_module_content ~= nil then
-                for _, m in pairs(m_current_module_content) do
-                    player.surface.spill_item_stack(entity.bounding_box.left_top, m, true, player.force, false)
+                for k, m in pairs(m_current_module_content) do
+                    player.surface.spill_item_stack(entity.bounding_box.left_top, {name=k, count=m}, true, player.force, false)
                 end
             end
 
