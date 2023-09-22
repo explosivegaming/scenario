@@ -4,6 +4,7 @@
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
+local config = require 'config.cctv' --- @dep config.cctv
 local player_list = {}
 
 --[[
@@ -16,28 +17,32 @@ local cctv_container
 
 cctv_container =
 Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, 300)
+    local container = Gui.container(parent, event_trigger, 640)
     Gui.header(container, 'CCTV', '', true)
 
-    local scroll_table = Gui.scroll_table(container, 300, 1)
+    local scroll_table = Gui.scroll_table(container, 640, 1)
     scroll_table.add{
         type = 'drop-down',
         name = 'cctv_display_p',
         items = player_list
     }
+
     local frame = scroll_table.add{
         type = 'frame',
         name = 'cctv_display_f',
         direction = 'vertical',
         vertical_scroll_policy = 'never'
     }
-    frame.add{
+
+    local camera = frame.add{
         type = 'camera',
         name = 'cctv_display_m',
         position = {x=0, y=0},
         surface_index = game.surfaces['nauvis'].index,
-        zoom = 0.75
+        zoom = 0.75,
     }
+    camera.style.minimal_width = 640
+    camera.style.minimal_height = 480
 
     return container.parent
 end)
@@ -79,3 +84,11 @@ Event.add(defines.events.on_gui_elem_changed, function(event)
 end)
 
 ]]
+
+Event.on_nth_tick(config.update_tick, function()
+    for _, player in pairs(game.connected_players) do
+        local frame = Gui.get_left_element(player, cctv_container)
+        frame.container.scroll.table['cctv_display_f']['cctv_display_m'].position = game.players[1].position
+    end
+end)
+
