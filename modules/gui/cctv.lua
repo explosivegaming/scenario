@@ -77,4 +77,3 @@ Event.on_nth_tick(config.update_tick, function()
         frame.container.scroll.table['cctv_display_f']['cctv_display_m'].position = game.players[player_list[frame.container.scroll.table['cctv_display_p'].selected_index]].position
     end
 end)
-
