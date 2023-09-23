@@ -149,7 +149,7 @@ Selection.on_selection(SelectionModuleArea, function(event)
 
     local frame = Gui.get_left_element(player, module_container)
 
-    for i=1, config.default_module_row do
+    for i=1, config.default_module_row_count do
         local m_machine = frame.container.scroll.table['module_mm_' .. i .. '_0'].elem_value
 
         if m_machine ~= nil then
@@ -227,7 +227,7 @@ Gui.element(function(event_trigger, parent)
 
     local scroll_table = Gui.scroll_table(container, (config.module_slot_max + 2) * 36, config.module_slot_max + 1)
 
-    for i=1, config.default_module_row do
+    for i=1, config.default_module_row_count do
         scroll_table.add{
             name = 'module_mm_' .. i .. '_0',
             type = 'choose-elem-button',
