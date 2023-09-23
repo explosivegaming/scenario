@@ -105,8 +105,7 @@ Event.on_nth_tick(config.update_tick, function()
         local selected_index = frame.container['cctv_st_1'].table['cctv_display_p'].selected_index
 
         if selected_index ~= nil or selected_index ~= 0 then
-            game.print(frame.container['cctv_st_1'].table['cctv_display_p'].items[selected_index].elem_value)
-            frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].position = game.players[frame.container['cctv_st_1'].table['cctv_display_p'].items[selected_index].elem_value].position
+            frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].position = game.players[selected_index].position
         end
     end
 end)
