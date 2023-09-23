@@ -94,7 +94,6 @@ Commands.new_command('personal-logistic', 'Set Personal Logistic (0 to cancel al
     end
 end)
 
-
 Commands.new_command('personal-logistic-empty', 'Set Personal Logistic to All 0')
 :add_alias('ple')
 :register(function(player)
