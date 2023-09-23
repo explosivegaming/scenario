@@ -4,7 +4,6 @@
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
-local config = require 'config.cctv' --- @dep config.cctv
 
 local cctv_container
 
@@ -33,7 +32,7 @@ end)
 cctv_container =
 Gui.element(function(event_trigger, parent)
     local container = Gui.container(parent, event_trigger, 400)
-    Gui.header(container, 'CH01', '', true)
+    Gui.header(container, 'CCTV', '', true)
     local scroll_table_1 = Gui.scroll_table(container, 400, 3, 'cctv_st_1')
     local player_list = {}
 
@@ -99,13 +98,16 @@ Event.add(defines.events.on_player_left_game, function(_)
     gui_update()
 end)
 
-Event.on_nth_tick(config.update_tick, function()
+Event.on_nth_tick(1, function()
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, cctv_container)
         local selected_index = frame.container['cctv_st_1'].table['cctv_display_p'].selected_index
 
         if selected_index ~= nil or selected_index ~= 0 then
             frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].position = game.players[selected_index].position
+
+        else
+            frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].position = {x=0, y=0}
         end
     end
 end)

@@ -234,9 +234,7 @@ Gui.element(function(event_trigger, parent)
             elem_type = 'entity',
             elem_filters = elem_filter.name,
             style = 'slot_button'
-        }:on_gui_elem_changed(function(player)
-            row_set(player, 'module_mm_' .. i .. '_')
-        end)
+        }
 
         for j=1, config.module_slot_max do
             scroll_table.add{
@@ -257,4 +255,13 @@ end)
 
 Gui.left_toolbar_button('item/productivity-module-3', {'module.main-tooltip'}, module_container, function(player)
 	return Roles.player_allowed(player, 'gui/module')
+end)
+
+
+Event.add(defines.events.on_gui_elem_changed, function(player_index, element)
+    if #element.name > 10 then
+        if element.name:sub(1, 10) == 'module_mm_' then
+            row_set(game.players[player_index], 'module_mm_' .. element.name:sub(-3) .. '_')
+        end
+    end
 end)
