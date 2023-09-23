@@ -16,10 +16,12 @@ local function pl(type, target, amount)
     elseif type == 'c' then
             c = target.clear_personal_logistic_slot
             s = target.set_personal_logistic_slot
+
             for k, v in pairs(config.request) do
                 c(config.start + v.key)
                 s(config.start + v.key, {name=k, min=0, max=0})
             end
+
             return
     else
         return
