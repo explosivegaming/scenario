@@ -123,7 +123,8 @@ Roles.new_role('Trainee','TrMod')
     'command/bot-queue-set',
     'command/game-speed',
     'command/kill-biters',
-    'command/remove-biters'
+    'command/remove-biters',
+    'gui/cctv'
 }
 
 --- Trusted Roles
@@ -289,8 +290,7 @@ local default = Roles.new_role('Guest','')
     'gui/readme',
     'gui/vlayer',
     'gui/research',
-    'gui/module',
-    'gui/cctv'
+    'gui/module'
 }
 
 --- Jail role
