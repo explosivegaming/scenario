@@ -16,7 +16,7 @@ Gui.element{
     style = 'button'
 }:on_click(function(player)
     local frame = Gui.get_left_element(player, cctv_container)
-    frame.container.scroll.table['cctv_display_f']['cctv_display_m'].zoom = frame.container.scroll.table['cctv_display_f']['cctv_display_m'] + 0.05
+    frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].zoom = frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'] + 0.05
 end)
 
 local button_zoom_b =
@@ -27,7 +27,7 @@ Gui.element{
     style = 'button'
 }:on_click(function(player)
     local frame = Gui.get_left_element(player, cctv_container)
-    frame.container.scroll.table['cctv_display_f']['cctv_display_m'].zoom = frame.container.scroll.table['cctv_display_f']['cctv_display_m'] - 0.05
+    frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].zoom = frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'] - 0.05
 end)
 
 cctv_container =
@@ -88,7 +88,7 @@ local function gui_update()
 
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, cctv_container)
-        frame.container.scroll.table['cctv_display_p'].items = player_list
+        frame.container['cctv_st_1'].table['cctv_display_p'].items = player_list
     end
 end
 
@@ -100,10 +100,9 @@ Event.add(defines.events.on_player_left_game, function(_)
     gui_update()
 end)
 
--- player_list[frame.container.scroll.table['cctv_display_p'].selected_index]
 Event.on_nth_tick(config.update_tick, function()
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, cctv_container)
-        frame.container.scroll.table['cctv_display_f']['cctv_display_m'].position = game.players[frame.container.scroll.table['cctv_display_p'].selected_index].position
+        frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].position = game.players[frame.container['cctv_st_1'].table['cctv_display_p'].items[frame.container['cctv_st_1'].table['cctv_display_p'].selected_index]].position
     end
 end)
