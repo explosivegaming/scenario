@@ -259,11 +259,12 @@ end)
 
 
 Event.add(defines.events.on_gui_elem_changed, function(event)
-    if string.len(event.element.name) > 10 then
-        if event.element.name:sub(1, 10) == 'module_mm_' then
-            if event.element.name:sub(-1) == '0' then
-                row_set(game.players[event.player_index], 'module_mm_' .. event.element.name:sub(-3) .. '_')
-            end
+    game.print(event.element.name:sub(1, 10))
+    game.print(event.element.name:sub(-1, 1))
+    game.print(event.element.name:sub(-3, 1))
+    if event.element.name:sub(1, 10) == 'module_mm_' then
+        if event.element.name:sub(-1, 1) == '0' then
+            row_set(game.players[event.player_index], 'module_mm_' .. event.element.name:sub(-3, 1) .. '_')
         end
     end
 end)
