@@ -260,8 +260,11 @@ end)
 
 Event.add(defines.events.on_gui_elem_changed, function(player_index, element)
     if #element.name > 10 then
+        game.print(element.name:sub(1, 10))
         if element.name:sub(1, 10) == 'module_mm_' then
-            row_set(game.players[player_index], 'module_mm_' .. element.name:sub(-3) .. '_')
+            if element.name:sub(-1) == '0' then
+                row_set(game.players[player_index], 'module_mm_' .. element.name:sub(-3) .. '_')
+            end
         end
     end
 end)
