@@ -1,30 +1,40 @@
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local config = require 'config.personal_logistic' --- @dep config.personal-logistic
 
---[[
-Command 2:
-add filter based of inventory
+local function pl(type, target, amount)
+    local c
+    local s
 
-Command 3:
-add filter of those not in inventory: all 0
-game.item_prototypes
+    if type == 'p' then
+        c = target.clear_personal_logistic_slot
+        s = target.set_personal_logistic_slot
 
-Command 4:
-Spidertron request
-]]
+    elseif type == 's' then
+        c = target.clear_vehicle_logistic_slot
+        s = target.set_vehicle_logistic_slot
 
-local function pl(player, amount)
-    local c = player.clear_personal_logistic_slot
+    elseif type == 'c' then
+            c = target.clear_personal_logistic_slot
+            s = target.set_personal_logistic_slot
 
-    for k, v in pairs(config.request) do
+            for k, v in pairs(config.request) do
+                c(config.start + v.key)
+                s(config.start + v.key, {name=k, min=0, max=0})
+            end
+
+            return
+    else
+        return
+    end
+
+    for _, v in pairs(config.request) do
         c(config.start + v.key)
     end
 
     if (amount == 0) then
         return
     else
-        local stats = player.force.item_production_statistics
-        local s = player.set_personal_logistic_slot
+        local stats = target.force.item_production_statistics
 
         for k, v in pairs(config.request) do
             local v_min = math.ceil(v.min * amount)
@@ -63,12 +73,33 @@ local function pl(player, amount)
     end
 end
 
-Commands.new_command('personal-logistic', 'Set Personal Logistic (0 to cancel all)')
+Commands.new_command('personal-logistic', 'Set Personal Logistic (0 to cancel all) (Select spidertron to edit spidertron)')
 :add_param('amount', 'integer-range', 0, 10)
 :add_alias('pl')
 :register(function(player, amount)
     if player.force.technologies['logistic-robotics'].researched then
-        pl(player, amount / 10)
+        if player.selected ~= nil then
+            if player.selected.name ~= nil then
+                if player.selected.name == 'spidertron' then
+                    pl('s', player.selected, amount / 10)
+                    return Commands.success
+                end
+            end
+        else
+            pl('p', player, amount / 10)
+            return Commands.success
+        end
+    else
+        player.print('Player logistic not researched')
+    end
+end)
+
+
+Commands.new_command('personal-logistic-empty', 'Set Personal Logistic to All 0')
+:add_alias('ple')
+:register(function(player, amount)
+    if player.force.technologies['logistic-robotics'].researched then
+        pl('c', player, 0)
         return Commands.success
     else
         player.print('Player logistic not researched')
