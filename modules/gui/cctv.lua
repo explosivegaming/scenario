@@ -65,6 +65,7 @@ end):style{
 cctv_container =
 Gui.element(function(event_trigger, parent)
     local container = Gui.container(parent, event_trigger, 400)
+    container.minimal_height = 672
     local scroll_table_11 = Gui.scroll_table(container, 400, 4, 'cctv_st_11')
     local player_list = {}
 
