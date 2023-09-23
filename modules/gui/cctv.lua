@@ -32,10 +32,10 @@ end)
 
 cctv_container =
 Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, 320)
+    local container = Gui.container(parent, event_trigger, 400)
     Gui.header(container, 'CCTV', '', true)
 
-    local scroll_table_1 = Gui.scroll_table(container, 320, 3, 'cctv_st_1')
+    local scroll_table_1 = Gui.scroll_table(container, 400, 3, 'cctv_st_1')
     local player_list = {}
 
     for _, player in pairs(game.connected_players) do
@@ -52,13 +52,13 @@ Gui.element(function(event_trigger, parent)
     button_zoom_a(scroll_table_1)
     button_zoom_b(scroll_table_1)
 
-    local scroll_table_2 = Gui.scroll_table(container, 320, 1, 'cctv_st_2')
+    local scroll_table_2 = Gui.scroll_table(container, 400, 1, 'cctv_st_2')
+    scroll_table_2.vertical_scroll_policy = 'never'
 
     local frame = scroll_table_2.add{
         type = 'frame',
         name = 'cctv_display_f',
-        direction = 'vertical',
-        vertical_scroll_policy = 'never'
+        direction = 'vertical'
     }
 
     local camera = frame.add{
