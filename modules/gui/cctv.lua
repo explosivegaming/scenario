@@ -53,7 +53,7 @@ Gui.element(function(event_trigger, parent)
     button_zoom_b(scroll_table_1)
 
     local scroll_table_2 = Gui.scroll_table(container, 400, 1, 'cctv_st_2')
-    scroll_table_2.vertical_scroll_policy = 'never'
+    container['cctv_st_2'].vertical_scroll_policy = 'never'
 
     local frame = scroll_table_2.add{
         type = 'frame',
