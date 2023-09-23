@@ -258,12 +258,11 @@ Gui.left_toolbar_button('item/productivity-module-3', {'module.main-tooltip'}, m
 end)
 
 
-Event.add(defines.events.on_gui_elem_changed, function(player_index, element)
-    game.print(element.name:sub(1, 10))
-    if string.len(element.name) > 10 then
-        if element.name:sub(1, 10) == 'module_mm_' then
-            if element.name:sub(-1) == '0' then
-                row_set(game.players[player_index], 'module_mm_' .. element.name:sub(-3) .. '_')
+Event.add(defines.events.on_gui_elem_changed, function(event)
+    if string.len(event.element.name) > 10 then
+        if event.element.name:sub(1, 10) == 'module_mm_' then
+            if event.element.name:sub(-1) == '0' then
+                row_set(game.players[event.player_index], 'module_mm_' .. event.element.name:sub(-3) .. '_')
             end
         end
     end
