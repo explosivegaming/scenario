@@ -8,16 +8,6 @@ local config = require 'config.module' --- @dep config.module
 local Selection = require 'modules.control.selection' --- @dep modules.control.selection
 local SelectionModuleArea = 'ModuleArea'
 
---[[
-for some reason this dont work
-
-local module_allowed = {}
-
-for _, r in pairs(game.item_prototypes['productivity-module'].limitations) do
-    module_allowed[r] = true
-end
-]]
-
 --- align an aabb to the grid by expanding it
 local function aabb_align_expand(aabb)
     return {
@@ -33,6 +23,14 @@ local machine_name = {}
 for k, _ in pairs(config.machine) do
     table.insert(machine_name, k)
 end
+
+--[[
+local module_allowed = {}
+
+for _, r in pairs(game.item_prototypes['productivity-module'].limitations) do
+    module_allowed[r] = true
+end
+]]
 
 local module_allowed = {
     ['advanced-circuit'] = true,
@@ -151,7 +149,7 @@ Selection.on_selection(SelectionModuleArea, function(event)
 
     local frame = Gui.get_left_element(player, module_container)
 
-    for i=1, config.default_module_row do
+    for i=1, config.default_module_row_count do
         local m_machine = frame.container.scroll.table['module_mm_' .. i .. '_0'].elem_value
 
         if m_machine ~= nil then
@@ -178,23 +176,20 @@ Selection.on_selection(SelectionModuleArea, function(event)
 end)
 
 local function row_set(player, element)
-    local name = element.name:sub(1, -1 - math.floor(math.log(config.module_slot_max)))
+    local frame = Gui.get_left_element(player, module_container)
 
-    if element.elem_value ~= nil then
-        local frame = Gui.get_left_element(player, module_container)
-
+    if frame.container.scroll.table[element .. '0'].elem_value ~= nil then
         for i=1, config.module_slot_max do
-            if i <= game.entity_prototypes[element.elem_value].module_inventory_size then
-                frame.container.scroll.table[name .. i].enabled = true
-                frame.container.scroll.table[name .. i].elem_value = config.machine[element.elem_value]
+            if i <= game.entity_prototypes[frame.container.scroll.table[element .. '0'].elem_value].module_inventory_size then
+                frame.container.scroll.table[element .. i].enabled = true
+                frame.container.scroll.table[element .. i].elem_value = config.machine[frame.container.scroll.table[element .. '0'].elem_value]
             else
-                frame.container.scroll.table[name .. i].enabled = false
-                frame.container.scroll.table[name .. i].elem_value = nil
+                frame.container.scroll.table[element .. i].enabled = false
+                frame.container.scroll.table[element .. i].elem_value = nil
             end
-            frame.container.scroll.table[name .. i].elem_filters = elem_filter.normal
+            frame.container.scroll.table[element .. i].elem_filters = elem_filter.normal
         end
     else
-        local frame = Gui.get_left_element(player, module_container)
         local mf = elem_filter.normal
 
         if config.machine_prod_disallow[element.elem_value] ~= nil then
@@ -204,9 +199,9 @@ local function row_set(player, element)
         end
 
         for i=1, config.module_slot_max do
-            frame.container.scroll.table[name .. i].enabled = true
-            frame.container.scroll.table[name .. i].elem_filters = mf
-            frame.container.scroll.table[name .. i].elem_value = nil
+            frame.container.scroll.table[element .. i].enabled = true
+            frame.container.scroll.table[element .. i].elem_filters = mf
+            frame.container.scroll.table[element .. i].elem_value = nil
         end
     end
 end
@@ -232,7 +227,7 @@ Gui.element(function(event_trigger, parent)
 
     local scroll_table = Gui.scroll_table(container, (config.module_slot_max + 2) * 36, config.module_slot_max + 1)
 
-    for i=1, config.default_module_row do
+    for i=1, config.default_module_row_count do
         scroll_table.add{
             name = 'module_mm_' .. i .. '_0',
             type = 'choose-elem-button',
@@ -240,10 +235,7 @@ Gui.element(function(event_trigger, parent)
             elem_filters = elem_filter.name,
             style = 'slot_button'
         }
-        --[[:on_elem_changed(function(player, element)
-            row_set(player, element)
-        end)
-        ]]
+
         for j=1, config.module_slot_max do
             scroll_table.add{
                 name = 'module_mm_' .. i .. '_' .. j,
@@ -263,4 +255,13 @@ end)
 
 Gui.left_toolbar_button('item/productivity-module-3', {'module.main-tooltip'}, module_container, function(player)
 	return Roles.player_allowed(player, 'gui/module')
+end)
+
+
+Event.add(defines.events.on_gui_elem_changed, function(event)
+    if event.element.name:sub(1, 10) == 'module_mm_' then
+        if event.element.name:sub(-1) == '0' then
+            row_set(game.players[event.player_index], 'module_mm_' .. event.element.name:sub(-3):sub(1, 1) .. '_')
+        end
+    end
 end)
