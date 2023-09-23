@@ -13,18 +13,28 @@ Command 4:
 Spidertron request
 ]]
 
-local function pl(player, amount)
-    local c = player.clear_personal_logistic_slot
+local function pl(type, target, amount)
+    local c
+    local s
 
-    for k, v in pairs(config.request) do
+    if type == 'p' then
+        c = target.clear_personal_logistic_slot
+        s = target.set_personal_logistic_slot
+    elseif type == 's' then
+        c = target.clear_vehicle_logistic_slot
+        s = target.set_vehicle_logistic_slot
+    else
+        return
+    end
+
+    for _, v in pairs(config.request) do
         c(config.start + v.key)
     end
 
     if (amount == 0) then
         return
     else
-        local stats = player.force.item_production_statistics
-        local s = player.set_personal_logistic_slot
+        local stats = target.force.item_production_statistics
 
         for k, v in pairs(config.request) do
             local v_min = math.ceil(v.min * amount)
@@ -68,8 +78,17 @@ Commands.new_command('personal-logistic', 'Set Personal Logistic (0 to cancel al
 :add_alias('pl')
 :register(function(player, amount)
     if player.force.technologies['logistic-robotics'].researched then
-        pl(player, amount / 10)
-        return Commands.success
+        if player.selected ~= nil then
+            if player.selected.name ~= nil then
+                if player.selected.name == 'spidertron' then
+                    pl('s', player.selected, amount / 10)
+                    return Commands.success
+                end
+            end
+        else
+            pl('p', player, amount / 10)
+            return Commands.success
+        end
     else
         player.print('Player logistic not researched')
     end
