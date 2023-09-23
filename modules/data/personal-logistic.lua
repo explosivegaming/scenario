@@ -97,7 +97,7 @@ end)
 
 Commands.new_command('personal-logistic-empty', 'Set Personal Logistic to All 0')
 :add_alias('ple')
-:register(function(player, amount)
+:register(function(player)
     if player.force.technologies['logistic-robotics'].researched then
         pl('c', player, 0)
         return Commands.success
