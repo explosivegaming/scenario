@@ -229,7 +229,6 @@ Roles.new_role('Member','Mem')
     'command/save-quickbar',
     'gui/vlayer-edit',
     'command/personal-logistic',
-    'command/personal-logistic-empty',
     'command/auto-research',
     'command/manual-train',
     'command/lawnmower'
