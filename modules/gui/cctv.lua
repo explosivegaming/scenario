@@ -103,6 +103,10 @@ end)
 Event.on_nth_tick(config.update_tick, function()
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, cctv_container)
-        frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].position = game.players[frame.container['cctv_st_1'].table['cctv_display_p'].items[frame.container['cctv_st_1'].table['cctv_display_p'].selected_index]].position
+        local selected_index = frame.container['cctv_st_1'].table['cctv_display_p'].selected_index
+
+        if selected_index ~= nil or selected_index ~= 0 then
+            frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].position = game.players[frame.container['cctv_st_1'].table['cctv_display_p'].items[selected_index]].position
+        end
     end
 end)

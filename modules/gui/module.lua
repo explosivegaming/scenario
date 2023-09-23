@@ -24,6 +24,14 @@ for k, _ in pairs(config.machine) do
     table.insert(machine_name, k)
 end
 
+--[[
+local module_allowed = {}
+
+for _, r in pairs(game.item_prototypes['productivity-module'].limitations) do
+    module_allowed[r] = true
+end
+]]
+
 local module_allowed = {
     ['advanced-circuit'] = true,
     ['automation-science-pack'] = true,
