@@ -33,8 +33,7 @@ end)
 cctv_container =
 Gui.element(function(event_trigger, parent)
     local container = Gui.container(parent, event_trigger, 400)
-    Gui.header(container, 'CCTV', '', true)
-
+    Gui.header(container, 'CH01', '', true)
     local scroll_table_1 = Gui.scroll_table(container, 400, 3, 'cctv_st_1')
     local player_list = {}
 
