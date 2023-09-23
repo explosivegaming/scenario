@@ -234,7 +234,7 @@ Gui.element(function(event_trigger, parent)
             elem_type = 'entity',
             elem_filters = elem_filter.name,
             style = 'slot_button'
-        }:on_elem_changed(function(player)
+        }:on_gui_elem_changed(function(player)
             row_set(player, 'module_mm_' .. i .. '_')
         end)
 

@@ -237,8 +237,7 @@ Roles.new_role('Member','Mem')
     'command/personal-logistic',
     'command/auto-research',
     'command/manual-train',
-    'command/lawnmower',
-    'gui/cctv'
+    'command/lawnmower'
 }
 
 local hours1, hours15 = 1*216000, 15*60
@@ -290,7 +289,8 @@ local default = Roles.new_role('Guest','')
     'gui/readme',
     'gui/vlayer',
     'gui/research',
-    'gui/module'
+    'gui/module',
+    'gui/cctv'
 }
 
 --- Jail role
