@@ -123,8 +123,7 @@ Roles.new_role('Trainee','TrMod')
     'command/bot-queue-set',
     'command/game-speed',
     'command/kill-biters',
-    'command/remove-biters',
-    'gui/cctv'
+    'command/remove-biters'
 }
 
 --- Trusted Roles
@@ -238,7 +237,8 @@ Roles.new_role('Member','Mem')
     'command/personal-logistic',
     'command/auto-research',
     'command/manual-train',
-    'command/lawnmower'
+    'command/lawnmower',
+    'gui/cctv'
 }
 
 local hours1, hours15 = 1*216000, 15*60
