@@ -8,16 +8,6 @@ local config = require 'config.module' --- @dep config.module
 local Selection = require 'modules.control.selection' --- @dep modules.control.selection
 local SelectionModuleArea = 'ModuleArea'
 
---[[
-for some reason this dont work
-
-local module_allowed = {}
-
-for _, r in pairs(game.item_prototypes['productivity-module'].limitations) do
-    module_allowed[r] = true
-end
-]]
-
 --- align an aabb to the grid by expanding it
 local function aabb_align_expand(aabb)
     return {
@@ -34,6 +24,8 @@ for k, _ in pairs(config.machine) do
     table.insert(machine_name, k)
 end
 
+local module_allowed = {}
+--[[
 local module_allowed = {
     ['advanced-circuit'] = true,
     ['automation-science-pack'] = true,
@@ -79,6 +71,7 @@ local module_allowed = {
     ['nuclear-fuel-reprocessing'] = true,
     ['kovarex-enrichment-process'] = true
 }
+]]
 
 local elem_filter = {
     name = {{
@@ -231,6 +224,10 @@ Gui.element(function(event_trigger, parent)
     Gui.header(container, 'Module Inserter', '', true)
 
     local scroll_table = Gui.scroll_table(container, (config.module_slot_max + 2) * 36, config.module_slot_max + 1)
+
+    for _, r in pairs(game.item_prototypes['productivity-module'].limitations) do
+        module_allowed[r] = true
+    end
 
     for i=1, config.default_module_row do
         scroll_table.add{

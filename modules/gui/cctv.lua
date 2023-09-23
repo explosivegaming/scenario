@@ -22,7 +22,8 @@ Gui.element(function(event_trigger, parent)
     scroll_table.add{
         type = 'drop-down',
         name = 'cctv_display_p',
-        items = player_list
+        items = player_list,
+        selected_index = 1
     }
 
     local frame = scroll_table.add{
@@ -39,8 +40,8 @@ Gui.element(function(event_trigger, parent)
         surface_index = game.surfaces['nauvis'].index,
         zoom = 0.75,
     }
-    camera.style.minimal_width = 320
-    camera.style.minimal_height = 240
+    camera.style.minimal_width = 400
+    camera.style.minimal_height = 300
 
     return container.parent
 end)
