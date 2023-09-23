@@ -5,20 +5,20 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.cctv' --- @dep config.cctv
-local player_list = {}
 
-for _, player in pairs(game.connected_players) do
-    table.insert(player_list, player.name)
-end
-
-local cctv_container
-
-cctv_container =
+local cctv_container =
 Gui.element(function(event_trigger, parent)
     local container = Gui.container(parent, event_trigger, 320)
     Gui.header(container, 'CCTV', '', true)
 
     local scroll_table = Gui.scroll_table(container, 320, 1)
+
+    local player_list = {}
+
+    for _, player in pairs(game.connected_players) do
+        table.insert(player_list, player.name)
+    end
+
     scroll_table.add{
         type = 'drop-down',
         name = 'cctv_display_p',
@@ -51,7 +51,7 @@ Gui.left_toolbar_button('entity/radar', 'CCTV GUI', cctv_container, function(pla
 end)
 
 local function gui_update()
-    player_list = {}
+    local player_list = {}
 
     for _, player in pairs(game.connected_players) do
         table.insert(player_list, player.name)
@@ -63,17 +63,18 @@ local function gui_update()
     end
 end
 
-Event.add(defines.events.on_player_joined_game, function(event)
+Event.add(defines.events.on_player_joined_game, function(_)
     gui_update()
 end)
 
-Event.add(defines.events.on_player_left_game, function(event)
+Event.add(defines.events.on_player_left_game, function(_)
     gui_update()
 end)
 
+-- player_list[frame.container.scroll.table['cctv_display_p'].selected_index]
 Event.on_nth_tick(config.update_tick, function()
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, cctv_container)
-        frame.container.scroll.table['cctv_display_f']['cctv_display_m'].position = game.players[player_list[frame.container.scroll.table['cctv_display_p'].selected_index]].position
+        frame.container.scroll.table['cctv_display_f']['cctv_display_m'].position = game.players[frame.container.scroll.table['cctv_display_p'].selected_index].position
     end
 end)

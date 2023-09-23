@@ -151,7 +151,7 @@ Selection.on_selection(SelectionModuleArea, function(event)
 
     local frame = Gui.get_left_element(player, module_container)
 
-    for i=1, config.module_row do
+    for i=1, config.default_module_row do
         local m_machine = frame.container.scroll.table['module_mm_' .. i .. '_0'].elem_value
 
         if m_machine ~= nil then
@@ -211,10 +211,6 @@ local function row_set(player, element)
     end
 end
 
-Event.add(defines.events.on_gui_elem_changed, function(event)
-    row_set(game.players[event.player_index], event.element)
-end)
-
 local button_apply =
 Gui.element{
     name = 'module_b',
@@ -236,7 +232,7 @@ Gui.element(function(event_trigger, parent)
 
     local scroll_table = Gui.scroll_table(container, (config.module_slot_max + 2) * 36, config.module_slot_max + 1)
 
-    for i=1, config.module_row do
+    for i=1, config.default_module_row do
         scroll_table.add{
             name = 'module_mm_' .. i .. '_0',
             type = 'choose-elem-button',
@@ -244,7 +240,10 @@ Gui.element(function(event_trigger, parent)
             elem_filters = elem_filter.name,
             style = 'slot_button'
         }
-
+        --[[:on_elem_changed(function(player, element)
+            row_set(player, element)
+        end)
+        ]]
         for j=1, config.module_slot_max do
             scroll_table.add{
                 name = 'module_mm_' .. i .. '_' .. j,
