@@ -6,27 +6,55 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.cctv' --- @dep config.cctv
 
-local cctv_container =
+local cctv_container
+
+local button_zoom_a =
+Gui.element{
+    name = 'cctv_display_m_z_a',
+    type = 'button',
+    caption = '+',
+    style = 'button'
+}:on_click(function(player)
+    local frame = Gui.get_left_element(player, cctv_container)
+    frame.container.scroll.table['cctv_display_f']['cctv_display_m'].zoom = frame.container.scroll.table['cctv_display_f']['cctv_display_m'] + 0.05
+end)
+
+local button_zoom_b =
+Gui.element{
+    name = 'cctv_display_m_z_b',
+    type = 'button',
+    caption = '-',
+    style = 'button'
+}:on_click(function(player)
+    local frame = Gui.get_left_element(player, cctv_container)
+    frame.container.scroll.table['cctv_display_f']['cctv_display_m'].zoom = frame.container.scroll.table['cctv_display_f']['cctv_display_m'] - 0.05
+end)
+
+cctv_container =
 Gui.element(function(event_trigger, parent)
     local container = Gui.container(parent, event_trigger, 320)
     Gui.header(container, 'CCTV', '', true)
 
-    local scroll_table = Gui.scroll_table(container, 320, 1)
-
+    local scroll_table_1 = Gui.scroll_table(container, 320, 3)
     local player_list = {}
 
     for _, player in pairs(game.connected_players) do
         table.insert(player_list, player.name)
     end
 
-    scroll_table.add{
+    scroll_table_1.add{
         type = 'drop-down',
         name = 'cctv_display_p',
         items = player_list,
         selected_index = 1
     }
 
-    local frame = scroll_table.add{
+    button_zoom_a(scroll_table_1)
+    button_zoom_b(scroll_table_1)
+
+    local scroll_table_2 = Gui.scroll_table(container, 320, 1)
+
+    local frame = scroll_table_2.add{
         type = 'frame',
         name = 'cctv_display_f',
         direction = 'vertical',
