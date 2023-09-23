@@ -16,7 +16,7 @@ Gui.element{
     style = 'button'
 }:on_click(function(player)
     local frame = Gui.get_left_element(player, cctv_container)
-    frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].zoom = frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'] + 0.05
+    frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].zoom = frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].zoom + 0.05
 end)
 
 local button_zoom_b =
@@ -27,7 +27,7 @@ Gui.element{
     style = 'button'
 }:on_click(function(player)
     local frame = Gui.get_left_element(player, cctv_container)
-    frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].zoom = frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'] - 0.05
+    frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].zoom = frame.container['cctv_st_2'].table['cctv_display_f']['cctv_display_m'].zoom - 0.05
 end)
 
 cctv_container =
