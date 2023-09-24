@@ -150,7 +150,8 @@ Roles.new_role('Board Member','Board')
     'command/home-set',
     'command/home-get',
     'command/return',
-    'fast-tree-decon'
+    'fast-tree-decon',
+    'gui/surveillance'
 }
 
 Roles.new_role('Supporter','Sup')
@@ -289,8 +290,7 @@ local default = Roles.new_role('Guest','')
     'gui/readme',
     'gui/vlayer',
     'gui/research',
-    'gui/module',
-    'gui/cctv'
+    'gui/module'
 }
 
 --- Jail role
