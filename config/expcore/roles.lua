@@ -151,7 +151,8 @@ Roles.new_role('Board Member','Board')
     'command/home-get',
     'command/return',
     'fast-tree-decon',
-    'gui/surveillance'
+    'gui/surveillance',
+    'gui/playerdata'
 }
 
 Roles.new_role('Supporter','Sup')

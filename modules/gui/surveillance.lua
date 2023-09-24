@@ -83,6 +83,7 @@ Gui.element(function(event_trigger, parent)
         camera.style.minimal_width = 400
         camera.style.minimal_height = 300
     end
+
     return container.parent
 end)
 :add_to_left_flow()
