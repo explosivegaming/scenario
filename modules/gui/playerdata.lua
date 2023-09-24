@@ -5,6 +5,8 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
+local format_time = _C.format_time --- @dep expcore.common
+local format_number = require('util').format_number --- @dep util
 
 local pd_container
 local pd_disp_n = {
@@ -29,14 +31,30 @@ Gui.element(function(event_trigger, parent)
     }
 
     local scroll_table_2 = Gui.scroll_table(container, 400, 4, 'pd_st_2')
+    local label
 
     for _, name in pairs(PlayerData.Statistics.metadata.display_order) do
-        scroll_table_2.add{
-            name = 'pd_display_' .. i,
-            caption = '',
+        label =
+        Gui.element{
+            name = 'pd_display_' .. name .. '_t',
             type = 'label',
-            style = config.gui.style
+            caption = {'exp-statistics.' .. name}
+        }:style{
+            maximal_width = 150
         }
+
+        label(scroll_table_2)
+
+        label =
+        Gui.element{
+            name = 'pd_display_' .. name .. '_d',
+            type = 'label',
+            caption = ''
+        }:style{
+            maximal_width = 120
+        }
+
+        label(scroll_table_2)
     end
 
     return container.parent
@@ -79,7 +97,11 @@ Event.add(defines.events.on_gui_elem_changed, function(event)
         local frame = Gui.get_left_element(game.players[event.player_index], pd_container)
 
         for _, name in pairs(PlayerData.Statistics.metadata.display_order) do
-            PlayerData.Statistics[name]:get(game.players[event.player_index].name)
+            if name == 'Playtime' or name == 'AfkTime' then
+                frame.container['pd_st_2'].table['pd_display_' .. name .. '_d'].caption = format_time((PlayerData.Statistics[name]:get(game.players[event.player_index].name) or 0) * 3600, {hours=true, minutes=true, seconds=true, time=true, string=true})
+            else
+                frame.container['pd_st_2'].table['pd_display_' .. name .. '_d'].caption = format_number(PlayerData.Statistics[name]:get(game.players[event.player_index].name) or 0)
+            end
         end
     end
 end)
