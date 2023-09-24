@@ -117,13 +117,13 @@ Event.add(defines.events.on_player_left_game, function(_)
 end)
 
 Event.add(defines.events.on_gui_elem_changed, function(event)
-    if event.element.name == 'pd_display_1b' then
+    if event.element.name == 'pd_display_1p' then
         gui_player_data_update(game.players[event.player_index])
     end
 end)
 
 Event.add(defines.events.on_gui_click, function(event)
-    if event.element.name == 'pd_display_1p' then
+    if event.element.name == 'pd_display_1b' then
         gui_player_data_update(game.players[event.player_index])
     end
 end)
