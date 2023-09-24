@@ -257,7 +257,6 @@ Gui.left_toolbar_button('item/productivity-module-3', {'module.main-tooltip'}, m
 	return Roles.player_allowed(player, 'gui/module')
 end)
 
-
 Event.add(defines.events.on_gui_elem_changed, function(event)
     if event.element.name:sub(1, 10) == 'module_mm_' then
         if event.element.name:sub(-1) == '0' then
