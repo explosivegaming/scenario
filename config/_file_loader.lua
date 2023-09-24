@@ -85,6 +85,7 @@ return {
     'modules.gui.rocket-info',
     'modules.gui.science-info',
     'modules.gui.autofill',
+    'modules.gui.surveillance',
     'modules.gui.warp-list',
     'modules.gui.task-list',
     'modules.gui.player-list',
@@ -92,7 +93,6 @@ return {
     'modules.gui.vlayer',
     'modules.gui.research',
     'modules.gui.module',
-    'modules.gui.surveillance',
 		'modules.graftorio.require', -- graftorio
 
     --- Config Files
