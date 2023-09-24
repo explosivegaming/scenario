@@ -123,9 +123,11 @@ Event.on_nth_tick(1, function()
 
             if selected_index ~= nil or selected_index ~= 0 then
                 frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].position = game.players[selected_index].position
+                frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].surface_index = game.players[selected_index].surface_index
 
             else
                 frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].position = {x=0, y=0}
+                frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].surface_index = game.surfaces['nauvis'].index
             end
 
             if frame.container['cctv_st_' .. i .. '1'].table['cctv_display_' .. i .. 'e'].selected_index == 1 then
