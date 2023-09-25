@@ -5,8 +5,9 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
--- local format_time = _C.format_time --- @dep expcore.common
--- local format_number = require('util').format_number --- @dep util
+require 'modules.data.statistics'
+local format_time = _C.format_time --- @dep expcore.common
+local format_number = require('util').format_number --- @dep util
 
 local pd_container
 local pd_disp_n = {
@@ -105,11 +106,14 @@ end
 
 local function gui_player_data_update(player)
     local frame = Gui.get_left_element(player, pd_container)
-    game.print(game.table_to_json(PlayerData.Statistics:get(player.name)))
+    game.print(game.table_to_json(PlayerData.Statistics['Playtime']:get(player.name)))
     for _, name in pairs(PlayerData.Statistics.metadata.display_order) do
         local data = PlayerData.Statistics[name]:get(player.name) or 0
-        game.print(frame.container['pd_st_2'].table['pd_display_' .. name .. '_d'].caption)
-        frame.container['pd_st_2'].table['pd_display_' .. name .. '_d'].caption = data
+        if name == 'Playtime' or name == 'AfkTime' then
+            frame.container['pd_st_2'].table['pd_display_' .. name .. '_d'].caption = format_time(data, {hours=true, minutes=true, seconds=true, time=true, string=true})
+        else
+            frame.container['pd_st_2'].table['pd_display_' .. name .. '_d'].caption = format_number(data)
+        end
     end
 end
 
