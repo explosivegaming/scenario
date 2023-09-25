@@ -21,7 +21,7 @@ local function pos_to_string(pos)
 end
 
 local function pos_to_gps_string(pos)
-	return '[gps=' .. tostring(pos.x) .. ',' .. tostring(pos.y) .. ']'
+	return '[gps=' .. string.format('%.1f', pos.x) .. ',' .. string.format('%.1f', pos.y) .. ']'
 end
 
 --- Print a message to all players who match the value of admin
