@@ -27,9 +27,9 @@ local function init()
         module_allowed[r] = true
     end
 
-    for _, t in pairs(config.machine_type) do
-        for _, m in pairs(game.entity_prototypes[t]) do
-            table.insert(machine_name, k)
+    for _, m in pairs(game.entity_prototypes) do
+        if config.machine_type[m.type] ~= nil then
+            table.insert(machine_name, m)
         end
     end
 end
