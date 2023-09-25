@@ -18,7 +18,7 @@ Gui.element(function(event_trigger, parent)
     end
 
     for i=1, 2 do
-        local scroll_table_1 = Gui.scroll_table(container, 480, 6, 'cctv_st_' .. i .. '1')
+        local scroll_table_1 = Gui.scroll_table(container, 400, 6, 'cctv_st_' .. i .. '1')
 
         scroll_table_1.add{
             type = 'drop-down',
@@ -29,17 +29,18 @@ Gui.element(function(event_trigger, parent)
 
         scroll_table_1.add{
             type = 'drop-down',
-            name = 'cctv_display_' .. i .. 'e',
-            items = {'Enable', 'Disable'},
+            name = 'cctv_display_' .. i .. 's',
+            items = {'Player', 'Static'},
             selected_index = 1
         }
 
         scroll_table_1.add{
             type = 'drop-down',
-            name = 'cctv_display_' .. i .. 's',
-            items = {'Player', 'Static'},
+            name = 'cctv_display_' .. i .. 'e',
+            items = {'Enable', 'Disable'},
             selected_index = 1
         }
+
 
         local button_ds =
         Gui.element{
@@ -77,7 +78,7 @@ Gui.element(function(event_trigger, parent)
             style = 'button'
         }:on_click(function(player)
             local frame = Gui.get_left_element(player, cctv_container)
-            if frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom > 0.1 then
+            if frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom > 0.2 then
                 frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom = frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom - 0.05
             end
         end):style{
@@ -105,8 +106,8 @@ Gui.element(function(event_trigger, parent)
             zoom = 0.75,
         }
 
-        camera.style.minimal_width = 480
-        camera.style.minimal_height = 360
+        camera.style.minimal_width = 400
+        camera.style.minimal_height = 300
     end
 
     return container.parent
