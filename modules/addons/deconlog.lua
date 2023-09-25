@@ -3,7 +3,8 @@
 
 local Event = require 'utils.event' --- @dep utils.event
 local Roles = require 'expcore.roles' --- @dep expcore.roles
-local format_time = _C.format_time
+local format_time = _C.format_time --- @dep expcore.common
+local format_number = require('util').format_number --- @dep util
 local config = require 'config.deconlog' --- @dep config.deconlog
 
 local filepath = "log/decon.log"
@@ -21,7 +22,7 @@ local function pos_to_string(pos)
 end
 
 local function pos_to_gps_string(pos)
-	return '[gps=' .. tostring(pos.x) .. ',' .. tostring(pos.y) .. ']'
+	return '[gps=' .. string.format('%.1f', pos.x) .. ',' .. string.format('%.1f', pos.y) .. ']'
 end
 
 --- Print a message to all players who match the value of admin
@@ -39,6 +40,10 @@ end)
 
 if config.decon_area then
 	Event.add(defines.events.on_player_deconstructed_area, function (e)
+		if e.alt then
+			return
+		end
+
 		local player = game.get_player(e.player_index)
 		if Roles.player_has_flag(player, "deconlog-bypass") then
 			return
@@ -47,7 +52,7 @@ if config.decon_area then
 		local items = e.surface.find_entities_filtered{area=e.area, force=player.force}
 
 		if #items > 250 then
-			print_to_players(true, player.name .. ' tried to deconstruct the area ' .. pos_to_gps_string(e.area.left_top) .. ' to ' .. pos_to_gps_string(e.area.right_bottom) .. ' that have ' .. #items .. ' items, but were not allowed.')
+			print_to_players(true, player.name .. ' tried to deconstruct the area ' .. pos_to_gps_string(e.area.left_top) .. ' to ' .. pos_to_gps_string(e.area.right_bottom) .. ' that have ' .. format_number(#items) .. ' items, but were not allowed.')
 		end
 
 		add_log(get_secs() .. "," .. player.name .. ",decon_area," .. pos_to_string(e.area.left_top) .. "," .. pos_to_string(e.area.right_bottom))
