@@ -20,21 +20,55 @@ local module_container
 
 local machine_name = {}
 
-local module_allowed = {}
-
-local function init()
-    for _, r in pairs(game.item_prototypes['productivity-module'].limitations) do
-        module_allowed[r] = true
-    end
-
-    for _, m in pairs(game.entity_prototypes) do
-        if config.machine_type[m.type] ~= nil then
-            table.insert(machine_name, m)
-        end
-    end
+for k, _ in pairs(config.machine) do
+    table.insert(machine_name, k)
 end
 
-script.on_init(init)
+local module_allowed = {
+    ['advanced-circuit'] = true,
+    ['automation-science-pack'] = true,
+    ['battery'] = true,
+    ['chemical-science-pack'] = true,
+    ['copper-cable'] = true,
+    ['copper-plate'] = true,
+    ['electric-engine-unit'] = true,
+    ['electronic-circuit'] = true,
+    ['empty-barrel'] = true,
+    ['engine-unit'] = true,
+    ['explosives'] = true,
+    ['flying-robot-frame'] = true,
+    ['iron-gear-wheel'] = true,
+    ['iron-plate'] = true,
+    ['iron-stick'] = true,
+    ['logistic-science-pack'] = true,
+    ['low-density-structure'] = true,
+    ['lubricant'] = true,
+    ['military-science-pack'] = true,
+    ['nuclear-fuel'] = true,
+    ['plastic-bar'] = true,
+    ['processing-unit'] = true,
+    ['production-science-pack'] = true,
+    ['rocket-control-unit'] = true,
+    ['rocket-fuel'] = true,
+    ['rocket-part'] = true,
+    ['steel-plate'] = true,
+    ['stone-brick'] = true,
+    ['sulfur'] = true,
+    ['sulfuric-acid'] = true,
+    ['uranium-fuel-cell'] = true,
+    ['utility-science-pack'] = true,
+    ['basic-oil-processing'] = true,
+    ['advanced-oil-processing'] = true,
+    ['coal-liquefaction'] = true,
+    ['heavy-oil-cracking'] = true,
+    ['light-oil-cracking'] = true,
+    ['solid-fuel-from-light-oil'] = true,
+    ['solid-fuel-from-petroleum-gas'] = true,
+    ['solid-fuel-from-heavy-oil'] = true,
+    ['uranium-processing'] = true,
+    ['nuclear-fuel-reprocessing'] = true,
+    ['kovarex-enrichment-process'] = true
+}
 
 local elem_filter = {
     name = {{
