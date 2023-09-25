@@ -5,6 +5,12 @@ return {
     machine_prod_disallow = {
         ['beacon'] = true
     },
+    machine_type = {
+        ['assembling-machine'] = true,
+        ['electric-furnace'] = true,
+        ['lab'] = true,
+        ['mining-drill'] = true
+    },
     machine = {
         ['electric-mining-drill'] = 'effectivity-module',
         ['assembling-machine-2'] = 'productivity-module',
