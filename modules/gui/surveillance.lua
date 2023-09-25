@@ -18,7 +18,7 @@ Gui.element(function(event_trigger, parent)
     end
 
     for i=1, 2 do
-        local scroll_table_1 = Gui.scroll_table(container, 400, 4, 'cctv_st_' .. i .. '1')
+        local scroll_table_1 = Gui.scroll_table(container, 400, 6, 'cctv_st_' .. i .. '1')
 
         scroll_table_1.add{
             type = 'drop-down',
@@ -27,11 +27,37 @@ Gui.element(function(event_trigger, parent)
             selected_index = 1
         }
 
-        scroll_table_1.add{
-            type = 'drop-down',
+        local drop_e =
+        Gui.element{
             name = 'cctv_display_' .. i .. 'e',
+            type = 'drop-down',
             items = {'Enable', 'Disable'},
             selected_index = 1
+        }:style{
+            maximal_width = 72
+        }
+
+        local drop_ds =
+        Gui.element{
+            name = 'cctv_display_' .. i .. 's',
+            type = 'drop-down',
+            items = {'Player', 'Static'},
+            selected_index = 1
+        }:style{
+            maximal_width = 72
+        }
+
+        local button_ds =
+        Gui.element{
+            name = 'cctv_display_' .. i .. 'sl',
+            type = 'button',
+            caption = 'Set',
+            style = 'button'
+        }:on_click(function(player)
+            local frame = Gui.get_left_element(player, cctv_container)
+            frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].position = player.position
+        end):style{
+            maximal_width = 36
         }
 
         local button_za =
@@ -42,7 +68,9 @@ Gui.element(function(event_trigger, parent)
             style = 'button'
         }:on_click(function(player)
             local frame = Gui.get_left_element(player, cctv_container)
-            frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom = frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom + 0.05
+            if frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom < 2.0 then
+                frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom = frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom + 0.05
+            end
         end):style{
             maximal_width = 36
         }
@@ -55,11 +83,16 @@ Gui.element(function(event_trigger, parent)
             style = 'button'
         }:on_click(function(player)
             local frame = Gui.get_left_element(player, cctv_container)
-            frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom = frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom - 0.05
+            if frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom > 0.1 then
+                frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom = frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom - 0.05
+            end
         end):style{
             maximal_width = 36
         }
 
+        drop_e(scroll_table_1)
+        drop_ds(scroll_table_1)
+        button_ds(scroll_table_1)
         button_za(scroll_table_1)
         button_zb(scroll_table_1)
 
@@ -120,21 +153,25 @@ Event.on_nth_tick(1, function()
         local frame = Gui.get_left_element(player, cctv_container)
 
         for i=1, 2 do
-            local selected_index = frame.container['cctv_st_' .. i .. '1'].table['cctv_display_' .. i .. 'p'].selected_index
+            local switch_index = frame.container['cctv_st_' .. i .. '1'].table['cctv_display_' .. i .. 's'].selected_index
 
-            if selected_index ~= nil or selected_index ~= 0 then
-                frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].position = game.players[selected_index].position
-                frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].surface_index = game.players[selected_index].surface_index
+            if switch_index == 1 then
+                local selected_index = frame.container['cctv_st_' .. i .. '1'].table['cctv_display_' .. i .. 'p'].selected_index
 
-            else
-                frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].position = {x=0, y=0}
-                frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].surface_index = game.surfaces['nauvis'].index
-            end
+                if selected_index ~= nil or selected_index ~= 0 then
+                    frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].position = game.players[selected_index].position
+                    frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].surface_index = game.players[selected_index].surface_index
 
-            if frame.container['cctv_st_' .. i .. '1'].table['cctv_display_' .. i .. 'e'].selected_index == 1 then
-                frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].visible = true
-            else
-                frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].visible = false
+                else
+                    frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].position = {x=0, y=0}
+                    frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].surface_index = game.surfaces['nauvis'].index
+                end
+
+                if frame.container['cctv_st_' .. i .. '1'].table['cctv_display_' .. i .. 'e'].selected_index == 1 then
+                    frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].visible = true
+                else
+                    frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].visible = false
+                end
             end
         end
     end
