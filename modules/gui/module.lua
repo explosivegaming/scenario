@@ -18,31 +18,57 @@ end
 
 local module_container
 
-local function machine_name_list()
-    local l = {}
+local machine_name = {}
 
-    for _, m in pairs(game.entity_prototypes) do
-        if config.machine_type[m.type] ~= nil then
-            table.insert(l, m.name)
-        end
-    end
-
-    return l
+for k, _ in pairs(config.machine) do
+    table.insert(machine_name, k)
 end
 
-local machine_name = machine_name_list()
-
-local function prod_limit()
-    local l = {}
-
-    for _, r in pairs(game.item_prototypes['productivity-module'].limitations) do
-        l[r] = true
-    end
-
-    return l
-end
-
-local module_allowed = prod_limit()
+local module_allowed = {
+    ['advanced-circuit'] = true,
+    ['automation-science-pack'] = true,
+    ['battery'] = true,
+    ['chemical-science-pack'] = true,
+    ['copper-cable'] = true,
+    ['copper-plate'] = true,
+    ['electric-engine-unit'] = true,
+    ['electronic-circuit'] = true,
+    ['empty-barrel'] = true,
+    ['engine-unit'] = true,
+    ['explosives'] = true,
+    ['flying-robot-frame'] = true,
+    ['iron-gear-wheel'] = true,
+    ['iron-plate'] = true,
+    ['iron-stick'] = true,
+    ['logistic-science-pack'] = true,
+    ['low-density-structure'] = true,
+    ['lubricant'] = true,
+    ['military-science-pack'] = true,
+    ['nuclear-fuel'] = true,
+    ['plastic-bar'] = true,
+    ['processing-unit'] = true,
+    ['production-science-pack'] = true,
+    ['rocket-control-unit'] = true,
+    ['rocket-fuel'] = true,
+    ['rocket-part'] = true,
+    ['steel-plate'] = true,
+    ['stone-brick'] = true,
+    ['sulfur'] = true,
+    ['sulfuric-acid'] = true,
+    ['uranium-fuel-cell'] = true,
+    ['utility-science-pack'] = true,
+    ['basic-oil-processing'] = true,
+    ['advanced-oil-processing'] = true,
+    ['coal-liquefaction'] = true,
+    ['heavy-oil-cracking'] = true,
+    ['light-oil-cracking'] = true,
+    ['solid-fuel-from-light-oil'] = true,
+    ['solid-fuel-from-petroleum-gas'] = true,
+    ['solid-fuel-from-heavy-oil'] = true,
+    ['uranium-processing'] = true,
+    ['nuclear-fuel-reprocessing'] = true,
+    ['kovarex-enrichment-process'] = true
+}
 
 local elem_filter = {
     name = {{
