@@ -9,7 +9,7 @@ local cctv_container
 
 cctv_container =
 Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, 400)
+    local container = Gui.container(parent, event_trigger, 480)
 
     local player_list = {}
 
@@ -18,7 +18,7 @@ Gui.element(function(event_trigger, parent)
     end
 
     for i=1, 2 do
-        local scroll_table_1 = Gui.scroll_table(container, 400, 6, 'cctv_st_' .. i .. '1')
+        local scroll_table_1 = Gui.scroll_table(container, 480, 6, 'cctv_st_' .. i .. '1')
 
         scroll_table_1.add{
             type = 'drop-down',
@@ -105,8 +105,8 @@ Gui.element(function(event_trigger, parent)
             zoom = 0.75,
         }
 
-        camera.style.minimal_width = 400
-        camera.style.minimal_height = 300
+        camera.style.minimal_width = 480
+        camera.style.minimal_height = 360
     end
 
     return container.parent
