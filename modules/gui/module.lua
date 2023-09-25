@@ -18,23 +18,31 @@ end
 
 local module_container
 
-local machine_name = {}
-
-local module_allowed = {}
-
-local function init()
-    for _, r in pairs(game.item_prototypes['productivity-module'].limitations) do
-        module_allowed[r] = true
-    end
+local function machine_name_list()
+    local l = {}
 
     for _, m in pairs(game.entity_prototypes) do
         if config.machine_type[m.type] ~= nil then
-            table.insert(machine_name, m)
+            table.insert(l, m.name)
         end
     end
+
+    return l
 end
 
-script.on_init(init)
+local machine_name = machine_name_list()
+
+local function prod_limit()
+    local l = {}
+
+    for _, r in pairs(game.item_prototypes['productivity-module'].limitations) do
+        l[r] = true
+    end
+
+    return l
+end
+
+local module_allowed = prod_limit()
 
 local elem_filter = {
     name = {{
