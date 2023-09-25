@@ -151,7 +151,6 @@ Roles.new_role('Board Member','Board')
     'command/home-get',
     'command/return',
     'fast-tree-decon',
-    'gui/surveillance',
     'gui/playerdata'
 }
 
@@ -239,7 +238,8 @@ Roles.new_role('Member','Mem')
     'command/personal-logistic',
     'command/auto-research',
     'command/manual-train',
-    'command/lawnmower'
+    'command/lawnmower',
+    'gui/surveillance'
 }
 
 local hours1, hours15 = 1*216000, 15*60
