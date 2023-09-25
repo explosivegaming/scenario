@@ -20,15 +20,17 @@ local module_container
 
 local machine_name = {}
 
-for k, _ in pairs(config.machine) do
-    table.insert(machine_name, k)
-end
-
 local module_allowed = {}
 
 local function init()
     for _, r in pairs(game.item_prototypes['productivity-module'].limitations) do
         module_allowed[r] = true
+    end
+
+    for _, t in pairs(config.machine_type) do
+        for _, m in pairs(game.entity_prototypes[t]) do
+            table.insert(machine_name, k)
+        end
     end
 end
 
@@ -138,7 +140,10 @@ local function row_set(player, element)
         for i=1, config.module_slot_max do
             if i <= game.entity_prototypes[frame.container.scroll.table[element .. '0'].elem_value].module_inventory_size then
                 frame.container.scroll.table[element .. i].enabled = true
-                frame.container.scroll.table[element .. i].elem_value = config.machine[frame.container.scroll.table[element .. '0'].elem_value]
+
+                if config.machine[frame.container.scroll.table[element .. '0'].elem_value] ~= nil then
+                    frame.container.scroll.table[element .. i].elem_value = config.machine[frame.container.scroll.table[element .. '0'].elem_value]
+                end
             else
                 frame.container.scroll.table[element .. i].enabled = false
                 frame.container.scroll.table[element .. i].elem_value = nil

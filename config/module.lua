@@ -6,10 +6,10 @@ return {
         ['beacon'] = true
     },
     machine_type = {
-        ['assembling-machine'] = true,
-        ['electric-furnace'] = true,
-        ['lab'] = true,
-        ['mining-drill'] = true
+        'assembling-machine',
+        'electric-furnace',
+        'lab',
+        'mining-drill'
     },
     machine = {
         ['electric-mining-drill'] = 'effectivity-module',
