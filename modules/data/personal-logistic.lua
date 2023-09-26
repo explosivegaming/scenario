@@ -16,7 +16,7 @@ local function pl(type, target, amount)
     else
         return
     end
-
+  
     for _, v in pairs(config.request) do
         c(config.start + v.key)
     end
