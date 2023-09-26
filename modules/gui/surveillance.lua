@@ -133,15 +133,10 @@ local function gui_update()
     end
 end
 
-Event.add(defines.events.on_player_joined_game, function(_)
-    gui_update()
-end)
+Event.add(defines.events.on_player_joined_game, gui_update)
+Event.add(defines.events.on_player_left_game, gui_update)
 
-Event.add(defines.events.on_player_left_game, function(_)
-    gui_update()
-end)
-
-Event.on_nth_tick(1, function()
+Event.on_tick(function()
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, cctv_container)
 
