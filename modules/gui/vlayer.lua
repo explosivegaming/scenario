@@ -14,11 +14,12 @@ local vlayer = require 'modules.control.vlayer'
         ['constant-combinator'] = 'circuit output',
         ['logistic-chest-storage'] = 'storage input'
     },
-]]
+
 
 local function pos_to_gps_string(pos)
 	return '[gps=' .. tostring(pos.x) .. ',' .. tostring(pos.y) .. ']'
 end
+]]
 
 local vlayer_container
 local vlayer_circuit_t = {}
@@ -34,8 +35,6 @@ Gui.element(function(event_trigger, parent)
     local scroll_table = Gui.scroll_table(container, 300, 2)
 
     for _, v in pairs(config.init_gui) do
-        local caption
-
         if v.type == 'item' then
             scroll_table.add{
                 name = 'vlayer_display_' .. v.index .. 'n',
@@ -69,15 +68,16 @@ Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_co
 	return Roles.player_allowed(player, 'gui/vlayer')
 end)
 
+--[[
 Event.on_nth_tick(config.update_tick, function(_)
     local vlayer_display = {}
 
-    for k, v in pairs(config.init_gui) do
+    for _, v in pairs(config.init_gui) do
         if v.type == 'item' then
-            vlayer_display[k] = format_number(vlayer.storage.item[v.name])
+            vlayer_display[v.index] = format_number(vlayer.storage.item[v.name])
 
         elseif v.type == 'signal' then
-            vlayer_display[k] = format_number(vlayer.circuit[vlayer_circuit_t[v.name]].count)
+            vlayer_display[v.index] = format_number(vlayer.circuit[vlayer_circuit_t[v.name] ].count)
         end
     end
 
@@ -89,7 +89,7 @@ Event.on_nth_tick(config.update_tick, function(_)
         end
     end
 end)
-
+]]
 --[[
 local function vlayer_convert_chest(player)
     local entities = player.surface.find_entities_filtered{position=player.position, radius=8, name='steel-chest', force=player.force}
@@ -277,7 +277,6 @@ function vlayer_gui_update()
     end
 end
 
-
     button_power(scroll_table)
     button_storage_input(scroll_table)
     button_circuit(scroll_table)
@@ -295,6 +294,4 @@ end
     scroll_table[button_power.name].enabled = (#vlayer.power.entity < config.interface_limit.energy)
     scroll_table[button_storage_input.name].enabled = (#vlayer.storage.input < config.interface_limit.storage_input)
     scroll_table[button_circuit.name].enabled = (#vlayer.power.circuit < config.interface_limit.circuit)
-
-
 ]]

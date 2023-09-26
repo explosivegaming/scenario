@@ -118,7 +118,7 @@ local function vlayer_storage_handle()
     else
         for k, v in pairs(vlayer.storage.item_w) do
             vlayer.storage.item[k] = vlayer.storage.item[k] + v
-            vlayer.storage.item_w[k] = 0
+            v = 0
         end
     end
 end

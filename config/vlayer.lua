@@ -120,7 +120,7 @@ return {
         }
     },
     -- for modded power
-    item_m_relation = {
+    init_item_m = {
         ['solar-panel-2'] = {
             n = 'solar-panel',
             m = 4
