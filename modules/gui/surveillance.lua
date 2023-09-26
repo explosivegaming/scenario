@@ -5,9 +5,7 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 
-local cctv_container
-
-cctv_container =
+local cctv_container =
 Gui.element(function(event_trigger, parent)
     local container = Gui.container(parent, event_trigger, 480)
 
@@ -41,53 +39,30 @@ Gui.element(function(event_trigger, parent)
             selected_index = 1
         }
 
-
-        local button_ds =
-        Gui.element{
-            name = 'cctv_display_' .. i .. 'sl',
+        local l = scroll_table_1.add{
             type = 'button',
-            caption = 'Set',
+            name = 'cctv_display_' .. i .. 'l',
+            caption = 'set',
             style = 'button'
-        }:on_click(function(player)
-            local frame = Gui.get_left_element(player, cctv_container)
-            frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].position = player.position
-        end):style{
-            maximal_width = 36
         }
 
-        local button_za =
-        Gui.element{
-            name = 'cctv_display_' .. i .. 'mza',
+        local a = scroll_table_1.add{
             type = 'button',
+            name = 'cctv_display_' .. i .. 'a',
             caption = '+',
             style = 'button'
-        }:on_click(function(player)
-            local frame = Gui.get_left_element(player, cctv_container)
-            if frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom < 2.0 then
-                frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom = frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom + 0.05
-            end
-        end):style{
-            maximal_width = 36
         }
 
-        local button_zb =
-        Gui.element{
-            name = 'cctv_display_' .. i .. 'mzb',
+        local b = scroll_table_1.add{
             type = 'button',
+            name = 'cctv_display_' .. i .. 'b',
             caption = '-',
             style = 'button'
-        }:on_click(function(player)
-            local frame = Gui.get_left_element(player, cctv_container)
-            if frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom > 0.2 then
-                frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom = frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom - 0.05
-            end
-        end):style{
-            maximal_width = 36
         }
 
-        button_ds(scroll_table_1)
-        button_za(scroll_table_1)
-        button_zb(scroll_table_1)
+        l.style.maximal_width = 48
+        a.style.maximal_width = 36
+        b.style.maximal_width = 36
 
         local scroll_table_2 = Gui.scroll_table(container, 400, 1, 'cctv_st_' .. i .. '2')
         container['cctv_st_' .. i .. '2'].vertical_scroll_policy = 'never'
@@ -136,13 +111,33 @@ end
 Event.add(defines.events.on_player_joined_game, gui_update)
 Event.add(defines.events.on_player_left_game, gui_update)
 
-Event.on_tick(function()
+Event.add(defines.events.on_gui_click, function(event)
+    if event.element.name:sub(1, 13) == 'cctv_display_' then
+        local frame = Gui.get_left_element(game.players[event.player_index], cctv_container)
+        local i = event.element.name:sub(-2):sub(1, 1)
+
+        if event.element.name:sub(-1) == 'l' then
+            frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].position = game.players[event.player_index].position
+
+        elseif event.element.name:sub(-1) == 'a' then
+            if frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom < 2.0 then
+                frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom = frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom + 0.05
+            end
+
+        elseif event.element.name:sub(-1) == 'b' then
+            if frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom > 0.2 then
+                frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom = frame.container['cctv_st_' .. i .. '2'].table['cctv_display_' .. i .. 'f']['cctv_display_' .. i .. 'm'].zoom - 0.05
+            end
+        end
+    end
+end)
+
+Event.add(defines.events.on_tick, function(_)
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, cctv_container)
 
         for i=1, 2 do
             local switch_index = frame.container['cctv_st_' .. i .. '1'].table['cctv_display_' .. i .. 's'].selected_index
-
             if switch_index == 1 then
                 local selected_index = frame.container['cctv_st_' .. i .. '1'].table['cctv_display_' .. i .. 'p'].selected_index
 
