@@ -21,9 +21,8 @@ vlayer.storage.item_w = {}
 
 vlayer.circuit = {}
 
-vlayer.power = {
-    energy =  0
-}
+vlayer.power = {}
+vlayer.power.energy =  0
 
 local vlayer_circuit_t = {}
 
@@ -115,6 +114,7 @@ local function vlayer_storage_handle()
         end
 
         vlayer.storage.item[config.land.tile] = 0
+
     else
         for k, v in pairs(vlayer.storage.item_w) do
             vlayer.storage.item[k] = vlayer.storage.item[k] + v
@@ -173,7 +173,7 @@ local function vlayer_power_handle()
     end
 
     local vlayer_power_capacity_total = math.floor((vlayer.storage.item['accumulator'] * 5000000) / 2)
-    local vlayer_power_capacity = math.floor(vlayer_power_capacity_total / #vlayer.power.entity)
+    local vlayer_power_capacity = math.floor(vlayer_power_capacity_total / #vlayer.entity.power)
 
     for k, v in pairs(vlayer.entity.power) do
         if (v == nil) or (not v.valid) then
