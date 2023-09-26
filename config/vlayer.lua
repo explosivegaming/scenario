@@ -4,8 +4,6 @@
 return {
     enabled = true,
     update_tick = 10,
-    -- 10 MJ
-    energy_base_limit = 10000000,
     land = {
         enabled = false,
         tile = 'landfill',

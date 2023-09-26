@@ -40,8 +40,8 @@ vlayer.circuit.output[9].signal = {type='virtual', name='signal-B'}
 vlayer.circuit.output[10].signal = {type='item', name='solar-panel'}
 vlayer.circuit.output[11].signal = {type='item', name='accumulator'}
 
-vlayer.storage.item['solar-panel'] = 0
-vlayer.storage.item['accumulator'] = 0
+vlayer.storage.item['solar-panel'] = 10
+vlayer.storage.item['accumulator'] = 10
 
 if config.land.enabled then
     vlayer.storage.item[config.land.tile] = 0
@@ -139,7 +139,7 @@ Event.on_nth_tick(config.update_tick, function()
 
                 vlayer.circuit.output[1].count = math.floor(vlayer.storage.item['solar-panel'] * 0.06 * game.surfaces['nauvis'].solar_power_multiplier)
                 vlayer.circuit.output[2].count = math.floor(vlayer.storage.item['solar-panel'] * 873 * game.surfaces['nauvis'].solar_power_multiplier / 20800)
-                vlayer.circuit.output[3].count = (vlayer.storage.item['accumulator'] * 5) + (config.energy_base_limit / 1000000)
+                vlayer.circuit.output[3].count = vlayer.storage.item['accumulator'] * 5
                 vlayer.circuit.output[10].count = vlayer.storage.item['solar-panel']
                 vlayer.circuit.output[11].count = vlayer.storage.item['accumulator']
             end
@@ -147,7 +147,7 @@ Event.on_nth_tick(config.update_tick, function()
     end
 
     -- power handle
-    local vlayer_power_capacity_total = math.floor(((vlayer.storage.item['accumulator'] * 5000000) + (config.energy_base_limit * #vlayer.power.entity)) / 2)
+    local vlayer_power_capacity_total = math.floor((vlayer.storage.item['accumulator'] * 5000000) / 2)
     local vlayer_power_capacity = math.floor(vlayer_power_capacity_total / #vlayer.power.entity)
 
     if config.always_day or game.surfaces['nauvis'].always_day then
