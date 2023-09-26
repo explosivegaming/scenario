@@ -8,23 +8,89 @@ local config = require 'config.vlayer' --- @dep config.vlayer
 local format_number = require('util').format_number
 local vlayer = require 'modules.control.vlayer'
 
-local vlayer_container
-local vlayer_display = {}
+--[[
+    print_out = {
+        ['electric-energy-interface'] = 'energy interface',
+        ['constant-combinator'] = 'circuit output',
+        ['logistic-chest-storage'] = 'storage input'
+    },
+]]
 
 local function pos_to_gps_string(pos)
 	return '[gps=' .. tostring(pos.x) .. ',' .. tostring(pos.y) .. ']'
 end
 
-for i=1, #config.gui.content do
-    if config.gui.content[i].type == 'item' or config.gui.content[i].type == 'signal' then
-        vlayer_display[i] = {
-            type = config.gui.content[i].type,
-            name = config.gui.content[i].name,
-            count = 0
-        }
-    end
+local vlayer_container
+local vlayer_circuit_t = {}
+
+for _, v in pairs(config.init_circuit) do
+    vlayer_circuit_t[v.name] = v.index
 end
 
+vlayer_container =
+Gui.element(function(event_trigger, parent)
+    local player = Gui.get_player_from_element(parent)
+    local container = Gui.container(parent, event_trigger, 300)
+    local scroll_table = Gui.scroll_table(container, 300, 2)
+
+    for _, v in pairs(config.init_gui) do
+        local caption
+
+        if v.type == 'item' then
+            scroll_table.add{
+                name = 'vlayer_display_' .. v.index .. 'n',
+                caption = '[img=entity/' .. v.name '] ' .. v.disp,
+                type = 'label',
+                style = 'heading_1_label'
+            }
+
+        else
+            scroll_table.add{
+                name = 'vlayer_display_' .. v.index .. 'n',
+                caption = '[virtual-signal=' .. v.name '] ' .. v.disp,
+                type = 'label',
+                style = 'heading_1_label'
+            }
+        end
+
+        scroll_table.add{
+            name = 'vlayer_display_' .. v.index  .. 'c',
+            caption = '0',
+            type = 'label',
+            style = 'heading_1_label'
+        }
+    end
+
+    return container.parent
+end)
+:add_to_left_flow()
+
+Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_container, function(player)
+	return Roles.player_allowed(player, 'gui/vlayer')
+end)
+
+Event.on_nth_tick(config.update_tick, function(_)
+    local vlayer_display = {}
+
+    for k, v in pairs(config.init_gui) do
+        if v.type == 'item' then
+            vlayer_display[k] = format_number(vlayer.storage.item[v.name])
+
+        elseif v.type == 'signal' then
+            vlayer_display[k] = format_number(vlayer.circuit[vlayer_circuit_t[v.name]].count)
+        end
+    end
+
+    for _, player in pairs(game.connected_players) do
+        local frame = Gui.get_left_element(player, vlayer_container)
+
+        for k, v in pairs(vlayer_display) do
+            frame.container.scroll.table['vlayer_display_' .. k .. 'c'].caption = v
+        end
+    end
+end)
+
+--[[
 local function vlayer_convert_chest(player)
     local entities = player.surface.find_entities_filtered{position=player.position, radius=8, name='steel-chest', force=player.force}
     if (not entities or (#entities == 0)) then
@@ -211,30 +277,11 @@ function vlayer_gui_update()
     end
 end
 
-vlayer_container =
-Gui.element(function(event_trigger, parent)
-    local player = Gui.get_player_from_element(parent)
-    local container = Gui.container(parent, event_trigger, 300)
-    Gui.header(container, 'VLAYER', '', true)
-    local scroll_table = Gui.scroll_table(container, 300, 2)
-    for i=1, #config.gui.content do
-        scroll_table.add{
-            name = 'vlayer_display_' .. i,
-            caption = config.gui.content[i].title,
-            type = config.gui.type,
-            style = config.gui.style
-        }
-    end
+
     button_power(scroll_table)
     button_storage_input(scroll_table)
     button_circuit(scroll_table)
     button_remove(scroll_table)
-
-    if (config.land.enabled ~= true) then
-        for i=7, 12 do
-            scroll_table['vlayer_display_' .. i].visible = false
-        end
-    end
 
     if not (Roles.player_allowed(player, 'gui/vlayer-edit')) then
         scroll_table['vlayer_display_' .. #config.gui.content - 1].visible = false
@@ -249,28 +296,5 @@ Gui.element(function(event_trigger, parent)
     scroll_table[button_storage_input.name].enabled = (#vlayer.storage.input < config.interface_limit.storage_input)
     scroll_table[button_circuit.name].enabled = (#vlayer.power.circuit < config.interface_limit.circuit)
 
-    return container.parent
-end)
-:add_to_left_flow()
 
-Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_container, function(player)
-	return Roles.player_allowed(player, 'gui/vlayer')
-end)
-
-Event.on_nth_tick(config.update_tick, function()
-    for _, v in pairs(vlayer_display) do
-        if v.type == 'item' then
-            v.count = format_number(vlayer.storage.item[v.name])
-        elseif v.type == 'signal' then
-            v.count = format_number(vlayer.circuit.output[v.name].count)
-        end
-    end
-
-    for _, player in pairs(game.connected_players) do
-        local frame = Gui.get_left_element(player, vlayer_container)
-
-        for k, v in pairs(vlayer_display) do
-            frame.container.scroll.table['vlayer_display_' .. k].caption = v.count
-        end
-    end
-end)
+]]
