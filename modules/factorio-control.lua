@@ -106,5 +106,19 @@ remote.add_interface("freeplay",
   end,
   set_chart_distance = function(value)
     global.chart_distance = tonumber(value)
+  end,
+  set_disable_crashsite = function()
+  end,
+  get_ship_items = function()
+    return {}
+  end,
+  set_ship_items = function()
+  return
+  end,
+  get_debris_items = function ()
+    return {}
+  end,
+  set_debris_items = function ()
+    return
   end
 })

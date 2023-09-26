@@ -13,20 +13,10 @@ local function pl(type, target, amount)
         c = target.clear_vehicle_logistic_slot
         s = target.set_vehicle_logistic_slot
 
-    elseif type == 'c' then
-            c = target.clear_personal_logistic_slot
-            s = target.set_personal_logistic_slot
-
-            for k, v in pairs(config.request) do
-                c(config.start + v.key)
-                s(config.start + v.key, {name=k, min=0, max=0})
-            end
-
-            return
     else
         return
     end
-
+  
     for _, v in pairs(config.request) do
         c(config.start + v.key)
     end
@@ -79,27 +69,14 @@ Commands.new_command('personal-logistic', 'Set Personal Logistic (0 to cancel al
 :register(function(player, amount)
     if player.force.technologies['logistic-robotics'].researched then
         if player.selected ~= nil then
-            if player.selected.name ~= nil then
-                if player.selected.name == 'spidertron' then
-                    pl('s', player.selected, amount / 10)
-                    return Commands.success
-                end
+            if player.selected.name == 'spidertron' then
+                pl('s', player.selected, amount / 10)
+                return Commands.success
             end
         else
             pl('p', player, amount / 10)
             return Commands.success
         end
-    else
-        player.print('Player logistic not researched')
-    end
-end)
-
-Commands.new_command('personal-logistic-empty', 'Set Personal Logistic to All 0')
-:add_alias('ple')
-:register(function(player)
-    if player.force.technologies['logistic-robotics'].researched then
-        pl('c', player, 0)
-        return Commands.success
     else
         player.print('Player logistic not researched')
     end

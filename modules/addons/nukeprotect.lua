@@ -1,9 +1,9 @@
 --- Disable new players from having certain items in their inventory, most commonly nukes
 -- @addon Nukeprotect
 
-local Event = require 'utils.event' --- @dep utils.event
-local Roles = require 'expcore.roles' --- @dep expcore.roles
-local config = require 'config.nukeprotect' --- @dep config.nukeprotect
+local Event = require 'utils.event'          --- @dep utils.event
+local Roles = require 'expcore.roles'        --- @dep expcore.roles
+local config = require 'config.nukeprotect'  --- @dep config.nukeprotect
 local move_items_stack = _C.move_items_stack --- @dep expcore.common
 
 
@@ -33,4 +33,14 @@ for _, inventory in ipairs(config.inventories) do
 			end
 		end)
 	end
+end
+
+
+if config.disable_nuke_research then
+	Event.add(defines.events.on_research_started, function(event)
+		local name = event.research.name
+		if config.disable_nuke_research_names[name] then
+			event.research.force.cancel_current_research()
+		end
+	end)
 end

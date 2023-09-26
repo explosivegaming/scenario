@@ -52,7 +52,7 @@ Roles.new_role('Administrator','Admin')
     'command/toggle-cheat-mode',
     'command/research-all',
     'command/connect-all',
-	'command/collectdata'
+	  'command/collectdata'
 }
 
 Roles.new_role('Senior Moderator','SMod')
@@ -64,6 +64,10 @@ Roles.new_role('Senior Moderator','SMod')
 :set_flag('instant-respawn')
 :set_parent('Moderator')
 :allow{
+   'gui/warp-list/bypass-proximity',
+   'gui/warp-list/bypass-cooldown',
+   'command/connect-all',
+	'command/collectdata'
 }
 
 Roles.new_role('Moderator','Mod')

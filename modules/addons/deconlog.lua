@@ -3,7 +3,7 @@
 
 local Event = require 'utils.event' --- @dep utils.event
 local Roles = require 'expcore.roles' --- @dep expcore.roles
-local format_time = _C.format_time
+local format_time = _C.format_time --- @dep expcore.common
 local format_number = require('util').format_number --- @dep util
 local config = require 'config.deconlog' --- @dep config.deconlog
 
@@ -39,7 +39,7 @@ Event.on_init(function()
 end)
 
 if config.decon_area then
-	Event.add(defines.events.on_player_deconstructed_area, function(e)
+	Event.add(defines.events.on_player_deconstructed_area, function (e)
 		if e.alt then
 			return
 		end
