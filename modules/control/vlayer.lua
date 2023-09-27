@@ -172,8 +172,9 @@ local function vlayer_power_handle()
         end
     end
 
-    local vlayer_power_capacity_total = math.floor((vlayer.storage.item['accumulator'] * 5000000) / 2)
-    local vlayer_power_capacity = math.floor(vlayer_power_capacity_total / #vlayer.entity.power)
+    -- 5 MJ each, a part is stored as vlayer energy, so to share energy to other stuff
+    local vlayer_power_capacity_total = math.floor(vlayer.storage.item['accumulator'] * 5000000)
+    local vlayer_power_capacity = math.floor(vlayer_power_capacity_total / (#vlayer.entity.power + 1))
 
     for k, v in pairs(vlayer.entity.power) do
         if (v == nil) or (not v.valid) then
