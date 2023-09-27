@@ -101,24 +101,26 @@ Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_co
 end)
 
 local function vlayer_convert_chest(player)
-    local entity = player.surface.find_entities_filtered{position=player.position, radius=8, name='steel-chest', force=player.force, limit=1}
+    local entities = player.surface.find_entities_filtered{position=player.position, radius=8, name='steel-chest', force=player.force, limit=1}
 
-    if ((not entity) or (#entity == 0)) then
+    if (not entities or #entities == 0) then
         player.print('No steel chest detected')
-        return nil
+        return
     end
 
-    if (not entity.get_inventory(defines.inventory.chest).is_empty()) then
-        player.print('Chest is not emptied')
-        return nil
-    end
+    for _, entity in pairs(entities) do
+        if (not entity.get_inventory(defines.inventory.chest).is_empty()) then
+            player.print('Chest is not emptied')
+            return nil
+        end
 
-    if (not entity.destroy()) then
-        player.print('Unable to convert chest')
-        return nil
-    end
+        if (not entity.destroy()) then
+            player.print('Unable to convert chest')
+            return nil
+        end
 
-    return {x=string.format('%.1f', entity.position.x), y=string.format('%.1f', entity.position.y)}
+        return {x=string.format('%.1f', entity.position.x), y=string.format('%.1f', entity.position.y)}
+    end
 end
 
 local function vlayer_convert_chest_storage_input(player)
@@ -180,46 +182,52 @@ local function vlayer_convert_chest_power(player)
 end
 
 local function vlayer_convert_remove(player)
-    local entity = player.surface.find_entities_filtered{name={'logistic-chest-storage', 'constant-combinator', 'electric-energy-interface'}, position=player.position, radius=8, force='neutral', limit=1}
+    local entities = player.surface.find_entities_filtered{name={'logistic-chest-storage', 'constant-combinator', 'electric-energy-interface'}, position=player.position, radius=8, force='neutral', limit=1}
 
-    if (not entity or #entity == 0) then
+    if (not entities or #entities == 0) then
         player.print('Entity not found')
         return
     end
 
-    local name = entity.name
-    entity.destroy()
+    for _, entity in pairs(entities) do
+        local name = entity.name
+        local pos = entity.position
+        entity.destroy()
 
-    if name == 'logistic-chest-storage' then
-        game.print(player.name .. ' removed a vlayer storage input on ' .. pos_to_gps_string(entity.position))
-        for k, v in pairs(vlayer.entity.storage.input) do
-            if v == nil then
-                vlayer.entity.storage.input[k] = nil
+        if name == 'logistic-chest-storage' then
+            game.print(player.name .. ' removed a vlayer storage input on ' .. pos_to_gps_string(pos))
 
-            elseif not v.valid then
-                vlayer.entity.storage.input[k] = nil
+            for k, v in pairs(vlayer.entity.storage.input) do
+                if v == nil then
+                    vlayer.entity.storage.input[k] = nil
+
+                elseif not v.valid then
+                    vlayer.entity.storage.input[k] = nil
+                end
             end
-        end
 
-    elseif name == 'constant-combinator' then
-        game.print(player.name .. ' removed a vlayer circuit output on ' .. pos_to_gps_string(entity.position))
-        for k, v in pairs(vlayer.entity.circuit) do
-            if v == nil then
-                vlayer.entity.circuit[k] = nil
+        elseif name == 'constant-combinator' then
+            game.print(player.name .. ' removed a vlayer circuit output on ' .. pos_to_gps_string(pos))
 
-            elseif not v.valid then
-                vlayer.entity.circuit[k] = nil
+            for k, v in pairs(vlayer.entity.circuit) do
+                if v == nil then
+                    vlayer.entity.circuit[k] = nil
+
+                elseif not v.valid then
+                    vlayer.entity.circuit[k] = nil
+                end
             end
-        end
 
-    elseif name == 'electric-energy-interface' then
-        game.print(player.name .. ' removed a vlayer energy interface on ' .. pos_to_gps_string(entity.position))
-        for k, v in pairs(vlayer.entity.power) do
-            if v == nil then
-                vlayer.entity.power[k] = nil
+        elseif name == 'electric-energy-interface' then
+            game.print(player.name .. ' removed a vlayer energy interface on ' .. pos_to_gps_string(pos))
 
-            elseif not v.valid then
-                vlayer.entity.power[k] = nil
+            for k, v in pairs(vlayer.entity.power) do
+                if v == nil then
+                    vlayer.entity.power[k] = nil
+
+                elseif not v.valid then
+                    vlayer.entity.power[k] = nil
+                end
             end
         end
     end
