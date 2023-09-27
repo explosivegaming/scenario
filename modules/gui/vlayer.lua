@@ -22,11 +22,11 @@ local vlayer_container =
 Gui.element(function(event_trigger, parent)
     local player = Gui.get_player_from_element(parent)
     local container = Gui.container(parent, event_trigger, 320)
-    local scroll_table = Gui.scroll_table(container, 320, 2)
+    local scroll_table_1 = Gui.scroll_table(container, 320, 2, 'vlayer_st_1')
 
     for _, v in pairs(config.init_gui) do
         if v.type == 'item' then
-            scroll_table.add{
+            scroll_table_1.add{
                 type = 'label',
                 name = 'vlayer_display_' .. v.index .. 'n',
                 caption = '[img=entity/' .. v.name .. '] ' .. v.disp,
@@ -34,7 +34,7 @@ Gui.element(function(event_trigger, parent)
             }
 
         else
-            scroll_table.add{
+            scroll_table_1.add{
                 type = 'label',
                 name = 'vlayer_display_' .. v.index .. 'n',
                 caption = '[virtual-signal=' .. v.name .. '] ' .. v.disp,
@@ -42,7 +42,7 @@ Gui.element(function(event_trigger, parent)
             }
         end
 
-        scroll_table.add{
+        scroll_table_1.add{
             type = 'label',
             name = 'vlayer_display_' .. v.index  .. 'c',
             caption = '0',
@@ -50,28 +50,30 @@ Gui.element(function(event_trigger, parent)
         }
     end
 
-    local s = scroll_table.add{
+    local scroll_table_2 = Gui.scroll_table(container, 320, 2, 'vlayer_st_2')
+    
+    local s = scroll_table_2.add{
         type = 'button',
         name = 'vlayer_display_0s',
         caption = 'Add Storage',
         style = 'button'
     }
 
-    local c = scroll_table.add{
+    local c = scroll_table_2.add{
         type = 'button',
         name = 'vlayer_display_0c',
         caption = 'Add Circuit',
         style = 'button'
     }
 
-    local p = scroll_table.add{
+    local p = scroll_table_2.add{
         type = 'button',
         name = 'vlayer_display_0p',
         caption = 'Add Power',
         style = 'button'
     }
 
-    local r = scroll_table.add{
+    local r = scroll_table_2.add{
         type = 'button',
         name = 'vlayer_display_0r',
         caption = 'Remove Special',
@@ -225,21 +227,21 @@ Event.add(defines.events.on_gui_click, function(event)
 
             if event.element.name:sub(-1) == 's' then
                 vlayer_convert_chest_storage_input(game.players[event.player_index])
-                frame.container.scroll.table['vlayer_display_0s'].enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
+                frame.container['vlayer_st_2'].table['vlayer_display_0s'].enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
 
             elseif event.element.name:sub(-1) == 'c' then
                 vlayer_convert_chest_circuit(game.players[event.player_index])
-                frame.container.scroll.table['vlayer_display_0c'].enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
+                frame.container['vlayer_st_2'].table['vlayer_display_0c'].enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
 
             elseif event.element.name:sub(-1) == 'p' then
                 vlayer_convert_chest_power(game.players[event.player_index])
-                frame.container.scroll.table['vlayer_display_0p'].enabled = (#vlayer.entity.power < config.interface_limit.energy)
+                frame.container['vlayer_st_2'].table['vlayer_display_0p'].enabled = (#vlayer.entity.power < config.interface_limit.energy)
 
             elseif event.element.name:sub(-1) == 'r' then
                 vlayer_convert_remove(game.players[event.player_index])
-                frame.container.scroll.table['vlayer_display_0s'].enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
-                frame.container.scroll.table['vlayer_display_0c'].enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
-                frame.container.scroll.table['vlayer_display_0p'].enabled = (#vlayer.entity.power < config.interface_limit.energy)
+                frame.container['vlayer_st_2'].table['vlayer_display_0s'].enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
+                frame.container['vlayer_st_2'].table['vlayer_display_0c'].enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
+                frame.container['vlayer_st_2'].table['vlayer_display_0p'].enabled = (#vlayer.entity.power < config.interface_limit.energy)
             end
         end
     end
@@ -261,7 +263,7 @@ Event.on_nth_tick(config.update_tick, function(_)
         local frame = Gui.get_left_element(player, vlayer_container)
 
         for k, v in pairs(vlayer_display) do
-            frame.container.scroll.table['vlayer_display_' .. k .. 'c'].caption = v
+            frame.container['vlayer_st_1'].table['vlayer_display_' .. k .. 'c'].caption = v
         end
     end
 end)
@@ -271,10 +273,10 @@ local function role_update_event(event)
     local frame = Gui.get_left_element(player, vlayer_container)
     local visible = Roles.player_allowed(player, 'gui/vlayer-edit')
 
-    frame.container.scroll.table['vlayer_display_0s'].visible = visible
-    frame.container.scroll.table['vlayer_display_0c'].visible = visible
-    frame.container.scroll.table['vlayer_display_0p'].visible = visible
-    frame.container.scroll.table['vlayer_display_0r'].visible = visible
+    frame.container['vlayer_st_2'].table['vlayer_display_0s'].visible = visible
+    frame.container['vlayer_st_2'].table['vlayer_display_0c'].visible = visible
+    frame.container['vlayer_st_2'].table['vlayer_display_0p'].visible = visible
+    frame.container['vlayer_st_2'].table['vlayer_display_0r'].visible = visible
 end
 
 Event.add(Roles.events.on_role_assigned, role_update_event)
