@@ -14,6 +14,10 @@ for _, v in pairs(config.init_circuit) do
     vlayer_circuit_t[v.name] = v.index
 end
 
+local function pos_to_gps_string(pos)
+	return '[gps=' .. string.format('%.1f', pos.x) .. ',' .. string.format('%.1f', pos.y) .. ']'
+end
+
 local vlayer_container =
 Gui.element(function(event_trigger, parent)
     local player = Gui.get_player_from_element(parent)
@@ -148,18 +152,12 @@ Event.add(Roles.events.on_role_assigned, role_update_event)
 Event.add(Roles.events.on_role_unassigned, role_update_event)
 
 --[[
-local function pos_to_gps_string(pos)
-	return '[gps=' .. string.format('%.1f', pos.x) .. ',' .. string.format('%.1f', pos.y) .. ']'
-end
-
 print_out = {
     ['electric-energy-interface'] = 'energy interface',
     ['constant-combinator'] = 'circuit output',
     ['logistic-chest-storage'] = 'storage input'
 }
 
-]]
---[[
 local function vlayer_convert_chest(player)
     local entities = player.surface.find_entities_filtered{position=player.position, radius=8, name='steel-chest', force=player.force}
     if (not entities or (#entities == 0)) then
@@ -286,81 +284,4 @@ local function vlayer_convert_remove(player)
         end
     end
 end
-
-local vlayer_gui_update
-
-local button_power =
-Gui.element{
-    name = 'button_1',
-    type = 'button',
-    caption = 'Power Entity',
-    style = 'button'
-}:on_click(function(player)
-    vlayer_convert_chest_power(player)
-    vlayer_gui_update()
-end)
-
-local button_storage_input =
-Gui.element{
-    name = 'button_2',
-    type = 'button',
-    caption = 'Storage Input',
-    style = 'button'
-}:on_click(function(player)
-    vlayer_convert_chest_storage_input(player)
-    vlayer_gui_update()
-end)
-
-local button_circuit =
-Gui.element{
-    name = 'button_3',
-    type = 'button',
-    caption = 'Circuit',
-    style = 'button'
-}:on_click(function(player)
-    vlayer_convert_chest_circuit(player)
-    vlayer_gui_update()
-end)
-
-local button_remove =
-Gui.element{
-    name = 'button_4',
-    type = 'button',
-    caption = 'Remove',
-    style = 'button'
-}:on_click(function(player)
-    vlayer_convert_remove(player)
-    vlayer_gui_update()
-end)
-
-function vlayer_gui_update()
-    local button_power_enabled = #vlayer.power.entity < config.interface_limit.energy
-    local button_storage_input_enabled = #vlayer.storage.input < config.interface_limit.storage_input
-    local button_circuit_enabled = #vlayer.power.circuit < config.interface_limit.circuit
-
-    for _, player in pairs(game.connected_players) do
-        local frame = Gui.get_left_element(player, vlayer_container)
-        frame.container.scroll.table[button_power.name].enabled = button_power_enabled
-        frame.container.scroll.table[button_storage_input.name].enabled = button_storage_input_enabled
-        frame.container.scroll.table[button_circuit.name].enabled = button_circuit_enabled
-    end
-end
-
-    button_power(scroll_table)
-    button_storage_input(scroll_table)
-    button_circuit(scroll_table)
-    button_remove(scroll_table)
-
-    if not (Roles.player_allowed(player, 'gui/vlayer-edit')) then
-        scroll_table['vlayer_display_' .. #config.gui.content - 1].visible = false
-        scroll_table['vlayer_display_' .. #config.gui.content].visible = false
-        scroll_table[button_power.name].visible = false
-        scroll_table[button_storage_input.name].visible = false
-        scroll_table[button_circuit.name].visible = false
-        scroll_table[button_remove.name].visible = false
-    end
-
-    scroll_table[button_power.name].enabled = (#vlayer.power.entity < config.interface_limit.energy)
-    scroll_table[button_storage_input.name].enabled = (#vlayer.storage.input < config.interface_limit.storage_input)
-    scroll_table[button_circuit.name].enabled = (#vlayer.power.circuit < config.interface_limit.circuit)
 ]]
