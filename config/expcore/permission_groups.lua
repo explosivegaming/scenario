@@ -22,7 +22,7 @@ Permission_Groups.new_group('Admin')
     'set_heat_interface_temperature',
     'set_infinity_container_filter_item',
     'set_infinity_container_remove_unfiltered_items',
-    'set_infinity_pipe_filter'  
+    'set_infinity_pipe_filter'
 }
 ]]
 

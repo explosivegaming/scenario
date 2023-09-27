@@ -10,6 +10,7 @@ local format_time = _C.format_time --- @dep expcore.common
 local format_number = require('util').format_number --- @dep util
 
 local pd_container
+--[[
 local pd_disp_n = {
     'DamageDeathRatio',
     'KillDeathRatio',
@@ -20,6 +21,7 @@ local pd_disp_n = {
     'NetPlayTime',
     'AFKTimeRatio'
 }
+]]
 
 pd_container =
 Gui.element(function(event_trigger, parent)

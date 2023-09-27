@@ -51,7 +51,7 @@ Gui.element(function(event_trigger, parent)
     end
 
     local scroll_table_2 = Gui.scroll_table(container, 320, 2, 'vlayer_st_2')
-    
+
     local s = scroll_table_2.add{
         type = 'button',
         name = 'vlayer_display_0s',
