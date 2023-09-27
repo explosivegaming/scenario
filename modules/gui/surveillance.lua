@@ -60,9 +60,9 @@ Gui.element(function(event_trigger, parent)
             style = 'button'
         }
 
-        l.style.maximal_width = 48
-        a.style.maximal_width = 36
-        b.style.maximal_width = 36
+        l.style.width = 48
+        a.style.width = 36
+        b.style.width = 36
 
         local scroll_table_2 = Gui.scroll_table(container, 400, 1, 'cctv_st_' .. i .. '2')
         container['cctv_st_' .. i .. '2'].vertical_scroll_policy = 'never'

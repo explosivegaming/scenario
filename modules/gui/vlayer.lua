@@ -80,14 +80,10 @@ Gui.element(function(event_trigger, parent)
         style = 'button'
     }
 
-    s.style.minimal_width = 160
-    s.style.maximal_width = 160
-    c.style.minimal_width = 160
-    c.style.maximal_width = 160
-    p.style.minimal_width = 160
-    p.style.maximal_width = 160
-    r.style.minimal_width = 160
-    r.style.maximal_width = 160
+    s.style.width = 160
+    c.style.width = 160
+    p.style.width = 160
+    r.style.width = 160
 
     if not (Roles.player_allowed(player, 'gui/vlayer-edit')) then
         s.visible = false
@@ -256,7 +252,7 @@ Event.add(defines.events.on_gui_click, function(event)
                 frame.container['vlayer_st_2'].table['vlayer_display_0s'].enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
                 frame.container['vlayer_st_2'].table['vlayer_display_0c'].enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
                 frame.container['vlayer_st_2'].table['vlayer_display_0p'].enabled = (#vlayer.entity.power < config.interface_limit.energy)
-                frame.container['vlayer_st_2'].table['vlayer_display_0p'].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+                frame.container['vlayer_st_2'].table['vlayer_display_0r'].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
             end
         end
     end
