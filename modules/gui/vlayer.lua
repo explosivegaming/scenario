@@ -112,19 +112,16 @@ local function vlayer_convert_chest(player)
         return
     end
 
-    for _, entity in pairs(entities) do
-        if (not entity.get_inventory(defines.inventory.chest).is_empty()) then
-            player.print('Chest is not emptied')
-            return nil
-        end
+    local entity = entities[1]
+    local pos = entity.position
 
-        if (not entity.destroy()) then
-            player.print('Unable to convert chest')
-            return nil
-        end
-
-        return {x=string.format('%.1f', entity.position.x), y=string.format('%.1f', entity.position.y)}
+    if (not entity.get_inventory(defines.inventory.chest).is_empty()) then
+        player.print('Chest is not emptied')
+        return nil
     end
+
+    entity.destroy()
+    return {x=string.format('%.1f', pos.x), y=string.format('%.1f', pos.y)}
 end
 
 local function vlayer_convert_chest_storage_input(player)
