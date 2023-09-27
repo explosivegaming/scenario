@@ -13,6 +13,7 @@ end)
 vlayer.entity = {}
 vlayer.entity.power = {}
 vlayer.entity.storage = {}
+vlayer.entity.storage.input = {}
 vlayer.entity.circuit = {}
 
 vlayer.storage = {}
@@ -65,12 +66,12 @@ for _, v in pairs(config.init_circuit) do
 end
 
 local function vlayer_storage_input_handle()
-    for k, v in pairs(vlayer.entity.storage) do
+    for k, v in pairs(vlayer.entity.storage.input) do
         if v == nil then
-            vlayer.entity.storage[k] = nil
+            vlayer.entity.storage.input[k] = nil
 
         elseif not v.valid then
-            vlayer.entity.storage[k] = nil
+            vlayer.entity.storage.input[k] = nil
 
         else
             local chest = v.get_inventory(defines.inventory.chest)
