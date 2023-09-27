@@ -25,14 +25,14 @@ Gui.element(function(event_trigger, parent)
             selected_index = 1
         }
 
-        scroll_table_1.add{
+        local s = scroll_table_1.add{
             type = 'drop-down',
             name = 'cctv_display_' .. i .. 's',
             items = {'Player', 'Static'},
             selected_index = 1
         }
 
-        scroll_table_1.add{
+        local e = scroll_table_1.add{
             type = 'drop-down',
             name = 'cctv_display_' .. i .. 'e',
             items = {'Enable', 'Disable'},
@@ -60,6 +60,8 @@ Gui.element(function(event_trigger, parent)
             style = 'button'
         }
 
+        s.style.width = 72
+        e.style.width = 72
         l.style.width = 48
         a.style.width = 36
         b.style.width = 36

@@ -23,7 +23,7 @@ vlayer.storage.item_w = {}
 vlayer.circuit = {}
 
 vlayer.power = {}
-vlayer.power.energy =  0
+vlayer.power.energy = 0
 
 local vlayer_circuit_t = {}
 
@@ -165,25 +165,25 @@ end
 
 local function vlayer_power_handle()
     if config.always_day or game.surfaces['nauvis'].always_day then
-        vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 * game.surfaces['nauvis'].solar_power_multiplier / config.update_tick)
+        vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier)
 
     else
         local tick = game.tick % 25000
 
         if tick <= 5000 or tick > 17500 then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 * game.surfaces['nauvis'].solar_power_multiplier / config.update_tick)
+            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier)
 
         elseif tick <= 10000 then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 * game.surfaces['nauvis'].solar_power_multiplier / config.update_tick * (1 - ((tick - 5000) / 5000)))
+            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier * (1 - ((tick - 5000) / 5000)))
 
         elseif (tick > 12500) and (tick <= 17500) then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 * game.surfaces['nauvis'].solar_power_multiplier / config.update_tick * ((tick - 5000) / 5000))
+            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier * ((tick - 5000) / 5000))
         end
     end
 
     -- 5 MJ each, a part is stored as vlayer energy, so to share energy to other stuff
     local vlayer_power_capacity_total = math.floor(vlayer.storage.item['accumulator'] * 5000000)
-    local vlayer_power_capacity = math.floor(vlayer_power_capacity_total / (#vlayer.entity.power + 1))
+    local vlayer_power_capacity = math.ceil(vlayer_power_capacity_total / #vlayer.entity.power)
 
     for k, v in pairs(vlayer.entity.power) do
         if v == nil then
@@ -197,21 +197,10 @@ local function vlayer_power_handle()
             v.power_production = math.floor(vlayer_power_capacity / 60)
             v.power_usage = math.floor(vlayer_power_capacity / 60)
 
-            if vlayer.power.energy < vlayer_power_capacity then
-                v.energy = math.ceil((v.energy + vlayer.power.energy) / 2)
-                vlayer.power.energy = v.energy
-
-            elseif v.energy < vlayer_power_capacity then
-                local energy_change = vlayer_power_capacity - v.energy
-
-                if energy_change < vlayer.power.energy then
-                    v.energy = v.energy + energy_change
-                    vlayer.power.energy = vlayer.power.energy - energy_change
-
-                else
-                    v.energy = v.energy + vlayer.power.energy
-                    vlayer.power.energy = 0
-                end
+            if v.energy < vlayer_power_capacity then
+                local power = math.min(vlayer_power_capacity - v.energy, vlayer.power.energy)
+                v.energy = v.energy + power
+                vlayer.power.energy = vlayer.power.energy - power
             end
         end
     end
