@@ -4,24 +4,12 @@
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
+local format_number = require('util').format_number --- @dep util
 local config = require 'config.vlayer' --- @dep config.vlayer
-local format_number = require('util').format_number
 local vlayer = require 'modules.control.vlayer'
 
---[[
-    print_out = {
-        ['electric-energy-interface'] = 'energy interface',
-        ['constant-combinator'] = 'circuit output',
-        ['logistic-chest-storage'] = 'storage input'
-    },
-
-
-local function pos_to_gps_string(pos)
-	return '[gps=' .. tostring(pos.x) .. ',' .. tostring(pos.y) .. ']'
-end
-]]
-
 local vlayer_container
+
 local vlayer_circuit_t = {}
 
 for _, v in pairs(config.init_circuit) do
@@ -38,7 +26,7 @@ Gui.element(function(event_trigger, parent)
         if v.type == 'item' then
             scroll_table.add{
                 name = 'vlayer_display_' .. v.index .. 'n',
-                caption = '[img=entity/' .. v.name '] ' .. v.disp,
+                caption = '[img=entity/' .. v.name .. '] ' .. v.disp,
                 type = 'label',
                 style = 'heading_1_label'
             }
@@ -46,7 +34,7 @@ Gui.element(function(event_trigger, parent)
         else
             scroll_table.add{
                 name = 'vlayer_display_' .. v.index .. 'n',
-                caption = '[virtual-signal=' .. v.name '] ' .. v.disp,
+                caption = '[virtual-signal=' .. v.name .. '] ' .. v.disp,
                 type = 'label',
                 style = 'heading_1_label'
             }
@@ -68,7 +56,6 @@ Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_co
 	return Roles.player_allowed(player, 'gui/vlayer')
 end)
 
---[[
 Event.on_nth_tick(config.update_tick, function(_)
     local vlayer_display = {}
 
@@ -89,6 +76,19 @@ Event.on_nth_tick(config.update_tick, function(_)
         end
     end
 end)
+
+--[[
+local function pos_to_gps_string(pos)
+	return '[gps=' .. string.format('%.1f', pos.x) .. ',' .. string.format('%.1f', pos.y) .. ']'
+end
+
+        print_out = {
+        ['electric-energy-interface'] = 'energy interface',
+        ['constant-combinator'] = 'circuit output',
+        ['logistic-chest-storage'] = 'storage input'
+    },
+
+
 ]]
 --[[
 local function vlayer_convert_chest(player)
