@@ -80,9 +80,13 @@ Gui.element(function(event_trigger, parent)
         style = 'button'
     }
 
+    s.style.minimal_width = 160
     s.style.maximal_width = 160
+    c.style.minimal_width = 160
     c.style.maximal_width = 160
+    p.style.minimal_width = 160
     p.style.maximal_width = 160
+    r.style.minimal_width = 160
     r.style.maximal_width = 160
 
     if not (Roles.player_allowed(player, 'gui/vlayer-edit')) then
