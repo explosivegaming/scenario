@@ -135,7 +135,7 @@ local function vlayer_circuit_handle()
 
     for _, v in pairs(config.init_circuit) do
         if v.type == 'item' then
-            vlayer.circuit[vlayer_circuit_t[v.name]] = vlayer.storage.item[v.name]
+            vlayer.circuit[v.index] = vlayer.storage.item[v.name]
         end
     end
 
@@ -150,7 +150,7 @@ local function vlayer_circuit_handle()
             local circuit_o = v.get_or_create_control_behavior()
 
             for _, vc in pairs(config.init_circuit) do
-                circuit_o.set_signal(vc.index, {signal={type=vc.type, name=vc.name}, count=vlayer.circuit[vlayer_circuit_t[vc.name]]})
+                circuit_o.set_signal(vc.index, {signal={type=vc.type, name=vc.name}, count=vlayer.circuit[vc.index]})
             end
         end
     end
