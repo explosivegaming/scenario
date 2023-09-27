@@ -8,44 +8,77 @@ local format_number = require('util').format_number --- @dep util
 local config = require 'config.vlayer' --- @dep config.vlayer
 local vlayer = require 'modules.control.vlayer'
 
-local vlayer_container
-
 local vlayer_circuit_t = {}
 
 for _, v in pairs(config.init_circuit) do
     vlayer_circuit_t[v.name] = v.index
 end
 
-vlayer_container =
+local vlayer_container =
 Gui.element(function(event_trigger, parent)
     local player = Gui.get_player_from_element(parent)
-    local container = Gui.container(parent, event_trigger, 300)
-    local scroll_table = Gui.scroll_table(container, 300, 2)
+    local container = Gui.container(parent, event_trigger, 320)
+    local scroll_table = Gui.scroll_table(container, 320, 2)
 
     for _, v in pairs(config.init_gui) do
         if v.type == 'item' then
             scroll_table.add{
+                type = 'label',
                 name = 'vlayer_display_' .. v.index .. 'n',
                 caption = '[img=entity/' .. v.name .. '] ' .. v.disp,
-                type = 'label',
                 style = 'heading_1_label'
             }
 
         else
             scroll_table.add{
+                type = 'label',
                 name = 'vlayer_display_' .. v.index .. 'n',
                 caption = '[virtual-signal=' .. v.name .. '] ' .. v.disp,
-                type = 'label',
                 style = 'heading_1_label'
             }
         end
 
         scroll_table.add{
+            type = 'label',
             name = 'vlayer_display_' .. v.index  .. 'c',
             caption = '0',
-            type = 'label',
             style = 'heading_1_label'
         }
+    end
+
+    local s = scroll_table.add{
+        type = 'button',
+        name = 'vlayer_display_0s',
+        caption = 'Add Storage',
+        style = 'button'
+    }
+
+    local c = scroll_table.add{
+        type = 'button',
+        name = 'vlayer_display_0c',
+        caption = 'Add Circuit',
+        style = 'button'
+    }
+
+    local p = scroll_table.add{
+        type = 'button',
+        name = 'vlayer_display_0p',
+        caption = 'Add Power',
+        style = 'button'
+    }
+
+    local r = scroll_table.add{
+        type = 'button',
+        name = 'vlayer_display_0r',
+        caption = 'Remove Special',
+        style = 'button'
+    }
+
+    if not (Roles.player_allowed(player, 'gui/vlayer-edit')) then
+        s.visible = false
+        c.visible = false
+        p.visible = false
+        r.visible = false
     end
 
     return container.parent
@@ -54,6 +87,29 @@ end)
 
 Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_container, function(player)
 	return Roles.player_allowed(player, 'gui/vlayer')
+end)
+
+Event.add(defines.events.on_gui_click, function(event)
+    if event.element.name:sub(1, 15) == 'vlayer_display_' then
+        if event.element.name:sub(-2):sub(1, 1) == '0' then
+            local frame = Gui.get_left_element(game.players[event.player_index], vlayer_container)
+
+            if event.element.name:sub(-1) == 's' then
+                frame.container.scroll.table['vlayer_display_0s'].enabled = (#vlayer.power.entity < config.interface_limit.storage_input)
+
+            elseif event.element.name:sub(-1) == 'c' then
+                frame.container.scroll.table['vlayer_display_0c'].enabled = (#vlayer.power.entity < config.interface_limit.circuit)
+
+            elseif event.element.name:sub(-1) == 'p' then
+                frame.container.scroll.table['vlayer_display_0p'].enabled = (#vlayer.power.entity < config.interface_limit.energy)
+
+            elseif event.element.name:sub(-1) == 'r' then
+                frame.container.scroll.table['vlayer_display_0s'].enabled = (#vlayer.power.entity < config.interface_limit.storage_input)
+                frame.container.scroll.table['vlayer_display_0c'].enabled = (#vlayer.power.entity < config.interface_limit.circuit)
+                frame.container.scroll.table['vlayer_display_0p'].enabled = (#vlayer.power.entity < config.interface_limit.energy)
+            end
+        end
+    end
 end)
 
 Event.on_nth_tick(config.update_tick, function(_)
@@ -77,17 +133,30 @@ Event.on_nth_tick(config.update_tick, function(_)
     end
 end)
 
+local function role_update_event(event)
+    local player = game.players[event.player_index]
+    local frame = Gui.get_left_element(player, vlayer_container)
+    local visible = Roles.player_allowed(player, 'gui/vlayer-edit')
+
+    frame.container.scroll.table['vlayer_display_0s'].visible = visible
+    frame.container.scroll.table['vlayer_display_0c'].visible = visible
+    frame.container.scroll.table['vlayer_display_0p'].visible = visible
+    frame.container.scroll.table['vlayer_display_0r'].visible = visible
+end
+
+Event.add(Roles.events.on_role_assigned, role_update_event)
+Event.add(Roles.events.on_role_unassigned, role_update_event)
+
 --[[
 local function pos_to_gps_string(pos)
 	return '[gps=' .. string.format('%.1f', pos.x) .. ',' .. string.format('%.1f', pos.y) .. ']'
 end
 
-        print_out = {
-        ['electric-energy-interface'] = 'energy interface',
-        ['constant-combinator'] = 'circuit output',
-        ['logistic-chest-storage'] = 'storage input'
-    },
-
+print_out = {
+    ['electric-energy-interface'] = 'energy interface',
+    ['constant-combinator'] = 'circuit output',
+    ['logistic-chest-storage'] = 'storage input'
+}
 
 ]]
 --[[
