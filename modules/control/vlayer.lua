@@ -54,14 +54,7 @@ for k, _ in pairs(vlayer.storage.item) do
 end
 
 for _, v in pairs(config.init_circuit) do
-    vlayer.circuit[v.index] = {
-        signal = {
-            type = v.type,
-            name = v.name
-        },
-        count = 0
-    }
-
+    vlayer.circuit[v.index] = 0
     vlayer_circuit_t[v.name] = v.index
 end
 
@@ -130,19 +123,19 @@ local function vlayer_storage_handle()
 end
 
 local function vlayer_circuit_handle()
-    vlayer.circuit[vlayer_circuit_t['signal-P']].count = math.floor(vlayer.storage.item['solar-panel'] * 0.06 * game.surfaces['nauvis'].solar_power_multiplier)
-    vlayer.circuit[vlayer_circuit_t['signal-S']].count = math.floor(vlayer.storage.item['solar-panel'] * 873 * game.surfaces['nauvis'].solar_power_multiplier / 20800)
-    vlayer.circuit[vlayer_circuit_t['signal-M']].count = vlayer.storage.item['accumulator'] * 5
-    vlayer.circuit[vlayer_circuit_t['signal-C']].count = math.floor(vlayer.power.energy / 1000000)
-    vlayer.circuit[vlayer_circuit_t['signal-D']].count = math.floor(game.tick / 25000)
-    vlayer.circuit[vlayer_circuit_t['signal-T']].count = game.tick % 25000
-    vlayer.circuit[vlayer_circuit_t['signal-L']].count = (vlayer.storage.item[config.land.tile] * config.land.result) - (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) - (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
-    vlayer.circuit[vlayer_circuit_t['signal-A']].count = vlayer.storage.item_w['solar-panel']
-    vlayer.circuit[vlayer_circuit_t['signal-B']].count = vlayer.storage.item_w['accumulator']
+    vlayer.circuit[vlayer_circuit_t['signal-P']] = math.floor(vlayer.storage.item['solar-panel'] * 0.06 * game.surfaces['nauvis'].solar_power_multiplier)
+    vlayer.circuit[vlayer_circuit_t['signal-S']] = math.floor(vlayer.storage.item['solar-panel'] * 873 * game.surfaces['nauvis'].solar_power_multiplier / 20800)
+    vlayer.circuit[vlayer_circuit_t['signal-M']] = vlayer.storage.item['accumulator'] * 5
+    vlayer.circuit[vlayer_circuit_t['signal-C']] = math.floor(vlayer.power.energy / 1000000)
+    vlayer.circuit[vlayer_circuit_t['signal-D']] = math.floor(game.tick / 25000)
+    vlayer.circuit[vlayer_circuit_t['signal-T']] = game.tick % 25000
+    vlayer.circuit[vlayer_circuit_t['signal-L']] = (vlayer.storage.item[config.land.tile] * config.land.result) - (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) - (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
+    vlayer.circuit[vlayer_circuit_t['signal-A']] = vlayer.storage.item_w['solar-panel']
+    vlayer.circuit[vlayer_circuit_t['signal-B']] = vlayer.storage.item_w['accumulator']
 
     for _, v in pairs(config.init_circuit) do
         if v.type == 'item' then
-            vlayer.circuit[vlayer_circuit_t[v.name]].count = vlayer.storage.item[v.name]
+            vlayer.circuit[vlayer_circuit_t[v.name]] = vlayer.storage.item[v.name]
         end
     end
 
@@ -156,8 +149,8 @@ local function vlayer_circuit_handle()
         else
             local circuit_o = v.get_or_create_control_behavior()
 
-            for kc, vc in pairs(vlayer.circuit) do
-                circuit_o.set_signal(kc, {signal=vc.signal, count=vc.count})
+            for _, vc in pairs(config.init_circuit) do
+                circuit_o.set_signal(vc.index, {signal={type=vc.type, name=vc.name}, count=vlayer.circuit[vlayer_circuit_t[vc.name]]})
             end
         end
     end
