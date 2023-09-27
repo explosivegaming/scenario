@@ -98,28 +98,28 @@ local function vlayer_storage_handle()
         local land_surplus = vlayer.storage.item[config.land.tile] - land_req
 
         if (vlayer.storage.item_w['solar-panel'] > 0) and (vlayer.storage.item_w['accumulator'] > 0) then
-            local land_allocation = math.floor(land_surplus / (config.land.requirement['solar-panel'] + config.land.requirement['accumulator']))
-            local s = math.min(vlayer.storage.item_w['solar-panel'], land_allocation)
-            local a = math.min(vlayer.storage.item_w['accumulator'], land_allocation)
+            local allocation = math.floor(land_surplus / (config.land.requirement['solar-panel'] + config.land.requirement['accumulator']))
+            local s = math.min(vlayer.storage.item_w['solar-panel'], allocation)
+            local a = math.min(vlayer.storage.item_w['accumulator'], allocation)
             vlayer.storage.item['solar-panel'] = vlayer.storage.item['solar-panel'] + s
             vlayer.storage.item['accumulator'] = vlayer.storage.item['accumulator'] + a
             vlayer.storage.item_w['solar-panel'] = vlayer.storage.item_w['solar-panel'] - s
             vlayer.storage.item_w['accumulator'] = vlayer.storage.item_w['accumulator'] - a
-            vlayer.storage.item[config.land.tile] = land_surplus - s - a
+            vlayer.storage.item[config.land.tile] = land_surplus - (s * config.land.requirement['solar-panel']) - (a * config.land.requirement['accumulator'])
 
         elseif (vlayer.storage.item_w['solar-panel'] > 0 and vlayer.storage.item_w['accumulator'] == 0) then
-            local land_allocation = math.floor(land_surplus / config.land.requirement['solar-panel'])
-            local s = math.min(vlayer.storage.item_w['solar-panel'], land_allocation)
+            local allocation = math.floor(land_surplus / config.land.requirement['solar-panel'])
+            local s = math.min(vlayer.storage.item_w['solar-panel'], allocation)
             vlayer.storage.item['solar-panel'] = vlayer.storage.item['solar-panel'] + s
             vlayer.storage.item_w['solar-panel'] = vlayer.storage.item_w['solar-panel'] - s
-            vlayer.storage.item[config.land.tile] = land_surplus - s
+            vlayer.storage.item[config.land.tile] = land_surplus - (s * config.land.requirement['solar-panel'])
 
         else
-            local land_allocation = math.floor(land_surplus / config.land.requirement['accumulator'])
-            local a = math.min(vlayer.storage.item_w['accumulator'], land_allocation)
+            local allocation = math.floor(land_surplus / config.land.requirement['accumulator'])
+            local a = math.min(vlayer.storage.item_w['accumulator'], allocation)
             vlayer.storage.item['accumulator'] = vlayer.storage.item['accumulator'] + a
             vlayer.storage.item_w['accumulator'] = vlayer.storage.item_w['accumulator'] - a
-            vlayer.storage.item[config.land.tile] = land_surplus - a
+            vlayer.storage.item[config.land.tile] = land_surplus - (a * config.land.requirement['accumulator'])
         end
     else
         for k, v in pairs(vlayer.storage.item_w) do
@@ -142,7 +142,7 @@ local function vlayer_circuit_handle()
 
     for _, v in pairs(config.init_circuit) do
         if v.type == 'item' then
-            vlayer.circuit[vlayer_circuit_t[v.name] ].count = vlayer.storage.item[v.name]
+            vlayer.circuit[vlayer_circuit_t[v.name]].count = vlayer.storage.item[v.name]
         end
     end
 
@@ -183,7 +183,7 @@ local function vlayer_power_handle()
 
     -- 5 MJ each, a part is stored as vlayer energy, so to share energy to other stuff
     local vlayer_power_capacity_total = math.floor(vlayer.storage.item['accumulator'] * 5000000)
-    local vlayer_power_capacity = math.ceil(vlayer_power_capacity_total / #vlayer.entity.power)
+    local vlayer_power_capacity = math.ceil(vlayer_power_capacity_total / math.max(#vlayer.entity.power, 1))
 
     for k, v in pairs(vlayer.entity.power) do
         if v == nil then

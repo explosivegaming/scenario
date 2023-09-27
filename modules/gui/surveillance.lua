@@ -60,8 +60,8 @@ Gui.element(function(event_trigger, parent)
             style = 'button'
         }
 
-        s.style.width = 72
-        e.style.width = 72
+        s.style.width = 96
+        e.style.width = 96
         l.style.width = 48
         a.style.width = 36
         b.style.width = 36

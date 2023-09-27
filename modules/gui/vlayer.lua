@@ -174,6 +174,7 @@ local function vlayer_convert_chest_power(player)
 
         else
             player.print('Unable to build vlayer energy entity')
+            player.surface.spill_item_stack(pos, {name='steel-chest', count=1}, true, player.force, false)
         end
     end
 end
