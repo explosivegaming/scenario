@@ -144,7 +144,6 @@ Roles.new_role('Board Member','Board')
     'command/spectate',
     'command/follow',
     'command/personal-battery-recharge',
-    'command/waterfill',
     -- Sponsor
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
@@ -182,7 +181,6 @@ Roles.new_role('Partner','Part')
     'command/spectate',
     'command/follow',
     'command/personal-battery-recharge',
-    'command/waterfill',
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
     'command/bonus',
@@ -243,6 +241,7 @@ Roles.new_role('Member','Mem')
     'command/auto-research',
     'command/manual-train',
     'command/lawnmower',
+    'command/waterfill',
     'gui/surveillance'
 }
 
