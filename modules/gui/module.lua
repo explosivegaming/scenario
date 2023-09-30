@@ -134,8 +134,6 @@ local function apply_module(player, area, machine, module)
         else
             entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=module}
         end
-
-
     end
 end
 
