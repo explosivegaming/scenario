@@ -14,9 +14,10 @@ return {
     },
     always_day = false,
     battery_limit = true,
+    -- setting to a value greater than 1 
+    -- will allow wireless energy or item transfer
     interface_limit = {
         ['storage_input'] = 1,
-        -- setting to a value greater than 1 will allow for wireless energy transfer
         ['energy'] = 1,
         ['circuit'] = 1
     },
