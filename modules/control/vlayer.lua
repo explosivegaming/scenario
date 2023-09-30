@@ -138,7 +138,7 @@ local function vlayer_circuit_handle()
             vlayer.circuit[v.index] = vlayer.storage.item[v.name]
         end
     end
-
+    --[[
     for k, v in pairs(vlayer.entity.circuit) do
         if v == nil then
             vlayer.entity.circuit[k] = nil
@@ -154,6 +154,7 @@ local function vlayer_circuit_handle()
             end
         end
     end
+    ]]
 end
 
 local function vlayer_power_handle()
@@ -178,6 +179,7 @@ local function vlayer_power_handle()
     local vlayer_power_capacity_total = math.floor(vlayer.storage.item['accumulator'] * 5000000)
     local vlayer_power_capacity = math.ceil(vlayer_power_capacity_total / math.max(#vlayer.entity.power, 1))
 
+    --[[
     for k, v in pairs(vlayer.entity.power) do
         if v == nil then
             vlayer.entity.power[k] = nil
@@ -197,7 +199,7 @@ local function vlayer_power_handle()
             end
         end
     end
-
+    ]]
     if config.battery_limit then
         if vlayer.power.energy > vlayer_power_capacity_total then
             vlayer.power.energy = vlayer_power_capacity_total

@@ -180,12 +180,12 @@ return {
         }
     },
     resource_tiles = {
-        enabled = false,
+        enabled = true,
         resources = {
             {
-                enabled = false,
+                enabled = true,
                 name = 'iron-ore',
-                amount = 4000,
+                amount = 1,
                 size = {26, 27},
                 offset = {-64,-32}
                 -- offset = {-64,-64}
