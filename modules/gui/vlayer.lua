@@ -9,9 +9,14 @@ local config = require 'config.vlayer' --- @dep config.vlayer
 local vlayer = require 'modules.control.vlayer'
 
 local vlayer_circuit_t = {}
+local vlayer_display = {}
 
 for _, v in pairs(config.init_circuit) do
     vlayer_circuit_t[v.name] = v.index
+end
+
+for _, v in pairs(config.init_gui) do
+    vlayer_display[v.index] = 0
 end
 
 local function pos_to_gps_string(pos)
@@ -91,6 +96,8 @@ Gui.element(function(event_trigger, parent)
         p.visible = false
         r.visible = false
     end
+
+    r.enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
 
     return container.parent
 end)
@@ -239,14 +246,17 @@ Event.add(defines.events.on_gui_click, function(event)
             if event.element.name:sub(-1) == 's' then
                 vlayer_convert_chest_storage_input(game.players[event.player_index])
                 frame.container['vlayer_st_2'].table['vlayer_display_0s'].enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
+                frame.container['vlayer_st_2'].table['vlayer_display_0r'].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
 
             elseif event.element.name:sub(-1) == 'c' then
                 vlayer_convert_chest_circuit(game.players[event.player_index])
                 frame.container['vlayer_st_2'].table['vlayer_display_0c'].enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
+                frame.container['vlayer_st_2'].table['vlayer_display_0r'].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
 
             elseif event.element.name:sub(-1) == 'p' then
                 vlayer_convert_chest_power(game.players[event.player_index])
                 frame.container['vlayer_st_2'].table['vlayer_display_0p'].enabled = (#vlayer.entity.power < config.interface_limit.energy)
+                frame.container['vlayer_st_2'].table['vlayer_display_0r'].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
 
             elseif event.element.name:sub(-1) == 'r' then
                 vlayer_convert_remove(game.players[event.player_index])
@@ -255,27 +265,6 @@ Event.add(defines.events.on_gui_click, function(event)
                 frame.container['vlayer_st_2'].table['vlayer_display_0p'].enabled = (#vlayer.entity.power < config.interface_limit.energy)
                 frame.container['vlayer_st_2'].table['vlayer_display_0r'].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
             end
-        end
-    end
-end)
-
-Event.on_nth_tick(config.update_tick, function(_)
-    local vlayer_display = {}
-
-    for _, v in pairs(config.init_gui) do
-        if v.type == 'item' then
-            vlayer_display[v.index] = format_number(vlayer.storage.item[v.name])
-
-        elseif v.type == 'signal' then
-            vlayer_display[v.index] = format_number(vlayer.circuit[vlayer_circuit_t[v.name] ].count)
-        end
-    end
-
-    for _, player in pairs(game.connected_players) do
-        local frame = Gui.get_left_element(player, vlayer_container)
-
-        for k, v in pairs(vlayer_display) do
-            frame.container['vlayer_st_1'].table['vlayer_display_' .. k .. 'c'].caption = v
         end
     end
 end)
@@ -293,3 +282,22 @@ end
 
 Event.add(Roles.events.on_role_assigned, role_update_event)
 Event.add(Roles.events.on_role_unassigned, role_update_event)
+
+Event.on_nth_tick(config.update_tick, function(_)
+    for _, v in pairs(config.init_gui) do
+        if v.type == 'item' then
+            vlayer_display[v.index] = format_number(vlayer.storage.item[v.name])
+
+        elseif v.type == 'signal' then
+            vlayer_display[v.index] = format_number(vlayer.circuit[vlayer_circuit_t[v.name]].count)
+        end
+    end
+
+    for _, player in pairs(game.connected_players) do
+        local frame = Gui.get_left_element(player, vlayer_container)
+
+        for _, v in pairs(config.init_gui) do
+            frame.container['vlayer_st_1'].table['vlayer_display_' .. v.index .. 'c'].caption = vlayer_display[v.index]
+        end
+    end
+end)
