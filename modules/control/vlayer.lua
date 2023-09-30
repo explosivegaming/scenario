@@ -129,16 +129,19 @@ local function vlayer_circuit_handle()
     vlayer.circuit[vlayer_circuit_t['signal-C']] = math.floor(vlayer.power.energy / 1000000)
     vlayer.circuit[vlayer_circuit_t['signal-D']] = math.floor(game.tick / 25000)
     vlayer.circuit[vlayer_circuit_t['signal-T']] = game.tick % 25000
-    vlayer.circuit[vlayer_circuit_t['signal-L']] = (vlayer.storage.item[config.land.tile] * config.land.result) - (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) - (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
     vlayer.circuit[vlayer_circuit_t['signal-A']] = vlayer.storage.item_w['solar-panel']
     vlayer.circuit[vlayer_circuit_t['signal-B']] = vlayer.storage.item_w['accumulator']
+
+    if config.land.enabled then
+        vlayer.circuit[vlayer_circuit_t['signal-L']] = (vlayer.storage.item[config.land.tile] * config.land.result) - (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) - (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
+    end
 
     for _, v in pairs(config.init_circuit) do
         if v.type == 'item' then
             vlayer.circuit[v.index] = vlayer.storage.item[v.name]
         end
     end
-    --[[
+
     for k, v in pairs(vlayer.entity.circuit) do
         if v == nil then
             vlayer.entity.circuit[k] = nil
@@ -154,7 +157,6 @@ local function vlayer_circuit_handle()
             end
         end
     end
-    ]]
 end
 
 local function vlayer_power_handle()
@@ -179,7 +181,6 @@ local function vlayer_power_handle()
     local vlayer_power_capacity_total = math.floor(vlayer.storage.item['accumulator'] * 5000000)
     local vlayer_power_capacity = math.ceil(vlayer_power_capacity_total / math.max(#vlayer.entity.power, 1))
 
-    --[[
     for k, v in pairs(vlayer.entity.power) do
         if v == nil then
             vlayer.entity.power[k] = nil
@@ -199,7 +200,7 @@ local function vlayer_power_handle()
             end
         end
     end
-    ]]
+    
     if config.battery_limit then
         if vlayer.power.energy > vlayer_power_capacity_total then
             vlayer.power.energy = vlayer_power_capacity_total
