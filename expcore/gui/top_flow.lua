@@ -48,6 +48,7 @@ end)
 
 ]]
 function Gui._prototype_element:add_to_top_flow(authenticator)
+    if not self.name then error("Elements for the top flow must have a static name") end
     Gui.top_elements[self.name] = authenticator or true
     return self
 end
@@ -138,7 +139,8 @@ function Gui.toolbar_button(sprite, tooltip, authenticator)
         type = 'sprite-button',
         sprite = sprite,
         tooltip = tooltip,
-        style = Gui.top_flow_button_style
+        style = Gui.top_flow_button_style,
+        name = Gui.unique_static_name
     }
     :style{
         minimal_width = 36,

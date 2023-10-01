@@ -38,6 +38,7 @@ example_flow_with_button:add_to_left_flow(true)
 
 ]]
 function Gui._prototype_element:add_to_left_flow(open_on_join)
+    if not self.name then error("Elements for the top flow must have a static name") end
     Gui.left_elements[self.name] = open_on_join or false
     return self
 end

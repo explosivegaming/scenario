@@ -16,7 +16,8 @@ Gui.element{
     type = 'sprite-button',
     sprite = 'utility/preset',
     style = 'tool_button',
-    tooltip = {'gui_util.button_tooltip'}
+    tooltip = {'gui_util.button_tooltip'},
+    name = Gui.unique_static_name
 }
 :style{
     padding = -2,
@@ -35,7 +36,8 @@ Gui.element{
     type = 'sprite-button',
     sprite = 'utility/preset',
     style = 'tool_button',
-    tooltip = {'gui_util.button_tooltip'}
+    tooltip = {'gui_util.button_tooltip'},
+    name = Gui.unique_static_name
 }
 :style{
     padding = -2,
@@ -54,7 +56,8 @@ Gui.element{
     type = 'sprite-button',
     sprite = 'utility/close_black',
     style = 'tool_button',
-    tooltip = {'expcore-gui.left-button-tooltip'}
+    tooltip = {'expcore-gui.left-button-tooltip'},
+    name = Gui.unique_static_name
 }
 :style{
     padding = -3,
@@ -83,5 +86,4 @@ Event.add(defines.events.on_player_created, function(event)
     show_top.visible = false
     hide_left.visible = false
     Gui.draw_left_flow(player)
-
 end)
