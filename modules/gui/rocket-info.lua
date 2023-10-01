@@ -43,7 +43,8 @@ local toggle_launch =
 Gui.element{
 	type = 'sprite-button',
 	sprite = 'utility/play',
-	tooltip = {'rocket-info.toggle-rocket-tooltip'}
+	tooltip = {'rocket-info.toggle-rocket-tooltip'},
+	name = Gui.unique_static_name
 }
 :style(Gui.sprite_style(16))
 :on_click(function(_, element, _)
@@ -66,7 +67,8 @@ local launch_rocket =
 Gui.element{
 	type = 'sprite-button',
 	sprite = 'utility/center',
-	tooltip = {'rocket-info.launch-tooltip'}
+	tooltip = {'rocket-info.launch-tooltip'},
+	name = Gui.unique_static_name
 }
 :style(Gui.sprite_style(16, -1))
 :on_click(function(player, element, _)
@@ -82,10 +84,9 @@ end)
 --- XY cords that allow zoom to map when pressed
 -- @element silo_cords
 local silo_cords =
-Gui.element(function(event_trigger, parent, silo_data)
+Gui.element(function(definition, parent, silo_data)
 	local silo_name = silo_data.silo_name
 	local pos = silo_data.position
-	local name = config.progress.allow_zoom_to_map and event_trigger or nil
 	local tooltip = config.progress.allow_zoom_to_map and {'rocket-info.progress-label-tooltip'} or nil
 
 	-- Add the x cord flow
@@ -97,9 +98,8 @@ Gui.element(function(event_trigger, parent, silo_data)
 	flow_x.style.padding = {0, 2,0, 1}
 
 	-- Add the x cord label
-	flow_x.add{
+	local label_x = flow_x.add{
 		type = 'label',
-		name = name,
 		caption = {'rocket-info.progress-x-pos', pos.x},
 		tooltip = tooltip
 	}
@@ -113,13 +113,16 @@ Gui.element(function(event_trigger, parent, silo_data)
 	flow_y.style.padding = {0, 2,0, 1}
 
 	-- Add the y cord label
-	flow_y.add{
+	local label_y = flow_y.add{
 		type = 'label',
-		name = name,
 		caption = {'rocket-info.progress-y-pos', pos.y},
 		tooltip = tooltip
 	}
 
+	if config.progress.allow_zoom_to_map then
+		definition:triggers_events(label_x)
+		definition:triggers_events(label_y)
+	end
 end)
 :on_click(function(player, element, _)
     local rocket_silo_name = element.parent.caption
@@ -422,7 +425,8 @@ Gui.element{
 	type = 'sprite-button',
 	sprite = 'utility/expand_dark',
 	hovered_sprite = 'utility/expand',
-	tooltip = {'rocket-info.toggle-section-tooltip'}
+	tooltip = {'rocket-info.toggle-section-tooltip'},
+	name = Gui.unique_static_name
 }
 :style(Gui.sprite_style(20))
 :on_click(function(_, element, _)
@@ -440,27 +444,19 @@ Gui.element{
 	end
 end)
 
--- Used to assign an event to the header label to trigger a toggle
--- @element header_toggle
-local header_toggle = Gui.element()
-:on_click(function(_, element, event)
-	event.element = element.parent.alignment[toggle_section.name]
-	toggle_section:raise_custom_event(event)
-end)
-
 -- Draw a section header and main scroll
 -- @element rocket_list_container
 local section =
-Gui.element(function(_, parent, section_name, table_size)
+Gui.element(function(definition, parent, section_name, table_size)
 	-- Draw the header for the section
     local header = Gui.header(
         parent,
 		{'rocket-info.section-caption-'..section_name},
         {'rocket-info.section-tooltip-'..section_name},
 		true,
-		section_name..'-header',
-		header_toggle.name
+		section_name..'-header'
 	)
+	definition:triggers_events(header.parent.header_label)
 
 	-- Right aligned button to toggle the section
 	header.caption = section_name
@@ -473,13 +469,17 @@ Gui.element(function(_, parent, section_name, table_size)
 	-- Return the flow table
 	return scroll_table
 end)
+:on_click(function(_, element, event)
+	event.element = element.parent.alignment[toggle_section.name]
+	toggle_section:raise_custom_event(event)
+end)
 
 --- Main gui container for the left flow
 -- @element rocket_list_container
 local rocket_list_container =
-Gui.element(function(event_trigger, parent)
+Gui.element(function(definition, parent)
     -- Draw the internal container
-    local container = Gui.container(parent, event_trigger, 200)
+    local container = Gui.container(parent, definition.name, 200)
 
     -- Set the container style
     local style = container.style
@@ -516,6 +516,7 @@ Gui.element(function(event_trigger, parent)
 	-- Return the exteral container
 	return container.parent
 end)
+:static_name(Gui.unique_static_name)
 :add_to_left_flow(function(player)
     return player.force.rockets_launched > 0 and Roles.player_allowed(player, 'gui/rocket-info')
 end)

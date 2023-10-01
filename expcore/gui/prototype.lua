@@ -27,6 +27,9 @@ local Gui = {
         __call = function(self, parent, ...)
             local element = self._draw(self, parent, ...)
             if self._style then self._style(element.style, element, ...) end
+            if self.name and self.name ~= element.name then
+                error("Static name \""..self.name.."\" expected but got: "..tostring(element.name))
+            end
             return self:triggers_events(element)
         end,
         __index = function(self, key)
@@ -170,19 +173,32 @@ function Gui._prototype_element:style(style_define)
     return self
 end
 
+--[[-- Enforce the fact the element has a static name, this is required for the cases when a function define is used
+@tparam[opt] string element The element that will trigger calls to the event handlers
+@treturn table the element define is returned to allow for event handlers to be registered
+]]
+function Gui._prototype_element:static_name(name)
+    if name == Gui.unique_static_name then
+        self.name  = "ExpGui_"..tostring(self.uid)
+    else
+        self.name = name
+    end
+    return self
+end
+
 --[[-- Used to link an element to an element define such that any event on the element will call the handlers on the element define
 @tparam LuaGuiElement element The element that will trigger calls to the event handlers
 @treturn LuaGuiElement The element passed as the argument to allow for cleaner returns
 ]]
 function Gui._prototype_element:triggers_events(element)
-    local event_triggers = element.tags.ExpGuiTriggers
+    local event_triggers = element.tags.ExpGui_event_triggers
     if not event_triggers then
         event_triggers = { self.uid }
     else
         table.insert(event_triggers, self.uid)
     end
     -- To modify a set of tags, the whole table needs to be written back to the respective property.
-    element.tags.ExpGuiTriggers = event_triggers
+    element.tags.ExpGui_event_triggers = event_triggers
 end
 
 --[[-- Set the handler which will be called for a custom event, only one handler can be used per event per element
@@ -247,7 +263,7 @@ local function event_handler_factory(event_name)
     Event.add(event_name, function(event)
         local element = event.element
         if not element or not element.valid then return end
-        local event_triggers = element.tags.ExpGuiTriggers
+        local event_triggers = element.tags.ExpGui_event_triggers
         if not event_triggers then return end
         for _, uid in event_triggers do
             local element_define = Gui.defines[uid]

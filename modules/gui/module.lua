@@ -171,7 +171,6 @@ end
 
 local button_apply =
 Gui.element{
-    name = 'module_b',
     type = 'button',
     caption = 'Apply',
     style = 'button'
@@ -184,8 +183,8 @@ Gui.element{
 end)
 
 module_container =
-Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, (config.module_slot_max + 2) * 36)
+Gui.element(function(definition, parent)
+    local container = Gui.container(parent, definition.name, (config.module_slot_max + 2) * 36)
     Gui.header(container, 'Module Inserter', '', true)
 
     local scroll_table = Gui.scroll_table(container, (config.module_slot_max + 2) * 36, config.module_slot_max + 1)
@@ -214,6 +213,7 @@ Gui.element(function(event_trigger, parent)
 
     return container.parent
 end)
+:static_name(Gui.unique_static_name)
 :add_to_left_flow()
 
 Gui.left_toolbar_button('item/productivity-module-3', {'module.main-tooltip'}, module_container, function(player)

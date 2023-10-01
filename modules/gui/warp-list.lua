@@ -81,7 +81,8 @@ Gui.element{
     type = 'sprite-button',
     sprite = 'utility/add',
     tooltip = {'warp-list.add-tooltip'},
-    style = 'shortcut_bar_button'
+    style = 'shortcut_bar_button',
+    name = Gui.unique_static_name
 }
 :style(Styles.sprite22)
 :on_click(function(player, _)
@@ -148,7 +149,7 @@ end)
 --- Warp icon button, this will trigger a warp when the player is able to
 -- @element warp_icon_button
 local warp_icon_button =
-Gui.element(function(event_trigger, parent, warp)
+Gui.element(function(definition, parent, warp)
     local warp_position = warp.position
 
     -- The SpritePath type is not the same as the SignalID type
@@ -158,15 +159,16 @@ Gui.element(function(event_trigger, parent, warp)
     end
 
     -- Draw the element
-    return parent.add{
-        name = event_trigger,
+    return definition:triggers_events(parent.add{
         type = 'sprite-button',
         sprite = sprite,
+        name = definition.name,
         tooltip = {'warp-list.goto-tooltip', warp_position.x, warp_position.y},
         style = 'slot_button'
-    }
+    })
 end)
 :style(Styles.sprite32)
+:static_name(Gui.unique_static_name)
 :on_click(function(player, element, _)
     if element.type == 'choose-elem-button' then return end
     local warp_id = element.parent.caption
@@ -183,30 +185,31 @@ end)
 --- The button that is visible when the warp is in edit state
 -- @element warp_icon_editing
 local warp_icon_editing =
-Gui.element(function(event_trigger, parent, warp)
-    return parent.add{
-        name = event_trigger,
+Gui.element(function(definition, parent, warp)
+    return definition:triggers_events(parent.add{
+        name = definition.name,
         type = 'choose-elem-button',
         elem_type = 'signal',
         signal = {type = warp.icon.type, name = warp.icon.name},
         tooltip = {'warp-list.goto-edit'}
-    }
+    })
 end)
+:static_name(Gui.unique_static_name)
 :style(Styles.sprite32)
 
 --- Warp label, visible if the player is not in edit state
 -- @element warp_label
 local warp_label =
-Gui.element(function(event_trigger, parent, warp)
+Gui.element(function(definition, parent, warp)
     local last_edit_name = warp.last_edit_name
     local last_edit_time = warp.last_edit_time
     -- Draw the element
-    return parent.add{
-        name = event_trigger,
+    return definition:triggers_events(parent.add{
         type = 'label',
         caption = warp.name,
-        tooltip = {'warp-list.last-edit', last_edit_name, format_time(last_edit_time)}
-    }
+        tooltip = {'warp-list.last-edit', last_edit_name, format_time(last_edit_time)},
+        name = definition.name
+    })
 end)
 :style{
     single_line = true,
@@ -220,19 +223,17 @@ end)
     local position = warp.position
     player.zoom_to_world(position, 1.5)
 end)
+:static_name(Gui.unique_static_name)
 
 --- Warp status, visible if the player is not in edit state
 --- This will show if the warp is connected or not
 -- @element warp_status
 local warp_status =
-Gui.element(function(event_trigger, parent)
-    -- Draw the element
-    return parent.add{
-        name = event_trigger,
-        type = 'label',
-        caption = '[img=utility/electricity_icon_unplugged]', -- Temporary icon
-    }
-end)
+Gui.element{
+    type = 'label',
+    caption = '[img=utility/electricity_icon_unplugged]', -- Temporary icon
+    name = Gui.unique_static_name
+}
 :style{
     -- When editing mode because textbox is larger the icon would move up.
     top_padding = 1,
@@ -242,14 +243,14 @@ end)
 --- Warp textfield, visible if the player is in edit state
 -- @element warp_textfield
 local warp_textfield =
-Gui.element(function(event_trigger, parent, warp)
+Gui.element(function(definition, parent, warp)
     -- Draw the element
-    return parent.add{
-        name = event_trigger,
+    return definition:triggers_events(parent.add{
         type = 'textfield',
         text = warp.name,
-        clear_and_focus_on_right_click = true
-    }
+        clear_and_focus_on_right_click = true,
+        name = definition.name
+    })
 end)
 :style{
     -- Required fields to make it squashable and strechable.
@@ -270,6 +271,7 @@ end)
     Warps.set_editing(warp_id, player.name)
     Warps.update_warp(warp_id, warp_name, warp_icon, player.name)
 end)
+:static_name(Gui.unique_static_name)
 
 
 --- Confirms the edit to name or icon of the warp
@@ -279,7 +281,8 @@ Gui.element{
     type = 'sprite-button',
     sprite = 'utility/confirm_slot',
     tooltip = {'warp-list.confirm-tooltip'},
-    style = 'shortcut_bar_button_green'
+    style = 'shortcut_bar_button_green',
+    name = Gui.unique_static_name
 }
 :style(Styles.sprite22)
 :on_click(function(player, element)
@@ -297,7 +300,8 @@ Gui.element{
     type = 'sprite-button',
     sprite = 'utility/close_black',
     tooltip = {'warp-list.cancel-tooltip'},
-    style = 'shortcut_bar_button_red'
+    style = 'shortcut_bar_button_red',
+    name = Gui.unique_static_name
 }
 :style(Styles.sprite22)
 :on_click(function(player, element)
@@ -318,7 +322,8 @@ Gui.element{
     type = 'sprite-button',
     sprite = 'utility/trash',
     tooltip = {'warp-list.remove-tooltip'},
-    style = 'shortcut_bar_button_red'
+    style = 'shortcut_bar_button_red',
+    name = Gui.unique_static_name
 }
 :style(Styles.sprite22)
 :on_click(function(_, element)
@@ -333,7 +338,8 @@ Gui.element{
     type = 'sprite-button',
     sprite = 'utility/rename_icon_normal',
     tooltip = {'warp-list.edit-tooltip-none'},
-    style = 'shortcut_bar_button'
+    style = 'shortcut_bar_button',
+    name = Gui.unique_static_name
 }
 :style(Styles.sprite22)
 :on_click(function(player, element)
@@ -402,6 +408,7 @@ end
 local warp_timer =
 Gui.element{
     type = 'progressbar',
+    name = Gui.unique_static_name,
     tooltip = {'warp-list.timer-tooltip-zero', config.cooldown_duration},
     minimum_value = 0,
     maximum_value = config.cooldown_duration*config.update_smoothing
@@ -626,13 +633,13 @@ end
 --- Main warp list container for the left flow
 -- @element warp_list_container
 warp_list_container =
-Gui.element(function(event_trigger, parent)
+Gui.element(function(definition, parent)
     local player = Gui.get_player_from_element(parent)
     -- Check if user has permission to add warps
     local allow_add_warp = check_player_permissions(player, 'allow_add_warp')
 
     -- Draw the internal container
-    local container = Gui.container(parent, event_trigger, allow_add_warp and 268 or 220)
+    local container = Gui.container(parent, definition.name, allow_add_warp and 268 or 220)
 
     -- Draw the header
     local header = Gui.header(
@@ -685,6 +692,7 @@ Gui.element(function(event_trigger, parent)
     -- Return the external container
     return container.parent
 end)
+:static_name(Gui.unique_static_name)
 :add_to_left_flow()
 
 --- Button on the top flow used to toggle the warp list container

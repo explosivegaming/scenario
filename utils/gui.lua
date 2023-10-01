@@ -13,7 +13,7 @@ Global.register(
 
 function Gui.uid_name()
     local new_element = ExpGui.element()
-    return new_element.name
+    return tostring(new_element.uid)
 end
 
 -- Associates data with the LuaGuiElement. If data is nil then removes the data
@@ -70,7 +70,7 @@ end
 
 local function handler_factory(event_name)
     return function(element_name, handler)
-        local element = ExpGui.defines[element_name]
+        local element = ExpGui.defines[tonumber(element_name)]
         if not element then return end
         element[event_name](element, function(_, _,event)
             handler(event)

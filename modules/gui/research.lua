@@ -55,8 +55,8 @@ for i=1, #config.milestone do
 end
 
 local clock_container =
-Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, 200)
+Gui.element(function(definition, parent)
+    local container = Gui.container(parent, definition.name, 200)
 	local scroll_table = Gui.scroll_table(container, 400, 4)
 
 	scroll_table.add{
@@ -143,6 +143,7 @@ Gui.element(function(event_trigger, parent)
 
     return container.parent
 end)
+:static_name(Gui.unique_static_name)
 :add_to_left_flow()
 
 Gui.left_toolbar_button('item/space-science-pack', {'expcom-res.main-tooltip'}, clock_container, function(player)
