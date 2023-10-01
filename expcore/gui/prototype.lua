@@ -30,12 +30,7 @@ local Gui = {
             if self.name and self.name ~= element.name then
                 error("Static name \""..self.name.."\" expected but got: "..tostring(element.name))
             end
-            return self:triggers_events(element)
-        end,
-        __index = function(self, key)
-            if self._draw_data then
-                return self._draw_data[key]
-            end
+            return element and self:triggers_events(element)
         end
     }
 }
@@ -102,7 +97,7 @@ function Gui.element(element_define)
         if element_define.name == Gui.unique_static_name then
             element_define.name = "ExpGui_"..tostring(uid)
         end
-        element._draw_data = element_define
+        element.name = element_define.name
         element._draw = function(_, parent)
             return parent.add(element_define)
         end
@@ -112,8 +107,11 @@ function Gui.element(element_define)
     end
 
     -- Add the define to the base module
-    local file_path = debug.getinfo(2, 'S').source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
-    Gui.file_paths[uid] = file_path
+    local debug_info = debug.getinfo(2, "Sn")
+    local file_name = debug_info.source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+    local func_name = debug_info.name or "<anonymous:"..debug_info.linedefined..">"
+    element.defined_at = file_name..":"..func_name
+    Gui.file_paths[uid] = element.defined_at
     Gui.defines[uid] = element
 
     -- Return the element so event handers can be accessed
@@ -179,7 +177,7 @@ end
 ]]
 function Gui._prototype_element:static_name(name)
     if name == Gui.unique_static_name then
-        self.name  = "ExpGui_"..tostring(self.uid)
+        self.name = "ExpGui_"..tostring(self.uid)
     else
         self.name = name
     end
@@ -191,14 +189,18 @@ end
 @treturn LuaGuiElement The element passed as the argument to allow for cleaner returns
 ]]
 function Gui._prototype_element:triggers_events(element)
-    local event_triggers = element.tags.ExpGui_event_triggers
-    if not event_triggers then
-        event_triggers = { self.uid }
+    local tags = element.tags
+    if not tags then
+        element.tags = { ExpGui_event_triggers = { self.uid } }
+        return element
+    elseif not tags.ExpGui_event_triggers then
+        tags.ExpGui_event_triggers = { self.uid }
     else
-        table.insert(event_triggers, self.uid)
+        table.insert(tags.ExpGui_event_triggers, self.uid)
     end
     -- To modify a set of tags, the whole table needs to be written back to the respective property.
-    element.tags.ExpGui_event_triggers = event_triggers
+    element.tags = tags
+    return element
 end
 
 --[[-- Set the handler which will be called for a custom event, only one handler can be used per event per element
@@ -251,7 +253,7 @@ function Gui._prototype_element:raise_custom_event(event)
     end
     event.player = player
 
-    local success, err = pcall(handler, player, element, event)
+    local success, err = xpcall(handler, debug.traceback, player, element, event)
     if not success then
         error('There as been an error with an event handler for a gui element:\n\t'..err)
     end
@@ -265,9 +267,9 @@ local function event_handler_factory(event_name)
         if not element or not element.valid then return end
         local event_triggers = element.tags.ExpGui_event_triggers
         if not event_triggers then return end
-        for _, uid in event_triggers do
+        for _, uid in pairs(event_triggers) do
             local element_define = Gui.defines[uid]
-            if not element_define then
+            if element_define then
                 element_define:raise_custom_event(event)
             end
         end

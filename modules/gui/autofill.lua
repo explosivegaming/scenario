@@ -54,14 +54,13 @@ end)
 --- Toggle enitity button, used for toggling autofill for the specific entity
 -- All entity autofill settings will be ignored if its disabled
 -- @element entity_toggle
-local entity_toggle = Gui.element(function(event_trigger, parent, entity_name)
-    return parent.add{
-        name = event_trigger,
+local entity_toggle = Gui.element(function(definition, parent, entity_name)
+    return definition:triggers_events(parent.add{
         type = 'sprite-button',
         sprite = 'utility/confirm_slot',
         tooltip = {'autofill.toggle-entity-tooltip', rich_img('item', entity_name)},
         style = 'shortcut_bar_button_green'
-    }
+    })
 end)
 :style(Gui.sprite_style(22))
 :on_click(function(player, element, _)

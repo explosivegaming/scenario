@@ -39,7 +39,7 @@ example_flow_with_button:add_to_left_flow(true)
 ]]
 function Gui._prototype_element:add_to_left_flow(open_on_join)
     if not self.name then error("Elements for the top flow must have a static name") end
-    Gui.left_elements[self.name] = open_on_join or false
+    Gui.left_elements[self] = open_on_join or false
     return self
 end
 
@@ -92,14 +92,14 @@ function Gui.draw_left_flow(player)
     local hide_button = left_flow.gui_core_buttons[hide_left_flow]
     local show_hide_button = false
 
-    for name, open_on_join in pairs(Gui.left_elements) do
+    for element_define, open_on_join in pairs(Gui.left_elements) do
         -- Draw the element to the left flow
-        local draw_success, left_element = pcall(function()
-            return Gui.defines[name](left_flow)
-        end)
+        local draw_success, left_element = xpcall(function()
+            return element_define(left_flow)
+        end, debug.traceback)
 
         if not draw_success then
-            error('There as been an error with an element draw function:\n\t'..left_element)
+            error('There as been an error with an element draw function: '..element_define.defined_at..'\n\t'..left_element)
         end
 
         -- Check if it should be open by default
@@ -117,7 +117,6 @@ function Gui.draw_left_flow(player)
         show_hide_button = show_hide_button or visible
 
         -- Get the assosiated element define
-        local element_define = Gui.defines[name]
         local top_flow = Gui.get_top_flow(player)
 
         -- Check if the the element has a button attached
@@ -145,8 +144,8 @@ local visible = Gui.update_left_flow(player)
 function Gui.update_left_flow(player)
     local left_flow = Gui.get_left_flow(player)
     local hide_button = left_flow.gui_core_buttons[hide_left_flow]
-    for name, _ in pairs(Gui.left_elements) do
-        local left_element = left_flow[name]
+    for element_define, _ in pairs(Gui.left_elements) do
+        local left_element = left_flow[element_define.name]
         if left_element.visible then
             hide_button.visible = true
             return true
@@ -170,11 +169,10 @@ function Gui.hide_left_flow(player)
 
     -- Set the visible state of all elements in the flow
     hide_button.visible = false
-    for name, _ in pairs(Gui.left_elements) do
-        left_flow[name].visible = false
+    for element_define, _ in pairs(Gui.left_elements) do
+        left_flow[element_define.name].visible = false
 
         -- Check if the the element has a toobar button attached
-        local element_define = Gui.defines[name]
         if element_define.toolbar_button then
             -- Check if the topflow contains the button
             local button = top_flow[element_define.toolbar_button]
