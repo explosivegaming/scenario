@@ -41,13 +41,7 @@ Gui.element{
     selected_index = 1
 }:style{
     width = 96
-}:on_click(function(_, element, _)
-    if element.selected_index == 1 then
-        element.parent.parent.parent.cctv_display.visible = true
-    else
-        element.parent.parent.parent.cctv_display.visible = false
-    end
-end)
+}
 
 local cctv_location =
 Gui.element{
