@@ -9,7 +9,7 @@ local cctv_container
 local player_list = {}
 
 local cctv_player =
-Gui.Element{
+Gui.element{
     type = 'drop-down',
     name = 'cctv_player',
     items = player_list,
@@ -17,7 +17,7 @@ Gui.Element{
 }
 
 local cctv_type =
-Gui.Element{
+Gui.element{
     type = 'drop-down',
     name = 'cctv_status',
     items = {'Enable', 'Disable'},
@@ -33,7 +33,7 @@ Gui.Element{
 end)
 
 local cctv_status =
-Gui.Element{
+Gui.element{
     type = 'drop-down',
     name = 'cctv_status',
     items = {'Player', 'Static'},
@@ -49,7 +49,7 @@ Gui.Element{
 end)
 
 local cctv_location =
-Gui.Element{
+Gui.element{
     type = 'button',
     caption = 'set'
 }:style{
@@ -59,7 +59,7 @@ Gui.Element{
 end)
 
 local zoom_in =
-Gui.Element{
+Gui.element{
     type = 'button',
     caption = '+'
 }:style{
@@ -71,7 +71,7 @@ Gui.Element{
 end)
 
 local zoom_out =
-Gui.Element{
+Gui.element{
     type = 'button',
     caption = '-'
 }:style{
@@ -83,7 +83,7 @@ Gui.Element{
 end)
 
 local camera_set =
-Gui.Element(function(_, parent)
+Gui.element(function(_, parent)
     local camera_set = parent.add{type='flow'}
     local buttons = Gui.scroll_table(camera_set, 400, 6, 'buttons')
 
@@ -138,8 +138,8 @@ local function gui_update()
 
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, cctv_container)
-        frame.container['cctv_st_1'].table.flow['buttons']['cctv_player'].items = player_list
-        frame.container['cctv_st_2'].table.flow['buttons']['cctv_player'].items = player_list
+        frame.container['cctv_st_1'].table.flow['buttons'][cctv_player.name].items = player_list
+        frame.container['cctv_st_2'].table.flow['buttons'][cctv_player.name].items = player_list
     end
 end
 
@@ -152,10 +152,10 @@ Event.add(defines.events.on_tick, function(_)
 
         for i=1, 2 do
             local scroll_table_name = 'cctv_st_' .. i
-            local switch_index = frame.container[scroll_table_name].table.flow['cctv_status'].selected_index
+            local switch_index = frame.container[scroll_table_name].table.flow[cctv_status.name].selected_index
 
             if switch_index == 1 then
-                local selected_index = frame.container[scroll_table_name].table.flow['cctv_player'].selected_index
+                local selected_index = frame.container[scroll_table_name].table.flow[cctv_player.name].selected_index
 
                 if selected_index ~= nil or selected_index ~= 0 then
                     frame.container[scroll_table_name].table.flow['cctv_display'].position = game.players[selected_index].position
