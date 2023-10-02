@@ -6,15 +6,16 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 
 local cctv_container
-local player_list = {}
 
 local cctv_player =
-Gui.element{
-    type = 'drop-down',
-    name = 'cctv_player',
-    items = player_list,
-    selected_index = 1
-}
+Gui.element(function(name, parent, player_list)
+    return parent.add{
+        name = name,
+        type = 'drop-down',
+        items = player_list,
+        selected_index = #player_list > 0 and 1
+    }
+end)
 
 local cctv_type =
 Gui.element{
@@ -23,12 +24,12 @@ Gui.element{
     items = {'Enable', 'Disable'},
     selected_index = 1
 }:style{
-    width = 96
-}:on_click(function(_, element, _)
+    width = 80
+}:on_selection_changed(function(_, element, _)
     if element.selected_index == 1 then
-        element.parent.parent.cctv_display.visible = true
+        element.parent.parent.parent.cctv_display.visible = true
     else
-        element.parent.parent.cctv_display.visible = false
+        element.parent.parent.parent.cctv_display.visible = false
     end
 end)
 
@@ -39,21 +40,15 @@ Gui.element{
     items = {'Player', 'Static'},
     selected_index = 1
 }:style{
-    width = 96
-}:on_click(function(_, element, _)
-    if element.selected_index == 1 then
-        element.parent.parent.cctv_display.visible = true
-    else
-        element.parent.parent.cctv_display.visible = false
-    end
-end)
+    width = 80
+}
 
 local cctv_location =
 Gui.element{
     type = 'button',
     caption = 'set'
 }:style{
-    width = 48
+    width = 40
 }:on_click(function(player, element, _)
     element.parent.parent.cctv_display.position = player.position
 end)
@@ -63,10 +58,11 @@ Gui.element{
     type = 'button',
     caption = '+'
 }:style{
-    width = 36
+    width = 30
 }:on_click(function(_, element, _)
-    if element.parent.parent.cctv_display.zoom < 2.0 then
-        element.parent.parent.cctv_display.zoom = element.parent.parent.cctv_display.zoom + 0.05
+    local display = element.parent.parent.parent.cctv_display
+    if display.zoom < 2.0 then
+        display.zoom = display.zoom + 0.05
     end
 end)
 
@@ -75,19 +71,20 @@ Gui.element{
     type = 'button',
     caption = '-'
 }:style{
-    width = 36
+    width = 30
 }:on_click(function(_, element, _)
-    if element.parent.parent.cctv_display.zoom > 0.2 then
-        element.parent.parent.cctv_display.zoom = element.parent.parent.cctv_display.zoom - 0.05
+    local display = element.parent.parent.parent.cctv_display
+    if display.zoom > 0.2 then
+        display.zoom = display.zoom - 0.05
     end
 end)
 
 local camera_set =
-Gui.element(function(_, parent)
-    local camera_set = parent.add{type='flow'}
+Gui.element(function(_, parent, name, player_list)
+    local camera_set = parent.add{type='flow', direction='vertical', name=name}
     local buttons = Gui.scroll_table(camera_set, 400, 6, 'buttons')
 
-    cctv_player(buttons)
+    cctv_player(buttons, player_list)
     cctv_type(buttons)
     cctv_status(buttons)
     cctv_location(buttons)
@@ -109,17 +106,15 @@ end)
 
 cctv_container =
 Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, 480)
-    local scroll_table_1 = Gui.scroll_table(container, 400, 6, 'cctv_st_1')
-    local scroll_table_2 = Gui.scroll_table(container, 400, 6, 'cctv_st_2')
-    player_list = {}
+    local container = Gui.container(parent, event_trigger, 400)
+    local player_list = {}
 
     for _, player in pairs(game.connected_players) do
         table.insert(player_list, player.name)
     end
 
-    camera_set(scroll_table_1)
-    camera_set(scroll_table_2)
+    camera_set(container, 'cctv_st_1', player_list)
+    camera_set(container, 'cctv_st_2', player_list)
 
     return container.parent
 end)
@@ -130,7 +125,7 @@ Gui.left_toolbar_button('entity/radar', 'Surveillance GUI', cctv_container, func
 end)
 
 local function gui_update()
-    player_list = {}
+    local player_list = {}
 
     for _, player in pairs(game.connected_players) do
         table.insert(player_list, player.name)
@@ -138,8 +133,8 @@ local function gui_update()
 
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, cctv_container)
-        frame.container['cctv_st_1'].table.flow['buttons'][cctv_player.name].items = player_list
-        frame.container['cctv_st_2'].table.flow['buttons'][cctv_player.name].items = player_list
+        frame.container['cctv_st_1'].buttons.table[cctv_player.name].items = player_list
+        frame.container['cctv_st_2'].buttons.table[cctv_player.name].items = player_list
     end
 end
 
@@ -152,18 +147,19 @@ Event.add(defines.events.on_tick, function(_)
 
         for i=1, 2 do
             local scroll_table_name = 'cctv_st_' .. i
-            local switch_index = frame.container[scroll_table_name].table.flow[cctv_status.name].selected_index
+            local current_camera_set = frame.container[scroll_table_name]
+            local switch_index = current_camera_set.buttons.table[cctv_status.name].selected_index
 
             if switch_index == 1 then
-                local selected_index = frame.container[scroll_table_name].table.flow[cctv_player.name].selected_index
+                local selected_index = current_camera_set.buttons.table[cctv_player.name].selected_index
 
                 if selected_index ~= nil or selected_index ~= 0 then
-                    frame.container[scroll_table_name].table.flow['cctv_display'].position = game.players[selected_index].position
-                    frame.container[scroll_table_name].table.flow['cctv_display'].surface_index = game.players[selected_index].surface_index
+                    current_camera_set['cctv_display'].position = game.players[selected_index].position
+                    current_camera_set['cctv_display'].surface_index = game.players[selected_index].surface_index
 
                 else
-                    frame.container[scroll_table_name].table.flow['cctv_display'].position = {x=0, y=0}
-                    frame.container[scroll_table_name].table.flow['cctv_display'].surface_index = game.surfaces['nauvis'].index
+                    current_camera_set['cctv_display'].position = {x=0, y=0}
+                    current_camera_set['cctv_display'].surface_index = game.surfaces['nauvis'].index
                 end
             end
         end
