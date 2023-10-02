@@ -87,7 +87,7 @@ end)
 
 local camera_set =
 Gui.element(function(_, parent, name, player_list)
-    local camera_set = parent.add{type='flow', direction="vertical", name=name}
+    local camera_set = parent.add{type='flow', direction='vertical', name=name}
     local buttons = Gui.scroll_table(camera_set, 400, 6, 'buttons')
 
     cctv_player(buttons, player_list)
@@ -119,8 +119,8 @@ Gui.element(function(event_trigger, parent)
         table.insert(player_list, player.name)
     end
 
-    camera_set(container, "cctv_st_1", player_list)
-    camera_set(container, "cctv_st_2", player_list)
+    camera_set(container, 'cctv_st_1', player_list)
+    camera_set(container, 'cctv_st_2', player_list)
 
     return container.parent
 end)
