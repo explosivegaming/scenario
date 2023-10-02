@@ -120,10 +120,8 @@ local function apply_module(player, area, machine, module)
                 local m_current_recipe = entity.get_recipe()
 
                 if m_current_recipe ~= nil then
-                    if module_allowed[m_current_recipe.name] ~= nil then
-                        if module_allowed[m_current_recipe.name] then
-                            entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=module}
-                        end
+                    if module_allowed[m_current_recipe.name] then
+                        entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=module}
                     end
 
                 else
