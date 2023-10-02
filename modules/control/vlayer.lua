@@ -200,7 +200,7 @@ local function vlayer_power_handle()
             end
         end
     end
-    
+
     if config.battery_limit then
         if vlayer.power.energy > vlayer_power_capacity_total then
             vlayer.power.energy = vlayer_power_capacity_total
