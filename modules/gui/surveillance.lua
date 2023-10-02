@@ -24,8 +24,8 @@ Gui.element{
     items = {'Enable', 'Disable'},
     selected_index = 1
 }:style{
-    width = 96
-}:on_click(function(_, element, _)
+    width = 80
+}:on_selection_changed(function(_, element, _)
     if element.selected_index == 1 then
         element.parent.parent.parent.cctv_display.visible = true
     else
@@ -40,7 +40,7 @@ Gui.element{
     items = {'Player', 'Static'},
     selected_index = 1
 }:style{
-    width = 96
+    width = 80
 }
 
 local cctv_location =
@@ -48,7 +48,7 @@ Gui.element{
     type = 'button',
     caption = 'set'
 }:style{
-    width = 48
+    width = 40
 }:on_click(function(player, element, _)
     element.parent.parent.cctv_display.position = player.position
 end)
@@ -58,7 +58,7 @@ Gui.element{
     type = 'button',
     caption = '+'
 }:style{
-    width = 36
+    width = 30
 }:on_click(function(_, element, _)
     local display = element.parent.parent.parent.cctv_display
     if display.zoom < 2.0 then
@@ -71,7 +71,7 @@ Gui.element{
     type = 'button',
     caption = '-'
 }:style{
-    width = 36
+    width = 30
 }:on_click(function(_, element, _)
     local display = element.parent.parent.parent.cctv_display
     if display.zoom > 0.2 then
@@ -106,7 +106,7 @@ end)
 
 cctv_container =
 Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, 480)
+    local container = Gui.container(parent, event_trigger, 400)
     local player_list = {}
 
     for _, player in pairs(game.connected_players) do
