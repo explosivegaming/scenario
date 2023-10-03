@@ -180,10 +180,10 @@ return {
         }
     },
     resource_tiles = {
-        enabled = true,
+        enabled = false,
         resources = {
             {
-                enabled = true,
+                enabled = false,
                 name = 'iron-ore',
                 amount = 1,
                 size = {26, 27},
