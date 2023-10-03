@@ -65,9 +65,11 @@ vlayer.circuit.signal['signal-M'] = 0
 vlayer.circuit.signal['signal-C'] = 0
 vlayer.circuit.signal['signal-D'] = 0
 vlayer.circuit.signal['signal-T'] = 0
+
 if config.land.enabled then
     vlayer.circuit.signal['signal-L'] = 0
 end
+
 vlayer.circuit.signal['signal-A'] = 0
 vlayer.circuit.signal['signal-B'] = 0
 
