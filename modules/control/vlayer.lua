@@ -42,7 +42,7 @@ vlayer.power.energy = 0
 if config.init_item then
     for k, v in pairs(config.init_item) do
         if v.enabled then
-            vlayer.storage.item[k] = v
+            vlayer.storage.item[k] = v.value
 
             if v.circuit then
                 vlayer.circuit.item[k] = 0
@@ -134,6 +134,7 @@ local function vlayer_storage_handle()
         for k, v in pairs(vlayer.storage.item_w) do
             vlayer.storage.item[k] = vlayer.storage.item[k] + v
             vlayer.storage.item_w[k] = 0
+            vlayer.circuit.item[k] = vlayer.storage.item[k]
         end
     end
 end
@@ -150,10 +151,6 @@ local function vlayer_circuit_handle()
 
     if config.land.enabled then
         vlayer.circuit.signal['signal-L'] = (vlayer.storage.item[config.land.tile] * config.land.result) - (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) - (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
-    end
-
-    for k, _ in pairs(vlayer.circuit.item) do
-        vlayer.circuit.item[k] = vlayer.storage.item[k]
     end
 
     for k, v in pairs(vlayer.entity.circuit) do
