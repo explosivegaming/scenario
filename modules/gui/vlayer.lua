@@ -9,11 +9,6 @@ local config = require 'config.vlayer' --- @dep config.vlayer
 local vlayer = require 'modules.control.vlayer'
 
 local vlayer_container
-local vlayer_circuit_t = {}
-
-for _, v in pairs(config.init_circuit) do
-    vlayer_circuit_t[v.name] = v.index
-end
 
 local function pos_to_gps_string(pos)
 	return '[gps=' .. string.format('%.1f', pos.x) .. ',' .. string.format('%.1f', pos.y) .. ']'
@@ -385,12 +380,12 @@ Event.add(Roles.events.on_role_unassigned, role_update_event)
 
 Event.on_nth_tick(config.update_tick, function(_)
     local vlayer_display = {
-        [vlayer_gui_display_item_solar_count.name] = format_number(vlayer.storage.item['solar-panel']),
-        [vlayer_gui_display_item_accumulator_count.name] = format_number(vlayer.storage.item['accumulator']),
-        [vlayer_gui_display_signal_peak_count.name] = format_number(vlayer.circuit[vlayer_circuit_t['signal-P']]),
-        [vlayer_gui_display_signal_sustained_count.name] = format_number(vlayer.circuit[vlayer_circuit_t['signal-S']]),
-        [vlayer_gui_display_signal_max_count.name] = format_number(vlayer.circuit[vlayer_circuit_t['signal-M']]),
-        [vlayer_gui_display_signal_current_count.name] = format_number(vlayer.circuit[vlayer_circuit_t['signal-C']])
+        [vlayer_gui_display_item_solar_count.name] = format_number(vlayer.circuit.item['solar-panel']),
+        [vlayer_gui_display_item_accumulator_count.name] = format_number(vlayer.circuit.item['accumulator']),
+        [vlayer_gui_display_signal_peak_count.name] = format_number(vlayer.circuit.signal['signal-P']),
+        [vlayer_gui_display_signal_sustained_count.name] = format_number(vlayer.circuit.signal['signal-S']),
+        [vlayer_gui_display_signal_max_count.name] = format_number(vlayer.circuit.signal['signal-M']),
+        [vlayer_gui_display_signal_current_count.name] = format_number(vlayer.circuit.signal['signal-C'])
     }
 
     for _, player in pairs(game.connected_players) do
