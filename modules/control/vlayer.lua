@@ -125,6 +125,7 @@ local function vlayer_storage_handle()
             vlayer.storage.item_w['accumulator'] = vlayer.storage.item_w['accumulator'] - a
             vlayer.storage.item[config.land.tile] = land_surplus - (a * config.land.requirement['accumulator'])
         end
+
     else
         for k, v in pairs(vlayer.storage.item_w) do
             vlayer.storage.item[k] = vlayer.storage.item[k] + v
