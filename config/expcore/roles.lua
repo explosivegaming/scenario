@@ -140,8 +140,7 @@ Roles.new_role('Board Member','Board')
     'command/repair',
     'command/spectate',
     'command/follow',
-    'command/personal-battery-recharge',
-    'command/waterfill'
+    'command/personal-battery-recharge'
 }
 
 Roles.new_role('Senior Backer','Backer')
@@ -231,7 +230,8 @@ Roles.new_role('Member','Mem')
     'command/personal-logistic',
     'command/auto-research',
     'command/manual-train',
-    'command/lawnmower'
+    'command/lawnmower',
+    'command/waterfill'
 }
 
 local hours3, hours15 = 3*216000, 15*60
