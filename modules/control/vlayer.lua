@@ -91,6 +91,7 @@ local function vlayer_storage_input_handle()
 
                 elseif config.init_item_m[name] then
                     vlayer.storage.item_w[config.init_item_m[name].n] = vlayer.storage.item_w[config.init_item_m[name].n] + (count * config.init_item_m[name].m)
+                    chest.remove({name=name, count=count})
                 end
             end
         end
