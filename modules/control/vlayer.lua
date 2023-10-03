@@ -39,7 +39,7 @@ local vlayer_circuit_t = {}
     0.55    Sunrise 5,000   83s
 ]]
 
-if config.init_item ~= nil then
+if config.init_item then
     for k, v in pairs(config.init_item) do
         vlayer.storage.item[k] = v
     end
@@ -70,11 +70,11 @@ local function vlayer_storage_input_handle()
             local chest = v.get_inventory(defines.inventory.chest)
 
             for name, count in pairs(chest.get_contents()) do
-                if vlayer.storage.item[name] ~= nil then
+                if vlayer.storage.item[name] then
                     vlayer.storage.item_w[name] = vlayer.storage.item_w[name] + count
                     chest.remove({name=name, count=count})
 
-                elseif config.init_item_m[name] ~= nil then
+                elseif config.init_item_m[name] then
                     vlayer.storage.item_w[config.init_item_m[name].n] = vlayer.storage.item_w[config.init_item_m[name].n] + (count * config.init_item_m[name].m)
                 end
             end
