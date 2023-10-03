@@ -147,7 +147,7 @@ Gui.element{
 local vlayer_gui_display_signal_current_count =
 Gui.element{
     type = 'label',
-    name = 'vlayer_display_signal_mcurrent_count',
+    name = 'vlayer_display_signal_current_count',
     caption = '0',
     style = 'heading_1_label'
 }:style{
