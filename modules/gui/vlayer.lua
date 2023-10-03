@@ -218,9 +218,16 @@ Gui.element{
         circuit_o.last_user = player
 
         local circuit_oc = circuit_o.get_or_create_control_behavior()
+        local count = 1
 
-        for _, v in pairs(config.init_circuit) do
-            circuit_oc.set_signal(v.index, {signal={type=v.type, name=v.name}, count=0})
+        for kc, vc in pairs(vlayer.circuit.signal) do
+            circuit_o.set_signal(count, {signal={type='virtual', name=kc}, count=vc})
+            count = count + 1
+        end
+
+        for kc, vc in pairs(vlayer.circuit.item) do
+            circuit_o.set_signal(count, {signal={type='item', name=kc}, count=vc})
+            count = count + 1
         end
 
         table.insert(vlayer.entity.circuit, circuit_o)
