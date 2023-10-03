@@ -161,16 +161,16 @@ local function vlayer_circuit_handle()
             vlayer.entity.circuit[k] = nil
 
         else
-            local circuit_o = v.get_or_create_control_behavior()
+            local circuit_oc = v.get_or_create_control_behavior()
             local count = 1
 
             for kc, vc in pairs(vlayer.circuit.signal) do
-                circuit_o.set_signal(count, {signal={type='virtual', name=kc}, count=vc})
+                circuit_oc.set_signal(count, {signal={type='virtual', name=kc}, count=vc})
                 count = count + 1
             end
 
             for kc, vc in pairs(vlayer.circuit.item) do
-                circuit_o.set_signal(count, {signal={type='item', name=kc}, count=vc})
+                circuit_oc.set_signal(count, {signal={type='item', name=kc}, count=vc})
                 count = count + 1
             end
         end
