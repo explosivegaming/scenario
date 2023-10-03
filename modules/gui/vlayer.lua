@@ -8,104 +8,16 @@ local format_number = require('util').format_number --- @dep util
 local config = require 'config.vlayer' --- @dep config.vlayer
 local vlayer = require 'modules.control.vlayer'
 
+local vlayer_container
 local vlayer_circuit_t = {}
-local vlayer_display = {}
 
 for _, v in pairs(config.init_circuit) do
     vlayer_circuit_t[v.name] = v.index
 end
 
-for _, v in pairs(config.init_gui) do
-    vlayer_display[v.index] = 0
-end
-
 local function pos_to_gps_string(pos)
 	return '[gps=' .. string.format('%.1f', pos.x) .. ',' .. string.format('%.1f', pos.y) .. ']'
 end
-
-local vlayer_container =
-Gui.element(function(event_trigger, parent)
-    local player = Gui.get_player_from_element(parent)
-    local container = Gui.container(parent, event_trigger, 320)
-    local scroll_table_1 = Gui.scroll_table(container, 320, 2, 'vlayer_st_1')
-
-    for _, v in pairs(config.init_gui) do
-        if v.type == 'item' then
-            scroll_table_1.add{
-                type = 'label',
-                name = 'vlayer_display_' .. v.index .. 'n',
-                caption = '[img=entity/' .. v.name .. '] ' .. v.disp,
-                style = 'heading_1_label'
-            }
-
-        else
-            scroll_table_1.add{
-                type = 'label',
-                name = 'vlayer_display_' .. v.index .. 'n',
-                caption = '[virtual-signal=' .. v.name .. '] ' .. v.disp,
-                style = 'heading_1_label'
-            }
-        end
-
-        scroll_table_1.add{
-            type = 'label',
-            name = 'vlayer_display_' .. v.index  .. 'c',
-            caption = '0',
-            style = 'heading_1_label'
-        }
-    end
-
-    local scroll_table_2 = Gui.scroll_table(container, 320, 2, 'vlayer_st_2')
-
-    local s = scroll_table_2.add{
-        type = 'button',
-        name = 'vlayer_display_0s',
-        caption = 'Add Storage',
-        style = 'button'
-    }
-
-    local c = scroll_table_2.add{
-        type = 'button',
-        name = 'vlayer_display_0c',
-        caption = 'Add Circuit',
-        style = 'button'
-    }
-
-    local p = scroll_table_2.add{
-        type = 'button',
-        name = 'vlayer_display_0p',
-        caption = 'Add Power',
-        style = 'button'
-    }
-
-    local r = scroll_table_2.add{
-        type = 'button',
-        name = 'vlayer_display_0r',
-        caption = 'Remove Special',
-        style = 'button'
-    }
-
-    s.style.width = 160
-    c.style.width = 160
-    p.style.width = 160
-    r.style.width = 160
-
-    if not (Roles.player_allowed(player, 'gui/vlayer-edit')) then
-        s.visible = false
-        c.visible = false
-        p.visible = false
-        r.visible = false
-    end
-
-    r.enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
-
-    return container.parent
-end)
-:add_to_left_flow()
-
-Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_container, function(player)
-	return Roles.player_allowed(player, 'gui/vlayer')
-end)
 
 local function vlayer_convert_chest(player)
     local entities = player.surface.find_entities_filtered{position=player.position, radius=8, name='steel-chest', force=player.force, limit=1}
@@ -127,7 +39,156 @@ local function vlayer_convert_chest(player)
     return {x=string.format('%.1f', pos.x), y=string.format('%.1f', pos.y)}
 end
 
-local function vlayer_convert_chest_storage_input(player)
+local vlayer_gui_display_item_solar_name =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_item_solar_name',
+    caption = '[img=entity/solar-panel] Solar Panel',
+    style = 'heading_1_label'
+}:style{
+    width = 200
+}
+
+local vlayer_gui_display_item_solar_count =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_item_solar_count',
+    caption = '0',
+    style = 'heading_1_label'
+}:style{
+    width = 120
+}
+
+local vlayer_gui_display_item_accumulator_name =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_item_accumulator_name',
+    caption = '[img=entity/accumulator] Accumulator',
+    style = 'heading_1_label'
+}:style{
+    width = 200
+}
+
+local vlayer_gui_display_item_accumulator_count =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_item_accumulator_count',
+    caption = '0',
+    style = 'heading_1_label'
+}:style{
+    width = 120
+}
+
+local vlayer_gui_display_signal_peak_name =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_signal_peak_name',
+    caption = '[virtual-signal=signal-P] Peak Production',
+    style = 'heading_1_label'
+}:style{
+    width = 200
+}
+
+local vlayer_gui_display_signal_peak_count =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_signal_peak_solar_count',
+    caption = '0',
+    style = 'heading_1_label'
+}:style{
+    width = 120
+}
+
+local vlayer_gui_display_signal_sustained_name =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_signal_sustained_name',
+    caption = '[virtual-signal=signal-S] Sustained Production',
+    style = 'heading_1_label'
+}:style{
+    width = 200
+}
+
+local vlayer_gui_display_signal_sustained_count =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_signal_sustained_count',
+    caption = '0',
+    style = 'heading_1_label'
+}:style{
+    width = 120
+}
+
+local vlayer_gui_display_signal_max_name =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_signal_max_name',
+    caption = '[virtual-signal=signal-M] Max Battery',
+    style = 'heading_1_label'
+}:style{
+    width = 200
+}
+
+local vlayer_gui_display_signal_max_count =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_signal_max_count',
+    caption = '0',
+    style = 'heading_1_label'
+}:style{
+    width = 120
+}
+
+local vlayer_gui_display_signal_current_name =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_signal_current_name',
+    caption = '[virtual-signal=signal-C] Current Battery',
+    style = 'heading_1_label'
+}:style{
+    width = 200
+}
+
+local vlayer_gui_display_signal_current_count =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_signal_mcurrent_count',
+    caption = '0',
+    style = 'heading_1_label'
+}:style{
+    width = 120
+}
+
+local vlayer_display_set =
+Gui.element(function(_, parent, name)
+    local vlayer_set = parent.add{type='flow', direction='vertical', name=name}
+    local disp = Gui.scroll_table(vlayer_set, 320, 2, 'disp')
+
+    vlayer_gui_display_item_solar_name(disp)
+    vlayer_gui_display_item_solar_count(disp)
+    vlayer_gui_display_item_accumulator_name(disp)
+    vlayer_gui_display_item_accumulator_count(disp)
+    vlayer_gui_display_signal_peak_name(disp)
+    vlayer_gui_display_signal_peak_count(disp)
+    vlayer_gui_display_signal_sustained_name(disp)
+    vlayer_gui_display_signal_sustained_count(disp)
+    vlayer_gui_display_signal_max_name(disp)
+    vlayer_gui_display_signal_max_count(disp)
+    vlayer_gui_display_signal_current_name(disp)
+    vlayer_gui_display_signal_current_count(disp)
+
+    return vlayer_set
+end)
+
+local vlayer_gui_control_remove
+
+local vlayer_gui_control_storage =
+Gui.element{
+    type = 'button',
+    caption = 'Add Storage'
+}:style{
+    width = 160
+}:on_click(function(player, element, _)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
@@ -139,9 +200,18 @@ local function vlayer_convert_chest_storage_input(player)
         vlayer_storage.last_user = player
         table.insert(vlayer.entity.storage.input, vlayer_storage)
     end
-end
 
-local function vlayer_convert_chest_circuit(player)
+    element.enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
+    element.parent[vlayer_gui_control_remove.name].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+end)
+
+local vlayer_gui_control_circuit =
+Gui.element{
+    type = 'button',
+    caption = 'Add Circuit'
+}:style{
+    width = 160
+}:on_click(function(player, element, _)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
@@ -160,9 +230,18 @@ local function vlayer_convert_chest_circuit(player)
 
         table.insert(vlayer.entity.circuit, circuit_o)
     end
-end
 
-local function vlayer_convert_chest_power(player)
+    element.enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
+    element.parent[vlayer_gui_control_remove.name].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+end)
+
+local vlayer_gui_control_power =
+Gui.element{
+    type = 'button',
+    caption = 'Add Power'
+}:style{
+    width = 160
+}:on_click(function(player, element, _)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
@@ -184,9 +263,18 @@ local function vlayer_convert_chest_power(player)
             player.surface.spill_item_stack(pos, {name='steel-chest', count=1}, true, player.force, false)
         end
     end
-end
 
-local function vlayer_convert_remove(player)
+    element.enabled = (#vlayer.entity.power < config.interface_limit.energy)
+    element.parent[vlayer_gui_control_remove.name].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+end)
+
+vlayer_gui_control_remove =
+Gui.element{
+    type = 'button',
+    caption = 'Remove Special'
+}:style{
+    width = 160
+}:on_click(function(player, element, _)
     local entities = player.surface.find_entities_filtered{name={'logistic-chest-storage', 'constant-combinator', 'electric-energy-interface'}, position=player.position, radius=8, force='neutral', limit=1}
 
     if (not entities or #entities == 0) then
@@ -236,37 +324,49 @@ local function vlayer_convert_remove(player)
             end
         end
     end
-end
 
-Event.add(defines.events.on_gui_click, function(event)
-    if event.element.name:sub(1, 15) == 'vlayer_display_' then
-        if event.element.name:sub(-2):sub(1, 1) == '0' then
-            local frame = Gui.get_left_element(game.players[event.player_index], vlayer_container)
+    element.parent[vlayer_gui_control_storage.name].enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
+    element.parent[vlayer_gui_control_circuit.name].enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
+    element.parent[vlayer_gui_control_power.name].enabled = (#vlayer.entity.power < config.interface_limit.energy)
+    element.enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+end)
 
-            if event.element.name:sub(-1) == 's' then
-                vlayer_convert_chest_storage_input(game.players[event.player_index])
-                frame.container['vlayer_st_2'].table['vlayer_display_0s'].enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
-                frame.container['vlayer_st_2'].table['vlayer_display_0r'].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+local vlayer_control_set =
+Gui.element(function(_, parent, name)
+    local vlayer_set = parent.add{type='flow', direction='vertical', name=name}
+    local disp = Gui.scroll_table(vlayer_set, 320, 2, 'disp')
 
-            elseif event.element.name:sub(-1) == 'c' then
-                vlayer_convert_chest_circuit(game.players[event.player_index])
-                frame.container['vlayer_st_2'].table['vlayer_display_0c'].enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
-                frame.container['vlayer_st_2'].table['vlayer_display_0r'].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+    vlayer_gui_control_storage(disp)
+    vlayer_gui_control_circuit(disp)
+    vlayer_gui_control_power(disp)
+    vlayer_gui_control_remove(disp)
 
-            elseif event.element.name:sub(-1) == 'p' then
-                vlayer_convert_chest_power(game.players[event.player_index])
-                frame.container['vlayer_st_2'].table['vlayer_display_0p'].enabled = (#vlayer.entity.power < config.interface_limit.energy)
-                frame.container['vlayer_st_2'].table['vlayer_display_0r'].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+    return vlayer_set
+end)
 
-            elseif event.element.name:sub(-1) == 'r' then
-                vlayer_convert_remove(game.players[event.player_index])
-                frame.container['vlayer_st_2'].table['vlayer_display_0s'].enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
-                frame.container['vlayer_st_2'].table['vlayer_display_0c'].enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
-                frame.container['vlayer_st_2'].table['vlayer_display_0p'].enabled = (#vlayer.entity.power < config.interface_limit.energy)
-                frame.container['vlayer_st_2'].table['vlayer_display_0r'].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
-            end
-        end
-    end
+vlayer_container =
+Gui.element(function(event_trigger, parent)
+    local player = Gui.get_player_from_element(parent)
+    local visible = Roles.player_allowed(player, 'gui/vlayer-edit')
+    local container = Gui.container(parent, event_trigger, 320)
+
+    vlayer_display_set(container, 'vlayer_st_1')
+    vlayer_control_set(container, 'vlayer_st_2')
+
+    local table = container['vlayer_st_2'].table
+
+    table[vlayer_gui_control_storage.name].visible = visible
+    table[vlayer_gui_control_circuit.name].visible = visible
+    table[vlayer_gui_control_power.name].visible = visible
+    table[vlayer_gui_control_remove.name].enabled = false
+    table[vlayer_gui_control_remove.name].visible = visible
+
+    return container.parent
+end)
+:add_to_left_flow()
+
+Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_container, function(player)
+	return Roles.player_allowed(player, 'gui/vlayer')
 end)
 
 local function role_update_event(event)
@@ -274,30 +374,31 @@ local function role_update_event(event)
     local frame = Gui.get_left_element(player, vlayer_container)
     local visible = Roles.player_allowed(player, 'gui/vlayer-edit')
 
-    frame.container['vlayer_st_2'].table['vlayer_display_0s'].visible = visible
-    frame.container['vlayer_st_2'].table['vlayer_display_0c'].visible = visible
-    frame.container['vlayer_st_2'].table['vlayer_display_0p'].visible = visible
-    frame.container['vlayer_st_2'].table['vlayer_display_0r'].visible = visible
+    frame.container['vlayer_st_2'].table[vlayer_gui_control_storage.name].visible = visible
+    frame.container['vlayer_st_2'].table[vlayer_gui_control_circuit.name].visible = visible
+    frame.container['vlayer_st_2'].table[vlayer_gui_control_power.name].visible = visible
+    frame.container['vlayer_st_2'].table[vlayer_gui_control_remove.name].visible = visible
 end
 
 Event.add(Roles.events.on_role_assigned, role_update_event)
 Event.add(Roles.events.on_role_unassigned, role_update_event)
 
 Event.on_nth_tick(config.update_tick, function(_)
-    for _, v in pairs(config.init_gui) do
-        if v.type == 'item' then
-            vlayer_display[v.index] = format_number(vlayer.storage.item[v.name])
-
-        elseif v.type == 'signal' then
-            vlayer_display[v.index] = format_number(vlayer.circuit[vlayer_circuit_t[v.name]].count)
-        end
-    end
+    local vlayer_display = {
+        [vlayer_gui_display_item_solar_count.name] = format_number(vlayer.storage.item['solar-panel']),
+        [vlayer_gui_display_item_accumulator_count.name] = format_number(vlayer.storage.item['accumulator']),
+        [vlayer_gui_display_signal_peak_count.name] = format_number(vlayer.circuit[vlayer_circuit_t['signal-P']]),
+        [vlayer_gui_display_signal_sustained_count.name] = format_number(vlayer.circuit[vlayer_circuit_t['signal-S']]),
+        [vlayer_gui_display_signal_max_count.name] = format_number(vlayer.circuit[vlayer_circuit_t['signal-M']]),
+        [vlayer_gui_display_signal_current_count.name] = format_number(vlayer.circuit[vlayer_circuit_t['signal-C']])
+    }
 
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, vlayer_container)
+        local table = frame.container['vlayer_st_1'].disp.table
 
-        for _, v in pairs(config.init_gui) do
-            frame.container['vlayer_st_1'].table['vlayer_display_' .. v.index .. 'c'].caption = vlayer_display[v.index]
+        for k, v in pairs(vlayer_display) do
+            table[k].caption = v
         end
     end
 end)

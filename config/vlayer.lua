@@ -82,44 +82,6 @@ return {
             name = 'accumulator'
         }
     },
-    init_gui = {
-        {
-            index = 1,
-            disp = 'Solar Panel',
-            type = 'item',
-            name = 'solar-panel'
-        },
-        {
-            index = 2,
-            disp = 'Accumulator',
-            type = 'item',
-            name = 'accumulator'
-        },
-        {
-            index = 3,
-            disp = 'Peak Production',
-            type = 'virtual',
-            name = 'signal-P'
-        },
-        {
-            index = 4,
-            disp = 'Sustained Production',
-            type = 'virtual',
-            name = 'signal-S'
-        },
-        {
-            index = 5,
-            disp = 'Max Battery',
-            type = 'virtual',
-            name = 'signal-M'
-        },
-        {
-            index = 6,
-            disp = 'Current Battery',
-            type = 'virtual',
-            name = 'signal-C'
-        }
-    },
     -- for modded power
     init_item_m = {
         ['solar-panel-2'] = {
