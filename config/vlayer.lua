@@ -22,64 +22,20 @@ return {
         ['circuit'] = 1
     },
     init_item = {
-        ['solar-panel'] = 10,
-        ['accumulator'] = 10
-    },
-    init_circuit = {
-        {
-            index = 1,
-            type = 'virtual',
-            name = 'signal-P'
+        ['solar-panel'] = {
+            enabled = true,
+            circuit = true,
+            value = 10
         },
-        {
-            index = 2,
-            type = 'virtual',
-            name = 'signal-S'
+        ['accumulator'] = {
+            enabled = true,
+            circuit = true,
+            value = 10
         },
-        {
-            index = 3,
-            type = 'virtual',
-            name = 'signal-M'
-        },
-        {
-            index = 4,
-            type = 'virtual',
-            name = 'signal-C'
-        },
-        {
-            index = 5,
-            type = 'virtual',
-            name = 'signal-D'
-        },
-        {
-            index = 6,
-            type = 'virtual',
-            name = 'signal-T'
-        },
-        {
-            index = 7,
-            type = 'virtual',
-            name = 'signal-L'
-        },
-        {
-            index = 8,
-            type = 'virtual',
-            name = 'signal-A'
-        },
-        {
-            index = 9,
-            type = 'virtual',
-            name = 'signal-B'
-        },
-        {
-            index = 10,
-            type = 'item',
-            name = 'solar-panel'
-        },
-        {
-            index = 11,
-            type = 'item',
-            name = 'accumulator'
+        ['landfill'] = {
+            enabled = false,
+            circuit = true,
+            value = 100
         }
     },
     -- for modded power
