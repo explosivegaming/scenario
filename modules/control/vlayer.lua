@@ -91,6 +91,7 @@ local function vlayer_storage_input_handle()
 
                 elseif config.init_item_m[name] then
                     vlayer.storage.item_w[config.init_item_m[name].n] = vlayer.storage.item_w[config.init_item_m[name].n] + (count * config.init_item_m[name].m)
+                    chest.remove({name=name, count=count})
                 end
             end
         end
@@ -140,9 +141,9 @@ local function vlayer_storage_handle()
 end
 
 local function vlayer_circuit_handle()
-    vlayer.circuit.signal['signal-P'] = math.floor(vlayer.storage.item['solar-panel'] * 0.06 * game.surfaces['nauvis'].solar_power_multiplier)
-    vlayer.circuit.signal['signal-S'] = math.floor(vlayer.storage.item['solar-panel'] * 873 * game.surfaces['nauvis'].solar_power_multiplier / 20800)
-    vlayer.circuit.signal['signal-M'] = vlayer.storage.item['accumulator'] * 5
+    vlayer.circuit.signal['signal-P'] = math.floor(vlayer.storage.item['solar-panel'] * config.default_energy['solar-panel'] * game.surfaces['nauvis'].solar_power_multiplier)
+    vlayer.circuit.signal['signal-S'] = math.floor(vlayer.storage.item['solar-panel'] * config.default_energy['solar-panel'] * 291 / 416 * game.surfaces['nauvis'].solar_power_multiplier)
+    vlayer.circuit.signal['signal-M'] = vlayer.storage.item['accumulator'] * config.default_energy['accumulator']
     vlayer.circuit.signal['signal-C'] = math.floor(vlayer.power.energy / 1000000)
     vlayer.circuit.signal['signal-D'] = math.floor(game.tick / 25000)
     vlayer.circuit.signal['signal-T'] = game.tick % 25000
@@ -179,24 +180,24 @@ end
 
 local function vlayer_power_handle()
     if config.always_day or game.surfaces['nauvis'].always_day then
-        vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier)
+        vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * config.default_energy['solar-panel'] * 1000000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier)
 
     else
         local tick = game.tick % 25000
 
         if tick <= 5000 or tick > 17500 then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier)
+            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * config.default_energy['solar-panel'] * 1000000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier)
 
         elseif tick <= 10000 then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier * (1 - ((tick - 5000) / 5000)))
+            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * config.default_energy['solar-panel'] * 1000000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier * (1 - ((tick - 5000) / 5000)))
 
         elseif (tick > 12500) and (tick <= 17500) then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier * ((tick - 5000) / 5000))
+            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * config.default_energy['solar-panel'] * 1000000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier * ((tick - 5000) / 5000))
         end
     end
 
     -- 5 MJ each, a part is stored as vlayer energy, so to share energy to other stuff
-    local vlayer_power_capacity_total = math.floor(vlayer.storage.item['accumulator'] * 5000000)
+    local vlayer_power_capacity_total = math.floor(vlayer.storage.item['accumulator'] * config.default_energy['accumulator'] * 1000000)
     local vlayer_power_capacity = math.ceil(vlayer_power_capacity_total / math.max(#vlayer.entity.power, 1))
 
     for k, v in pairs(vlayer.entity.power) do

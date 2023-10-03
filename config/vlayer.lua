@@ -3,6 +3,11 @@
 
 return {
     update_tick = 10,
+    -- MW and MJ
+    default_energy = {
+        ['solar-panel'] = 0.06,
+        ['accumulator'] = 5
+    },
     land = {
         enabled = false,
         tile = 'landfill',
