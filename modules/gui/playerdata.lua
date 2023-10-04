@@ -23,7 +23,57 @@ local pd_disp_n = {
 }
 ]]
 
-local pd_player =
+local pd_data_playtime_name =
+Gui.element{
+    type = 'label',
+    caption = 'Playtime',
+    style = 'heading_1_label'
+}:style{
+    width = 180
+}
+
+local pd_data_playtime_count =
+Gui.element{
+    type = 'label',
+    caption = '0',
+    style = 'heading_1_label'
+}:style{
+    width = 140
+}
+
+local pd_data_distance_travelled_name =
+Gui.element{
+    type = 'label',
+    caption = 'Distance Travelled',
+    style = 'heading_1_label'
+}:style{
+    width = 180
+}
+
+local pd_data_distance_travelled_count =
+Gui.element{
+    type = 'label',
+    caption = '0',
+    style = 'heading_1_label'
+}:style{
+    width = 140
+}
+
+
+local pd_data_set =
+Gui.element(function(_, parent, name)
+    local pd_data_set = parent.add{type='flow', direction='vertical', name=name}
+    local disp = Gui.scroll_table(pd_data_set, 320, 2, 'disp')
+
+    pd_data_playtime_name(disp)
+    pd_data_playtime_count(disp)
+    pd_data_distance_travelled_name(disp)
+    pd_data_distance_travelled_count(disp)
+
+    return pd_data_set
+end)
+
+local pd_username_player =
 Gui.element(function(name, parent, player_list)
     return parent.add{
         name = name,
@@ -33,61 +83,30 @@ Gui.element(function(name, parent, player_list)
     }
 end)
 
-local pd_update =
+local pd_username_update =
 Gui.element{
     type = 'button',
-    caption = 'Update'
+    caption = 'update'
 }:style{
     width = 96
 }:on_click(function(_, element, _)
-    local display = element.parent.parent.parent.cctv_display
-    if display.zoom > 0.2 then
-        display.zoom = display.zoom - 0.05
-    end
-end)
-
-local pd_set =
-Gui.element(function(_, parent, name, player_list)
-    local pd_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(pd_set, 320, 2, 'disp')
-
-    pd_player(disp, player_list)
-    pd_update(disp)
-
-    return pd_set
-end)
-
-local pd_data =
-Gui.element(function(_, parent, name, caption, width)
-    return parent.add{
-        type = 'label',
-        name = name,
-        caption = caption,
-        style = 'heading_1_label'
-    }:style{
-        width = width
-    }
-end)
-
-local pd_data_display =
-Gui.element(function(_, parent, name, player_name)
-    local pd_data_display = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(pd_set, 320, 2, 'disp')
+    local player_name = game.players[element.parent[pd_username_player.name].selected_index]
     local data = PlayerData.Statistics
+    local table = element.parent.parent.parent.parent['pd_st_2'].disp.table
+    table[pd_data_playtime_count.name].caption = format_time(data['Playtime']:get(player_name), {hours=true, minutes=true, seconds=true, time=true, string=true})
+    table[pd_data_distance_travelled_count.name].caption = format_number(data['DistanceTravelled']:get(player_name))
+end)
 
-    for _, stat_name in pairs(PlayerData.Statistics.metadata.display_order) do
-        pd_data(disp, 'pd_stat_' .. stat_name .. 'n', stat_name, 110)
+local pd_username_set =
+Gui.element(function(_, parent, name, player_list)
+    local pd_username_set = parent.add{type='flow', direction='vertical', name=name}
+    local disp = Gui.scroll_table(pd_username_set, 320, 2, 'disp')
 
-        if name == 'Playtime' or name == 'AfkTime' then
-            pd_data(disp, 'pd_stat_' .. stat_name .. 'c', format_time(data[stat_name]:get(player_name), {hours=true, minutes=true, seconds=true, time=true, string=true}), 90)
+    pd_username_player(disp, player_list)
+    pd_username_update(disp)
+    disp.table[pd_username_player.name].width = 224
 
-        else
-            pd_data(disp, 'pd_stat_' .. stat_name .. 'c', format_number(data[stat_name]:get(player_name)), 90)
-
-        end
-    end
-
-    return pd_data_display
+    return pd_username_set
 end)
 
 pd_container =
@@ -99,8 +118,8 @@ Gui.element(function(event_trigger, parent)
         table.insert(player_list, player.name)
     end
 
-    pd_set(container, 'pd_st_1', player_list)
-    pd_data_display(container, 'pd_st_2', player_list, Gui.get_player_from_element(parent))
+    pd_username_set(container, 'pd_st_1', player_list)
+    pd_data_set(container, 'pd_st_2')
 
     return container.parent
 end)
@@ -119,7 +138,7 @@ local function gui_player_list_update()
 
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, pd_container)
-        frame.container['pd_st_1'].disp.table[pd_player.name].items = player_list
+        frame.container['pd_st_1'].disp.table[pd_username_player.name].items = player_list
     end
 end
 
