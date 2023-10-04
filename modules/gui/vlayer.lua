@@ -351,20 +351,19 @@ end)
 vlayer_container =
 Gui.element(function(event_trigger, parent)
     local player = Gui.get_player_from_element(parent)
-    local visible = Roles.player_allowed(player, 'gui/vlayer-edit')
     local container = Gui.container(parent, event_trigger, 320)
 
     vlayer_display_set(container, 'vlayer_st_1')
     vlayer_control_set(container, 'vlayer_st_2')
 
-    local table = container['vlayer_st_2'].table
+    local table = container['vlayer_st_2'].disp.table
+    local visible = Roles.player_allowed(player, 'gui/vlayer-edit')
 
     table[vlayer_gui_control_storage.name].visible = visible
     table[vlayer_gui_control_circuit.name].visible = visible
     table[vlayer_gui_control_power.name].visible = visible
     table[vlayer_gui_control_remove.name].enabled = false
     table[vlayer_gui_control_remove.name].visible = visible
-
     return container.parent
 end)
 :add_to_left_flow()
@@ -375,13 +374,14 @@ end)
 
 local function role_update_event(event)
     local player = game.players[event.player_index]
-    local frame = Gui.get_left_element(player, vlayer_container)
     local visible = Roles.player_allowed(player, 'gui/vlayer-edit')
+    local frame = Gui.get_left_element(player, vlayer_container)
+    local table = frame.container['vlayer_st_2'].disp.table
 
-    frame.container['vlayer_st_2'].table[vlayer_gui_control_storage.name].visible = visible
-    frame.container['vlayer_st_2'].table[vlayer_gui_control_circuit.name].visible = visible
-    frame.container['vlayer_st_2'].table[vlayer_gui_control_power.name].visible = visible
-    frame.container['vlayer_st_2'].table[vlayer_gui_control_remove.name].visible = visible
+    table[vlayer_gui_control_storage.name].visible = visible
+    table[vlayer_gui_control_circuit.name].visible = visible
+    table[vlayer_gui_control_power.name].visible = visible
+    table[vlayer_gui_control_remove.name].visible = visible
 end
 
 Event.add(Roles.events.on_role_assigned, role_update_event)
