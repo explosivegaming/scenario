@@ -24,7 +24,7 @@ Gui.element{
     items = {'Enable', 'Disable'},
     selected_index = 1
 }:style{
-    width = 100
+    width = 96
 }:on_selection_changed(function(_, element, _)
     if element.selected_index == 1 then
         element.parent.parent.parent.cctv_display.visible = true
@@ -40,7 +40,7 @@ Gui.element{
     items = {'Player', 'Static'},
     selected_index = 1
 }:style{
-    width = 100
+    width = 96
 }
 
 local cctv_location =
@@ -48,7 +48,7 @@ Gui.element{
     type = 'button',
     caption = 'set'
 }:style{
-    width = 50
+    width = 48
 }:on_click(function(player, element, _)
     element.parent.parent.parent.cctv_display.position = player.position
 end)
@@ -58,7 +58,7 @@ Gui.element{
     type = 'button',
     caption = '+'
 }:style{
-    width = 30
+    width = 32
 }:on_click(function(_, element, _)
     local display = element.parent.parent.parent.cctv_display
     if display.zoom < 2.0 then
@@ -71,7 +71,7 @@ Gui.element{
     type = 'button',
     caption = '-'
 }:style{
-    width = 30
+    width = 32
 }:on_click(function(_, element, _)
     local display = element.parent.parent.parent.cctv_display
     if display.zoom > 0.2 then
@@ -82,7 +82,7 @@ end)
 local camera_set =
 Gui.element(function(_, parent, name, player_list)
     local camera_set = parent.add{type='flow', direction='vertical', name=name}
-    local buttons = Gui.scroll_table(camera_set, 400, 6, 'buttons')
+    local buttons = Gui.scroll_table(camera_set, 480, 6, 'buttons')
 
     cctv_player(buttons, player_list)
     cctv_type(buttons)
@@ -99,14 +99,14 @@ Gui.element(function(_, parent, name, player_list)
         zoom = 0.75,
     }
 
-    camera.style.minimal_width = 400
-    camera.style.minimal_height = 300
+    camera.style.minimal_width = 480
+    camera.style.minimal_height = 360
     return camera_set
 end)
 
 cctv_container =
 Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, 400)
+    local container = Gui.container(parent, event_trigger, 480)
     local player_list = {}
 
     for _, player in pairs(game.connected_players) do
