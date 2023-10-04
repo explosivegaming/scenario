@@ -687,7 +687,7 @@ Gui.element{
     table[pd_data_rocket_per_hour_count.name].caption = string.format('%.2f', (data['RocketsLaunched']:get(player_name) or 0) * 60 / (data['Playtime']:get(player_name) or 1))
     table[pd_data_tree_kill_per_minute_count.name].caption = string.format('%.2f', (data['TreesDestroyed']:get(player_name) or 0) / (data['Playtime']:get(player_name) or 1))
     table[pd_data_net_play_time_count.name].caption = format_time(((data['Playtime']:get(player_name) or 0) - (data['AfkTime']:get(player_name) or 0) * 3600), {hours=true, minutes=true, seconds=false, time=true, string=true})
-    table[pd_data_net_play_time_count.name].caption = string.format('%.2f', (data['AfkTime']:get(player_name) or 0) / (data['Playtime']:get(player_name) or 1))
+    table[pd_data_afk_time_ratio_count.name].caption = string.format('%.2f', (data['AfkTime']:get(player_name) or 0) / (data['Playtime']:get(player_name) or 1))
 end)
 
 local pd_username_set =
