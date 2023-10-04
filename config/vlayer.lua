@@ -9,7 +9,7 @@ return {
         ['accumulator'] = 5
     },
     land = {
-        enabled = false,
+        enabled = true,
         tile = 'landfill',
         result = 4,
         requirement = {
