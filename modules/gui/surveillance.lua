@@ -50,7 +50,7 @@ Gui.element{
 }:style{
     width = 50
 }:on_click(function(player, element, _)
-    element.parent.parent.cctv_display.position = player.position
+    element.parent.parent.parent.cctv_display.position = player.position
 end)
 
 local zoom_in =
