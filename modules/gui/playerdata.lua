@@ -24,7 +24,7 @@ Gui.element{
 local pd_data_play_time_count =
 Gui.element{
     type = 'label',
-    caption = '0',
+    caption = '00:00:00',
     style = 'heading_1_label'
 }:style{
     width = 140
@@ -43,7 +43,7 @@ Gui.element{
 local pd_data_afk_time_count =
 Gui.element{
     type = 'label',
-    caption = '0',
+    caption = '00:00:00',
     style = 'heading_1_label'
 }:style{
     width = 140
@@ -391,12 +391,83 @@ Gui.element{
     width = 140
 }
 
---[[
-CapsulesUsed
-EntityRepaired
-DeconstructionPlannerUsed
-MapTagsMade
+local pd_data_capsules_used_name =
+Gui.element{
+    type = 'label',
+    caption = {'exp-statistics.CapsulesUsed'},
+    tooltip = {'exp-statistics.CapsulesUsed-tooltip'},
+    style = 'heading_1_label'
+}:style{
+    width = 180
+}
 
+local pd_data_capsules_used_count =
+Gui.element{
+    type = 'label',
+    caption = '0',
+    style = 'heading_1_label'
+}:style{
+    width = 140
+}
+
+local pd_data_entity_repaired_name =
+Gui.element{
+    type = 'label',
+    caption = {'exp-statistics.EntityRepaired'},
+    tooltip = {'exp-statistics.EntityRepaired-tooltip'},
+    style = 'heading_1_label'
+}:style{
+    width = 180
+}
+
+local pd_data_entity_repaired_count =
+Gui.element{
+    type = 'label',
+    caption = '0',
+    style = 'heading_1_label'
+}:style{
+    width = 140
+}
+
+local pd_data_deconstruction_planner_used_name =
+Gui.element{
+    type = 'label',
+    caption = {'exp-statistics.DeconstructionPlannerUsed'},
+    tooltip = {'exp-statistics.DeconstructionPlannerUsed-tooltip'},
+    style = 'heading_1_label'
+}:style{
+    width = 180
+}
+
+local pd_data_deconstruction_planner_used_count =
+Gui.element{
+    type = 'label',
+    caption = '0',
+    style = 'heading_1_label'
+}:style{
+    width = 140
+}
+
+local pd_data_map_tags_made_name =
+Gui.element{
+    type = 'label',
+    caption = {'exp-statistics.MapTagsMade'},
+    tooltip = {'exp-statistics.MapTagsMade-tooltip'},
+    style = 'heading_1_label'
+}:style{
+    width = 180
+}
+
+local pd_data_map_tags_made_count =
+Gui.element{
+    type = 'label',
+    caption = '0',
+    style = 'heading_1_label'
+}:style{
+    width = 140
+}
+
+--[[
 DamageDeathRatio
 KillDeathRatio
 SessionTime
@@ -452,6 +523,14 @@ Gui.element(function(_, parent, name)
     pd_data_damage_dealt_count(disp)
     pd_data_distance_travelled_name(disp)
     pd_data_distance_travelled_count(disp)
+    pd_data_capsules_used_name(disp)
+    pd_data_capsules_used_count(disp)
+    pd_data_entity_repaired_name(disp)
+    pd_data_entity_repaired_count(disp)
+    pd_data_deconstruction_planner_used_name(disp)
+    pd_data_deconstruction_planner_used_count(disp)
+    pd_data_map_tags_made_name(disp)
+    pd_data_map_tags_made_count(disp)
 
     return pd_data_set
 end)
@@ -476,6 +555,7 @@ Gui.element{
     local player_name = game.players[element.parent[pd_username_player.name].selected_index]
     local data = PlayerData.Statistics
     local table = element.parent.parent.parent.parent['pd_st_2'].disp.table
+
     table[pd_data_play_time_count.name].caption = format_time(data['Playtime']:get(player_name) or 0, {hours=true, minutes=true, seconds=true, time=true, string=true})
     table[pd_data_afk_time_count.name].caption = format_time(data['AfkTime']:get(player_name) or 0, {hours=true, minutes=true, seconds=true, time=true, string=true})
     table[pd_data_maps_played_count.name].caption = format_number(data['MapsPlayed']:get(player_name) or 0)
@@ -495,8 +575,12 @@ Gui.element{
     table[pd_data_kills_count.name].caption = format_number(data['Kills']:get(player_name) or 0)
     table[pd_data_deaths_count.name].caption = format_number(data['Deaths']:get(player_name) or 0)
     table[pd_data_damage_dealt_count.name].caption = format_number(data['DamageDealt']:get(player_name) or 0)
-
     table[pd_data_distance_travelled_count.name].caption = format_number(data['DistanceTravelled']:get(player_name) or 0)
+    table[pd_data_capsules_used_count.name].caption = format_number(data['CapsulesUsed']:get(player_name) or 0)
+    table[pd_data_entity_repaired_count.name].caption = format_number(data['EntityRepaired']:get(player_name) or 0)
+    table[pd_data_deconstruction_planner_used_count].caption = format_number(data['DeconstructionPlannerUsed']:get(player_name) or 0)
+    table[pd_data_map_tags_made_count].caption = format_number(data['MapTagsMade']:get(player_name) or 0)
+
 end)
 
 local pd_username_set =
@@ -506,7 +590,6 @@ Gui.element(function(_, parent, name, player_list)
 
     pd_username_player(disp, player_list)
     pd_username_update(disp)
-    disp.table[pd_username_player.name].width = 224
 
     return pd_username_set
 end)
@@ -523,6 +606,9 @@ Gui.element(function(event_trigger, parent)
     pd_username_set(container, 'pd_st_1', player_list)
     pd_data_set(container, 'pd_st_2')
 
+    local table = container['pd_st_2'].disp.table
+    table[pd_username_player.name].width = 224
+
     return container.parent
 end)
 :add_to_left_flow()
@@ -534,7 +620,7 @@ end)
 local function gui_player_list_update()
     local player_list = {}
 
-    for _, player in pairs(game.connected_players) do
+    for _, player in pairs(game.players) do
         table.insert(player_list, player.name)
     end
 
