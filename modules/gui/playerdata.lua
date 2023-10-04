@@ -28,7 +28,7 @@ Gui.element{
 local pd_data_play_time_count =
 Gui.element{
     type = 'label',
-    caption = '00:00:00'
+    caption = '00:00'
 }:style{
     width = label_width['count']
 }
@@ -45,7 +45,7 @@ Gui.element{
 local pd_data_afk_time_count =
 Gui.element{
     type = 'label',
-    caption = '00:00:00'
+    caption = '00:00'
 }:style{
     width = label_width['count']
 }
@@ -436,7 +436,7 @@ Gui.element{
 local pd_data_damage_death_ratio_count =
 Gui.element{
     type = 'label',
-    caption = '0'
+    caption = '0.00'
 }:style{
     width = label_width['count']
 }
@@ -453,7 +453,7 @@ Gui.element{
 local pd_data_kill_death_ratio_count =
 Gui.element{
     type = 'label',
-    caption = '0'
+    caption = '0.00'
 }:style{
     width = label_width['count']
 }
@@ -470,7 +470,7 @@ Gui.element{
 local pd_data_session_time_count =
 Gui.element{
     type = 'label',
-    caption = '0'
+    caption = '00:00'
 }:style{
     width = label_width['count']
 }
@@ -487,7 +487,7 @@ Gui.element{
 local pd_data_build_ratio_count =
 Gui.element{
     type = 'label',
-    caption = '0'
+    caption = '0.00'
 }:style{
     width = label_width['count']
 }
@@ -504,7 +504,7 @@ Gui.element{
 local pd_data_rocket_per_hour_count =
 Gui.element{
     type = 'label',
-    caption = '0'
+    caption = '0.00'
 }:style{
     width = label_width['count']
 }
@@ -521,7 +521,7 @@ Gui.element{
 local pd_data_tree_kill_per_minute_count =
 Gui.element{
     type = 'label',
-    caption = '0'
+    caption = '0.00'
 }:style{
     width = label_width['count']
 }
@@ -538,7 +538,7 @@ Gui.element{
 local pd_data_net_play_time_count =
 Gui.element{
     type = 'label',
-    caption = '0'
+    caption = '00:00'
 }:style{
     width = label_width['count']
 }
@@ -555,7 +555,7 @@ Gui.element{
 local pd_data_afk_time_ratio_count =
 Gui.element{
     type = 'label',
-    caption = '0'
+    caption = '0.00'
 }:style{
     width = label_width['count']
 }
