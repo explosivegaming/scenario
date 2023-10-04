@@ -23,67 +23,84 @@ local pd_disp_n = {
 }
 ]]
 
+local pd_player =
+Gui.element(function(name, parent, player_list)
+    return parent.add{
+        name = name,
+        type = 'drop-down',
+        items = player_list,
+        selected_index = #player_list > 0 and 1
+    }
+end)
+
+local pd_update =
+Gui.element{
+    type = 'button',
+    caption = 'Update'
+}:style{
+    width = 96
+}:on_click(function(_, element, _)
+    local display = element.parent.parent.parent.cctv_display
+    if display.zoom > 0.2 then
+        display.zoom = display.zoom - 0.05
+    end
+end)
+
+local pd_set =
+Gui.element(function(_, parent, name, player_list)
+    local pd_set = parent.add{type='flow', direction='vertical', name=name}
+    local disp = Gui.scroll_table(pd_set, 320, 2, 'disp')
+
+    pd_player(disp, player_list)
+    pd_update(disp)
+
+    return pd_set
+end)
+
+local pd_data =
+Gui.element(function(_, parent, name, caption, width)
+    return parent.add{
+        type = 'label',
+        name = name,
+        caption = caption,
+        style = 'heading_1_label'
+    }:style{
+        width = width
+    }
+end)
+
+local pd_data_display =
+Gui.element(function(_, parent, name, player_name)
+    local pd_data_display = parent.add{type='flow', direction='vertical', name=name}
+    local disp = Gui.scroll_table(pd_set, 320, 2, 'disp')
+    local data = PlayerData.Statistics
+
+    for _, stat_name in pairs(PlayerData.Statistics.metadata.display_order) do
+        pd_data(disp, 'pd_stat_' .. stat_name .. 'n', stat_name, 110)
+
+        if name == 'Playtime' or name == 'AfkTime' then
+            pd_data(disp, 'pd_stat_' .. stat_name .. 'c', format_time(data[stat_name]:get(player_name), {hours=true, minutes=true, seconds=true, time=true, string=true}), 90)
+
+        else
+            pd_data(disp, 'pd_stat_' .. stat_name .. 'c', format_number(data[stat_name]:get(player_name)), 90)
+
+        end
+    end
+
+    return pd_data_display
+end)
+
 pd_container =
 Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, 400)
-    local scroll_table_1 = Gui.scroll_table(container, 400, 2, 'pd_st_1')
+    local container = Gui.container(parent, event_trigger, 320)
     local player_list = {}
 
     for _, player in pairs(game.players) do
         table.insert(player_list, player.name)
     end
 
-    scroll_table_1.add{
-        type = 'drop-down',
-        name = 'pd_display_1p',
-        items = player_list,
-        selected_index = 1
-    }
-
-    scroll_table_1.add{
-        type = 'button',
-        name = 'pd_display_1b',
-        caption = 'Update',
-        style = 'button'
-    }
-
-    local scroll_table_2 = Gui.scroll_table(container, 400, 4, 'pd_st_2')
-
-    for _, name in pairs(PlayerData.Statistics.metadata.display_order) do
-        local label =
-        Gui.element{
-            name = 'pd_display_' .. name .. '_t',
-            type = 'label',
-            caption = {'exp-statistics.' .. name},
-            tooltip = {'exp-statistics.' .. name .. '-tooltip'}
-        }:style{
-            maximal_width = 110
-        }
-
-        label(scroll_table_2)
-
-        if name == 'Playtime' or name == 'AfkTime' then
-            label =
-            Gui.element{
-                name = 'pd_display_' .. name .. '_d',
-                type = 'label',
-                caption = '0 m'
-            }:style{
-                maximal_width = 90
-            }
-        else
-            label =
-            Gui.element{
-                name = 'pd_display_' .. name .. '_d',
-                type = 'label',
-                caption = '0'
-            }:style{
-                maximal_width = 90
-            }
-        end
-
-        label(scroll_table_2)
-    end
+    pd_set(container, 'pd_st_1', player_list)
+    pd_data_display(container, 'pd_st_2', player_list, Gui.get_player_from_element(parent))
 
     return container.parent
 end)
@@ -96,45 +113,15 @@ end)
 local function gui_player_list_update()
     local player_list = {}
 
-    for _, player in pairs(game.players) do
+    for _, player in pairs(game.connected_players) do
         table.insert(player_list, player.name)
     end
 
-    for _, player in pairs(game.players) do
+    for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, pd_container)
-        frame.container['pd_st_1'].table['pd_display_1p'].items = player_list
+        frame.container['pd_st_1'].disp.table[pd_player.name].items = player_list
     end
 end
 
-local function gui_player_data_update(player)
-    local frame = Gui.get_left_element(player, pd_container)
-    game.print(game.table_to_json(PlayerData.Statistics['Playtime']:get(player.name)))
-    for _, name in pairs(PlayerData.Statistics.metadata.display_order) do
-        local data = PlayerData.Statistics[name]:get(player.name) or 0
-        if name == 'Playtime' or name == 'AfkTime' then
-            frame.container['pd_st_2'].table['pd_display_' .. name .. '_d'].caption = format_time(data, {hours=true, minutes=true, seconds=true, time=true, string=true})
-        else
-            frame.container['pd_st_2'].table['pd_display_' .. name .. '_d'].caption = format_number(data)
-        end
-    end
-end
-
-Event.add(defines.events.on_player_joined_game, function(_)
-    gui_player_list_update()
-end)
-
-Event.add(defines.events.on_player_left_game, function(_)
-    gui_player_list_update()
-end)
-
-Event.add(defines.events.on_gui_elem_changed, function(event)
-    if event.element.name == 'pd_display_1p' then
-        gui_player_data_update(game.players[event.player_index])
-    end
-end)
-
-Event.add(defines.events.on_gui_click, function(event)
-    if event.element.name == 'pd_display_1b' then
-        gui_player_data_update(game.players[event.player_index])
-    end
-end)
+Event.add(defines.events.on_player_joined_game, gui_player_list_update)
+Event.add(defines.events.on_player_left_game, gui_player_list_update)
