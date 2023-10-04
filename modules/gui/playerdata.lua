@@ -655,8 +655,8 @@ Gui.element{
     local data = PlayerData.Statistics
     local table = element.parent.parent.parent.parent['pd_st_2'].disp.table
 
-    table[pd_data_play_time_count.name].caption = format_time((data['Playtime']:get(player_name) * 3600) or 0, {hours=true, minutes=true, seconds=false, time=true, string=true})
-    table[pd_data_afk_time_count.name].caption = format_time((data['AfkTime']:get(player_name) * 3600) or 0, {hours=true, minutes=true, seconds=false, time=true, string=true})
+    table[pd_data_play_time_count.name].caption = format_time((data['Playtime']:get(player_name) or 0) * 3600, {hours=true, minutes=true, seconds=false, time=true, string=true})
+    table[pd_data_afk_time_count.name].caption = format_time((data['AfkTime']:get(player_name) or 0) * 3600, {hours=true, minutes=true, seconds=false, time=true, string=true})
     table[pd_data_maps_played_count.name].caption = format_number(data['MapsPlayed']:get(player_name) or 0)
     table[pd_data_join_count_count.name].caption = format_number(data['JoinCount']:get(player_name) or 0)
     table[pd_data_chat_messages_count.name].caption = format_number(data['ChatMessages']:get(player_name) or 0)
@@ -682,11 +682,11 @@ Gui.element{
 
     table[pd_data_damage_death_ratio_count.name].caption = string.format('%.2f', (data['DamageDealt']:get(player_name) or 0) / (data['Deaths']:get(player_name) or 1))
     table[pd_data_kill_death_ratio_count.name].caption = string.format('%.2f', (data['Kills']:get(player_name) or 0) / (data['Deaths']:get(player_name) or 1))
-    table[pd_data_session_time_count.name].caption = format_time(((data['Playtime']:get(player_name) or 0) - (data['AfkTime']:get(player_name) or 0) * 3600) / (data['JoinCount']:get(player_name) or 1), {hours=true, minutes=true, seconds=false, time=true, string=true})
+    table[pd_data_session_time_count.name].caption = format_time((((data['Playtime']:get(player_name) or 0) - (data['AfkTime']:get(player_name) or 0)) * 3600) / (data['JoinCount']:get(player_name) or 1), {hours=true, minutes=true, seconds=false, time=true, string=true})
     table[pd_data_build_ratio_count.name].caption = string.format('%.2f', (data['MachinesBuilt']:get(player_name) or 0) / (data['MachinesRemoved']:get(player_name) or 1))
     table[pd_data_rocket_per_hour_count.name].caption = string.format('%.2f', (data['RocketsLaunched']:get(player_name) or 0) * 60 / (data['Playtime']:get(player_name) or 1))
     table[pd_data_tree_kill_per_minute_count.name].caption = string.format('%.2f', (data['TreesDestroyed']:get(player_name) or 0) / (data['Playtime']:get(player_name) or 1))
-    table[pd_data_net_play_time_count.name].caption = format_time(((data['Playtime']:get(player_name) or 0) - (data['AfkTime']:get(player_name) or 0) * 3600), {hours=true, minutes=true, seconds=false, time=true, string=true})
+    table[pd_data_net_play_time_count.name].caption = format_time((((data['Playtime']:get(player_name) or 0) - (data['AfkTime']:get(player_name) or 0)) * 3600), {hours=true, minutes=true, seconds=false, time=true, string=true})
     table[pd_data_afk_time_ratio_count.name].caption = string.format('%.2f', (data['AfkTime']:get(player_name) or 0) / (data['Playtime']:get(player_name) or 1))
 end)
 
