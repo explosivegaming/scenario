@@ -22,7 +22,7 @@ Gui.element{
     type = 'drop-down',
     name = 'cctv_status',
     items = {'Enable', 'Disable'},
-    selected_index = 1
+    selected_index = 2
 }:style{
     width = 96
 }:on_selection_changed(function(_, element, _)
