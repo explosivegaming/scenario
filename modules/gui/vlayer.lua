@@ -38,7 +38,8 @@ local vlayer_gui_display_item_solar_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_item_solar_name',
-    caption = '[img=entity/solar-panel] Solar Panel'
+    caption = '[img=entity/solar-panel] Solar Panel',
+    font = 'default-bold'
 }:style{
     width = 200
 }
@@ -47,7 +48,8 @@ local vlayer_gui_display_item_solar_count =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_item_solar_count',
-    caption = '0'
+    caption = '0',
+    font = 'default-bold'
 }:style{
     width = 120
 }
@@ -56,7 +58,8 @@ local vlayer_gui_display_item_accumulator_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_item_accumulator_name',
-    caption = '[img=entity/accumulator] Accumulator'
+    caption = '[img=entity/accumulator] Accumulator',
+    font = 'default-bold'
 }:style{
     width = 200
 }
@@ -65,7 +68,8 @@ local vlayer_gui_display_item_accumulator_count =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_item_accumulator_count',
-    caption = '0'
+    caption = '0',
+    font = 'default-bold'
 }:style{
     width = 120
 }
@@ -74,7 +78,8 @@ local vlayer_gui_display_signal_peak_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_peak_name',
-    caption = '[virtual-signal=signal-P] Peak Production'
+    caption = '[virtual-signal=signal-P] Peak Production',
+    font = 'default-bold'
 }:style{
     width = 200
 }
@@ -83,7 +88,8 @@ local vlayer_gui_display_signal_peak_count =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_peak_solar_count',
-    caption = '0'
+    caption = '0',
+    font = 'default-bold'
 }:style{
     width = 120
 }
@@ -92,7 +98,8 @@ local vlayer_gui_display_signal_sustained_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_sustained_name',
-    caption = '[virtual-signal=signal-S] Sustained Production'
+    caption = '[virtual-signal=signal-S] Sustained Production',
+    font = 'default-bold'
 }:style{
     width = 200
 }
@@ -102,35 +109,18 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_sustained_count',
     caption = '0',
+    font = 'default-bold'
 }:style{
     width = 120
 }
 
-local vlayer_gui_display_battery_bar =
-Gui.element{
-    type = 'progressbar_style',
-    name = 'vlayer_display_signal_battery_bar',
-    embed_text_in_bar = true,
-    font = 'default-bold',
-    value = 0,
-    size = 320
-}:style{
-    width = 320
-}
-
-local vlayer_gui_display_battery_e =
-Gui.element{
-    type = 'label',
-    name = 'vlayer_display_signal_battery_e'
-}:style{
-    width = 0
-}
 
 local vlayer_gui_display_signal_max_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_max_name',
-    caption = '[virtual-signal=signal-M] Max Battery'
+    caption = '[virtual-signal=signal-M] Max Battery',
+    font = 'default-bold'
 }:style{
     width = 200
 }
@@ -139,7 +129,8 @@ local vlayer_gui_display_signal_max_count =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_max_count',
-    caption = '0'
+    caption = '0',
+    font = 'default-bold'
 }:style{
     width = 120
 }
@@ -148,7 +139,8 @@ local vlayer_gui_display_signal_current_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_current_name',
-    caption = '[virtual-signal=signal-C] Current Battery'
+    caption = '[virtual-signal=signal-C] Current Battery',
+    font = 'default-bold'
 }:style{
     width = 200
 }
@@ -157,7 +149,8 @@ local vlayer_gui_display_signal_current_count =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_current_count',
-    caption = '0'
+    caption = '0',
+    font = 'default-bold'
 }:style{
     width = 120
 }
@@ -175,9 +168,6 @@ Gui.element(function(_, parent, name)
     vlayer_gui_display_signal_peak_count(disp)
     vlayer_gui_display_signal_sustained_name(disp)
     vlayer_gui_display_signal_sustained_count(disp)
-
-    vlayer_gui_display_battery_bar(disp)
-    vlayer_gui_display_battery_e(disp)
     vlayer_gui_display_signal_max_name(disp)
     vlayer_gui_display_signal_max_count(disp)
     vlayer_gui_display_signal_current_name(disp)
@@ -403,7 +393,6 @@ Event.on_nth_tick(config.update_tick, function(_)
         [vlayer_gui_display_item_accumulator_count.name] = format_number(vlayer.circuit.item['accumulator']),
         [vlayer_gui_display_signal_peak_count.name] = format_number(vlayer.circuit.signal['signal-P']),
         [vlayer_gui_display_signal_sustained_count.name] = format_number(vlayer.circuit.signal['signal-S']),
-        [vlayer_gui_display_battery_bar.name] = vlayer.circuit.signal['signal-C'] / vlayer.circuit.signal['signal-M'],
         [vlayer_gui_display_signal_max_count.name] = format_number(vlayer.circuit.signal['signal-M']),
         [vlayer_gui_display_signal_current_count.name] = format_number(vlayer.circuit.signal['signal-C']),
     }
