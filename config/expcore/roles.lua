@@ -117,7 +117,6 @@ Roles.new_role('Trainee','TrMod')
     'command/search-recent',
     'command/search-online',
     'command/personal-battery-recharge',
-    'command/waterfill',
     'command/pollution-off',
     'command/pollution-clear',
     'command/bot-queue-get',
@@ -140,8 +139,7 @@ Roles.new_role('Board Member','Board')
     'command/repair',
     'command/spectate',
     'command/follow',
-    'command/personal-battery-recharge',
-    'command/waterfill'
+    'command/personal-battery-recharge'
 }
 
 Roles.new_role('Senior Backer','Backer')
@@ -232,7 +230,8 @@ Roles.new_role('Member','Mem')
     'command/auto-research',
     'command/manual-train',
     'command/lawnmower',
-    'gui/surveillance'
+    'gui/surveillance',
+    'command/waterfill'
 }
 
 local hours3, hours15 = 3*216000, 15*60
