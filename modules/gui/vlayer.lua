@@ -114,6 +114,7 @@ Gui.element{
     width = 120
 }
 
+
 local vlayer_gui_display_signal_max_name =
 Gui.element{
     type = 'label',
@@ -171,6 +172,7 @@ Gui.element(function(_, parent, name)
     vlayer_gui_display_signal_max_count(disp)
     vlayer_gui_display_signal_current_name(disp)
     vlayer_gui_display_signal_current_count(disp)
+
 
     return vlayer_set
 end)
@@ -349,20 +351,19 @@ end)
 vlayer_container =
 Gui.element(function(event_trigger, parent)
     local player = Gui.get_player_from_element(parent)
-    local visible = Roles.player_allowed(player, 'gui/vlayer-edit')
     local container = Gui.container(parent, event_trigger, 320)
 
     vlayer_display_set(container, 'vlayer_st_1')
     vlayer_control_set(container, 'vlayer_st_2')
 
-    local table = container['vlayer_st_2'].table
+    local table = container['vlayer_st_2'].disp.table
+    local visible = Roles.player_allowed(player, 'gui/vlayer-edit')
 
     table[vlayer_gui_control_storage.name].visible = visible
     table[vlayer_gui_control_circuit.name].visible = visible
     table[vlayer_gui_control_power.name].visible = visible
     table[vlayer_gui_control_remove.name].enabled = false
     table[vlayer_gui_control_remove.name].visible = visible
-
     return container.parent
 end)
 :add_to_left_flow()
@@ -373,13 +374,14 @@ end)
 
 local function role_update_event(event)
     local player = game.players[event.player_index]
-    local frame = Gui.get_left_element(player, vlayer_container)
     local visible = Roles.player_allowed(player, 'gui/vlayer-edit')
+    local frame = Gui.get_left_element(player, vlayer_container)
+    local table = frame.container['vlayer_st_2'].disp.table
 
-    frame.container['vlayer_st_2'].table[vlayer_gui_control_storage.name].visible = visible
-    frame.container['vlayer_st_2'].table[vlayer_gui_control_circuit.name].visible = visible
-    frame.container['vlayer_st_2'].table[vlayer_gui_control_power.name].visible = visible
-    frame.container['vlayer_st_2'].table[vlayer_gui_control_remove.name].visible = visible
+    table[vlayer_gui_control_storage.name].visible = visible
+    table[vlayer_gui_control_circuit.name].visible = visible
+    table[vlayer_gui_control_power.name].visible = visible
+    table[vlayer_gui_control_remove.name].visible = visible
 end
 
 Event.add(Roles.events.on_role_assigned, role_update_event)
@@ -392,7 +394,7 @@ Event.on_nth_tick(config.update_tick, function(_)
         [vlayer_gui_display_signal_peak_count.name] = format_number(vlayer.circuit.signal['signal-P']),
         [vlayer_gui_display_signal_sustained_count.name] = format_number(vlayer.circuit.signal['signal-S']),
         [vlayer_gui_display_signal_max_count.name] = format_number(vlayer.circuit.signal['signal-M']),
-        [vlayer_gui_display_signal_current_count.name] = format_number(vlayer.circuit.signal['signal-C'])
+        [vlayer_gui_display_signal_current_count.name] = format_number(vlayer.circuit.signal['signal-C']),
     }
 
     for _, player in pairs(game.connected_players) do
