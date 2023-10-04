@@ -10,461 +10,418 @@ local format_time = _C.format_time --- @dep expcore.common
 local format_number = require('util').format_number --- @dep util
 
 local pd_container
+local label_width = {
+    ['name'] = 135,
+    ['count'] = 105,
+    ['total'] = 480
+}
 
 local pd_data_play_time_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.Playtime'},
-    tooltip = {'exp-statistics.Playtime-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.Playtime-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_play_time_count =
 Gui.element{
     type = 'label',
-    caption = '00:00:00',
-    style = 'heading_1_label'
+    caption = '00:00:00'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_afk_time_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.AfkTime'},
-    tooltip = {'exp-statistics.AfkTime-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.AfkTime-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_afk_time_count =
 Gui.element{
     type = 'label',
-    caption = '00:00:00',
-    style = 'heading_1_label'
+    caption = '00:00:00'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_maps_played_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.MapsPlayed'},
-    tooltip = {'exp-statistics.MapsPlayed-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.MapsPlayed-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_maps_played_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_join_count_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.JoinCount'},
-    tooltip = {'exp-statistics.JoinCount-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.JoinCount-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_join_count_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_chat_messages_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.ChatMessages'},
-    tooltip = {'exp-statistics.ChatMessages-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.ChatMessages-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_chat_messages_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_commands_used_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.CommandsUsed'},
-    tooltip = {'exp-statistics.CommandsUsed-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.CommandsUsed-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_commands_used_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_rockets_launched_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.RocketsLaunched'},
-    tooltip = {'exp-statistics.RocketsLaunched-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.RocketsLaunched-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_rockets_launched_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_research_completed_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.ResearchCompleted'},
-    tooltip = {'exp-statistics.ResearchCompleted-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.ResearchCompleted-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_research_completed_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_machines_built_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.MachinesBuilt'},
-    tooltip = {'exp-statistics.MachinesBuilt-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.MachinesBuilt-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_machines_built_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_machines_removed_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.MachinesRemoved'},
-    tooltip = {'exp-statistics.MachinesRemoved-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.MachinesRemoved-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_machines_removed_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_tiles_built_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.TilesBuilt'},
-    tooltip = {'exp-statistics.TilesBuilt-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.TilesBuilt-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_tiles_built_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_tiles_removed_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.TilesRemoved'},
-    tooltip = {'exp-statistics.TilesRemoved-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.TilesRemoved-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_tiles_removed_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_trees_destroyed_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.TreesDestroyed'},
-    tooltip = {'exp-statistics.TreesDestroyed-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.TreesDestroyed-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_trees_destroyed_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_ore_mined_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.OreMined'},
-    tooltip = {'exp-statistics.OreMined-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.OreMined-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_ore_mined_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_items_crafted_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.ItemsCrafted'},
-    tooltip = {'exp-statistics.ItemsCrafted-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.ItemsCrafted-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_items_crafted_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_items_picked_up_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.ItemsPickedUp'},
-    tooltip = {'exp-statistics.ItemsPickedUp-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.ItemsPickedUp-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_items_picked_up_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_kills_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.Kills'},
-    tooltip = {'exp-statistics.Kills-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.Kills-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_kills_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_deaths_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.Deaths'},
-    tooltip = {'exp-statistics.Deaths-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.Deaths-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_deaths_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_damage_dealt_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.DamageDealt'},
-    tooltip = {'exp-statistics.DamageDealt-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.DamageDealt-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_damage_dealt_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_distance_travelled_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.DistanceTravelled'},
-    tooltip = {'exp-statistics.DistanceTravelled-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.DistanceTravelled-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_distance_travelled_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_capsules_used_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.CapsulesUsed'},
-    tooltip = {'exp-statistics.CapsulesUsed-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.CapsulesUsed-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_capsules_used_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_entity_repaired_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.EntityRepaired'},
-    tooltip = {'exp-statistics.EntityRepaired-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.EntityRepaired-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_entity_repaired_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_deconstruction_planner_used_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.DeconstructionPlannerUsed'},
-    tooltip = {'exp-statistics.DeconstructionPlannerUsed-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.DeconstructionPlannerUsed-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_deconstruction_planner_used_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 local pd_data_map_tags_made_name =
 Gui.element{
     type = 'label',
     caption = {'exp-statistics.MapTagsMade'},
-    tooltip = {'exp-statistics.MapTagsMade-tooltip'},
-    style = 'heading_1_label'
+    tooltip = {'exp-statistics.MapTagsMade-tooltip'}
 }:style{
-    width = 180
+    width = label_width['name']
 }
 
 local pd_data_map_tags_made_count =
 Gui.element{
     type = 'label',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '0'
 }:style{
-    width = 140
+    width = label_width['count']
 }
 
 --[[
@@ -481,7 +438,7 @@ AFKTimeRatio
 local pd_data_set =
 Gui.element(function(_, parent, name)
     local pd_data_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(pd_data_set, 320, 2, 'disp')
+    local disp = Gui.scroll_table(pd_data_set, label_width['total'], 4, 'disp')
 
     pd_data_play_time_name(disp)
     pd_data_play_time_count(disp)
@@ -586,7 +543,7 @@ end)
 local pd_username_set =
 Gui.element(function(_, parent, name, player_list)
     local pd_username_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(pd_username_set, 320, 2, 'disp')
+    local disp = Gui.scroll_table(pd_username_set, label_width['total'], 2, 'disp')
 
     pd_username_player(disp, player_list)
     pd_username_update(disp)
@@ -596,7 +553,7 @@ end)
 
 pd_container =
 Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, 320)
+    local container = Gui.container(parent, event_trigger, label_width['total'])
     local player_list = {}
 
     for _, player in pairs(game.players) do
