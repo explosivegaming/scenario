@@ -39,7 +39,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_item_solar_name',
     caption = '[img=entity/solar-panel] Solar Panel',
-    font = 'default-bold'
+    style = 'heading_1_label'
 }:style{
     width = 200
 }
@@ -49,7 +49,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_item_solar_count',
     caption = '0',
-    font = 'default-bold'
+    style = 'heading_1_label'
 }:style{
     width = 120
 }
@@ -59,7 +59,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_item_accumulator_name',
     caption = '[img=entity/accumulator] Accumulator',
-    font = 'default-bold'
+    style = 'heading_1_label'
 }:style{
     width = 200
 }
@@ -69,7 +69,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_item_accumulator_count',
     caption = '0',
-    font = 'default-bold'
+    style = 'heading_1_label'
 }:style{
     width = 120
 }
@@ -79,7 +79,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_peak_name',
     caption = '[virtual-signal=signal-P] Peak Production',
-    font = 'default-bold'
+    style = 'heading_1_label'
 }:style{
     width = 200
 }
@@ -89,7 +89,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_peak_solar_count',
     caption = '0',
-    font = 'default-bold'
+    style = 'heading_1_label'
 }:style{
     width = 120
 }
@@ -99,7 +99,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_sustained_name',
     caption = '[virtual-signal=signal-S] Sustained Production',
-    font = 'default-bold'
+    style = 'heading_1_label'
 }:style{
     width = 200
 }
@@ -109,7 +109,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_sustained_count',
     caption = '0',
-    font = 'default-bold'
+    style = 'heading_1_label'
 }:style{
     width = 120
 }
@@ -120,7 +120,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_max_name',
     caption = '[virtual-signal=signal-M] Max Battery',
-    font = 'default-bold'
+    style = 'heading_1_label'
 }:style{
     width = 200
 }
@@ -130,7 +130,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_max_count',
     caption = '0',
-    font = 'default-bold'
+    style = 'heading_1_label'
 }:style{
     width = 120
 }
@@ -140,7 +140,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_current_name',
     caption = '[virtual-signal=signal-C] Current Battery',
-    font = 'default-bold'
+    style = 'heading_1_label'
 }:style{
     width = 200
 }
@@ -150,7 +150,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_current_count',
     caption = '0',
-    font = 'default-bold'
+    style = 'heading_1_label'
 }:style{
     width = 120
 }
