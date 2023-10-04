@@ -424,11 +424,75 @@ Gui.element{
     width = label_width['count']
 }
 
+local pd_data_damage_death_ratio_name =
+Gui.element{
+    type = 'label',
+    caption = {'exp-statistics.DamageDeathRatio'},
+    tooltip = {'exp-statistics.DamageDeathRatio-tooltip'}
+}:style{
+    width = label_width['name']
+}
+
+local pd_data_damage_death_ratio_count =
+Gui.element{
+    type = 'label',
+    caption = '0'
+}:style{
+    width = label_width['count']
+}
+
+local pd_data_kill_death_ratio_name =
+Gui.element{
+    type = 'label',
+    caption = {'exp-statistics.KillDeathRatio'},
+    tooltip = {'exp-statistics.KillDeathRatio-tooltip'}
+}:style{
+    width = label_width['name']
+}
+
+local pd_data_kill_death_ratio_count =
+Gui.element{
+    type = 'label',
+    caption = '0'
+}:style{
+    width = label_width['count']
+}
+
+local pd_data_session_time_name =
+Gui.element{
+    type = 'label',
+    caption = {'exp-statistics.SessionTime'},
+    tooltip = {'exp-statistics.SessionTime-tooltip'}
+}:style{
+    width = label_width['name']
+}
+
+local pd_data_session_time_count =
+Gui.element{
+    type = 'label',
+    caption = '0'
+}:style{
+    width = label_width['count']
+}
+
+local pd_data_build_ratio_name =
+Gui.element{
+    type = 'label',
+    caption = {'exp-statistics.BuildRatio'},
+    tooltip = {'exp-statistics.BuildRatio-tooltip'}
+}:style{
+    width = label_width['name']
+}
+
+local pd_data_build_ratio_count =
+Gui.element{
+    type = 'label',
+    caption = '0'
+}:style{
+    width = label_width['count']
+}
+
 --[[
-DamageDeathRatio
-KillDeathRatio
-SessionTime
-BuildRatio
 RocketPerHour
 TreeKillPerMinute
 NetPlayTime
@@ -489,6 +553,15 @@ Gui.element(function(_, parent, name)
     pd_data_map_tags_made_name(disp)
     pd_data_map_tags_made_count(disp)
 
+    pd_data_damage_death_ratio_name(disp)
+    pd_data_damage_death_ratio_count(disp)
+    pd_data_kill_death_ratio_name(disp)
+    pd_data_kill_death_ratio_count(disp)
+    pd_data_session_time_name(disp)
+    pd_data_session_time_count(disp)
+    pd_data_build_ratio_name(disp)
+    pd_data_build_ratio_count(disp)
+
     return pd_data_set
 end)
 
@@ -535,8 +608,13 @@ Gui.element{
     table[pd_data_distance_travelled_count.name].caption = format_number(data['DistanceTravelled']:get(player_name) or 0)
     table[pd_data_capsules_used_count.name].caption = format_number(data['CapsulesUsed']:get(player_name) or 0)
     table[pd_data_entity_repaired_count.name].caption = format_number(data['EntityRepaired']:get(player_name) or 0)
-    table[pd_data_deconstruction_planner_used_count].caption = format_number(data['DeconstructionPlannerUsed']:get(player_name) or 0)
-    table[pd_data_map_tags_made_count].caption = format_number(data['MapTagsMade']:get(player_name) or 0)
+    table[pd_data_deconstruction_planner_used_count.name].caption = format_number(data['DeconstructionPlannerUsed']:get(player_name) or 0)
+    table[pd_data_map_tags_made_count.name].caption = format_number(data['MapTagsMade']:get(player_name) or 0)
+
+    table[pd_data_damage_death_ratio_count.name].caption = string.format('%.2f', (data['DamageDealt']:get(player_name) or 0) / (data['Deaths']:get(player_name) or 1))
+    table[pd_data_kill_death_ratio_count.name].caption = string.format('%.2f', (data['Kills']:get(player_name) or 0) / (data['Deaths']:get(player_name) or 1))
+    table[pd_data_session_time_count.name].caption = format_time((data['Playtime']:get(player_name) or 0) - (data['AfkTime']:get(player_name) or 0), {hours=true, minutes=true, seconds=true, time=true, string=true})
+    table[pd_data_build_ratio_count.name].caption = string.format('%.2f', (data['MachinesBuilt']:get(player_name) or 0) / (data['MachinesRemoved']:get(player_name) or 1))
 
 end)
 
