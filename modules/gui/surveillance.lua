@@ -24,7 +24,7 @@ Gui.element{
     items = {'Enable', 'Disable'},
     selected_index = 1
 }:style{
-    width = 80
+    width = 100
 }:on_selection_changed(function(_, element, _)
     if element.selected_index == 1 then
         element.parent.parent.parent.cctv_display.visible = true
@@ -40,7 +40,7 @@ Gui.element{
     items = {'Player', 'Static'},
     selected_index = 1
 }:style{
-    width = 80
+    width = 100
 }
 
 local cctv_location =
@@ -48,7 +48,7 @@ Gui.element{
     type = 'button',
     caption = 'set'
 }:style{
-    width = 40
+    width = 50
 }:on_click(function(player, element, _)
     element.parent.parent.cctv_display.position = player.position
 end)
