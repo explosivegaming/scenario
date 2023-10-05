@@ -118,7 +118,7 @@ function vlayer.entity.create.power(surface, pos, player)
         game.print(player.name .. ' built a vlayer energy interface on ' .. pos_to_gps_string(pos))
         vlayer_power.destructible = false
         vlayer_power.minable = false
-        vlayer_power.operable = false
+        vlayer_power.operable = true
         vlayer_power.last_user = player
         vlayer_power.electric_buffer_size = math.floor(10000000)
         vlayer_power.power_production = math.floor(500000 / 3)

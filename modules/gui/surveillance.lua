@@ -112,7 +112,7 @@ cctv_container =
 Gui.element(function(event_trigger, parent)
     local container = Gui.container(parent, event_trigger, 400)
     local scroll = container.add{name='scroll', type='scroll-pane', direction='vertical'}
-    scroll.style.maximal_height = 696
+    scroll.style.maximal_height = 664
     local player_list = {}
 
     for _, player in pairs(game.connected_players) do
