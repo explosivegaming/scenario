@@ -10,10 +10,6 @@ local vlayer = require 'modules.control.vlayer'
 
 local vlayer_container
 
-local function pos_to_gps_string(pos)
-	return '[gps=' .. string.format('%.1f', pos.x) .. ',' .. string.format('%.1f', pos.y) .. ']'
-end
-
 local function vlayer_convert_chest(player)
     local entities = player.surface.find_entities_filtered{position=player.position, radius=8, name='steel-chest', force=player.force, limit=1}
 
