@@ -16,6 +16,9 @@ Gui.element(function(name, parent, player_list)
         selected_index = #player_list > 0 and 1
     }
 end)
+:style{
+    horizontally_stretchable = true
+}
 
 local cctv_type =
 Gui.element{
@@ -100,22 +103,24 @@ Gui.element(function(_, parent, name, player_list)
     }
 
     camera.visible = false
-    camera.style.minimal_width = 480
-    camera.style.minimal_height = 360
+    camera.style.minimal_width = 400
+    camera.style.minimal_height = 300
     return camera_set
 end)
 
 cctv_container =
 Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, 480)
+    local container = Gui.container(parent, event_trigger, 400)
+    local scroll = container.add{name='scroll', type='scroll-pane', direction='vertical'}
+    scroll.style.maximal_height = 664
     local player_list = {}
 
     for _, player in pairs(game.connected_players) do
         table.insert(player_list, player.name)
     end
 
-    camera_set(container, 'cctv_st_1', player_list)
-    camera_set(container, 'cctv_st_2', player_list)
+    camera_set(scroll, 'cctv_st_1', player_list)
+    camera_set(scroll, 'cctv_st_2', player_list)
 
     return container.parent
 end)
@@ -134,8 +139,8 @@ local function gui_update()
 
     for _, player in pairs(game.connected_players) do
         local frame = Gui.get_left_element(player, cctv_container)
-        frame.container['cctv_st_1'].buttons.table[cctv_player.name].items = player_list
-        frame.container['cctv_st_2'].buttons.table[cctv_player.name].items = player_list
+        frame.container.scroll['cctv_st_1'].buttons.table[cctv_player.name].items = player_list
+        frame.container.scroll['cctv_st_2'].buttons.table[cctv_player.name].items = player_list
     end
 end
 
@@ -148,7 +153,7 @@ Event.add(defines.events.on_tick, function(_)
 
         for i=1, 2 do
             local scroll_table_name = 'cctv_st_' .. i
-            local current_camera_set = frame.container[scroll_table_name]
+            local current_camera_set = frame.container.scroll[scroll_table_name]
             local switch_index = current_camera_set.buttons.table[cctv_status.name].selected_index
 
             if switch_index == 1 then
