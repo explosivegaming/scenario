@@ -139,7 +139,8 @@ Roles.new_role('Board Member','Board')
     'command/repair',
     'command/spectate',
     'command/follow',
-    'command/personal-battery-recharge'
+    'command/personal-battery-recharge',
+    'gui/playerdata'
 }
 
 Roles.new_role('Senior Backer','Backer')
