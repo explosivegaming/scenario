@@ -103,14 +103,14 @@ Gui.element(function(_, parent, name, player_list)
     }
 
     camera.visible = false
-    camera.style.minimal_width = 400
-    camera.style.minimal_height = 300
+    camera.style.minimal_width = 480
+    camera.style.minimal_height = 360
     return camera_set
 end)
 
 cctv_container =
 Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, 400)
+    local container = Gui.container(parent, event_trigger, 480)
     local scroll = container.add{name='scroll', type='scroll-pane', direction='vertical'}
     scroll.style.maximal_height = 664
     local player_list = {}
