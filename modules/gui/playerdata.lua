@@ -643,6 +643,9 @@ Gui.element(function(name, parent, player_list)
         selected_index = #player_list > 0 and 1
     }
 end)
+:style{
+    horizontally_stretchable = true
+}
 
 local pd_username_update =
 Gui.element{
