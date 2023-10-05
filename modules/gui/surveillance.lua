@@ -153,7 +153,7 @@ Event.add(defines.events.on_tick, function(_)
 
         for i=1, 2 do
             local scroll_table_name = 'cctv_st_' .. i
-            local current_camera_set = frame.container[scroll_table_name].scroll
+            local current_camera_set = frame.container.scroll[scroll_table_name]
             local switch_index = current_camera_set.buttons.table[cctv_status.name].selected_index
 
             if switch_index == 1 then
