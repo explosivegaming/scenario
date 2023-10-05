@@ -169,7 +169,6 @@ Gui.element(function(_, parent, name)
     vlayer_gui_display_signal_current_name(disp)
     vlayer_gui_display_signal_current_count(disp)
 
-
     return vlayer_set
 end)
 
