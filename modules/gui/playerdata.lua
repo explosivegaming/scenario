@@ -652,7 +652,7 @@ Gui.element{
     type = 'button',
     caption = 'update'
 }:style{
-    width = 96
+    width = 128
 }:on_click(function(_, element, _)
     local player_name = game.players[element.parent[pd_username_player.name].selected_index]
     local data = PlayerData.Statistics
