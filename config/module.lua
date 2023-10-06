@@ -1,6 +1,6 @@
 return {
     -- type of machine to handle together
-    default_module_row_count = 4,
+    default_module_row_count = 6,
     module_slot_max = 4,
     machine_prod_disallow = {
         ['beacon'] = true

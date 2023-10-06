@@ -76,6 +76,20 @@ local function apply_module(player, area, machine, module)
                 if config.module_allowed[m_current_recipe.name] then
                     entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=module}
                     entity.last_user = player
+
+                else
+                    local prod = false
+
+                    for k, _ in pairs(module) do
+                        if k:sub(1, 12) == 'productivity' then
+                            prod = true
+                        end
+                    end
+
+                    if not prod then
+                        entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=module}
+                        entity.last_user = player
+                    end
                 end
 
             else
