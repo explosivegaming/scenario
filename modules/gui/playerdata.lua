@@ -638,30 +638,8 @@ Gui.element(function(_, parent, name)
     return pd_data_set
 end)
 
-local pd_username_player =
-Gui.element(function(name, parent, player_list)
-    return parent.add{
-        name = name,
-        type = 'drop-down',
-        items = player_list,
-        selected_index = #player_list > 0 and 1
-    }
-end)
-:style{
-    horizontally_stretchable = true
-}
-
-local pd_username_update =
-Gui.element{
-    type = 'button',
-    caption = 'update'
-}:style{
-    width = 128
-}:on_click(function(_, element, _)
-    local player_name = game.players[element.parent[pd_username_player.name].selected_index]
+local function pd_update(table, player_name)
     local data = PlayerData.Statistics
-    local table = element.parent.parent.parent.parent['pd_st_2'].disp.table
-
     table[pd_data_play_time_count.name].caption = format_time((data['Playtime']:get(player_name) or 0) * 3600, {hours=true, minutes=true, seconds=false, time=true, string=true})
     table[pd_data_afk_time_count.name].caption = format_time((data['AfkTime']:get(player_name) or 0) * 3600, {hours=true, minutes=true, seconds=false, time=true, string=true})
     table[pd_data_maps_played_count.name].caption = format_number(data['MapsPlayed']:get(player_name) or 0)
@@ -695,6 +673,35 @@ Gui.element{
     table[pd_data_tree_kill_per_minute_count.name].caption = format_number_n((data['TreesDestroyed']:get(player_name) or 0) / (data['Playtime']:get(player_name) or 1))
     table[pd_data_net_play_time_count.name].caption = format_time((((data['Playtime']:get(player_name) or 0) - (data['AfkTime']:get(player_name) or 0)) * 3600), {hours=true, minutes=true, seconds=false, time=true, string=true})
     table[pd_data_afk_time_ratio_count.name].caption = format_number_n((data['AfkTime']:get(player_name) or 0) * 100 / (data['Playtime']:get(player_name) or 1))
+end
+
+local pd_username_player =
+Gui.element(function(name, parent, player_list)
+    return parent.add{
+        name = name,
+        type = 'drop-down',
+        items = player_list,
+        selected_index = #player_list > 0 and 1
+    }
+end)
+:style{
+    horizontally_stretchable = true
+}:on_selection_changed(function(_, element, _)
+    local player_name = game.players[element.selected_index]
+    local table = element.parent.parent.parent.parent['pd_st_2'].disp.table
+    pd_update(table, player_name)
+end)
+
+local pd_username_update =
+Gui.element{
+    type = 'button',
+    caption = 'update'
+}:style{
+    width = 128
+}:on_click(function(_, element, _)
+    local player_name = game.players[element.parent[pd_username_player.name].selected_index]
+    local table = element.parent.parent.parent.parent['pd_st_2'].disp.table
+    pd_update(table, player_name)
 end)
 
 local pd_username_set =
