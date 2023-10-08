@@ -9,6 +9,7 @@ local config = require 'config.vlayer' --- @dep config.vlayer
 local vlayer = require 'modules.control.vlayer'
 
 local vlayer_container
+local vlayer_entity = {}
 
 local function vlayer_convert_chest(player)
     local entities = player.surface.find_entities_filtered{position=player.position, radius=8, name='steel-chest', force=player.force, limit=1}
@@ -174,6 +175,116 @@ end)
 
 local vlayer_gui_control_remove
 
+local function pos_to_gps_string(pos)
+	return '[gps=' .. string.format('%.1f', pos.x) .. ',' .. string.format('%.1f', pos.y) .. ']'
+end
+
+function vlayer_entity.create.storage(surface, pos, player)
+    local vlayer_storage = surface.create_entity{name='logistic-chest-storage', position=pos, force='neutral'}
+    game.print(player.name .. ' built a vlayer storage input on ' .. pos_to_gps_string(pos))
+    vlayer_storage.destructible = false
+    vlayer_storage.minable = false
+    vlayer_storage.operable = true
+    vlayer_storage.last_user = player
+    table.insert(vlayer.entity.storage.input, vlayer_storage)
+end
+
+function vlayer_entity.create.circuit(surface, pos, player)
+    local circuit_o = surface.create_entity{name='constant-combinator', position=pos, force='neutral'}
+    game.print(player.name .. ' built a vlayer circuit on ' .. pos_to_gps_string(pos))
+    circuit_o.destructible = false
+    circuit_o.minable = false
+    circuit_o.operable = true
+    circuit_o.last_user = player
+
+    local circuit_oc = circuit_o.get_or_create_control_behavior()
+    local count = 1
+
+    for kc, vc in pairs(vlayer.circuit.signal) do
+        circuit_oc.set_signal(count, {signal={type='virtual', name=kc}, count=vc})
+        count = count + 1
+    end
+
+    for kc, vc in pairs(vlayer.circuit.item) do
+        circuit_oc.set_signal(count, {signal={type='item', name=kc}, count=vc})
+        count = count + 1
+    end
+
+    table.insert(vlayer.entity.circuit, circuit_o)
+end
+
+function vlayer_entity.create.power(surface, pos, player)
+    if (surface.can_place_entity{name='electric-energy-interface', position=pos})then
+        local vlayer_power = surface.create_entity{name='electric-energy-interface', position=pos, force='neutral'}
+        game.print(player.name .. ' built a vlayer energy interface on ' .. pos_to_gps_string(pos))
+        vlayer_power.destructible = false
+        vlayer_power.minable = false
+        vlayer_power.operable = false
+        vlayer_power.last_user = player
+        vlayer_power.electric_buffer_size = math.floor(10000000)
+        vlayer_power.power_production = math.floor(500000 / 3)
+        vlayer_power.power_usage = math.floor(500000 / 3)
+        vlayer_power.energy = 0
+        table.insert(vlayer.entity.power, vlayer_power)
+
+    else
+        player.print('Unable to build vlayer energy entity')
+        surface.spill_item_stack(pos, {name='steel-chest', count=1}, true, player.force, false)
+    end
+end
+
+function vlayer_entity.remove(surface, pos, player)
+    local entities = surface.find_entities_filtered{name={'logistic-chest-storage', 'constant-combinator', 'electric-energy-interface'}, position=pos, radius=8, force='neutral', limit=1}
+
+    if (not entities or #entities == 0) then
+        player.print('Entity not found')
+        return
+    end
+
+    for _, entity in pairs(entities) do
+        local name = entity.name
+        local position = entity.position
+        entity.destroy()
+
+        if name == 'logistic-chest-storage' then
+            game.print(player.name .. ' removed a vlayer storage input on ' .. pos_to_gps_string(position))
+
+            for k, v in pairs(vlayer.entity.storage.input) do
+                if v == nil then
+                    vlayer.entity.storage.input[k] = nil
+
+                elseif not v.valid then
+                    vlayer.entity.storage.input[k] = nil
+                end
+            end
+
+        elseif name == 'constant-combinator' then
+            game.print(player.name .. ' removed a vlayer circuit output on ' .. pos_to_gps_string(position))
+
+            for k, v in pairs(vlayer.entity.circuit) do
+                if v == nil then
+                    vlayer.entity.circuit[k] = nil
+
+                elseif not v.valid then
+                    vlayer.entity.circuit[k] = nil
+                end
+            end
+
+        elseif name == 'electric-energy-interface' then
+            game.print(player.name .. ' removed a vlayer energy interface on ' .. pos_to_gps_string(position))
+
+            for k, v in pairs(vlayer.entity.power) do
+                if v == nil then
+                    vlayer.entity.power[k] = nil
+
+                elseif not v.valid then
+                    vlayer.entity.power[k] = nil
+                end
+            end
+        end
+    end
+end
+
 local vlayer_gui_control_storage =
 Gui.element{
     type = 'button',
@@ -184,7 +295,7 @@ Gui.element{
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
-        vlayer.entity.create.storage(player.surface, pos, player)
+        vlayer_entity.create.storage(player.surface, pos, player)
     end
 
     element.enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
@@ -201,7 +312,7 @@ Gui.element{
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
-        vlayer.entity.create.circuit(player.surface, pos, player)
+        vlayer_entity.create.circuit(player.surface, pos, player)
     end
 
     element.enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
@@ -218,7 +329,7 @@ Gui.element{
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
-        vlayer.entity.create.power(player.surface, pos, player)
+        vlayer_entity.create.power(player.surface, pos, player)
     end
 
     element.enabled = (#vlayer.entity.power < config.interface_limit.energy)
@@ -232,7 +343,7 @@ Gui.element{
 }:style{
     width = 160
 }:on_click(function(player, element, _)
-    vlayer.entity.remove(player.surface, player.position, player)
+    vlayer_entity.remove(player.surface, player.position, player)
 
     element.parent[vlayer_gui_control_storage.name].enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
     element.parent[vlayer_gui_control_circuit.name].enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
