@@ -687,7 +687,7 @@ end)
 :style{
     horizontally_stretchable = true
 }:on_selection_changed(function(_, element, _)
-    local player_name = game.players[element.selected_index]
+    local player_name = game.connected_players[element.selected_index]
     local table = element.parent.parent.parent.parent['pd_st_2'].disp.table
     pd_update(table, player_name)
 end)
@@ -699,9 +699,13 @@ Gui.element{
 }:style{
     width = 128
 }:on_click(function(_, element, _)
-    local player_name = game.players[element.parent[pd_username_player.name].selected_index]
-    local table = element.parent.parent.parent.parent['pd_st_2'].disp.table
-    pd_update(table, player_name)
+    local player_index = element.parent[pd_username_player.name].selected_index
+
+    if player_index > 0 then
+        local player_name = game.connected_players[player_index]
+        local table = element.parent.parent.parent.parent['pd_st_2'].disp.table
+        pd_update(table, player_name)
+    end
 end)
 
 local pd_username_set =
@@ -720,7 +724,7 @@ Gui.element(function(event_trigger, parent)
     local container = Gui.container(parent, event_trigger, label_width['total'])
     local player_list = {}
 
-    for _, player in pairs(game.players) do
+    for _, player in pairs(game.connected_players) do
         table.insert(player_list, player.name)
     end
 
@@ -741,7 +745,7 @@ end)
 local function gui_player_list_update()
     local player_list = {}
 
-    for _, player in pairs(game.players) do
+    for _, player in pairs(game.connected_players) do
         table.insert(player_list, player.name)
     end
 
