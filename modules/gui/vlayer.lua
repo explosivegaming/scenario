@@ -10,6 +10,7 @@ local vlayer = require 'modules.control.vlayer'
 
 local vlayer_container
 local vlayer_entity = {}
+vlayer_entity.create = {}
 
 local function vlayer_convert_chest(player)
     local entities = player.surface.find_entities_filtered{position=player.position, radius=8, name='steel-chest', force=player.force, limit=1}
