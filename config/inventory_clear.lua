@@ -4,6 +4,6 @@
 local events = defines.events
 return {
     events.on_player_banned,
-    events.on_player_kicked,
-    --events.on_player_left_game
+    -- events.on_player_kicked,
+    -- events.on_player_left_game
 }
