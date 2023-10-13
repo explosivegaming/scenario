@@ -99,23 +99,17 @@ Event.on_nth_tick(300, function()
 end)
 
 Event.add(defines.events.on_entity_damaged, function(event)
-    if (not event.cause) or (not event.cause.valid) or (event.cause.type ~= 'character') then
-        return
-    end
-
-    if not event.cause.associated_player then
-        return
-    end
-
-    if not HasEnabledDecon:get(event.cause.associated_player.name) then
-        return
-    end
-
     if not (event.damage_type.name == 'impact' and event.force) then
 		return
 	end
 
-	if event.entity.type == 'tree' or event.entity.type == 'simple-entity' then
-		event.entity.destroy()
+    if not (event.entity.type == 'tree' or event.entity.type == 'simple-entity') then
+		return
 	end
+
+    if (not event.cause) or (event.cause.type ~= 'car')then
+        return
+    end
+
+	event.entity.destroy()
 end)
