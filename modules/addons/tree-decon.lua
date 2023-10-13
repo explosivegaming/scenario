@@ -98,7 +98,6 @@ Event.on_nth_tick(300, function()
     end
 end)
 
---[[
 Event.add(defines.events.on_entity_damaged, function(event)
     if not (event.damage_type.name == 'impact' and event.force) then
 		return
@@ -108,4 +107,3 @@ Event.add(defines.events.on_entity_damaged, function(event)
 		event.entity.destroy()
 	end
 end)
-]]
