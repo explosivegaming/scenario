@@ -102,11 +102,11 @@ Event.add(defines.events.on_entity_damaged, function(event)
 	if not (event.damage_type.name == 'impact' and event.force) then
 		return
 	end
-	
+
 	if not (event.entity.type == 'tree' or event.entity.type == 'simple-entity') then
 		return
 	end
-	
+
 	if (not event.cause) or (event.cause.type ~= 'car')then
 		return
 	end
