@@ -97,3 +97,16 @@ Event.on_nth_tick(300, function()
         chache[key] = nil
     end
 end)
+
+Event.add(defines.events.on_entity_damaged, function(event)
+	local entity = event.entity
+	local force = event.force
+
+    if not (event.damage_type.name == 'impact' and force) then
+		return
+	end
+
+	if entity.type == 'tree' or entity.type == 'simple-entity' then
+		entity.destroy()
+	end
+end)
