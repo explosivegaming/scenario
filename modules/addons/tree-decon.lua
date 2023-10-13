@@ -99,14 +99,11 @@ Event.on_nth_tick(300, function()
 end)
 
 Event.add(defines.events.on_entity_damaged, function(event)
-	local entity = event.entity
-	local force = event.force
-
-    if not (event.damage_type.name == 'impact' and force) then
+    if not (event.damage_type.name == 'impact' and event.force) then
 		return
 	end
 
-	if entity.type == 'tree' or entity.type == 'simple-entity' then
-		entity.destroy()
+	if event.entity.type == 'tree' or event.entity.type == 'simple-entity' then
+		event.entity.destroy()
 	end
 end)
