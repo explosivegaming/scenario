@@ -99,11 +99,17 @@ Event.on_nth_tick(300, function()
 end)
 
 Event.add(defines.events.on_entity_damaged, function(event)
-    if not (event.damage_type.name == 'impact' and event.force) then
+	if not (event.damage_type.name == 'impact' and event.force) then
+		return
+	end
+	
+	if not (event.entity.type == 'tree' or event.entity.type == 'simple-entity') then
+		return
+	end
+	
+	if (not event.cause) or (event.cause.type ~= 'car')then
 		return
 	end
 
-	if event.entity.type == 'tree' or event.entity.type == 'simple-entity' then
-		event.entity.destroy()
-	end
+	event.entity.destroy()
 end)
