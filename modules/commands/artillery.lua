@@ -48,13 +48,26 @@ Selection.on_selection(SelectionArtyArea, function(event)
     end
 
     local count = 0
+    local hit = {}
 
     for _, e in pairs(player.surface.find_entities_filtered({area=area, type={'unit-spawner', 'turret'}, force='enemy'})) do
-        player.surface.create_entity{name='artillery-flare', position=e.position, force=player.force, life_time=30, movement={0, 0}, height=0, vertical_speed=0, frame_speed=0}
-        count = count + 1
+        local skip = false
 
-        if count > 600 then
-            break
+        for _, pos in ipairs(hit) do
+            if math.abs(e.position.x - pos.x) < 4 or math.abs(e.position.y - pos.y) < 4 then
+                skip = true
+                break
+            end
+        end
+
+        if not skip then
+            player.surface.create_entity{name='artillery-flare', position=e.position, force=player.force, life_time=30, movement={0, 0}, height=0, vertical_speed=0, frame_speed=0}
+            table.insert(hit, e.position)
+            count = count + 1
+
+            if count > 400 then
+                break
+            end
         end
     end
 end)
