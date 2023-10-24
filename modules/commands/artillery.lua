@@ -8,6 +8,24 @@ require 'config.expcore.command_general_parse'
 local Selection = require 'modules.control.selection' --- @dep modules.control.selection
 local SelectionArtyArea = 'ArtyArea'
 
+local function location_break(player, pos)
+    if player.force.is_chunk_charted(player.surface, {x=math.floor(pos.left_top.x / 32), y=math.floor(pos.left_top.y / 32)}) then
+        return true
+
+    elseif player.force.is_chunk_charted(player.surface, {x=math.floor(pos.left_top.x / 32), y=math.floor(pos.right_bottom.y / 32)}) then
+        return true
+
+    elseif player.force.is_chunk_charted(player.surface, {x=math.floor(pos.right_bottom.x / 32), y=math.floor(pos.left_top.y / 32)}) then
+        return true
+
+    elseif player.force.is_chunk_charted(player.surface, {x=math.floor(pos.right_bottom.x / 32), y=math.floor(pos.right_bottom.y / 32)}) then
+        return true
+
+    else
+        return false
+    end
+end
+
 --- align an aabb to the grid by expanding it
 local function aabb_align_expand(aabb)
     return {
@@ -25,13 +43,17 @@ Selection.on_selection(SelectionArtyArea, function(event)
         return
     end
 
+    if not (game.players[event.player_index].cheat_mode or location_break(player, event.area)) then
+        return Commands.error
+    end
+
     local count = 0
 
     for _, e in pairs(player.surface.find_entities_filtered({area=area, type={'unit-spawner', 'turret'}, force='enemy'})) do
         player.surface.create_entity{name='artillery-flare', position=e.position, force=player.force, life_time=30, movement={0, 0}, height=0, vertical_speed=0, frame_speed=0}
         count = count + 1
 
-        if count > 800 then
+        if count > 600 then
             break
         end
     end
