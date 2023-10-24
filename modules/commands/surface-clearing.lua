@@ -18,11 +18,6 @@ Commands.new_command('clear-item-on-ground', 'Clear Item On Ground')
     return Commands.success
 end)
 
---[[-- Commands Module - Clear Blueprint
-    - Adds a command that clear blueprint spamming or leftover
-    @commands Clear Blueprint
-]]
-
 Commands.new_command('clear-blueprint', 'Clear Blueprint')
 :add_param('range', false, 'integer-range', 1, 1000)
 :register(function(player, range)
