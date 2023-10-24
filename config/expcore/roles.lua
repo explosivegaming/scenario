@@ -245,6 +245,7 @@ Roles.new_role('Member','Mem')
     'command/waterfill',
     'command/clear-item-on-ground',
     'command/clear-blueprint',
+    'command/artillery-target-remote',
     'gui/surveillance'
 }
 

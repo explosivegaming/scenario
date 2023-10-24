@@ -45,6 +45,7 @@ return {
     'modules.commands.enemy',
     'modules.commands.waterfill',
     'modules.commands.surface-clearing',
+    'modules.commands.artillery',
 
     --- Addons
     'modules.addons.chat-popups',
