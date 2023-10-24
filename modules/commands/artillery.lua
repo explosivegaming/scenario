@@ -38,7 +38,7 @@ Selection.on_selection(SelectionArtyArea, function(event)
 end)
 
 Commands.new_command('artillery-target-remote', 'Artillery Target Remote')
-:register(function(_)
+:register(function(player)
     if Selection.is_selecting(player, SelectionArtyArea) then
         Selection.stop(player)
     else
