@@ -95,7 +95,8 @@ return {
     'modules.gui.research',
     'modules.gui.module',
     'modules.gui.surveillance',
-    'modules.gui.playerdata',
+    -- 'modules.gui.playerdata',
+    'modules.gui.linked',
 		'modules.graftorio.require', -- graftorio
 
     --- Config Files

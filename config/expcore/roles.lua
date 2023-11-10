@@ -246,7 +246,8 @@ Roles.new_role('Member','Mem')
     'command/clear-item-on-ground',
     'command/clear-blueprint',
     'command/artillery-target-remote',
-    'gui/surveillance'
+    'gui/surveillance',
+    -- 'gui/linked'
 }
 
 local hours1, hours15 = 1*216000, 15*60
