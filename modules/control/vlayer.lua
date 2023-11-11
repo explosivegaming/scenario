@@ -192,7 +192,7 @@ local function vlayer_circuit_handle()
         vlayer.circuit.signal['signal-L'] = (vlayer.storage.item[config.land.tile] * config.land.result) - (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) - (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
     end
 
-    for k, v in pairs(vlayer.circuit.item) do
+    for k, _ in pairs(vlayer.circuit.item) do
         vlayer.circuit.item[k] = vlayer.storage.item[k]
     end
 
