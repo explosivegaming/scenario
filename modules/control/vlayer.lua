@@ -270,6 +270,7 @@ local function vlayer_power_handle()
 end
 
 local update_tick_count = 1
+local update_tick_lcm = config.update_tick_storage * config.update_tick_power
 
 Event.on_nth_tick(config.update_tick, function(_)
     if (update_tick_count % config.update_tick_storage) == 0 then
@@ -283,7 +284,7 @@ Event.on_nth_tick(config.update_tick, function(_)
         vlayer_power_handle()
     end
 
-    if update_tick_count < config.update_tick_lcm then
+    if update_tick_count < update_tick_lcm then
         update_tick_count = update_tick_count + 1
 
     else

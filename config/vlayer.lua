@@ -3,7 +3,6 @@
 
 return {
     update_tick = 10,
-    update_tick_lcm = 6,
     update_tick_storage = 6,
     update_tick_power = 1,
     -- MW and MJ
