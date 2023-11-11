@@ -14,6 +14,7 @@ vlayer.entity = {}
 vlayer.entity.power = {}
 vlayer.entity.storage = {}
 vlayer.entity.storage.input = {}
+vlayer.entity.storage.output = {}
 vlayer.entity.circuit = {}
 vlayer.entity.create = {}
 
@@ -48,16 +49,17 @@ if config.init_item then
             if v.circuit then
                 vlayer.circuit.item[k] = 0
             end
+
+            if v.direct == false then
+                vlayer.storage.item_w[k] = 0
+            end
         end
     end
 end
 
 if config.land.enabled then
     vlayer.storage.item[config.land.tile] = 0
-end
-
-for k, _ in pairs(vlayer.storage.item) do
-    vlayer.storage.item_w[k] = 0
+    vlayer.storage.item_w[config.land.tile] = config.land.init_value
 end
 
 vlayer.circuit.signal['signal-P'] = 0
@@ -87,12 +89,48 @@ local function vlayer_storage_input_handle()
 
             for name, count in pairs(chest.get_contents()) do
                 if vlayer.storage.item[name] then
-                    vlayer.storage.item_w[name] = vlayer.storage.item_w[name] + count
-                    chest.remove({name=name, count=count})
+                    if config.init_item[name].direct then
+                        vlayer.storage.item[name] = vlayer.storage.item[name] + count
+                        chest.remove({name=name, count=count})
+
+                    else
+                        vlayer.storage.item_w[name] = vlayer.storage.item_w[name] + count
+                        chest.remove({name=name, count=count})
+                    end
 
                 elseif config.init_item_m[name] then
                     vlayer.storage.item_w[config.init_item_m[name].n] = vlayer.storage.item_w[config.init_item_m[name].n] + (count * config.init_item_m[name].m)
                     chest.remove({name=name, count=count})
+                end
+            end
+        end
+    end
+end
+
+local function vlayer_storage_output_handle()
+    for k, v in pairs(vlayer.entity.storage.output) do
+        if v == nil then
+            vlayer.entity.storage.output[k] = nil
+
+        elseif not v.valid then
+            vlayer.entity.storage.output[k] = nil
+
+        else
+            local chest = v.get_inventory(defines.inventory.chest)
+
+            for i=1, v.request_slot_count do
+                local request = v.get_request_slot(i)
+
+                if request then
+                    if vlayer.storage.item[request.name] then
+                        local current_amount = chest.get_item_count(request.name)
+                        local request_amount = math.min(math.max(request.count - current_amount, 0), vlayer.storage.item[request.name])
+                        vlayer.storage.item[request.name] = vlayer.storage.item[request.name] - request_amount
+
+                        if chest.can_insert({name=request.name, count=request_amount}) then
+                            chest.insert({name=request.name, count=request_amount})
+                        end
+                    end
                 end
             end
         end
@@ -136,7 +174,6 @@ local function vlayer_storage_handle()
         for k, v in pairs(vlayer.storage.item_w) do
             vlayer.storage.item[k] = vlayer.storage.item[k] + v
             vlayer.storage.item_w[k] = 0
-            vlayer.circuit.item[k] = vlayer.storage.item[k]
         end
     end
 end
@@ -153,6 +190,10 @@ local function vlayer_circuit_handle()
 
     if config.land.enabled then
         vlayer.circuit.signal['signal-L'] = (vlayer.storage.item[config.land.tile] * config.land.result) - (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) - (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
+    end
+
+    for k, v in pairs(vlayer.circuit.item) do
+        vlayer.circuit.item[k] = vlayer.storage.item[k]
     end
 
     for k, v in pairs(vlayer.entity.circuit) do
@@ -228,11 +269,26 @@ local function vlayer_power_handle()
     end
 end
 
+local update_tick_count = 1
+
 Event.on_nth_tick(config.update_tick, function(_)
-    vlayer_storage_input_handle()
-    vlayer_storage_handle()
-    vlayer_circuit_handle()
-    vlayer_power_handle()
+    if (update_tick_count % config.update_tick_storage) == 0 then
+        vlayer_storage_input_handle()
+        vlayer_storage_output_handle()
+        vlayer_storage_handle()
+    end
+
+    if (update_tick_count % config.update_tick_power) == 0 then
+        vlayer_circuit_handle()
+        vlayer_power_handle()
+    end
+
+    if update_tick_count < config.update_tick_lcm then
+        update_tick_count = update_tick_count + 1
+
+    else
+        update_tick_count = 1
+    end
 end)
 
 return vlayer

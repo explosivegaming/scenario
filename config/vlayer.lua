@@ -3,6 +3,9 @@
 
 return {
     update_tick = 10,
+    update_tick_lcm = 6,
+    update_tick_storage = 6,
+    update_tick_power = 1,
     -- MW and MJ
     default_energy = {
         ['solar-panel'] = 0.06,
@@ -10,6 +13,7 @@ return {
     },
     land = {
         enabled = false,
+        init_value = 100,
         tile = 'landfill',
         result = 4,
         requirement = {
@@ -23,6 +27,7 @@ return {
     -- will allow wireless energy or item transfer
     interface_limit = {
         ['storage_input'] = 1,
+        ['storage_output'] = 1,
         ['energy'] = 1,
         ['circuit'] = 1
     },
@@ -30,17 +35,51 @@ return {
         ['solar-panel'] = {
             enabled = true,
             circuit = true,
+            direct = false,
             value = 10
         },
         ['accumulator'] = {
             enabled = true,
             circuit = true,
+            direct = false,
             value = 10
         },
-        ['landfill'] = {
+        -- Can convert wood directly to energy to reduce trash
+        ['wood'] = {
             enabled = false,
             circuit = true,
-            value = 100
+            direct = true,
+            value = 0
+        },
+        ['coal'] = {
+            enabled = true,
+            circuit = true,
+            direct = true,
+            value = 0
+        },
+        ['stone'] = {
+            enabled = true,
+            circuit = true,
+            direct = true,
+            value = 0
+        },
+        ['iron-ore'] = {
+            enabled = true,
+            circuit = true,
+            direct = true,
+            value = 0
+        },
+        ['copper-ore'] = {
+            enabled = true,
+            circuit = true,
+            direct = true,
+            value = 0
+        },
+        ['uranium-ore'] = {
+            enabled = true,
+            circuit = true,
+            direct = true,
+            value = 0
         }
     },
     -- for modded power

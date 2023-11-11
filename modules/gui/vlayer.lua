@@ -13,7 +13,7 @@ local vlayer_entity = {}
 vlayer_entity.create = {}
 
 local function vlayer_convert_chest(player)
-    local entities = player.surface.find_entities_filtered{position=player.position, radius=8, name='steel-chest', force=player.force, limit=1}
+    local entities = player.surface.find_entities_filtered{position=player.position, radius=6, name='steel-chest', force=player.force, limit=1}
 
     if (not entities or #entities == 0) then
         player.print('No steel chest detected')
@@ -184,7 +184,7 @@ local function pos_to_gps_string(pos)
 	return '[gps=' .. string.format('%.1f', pos.x) .. ',' .. string.format('%.1f', pos.y) .. ']'
 end
 
-function vlayer_entity.create.storage(surface, pos, player)
+function vlayer_entity.create.storage_input(surface, pos, player)
     local vlayer_storage = surface.create_entity{name='logistic-chest-storage', position=pos, force='neutral'}
     game.print(player.name .. ' built a vlayer storage input on ' .. pos_to_gps_string(pos))
     vlayer_storage.destructible = false
@@ -192,6 +192,16 @@ function vlayer_entity.create.storage(surface, pos, player)
     vlayer_storage.operable = true
     vlayer_storage.last_user = player
     table.insert(vlayer.entity.storage.input, vlayer_storage)
+end
+
+function vlayer_entity.create.storage_output(surface, pos, player)
+    local vlayer_storage = surface.create_entity{name='logistic-chest-requester', position=pos, force='neutral'}
+    game.print(player.name .. ' built a vlayer storage output on ' .. pos_to_gps_string(pos))
+    vlayer_storage.destructible = false
+    vlayer_storage.minable = false
+    vlayer_storage.operable = true
+    vlayer_storage.last_user = player
+    table.insert(vlayer.entity.storage.output, vlayer_storage)
 end
 
 function vlayer_entity.create.circuit(surface, pos, player)
@@ -239,7 +249,7 @@ function vlayer_entity.create.power(surface, pos, player)
 end
 
 function vlayer_entity.remove(surface, pos, player)
-    local entities = surface.find_entities_filtered{name={'logistic-chest-storage', 'constant-combinator', 'electric-energy-interface'}, position=pos, radius=8, force='neutral', limit=1}
+    local entities = surface.find_entities_filtered{name={'logistic-chest-storage', 'logistic-chest-requester', 'constant-combinator', 'electric-energy-interface'}, position=pos, radius=6, force='neutral', limit=1}
 
     if (not entities or #entities == 0) then
         player.print('Entity not found')
@@ -260,6 +270,18 @@ function vlayer_entity.remove(surface, pos, player)
 
                 elseif not v.valid then
                     vlayer.entity.storage.input[k] = nil
+                end
+            end
+
+        elseif name == 'logistic-chest-requester' then
+            game.print(player.name .. ' removed a vlayer storage output on ' .. pos_to_gps_string(position))
+
+            for k, v in pairs(vlayer.entity.storage.output) do
+                if v == nil then
+                    vlayer.entity.storage.output[k] = nil
+
+                elseif not v.valid then
+                    vlayer.entity.storage.output[k] = nil
                 end
             end
 
@@ -290,21 +312,38 @@ function vlayer_entity.remove(surface, pos, player)
     end
 end
 
-local vlayer_gui_control_storage =
+local vlayer_gui_control_storage_input =
 Gui.element{
     type = 'button',
-    caption = 'Add Storage'
+    caption = 'Add Input Storage'
 }:style{
     width = 160
 }:on_click(function(player, element, _)
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
-        vlayer_entity.create.storage(player.surface, pos, player)
+        vlayer_entity.create.storage_input(player.surface, pos, player)
     end
 
     element.enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
-    element.parent[vlayer_gui_control_remove.name].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+    element.parent[vlayer_gui_control_remove.name].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.storage.output > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+end)
+
+local vlayer_gui_control_storage_output =
+Gui.element{
+    type = 'button',
+    caption = 'Add Output Storage'
+}:style{
+    width = 160
+}:on_click(function(player, element, _)
+    local pos = vlayer_convert_chest(player)
+
+    if (pos) then
+        vlayer_entity.create.storage_output(player.surface, pos, player)
+    end
+
+    element.enabled = (#vlayer.entity.storage.output < config.interface_limit.storage_output)
+    element.parent[vlayer_gui_control_remove.name].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.storage.output > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
 end)
 
 local vlayer_gui_control_circuit =
@@ -321,7 +360,7 @@ Gui.element{
     end
 
     element.enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
-    element.parent[vlayer_gui_control_remove.name].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+    element.parent[vlayer_gui_control_remove.name].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.storage.output > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
 end)
 
 local vlayer_gui_control_power =
@@ -338,7 +377,7 @@ Gui.element{
     end
 
     element.enabled = (#vlayer.entity.power < config.interface_limit.energy)
-    element.parent[vlayer_gui_control_remove.name].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+    element.parent[vlayer_gui_control_remove.name].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.storage.output > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
 end)
 
 vlayer_gui_control_remove =
@@ -350,10 +389,11 @@ Gui.element{
 }:on_click(function(player, element, _)
     vlayer_entity.remove(player.surface, player.position, player)
 
-    element.parent[vlayer_gui_control_storage.name].enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
+    element.parent[vlayer_gui_control_storage_input.name].enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
+    element.parent[vlayer_gui_control_storage_output.name].enabled = (#vlayer.entity.storage.output < config.interface_limit.storage_output)
     element.parent[vlayer_gui_control_circuit.name].enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
     element.parent[vlayer_gui_control_power.name].enabled = (#vlayer.entity.power < config.interface_limit.energy)
-    element.enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+    element.enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.storage.output > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
 end)
 
 local vlayer_control_set =
@@ -361,7 +401,8 @@ Gui.element(function(_, parent, name)
     local vlayer_set = parent.add{type='flow', direction='vertical', name=name}
     local disp = Gui.scroll_table(vlayer_set, 320, 2, 'disp')
 
-    vlayer_gui_control_storage(disp)
+    vlayer_gui_control_storage_input(disp)
+    vlayer_gui_control_storage_output(disp)
     vlayer_gui_control_circuit(disp)
     vlayer_gui_control_power(disp)
     vlayer_gui_control_remove(disp)
@@ -380,7 +421,8 @@ Gui.element(function(event_trigger, parent)
     local table = container['vlayer_st_2'].disp.table
     local visible = Roles.player_allowed(player, 'gui/vlayer-edit')
 
-    table[vlayer_gui_control_storage.name].visible = visible
+    table[vlayer_gui_control_storage_input.name].visible = visible
+    table[vlayer_gui_control_storage_output.name].visible = visible
     table[vlayer_gui_control_circuit.name].visible = visible
     table[vlayer_gui_control_power.name].visible = visible
     table[vlayer_gui_control_remove.name].enabled = false
@@ -399,7 +441,8 @@ local function role_update_event(event)
     local frame = Gui.get_left_element(player, vlayer_container)
     local table = frame.container['vlayer_st_2'].disp.table
 
-    table[vlayer_gui_control_storage.name].visible = visible
+    table[vlayer_gui_control_storage_input.name].visible = visible
+    table[vlayer_gui_control_storage_output.name].visible = visible
     table[vlayer_gui_control_circuit.name].visible = visible
     table[vlayer_gui_control_power.name].visible = visible
     table[vlayer_gui_control_remove.name].visible = visible
