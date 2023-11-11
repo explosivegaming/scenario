@@ -25,10 +25,10 @@ return {
     -- setting to a value greater than 1
     -- will allow wireless energy or item transfer
     interface_limit = {
-        ['storage_input'] = 1,
-        ['storage_output'] = 1,
+        ['storage_input'] = 2000,
+        ['storage_output'] = 2000,
         ['energy'] = 1,
-        ['circuit'] = 1
+        ['circuit'] = 2
     },
     init_item = {
         ['solar-panel'] = {
