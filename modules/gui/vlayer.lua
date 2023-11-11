@@ -13,7 +13,7 @@ local vlayer_entity = {}
 vlayer_entity.create = {}
 
 local function vlayer_convert_chest(player)
-    local entities = player.surface.find_entities_filtered{position=player.position, radius=6, name='steel-chest', force=player.force, limit=1}
+    local entities = player.surface.find_entities_filtered{position=player.position, radius=8, name='steel-chest', force=player.force, limit=1}
 
     if (not entities or #entities == 0) then
         player.print('No steel chest detected')
@@ -249,7 +249,7 @@ function vlayer_entity.create.power(surface, pos, player)
 end
 
 function vlayer_entity.remove(surface, pos, player)
-    local entities = surface.find_entities_filtered{name={'logistic-chest-storage', 'logistic-chest-requester', 'constant-combinator', 'electric-energy-interface'}, position=pos, radius=6, force='neutral', limit=1}
+    local entities = surface.find_entities_filtered{name={'logistic-chest-storage', 'logistic-chest-requester', 'constant-combinator', 'electric-energy-interface'}, position=pos, radius=4, force='neutral', limit=1}
 
     if (not entities or #entities == 0) then
         player.print('Entity not found')
