@@ -38,6 +38,12 @@ Selection.on_selection(SelectionConvertArea, function(event)
     local player = game.get_player(event.player_index)
 
     local entities = player.surface.find_entities_filtered{area=area, name='steel-chest'}
+    
+    if #entities == 0 then
+        player.print('No steel chest found')
+        return
+    end
+
     local tiles_to_make = {}
     local inv = player.get_main_inventory()
     local clf_exp = inv.get_item_count('cliff-explosives')
