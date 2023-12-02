@@ -28,7 +28,7 @@ return {
         ['storage_input'] = 2000,
         ['storage_output'] = 2000,
         ['energy'] = 1,
-        ['circuit'] = 2
+        ['circuit'] = 500
     },
     init_item = {
         ['solar-panel'] = {
@@ -45,7 +45,7 @@ return {
         },
         -- Can convert wood directly to energy to reduce trash
         ['wood'] = {
-            enabled = false,
+            enabled = true,
             circuit = true,
             direct = true,
             value = 0
