@@ -265,6 +265,7 @@ local hours1, hours15 = 1*216000, 15*60
 Roles.new_role('Regular','Reg')
 :set_permission_group('Standard')
 :set_custom_color{r=79,g=155,b=163}
+:set_flag('deconlog-bypass')
 :set_parent('Guest')
 :allow{
     'command/kill',
