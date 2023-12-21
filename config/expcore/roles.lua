@@ -230,6 +230,7 @@ Roles.new_role('Member','Mem')
     'command/auto-research',
     'command/manual-train',
     'command/lawnmower',
+    'gui/surveillance',
     'command/waterfill'
 }
 

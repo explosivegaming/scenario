@@ -92,6 +92,7 @@ return {
     'modules.gui.vlayer',
     'modules.gui.research',
     'modules.gui.module',
+    'modules.gui.surveillance',
 		'modules.graftorio.require', -- graftorio
 
     --- Config Files
