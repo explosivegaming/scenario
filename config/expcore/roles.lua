@@ -233,6 +233,7 @@ Roles.new_role('Member','Mem')
     'command/waterfill',
     'command/clear-item-on-ground',
     'command/clear-blueprint'
+    'gui/surveillance'
 }
 
 local hours3, hours15 = 3*216000, 15*60
