@@ -67,32 +67,35 @@ local function clear_module(player, area, machine)
     end
 end
 
-local function apply_module(player, area, machine, module)
+local function apply_module(player, area, machine, modules)
     for _, entity in pairs(player.surface.find_entities_filtered{area=area, name=machine, force=player.force}) do
         if config.machine_craft[machine] then
             local m_current_recipe = entity.get_recipe()
 
             if m_current_recipe ~= nil then
                 if config.module_allowed[m_current_recipe.name] then
-                    entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=module}
+                    entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=modules}
                     entity.last_user = player
 
                 else
-                    for k, _ in pairs(module) do
-                        module[k] = module[k]:gsub('productivity', 'effectivity')
+                    for k in pairs(modules) do
+                        if k:find('productivity') then
+                            modules[k:gsub('productivity', 'effectivity')] = modules[k]
+                            modules[k] = nil
+                        end
                     end
 
-                    entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=module}
+                    entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=modules}
                     entity.last_user = player
                 end
 
             else
-                entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=module}
+                entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=modules}
                 entity.last_user = player
             end
 
         else
-            entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=module}
+            entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=modules}
             entity.last_user = player
         end
     end
