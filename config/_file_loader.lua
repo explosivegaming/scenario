@@ -45,6 +45,7 @@ return {
     'modules.commands.enemy',
     'modules.commands.waterfill',
     'modules.commands.artillery',
+    'modules.commands.surface-clearing',
 
     --- Addons
     'modules.addons.chat-popups',
@@ -93,6 +94,7 @@ return {
     'modules.gui.vlayer',
     'modules.gui.research',
     'modules.gui.module',
+    'modules.gui.surveillance',
 		'modules.graftorio.require', -- graftorio
 
     --- Config Files

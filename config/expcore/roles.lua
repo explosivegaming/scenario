@@ -231,7 +231,10 @@ Roles.new_role('Member','Mem')
     'command/manual-train',
     'command/lawnmower',
     'command/waterfill',
-    'command/artillery-target-remote'
+    'command/artillery-target-remote',
+    'command/clear-item-on-ground',
+    'command/clear-blueprint',
+    'gui/surveillance'
 }
 
 local hours3, hours15 = 3*216000, 15*60
