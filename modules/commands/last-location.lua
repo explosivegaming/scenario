@@ -15,5 +15,5 @@ Commands.new_command('last-location', 'Sends you the last location of a player')
 :add_param('player', false, 'player')
 :register(function(player, action_player)
     local action_player_name_color = format_chat_player_name(action_player)
-    player.print{'expcom-lastlocation.response', action_player_name_color, action_player.position.x, action_player.position.y}
+    player.print{'expcom-lastlocation.response', action_player_name_color, string.format('%.1f', action_player.position.x), string.format('%.1f', action_player.position.y)}
 end)
