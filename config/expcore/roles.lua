@@ -232,7 +232,7 @@ Roles.new_role('Member','Mem')
     'command/lawnmower',
     'command/waterfill',
     'command/clear-item-on-ground',
-    'command/clear-blueprint'
+    'command/clear-blueprint',
     'gui/surveillance'
 }
 
