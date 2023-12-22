@@ -3,9 +3,9 @@
 
 return {
     disallow = { --- @setting disallow items in this list will never be repaired
-        ['loader']=true,
-        ['fast-loader']=true,
-        ['express-loader']=true,
+        -- ['loader']=true,
+        -- ['fast-loader']=true,
+        -- ['express-loader']=true,
         ['electric-energy-interface']=true,
         ['infinity-chest']=true
     },

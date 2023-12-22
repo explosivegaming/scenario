@@ -25,6 +25,7 @@ Roles.new_role('System','SYS')
 :set_flag('is_spectator')
 :set_flag('report-immune')
 :set_flag('instant-respawn')
+:set_flag('deconlog-bypass')
 :set_allow_all()
 
 Roles.new_role('Senior Administrator','SAdmin')
@@ -34,12 +35,9 @@ Roles.new_role('Senior Administrator','SAdmin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
 :set_flag('instant-respawn')
+:set_flag('deconlog-bypass')
 :set_parent('Administrator')
 :allow{
-    'command/interface',
-    'command/debug',
-    'command/toggle-cheat-mode',
-    'command/research-all'
 }
 
 Roles.new_role('Administrator','Admin')
@@ -49,11 +47,30 @@ Roles.new_role('Administrator','Admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
 :set_flag('instant-respawn')
+:set_flag('deconlog-bypass')
+:set_parent('Senior Moderator')
+:allow{
+    'command/interface',
+    'command/debug',
+    'command/toggle-cheat-mode',
+    'command/research-all',
+    'command/connect-all',
+	  'command/collectdata'
+}
+
+Roles.new_role('Senior Moderator','SMod')
+:set_permission_group('Admin')
+:set_custom_color{r=0,g=170,b=0}
+:set_flag('is_admin')
+:set_flag('is_spectator')
+:set_flag('report-immune')
+:set_flag('instant-respawn')
+:set_flag('deconlog-bypass')
 :set_parent('Moderator')
 :allow{
-    'gui/warp-list/bypass-proximity',
-    'gui/warp-list/bypass-cooldown',
-    'command/connect-all',
+   'gui/warp-list/bypass-proximity',
+   'gui/warp-list/bypass-cooldown',
+   'command/connect-all',
 	'command/collectdata'
 }
 
@@ -64,29 +81,22 @@ Roles.new_role('Moderator','Mod')
 :set_flag('is_spectator')
 :set_flag('report-immune')
 :set_flag('instant-respawn')
+:set_flag('deconlog-bypass')
 :set_parent('Trainee')
 :allow{
     'command/assign-role',
     'command/unassign-role',
-    'command/repair',
     'command/kill/always',
     'command/clear-tag/always',
     'command/go-to-spawn/always',
     'command/clear-reports',
     'command/clear-warnings',
     'command/clear-inventory',
-    'command/bonus',
-    'command/bonus/2',
-    'command/home',
-    'command/home-set',
-    'command/home-get',
-    'command/return',
+    'gui/warp-list/bypass-proximity',
+    'gui/warp-list/bypass-cooldown',
     'command/connect-player',
-    'gui/rocket-info/toggle-active',
-    'gui/rocket-info/remote_launch',
     'command/toggle-friendly-fire',
     'command/toggle-always-day',
-    'fast-tree-decon'
 }
 
 Roles.new_role('Trainee','TrMod')
@@ -95,7 +105,8 @@ Roles.new_role('Trainee','TrMod')
 :set_flag('is_admin')
 :set_flag('is_spectator')
 :set_flag('report-immune')
-:set_parent('Veteran')
+:set_flag('deconlog-bypass')
+:set_parent('Board Member')
 :allow{
     'command/admin-chat',
     'command/admin-marker',
@@ -116,14 +127,14 @@ Roles.new_role('Trainee','TrMod')
     'command/search-amount',
     'command/search-recent',
     'command/search-online',
-    'command/personal-battery-recharge',
     'command/pollution-off',
     'command/pollution-clear',
     'command/bot-queue-get',
     'command/bot-queue-set',
     'command/game-speed',
     'command/kill-biters',
-    'command/remove-biters'
+    'command/remove-biters',
+    'gui/playerdata'
 }
 
 --- Trusted Roles
@@ -133,33 +144,15 @@ Roles.new_role('Board Member','Board')
 :set_flag('is_spectator')
 :set_flag('report-immune')
 :set_flag('instant-respawn')
-:set_parent('Sponsor')
+:set_flag('deconlog-bypass')
+:set_parent('Supporter')
 :allow{
     'command/goto',
     'command/repair',
     'command/spectate',
     'command/follow',
-    'command/personal-battery-recharge'
-}
-
-Roles.new_role('Senior Backer','Backer')
-:set_permission_group('Trusted')
-:set_custom_color{r=238,g=172,b=44}
-:set_flag('is_spectator')
-:set_flag('report-immune')
-:set_flag('instant-respawn')
-:set_parent('Sponsor')
-:allow{
-}
-
-Roles.new_role('Sponsor','Spon')
-:set_permission_group('Trusted')
-:set_custom_color{r=238,g=172,b=44}
-:set_flag('is_spectator')
-:set_flag('report-immune')
-:set_flag('instant-respawn')
-:set_parent('Supporter')
-:allow{
+    'command/personal-battery-recharge',
+    -- Sponsor
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
     'command/bonus',
@@ -168,14 +161,16 @@ Roles.new_role('Sponsor','Spon')
     'command/home-set',
     'command/home-get',
     'command/return',
-    'fast-tree-decon'
+    'fast-tree-decon',
+    -- 'gui/playerdata'
 }
 
 Roles.new_role('Supporter','Sup')
 :set_permission_group('Trusted')
 :set_custom_color{r=230,g=99,b=34}
 :set_flag('is_spectator')
-:set_parent('Veteran')
+:set_flag('deconlog-bypass')
+:set_parent('Senior Member')
 :allow{
     'command/tag-color',
     'command/jail',
@@ -188,23 +183,51 @@ Roles.new_role('Partner','Part')
 :set_permission_group('Trusted')
 :set_custom_color{r=140,g=120,b=200}
 :set_flag('is_spectator')
-:set_parent('Veteran')
+:set_flag('deconlog-bypass')
+:set_parent('Senior Member')
 :allow{
+    'command/goto',
+    'command/repair',
+    'command/spectate',
+    'command/follow',
+    'command/personal-battery-recharge',
+    'gui/rocket-info/toggle-active',
+    'gui/rocket-info/remote_launch',
+    'command/bonus',
+    'command/bonus/2',
+    'command/home',
+    'command/home-set',
+    'command/home-get',
+    'command/return',
+    'fast-tree-decon',
+    'command/tag-color',
     'command/jail',
-    'command/unjail'
+    'command/unjail',
+    'command/join-message',
+    'command/join-message-clear'
 }
 
-local hours10, hours250 = 10*216000, 250*60
+Roles.new_role('Senior Member','SMem')
+:set_permission_group('Trusted')
+:set_custom_color{r=140,g=120,b=200}
+:set_flag('is_spectator')
+:set_flag('deconlog-bypass')
+:set_parent('Veteran')
+:allow{
+}
+
+local hours6, hours250 = 6*216000, 250*60
 Roles.new_role('Veteran','Vet')
 :set_permission_group('Trusted')
 :set_custom_color{r=140,g=120,b=200}
+:set_flag('deconlog-bypass')
 :set_parent('Member')
 :allow{
     'command/chat-bot',
     'command/last-location'
 }
 :set_auto_assign_condition(function(player)
-    if player.online_time >= hours10 then
+    if player.online_time >= hours6 then
         return true
     else
         local stats = Statistics:get(player, {})
@@ -231,16 +254,18 @@ Roles.new_role('Member','Mem')
     'command/manual-train',
     'command/lawnmower',
     'command/waterfill',
-    'command/artillery-target-remote',
     'command/clear-item-on-ground',
     'command/clear-blueprint',
-    'gui/surveillance'
+    'command/artillery-target-remote',
+    'gui/surveillance',
+    -- 'gui/linked'
 }
 
-local hours3, hours15 = 3*216000, 15*60
+local hours1, hours15 = 1*216000, 15*60
 Roles.new_role('Regular','Reg')
 :set_permission_group('Standard')
 :set_custom_color{r=79,g=155,b=163}
+:set_flag('deconlog-bypass')
 :set_parent('Guest')
 :allow{
     'command/kill',
@@ -252,7 +277,7 @@ Roles.new_role('Regular','Reg')
 	'bypass-nukeprotect'
 }
 :set_auto_assign_condition(function(player)
-    if player.online_time >= hours3 then
+    if player.online_time >= hours1 then
         return true
     else
         local stats = Statistics:get(player, {})
@@ -305,13 +330,13 @@ Roles.define_role_order{
     'System', -- Best to keep root at top
     'Senior Administrator',
     'Administrator',
+    'Senior Moderator',
     'Moderator',
     'Trainee',
     'Board Member',
-    'Senior Backer',
-    'Sponsor',
     'Supporter',
     'Partner',
+    'Senior Member',
     'Veteran',
     'Member',
     'Regular',
@@ -320,10 +345,10 @@ Roles.define_role_order{
 }
 
 Roles.override_player_roles{
-    ['PHIDIAS0303']={'Moderator', 'Board Member', 'Member'},
+    ['PHIDIAS0303']={'Senior Administrator', 'Moderator', 'Board Member', 'Member'},
     ['aldldl']={'Administrator', 'Moderator','Member'},
-    ['arty714']={'Senior Administrator', 'Moderator', 'Member'},
-    ['Cooldude2606']={'Senior Administrator', 'Moderator', 'Member'},
+    ['arty714']={'Administrator', 'Moderator', 'Member'},
+    ['Cooldude2606']={'Administrator', 'Moderator', 'Member'},
     ['Drahc_pro']={'Administrator', 'Moderator', 'Member'},
     ['mark9064']={'Administrator', 'Moderator','Member'},
     ['7h3w1z4rd']={'Moderator','Member'},

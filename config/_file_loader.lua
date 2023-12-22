@@ -46,6 +46,9 @@ return {
     'modules.commands.waterfill',
     'modules.commands.artillery',
     'modules.commands.surface-clearing',
+    'modules.commands.surface-clearing',
+    'modules.commands.artillery',
+
 
     --- Addons
     'modules.addons.chat-popups',
@@ -54,7 +57,7 @@ return {
     'modules.addons.advanced-start',
     'modules.addons.spawn-area',
     'modules.addons.compilatron',
-    'modules.addons.scorched-earth',
+    -- 'modules.addons.scorched-earth',
     'modules.addons.pollution-grading',
     'modules.addons.station-auto-name',
     'modules.addons.discord-alerts',
@@ -95,6 +98,8 @@ return {
     'modules.gui.research',
     'modules.gui.module',
     'modules.gui.surveillance',
+    -- 'modules.gui.playerdata',
+    -- 'modules.gui.linked',
 		'modules.graftorio.require', -- graftorio
 
     --- Config Files

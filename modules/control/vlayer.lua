@@ -10,52 +10,24 @@ Global.register(vlayer, function(tbl)
     vlayer = tbl
 end)
 
+vlayer.entity = {}
+vlayer.entity.power = {}
+vlayer.entity.storage = {}
+vlayer.entity.storage.input = {}
+vlayer.entity.storage.output = {}
+vlayer.entity.circuit = {}
+vlayer.entity.create = {}
+
 vlayer.storage = {}
 vlayer.storage.item = {}
-vlayer.storage.input = {}
-vlayer.storage.item_m = {}
-
-vlayer.power = {}
-vlayer.power.entity = {}
-vlayer.power.energy = 0
-vlayer.power.circuit = {}
+vlayer.storage.item_w = {}
 
 vlayer.circuit = {}
-vlayer.circuit.output = {}
+vlayer.circuit.item = {}
+vlayer.circuit.signal = {}
 
-for i=1, 11 do
-    vlayer.circuit.output[i] = {}
-    vlayer.circuit.output[i].count = 0
-end
-
-vlayer.circuit.output[1].signal = {type='virtual', name='signal-P'}
-vlayer.circuit.output[2].signal = {type='virtual', name='signal-S'}
-vlayer.circuit.output[3].signal = {type='virtual', name='signal-M'}
-vlayer.circuit.output[4].signal = {type='virtual', name='signal-C'}
-vlayer.circuit.output[5].signal = {type='virtual', name='signal-D'}
-vlayer.circuit.output[6].signal = {type='virtual', name='signal-T'}
-vlayer.circuit.output[7].signal = {type='virtual', name='signal-L'}
-vlayer.circuit.output[8].signal = {type='virtual', name='signal-A'}
-vlayer.circuit.output[9].signal = {type='virtual', name='signal-B'}
-vlayer.circuit.output[10].signal = {type='item', name='solar-panel'}
-vlayer.circuit.output[11].signal = {type='item', name='accumulator'}
-
-vlayer.storage.item['solar-panel'] = 0
-vlayer.storage.item['accumulator'] = 0
-
-if config.land.enabled then
-    vlayer.storage.item[config.land.tile] = 0
-    vlayer.storage.item_a = {}
-    vlayer.storage.item_a['solar-panel'] = 0
-    vlayer.storage.item_a['accumulator'] = 0
-end
-
-local vlayer_storage_item = {}
-
-for i=2, 8 do
-    vlayer_storage_item['solar-panel-' .. i] = {name='solar-panel', multiplier=4 ^ (i - 1)}
-    vlayer_storage_item['accumulator-' .. i] = {name='accumulator', multiplier=4 ^ (i - 1)}
-end
+vlayer.power = {}
+vlayer.power.energy = 0
 
 --[[
     25,000 / 416 s
@@ -69,154 +41,266 @@ end
     0.55    Sunrise 5,000   83s
 ]]
 
-Event.on_nth_tick(config.update_tick, function()
-    -- storage handle
-    for k, v in pairs(vlayer.storage.input) do
-        if ((v == nil) or (not v.valid)) then
-            vlayer.input[k] = nil
+if config.init_item then
+    for k, v in pairs(config.init_item) do
+        if v.enabled then
+            vlayer.storage.item[k] = v.value
 
-        else
-            local chest = v.get_inventory(defines.inventory.chest)
-            local chest_content = chest.get_contents()
+            if v.circuit then
+                vlayer.circuit.item[k] = 0
+            end
 
-            if config.land.enabled then
-                for item_name, count in pairs(chest_content) do
-                    if (vlayer.storage.item[item_name] ~= nil) then
-                        if item_name == config.land.tile then
-                            vlayer.storage.item[item_name] = vlayer.storage.item[item_name] + count
-                        else
-                            vlayer.storage.item_a[item_name] = vlayer.storage.item_a[item_name] + count
-                        end
-                        chest.remove({name=item_name, count=count})
-
-                    elseif (vlayer_storage_item[item_name] ~= nil) then
-                        vlayer.storage.item_a[vlayer_storage_item[item_name].name] = vlayer.storage.item_a[vlayer_storage_item[item_name].name] + (count * vlayer_storage_item[item_name].multiplier)
-                        chest.remove({name=item_name, count=count})
-                    end
-                end
-
-                local land_req = (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) + (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
-                local land_surplus = (vlayer.storage.item[config.land.tile] * config.land.result) - land_req
-
-                if (vlayer.storage.item_a['solar-panel'] > 0 and vlayer.storage.item_a['accumulator'] > 0) then
-                    local land_allocation = math.floor(land_surplus / (config.land.requirement['solar-panel'] + config.land.requirement['accumulator']))
-                    vlayer.storage.item['solar-panel'] = vlayer.storage.item['solar-panel'] + math.min(vlayer.storage.item_a['solar-panel'], land_allocation)
-                    vlayer.storage.item_a['solar-panel'] = vlayer.storage.item_a['solar-panel'] - math.min(vlayer.storage.item_a['solar-panel'], land_allocation)
-                    vlayer.storage.item['accumulator'] = vlayer.storage.item['accumulator'] + math.min(vlayer.storage.item_a['accumulator'], land_allocation)
-                    vlayer.storage.item_a['accumulator'] = vlayer.storage.item_a['accumulator'] - math.min(vlayer.storage.item_a['accumulator'], land_allocation)
-
-                elseif (vlayer.storage.item_a['solar-panel'] > 0 and vlayer.storage.item_a['accumulator'] == 0) then
-                    local land_allocation = math.floor(land_surplus / config.land.requirement['solar-panel'])
-                    vlayer.storage.item['solar-panel'] = vlayer.storage.item['solar-panel'] + math.min(vlayer.storage.item_a['solar-panel'], land_allocation)
-                    vlayer.storage.item_a['solar-panel'] = vlayer.storage.item_a['solar-panel'] - math.min(vlayer.storage.item_a['solar-panel'], land_allocation)
-
-                else
-                    local land_allocation = math.floor(land_surplus / config.land.requirement['accumulator'])
-                    vlayer.storage.item['accumulator'] = vlayer.storage.item['accumulator'] + math.min(vlayer.storage.item_a['accumulator'], land_allocation)
-                    vlayer.storage.item_a['accumulator'] = vlayer.storage.item_a['accumulator'] - math.min(vlayer.storage.item_a['accumulator'], land_allocation)
-                end
-
-                vlayer.circuit.output[1].count = math.floor(vlayer.storage.item['solar-panel'] * 0.06 * game.surfaces['nauvis'].solar_power_multiplier)
-                vlayer.circuit.output[2].count = math.floor(vlayer.storage.item['solar-panel'] * 873 * game.surfaces['nauvis'].solar_power_multiplier / 20800)
-                vlayer.circuit.output[3].count = vlayer.storage.item['accumulator'] * 5
-                vlayer.circuit.output[7].count = (vlayer.storage.item[config.land.tile] * config.land.result) - (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) - (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
-                vlayer.circuit.output[8].count = vlayer.storage.item_a['solar-panel']
-                vlayer.circuit.output[9].count = vlayer.storage.item_a['accumulator']
-                vlayer.circuit.output[10].count = vlayer.storage.item['solar-panel']
-                vlayer.circuit.output[11].count = vlayer.storage.item['accumulator']
-
-            else
-                for item_name, count in pairs(chest_content) do
-                    if (vlayer.storage.item[item_name] ~= nil) then
-                        vlayer.storage.item[item_name] = vlayer.storage.item[item_name] + count
-                        chest.remove({name=item_name, count=count})
-
-                    elseif (vlayer_storage_item[item_name] ~= nil) then
-                        vlayer.storage.item[vlayer_storage_item[item_name].name] = vlayer.storage.item[vlayer_storage_item[item_name].name] + (count * vlayer_storage_item[item_name].multiplier)
-                        chest.remove({name=item_name, count=count})
-                    end
-                end
-
-                vlayer.circuit.output[1].count = math.floor(vlayer.storage.item['solar-panel'] * 0.06 * game.surfaces['nauvis'].solar_power_multiplier)
-                vlayer.circuit.output[2].count = math.floor(vlayer.storage.item['solar-panel'] * 873 * game.surfaces['nauvis'].solar_power_multiplier / 20800)
-                vlayer.circuit.output[3].count = (vlayer.storage.item['accumulator'] * 5) + (config.energy_base_limit / 1000000)
-                vlayer.circuit.output[10].count = vlayer.storage.item['solar-panel']
-                vlayer.circuit.output[11].count = vlayer.storage.item['accumulator']
+            if v.direct == false then
+                vlayer.storage.item_w[k] = 0
             end
         end
     end
+end
 
-    -- power handle
-    local vlayer_power_capacity_total = math.floor(((vlayer.storage.item['accumulator'] * 5000000) + (config.energy_base_limit * #vlayer.power.entity)) / 2)
-    local vlayer_power_capacity = math.floor(vlayer_power_capacity_total / #vlayer.power.entity)
+if config.land.enabled then
+    vlayer.storage.item[config.land.tile] = 0
+    vlayer.storage.item_w[config.land.tile] = config.land.init_value
+end
 
+vlayer.circuit.signal['signal-P'] = 0
+vlayer.circuit.signal['signal-S'] = 0
+vlayer.circuit.signal['signal-M'] = 0
+vlayer.circuit.signal['signal-C'] = 0
+vlayer.circuit.signal['signal-D'] = 0
+vlayer.circuit.signal['signal-T'] = 0
+
+if config.land.enabled then
+    vlayer.circuit.signal['signal-L'] = 0
+end
+
+vlayer.circuit.signal['signal-A'] = 0
+vlayer.circuit.signal['signal-B'] = 0
+
+local function vlayer_storage_input_handle()
+    for k, v in pairs(vlayer.entity.storage.input) do
+        if v == nil then
+            vlayer.entity.storage.input[k] = nil
+
+        elseif not v.valid then
+            vlayer.entity.storage.input[k] = nil
+
+        else
+            local chest = v.get_inventory(defines.inventory.chest)
+
+            for name, count in pairs(chest.get_contents()) do
+                if vlayer.storage.item[name] then
+                    if config.init_item[name].direct then
+                        vlayer.storage.item[name] = vlayer.storage.item[name] + count
+                        chest.remove({name=name, count=count})
+
+                    else
+                        vlayer.storage.item_w[name] = vlayer.storage.item_w[name] + count
+                        chest.remove({name=name, count=count})
+                    end
+
+                elseif config.init_item_m[name] then
+                    vlayer.storage.item_w[config.init_item_m[name].n] = vlayer.storage.item_w[config.init_item_m[name].n] + (count * config.init_item_m[name].m)
+                    chest.remove({name=name, count=count})
+                end
+            end
+        end
+    end
+end
+
+local function vlayer_storage_output_handle()
+    for k, v in pairs(vlayer.entity.storage.output) do
+        if v == nil then
+            vlayer.entity.storage.output[k] = nil
+
+        elseif not v.valid then
+            vlayer.entity.storage.output[k] = nil
+
+        else
+            local chest = v.get_inventory(defines.inventory.chest)
+
+            for i=1, v.request_slot_count do
+                local request = v.get_request_slot(i)
+
+                if request then
+                    if vlayer.storage.item[request.name] then
+                        local current_amount = chest.get_item_count(request.name)
+                        local request_amount = math.min(math.max(request.count - current_amount, 0), vlayer.storage.item[request.name])
+                        vlayer.storage.item[request.name] = vlayer.storage.item[request.name] - request_amount
+
+                        if chest.can_insert({name=request.name, count=request_amount}) then
+                            chest.insert({name=request.name, count=request_amount})
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+local function vlayer_storage_handle()
+    if config.land.enabled then
+        vlayer.storage.item[config.land.tile] = vlayer.storage.item[config.land.tile] + (vlayer.storage.item_w[config.land.tile] * config.land.result)
+        vlayer.storage.item_w[config.land.tile] = 0
+
+        local land_req = (vlayer.storage.item_w['solar-panel'] * config.land.requirement['solar-panel']) + (vlayer.storage.item_w['accumulator'] * config.land.requirement['accumulator'])
+        local land_surplus = vlayer.storage.item[config.land.tile] - land_req
+
+        if (vlayer.storage.item_w['solar-panel'] > 0) and (vlayer.storage.item_w['accumulator'] > 0) then
+            local allocation = math.floor(land_surplus / (config.land.requirement['solar-panel'] + config.land.requirement['accumulator']))
+            local s = math.min(vlayer.storage.item_w['solar-panel'], allocation)
+            local a = math.min(vlayer.storage.item_w['accumulator'], allocation)
+            vlayer.storage.item['solar-panel'] = vlayer.storage.item['solar-panel'] + s
+            vlayer.storage.item['accumulator'] = vlayer.storage.item['accumulator'] + a
+            vlayer.storage.item_w['solar-panel'] = vlayer.storage.item_w['solar-panel'] - s
+            vlayer.storage.item_w['accumulator'] = vlayer.storage.item_w['accumulator'] - a
+            vlayer.storage.item[config.land.tile] = land_surplus - (s * config.land.requirement['solar-panel']) - (a * config.land.requirement['accumulator'])
+
+        elseif (vlayer.storage.item_w['solar-panel'] > 0 and vlayer.storage.item_w['accumulator'] == 0) then
+            local allocation = math.floor(land_surplus / config.land.requirement['solar-panel'])
+            local s = math.min(vlayer.storage.item_w['solar-panel'], allocation)
+            vlayer.storage.item['solar-panel'] = vlayer.storage.item['solar-panel'] + s
+            vlayer.storage.item_w['solar-panel'] = vlayer.storage.item_w['solar-panel'] - s
+            vlayer.storage.item[config.land.tile] = land_surplus - (s * config.land.requirement['solar-panel'])
+
+        else
+            local allocation = math.floor(land_surplus / config.land.requirement['accumulator'])
+            local a = math.min(vlayer.storage.item_w['accumulator'], allocation)
+            vlayer.storage.item['accumulator'] = vlayer.storage.item['accumulator'] + a
+            vlayer.storage.item_w['accumulator'] = vlayer.storage.item_w['accumulator'] - a
+            vlayer.storage.item[config.land.tile] = land_surplus - (a * config.land.requirement['accumulator'])
+        end
+
+    else
+        for k, v in pairs(vlayer.storage.item_w) do
+            vlayer.storage.item[k] = vlayer.storage.item[k] + v
+            vlayer.storage.item_w[k] = 0
+        end
+    end
+end
+
+local function vlayer_circuit_handle()
+    vlayer.circuit.signal['signal-P'] = math.floor(vlayer.storage.item['solar-panel'] * config.default_energy['solar-panel'] * game.surfaces['nauvis'].solar_power_multiplier)
+    vlayer.circuit.signal['signal-S'] = math.floor(vlayer.storage.item['solar-panel'] * config.default_energy['solar-panel'] * 291 / 416 * game.surfaces['nauvis'].solar_power_multiplier)
+    vlayer.circuit.signal['signal-M'] = vlayer.storage.item['accumulator'] * config.default_energy['accumulator']
+    vlayer.circuit.signal['signal-C'] = math.floor(vlayer.power.energy / 1000000)
+    vlayer.circuit.signal['signal-D'] = math.floor(game.tick / 25000)
+    vlayer.circuit.signal['signal-T'] = game.tick % 25000
+    vlayer.circuit.signal['signal-A'] = vlayer.storage.item_w['solar-panel']
+    vlayer.circuit.signal['signal-B'] = vlayer.storage.item_w['accumulator']
+
+    if config.land.enabled then
+        vlayer.circuit.signal['signal-L'] = (vlayer.storage.item[config.land.tile] * config.land.result) - (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) - (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
+    end
+
+    for k, _ in pairs(vlayer.circuit.item) do
+        vlayer.circuit.item[k] = vlayer.storage.item[k]
+    end
+
+    for k, v in pairs(vlayer.entity.circuit) do
+        if v == nil then
+            vlayer.entity.circuit[k] = nil
+
+        elseif not v.valid then
+            vlayer.entity.circuit[k] = nil
+
+        else
+            local circuit_oc = v.get_or_create_control_behavior()
+            local count = 1
+
+            for kc, vc in pairs(vlayer.circuit.signal) do
+                circuit_oc.set_signal(count, {signal={type='virtual', name=kc}, count=vc})
+                count = count + 1
+            end
+
+            for kc, vc in pairs(vlayer.circuit.item) do
+                circuit_oc.set_signal(count, {signal={type='item', name=kc}, count=vc})
+                count = count + 1
+            end
+        end
+    end
+end
+
+local function vlayer_power_handle()
     if config.always_day or game.surfaces['nauvis'].always_day then
-        vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 * game.surfaces['nauvis'].solar_power_multiplier / config.update_tick)
+        vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * config.default_energy['solar-panel'] * 1000000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier)
 
     else
         local tick = game.tick % 25000
 
         if tick <= 5000 or tick > 17500 then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 * game.surfaces['nauvis'].solar_power_multiplier / config.update_tick)
+            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * config.default_energy['solar-panel'] * 1000000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier)
 
         elseif tick <= 10000 then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 * game.surfaces['nauvis'].solar_power_multiplier / config.update_tick * (1 - ((tick - 5000) / 5000)))
+            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * config.default_energy['solar-panel'] * 1000000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier * (1 - ((tick - 5000) / 5000)))
 
         elseif (tick > 12500) and (tick <= 17500) then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 * game.surfaces['nauvis'].solar_power_multiplier / config.update_tick * ((tick - 5000) / 5000))
+            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * config.default_energy['solar-panel'] * 1000000 / config.update_tick * game.surfaces['nauvis'].solar_power_multiplier * ((tick - 5000) / 5000))
         end
     end
 
-    if config.battery_limit then
-        if vlayer.power.energy > vlayer_power_capacity_total then
-            vlayer.power.energy = vlayer_power_capacity_total
-        end
-    end
+    -- 5 MJ each, a part is stored as vlayer energy, so to share energy to other stuff
+    local vlayer_power_capacity_total = math.floor(vlayer.storage.item['accumulator'] * config.default_energy['accumulator'] * 1000000)
+    local vlayer_power_capacity = math.ceil(vlayer_power_capacity_total / math.max(#vlayer.entity.power, 1))
 
-    for k, v in pairs(vlayer.power.entity) do
-        if (v == nil) or (not v.valid)then
-            vlayer.power.entity[k] = nil
+    for k, v in pairs(vlayer.entity.power) do
+        if v == nil then
+            vlayer.entity.power[k] = nil
+
+        elseif not v.valid then
+            vlayer.entity.power[k] = nil
 
         else
             v.electric_buffer_size = vlayer_power_capacity
             v.power_production = math.floor(vlayer_power_capacity / 60)
             v.power_usage = math.floor(vlayer_power_capacity / 60)
 
-            if vlayer.power.energy < vlayer_power_capacity then
-                v.energy = math.floor((v.energy + vlayer.power.energy) / 2)
-                vlayer.power.energy = v.energy
-
-            elseif v.energy < vlayer_power_capacity then
-                local energy_change = vlayer_power_capacity - v.energy
-
-                if energy_change < vlayer.power.energy then
-                    v.energy = v.energy + energy_change
-                    vlayer.power.energy = vlayer.power.energy - energy_change
-
-                else
-                    v.energy = v.energy + vlayer.power.energy
-                    vlayer.power.energy = 0
-                end
+            if v.energy < vlayer_power_capacity then
+                local power = math.min(vlayer_power_capacity - v.energy, vlayer.power.energy)
+                v.energy = v.energy + power
+                vlayer.power.energy = vlayer.power.energy - power
             end
         end
     end
 
-    -- circuit handle
-    vlayer.circuit.output[4].count = math.floor(vlayer.power.energy / 1000000)
-    vlayer.circuit.output[5].count = math.floor(game.tick / 25000)
-    vlayer.circuit.output[6].count = game.tick % 25000
+    if config.battery_limit then
+        if vlayer.power.energy > vlayer_power_capacity_total then
+            vlayer.power.energy = vlayer_power_capacity_total
 
-    for k, v in pairs(vlayer.power.circuit) do
-        if (v == nil) or (not v.valid) then
-            vlayer.power.circuit[k] = nil
-
-        else
-            local circuit_o = v.get_or_create_control_behavior()
-
-            for i=1, #vlayer.circuit.output do
-                circuit_o.set_signal(i, {signal=vlayer.circuit.output[i].signal, count=vlayer.circuit.output[i].count})
-            end
+        elseif config.init_item['wood'].enabled then
+            local can_burn = math.floor((vlayer_power_capacity_total - vlayer.power.energy) / 2000000)
+            local to_burn = math.min(vlayer.storage.item['wood'], can_burn)
+            vlayer.power.energy = vlayer.power.energy + (to_burn * 2000000)
+            vlayer.storage.item['wood'] = vlayer.storage.item['wood'] - to_burn
         end
+
+    elseif config.init_item['wood'].enabled then
+        local can_burn = math.floor((vlayer_power_capacity_total - vlayer.power.energy) / 2000000)
+        local to_burn = math.min(vlayer.storage.item['wood'], can_burn)
+        vlayer.power.energy = vlayer.power.energy + (to_burn * 2000000)
+        vlayer.storage.item['wood'] = vlayer.storage.item['wood'] - to_burn
+    end
+end
+
+local update_tick_count = 1
+local update_tick_lcm = config.update_tick_storage * config.update_tick_power
+
+Event.on_nth_tick(config.update_tick, function(_)
+    if (update_tick_count % config.update_tick_storage) == 0 then
+        vlayer_storage_input_handle()
+        vlayer_storage_output_handle()
+        vlayer_storage_handle()
+    end
+
+    if (update_tick_count % config.update_tick_power) == 0 then
+        vlayer_circuit_handle()
+        vlayer_power_handle()
+    end
+
+    if update_tick_count < update_tick_lcm then
+        update_tick_count = update_tick_count + 1
+
+    else
+        update_tick_count = 1
     end
 end)
 

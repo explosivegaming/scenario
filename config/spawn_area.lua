@@ -23,7 +23,7 @@ return {
     },
     afk_belts = { --- @setting afk_belts Settings relating to adding afk belts to spawn
         enabled = true, --- @setting enabled Whether afk belts will be added to spawn
-        belt_type = 'transport-belt', --- @setting belt_type The belt to be used as afk belts
+        belt_type = 'fast-transport-belt', --- @setting belt_type The belt to be used as afk belts
         protected = true, --- @setting protected Whether belts will be protected from player interaction
         offset = {x=0, y=0}, --- @setting offset The position offset to apply to afk belts
         locations={ --- @setting locations The locations to spawn afk belts at, given as the top left position
@@ -50,17 +50,17 @@ return {
         offset = {x=0, y=-2}, --- @setting offset The position offset to apply to entities
         locations = { --- @setting locations The location and names of entities {name,x,y}
             {'stone-wall',-10,-5},{'stone-wall',-10,-4},{'stone-wall',-10,-3},{'stone-wall',-10,-2},{'stone-wall',-10,-1},{'stone-wall',-10,0},{'stone-wall',-10,3},{'stone-wall',-10,4},{'stone-wall',-10,5},
-            {'stone-wall',-10,6},{'stone-wall',-10,7},{'stone-wall',-10,8},{'small-lamp',-8,-4},{'small-lamp',-8,-1},{'iron-chest',-8,0},{'iron-chest',-8,3},{'small-lamp',-8,4},
-            {'small-lamp',-8,7},{'stone-wall',-7,-8},{'small-electric-pole',-7,-2},{'iron-chest',-7,0},{'iron-chest',-7,3},{'small-electric-pole',-7,5},{'stone-wall',-7,11},{'stone-wall',-6,-8},{'small-lamp',-6,-6},
-            {'iron-chest',-6,0},{'iron-chest',-6,3},{'small-lamp',-6,9},{'stone-wall',-6,11},{'stone-wall',-5,-8},{'small-lamp',-5,-1},{'iron-chest',-5,0},{'iron-chest',-5,3},{'small-lamp',-5,4},{'stone-wall',-5,11},
-            {'stone-wall',-4,-8},{'small-electric-pole',-4,-5},{'iron-chest',-4,0},{'iron-chest',-4,3},{'small-electric-pole',-4,8},{'stone-wall',-4,11},{'stone-wall',-3,-8},{'small-lamp',-3,-6},{'small-lamp',-3,-3},{'small-lamp',-3,6},
-            {'small-lamp',-3,9},{'stone-wall',-3,11},{'stone-wall',-2,-8},{'iron-chest',-2,-6},{'iron-chest',-2,-5},{'iron-chest',-2,-4},{'iron-chest',-2,-3},{'iron-chest',-2,-2},{'iron-chest',-2,5},{'iron-chest',-2,6},
-            {'iron-chest',-2,7},{'iron-chest',-2,8},{'iron-chest',-2,9},{'stone-wall',-2,11},{'stone-wall',1,-8},{'iron-chest',1,-6},
-            {'iron-chest',1,-5},{'iron-chest',1,-4},{'iron-chest',1,-3},{'iron-chest',1,-2},{'iron-chest',1,5},{'iron-chest',1,6},{'iron-chest',1,7},{'iron-chest',1,8},{'iron-chest',1,9},{'stone-wall',1,11},
-            {'stone-wall',2,-8},{'small-lamp',2,-6},{'small-lamp',2,-3},{'small-lamp',2,6},{'small-lamp',2,9},{'stone-wall',2,11},{'stone-wall',3,-8},{'small-electric-pole',3,-5},{'iron-chest',3,0},{'iron-chest',3,3},
-            {'small-electric-pole',3,8},{'stone-wall',3,11},{'stone-wall',4,-8},{'small-lamp',4,-1},{'iron-chest',4,0},{'iron-chest',4,3},{'small-lamp',4,4},{'stone-wall',4,11},{'stone-wall',5,-8},{'small-lamp',5,-6},
-            {'iron-chest',5,0},{'iron-chest',5,3},{'small-lamp',5,9},{'stone-wall',5,11},{'stone-wall',6,-8},{'small-electric-pole',6,-2},{'iron-chest',6,0},{'iron-chest',6,3},{'small-electric-pole',6,5},{'stone-wall',6,11},
-            {'small-lamp',7,-4},{'small-lamp',7,-1},{'iron-chest',7,0},{'iron-chest',7,3},{'small-lamp',7,4},{'small-lamp',7,7},{'stone-wall',9,-5},
+            {'stone-wall',-10,6},{'stone-wall',-10,7},{'stone-wall',-10,8},{'small-lamp',-8,-4},{'small-lamp',-8,-1},{'steel-chest',-8,0},{'steel-chest',-8,3},{'small-lamp',-8,4},
+            {'small-lamp',-8,7},{'stone-wall',-7,-8},{'medium-electric-pole',-7,-2},{'steel-chest',-7,0},{'steel-chest',-7,3},{'medium-electric-pole',-7,5},{'stone-wall',-7,11},{'stone-wall',-6,-8},{'small-lamp',-6,-6},
+            {'steel-chest',-6,0},{'steel-chest',-6,3},{'small-lamp',-6,9},{'stone-wall',-6,11},{'stone-wall',-5,-8},{'small-lamp',-5,-1},{'steel-chest',-5,0},{'steel-chest',-5,3},{'small-lamp',-5,4},{'stone-wall',-5,11},
+            {'stone-wall',-4,-8},{'medium-electric-pole',-4,-5},{'steel-chest',-4,0},{'steel-chest',-4,3},{'medium-electric-pole',-4,8},{'stone-wall',-4,11},{'stone-wall',-3,-8},{'small-lamp',-3,-6},{'small-lamp',-3,-3},{'small-lamp',-3,6},
+            {'small-lamp',-3,9},{'stone-wall',-3,11},{'stone-wall',-2,-8},{'steel-chest',-2,-6},{'steel-chest',-2,-5},{'steel-chest',-2,-4},{'steel-chest',-2,-3},{'steel-chest',-2,-2},{'steel-chest',-2,5},{'steel-chest',-2,6},
+            {'steel-chest',-2,7},{'steel-chest',-2,8},{'steel-chest',-2,9},{'stone-wall',-2,11},{'stone-wall',1,-8},{'steel-chest',1,-6},
+            {'steel-chest',1,-5},{'steel-chest',1,-4},{'steel-chest',1,-3},{'steel-chest',1,-2},{'steel-chest',1,5},{'steel-chest',1,6},{'steel-chest',1,7},{'steel-chest',1,8},{'steel-chest',1,9},{'stone-wall',1,11},
+            {'stone-wall',2,-8},{'small-lamp',2,-6},{'small-lamp',2,-3},{'small-lamp',2,6},{'small-lamp',2,9},{'stone-wall',2,11},{'stone-wall',3,-8},{'medium-electric-pole',3,-5},{'steel-chest',3,0},{'steel-chest',3,3},
+            {'medium-electric-pole',3,8},{'stone-wall',3,11},{'stone-wall',4,-8},{'small-lamp',4,-1},{'steel-chest',4,0},{'steel-chest',4,3},{'small-lamp',4,4},{'stone-wall',4,11},{'stone-wall',5,-8},{'small-lamp',5,-6},
+            {'steel-chest',5,0},{'steel-chest',5,3},{'small-lamp',5,9},{'stone-wall',5,11},{'stone-wall',6,-8},{'medium-electric-pole',6,-2},{'steel-chest',6,0},{'steel-chest',6,3},{'medium-electric-pole',6,5},{'stone-wall',6,11},
+            {'small-lamp',7,-4},{'small-lamp',7,-1},{'steel-chest',7,0},{'steel-chest',7,3},{'small-lamp',7,4},{'small-lamp',7,7},{'stone-wall',9,-5},
             {'stone-wall',9,-4},{'stone-wall',9,-3},{'stone-wall',9,-2},{'stone-wall',9,-1},{'stone-wall',9,0},{'stone-wall',9,3},{'stone-wall',9,4},{'stone-wall',9,5},{'stone-wall',9,6},{'stone-wall',9,7},
             {'stone-wall',9,8}
         }
@@ -185,42 +185,42 @@ return {
             {
                 enabled = false,
                 name = 'iron-ore',
-                amount = 4000,
+                amount = 1,
                 size = {26, 27},
-                -- offset = {-64,-32}
-                offset = {-64,-64}
+                offset = {-64,-32}
+                -- offset = {-64,-64}
             },
             {
                 enabled = false,
                 name = 'copper-ore',
                 amount = 4000,
                 size = {26, 27},
-                -- offset = {-64, 0}
-                offset = {64, -64}
+                offset = {-64, 0}
+                -- offset = {64, -64}
             },
             {
                 enabled = false,
                 name = 'stone',
                 amount = 4000,
                 size = {22, 20},
-                -- offset = {-64, 32}
-                offset = {-64, 64}
+                offset = {-64, 32}
+                -- offset = {-64, 64}
             },
             {
                 enabled = false,
                 name = 'coal',
                 amount = 4000,
                 size = {22, 20},
-                -- offset = {-64, -64}
-                offset = {64, 64}
+                offset = {-64, -64}
+                -- offset = {64, 64}
             },
             {
                 enabled = false,
                 name = 'uranium-ore',
                 amount = 4000,
                 size = {22, 20},
-                -- offset = {-64, -96}
-                offset = {0, 64}
+                offset = {-64, -96}
+                -- offset = {0, 64}
             }
         }
     },
@@ -232,10 +232,10 @@ return {
                 name = 'crude-oil',
                 num_patches = 4,
                 amount = 4000000,
-                -- offset = {-80, -12},
-                offset = {-12, 64},
-                -- offset_next = {0, 6}
-                offset_next = {6, 0}
+                offset = {-80, -12},
+                -- offset = {-12, 64},
+                offset_next = {0, 6}
+                -- offset_next = {6, 0}
             }
         }
     },
