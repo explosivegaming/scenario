@@ -78,8 +78,11 @@ local function apply_module(player, area, machine, modules)
                     entity.last_user = player
 
                 else
-                    for k, _ in pairs(modules) do
-                        modules[k] = modules[k]:gsub('productivity', 'effectivity')
+                    for k in pairs(modules) do
+                        if k:find('productivity') then
+                            modules[k:gsub('productivity', 'effectivity')] = modules[k]
+                            modules[k] = nil
+                        end
                     end
 
                     entity.surface.create_entity{name='item-request-proxy', target=entity, position=entity.position, force=entity.force, modules=modules}
