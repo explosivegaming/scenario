@@ -16,663 +16,123 @@ local label_width = {
     ['total'] = 480
 }
 
+local function format_clock(value)
+    return format_time(value*3600, {
+        hours=true,
+        minutes=true,
+        seconds=false,
+        time=true
+    })
+end
+
 local function format_number_n(n)
     return format_number(math.floor(n)) .. string.format('%.2f', n % 1):sub(2)
 end
 
-local pd_data_play_time_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.Playtime'},
-    tooltip = {'exp-statistics.Playtime-tooltip'}
-}:style{
-    width = label_width['name']
+local playerStats = PlayerData.Statistics
+local computed_stats = {
+    DamageDeathRatio = {
+        default = '0.00',
+        calculate = function(player_name)
+            return format_number_n(playerStats['DamageDealt']:get(player_name, 0) / playerStats['Deaths']:get(player_name, 1))
+        end
+    },
+    KillDeathRatio = {
+        default = '0.00',
+        calculate = function(player_name)
+            return format_number_n(playerStats['Kills']:get(player_name, 0) / playerStats['Deaths']:get(player_name, 1))
+        end
+    },
+    SessionTime = {
+        default = '00:00',
+        calculate = function(player_name)
+            return format_clock((playerStats['Playtime']:get(player_name, 0) - playerStats['AfkTime']:get(player_name, 0)) / playerStats['JoinCount']:get(player_name, 1))
+        end
+    },
+    BuildRatio = {
+        default = '0.00',
+        calculate = function(player_name)
+            return format_number_n(playerStats['MachinesBuilt']:get(player_name, 0) / playerStats['MachinesRemoved']:get(player_name, 1))
+        end
+    },
+    RocketPerHour = {
+        default = '0.00',
+        calculate = function(player_name)
+            return format_number_n(playerStats['RocketsLaunched']:get(player_name, 0) * 60 / playerStats['Playtime']:get(player_name, 1))
+        end
+    },
+    TreeKillPerMinute = {
+        default = '0.00',
+        calculate = function(player_name)
+            return format_number_n(playerStats['TreesDestroyed']:get(player_name, 0) / playerStats['Playtime']:get(player_name, 1))
+        end
+    },
+    NetPlayTime = {
+        default = '00:00',
+        calculate = function(player_name)
+            return format_clock((playerStats['Playtime']:get(player_name, 0) - playerStats['AfkTime']:get(player_name, 0)))
+        end
+    },
+    AFKTimeRatio = {
+        default = '0.00',
+        calculate = function(player_name)
+            return format_number_n(playerStats['AfkTime']:get(player_name, 0) * 100 / playerStats['Playtime']:get(player_name, 1))
+        end
+    },
 }
 
-local pd_data_play_time_count =
-Gui.element{
-    type = 'label',
-    caption = '00:00'
-}:style{
-    width = label_width['count']
-}
+local label =
+Gui.element(function(_, parent, width, caption, tooltip, name)
+    local new_label = parent.add{
+        type = 'label',
+        caption = caption,
+        tooltip = tooltip,
+        name = name
+    }
 
-local pd_data_afk_time_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.AfkTime'},
-    tooltip = {'exp-statistics.AfkTime-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_afk_time_count =
-Gui.element{
-    type = 'label',
-    caption = '00:00'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_maps_played_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.MapsPlayed'},
-    tooltip = {'exp-statistics.MapsPlayed-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_maps_played_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_join_count_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.JoinCount'},
-    tooltip = {'exp-statistics.JoinCount-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_join_count_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_chat_messages_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.ChatMessages'},
-    tooltip = {'exp-statistics.ChatMessages-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_chat_messages_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_commands_used_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.CommandsUsed'},
-    tooltip = {'exp-statistics.CommandsUsed-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_commands_used_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_rockets_launched_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.RocketsLaunched'},
-    tooltip = {'exp-statistics.RocketsLaunched-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_rockets_launched_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_research_completed_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.ResearchCompleted'},
-    tooltip = {'exp-statistics.ResearchCompleted-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_research_completed_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_machines_built_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.MachinesBuilt'},
-    tooltip = {'exp-statistics.MachinesBuilt-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_machines_built_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_machines_removed_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.MachinesRemoved'},
-    tooltip = {'exp-statistics.MachinesRemoved-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_machines_removed_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_tiles_built_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.TilesBuilt'},
-    tooltip = {'exp-statistics.TilesBuilt-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_tiles_built_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_tiles_removed_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.TilesRemoved'},
-    tooltip = {'exp-statistics.TilesRemoved-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_tiles_removed_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_trees_destroyed_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.TreesDestroyed'},
-    tooltip = {'exp-statistics.TreesDestroyed-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_trees_destroyed_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_ore_mined_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.OreMined'},
-    tooltip = {'exp-statistics.OreMined-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_ore_mined_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_items_crafted_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.ItemsCrafted'},
-    tooltip = {'exp-statistics.ItemsCrafted-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_items_crafted_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_items_picked_up_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.ItemsPickedUp'},
-    tooltip = {'exp-statistics.ItemsPickedUp-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_items_picked_up_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_kills_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.Kills'},
-    tooltip = {'exp-statistics.Kills-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_kills_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_deaths_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.Deaths'},
-    tooltip = {'exp-statistics.Deaths-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_deaths_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_damage_dealt_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.DamageDealt'},
-    tooltip = {'exp-statistics.DamageDealt-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_damage_dealt_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_distance_travelled_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.DistanceTravelled'},
-    tooltip = {'exp-statistics.DistanceTravelled-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_distance_travelled_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_capsules_used_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.CapsulesUsed'},
-    tooltip = {'exp-statistics.CapsulesUsed-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_capsules_used_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_entity_repaired_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.EntityRepaired'},
-    tooltip = {'exp-statistics.EntityRepaired-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_entity_repaired_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_deconstruction_planner_used_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.DeconstructionPlannerUsed'},
-    tooltip = {'exp-statistics.DeconstructionPlannerUsed-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_deconstruction_planner_used_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_map_tags_made_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.MapTagsMade'},
-    tooltip = {'exp-statistics.MapTagsMade-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_map_tags_made_count =
-Gui.element{
-    type = 'label',
-    caption = '0'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_damage_death_ratio_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.DamageDeathRatio'},
-    tooltip = {'exp-statistics.DamageDeathRatio-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_damage_death_ratio_count =
-Gui.element{
-    type = 'label',
-    caption = '0.00'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_kill_death_ratio_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.KillDeathRatio'},
-    tooltip = {'exp-statistics.KillDeathRatio-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_kill_death_ratio_count =
-Gui.element{
-    type = 'label',
-    caption = '0.00'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_session_time_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.SessionTime'},
-    tooltip = {'exp-statistics.SessionTime-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_session_time_count =
-Gui.element{
-    type = 'label',
-    caption = '00:00'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_build_ratio_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.BuildRatio'},
-    tooltip = {'exp-statistics.BuildRatio-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_build_ratio_count =
-Gui.element{
-    type = 'label',
-    caption = '0.00'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_rocket_per_hour_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.RocketPerHour'},
-    tooltip = {'exp-statistics.RocketPerHour-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_rocket_per_hour_count =
-Gui.element{
-    type = 'label',
-    caption = '0.00'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_tree_kill_per_minute_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.TreeKillPerMinute'},
-    tooltip = {'exp-statistics.TreeKillPerMinute-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_tree_kill_per_minute_count =
-Gui.element{
-    type = 'label',
-    caption = '0.00'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_net_play_time_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.NetPlayTime'},
-    tooltip = {'exp-statistics.NetPlayTime-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_net_play_time_count =
-Gui.element{
-    type = 'label',
-    caption = '00:00'
-}:style{
-    width = label_width['count']
-}
-
-local pd_data_afk_time_ratio_name =
-Gui.element{
-    type = 'label',
-    caption = {'exp-statistics.AFKTimeRatio'},
-    tooltip = {'exp-statistics.AFKTimeRatio-tooltip'}
-}:style{
-    width = label_width['name']
-}
-
-local pd_data_afk_time_ratio_count =
-Gui.element{
-    type = 'label',
-    caption = '0.00'
-}:style{
-    width = label_width['count']
-}
+    new_label.style.width = width
+    return new_label
+end)
 
 local pd_data_set =
 Gui.element(function(_, parent, name)
     local pd_data_set = parent.add{type='flow', direction='vertical', name=name}
     local disp = Gui.scroll_table(pd_data_set, label_width['total'], 4, 'disp')
 
-    pd_data_play_time_name(disp)
-    pd_data_play_time_count(disp)
-    pd_data_afk_time_name(disp)
-    pd_data_afk_time_count(disp)
-    pd_data_maps_played_name(disp)
-    pd_data_maps_played_count(disp)
-    pd_data_join_count_name(disp)
-    pd_data_join_count_count(disp)
-    pd_data_chat_messages_name(disp)
-    pd_data_chat_messages_count(disp)
-    pd_data_commands_used_name(disp)
-    pd_data_commands_used_count(disp)
-    pd_data_rockets_launched_name(disp)
-    pd_data_rockets_launched_count(disp)
-    pd_data_research_completed_name(disp)
-    pd_data_research_completed_count(disp)
-    pd_data_machines_built_name(disp)
-    pd_data_machines_built_count(disp)
-    pd_data_machines_removed_name(disp)
-    pd_data_machines_removed_count(disp)
-    pd_data_tiles_built_name(disp)
-    pd_data_tiles_built_count(disp)
-    pd_data_tiles_removed_name(disp)
-    pd_data_tiles_removed_count(disp)
-    pd_data_trees_destroyed_name(disp)
-    pd_data_trees_destroyed_count(disp)
-    pd_data_ore_mined_name(disp)
-    pd_data_ore_mined_count(disp)
-    pd_data_items_crafted_name(disp)
-    pd_data_items_crafted_count(disp)
-    pd_data_items_picked_up_name(disp)
-    pd_data_items_picked_up_count(disp)
-    pd_data_kills_name(disp)
-    pd_data_kills_count(disp)
-    pd_data_deaths_name(disp)
-    pd_data_deaths_count(disp)
-    pd_data_damage_dealt_name(disp)
-    pd_data_damage_dealt_count(disp)
-    pd_data_distance_travelled_name(disp)
-    pd_data_distance_travelled_count(disp)
-    pd_data_capsules_used_name(disp)
-    pd_data_capsules_used_count(disp)
-    pd_data_entity_repaired_name(disp)
-    pd_data_entity_repaired_count(disp)
-    pd_data_deconstruction_planner_used_name(disp)
-    pd_data_deconstruction_planner_used_count(disp)
-    pd_data_map_tags_made_name(disp)
-    pd_data_map_tags_made_count(disp)
+    for _, stat_name in pairs(PlayerData.Statistics.metadata.display_order) do
+        local child = PlayerData.Statistics[stat_name]
+        local metadata = child.metadata
+        local value = metadata.stringify_short and metadata.stringify_short(0) or metadata.stringify and metadata.stringify(0) or format_number(0)
+        label(disp, label_width['name'], metadata.name or {'exp-statistics.'..stat_name}, metadata.tooltip or {'exp-statistics.'..stat_name..'-tooltip'})
+        label(disp, label_width['count'], {'readme.data-format', value, metadata.unit or ''}, metadata.value_tooltip or {'exp-statistics.'..stat_name..'-tooltip'}, stat_name)
+    end
 
-    pd_data_damage_death_ratio_name(disp)
-    pd_data_damage_death_ratio_count(disp)
-    pd_data_kill_death_ratio_name(disp)
-    pd_data_kill_death_ratio_count(disp)
-    pd_data_session_time_name(disp)
-    pd_data_session_time_count(disp)
-    pd_data_build_ratio_name(disp)
-    pd_data_build_ratio_count(disp)
-    pd_data_rocket_per_hour_name(disp)
-    pd_data_rocket_per_hour_count(disp)
-    pd_data_tree_kill_per_minute_name(disp)
-    pd_data_tree_kill_per_minute_count(disp)
-    pd_data_net_play_time_name(disp)
-    pd_data_net_play_time_count(disp)
-    pd_data_afk_time_ratio_name(disp)
-    pd_data_afk_time_ratio_count(disp)
+    for stat_name, data in pairs(computed_stats) do
+        label(disp, label_width['name'], {'exp-statistics.'..stat_name}, {'exp-statistics.'..stat_name..'-tooltip'})
+        label(disp, label_width['count'], {'readme.data-format', data.default, ''}, {'exp-statistics.'..stat_name..'-tooltip'}, stat_name)
+    end
 
     return pd_data_set
 end)
 
 local function pd_update(table, player_name)
-    local data = PlayerData.Statistics
-    table[pd_data_play_time_count.name].caption = format_time((data['Playtime']:get(player_name) or 0) * 3600, {hours=true, minutes=true, seconds=false, time=true, string=true})
-    table[pd_data_afk_time_count.name].caption = format_time((data['AfkTime']:get(player_name) or 0) * 3600, {hours=true, minutes=true, seconds=false, time=true, string=true})
-    table[pd_data_maps_played_count.name].caption = format_number(data['MapsPlayed']:get(player_name) or 0)
-    table[pd_data_join_count_count.name].caption = format_number(data['JoinCount']:get(player_name) or 0)
-    table[pd_data_chat_messages_count.name].caption = format_number(data['ChatMessages']:get(player_name) or 0)
-    table[pd_data_commands_used_count.name].caption = format_number(data['CommandsUsed']:get(player_name) or 0)
-    table[pd_data_rockets_launched_count.name].caption = format_number(data['RocketsLaunched']:get(player_name) or 0)
-    table[pd_data_research_completed_count.name].caption = format_number(data['ResearchCompleted']:get(player_name) or 0)
-    table[pd_data_machines_built_count.name].caption = format_number(data['MachinesBuilt']:get(player_name) or 0)
-    table[pd_data_machines_removed_count.name].caption = format_number(data['MachinesRemoved']:get(player_name) or 0)
-    table[pd_data_tiles_built_count.name].caption = format_number(data['TilesBuilt']:get(player_name) or 0)
-    table[pd_data_tiles_removed_count.name].caption = format_number(data['TilesRemoved']:get(player_name) or 0)
-    table[pd_data_trees_destroyed_count.name].caption = format_number(data['TreesDestroyed']:get(player_name) or 0)
-    table[pd_data_ore_mined_count.name].caption = format_number(data['OreMined']:get(player_name) or 0)
-    table[pd_data_items_crafted_count.name].caption = format_number(data['ItemsCrafted']:get(player_name) or 0)
-    table[pd_data_items_picked_up_count.name].caption = format_number(data['ItemsPickedUp']:get(player_name) or 0)
-    table[pd_data_kills_count.name].caption = format_number(data['Kills']:get(player_name) or 0)
-    table[pd_data_deaths_count.name].caption = format_number(data['Deaths']:get(player_name) or 0)
-    table[pd_data_damage_dealt_count.name].caption = format_number(data['DamageDealt']:get(player_name) or 0)
-    table[pd_data_distance_travelled_count.name].caption = format_number(data['DistanceTravelled']:get(player_name) or 0)
-    table[pd_data_capsules_used_count.name].caption = format_number(data['CapsulesUsed']:get(player_name) or 0)
-    table[pd_data_entity_repaired_count.name].caption = format_number(data['EntityRepaired']:get(player_name) or 0)
-    table[pd_data_deconstruction_planner_used_count.name].caption = format_number(data['DeconstructionPlannerUsed']:get(player_name) or 0)
-    table[pd_data_map_tags_made_count.name].caption = format_number(data['MapTagsMade']:get(player_name) or 0)
+    for _, stat_name in pairs(PlayerData.Statistics.metadata.display_order) do
+        local child = PlayerData.Statistics[stat_name]
+        local metadata = child.metadata
+        local value = child:get(player_name)
+        if metadata.stringify_short then
+            value = metadata.stringify_short(value or 0)
+        elseif metadata.stringify then
+            value = metadata.stringify(value or 0)
+        else
+            value = format_number(value or 0)
+        end
+        table[stat_name].caption = {'readme.data-format', value, metadata.unit or ''}
+    end
 
-    table[pd_data_damage_death_ratio_count.name].caption = format_number_n((data['DamageDealt']:get(player_name) or 0) / (data['Deaths']:get(player_name) or 1))
-    table[pd_data_kill_death_ratio_count.name].caption = format_number_n((data['Kills']:get(player_name) or 0) / (data['Deaths']:get(player_name) or 1))
-    table[pd_data_session_time_count.name].caption = format_time((((data['Playtime']:get(player_name) or 0) - (data['AfkTime']:get(player_name) or 0)) * 3600) / (data['JoinCount']:get(player_name) or 1), {hours=true, minutes=true, seconds=false, time=true, string=true})
-    table[pd_data_build_ratio_count.name].caption = format_number_n((data['MachinesBuilt']:get(player_name) or 0) / (data['MachinesRemoved']:get(player_name) or 1))
-    table[pd_data_rocket_per_hour_count.name].caption = format_number_n((data['RocketsLaunched']:get(player_name) or 0) * 60 / (data['Playtime']:get(player_name) or 1))
-    table[pd_data_tree_kill_per_minute_count.name].caption = format_number_n((data['TreesDestroyed']:get(player_name) or 0) / (data['Playtime']:get(player_name) or 1))
-    table[pd_data_net_play_time_count.name].caption = format_time((((data['Playtime']:get(player_name) or 0) - (data['AfkTime']:get(player_name) or 0)) * 3600), {hours=true, minutes=true, seconds=false, time=true, string=true})
-    table[pd_data_afk_time_ratio_count.name].caption = format_number_n((data['AfkTime']:get(player_name) or 0) * 100 / (data['Playtime']:get(player_name) or 1))
+    for stat_name, data in pairs(computed_stats) do
+        table[stat_name].caption = {'readme.data-format', data.calculate(player_name), ''}
+    end
 end
 
 local pd_username_player =
@@ -730,9 +190,6 @@ Gui.element(function(event_trigger, parent)
 
     pd_username_set(container, 'pd_st_1', player_list)
     pd_data_set(container, 'pd_st_2')
-
-    local table = container['pd_st_2'].disp.table
-    table[pd_username_player.name].width = 224
 
     return container.parent
 end)
