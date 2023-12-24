@@ -147,73 +147,51 @@ Roles.new_role('Board Member','Board')
 :set_flag('deconlog-bypass')
 :set_parent('Supporter')
 :allow{
-    'command/goto',
-    'command/repair',
-    'command/spectate',
-    'command/follow',
-    'command/personal-battery-recharge',
-    -- Sponsor
-    'gui/rocket-info/toggle-active',
-    'gui/rocket-info/remote_launch',
-    'command/bonus',
-    'command/bonus/2',
-    'command/home',
-    'command/home-set',
-    'command/home-get',
-    'command/return',
-    'fast-tree-decon',
-    -- 'gui/playerdata'
 }
 
 Roles.new_role('Supporter','Sup')
 :set_permission_group('Trusted')
 :set_custom_color{r=230,g=99,b=34}
 :set_flag('is_spectator')
+:set_flag('report-immune')
+:set_flag('instant-respawn')
 :set_flag('deconlog-bypass')
-:set_parent('Senior Member')
+:set_parent('Partner')
 :allow{
-    'command/tag-color',
-    'command/jail',
-    'command/unjail',
-    'command/join-message',
-    'command/join-message-clear'
 }
 
 Roles.new_role('Partner','Part')
 :set_permission_group('Trusted')
 :set_custom_color{r=140,g=120,b=200}
 :set_flag('is_spectator')
+:set_flag('report-immune')
+:set_flag('instant-respawn')
 :set_flag('deconlog-bypass')
 :set_parent('Senior Member')
 :allow{
-    'command/goto',
-    'command/repair',
-    'command/spectate',
-    'command/follow',
-    'command/personal-battery-recharge',
-    'gui/rocket-info/toggle-active',
-    'gui/rocket-info/remote_launch',
-    'command/bonus',
-    'command/bonus/2',
-    'command/home',
-    'command/home-set',
-    'command/home-get',
-    'command/return',
-    'fast-tree-decon',
-    'command/tag-color',
-    'command/jail',
-    'command/unjail',
-    'command/join-message',
-    'command/join-message-clear'
 }
 
 Roles.new_role('Senior Member','SMem')
 :set_permission_group('Trusted')
 :set_custom_color{r=140,g=120,b=200}
 :set_flag('is_spectator')
+:set_flag('report-immune')
+:set_flag('instant-respawn')
 :set_flag('deconlog-bypass')
 :set_parent('Veteran')
 :allow{
+    'command/join-message',
+    'command/join-message-clear',
+    'command/goto',
+    'command/jail',
+    'command/unjail',
+    'command/spectate',
+    'command/follow',
+    'command/repair',
+    'command/personal-battery-recharge',
+    'gui/rocket-info/toggle-active',
+    'gui/rocket-info/remote_launch',
+    'command/tag-color'
 }
 
 local hours6, hours250 = 6*216000, 250*60
@@ -223,8 +201,6 @@ Roles.new_role('Veteran','Vet')
 :set_flag('deconlog-bypass')
 :set_parent('Member')
 :allow{
-    'command/chat-bot',
-    'command/last-location'
 }
 :set_auto_assign_condition(function(player)
     if player.online_time >= hours6 then
@@ -243,6 +219,8 @@ Roles.new_role('Member','Mem')
 :set_flag('deconlog-bypass')
 :set_parent('Regular')
 :allow{
+    'command/chat-bot',
+    'command/last-location'
     'gui/task-list/add',
     'gui/task-list/edit',
     'gui/warp-list/add',
@@ -258,6 +236,13 @@ Roles.new_role('Member','Mem')
     'command/clear-blueprint',
     'command/artillery-target-remote',
     'gui/surveillance',
+    'command/bonus',
+    'command/bonus/2',
+    'command/home',
+    'command/home-set',
+    'command/home-get',
+    'command/return',
+    'fast-tree-decon',
     -- 'gui/linked'
 }
 
