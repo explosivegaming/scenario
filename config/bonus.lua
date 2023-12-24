@@ -141,7 +141,7 @@ return {
         },
         {
             name = 'worker_robots_speed_modifier',
-            enabled = false,
+            enabled = true,
             min = 0,
             max = 1.3
         },
