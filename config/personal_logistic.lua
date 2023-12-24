@@ -102,16 +102,16 @@ return {
             upgrade_of = nil,
             type = 'power',
             stack = 50,
-            min = 50,
-            max = 50
+            min = 0,
+            max = 0
         },
         ['accumulator'] = {
             key = 5,
             upgrade_of = nil,
             type = 'power',
             stack = 50,
-            min = 50,
-            max = 50
+            min = 0,
+            max = 0
         },
         ['boiler'] = {
             key = 6,
@@ -176,8 +176,8 @@ return {
             upgrade_of = 'steel-furnace',
             type = 'furnace',
             stack = 50,
-            min = 50,
-            max = 50
+            min = 0,
+            max = 0
         },
         -- machine
         ['assembling-machine-1'] = {
@@ -290,16 +290,16 @@ return {
             upgrade_of = 'small-electric-pole',
             type = 'pole',
             stack = 50,
-            min = 100,
-            max = 100
+            min = 150,
+            max = 150
         },
         ['big-electric-pole'] = {
             key = 33,
             upgrade_of = nil,
             type = 'pole',
             stack = 50,
-            min = 100,
-            max = 100
+            min = 150,
+            max = 150
         },
         ['substation'] = {
             key = 34,
@@ -323,16 +323,16 @@ return {
             upgrade_of = nil,
             type = 'bot',
             stack = 50,
-            min = 50,
-            max = 50
+            min = 100,
+            max = 100
         },
         ['logistic-robot'] = {
             key = 37,
             upgrade_of = nil,
             type = 'bot',
             stack = 50,
-            min = 0,
-            max = 0
+            min = 10,
+            max = 10
         },
         ['cliff-explosives'] = {
             key = 38,
@@ -469,8 +469,8 @@ return {
             upgrade_of = 'inserter',
             type = 'inserter',
             stack = 50,
-            min = 50,
-            max = 50
+            min = 100,
+            max = 100
         },
         ['filter-inserter'] = {
             key = 45,
@@ -485,8 +485,8 @@ return {
             upgrade_of = 'fast-inserter',
             type = 'inserter',
             stack = 50,
-            min = 50,
-            max = 50
+            min = 100,
+            max = 100
         },
         ['stack-filter-inserter'] = {
             key = 47,
@@ -502,16 +502,16 @@ return {
             upgrade_of = nil,
             type = nil,
             stack = 100,
-            min = 100,
-            max = 100
+            min = 200,
+            max = 200
         },
         ['pipe-to-ground'] = {
             key = 49,
             upgrade_of = nil,
             type = nil,
             stack = 50,
-            min = 100,
-            max = 100
+            min = 150,
+            max = 150
         },
         ['pump'] = {
             key = 50,
@@ -552,7 +552,7 @@ return {
             type = 'chest',
             stack = 50,
             min = 50,
-            max = 50
+            max = 100
         },
         ['logistic-chest-passive-provider'] = {
             key = 54,
@@ -600,56 +600,56 @@ return {
             upgrade_of = nil,
             type = 'rail',
             stack = 100,
-            min = 1000,
-            max = 1000
+            min = 1500,
+            max = 1500
         },
         ['train-stop'] = {
             key = 62,
             upgrade_of = nil,
             type = 'rail',
             stack = 10,
-            min = 10,
-            max = 10
+            min = 20,
+            max = 20
         },
         ['rail-signal'] = {
             key = 63,
             upgrade_of = nil,
             type = 'rail',
             stack = 50,
-            min = 100,
-            max = 100
+            min = 150,
+            max = 150
         },
         ['rail-chain-signal'] = {
             key = 64,
             upgrade_of = nil,
             type = 'rail',
             stack = 50,
-            min = 100,
-            max = 100
+            min = 150,
+            max = 150
         },
         ['locomotive'] = {
             key = 65,
             upgrade_of = nil,
             type = 'rail',
             stack = 5,
-            min = 5,
-            max = 5
+            min = 0,
+            max = 0
         },
         ['cargo-wagon'] = {
             key = 66,
             upgrade_of = nil,
             type = 'rail',
             stack = 5,
-            min = 10,
-            max = 10
+            min = 0,
+            max = 0
         },
         ['fluid-wagon'] = {
             key = 67,
             upgrade_of = nil,
             type = 'rail',
             stack = 5,
-            min = 5,
-            max = 5
+            min = 0,
+            max = 0
         },
         ['artillery-wagon'] = {
             key = 68,
@@ -721,16 +721,16 @@ return {
             upgrade_of = nil,
             type = nil,
             stack = 50,
-            min = 50,
-            max = 50
+            min = 10,
+            max = 10
         },
         ['programmable-speaker'] = {
             key = 79,
             upgrade_of = nil,
             type = nil,
             stack = 50,
-            min = 0,
-            max = 0
+            min = 10,
+            max = 10
         },
         ['offshore-pump'] = {
             key = 60,
@@ -746,16 +746,16 @@ return {
             upgrade_of = nil,
             type = 'module',
             stack = 10,
-            min = 20,
-            max = 20
+            min = 80,
+            max = 80
         },
         ['speed-module'] = {
             key = 82,
             upgrade_of = nil,
             type = 'module',
             stack = 50,
-            min = 150,
-            max = 150
+            min = 250,
+            max = 250
         },
         ['speed-module-2'] = {
             key = 83,
@@ -770,8 +770,8 @@ return {
             upgrade_of = 'speed-module-2',
             type = 'module',
             stack = 50,
-            min = 150,
-            max = 150
+            min = 250,
+            max = 250
         },
         ['productivity-module'] = {
             key = 85,
@@ -884,8 +884,8 @@ return {
             upgrade_of = 'rocket',
             type = 'rocket',
             stack = 200,
-            min = 1000,
-            max = 1000
+            min = 0,
+            max = 0
         },
         ['atomic-bomb'] = {
             key = 103,
