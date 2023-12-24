@@ -123,7 +123,8 @@ Roles.new_role('Trainee','TrMod')
     'command/bot-queue-set',
     'command/game-speed',
     'command/kill-biters',
-    'command/remove-biters'
+    'command/remove-biters',
+    'gui/playerdata'
 }
 
 --- Trusted Roles
@@ -139,7 +140,8 @@ Roles.new_role('Board Member','Board')
     'command/repair',
     'command/spectate',
     'command/follow',
-    'command/personal-battery-recharge'
+    'command/personal-battery-recharge',
+    'gui/playerdata'
 }
 
 Roles.new_role('Senior Backer','Backer')
