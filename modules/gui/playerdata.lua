@@ -45,7 +45,7 @@ local computed_stats = {
         end
     },
     SessionTime = {
-        default = '00:00',
+        default = format_clock(0),
         calculate = function(player_name)
             return format_clock((playerStats['Playtime']:get(player_name, 0) - playerStats['AfkTime']:get(player_name, 0)) / playerStats['JoinCount']:get(player_name, 1))
         end
@@ -69,7 +69,7 @@ local computed_stats = {
         end
     },
     NetPlayTime = {
-        default = '00:00',
+        default = format_clock(0),
         calculate = function(player_name)
             return format_clock((playerStats['Playtime']:get(player_name, 0) - playerStats['AfkTime']:get(player_name, 0)))
         end
