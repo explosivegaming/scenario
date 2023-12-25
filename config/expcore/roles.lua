@@ -220,7 +220,7 @@ Roles.new_role('Member','Mem')
 :set_parent('Regular')
 :allow{
     'command/chat-bot',
-    'command/last-location'
+    'command/last-location',
     'gui/task-list/add',
     'gui/task-list/edit',
     'gui/warp-list/add',
@@ -242,7 +242,7 @@ Roles.new_role('Member','Mem')
     'command/home-set',
     'command/home-get',
     'command/return',
-    'fast-tree-decon',
+    'fast-tree-decon'
     -- 'gui/linked'
 }
 
