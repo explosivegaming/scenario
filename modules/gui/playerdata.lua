@@ -21,6 +21,7 @@ local function format_clock(value)
         hours=true,
         minutes=true,
         seconds=false,
+        time=true,
         string=true
     })
 end
