@@ -122,7 +122,7 @@ Gui.element{
     caption = 'Remove Linked Chest'
 }:style{
     width = 160
-}:on_click(function(player, element, _)
+}:on_click(function(player, _, _)
     linked_chest_remove(player.surface, player.position, player)
 end)
 
