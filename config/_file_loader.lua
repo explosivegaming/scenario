@@ -46,9 +46,7 @@ return {
     'modules.commands.waterfill',
     'modules.commands.artillery',
     'modules.commands.surface-clearing',
-    'modules.commands.surface-clearing',
     'modules.commands.artillery',
-
 
     --- Addons
     'modules.addons.chat-popups',
