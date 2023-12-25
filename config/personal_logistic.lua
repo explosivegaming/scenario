@@ -29,16 +29,16 @@ return {
             upgrade_of = nil,
             type = 'belt',
             stack = 100,
-            min = 500,
-            max = 500
+            min = 800,
+            max = 800
         },
         ['underground-belt'] = {
             key = 2,
             upgrade_of = nil,
             type = 'belt',
             stack = 50,
-            min = 150,
-            max = 150
+            min = 250,
+            max = 250
         },
         ['splitter'] = {
             key = 3,
@@ -53,16 +53,16 @@ return {
             upgrade_of = 'transport-belt',
             type = 'belt',
             stack = 100,
-            min = 500,
-            max = 500
+            min = 800,
+            max = 800
         },
         ['fast-underground-belt'] = {
             key = 12,
             upgrade_of = 'underground-belt',
             type = 'belt',
             stack = 50,
-            min = 150,
-            max = 150
+            min = 250,
+            max = 250
         },
         ['fast-splitter'] = {
             key = 13,
@@ -77,16 +77,16 @@ return {
             upgrade_of = 'fast-transport-belt',
             type = 'belt',
             stack = 100,
-            min = 500,
-            max = 500
+            min = 800,
+            max = 800
         },
         ['express-underground-belt'] = {
             key = 22,
             upgrade_of = 'fast-underground-belt',
             type = 'belt',
             stack = 50,
-            min = 150,
-            max = 150
+            min = 250,
+            max = 250
         },
         ['express-splitter'] = {
             key = 23,
