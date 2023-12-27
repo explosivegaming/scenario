@@ -101,10 +101,12 @@ return {
         -- Ammo
         ['firearm-magazine']=cutoff_amount_made_unless(100, 10, 0,'piercing-rounds-magazine', 100),
         ['piercing-rounds-magazine']=cutoff_amount_made(100, 0, 10),
-        ['construction-robot']=scale_amount_made(1, 10, 1)
+        --[[
+            ['construction-robot']=scale_amount_made(1, 10, 1)
+        ]]
     },
     armor = {
-        enable=true,
+        enable=false,
         main = 'modular-armor',
         item = {
             {

@@ -48,13 +48,11 @@ Statistics:on_load(function(player_name, player_statistics)
 end)
 
 --- Used to format time in minute format
-local function format_clock(value)
+local function format_minutes(value)
     return format_time(value*3600, {
-        hours=true,
-        minutes=true,
-        seconds=false,
-        time=false,
-        string=true
+        long = true,
+        hours = true,
+        minutes = true
     })
 end
 
@@ -81,8 +79,8 @@ end
 --- Add Playtime and AfkTime if it is enabled
 if config.Playtime or config.AfkTime then
     local playtime, afk_time
-    if config.Playtime then playtime = Statistics:combine('Playtime') playtime:set_metadata{stringify=format_clock} end
-    if config.AfkTime then afk_time = Statistics:combine('AfkTime') afk_time:set_metadata{stringify=format_clock} end
+    if config.Playtime then playtime = Statistics:combine('Playtime') playtime:set_metadata{stringify=format_minutes, stringify_short=format_clock} end
+    if config.AfkTime then afk_time = Statistics:combine('AfkTime') afk_time:set_metadata{stringify=format_minutes, stringify_short=format_clock} end
     Event.on_nth_tick(3600, function()
         if game.tick == 0 then return end
         for _, player in pairs(game.connected_players) do

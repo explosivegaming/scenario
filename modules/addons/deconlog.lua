@@ -45,7 +45,6 @@ if config.decon_area then
 		end
 
 		local player = game.get_player(e.player_index)
-
 		if Roles.player_has_flag(player, "deconlog-bypass") then
 			return
 		end

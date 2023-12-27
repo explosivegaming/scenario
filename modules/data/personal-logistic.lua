@@ -38,13 +38,7 @@ local function pl(type, target, amount)
             if v.upgrade_of == nil then
                 if v.type ~= nil then
                     if stats.get_input_count(k) < config.production_required[v.type] then
-                        if v_min > 0 then
-                            if v_min == v_max then
-                                v_min = math.floor((v_max * 0.5) / v.stack) * v.stack
-                            end
-                        else
-                            v_min = 0
-                        end
+                        v_min = 0
                     end
                 end
 
