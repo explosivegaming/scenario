@@ -27,10 +27,7 @@ local vlayer_data = {
         energy = 0,
         unallocated = {}
     },
-    surface = {
-        always_day = false,
-        solar_power_multiplier = 1
-    }
+    surface = table.deep_copy(config.surface)
 }
 
 Global.register(vlayer_data, function(tbl)
@@ -504,19 +501,18 @@ function vlayer.remove_closest_interface(surface, position, radius)
     end
 end
 
-local function update_surface_handle()
-    if config.always_day == true then
-        vlayer_data.surface.always_day = true
-
-    else
-        vlayer_data.surface.always_day = game.surfaces[config.surface_selected].always_day
+local function on_surface_event()
+    if config.mimic_surface then
+        local surface = game.get_surface(config.mimic_surface)
+        if surface then
+            vlayer_data.surface = surface
+            return
+        end
     end
 
-    if config.solar_power_multiplier ~= 1 then
-        vlayer_data.surface.solar_power_multiplier = config.solar_power_multiplier
-
-    else
-        vlayer_data.surface.solar_power_multiplier = game.surfaces[config.surface_selected].solar_power_multiplier
+    if not vlayer_data.surface.index then
+        -- Our fake surface data never has an index, we test for this to avoid unneeded copies from the config
+        vlayer_data.surface = table.deep_copy(config.surface)
     end
 end
 
@@ -533,8 +529,9 @@ Event.on_nth_tick(config.update_tick_energy, function(_)
     handle_energy_interfaces()
 end)
 
-Event.on_nth_tick(config.update_tick_surface, function(_)
-    update_surface_handle()
-end)
+Event.add(defines.events.on_surface_created, on_surface_event)
+Event.add(defines.events.on_surface_renamed, on_surface_event)
+Event.add(defines.events.on_surface_imported, on_surface_event)
+Event.on_init(on_surface_event) -- Default surface always exists, does not trigger on_surface_created
 
 return vlayer

@@ -4,14 +4,15 @@
 return {
     update_tick_storage = 60,
     update_tick_energy = 10,
-    update_tick_surface = 900,
     update_tick_gui = 60,
     -- Cheat options
-    surface_selected = 'nauvis',
-    always_day = false, -- force if true
-    solar_power_multiplier = 1, -- force if not 1
     unlimited_capacity = false,
     unlimited_surface_area = false,
+    mimic_surface = 'nauvis', -- Surface name/index or nil to use config below
+    surface = {
+        always_day = false,
+        solar_power_multiplier = 1,
+    },
     interface_limit = {
         energy = 1, -- >1 allows for disconnected networks
         circuit = 10, -- No caveats
