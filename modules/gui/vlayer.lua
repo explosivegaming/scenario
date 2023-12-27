@@ -9,8 +9,33 @@ local config = require 'config.vlayer' --- @dep config.vlayer
 local vlayer = require 'modules.control.vlayer'
 
 local vlayer_container
-local vlayer_entity = {}
-vlayer_entity.create = {}
+
+local function format_energy(amount, unit)
+    if amount < 1 then return "0"..unit end
+    local suffix = ""
+    local suffix_list =
+    { -- all are 10^3 smaller because we are working in kilo watts/joules
+        ["T"] = 1000000000000,
+        ["G"] = 1000000000,
+        ["M"] = 1000000,
+        ["k"] = 1000
+    }
+    for letter, limit in pairs (suffix_list) do
+    if math.abs(amount) >= limit then
+        amount = math.floor(amount/(limit/10))/10
+        suffix = letter
+        break
+    end
+    end
+    local formatted, k = amount
+    while true do
+      formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+      if (k==0) then
+        break
+      end
+    end
+    return formatted..suffix..unit
+  end
 
 local function vlayer_convert_chest(player)
     local entities = player.surface.find_entities_filtered{position=player.position, radius=8, name='steel-chest', force=player.force, limit=1}
@@ -76,13 +101,13 @@ local vlayer_gui_display_signal_peak_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_peak_name',
-    caption = '[virtual-signal=signal-P] Peak Production',
+    caption = '[virtual-signal=signal-P] Current Production',
     style = 'heading_1_label'
 }:style{
     width = 200
 }
 
-local vlayer_gui_display_signal_peak_count =
+local vlayer_gui_display_signal_production_count =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_peak_solar_count',
@@ -114,18 +139,17 @@ Gui.element{
     width = 120
 }
 
-
-local vlayer_gui_display_signal_max_name =
+local vlayer_gui_display_signal_capacity_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_max_name',
-    caption = '[virtual-signal=signal-M] Max Battery',
+    caption = '[virtual-signal=signal-C] Battery Capacity',
     style = 'heading_1_label'
 }:style{
     width = 200
 }
 
-local vlayer_gui_display_signal_max_count =
+local vlayer_gui_display_signal_capacity_count =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_max_count',
@@ -140,7 +164,7 @@ local vlayer_gui_display_signal_current_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_current_name',
-    caption = '[virtual-signal=signal-C] Current Battery',
+    caption = '[virtual-signal=signal-E] Battery Charge',
     style = 'heading_1_label'
 }:style{
     width = 200
@@ -167,11 +191,11 @@ Gui.element(function(_, parent, name)
     vlayer_gui_display_item_accumulator_name(disp)
     vlayer_gui_display_item_accumulator_count(disp)
     vlayer_gui_display_signal_peak_name(disp)
-    vlayer_gui_display_signal_peak_count(disp)
+    vlayer_gui_display_signal_production_count(disp)
     vlayer_gui_display_signal_sustained_name(disp)
     vlayer_gui_display_signal_sustained_count(disp)
-    vlayer_gui_display_signal_max_name(disp)
-    vlayer_gui_display_signal_max_count(disp)
+    vlayer_gui_display_signal_capacity_name(disp)
+    vlayer_gui_display_signal_capacity_count(disp)
     vlayer_gui_display_signal_current_name(disp)
     vlayer_gui_display_signal_current_count(disp)
 
@@ -184,134 +208,6 @@ local function pos_to_gps_string(pos)
 	return '[gps=' .. string.format('%.1f', pos.x) .. ',' .. string.format('%.1f', pos.y) .. ']'
 end
 
-function vlayer_entity.create.storage_input(surface, pos, player)
-    local vlayer_storage = surface.create_entity{name='logistic-chest-storage', position=pos, force='neutral'}
-    game.print(player.name .. ' built a vlayer storage input on ' .. pos_to_gps_string(pos))
-    vlayer_storage.destructible = false
-    vlayer_storage.minable = false
-    vlayer_storage.operable = true
-    vlayer_storage.last_user = player
-    table.insert(vlayer.entity.storage.input, vlayer_storage)
-end
-
-function vlayer_entity.create.storage_output(surface, pos, player)
-    local vlayer_storage = surface.create_entity{name='logistic-chest-requester', position=pos, force='neutral'}
-    game.print(player.name .. ' built a vlayer storage output on ' .. pos_to_gps_string(pos))
-    vlayer_storage.destructible = false
-    vlayer_storage.minable = false
-    vlayer_storage.operable = true
-    vlayer_storage.last_user = player
-    table.insert(vlayer.entity.storage.output, vlayer_storage)
-end
-
-function vlayer_entity.create.circuit(surface, pos, player)
-    local circuit_o = surface.create_entity{name='constant-combinator', position=pos, force='neutral'}
-    game.print(player.name .. ' built a vlayer circuit on ' .. pos_to_gps_string(pos))
-    circuit_o.destructible = false
-    circuit_o.minable = false
-    circuit_o.operable = true
-    circuit_o.last_user = player
-
-    local circuit_oc = circuit_o.get_or_create_control_behavior()
-    local count = 1
-
-    for kc, vc in pairs(vlayer.circuit.signal) do
-        circuit_oc.set_signal(count, {signal={type='virtual', name=kc}, count=vc})
-        count = count + 1
-    end
-
-    for kc, vc in pairs(vlayer.circuit.item) do
-        circuit_oc.set_signal(count, {signal={type='item', name=kc}, count=vc})
-        count = count + 1
-    end
-
-    table.insert(vlayer.entity.circuit, circuit_o)
-end
-
-function vlayer_entity.create.power(surface, pos, player)
-    if (surface.can_place_entity{name='electric-energy-interface', position=pos})then
-        local vlayer_power = surface.create_entity{name='electric-energy-interface', position=pos, force='neutral'}
-        game.print(player.name .. ' built a vlayer energy interface on ' .. pos_to_gps_string(pos))
-        vlayer_power.destructible = false
-        vlayer_power.minable = false
-        vlayer_power.operable = false
-        vlayer_power.last_user = player
-        vlayer_power.electric_buffer_size = math.floor(10000000)
-        vlayer_power.power_production = math.floor(500000 / 3)
-        vlayer_power.power_usage = math.floor(500000 / 3)
-        vlayer_power.energy = 0
-        table.insert(vlayer.entity.power, vlayer_power)
-
-    else
-        player.print('Unable to build vlayer energy entity')
-        surface.spill_item_stack(pos, {name='steel-chest', count=1}, true, player.force, false)
-    end
-end
-
-function vlayer_entity.remove(surface, pos, player)
-    local entities = surface.find_entities_filtered{name={'logistic-chest-storage', 'logistic-chest-requester', 'constant-combinator', 'electric-energy-interface'}, position=pos, radius=4, force='neutral', limit=1}
-
-    if (not entities or #entities == 0) then
-        player.print('Entity not found')
-        return
-    end
-
-    for _, entity in pairs(entities) do
-        local name = entity.name
-        local position = entity.position
-        entity.destroy()
-
-        if name == 'logistic-chest-storage' then
-            game.print(player.name .. ' removed a vlayer storage input on ' .. pos_to_gps_string(position))
-
-            for k, v in pairs(vlayer.entity.storage.input) do
-                if v == nil then
-                    vlayer.entity.storage.input[k] = nil
-
-                elseif not v.valid then
-                    vlayer.entity.storage.input[k] = nil
-                end
-            end
-
-        elseif name == 'logistic-chest-requester' then
-            game.print(player.name .. ' removed a vlayer storage output on ' .. pos_to_gps_string(position))
-
-            for k, v in pairs(vlayer.entity.storage.output) do
-                if v == nil then
-                    vlayer.entity.storage.output[k] = nil
-
-                elseif not v.valid then
-                    vlayer.entity.storage.output[k] = nil
-                end
-            end
-
-        elseif name == 'constant-combinator' then
-            game.print(player.name .. ' removed a vlayer circuit output on ' .. pos_to_gps_string(position))
-
-            for k, v in pairs(vlayer.entity.circuit) do
-                if v == nil then
-                    vlayer.entity.circuit[k] = nil
-
-                elseif not v.valid then
-                    vlayer.entity.circuit[k] = nil
-                end
-            end
-
-        elseif name == 'electric-energy-interface' then
-            game.print(player.name .. ' removed a vlayer energy interface on ' .. pos_to_gps_string(position))
-
-            for k, v in pairs(vlayer.entity.power) do
-                if v == nil then
-                    vlayer.entity.power[k] = nil
-
-                elseif not v.valid then
-                    vlayer.entity.power[k] = nil
-                end
-            end
-        end
-    end
-end
-
 local vlayer_gui_control_storage_input =
 Gui.element{
     type = 'button',
@@ -322,11 +218,11 @@ Gui.element{
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
-        vlayer_entity.create.storage_input(player.surface, pos, player)
+        vlayer.create_input_interface(player.surface, pos, player)
+        game.print(player.name .. ' built a vlayer storage input on ' .. pos_to_gps_string(pos))
     end
 
-    element.enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
-    element.parent[vlayer_gui_control_remove.name].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.storage.output > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+    element.enabled = (vlayer.get_interface_counts().storage_input < config.interface_limit.storage_input)
 end)
 
 local vlayer_gui_control_storage_output =
@@ -339,11 +235,11 @@ Gui.element{
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
-        vlayer_entity.create.storage_output(player.surface, pos, player)
+        vlayer.create_output_interface(player.surface, pos, player)
+        game.print(player.name .. ' built a vlayer storage output on ' .. pos_to_gps_string(pos))
     end
 
-    element.enabled = (#vlayer.entity.storage.output < config.interface_limit.storage_output)
-    element.parent[vlayer_gui_control_remove.name].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.storage.output > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+    element.enabled = (vlayer.get_interface_counts().storage_output < config.interface_limit.storage_output)
 end)
 
 local vlayer_gui_control_circuit =
@@ -356,11 +252,11 @@ Gui.element{
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
-        vlayer_entity.create.circuit(player.surface, pos, player)
+        vlayer.create_circuit_interface(player.surface, pos, player)
+        game.print(player.name .. ' built a vlayer circuit on ' .. pos_to_gps_string(pos))
     end
 
-    element.enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
-    element.parent[vlayer_gui_control_remove.name].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.storage.output > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+    element.enabled = (vlayer.get_interface_counts().circuit < config.interface_limit.circuit)
 end)
 
 local vlayer_gui_control_power =
@@ -373,11 +269,14 @@ Gui.element{
     local pos = vlayer_convert_chest(player)
 
     if (pos) then
-        vlayer_entity.create.power(player.surface, pos, player)
+        if vlayer.create_energy_interface(player.surface, pos, player) then
+            game.print(player.name .. ' built a vlayer energy interface on ' .. pos_to_gps_string(pos))
+        else
+            player.print('Unable to build vlayer energy entity')
+        end
     end
 
-    element.enabled = (#vlayer.entity.power < config.interface_limit.energy)
-    element.parent[vlayer_gui_control_remove.name].enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.storage.output > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+    element.enabled = (vlayer.get_interface_counts().energy < config.interface_limit.energy)
 end)
 
 vlayer_gui_control_remove =
@@ -387,13 +286,17 @@ Gui.element{
 }:style{
     width = 160
 }:on_click(function(player, element, _)
-    vlayer_entity.remove(player.surface, player.position, player)
+    local interface_type, interface_position = vlayer.remove_closest_interface(player.surface, player.position, 4)
+    if not interface_type then
+        return player.print('Interface not found in range, please move closer')
+    end
 
-    element.parent[vlayer_gui_control_storage_input.name].enabled = (#vlayer.entity.storage.input < config.interface_limit.storage_input)
-    element.parent[vlayer_gui_control_storage_output.name].enabled = (#vlayer.entity.storage.output < config.interface_limit.storage_output)
-    element.parent[vlayer_gui_control_circuit.name].enabled = (#vlayer.entity.circuit < config.interface_limit.circuit)
-    element.parent[vlayer_gui_control_power.name].enabled = (#vlayer.entity.power < config.interface_limit.energy)
-    element.enabled = (#vlayer.entity.storage.input > 0) or (#vlayer.entity.storage.output > 0) or (#vlayer.entity.circuit > 0) or (#vlayer.entity.power > 0)
+    local interfaces = vlayer.get_interface_counts()
+    game.print(player.name..' removed a vlayer '..interface_type..' on '.. pos_to_gps_string(interface_position))
+    element.parent[vlayer_gui_control_storage_input.name].enabled = (interfaces.storage_input < config.interface_limit.storage_input)
+    element.parent[vlayer_gui_control_storage_output.name].enabled = (interfaces.storage_output < config.interface_limit.storage_output)
+    element.parent[vlayer_gui_control_circuit.name].enabled = (interfaces.circuit < config.interface_limit.circuit)
+    element.parent[vlayer_gui_control_power.name].enabled = (interfaces.energy < config.interface_limit.energy)
 end)
 
 local vlayer_control_set =
@@ -401,10 +304,11 @@ Gui.element(function(_, parent, name)
     local vlayer_set = parent.add{type='flow', direction='vertical', name=name}
     local disp = Gui.scroll_table(vlayer_set, 320, 2, 'disp')
 
-    vlayer_gui_control_storage_input(disp)
-    vlayer_gui_control_storage_output(disp)
-    vlayer_gui_control_circuit(disp)
-    vlayer_gui_control_power(disp)
+    local interfaces = vlayer.get_interface_counts()
+    vlayer_gui_control_storage_input(disp).enabled = (interfaces.storage_input < config.interface_limit.storage_input)
+    vlayer_gui_control_storage_output(disp).enabled = (interfaces.storage_output < config.interface_limit.storage_output)
+    vlayer_gui_control_circuit(disp).enabled = (interfaces.circuit < config.interface_limit.circuit)
+    vlayer_gui_control_power(disp).enabled = (interfaces.energy < config.interface_limit.energy)
     vlayer_gui_control_remove(disp)
 
     return vlayer_set
@@ -425,7 +329,6 @@ Gui.element(function(event_trigger, parent)
     table[vlayer_gui_control_storage_output.name].visible = visible
     table[vlayer_gui_control_circuit.name].visible = visible
     table[vlayer_gui_control_power.name].visible = visible
-    table[vlayer_gui_control_remove.name].enabled = false
     table[vlayer_gui_control_remove.name].visible = visible
     return container.parent
 end)
@@ -451,14 +354,16 @@ end
 Event.add(Roles.events.on_role_assigned, role_update_event)
 Event.add(Roles.events.on_role_unassigned, role_update_event)
 
-Event.on_nth_tick(config.update_tick, function(_)
+Event.on_nth_tick(config.update_tick_gui, function(_)
+    local stats = vlayer.get_statistics()
+    local items = vlayer.get_items()
     local vlayer_display = {
-        [vlayer_gui_display_item_solar_count.name] = format_number(vlayer.circuit.item['solar-panel']),
-        [vlayer_gui_display_item_accumulator_count.name] = format_number(vlayer.circuit.item['accumulator']),
-        [vlayer_gui_display_signal_peak_count.name] = format_number(vlayer.circuit.signal['signal-P']),
-        [vlayer_gui_display_signal_sustained_count.name] = format_number(vlayer.circuit.signal['signal-S']),
-        [vlayer_gui_display_signal_max_count.name] = format_number(vlayer.circuit.signal['signal-M']),
-        [vlayer_gui_display_signal_current_count.name] = format_number(vlayer.circuit.signal['signal-C']),
+        [vlayer_gui_display_item_solar_count.name] = format_number(items['solar-panel']),
+        [vlayer_gui_display_item_accumulator_count.name] = format_number(items['accumulator']),
+        [vlayer_gui_display_signal_production_count.name] = format_energy(stats.energy_production, 'W'),
+        [vlayer_gui_display_signal_sustained_count.name] = format_energy(stats.energy_sustained, 'W'),
+        [vlayer_gui_display_signal_capacity_count.name] = format_energy(stats.energy_capacity, 'J'),
+        [vlayer_gui_display_signal_current_count.name] = format_energy(stats.energy_storage, 'J'),
     }
 
     for _, player in pairs(game.connected_players) do
