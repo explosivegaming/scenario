@@ -488,7 +488,7 @@ function vlayer.remove_closest_interface(surface, position, radius)
     end
 end
 
-function update_surface_handle()
+local function update_surface_handle()
     if config.always_day == true then
         vlayer_data.surface.always_day = true
 
