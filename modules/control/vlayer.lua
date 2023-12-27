@@ -29,8 +29,8 @@ local vlayer_data = {
         unallocated = {}
     },
     surface = {
-        always_day = config.always_day,
-        solar_power_multiplier = config.solar_power_multiplier
+        always_day = false,
+        solar_power_multiplier = 1
     }
 }
 
@@ -156,7 +156,7 @@ function vlayer.insert_item(item_name, count)
         local allocate_count = math.min(count, math.floor(surplus_area / item_properties.required_area))
 
         if allocate_count > 0 then
-            vlayer.allocate_item(item_name, allocate_count) 
+            vlayer.allocate_item(item_name, allocate_count)
         end
 
         vlayer_data.storage.unallocated[item_name] = vlayer_data.storage.unallocated[item_name] + count - allocate_count
@@ -320,8 +320,8 @@ function vlayer.get_statistics()
     return {
         total_surface_area = vlayer_data.properties.total_surface_area,
         used_surface_area = vlayer_data.properties.used_surface_area,
-        energy_production = vlayer_data.properties.production * mega * get_time_multiplier(),
-        energy_sustained = vlayer_data.properties.production * mega * (vlayer_data.surface.always_day and 1 or 291 / 416),
+        energy_production = vlayer_data.properties.production * mega * get_time_multiplier() * vlayer_data.surface.solar_power_multiplier,
+        energy_sustained = vlayer_data.properties.production * mega * (vlayer_data.surface.always_day and 1 or 291 / 416) * vlayer_data.surface.solar_power_multiplier,
         energy_capacity = vlayer_data.properties.capacity * mega,
         energy_storage = vlayer_data.storage.energy,
         day = math.floor(game.tick / 25000),
@@ -389,7 +389,7 @@ end
 
 --- Create a new energy interface
 function vlayer.create_energy_interface(surface, pos, last_user)
-    if not surface.can_place_entity{name = 'electric-energy-interface', position = pos} then
+    if not surface.can_place_entity{name='electric-energy-interface', position=pos} then
         return false
     end
 
@@ -488,6 +488,22 @@ function vlayer.remove_closest_interface(surface, position, radius)
     end
 end
 
+function update_surface_handle()
+    if config.always_day == true then
+        vlayer_data.surface.always_day = true
+
+    else
+        vlayer_data.surface.always_day = game.surfaces[config.surface_selected].always_day
+    end
+
+    if config.solar_power_multiplier ~= 1 then
+        vlayer_data.surface.solar_power_multiplier = config.solar_power_multiplier
+
+    else
+        vlayer_data.surface.solar_power_multiplier = game.surfaces[config.surface_selected].solar_power_multiplier
+    end
+end
+
 --- Handle all storage IO and attempt allocation of unallocated items
 Event.on_nth_tick(config.update_tick_storage, function(_)
     handle_input_interfaces()
@@ -499,6 +515,10 @@ end)
 Event.on_nth_tick(config.update_tick_energy, function(_)
     handle_circuit_interfaces()
     handle_energy_interfaces()
+end)
+
+Event.on_nth_tick(config.update_tick_surface, function(_)
+    update_surface_handle()
 end)
 
 return vlayer
