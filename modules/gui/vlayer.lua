@@ -11,31 +11,39 @@ local vlayer = require 'modules.control.vlayer'
 local vlayer_container
 
 local function format_energy(amount, unit)
-    if amount < 1 then return "0"..unit end
-    local suffix = ""
+    if amount < 1 then
+        return '0' .. unit
+    end
+
+    local suffix = ''
     local suffix_list =
     { -- all are 10^3 smaller because we are working in kilo watts/joules
-        ["T"] = 1000000000000,
-        ["G"] = 1000000000,
-        ["M"] = 1000000,
-        ["k"] = 1000
+        ['T'] = 1000000000000,
+        ['G'] = 1000000000,
+        ['M'] = 1000000,
+        ['k'] = 1000
     }
+
     for letter, limit in pairs (suffix_list) do
-    if math.abs(amount) >= limit then
-        amount = math.floor(amount/(limit/10))/10
-        suffix = letter
-        break
+        if math.abs(amount) >= limit then
+            amount = math.floor(amount / (limit / 10)) / 10
+            suffix = letter
+            break
+        end
     end
-    end
+
     local formatted, k = amount
+
     while true do
-      formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
-      if (k==0) then
-        break
-      end
+        formatted, k = string.gsub(formatted, '^(-?%d+)(%d%d%d)', '%1,%2')
+
+        if (k==0) then
+            break
+        end
     end
-    return formatted..suffix..unit
-  end
+
+    return formatted .. suffix .. unit
+end
 
 local function vlayer_convert_chest(player)
     local entities = player.surface.find_entities_filtered{position=player.position, radius=8, name='steel-chest', force=player.force, limit=1}

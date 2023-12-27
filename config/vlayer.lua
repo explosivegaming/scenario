@@ -4,7 +4,7 @@
 return {
     update_tick_storage = 60,
     update_tick_energy = 10,
-    update_tick_gui = 360,
+    update_tick_gui = 300,
     -- Cheat options
     always_day = false,
     unlimited_capacity = false,
