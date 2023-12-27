@@ -114,6 +114,6 @@ return {
             starting_value = 0,
             base_game_equivalent = 'accumulator',
             multiplier = 16384
-        },
+        }
     }
 }

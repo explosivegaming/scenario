@@ -9,6 +9,7 @@ local Permission_Groups = require 'expcore.permission_groups' --- @dep expcore.p
 
 Permission_Groups.new_group('Admin')
 :allow_all()
+--[[
 :disallow{
     'add_permission_group', -- admin
     'delete_permission_group',
@@ -23,6 +24,7 @@ Permission_Groups.new_group('Admin')
     'set_infinity_container_remove_unfiltered_items',
     'set_infinity_pipe_filter'
 }
+]]
 
 Permission_Groups.new_group('Trusted')
 :allow_all()
@@ -59,7 +61,6 @@ Permission_Groups.new_group('Standard')
     'set_infinity_pipe_filter',
     'admin_action', -- trusted
     'change_programmable_speaker_alert_parameters', -- standard
-    'drop_item',
     'set_auto_launch_rocket'
 }
 

@@ -18,8 +18,10 @@ end)
 local function get_permission(player_index)
     if cache[player_index] == nil then
         local player = game.players[player_index]
-        if Roles.player_allowed(player, 'fast-tree-decon') then cache[player_index] = 'fast'
-        elseif Roles.player_allowed(player, 'standard-decon') then cache[player_index] = 'standard'
+        if Roles.player_allowed(player, 'fast-tree-decon') then
+            cache[player_index] = 'fast'
+        elseif Roles.player_allowed(player, 'standard-decon') then
+            cache[player_index] = 'standard'
         else cache[player_index] = player.force end
     end
 

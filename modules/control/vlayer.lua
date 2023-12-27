@@ -384,6 +384,12 @@ local function handle_circuit_interfaces()
                 end
             end
         end
+
+    elseif config.init_item['wood'].enabled then
+        local can_burn = math.floor((vlayer_power_capacity_total - vlayer.power.energy) / 2000000)
+        local to_burn = math.min(vlayer.storage.item['wood'], can_burn)
+        vlayer.power.energy = vlayer.power.energy + (to_burn * 2000000)
+        vlayer.storage.item['wood'] = vlayer.storage.item['wood'] - to_burn
     end
 end
 
