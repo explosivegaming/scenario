@@ -373,8 +373,10 @@ local function handle_circuit_interfaces()
 
         else
             local circuit_oc = interface.get_or_create_control_behavior()
+            local max_signals = circuit_oc.signals_count
             local signal_index = 1
 
+            -- Set the virtual signals based on the vlayer stats
             for stat_name, signal_name in pairs(circuit_signals) do
                 if stat_name:find('energy') then
                     circuit_oc.set_signal(signal_index, {signal={type='virtual', name=signal_name}, count=math.floor(stats[stat_name] / mega)})
@@ -386,11 +388,23 @@ local function handle_circuit_interfaces()
                 signal_index = signal_index + 1
             end
 
+            -- Set the item signals based on stored items
             for item_name, count in pairs(vlayer_data.storage.items) do
-                if game.item_prototypes[item_name] then
+                if game.item_prototypes[item_name] and count > 0 then
                     circuit_oc.set_signal(signal_index, {signal={type='item', name=item_name}, count=count})
                     signal_index = signal_index + 1
+                    if signal_index > max_signals then
+                        return -- No more signals can be added
+                    end
                 end
+            end
+
+            -- Clear remaining signals to prevent outdated values being present (caused by count > 0 check)
+            for clear_index = signal_index, max_signals do
+                if not circuit_oc.get_signal(clear_index).signal then
+                    break -- There are no more signals to clear
+                end
+                circuit_oc.set_signal(clear_index, nil)
             end
         end
     end
