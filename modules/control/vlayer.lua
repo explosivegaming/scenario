@@ -7,7 +7,6 @@ local config = require 'config.vlayer' --- @dep config.vlayer
 local move_items_stack = _C.move_items_stack
 
 local mega = 1000000
-local mega10 = 10 * mega
 
 local vlayer = {}
 local vlayer_data = {
@@ -42,6 +41,7 @@ end)
 for item_name, properties in pairs(config.modded_items) do
     local base_properties = config.allowed_items[properties.base_game_equivalent]
     local m = properties.multiplier
+
     config.allowed_items[item_name] = {
         starting_value = properties.starting_value or 0,
         required_area = base_properties.required_area or 0,
@@ -403,7 +403,7 @@ function vlayer.create_energy_interface(surface, pos, last_user)
     interface.destructible = false
     interface.minable = false
     interface.operable = false
-    interface.electric_buffer_size = mega10
+    interface.electric_buffer_size = 0
     interface.power_production = 0
     interface.power_usage = 0
     interface.energy = 0
@@ -414,23 +414,27 @@ end
 --- Handle all energy interfaces as well as the energy storage
 local function handle_energy_interfaces()
     -- Add the newly produced power
-    local production = vlayer_data.properties.production * mega / config.update_tick_energy * vlayer_data.surface.solar_power_multiplier
+    local production = vlayer_data.properties.production * mega * (config.update_tick_energy / 60) * vlayer_data.surface.solar_power_multiplier
+    local average_capacity = (vlayer_data.properties.capacity * mega) / #vlayer_data.entity_interfaces.energy
     vlayer_data.storage.energy = vlayer_data.storage.energy + math.floor(production * get_time_multiplier())
-
     -- Calculate how much power is present in the network, that is storage + all interfaces
     if #vlayer_data.entity_interfaces.energy > 0 then
         local available_energy = vlayer_data.storage.energy
+
         for index, interface in pairs(vlayer_data.entity_interfaces.energy) do
             if not interface.valid then
                 vlayer_data.entity_interfaces.energy[index] = nil
+
             else
                 available_energy = available_energy + interface.energy
             end
         end
 
         -- Distribute the energy between all interfaces
-        local fill_to = math.min(mega10, math.floor(available_energy / #vlayer_data.entity_interfaces.energy))
+        local fill_to = math.min(average_capacity, math.floor(available_energy / #vlayer_data.entity_interfaces.energy))
+
         for index, interface in pairs(vlayer_data.entity_interfaces.energy) do
+            interface.electric_buffer_size = average_capacity
             local delta = fill_to - interface.energy -- positive means storage to interface
             vlayer_data.storage.energy = vlayer_data.storage.energy - delta
             interface.energy = interface.energy + delta

@@ -4,8 +4,8 @@
 return {
     update_tick_storage = 60,
     update_tick_energy = 10,
-    update_tick_surface = 3600,
-    update_tick_gui = 300,
+    update_tick_surface = 900,
+    update_tick_gui = 60,
     -- Cheat options
     surface_selected = 'nauvis',
     always_day = false, -- force if true
@@ -25,7 +25,7 @@ return {
             production = 0.06 -- MW
         },
         ['accumulator'] = {
-            starting_value = 0,
+            starting_value = 2,
             required_area = 4,
             capacity = 5 -- MJ
         },

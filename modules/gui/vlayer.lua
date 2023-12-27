@@ -12,7 +12,7 @@ local vlayer_container
 
 local function format_energy(amount, unit)
     if amount < 1 then
-        return '0' .. unit
+        return '0 ' .. unit
     end
 
     local suffix = ''
@@ -26,7 +26,7 @@ local function format_energy(amount, unit)
 
     for letter, limit in pairs (suffix_list) do
         if math.abs(amount) >= limit then
-            amount = math.floor(amount / (limit / 10)) / 10
+            amount = string.format('%.1f', amount / limit)
             suffix = letter
             break
         end
@@ -37,12 +37,12 @@ local function format_energy(amount, unit)
     while true do
         formatted, k = string.gsub(formatted, '^(-?%d+)(%d%d%d)', '%1,%2')
 
-        if (k==0) then
+        if (k == 0) then
             break
         end
     end
 
-    return formatted .. suffix .. unit
+    return formatted .. ' ' .. suffix .. unit
 end
 
 local function vlayer_convert_chest(player)
@@ -120,8 +120,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_peak_solar_count',
     caption = '0',
-    style = 'heading_1_label',
-    tooltip = 'MW'
+    style = 'heading_1_label'
 }:style{
     width = 120
 }
@@ -141,8 +140,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_sustained_count',
     caption = '0',
-    style = 'heading_1_label',
-    tooltip = 'MW'
+    style = 'heading_1_label'
 }:style{
     width = 120
 }
@@ -162,8 +160,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_max_count',
     caption = '0',
-    style = 'heading_1_label',
-    tooltip = 'MJ'
+    style = 'heading_1_label'
 }:style{
     width = 120
 }
@@ -183,8 +180,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_current_count',
     caption = '0',
-    style = 'heading_1_label',
-    tooltip = 'MJ'
+    style = 'heading_1_label'
 }:style{
     width = 120
 }
