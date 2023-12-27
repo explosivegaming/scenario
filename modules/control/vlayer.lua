@@ -82,9 +82,10 @@ end
 ]]
 
 --- Get the power multiplier based on the surface time
-local function get_time_multiplier()
+local function get_production_multiplier()
+    local mul = vlayer_data.surface.solar_power_multiplier
     if vlayer_data.surface.always_day then
-        return 1
+        return mul
     end
 
     -- TODO maybe link this into vlayer_data.surface
@@ -92,20 +93,31 @@ local function get_time_multiplier()
     local tick = game.tick % 25000
 
     if tick <= 6250 then -- Noon to Sunset
-        return 1
+        return mul
 
     elseif tick <= 11250 then -- Sunset to Night
-        return 1 - ((tick - 6250) / 5000)
+        return mul * (1 - ((tick - 6250) / 5000))
 
     elseif tick <= 13750 then -- Night to Sunrise
         return 0
 
     elseif tick <= 18750 then -- Sunrise to Morning
-        return (tick - 13750) / 5000
+        return mul * ((tick - 13750) / 5000)
 
     else -- Morning to Noon
-        return 1
+        return mul
     end
+end
+
+--- Get the sustained power multiplier, this needs improving
+local function get_sustained_multiplier()
+    local mul = vlayer_data.surface.solar_power_multiplier
+    if vlayer_data.surface.always_day then
+        return mul
+    end
+
+    -- TODO maybe link this into vlayer_data.surface
+    return mul * 291 / 416
 end
 
 --- Internal, Allocate items in the vlayer, this will increase the property values of the vlayer such as production and capacity
@@ -320,8 +332,8 @@ function vlayer.get_statistics()
     return {
         total_surface_area = vlayer_data.properties.total_surface_area,
         used_surface_area = vlayer_data.properties.used_surface_area,
-        energy_production = vlayer_data.properties.production * mega * get_time_multiplier() * vlayer_data.surface.solar_power_multiplier,
-        energy_sustained = vlayer_data.properties.production * mega * (vlayer_data.surface.always_day and 1 or 291 / 416) * vlayer_data.surface.solar_power_multiplier,
+        energy_production = vlayer_data.properties.production * mega * get_production_multiplier(),
+        energy_sustained = vlayer_data.properties.production * mega * get_sustained_multiplier(),
         energy_capacity = vlayer_data.properties.capacity * mega,
         energy_storage = vlayer_data.storage.energy,
         day = math.floor(game.tick / 25000),
@@ -414,9 +426,9 @@ end
 --- Handle all energy interfaces as well as the energy storage
 local function handle_energy_interfaces()
     -- Add the newly produced power
-    local production = vlayer_data.properties.production * mega * (config.update_tick_energy / 60) * vlayer_data.surface.solar_power_multiplier
+    local production = vlayer_data.properties.production * mega * (config.update_tick_energy / 60)
     local average_capacity = (vlayer_data.properties.capacity * mega) / #vlayer_data.entity_interfaces.energy
-    vlayer_data.storage.energy = vlayer_data.storage.energy + math.floor(production * get_time_multiplier())
+    vlayer_data.storage.energy = vlayer_data.storage.energy + math.floor(production * get_production_multiplier())
     -- Calculate how much power is present in the network, that is storage + all interfaces
     if #vlayer_data.entity_interfaces.energy > 0 then
         local available_energy = vlayer_data.storage.energy
