@@ -296,7 +296,7 @@ Gui.element{
     end
 
     local interfaces = vlayer.get_interface_counts()
-    game.print(player.name..' removed a vlayer '..interface_type..' on '.. pos_to_gps_string(interface_position))
+    game.print(player.name .. ' removed a vlayer ' .. interface_type .. ' on ' .. pos_to_gps_string(interface_position))
     element.parent[vlayer_gui_control_storage_input.name].enabled = (interfaces.storage_input < config.interface_limit.storage_input)
     element.parent[vlayer_gui_control_storage_output.name].enabled = (interfaces.storage_output < config.interface_limit.storage_output)
     element.parent[vlayer_gui_control_circuit.name].enabled = (interfaces.circuit < config.interface_limit.circuit)
