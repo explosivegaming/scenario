@@ -28,6 +28,7 @@ return {
         ['accumulator'] = {
             starting_value = 2,
             required_area = 4,
+            discharge = 0.3, -- MW
             capacity = 5 -- MJ
         },
         ['landfill'] = {

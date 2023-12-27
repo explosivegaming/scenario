@@ -20,6 +20,7 @@ local vlayer_data = {
         total_surface_area = 0,
         used_surface_area = 0,
         production = 0,
+        discharge = 0,
         capacity = 0,
     },
     storage = {
@@ -131,6 +132,10 @@ function vlayer.allocate_item(item_name, count)
 
     if item_properties.capacity then
         vlayer_data.properties.capacity = vlayer_data.properties.capacity + item_properties.capacity * count
+    end
+
+    if item_properties.discharge then
+        vlayer_data.properties.discharge = vlayer_data.properties.discharge + item_properties.discharge * count
     end
 
     if item_properties.surface_area then
@@ -438,7 +443,6 @@ end
 local function handle_energy_interfaces()
     -- Add the newly produced power
     local production = vlayer_data.properties.production * mega * (config.update_tick_energy / 60)
-    local average_capacity = (vlayer_data.properties.capacity * mega) / #vlayer_data.entity_interfaces.energy
     vlayer_data.storage.energy = vlayer_data.storage.energy + math.floor(production * get_production_multiplier())
     -- Calculate how much power is present in the network, that is storage + all interfaces
     if #vlayer_data.entity_interfaces.energy > 0 then
@@ -454,10 +458,11 @@ local function handle_energy_interfaces()
         end
 
         -- Distribute the energy between all interfaces
-        local fill_to = math.min(average_capacity, math.floor(available_energy / #vlayer_data.entity_interfaces.energy))
+        local discharge_rate = 2 * (production + vlayer_data.properties.discharge * mega) / #vlayer_data.entity_interfaces.energy
+        local fill_to = math.min(discharge_rate, math.floor(available_energy / #vlayer_data.entity_interfaces.energy))
 
         for index, interface in pairs(vlayer_data.entity_interfaces.energy) do
-            interface.electric_buffer_size = average_capacity
+            interface.electric_buffer_size = math.max(discharge_rate, interface.energy) -- prevent energy loss
             local delta = fill_to - interface.energy -- positive means storage to interface
             vlayer_data.storage.energy = vlayer_data.storage.energy - delta
             interface.energy = interface.energy + delta
