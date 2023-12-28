@@ -1,16 +1,17 @@
--- Vlayer Config
+--- Settings for vlayer including the allowed items, the update frequency, and some cheats
 -- @config Vlayer
 
 return {
-    update_tick_storage = 60,
-    update_tick_energy = 10,
-    update_tick_gui = 60,
-    modded_auto_downgrade = false,
-    -- Cheat options
-    unlimited_capacity = false,
-    unlimited_surface_area = false,
-    mimic_surface = 'nauvis', -- Surface name/index or nil to use config below
-    surface = {
+    update_tick_storage = 60, --- @setting update_tick_storage The number of ticks between each update of the storage interfaces
+    update_tick_energy = 10, --- @setting update_tick_energy The number of ticks between each update of the energy and circuit interfaces
+    update_tick_gui = 60, --- @setting update_tick_gui The number of ticks between each update of the gui
+
+    unlimited_capacity = false, --- @setting unlimited_capacity When true the vlayer has an unlimited energy capacity, accumulators are not required
+    unlimited_surface_area = false, --- @setting unlimited_surface_area When true the vlayer has an unlimited surface area, landfill is not required
+    modded_auto_downgrade = false, --- @setting modded_auto_downgrade When true modded items will be converted into their base game equivalent, original items can not be recovered
+
+    mimic_surface = 'nauvis', --- @setting mimic_surface Surface name/index the vlayer will copy its settings from, use nil to use the settings below
+    surface = { --- @setting surface When mimic_surface is nil these settings will be used instead, see LuaSurface for details
         always_day = false,
         solar_power_multiplier = 1,
         min_brightness = 0.15,
@@ -21,13 +22,24 @@ return {
         morning = 0.55,
         dawn = 0.75
     },
-    interface_limit = {
-        energy = 1, -- >1 allows for disconnected networks
+
+    interface_limit = { --- @setting interface_limit Sets the limit for the number of vlayer interfaces that can be created
+        energy = 1, -- >1 allows for disconnected power networks to receive power
         circuit = 10, -- No caveats
         storage_input = 10, -- No caveats
         storage_output = 1 -- >0 allows for item teleportation (allowed_items only)
     },
-    allowed_items = {
+
+    allowed_items = { --- @setting allowed_items List of all items allowed in vlayer storage and their properties
+        --[[
+            Allowed properties:
+            starting_value = 0: The amount of the item placed into the vlayer on game start, ignores area requirements
+            required_area = 0: When greater than 0 the items properties are not applied unless their is sufficient surplus surface area
+            production = 0: The energy production of the item in MW, used for solar panels
+            discharge = 0: The energy discharge of the item in MW, used for accumulators
+            capacity = 0: The energy capacity of the item in MJ, used for accumulators
+            surface_area = 0: The surface area provided by the item, used for landfill
+        ]]
         ['solar-panel'] = {
             starting_value = 0,
             required_area = 9,
@@ -79,7 +91,8 @@ return {
         },
         ]]
     },
-    modded_items = {
+
+    modded_items = { --- @setting modded_items List of all modded items allowed in vlayer storage and their base game equivalent
         ['solar-panel-2'] = {
             starting_value = 0,
             base_game_equivalent = 'solar-panel',

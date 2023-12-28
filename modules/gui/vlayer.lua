@@ -1,5 +1,8 @@
---- Adds a virtual layer to store power to save space.
--- @addon Virtual Layer
+--[[-- Gui Module - Virtual Layer
+    - Adds a virtual layer to store power to save space.
+    @gui Virtual Layer
+    @alias vlayer_container
+]]
 
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
@@ -7,8 +10,6 @@ local Event = require 'utils.event' --- @dep utils.event
 local format_number = require('util').format_number --- @dep util
 local config = require 'config.vlayer' --- @dep config.vlayer
 local vlayer = require 'modules.control.vlayer'
-
-local vlayer_container
 
 local function format_energy(amount, unit)
     if amount < 1 then
@@ -64,6 +65,8 @@ local function vlayer_convert_chest(player)
     return {x=string.format('%.1f', pos.x), y=string.format('%.1f', pos.y)}
 end
 
+--- Display label for the number of solar panels
+-- @element vlayer_gui_display_item_solar_name
 local vlayer_gui_display_item_solar_name =
 Gui.element{
     type = 'label',
@@ -84,6 +87,8 @@ Gui.element{
     width = 120
 }
 
+--- Display label for the number of accumulators
+-- @element vlayer_gui_display_item_accumulator_name
 local vlayer_gui_display_item_accumulator_name =
 Gui.element{
     type = 'label',
@@ -104,7 +109,9 @@ Gui.element{
     width = 120
 }
 
-local vlayer_gui_display_signal_peak_name =
+--- Display label for the current energy production
+-- @element vlayer_gui_display_signal_production_name
+local vlayer_gui_display_signal_production_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_peak_name',
@@ -124,6 +131,8 @@ Gui.element{
     width = 120
 }
 
+--- Display label for the sustained energy production
+-- @element vlayer_gui_display_signal_sustained_name
 local vlayer_gui_display_signal_sustained_name =
 Gui.element{
     type = 'label',
@@ -144,6 +153,8 @@ Gui.element{
     width = 120
 }
 
+--- Display label for the sustained energy capacity
+-- @element vlayer_gui_display_signal_capacity_name
 local vlayer_gui_display_signal_capacity_name =
 Gui.element{
     type = 'label',
@@ -164,6 +175,8 @@ Gui.element{
     width = 120
 }
 
+--- Display label for the current energy in storage
+-- @element vlayer_gui_display_signal_current_name
 local vlayer_gui_display_signal_current_name =
 Gui.element{
     type = 'label',
@@ -184,6 +197,8 @@ Gui.element{
     width = 120
 }
 
+--- A vertical flow containing all the displays labels and their counts
+-- @element vlayer_display_set
 local vlayer_display_set =
 Gui.element(function(_, parent, name)
     local vlayer_set = parent.add{type='flow', direction='vertical', name=name}
@@ -193,7 +208,7 @@ Gui.element(function(_, parent, name)
     vlayer_gui_display_item_solar_count(disp)
     vlayer_gui_display_item_accumulator_name(disp)
     vlayer_gui_display_item_accumulator_count(disp)
-    vlayer_gui_display_signal_peak_name(disp)
+    vlayer_gui_display_signal_production_name(disp)
     vlayer_gui_display_signal_production_count(disp)
     vlayer_gui_display_signal_sustained_name(disp)
     vlayer_gui_display_signal_sustained_count(disp)
@@ -205,12 +220,12 @@ Gui.element(function(_, parent, name)
     return vlayer_set
 end)
 
-local vlayer_gui_control_remove
-
 local function pos_to_gps_string(pos)
 	return '[gps=' .. string.format('%.1f', pos.x) .. ',' .. string.format('%.1f', pos.y) .. ']'
 end
 
+--- A button used to add a new storage input interface
+-- @element vlayer_gui_control_storage_input
 local vlayer_gui_control_storage_input =
 Gui.element{
     type = 'button',
@@ -228,6 +243,8 @@ Gui.element{
     element.enabled = (vlayer.get_interface_counts().storage_input < config.interface_limit.storage_input)
 end)
 
+--- A button used to add a new storage output interface
+-- @element vlayer_gui_control_storage_output
 local vlayer_gui_control_storage_output =
 Gui.element{
     type = 'button',
@@ -245,6 +262,8 @@ Gui.element{
     element.enabled = (vlayer.get_interface_counts().storage_output < config.interface_limit.storage_output)
 end)
 
+--- A button used to add a new circuit interface
+-- @element vlayer_gui_control_circuit
 local vlayer_gui_control_circuit =
 Gui.element{
     type = 'button',
@@ -262,6 +281,8 @@ Gui.element{
     element.enabled = (vlayer.get_interface_counts().circuit < config.interface_limit.circuit)
 end)
 
+--- A button used to add a new energy interface
+-- @element vlayer_gui_control_power
 local vlayer_gui_control_power =
 Gui.element{
     type = 'button',
@@ -282,7 +303,9 @@ Gui.element{
     element.enabled = (vlayer.get_interface_counts().energy < config.interface_limit.energy)
 end)
 
-vlayer_gui_control_remove =
+--- A button used to remove the closest vlayer interface
+-- @element vlayer_gui_control_remove
+local vlayer_gui_control_remove =
 Gui.element{
     type = 'button',
     caption = 'Remove Special'
@@ -302,6 +325,8 @@ Gui.element{
     element.parent[vlayer_gui_control_power.name].enabled = (interfaces.energy < config.interface_limit.energy)
 end)
 
+--- A vertical flow containing all the control buttons
+-- @element vlayer_control_set
 local vlayer_control_set =
 Gui.element(function(_, parent, name)
     local vlayer_set = parent.add{type='flow', direction='vertical', name=name}
@@ -317,7 +342,9 @@ Gui.element(function(_, parent, name)
     return vlayer_set
 end)
 
-vlayer_container =
+--- The main container for the vlayer gui
+-- @element vlayer_container
+local vlayer_container =
 Gui.element(function(event_trigger, parent)
     local player = Gui.get_player_from_element(parent)
     local container = Gui.container(parent, event_trigger, 320)
@@ -337,21 +364,18 @@ Gui.element(function(event_trigger, parent)
 end)
 :add_to_left_flow()
 
+--- Button on the top flow used to toggle the task list container
+-- @element toggle_left_element
 Gui.left_toolbar_button('entity/solar-panel', {'vlayer.main-tooltip'}, vlayer_container, function(player)
 	return Roles.player_allowed(player, 'gui/vlayer')
 end)
 
+--- Update the visibly of the buttons based on a players roles
 local function role_update_event(event)
     local player = game.players[event.player_index]
     local visible = Roles.player_allowed(player, 'gui/vlayer-edit')
     local frame = Gui.get_left_element(player, vlayer_container)
-    local table = frame.container['vlayer_st_2'].disp.table
-
-    table[vlayer_gui_control_storage_input.name].visible = visible
-    table[vlayer_gui_control_storage_output.name].visible = visible
-    table[vlayer_gui_control_circuit.name].visible = visible
-    table[vlayer_gui_control_power.name].visible = visible
-    table[vlayer_gui_control_remove.name].visible = visible
+    frame.container['vlayer_st_2'].visible = visible
 end
 
 Event.add(Roles.events.on_role_assigned, role_update_event)
