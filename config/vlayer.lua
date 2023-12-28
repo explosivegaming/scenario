@@ -11,7 +11,7 @@ return {
     mimic_surface = 'nauvis', -- Surface name/index or nil to use config below
     surface = {
         always_day = false,
-        solar_power_multiplier = 1,
+        solar_power_multiplier = 1
     },
     interface_limit = {
         energy = 1, -- >1 allows for disconnected networks
@@ -35,15 +35,41 @@ return {
             starting_value = 0,
             required_area = 0,
             surface_area = 4 -- Tiles
-        },
+        }
         -- TODO: Can convert wood directly to energy to reduce trash
         --[[
-        ['wood'] = {},
-        ['coal'] = {},
-        ['stone'] = {},
-        ['iron-ore'] = {},
-        ['copper-ore'] = {},
-        ['uranium-ore'] = {},
+        ['wood'] = {
+            starting_value = 0,
+            required_area = 0,
+            surface_area = 0,
+            fuel_input = true,
+            fuel_value = 2
+        },
+        ['iron-ore'] = {
+            starting_value = 0,
+            required_area = 0,
+            surface_area = 0
+        },
+        ['copper-ore'] = {
+            starting_value = 0,
+            required_area = 0,
+            surface_area = 0
+        },
+        ['coal'] = {
+            starting_value = 0,
+            required_area = 0,
+            surface_area = 0
+        },
+        ['stone'] = {
+            starting_value = 0,
+            required_area = 0,
+            surface_area = 0
+        },
+        ['uranium-ore'] = {
+            starting_value = 0,
+            required_area = 0,
+            surface_area = 0
+        },
         ]]
     },
     modded_items = {
