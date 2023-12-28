@@ -87,51 +87,62 @@ end
 --- Get the power multiplier based on the surface time
 local function get_production_multiplier()
     local mul = vlayer_data.surface.solar_power_multiplier
+    local surface = vlayer_data.surface
 
-    if vlayer_data.surface.always_day then
+    if surface.always_day then
+        -- Surface is always day, so full production is used
         return mul
     end
 
-    --[[
-    local tick = game.tick % vlayer_data.surface.ticks_per_day
+    if surface.darkness then
+        -- We are using a real surface, our config does not contain 'darkness'
+        local brightness = 1 - surface.darkness
 
-    if vlayer_data.surface.daytime <= vlayer_data.surface.dusk then -- Noon to Sunset
+        if brightness >= surface.min_brightness then
+            return mul * (brightness - surface.min_brightness) / (1 - surface.min_brightness)
+
+        else
+            return 0
+        end
+    end
+
+    -- Caused by using a set config rather than a surface
+    local tick = game.tick % surface.ticks_per_day
+    local daytime = tick / surface.ticks_per_day
+    surface.daytime = daytime
+
+    if daytime <= surface.dusk then -- Noon to Sunset
         return mul
 
-    elseif vlayer_data.surface.daytime <= vlayer_data.surface.evening then -- Sunset to Night
-        return mul * (1 - ((vlayer_data.surface.daytime - vlayer_data.surface.dusk) / (vlayer_data.surface.evening - vlayer_data.surface.dusk)))
+    elseif daytime <= surface.evening then -- Sunset to Night
+        return mul * (1 - ((daytime - surface.dusk) / (surface.evening - surface.dusk)))
 
-    elseif vlayer_data.surface.daytime <= vlayer_data.surface.morning then -- Night to Sunrise
+    elseif daytime <= surface.morning then -- Night to Sunrise
         return 0
 
-    elseif vlayer_data.surface.daytime <= vlayer_data.surface.dawn then -- Sunrise to Morning
-        return mul * ((vlayer_data.surface.daytime - vlayer_data.surface.morning) / (vlayer_data.surface.dawn - vlayer_data.surface.morning))
+    elseif daytime <= surface.dawn then -- Sunrise to Morning
+        return mul * ((surface.daytime - surface.morning) / (surface.dawn - surface.morning))
 
     else -- Morning to Noon
         return mul
-    end
-    ]]
-
-    local brightness = 1 - vlayer_data.surface.darkness
-
-    if brightness >= vlayer_data.surface.min_brightness then
-        return mul * (brightness - vlayer_data.surface.min_brightness) / (1 - vlayer_data.surface.min_brightness)
-
-    else
-        return 0
     end
 end
 
 --- Get the sustained power multiplier, this needs improving
 local function get_sustained_multiplier()
     local mul = vlayer_data.surface.solar_power_multiplier
+    local surface = vlayer_data.surface
 
-    if vlayer_data.surface.always_day then
+    if surface.always_day then
+        -- Surface is always day, so full production is used
         return mul
     end
 
     -- For nauvis vanilla: 208s + (1/2 x (83s + 83s))
-    return mul * ((1 - vlayer_data.surface.dawn + vlayer_data.surface.dusk) + (0.5 * (vlayer_data.surface.evening - vlayer_data.surface.dusk + vlayer_data.surface.dawn - vlayer_data.surface.morning)))
+    local day_duration = 1 - surface.dawn + surface.dusk
+    local sunset_duration = surface.evening - surface.dusk
+    local sunrise_duration = surface.dawn - surface.morning
+    return mul * (day_duration + (0.5 * (sunset_duration + sunrise_duration)))
 end
 
 --- Internal, Allocate items in the vlayer, this will increase the property values of the vlayer such as production and capacity
@@ -366,7 +377,7 @@ function vlayer.get_statistics()
         energy_capacity = vlayer_data.properties.capacity * mega,
         energy_storage = vlayer_data.storage.energy,
         day = math.floor(game.tick / vlayer_data.surface.ticks_per_day),
-        time = game.tick % vlayer_data.surface.ticks_per_day,
+        time =math.floor(vlayer_data.surface.daytime * vlayer_data.surface.ticks_per_day)
     }
 end
 

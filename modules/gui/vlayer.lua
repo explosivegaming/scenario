@@ -16,8 +16,7 @@ local function format_energy(amount, unit)
     end
 
     local suffix = ''
-    local suffix_list =
-    { -- all are 10^3 smaller because we are working in kilo watts/joules
+    local suffix_list = {
         ['T'] = 1000000000000,
         ['G'] = 1000000000,
         ['M'] = 1000000,

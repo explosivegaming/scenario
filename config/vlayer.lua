@@ -12,7 +12,14 @@ return {
     mimic_surface = 'nauvis', -- Surface name/index or nil to use config below
     surface = {
         always_day = false,
-        solar_power_multiplier = 1
+        solar_power_multiplier = 1,
+        min_brightness = 0.15,
+        ticks_per_day = 25000,
+        daytime = 0,
+        dusk = 0.25,
+        evening = 0.45,
+        morning = 0.55,
+        dawn = 0.75
     },
     interface_limit = {
         energy = 1, -- >1 allows for disconnected networks
@@ -43,7 +50,6 @@ return {
             starting_value = 0,
             required_area = 0,
             surface_area = 0,
-            fuel_input = true,
             fuel_value = 2
         },
         ['iron-ore'] = {
