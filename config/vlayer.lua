@@ -5,6 +5,7 @@ return {
     update_tick_storage = 60,
     update_tick_energy = 10,
     update_tick_gui = 60,
+    modded_auto_downgrade = false,
     -- Cheat options
     unlimited_capacity = false,
     unlimited_surface_area = false,

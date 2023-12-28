@@ -265,8 +265,12 @@ local function handle_input_interfaces()
             for name, count in pairs(inventory.get_contents()) do
                 if config.allowed_items[name] then
                     if config.allowed_items[name].modded then
-                        vlayer.insert_item(config.modded_items[name].base_game_equivalent, count * config.modded_items[name].multiplier)
+                        if config.modded_auto_downgrade then
+                            vlayer.insert_item(config.modded_items[name].base_game_equivalent, count * config.modded_items[name].multiplier)
 
+                        else
+                            vlayer.insert_item(name, count)
+                        end
                     else
                         vlayer.insert_item(name, count)
                     end
