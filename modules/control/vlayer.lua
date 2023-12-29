@@ -1,223 +1,633 @@
---- Adds a virtual layer to store power to save space.
--- @addon Virtual Layer
+--[[-- Control Module - vlayer
+    - Adds a virtual layer to store power to save space.
+    @control vlayer
+    @alias vlayer
+]]
 
 local Global = require 'utils.global' --- @dep utils.global
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.vlayer' --- @dep config.vlayer
+local move_items_stack = _C.move_items_stack
+
+local mega = 1000000
 
 local vlayer = {}
-Global.register(vlayer, function(tbl)
-    vlayer = tbl
+local vlayer_data = {
+    entity_interfaces = {
+        energy = {},
+        circuit = {},
+        storage_input = {},
+        storage_output = {}
+    },
+    properties = {
+        total_surface_area = 0,
+        used_surface_area = 0,
+        production = 0,
+        discharge = 0,
+        capacity = 0,
+    },
+    storage = {
+        items = {},
+        energy = 0,
+        unallocated = {}
+    },
+    surface = table.deep_copy(config.surface)
+}
+
+Global.register(vlayer_data, function(tbl)
+    vlayer_data = tbl
 end)
 
-vlayer.storage = {}
-vlayer.storage.item = {}
-vlayer.storage.input = {}
-vlayer.storage.item_m = {}
-
-vlayer.power = {}
-vlayer.power.entity = {}
-vlayer.power.energy = 0
-vlayer.power.circuit = {}
-
-vlayer.circuit = {}
-vlayer.circuit.output = {}
-
-for i=1, 11 do
-    vlayer.circuit.output[i] = {}
-    vlayer.circuit.output[i].count = 0
+for _, properties in pairs(config.allowed_items) do
+    properties.modded = false
 end
 
-vlayer.circuit.output[1].signal = {type='virtual', name='signal-P'}
-vlayer.circuit.output[2].signal = {type='virtual', name='signal-S'}
-vlayer.circuit.output[3].signal = {type='virtual', name='signal-M'}
-vlayer.circuit.output[4].signal = {type='virtual', name='signal-C'}
-vlayer.circuit.output[5].signal = {type='virtual', name='signal-D'}
-vlayer.circuit.output[6].signal = {type='virtual', name='signal-T'}
-vlayer.circuit.output[7].signal = {type='virtual', name='signal-L'}
-vlayer.circuit.output[8].signal = {type='virtual', name='signal-A'}
-vlayer.circuit.output[9].signal = {type='virtual', name='signal-B'}
-vlayer.circuit.output[10].signal = {type='item', name='solar-panel'}
-vlayer.circuit.output[11].signal = {type='item', name='accumulator'}
+-- For all modded items, create a config for them
+for item_name, properties in pairs(config.modded_items) do
+    local base_properties = config.allowed_items[properties.base_game_equivalent]
+    local m = properties.multiplier
 
-vlayer.storage.item['solar-panel'] = 0
-vlayer.storage.item['accumulator'] = 0
-
-if config.land.enabled then
-    vlayer.storage.item[config.land.tile] = 0
-    vlayer.storage.item_a = {}
-    vlayer.storage.item_a['solar-panel'] = 0
-    vlayer.storage.item_a['accumulator'] = 0
+    config.allowed_items[item_name] = {
+        starting_value = properties.starting_value or 0,
+        required_area = base_properties.required_area or 0,
+        surface_area = (base_properties.surface_area or 0) * m,
+        production = (base_properties.production or 0) * m,
+        capacity = (base_properties.capacity or 0) * m,
+        modded = true
+    }
 end
 
-local vlayer_storage_item = {}
+--- Get all items in storage, do not modify
+-- @treturn table a dictionary of all items stored in the vlayer
+function vlayer.get_items()
+    return vlayer_data.storage.items
+end
 
-for i=2, 8 do
-    vlayer_storage_item['solar-panel-' .. i] = {name='solar-panel', multiplier=4 ^ (i - 1)}
-    vlayer_storage_item['accumulator-' .. i] = {name='accumulator', multiplier=4 ^ (i - 1)}
+--- Get interface counts
+-- @treturn table a dictionary of the vlayer interface counts
+function vlayer.get_interface_counts()
+    local interfaces = vlayer_data.entity_interfaces
+
+    return {
+        energy = #interfaces.energy,
+        circuit = #interfaces.circuit,
+        storage_input = #interfaces.storage_input,
+        storage_output = #interfaces.storage_output,
+    }
 end
 
 --[[
     25,000 / 416 s
-    昼      208秒	ソーラー効率100%
-    夕方	83秒	1秒ごとにソーラー発電量が約1.2%ずつ下がり、やがて0%になる
-    夜	    41秒	ソーラー発電量が0%になる
-    朝方	83秒	1秒ごとにソーラー発電量が約1.2%ずつ上がり、やがて100%になる
-    0.75    Day     12,500  208s
-    0.25    Sunset  5,000   83s
-    0.45    Night   2,500   41s
-    0.55    Sunrise 5,000   83s
+    昼      208秒   ソーラー効率100%
+    夕方    83秒	1秒ごとにソーラー発電量が約1.2%ずつ下がり、やがて0%になる
+    夜      41秒    ソーラー発電量が0%になる
+    朝方    83秒    1秒ごとにソーラー発電量が約1.2%ずつ上がり、やがて100%になる
+
+    (surface.dawn)      0.75    18,750   Day         12,500  208s
+                        0.00    0       Noon
+    (surface.dusk)      0.25    6,250    Sunset      5,000   83s
+    (surface.evening)   0.45    11,250   Night       2,500   41s
+    (surface.morning)   0.55    13,750   Sunrise     5,000   83s
 ]]
 
-Event.on_nth_tick(config.update_tick, function()
-    -- storage handle
-    for k, v in pairs(vlayer.storage.input) do
-        if ((v == nil) or (not v.valid)) then
-            vlayer.input[k] = nil
+--- Get the power multiplier based on the surface time
+local function get_production_multiplier()
+    local mul = vlayer_data.surface.solar_power_multiplier
+    local surface = vlayer_data.surface
+
+    if surface.always_day then
+        -- Surface is always day, so full production is used
+        return mul
+    end
+
+    if surface.darkness then
+        -- We are using a real surface, our config does not contain 'darkness'
+        local brightness = 1 - surface.darkness
+
+        if brightness >= surface.min_brightness then
+            return mul * (brightness - surface.min_brightness) / (1 - surface.min_brightness)
 
         else
-            local chest = v.get_inventory(defines.inventory.chest)
-            local chest_content = chest.get_contents()
-
-            if config.land.enabled then
-                for item_name, count in pairs(chest_content) do
-                    if (vlayer.storage.item[item_name] ~= nil) then
-                        if item_name == config.land.tile then
-                            vlayer.storage.item[item_name] = vlayer.storage.item[item_name] + count
-                        else
-                            vlayer.storage.item_a[item_name] = vlayer.storage.item_a[item_name] + count
-                        end
-                        chest.remove({name=item_name, count=count})
-
-                    elseif (vlayer_storage_item[item_name] ~= nil) then
-                        vlayer.storage.item_a[vlayer_storage_item[item_name].name] = vlayer.storage.item_a[vlayer_storage_item[item_name].name] + (count * vlayer_storage_item[item_name].multiplier)
-                        chest.remove({name=item_name, count=count})
-                    end
-                end
-
-                local land_req = (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) + (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
-                local land_surplus = (vlayer.storage.item[config.land.tile] * config.land.result) - land_req
-
-                if (vlayer.storage.item_a['solar-panel'] > 0 and vlayer.storage.item_a['accumulator'] > 0) then
-                    local land_allocation = math.floor(land_surplus / (config.land.requirement['solar-panel'] + config.land.requirement['accumulator']))
-                    vlayer.storage.item['solar-panel'] = vlayer.storage.item['solar-panel'] + math.min(vlayer.storage.item_a['solar-panel'], land_allocation)
-                    vlayer.storage.item_a['solar-panel'] = vlayer.storage.item_a['solar-panel'] - math.min(vlayer.storage.item_a['solar-panel'], land_allocation)
-                    vlayer.storage.item['accumulator'] = vlayer.storage.item['accumulator'] + math.min(vlayer.storage.item_a['accumulator'], land_allocation)
-                    vlayer.storage.item_a['accumulator'] = vlayer.storage.item_a['accumulator'] - math.min(vlayer.storage.item_a['accumulator'], land_allocation)
-
-                elseif (vlayer.storage.item_a['solar-panel'] > 0 and vlayer.storage.item_a['accumulator'] == 0) then
-                    local land_allocation = math.floor(land_surplus / config.land.requirement['solar-panel'])
-                    vlayer.storage.item['solar-panel'] = vlayer.storage.item['solar-panel'] + math.min(vlayer.storage.item_a['solar-panel'], land_allocation)
-                    vlayer.storage.item_a['solar-panel'] = vlayer.storage.item_a['solar-panel'] - math.min(vlayer.storage.item_a['solar-panel'], land_allocation)
-
-                else
-                    local land_allocation = math.floor(land_surplus / config.land.requirement['accumulator'])
-                    vlayer.storage.item['accumulator'] = vlayer.storage.item['accumulator'] + math.min(vlayer.storage.item_a['accumulator'], land_allocation)
-                    vlayer.storage.item_a['accumulator'] = vlayer.storage.item_a['accumulator'] - math.min(vlayer.storage.item_a['accumulator'], land_allocation)
-                end
-
-                vlayer.circuit.output[1].count = math.floor(vlayer.storage.item['solar-panel'] * 0.06 * game.surfaces['nauvis'].solar_power_multiplier)
-                vlayer.circuit.output[2].count = math.floor(vlayer.storage.item['solar-panel'] * 873 * game.surfaces['nauvis'].solar_power_multiplier / 20800)
-                vlayer.circuit.output[3].count = vlayer.storage.item['accumulator'] * 5
-                vlayer.circuit.output[7].count = (vlayer.storage.item[config.land.tile] * config.land.result) - (vlayer.storage.item['solar-panel'] * config.land.requirement['solar-panel']) - (vlayer.storage.item['accumulator'] * config.land.requirement['accumulator'])
-                vlayer.circuit.output[8].count = vlayer.storage.item_a['solar-panel']
-                vlayer.circuit.output[9].count = vlayer.storage.item_a['accumulator']
-                vlayer.circuit.output[10].count = vlayer.storage.item['solar-panel']
-                vlayer.circuit.output[11].count = vlayer.storage.item['accumulator']
-
-            else
-                for item_name, count in pairs(chest_content) do
-                    if (vlayer.storage.item[item_name] ~= nil) then
-                        vlayer.storage.item[item_name] = vlayer.storage.item[item_name] + count
-                        chest.remove({name=item_name, count=count})
-
-                    elseif (vlayer_storage_item[item_name] ~= nil) then
-                        vlayer.storage.item[vlayer_storage_item[item_name].name] = vlayer.storage.item[vlayer_storage_item[item_name].name] + (count * vlayer_storage_item[item_name].multiplier)
-                        chest.remove({name=item_name, count=count})
-                    end
-                end
-
-                vlayer.circuit.output[1].count = math.floor(vlayer.storage.item['solar-panel'] * 0.06 * game.surfaces['nauvis'].solar_power_multiplier)
-                vlayer.circuit.output[2].count = math.floor(vlayer.storage.item['solar-panel'] * 873 * game.surfaces['nauvis'].solar_power_multiplier / 20800)
-                vlayer.circuit.output[3].count = (vlayer.storage.item['accumulator'] * 5) + (config.energy_base_limit / 1000000)
-                vlayer.circuit.output[10].count = vlayer.storage.item['solar-panel']
-                vlayer.circuit.output[11].count = vlayer.storage.item['accumulator']
-            end
+            return 0
         end
     end
 
-    -- power handle
-    local vlayer_power_capacity_total = math.floor(((vlayer.storage.item['accumulator'] * 5000000) + (config.energy_base_limit * #vlayer.power.entity)) / 2)
-    local vlayer_power_capacity = math.floor(vlayer_power_capacity_total / #vlayer.power.entity)
+    -- Caused by using a set config rather than a surface
+    local tick = game.tick % surface.ticks_per_day
+    local daytime = tick / surface.ticks_per_day
+    surface.daytime = daytime
 
-    if config.always_day or game.surfaces['nauvis'].always_day then
-        vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 * game.surfaces['nauvis'].solar_power_multiplier / config.update_tick)
+    if daytime <= surface.dusk then -- Noon to Sunset
+        return mul
+
+    elseif daytime <= surface.evening then -- Sunset to Night
+        return mul * (1 - ((daytime - surface.dusk) / (surface.evening - surface.dusk)))
+
+    elseif daytime <= surface.morning then -- Night to Sunrise
+        return 0
+
+    elseif daytime <= surface.dawn then -- Sunrise to Morning
+        return mul * ((surface.daytime - surface.morning) / (surface.dawn - surface.morning))
+
+    else -- Morning to Noon
+        return mul
+    end
+end
+
+--- Get the sustained power multiplier, this needs improving
+local function get_sustained_multiplier()
+    local mul = vlayer_data.surface.solar_power_multiplier
+    local surface = vlayer_data.surface
+
+    if surface.always_day then
+        -- Surface is always day, so full production is used
+        return mul
+    end
+
+    -- For nauvis vanilla: 208s + (1/2 x (83s + 83s))
+    local day_duration = 1 - surface.dawn + surface.dusk
+    local sunset_duration = surface.evening - surface.dusk
+    local sunrise_duration = surface.dawn - surface.morning
+    return mul * (day_duration + (0.5 * (sunset_duration + sunrise_duration)))
+end
+
+--- Internal, Allocate items in the vlayer, this will increase the property values of the vlayer such as production and capacity
+-- Does not increment item storage, so should not be called before insert_item unless during init
+-- Does not validate area requirements, so checks must be performed before calling this function
+-- Accepts negative count for deallocating items
+-- @tparam string item_name The name of the item to allocate
+-- @tparam number count The count of the item to allocate
+function vlayer.allocate_item(item_name, count)
+    local item_properties = config.allowed_items[item_name]
+    assert(item_properties, 'Item not allowed in vlayer: ' .. tostring(item_name))
+
+    if item_properties.production then
+        vlayer_data.properties.production = vlayer_data.properties.production + item_properties.production * count
+    end
+
+    if item_properties.capacity then
+        vlayer_data.properties.capacity = vlayer_data.properties.capacity + item_properties.capacity * count
+    end
+
+    if item_properties.discharge then
+        vlayer_data.properties.discharge = vlayer_data.properties.discharge + item_properties.discharge * count
+    end
+
+    if item_properties.surface_area then
+        vlayer_data.properties.total_surface_area = vlayer_data.properties.total_surface_area + item_properties.surface_area * count
+    end
+
+    if item_properties.required_area and item_properties.required_area > 0 then
+        vlayer_data.properties.used_surface_area = vlayer_data.properties.used_surface_area + item_properties.required_area * count
+    end
+end
+
+-- For all allowed items, setup their starting values, default 0
+for item_name, properties in pairs(config.allowed_items) do
+    vlayer_data.storage.items[item_name] = properties.starting_value or 0
+
+    if properties.required_area and properties.required_area > 0 then
+        vlayer_data.storage.unallocated[item_name] = 0
+    end
+
+    vlayer.allocate_item(item_name, properties.starting_value)
+end
+
+--- Insert an item into the vlayer, this will increment its count in storage and allocate it if possible
+-- @tparam string item_name The name of the item to insert
+-- @tparam number count The count of the item to insert
+function vlayer.insert_item(item_name, count)
+    local item_properties = config.allowed_items[item_name]
+    assert(item_properties, 'Item not allowed in vlayer: ' .. tostring(item_name))
+    vlayer_data.storage.items[item_name] = vlayer_data.storage.items[item_name] + count
+
+    if not config.unlimited_surface_area and item_properties.required_area and item_properties.required_area > 0 then
+        -- Calculate how many can be allocated
+        local surplus_area = vlayer_data.properties.total_surface_area - vlayer_data.properties.used_surface_area
+        local allocate_count = math.min(count, math.floor(surplus_area / item_properties.required_area))
+
+        if allocate_count > 0 then
+            vlayer.allocate_item(item_name, allocate_count)
+        end
+
+        vlayer_data.storage.unallocated[item_name] = vlayer_data.storage.unallocated[item_name] + count - allocate_count
 
     else
-        local tick = game.tick % 25000
+        vlayer.allocate_item(item_name, count)
+    end
+end
 
-        if tick <= 5000 or tick > 17500 then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 * game.surfaces['nauvis'].solar_power_multiplier / config.update_tick)
+--- Remove an item from the vlayer, this will decrement its count in storage and prioritise unallocated items over deallocation
+-- Can not always fulfil the remove request for items which provide surface area, therefore returns the amount actually removed
+-- @tparam string item_name The name of the item to remove
+-- @tparam number count The count of the item to remove
+-- @treturn number The count of the item actually removed
+function vlayer.remove_item(item_name, count)
+    local item_properties = config.allowed_items[item_name]
+    assert(item_properties, 'Item not allowed in vlayer: ' .. tostring(item_name))
+    local remove_unallocated = 0
 
-        elseif tick <= 10000 then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 * game.surfaces['nauvis'].solar_power_multiplier / config.update_tick * (1 - ((tick - 5000) / 5000)))
+    if not config.unlimited_surface_area and item_properties.required_area and item_properties.required_area > 0 then
+        -- Remove from the unallocated storage first
+        remove_unallocated = math.min(count, vlayer_data.storage.unallocated[item_name])
 
-        elseif (tick > 12500) and (tick <= 17500) then
-            vlayer.power.energy = vlayer.power.energy + math.floor(vlayer.storage.item['solar-panel'] * 60000 * game.surfaces['nauvis'].solar_power_multiplier / config.update_tick * ((tick - 5000) / 5000))
+        if remove_unallocated > 0 then
+            vlayer_data.storage.items[item_name] = vlayer_data.storage.items[item_name] - count
+            vlayer_data.storage.unallocated[item_name] = vlayer_data.storage.unallocated[item_name] - count
+        end
+
+        -- Check if any more items need to be removed
+        count = count - remove_unallocated
+
+        if count == 0 then
+            return remove_unallocated
         end
     end
 
-    if config.battery_limit then
-        if vlayer.power.energy > vlayer_power_capacity_total then
-            vlayer.power.energy = vlayer_power_capacity_total
+    -- Calculate the amount to remove based on items in storage
+    local remove_count = math.min(count, vlayer_data.storage.items[item_name])
+
+    if item_properties.surface_area and item_properties.surface_area > 0 then
+        -- If the item provides surface area then it has additional limitations
+        local surplus_area = vlayer_data.properties.total_surface_area - vlayer_data.properties.used_surface_area
+        remove_count = math.min(remove_count, math.floor(surplus_area / item_properties.surface_area))
+
+        if remove_count <= 0 then
+            return remove_unallocated
         end
     end
 
-    for k, v in pairs(vlayer.power.entity) do
-        if (v == nil) or (not v.valid)then
-            vlayer.power.entity[k] = nil
+    -- Remove the item from allocated storage
+    vlayer_data.storage.items[item_name] = vlayer_data.storage.items[item_name] - remove_count
+    vlayer.allocate_item(item_name, -remove_count)
+    return remove_unallocated + remove_count
+end
+
+--- Create a new storage input interface
+-- @tparam LuaSurface surface The surface to place the interface onto
+-- @tparam MapPosition position The position on the surface to place the interface at
+-- @tparam[opt] LuaPlayer player The player to show as the last user of the interface
+-- @treturn LuaEntity The entity that was created for the interface
+function vlayer.create_input_interface(surface, position, last_user)
+    local interface = surface.create_entity{name='logistic-chest-storage', position=position, force='neutral'}
+    table.insert(vlayer_data.entity_interfaces.storage_input, interface)
+
+    if last_user then
+        interface.last_user = last_user
+    end
+
+    interface.destructible = false
+    interface.minable = false
+    interface.operable = true
+    return interface
+end
+
+--- Handle all input interfaces, will take their contents and insert it into the vlayer storage
+local function handle_input_interfaces()
+    for index, interface in pairs(vlayer_data.entity_interfaces.storage_input) do
+        if not interface.valid then
+            vlayer_data.entity_interfaces.storage_input[index] = nil
 
         else
-            v.electric_buffer_size = vlayer_power_capacity
-            v.power_production = math.floor(vlayer_power_capacity / 60)
-            v.power_usage = math.floor(vlayer_power_capacity / 60)
+            local inventory = interface.get_inventory(defines.inventory.chest)
 
-            if vlayer.power.energy < vlayer_power_capacity then
-                v.energy = math.floor((v.energy + vlayer.power.energy) / 2)
-                vlayer.power.energy = v.energy
+            for name, count in pairs(inventory.get_contents()) do
+                if config.allowed_items[name] then
+                    if config.allowed_items[name].modded then
+                        if config.modded_auto_downgrade then
+                            vlayer.insert_item(config.modded_items[name].base_game_equivalent, count * config.modded_items[name].multiplier)
 
-            elseif v.energy < vlayer_power_capacity then
-                local energy_change = vlayer_power_capacity - v.energy
+                        else
+                            vlayer.insert_item(name, count)
+                        end
+                    else
+                        vlayer.insert_item(name, count)
+                    end
 
-                if energy_change < vlayer.power.energy then
-                    v.energy = v.energy + energy_change
-                    vlayer.power.energy = vlayer.power.energy - energy_change
-
-                else
-                    v.energy = v.energy + vlayer.power.energy
-                    vlayer.power.energy = 0
+                    inventory.remove({name=name, count=count})
                 end
             end
         end
     end
+end
 
-    -- circuit handle
-    vlayer.circuit.output[4].count = math.floor(vlayer.power.energy / 1000000)
-    vlayer.circuit.output[5].count = math.floor(game.tick / 25000)
-    vlayer.circuit.output[6].count = game.tick % 25000
+--- Create a new storage output interface
+-- @tparam LuaSurface surface The surface to place the interface onto
+-- @tparam MapPosition position The position on the surface to place the interface at
+-- @tparam[opt] LuaPlayer player The player to show as the last user of the interface
+-- @treturn LuaEntity The entity that was created for the interface
+function vlayer.create_output_interface(surface, position, last_user)
+    local interface = surface.create_entity{name='logistic-chest-requester', position=position, force='neutral'}
+    table.insert(vlayer_data.entity_interfaces.storage_output, interface)
 
-    for k, v in pairs(vlayer.power.circuit) do
-        if (v == nil) or (not v.valid) then
-            vlayer.power.circuit[k] = nil
+    if last_user then
+        interface.last_user = last_user
+    end
+
+    interface.destructible = false
+    interface.minable = false
+    interface.operable = true
+    return interface
+end
+
+--- Handle all output interfaces, will take their requests and remove it from the vlayer storage
+local function handle_output_interfaces()
+    for index, interface in pairs(vlayer_data.entity_interfaces.storage_output) do
+        if not interface.valid then
+            vlayer_data.entity_interfaces.storage_output[index] = nil
 
         else
-            local circuit_o = v.get_or_create_control_behavior()
+            local inventory = interface.get_inventory(defines.inventory.chest)
 
-            for i=1, #vlayer.circuit.output do
-                circuit_o.set_signal(i, {signal=vlayer.circuit.output[i].signal, count=vlayer.circuit.output[i].count})
+            for i = 1, interface.request_slot_count do
+                local request = interface.get_request_slot(i)
+
+                if request and config.allowed_items[request.name] then
+                    local current_amount = inventory.get_item_count(request.name)
+                    local request_amount = math.min(request.count - current_amount, vlayer_data.storage.items[request.name])
+
+                    if request_amount > 0 and inventory.can_insert({name=request.name, count=request_amount}) then
+                        local removed_item_count = vlayer.remove_item(request.name, request_amount)
+
+                        if removed_item_count > 0 then
+                            inventory.insert({name=request.name, count=removed_item_count})
+                        end
+                    end
+                end
             end
         end
     end
+end
+
+--- Handle the unallocated items because more surface area may have been added
+local function handle_unallocated()
+    -- unallocated cant happen when its unlimited
+    if config.unlimited_surface_area then
+        return
+    end
+
+    -- Get the total unallocated area so items can be allocated in equal amounts
+    local unallocated_area = 0
+
+    for item_name, count in pairs(vlayer_data.storage.unallocated) do
+        local item_properties = config.allowed_items[item_name]
+        unallocated_area = unallocated_area + item_properties.required_area * count
+    end
+
+    if unallocated_area == 0 then
+        return
+    end
+
+    -- Allocate items in an equal distribution
+    local surplus_area = vlayer_data.properties.total_surface_area - vlayer_data.properties.used_surface_area
+    for item_name, count in pairs(vlayer_data.storage.unallocated) do
+        local allocation_count = math.min(count, math.floor(count * surplus_area / unallocated_area))
+
+        if allocation_count > 0 then
+            vlayer_data.storage.unallocated[item_name] = vlayer_data.storage.unallocated[item_name] - allocation_count
+            vlayer.allocate_item(item_name, allocation_count)
+        end
+    end
+end
+
+--- Get the statistics for the vlayer
+function vlayer.get_statistics()
+    return {
+        total_surface_area = vlayer_data.properties.total_surface_area,
+        used_surface_area = vlayer_data.properties.used_surface_area,
+        energy_production = vlayer_data.properties.production * mega * get_production_multiplier(),
+        energy_sustained = vlayer_data.properties.production * mega * get_sustained_multiplier(),
+        energy_capacity = vlayer_data.properties.capacity * mega,
+        energy_storage = vlayer_data.storage.energy,
+        day = math.floor(game.tick / vlayer_data.surface.ticks_per_day),
+        time =math.floor(vlayer_data.surface.daytime * vlayer_data.surface.ticks_per_day)
+    }
+end
+
+--- Circuit signals used for the statistics
+local circuit_signals = {
+    total_surface_area = 'signal-A',
+    used_surface_area = 'signal-B',
+    energy_production = 'signal-P',
+    energy_sustained = 'signal-S',
+    energy_capacity = 'signal-C',
+    energy_storage = 'signal-E',
+    day = 'signal-D',
+    time = 'signal-T',
+}
+
+--- Create a new circuit interface
+-- @tparam LuaSurface surface The surface to place the interface onto
+-- @tparam MapPosition position The position on the surface to place the interface at
+-- @tparam[opt] LuaPlayer player The player to show as the last user of the interface
+-- @treturn LuaEntity The entity that was created for the interface
+function vlayer.create_circuit_interface(surface, position, last_user)
+    local interface = surface.create_entity{name='constant-combinator', position=position, force='neutral'}
+    table.insert(vlayer_data.entity_interfaces.circuit, interface)
+
+    if last_user then
+        interface.last_user = last_user
+    end
+
+    interface.destructible = false
+    interface.minable = false
+    interface.operable = true
+    return interface
+end
+
+--- Handle all circuit interfaces, updating their signals to match the vlayer statistics
+local function handle_circuit_interfaces()
+    local stats = vlayer.get_statistics()
+
+    for index, interface in pairs(vlayer_data.entity_interfaces.circuit) do
+        if not interface.valid then
+            vlayer_data.entity_interfaces.circuit[index] = nil
+
+        else
+            local circuit_oc = interface.get_or_create_control_behavior()
+            local max_signals = circuit_oc.signals_count
+            local signal_index = 1
+
+            -- Set the virtual signals based on the vlayer stats
+            for stat_name, signal_name in pairs(circuit_signals) do
+                if stat_name:find('energy') then
+                    circuit_oc.set_signal(signal_index, {signal={type='virtual', name=signal_name}, count=math.floor(stats[stat_name] / mega)})
+
+                else
+                    circuit_oc.set_signal(signal_index, {signal={type='virtual', name=signal_name}, count=math.floor(stats[stat_name])})
+                end
+
+                signal_index = signal_index + 1
+            end
+
+            -- Set the item signals based on stored items
+            for item_name, count in pairs(vlayer_data.storage.items) do
+                if game.item_prototypes[item_name] and count > 0 then
+                    circuit_oc.set_signal(signal_index, {signal={type='item', name=item_name}, count=count})
+                    signal_index = signal_index + 1
+                    if signal_index > max_signals then
+                        return -- No more signals can be added
+                    end
+                end
+            end
+
+            -- Clear remaining signals to prevent outdated values being present (caused by count > 0 check)
+            for clear_index = signal_index, max_signals do
+                if not circuit_oc.get_signal(clear_index).signal then
+                    break -- There are no more signals to clear
+                end
+                circuit_oc.set_signal(clear_index, nil)
+            end
+        end
+    end
+end
+
+--- Create a new energy interface
+-- @tparam LuaSurface surface The surface to place the interface onto
+-- @tparam MapPosition position The position on the surface to place the interface at
+-- @tparam[opt] LuaPlayer player The player to show as the last user of the interface
+-- @treturn LuaEntity The entity that was created for the interface, or nil if it could not be created
+function vlayer.create_energy_interface(surface, position, last_user)
+    if not surface.can_place_entity{name='electric-energy-interface', position=position} then
+        return nil
+    end
+
+    local interface = surface.create_entity{name='electric-energy-interface', position=position, force='neutral'}
+    table.insert(vlayer_data.entity_interfaces.energy, interface)
+
+    if last_user then
+        interface.last_user = last_user
+    end
+
+    interface.destructible = false
+    interface.minable = false
+    interface.operable = false
+    interface.electric_buffer_size = 0
+    interface.power_production = 0
+    interface.power_usage = 0
+    interface.energy = 0
+    return interface
+end
+
+--- Handle all energy interfaces as well as the energy storage
+local function handle_energy_interfaces()
+    -- Add the newly produced power
+    local production = vlayer_data.properties.production * mega * (config.update_tick_energy / 60)
+    vlayer_data.storage.energy = vlayer_data.storage.energy + math.floor(production * get_production_multiplier())
+
+    -- Calculate how much power is present in the network, that is storage + all interfaces
+    if #vlayer_data.entity_interfaces.energy > 0 then
+        local available_energy = vlayer_data.storage.energy
+
+        for index, interface in pairs(vlayer_data.entity_interfaces.energy) do
+            if not interface.valid then
+                vlayer_data.entity_interfaces.energy[index] = nil
+
+            else
+                available_energy = available_energy + interface.energy
+            end
+        end
+
+        -- Distribute the energy between all interfaces
+        local discharge_rate = 2 * (production + vlayer_data.properties.discharge * mega) / #vlayer_data.entity_interfaces.energy
+        local fill_to = math.min(discharge_rate, math.floor(available_energy / #vlayer_data.entity_interfaces.energy))
+
+        for index, interface in pairs(vlayer_data.entity_interfaces.energy) do
+            interface.electric_buffer_size = math.max(discharge_rate, interface.energy) -- prevent energy loss
+            local delta = fill_to - interface.energy -- positive means storage to interface
+            vlayer_data.storage.energy = vlayer_data.storage.energy - delta
+            interface.energy = interface.energy + delta
+        end
+    end
+
+    -- Cap the stored energy to the allowed capacity
+    if not config.unlimited_capacity and vlayer_data.storage.energy > vlayer_data.properties.capacity * mega then
+        vlayer_data.storage.energy = vlayer_data.properties.capacity * mega
+    end
+end
+
+--- Remove the closest entity interface to the given position
+-- @tparam LuaSurface surface The surface to search for an interface on
+-- @tparam MapPosition position The position to start the search from
+-- @tparam number radius The radius to search for an interface within
+-- @treturn string The type of interface that was removed, or nil if no interface was found
+-- @treturn MapPosition The position the interface was at, or nil if no interface was found
+function vlayer.remove_closest_interface(surface, position, radius)
+    local entities = surface.find_entities_filtered{
+        name = {'logistic-chest-storage', 'logistic-chest-requester', 'constant-combinator', 'electric-energy-interface'},
+        force = 'neutral',
+        position = position,
+        radius = radius,
+        limit = 1
+    }
+
+    -- Get the details which will be returned
+    if #entities == 0 then
+        return nil, nil
+    end
+
+    local interface = entities[1]
+    local name = interface.name
+    local pos = interface.position
+
+    -- Return the type of interface removed and do some clean up
+    if name == 'logistic-chest-storage' then
+        move_items_stack(interface.get_inventory(defines.inventory.chest).get_contents())
+        table.remove_element(vlayer_data.entity_interfaces.storage_input, interface)
+        interface.destroy()
+        return 'storage input', pos
+
+    elseif name == 'logistic-chest-requester' then
+        move_items_stack(interface.get_inventory(defines.inventory.chest).get_contents())
+        table.remove_element(vlayer_data.entity_interfaces.storage_output, interface)
+        interface.destroy()
+        return 'storage output', pos
+
+    elseif name == 'constant-combinator' then
+        table.remove_element(vlayer_data.entity_interfaces.circuit, interface)
+        interface.destroy()
+        return 'circuit', pos
+
+    elseif name == 'electric-energy-interface' then
+        vlayer_data.storage.energy = vlayer_data.storage.energy + interface.energy
+        table.remove_element(vlayer_data.entity_interfaces.energy, interface)
+        interface.destroy()
+        return 'energy', pos
+    end
+end
+
+local function on_surface_event()
+    if config.mimic_surface then
+        local surface = game.get_surface(config.mimic_surface)
+
+        if surface then
+            vlayer_data.surface = surface
+            return
+        end
+    end
+
+    if not vlayer_data.surface.index then
+        -- Our fake surface data never has an index, we test for this to avoid unneeded copies from the config
+        vlayer_data.surface = table.deep_copy(config.surface)
+    end
+end
+
+--- Handle all storage IO and attempt allocation of unallocated items
+Event.on_nth_tick(config.update_tick_storage, function(_)
+    handle_input_interfaces()
+    handle_output_interfaces()
+    handle_unallocated()
 end)
+
+--- Handle all energy and circuit updates
+Event.on_nth_tick(config.update_tick_energy, function(_)
+    handle_circuit_interfaces()
+    handle_energy_interfaces()
+end)
+
+Event.add(defines.events.on_surface_created, on_surface_event)
+Event.add(defines.events.on_surface_renamed, on_surface_event)
+Event.add(defines.events.on_surface_imported, on_surface_event)
+Event.on_init(on_surface_event) -- Default surface always exists, does not trigger on_surface_created
 
 return vlayer

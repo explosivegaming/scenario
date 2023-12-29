@@ -1,167 +1,167 @@
--- Vlayer Config
+--- Settings for vlayer including the allowed items, the update frequency, and some cheats
 -- @config Vlayer
 
 return {
-    enabled = true,
-    update_tick = 10,
-    -- 10 MJ
-    energy_base_limit = 10000000,
-    land = {
-        enabled = true,
-        tile = 'landfill',
-        result = 4,
-        requirement = {
-            ['solar-panel'] = 9,
-            ['accumulator'] = 4
+    update_tick_storage = 60, --- @setting update_tick_storage The number of ticks between each update of the storage interfaces
+    update_tick_energy = 10, --- @setting update_tick_energy The number of ticks between each update of the energy and circuit interfaces
+    update_tick_gui = 60, --- @setting update_tick_gui The number of ticks between each update of the gui
+
+    unlimited_capacity = false, --- @setting unlimited_capacity When true the vlayer has an unlimited energy capacity, accumulators are not required
+    unlimited_surface_area = false, --- @setting unlimited_surface_area When true the vlayer has an unlimited surface area, landfill is not required
+    modded_auto_downgrade = false, --- @setting modded_auto_downgrade When true modded items will be converted into their base game equivalent, original items can not be recovered
+
+    mimic_surface = 'nauvis', --- @setting mimic_surface Surface name/index the vlayer will copy its settings from, use nil to use the settings below
+    surface = { --- @setting surface When mimic_surface is nil these settings will be used instead, see LuaSurface for details
+        always_day = false,
+        solar_power_multiplier = 1,
+        min_brightness = 0.15,
+        ticks_per_day = 25000,
+        daytime = 0,
+        dusk = 0.25,
+        evening = 0.45,
+        morning = 0.55,
+        dawn = 0.75
+    },
+
+    interface_limit = { --- @setting interface_limit Sets the limit for the number of vlayer interfaces that can be created
+        energy = 1, -- >1 allows for disconnected power networks to receive power
+        circuit = 10, -- No caveats
+        storage_input = 10, -- No caveats
+        storage_output = 1 -- >0 allows for item teleportation (allowed_items only)
+    },
+
+    allowed_items = { --- @setting allowed_items List of all items allowed in vlayer storage and their properties
+        --[[
+            Allowed properties:
+            starting_value = 0: The amount of the item placed into the vlayer on game start, ignores area requirements
+            required_area = 0: When greater than 0 the items properties are not applied unless their is sufficient surplus surface area
+            production = 0: The energy production of the item in MW, used for solar panels
+            discharge = 0: The energy discharge of the item in MW, used for accumulators
+            capacity = 0: The energy capacity of the item in MJ, used for accumulators
+            surface_area = 0: The surface area provided by the item, used for landfill
+        ]]
+        ['solar-panel'] = {
+            starting_value = 0,
+            required_area = 9,
+            production = 0.06 -- MW
+        },
+        ['accumulator'] = {
+            starting_value = 2,
+            required_area = 4,
+            discharge = 0.3, -- MW
+            capacity = 5 -- MJ
+        },
+        ['landfill'] = {
+            starting_value = 0,
+            required_area = 0,
+            surface_area = 4 -- Tiles
         }
+        -- TODO: Can convert wood directly to energy to reduce trash
+        --[[
+        ['wood'] = {
+            starting_value = 0,
+            required_area = 0,
+            surface_area = 0,
+            fuel_value = 2
+        },
+        ['iron-ore'] = {
+            starting_value = 0,
+            required_area = 0,
+            surface_area = 0
+        },
+        ['copper-ore'] = {
+            starting_value = 0,
+            required_area = 0,
+            surface_area = 0
+        },
+        ['coal'] = {
+            starting_value = 0,
+            required_area = 0,
+            surface_area = 0
+        },
+        ['stone'] = {
+            starting_value = 0,
+            required_area = 0,
+            surface_area = 0
+        },
+        ['uranium-ore'] = {
+            starting_value = 0,
+            required_area = 0,
+            surface_area = 0
+        },
+        ]]
     },
-    always_day = false,
-    battery_limit = true,
-    -- setting to a value greater than 1 will allow for wireless energy transfer
-    interface_limit = {
-        storage_input = 1,
-        energy = 1,
-        circuit = 1
-    },
-    print_out = {
-        ['electric-energy-interface'] = 'energy interface',
-        ['constant-combinator'] = 'circuit output',
-        ['logistic-chest-storage'] = 'storage input'
-    },
-    gui = {
-        style = 'heading_1_label',
-        type = 'label',
-        content = {
-            {
-                title = 'Storage',
-                type = nil,
-                name = nil
-            },
-            {
-                title = '',
-                type = nil,
-                name = nil
-            },
-            {
-                title = '[img=entity/solar-panel] Solar Panel',
-                type = nil,
-                name = nil
-            },
-            {
-                title = 0,
-                type = 'item',
-                name = 'solar-panel'
-            },
-            {
-                title = '[img=entity/accumulator] Accumulator',
-                type = nil,
-                name = nil
-            },
-            {
-                title = 0,
-                type = 'item',
-                name = 'accumulator'
-            },
-            {
-                title = '[virtual-signal=signal-L] Landfill',
-                type = nil,
-                name = nil
-            },
-            {
-                title = 0,
-                type = 'signal',
-                name = 7
-            },
-            {
-                title = '[virtual-signal=signal-A] Solar Available',
-                type = nil,
-                name = nil
-            },
-            {
-                title = 0,
-                type = 'signal',
-                name = 8
-            },
-            {
-                title = '[virtual-signal=signal-B] Acc Available',
-                type = nil,
-                name = nil
-            },
-            {
-                title = 0,
-                type = 'signal',
-                name = 9
-            },
-            {
-                title = 'Power Production',
-                type = nil,
-                name = nil
-            },
-            {
-                title = 'MW',
-                type = nil,
-                name = nil
-            },
-            {
-                title = '[virtual-signal=signal-P] Peak',
-                type = nil,
-                name = nil
-            },
-            {
-                title = '0',
-                type = 'signal',
-                name = 1
-            },
-            {
-                title = '[virtual-signal=signal-S] Sustained',
-                type = nil,
-                name = nil
-            },
-            {
-                title = '0',
-                type = 'signal',
-                name = 2
-            },
-            {
-                title = 'Battery',
-                type = nil,
-                name = nil
-            },
-            {
-                title = 'MJ',
-                type = nil,
-                name = nil
-            },
-            {
-                title = '[virtual-signal=signal-M] Max',
-                type = nil,
-                name = nil
-            },
-            {
-                title = '0',
-                type = 'signal',
-                name = 3
-            },
-            {
-                title = '[virtual-signal=signal-C] Current',
-                type = nil,
-                name = nil
-            },
-            {
-                title = '0',
-                type = 'signal',
-                name = 4
-            },
-            {
-                title = 'Convert',
-                type = nil,
-                name = nil
-            },
-            {
-                title = '',
-                type = nil,
-                name = nil
-            }
-        }
+
+    modded_items = { --- @setting modded_items List of all modded items allowed in vlayer storage and their base game equivalent
+        ['solar-panel-2'] = {
+            starting_value = 0,
+            base_game_equivalent = 'solar-panel',
+            multiplier = 4
+        },
+        ['solar-panel-3'] = {
+            starting_value = 0,
+            base_game_equivalent = 'solar-panel',
+            multiplier = 16
+        },
+        ['solar-panel-4'] = {
+            starting_value = 0,
+            base_game_equivalent = 'solar-panel',
+            multiplier = 64
+        },
+        ['solar-panel-5'] = {
+            starting_value = 0,
+            base_game_equivalent = 'solar-panel',
+            multiplier = 256
+        },
+        ['solar-panel-6'] = {
+            starting_value = 0,
+            base_game_equivalent = 'solar-panel',
+            multiplier = 1024
+        },
+        ['solar-panel-7'] = {
+            starting_value = 0,
+            base_game_equivalent = 'solar-panel',
+            multiplier = 4096
+        },
+        ['solar-panel-8'] = {
+            starting_value = 0,
+            base_game_equivalent = 'solar-panel',
+            multiplier = 16384
+        },
+        ['accumulator-2'] = {
+            starting_value = 0,
+            base_game_equivalent = 'accumulator',
+            multiplier = 4
+        },
+        ['accumulator-3'] = {
+            starting_value = 0,
+            base_game_equivalent = 'accumulator',
+            multiplier = 16
+        },
+        ['accumulator-4'] = {
+            starting_value = 0,
+            base_game_equivalent = 'accumulator',
+            multiplier = 64
+        },
+        ['accumulator-5'] = {
+            starting_value = 0,
+            base_game_equivalent = 'accumulator',
+            multiplier = 256
+        },
+        ['accumulator-6'] = {
+            starting_value = 0,
+            base_game_equivalent = 'accumulator',
+            multiplier = 1024
+        },
+        ['accumulator-7'] = {
+            starting_value = 0,
+            base_game_equivalent = 'accumulator',
+            multiplier = 4096
+        },
+        ['accumulator-8'] = {
+            starting_value = 0,
+            base_game_equivalent = 'accumulator',
+            multiplier = 16384
+        },
     }
 }
