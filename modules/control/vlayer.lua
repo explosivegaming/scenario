@@ -67,6 +67,7 @@ end
 -- @treturn table a dictionary of the vlayer interface counts
 function vlayer.get_interface_counts()
     local interfaces = vlayer_data.entity_interfaces
+
     return {
         energy = #interfaces.energy,
         circuit = #interfaces.circuit,
