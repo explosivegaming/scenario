@@ -229,6 +229,7 @@ end
 local vlayer_gui_control_storage_input =
 Gui.element{
     type = 'button',
+    name = Gui.unique_static_name,
     caption = 'Add Input Storage'
 }:style{
     width = 160
@@ -248,6 +249,7 @@ end)
 local vlayer_gui_control_storage_output =
 Gui.element{
     type = 'button',
+    name = Gui.unique_static_name,
     caption = 'Add Output Storage'
 }:style{
     width = 160
@@ -267,6 +269,7 @@ end)
 local vlayer_gui_control_circuit =
 Gui.element{
     type = 'button',
+    name = Gui.unique_static_name,
     caption = 'Add Circuit'
 }:style{
     width = 160
@@ -286,6 +289,7 @@ end)
 local vlayer_gui_control_power =
 Gui.element{
     type = 'button',
+    name = Gui.unique_static_name,
     caption = 'Add Power'
 }:style{
     width = 160
@@ -308,6 +312,7 @@ end)
 local vlayer_gui_control_remove =
 Gui.element{
     type = 'button',
+    name = Gui.unique_static_name,
     caption = 'Remove Special'
 }:style{
     width = 160

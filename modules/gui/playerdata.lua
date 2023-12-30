@@ -16,13 +16,11 @@ local label_width = {
     ['total'] = 480
 }
 
-local function format_clock(value)
+local function format_time_short(value)
     return format_time(value*3600, {
         hours=true,
         minutes=true,
-        seconds=false,
-        time=false,
-        string=true
+        seconds=false
     })
 end
 
@@ -33,49 +31,49 @@ end
 local playerStats = PlayerData.Statistics
 local computed_stats = {
     DamageDeathRatio = {
-        default = '0.00',
+        default = format_number_n(0),
         calculate = function(player_name)
             return format_number_n(playerStats['DamageDealt']:get(player_name, 0) / playerStats['Deaths']:get(player_name, 1))
         end
     },
     KillDeathRatio = {
-        default = '0.00',
+        default = format_number_n(0),
         calculate = function(player_name)
             return format_number_n(playerStats['Kills']:get(player_name, 0) / playerStats['Deaths']:get(player_name, 1))
         end
     },
     SessionTime = {
-        default = format_clock(0),
+        default = format_time_short(0),
         calculate = function(player_name)
-            return format_clock((playerStats['Playtime']:get(player_name, 0) - playerStats['AfkTime']:get(player_name, 0)) / playerStats['JoinCount']:get(player_name, 1))
+            return format_time_short((playerStats['Playtime']:get(player_name, 0) - playerStats['AfkTime']:get(player_name, 0)) / playerStats['JoinCount']:get(player_name, 1))
         end
     },
     BuildRatio = {
-        default = '0.00',
+        default = format_number_n(0),
         calculate = function(player_name)
             return format_number_n(playerStats['MachinesBuilt']:get(player_name, 0) / playerStats['MachinesRemoved']:get(player_name, 1))
         end
     },
     RocketPerHour = {
-        default = '0.00',
+        default = format_number_n(0),
         calculate = function(player_name)
             return format_number_n(playerStats['RocketsLaunched']:get(player_name, 0) * 60 / playerStats['Playtime']:get(player_name, 1))
         end
     },
     TreeKillPerMinute = {
-        default = '0.00',
+        default = format_number_n(0),
         calculate = function(player_name)
             return format_number_n(playerStats['TreesDestroyed']:get(player_name, 0) / playerStats['Playtime']:get(player_name, 1))
         end
     },
     NetPlayTime = {
-        default = format_clock(0),
+        default = format_time_short(0),
         calculate = function(player_name)
-            return format_clock((playerStats['Playtime']:get(player_name, 0) - playerStats['AfkTime']:get(player_name, 0)))
+            return format_time_short((playerStats['Playtime']:get(player_name, 0) - playerStats['AfkTime']:get(player_name, 0)))
         end
     },
     AFKTimeRatio = {
-        default = '0.00',
+        default = format_number_n(0),
         calculate = function(player_name)
             return format_number_n(playerStats['AfkTime']:get(player_name, 0) * 100 / playerStats['Playtime']:get(player_name, 1))
         end
@@ -137,9 +135,9 @@ local function pd_update(table, player_name)
 end
 
 local pd_username_player =
-Gui.element(function(name, parent, player_list)
+Gui.element(function(definition, parent, player_list)
     return parent.add{
-        name = name,
+        name = definition.name,
         type = 'drop-down',
         items = player_list,
         selected_index = #player_list > 0 and 1
@@ -152,10 +150,12 @@ end)
     local table = element.parent.parent.parent.parent['pd_st_2'].disp.table
     pd_update(table, player_name)
 end)
+:static_name(Gui.unique_static_name)
 
 local pd_username_update =
 Gui.element{
     type = 'button',
+    name = Gui.unique_static_name,
     caption = 'update'
 }:style{
     width = 128
@@ -181,8 +181,8 @@ Gui.element(function(_, parent, name, player_list)
 end)
 
 pd_container =
-Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, label_width['total'])
+Gui.element(function(definition, parent)
+    local container = Gui.container(parent, definition.name, label_width['total'])
     local player_list = {}
 
     for _, player in pairs(game.connected_players) do
@@ -194,6 +194,7 @@ Gui.element(function(event_trigger, parent)
 
     return container.parent
 end)
+:static_name(Gui.unique_static_name)
 :add_to_left_flow()
 
 Gui.left_toolbar_button('item/power-armor-mk2', 'Player Data GUI', pd_container, function(player)
