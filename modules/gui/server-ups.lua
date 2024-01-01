@@ -23,7 +23,8 @@ UsesServerUps:set_metadata{
 local server_ups =
 Gui.element{
     type = 'label',
-    caption = 'SUPS = 60.0'
+    caption = 'SUPS = 60.0',
+    name = Gui.unique_static_name
 }
 :style{
     font = 'default-game'

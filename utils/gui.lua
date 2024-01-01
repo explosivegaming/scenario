@@ -1,8 +1,10 @@
 local Global = require 'utils.global' --- @dep utils.global
-local ExpGui = require 'expcore.gui' --- @dep expcore.gui
+local Event = require 'utils.event' --- @dep expcore.gui
+local mod_gui = require 'mod-gui' --- @dep mod-gui
 
 local Gui = {}
 local data = {}
+local uid = 0
 
 Global.register(
     data,
@@ -12,8 +14,8 @@ Global.register(
 )
 
 function Gui.uid_name()
-    local new_element = ExpGui.element()
-    return new_element.name
+    uid = uid + 1
+    return "Redmew_"..uid
 end
 
 -- Associates data with the LuaGuiElement. If data is nil then removes the data
@@ -70,10 +72,11 @@ end
 
 local function handler_factory(event_name)
     return function(element_name, handler)
-        local element = ExpGui.defines[element_name]
-        if not element then return end
-        element[event_name](element, function(_, _,event)
-            handler(event)
+        Event.add(defines.events[event_name], function(event)
+            if event.element and event.element.valid and event.element.name == element_name then
+                event.player = game.get_player(event.player_index)
+                handler(event)
+            end
         end)
     end
 end
@@ -82,48 +85,48 @@ end
 -- Can only have one handler per element name.
 -- Guarantees that the element and the player are valid when calling the handler.
 -- Adds a player field to the event table.
-Gui.on_checked_state_changed = handler_factory('on_checked_changed')
+Gui.on_checked_state_changed = handler_factory('on_gui_checked_state_changed')
 
 -- Register a handler for the on_gui_click event for LuaGuiElements with element_name.
 -- Can only have one handler per element name.
 -- Guarantees that the element and the player are valid when calling the handler.
 -- Adds a player field to the event table.
-Gui.on_click = handler_factory('on_click')
+Gui.on_click = handler_factory('on_gui_click')
 
 -- Register a handler for the on_gui_closed event for a custom LuaGuiElements with element_name.
 -- Can only have one handler per element name.
 -- Guarantees that the element and the player are valid when calling the handler.
 -- Adds a player field to the event table.
-Gui.on_custom_close = handler_factory('on_closed')
+Gui.on_custom_close = handler_factory('on_gui_closed')
 
 -- Register a handler for the on_gui_elem_changed event for LuaGuiElements with element_name.
 -- Can only have one handler per element name.
 -- Guarantees that the element and the player are valid when calling the handler.
 -- Adds a player field to the event table.
-Gui.on_elem_changed = handler_factory('on_elem_changed')
+Gui.on_elem_changed = handler_factory('on_gui_elem_changed')
 
 -- Register a handler for the on_gui_selection_state_changed event for LuaGuiElements with element_name.
 -- Can only have one handler per element name.
 -- Guarantees that the element and the player are valid when calling the handler.
 -- Adds a player field to the event table.
-Gui.on_selection_state_changed = handler_factory('on_selection_changed')
+Gui.on_selection_state_changed = handler_factory('on_gui_selection_state_changed')
 
 -- Register a handler for the on_gui_text_changed event for LuaGuiElements with element_name.
 -- Can only have one handler per element name.
 -- Guarantees that the element and the player are valid when calling the handler.
 -- Adds a player field to the event table.
-Gui.on_text_changed = handler_factory('on_text_changed')
+Gui.on_text_changed = handler_factory('on_gui_text_changed')
 
 -- Register a handler for the on_gui_value_changed event for LuaGuiElements with element_name.
 -- Can only have one handler per element name.
 -- Guarantees that the element and the player are valid when calling the handler.
 -- Adds a player field to the event table.
-Gui.on_value_changed = handler_factory('on_value_changed')
+Gui.on_value_changed = handler_factory('on_gui_value_changed')
 
 --- Returns the flow where top elements can be added and will be effected by google visibility
 -- For the toggle to work it must be registed with Gui.allow_player_to_toggle_top_element_visibility(element_name)
 -- @tparam LuaPlayer player pointer to the player who has the gui
 -- @treturn LuaGuiElement the top element flow
-Gui.get_top_element_flow = ExpGui.get_top_flow
+Gui.get_top_element_flow = mod_gui.get_button_flow
 
 return Gui

@@ -5,12 +5,10 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 
-local cctv_container
-
 local cctv_player =
-Gui.element(function(name, parent, player_list)
+Gui.element(function(definition, parent, player_list)
     return parent.add{
-        name = name,
+        name = definition.name,
         type = 'drop-down',
         items = player_list,
         selected_index = #player_list > 0 and 1
@@ -19,11 +17,11 @@ end)
 :style{
     horizontally_stretchable = true
 }
+:static_name(Gui.unique_static_name)
 
-local cctv_type =
+local cctv_status =
 Gui.element{
     type = 'drop-down',
-    name = 'cctv_status',
     items = {'Enable', 'Disable'},
     selected_index = 2
 }:style{
@@ -36,10 +34,10 @@ Gui.element{
     end
 end)
 
-local cctv_status =
+local cctv_type =
 Gui.element{
     type = 'drop-down',
-    name = 'cctv_status',
+    name = Gui.unique_static_name,
     items = {'Player', 'Static'},
     selected_index = 1
 }:style{
@@ -49,6 +47,7 @@ Gui.element{
 local cctv_location =
 Gui.element{
     type = 'button',
+    name = Gui.unique_static_name,
     caption = 'set'
 }:style{
     width = 48
@@ -59,6 +58,7 @@ end)
 local zoom_in =
 Gui.element{
     type = 'button',
+    name = Gui.unique_static_name,
     caption = '+'
 }:style{
     width = 32
@@ -72,6 +72,7 @@ end)
 local zoom_out =
 Gui.element{
     type = 'button',
+    name = Gui.unique_static_name,
     caption = '-'
 }:style{
     width = 32
@@ -88,8 +89,8 @@ Gui.element(function(_, parent, name, player_list)
     local buttons = Gui.scroll_table(camera_set, 480, 6, 'buttons')
 
     cctv_player(buttons, player_list)
-    cctv_type(buttons)
     cctv_status(buttons)
+    cctv_type(buttons)
     cctv_location(buttons)
     zoom_out(buttons)
     zoom_in(buttons)
@@ -108,9 +109,9 @@ Gui.element(function(_, parent, name, player_list)
     return camera_set
 end)
 
-cctv_container =
-Gui.element(function(event_trigger, parent)
-    local container = Gui.container(parent, event_trigger, 480)
+local cctv_container =
+Gui.element(function(definition, parent)
+    local container = Gui.container(parent, definition.name, 480)
     local scroll = container.add{name='scroll', type='scroll-pane', direction='vertical'}
     scroll.style.maximal_height = 704
     local player_list = {}
@@ -124,6 +125,7 @@ Gui.element(function(event_trigger, parent)
 
     return container.parent
 end)
+:static_name(Gui.unique_static_name)
 :add_to_left_flow()
 
 Gui.left_toolbar_button('entity/radar', 'Surveillance GUI', cctv_container, function(player)
@@ -154,7 +156,7 @@ Event.add(defines.events.on_tick, function(_)
         for i=1, 2 do
             local scroll_table_name = 'cctv_st_' .. i
             local current_camera_set = frame.container.scroll[scroll_table_name]
-            local switch_index = current_camera_set.buttons.table[cctv_status.name].selected_index
+            local switch_index = current_camera_set.buttons.table[cctv_type.name].selected_index
 
             if switch_index == 1 then
                 local selected_index = current_camera_set.buttons.table[cctv_player.name].selected_index

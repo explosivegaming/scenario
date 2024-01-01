@@ -261,11 +261,11 @@ end
 --- Main task list container for the left flow
 -- @element task_list_container
 local science_info_container =
-Gui.element(function(event_trigger, parent)
+Gui.element(function(definition, parent)
     local player = Gui.get_player_from_element(parent)
 
     -- Draw the internal container
-    local container = Gui.container(parent, event_trigger, 200)
+    local container = Gui.container(parent, definition.name, 200)
 
     -- Draw the header
     Gui.header(container, {'science-info.main-caption'}, {'science-info.main-tooltip'})
@@ -315,6 +315,7 @@ Gui.element(function(event_trigger, parent)
     -- Return the exteral container
     return container.parent
 end)
+:static_name(Gui.unique_static_name)
 :add_to_left_flow()
 
 --- Button on the top flow used to toggle the task list container

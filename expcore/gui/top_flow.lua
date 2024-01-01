@@ -48,7 +48,8 @@ end)
 
 ]]
 function Gui._prototype_element:add_to_top_flow(authenticator)
-    Gui.top_elements[self.name] = authenticator or true
+    if not self.name then error("Elements for the top flow must have a static name") end
+    Gui.top_elements[self] = authenticator or true
     return self
 end
 
@@ -65,11 +66,11 @@ function Gui.update_top_flow(player)
     local is_visible = hide_button.visible
 
     -- Set the visible state of all elements in the flow
-    for name, authenticator in pairs(Gui.top_elements) do
+    for element_define, authenticator in pairs(Gui.top_elements) do
         -- Ensure the element exists
-        local element = top_flow[name]
+        local element = top_flow[element_define.name]
         if not element then
-            element = Gui.defines[name](top_flow)
+            element = element_define(top_flow)
         end
 
         -- Set the visible state
@@ -138,7 +139,8 @@ function Gui.toolbar_button(sprite, tooltip, authenticator)
         type = 'sprite-button',
         sprite = sprite,
         tooltip = tooltip,
-        style = Gui.top_flow_button_style
+        style = Gui.top_flow_button_style,
+        name = Gui.unique_static_name
     }
     :style{
         minimal_width = 36,

@@ -229,6 +229,7 @@ end
 local vlayer_gui_control_storage_input =
 Gui.element{
     type = 'button',
+    name = Gui.unique_static_name,
     caption = 'Add Input Storage'
 }:style{
     width = 160
@@ -248,6 +249,7 @@ end)
 local vlayer_gui_control_storage_output =
 Gui.element{
     type = 'button',
+    name = Gui.unique_static_name,
     caption = 'Add Output Storage'
 }:style{
     width = 160
@@ -267,6 +269,7 @@ end)
 local vlayer_gui_control_circuit =
 Gui.element{
     type = 'button',
+    name = Gui.unique_static_name,
     caption = 'Add Circuit'
 }:style{
     width = 160
@@ -286,6 +289,7 @@ end)
 local vlayer_gui_control_power =
 Gui.element{
     type = 'button',
+    name = Gui.unique_static_name,
     caption = 'Add Power'
 }:style{
     width = 160
@@ -308,6 +312,7 @@ end)
 local vlayer_gui_control_remove =
 Gui.element{
     type = 'button',
+    name = Gui.unique_static_name,
     caption = 'Remove Special'
 }:style{
     width = 160
@@ -345,9 +350,9 @@ end)
 --- The main container for the vlayer gui
 -- @element vlayer_container
 local vlayer_container =
-Gui.element(function(event_trigger, parent)
+Gui.element(function(definition, parent)
     local player = Gui.get_player_from_element(parent)
-    local container = Gui.container(parent, event_trigger, 320)
+    local container = Gui.container(parent, definition.name, 320)
 
     vlayer_display_set(container, 'vlayer_st_1')
     vlayer_control_set(container, 'vlayer_st_2')
@@ -362,6 +367,7 @@ Gui.element(function(event_trigger, parent)
     table[vlayer_gui_control_remove.name].visible = visible
     return container.parent
 end)
+:static_name(Gui.unique_static_name)
 :add_to_left_flow()
 
 --- Button on the top flow used to toggle the task list container

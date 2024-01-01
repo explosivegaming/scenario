@@ -8,24 +8,29 @@ local Event = require 'utils.event' --- @dep utils.event
 local Gui = {
     --- The current highest uid that is being used by a define, will not increase during runtime
     uid = 0,
+    --- Used to automatically assign a unique static name to an element
+    unique_static_name = {},
     --- String indexed table used to avoid conflict with custom event names, similar to how defines.events works
     events = {},
     --- Uid indexed array that stores all the factory functions that were defined, no new values will be added during runtime
     defines = {},
-    --- An string indexed table of all the defines which are used by the core of the gui system, used for internal refrence
+    --- An string indexed table of all the defines which are used by the core of the gui system, used for internal reference
     core_defines = {},
-    --- Used to store the file names where elements were defined, this can be useful to find the uid of an element, mostly for debuging
+    --- Used to store the file names where elements were defined, this can be useful to find the uid of an element, mostly for debugging
     file_paths = {},
-    --- Used to store extra infomation about elements as they get defined such as the params used and event handlers registered to them
+    --- Used to store extra information about elements as they get defined such as the params used and event handlers registered to them
     debug_info = {},
     --- The prototype used to store the functions of an element define
     _prototype_element = {},
     --- The prototype metatable applied to new element defines
     _mt_element = {
         __call = function(self, parent, ...)
-            local element = self._draw(self.name, parent, ...)
+            local element = self._draw(self, parent, ...)
             if self._style then self._style(element.style, element, ...) end
-            return element
+            if self.name and self.name ~= element.name then
+                error("Static name \""..self.name.."\" expected but got: "..tostring(element.name))
+            end
+            return element and self:triggers_events(element)
         end
     }
 }
@@ -76,32 +81,38 @@ end)
 
 ]]
 function Gui.element(element_define)
+    _C.error_if_runtime()
     -- Set the metatable to allow access to register events
     local element = setmetatable({}, Gui._mt_element)
 
     -- Increment the uid counter
     local uid = Gui.uid + 1
     Gui.uid = uid
-    local name = tostring(uid)
-    element.name = name
-    Gui.debug_info[name] = { draw = 'None', style = 'None', events = {} }
+    element.uid = uid
+    Gui.debug_info[uid] = { draw = 'None', style = 'None', events = {} }
 
-    -- Add the defination function
+    -- Add the definition function
     if type(element_define) == 'table' then
-        Gui.debug_info[name].draw = element_define
-        element_define.name = name
+        Gui.debug_info[uid].draw = element_define
+        if element_define.name == Gui.unique_static_name then
+            element_define.name = "ExpGui_"..tostring(uid)
+        end
+        element.name = element_define.name
         element._draw = function(_, parent)
             return parent.add(element_define)
         end
     else
-        Gui.debug_info[name].draw = 'Function'
+        Gui.debug_info[uid].draw = 'Function'
         element._draw = element_define
     end
 
     -- Add the define to the base module
-    local file_path = debug.getinfo(2, 'S').source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
-    Gui.file_paths[name] = file_path
-    Gui.defines[name] = element
+    local debug_info = debug.getinfo(2, "Sn")
+    local file_name = debug_info.source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+    local func_name = debug_info.name or "<anonymous:"..debug_info.linedefined..">"
+    element.defined_at = file_name..":"..func_name
+    Gui.file_paths[uid] = element.defined_at
+    Gui.defines[uid] = element
 
     -- Return the element so event handers can be accessed
     return element
@@ -143,21 +154,53 @@ end)
 
 ]]
 function Gui._prototype_element:style(style_define)
-    -- Add the defination function
+    -- Add the definition function
     if type(style_define) == 'table' then
-        Gui.debug_info[self.name].style = style_define
+        Gui.debug_info[self.uid].style = style_define
         self._style = function(style)
             for key, value in pairs(style_define) do
                 style[key] = value
             end
         end
     else
-        Gui.debug_info[self.name].style = 'Function'
+        Gui.debug_info[self.uid].style = 'Function'
         self._style = style_define
     end
 
     -- Return the element so event handers can be accessed
     return self
+end
+
+--[[-- Enforce the fact the element has a static name, this is required for the cases when a function define is used
+@tparam[opt] string element The element that will trigger calls to the event handlers
+@treturn table the element define is returned to allow for event handlers to be registered
+]]
+function Gui._prototype_element:static_name(name)
+    if name == Gui.unique_static_name then
+        self.name = "ExpGui_"..tostring(self.uid)
+    else
+        self.name = name
+    end
+    return self
+end
+
+--[[-- Used to link an element to an element define such that any event on the element will call the handlers on the element define
+@tparam LuaGuiElement element The element that will trigger calls to the event handlers
+@treturn LuaGuiElement The element passed as the argument to allow for cleaner returns
+]]
+function Gui._prototype_element:triggers_events(element)
+    local tags = element.tags
+    if not tags then
+        element.tags = { ExpGui_event_triggers = { self.uid } }
+        return element
+    elseif not tags.ExpGui_event_triggers then
+        tags.ExpGui_event_triggers = { self.uid }
+    else
+        table.insert(tags.ExpGui_event_triggers, self.uid)
+    end
+    -- To modify a set of tags, the whole table needs to be written back to the respective property.
+    element.tags = tags
+    return element
 end
 
 --[[-- Set the handler which will be called for a custom event, only one handler can be used per event per element
@@ -172,7 +215,7 @@ end)
 
 ]]
 function Gui._prototype_element:on_custom_event(event_name, handler)
-    table.insert(Gui.debug_info[self.name].events, event_name)
+    table.insert(Gui.debug_info[self.uid].events, event_name)
     Gui.events[event_name] = event_name
     self[event_name] = handler
     return self
@@ -210,7 +253,7 @@ function Gui._prototype_element:raise_custom_event(event)
     end
     event.player = player
 
-    local success, err = pcall(handler, player, element, event)
+    local success, err = xpcall(handler, debug.traceback, player, element, event)
     if not success then
         error('There as been an error with an event handler for a gui element:\n\t'..err)
     end
@@ -222,13 +265,18 @@ local function event_handler_factory(event_name)
     Event.add(event_name, function(event)
         local element = event.element
         if not element or not element.valid then return end
-        local element_define = Gui.defines[element.name]
-        if not element_define then return end
-        element_define:raise_custom_event(event)
+        local event_triggers = element.tags.ExpGui_event_triggers
+        if not event_triggers then return end
+        for _, uid in pairs(event_triggers) do
+            local element_define = Gui.defines[uid]
+            if element_define then
+                element_define:raise_custom_event(event)
+            end
+        end
     end)
 
     return function(self, handler)
-        table.insert(Gui.debug_info[self.name].events, debug.getinfo(1, "n").name)
+        table.insert(Gui.debug_info[self.uid].events, debug.getinfo(1, "n").name)
         self[event_name] = handler
         return self
     end

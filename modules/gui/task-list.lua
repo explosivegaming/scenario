@@ -85,7 +85,8 @@ local add_new_task =
     type = "sprite-button",
     sprite = "utility/add",
     tooltip = {"task-list.add-tooltip"},
-    style = "tool_button"
+    style = "tool_button",
+    name = Gui.unique_static_name
 }:style(Styles.sprite22):on_click(
     function(player, _, _)
         -- Disable editing
@@ -164,20 +165,16 @@ local subfooter_label =
 --- Action flow that contains action buttons
 -- @element subfooter_actions
 local subfooter_actions =
-    Gui.element(
-    function(_, parent)
-        return parent.add {
-            type = "flow",
-            name = "actions"
-        }
-    end
-)
+    Gui.element {
+    type = "flow",
+    name = "actions"
+}
 
 --- Button element with a flow around it to fix duplicate name inside of the scroll flow
 -- @element task_list_item
 local task_list_item =
     Gui.element(
-    function(event_trigger, parent, task)
+    function(definition, parent, task)
         local flow =
             parent.add {
             type = "flow",
@@ -187,11 +184,12 @@ local task_list_item =
         flow.style.horizontally_stretchable = true
         local button =
             flow.add {
-            name = event_trigger,
+            name = definition.name,
             type = "button",
             style = "list_box_item",
             caption = task.title
         }
+        definition:triggers_events(button)
         button.style.horizontally_stretchable = true
         button.style.horizontally_squashable = true
         return flow
@@ -201,7 +199,7 @@ local task_list_item =
         local task_id = element.parent.caption
         PlayerSelected:set(player, task_id)
     end
-)
+):static_name(Gui.unique_static_name)
 
 --- Scrollable list of all tasks
 -- @element task_list
@@ -239,6 +237,7 @@ local task_list =
 local task_view_edit_button =
     Gui.element {
     type = "button",
+    name = Gui.unique_static_name,
     caption = {"", "[img=utility/rename_icon_normal] ", {"task-list.edit"}},
     tooltip = {"task-list.edit-tooltip"},
     style = "shortcut_bar_button"
@@ -271,6 +270,7 @@ Gui.element{
 local task_view_delete_button =
     Gui.element {
     type = "button",
+    name = Gui.unique_static_name,
     caption = {"", "[img=utility/trash] ", {"task-list.delete"}},
     tooltip = {"task-list.delete-tooltip"},
     style = "shortcut_bar_button_red"
@@ -342,6 +342,7 @@ local task_create_confirm_button
 -- @element task_message_textfield
 local task_message_textfield =
     Gui.element {
+    name = Gui.unique_static_name,
     type = "text-box",
     text = ""
 }:style(
@@ -370,6 +371,7 @@ local task_message_textfield =
 task_edit_confirm_button =
     Gui.element {
     type = "button",
+    name = Gui.unique_static_name,
     caption = {"", "[img=utility/check_mark] ", {"task-list.confirm"}},
     tooltip = {"task-list.confirm-tooltip"},
     style = "shortcut_bar_button_green"
@@ -424,6 +426,7 @@ local task_edit_footer =
 task_create_confirm_button =
     Gui.element {
     type = "button",
+    name = Gui.unique_static_name,
     caption = {"", "[img=utility/check_mark] ", {"task-list.confirm"}},
     tooltip = {"task-list.confirm-tooltip"},
     style = "shortcut_bar_button_green",
@@ -496,9 +499,9 @@ end
 -- @element task_list_container
 local task_list_container =
     Gui.element(
-    function(event_trigger, parent)
+    function(definition, parent)
         -- Draw the internal container
-        local container = Gui.container(parent, event_trigger, 268)
+        local container = Gui.container(parent, definition.name, 268)
         container.style.maximal_width = 268
         container.style.minimal_width = 268
 
@@ -526,7 +529,7 @@ local task_list_container =
         -- Return the external container
         return container.parent
     end
-):add_to_left_flow(
+):static_name(Gui.unique_static_name):add_to_left_flow(
     function(player)
         local task_ids = Tasks.get_force_task_ids(player.force.name)
         return #task_ids > 0

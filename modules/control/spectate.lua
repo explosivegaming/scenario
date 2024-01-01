@@ -103,15 +103,17 @@ end
 --- Label used to show that the player is following, also used to allow esc to stop following
 -- @element follow_label
 follow_label =
-Gui.element(function(event_trigger, parent, target)
-    Gui.destroy_if_valid(parent[event_trigger])
+Gui.element(function(definition, parent, target)
+    Gui.destroy_if_valid(parent[definition.name])
 
-    local label = parent.add{
-        name = event_trigger,
-        type = 'label',
-        style = 'heading_1_label',
-        caption = 'Following '..target.name..'.\nClick here or press esc to stop following.'
-    }
+    local label = definition:triggers_events(
+        parent.add{
+            type = 'label',
+            style = 'heading_1_label',
+            caption = 'Following '..target.name..'.\nClick here or press esc to stop following.',
+            name = definition.name
+        }
+    )
 
     local player = Gui.get_player_from_element(parent)
     local res = player.display_resolution
@@ -122,6 +124,7 @@ Gui.element(function(event_trigger, parent, target)
 
     return label
 end)
+:static_name(Gui.unique_static_name)
 :on_click(Public.stop_follow)
 :on_close(function(player)
     -- Don't call set_controller during on_close as it invalidates the controller

@@ -18,7 +18,7 @@ Gui.element{
 @usage-- Making a factory function for a button which is contained within a flow
 -- This method is for when you still want to register event handlers but cant use the table method
 local example_flow_with_button =
-Gui.element(function(event_trigger, parent, ...)
+Gui.element(function(definition, parent, ...)
     -- ... shows that all other arguments from the factory call are passed to this function
     -- Here we are adding a flow which we will then later add a button to
     local flow =
@@ -28,12 +28,12 @@ Gui.element(function(event_trigger, parent, ...)
     }
 
     -- Now we add the button to the flow that we created earlier
-    local element =
-    flow.add{
-        name = event_trigger, -- event_trigger should be the name of any elements you want to trigger your event handlers
-        type = 'button',
-        caption = 'Example Button'
-    }
+    local element = definition:triggers_event(
+        flow.add{
+            type = 'button',
+            caption = 'Example Button'
+        }
+    )
 
     -- You must return a new element, this is so styles can be applied and returned to the caller
     -- You may return any of your elements that you added, consider the context in which it will be used for which should be returned
