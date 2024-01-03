@@ -7,6 +7,7 @@ return {
     --'example.file_not_loaded',
     'modules.factorio-control', -- base factorio free play scenario
     'expcore.player_data',
+    'modules.gui.mock-toolbar',
 
     --- Game Commands
     'modules.commands.debug',

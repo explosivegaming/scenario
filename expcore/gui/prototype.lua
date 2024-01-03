@@ -98,6 +98,7 @@ function Gui.element(element_define)
             element_define.name = "ExpGui_"..tostring(uid)
         end
         element.name = element_define.name
+        element.tooltip = element_define.tooltip -- TODO: This better
         element._draw = function(_, parent)
             return parent.add(element_define)
         end
