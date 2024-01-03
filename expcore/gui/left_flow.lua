@@ -76,7 +76,7 @@ function Gui.left_toolbar_button(sprite, tooltip, element_define, authenticator)
 
     -- Add property to the left flow element with the name of the button
     -- This is for the ability to reverse lookup the button from the left flow element
-    element_define.toolbar_button = button.name
+    element_define.toolbar_button = button
     return button
 end
 
@@ -99,15 +99,17 @@ function Gui.draw_left_flow(player)
         end, debug.traceback)
 
         if not draw_success then
-            error('There as been an error with an element draw function: '..element_define.defined_at..'\n\t'..left_element)
+            log('There as been an error with an element draw function: '..element_define.defined_at..'\n\t'..left_element)
+            goto continue
         end
 
         -- Check if it should be open by default
         local visible = type(open_on_join) == 'boolean' and open_on_join or false
         if type(open_on_join) == 'function' then
-            local success, err = pcall(open_on_join, player)
+            local success, err = xpcall(open_on_join, debug.traceback, player)
             if not success then
-                error('There as been an error with an open on join hander for a gui element:\n\t'..err)
+                log('There as been an error with an open on join hander for a gui element:\n\t'..err)
+                goto continue
             end
             visible = err
         end
@@ -122,12 +124,13 @@ function Gui.draw_left_flow(player)
         -- Check if the the element has a button attached
         if element_define.toolbar_button then
             -- Check if the topflow contains the button
-            local button = top_flow[element_define.toolbar_button]
+            local button = top_flow[element_define.toolbar_button.name]
             if button then
                 -- Style the button
                 Gui.toolbar_button_style(button, visible)
             end
         end
+        ::continue::
     end
 
     hide_button.visible = show_hide_button
@@ -175,14 +178,12 @@ function Gui.hide_left_flow(player)
         -- Check if the the element has a toobar button attached
         if element_define.toolbar_button then
             -- Check if the topflow contains the button
-            local button = top_flow[element_define.toolbar_button]
+            local button = top_flow[element_define.toolbar_button.name]
             if button then
                 -- Style the button
                 Gui.toolbar_button_style(button, false)
-                -- Get the button define from the reverse lookup on the element
-                local button_define = Gui.defines[element_define.toolbar_button]
                 -- Raise the custom event if all of the top checks have passed
-                button_define:raise_custom_event{
+                element_define.toolbar_button:raise_custom_event{
                     name = Gui.events.on_visibility_changed_by_click,
                     element = button,
                     state = false
@@ -232,7 +233,7 @@ function Gui.toggle_left_element(player, element_define, state)
     -- Check if the the element has a button attached
     if element_define.toolbar_button then
         -- Check if the topflow contains the button
-        local button = top_flow[element_define.toolbar_button]
+        local button = top_flow[element_define.toolbar_button.name]
         if button then
             -- Style the button
             Gui.toolbar_button_style(button, state)
