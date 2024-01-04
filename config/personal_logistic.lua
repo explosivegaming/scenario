@@ -892,8 +892,8 @@ return {
             upgrade_of = 'explosive-rocket',
             type = 'rocket',
             stack = 10,
-            min = 50,
-            max = 50
+            min = 0,
+            max = 0
         },
         ['rocket-launcher'] = {
             key = 104,
@@ -1118,7 +1118,7 @@ return {
             type = nil,
             stack = 1,
             min = 0,
-            max = 0
+            max = 5
         },
         ['spidertron-remote'] = {
             key = 130,
@@ -1126,7 +1126,7 @@ return {
             type = nil,
             stack = 1,
             min = 0,
-            max = 0
+            max = 5
         },
         ['radar'] = {
             key = 99,
