@@ -22,6 +22,7 @@ Gui.element {
     type = "sprite-button",
     sprite = "utility/reset",
     style = "shortcut_bar_button_red",
+    tooltip = {"toolbar.reset"},
     name = Gui.unique_static_name
 }
 :style(Gui.sprite_style(22, -1))
@@ -53,6 +54,7 @@ local toggle_toolbar =
 Gui.element {
     type = "sprite-button",
     sprite = "utility/bookmark",
+    tooltip = {"toolbar.toggle"},
     style = "tool_button",
     auto_toggle = true,
     name = Gui.unique_static_name
@@ -69,6 +71,7 @@ move_up =
 Gui.element {
     type = "sprite-button",
     sprite = "utility/speed_up",
+    tooltip = {"toolbar.move-up"},
     name = Gui.unique_static_name
 }
 :style(Styles.sprite20)
@@ -107,6 +110,7 @@ move_down =
 Gui.element {
     type = "sprite-button",
     sprite = "utility/speed_down",
+    tooltip = {"toolbar.move-down"},
     name = Gui.unique_static_name
 }
 :style(Styles.sprite20)
@@ -139,7 +143,6 @@ Gui.element {
     end
 end)
 
-
 --- A flow which represents one item in the toolbar list
 -- @element toolbar_list_item
 local toolbar_list_item =
@@ -165,7 +168,7 @@ Gui.element(function(definition, parent, element_define)
     local checkbox = flow.add{
         type = "checkbox",
         name = "checkbox",
-        caption = element_define.tooltip or "None",
+        caption = element_define.tooltip or element_define.caption or "None",
         state = top_element.visible or false,
         tags = {
             top_element_name = element_define.name
@@ -241,7 +244,7 @@ Gui.element(function(definition, parent)
 
     -- Draw the header
     local player = Gui.get_player_from_element(parent)
-    local header = Gui.header(container, "Toolbar", {"", "Change Me"}, true)
+    local header = Gui.header(container, {"toolbar.main-caption"}, {"toolbar.main-tooltip"}, true)
 
     -- Draw the toolbar control buttons
     local toggle_element = toggle_toolbar(header)

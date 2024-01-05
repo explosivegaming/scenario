@@ -697,7 +697,7 @@ end)
 
 --- Button on the top flow used to toggle the warp list container
 -- @element toggle_warp_list
-Gui.left_toolbar_button(config.default_icon.type ..'/'..config.default_icon.name, {'warp-list.main-tooltip', config.standard_proximity_radius}, warp_list_container, function(player)
+Gui.left_toolbar_button(config.default_icon.type ..'/'..config.default_icon.name, {'warp-list.main-tooltip'}, warp_list_container, function(player)
     return Roles.player_allowed(player, 'gui/warp-list')
 end)
 :on_event(Gui.events.on_visibility_changed_by_click, function(player, _,event)
