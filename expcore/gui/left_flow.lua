@@ -89,7 +89,16 @@ function Gui.draw_left_flow(player)
     local hide_button = left_flow.gui_core_buttons[hide_left_flow]
     local show_hide_button = false
 
+    -- TODO dont hack the internals to but the toolbar menu first
+    local order = { true }
     for element_define, open_on_join in pairs(Gui.left_elements) do
+        table.insert(order, {element_define,open_on_join})
+    end
+    order[1] = order[#order]
+    order[#order] = nil
+
+    for _, a in ipairs(order) do
+        local element_define, open_on_join = a[1], a[2]
         -- Draw the element to the left flow
         local draw_success, left_element = xpcall(function()
             return element_define(left_flow)

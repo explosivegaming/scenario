@@ -80,6 +80,21 @@ function Gui._prototype_element:add_to_top_flow(authenticator)
     return self
 end
 
+--- Returns true if the top flow has visible elements
+function Gui.top_flow_has_visible_elements(player)
+    local top_flow = Gui.get_top_flow(player)
+
+    for _, child in pairs(top_flow.children) do
+        if child.name ~= hide_top_flow then
+            if child.visible then
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
 --[[-- Updates the visible state of all the elements on the players top flow, uses authenticator
 @tparam LuaPlayer player the player that you want to update the top flow for
 
@@ -104,20 +119,14 @@ function Gui.update_top_flow(player)
         element.visible = allowed or false
     end
 
-    -- Check if any are visible
-    for _, child in pairs(top_flow.children) do
-        if child.name ~= hide_top_flow then
-            if child.visible then
-                return
-            end
-        end
+    -- Check if there are any visible elements in the top flow
+    if not Gui.top_flow_has_visible_elements(player) then
+        -- None are visible so hide the top_flow and its show button
+        Gui.toggle_top_flow(player, false)
+        local left_flow = Gui.get_left_flow(player)
+        local show_button = left_flow.gui_core_buttons[show_top_flow]
+        show_button.visible = false
     end
-
-    -- Non are visible so hide the top_flow and its show button
-    Gui.toggle_top_flow(player, false)
-    local left_flow = Gui.get_left_flow(player)
-    local show_button = left_flow.gui_core_buttons[show_top_flow]
-    show_button.visible = false
 end
 
 --[[-- Toggles the visible state of all the elements on a players top flow, effects all elements

@@ -44,7 +44,8 @@ Gui.element {
     type = "sprite-button",
     sprite = "utility/bookmark",
     style = "tool_button",
-    auto_toggle = true
+    auto_toggle = true,
+    name = Gui.unique_static_name
 }
 :style(Styles.sprite22)
 :on_click(function(player, element)
@@ -112,8 +113,21 @@ end)
 :on_checked_changed(function(player, element)
     local top_flow = Gui.get_top_flow(player)
     local top_element = top_flow[element.tags.top_element_name]
-    if top_element then
-        top_element.visible = element.state
+    local had_visible = Gui.top_flow_has_visible_elements(player)
+    top_element.visible = element.state
+    -- Check if we are on the edge case between 0 and 1 visible elements
+    if element.state and not had_visible then
+        Gui.toggle_top_flow(player, true)
+        local container = element.parent.parent.parent.parent
+        local button = container.header.alignment[toggle_toolbar.name]
+        button.toggled = true
+        button.enabled = true
+    elseif not element.state and not Gui.top_flow_has_visible_elements(player) then
+        Gui.toggle_top_flow(player, false)
+        local container = element.parent.parent.parent.parent
+        local button = container.header.alignment[toggle_toolbar.name]
+        button.toggled = false
+        button.enabled = false
     end
 end)
 
