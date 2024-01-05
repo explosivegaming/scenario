@@ -155,6 +155,7 @@ end)
 
 ]]
 function Gui._prototype_element:style(style_define)
+    _C.error_if_runtime()
     -- Add the definition function
     if type(style_define) == 'table' then
         Gui.debug_info[self.uid].style = style_define
@@ -177,6 +178,7 @@ end
 @treturn table the element define is returned to allow for event handlers to be registered
 ]]
 function Gui._prototype_element:static_name(name)
+    _C.error_if_runtime()
     if name == Gui.unique_static_name then
         self.name = "ExpGui_"..tostring(self.uid)
     else
@@ -216,6 +218,7 @@ end)
 
 ]]
 function Gui._prototype_element:on_custom_event(event_name, handler)
+    _C.error_if_runtime()
     table.insert(Gui.debug_info[self.uid].events, event_name)
     Gui.events[event_name] = event_name
     self[event_name] = handler

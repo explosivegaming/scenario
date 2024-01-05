@@ -38,6 +38,7 @@ example_flow_with_button:add_to_left_flow(true)
 
 ]]
 function Gui._prototype_element:add_to_left_flow(open_on_join)
+    _C.error_if_runtime()
     if not self.name then error("Elements for the top flow must have a static name") end
     Gui.left_elements[self] = open_on_join or false
     return self
@@ -60,17 +61,13 @@ function Gui.left_toolbar_button(sprite, tooltip, element_define, authenticator)
     local button = Gui.toolbar_button(sprite, tooltip, authenticator)
 
     -- Add on_click handler to handle click events comming from the player
-    button:on_click(function(player, _,_)
-        local top_flow = Gui.get_top_flow(player)
-        local element = top_flow[button.name]
-        local visibility_state  = Gui.toggle_left_element(player, element_define)
-
+    button:on_click(function(player, _, _)
         -- Raise custom event that tells listening elements if the element has changed visibility by a player clicking
         -- Used in warp gui to handle the keep open logic
         button:raise_custom_event{
             name = Gui.events.on_visibility_changed_by_click,
-            element = element,
-            state = visibility_state
+            element = Gui.get_top_element(player, button),
+            state = Gui.toggle_left_element(player, element_define)
         }
     end)
 
@@ -118,17 +115,9 @@ function Gui.draw_left_flow(player)
         left_element.visible = visible
         show_hide_button = show_hide_button or visible
 
-        -- Get the assosiated element define
-        local top_flow = Gui.get_top_flow(player)
-
         -- Check if the the element has a button attached
         if element_define.toolbar_button then
-            -- Check if the topflow contains the button
-            local button = top_flow[element_define.toolbar_button.name]
-            if button then
-                -- Style the button
-                Gui.toolbar_button_style(button, visible)
-            end
+            Gui.toggle_toolbar_button(player, element_define.toolbar_button, visible)
         end
         ::continue::
     end
@@ -181,7 +170,7 @@ function Gui.hide_left_flow(player)
             local button = top_flow[element_define.toolbar_button.name]
             if button then
                 -- Style the button
-                Gui.toolbar_button_style(button, false)
+                Gui.toggle_toolbar_button(player, element_define.toolbar_button, false)
                 -- Raise the custom event if all of the top checks have passed
                 element_define.toolbar_button:raise_custom_event{
                     name = Gui.events.on_visibility_changed_by_click,
@@ -221,23 +210,15 @@ Gui.toggle_top_flow(game.player, example_flow_with_button, true)
 
 ]]
 function Gui.toggle_left_element(player, element_define, state)
-    local left_flow = Gui.get_left_flow(player)
-    local top_flow = Gui.get_top_flow(player)
-
     -- Set the visible state
-    local element = left_flow[element_define.name]
+    local element = Gui.get_left_element(player, element_define)
     if state == nil then state = not element.visible end
     element.visible = state
     Gui.update_left_flow(player)
 
     -- Check if the the element has a button attached
     if element_define.toolbar_button then
-        -- Check if the topflow contains the button
-        local button = top_flow[element_define.toolbar_button.name]
-        if button then
-            -- Style the button
-            Gui.toolbar_button_style(button, state)
-        end
+        Gui.toggle_toolbar_button(player, element_define.toolbar_button, state)
     end
     return state
 end

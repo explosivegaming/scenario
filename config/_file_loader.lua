@@ -7,7 +7,6 @@ return {
     --'example.file_not_loaded',
     'modules.factorio-control', -- base factorio free play scenario
     'expcore.player_data', -- must be loaded first to register event handlers
-    'modules.gui.toolbar', -- must be loaded first to register core gui handlers
 
     --- Game Commands
     'modules.commands.debug',
@@ -98,6 +97,7 @@ return {
     'modules.gui.playerdata',
     'modules.gui.surveillance',
 		'modules.graftorio.require', -- graftorio
+    'modules.gui.toolbar', -- must be loaded last to register toolbar handlers
 
     --- Config Files
     'config.expcore.command_auth_admin', -- commands tagged with admin_only are blocked for non admins

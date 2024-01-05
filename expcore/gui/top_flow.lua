@@ -13,6 +13,9 @@ local show_top_flow = Gui.core_defines.show_top_flow.name
 --- Top Flow.
 -- @section topFlow
 
+-- Triggered when a user changed the visibility of a left flow element by clicking a button
+Gui.events.on_toolbar_button_toggled = 'on_toolbar_button_toggled'
+
 --- Contains the uids of the elements that will shown on the top flow and their auth functions
 -- @table top_elements
 Gui.top_elements = {}
@@ -22,8 +25,30 @@ Gui.top_elements = {}
 Gui.top_flow_button_style = mod_gui.button_style
 
 --- The style that should be used for buttons on the top flow when their flow is visible
--- @field Gui.top_flow_button_visible_style
-Gui.top_flow_button_visible_style = 'menu_button_continue'
+-- @field Gui.top_flow_button_toggled_style
+Gui.top_flow_button_toggled_style = 'menu_button_continue'
+
+--[[-- Styles a top flow button depending on the state given
+@tparam LuaGuiElement button the button element to style
+@tparam boolean state The state the button is in
+
+@usage-- Sets the button to the visible style
+Gui.toolbar_button_style(button, true)
+
+@usage-- Sets the button to the hidden style
+Gui.toolbar_button_style(button, false)
+
+]]
+function Gui.toolbar_button_style(button, state, size)
+    if state then
+        button.style = Gui.top_flow_button_toggled_style
+    else
+        button.style = Gui.top_flow_button_style
+    end
+    button.style.minimal_width = size or toolbar_button_size
+    button.style.height = size or toolbar_button_size
+    button.style.padding = -2
+end
 
 --[[-- Gets the flow refered to as the top flow, each player has one top flow
 @function Gui.get_top_flow(player)
@@ -49,6 +74,7 @@ end)
 
 ]]
 function Gui._prototype_element:add_to_top_flow(authenticator)
+    _C.error_if_runtime()
     if not self.name then error("Elements for the top flow must have a static name") end
     Gui.top_elements[self] = authenticator or true
     return self
@@ -77,6 +103,21 @@ function Gui.update_top_flow(player)
         if type(allowed) == 'function' then allowed = allowed(player) end
         element.visible = allowed or false
     end
+
+    -- Check if any are visible
+    for _, child in pairs(top_flow.children) do
+        if child.name ~= hide_top_flow then
+            if child.visible then
+                return
+            end
+        end
+    end
+
+    -- Non are visible so hide the top_flow and its show button
+    Gui.toggle_top_flow(player, false)
+    local left_flow = Gui.get_left_flow(player)
+    local show_button = left_flow.gui_core_buttons[show_top_flow]
+    show_button.visible = false
 end
 
 --[[-- Toggles the visible state of all the elements on a players top flow, effects all elements
@@ -121,6 +162,32 @@ function Gui.get_top_element(player, element_define)
     return top_flow[element_define.name]
 end
 
+--[[-- Toggles the state of a toolbar button for a given player, can be used to set the visual state
+@tparam LuaPlayer player the player that you want to toggle the element for
+@tparam table element_define the element that you want to toggle
+@tparam[opt] boolean state with given will set the state, else state will be toggled
+@treturn boolean the new visible state of the element
+
+@usage-- Toggle your example button
+Gui.toggle_toolbar_button(game.player, toolbar_button)
+
+@usage-- Show your example button
+Gui.toggle_toolbar_button(game.player, toolbar_button, true)
+
+]]
+function Gui.toggle_toolbar_button(player, element_define, state)
+    local toolbar_button = Gui.get_top_element(player, element_define)
+    if state == nil then state = toolbar_button.style.name ~= Gui.top_flow_button_toggled_style end
+    Gui.toolbar_button_style(toolbar_button, state, toolbar_button.style.minimal_width)
+    element_define:raise_custom_event{
+        name = Gui.events.on_toolbar_button_toggled,
+        element = toolbar_button,
+        player = player,
+        state = state
+    }
+    return state
+end
+
 --[[-- Creates a button on the top flow with consistent styling
 @tparam string sprite the sprite that you want to use on the button
 @tparam ?string|Concepts.LocalizedString tooltip the tooltip that you want the button to have
@@ -149,24 +216,40 @@ function Gui.toolbar_button(sprite, tooltip, authenticator)
     :add_to_top_flow(authenticator)
 end
 
---[[-- Styles a top flow button depending on the state given
-@tparam LuaGuiElement button the button element to style
-@tparam boolean state The state the button is in
+--[[-- Creates a toggle button on the top flow with consistent styling
+@tparam string sprite the sprite that you want to use on the button
+@tparam ?string|Concepts.LocalizedString tooltip the tooltip that you want the button to have
+@tparam[opt] function authenticator used to decide if the button should be visible to a player
 
-@usage-- Sets the button to the visible style
-Gui.toolbar_button_style(button, true)
-
-@usage-- Sets the button to the hidden style
-Gui.toolbar_button_style(button, false)
+@usage-- Add a button to the toolbar
+local toolbar_button =
+Gui.toolbar_toggle_button('entity/inserter', 'Nothing to see here', function(player)
+    return player.admin
+end)
+:on_custom_event(Gui.events.on_toolbar_button_toggled, function(player, element, event)
+    game.print(table.inspect(event))
+end)
 
 ]]
-function Gui.toolbar_button_style(button, state, size)
-    if state then
-        button.style = Gui.top_flow_button_visible_style
-    else
-        button.style = Gui.top_flow_button_style
-    end
-    button.style.minimal_width = size or toolbar_button_size
-    button.style.height = size or toolbar_button_size
-    button.style.padding = -2
+function Gui.toolbar_toggle_button(sprite, tooltip, authenticator)
+    local button =
+    Gui.element{
+        type = 'sprite-button',
+        sprite = sprite,
+        tooltip = tooltip,
+        style = Gui.top_flow_button_style,
+        name = Gui.unique_static_name
+    }
+    :style{
+        minimal_width = toolbar_button_size,
+        height = toolbar_button_size,
+        padding = -2
+    }
+    :add_to_top_flow(authenticator)
+
+    button:on_click(function(player, _, _)
+        Gui.toggle_toolbar_button(player, button)
+    end)
+
+    return button
 end

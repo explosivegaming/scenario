@@ -522,7 +522,7 @@ function Datastore:increment(key, delta)
     return self:set(key, value + (delta or 1))
 end
 
-local function update_error(err) log('An error occurred in datastore update: '..trace(err)) end
+local function update_error(err) log('An error occurred in datastore update:\n\t'..trace(err)) end
 --[[-- Use a function to update the value locally, will trigger on_update then on_save, save_to_disk and auto_save is required for on_save
 @tparam any key The key that you want to apply the update to, must be a string unless a serializer is set
 @tparam function callback The function that will be used to update the value at this key
@@ -566,7 +566,7 @@ function Datastore:remove(key)
     if self.parent and self.parent.auto_save then return self.parent:save(key) end
 end
 
-local function filter_error(err) log('An error ocurred in a datastore filter:'..trace(err)) end
+local function filter_error(err) log('An error ocurred in a datastore filter:\n\t'..trace(err)) end
 --[[-- Internal, Used to filter elements from a table
 @tparam table tbl The table that will have the filter applied to it
 @tparam[opt] function callback The function that will be used as a filter, if none giving then the provided table is returned
@@ -744,7 +744,7 @@ end
 ----- Events
 -- @section events
 
-local function event_error(err) log('An error ocurred in a datastore event handler: '..trace(err)) end
+local function event_error(err) log('An error ocurred in a datastore event handler:\n\t'..trace(err)) end
 --[[-- Internal, Raise an event on this datastore
 @tparam string event_name The name of the event to raise for this datastore
 @tparam string key The key that this event is being raised for
