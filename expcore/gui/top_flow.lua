@@ -235,7 +235,7 @@ local toolbar_button =
 Gui.toolbar_toggle_button('entity/inserter', 'Nothing to see here', function(player)
     return player.admin
 end)
-:on_custom_event(Gui.events.on_toolbar_button_toggled, function(player, element, event)
+:on_event(Gui.events.on_toolbar_button_toggled, function(player, element, event)
     game.print(table.inspect(event))
 end)
 

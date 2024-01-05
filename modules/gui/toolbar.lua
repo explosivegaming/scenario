@@ -200,7 +200,9 @@ end)
 
 --- For all top element, register an on click which will copy their style
 for element_define, _ in pairs(Gui.top_elements) do
-    element_define:on_custom_event(Gui.events.on_toolbar_button_toggled, function(player, _, _)
+    local prev_handler = element_define[Gui.events.on_toolbar_button_toggled]
+    element_define:on_event(Gui.events.on_toolbar_button_toggled, function(player, element, event)
+        if prev_handler then prev_handler(player, element, event) end -- Kind of hacky but works
         local frame = Gui.get_left_element(player, task_list_container)
         if not frame then return end -- Gui might not be loaded yet
         local button = frame.container.scroll.task_list[element_define.name][element_define.name]
@@ -209,14 +211,12 @@ for element_define, _ in pairs(Gui.top_elements) do
     end)
 end
 
---- Prevent the default toggle behaviour and instead toggle this menu
-Gui.core_defines.hide_top_flow.prevent_default()
+--- Overwrite the default toggle behaviour and instead toggle this menu
 Gui.core_defines.hide_top_flow:on_click(function(player, _, _)
     Gui.toggle_left_element(player, task_list_container)
 end)
 
---- Prevent the default toggle behaviour and instead toggle this menu
-Gui.core_defines.show_top_flow.prevent_default()
+--- Overwrite the default toggle behaviour and instead toggle this menu
 Gui.core_defines.show_top_flow:on_click(function(player, _, _)
     Gui.toggle_left_element(player, task_list_container)
 end)

@@ -212,12 +212,12 @@ end
 @treturn table the element define so more handleres can be registered
 
 @usage-- Register a handler to "my_custom_event" for this element
-element_deinfe:on_custom_event('my_custom_event', function(event)
+element_deinfe:on_event('my_custom_event', function(event)
     event.player.print(player.name)
 end)
 
 ]]
-function Gui._prototype_element:on_custom_event(event_name, handler)
+function Gui._prototype_element:on_event(event_name, handler)
     _C.error_if_runtime()
     table.insert(Gui.debug_info[self.uid].events, event_name)
     Gui.events[event_name] = event_name
@@ -279,10 +279,9 @@ local function event_handler_factory(event_name)
         end
     end)
 
+    Gui.events[event_name] = event_name
     return function(self, handler)
-        table.insert(Gui.debug_info[self.uid].events, debug.getinfo(1, "n").name)
-        self[event_name] = handler
-        return self
+        return self:on_event(event_name, handler)
     end
 end
 

@@ -33,7 +33,7 @@ HasEnabledDecon:set_default(false)
 Gui.toolbar_toggle_button("entity/tree-01", {'tree-decon.main-tooltip'}, function (player)
 	return Roles.player_allowed(player, "fast-tree-decon")
 end)
-:on_custom_event(Gui.events.on_toolbar_button_toggled, function(player, _, event)
+:on_event(Gui.events.on_toolbar_button_toggled, function(player, _, event)
 	HasEnabledDecon:set(player, event.state)
 	player.print{'tree-decon.toggle-msg', event.state and {'tree-decon.enabled'} or {'tree-decon.disabled'}}
 end)
