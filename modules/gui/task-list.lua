@@ -175,24 +175,27 @@ local subfooter_actions =
 local task_list_item =
     Gui.element(
     function(definition, parent, task)
-        local flow =
-            parent.add {
+        local flow = parent.add {
             type = "flow",
             name = "task-" .. task.task_id,
             caption = task.task_id
         }
+
         flow.style.horizontally_stretchable = true
-        local button =
-            flow.add {
+
+        local button = flow.add {
             name = definition.name,
             type = "button",
             style = "list_box_item",
-            caption = task.title
+            caption = task.title,
+            tooltip = { "task-list.last-edit", task.last_edit_name, format_time(task.last_edit_time) }
         }
+
         definition:triggers_events(button)
         button.style.horizontally_stretchable = true
         button.style.horizontally_squashable = true
-        return flow
+
+        return button
     end
 ):on_click(
     function(player, element, _)
@@ -487,11 +490,7 @@ local repopulate_task_list = function(task_list_element)
     for _, task_id in ipairs(task_ids) do
         -- Add the task
         local task = Tasks.get_task(task_id)
-        local element = task_list_item(task_list_element, task)
-        -- Set tooltip
-        local last_edit_name = task.last_edit_name
-        local last_edit_time = task.last_edit_time
-        element[task_list_item.name].tooltip = {"task-list.last-edit", last_edit_name, format_time(last_edit_time)}
+        task_list_item(task_list_element, task)
     end
 end
 
@@ -560,19 +559,16 @@ local update_task = function(player, task_list_element, task_id)
         return
     end
 
-    local element
-    -- If task does not exist yet add it to the list
-    if not task_list_element["task-" .. task_id] then
-        element = task_list_item(task_list_element, task)
+    local flow = task_list_element["task-" .. task_id]
+    if not flow then
+        -- If task does not exist yet add it to the list
+        task_list_item(task_list_element, task)
     else
-        -- If the task exists update the caption
-        element = task_list_element["task-" .. task_id]
-        element[task_list_item.name].caption = task.title
+        -- If the task exists update the caption and tooltip
+        local button = flow[task_list_item.name]
+        button.caption = task.title
+        button.tooltip = {"task-list.last-edit", task.last_edit_name, format_time(task.last_edit_time)}
     end
-    -- Set tooltip
-    local last_edit_name = task.last_edit_name
-    local last_edit_time = task.last_edit_time
-    element[task_list_item.name].tooltip = {"task-list.last-edit", last_edit_name, format_time(last_edit_time)}
 end
 
 -- Update the footer task edit view
