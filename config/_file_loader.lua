@@ -6,8 +6,8 @@
 return {
     --'example.file_not_loaded',
     'modules.factorio-control', -- base factorio free play scenario
-    'expcore.player_data',
-    'modules.gui.mock-toolbar',
+    'expcore.player_data', -- must be loaded first to register event handlers
+    'modules.gui.toolbar', -- must be loaded first to register core gui handlers
 
     --- Game Commands
     'modules.commands.debug',

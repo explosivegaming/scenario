@@ -6,6 +6,7 @@
 local Gui = require 'expcore.gui.prototype'
 local mod_gui = require 'mod-gui' --- @dep mod-gui
 
+local toolbar_button_size = 36
 local hide_top_flow = Gui.core_defines.hide_top_flow.name
 local show_top_flow = Gui.core_defines.show_top_flow.name
 
@@ -62,8 +63,6 @@ Gui.update_top_flow(game.player)
 ]]
 function Gui.update_top_flow(player)
     local top_flow = Gui.get_top_flow(player)
-    local hide_button = top_flow[hide_top_flow]
-    local is_visible = hide_button.visible
 
     -- Set the visible state of all elements in the flow
     for element_define, authenticator in pairs(Gui.top_elements) do
@@ -76,7 +75,7 @@ function Gui.update_top_flow(player)
         -- Set the visible state
         local allowed = authenticator
         if type(allowed) == 'function' then allowed = allowed(player) end
-        element.visible = is_visible and allowed or false
+        element.visible = allowed or false
     end
 end
 
@@ -143,8 +142,8 @@ function Gui.toolbar_button(sprite, tooltip, authenticator)
         name = Gui.unique_static_name
     }
     :style{
-        minimal_width = 36,
-        height = 36,
+        minimal_width = toolbar_button_size,
+        height = toolbar_button_size,
         padding = -2
     }
     :add_to_top_flow(authenticator)
@@ -161,13 +160,13 @@ Gui.toolbar_button_style(button, true)
 Gui.toolbar_button_style(button, false)
 
 ]]
-function Gui.toolbar_button_style(button, state)
+function Gui.toolbar_button_style(button, state, size)
     if state then
         button.style = Gui.top_flow_button_visible_style
     else
         button.style = Gui.top_flow_button_style
     end
-    button.style.minimal_width = 36
-    button.style.height = 36
+    button.style.minimal_width = size or toolbar_button_size
+    button.style.height = size or toolbar_button_size
     button.style.padding = -2
 end
