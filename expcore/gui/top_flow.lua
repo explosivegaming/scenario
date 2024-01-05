@@ -127,11 +127,13 @@ function Gui.update_top_flow(player)
     end
 
     -- Set the visible state of all elements in the flow
-    for _, element_define in ipairs(flow_order) do
+    for index, element_define in ipairs(flow_order) do
         -- Ensure the element exists
         local element = top_flow[element_define.name]
         if not element then
             element = element_define(top_flow)
+        else
+            top_flow.swap_children(index+1, element.get_index_in_parent())
         end
 
         -- Set the visible state
@@ -147,6 +149,23 @@ function Gui.update_top_flow(player)
         local left_flow = Gui.get_left_flow(player)
         local show_button = left_flow.gui_core_buttons[show_top_flow]
         show_button.visible = false
+    end
+end
+
+--- Reorder the top flow elements to match that returned by the provider, uses a method equivalent to insert sort
+function Gui.reorder_top_flow(player)
+    local top_flow = Gui.get_top_flow(player)
+
+    -- Get the order to draw the elements in
+    local flow_order = Gui.get_top_flow_order(player)
+    if #flow_order ~= #table.get_keys(Gui.top_elements) then
+        error("Top flow order provider ("..Gui._top_flow_order_src..") did not return all elements")
+    end
+
+    -- Reorder the elements, index 1 is the core ui buttons so +1 is required
+    for index, element_define in ipairs(flow_order) do
+        local element = top_flow[element_define]
+        top_flow.swap_children(index+1, element.get_index_in_parent())
     end
 end
 

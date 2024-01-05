@@ -74,6 +74,7 @@ function Gui.left_toolbar_button(sprite, tooltip, element_define, authenticator)
     -- Add property to the left flow element with the name of the button
     -- This is for the ability to reverse lookup the button from the left flow element
     element_define.toolbar_button = button
+    button.left_flow = element_define
     return button
 end
 
@@ -145,6 +146,23 @@ function Gui.draw_left_flow(player)
     end
 
     hide_button.visible = show_hide_button
+end
+
+--- Reorder the left flow elements to match that returned by the provider, uses a method equivalent to insert sort
+function Gui.reorder_left_flow(player)
+    local left_flow = Gui.get_left_flow(player)
+
+    -- Get the order to draw the elements in
+    local flow_order = Gui.get_left_flow_order(player)
+    if #flow_order ~= #table.get_keys(Gui.left_elements) then
+        error("Left flow order provider ("..Gui._left_flow_order_src..") did not return all elements")
+    end
+
+    -- Reorder the elements, index 1 is the core ui buttons so +1 is required
+    for index, element_define in ipairs(flow_order) do
+        local element = left_flow[element_define]
+        left_flow.swap_children(index+1, element.get_index_in_parent())
+    end
 end
 
 --[[-- Update the visible state of the hide button, can be used to check if any frames are visible
