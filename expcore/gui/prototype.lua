@@ -26,7 +26,11 @@ local Gui = {
     _mt_element = {}
 }
 
+--- Allow access to the element prototype methods
 Gui._mt_element.__index = Gui._prototype_element
+
+--- Prevents modification at runtime which people might be tempted to attempt
+Gui._mt_element.__new_index = _C.error_if_runtime
 
 --- Allows the define to be called to draw the element
 function Gui._mt_element.__call(self, parent, ...)
@@ -114,8 +118,11 @@ function Gui.element(element_define)
         if element_define.name == Gui.unique_static_name then
             element_define.name = "ExpGui_"..tostring(uid)
         end
-        element.name = element_define.name
-        element.tooltip = element_define.tooltip -- TODO: This better
+        for k, v in pairs(element_define) do
+            if element[k] == nil then
+                element[k] = v
+            end
+        end
         element._draw = function(_, parent)
             return parent.add(element_define)
         end

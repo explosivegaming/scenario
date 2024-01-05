@@ -25,8 +25,17 @@ Gui.element {
     name = Gui.unique_static_name
 }
 :style(Gui.sprite_style(22, -1))
-:on_click(function()
-    game.print("TODO: Reset to default")
+:on_click(function(player, element)
+    for element_define, authenticator in pairs(Gui.top_elements) do
+        local allowed = authenticator
+        if type(allowed) == 'function' then allowed = allowed(player) end
+        local state = allowed or false
+        local container = element.parent.parent.parent
+        local checkbox = container.scroll.list[element_define.name].checkbox
+        local toolbar_button = Gui.get_top_element(player, element_define)
+        toolbar_button.visible = state
+        checkbox.state = state
+    end
 end)
 
 --- Replaces the default method for opening and closing the toolbar
@@ -64,9 +73,9 @@ Gui.element {
 }
 :style(Styles.sprite20)
 
---- Button element with a flow around it to fix duplicate name inside of the scroll flow
--- @element task_list_item
-local task_list_item =
+--- A flow which represents one item in the toolbar list
+-- @element toolbar_list_item
+local toolbar_list_item =
 Gui.element(function(definition, parent, element_define)
     local flow = parent.add {
         type = "frame",
@@ -82,8 +91,10 @@ Gui.element(function(definition, parent, element_define)
     local top_element = Gui.get_top_element(player, element_define)
     copy_style(top_element, element)
 
+    -- Add the checkbox that can toggle the visibility
     local checkbox = flow.add{
-        type = 'checkbox',
+        type = "checkbox",
+        name = "checkbox",
         caption = element_define.tooltip or "None",
         state = top_element.visible or false,
         tags = { top_element_name = element_define.name }
@@ -91,12 +102,9 @@ Gui.element(function(definition, parent, element_define)
     definition:triggers_events(checkbox)
     checkbox.style.width = 180
 
-    local move_flow = flow.add{
-        type = "flow"
-    }
-
+    -- Add the buttons used to move the flow up and down
+    local move_flow = flow.add{ type = "flow" }
     move_flow.style.horizontal_spacing = 0
-
     move_up(move_flow)
     move_down(move_flow)
 
@@ -123,9 +131,9 @@ end)
     end
 end)
 
---- Scrollable list of all tasks
--- @element task_list
-local task_list =
+--- Scrollable list of all toolbar buttons
+-- @element toolbar_list
+local toolbar_list =
 Gui.element(function(_, parent)
     local scroll_pane = parent.add {
         name = "scroll",
@@ -140,7 +148,7 @@ Gui.element(function(_, parent)
     scroll_pane.style.maximal_height = 224
 
     local flow = scroll_pane.add {
-        name = "task_list",
+        name = "list",
         type = "flow",
         direction = "vertical"
     }
@@ -150,9 +158,9 @@ Gui.element(function(_, parent)
     return flow
 end)
 
---- Main task list container for the left flow
--- @element task_list_container
-local task_list_container =
+--- Main toolbar container for the left flow
+-- @element toolbar_container
+local toolbar_container =
 Gui.element(function(definition, parent)
     -- Draw the internal container
     local container = Gui.container(parent, definition.name, 268)
@@ -161,21 +169,21 @@ Gui.element(function(definition, parent)
 
     -- Draw the header
     local player = Gui.get_player_from_element(parent)
-    local header = Gui.header(container, "Toolbar", {"task-list.sub-tooltip"}, true)
+    local header = Gui.header(container, "Toolbar", {"", "Change Me"}, true)
 
-    -- Draw the new task button
+    -- Draw the toolbar control buttons
     local toggle_element = toggle_toolbar(header)
     toggle_element.toggled = Gui.get_top_flow(player).visible
     reset_toolbar(header)
 
-    -- Draw task list element
-    local task_list_element = task_list(container)
+    -- Draw toolbar list element
+    local list_element = toolbar_list(container)
 
     for element_define, authenticator in pairs(Gui.top_elements) do
         -- Ensure the element exists
-        local element = task_list_element[element_define.name]
+        local element = list_element[element_define.name]
         if not element then
-            element = task_list_item(task_list_element, element_define)
+            element = toolbar_list_item(list_element, element_define)
         end
 
         -- Set the visible state
@@ -195,9 +203,9 @@ for element_define, _ in pairs(Gui.top_elements) do
     local prev_handler = element_define[Gui.events.on_toolbar_button_toggled]
     element_define:on_event(Gui.events.on_toolbar_button_toggled, function(player, element, event)
         if prev_handler then prev_handler(player, element, event) end -- Kind of hacky but works
-        local frame = Gui.get_left_element(player, task_list_container)
+        local frame = Gui.get_left_element(player, toolbar_container)
         if not frame then return end -- Gui might not be loaded yet
-        local button = frame.container.scroll.task_list[element_define.name][element_define.name]
+        local button = frame.container.scroll.list[element_define.name][element_define.name]
         local toolbar_button = Gui.get_top_element(player, element_define)
         copy_style(toolbar_button, button)
     end)
@@ -205,10 +213,10 @@ end
 
 --- Overwrite the default toggle behaviour and instead toggle this menu
 Gui.core_defines.hide_top_flow:on_click(function(player, _, _)
-    Gui.toggle_left_element(player, task_list_container)
+    Gui.toggle_left_element(player, toolbar_container)
 end)
 
 --- Overwrite the default toggle behaviour and instead toggle this menu
 Gui.core_defines.show_top_flow:on_click(function(player, _, _)
-    Gui.toggle_left_element(player, task_list_container)
+    Gui.toggle_left_element(player, toolbar_container)
 end)
