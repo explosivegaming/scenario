@@ -6,6 +6,7 @@
 
 local Game = require 'utils.game' -- @dep utils.game
 local Gui = require 'expcore.gui' -- @dep expcore.gui
+local Roles = require 'expcore.roles' -- @dep expcore.gui
 local Global = require 'utils.global' -- @dep utils.global
 local config = require 'config.gui.autofill' -- @dep config.gui.autofill
 local Event = require 'utils.event' -- @dep utils.event
@@ -294,7 +295,9 @@ end)
 
 --- Button on the top flow used to toggle autofill container
 -- @element autofill_toggle
-Gui.left_toolbar_button(config.icon, {'autofill.main-tooltip'}, autofill_container)
+Gui.left_toolbar_button(config.icon, {'autofill.main-tooltip'}, autofill_container, function(player)
+	return Roles.player_allowed(player, 'gui/autofill')
+end)
 
 --- When a player is created make sure they have the default autofill settings
 Event.add(defines.events.on_player_created, function(event)
