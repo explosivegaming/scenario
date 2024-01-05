@@ -26,12 +26,21 @@ Gui.element {
 }
 :style(Gui.sprite_style(22, -1))
 :on_click(function(player, element)
-    for element_define, authenticator in pairs(Gui.top_elements) do
-        local allowed = authenticator
+    Gui.reorder_top_flow(player)
+    Gui.reorder_left_flow(player)
+    local flow_order = Gui.get_top_flow_order(player)
+    local container = element.parent.parent.parent
+    local list = container.scroll.list
+    for index, element_define in ipairs(flow_order) do
+        -- Switch item order
+        local top_element = list[element_define.name]
+        list.swap_children(index, top_element.get_index_in_parent())
+        -- Check if the player is allowed to see the button
+        local allowed = Gui.top_elements[element_define] -- authenticator
         if type(allowed) == 'function' then allowed = allowed(player) end
         local state = allowed or false
-        local container = element.parent.parent.parent
-        local checkbox = container.scroll.list[element_define.name].checkbox
+        -- Update the checkbox state and item visibility
+        local checkbox = list[element_define.name].checkbox
         local toolbar_button = Gui.get_top_element(player, element_define)
         toolbar_button.visible = state
         checkbox.state = state
@@ -53,25 +62,83 @@ Gui.element {
     Gui.toggle_top_flow(player, element.toggled)
 end)
 
+local move_up, move_down
 --- Move an element up the list
 -- @element move_up
-local move_up =
+move_up =
 Gui.element {
     type = "sprite-button",
     sprite = "utility/speed_up",
     name = Gui.unique_static_name
 }
 :style(Styles.sprite20)
+:on_click(function(player, element)
+    local item = element.parent.parent
+    local index = item.get_index_in_parent()
+    -- Swap the position in the list
+    local list = item.parent
+    list.swap_children(index, index-1)
+    local other_item = list.children[index]
+    -- Swap the position in the top flow
+    local top_flow = Gui.get_top_flow(player)
+    top_flow.swap_children(index+1, index) -- Offset by 1
+    -- Check if the element has a left element to move
+    local element_define = Gui.defines[item.tags.top_element_uid]
+    local other_define = Gui.defines[other_item.tags.top_element_uid]
+    if element_define.left_flow_element and other_define.left_flow_element then
+        local left_element = Gui.get_left_element(player, element_define.left_flow_element)
+        local left_index = left_element.get_index_in_parent()
+        left_element.parent.swap_children(left_index, left_index-1)
+    end
+    -- If we are moving in/out of first/last place we need to update the move buttons
+    local last = #list.children
+    if index == 2 then -- Moving into index 1
+        other_item.move[move_up.name].enabled = true
+        item.move[move_up.name].enabled = false
+    elseif index == last then -- Moving out of last index
+        other_item.move[move_down.name].enabled = false
+        item.move[move_down.name].enabled = true
+    end
+end)
 
 --- Move an element down the list
 -- @element move_down
-local move_down =
+move_down =
 Gui.element {
     type = "sprite-button",
     sprite = "utility/speed_down",
     name = Gui.unique_static_name
 }
 :style(Styles.sprite20)
+:on_click(function(player, element)
+    local item = element.parent.parent
+    local index = item.get_index_in_parent()
+    -- Swap the position in the list
+    local list = item.parent
+    list.swap_children(index, index+1)
+    local other_item = list.children[index]
+    -- Swap the position in the top flow
+    local top_flow = Gui.get_top_flow(player)
+    top_flow.swap_children(index+2, index+1) -- Offset by 1
+    -- Check if the element has a left element to move
+    local element_define = Gui.defines[item.tags.top_element_uid]
+    local other_define = Gui.defines[other_item.tags.top_element_uid]
+    if element_define.left_flow_element and other_define.left_flow_element then
+        local left_element = Gui.get_left_element(player, element_define.left_flow_element)
+        local left_index = left_element.get_index_in_parent()
+        left_element.parent.swap_children(left_index, left_index+1)
+    end
+    -- If we are moving in/out of first/last place we need to update the move buttons
+    local last = #list.children
+    if index == 1 then -- Moving out of index 1
+        other_item.move[move_up.name].enabled = false
+        item.move[move_up.name].enabled = true
+    elseif index == last-1 then -- Moving into last index
+        other_item.move[move_down.name].enabled = true
+        item.move[move_down.name].enabled = false
+    end
+end)
+
 
 --- A flow which represents one item in the toolbar list
 -- @element toolbar_list_item
@@ -80,7 +147,10 @@ Gui.element(function(definition, parent, element_define)
     local flow = parent.add {
         type = "frame",
         style = "shortcut_selection_row",
-        name = element_define.name
+        name = element_define.name,
+        tags = {
+            top_element_uid = element_define.uid
+        }
     }
     flow.style.horizontally_stretchable = true
     flow.style.vertical_align = "center"
@@ -97,13 +167,15 @@ Gui.element(function(definition, parent, element_define)
         name = "checkbox",
         caption = element_define.tooltip or "None",
         state = top_element.visible or false,
-        tags = { top_element_name = element_define.name }
+        tags = {
+            top_element_name = element_define.name
+        }
     }
     definition:triggers_events(checkbox)
     checkbox.style.width = 180
 
     -- Add the buttons used to move the flow up and down
-    local move_flow = flow.add{ type = "flow" }
+    local move_flow = flow.add{ type = "flow", name = "move" }
     move_flow.style.horizontal_spacing = 0
     move_up(move_flow)
     move_down(move_flow)
@@ -178,8 +250,9 @@ Gui.element(function(definition, parent)
 
     -- Draw toolbar list element
     local list_element = toolbar_list(container)
+    local flow_order = Gui.get_top_flow_order(player)
 
-    for element_define, authenticator in pairs(Gui.top_elements) do
+    for _, element_define in ipairs(flow_order) do
         -- Ensure the element exists
         local element = list_element[element_define.name]
         if not element then
@@ -187,10 +260,15 @@ Gui.element(function(definition, parent)
         end
 
         -- Set the visible state
-        local allowed = authenticator
+        local allowed = Gui.top_elements[element_define] -- authenticator
         if type(allowed) == 'function' then allowed = allowed(player) end
         element.visible = allowed or false
     end
+
+    -- Set the state of the move buttons for the first and last element
+    local children = list_element.children
+    children[1].move[move_up.name].enabled = false
+    children[#children].move[move_down.name].enabled = false
 
     -- Return the external container
     return container.parent
@@ -215,8 +293,8 @@ end
 Gui.inject_left_flow_order(function(_)
     local elements = table.get_keys(Gui.left_elements)
     local toolbar_index = table.get_index(elements, toolbar_container)
-    elements[toolbar_index] = elements[1]
-    elements[1] = toolbar_container
+    elements[toolbar_index] = nil
+    table.insert(elements, 1, toolbar_container)
     return elements
 end)
 

@@ -164,7 +164,7 @@ function Gui.reorder_top_flow(player)
 
     -- Reorder the elements, index 1 is the core ui buttons so +1 is required
     for index, element_define in ipairs(flow_order) do
-        local element = top_flow[element_define]
+        local element = top_flow[element_define.name]
         top_flow.swap_children(index+1, element.get_index_in_parent())
     end
 end

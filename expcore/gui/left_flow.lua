@@ -74,7 +74,7 @@ function Gui.left_toolbar_button(sprite, tooltip, element_define, authenticator)
     -- Add property to the left flow element with the name of the button
     -- This is for the ability to reverse lookup the button from the left flow element
     element_define.toolbar_button = button
-    button.left_flow = element_define
+    button.left_flow_element = element_define
     return button
 end
 
@@ -160,7 +160,7 @@ function Gui.reorder_left_flow(player)
 
     -- Reorder the elements, index 1 is the core ui buttons so +1 is required
     for index, element_define in ipairs(flow_order) do
-        local element = left_flow[element_define]
+        local element = left_flow[element_define.name]
         left_flow.swap_children(index+1, element.get_index_in_parent())
     end
 end
