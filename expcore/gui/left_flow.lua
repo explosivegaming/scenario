@@ -77,6 +77,21 @@ function Gui.left_toolbar_button(sprite, tooltip, element_define, authenticator)
     return button
 end
 
+Gui._left_flow_order_src = "<default>"
+--- Get the order of elements in the left flow, first argument is player but is unused in the default method
+function Gui.get_left_flow_order(_)
+    return table.get_keys(Gui.left_elements)
+end
+
+--- Inject a custom left flow order provider, this should accept a player and return a list of elements definitions to draw
+function Gui.inject_left_flow_order(provider)
+    Gui.get_left_flow_order = provider
+    local debug_info = debug.getinfo(2, "Sn")
+    local file_name = debug_info.source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+    local func_name = debug_info.name or "<anonymous:"..debug_info.linedefined..">"
+    Gui._left_flow_order_src = file_name..":"..func_name
+end
+
 --[[-- Draw all the left elements onto the left flow, internal use only with on join
 @tparam LuaPlayer player the player that you want to draw the elements for
 
@@ -89,16 +104,13 @@ function Gui.draw_left_flow(player)
     local hide_button = left_flow.gui_core_buttons[hide_left_flow]
     local show_hide_button = false
 
-    -- TODO dont hack the internals to but the toolbar menu first
-    local order = { true }
-    for element_define, open_on_join in pairs(Gui.left_elements) do
-        table.insert(order, {element_define,open_on_join})
+    -- Get the order to draw the elements in
+    local flow_order = Gui.get_left_flow_order(player)
+    if #flow_order ~= #table.get_keys(Gui.left_elements) then
+        error("Left flow order provider ("..Gui._left_flow_order_src..") did not return all elements")
     end
-    order[1] = order[#order]
-    order[#order] = nil
 
-    for _, a in ipairs(order) do
-        local element_define, open_on_join = a[1], a[2]
+    for _, element_define in ipairs(flow_order) do
         -- Draw the element to the left flow
         local draw_success, left_element = xpcall(function()
             return element_define(left_flow)
@@ -110,6 +122,7 @@ function Gui.draw_left_flow(player)
         end
 
         -- Check if it should be open by default
+        local open_on_join = Gui.left_elements[element_define]
         local visible = type(open_on_join) == 'boolean' and open_on_join or false
         if type(open_on_join) == 'function' then
             local success, err = xpcall(open_on_join, debug.traceback, player)

@@ -211,6 +211,15 @@ for element_define, _ in pairs(Gui.top_elements) do
     end)
 end
 
+--- Make the toolbar the first left element
+Gui.inject_left_flow_order(function(_)
+    local elements = table.get_keys(Gui.left_elements)
+    local toolbar_index = table.get_index(elements, toolbar_container)
+    elements[toolbar_index] = elements[1]
+    elements[1] = toolbar_container
+    return elements
+end)
+
 --- Overwrite the default toggle behaviour and instead toggle this menu
 Gui.core_defines.hide_top_flow:on_click(function(player, _, _)
     Gui.toggle_left_element(player, toolbar_container)

@@ -95,6 +95,21 @@ function Gui.top_flow_has_visible_elements(player)
     return false
 end
 
+Gui._top_flow_order_src = "<default>"
+--- Get the order of elements in the top flow, first argument is player but is unused in the default method
+function Gui.get_top_flow_order(_)
+    return table.get_keys(Gui.top_elements)
+end
+
+--- Inject a custom top flow order provider, this should accept a player and return a list of elements definitions to draw
+function Gui.inject_top_flow_order(provider)
+    Gui.get_top_flow_order = provider
+    local debug_info = debug.getinfo(2, "Sn")
+    local file_name = debug_info.source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+    local func_name = debug_info.name or "<anonymous:"..debug_info.linedefined..">"
+    Gui._top_flow_order_src = file_name..":"..func_name
+end
+
 --[[-- Updates the visible state of all the elements on the players top flow, uses authenticator
 @tparam LuaPlayer player the player that you want to update the top flow for
 
@@ -105,8 +120,14 @@ Gui.update_top_flow(game.player)
 function Gui.update_top_flow(player)
     local top_flow = Gui.get_top_flow(player)
 
+    -- Get the order to draw the elements in
+    local flow_order = Gui.get_top_flow_order(player)
+    if #flow_order ~= #table.get_keys(Gui.top_elements) then
+        error("Top flow order provider ("..Gui._top_flow_order_src..") did not return all elements")
+    end
+
     -- Set the visible state of all elements in the flow
-    for element_define, authenticator in pairs(Gui.top_elements) do
+    for _, element_define in ipairs(flow_order) do
         -- Ensure the element exists
         local element = top_flow[element_define.name]
         if not element then
@@ -114,7 +135,7 @@ function Gui.update_top_flow(player)
         end
 
         -- Set the visible state
-        local allowed = authenticator
+        local allowed = Gui.top_elements[element_define] -- authenticator
         if type(allowed) == 'function' then allowed = allowed(player) end
         element.visible = allowed or false
     end
