@@ -79,12 +79,12 @@ Gui.element(function(definition, parent, server_id, wrong_version)
     local status = External.get_server_status(server_id) or 'Offline'
     if wrong_version then status = 'Version' end
     local flow = parent.add{ name = server_id, type = 'flow' }
-    local button = definition:triggers_events(flow.add{
+    local button = flow.add{
         type = 'sprite-button',
         sprite = 'utility/circuit_network_panel_white', --- network panel white, warning white, download white
         hovered_sprite = 'utility/circuit_network_panel_black', --- network panel black, warning black, download black
         tooltip = {'readme.servers-connect-'..status, wrong_version}
-    })
+    }
 
     if status == 'Offline' or status == 'Current' then
         button.enabled = false

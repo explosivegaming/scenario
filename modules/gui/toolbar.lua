@@ -3,16 +3,8 @@ local Gui = require "expcore.gui" --- @dep expcore.gui
 -- Styles used for sprite buttons
 local button_size = 20
 local Styles = {
-    sprite20 = {
-        height = 20,
-        width = 20,
-        padding = -2
-    },
-    sprite22 = {
-        height = 22,
-        width = 22,
-        padding = -2
-    }
+    sprite20 = Gui.sprite_style(20),
+    sprite22 = Gui.sprite_style(22)
 }
 
 --- Set the style of the fake toolbar element
@@ -29,10 +21,10 @@ local reset_toolbar =
 Gui.element {
     type = "sprite-button",
     sprite = "utility/reset",
-    style = "tool_button_red",
+    style = "shortcut_bar_button_red",
     name = Gui.unique_static_name
 }
-:style(Styles.sprite22)
+:style(Gui.sprite_style(22, -1))
 :on_click(function()
     game.print("TODO: Reset to default")
 end)
@@ -108,7 +100,7 @@ Gui.element(function(definition, parent, element_define)
     move_up(move_flow)
     move_down(move_flow)
 
-    return flow
+    return definition:no_events(flow)
 end)
 :on_checked_changed(function(player, element)
     local top_flow = Gui.get_top_flow(player)

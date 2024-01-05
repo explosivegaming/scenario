@@ -64,7 +64,7 @@ function Gui.left_toolbar_button(sprite, tooltip, element_define, authenticator)
     button:on_click(function(player, _, _)
         -- Raise custom event that tells listening elements if the element has changed visibility by a player clicking
         -- Used in warp gui to handle the keep open logic
-        button:raise_custom_event{
+        button:raise_event{
             name = Gui.events.on_visibility_changed_by_click,
             element = Gui.get_top_element(player, button),
             state = Gui.toggle_left_element(player, element_define)
@@ -181,7 +181,7 @@ function Gui.hide_left_flow(player)
                 -- Style the button
                 Gui.toggle_toolbar_button(player, element_define.toolbar_button, false)
                 -- Raise the custom event if all of the top checks have passed
-                element_define.toolbar_button:raise_custom_event{
+                element_define.toolbar_button:raise_event{
                     name = Gui.events.on_visibility_changed_by_click,
                     element = button,
                     state = false

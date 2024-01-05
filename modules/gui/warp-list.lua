@@ -159,13 +159,13 @@ Gui.element(function(definition, parent, warp)
     end
 
     -- Draw the element
-    return definition:triggers_events(parent.add{
+    return parent.add{
         type = 'sprite-button',
         sprite = sprite,
         name = definition.name,
         tooltip = {'warp-list.goto-tooltip', warp_position.x, warp_position.y},
         style = 'slot_button'
-    })
+    }
 end)
 :style(Styles.sprite32)
 :static_name(Gui.unique_static_name)
@@ -186,13 +186,13 @@ end)
 -- @element warp_icon_editing
 local warp_icon_editing =
 Gui.element(function(definition, parent, warp)
-    return definition:triggers_events(parent.add{
+    return parent.add{
         name = definition.name,
         type = 'choose-elem-button',
         elem_type = 'signal',
         signal = {type = warp.icon.type, name = warp.icon.name},
         tooltip = {'warp-list.goto-edit'}
-    })
+    }
 end)
 :static_name(Gui.unique_static_name)
 :style(Styles.sprite32)
@@ -204,12 +204,12 @@ Gui.element(function(definition, parent, warp)
     local last_edit_name = warp.last_edit_name
     local last_edit_time = warp.last_edit_time
     -- Draw the element
-    return definition:triggers_events(parent.add{
+    return parent.add{
         type = 'label',
         caption = warp.name,
         tooltip = {'warp-list.last-edit', last_edit_name, format_time(last_edit_time)},
         name = definition.name
-    })
+    }
 end)
 :style{
     single_line = true,
@@ -245,12 +245,12 @@ Gui.element{
 local warp_textfield =
 Gui.element(function(definition, parent, warp)
     -- Draw the element
-    return definition:triggers_events(parent.add{
+    return parent.add{
         type = 'textfield',
         text = warp.name,
         clear_and_focus_on_right_click = true,
         name = definition.name
-    })
+    }
 end)
 :style{
     -- Required fields to make it squashable and strechable.

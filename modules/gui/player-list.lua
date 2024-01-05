@@ -100,7 +100,6 @@ Gui.element(function(definition, parent, player_data)
     }
     player_name.style.padding = {0, 2,0, 0}
     player_name.style.font_color = player_data.chat_color
-    definition:triggers_events(player_name)
 
     -- Add the time played label
     local alignment = Gui.alignment(parent, 'player-time-'..player_data.index)
@@ -112,7 +111,7 @@ Gui.element(function(definition, parent, player_data)
     }
     time_label.style.padding = 0
 
-    return time_label
+    return player_name
 end)
 :on_click(function(player, element, event)
     local selected_player_name = element.caption

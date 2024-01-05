@@ -188,7 +188,7 @@ function Gui.toggle_toolbar_button(player, element_define, state)
     local toolbar_button = Gui.get_top_element(player, element_define)
     if state == nil then state = toolbar_button.style.name ~= Gui.top_flow_button_toggled_style end
     Gui.toolbar_button_style(toolbar_button, state, toolbar_button.style.minimal_width)
-    element_define:raise_custom_event{
+    element_define:raise_event{
         name = Gui.events.on_toolbar_button_toggled,
         element = toolbar_button,
         player = player,

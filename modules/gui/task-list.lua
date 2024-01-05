@@ -191,7 +191,6 @@ local task_list_item =
             tooltip = { "task-list.last-edit", task.last_edit_name, format_time(task.last_edit_time) }
         }
 
-        definition:triggers_events(button)
         button.style.horizontally_stretchable = true
         button.style.horizontally_squashable = true
 
