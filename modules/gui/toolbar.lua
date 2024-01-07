@@ -4,8 +4,15 @@ local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 -- Used to store the state of the toolbar when a player leaves
 local ToolbarState = PlayerData.Settings:combine('ToolbarState')
 ToolbarState:set_metadata{
-    stringify = function(_)
-        return "Value calculated on disconnect"
+    stringify = function(value)
+        local buttons, favourites = 0, 0
+        for _, state in ipairs(value) do
+            buttons = buttons + 1
+            if state.favourite then
+                favourites = favourites + 1
+            end
+        end
+        return string.format("Buttons: %d, Favourites: %d", buttons, favourites)
     end
 }
 
@@ -24,79 +31,10 @@ local function copy_style(src, dst)
     dst.style.padding = -2
 end
 
-local toolbar_container, move_up, move_down
-
---- Reorder the buttons in the left flow to match that of the current state, reads the datastore
-local function reorder_toolbar_menu(player)
-    local frame = Gui.get_left_element(player, toolbar_container)
-    local list = frame.container.scroll.list
-    local order = ToolbarState:get(player)
-    local last_index = #order
-
-    for index, state in ipairs(order) do
-        local element_define = Gui.defines[state.element_uid]
-
-        -- Switch item order
-        local item = list[element_define.name]
-        list.swap_children(index, item.get_index_in_parent())
-
-        -- Check if the player is allowed to see the button
-        local allowed = element_define.authenticator
-        if type(allowed) == 'function' then allowed = allowed(player) end
-
-        -- Update the checkbox state and item visibility
-        local toolbar_button = Gui.get_top_element(player, element_define)
-        toolbar_button.visible = allowed and state.favourite or false
-        item.checkbox.state = state.favourite
-
-        -- Update the state if the move buttons
-        item.move[move_up.name].enabled = index ~= 1
-        item.move[move_down.name].enabled = index ~= last_index
-    end
-end
-
 --- Reorder the buttons relative to each other, this will update the datastore
 local function move_toolbar_button(player, item, offset)
     local old_index = item.get_index_in_parent()
     local new_index = old_index + offset
-
-    -- All of below works, but it was replaced by the datastore:on_update handler
-    -- This is likely to be more efficient, but it is required to keep the datastore in sync
-    --[[ Swap the position in the list
-    local list = item.parent
-    local other_item = list.children[new_index]
-    list.swap_children(old_index, new_index)
-
-    -- Swap the position in the top flow, offset by 1 because of settings button
-    local top_flow = Gui.get_top_flow(player)
-    top_flow.swap_children(old_index+1, new_index+1)
-
-    -- Check if the element has a left element to move
-    local element_define = Gui.defines[item.tags.top_element_uid]
-    local other_define = Gui.defines[other_item.tags.top_element_uid]
-    if element_define.left_flow_element and other_define.left_flow_element then
-        local left_element = Gui.get_left_element(player, element_define.left_flow_element)
-        local other_left_element = Gui.get_left_element(player, other_define.left_flow_element)
-        local left_index = left_element.get_index_in_parent()
-        local other_index = other_left_element.get_index_in_parent()
-        left_element.parent.swap_children(left_index, other_index)
-    end
-
-    -- If we are moving in/out of first/last place we need to update the move buttons
-    local last_index = #list.children
-    if old_index == 1 then -- Moving out of index 1
-        other_item.move[move_up.name].enabled = false
-        item.move[move_up.name].enabled = true
-    elseif new_index == 1 then -- Moving into index 1
-        other_item.move[move_up.name].enabled = true
-        item.move[move_up.name].enabled = false
-    elseif old_index == last_index then -- Moving out of the last index
-        other_item.move[move_down.name].enabled = false
-        item.move[move_down.name].enabled = true
-    elseif new_index == last_index then -- Moving into the last index
-        other_item.move[move_down.name].enabled = true
-        item.move[move_down.name].enabled = false
-    end]]
 
     -- Update the datastore state
     ToolbarState:update(player, function(_, order)
@@ -139,7 +77,7 @@ end)
 
 --- Move an element up the list
 -- @element move_up
-move_up =
+local move_up =
 Gui.element {
     type = "sprite-button",
     sprite = "utility/speed_up",
@@ -154,7 +92,7 @@ end)
 
 --- Move an element down the list
 -- @element move_down
-move_down =
+local move_down =
 Gui.element {
     type = "sprite-button",
     sprite = "utility/speed_down",
@@ -241,6 +179,7 @@ end)
 -- @element toolbar_list
 local toolbar_list =
 Gui.element(function(_, parent)
+    -- This is a scroll pane for the list
     local scroll_pane = parent.add {
         name = "scroll",
         type = "scroll-pane",
@@ -253,6 +192,7 @@ Gui.element(function(_, parent)
     scroll_pane.style.padding = 0
     scroll_pane.style.maximal_height = 224
 
+    -- This flow is the list, we need a linear list because of get_index_in_parent
     local flow = scroll_pane.add {
         name = "list",
         type = "flow",
@@ -266,7 +206,7 @@ end)
 
 --- Main toolbar container for the left flow
 -- @element toolbar_container
-toolbar_container =
+local toolbar_container =
 Gui.element(function(definition, parent)
     -- Draw the internal container
     local container = Gui.container(parent, definition.name, 268)
@@ -358,7 +298,7 @@ for index, element_define in ipairs(Gui.top_elements) do
     })
 end
 
---- Make the toolbar the first left element
+--- Get the top order based on the players settings
 Gui.inject_top_flow_order(function(player)
     local order = ToolbarState:get(player)
 
@@ -370,7 +310,7 @@ Gui.inject_top_flow_order(function(player)
     return elements
 end)
 
---- Make the toolbar the first left element
+--- Get the left order based on the player settings, with toolbar menu first, and all remaining after
 Gui.inject_left_flow_order(function(player)
     local order = Gui.get_top_flow_order(player)
     local elements, element_map = { toolbar_container }, { [toolbar_container] = true }
@@ -418,10 +358,37 @@ end
 
 --- When the value updates also update the guis
 ToolbarState:on_update(function(player_name, _)
+    -- Update the top and left gui
     local player = game.get_player(player_name)
     Gui.reorder_top_flow(player)
     Gui.reorder_left_flow(player)
-    reorder_toolbar_menu(player)
+
+    -- Update the toolbar menu
+    local frame = Gui.get_left_element(player, toolbar_container)
+    local list = frame.container.scroll.list
+    local order = ToolbarState:get(player)
+    local last_index = #order
+
+    for index, state in ipairs(order) do
+        local element_define = Gui.defines[state.element_uid]
+
+        -- Switch item order
+        local item = list[element_define.name]
+        list.swap_children(index, item.get_index_in_parent())
+
+        -- Check if the player is allowed to see the button
+        local allowed = element_define.authenticator
+        if type(allowed) == 'function' then allowed = allowed(player) end
+
+        -- Update the checkbox state and item visibility
+        local toolbar_button = Gui.get_top_element(player, element_define)
+        toolbar_button.visible = allowed and state.favourite or false
+        item.checkbox.state = state.favourite
+
+        -- Update the state if the move buttons
+        item.move[move_up.name].enabled = index ~= 1
+        item.move[move_down.name].enabled = index ~= last_index
+    end
 end)
 
 --- Uncompress the data to be more useable
