@@ -407,11 +407,13 @@ ToolbarState:on_load(function(player_name, value)
     local element_hash = {}
     for index, id in ipairs(value[1]) do
         local element = datastore_id_map[id]
-        element_hash[element.uid] = true
-        elements[index] = {
-            element_uid = element.uid,
-            favourite = favourites[id] or false,
-        }
+        if element and not element_hash[element.uid] then
+            element_hash[element.uid] = true
+            elements[index] = {
+                element_uid = element.uid,
+                favourite = favourites[id] or false,
+            }
+        end
     end
 
     -- Add any in the default state that are missing
