@@ -40,7 +40,8 @@ example_flow_with_button:add_to_left_flow(true)
 function Gui._prototype_element:add_to_left_flow(open_on_join)
     _C.error_if_runtime()
     if not self.name then error("Elements for the top flow must have a static name") end
-    Gui.left_elements[self] = open_on_join or false
+    self.open_on_join = open_on_join or false
+    table.insert(Gui.left_elements, self)
     return self
 end
 
@@ -81,7 +82,7 @@ end
 Gui._left_flow_order_src = "<default>"
 --- Get the order of elements in the left flow, first argument is player but is unused in the default method
 function Gui.get_left_flow_order(_)
-    return table.get_keys(Gui.left_elements)
+    return Gui.left_elements
 end
 
 --- Inject a custom left flow order provider, this should accept a player and return a list of elements definitions to draw
@@ -107,8 +108,10 @@ function Gui.draw_left_flow(player)
 
     -- Get the order to draw the elements in
     local flow_order = Gui.get_left_flow_order(player)
-    if #flow_order ~= #table.get_keys(Gui.left_elements) then
-        error("Left flow order provider ("..Gui._left_flow_order_src..") did not return all elements")
+    if #flow_order ~= #Gui.left_elements then
+        error(string.format("Left flow order provider (%s) did not return all elements, expect %d got %d",
+            Gui._left_flow_order_src, #Gui.left_elements, #flow_order
+        ))
     end
 
     for _, element_define in ipairs(flow_order) do
@@ -123,7 +126,7 @@ function Gui.draw_left_flow(player)
         end
 
         -- Check if it should be open by default
-        local open_on_join = Gui.left_elements[element_define]
+        local open_on_join = element_define.open_on_join
         local visible = type(open_on_join) == 'boolean' and open_on_join or false
         if type(open_on_join) == 'function' then
             local success, err = xpcall(open_on_join, debug.traceback, player)
@@ -154,8 +157,10 @@ function Gui.reorder_left_flow(player)
 
     -- Get the order to draw the elements in
     local flow_order = Gui.get_left_flow_order(player)
-    if #flow_order ~= #table.get_keys(Gui.left_elements) then
-        error("Left flow order provider ("..Gui._left_flow_order_src..") did not return all elements")
+    if #flow_order ~= #Gui.left_elements then
+        error(string.format("Left flow order provider (%s) did not return all elements, expect %d got %d",
+            Gui._left_flow_order_src, #Gui.left_elements, #flow_order
+        ))
     end
 
     -- Reorder the elements, index 1 is the core ui buttons so +1 is required
@@ -176,7 +181,7 @@ local visible = Gui.update_left_flow(player)
 function Gui.update_left_flow(player)
     local left_flow = Gui.get_left_flow(player)
     local hide_button = left_flow.gui_core_buttons[hide_left_flow]
-    for element_define, _ in pairs(Gui.left_elements) do
+    for _, element_define in ipairs(Gui.left_elements) do
         local left_element = left_flow[element_define.name]
         if left_element.visible then
             hide_button.visible = true
@@ -201,7 +206,7 @@ function Gui.hide_left_flow(player)
 
     -- Set the visible state of all elements in the flow
     hide_button.visible = false
-    for element_define, _ in pairs(Gui.left_elements) do
+    for _, element_define in ipairs(Gui.left_elements) do
         left_flow[element_define.name].visible = false
 
         -- Check if the the element has a toobar button attached
@@ -233,7 +238,7 @@ local frame = Gui.get_left_element(game.player, example_flow_with_button)
 ]]
 function Gui.get_left_element(player, element_define)
     local left_flow = Gui.get_left_flow(player)
-    return left_flow[element_define.name]
+    return assert(left_flow[element_define.name], "Left element failed to load")
 end
 
 --[[-- Toggles the visible state of a left element for a given player, can be used to set the visible state

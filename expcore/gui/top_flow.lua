@@ -76,7 +76,8 @@ end)
 function Gui._prototype_element:add_to_top_flow(authenticator)
     _C.error_if_runtime()
     if not self.name then error("Elements for the top flow must have a static name") end
-    Gui.top_elements[self] = authenticator or true
+    self.authenticator = authenticator or true
+    table.insert(Gui.top_elements, self)
     return self
 end
 
@@ -98,7 +99,7 @@ end
 Gui._top_flow_order_src = "<default>"
 --- Get the order of elements in the top flow, first argument is player but is unused in the default method
 function Gui.get_top_flow_order(_)
-    return table.get_keys(Gui.top_elements)
+    return Gui.top_elements
 end
 
 --- Inject a custom top flow order provider, this should accept a player and return a list of elements definitions to draw
@@ -122,8 +123,10 @@ function Gui.update_top_flow(player)
 
     -- Get the order to draw the elements in
     local flow_order = Gui.get_top_flow_order(player)
-    if #flow_order ~= #table.get_keys(Gui.top_elements) then
-        error("Top flow order provider ("..Gui._top_flow_order_src..") did not return all elements")
+    if #flow_order ~= #Gui.top_elements then
+        error(string.format("Top flow order provider (%s) did not return all elements, expect %d got %d",
+            Gui._top_flow_order_src, #Gui.top_elements, #flow_order
+        ))
     end
 
     -- Set the visible state of all elements in the flow
@@ -137,7 +140,7 @@ function Gui.update_top_flow(player)
         end
 
         -- Set the visible state
-        local allowed = Gui.top_elements[element_define] -- authenticator
+        local allowed = element_define.authenticator
         if type(allowed) == 'function' then allowed = allowed(player) end
         element.visible = allowed or false
     end
@@ -158,8 +161,10 @@ function Gui.reorder_top_flow(player)
 
     -- Get the order to draw the elements in
     local flow_order = Gui.get_top_flow_order(player)
-    if #flow_order ~= #table.get_keys(Gui.top_elements) then
-        error("Top flow order provider ("..Gui._top_flow_order_src..") did not return all elements")
+    if #flow_order ~= #Gui.top_elements then
+        error(string.format("Top flow order provider (%s) did not return all elements, expect %d got %d",
+            Gui._top_flow_order_src, #Gui.top_elements, #flow_order
+        ))
     end
 
     -- Reorder the elements, index 1 is the core ui buttons so +1 is required
@@ -208,7 +213,7 @@ local button = Gui.get_top_element(game.player, example_button)
 ]]
 function Gui.get_top_element(player, element_define)
     local top_flow = Gui.get_top_flow(player)
-    return top_flow[element_define.name]
+    return assert(top_flow[element_define.name], "Top element failed to load")
 end
 
 --[[-- Toggles the state of a toolbar button for a given player, can be used to set the visual state
