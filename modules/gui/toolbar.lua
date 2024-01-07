@@ -72,8 +72,10 @@ local function move_toolbar_button(player, item, offset)
     local other_define = Gui.defines[other_item.tags.top_element_uid]
     if element_define.left_flow_element and other_define.left_flow_element then
         local left_element = Gui.get_left_element(player, element_define.left_flow_element)
+        local other_left_element = Gui.get_left_element(player, other_define.left_flow_element)
         local left_index = left_element.get_index_in_parent()
-        left_element.parent.swap_children(left_index, left_index-1)
+        local other_index = other_left_element.get_index_in_parent()
+        left_element.parent.swap_children(left_index, other_index)
     end
 
     -- If we are moving in/out of first/last place we need to update the move buttons
