@@ -58,6 +58,14 @@ function Gui._mt_element.__call(self, parent, ...)
     end
 end
 
+--- Get where a function was defined as a string
+local function get_defined_at(level)
+    local debug_info = debug.getinfo(level, "Sn")
+    local file_name = debug_info.source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+    local func_name = debug_info.name or "<anonymous:"..debug_info.linedefined..">"
+    return file_name..":"..func_name
+end
+
 --- Element Define.
 -- @section elementDefine
 
@@ -127,15 +135,12 @@ function Gui.element(element_define)
             return parent.add(element_define)
         end
     else
-        Gui.debug_info[uid].draw = 'Function'
+        Gui.debug_info[uid].draw = get_defined_at(element_define)
         element._draw = element_define
     end
 
     -- Add the define to the base module
-    local debug_info = debug.getinfo(2, "Sn")
-    local file_name = debug_info.source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
-    local func_name = debug_info.name or "<anonymous:"..debug_info.linedefined..">"
-    element.defined_at = file_name..":"..func_name
+    element.defined_at = get_defined_at(3)
     Gui.file_paths[uid] = element.defined_at
     Gui.defines[uid] = element
 
@@ -189,7 +194,7 @@ function Gui._prototype_element:style(style_define)
             end
         end
     else
-        Gui.debug_info[self.uid].style = 'Function'
+        Gui.debug_info[self.uid].style = get_defined_at(style_define)
         self._style = style_define
     end
 

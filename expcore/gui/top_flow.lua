@@ -124,7 +124,7 @@ function Gui.update_top_flow(player)
     -- Get the order to draw the elements in
     local flow_order = Gui.get_top_flow_order(player)
     if #flow_order ~= #Gui.top_elements then
-        error(string.format("Top flow order provider (%s) did not return all elements, expect %d got %d",
+        error(string.format("Top flow order provider (%s) did not return the correct element count, expect %d got %d",
             Gui._top_flow_order_src, #Gui.top_elements, #flow_order
         ))
     end
@@ -162,7 +162,7 @@ function Gui.reorder_top_flow(player)
     -- Get the order to draw the elements in
     local flow_order = Gui.get_top_flow_order(player)
     if #flow_order ~= #Gui.top_elements then
-        error(string.format("Top flow order provider (%s) did not return all elements, expect %d got %d",
+        error(string.format("Top flow order provider (%s) did not return the correct element count, expect %d got %d",
             Gui._top_flow_order_src, #Gui.top_elements, #flow_order
         ))
     end

@@ -109,7 +109,7 @@ function Gui.draw_left_flow(player)
     -- Get the order to draw the elements in
     local flow_order = Gui.get_left_flow_order(player)
     if #flow_order ~= #Gui.left_elements then
-        error(string.format("Left flow order provider (%s) did not return all elements, expect %d got %d",
+        error(string.format("Left flow order provider (%s) did not return the correct element count, expect %d got %d",
             Gui._left_flow_order_src, #Gui.left_elements, #flow_order
         ))
     end
@@ -158,7 +158,7 @@ function Gui.reorder_left_flow(player)
     -- Get the order to draw the elements in
     local flow_order = Gui.get_left_flow_order(player)
     if #flow_order ~= #Gui.left_elements then
-        error(string.format("Left flow order provider (%s) did not return all elements, expect %d got %d",
+        error(string.format("Left flow order provider (%s) did not return the correct element count, expect %d got %d",
             Gui._left_flow_order_src, #Gui.left_elements, #flow_order
         ))
     end
