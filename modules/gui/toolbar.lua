@@ -447,6 +447,7 @@ end)
 
 --- Save the current state of the players toolbar menu
 ToolbarState:on_save(function(player_name, value)
+    if value == nil then return nil end -- Don't save default
     local order, favourites, left_flows = {}, {}, {}
 
     local player = game.get_player(player_name)
