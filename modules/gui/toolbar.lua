@@ -1,6 +1,8 @@
 local Gui = require "expcore.gui" --- @dep expcore.gui
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 
+local playtime_for_update = 3600 * 30
+
 -- Used to store the state of the toolbar when a player leaves
 local ToolbarState = PlayerData.Settings:combine('ToolbarState')
 ToolbarState:set_metadata{
@@ -441,7 +443,12 @@ ToolbarState:on_load(function(player_name, value)
 end)
 
 --- Save the current state of the players toolbar menu
-ToolbarState:on_save(function(player_name, _)
+ToolbarState:on_save(function(player_name, value)
+    -- If they played less than 30 minute dont update the data, helps reduce storage requirements from new players
+    if game.players[player_name].online_time < playtime_for_update then
+        return value
+    end
+
     local order, favourites, left_flows = {}, {}, {}
 
     local player = game.get_player(player_name)
