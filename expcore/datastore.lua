@@ -536,13 +536,16 @@ end)
 ]]
 function Datastore:update(key, callback)
     key = self:serialize(key)
-    local value = self:raw_get(key)
+    local value = self:get(key)
+    local raw_value = self:raw_get(key)
     local old_value = copy(self:raw_get(key))
     local success, new_value = xpcall(callback, update_error, key, value)
     if not success then
         self:raw_set(key, old_value)
     elseif new_value ~= nil then
         self:set(key, new_value)
+    elseif raw_value == nil then
+        self:set(key, value)
     else
         self:raise_event('on_update', key, value, old_value)
         if self.auto_save then self:save(key) end

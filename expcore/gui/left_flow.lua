@@ -227,6 +227,12 @@ function Gui.hide_left_flow(player)
     end
 end
 
+--- Checks if an element is loaded, used internally when the normal left gui assumptions may not hold
+function Gui.left_flow_loaded(player, element_define)
+    local left_flow = Gui.get_left_flow(player)
+    return left_flow[element_define.name] ~= nil
+end
+
 --[[-- Get the element define that is in the left flow, use in events without an element refrence
 @tparam LuaPlayer player the player that you want to get the element for
 @tparam table element_define the element that you want to get

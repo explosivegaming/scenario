@@ -143,6 +143,11 @@ function Gui.update_top_flow(player)
         local allowed = element_define.authenticator
         if type(allowed) == 'function' then allowed = allowed(player) end
         element.visible = allowed or false
+
+        -- If its not visible and there is a left element, then hide it
+        if element_define.left_flow_element and not element.visible and Gui.left_flow_loaded(player, element_define.left_flow_element) then
+            Gui.toggle_left_element(player, element_define.left_flow_element, false)
+        end
     end
 
     -- Check if there are any visible elements in the top flow

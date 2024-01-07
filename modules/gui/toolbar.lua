@@ -1,8 +1,6 @@
 local Gui = require "expcore.gui" --- @dep expcore.gui
 local PlayerData = require 'expcore.player_data' --- @dep expcore.player_data
 
-local playtime_for_update = 3600 * 30
-
 -- Used to store the state of the toolbar when a player leaves
 local ToolbarState = PlayerData.Settings:combine('ToolbarState')
 ToolbarState:set_metadata{
@@ -33,23 +31,27 @@ local function reorder_toolbar_menu(player)
     local frame = Gui.get_left_element(player, toolbar_container)
     local list = frame.container.scroll.list
     local order = ToolbarState:get(player)
+    local last_index = #order
 
     for index, state in ipairs(order) do
         local element_define = Gui.defines[state.element_uid]
 
         -- Switch item order
-        local top_element = list[element_define.name]
-        list.swap_children(index, top_element.get_index_in_parent())
+        local item = list[element_define.name]
+        list.swap_children(index, item.get_index_in_parent())
 
         -- Check if the player is allowed to see the button
         local allowed = element_define.authenticator
         if type(allowed) == 'function' then allowed = allowed(player) end
 
         -- Update the checkbox state and item visibility
-        local checkbox = list[element_define.name].checkbox
         local toolbar_button = Gui.get_top_element(player, element_define)
         toolbar_button.visible = allowed and state.favourite or false
-        checkbox.state = state.favourite
+        item.checkbox.state = state.favourite
+
+        -- Update the state if the move buttons
+        item.move[move_up.name].enabled = index ~= 1
+        item.move[move_down.name].enabled = index ~= last_index
     end
 end
 
@@ -58,7 +60,9 @@ local function move_toolbar_button(player, item, offset)
     local old_index = item.get_index_in_parent()
     local new_index = old_index + offset
 
-    -- Swap the position in the list
+    -- All of below works, but it was replaced by the datastore:on_update handler
+    -- This is likely to be more efficient, but it is required to keep the datastore in sync
+    --[[ Swap the position in the list
     local list = item.parent
     local other_item = list.children[new_index]
     list.swap_children(old_index, new_index)
@@ -92,7 +96,14 @@ local function move_toolbar_button(player, item, offset)
     elseif new_index == last_index then -- Moving into the last index
         other_item.move[move_down.name].enabled = true
         item.move[move_down.name].enabled = false
-    end
+    end]]
+
+    -- Update the datastore state
+    ToolbarState:update(player, function(_, order)
+        local tmp = order[old_index]
+        order[old_index] = order[new_index]
+        order[new_index] = tmp
+    end)
 end
 
 --- Resets the toolbar to its default state when pressed
@@ -218,6 +229,12 @@ end)
         button.toggled = false
         button.enabled = false
     end
+
+    -- Update the datastore state
+    ToolbarState:update(player, function(_, order)
+        local index = element.parent.get_index_in_parent()
+        order[index].favourite = element.state
+    end)
 end)
 
 --- Scrollable list of all toolbar buttons
@@ -386,6 +403,19 @@ Gui.core_defines.show_top_flow:on_click(function(player, _, _)
     Gui.toggle_left_element(player, toolbar_container)
 end)
 
+--- Overwrite the default update top flow
+local _update_top_flow = Gui.update_top_flow
+function Gui.update_top_flow(player)
+    _update_top_flow(player) -- Call the original
+
+    local order = ToolbarState:get(player)
+    for index, state in ipairs(order) do
+        local element_define = Gui.defines[state.element_uid]
+        local top_element = Gui.get_top_element(player, element_define)
+        top_element.visible = top_element.visible and state.favourite or false
+    end
+end
+
 --- When the value updates also update the guis
 ToolbarState:on_update(function(player_name, _)
     local player = game.get_player(player_name)
@@ -446,26 +476,19 @@ end)
 
 --- Save the current state of the players toolbar menu
 ToolbarState:on_save(function(player_name, value)
-    -- If they played less than 30 minute dont update the data, helps reduce storage requirements from new players
-    if game.players[player_name].online_time < playtime_for_update then
-        return value
-    end
-
     local order, favourites, left_flows = {}, {}, {}
 
     local player = game.get_player(player_name)
     local top_flow_open = Gui.get_top_flow(player).parent.visible
-    local frame = Gui.get_left_element(player, toolbar_container)
-    local list = frame.container.scroll.list
 
-    for _, element_define in ipairs(Gui.top_elements) do
+    for index, state in ipairs(value) do
         -- Add the element to the order array
+        local element_define = Gui.defines[state.element_uid]
         local id = to_datastore_id(element_define)
-        local index = list[element_define.name].get_index_in_parent()
         order[index] = id
 
         -- If its a favourite then insert it
-        if list[element_define.name].checkbox.state then
+        if state.favourite then
             table.insert(favourites, id)
         end
 
