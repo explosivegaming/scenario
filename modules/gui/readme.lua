@@ -75,7 +75,7 @@ Gui.element{
 --- Used to connect to servers in server list
 -- @element join_server
 local join_server =
-Gui.element(function(definition, parent, server_id, wrong_version)
+Gui.element(function(_, parent, server_id, wrong_version)
     local status = External.get_server_status(server_id) or 'Offline'
     if wrong_version then status = 'Version' end
     local flow = parent.add{ name = server_id, type = 'flow' }

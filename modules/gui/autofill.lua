@@ -56,7 +56,7 @@ end)
 -- All entity autofill settings will be ignored if its disabled
 -- @element entity_toggle
 local entity_toggle =
-Gui.element(function(definition, parent, entity_name)
+Gui.element(function(_, parent, entity_name)
     return parent.add{
         type = 'sprite-button',
         sprite = 'utility/confirm_slot',
