@@ -248,7 +248,7 @@ Gui.element(function(definition, parent)
     return container.parent
 end)
 :static_name(Gui.unique_static_name)
-:add_to_left_flow(true)
+:add_to_left_flow(false)
 
 --- Set the default value for the datastore
 local datastore_id_map = {}
