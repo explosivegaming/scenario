@@ -290,8 +290,21 @@ end)
 :add_to_left_flow(true)
 
 --- Set the default value for the datastore
+local datastore_id_map = {}
 local toolbar_default_state = {}
 ToolbarState:set_default(toolbar_default_state)
+
+--- Get the datastore id for this element define, to best of ability it should be unique between versions
+local function to_datastore_id(element_define)
+    -- First try to use the tooltip locale string
+    local tooltip = element_define.tooltip
+    if type(tooltip) == "table" then
+        return tooltip[1]:gsub("%.(.+)", "")
+    end
+
+    -- Then try to use the caption or sprite
+    return element_define.caption or element_define.sprite
+end
 
 --- For all top element, register an on click which will copy their style
 for index, element_define in ipairs(Gui.top_elements) do
@@ -307,6 +320,15 @@ for index, element_define in ipairs(Gui.top_elements) do
         local toolbar_button = Gui.get_top_element(player, element_define)
         copy_style(toolbar_button, button)
     end)
+
+    -- Insert the element into the id map
+    local id = to_datastore_id(element_define)
+    if datastore_id_map[id] then
+        error(string.format("All toolbar elements need a unique id to be saved correctly, %d (%s) and %d (%s) share the id %s",
+            datastore_id_map[id].uid, datastore_id_map[id].defined_at, element_define.uid, element_define.defined_at, id
+        ))
+    end
+    datastore_id_map[id] = element_define
 
     -- Add the element to the default state
     table.insert(toolbar_default_state, {
@@ -360,16 +382,6 @@ Gui.core_defines.show_top_flow:on_click(function(player, _, _)
     Gui.toggle_left_element(player, toolbar_container)
 end)
 
---- Get the datastore id for this element define, to best of ability it should be unique between versions
-local function to_datastore_id(element_define)
-    return element_define.uid -- TODO
-end
-
---- Get the element from a datastore id, to best of ability it should be unique between versions
-local function from_datastore_id(datastore_id)
-    return Gui.defines[datastore_id]
-end
-
 --- When the value updates also update the guis
 ToolbarState:on_update(function(player_name, _)
     local player = game.get_player(player_name)
@@ -393,7 +405,7 @@ ToolbarState:on_load(function(player_name, value)
     local elements = {}
     local element_hash = {}
     for index, id in ipairs(value[1]) do
-        local element = from_datastore_id(id)
+        local element = datastore_id_map[id]
         element_hash[element] = true
         elements[index] = {
             element_uid = element.uid,
@@ -411,7 +423,7 @@ ToolbarState:on_load(function(player_name, value)
     -- Create a hash map of the open left flows
     local left_flows = {}
     for _, id in ipairs(value[3]) do
-        local element = from_datastore_id(id)
+        local element = datastore_id_map[id]
         left_flows[element] = true
     end
 
