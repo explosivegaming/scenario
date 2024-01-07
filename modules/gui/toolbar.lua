@@ -427,7 +427,9 @@ ToolbarState:on_load(function(player_name, value)
     local left_flows = {}
     for _, id in ipairs(value[3]) do
         local element = datastore_id_map[id]
-        left_flows[element] = true
+        if element.left_flow_element then
+            left_flows[element.left_flow_element] = true
+        end
     end
 
     -- Set the visible state of all left flows
