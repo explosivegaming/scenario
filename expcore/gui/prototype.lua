@@ -29,9 +29,6 @@ local Gui = {
 --- Allow access to the element prototype methods
 Gui._mt_element.__index = Gui._prototype_element
 
---- Prevents modification at runtime which people might be tempted to attempt
-Gui._mt_element.__new_index = _C.error_if_runtime
-
 --- Allows the define to be called to draw the element
 function Gui._mt_element.__call(self, parent, ...)
     local element, no_events = self._draw(self, parent, ...)
