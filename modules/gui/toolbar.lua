@@ -473,8 +473,7 @@ ToolbarState:on_load(function(player_name, value)
     end
 
     -- Set the toolbar visible state
-    local top_flow = Gui.get_top_flow(player)
-    top_flow.parent.visible = value[4]
+    Gui.toggle_top_flow(player, value[4])
 
     -- Set the data now and update now, ideally this would be on_update but that had too large of a latency
     ToolbarState:raw_set(player_name, elements)
