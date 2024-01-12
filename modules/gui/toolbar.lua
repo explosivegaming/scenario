@@ -475,7 +475,9 @@ ToolbarState:on_load(function(player_name, value)
     -- Set the toolbar visible state
     Gui.toggle_top_flow(player, value[4])
     local frame = Gui.get_left_element(player, toolbar_container)
-    frame.container.header.alignment[toggle_toolbar.name].toggled = value[4]
+    local button = frame.container.header.alignment[toggle_toolbar.name]
+    button.enabled = Gui.top_flow_has_visible_elements(player)
+    button.toggled = value[4]
 
     -- Set the data now and update now, ideally this would be on_update but that had too large of a latency
     ToolbarState:raw_set(player_name, elements)
