@@ -472,18 +472,18 @@ ToolbarState:on_load(function(player_name, value)
         Gui.toggle_left_element(player, left_element, left_flows[left_element] or false)
     end
 
+    -- Set the data now and update now, ideally this would be on_update but that had too large of a latency
+    ToolbarState:raw_set(player_name, elements)
+    Gui.reorder_top_flow(player)
+    Gui.reorder_left_flow(player)
+    reorder_toolbar_menu(player)
+
     -- Set the toolbar visible state
     Gui.toggle_top_flow(player, value[4])
     local frame = Gui.get_left_element(player, toolbar_container)
     local button = frame.container.header.alignment[toggle_toolbar.name]
     button.enabled = Gui.top_flow_has_visible_elements(player)
     button.toggled = value[4]
-
-    -- Set the data now and update now, ideally this would be on_update but that had too large of a latency
-    ToolbarState:raw_set(player_name, elements)
-    Gui.reorder_top_flow(player)
-    Gui.reorder_left_flow(player)
-    reorder_toolbar_menu(player)
 
     return elements
 end)
