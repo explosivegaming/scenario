@@ -31,7 +31,7 @@ local function copy_style(src, dst)
     dst.style.padding = -2
 end
 
-local toolbar_container, move_up, move_down
+local toolbar_container, move_up, move_down, toggle_toolbar
 
 --- Reorder the buttons relative to each other, this will update the datastore
 local function move_toolbar_button(player, item, offset)
@@ -90,6 +90,7 @@ local function reorder_toolbar_menu(player)
     local order = ToolbarState:get(player)
     local last_index = #order
 
+    -- Reorder the buttons
     for index, state in ipairs(order) do
         local element_define = Gui.defines[state.element_uid]
 
@@ -110,6 +111,11 @@ local function reorder_toolbar_menu(player)
         item.move[move_up.name].enabled = index ~= 1
         item.move[move_down.name].enabled = index ~= last_index
     end
+
+    -- Update the state of the toggle button
+    local button = frame.container.header.alignment[toggle_toolbar.name]
+    button.enabled = Gui.top_flow_has_visible_elements(player)
+    button.toggled = Gui.get_top_flow(player).parent.visible
 end
 
 --- Resets the toolbar to its default state when pressed
@@ -125,12 +131,13 @@ Gui.element {
 :style(Gui.sprite_style(Styles.header.width, -1))
 :on_click(function(player)
     ToolbarState:set(player, nil)
+    Gui.toggle_top_flow(player, true)
     reorder_toolbar_menu(player)
 end)
 
 --- Replaces the default method for opening and closing the toolbar
 -- @element toggle_toolbar
-local toggle_toolbar =
+toggle_toolbar =
 Gui.element {
     type = "sprite-button",
     sprite = "utility/bookmark",
@@ -472,18 +479,14 @@ ToolbarState:on_load(function(player_name, value)
         Gui.toggle_left_element(player, left_element, left_flows[left_element] or false)
     end
 
+    -- Set the toolbar visible state
+    Gui.toggle_top_flow(player, value[4])
+
     -- Set the data now and update now, ideally this would be on_update but that had too large of a latency
     ToolbarState:raw_set(player_name, elements)
     Gui.reorder_top_flow(player)
     Gui.reorder_left_flow(player)
     reorder_toolbar_menu(player)
-
-    -- Set the toolbar visible state
-    Gui.toggle_top_flow(player, value[4])
-    local frame = Gui.get_left_element(player, toolbar_container)
-    local button = frame.container.header.alignment[toggle_toolbar.name]
-    button.enabled = Gui.top_flow_has_visible_elements(player)
-    button.toggled = value[4]
 
     return elements
 end)
