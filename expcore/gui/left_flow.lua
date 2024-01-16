@@ -38,8 +38,10 @@ example_flow_with_button:add_to_left_flow(true)
 
 ]]
 function Gui._prototype_element:add_to_left_flow(open_on_join)
+    _C.error_if_runtime()
     if not self.name then error("Elements for the top flow must have a static name") end
-    Gui.left_elements[self] = open_on_join or false
+    self.open_on_join = open_on_join or false
+    table.insert(Gui.left_elements, self)
     return self
 end
 
@@ -60,24 +62,36 @@ function Gui.left_toolbar_button(sprite, tooltip, element_define, authenticator)
     local button = Gui.toolbar_button(sprite, tooltip, authenticator)
 
     -- Add on_click handler to handle click events comming from the player
-    button:on_click(function(player, _,_)
-        local top_flow = Gui.get_top_flow(player)
-        local element = top_flow[button.name]
-        local visibility_state  = Gui.toggle_left_element(player, element_define)
-
+    button:on_click(function(player, _, _)
         -- Raise custom event that tells listening elements if the element has changed visibility by a player clicking
         -- Used in warp gui to handle the keep open logic
-        button:raise_custom_event{
+        button:raise_event{
             name = Gui.events.on_visibility_changed_by_click,
-            element = element,
-            state = visibility_state
+            element = Gui.get_top_element(player, button),
+            state = Gui.toggle_left_element(player, element_define)
         }
     end)
 
     -- Add property to the left flow element with the name of the button
     -- This is for the ability to reverse lookup the button from the left flow element
-    element_define.toolbar_button = button.name
+    element_define.toolbar_button = button
+    button.left_flow_element = element_define
     return button
+end
+
+Gui._left_flow_order_src = "<default>"
+--- Get the order of elements in the left flow, first argument is player but is unused in the default method
+function Gui.get_left_flow_order(_)
+    return Gui.left_elements
+end
+
+--- Inject a custom left flow order provider, this should accept a player and return a list of elements definitions to draw
+function Gui.inject_left_flow_order(provider)
+    Gui.get_left_flow_order = provider
+    local debug_info = debug.getinfo(2, "Sn")
+    local file_name = debug_info.source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+    local func_name = debug_info.name or "<anonymous:"..debug_info.linedefined..">"
+    Gui._left_flow_order_src = file_name..":"..func_name
 end
 
 --[[-- Draw all the left elements onto the left flow, internal use only with on join
@@ -92,22 +106,33 @@ function Gui.draw_left_flow(player)
     local hide_button = left_flow.gui_core_buttons[hide_left_flow]
     local show_hide_button = false
 
-    for element_define, open_on_join in pairs(Gui.left_elements) do
+    -- Get the order to draw the elements in
+    local flow_order = Gui.get_left_flow_order(player)
+    if #flow_order ~= #Gui.left_elements then
+        error(string.format("Left flow order provider (%s) did not return the correct element count, expect %d got %d",
+            Gui._left_flow_order_src, #Gui.left_elements, #flow_order
+        ))
+    end
+
+    for _, element_define in ipairs(flow_order) do
         -- Draw the element to the left flow
         local draw_success, left_element = xpcall(function()
             return element_define(left_flow)
         end, debug.traceback)
 
         if not draw_success then
-            error('There as been an error with an element draw function: '..element_define.defined_at..'\n\t'..left_element)
+            log('There as been an error with an element draw function: '..element_define.defined_at..'\n\t'..left_element)
+            goto continue
         end
 
         -- Check if it should be open by default
+        local open_on_join = element_define.open_on_join
         local visible = type(open_on_join) == 'boolean' and open_on_join or false
         if type(open_on_join) == 'function' then
-            local success, err = pcall(open_on_join, player)
+            local success, err = xpcall(open_on_join, debug.traceback, player)
             if not success then
-                error('There as been an error with an open on join hander for a gui element:\n\t'..err)
+                log('There as been an error with an open on join hander for a gui element:\n\t'..err)
+                goto continue
             end
             visible = err
         end
@@ -116,21 +141,33 @@ function Gui.draw_left_flow(player)
         left_element.visible = visible
         show_hide_button = show_hide_button or visible
 
-        -- Get the assosiated element define
-        local top_flow = Gui.get_top_flow(player)
-
         -- Check if the the element has a button attached
         if element_define.toolbar_button then
-            -- Check if the topflow contains the button
-            local button = top_flow[element_define.toolbar_button]
-            if button then
-                -- Style the button
-                Gui.toolbar_button_style(button, visible)
-            end
+            Gui.toggle_toolbar_button(player, element_define.toolbar_button, visible)
         end
+        ::continue::
     end
 
     hide_button.visible = show_hide_button
+end
+
+--- Reorder the left flow elements to match that returned by the provider, uses a method equivalent to insert sort
+function Gui.reorder_left_flow(player)
+    local left_flow = Gui.get_left_flow(player)
+
+    -- Get the order to draw the elements in
+    local flow_order = Gui.get_left_flow_order(player)
+    if #flow_order ~= #Gui.left_elements then
+        error(string.format("Left flow order provider (%s) did not return the correct element count, expect %d got %d",
+            Gui._left_flow_order_src, #Gui.left_elements, #flow_order
+        ))
+    end
+
+    -- Reorder the elements, index 1 is the core ui buttons so +1 is required
+    for index, element_define in ipairs(flow_order) do
+        local element = left_flow[element_define.name]
+        left_flow.swap_children(index+1, element.get_index_in_parent())
+    end
 end
 
 --[[-- Update the visible state of the hide button, can be used to check if any frames are visible
@@ -144,7 +181,7 @@ local visible = Gui.update_left_flow(player)
 function Gui.update_left_flow(player)
     local left_flow = Gui.get_left_flow(player)
     local hide_button = left_flow.gui_core_buttons[hide_left_flow]
-    for element_define, _ in pairs(Gui.left_elements) do
+    for _, element_define in ipairs(Gui.left_elements) do
         local left_element = left_flow[element_define.name]
         if left_element.visible then
             hide_button.visible = true
@@ -169,20 +206,18 @@ function Gui.hide_left_flow(player)
 
     -- Set the visible state of all elements in the flow
     hide_button.visible = false
-    for element_define, _ in pairs(Gui.left_elements) do
+    for _, element_define in ipairs(Gui.left_elements) do
         left_flow[element_define.name].visible = false
 
         -- Check if the the element has a toobar button attached
         if element_define.toolbar_button then
             -- Check if the topflow contains the button
-            local button = top_flow[element_define.toolbar_button]
+            local button = top_flow[element_define.toolbar_button.name]
             if button then
                 -- Style the button
-                Gui.toolbar_button_style(button, false)
-                -- Get the button define from the reverse lookup on the element
-                local button_define = Gui.defines[element_define.toolbar_button]
+                Gui.toggle_toolbar_button(player, element_define.toolbar_button, false)
                 -- Raise the custom event if all of the top checks have passed
-                button_define:raise_custom_event{
+                element_define.toolbar_button:raise_event{
                     name = Gui.events.on_visibility_changed_by_click,
                     element = button,
                     state = false
@@ -190,6 +225,12 @@ function Gui.hide_left_flow(player)
             end
         end
     end
+end
+
+--- Checks if an element is loaded, used internally when the normal left gui assumptions may not hold
+function Gui.left_flow_loaded(player, element_define)
+    local left_flow = Gui.get_left_flow(player)
+    return left_flow[element_define.name] ~= nil
 end
 
 --[[-- Get the element define that is in the left flow, use in events without an element refrence
@@ -203,7 +244,7 @@ local frame = Gui.get_left_element(game.player, example_flow_with_button)
 ]]
 function Gui.get_left_element(player, element_define)
     local left_flow = Gui.get_left_flow(player)
-    return left_flow[element_define.name]
+    return assert(left_flow[element_define.name], "Left element failed to load")
 end
 
 --[[-- Toggles the visible state of a left element for a given player, can be used to set the visible state
@@ -220,23 +261,15 @@ Gui.toggle_top_flow(game.player, example_flow_with_button, true)
 
 ]]
 function Gui.toggle_left_element(player, element_define, state)
-    local left_flow = Gui.get_left_flow(player)
-    local top_flow = Gui.get_top_flow(player)
-
     -- Set the visible state
-    local element = left_flow[element_define.name]
+    local element = Gui.get_left_element(player, element_define)
     if state == nil then state = not element.visible end
     element.visible = state
     Gui.update_left_flow(player)
 
     -- Check if the the element has a button attached
     if element_define.toolbar_button then
-        -- Check if the topflow contains the button
-        local button = top_flow[element_define.toolbar_button]
-        if button then
-            -- Style the button
-            Gui.toolbar_button_style(button, state)
-        end
+        Gui.toggle_toolbar_button(player, element_define.toolbar_button, state)
     end
     return state
 end

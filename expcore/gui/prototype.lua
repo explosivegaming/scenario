@@ -23,19 +23,45 @@ local Gui = {
     --- The prototype used to store the functions of an element define
     _prototype_element = {},
     --- The prototype metatable applied to new element defines
-    _mt_element = {
-        __call = function(self, parent, ...)
-            local element = self._draw(self, parent, ...)
-            if self._style then self._style(element.style, element, ...) end
-            if self.name and self.name ~= element.name then
-                error("Static name \""..self.name.."\" expected but got: "..tostring(element.name))
-            end
-            return element and self:triggers_events(element)
-        end
-    }
+    _mt_element = {}
 }
 
+--- Allow access to the element prototype methods
 Gui._mt_element.__index = Gui._prototype_element
+
+--- Allows the define to be called to draw the element
+function Gui._mt_element.__call(self, parent, ...)
+    local element, no_events = self._draw(self, parent, ...)
+    if self._style then self._style(element.style, element, ...) end
+
+    -- Asserts to catch common errors
+    if element then
+        if self.name and self.name ~= element.name then
+            error("Static name \""..self.name.."\" expected but got: "..tostring(element.name))
+        end
+        local event_triggers = element.tags and element.tags.ExpGui_event_triggers
+        if event_triggers and table.array_contains(event_triggers, self.uid) then
+            error("Element::triggers_events should not be called on the value you return from the definition")
+        end
+    elseif self.name then
+        error("Static name \""..self.name.."\" expected but no element was returned from the definition")
+    end
+
+    -- Register events by default, but allow skipping them
+    if no_events == self.no_events then
+        return element
+    else
+        return element and self:triggers_events(element)
+    end
+end
+
+--- Get where a function was defined as a string
+local function get_defined_at(level)
+    local debug_info = debug.getinfo(level, "Sn")
+    local file_name = debug_info.source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
+    local func_name = debug_info.name or "<anonymous:"..debug_info.linedefined..">"
+    return file_name..":"..func_name
+end
 
 --- Element Define.
 -- @section elementDefine
@@ -97,20 +123,21 @@ function Gui.element(element_define)
         if element_define.name == Gui.unique_static_name then
             element_define.name = "ExpGui_"..tostring(uid)
         end
-        element.name = element_define.name
+        for k, v in pairs(element_define) do
+            if element[k] == nil then
+                element[k] = v
+            end
+        end
         element._draw = function(_, parent)
             return parent.add(element_define)
         end
     else
-        Gui.debug_info[uid].draw = 'Function'
+        Gui.debug_info[uid].draw = get_defined_at(element_define)
         element._draw = element_define
     end
 
     -- Add the define to the base module
-    local debug_info = debug.getinfo(2, "Sn")
-    local file_name = debug_info.source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
-    local func_name = debug_info.name or "<anonymous:"..debug_info.linedefined..">"
-    element.defined_at = file_name..":"..func_name
+    element.defined_at = get_defined_at(3)
     Gui.file_paths[uid] = element.defined_at
     Gui.defines[uid] = element
 
@@ -154,6 +181,7 @@ end)
 
 ]]
 function Gui._prototype_element:style(style_define)
+    _C.error_if_runtime()
     -- Add the definition function
     if type(style_define) == 'table' then
         Gui.debug_info[self.uid].style = style_define
@@ -163,7 +191,7 @@ function Gui._prototype_element:style(style_define)
             end
         end
     else
-        Gui.debug_info[self.uid].style = 'Function'
+        Gui.debug_info[self.uid].style = get_defined_at(style_define)
         self._style = style_define
     end
 
@@ -176,6 +204,7 @@ end
 @treturn table the element define is returned to allow for event handlers to be registered
 ]]
 function Gui._prototype_element:static_name(name)
+    _C.error_if_runtime()
     if name == Gui.unique_static_name then
         self.name = "ExpGui_"..tostring(self.uid)
     else
@@ -185,16 +214,20 @@ function Gui._prototype_element:static_name(name)
 end
 
 --[[-- Used to link an element to an element define such that any event on the element will call the handlers on the element define
+-- You should not call this on the element you return from your constructor because this is done automatically
 @tparam LuaGuiElement element The element that will trigger calls to the event handlers
 @treturn LuaGuiElement The element passed as the argument to allow for cleaner returns
 ]]
 function Gui._prototype_element:triggers_events(element)
+    if not self._has_events then return element end
     local tags = element.tags
     if not tags then
         element.tags = { ExpGui_event_triggers = { self.uid } }
         return element
     elseif not tags.ExpGui_event_triggers then
         tags.ExpGui_event_triggers = { self.uid }
+    elseif table.array_contains(tags.ExpGui_event_triggers, self.uid) then
+        error("Element::triggers_events called multiple times on the same element with the same definition")
     else
         table.insert(tags.ExpGui_event_triggers, self.uid)
     end
@@ -203,21 +236,28 @@ function Gui._prototype_element:triggers_events(element)
     return element
 end
 
+--- Explicitly skip events on the element returned by your definition function
+function Gui._prototype_element:no_events(element)
+    return element, self.no_events
+end
+
 --[[-- Set the handler which will be called for a custom event, only one handler can be used per event per element
 @tparam string event_name the name of the event you want to handler to be called on, often from Gui.events
 @tparam function handler the handler that you want to be called when the event is raised
 @treturn table the element define so more handleres can be registered
 
 @usage-- Register a handler to "my_custom_event" for this element
-element_deinfe:on_custom_event('my_custom_event', function(event)
+element_deinfe:on_event('my_custom_event', function(event)
     event.player.print(player.name)
 end)
 
 ]]
-function Gui._prototype_element:on_custom_event(event_name, handler)
+function Gui._prototype_element:on_event(event_name, handler)
+    _C.error_if_runtime()
     table.insert(Gui.debug_info[self.uid].events, event_name)
     Gui.events[event_name] = event_name
     self[event_name] = handler
+    self._has_events = true
     return self
 end
 
@@ -226,13 +266,13 @@ end
 @treturn table the element define so more events can be raised
 
 @usage Raising a custom event
-element_define:raise_custom_event{
+element_define:raise_event{
     name = 'my_custom_event',
     element = element
 }
 
 ]]
-function Gui._prototype_element:raise_custom_event(event)
+function Gui._prototype_element:raise_event(event)
     -- Check the element is valid
     local element = event.element
     if not element or not element.valid then
@@ -270,15 +310,14 @@ local function event_handler_factory(event_name)
         for _, uid in pairs(event_triggers) do
             local element_define = Gui.defines[uid]
             if element_define then
-                element_define:raise_custom_event(event)
+                element_define:raise_event(event)
             end
         end
     end)
 
+    Gui.events[event_name] = event_name
     return function(self, handler)
-        table.insert(Gui.debug_info[self.uid].events, debug.getinfo(1, "n").name)
-        self[event_name] = handler
-        return self
+        return self:on_event(event_name, handler)
     end
 end
 

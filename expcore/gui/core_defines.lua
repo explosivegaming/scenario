@@ -25,7 +25,7 @@ Gui.element{
     height = 36
 }
 :on_click(function(player, _,_)
-    Gui.toggle_top_flow(player)
+    Gui.toggle_top_flow(player, false)
 end)
 Gui.core_defines.hide_top_flow = hide_top_flow
 
@@ -45,7 +45,7 @@ Gui.element{
     height = 20
 }
 :on_click(function(player, _,_)
-    Gui.toggle_top_flow(player)
+    Gui.toggle_top_flow(player, true)
 end)
 Gui.core_defines.show_top_flow = show_top_flow
 

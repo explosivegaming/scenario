@@ -288,6 +288,7 @@ local default = Roles.new_role('Guest','')
     'gui/readme',
     'gui/vlayer',
     'gui/research',
+    'gui/autofill',
     'gui/module'
 }
 

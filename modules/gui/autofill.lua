@@ -6,6 +6,7 @@
 
 local Game = require 'utils.game' -- @dep utils.game
 local Gui = require 'expcore.gui' -- @dep expcore.gui
+local Roles = require 'expcore.roles' -- @dep expcore.gui
 local Global = require 'utils.global' -- @dep utils.global
 local config = require 'config.gui.autofill' -- @dep config.gui.autofill
 local Event = require 'utils.event' -- @dep utils.event
@@ -54,13 +55,14 @@ end)
 --- Toggle enitity button, used for toggling autofill for the specific entity
 -- All entity autofill settings will be ignored if its disabled
 -- @element entity_toggle
-local entity_toggle = Gui.element(function(definition, parent, entity_name)
-    return definition:triggers_events(parent.add{
+local entity_toggle =
+Gui.element(function(_, parent, entity_name)
+    return parent.add{
         type = 'sprite-button',
         sprite = 'utility/confirm_slot',
         tooltip = {'autofill.toggle-entity-tooltip', rich_img('item', entity_name)},
         style = 'shortcut_bar_button_green'
-    })
+    }
 end)
 :style(Gui.sprite_style(22))
 :on_click(function(player, element, _)
@@ -112,11 +114,11 @@ Gui.element(function(definition, parent, section_name, table_size)
 
     section_table.visible = false
 
-    return section_table
+    return definition:no_events(section_table)
 end)
 :on_click(function(_, element, event)
     event.element = element.parent.alignment[toggle_section.name]
-    toggle_section:raise_custom_event(event)
+    toggle_section:raise_event(event)
 end)
 
 --- Toggle item button, used for toggling autofill for the specific item
@@ -294,7 +296,9 @@ end)
 
 --- Button on the top flow used to toggle autofill container
 -- @element autofill_toggle
-Gui.left_toolbar_button(config.icon, {'autofill.main-tooltip'}, autofill_container)
+Gui.left_toolbar_button(config.icon, {'autofill.main-tooltip'}, autofill_container, function(player)
+	return Roles.player_allowed(player, 'gui/autofill')
+end)
 
 --- When a player is created make sure they have the default autofill settings
 Event.add(defines.events.on_player_created, function(event)

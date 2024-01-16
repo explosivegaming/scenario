@@ -467,11 +467,11 @@ Gui.element(function(definition, parent, section_name, table_size)
 	scroll_table.parent.visible = false
 
 	-- Return the flow table
-	return scroll_table
+	return definition:no_events(scroll_table)
 end)
 :on_click(function(_, element, event)
 	event.element = element.parent.alignment[toggle_section.name]
-	toggle_section:raise_custom_event(event)
+	toggle_section:raise_event(event)
 end)
 
 --- Main gui container for the left flow

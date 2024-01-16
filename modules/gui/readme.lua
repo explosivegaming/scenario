@@ -75,16 +75,16 @@ Gui.element{
 --- Used to connect to servers in server list
 -- @element join_server
 local join_server =
-Gui.element(function(definition, parent, server_id, wrong_version)
+Gui.element(function(_, parent, server_id, wrong_version)
     local status = External.get_server_status(server_id) or 'Offline'
     if wrong_version then status = 'Version' end
     local flow = parent.add{ name = server_id, type = 'flow' }
-    local button = definition:triggers_events(flow.add{
+    local button = flow.add{
         type = 'sprite-button',
         sprite = 'utility/circuit_network_panel_white', --- network panel white, warning white, download white
         hovered_sprite = 'utility/circuit_network_panel_black', --- network panel black, warning black, download black
         tooltip = {'readme.servers-connect-'..status, wrong_version}
-    })
+    }
 
     if status == 'Offline' or status == 'Current' then
         button.enabled = false
@@ -438,12 +438,10 @@ Gui.element(function(definition, parent)
 end)
 :static_name(Gui.unique_static_name)
 :on_open(function(player)
-    local toggle_button = Gui.get_top_element(player, readme_toggle)
-    Gui.toolbar_button_style(toggle_button, true)
+    Gui.toggle_toolbar_button(player, readme_toggle, true)
 end)
 :on_close(function(player, element)
-    local toggle_button = Gui.get_top_element(player, readme_toggle)
-    Gui.toolbar_button_style(toggle_button, false)
+    Gui.toggle_toolbar_button(player, readme_toggle, false)
     Gui.destroy_if_valid(element)
 end)
 

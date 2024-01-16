@@ -106,14 +106,12 @@ follow_label =
 Gui.element(function(definition, parent, target)
     Gui.destroy_if_valid(parent[definition.name])
 
-    local label = definition:triggers_events(
-        parent.add{
-            type = 'label',
-            style = 'heading_1_label',
-            caption = 'Following '..target.name..'.\nClick here or press esc to stop following.',
-            name = definition.name
-        }
-    )
+    local label = parent.add{
+        type = 'label',
+        style = 'heading_1_label',
+        caption = 'Following '..target.name..'.\nClick here or press esc to stop following.',
+        name = definition.name
+    }
 
     local player = Gui.get_player_from_element(parent)
     local res = player.display_resolution
