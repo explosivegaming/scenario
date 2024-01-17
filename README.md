@@ -70,7 +70,7 @@ About our versioning and branch structure:
 
 | Release* | Release Name | Factorio Version** |
 |---|---|---|
-| [6.3][s6.3] | Mega Feature Bundle | [1.1.101][f1.1.101] |
+| [6.3][s6.3] | Feature Bundle 2: Electric Boogaloo | [1.1.101][f1.1.101] |
 | [6.2][s6.2] | Mega Feature Bundle | [1.1.32][f1.1.32] |
 | [6.1][s6.1] | External Data Overhaul | [1.0.0][f1.0.0] |
 | [6.0][s6.0] | Gui / 0.18 Overhaul | [0.18.17][f0.18.17] |
