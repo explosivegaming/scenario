@@ -24,23 +24,23 @@
 
 ## Explosive Gaming
 
-Explosive Gaming (often ExpGaming) is a server hosting community with a strong focus on [Factorio][factorio] and games with similar themes. We are best known for our weekly reset Factorio server with a vanilla+ scenario. Although our servers tend to attract the more experienced players, our servers are open to everyone. You can find us through our [website], [discord], or the public server list with the name ExpGaming.
+Explosive Gaming (often ExpGaming) is a server hosting community with a strong focus on [Factorio][factorio] and games with similar themes. We are best known for our weekly reset Factorio server with a vanilla+ scenario where we add new features and mechanics that are balanced with base game progression. Although our servers tend to attract the more experienced players, our servers are open to everyone. You can find us through our [website], [discord], or the public server list with the name ExpGaming.
 
 ## Use and Installation
 
-1) Download our [git repository][stable-dl] for the stable release. For the latest features you can download our [dev branch][experimental-dl]. See [releases](#releases) for other major releases.
+1) Download our [git repository][experimental-dl] for the latest version. For a stable release you can download from our [stable branch][stable-dl]. See [releases](#releases) for other major releases.
 
 2) Extract the downloaded zip file into your Factorio scenario directory:
     * Windows: `%appdata%\Factorio\scenarios`
     * Linux: `~/.factorio/scenarios`
 
-3) Within the scenario you can find `./config/_file_loader.lua` which contains a list of all the modules which will be loaded by the scenario. Comment out (or remove) features you do not want. Be aware modules may load other modules as dependencies even when removed from the list.
+3) Within the scenario you can find `./config/_file_loader.lua` which contains a list of all the modules which will be loaded by the scenario. Comment out (or delete) lines for features you do not want. Be aware modules may load other modules as dependencies even when removed from the list.
 
-4) More advanced users can adjust other configs files within `./config` but please be aware some files will require a basic understanding of lua.
+4) More advanced users can adjust other configs files within `./config` but some files will require a basic understanding of lua.
 
-5) Once you have made your config changes: open Factorio, select either single or multiplayer, select (host) new game, and finally select our scenario which will be called `scenario-master` or `scenario-dev` under user scenarios.
+5) Once you have made your config changes: open Factorio, select either single or multiplayer, select (host) new game, and finally select our scenario which will be called `scenario-stable` or `scenario-dev` under user scenarios.
 
-6) You will now be asked to generate your map and the scenario will load all selected modules. If any module does not load as expected please check `factorio-current.log` in your Factorio directory for errors and report them to our [issues page][issues].
+6) You will now be asked to generate your map and the scenario will load all selected modules. If any module does not load as expected please check `factorio-current.log` in your Factorio directory for errors and report them on our [issues page][issues].
 
 ## Contributing
 
@@ -57,10 +57,20 @@ For developers wanting to add features please follow these guidelines:
 * Bug fixes should have the branch names: `fix/bug-name`
 * Commits should have meaningful messages.
 
+About our versioning and branch structure:
+
+* Versions track changes to the stable branch and are managed by organisation members.
+* Versions to not track changes on the dev branch which may contain some critical bugs.
+* Other branches may exist for alternative version of our scenario, these are not versioned.
+* Major releases contain significant changes to core modules.
+* Minor releases contain many new features and bug fixes.
+* Patch releases are only used for critical bugs.
+
 ## Releases
 
 | Release* | Release Name | Factorio Version** |
 |---|---|---|
+| [6.3][s6.3] | Mega Feature Bundle | [1.1.101][f1.1.101] |
 | [6.2][s6.2] | Mega Feature Bundle | [1.1.32][f1.1.32] |
 | [6.1][s6.1] | External Data Overhaul | [1.0.0][f1.0.0] |
 | [6.0][s6.0] | Gui / 0.18 Overhaul | [0.18.17][f0.18.17] |
@@ -85,6 +95,7 @@ For developers wanting to add features please follow these guidelines:
 
 \*\* Factorio versions show the version they were made for, often the minimum requirement to run the scenario.
 
+[s6.3]: https://github.com/explosivegaming/scenario/releases/tag/6.3.0
 [s6.2]: https://github.com/explosivegaming/scenario/releases/tag/6.2.0
 [s6.1]: https://github.com/explosivegaming/scenario/releases/tag/6.1.0
 [s6.0]: https://github.com/explosivegaming/scenario/releases/tag/6.0.0
@@ -105,6 +116,7 @@ For developers wanting to add features please follow these guidelines:
 [s1.0]: https://github.com/explosivegaming/scenario/releases/tag/v1.0
 [s0.1]: https://github.com/explosivegaming/scenario/releases/tag/v0.1
 
+[f1.1.101]: https://wiki.factorio.com/Version_history/1.1.0#1.1.101
 [f1.1.32]: https://wiki.factorio.com/Version_history/1.1.0#1.1.32
 [f1.0.0]: https://wiki.factorio.com/Version_history/1.0.0#1.0.0
 [f0.18.17]: https://wiki.factorio.com/Version_history/0.18.0#0.18.17

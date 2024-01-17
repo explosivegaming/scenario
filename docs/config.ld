@@ -2,7 +2,7 @@ file = { '../', exclude = { '../.install', '../.lua', '../.luarocks' } }
 dir = '../docs'
 project = 'ExpGaming Scenario'
 title = 'ExpGaming Scenario'
-description = 'Explosive Gaming\'s server scenario for 0.18'
+description = 'Explosive Gaming\'s server scenario for factorio 1.1.101'
 
 convert_opt = true
 sort = false
