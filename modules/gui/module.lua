@@ -1,5 +1,5 @@
 ---- module inserter
--- @addon module
+-- @gui Module
 
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Event = require 'utils.event' --- @dep utils.event

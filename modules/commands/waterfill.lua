@@ -1,5 +1,5 @@
 --- Adds a waterfill
--- @addon Virtual Waterfill
+-- @commands Waterfill
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'

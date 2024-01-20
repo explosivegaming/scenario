@@ -1,5 +1,5 @@
 ---- module pd
--- @addon pd
+-- @gui PlayerData
 
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
