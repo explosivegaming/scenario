@@ -1,5 +1,5 @@
 --- Adds a virtual layer to store power to save space.
--- @addon Vlayer
+-- @commands Vlayer
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
