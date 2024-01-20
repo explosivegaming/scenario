@@ -1,5 +1,5 @@
 --- research milestone gui
--- @addon research milestone
+-- @gui Research
 
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Global = require 'utils.global' --- @dep utils.global
