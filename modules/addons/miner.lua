@@ -102,39 +102,37 @@ local function miner_check(entity)
 
     local pipe_build = {}
 
-    if entity.fluidbox and #entity.fluidbox > 0 then
+    if config.fluid and entity.fluidbox and #entity.fluidbox > 0 then
         -- if require fluid to mine
-        if config.fluid then
-            table.insert(pipe_build, {x=0, y=0})
+        table.insert(pipe_build, {x=0, y=0})
 
-            local half = math.floor(entity.get_radius())
-            radius = 1 + entity.prototype.mining_drill_radius
+        local half = math.floor(entity.get_radius())
+        radius = 1 + entity.prototype.mining_drill_radius
 
-            local entities = entity.surface.find_entities_filtered{area={{entity.position.x - radius, entity.position.y - radius}, {entity.position.x + radius, entity.position.y + radius}}, type={'mining-drill', 'pipe', 'pipe-to-ground'}}
-            local entities_t = entity.surface.find_entities_filtered{area={{entity.position.x - radius, entity.position.y - radius}, {entity.position.x + radius, entity.position.y + radius}}, ghost_type={'pipe', 'pipe-to-ground'}}
+        local entities = entity.surface.find_entities_filtered{area={{entity.position.x - radius, entity.position.y - radius}, {entity.position.x + radius, entity.position.y + radius}}, type={'mining-drill', 'pipe', 'pipe-to-ground'}}
+        local entities_t = entity.surface.find_entities_filtered{area={{entity.position.x - radius, entity.position.y - radius}, {entity.position.x + radius, entity.position.y + radius}}, ghost_type={'pipe', 'pipe-to-ground'}}
 
-            table.array_insert(entities, entities_t)
+        table.array_insert(entities, entities_t)
 
-            for _, e in pairs(entities) do
-                if (e.position.x > entity.position.x) and (e.position.y == entity.position.y) then
-                    for h=1, half do
-                        table.insert(pipe_build, {x=h, y=0})
-                    end
+        for _, e in pairs(entities) do
+            if (e.position.x > entity.position.x) and (e.position.y == entity.position.y) then
+                for h=1, half do
+                    table.insert(pipe_build, {x=h, y=0})
+                end
 
-                elseif (e.position.x < entity.position.x) and (e.position.y == entity.position.y) then
-                    for h=1, half do
-                        table.insert(pipe_build, {x=-h, y=0})
-                    end
+            elseif (e.position.x < entity.position.x) and (e.position.y == entity.position.y) then
+                for h=1, half do
+                    table.insert(pipe_build, {x=-h, y=0})
+                end
 
-                elseif (e.position.x == entity.position.x) and (e.position.y > entity.position.y) then
-                    for h=1, half do
-                        table.insert(pipe_build, {x=0, y=h})
-                    end
+            elseif (e.position.x == entity.position.x) and (e.position.y > entity.position.y) then
+                for h=1, half do
+                    table.insert(pipe_build, {x=0, y=h})
+                end
 
-                elseif (e.position.x == entity.position.x) and (e.position.y < entity.position.y) then
-                    for h=1, half do
-                        table.insert(pipe_build, {x=0, y=-h})
-                    end
+            elseif (e.position.x == entity.position.x) and (e.position.y < entity.position.y) then
+                for h=1, half do
+                    table.insert(pipe_build, {x=0, y=-h})
                 end
             end
         end
