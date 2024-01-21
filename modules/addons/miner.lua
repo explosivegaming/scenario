@@ -52,20 +52,14 @@ local function chest_entity(entity)
     return false
 end
 
-local function chest_check(entity)
-    local target = drop_target(entity)
-
-    if chest_entity(entity) then
-        return
-    end
-
+local function chest_check(entity, target)
     if target.type ~= 'logistic-container' and target.type ~= 'container' then
         -- not a chest
         return
     end
 
-    local radius = 1 + entity.prototype.mining_drill_radius
-    local entities = entity.surface.find_entities_filtered{area={{entity.position.x - radius, entity.position.y - radius}, {entity.position.x + radius, entity.position.y + radius}}, type={'mining-drill', 'inserter'}}
+    local radius = 2
+    local entities = target.surface.find_entities_filtered{area={{target.position.x - radius, target.position.y - radius}, {target.position.x + radius, target.position.y + radius}}, type={'mining-drill', 'inserter'}}
 
     for _, e in pairs(entities) do
         if drop_target(e) == target then
@@ -96,7 +90,7 @@ local function miner_check(entity)
         end
     end
 
-    if chest_entity(entity) then
+    if chest_entity(drop_target(entity)) then
         return
     end
 
@@ -141,7 +135,7 @@ local function miner_check(entity)
     table.insert(miner_data.queue, {t=game.tick + 5, e=entity})
 
     if config.chest then
-        chest_check(entity)
+        chest_check(entity, drop_target(entity))
     end
 
     for _, pos in ipairs(pipe_build) do
