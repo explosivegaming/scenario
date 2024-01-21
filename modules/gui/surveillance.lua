@@ -1,5 +1,5 @@
 ---- module surveillance
--- @addon surveillance
+-- @gui surveillance
 
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
