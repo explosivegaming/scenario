@@ -23,7 +23,7 @@ local function drop_target(entity)
     end
 end
 
-local function chest_entity(entity)
+local function check_entity(entity)
     if entity.to_be_deconstructed(entity.force) then
         -- if it is already waiting to be deconstruct
         return true
@@ -52,7 +52,13 @@ local function chest_entity(entity)
     return false
 end
 
-local function chest_check(entity, target)
+local function chest_check(entity)
+    local target = drop_target(entity)
+
+    if check_entity(entity) then
+        return
+    end
+
     if target.type ~= 'logistic-container' and target.type ~= 'container' then
         -- not a chest
         return
@@ -69,7 +75,9 @@ local function chest_check(entity, target)
         end
     end
 
-    table.insert(miner_data.queue, {t=game.tick + 10, e=target})
+    if check_entity(target) then
+        table.insert(miner_data.queue, {t=game.tick + 10, e=target})
+    end
 end
 
 local function miner_check(entity)
@@ -90,7 +98,7 @@ local function miner_check(entity)
         end
     end
 
-    if chest_entity(drop_target(entity)) then
+    if check_entity(drop_target(entity)) then
         return
     end
 
@@ -132,10 +140,12 @@ local function miner_check(entity)
         end
     end
 
-    table.insert(miner_data.queue, {t=game.tick + 5, e=entity})
+    if check_entity(entity) then
+        table.insert(miner_data.queue, {t=game.tick + 5, e=entity})
+    end
 
     if config.chest then
-        chest_check(entity, drop_target(entity))
+        chest_check(entity)
     end
 
     for _, pos in ipairs(pipe_build) do
