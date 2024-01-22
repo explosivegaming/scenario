@@ -98,7 +98,7 @@ local function miner_check(entity)
         end
     end
 
-    if check_entity(drop_target(entity)) then
+    if check_entity(entity) then
         return
     end
 
@@ -140,9 +140,7 @@ local function miner_check(entity)
         end
     end
 
-    if check_entity(entity) then
-        table.insert(miner_data.queue, {t=game.tick + 5, e=entity})
-    end
+    table.insert(miner_data.queue, {t=game.tick + 5, e=entity})
 
     if config.chest then
         chest_check(entity)
