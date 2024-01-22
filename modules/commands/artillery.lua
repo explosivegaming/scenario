@@ -61,7 +61,7 @@ Selection.on_selection(SelectionArtyArea, function(event)
         end
 
         if not skip then
-            player.surface.create_entity{name='artillery-flare', position=e.position, force=player.force, life_time=120, movement={0, 0}, height=0, vertical_speed=0, frame_speed=0}
+            player.surface.create_entity{name='artillery-flare', position=e.position, force=player.force, life_time=240, movement={0, 0}, height=0, vertical_speed=0, frame_speed=0}
             table.insert(hit, e.position)
             count = count + 1
 

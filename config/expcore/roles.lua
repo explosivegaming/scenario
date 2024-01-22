@@ -230,7 +230,7 @@ Roles.new_role('Member','Mem')
     'gui/vlayer-edit',
     'command/personal-logistic',
     'command/auto-research',
-    'command/manual-train',
+    'command/set-trains-to-automatic',
     'command/lawnmower',
     'command/waterfill',
     'command/artillery-target-remote',
