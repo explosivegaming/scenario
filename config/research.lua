@@ -3,6 +3,7 @@
 
 return {
     enabled = true,
+    pollution_ageing_by_research = false,
     queue_amount = 3,
     bonus = {
         enabled = false,
