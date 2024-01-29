@@ -50,7 +50,7 @@ local function research_notification(event)
         end
 
         if not (event.by_script) then
-            game.print{'expcom-res.inf', format_time(game.tick, research_time_format), event.research.name, event.research.level}
+            game.print{'expcom-res.inf', format_time(game.tick, research_time_format), event.research.name, event.research.level - 1}
         end
     else
         if not (event.by_script) then
