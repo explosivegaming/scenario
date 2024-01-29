@@ -13,10 +13,12 @@ Commands.new_command('lawnmower', 'Clean up biter corpse, decoratives and nuclea
 
     player.surface.destroy_decoratives({position=player.position, radius=range})
 
-	local entities = player.surface.find_entities_filtered{position=player.position, radius=range, type='corpse', name={'transport-caution-corpse', 'invisible-transport-caution-corpse'}}
+	local entities = player.surface.find_entities_filtered{position=player.position, radius=range, type='corpse'}
 
 	for _, entity in pairs(entities) do
-		entity.destroy()
+		if not (entity.name == 'transport-caution-corpse') and not (entity.name == 'invisible-transport-caution-corpse') then
+			entity.destroy()
+		end
 	end
 
 	local tiles = player.surface.find_tiles_filtered{position=player.position, radius=range, name={'nuclear-ground'}}
