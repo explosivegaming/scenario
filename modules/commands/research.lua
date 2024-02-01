@@ -43,7 +43,7 @@ local function research_notification(event)
     end
 
     if is_inf_res then
-        if event.research.name == 'mining-productivity-4' and event.research.force.technologies['mining-productivity-4'].level > 4 then
+        if event.research.name == 'mining-productivity-4' and event.research.level > 4 then
             if config.bonus.enabled then
                 event.research.force[config.bonus.name] = base_rate + event.research.level * config.bonus.rate
             end
