@@ -13,7 +13,12 @@ Commands.new_command('spectate', 'Toggles spectator mode')
 :register(function(player)
     if Spectate.is_spectating(player) then
         Spectate.stop_spectate(player)
+
     else
+        if Spectate.is_following(player) then
+            Spectate.stop_follow(player)
+        end
+
         Spectate.start_spectate(player)
     end
 end)
@@ -27,7 +32,12 @@ Commands.new_command('follow', 'Start following a player in spectator')
 :register(function(player, action_player)
     if player == action_player then
        return Commands.error{'expcom-spectate.follow-self'}
+
     else
+        if Spectate.is_spectating(player) then
+            Spectate.stop_spectate(player)
+        end
+
         Spectate.start_follow(player, action_player)
     end
 end)
