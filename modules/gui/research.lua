@@ -5,7 +5,7 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Global = require 'utils.global' --- @dep utils.global
 local Event = require 'utils.event' --- @dep utils.event
 local Roles = require 'expcore.roles' --- @dep expcore.roles
-local config = require 'config.research' --- @dep config.clock
+local config = require 'config.research' --- @dep config.research
 local format_time = _C.format_time --- @dep expcore.common
 
 local research = {}
