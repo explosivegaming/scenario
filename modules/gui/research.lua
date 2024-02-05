@@ -5,7 +5,7 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Global = require 'utils.global' --- @dep utils.global
 local Event = require 'utils.event' --- @dep utils.event
 local Roles = require 'expcore.roles' --- @dep expcore.roles
-local config = require 'config.research' --- @dep config.clock
+local config = require 'config.research' --- @dep config.research
 local format_time = _C.format_time --- @dep expcore.common
 
 local research = {}
@@ -54,7 +54,7 @@ for i=1, #config.milestone do
 	}
 end
 
-local clock_container =
+local research_container =
 Gui.element(function(definition, parent)
     local container = Gui.container(parent, definition.name, 200)
 	local scroll_table = Gui.scroll_table(container, 400, 4)
@@ -121,18 +121,21 @@ Gui.element(function(definition, parent)
 
 	for j=1, 8 do
 		local res_j = res_n + j - 3
+
 		if res[res_j] ~= nil then
 			local res_r = res[res_j]
 			scroll_table['research_display_n_' .. j].caption = res_r.name
 
 			if research.time[res_j] < res[res_j].prev then
 				scroll_table['research_display_d_' .. j].caption = '-' .. format_time(res[res_j].prev - research.time[res_j], research_time_format)
+
 			else
 				scroll_table['research_display_d_' .. j].caption = format_time(research.time[res_j] - res[res_j].prev, research_time_format)
 			end
 
 			scroll_table['research_display_p_' .. j].caption = res_r.prev_disp
 			scroll_table['research_display_t_' .. j].caption = format_time(research.time[res_j], research_time_format)
+
 		else
 			scroll_table['research_display_n_' .. j].caption = ''
 			scroll_table['research_display_d_' .. j].caption = ''
@@ -146,7 +149,7 @@ end)
 :static_name(Gui.unique_static_name)
 :add_to_left_flow()
 
-Gui.left_toolbar_button('item/space-science-pack', {'expcom-res.main-tooltip'}, clock_container, function(player)
+Gui.left_toolbar_button('item/space-science-pack', {'expcom-res.main-tooltip'}, research_container, function(player)
 	return Roles.player_allowed(player, 'gui/research')
 end)
 
@@ -170,14 +173,17 @@ Event.add(defines.events.on_research_finished, function(event)
 		if res[res_j] ~= nil then
 			local res_r = res[res_j]
 			res_disp[j]['n'] = res_r.name
+
 			if research.time[res_j] < res[res_j].prev then
 				res_disp[j]['d'] = '-' .. format_time(res[res_j].prev - research.time[res_j], research_time_format)
+
 			else
 				res_disp[j]['d'] = format_time(research.time[res_j] - res[res_j].prev, research_time_format)
 			end
 
 			res_disp[j]['p'] = res_r.prev_disp
 			res_disp[j]['t'] = format_time(research.time[res_j], research_time_format)
+
 		else
 			res_disp[j]['n'] = ''
 			res_disp[j]['d'] = ''
@@ -187,7 +193,7 @@ Event.add(defines.events.on_research_finished, function(event)
 	end
 
 	for _, player in pairs(game.connected_players) do
-        local frame = Gui.get_left_element(player, clock_container)
+        local frame = Gui.get_left_element(player, research_container)
 
 		for j=1, 8 do
 			frame.container.scroll.table['research_display_n_' .. j].caption = res_disp[j]['n']
@@ -202,7 +208,7 @@ Event.on_nth_tick(60, function()
 	local current_time = format_time(game.tick, research_time_format)
 
 	for _, player in pairs(game.connected_players) do
-        local frame = Gui.get_left_element(player, clock_container)
+        local frame = Gui.get_left_element(player, research_container)
 		frame.container.scroll.table['clock_display'].caption = current_time
     end
 end)
