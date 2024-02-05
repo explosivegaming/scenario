@@ -42,7 +42,7 @@ local computed_stats = {
     SessionTime = {
         default = format_time(0),
         calculate = function(player_name)
-            return format_time((playerStats['Playtime']:get(player_name, 0) - playerStats['AfkTime']:get(player_name, 0)) / playerStats['JoinCount']:get(player_name, 1))
+            return format_time((playerStats['Playtime']:get(player_name, 0) - playerStats['AfkTime']:get(player_name, 0)) / playerStats['JoinCount']:get(player_name, 1) * 3600)
         end
     },
     BuildRatio = {
@@ -66,7 +66,7 @@ local computed_stats = {
     NetPlayTime = {
         default = format_time(0),
         calculate = function(player_name)
-            return format_time((playerStats['Playtime']:get(player_name, 0) - playerStats['AfkTime']:get(player_name, 0)))
+            return format_time((playerStats['Playtime']:get(player_name, 0) - playerStats['AfkTime']:get(player_name, 0)) * 3600)
         end
     },
     AFKTimeRatio = {
