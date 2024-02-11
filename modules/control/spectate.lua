@@ -85,7 +85,9 @@ end
 -- @tparam LuaPlayer player The player that will regain control of their camera
 function Public.stop_follow(player)
     assert(player and player.valid, 'Invalid player given to follower')
-    if following[player.index] and following[player.index][4] then Public.stop_spectate(player) end
+    if following[player.index] and following[player.index][4] and Public.is_spectating(player) then
+        Public.stop_spectate(player)
+    end
 
     Gui.destroy_if_valid(player.gui.screen[follow_label.name])
     following[player.index] = nil
