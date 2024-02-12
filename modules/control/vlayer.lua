@@ -397,6 +397,7 @@ function vlayer.get_statistics()
     return {
         total_surface_area = vlayer_data.properties.total_surface_area,
         used_surface_area = vlayer_data.properties.used_surface_area,
+        remaining_surface_area = vlayer_data.properties.total_surface_area - vlayer_data.properties.used_surface_area,
         energy_production = vlayer_data.properties.production * mega * get_production_multiplier(),
         energy_sustained = vlayer_data.properties.production * mega * get_sustained_multiplier(),
         energy_capacity = vlayer_data.properties.capacity * mega,
@@ -415,6 +416,7 @@ end
 local circuit_signals = {
     total_surface_area = 'signal-A',
     used_surface_area = 'signal-B',
+    remaining_surface_area = 'signal-L',
     energy_production = 'signal-P',
     energy_sustained = 'signal-S',
     energy_capacity = 'signal-C',
