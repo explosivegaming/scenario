@@ -11,16 +11,12 @@ Commands.new_command('personal-battery-recharge', 'Recharge Player Battery upto 
     local armor = player.get_inventory(defines.inventory.character_armor)[1].grid
 
     for i=1, #armor.equipment do
-        if armor.equipment[i].energy < (armor.equipment[i].max_energy * amount) then
-            local energy_required = (armor.equipment[i].max_energy * amount) - armor.equipment[i].energy
+        local target = math.floor(armor.equipment[i].max_energy * amount)
 
-            if vlayer.power.energy >= energy_required then
-                armor.equipment[i].energy = armor.equipment[i].max_energy * amount
-                vlayer.power.energy = vlayer.power.energy - energy_required
-            else
-                armor.equipment[i].energy = armor.equipment[i].energy + vlayer.power.energy
-                vlayer.power.energy = 0
-            end
+        if armor.equipment[i].energy < target then
+            local energy_required = math.min(math.floor(target - armor.equipment[i].energy), vlayer.get_statistics()['energy_storage'])
+            armor.equipment[i].energy = armor.equipment[i].max_energy + energy_required
+            vlayer.energy_changed(0 - energy_required)
         end
     end
 
