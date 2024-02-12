@@ -54,7 +54,7 @@ return {
         ['landfill'] = {
             starting_value = 0,
             required_area = 0,
-            surface_area = 4 -- Tiles
+            surface_area = 6 -- Tiles
         }
         -- TODO: Can convert wood directly to energy to reduce trash
         --[[
