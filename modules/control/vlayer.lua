@@ -148,6 +148,7 @@ local function get_sustained_multiplier()
     local day_duration = 1 - surface.dawn + surface.dusk
     local sunset_duration = surface.evening - surface.dusk
     local sunrise_duration = surface.dawn - surface.morning
+
     return mul * (day_duration + (0.5 * (sunset_duration + sunrise_duration)))
 end
 
@@ -300,6 +301,7 @@ local function handle_input_interfaces()
                         else
                             vlayer.insert_item(name, count)
                         end
+
                     else
                         vlayer.insert_item(name, count)
                     end
@@ -400,8 +402,13 @@ function vlayer.get_statistics()
         energy_capacity = vlayer_data.properties.capacity * mega,
         energy_storage = vlayer_data.storage.energy,
         day = math.floor(game.tick / vlayer_data.surface.ticks_per_day),
-        time =math.floor(vlayer_data.surface.daytime * vlayer_data.surface.ticks_per_day)
+        time = math.floor(vlayer_data.surface.daytime * vlayer_data.surface.ticks_per_day)
     }
+end
+
+--- add or reduce vlayer power
+function vlayer.energy_changed(power)
+    vlayer_data.storage.energy = vlayer_data.storage.energy + power
 end
 
 --- Circuit signals used for the statistics
@@ -476,6 +483,16 @@ local function handle_circuit_interfaces()
                 if not circuit_oc.get_signal(clear_index).signal then
                     break -- There are no more signals to clear
                 end
+
+                circuit_oc.set_signal(clear_index, nil)
+            end
+
+            -- Clear remaining signals to prevent outdated values being present (caused by count > 0 check)
+            for clear_index = signal_index, max_signals do
+                if not circuit_oc.get_signal(clear_index).signal then
+                    break -- There are no more signals to clear
+                end
+
                 circuit_oc.set_signal(clear_index, nil)
             end
         end
