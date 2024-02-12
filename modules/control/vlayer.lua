@@ -486,15 +486,6 @@ local function handle_circuit_interfaces()
 
                 circuit_oc.set_signal(clear_index, nil)
             end
-
-            -- Clear remaining signals to prevent outdated values being present (caused by count > 0 check)
-            for clear_index = signal_index, max_signals do
-                if not circuit_oc.get_signal(clear_index).signal then
-                    break -- There are no more signals to clear
-                end
-
-                circuit_oc.set_signal(clear_index, nil)
-            end
         end
     end
 end
