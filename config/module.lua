@@ -16,6 +16,7 @@ return {
     },
     machine = {
         ['electric-mining-drill'] = 'effectivity-module',
+        ['pumpjack'] = 'effectivity-module',
         ['assembling-machine-2'] = 'productivity-module',
         ['assembling-machine-3'] = 'productivity-module-3',
         ['electric-furnace'] = 'productivity-module-3',
