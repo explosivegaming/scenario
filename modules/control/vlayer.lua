@@ -413,17 +413,19 @@ function vlayer.energy_changed(power)
 end
 
 --- Circuit signals used for the statistics
-local circuit_signals = {
-    total_surface_area = 'signal-A',
-    used_surface_area = 'signal-U',
-    remaining_surface_area = 'signal-R',
-    energy_production = 'signal-P',
-    energy_sustained = 'signal-S',
-    energy_capacity = 'signal-C',
-    energy_storage = 'signal-E',
-    day = 'signal-D',
-    time = 'signal-T',
-}
+function vlayer.get_circuits()
+    return {
+        total_surface_area = 'signal-A',
+        used_surface_area = 'signal-U',
+        remaining_surface_area = 'signal-R',
+        energy_production = 'signal-P',
+        energy_sustained = 'signal-S',
+        energy_capacity = 'signal-C',
+        energy_storage = 'signal-E',
+        day = 'signal-D',
+        time = 'signal-T',
+    }
+end
 
 --- Create a new circuit interface
 -- @tparam LuaSurface surface The surface to place the interface onto
@@ -456,9 +458,10 @@ local function handle_circuit_interfaces()
             local circuit_oc = interface.get_or_create_control_behavior()
             local max_signals = circuit_oc.signals_count
             local signal_index = 1
+            local circuit = vlayer.get_circuits()
 
             -- Set the virtual signals based on the vlayer stats
-            for stat_name, signal_name in pairs(circuit_signals) do
+            for stat_name, signal_name in pairs(circuit) do
                 if stat_name:find('energy') then
                     circuit_oc.set_signal(signal_index, {signal={type='virtual', name=signal_name}, count=math.floor(stats[stat_name] / mega)})
 
