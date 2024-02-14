@@ -415,8 +415,8 @@ end
 --- Circuit signals used for the statistics
 local circuit_signals = {
     total_surface_area = 'signal-A',
-    used_surface_area = 'signal-B',
-    remaining_surface_area = 'signal-L',
+    used_surface_area = 'signal-U',
+    remaining_surface_area = 'signal-R',
     energy_production = 'signal-P',
     energy_sustained = 'signal-S',
     energy_capacity = 'signal-C',
