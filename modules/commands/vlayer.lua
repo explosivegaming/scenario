@@ -22,3 +22,14 @@ Commands.new_command('personal-battery-recharge', 'Recharge Player Battery upto 
 
     return Commands.success
 end)
+
+Commands.new_command('vlayer-info', 'Vlayer Info')
+:register(function(player)
+    local c = vlayer.get_circuits()
+
+    for k, v in pairs(vlayer.get_circuits()) do
+        player.print(v .. ' : ' .. k)
+    end
+
+    return Commands.success
+end)
