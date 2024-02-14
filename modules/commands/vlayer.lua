@@ -15,8 +15,8 @@ Commands.new_command('personal-battery-recharge', 'Recharge Player Battery upto 
 
         if armor.equipment[i].energy < target then
             local energy_required = math.min(math.floor(target - armor.equipment[i].energy), vlayer.get_statistics()['energy_storage'])
-            armor.equipment[i].energy = armor.equipment[i].max_energy + energy_required
-            vlayer.energy_changed(0 - energy_required)
+            armor.equipment[i].energy = armor.equipment[i].energy + energy_required
+            vlayer.energy_changed(- energy_required)
         end
     end
 
