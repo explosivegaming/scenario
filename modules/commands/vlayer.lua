@@ -27,7 +27,7 @@ Commands.new_command('vlayer-info', 'Vlayer Info')
 :register(function(player)
     local c = vlayer.get_circuits()
 
-    for k, v in pairs(vlayer.get_circuits()) do
+    for k, v in pairs(c) do
         player.print(v .. ' : ' .. k)
     end
 
