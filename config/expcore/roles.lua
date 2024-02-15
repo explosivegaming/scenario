@@ -229,6 +229,7 @@ Roles.new_role('Member','Mem')
     'gui/warp-list/edit',
     'command/save-quickbar',
     'gui/vlayer-edit',
+    'command/vlayer-info',
     'command/personal-logistic',
     'command/auto-research',
     'command/set-trains-to-automatic',

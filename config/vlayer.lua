@@ -46,7 +46,7 @@ return {
             production = 0.06 -- MW
         },
         ['accumulator'] = {
-            starting_value = 2,
+            starting_value = 0,
             required_area = 4,
             discharge = 0.3, -- MW
             capacity = 5 -- MJ
@@ -54,7 +54,7 @@ return {
         ['landfill'] = {
             starting_value = 0,
             required_area = 0,
-            surface_area = 4 -- Tiles
+            surface_area = 6 -- Tiles
         }
         -- TODO: Can convert wood directly to energy to reduce trash
         --[[
