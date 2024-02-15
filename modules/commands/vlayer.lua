@@ -28,8 +28,6 @@ Commands.new_command('vlayer-info', 'Vlayer Info')
     local c = vlayer.get_circuits()
 
     for k, v in pairs(c) do
-        player.print(v .. ' : ' .. k)
+        Commands.print(v .. ' : ' .. k)
     end
-
-    return Commands.success
 end)
