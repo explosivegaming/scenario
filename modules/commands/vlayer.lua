@@ -8,6 +8,10 @@ local vlayer = require 'modules.control.vlayer'
 Commands.new_command('personal-battery-recharge', 'Recharge Player Battery upto a portion with vlayer')
 :add_param('amount', 'number-range', 0.2, 1)
 :register(function(player, amount)
+    if vlayer.get_statistics()['energy_sustained'] == 0 then
+        return Commands.error('vlayer need to be running to get this command work')
+    end
+
     local armor = player.get_inventory(defines.inventory.character_armor)[1].grid
 
     for i=1, #armor.equipment do
