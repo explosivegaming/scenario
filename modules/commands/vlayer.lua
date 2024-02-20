@@ -9,7 +9,7 @@ Commands.new_command('personal-battery-recharge', 'Recharge Player Battery upto 
 :add_param('amount', 'number-range', 0.2, 1)
 :register(function(player, amount)
     if vlayer.get_statistics()['energy_sustained'] == 0 then
-        return Commands.print('vlayer need to be running to get this command work')
+        return Commands.error('vlayer need to be running to get this command work')
     end
 
     local armor = player.get_inventory(defines.inventory.character_armor)[1].grid
