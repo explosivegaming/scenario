@@ -237,7 +237,7 @@ Gui.element{
 }:on_click(function(player, element, _)
     local res = vlayer_convert_chest(player)
 
-    if res and res.pos then
+    if res then
         local e = vlayer.create_input_interface(player.surface, res.pos, player)
         game.print(player.name .. ' built a vlayer storage input on ' .. pos_to_gps_string(res.pos))
 
@@ -269,7 +269,7 @@ Gui.element{
 }:on_click(function(player, element, _)
     local res = vlayer_convert_chest(player)
 
-    if res and res.pos then
+    if res then
         local e = vlayer.create_output_interface(player.surface, res.pos, player)
         game.print(player.name .. ' built a vlayer storage output on ' .. pos_to_gps_string(res.pos))
 
@@ -301,7 +301,7 @@ Gui.element{
 }:on_click(function(player, element, _)
     local res = vlayer_convert_chest(player)
 
-    if res and res.pos then
+    if res then
         local e = vlayer.create_circuit_interface(player.surface, res.pos, player)
         game.print(player.name .. ' built a vlayer circuit on ' .. pos_to_gps_string(res.pos))
 
@@ -333,7 +333,7 @@ Gui.element{
 }:on_click(function(player, element, _)
     local res = vlayer_convert_chest(player)
 
-    if res and res.pos then
+    if res then
         if vlayer.create_energy_interface(player.surface, res.pos, player) then
             game.print(player.name .. ' built a vlayer energy interface on ' .. pos_to_gps_string(res.pos))
 
