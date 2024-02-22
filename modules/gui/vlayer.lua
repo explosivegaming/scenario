@@ -55,6 +55,7 @@ local function vlayer_convert_chest(player)
 
     local entity = entities[1]
     local pos = entity.position
+    local circuit = entity.circuit_connected_entities
 
     if (not entity.get_inventory(defines.inventory.chest).is_empty()) then
         player.print('Chest is not emptied')
@@ -62,7 +63,7 @@ local function vlayer_convert_chest(player)
     end
 
     entity.destroy()
-    return {x=string.format('%.1f', pos.x), y=string.format('%.1f', pos.y)}
+    return {pos={x=string.format('%.1f', pos.x), y=string.format('%.1f', pos.y)}, circuit=circuit}
 end
 
 --- Display label for the number of solar panels
@@ -234,11 +235,23 @@ Gui.element{
 }:style{
     width = 160
 }:on_click(function(player, element, _)
-    local pos = vlayer_convert_chest(player)
+    local res = vlayer_convert_chest(player)
 
-    if (pos) then
-        vlayer.create_input_interface(player.surface, pos, player)
-        game.print(player.name .. ' built a vlayer storage input on ' .. pos_to_gps_string(pos))
+    if res and res.pos then
+        local e = vlayer.create_input_interface(player.surface, res.pos, player)
+        game.print(player.name .. ' built a vlayer storage input on ' .. pos_to_gps_string(res.pos))
+
+        if next(res.circuit.red) ~= nil then
+            for _, v in pairs(res.circuit.red) do
+                e.connect_neighbour({wire = defines.wire_type.red, target_entity = v})
+            end
+        end
+
+        if next(res.circuit.green) ~= nil then
+            for _, v in pairs(res.circuit.green) do
+                e.connect_neighbour({wire = defines.wire_type.green, target_entity = v})
+            end
+        end
     end
 
     element.enabled = (vlayer.get_interface_counts().storage_input < config.interface_limit.storage_input)
@@ -254,11 +267,23 @@ Gui.element{
 }:style{
     width = 160
 }:on_click(function(player, element, _)
-    local pos = vlayer_convert_chest(player)
+    local res = vlayer_convert_chest(player)
 
-    if (pos) then
-        vlayer.create_output_interface(player.surface, pos, player)
-        game.print(player.name .. ' built a vlayer storage output on ' .. pos_to_gps_string(pos))
+    if res and res.pos then
+        local e = vlayer.create_output_interface(player.surface, res.pos, player)
+        game.print(player.name .. ' built a vlayer storage output on ' .. pos_to_gps_string(res.pos))
+
+        if next(res.circuit.red) ~= nil then
+            for _, v in pairs(res.circuit.red) do
+                e.connect_neighbour({wire = defines.wire_type.red, target_entity = v})
+            end
+        end
+
+        if next(res.circuit.green) ~= nil then
+            for _, v in pairs(res.circuit.green) do
+                e.connect_neighbour({wire = defines.wire_type.green, target_entity = v})
+            end
+        end
     end
 
     element.enabled = (vlayer.get_interface_counts().storage_output < config.interface_limit.storage_output)
@@ -274,11 +299,23 @@ Gui.element{
 }:style{
     width = 160
 }:on_click(function(player, element, _)
-    local pos = vlayer_convert_chest(player)
+    local res = vlayer_convert_chest(player)
 
-    if (pos) then
-        vlayer.create_circuit_interface(player.surface, pos, player)
-        game.print(player.name .. ' built a vlayer circuit on ' .. pos_to_gps_string(pos))
+    if res and res.pos then
+        local e = vlayer.create_circuit_interface(player.surface, res.pos, player)
+        game.print(player.name .. ' built a vlayer circuit on ' .. pos_to_gps_string(res.pos))
+
+        if next(res.circuit.red) ~= nil then
+            for _, v in pairs(res.circuit.red) do
+                e.connect_neighbour({wire = defines.wire_type.red, target_entity = v})
+            end
+        end
+
+        if next(res.circuit.green) ~= nil then
+            for _, v in pairs(res.circuit.green) do
+                e.connect_neighbour({wire = defines.wire_type.green, target_entity = v})
+            end
+        end
     end
 
     element.enabled = (vlayer.get_interface_counts().circuit < config.interface_limit.circuit)
@@ -294,11 +331,12 @@ Gui.element{
 }:style{
     width = 160
 }:on_click(function(player, element, _)
-    local pos = vlayer_convert_chest(player)
+    local res = vlayer_convert_chest(player)
 
-    if (pos) then
-        if vlayer.create_energy_interface(player.surface, pos, player) then
-            game.print(player.name .. ' built a vlayer energy interface on ' .. pos_to_gps_string(pos))
+    if res and res.pos then
+        if vlayer.create_energy_interface(player.surface, res.pos, player) then
+            game.print(player.name .. ' built a vlayer energy interface on ' .. pos_to_gps_string(res.pos))
+
         else
             player.print('Unable to build vlayer energy entity')
         end
@@ -318,6 +356,7 @@ Gui.element{
     width = 160
 }:on_click(function(player, element, _)
     local interface_type, interface_position = vlayer.remove_closest_interface(player.surface, player.position, 4)
+
     if not interface_type then
         return player.print('Interface not found in range, please move closer')
     end
