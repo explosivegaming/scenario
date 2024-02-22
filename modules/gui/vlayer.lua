@@ -242,7 +242,7 @@ Gui.element{
         game.print(player.name .. ' built a vlayer storage input on ' .. pos_to_gps_string(res.pos))
 
         for k, _ in pairs(res.circuit) do
-            if next(res.circuit.red) ~= nil then
+            if next(res.circuit[k]) ~= nil then
                 for _, v in pairs(res.circuit[k]) do
                     e.connect_neighbour({wire = defines.wire_type[k], target_entity = v})
                 end
