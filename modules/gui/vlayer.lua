@@ -269,15 +269,11 @@ Gui.element{
         local e = vlayer.create_output_interface(player.surface, res.pos, player)
         game.print(player.name .. ' built a vlayer storage output on ' .. pos_to_gps_string(res.pos))
 
-        if next(res.circuit.red) ~= nil then
-            for _, v in pairs(res.circuit.red) do
-                e.connect_neighbour({wire = defines.wire_type.red, target_entity = v})
-            end
-        end
-
-        if next(res.circuit.green) ~= nil then
-            for _, v in pairs(res.circuit.green) do
-                e.connect_neighbour({wire = defines.wire_type.green, target_entity = v})
+        for k, _ in pairs(res.circuit) do
+            if next(res.circuit[k]) ~= nil then
+                for _, v in pairs(res.circuit[k]) do
+                    e.connect_neighbour({wire = defines.wire_type[k], target_entity = v})
+                end
             end
         end
     end
@@ -301,15 +297,11 @@ Gui.element{
         local e = vlayer.create_circuit_interface(player.surface, res.pos, player)
         game.print(player.name .. ' built a vlayer circuit on ' .. pos_to_gps_string(res.pos))
 
-        if next(res.circuit.red) ~= nil then
-            for _, v in pairs(res.circuit.red) do
-                e.connect_neighbour({wire = defines.wire_type.red, target_entity = v})
-            end
-        end
-
-        if next(res.circuit.green) ~= nil then
-            for _, v in pairs(res.circuit.green) do
-                e.connect_neighbour({wire = defines.wire_type.green, target_entity = v})
+        for k, _ in pairs(res.circuit) do
+            if next(res.circuit[k]) ~= nil then
+                for _, v in pairs(res.circuit[k]) do
+                    e.connect_neighbour({wire = defines.wire_type[k], target_entity = v})
+                end
             end
         end
     end
