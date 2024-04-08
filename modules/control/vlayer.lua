@@ -269,12 +269,22 @@ end
 -- @tparam MapPosition position The position on the surface to place the interface at
 -- @tparam[opt] LuaPlayer player The player to show as the last user of the interface
 -- @treturn LuaEntity The entity that was created for the interface
-function vlayer.create_input_interface(surface, position, last_user)
+function vlayer.create_input_interface(surface, position, circuit, last_user)
     local interface = surface.create_entity{name='logistic-chest-storage', position=position, force='neutral'}
     table.insert(vlayer_data.entity_interfaces.storage_input, interface)
 
     if last_user then
         interface.last_user = last_user
+    end
+
+    if circuit then
+        for k, _ in pairs(circuit) do
+            if next(circuit[k]) ~= nil then
+                for _, v in pairs(circuit[k]) do
+                    interface.connect_neighbour({wire=defines.wire_type[k], target_entity=v})
+                end
+            end
+        end
     end
 
     interface.destructible = false
@@ -318,12 +328,22 @@ end
 -- @tparam MapPosition position The position on the surface to place the interface at
 -- @tparam[opt] LuaPlayer player The player to show as the last user of the interface
 -- @treturn LuaEntity The entity that was created for the interface
-function vlayer.create_output_interface(surface, position, last_user)
+function vlayer.create_output_interface(surface, position, circuit, last_user)
     local interface = surface.create_entity{name='logistic-chest-requester', position=position, force='neutral'}
     table.insert(vlayer_data.entity_interfaces.storage_output, interface)
 
     if last_user then
         interface.last_user = last_user
+    end
+
+    if circuit then
+        for k, _ in pairs(circuit) do
+            if next(circuit[k]) ~= nil then
+                for _, v in pairs(circuit[k]) do
+                    interface.connect_neighbour({wire=defines.wire_type[k], target_entity=v})
+                end
+            end
+        end
     end
 
     interface.destructible = false
@@ -432,12 +452,22 @@ end
 -- @tparam MapPosition position The position on the surface to place the interface at
 -- @tparam[opt] LuaPlayer player The player to show as the last user of the interface
 -- @treturn LuaEntity The entity that was created for the interface
-function vlayer.create_circuit_interface(surface, position, last_user)
+function vlayer.create_circuit_interface(surface, position, circuit, last_user)
     local interface = surface.create_entity{name='constant-combinator', position=position, force='neutral'}
     table.insert(vlayer_data.entity_interfaces.circuit, interface)
 
     if last_user then
         interface.last_user = last_user
+    end
+
+    if circuit then
+        for k, _ in pairs(circuit) do
+            if next(circuit[k]) ~= nil then
+                for _, v in pairs(circuit[k]) do
+                    interface.connect_neighbour({wire=defines.wire_type[k], target_entity=v})
+                end
+            end
+        end
     end
 
     interface.destructible = false
