@@ -63,16 +63,20 @@ local function research_notification(event)
     end
 end
 
-local function res_queue(force)
-    if force.rockets_launched == 0 or force.technologies['mining-productivity-4'].level <= 4 then
+local function res_queue(event)
+    if event.research.force.rockets_launched == 0 or event.research.force.technologies['mining-productivity-4'].level <= 4 then
         return
     end
 
-    local res_q = force.research_queue
+    local res_q = event.research.research_queue
 
     if #res_q < config.queue_amount then
         for i=1, config.queue_amount - #res_q do
-            force.add_research(force.technologies['mining-productivity-4'])
+            event.research.force.add_research(event.research.force.technologies['mining-productivity-4'])
+
+            if not (event.by_script) then
+                game.print{'expcom-res.inf', event.research.name, event.research.level + i}
+            end
         end
     end
 end
