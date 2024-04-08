@@ -85,13 +85,8 @@ local function research_queue_logic(event)
     end
 end
 
-Event.add(defines.events.on_research_finished, function(event)
-    research_queue_logic(event)
-end)
-
-Event.add(defines.events.on_research_cancelled, function(event)
-    research_queue_logic(event)
-end)
+Event.add(defines.events.on_research_finished, research_queue_logic)
+Event.add(defines.events.on_research_cancelled, research_queue_logic)
 
 Commands.new_command('auto-research', 'Automatically queue up research')
 :add_alias('ares')
