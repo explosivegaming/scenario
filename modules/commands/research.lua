@@ -36,6 +36,7 @@ local function research_notification(event)
         if (event.research.force.mining_drill_productivity_bonus * 10) <= (config.bonus_inventory.limit / config.bonus_inventory.rate) then
             if event.research.force.technologies['toolbelt'].researched then
                 event.research.force[config.bonus_inventory.name] = (math.floor(event.research.force.mining_drill_productivity_bonus * 10) * config.bonus_inventory.rate) + 10
+
             else
                 event.research.force[config.bonus_inventory.name] = math.floor(event.research.force.mining_drill_productivity_bonus * 10) * config.bonus_inventory.rate
             end
@@ -56,6 +57,7 @@ local function research_notification(event)
         if not (event.by_script) then
             game.print{'expcom-res.inf', format_time(game.tick, research_time_format), event.research.name, event.research.level - 1}
         end
+
     else
         if not (event.by_script) then
             game.print{'expcom-res.msg', format_time(game.tick, research_time_format), event.research.name}
@@ -63,27 +65,34 @@ local function research_notification(event)
     end
 end
 
-local function res_queue(force)
-    if force.rockets_launched == 0 or force.technologies['mining-productivity-4'].level <= 4 then
+local function res_queue(event)
+    if event.research.force.rockets_launched == 0 or event.research.force.technologies['mining-productivity-4'].level <= 4 then
         return
     end
 
-    local res_q = force.research_queue
+    local res_q = event.research.research_queue
 
     if #res_q < config.queue_amount then
         for i=1, config.queue_amount - #res_q do
-            force.add_research(force.technologies['mining-productivity-4'])
+            event.research.force.add_research(event.research.force.technologies['mining-productivity-4'])
+
+            if not (event.by_script) then
+                game.print{'expcom-res.inf-q', event.research.name, event.research.level + i}
+            end
         end
     end
 end
 
-Event.add(defines.events.on_research_finished, function(event)
+local function research_queue_logic(event)
     research_notification(event)
 
     if research.res_queue_enable then
-        res_queue(event.research.force)
+        res_queue(event)
     end
-end)
+end
+
+Event.add(defines.events.on_research_finished, research_queue_logic)
+Event.add(defines.events.on_research_cancelled, research_queue_logic)
 
 Commands.new_command('auto-research', 'Automatically queue up research')
 :add_alias('ares')
@@ -94,5 +103,5 @@ Commands.new_command('auto-research', 'Automatically queue up research')
         res_queue(player.force)
     end
 
-    return Commands.success{'expcom-res.res', research.res_queue_enable}
+    return game.print{'expcom-res.res', research.res_queue_enable}
 end)
