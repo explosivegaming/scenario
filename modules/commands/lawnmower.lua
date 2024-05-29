@@ -16,7 +16,7 @@ Commands.new_command('lawnmower', 'Clean up biter corpse, decoratives and nuclea
 	local entities = player.surface.find_entities_filtered{position=player.position, radius=range, type='corpse'}
 
 	for _, entity in pairs(entities) do
-		if not (entity.name == 'transport-caution-corpse') and not (entity.name == 'invisible-transport-caution-corpse') then
+		if (entity.name ~= 'transport-caution-corpse' and entity.name ~= 'invisible-transport-caution-corpse') then
 			entity.destroy()
 		end
 	end
