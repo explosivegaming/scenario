@@ -692,7 +692,7 @@ nb: use error(error_message) within your callback to trigger do not trigger dire
 @treturn boolean The opposite of success so true means to cancel execution, used internally
 
 @usage-- Used in the command system to log handler errors
-local success, err = pcall(command_data.callback, player, unpack(params))
+local success, err = pcall(command_data.callback, player, table.unpack(params))
 if Commands.internal_error(success, command_data.name, err) then
     return command_log(player, command_data, 'Internal Error: Command Callback Fail', raw_params, command_event.parameter, err)
 end
@@ -806,7 +806,7 @@ function Commands.run_command(command_event)
         end
 
         -- If its not a function throw and error
-        if not type(parse_callback) == 'function' then
+        if type(parse_callback) ~= 'function' then
             Commands.internal_error(false, command_data.name, 'Invalid param parse '..tostring(param_data.parse))
             command_log(player, command_data, 'Internal Error: Invalid Param Parse', params, raw_input, tostring(param_data.parse))
             return
@@ -820,7 +820,7 @@ function Commands.run_command(command_event)
         end
 
         -- input: string, player: LuaPlayer, reject: function, ... extra args
-        local success, param_parsed = pcall(parse_callback, raw_params[index], player, reject, unpack(param_data.parse_args))
+        local success, param_parsed = pcall(parse_callback, raw_params[index], player, reject, table.unpack(param_data.parse_args))
         if Commands.internal_error(success, command_data.name, param_parsed) then
             return command_log(player, command_data, 'Internal Error: Param Parse Fail', params, raw_input, param_parsed)
         end
@@ -837,7 +837,7 @@ function Commands.run_command(command_event)
 
         elseif param_parsed == nil or param_parsed == Commands.defines.error or param_parsed == reject then
             -- No value was returned or error was returned, if nil then give generic error
-            if not param_parsed == Commands.defines.error then
+            if param_parsed ~= Commands.defines.error then
                 command_log(player, command_data, 'Invalid Param Given', raw_params, raw_input, param_name)
                 Commands.error{'expcore-commands.command-error-param-format', param_name, 'please make sure it is the correct type'}
             end
@@ -853,7 +853,7 @@ function Commands.run_command(command_event)
     -- Run the command
     -- player: LuaPlayer, ... command params, raw: string
     params[command_data.max_param_count+1] = raw_input
-    local success, rtn = pcall(command_data.callback, player, unpack(params))
+    local success, rtn = pcall(command_data.callback, player, table.unpack(params))
     if Commands.internal_error(success, command_data.name, rtn) then
         return command_log(player, command_data, 'Internal Error: Command Callback Fail', raw_params, command_event.parameter, rtn)
     end

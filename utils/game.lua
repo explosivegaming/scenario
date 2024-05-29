@@ -51,10 +51,13 @@ function Game.player_print(str, color)
 end
 
 --[[
-    @param Position String to display at
+    Creates a floating text entity at a location with the specified color.
+    Example: "+10 iron" or "-10 coins"
+
+    @param surface LuaSurface
+    @param position String to display at
     @param text String to display
     @param color table in {r = 0~1, g = 0~1, b = 0~1}, defaults to white.
-    @param surface LuaSurface
 
     @return the created entity
 ]]

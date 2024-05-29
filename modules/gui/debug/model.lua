@@ -6,7 +6,7 @@ local type = type
 local concat = table.concat
 local inspect = table.inspect
 local pcall = pcall
-local loadstring = loadstring
+local loadstring = loadstring ---@diagnostic disable-line
 local rawset = rawset
 
 local Public = {}

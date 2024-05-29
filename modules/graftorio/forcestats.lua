@@ -6,15 +6,18 @@ local lib = {}
 
 lib.collect_production = function()
 	for _, force in pairs(game.forces) do
+		---@class ItemStats
+		---@field count number
+
 		---@class ProductionStatistics
-		---@field item_input table<string, double|uint64>
-		---@field item_output table<string, double|uint64>
-		---@field fluid_input table<string, double|uint64>
-		---@field fluid_output table<string, double|uint64>
-		---@field kill_input table<string, double|uint64>
-		---@field kill_output table<string, double|uint64>
-		---@field build_input table<string, double|uint64>
-		---@field build_output table<string, double|uint64>
+		---@field item_input table<string, ItemStats>
+		---@field item_output table<string, ItemStats>
+		---@field fluid_input table<string, ItemStats>
+		---@field fluid_output table<string, ItemStats>
+		---@field kill_input table<string, ItemStats>
+		---@field kill_output table<string, ItemStats>
+		---@field build_input table<string, ItemStats>
+		---@field build_output table<string, ItemStats>
 		local stats = {
 			item_input = {},
 			item_output = {},
@@ -138,16 +141,10 @@ lib.collect_loginet = function()
 	end
 end
 
-
----@class ResearchStatistics
----@field current Research
----@field queue Research[]
-
 ---@class Research
 ---@field name string
 ---@field level uint
 ---@field progress double
-
 
 Event.add(defines.events.on_research_finished, function(evt)
 	local research = evt.research

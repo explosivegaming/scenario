@@ -67,7 +67,7 @@ Commands.new_command('clear-warnings', 'Clears all warnings (and script warnings
 :add_param('player', false, 'player')
 :register(function(player, action_player)
     Warnings.clear_warnings(action_player, player.name)
-    Warnings.clear_script_warnings(action_player, player.name)
+    Warnings.clear_script_warnings(action_player)
     local action_player_name_color = format_chat_player_name(action_player)
     local by_player_name_color = format_chat_player_name(player)
     game.print{'expcom-warnings.cleared', action_player_name_color, by_player_name_color}

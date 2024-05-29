@@ -16,6 +16,8 @@ global.version = require 'overrides.version' -- The current version for exp gami
 inspect = require 'overrides.inspect' -- Used to covert any value into human readable string
 Debug = require 'overrides.debug' -- Global Debug module
 _C = require 'expcore.common' -- _C is used to store lots of common functions expected to be used
+_CHEATS = false
+_DEBUG = false
 
 -- Please go to config/file_loader.lua to edit the files that are loaded
 log('[INFO] Reading loader config')

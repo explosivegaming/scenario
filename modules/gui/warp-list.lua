@@ -806,6 +806,7 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing), function()
             if was_in_range and not in_range then
                 PlayerInRange:set(player, nil)
             elseif not was_in_range and in_range then
+                ---@cast closest_warp -nil
                 PlayerInRange:set(player, closest_warp.warp_id)
             end
 
@@ -819,6 +820,7 @@ Event.on_nth_tick(math.floor(60/config.update_smoothing), function()
                 add_warp_element.enabled = true
                 add_warp_element.tooltip = {'warp-list.add-tooltip'}
             elseif not can_make_warp and was_able_to_make_warp or closest_warp and (old_closest_warp_name ~= closest_warp.name) then
+                ---@cast closest_warp -nil
                 add_warp_element.enabled = false
                 add_warp_element.tooltip = {'warp-list.too-close', closest_warp.name}
             end

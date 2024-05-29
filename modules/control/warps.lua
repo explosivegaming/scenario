@@ -33,6 +33,7 @@ local Warps = {}
 
 -- Global lookup table for force name to task ids
 local force_warps = {_uid=1}
+---@cast force_warps table<string, { spawn: string, [number]: string }>
 Global.register(force_warps, function(tbl)
     force_warps = tbl
 end)

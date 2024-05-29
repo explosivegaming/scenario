@@ -32,7 +32,8 @@ local function format_energy(amount, unit)
         end
     end
 
-    local formatted, k = amount
+    local k
+    local formatted = amount
 
     while true do
         formatted, k = string.gsub(formatted, '^(-?%d+)(%d%d%d)', '%1,%2')

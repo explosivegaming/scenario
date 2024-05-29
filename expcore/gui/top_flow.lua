@@ -40,6 +40,7 @@ Gui.toolbar_button_style(button, false)
 
 ]]
 function Gui.toolbar_button_style(button, state, size)
+    ---@cast button LuaGuiElement
     if state then
         button.style = Gui.top_flow_button_toggled_style
     else
@@ -107,7 +108,7 @@ function Gui.inject_top_flow_order(provider)
     Gui.get_top_flow_order = provider
     local debug_info = debug.getinfo(2, "Sn")
     local file_name = debug_info.source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
-    local func_name = debug_info.name or "<anonymous:"..debug_info.linedefined..">"
+    local func_name = debug_info.name or ("<anonymous:"..debug_info.linedefined..">")
     Gui._top_flow_order_src = file_name..":"..func_name
 end
 

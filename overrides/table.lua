@@ -161,7 +161,7 @@ function table.extract_keys(tbl, ...)
     for _, key in pairs({...}) do
         table.insert(values, tbl[key])
     end
-    return unpack(values)
+    return table.unpack(values)
 end
 
 --- Adds an element into a specific index position while shuffling the rest down
