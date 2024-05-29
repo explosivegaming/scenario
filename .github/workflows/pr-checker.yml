@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Luacheck linter
         uses: lunarmodules/luacheck@v1
@@ -16,12 +16,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Install Lua
-        uses: leafo/gh-actions-lua@v8.0.0
+        uses: leafo/gh-actions-lua@v10
 
       - name: Install LuaRocks
         uses: leafo/gh-actions-luarocks@v4
