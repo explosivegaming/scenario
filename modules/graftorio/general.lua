@@ -12,11 +12,10 @@ Global.register(lib.data, function(tbl)
 end)
 
 ---@class Statistics
----@field trains TrainStatistics
----@field power PowerStatistics
----@field production ProductionStatistics
----@field robots RobotStatistics
----@field other OtherStatistics
+---@field production ProductionStatistics?
+---@field robots RobotStatistics?
+---@field other OtherStatistics?
+---@field research Research[]?
 
 Event.on_init(function()
 	---@type table<string, Statistics>
@@ -29,7 +28,6 @@ end)
 ---@class OtherStatistics
 ---@field tick uint
 ---@field evolution EvolutionStatistics
----@field research ResearchStatistics
 
 ---@class EvolutionStatistics
 ---@field evolution_factor double

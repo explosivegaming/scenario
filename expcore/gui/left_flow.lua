@@ -90,7 +90,7 @@ function Gui.inject_left_flow_order(provider)
     Gui.get_left_flow_order = provider
     local debug_info = debug.getinfo(2, "Sn")
     local file_name = debug_info.source:match('^.+/currently%-playing/(.+)$'):sub(1, -5)
-    local func_name = debug_info.name or "<anonymous:"..debug_info.linedefined..">"
+    local func_name = debug_info.name or ("<anonymous:"..debug_info.linedefined..">")
     Gui._left_flow_order_src = file_name..":"..func_name
 end
 

@@ -1,0 +1,5 @@
+{
+    "Lua.diagnostics.disable": [
+        "luadoc-miss-type-name"
+    ]
+}

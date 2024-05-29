@@ -129,7 +129,7 @@ function Selection.on_selection(selection_name, handler)
     Event.add(defines.events.on_player_selected_area, function(event)
         local selection = selections[event.player_index]
         if not selection or selection.name ~= selection_name then return end
-        handler(event, unpack(selection.arguments))
+        handler(event, table.unpack(selection.arguments))
     end)
 end
 
@@ -140,13 +140,13 @@ function Selection.on_alt_selection(selection_name, handler)
     Event.add(defines.events.on_player_alt_selected_area, function(event)
         local selection = selections[event.player_index]
         if not selection or selection.name ~= selection_name then return end
-        handler(event, unpack(selection.arguments))
+        handler(event, table.unpack(selection.arguments))
     end)
 end
 
 --- Stop selection if the selection tool is removed from the cursor
 Event.add(defines.events.on_player_cursor_stack_changed, function(event)
-    local player = game.get_player(event.player_index)
+    local player = game.get_player(event.player_index) ---@cast player -nil
     if player.cursor_stack.is_selection_tool then return end
     Selection.stop(player)
 end)

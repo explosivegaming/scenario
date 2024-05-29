@@ -36,7 +36,7 @@ local Async = {}
 local internal_run =
 Token.register(function(params)
     local func = Token.get(params.token)
-    return func(unpack(params.params))
+    return func(table.unpack(params.params))
 end)
 
 --[[-- Register a new async function, must called when the file is loaded

@@ -83,12 +83,12 @@ function Jail.jail_player(player, by_player_name, reason)
     if has_role(player, 'Jail') then return end
     local roles = get_roles(player)
 
-    player.walking_state = { walking = false }
+    player.walking_state = { walking = false, direction = player.walking_state.direction }
     player.riding_state = { acceleration = defines.riding.acceleration.nothing, direction = player.riding_state.direction }
     player.mining_state = { mining = false }
-    player.shooting_state = { state = defines.shooting.not_shooting }
+    player.shooting_state = { state = defines.shooting.not_shooting, position = player.shooting_state.position }
     player.picking_state = false
-    player.repair_state = { repairing = false }
+    player.repair_state = { repairing = false, position = player.repair_state.position }
 
     unassign_roles(player, roles, by_player_name, nil, true)
     assign_roles(player, 'Jail', by_player_name, nil, true)

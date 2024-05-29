@@ -7,28 +7,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_BASE_REF#refs/heads/})"
-        id: extract_branch
-
-      - name: Lint
-        uses: Roang-zero1/factorio-mod-luacheck@master
-        with:
-          luacheckrc_url: https://raw.githubusercontent.com/explosivegaming/scenario/${{ steps.extract_branch.outputs.branch }}/.luacheckrc
+      - name: Luacheck linter
+        uses: lunarmodules/luacheck@v1
 
   docs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Install Lua
-        uses: leafo/gh-actions-lua@v8.0.0
+        uses: leafo/gh-actions-lua@v10
 
       - name: Install LuaRocks
         uses: leafo/gh-actions-luarocks@v4

@@ -127,7 +127,7 @@ function Debug.object_type(object)
 end
 
 ---Shows the given message if debug is on.
----@param position Position
+---@param position MapPosition
 ---@param message string
 function Debug.print_position(position, message)
     Debug.print(format('%s %s', serialize(position), message))

@@ -37,10 +37,10 @@ Event.add(defines.events.on_console_chat, function(event)
     for key_word, reply in pairs(config.commands) do
         if message:find(prefix..key_word) then
             if type(reply) == 'function' then
-                reply = reply(player, true)
+                local msg = reply(player, true)
 
                 if reply then
-                    game.print{'chat-bot.reply', reply}
+                    game.print{'chat-bot.reply', msg}
                 end
 
             else
