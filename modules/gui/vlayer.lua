@@ -72,7 +72,7 @@ local function vlayer_convert_chest(player)
     local circuit = entity.circuit_connected_entities
 
     if (not entity.get_inventory(defines.inventory.chest).is_empty()) then
-        player.print{'vlayer.steel-chest-detect'}
+        player.print{'vlayer.steel-chest-empty'}
         return nil
     end
 
@@ -223,7 +223,7 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_remaining_surface_area_name',
     caption = {'vlayer.display-remaining_surface_area'},
-    tooltip = {'vlayer.display-remaining_surface_area-tooltip'},
+    tooltip = {'vlayer.display-remaining-surface-area-tooltip'},
     style = 'heading_1_label'
 }:style{
     width = 200
@@ -270,7 +270,7 @@ local vlayer_gui_control_type =
 Gui.element{
     type = 'drop-down',
     name = Gui.unique_static_name,
-    items = {'Energy', 'Circuit', 'Storage Input', 'Storage Output'},
+    items = {{'vlayer.control-type-energy'}, {'vlayer.control-type-circuit'}, {'vlayer.control-type-storage-input'}, {'vlayer.control-type-storage-output'}},
     selected_index = 1
 }:style{
     width = 160
@@ -293,16 +293,17 @@ Gui.element{
 local vlayer_gui_control_refresh =
 Gui.element{
     type = 'button',
-    name = Gui.unique_static_name,
+    name = Gui.unique_static_name,  
     caption = {'vlayer.control-refresh'}
 }:style{
     width = 160
 }:on_click(function(_, element, _)
     local target = element.parent[vlayer_gui_control_type.name].selected_index
     local full_list = {}
+    local interface = vlayer.get_interfaces()[vlayer_control_type_list[target]]
 
     for i=1, vlayer.get_interface_counts()[vlayer_control_type_list[target]], 1 do
-        table.insert(full_list, i)
+        table.insert(full_list, i .. ' X ' .. interface[i].position.x .. ' Y '.. interface[i].position.y)
     end
 
     element.parent[vlayer_gui_control_list.name].items = full_list
@@ -407,7 +408,8 @@ Gui.element{
 }:on_click(function(player, element, _)
     local target = element.parent[vlayer_gui_control_type.name].selected_index
     local n = element.parent[vlayer_gui_control_list.name].selected_index
-    local interface_type, interface_position = vlayer.remove_interface(vlayer.get_interfaces()[vlayer_control_type_list[target]][n].surface, vlayer.get_interfaces()[vlayer_control_type_list[target]][n].position)
+    local t = vlayer.get_interfaces()[vlayer_control_type_list[target]]
+    local interface_type, interface_position = vlayer.remove_interface(t[n].surface, t[n].position)
     game.print{'vlayer.result-remove', player.name, interface_type, pos_to_gps_string(interface_position)}
 end)
 
