@@ -430,7 +430,7 @@ Event.on_nth_tick(config.update_tick_gui, function(_)
         [vlayer_gui_display_signal_sustained_count.name] = format_energy(stats.energy_sustained, 'W'),
         [vlayer_gui_display_signal_capacity_count.name] = format_energy(stats.energy_capacity, 'J'),
         [vlayer_gui_display_signal_current_count.name] = format_energy(stats.energy_storage, 'J'),
-        [vlayer_gui_display_signal_remaining_surface_area_count] = format_number(stats.remaining_surface_area),
+        [vlayer_gui_display_signal_remaining_surface_area_count.name] = format_number(stats.remaining_surface_area),
     }
 
     for _, player in pairs(game.connected_players) do
