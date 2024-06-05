@@ -26,7 +26,7 @@ Commands.new_command('research-all', 'Set all research for your force.')
 :set_defaults{force=function(player)
     return player.force
 end}
-:register(function(_, force)
+:register(function(player, force)
     force.research_all_technologies()
     game.print{'expcom-cheat.res', player.name}
     return Commands.success
