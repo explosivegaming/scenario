@@ -18,5 +18,6 @@ Commands.new_command('set-trains-to-automatic', 'Set All Trains to Automatic')
         end
     end
 
-    return Commands.success{'expcom-train.manual-result', format_number(count)}
+    game.print{'expcom-train.manual-result', player.name, format_number(count)}
+    return Commands.success
 end)

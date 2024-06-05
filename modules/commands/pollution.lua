@@ -15,7 +15,8 @@ Commands.new_command('pollution-clear', 'Clear pollution')
 end}
 :register(function(player, surface)
     surface.clear_pollution()
-    return Commands.success{'expcom-pol.clr', player.name}
+    game.print{'expcom-pol.clr', player.name}
+    return Commands.success
 end)
 
 Commands.new_command('pollution-off', 'Disable pollution')
@@ -28,5 +29,6 @@ Commands.new_command('pollution-off', 'Disable pollution')
         v.clear_pollution()
     end
 
-    return Commands.success{'expcom-pol.off', player.name}
+    game.print{'expcom-pol.off', player.name}
+    return Commands.success
 end)
