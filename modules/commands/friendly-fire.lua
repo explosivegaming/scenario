@@ -12,8 +12,8 @@ Commands.new_command('toggle-friendly-fire', 'Toggle Friendly Fire')
 :set_defaults{force=function(player)
     return player.force
 end}
-:register(function(_, force)
+:register(function(player, force)
     force.friendly_fire = not force.friendly_fire
-    game.print{'expcom-ff.ff', force.friendly_fire}
+    game.print{'expcom-ff.ff', player.name, force.friendly_fire}
     return Commands.success
 end)
