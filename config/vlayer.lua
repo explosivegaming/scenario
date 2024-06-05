@@ -68,7 +68,7 @@ return {
             required_area = 0,
             surface_area = 0,
             fuel_value = 4, -- MJ
-            power = true -- turn all coal to power to reduce trash
+            power = false -- turn all coal to power to reduce trash
         }
         --[[
         ['iron-ore'] = {
