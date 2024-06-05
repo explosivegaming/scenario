@@ -73,7 +73,7 @@ local vlayer_gui_display_item_solar_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_item_solar_name',
-    caption = '[img=entity/solar-panel] Solar Panel',
+    caption = {'vlayer.display-item-solar'},
     style = 'heading_1_label'
 }:style{
     width = 200
@@ -95,7 +95,7 @@ local vlayer_gui_display_item_accumulator_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_item_accumulator_name',
-    caption = '[img=entity/accumulator] Accumulator',
+    caption = {'vlayer.display-item-accumulator'},
     style = 'heading_1_label'
 }:style{
     width = 200
@@ -117,7 +117,8 @@ local vlayer_gui_display_signal_production_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_peak_name',
-    caption = '[virtual-signal=signal-P] Current Production',
+    caption = {'vlayer.display-current-production'},
+    tooltip = {'vlayer.display-current-production-tooltip'},
     style = 'heading_1_label'
 }:style{
     width = 200
@@ -139,7 +140,8 @@ local vlayer_gui_display_signal_sustained_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_sustained_name',
-    caption = '[virtual-signal=signal-S] Sustained Production',
+    caption = {'vlayer.display-sustained-production'},
+    tooltip = {'vlayer.display-sustained-production-tooltip'},
     style = 'heading_1_label'
 }:style{
     width = 200
@@ -161,7 +163,8 @@ local vlayer_gui_display_signal_capacity_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_max_name',
-    caption = '[virtual-signal=signal-C] Battery Capacity',
+    caption = {'vlayer.display-max-capacity'},
+    tooltip = {'vlayer.display-max-capacity-tooltip'},
     style = 'heading_1_label'
 }:style{
     width = 200
@@ -183,7 +186,8 @@ local vlayer_gui_display_signal_current_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_current_name',
-    caption = '[virtual-signal=signal-E] Battery Charge',
+    caption = {'vlayer.display-current-capacity'},
+    tooltip = {'vlayer.display-current-capacity-tooltip'},
     style = 'heading_1_label'
 }:style{
     width = 200
@@ -193,6 +197,29 @@ local vlayer_gui_display_signal_current_count =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_current_count',
+    caption = '0',
+    style = 'heading_1_label'
+}:style{
+    width = 120
+}
+
+--- Display label for the remaining surface area
+-- @element vlayer_gui_display_signal_remaining_surface_area_name
+local vlayer_gui_display_signal_remaining_surface_area_name =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_signal_remaining_surface_area_name',
+    caption = {'vlayer.display-remaining_surface_area'},
+    tooltip = {'vlayer.display-remaining_surface_area-tooltip'},
+    style = 'heading_1_label'
+}:style{
+    width = 200
+}
+
+local vlayer_gui_display_signal_remaining_surface_area_count =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_signal_remaining_surface_area_count',
     caption = '0',
     style = 'heading_1_label'
 }:style{
@@ -218,6 +245,8 @@ Gui.element(function(_, parent, name)
     vlayer_gui_display_signal_capacity_count(disp)
     vlayer_gui_display_signal_current_name(disp)
     vlayer_gui_display_signal_current_count(disp)
+    vlayer_gui_display_signal_remaining_surface_area_name(disp)
+    vlayer_gui_display_signal_remaining_surface_area_count(disp)
 
     return vlayer_set
 end)
@@ -401,6 +430,7 @@ Event.on_nth_tick(config.update_tick_gui, function(_)
         [vlayer_gui_display_signal_sustained_count.name] = format_energy(stats.energy_sustained, 'W'),
         [vlayer_gui_display_signal_capacity_count.name] = format_energy(stats.energy_capacity, 'J'),
         [vlayer_gui_display_signal_current_count.name] = format_energy(stats.energy_storage, 'J'),
+        [vlayer_gui_display_signal_remaining_surface_area_count] = format_number(stats.remaining_surface_area),
     }
 
     for _, player in pairs(game.connected_players) do
