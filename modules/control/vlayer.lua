@@ -28,6 +28,7 @@ local vlayer_data = {
     },
     storage = {
         items = {},
+        power_items = {},
         energy = 0,
         unallocated = {}
     },
@@ -38,8 +39,15 @@ Global.register(vlayer_data, function(tbl)
     vlayer_data = tbl
 end)
 
-for _, properties in pairs(config.allowed_items) do
+for name, properties in pairs(config.allowed_items) do
     properties.modded = false
+
+    if properties.power then
+        vlayer_data.storage.power_items[name] = {
+            value = properties.power * 1000000,
+            count = 0
+        }
+    end
 end
 
 -- For all modded items, create a config for them
@@ -311,6 +319,10 @@ local function handle_input_interfaces()
                         end
 
                     else
+                        if vlayer_data.storage.power_items[name] then
+                            vlayer_data.storage.power_items[name].count = vlayer_data.storage.power_items[name].count + count
+                        end
+
                         vlayer.insert_item(name, count)
                     end
 
@@ -580,6 +592,23 @@ local function handle_energy_interfaces()
     -- Cap the stored energy to the allowed capacity
     if not config.unlimited_capacity and vlayer_data.storage.energy > vlayer_data.properties.capacity * mega then
         vlayer_data.storage.energy = vlayer_data.properties.capacity * mega
+
+    elseif vlayer_data.storage.power_items then
+        local max_burning = (vlayer_data.properties.capacity * mega / 2) - vlayer_data.storage.energy
+
+        for k, v in pairs(vlayer_data.storage.power_items) do
+            if v.count > 0 then
+                if (v.count * v.value) < max_burning then
+                    vlayer_data.storage.energy = vlayer_data.storage.energy + (v.count * v.value)
+                    vlayer_data.storage.power_items[k].count = 0
+
+                else
+                    local to_burn = math.min(max_burning / v.value)
+                    vlayer_data.storage.energy = vlayer_data.storage.energy + (to_burn * v.value)
+                    vlayer_data.storage.power_items[k].count = vlayer_data.storage.power_items[k].count - to_burn
+                end
+            end
+        end
     end
 end
 
