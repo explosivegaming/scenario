@@ -84,6 +84,19 @@ function vlayer.get_interface_counts()
     }
 end
 
+--- Get interfaces
+-- @treturn table a dictionary of the vlayer interfaces
+function vlayer.get_interfaces()
+    local interfaces = vlayer_data.entity_interfaces
+
+    return {
+        energy = interfaces.energy,
+        circuit = interfaces.circuit,
+        storage_input = interfaces.storage_input,
+        storage_output = interfaces.storage_output,
+    }
+end
+
 --[[
     25,000 / 416 s
     昼      208秒   ソーラー効率100%
@@ -594,12 +607,13 @@ local function handle_energy_interfaces()
     if not config.unlimited_capacity and vlayer_data.storage.energy > vlayer_data.properties.capacity * mega then
         vlayer_data.storage.energy = vlayer_data.properties.capacity * mega
 
+    -- burn the trash to produce power
     elseif vlayer_data.storage.power_items then
         local max_burning = (vlayer_data.properties.capacity * mega / 2) - vlayer_data.storage.energy
 
         for k, v in pairs(vlayer_data.storage.power_items) do
             if v.count > 0 then
-                local to_burn = 0
+                local to_burn
 
                 if (v.count * v.value) < max_burning then
                     to_burn = v.count
@@ -615,18 +629,17 @@ local function handle_energy_interfaces()
     end
 end
 
---- Remove the closest entity interface to the given position
+--- Remove the entity interface using the given position
 -- @tparam LuaSurface surface The surface to search for an interface on
--- @tparam MapPosition position The position to start the search from
--- @tparam number radius The radius to search for an interface within
+-- @tparam MapPosition position The position of the item
 -- @treturn string The type of interface that was removed, or nil if no interface was found
 -- @treturn MapPosition The position the interface was at, or nil if no interface was found
-function vlayer.remove_closest_interface(surface, position, radius)
+function vlayer.remove_interface(surface, position)
     local entities = surface.find_entities_filtered{
         name = {'logistic-chest-storage', 'logistic-chest-requester', 'constant-combinator', 'electric-energy-interface'},
         force = 'neutral',
         position = position,
-        radius = radius,
+        radius = 2,
         limit = 1
     }
 
