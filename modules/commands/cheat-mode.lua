@@ -28,6 +28,7 @@ Commands.new_command('research-all', 'Set all research for your force.')
 end}
 :register(function(_, force)
     force.research_all_technologies()
+    game.print{'expcom-cheat.res', player.name}
     return Commands.success
 end)
 
@@ -37,7 +38,8 @@ Commands.new_command('toggle-always-day', 'Toggles always day in surface')
 :set_defaults{surface=function(player)
     return player.surface
 end}
-:register(function(_, surface)
+:register(function(player, surface)
     surface.always_day = not surface.always_day
-    return Commands.success{'expcom-cheat.day', surface.always_day}
+    game.print{'expcom-cheat.day', player.name, surface.always_day}
+    return Commands.success
 end)
