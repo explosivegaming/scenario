@@ -293,7 +293,7 @@ Gui.element{
 local vlayer_gui_control_refresh =
 Gui.element{
     type = 'button',
-    name = Gui.unique_static_name,  
+    name = Gui.unique_static_name,
     caption = {'vlayer.control-refresh'}
 }:style{
     width = 160
