@@ -103,5 +103,5 @@ Commands.new_command('auto-research', 'Automatically queue up research')
         res_queue(player.force)
     end
 
-    return game.print{'expcom-res.res', research.res_queue_enable}
+    return game.print{'expcom-res.res', player.name, research.res_queue_enable}
 end)
