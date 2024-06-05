@@ -44,7 +44,7 @@ for name, properties in pairs(config.allowed_items) do
 
     if properties.power then
         vlayer_data.storage.power_items[name] = {
-            value = properties.power * 1000000,
+            value = properties.fuel_value * 1000000,
             count = 0
         }
     end
@@ -321,9 +321,10 @@ local function handle_input_interfaces()
                     else
                         if vlayer_data.storage.power_items[name] then
                             vlayer_data.storage.power_items[name].count = vlayer_data.storage.power_items[name].count + count
-                        end
 
-                        vlayer.insert_item(name, count)
+                        else
+                            vlayer.insert_item(name, count)
+                        end
                     end
 
                     inventory.remove({name=name, count=count})
@@ -598,15 +599,17 @@ local function handle_energy_interfaces()
 
         for k, v in pairs(vlayer_data.storage.power_items) do
             if v.count > 0 then
+                local to_burn = 0
+
                 if (v.count * v.value) < max_burning then
-                    vlayer_data.storage.energy = vlayer_data.storage.energy + (v.count * v.value)
-                    vlayer_data.storage.power_items[k].count = 0
+                    to_burn = v.count
 
                 else
-                    local to_burn = math.min(max_burning / v.value)
-                    vlayer_data.storage.energy = vlayer_data.storage.energy + (to_burn * v.value)
-                    vlayer_data.storage.power_items[k].count = vlayer_data.storage.power_items[k].count - to_burn
+                    to_burn = math.min(max_burning / v.value)
                 end
+
+                vlayer_data.storage.energy = vlayer_data.storage.energy + (to_burn * v.value)
+                vlayer_data.storage.power_items[k].count = vlayer_data.storage.power_items[k].count - to_burn
             end
         end
     end
