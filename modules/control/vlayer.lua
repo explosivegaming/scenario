@@ -609,10 +609,8 @@ local function handle_energy_interfaces()
 
     -- burn the trash to produce power
     elseif vlayer_data.storage.power_items then
-        local max_burning
-
         for k, v in pairs(vlayer_data.storage.power_items) do
-            max_burning = (vlayer_data.properties.capacity * mega / 2) - vlayer_data.storage.energy
+            local max_burning = (vlayer_data.properties.capacity * mega / 2) - vlayer_data.storage.energy
 
             if v.count > 0 then
                 local to_burn = math.min(v.count, max_burning / v.value)
