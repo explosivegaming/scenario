@@ -222,7 +222,7 @@ local vlayer_gui_display_signal_remaining_surface_area_name =
 Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_remaining_surface_area_name',
-    caption = {'vlayer.display-remaining_surface_area'},
+    caption = {'vlayer.display-remaining-surface-area'},
     tooltip = {'vlayer.display-remaining-surface-area-tooltip'},
     style = 'heading_1_label'
 }:style{
@@ -288,6 +288,23 @@ Gui.element{
     width = 160
 }
 
+local function vlayer_gui_List_refresh(player)
+    local frame = Gui.get_left_element(player, vlayer_container)
+    local table = frame.container['vlayer_st_2'].disp.table
+    local target = table[vlayer_gui_control_type.name].selected_index
+    local full_list = {}
+
+    if target then
+        local interface = vlayer.get_interfaces()[vlayer_control_type_list[target]]
+
+        for i=1, vlayer.get_interface_counts()[vlayer_control_type_list[target]], 1 do
+            table.insert(full_list, i .. ' X ' .. interface[i].position.x .. ' Y '.. interface[i].position.y)
+        end
+
+        table[vlayer_gui_control_list.name].items = full_list
+    end
+end
+
 --- A button to refresh the remove list
 -- @element vlayer_gui_control_refresh
 local vlayer_gui_control_refresh =
@@ -297,16 +314,8 @@ Gui.element{
     caption = {'vlayer.control-refresh'}
 }:style{
     width = 160
-}:on_click(function(_, element, _)
-    local target = element.parent[vlayer_gui_control_type.name].selected_index
-    local full_list = {}
-    local interface = vlayer.get_interfaces()[vlayer_control_type_list[target]]
-
-    for i=1, vlayer.get_interface_counts()[vlayer_control_type_list[target]], 1 do
-        table.insert(full_list, i .. ' X ' .. interface[i].position.x .. ' Y '.. interface[i].position.y)
-    end
-
-    element.parent[vlayer_gui_control_list.name].items = full_list
+}:on_click(function(player, _, _)
+    vlayer_gui_List_refresh(player)
 end)
 
 --- A button to check if the item is the one wanted to remove
@@ -394,6 +403,8 @@ Gui.element{
             player.print{'vlayer.result-unable'}
         end
     end
+
+    vlayer_gui_List_refresh(player)
 end)
 
 --- A button used to remove the vlayer interface
@@ -408,9 +419,14 @@ Gui.element{
 }:on_click(function(player, element, _)
     local target = element.parent[vlayer_gui_control_type.name].selected_index
     local n = element.parent[vlayer_gui_control_list.name].selected_index
-    local t = vlayer.get_interfaces()[vlayer_control_type_list[target]]
-    local interface_type, interface_position = vlayer.remove_interface(t[n].surface, t[n].position)
-    game.print{'vlayer.result-remove', player.name, interface_type, pos_to_gps_string(interface_position)}
+
+    if n then
+        local t = vlayer.get_interfaces()[vlayer_control_type_list[target]]
+        local interface_type, interface_position = vlayer.remove_interface(t[n].surface, t[n].position)
+        game.print{'vlayer.result-remove', player.name, interface_type, pos_to_gps_string(interface_position)}
+    end
+
+    vlayer_gui_List_refresh(player)
 end)
 
 --- A vertical flow containing all the control buttons
