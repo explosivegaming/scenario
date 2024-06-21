@@ -264,29 +264,8 @@ Gui.element(function(_, parent, name)
     return vlayer_set
 end)
 
---- A drop down list filter by this type
--- @element vlayer_gui_control_type
-local vlayer_gui_control_type =
-Gui.element{
-    type = 'drop-down',
-    name = Gui.unique_static_name,
-    items = {{'vlayer.control-type-energy'}, {'vlayer.control-type-circuit'}, {'vlayer.control-type-storage-input'}, {'vlayer.control-type-storage-output'}},
-    selected_index = 1
-}:style{
-    width = 160
-}
-
---- A drop down list to see the exact item to remove
--- @element vlayer_gui_control_list
-local vlayer_gui_control_list =
-Gui.element{
-    type = 'drop-down',
-    name = Gui.unique_static_name,
-    items = {''},
-    selected_index = 1
-}:style{
-    width = 160
-}
+local vlayer_gui_control_type
+local vlayer_gui_control_list
 
 local function vlayer_gui_list_refresh(player)
     local frame = Gui.get_left_element(player, vlayer_container)
@@ -304,6 +283,33 @@ local function vlayer_gui_list_refresh(player)
         disp[vlayer_gui_control_list.name].items = full_list
     end
 end
+
+--- A drop down list filter by this type
+-- @element vlayer_gui_control_type
+vlayer_gui_control_type =
+Gui.element{
+    type = 'drop-down',
+    name = Gui.unique_static_name,
+    items = {{'vlayer.control-type-energy'}, {'vlayer.control-type-circuit'}, {'vlayer.control-type-storage-input'}, {'vlayer.control-type-storage-output'}},
+    selected_index = 1
+}:style{
+    width = 160
+}:on_selection_changed(function(player, _, _)
+    vlayer_gui_list_refresh(player)
+end)
+
+--- A drop down list to see the exact item to remove
+-- @element vlayer_gui_control_list
+vlayer_gui_control_list =
+Gui.element{
+    type = 'drop-down',
+    name = Gui.unique_static_name,
+    items = {''},
+    selected_index = 1
+}:style{
+    width = 160
+}
+
 
 --- A button to refresh the remove list
 -- @element vlayer_gui_control_refresh
