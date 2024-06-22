@@ -28,6 +28,7 @@ local vlayer_data = {
     },
     storage = {
         items = {},
+        power_items = {},
         energy = 0,
         unallocated = {}
     },
@@ -38,8 +39,15 @@ Global.register(vlayer_data, function(tbl)
     vlayer_data = tbl
 end)
 
-for _, properties in pairs(config.allowed_items) do
+for name, properties in pairs(config.allowed_items) do
     properties.modded = false
+
+    if properties.power then
+        vlayer_data.storage.power_items[name] = {
+            value = properties.fuel_value * 1000000,
+            count = 0
+        }
+    end
 end
 
 -- For all modded items, create a config for them
@@ -73,6 +81,19 @@ function vlayer.get_interface_counts()
         circuit = #interfaces.circuit,
         storage_input = #interfaces.storage_input,
         storage_output = #interfaces.storage_output,
+    }
+end
+
+--- Get interfaces
+-- @treturn table a dictionary of the vlayer interfaces
+function vlayer.get_interfaces()
+    local interfaces = vlayer_data.entity_interfaces
+
+    return {
+        energy = interfaces.energy,
+        circuit = interfaces.circuit,
+        storage_input = interfaces.storage_input,
+        storage_output = interfaces.storage_output,
     }
 end
 
@@ -311,7 +332,12 @@ local function handle_input_interfaces()
                         end
 
                     else
-                        vlayer.insert_item(name, count)
+                        if vlayer_data.storage.power_items[name] then
+                            vlayer_data.storage.power_items[name].count = vlayer_data.storage.power_items[name].count + count
+
+                        else
+                            vlayer.insert_item(name, count)
+                        end
                     end
 
                     inventory.remove({name=name, count=count})
@@ -580,21 +606,32 @@ local function handle_energy_interfaces()
     -- Cap the stored energy to the allowed capacity
     if not config.unlimited_capacity and vlayer_data.storage.energy > vlayer_data.properties.capacity * mega then
         vlayer_data.storage.energy = vlayer_data.properties.capacity * mega
+
+    -- burn the trash to produce power
+    elseif vlayer_data.storage.power_items then
+        for k, v in pairs(vlayer_data.storage.power_items) do
+            local max_burning = (vlayer_data.properties.capacity * mega / 2) - vlayer_data.storage.energy
+
+            if v.count > 0 and max_burning > 0 then
+                local to_burn = math.min(v.count, max_burning / v.value)
+                vlayer_data.storage.energy = vlayer_data.storage.energy + (to_burn * v.value)
+                vlayer_data.storage.power_items[k].count = vlayer_data.storage.power_items[k].count - to_burn
+            end
+        end
     end
 end
 
---- Remove the closest entity interface to the given position
+--- Remove the entity interface using the given position
 -- @tparam LuaSurface surface The surface to search for an interface on
--- @tparam MapPosition position The position to start the search from
--- @tparam number radius The radius to search for an interface within
+-- @tparam MapPosition position The position of the item
 -- @treturn string The type of interface that was removed, or nil if no interface was found
 -- @treturn MapPosition The position the interface was at, or nil if no interface was found
-function vlayer.remove_closest_interface(surface, position, radius)
+function vlayer.remove_interface(surface, position)
     local entities = surface.find_entities_filtered{
         name = {'logistic-chest-storage', 'logistic-chest-requester', 'constant-combinator', 'electric-energy-interface'},
         force = 'neutral',
         position = position,
-        radius = radius,
+        radius = 2,
         limit = 1
     }
 
