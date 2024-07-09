@@ -260,6 +260,7 @@ return {
         ]]
     },
     surface_bonus = {
+        --[[
         ['solar_power_multiplier'] = {
             value = 0,
             max = 1000,
@@ -267,5 +268,6 @@ return {
             cost_scale = 1,
             cost = 1
         }
+        ]]
     }
 }
