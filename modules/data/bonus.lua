@@ -30,12 +30,12 @@ local function apply_bonus(player, stage)
         return
     end
 
-    for _, v in pairs(config.player_bonus) do
-        if v.enabled then
-            if stage == 0 then
-                player[v.name] = v.min
-            else
-                player[v.name] = v.min + (v.max - v.min) * stage / 10
+    for k, v in pairs(config.player_bonus) do
+        player[k] = v.value * stage / 10
+
+        if v.combined_bonus then
+            for i=1, #v.combined_bonus, 1 do
+                player[v.combined_bonus[i]] = v.value * stage / 10
             end
         end
     end
@@ -52,16 +52,9 @@ end)
 Commands.new_command('bonus', 'Changes the amount of bonus you receive')
 :add_param('amount', 'integer-range', 0, 10)
 :register(function(player, amount)
-    if amount > config.player_bonus_level then
-        if not Roles.player_allowed(player, 'command/bonus/2') then
-            Commands.print{'expcom-bonus.perm', 2}
-            return
-        end
-    elseif amount <= config.player_bonus_level then
-        if not Roles.player_allowed(player, 'command/bonus') then
-            Commands.print{'expcom-bonus.perm', 1}
-            return
-        end
+    if not Roles.player_allowed(player, 'command/bonus') then
+        Commands.print{'expcom-bonus.perm', 1}
+        return
     end
 
     PlayerBonus:set(player, amount)
@@ -97,16 +90,12 @@ Event.add(defines.events.on_player_created, function(event)
         return
     end
 
-    for _, v in pairs(config.force_bonus) do
-        if v.enabled then
-            game.players[event.player_index].force[v.name] = game.players[event.player_index].force[v.name] + v.max
-        end
+    for k, v in pairs(config.force_bonus) do
+        game.players[event.player_index].force[k] = v.value
     end
 
-    for _, v in pairs(config.surface_bonus) do
-        if v.enabled then
-            game.players[event.player_index].surface[v.name] = game.players[event.player_index].surface[v.name] + v.max
-        end
+    for k, v in pairs(config.surface_bonus) do
+        game.players[event.player_index].surface[k] = v.value
     end
 end)
 
