@@ -54,7 +54,7 @@ Roles.new_role('Administrator','Admin')
     'gui/warp-list/bypass-proximity',
     'gui/warp-list/bypass-cooldown',
     'command/connect-all',
-	'command/collectdata'
+    'command/collectdata'
 }
 
 Roles.new_role('Moderator','Mod')
@@ -75,8 +75,8 @@ Roles.new_role('Moderator','Mod')
     'command/clear-reports',
     'command/clear-warnings',
     'command/clear-inventory',
-    'command/bonus',
-    'command/bonus/2',
+    -- 'command/bonus',
+    'gui/bonus',
     'command/home',
     'command/home-set',
     'command/home-get',
@@ -165,8 +165,8 @@ Roles.new_role('Sponsor','Spon')
 :allow{
     'gui/rocket-info/toggle-active',
     'gui/rocket-info/remote_launch',
-    'command/bonus',
-    'command/bonus/2',
+    -- 'command/bonus',
+    'gui/bonus',
     'command/home',
     'command/home-set',
     'command/home-get',
