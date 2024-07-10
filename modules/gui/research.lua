@@ -103,7 +103,7 @@ local function research_notification(event)
 		end
 
 		if event.research.level >= config.inf_res[event.research.name] then
-        	is_inf_res = true
+			is_inf_res = true
 		end
     end
 
