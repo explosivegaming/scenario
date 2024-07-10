@@ -166,39 +166,39 @@ Gui.element(function(_, parent, name)
     local research_set = parent.add{type='flow', direction='vertical', name=name}
     local disp = Gui.scroll_table(research_set, 360, 4, 'disp')
 
-	for i=1, 8 do
+	for i=1, 8, 1 do
         disp.add{
+			type = 'label',
             name = 'research_display_n_' .. i,
             caption = '',
-            type = 'label',
             style = 'heading_1_label'
         }
 
 		disp.add{
+			type = 'label',
             name = 'research_display_d_' .. i,
             caption = empty_time,
-            type = 'label',
             style = 'heading_1_label'
         }
 
 		disp.add{
+			type = 'label',
             name = 'research_display_p_' .. i,
 			caption = '',
-            type = 'label',
             style = 'heading_1_label'
         }
 
 		disp.add{
+			type = 'label',
             name = 'research_display_t_' .. i,
             caption = empty_time,
-            type = 'label',
             style = 'heading_1_label'
         }
 	end
 
 	local res_n = research_res_n(res['disp'])
 
-	for j=1, 8 do
+	for j=1, 8, 1 do
 		local res_j = res_n + j - 3
 
 		if res['disp'][res_j] then
@@ -260,7 +260,7 @@ Event.add(defines.events.on_research_finished, function(event)
 	local res_n = research_res_n(res['disp'])
 	local res_disp = {}
 
-	for j=1, 8 do
+	for j=1, 8, 1 do
 		local res_j = res_n + j - 3
 		res_disp[j] = {}
 
@@ -290,7 +290,7 @@ Event.add(defines.events.on_research_finished, function(event)
         local frame = Gui.get_left_element(player, research_container)
 		local disp = frame.container['research_st_2'].disp.table
 
-		for j=1, 8 do
+		for j=1, 8, 1 do
 			disp['research_display_n_' .. j].caption = res_disp[j]['n']
 			disp['research_display_d_' .. j].caption = res_disp[j]['d']
 			disp['research_display_p_' .. j].caption = res_disp[j]['p']
