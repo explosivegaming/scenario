@@ -445,7 +445,7 @@ function vlayer.get_statistics()
         energy_capacity = vlayer_data.properties.capacity * mega,
         energy_storage = vlayer_data.storage.energy,
         day = math.floor(game.tick / vlayer_data.surface.ticks_per_day),
-        time = math.floor(vlayer_data.surface.daytime * vlayer_data.surface.ticks_per_day)
+        time = math.floor(game.tick % vlayer_data.surface.ticks_per_day)
     }
 end
 
