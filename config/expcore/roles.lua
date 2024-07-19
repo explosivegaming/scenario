@@ -76,7 +76,6 @@ Roles.new_role('Moderator','Mod')
     'command/clear-warnings',
     'command/clear-inventory',
     -- 'command/bonus',
-    -- 'command/bonus/2',
     'gui/bonus',
     'command/home',
     'command/home-set',
