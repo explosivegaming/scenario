@@ -205,15 +205,22 @@ Gui.element(function(_, parent, name)
 			local res_r = res['disp'][res_j]
 			disp['research_display_n_' .. j].caption = res_r.name
 
-			if research.time[res_j] < res['disp'][res_j].prev then
-				disp['research_display_d_' .. j].caption = '-' .. format_time(res['disp'][res_j].prev - research.time[res_j], research_time_format)
+			if research.time[res_j] == 0 then
+				disp['research_display_d_' .. j].caption = empty_time
+				disp['research_display_p_' .. j].caption = res_r.prev_disp
+				disp['research_display_t_' .. j].caption = empty_time
 
 			else
-				disp['research_display_d_' .. j].caption = format_time(research.time[res_j] - res['disp'][res_j].prev, research_time_format)
-			end
+				if research.time[res_j] < res['disp'][res_j].prev then
+					disp['research_display_d_' .. j].caption = '-' .. format_time(res['disp'][res_j].prev - research.time[res_j], research_time_format)
 
-			disp['research_display_p_' .. j].caption = res_r.prev_disp
-			disp['research_display_t_' .. j].caption = format_time(research.time[res_j], research_time_format)
+				else
+					disp['research_display_d_' .. j].caption = format_time(research.time[res_j] - res['disp'][res_j].prev, research_time_format)
+				end
+
+				disp['research_display_p_' .. j].caption = res_r.prev_disp
+				disp['research_display_t_' .. j].caption = format_time(research.time[res_j], research_time_format)
+			end
 
 		else
 			disp['research_display_n_' .. j].caption = ''
@@ -267,15 +274,22 @@ Event.add(defines.events.on_research_finished, function(event)
 			local res_r = res['disp'][res_j]
 			res_disp[j]['n'] = res_r.name
 
-			if research.time[res_j] < res['disp'][res_j].prev then
-				res_disp[j]['d'] = '-' .. format_time(res['disp'][res_j].prev - research.time[res_j], research_time_format)
+			if research.time[res_j] == 0 then
+				res_disp[j]['d'] = empty_time
+				res_disp[j]['p']= res_r.prev_disp
+				res_disp[j]['t'] = empty_time
 
 			else
-				res_disp[j]['d'] = format_time(research.time[res_j] - res['disp'][res_j].prev, research_time_format)
-			end
+				if research.time[res_j] < res['disp'][res_j].prev then
+					res_disp[j]['d'] = '-' .. format_time(res['disp'][res_j].prev - research.time[res_j], research_time_format)
 
-			res_disp[j]['p'] = res_r.prev_disp
-			res_disp[j]['t'] = format_time(research.time[res_j], research_time_format)
+				else
+					res_disp[j]['d'] = format_time(research.time[res_j] - res['disp'][res_j].prev, research_time_format)
+				end
+
+				res_disp[j]['p'] = res_r.prev_disp
+				res_disp[j]['t'] = format_time(research.time[res_j], research_time_format)
+			end
 
 		else
 			res_disp[j]['n'] = ''
