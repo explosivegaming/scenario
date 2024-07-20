@@ -1,4 +1,5 @@
 local Global = require 'utils.global' --- @dep utils.global
+local Event = require 'utils.event' --- @dep utils.event
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local config = require 'config.research' --- @dep config.research
 
@@ -7,9 +8,7 @@ Global.register(research, function(tbl)
     research = tbl
 end)
 
-local res = {}
-
-function res.res_queue(event)
+local function res_queue(event)
     if event.research.force.rockets_launched == 0 or event.research.force.technologies['mining-productivity-4'].level <= 4 then
         return
     end
@@ -33,11 +32,15 @@ Commands.new_command('auto-research', 'Automatically queue up research')
     research.res_queue_enable = not research.res_queue_enable
 
     if research.res_queue_enable then
-        res.res_queue(player.force)
+        res_queue(player.force)
     end
 
     game.print{'expcom-res.res', player.name, research.res_queue_enable}
     return Commands.success
 end)
 
-return res
+Event.add(defines.events.on_research_finished, function(event)
+    if research.res_queue_enable then
+        res_queue(event)
+    end
+end)
