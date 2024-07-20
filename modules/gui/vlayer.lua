@@ -310,7 +310,6 @@ Gui.element{
     width = 160
 }
 
-
 --- A button to refresh the remove list
 -- @element vlayer_gui_control_refresh
 local vlayer_gui_control_refresh =
@@ -460,17 +459,8 @@ Gui.element(function(definition, parent)
     local container = Gui.container(parent, definition.name, 320)
 
     vlayer_display_set(container, 'vlayer_st_1')
-    vlayer_control_set(container, 'vlayer_st_2')
-
-    local disp = container['vlayer_st_2'].disp.table
-    local visible = Roles.player_allowed(player, 'gui/vlayer-edit')
-
-    disp[vlayer_gui_control_type.name].visible = visible
-    disp[vlayer_gui_control_list.name].visible = visible
-    disp[vlayer_gui_control_refresh.name].visible = visible
-    disp[vlayer_gui_control_see.name].visible = visible
-    disp[vlayer_gui_control_build.name].visible = visible
-    disp[vlayer_gui_control_remove.name].visible = visible
+    local control_set = vlayer_control_set(container, 'vlayer_st_2')
+    control_set.visible = Roles.player_allowed(player, 'gui/vlayer-edit')
 
     return container.parent
 end)
