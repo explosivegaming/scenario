@@ -76,7 +76,7 @@ local function apply_module(player, area, machine, modules)
     for _, entity in pairs(player.surface.find_entities_filtered{area=area, name=machine, force=player.force}) do
         local m_current_recipe
 
-        if config.machine_craft[machine] then
+        if machine.prototype.crafting_speed then
             m_current_recipe= entity.get_recipe()
         end
 
