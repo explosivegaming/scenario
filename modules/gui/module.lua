@@ -164,8 +164,6 @@ local function row_set(player, element)
                 scroll_table[element .. i].enabled = false
                 scroll_table[element .. i].elem_value = nil
             end
-
-            scroll_table[element .. i].elem_filters = elem_filter.normal
         end
 
     else
@@ -214,7 +212,8 @@ Gui.element(function(definition, parent)
                 type = 'choose-elem-button',
                 elem_type = 'item',
                 elem_filters = elem_filter.normal,
-                style = 'slot_button'
+                style = 'slot_button',
+                enabled = false
             }
         end
     end
