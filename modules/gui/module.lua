@@ -150,6 +150,13 @@ local function row_set(player, element)
     if scroll_table[element .. '0'].elem_value then
         for i=1, config.module_slot_max do
             if i <= game.entity_prototypes[scroll_table[element .. '0'].elem_value].module_inventory_size then
+                if config.machine[scroll_table[element .. '0'].elem_value].prod then
+                    scroll_table[element .. i].elem_filters = elem_filter.prod
+
+                else
+                    scroll_table[element .. i].elem_filters = elem_filter.normal
+                end
+
                 scroll_table[element .. i].enabled = true
                 scroll_table[element .. i].elem_value = config.machine[scroll_table[element .. '0'].elem_value].module
 
@@ -164,12 +171,8 @@ local function row_set(player, element)
     else
         local mf = elem_filter.normal
 
-        if not config.machine[element.elem_value].prod then
-            mf = elem_filter.prod
-        end
-
         for i=1, config.module_slot_max do
-            scroll_table[element .. i].enabled = true
+            scroll_table[element .. i].enabled = false
             scroll_table[element .. i].elem_filters = mf
             scroll_table[element .. i].elem_value = nil
         end
