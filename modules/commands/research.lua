@@ -13,7 +13,7 @@ local function res_queue(event)
         return
     end
 
-    local res_q = event.research.research_queue
+    local res_q = event.force.research_queue
 
     if #res_q < config.queue_amount then
         for i=1, config.queue_amount - #res_q do
