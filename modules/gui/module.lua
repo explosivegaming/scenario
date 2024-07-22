@@ -29,6 +29,16 @@ for k, _ in pairs(config.machine) do
     table.insert(machine_name, k)
 end
 
+local prod_module_names = {}
+
+local function get_module_name()
+    for name, item in pairs(game.item_prototypes) do
+        if item.module_effects and item.module_effects.productivity and item.module_effects.productivity.bonus > 0 then
+            prod_module_names[#prod_module_names + 1] = name
+        end
+    end
+end
+
 local elem_filter = {
     name = {{
         filter = 'name',
@@ -43,7 +53,8 @@ local elem_filter = {
         type = 'module'
     }, {
         filter = 'name',
-        name = 'productivity',
+        name = prod_module_names,
+        mode = 'and',
         invert = true
     }}
 }
@@ -236,3 +247,6 @@ Event.add(defines.events.on_gui_elem_changed, function(event)
         end
     end
 end)
+
+Event.on_init(get_module_name)
+Event.on_load(get_module_name)
