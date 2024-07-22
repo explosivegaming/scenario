@@ -8,7 +8,7 @@ Global.register(research, function(tbl)
     research = tbl
 end)
 
-local function res_queue(force, research, by_script)
+local function res_queue(force, res, by_script)
     local res_q = force.research_queue
 
     if #res_q < config.queue_amount then
@@ -16,7 +16,7 @@ local function res_queue(force, research, by_script)
             force.add_research(force.technologies['mining-productivity-4'])
 
             if not (by_script) then
-                game.print{'expcom-res.inf-q', research.name, research.level + i}
+                game.print{'expcom-res.inf-q', res.name, res.level + i}
             end
         end
     end
