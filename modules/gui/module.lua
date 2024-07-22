@@ -54,8 +54,7 @@ local elem_filter = {
     }, {
         filter = 'name',
         name = prod_module_names,
-        mode = 'and',
-        invert = true
+        mode = 'and'
     }}
 }
 
