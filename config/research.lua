@@ -5,11 +5,6 @@ return {
     enabled = true,
     pollution_ageing_by_research = false,
     queue_amount = 3,
-    bonus = {
-        enabled = false,
-        name = 'laboratory_productivity_bonus',
-        rate = 1
-    },
     -- this enable 20 more inventory for each mining productivity level up to 4
     bonus_inventory = {
         enabled = true,
@@ -17,285 +12,70 @@ return {
         rate = 5,
         limit = 20
     },
+    file_name = 'log/research.log',
     milestone = {
-        {
-            name = 'automation',
-            time = 600
-        },
-        {
-            name = 'logistics',
-            time = 300
-        },
-        {
-            name = 'steel-processing',
-            time = 300
-        },
-        {
-            name = 'logistic-science-pack',
-            time = 300
-        },
-        {
-            name = 'electronics',
-            time = 300
-        },
-        {
-            name = 'fast-inserter',
-            time = 300
-        },
-        {
-            name = 'steel-axe',
-            time = 300
-        },
-        {
-            name = 'automation-2',
-            time = 300
-        },
-        {
-            name = 'advanced-material-processing',
-            time = 300
-        },
-        {
-            name = 'engine',
-            time = 300
-        },
-        {
-            name = 'fluid-handling',
-            time = 300
-        },
-        {
-            name = 'oil-processing',
-            time = 300
-        },
-        {
-            name = 'sulfur-processing',
-            time = 300
-        },
-        {
-            name = 'plastics',
-            time = 300
-        },
-        {
-            name = 'advanced-electronics',
-            time = 300
-        },
-        {
-            name = 'chemical-science-pack',
-            time = 300
-        },
-        {
-            name = 'modules',
-            time = 300
-        },
-        {
-            name = 'logistics-2',
-            time = 300
-        },
-        {
-            name = 'railway',
-            time = 300
-        },
-        {
-            name = 'research-speed-1',
-            time = 300
-        },
-        {
-            name = 'research-speed-2',
-            time = 300
-        },
-        {
-            name = 'battery',
-            time = 300
-        },
-        {
-            name = 'concrete',
-            time = 300
-        },
-        {
-            name = 'flammables',
-            time = 300
-        },
-        {
-            name = 'low-density-structure',
-            time = 300
-        },
-        {
-            name = 'advanced-material-processing-2',
-            time = 300
-        },
-        {
-            name = 'productivity-module',
-            time = 300
-        },
-        {
-            name = 'production-science-pack',
-            time = 300
-        },
-        {
-            name = 'advanced-electronics-2',
-            time = 300
-        },
-        {
-            name = 'advanced-oil-processing',
-            time = 300
-        },
-        {
-            name = 'lubricant',
-            time = 300
-        },
-        {
-            name = 'electric-engine',
-            time = 300
-        },
-        {
-            name = 'robotics',
-            time = 300
-        },
-        {
-            name = 'construction-robotics',
-            time = 300
-        },
-        {
-            name = 'worker-robots-speed-1',
-            time = 300
-        },
-        {
-            name = 'worker-robots-speed-2',
-            time = 300
-        },
-        {
-            name = 'utility-science-pack',
-            time = 300
-        },
-        {
-            name = 'productivity-module-2',
-            time = 300
-        },
-        {
-            name = 'speed-module-2',
-            time = 300
-        },
-        {
-            name = 'rocket-fuel',
-            time = 300
-        },
-        {
-            name = 'effect-transmission',
-            time = 300
-        },
-        {
-            name = 'productivity-module-3',
-            time = 300
-        },
-        {
-            name = 'rocket-control-unit',
-            time = 300
-        },
-        {
-            name = 'speed-module-3',
-            time = 300
-        },
-        {
-            name = 'rocket-silo',
-            time = 300
-        },
-        {
-            name = 'space-science-pack',
-            time = 300
-        }
+        ['automation'] = 600,
+        ['logistics'] = 300,
+        ['steel-processing'] = 300,
+        ['logistic-science-pack'] = 300,
+        ['electronics'] = 300,
+        ['fast-inserter'] = 300,
+        ['steel-axe'] = 300,
+        ['automation-2'] = 300,
+        ['advanced-material-processing'] = 300,
+        ['engine'] = 300,
+        ['fluid-handling'] = 300,
+        ['oil-processing'] = 300,
+        ['sulfur-processing'] = 300,
+        ['plastics'] = 300,
+        ['advanced-electronics'] = 300,
+        ['chemical-science-pack'] = 300,
+        ['modules'] = 300,
+        ['logistics-2'] = 300,
+        ['railway'] = 300,
+        ['research-speed-1'] = 300,
+        ['research-speed-2'] = 300,
+        ['battery'] = 300,
+        ['concrete'] = 300,
+        ['flammables'] = 300,
+        ['low-density-structure'] = 300,
+        ['advanced-material-processing-2'] = 300,
+        ['productivity-module'] = 300,
+        ['production-science-pack'] = 300,
+        ['advanced-electronics-2'] = 300,
+        ['advanced-oil-processing'] = 300,
+        ['electric-engine'] = 300,
+        ['robotics'] = 300,
+        ['construction-robotics'] = 300,
+        ['worker-robots-speed-1'] = 300,
+        ['worker-robots-speed-2'] = 300,
+        ['utility-science-pack'] = 300,
+        ['productivity-module-2'] = 300,
+        ['speed-module-2'] = 300,
+        ['rocket-fuel'] = 300,
+        ['effect-transmission'] = 300,
+        ['productivity-module-3'] = 300,
+        ['rocket-control-unit'] = 300,
+        ['speed-module-3'] = 300,
+        ['rocket-silo'] = 300,
+        ['space-science-pack'] = 300,
     },
     inf_res = {
-        {
-            -- Mining Productivity
-            name = 'mining-productivity-4',
-            level = 4
-        },
-        {
-            -- Robot Speed
-            name = 'worker-robots-speed-6',
-            level = 6
-        },
-        {
-            -- Laser Damage
-            name = 'energy-weapons-damage-7',
-            level = 7
-        },
-        {
-            -- Explosive Damage
-            name = 'stronger-explosives-7',
-            level = 7
-        },
-        {
-            -- Bullet Damage
-            name = 'physical-projectile-damage-7',
-            level = 7
-        },
-        {
-            -- Flame Damage
-            name = 'refined-flammables-7',
-            level = 7
-        },
-        {
-            -- Artillery Range
-            name = 'artillery-shell-range-1',
-            level = 1
-        },
-        {
-            -- Artillery Speed
-            name = 'artillery-shell-speed-1',
-            level = 1
-        }
+        -- Mining Productivity
+        ['mining-productivity-4'] = 4,
+        -- Robot Speed
+        ['worker-robots-speed-6'] = 6,
+        -- Laser Damage
+        ['energy-weapons-damage-7'] = 7,
+        -- Explosive Damage
+        ['stronger-explosives-7'] = 7,
+        -- Bullet Damage
+        ['physical-projectile-damage-7'] = 7,
+        -- Flame Damage
+        ['refined-flammables-7'] = 7,
+        -- Artillery Range
+        ['artillery-shell-range-1'] = 1,
+        -- Artillery Speed
+        ['artillery-shell-speed-1'] = 1
     }
-    --[[
-    limit_research = false,
-    limit_research_list = {
-        {
-            -- Mining Productivity
-            name = 'mining-productivity-4',
-            enabled = false,
-            level = 4
-        },
-        {
-            -- Robot Speed
-            name = 'worker-robots-speed-6',
-            enabled = false,
-            level = 6
-        },
-        {
-            -- Laser Damage
-            name = 'energy-weapons-damage-7',
-            enabled = false,
-            level = 7
-        },
-        {
-            -- Explosive Damage
-            name = 'stronger-explosives-7',
-            enabled = false,
-            level = 7
-        },
-        {
-            -- Bullet Damage
-            name = 'physical-projectile-damage-7',
-            enabled = false,
-            level = 7
-        },
-        {
-            -- Flame Damage
-            name = 'refined-flammables-7',
-            enabled = false,
-            level = 7
-        },
-        {
-            -- Artillery Range
-            name = 'artillery-shell-range-1',
-            enabled = false,
-            level = 1
-        },
-        {
-            -- Artillery Speed
-            name = 'artillery-shell-speed-1',
-            enabled = false,
-            level = 1
-        }
-    }
-    ]]
 }
