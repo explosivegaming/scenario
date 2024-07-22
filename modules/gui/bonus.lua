@@ -249,12 +249,12 @@ local function bonus_gui_pts_needed(player)
     local disp = frame.container['bonus_st_2'].disp.table
     local total = 0
 
-    total = total + (tonumber(disp[bonus_gui_display_cmms_count.name].caption) / config.player_bonus['character_mining_speed_modifier'].cost_scale * config.player_bonus['character_mining_speed_modifier'].cost)
-    total = total + (tonumber(disp[bonus_gui_display_crs_count.name].caption) / config.player_bonus['character_running_speed_modifier'].cost_scale * config.player_bonus['character_running_speed_modifier'].cost)
-    total = total + (tonumber(disp[bonus_gui_display_ccs_count.name].caption) / config.player_bonus['character_crafting_speed_modifier'].cost_scale * config.player_bonus['character_crafting_speed_modifier'].cost)
-    total = total + (tonumber(disp[bonus_gui_display_cisb_count.name].caption) / config.player_bonus['character_inventory_slots_bonus'].cost_scale * config.player_bonus['character_inventory_slots_bonus'].cost)
-    total = total + (tonumber(disp[bonus_gui_display_chb_count.name].caption) / config.player_bonus['character_health_bonus'].cost_scale * config.player_bonus['character_health_bonus'].cost)
-    total = total + (tonumber(disp[bonus_gui_display_crdb_count.name].caption) / config.player_bonus['character_reach_distance_bonus'].cost_scale * config.player_bonus['character_reach_distance_bonus'].cost)
+    total = total + (disp[bonus_gui_display_cmms_slider.name].slider_value / config.player_bonus['character_mining_speed_modifier'].cost_scale * config.player_bonus['character_mining_speed_modifier'].cost)
+    total = total + (disp[bonus_gui_display_crs_slider.name].slider_value / config.player_bonus['character_running_speed_modifier'].cost_scale * config.player_bonus['character_running_speed_modifier'].cost)
+    total = total + (disp[bonus_gui_display_ccs_slider.name].slider_value / config.player_bonus['character_crafting_speed_modifier'].cost_scale * config.player_bonus['character_crafting_speed_modifier'].cost)
+    total = total + (disp[bonus_gui_display_cisb_slider.name].slider_value / config.player_bonus['character_inventory_slots_bonus'].cost_scale * config.player_bonus['character_inventory_slots_bonus'].cost)
+    total = total + (disp[bonus_gui_display_chb_slider.name].slider_value / config.player_bonus['character_health_bonus'].cost_scale * config.player_bonus['character_health_bonus'].cost)
+    total = total + (disp[bonus_gui_display_crdb_slider.name].slider_value / config.player_bonus['character_reach_distance_bonus'].cost_scale * config.player_bonus['character_reach_distance_bonus'].cost)
 
     return total
 end
@@ -267,14 +267,14 @@ local function apply_bonus(player)
     local frame = Gui.get_left_element(player, bonus_container)
     local disp = frame.container['bonus_st_2'].disp.table
 
-    player['character_mining_speed_modifier'] = tonumber(disp[bonus_gui_display_cmms_count.name].caption)
-    player['character_running_speed_modifier'] = tonumber(disp[bonus_gui_display_crs_count.name].caption)
-    player['character_crafting_speed_modifier'] = tonumber(disp[bonus_gui_display_ccs_count.name].caption)
-    player['character_inventory_slots_bonus'] = tonumber(disp[bonus_gui_display_cisb_count.name].caption)
-    player['character_health_bonus'] = tonumber(disp[bonus_gui_display_chb_count.name].caption)
-    player['character_reach_distance_bonus'] = tonumber(disp[bonus_gui_display_crdb_count.name].caption)
-    player['character_resource_reach_distance_bonus'] = tonumber(disp[bonus_gui_display_crdb_count.name].caption)
-    player['character_build_distance_bonus'] = tonumber(disp[bonus_gui_display_crdb_count.name].caption)
+    player['character_mining_speed_modifier'] = disp[bonus_gui_display_cmms_slider.name].slider_value
+    player['character_running_speed_modifier'] = disp[bonus_gui_display_crs_slider.name].slider_value
+    player['character_crafting_speed_modifier'] = disp[bonus_gui_display_ccs_slider.name].slider_value
+    player['character_inventory_slots_bonus'] = disp[bonus_gui_display_cisb_slider.name].slider_value
+    player['character_health_bonus'] = disp[bonus_gui_display_chb_slider.name].slider_value
+    player['character_reach_distance_bonus'] = disp[bonus_gui_display_crdb_slider.name].slider_value
+    player['character_resource_reach_distance_bonus'] = disp[bonus_gui_display_crdb_slider.name].slider_value
+    player['character_build_distance_bonus'] = disp[bonus_gui_display_crdb_slider.name].slider_value
 end
 
 local function role_update(event)
@@ -384,9 +384,10 @@ Gui.element{
 }:style{
     width = config.gui_display_width['half']
 }:on_click(function(player, element, _)
-    local r = bonus_gui_pts_needed(player)
-    element.parent[bonus_gui_control_pts_n_count.name].caption = r
-    element.parent[bonus_gui_control_pts_r_count.name].caption = tonumber(element.parent[bonus_gui_control_pts_a_count.name].caption) - r
+    local n = bonus_gui_pts_needed(player)
+    element.parent[bonus_gui_control_pts_n_count.name].caption = n
+    local r = tonumber(element.parent[bonus_gui_control_pts_a_count.name].caption) - n
+    element.parent[bonus_gui_control_pts_r_count.name].caption = r
 
     if r >= 0 then
         apply_bonus(player)
