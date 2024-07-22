@@ -8,19 +8,15 @@ Global.register(research, function(tbl)
     research = tbl
 end)
 
-local function res_queue(event)
-    if event.research.force.rockets_launched == 0 or event.research.force.technologies['mining-productivity-4'].level <= 4 then
-        return
-    end
-
-    local res_q = event.force.research_queue
+local function res_queue(force, research, by_script)
+    local res_q = force.research_queue
 
     if #res_q < config.queue_amount then
         for i=1, config.queue_amount - #res_q do
-            event.research.force.add_research(event.research.force.technologies['mining-productivity-4'])
+            force.add_research(force.technologies['mining-productivity-4'])
 
-            if not (event.by_script) then
-                game.print{'expcom-res.inf-q', event.research.name, event.research.level + i}
+            if not (by_script) then
+                game.print{'expcom-res.inf-q', research.name, research.level + i}
             end
         end
     end
@@ -32,7 +28,7 @@ Commands.new_command('auto-research', 'Automatically queue up research')
     research.res_queue_enable = not research.res_queue_enable
 
     if research.res_queue_enable then
-        res_queue(player.force)
+        res_queue(player.force, nil, true)
     end
 
     game.print{'expcom-res.res', player.name, research.res_queue_enable}
@@ -41,6 +37,8 @@ end)
 
 Event.add(defines.events.on_research_finished, function(event)
     if research.res_queue_enable then
-        res_queue(event)
+        if event.research.force.rockets_launched > 0 and event.research.force.technologies['mining-productivity-4'].level > 4 then
+            res_queue(event.research.force, {name=event.research.name, level=event.research.level}, event.by_script)
+        end
     end
 end)
