@@ -47,14 +47,15 @@ local elem_filter = {
     normal = {{
         filter = 'type',
         type = 'module'
+    }, {
+        filter = 'name',
+        name = prod_module_names,
+        mode = 'and',
+        invert = true
     }},
     prod = {{
         filter = 'type',
         type = 'module'
-    }, {
-        filter = 'name',
-        name = prod_module_names,
-        mode = 'and'
     }}
 }
 
