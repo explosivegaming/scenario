@@ -141,7 +141,8 @@ Selection.on_selection(SelectionModuleArea, function(event)
 
             for k, v in pairs(mm['p']) do
                 if k:find('productivity') then
-                    mm['p'][k:gsub('productivity', 'effectivity')] = v
+                    local module_name = k:gsub('productivity', 'effectivity')
+                    mm['p'][module_name] = (mm['p'][module_name] or 0) + v
                     mm['p'][k] = nil
                 end
             end
