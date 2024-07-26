@@ -10,251 +10,17 @@ local config = require 'config.bonus' --- @dep config.bonus
 
 local bonus_container
 
---- Display label for the character, manual mining speed
--- @element bonus_gui_display_cmms
-local bonus_gui_display_cmms =
-Gui.element{
-    type = 'label',
-    name = 'bonus_display_cmms',
-    caption = {'bonus.display-cmms'},
-    tooltip = {'bonus.display-cmms-tooltip'},
-    style = 'heading_1_label'
-}:style{
-    width = config.gui_display_width['label']
-}
-
-local bonus_gui_display_cmms_slider =
-Gui.element{
-    type = 'slider',
-    name = 'bonus_display_cmms_slider',
-    value = config.player_bonus['character_mining_speed_modifier'].value,
-    maximum_value = config.player_bonus['character_mining_speed_modifier'].max,
-    value_step = config.player_bonus['character_mining_speed_modifier'].scale,
-    discrete_values = true,
-    style = 'notched_slider'
-}:style{
-    width = config.gui_display_width['slider']
-}
-
-local bonus_gui_display_cmms_count =
-Gui.element{
-    type = 'label',
-    name = 'bonus_display_cmms_count',
-    caption = config.player_bonus['character_mining_speed_modifier'].value,
-    numeric = true,
-    allow_decimal = true,
-    allow_negative = false,
-    style = 'heading_1_label'
-}:style{
-    width = config.gui_display_width['count']
-}
-
---- Display label for the character, running speed
--- @element bonus_gui_display_crs
-local bonus_gui_display_crs =
-Gui.element{
-    type = 'label',
-    name = 'bonus_display_crs',
-    caption = {'bonus.display-crs'},
-    tooltip = {'bonus.display-crs-tooltip'},
-    style = 'heading_1_label'
-}:style{
-    width = config.gui_display_width['label']
-}
-
-local bonus_gui_display_crs_slider =
-Gui.element{
-    type = 'slider',
-    name = 'bonus_display_crs_slider',
-    value = config.player_bonus['character_running_speed_modifier'].value,
-    maximum_value = config.player_bonus['character_running_speed_modifier'].max,
-    value_step = config.player_bonus['character_running_speed_modifier'].scale,
-    discrete_values = true,
-    style = 'notched_slider'
-}:style{
-    width = config.gui_display_width['slider']
-}
-
-local bonus_gui_display_crs_count =
-Gui.element{
-    type = 'label',
-    name = 'bonus_display_crs_count',
-    caption = config.player_bonus['character_running_speed_modifier'].value,
-    numeric = true,
-    allow_decimal = true,
-    allow_negative = false,
-    style = 'heading_1_label'
-}:style{
-    width = config.gui_display_width['count']
-}
-
---- Display label for the character, crafting speed
--- @element bonus_gui_display_ccs
-local bonus_gui_display_ccs =
-Gui.element{
-    type = 'label',
-    name = 'bonus_display_ccs',
-    caption = {'bonus.display-ccs'},
-    tooltip = {'bonus.display-ccs-tooltip'},
-    style = 'heading_1_label'
-}:style{
-    width = config.gui_display_width['label']
-}
-
-local bonus_gui_display_ccs_slider =
-Gui.element{
-    type = 'slider',
-    name = 'bonus_display_ccs_slider',
-    value = config.player_bonus['character_crafting_speed_modifier'].value,
-    maximum_value = config.player_bonus['character_crafting_speed_modifier'].max,
-    value_step = config.player_bonus['character_crafting_speed_modifier'].scale,
-    discrete_values = true,
-    style = 'notched_slider'
-}:style{
-    width = config.gui_display_width['slider']
-}
-
-local bonus_gui_display_ccs_count =
-Gui.element{
-    type = 'label',
-    name = 'bonus_display_ccs_count',
-    caption = config.player_bonus['character_crafting_speed_modifier'].value,
-    numeric = true,
-    allow_decimal = true,
-    allow_negative = false,
-    style = 'heading_1_label'
-}:style{
-    width = config.gui_display_width['count']
-}
-
---- Display label for the character, inventory slots bonus
--- @element bonus_gui_display_cisb
-local bonus_gui_display_cisb =
-Gui.element{
-    type = 'label',
-    name = 'bonus_display_cisb',
-    caption = {'bonus.display-cisb'},
-    tooltip = {'bonus.display-cisb-tooltip'},
-    style = 'heading_1_label'
-}:style{
-    width = config.gui_display_width['label']
-}
-
-local bonus_gui_display_cisb_slider =
-Gui.element{
-    type = 'slider',
-    name = 'bonus_display_cisb_slider',
-    value = config.player_bonus['character_inventory_slots_bonus'].value,
-    maximum_value = config.player_bonus['character_inventory_slots_bonus'].max,
-    value_step = config.player_bonus['character_inventory_slots_bonus'].scale,
-    discrete_values = true,
-    style = 'notched_slider'
-}:style{
-    width = config.gui_display_width['slider']
-}
-
-local bonus_gui_display_cisb_count =
-Gui.element{
-    type = 'label',
-    name = 'bonus_display_cisb_count',
-    caption = config.player_bonus['character_inventory_slots_bonus'].value,
-    numeric = true,
-    allow_decimal = false,
-    allow_negative = false,
-    style = 'heading_1_label'
-}:style{
-    width = config.gui_display_width['count']
-}
-
---- Display label for the character, health bonus
--- @element bonus_gui_display_chb
-local bonus_gui_display_chb =
-Gui.element{
-    type = 'label',
-    name = 'bonus_display_chb',
-    caption = {'bonus.display-chb'},
-    tooltip = {'bonus.display-chb-tooltip'},
-    style = 'heading_1_label'
-}:style{
-    width = config.gui_display_width['label']
-}
-
-local bonus_gui_display_chb_slider =
-Gui.element{
-    type = 'slider',
-    name = 'bonus_display_chb_slider',
-    value = config.player_bonus['character_health_bonus'].value,
-    maximum_value = config.player_bonus['character_health_bonus'].max,
-    value_step = config.player_bonus['character_health_bonus'].scale,
-    discrete_values = true,
-    style = 'notched_slider'
-}:style{
-    width = config.gui_display_width['slider']
-}
-
-local bonus_gui_display_chb_count =
-Gui.element{
-    type = 'label',
-    name = 'bonus_display_chb_count',
-    caption = config.player_bonus['character_health_bonus'].value,
-    numeric = true,
-    allow_decimal = false,
-    allow_negative = false,
-    style = 'heading_1_label'
-}:style{
-    width = config.gui_display_width['count']
-}
-
---- Display label for the character, reach distance bonus
--- @element bonus_gui_display_crdb
-local bonus_gui_display_crdb =
-Gui.element{
-    type = 'label',
-    name = 'bonus_display_crdb',
-    caption = {'bonus.display-crdb'},
-    tooltip = {'bonus.display-crdb-tooltip'},
-    style = 'heading_1_label'
-}:style{
-    width = config.gui_display_width['label']
-}
-
-local bonus_gui_display_crdb_slider =
-Gui.element{
-    type = 'slider',
-    name = 'bonus_display_crdb_slider',
-    value = config.player_bonus['character_reach_distance_bonus'].value,
-    maximum_value = config.player_bonus['character_reach_distance_bonus'].max,
-    value_step = config.player_bonus['character_reach_distance_bonus'].scale,
-    discrete_values = true,
-    style = 'notched_slider'
-}:style{
-    width = config.gui_display_width['slider']
-}
-
-local bonus_gui_display_crdb_count =
-Gui.element{
-    type = 'label',
-    name = 'bonus_display_crdb_count',
-    caption = config.player_bonus['character_reach_distance_bonus'].value,
-    numeric = true,
-    allow_decimal = false,
-    allow_negative = false,
-    style = 'heading_1_label'
-}:style{
-    width = config.gui_display_width['count']
-}
-
 local function bonus_gui_pts_needed(player)
     local frame = Gui.get_left_element(player, bonus_container)
     local disp = frame.container['bonus_st_2'].disp.table
     local total = 0
 
-    total = total + (disp[bonus_gui_display_cmms_slider.name].slider_value / config.player_bonus['character_mining_speed_modifier'].cost_scale * config.player_bonus['character_mining_speed_modifier'].cost)
-    total = total + (disp[bonus_gui_display_crs_slider.name].slider_value / config.player_bonus['character_running_speed_modifier'].cost_scale * config.player_bonus['character_running_speed_modifier'].cost)
-    total = total + (disp[bonus_gui_display_ccs_slider.name].slider_value / config.player_bonus['character_crafting_speed_modifier'].cost_scale * config.player_bonus['character_crafting_speed_modifier'].cost)
-    total = total + (disp[bonus_gui_display_cisb_slider.name].slider_value / config.player_bonus['character_inventory_slots_bonus'].cost_scale * config.player_bonus['character_inventory_slots_bonus'].cost)
-    total = total + (disp[bonus_gui_display_chb_slider.name].slider_value / config.player_bonus['character_health_bonus'].cost_scale * config.player_bonus['character_health_bonus'].cost)
-    total = total + (disp[bonus_gui_display_crdb_slider.name].slider_value / config.player_bonus['character_reach_distance_bonus'].cost_scale * config.player_bonus['character_reach_distance_bonus'].cost)
+    total = total + (disp['bonus_display_cmms_slider'].slider_value / config.player_bonus['character_mining_speed_modifier'].cost_scale * config.player_bonus['character_mining_speed_modifier'].cost)
+    total = total + (disp['bonus_display_crs_slider'].slider_value / config.player_bonus['character_running_speed_modifier'].cost_scale * config.player_bonus['character_running_speed_modifier'].cost)
+    total = total + (disp['bonus_display_ccs_slider'].slider_value / config.player_bonus['character_crafting_speed_modifier'].cost_scale * config.player_bonus['character_crafting_speed_modifier'].cost)
+    total = total + (disp['bonus_display_cisb_slider'].slider_value / config.player_bonus['character_inventory_slots_bonus'].cost_scale * config.player_bonus['character_inventory_slots_bonus'].cost)
+    total = total + (disp['bonus_display_chb_slider'].slider_value / config.player_bonus['character_health_bonus'].cost_scale * config.player_bonus['character_health_bonus'].cost)
+    total = total + (disp['bonus_display_crdb_slider'].slider_value / config.player_bonus['character_reach_distance_bonus'].cost_scale * config.player_bonus['character_reach_distance_bonus'].cost)
 
     return total
 end
@@ -267,14 +33,14 @@ local function apply_bonus(player)
     local frame = Gui.get_left_element(player, bonus_container)
     local disp = frame.container['bonus_st_2'].disp.table
 
-    player['character_mining_speed_modifier'] = disp[bonus_gui_display_cmms_slider.name].slider_value
-    player['character_running_speed_modifier'] = disp[bonus_gui_display_crs_slider.name].slider_value
-    player['character_crafting_speed_modifier'] = disp[bonus_gui_display_ccs_slider.name].slider_value
-    player['character_inventory_slots_bonus'] = disp[bonus_gui_display_cisb_slider.name].slider_value
-    player['character_health_bonus'] = disp[bonus_gui_display_chb_slider.name].slider_value
-    player['character_reach_distance_bonus'] = disp[bonus_gui_display_crdb_slider.name].slider_value
-    player['character_resource_reach_distance_bonus'] = disp[bonus_gui_display_crdb_slider.name].slider_value
-    player['character_build_distance_bonus'] = disp[bonus_gui_display_crdb_slider.name].slider_value
+    player['character_mining_speed_modifier'] = disp['bonus_display_cmms_slider'].slider_value
+    player['character_running_speed_modifier'] = disp['bonus_display_crs_slider'].slider_value
+    player['character_crafting_speed_modifier'] = disp['bonus_display_ccs_slider'].slider_value
+    player['character_inventory_slots_bonus'] = disp['bonus_display_cisb_slider'].slider_value
+    player['character_health_bonus'] = disp['bonus_display_chb_slider'].slider_value
+    player['character_reach_distance_bonus'] = disp['bonus_display_crdb_slider'].slider_value
+    player['character_resource_reach_distance_bonus'] = disp['bonus_display_crdb_slider'].slider_value
+    player['character_build_distance_bonus'] = disp['bonus_display_crdb_slider'].slider_value
 end
 
 local function role_update(event)
@@ -289,7 +55,6 @@ local function role_update(event)
         player['character_reach_distance_bonus'] = 0
         player['character_resource_reach_distance_bonus'] = 0
         player['character_build_distance_bonus'] = 0
-        apply_bonus(player)
     end
 end
 
@@ -416,6 +181,54 @@ Gui.element(function(_, parent, name)
     return bonus_set
 end)
 
+--- Display group
+-- @element bonus_gui_slider
+local bonus_gui_slider =
+Gui.element(function(definition, parent, name, caption, tooltip, bonus)
+    local label = parent.add{
+        type = 'label',
+        caption = caption,
+        tooltip = tooltip,
+        style = 'heading_1_label'
+    }
+    label.style.width = config.gui_display_width['label']
+
+    local slider = parent.add{
+        type = 'slider',
+        name = name .. '_slider',
+        value = bonus.value,
+        maximum_value = bonus.max,
+        value_step = bonus.scale,
+        discrete_values = true,
+        style = 'notched_slider',
+        tags = {
+            counter = name .. '_count'
+        }
+    }
+    slider.style.width = config.gui_display_width['slider']
+    slider.style.horizontally_stretchable = true
+
+    local count = parent.add{
+        type = 'label',
+        name = name .. '_count',
+        caption = bonus.value,
+        numeric = true,
+        allow_decimal = false,
+        allow_negative = false,
+        style = 'heading_1_label'
+    }
+    count.style.width = config.gui_display_width['count']
+end)
+:on_value_changed(function(player, element, _event)
+    element.parent[element.tags.counter].caption = element.slider_value
+
+    local r = bonus_gui_pts_needed(player)
+    local frame = Gui.get_left_element(player, bonus_container)
+    local disp = frame.container['bonus_st_1'].disp.table
+    disp[bonus_gui_control_pts_n_count.name].caption = r
+    disp[bonus_gui_control_pts_r_count.name].caption = tonumber(disp[bonus_gui_control_pts_a_count.name].caption) - r
+end)
+
 --- A vertical flow containing all the bonus data
 -- @element bonus_data_set
 local bonus_data_set =
@@ -423,29 +236,12 @@ Gui.element(function(_, parent, name)
     local bonus_set = parent.add{type='flow', direction='vertical', name=name}
     local disp = Gui.scroll_table(bonus_set, 360, 3, 'disp')
 
-    bonus_gui_display_cmms(disp)
-    bonus_gui_display_cmms_slider(disp)
-    bonus_gui_display_cmms_count(disp)
-
-    bonus_gui_display_crs(disp)
-    bonus_gui_display_crs_slider(disp)
-    bonus_gui_display_crs_count(disp)
-
-    bonus_gui_display_ccs(disp)
-    bonus_gui_display_ccs_slider(disp)
-    bonus_gui_display_ccs_count(disp)
-
-    bonus_gui_display_cisb(disp)
-    bonus_gui_display_cisb_slider(disp)
-    bonus_gui_display_cisb_count(disp)
-
-    bonus_gui_display_chb(disp)
-    bonus_gui_display_chb_slider(disp)
-    bonus_gui_display_chb_count(disp)
-
-    bonus_gui_display_crdb(disp)
-    bonus_gui_display_crdb_slider(disp)
-    bonus_gui_display_crdb_count(disp)
+    bonus_gui_slider(disp, 'bonus_display_cmms', {'bonus.display-cmms'}, {'bonus.display-cmms-tooltip'}, config.player_bonus['character_mining_speed_modifier'])
+    bonus_gui_slider(disp, 'bonus_display_crs', {'bonus.display-crs'}, {'bonus.display-crs-tooltip'}, config.player_bonus['character_running_speed_modifier'])
+    bonus_gui_slider(disp, 'bonus_display_ccs', {'bonus.display-ccs'}, {'bonus.display-ccs-tooltip'}, config.player_bonus['character_crafting_speed_modifier'])
+    bonus_gui_slider(disp, 'bonus_display_cisb', {'bonus.display-cisb'}, {'bonus.display-cisb-tooltip'}, config.player_bonus['character_inventory_slots_bonus'])
+    bonus_gui_slider(disp, 'bonus_display_chb', {'bonus.display-chb'}, {'bonus.display-chb-tooltip'}, config.player_bonus['character_health_bonus'])
+    bonus_gui_slider(disp, 'bonus_display_crdb', {'bonus.display-crdb'}, {'bonus.display-crdb-tooltip'}, config.player_bonus['character_reach_distance_bonus'])
 
     return bonus_set
 end)
@@ -468,31 +264,6 @@ end)
 -- @element toggle_left_element
 Gui.left_toolbar_button('item/exoskeleton-equipment', {'bonus.main-tooltip'}, bonus_container, function(player)
 	return Roles.player_allowed(player, 'gui/bonus')
-end)
-
-Event.add(defines.events.on_gui_value_changed, function(event)
-    local player = game.get_player(event.player_index)
-    local frame = Gui.get_left_element(player, bonus_container)
-    local disp = frame.container['bonus_st_2'].disp.table
-
-    if event.element.name == bonus_gui_display_cmms_slider.name then
-        disp[bonus_gui_display_cmms_count.name].caption = event.element.slider_value
-
-    elseif event.element.name == bonus_gui_display_crs_slider.name then
-        disp[bonus_gui_display_crs_count.name].caption = event.element.slider_value
-
-    elseif event.element.name == bonus_gui_display_ccs_slider.name then
-        disp[bonus_gui_display_ccs_count.name].caption = event.element.slider_value
-
-    elseif event.element.name == bonus_gui_display_cisb_slider.name then
-        disp[bonus_gui_display_cisb_count.name].caption = event.element.slider_value
-
-    elseif event.element.name == bonus_gui_display_chb_slider.name then
-        disp[bonus_gui_display_chb_count.name].caption = event.element.slider_value
-
-    elseif event.element.name == bonus_gui_display_crdb_slider.name then
-        disp[bonus_gui_display_crdb_count.name].caption = event.element.slider_value
-    end
 end)
 
 Event.add(defines.events.on_player_created, function(event)
