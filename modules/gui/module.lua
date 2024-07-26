@@ -249,5 +249,4 @@ Event.add(defines.events.on_gui_elem_changed, function(event)
     end
 end)
 
-Event.on_init(get_module_name)
-Event.on_load(get_module_name)
+Event.add(defines.events.on_player_joined_game, get_module_name)
