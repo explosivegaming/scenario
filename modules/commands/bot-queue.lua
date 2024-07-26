@@ -11,7 +11,7 @@ Commands.new_command('bot-queue-get', 'Get bot queue')
 :register(function(player)
     local s = player.force.max_successful_attempts_per_tick_per_construction_queue
     local f = player.force.max_failed_attempts_per_tick_per_construction_queue
-    return Commands.success{'expcom-bot-queue.result', s, f}
+    return Commands.success{'expcom-bot-queue.result', player.name, s, f}
 end)
 
 Commands.new_command('bot-queue-set', 'Set bot queue')
