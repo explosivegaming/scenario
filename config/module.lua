@@ -1,31 +1,52 @@
 return {
     -- type of machine to handle together
-    default_module_row_count = 6,
+    default_module_row_count = 9,
     module_slot_max = 4,
-    machine_prod_disallow = {
-        ['beacon'] = true
-    },
-    machine_craft = {
-        ['assembling-machine-2'] = true,
-        ['assembling-machine-3'] = true,
-        ['electric-furnace'] = true,
-        ['oil-refinery'] = true,
-        ['chemical-plant'] = true,
-        ['centrifuge'] = true,
-        ['rocket-silo'] = true
-    },
     machine = {
-        ['electric-mining-drill'] = 'effectivity-module',
-        ['pumpjack'] = 'effectivity-module',
-        ['assembling-machine-2'] = 'productivity-module',
-        ['assembling-machine-3'] = 'productivity-module-3',
-        ['electric-furnace'] = 'productivity-module-3',
-        ['beacon'] = 'speed-module-3',
-        ['oil-refinery'] = 'productivity-module-3',
-        ['chemical-plant'] = 'productivity-module-3',
-        ['centrifuge'] = 'productivity-module-3',
-        ['lab'] = 'productivity-module-3',
-        ['rocket-silo'] = 'productivity-module-3'
+        ['electric-mining-drill'] = {
+            ['module'] = 'effectivity-module',
+            ['prod'] = true
+        },
+        ['pumpjack'] = {
+            ['module'] = 'effectivity-module',
+            ['prod'] = true
+        },
+        ['assembling-machine-2'] = {
+            ['module'] = 'productivity-module',
+            ['prod'] = true
+        },
+        ['assembling-machine-3'] = {
+            ['module'] = 'productivity-module-3',
+            ['prod'] = true
+        },
+        ['electric-furnace'] = {
+            ['module'] = 'productivity-module-3',
+            ['prod'] = true
+        },
+        ['beacon'] = {
+            ['module'] = 'speed-module-3',
+            ['prod'] = false
+        },
+        ['oil-refinery'] = {
+            ['module'] = 'productivity-module-3',
+            ['prod'] = true
+        },
+        ['chemical-plant'] = {
+            ['module'] = 'productivity-module-3',
+            ['prod'] = true
+        },
+        ['centrifuge'] = {
+            ['module'] = 'productivity-module-3',
+            ['prod'] = true
+        },
+        ['lab'] = {
+            ['module'] = 'productivity-module-3',
+            ['prod'] = true
+        },
+        ['rocket-silo'] = {
+            ['module'] = 'productivity-module-3',
+            ['prod'] = true
+        }
     },
     module_allowed = {
         ['advanced-circuit'] = true,
