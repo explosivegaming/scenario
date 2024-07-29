@@ -15,26 +15,24 @@ local function bonus_gui_pts_needed(player)
     local disp = frame.container['bonus_st_2'].disp.table
     local total = 0
 
-    total = total + (disp['bonus_display_cmms_slider'].slider_value / config.player_bonus['character_mining_speed_modifier'].cost_scale * config.player_bonus['character_mining_speed_modifier'].cost)
-    total = total + (disp['bonus_display_crs_slider'].slider_value / config.player_bonus['character_running_speed_modifier'].cost_scale * config.player_bonus['character_running_speed_modifier'].cost)
-    total = total + (disp['bonus_display_ccs_slider'].slider_value / config.player_bonus['character_crafting_speed_modifier'].cost_scale * config.player_bonus['character_crafting_speed_modifier'].cost)
-    total = total + (disp['bonus_display_cisb_slider'].slider_value / config.player_bonus['character_inventory_slots_bonus'].cost_scale * config.player_bonus['character_inventory_slots_bonus'].cost)
-    total = total + (disp['bonus_display_chb_slider'].slider_value / config.player_bonus['character_health_bonus'].cost_scale * config.player_bonus['character_health_bonus'].cost)
-    total = total + (disp['bonus_display_crdb_slider'].slider_value / config.player_bonus['character_reach_distance_bonus'].cost_scale * config.player_bonus['character_reach_distance_bonus'].cost)
+    for k, v in pairs(config.conversion) do
+        total = total + (disp['bonus_display_' .. k .. '_slider'].slider_value / config.player_bonus[v].cost_scale * config.player_bonus[v].cost)
+    end
 
     return total
 end
 
 local function apply_bonus(player)
     if not Roles.player_allowed(player, 'gui/bonus') then
-        player['character_mining_speed_modifier'] = 0
-        player['character_running_speed_modifier'] = 0
-        player['character_crafting_speed_modifier'] = 0
-        player['character_inventory_slots_bonus'] = 0
-        player['character_health_bonus'] = 0
-        player['character_reach_distance_bonus'] = 0
-        player['character_resource_reach_distance_bonus'] = 0
-        player['character_build_distance_bonus'] = 0
+        for k, v in pairs(config.player_bonus) do
+            player[k] = 0
+
+            if v.combined_bonus then
+                for i=1, #v.combined_bonus do
+                    player[v.combined_bonus[i]] = 0
+                end
+            end
+        end
 
         return
     end
@@ -46,14 +44,15 @@ local function apply_bonus(player)
     local frame = Gui.get_left_element(player, bonus_container)
     local disp = frame.container['bonus_st_2'].disp.table
 
-    player['character_mining_speed_modifier'] = disp['bonus_display_cmms_slider'].slider_value
-    player['character_running_speed_modifier'] = disp['bonus_display_crs_slider'].slider_value
-    player['character_crafting_speed_modifier'] = disp['bonus_display_ccs_slider'].slider_value
-    player['character_inventory_slots_bonus'] = disp['bonus_display_cisb_slider'].slider_value
-    player['character_health_bonus'] = disp['bonus_display_chb_slider'].slider_value
-    player['character_reach_distance_bonus'] = disp['bonus_display_crdb_slider'].slider_value
-    player['character_resource_reach_distance_bonus'] = disp['bonus_display_crdb_slider'].slider_value
-    player['character_build_distance_bonus'] = disp['bonus_display_crdb_slider'].slider_value
+    for k, v in pairs(config.conversion) do
+        player[k] = disp['bonus_display_' .. k .. '_slider'].slider_value
+
+        if config.player_bonus[v].combined_bonus then
+            for i=1, #config.player_bonus[v].combined_bonus do
+                player[config.player_bonus[v].combined_bonus[i]] = 0
+            end
+        end
+    end
 end
 
 --- Control label for the bonus points available
@@ -135,19 +134,17 @@ Gui.element{
     local frame = Gui.get_left_element(player, bonus_container)
     local disp = frame.container['bonus_st_2'].disp.table
 
-    disp['bonus_display_cmms_slider'].slider_value = config.player_bonus['character_mining_speed_modifier'].value
-    disp['bonus_display_crs_slider'].slider_value = config.player_bonus['character_running_speed_modifier'].value
-    disp['bonus_display_ccs_slider'].slider_value = config.player_bonus['character_crafting_speed_modifier'].value
-    disp['bonus_display_cisb_slider'].slider_value = config.player_bonus['character_inventory_slots_bonus'].value
-    disp['bonus_display_chb_slider'].slider_value = config.player_bonus['character_health_bonus'].value
-    disp['bonus_display_crdb_slider'].slider_value = config.player_bonus['character_reach_distance_bonus'].value
+    for k, v in pairs(config.conversion) do
+        local s = 'bonus_display_' .. k .. '_slider'
+        disp[s].slider_value = config.player_bonus[v].value
 
-    disp['bonus_display_cmms_count'].slider_value = config.player_bonus['character_mining_speed_modifier'].value
-    disp['bonus_display_crs_count'].slider_value = config.player_bonus['character_running_speed_modifier'].value
-    disp['bonus_display_ccs_count'].slider_value = config.player_bonus['character_crafting_speed_modifier'].value
-    disp['bonus_display_cisb_count'].slider_value = config.player_bonus['character_inventory_slots_bonus'].value
-    disp['bonus_display_chb_count'].slider_value = config.player_bonus['character_health_bonus'].value
-    disp['bonus_display_crdb_count'].slider_value = config.player_bonus['character_reach_distance_bonus'].value
+        if config.player_bonus[v].is_percentage then
+            disp[disp[s].tags.counter].caption = format_number(disp[s].slider_value * 100) .. ' %'
+
+        else
+            disp[disp[s].tags.counter].caption = format_number(disp[s].slider_value)
+        end
+    end
 
     local r = bonus_gui_pts_needed(player)
     element.parent[bonus_gui_control_pts_n_count.name].caption = r
@@ -265,12 +262,9 @@ Gui.element(function(_, parent, name)
     local bonus_set = parent.add{type='flow', direction='vertical', name=name}
     local disp = Gui.scroll_table(bonus_set, 360, 3, 'disp')
 
-    bonus_gui_slider(disp, 'bonus_display_cmms', {'bonus.display-cmms'}, {'bonus.display-cmms-tooltip'}, config.player_bonus['character_mining_speed_modifier'])
-    bonus_gui_slider(disp, 'bonus_display_crs', {'bonus.display-crs'}, {'bonus.display-crs-tooltip'}, config.player_bonus['character_running_speed_modifier'])
-    bonus_gui_slider(disp, 'bonus_display_ccs', {'bonus.display-ccs'}, {'bonus.display-ccs-tooltip'}, config.player_bonus['character_crafting_speed_modifier'])
-    bonus_gui_slider(disp, 'bonus_display_cisb', {'bonus.display-cisb'}, {'bonus.display-cisb-tooltip'}, config.player_bonus['character_inventory_slots_bonus'])
-    bonus_gui_slider(disp, 'bonus_display_chb', {'bonus.display-chb'}, {'bonus.display-chb-tooltip'}, config.player_bonus['character_health_bonus'])
-    bonus_gui_slider(disp, 'bonus_display_crdb', {'bonus.display-crdb'}, {'bonus.display-crdb-tooltip'}, config.player_bonus['character_reach_distance_bonus'])
+    for k, v in pairs(config.conversion) do
+        bonus_gui_slider(disp, 'bonus_display_' .. k, {'bonus.display-' .. k}, {'bonus.display-' .. k .. '-tooltip'}, config.player_bonus[v])
+    end
 
     return bonus_set
 end)
