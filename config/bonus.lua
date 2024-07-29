@@ -2,29 +2,23 @@
 -- @config Bonuses
 
 return {
-    -- level of player bonus for lower roles, 1 level is 10 %
     --[[
-    Total point is something like 200
-    point is given by role.
-    so below will be not able to see
-    then do like crafting speed is 2:1 (1 = 0.5x speed)
-    blah blah ...
-    and limit maximum...
+    TODO
+    force bonus
+    vlayer battery recharge (auto)
+    quick health regeneration
 
-    work with vlayer, virtual power source blah blah...
-    ]]
-    --[[
     Base point is equal to the amount of standard value in each parameter.
 
             CMMS    CRS     CCS     CISB    CHB     CRDB
-    STD     20      75      25      40      24      20
-    =       204
+    STD     20      60      20      20      12      10
+    =       142
 
-    MAX     40      150     50      60      48      50
-    =       398
+    MAX     50      120     60      40      24      25
+    =       319
     ]]
     pts = {
-        base = 204
+        base = 142
     },
     gui_display_width = {
         half = 180,
@@ -35,45 +29,51 @@ return {
     player_bonus = {
         ['character_mining_speed_modifier'] = {
             value = 2,
-            max = 4,
-            scale = 0.25,
+            max = 5,
+            scale = 0.5,
             cost_scale = 1,
-            cost = 10
+            cost = 10,
+            is_percentage = true
         },
         ['character_running_speed_modifier'] = {
             value = 1.5,
             max = 3,
             scale = 0.25,
             cost_scale = 1,
-            cost = 50
+            cost = 40,
+            is_percentage = true
         },
         ['character_crafting_speed_modifier'] = {
             value = 5,
-            max = 10,
+            max = 15,
             scale = 0.5,
             cost_scale = 1,
-            cost = 5
+            cost = 4,
+            is_percentage = true
         },
         ['character_inventory_slots_bonus'] = {
             value = 100,
-            max = 150,
+            max = 200,
             scale = 10,
             cost_scale = 10,
-            cost = 4
+            cost = 2,
+            is_percentage = false
         },
         ['character_health_bonus'] = {
             value = 200,
             max = 400,
             scale = 50,
             cost_scale = 50,
-            cost = 6
+            cost = 3,
+            is_percentage = false
         },
         ['character_reach_distance_bonus'] = {
             value = 10,
             max = 25,
             scale = 1,
             cost_scale = 1,
-            cost = 2,
+            cost = 1,
+            is_percentage = false,
             combined_bonus = {
                 'character_resource_reach_distance_bonus',
                 'character_build_distance_bonus'
@@ -85,21 +85,24 @@ return {
             max = 20,
             scale = 1,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ['character_loot_pickup_distance_bonus'] = {
             value = 0,
             max = 20,
             scale = 1,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ['character_item_drop_distance_bonus'] = {
             value = 0,
             max = 20,
             scale = 1,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         }
         ]]
     },
@@ -107,44 +110,50 @@ return {
         --[[
         ['character_mining_speed_modifier'] = {
             value = 0,
-            max = 4,
-            scale = 0.25,
+            max = 5,
+            scale = 0.5,
             cost_scale = 1,
-            cost = 10
+            cost = 10,
+            is_percentage = true
         },
         ['character_running_speed_modifier'] = {
             value = 0,
             max = 3,
             scale = 0.25,
             cost_scale = 1,
-            cost = 50
+            cost = 40,
+            is_percentage = true
         },
         ['character_crafting_speed_modifier'] = {
             value = 0,
-            max = 10,
+            max = 15,
             scale = 0.5,
             cost_scale = 1,
-            cost = 5
+            cost = 4,
+            is_percentage = true
         },
         ['character_inventory_slots_bonus'] = {
             value = 0,
-            max = 150,
+            max = 200,
             scale = 10,
             cost_scale = 100,
-            cost = 4
+            cost = 2,
+            is_percentage = false
         },
         ['character_health_bonus'] = {
             value = 0,
             max = 400,
             scale = 50,
-            cost = 6
+            cost = 3,
+            is_percentage = false
         },
         ['character_reach_distance_bonus'] = {
             value = 0,
             max = 25,
             scale = 1,
             cost_scale = 1,
-            cost = 2,
+            cost = 1,
+            is_percentage = false,
             combined_bonus = {
                 'character_resource_reach_distance_bonus',
                 'character_build_distance_bonus'
@@ -155,7 +164,8 @@ return {
             max = 0,
             scale = 0,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ]]
         ['worker_robots_battery_modifier'] = {
@@ -163,21 +173,24 @@ return {
             max = 1,
             scale = 1,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ['worker_robots_storage_bonus'] = {
             value = 1,
             max = 1,
             scale = 1,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ['following_robots_lifetime_modifier'] = {
             value = 1,
             max = 1,
             scale = 1,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         --[[
         ['character_item_pickup_distance_bonus'] = {
@@ -185,88 +198,100 @@ return {
             max = 20,
             scale = 1,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ['character_loot_pickup_distance_bonus'] = {
             value = 0,
             max = 20,
             scale = 1,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ['character_item_drop_distance_bonus'] = {
             value = 0,
             max = 20,
             scale = 1,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ['character_trash_slot_count'] = {
             value = 0,
             max = 0,
             scale = 0,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ['mining_drill_productivity_bonus'] = {
             value = 0,
             max = 0,
             scale = 0,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ['train_braking_force_bonus'] = {
             value = 0,
             max = 0,
             scale = 0,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ['laboratory_speed_modifier'] = {
             value = 0,
             max = 0,
             scale = 0,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ['laboratory_productivity_bonus'] = {
             value = 0,
             max = 0,
             scale = 0,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ['inserter_stack_size_bonus'] = {
             value = 0,
             max = 0,
             scale = 0,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ['stack_inserter_capacity_bonus'] = {
             value = 0,
             max = 0,
             scale = 0,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         },
         ['artillery_range_modifier'] = {
             value = 0,
             max = 0,
             scale = 0,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         }
         ]]
     },
     surface_bonus = {
         --[[
         ['solar_power_multiplier'] = {
-            value = 0,
+            value = 1,
             max = 1000,
             scale = 1,
             cost_scale = 1,
-            cost = 1
+            cost = 1,
+            is_percentage = false
         }
         ]]
     }
