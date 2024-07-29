@@ -14,8 +14,8 @@ return {
     STD     20      90      20      20      12      10
     =       172
 
-    MAX     50      180     60      40      24      25
-    =       379
+    MAX     50      180     80      40      24      30
+    =       405
     ]]
     pts = {
         base = 172
@@ -45,8 +45,8 @@ return {
         },
         ['character_crafting_speed_modifier'] = {
             value = 5,
-            max = 15,
-            scale = 0.5,
+            max = 20,
+            scale = 1,
             cost_scale = 1,
             cost = 4,
             is_percentage = true
@@ -69,8 +69,8 @@ return {
         },
         ['character_reach_distance_bonus'] = {
             value = 10,
-            max = 25,
-            scale = 1,
+            max = 30,
+            scale = 2,
             cost_scale = 1,
             cost = 1,
             is_percentage = false,
@@ -126,8 +126,8 @@ return {
         },
         ['character_crafting_speed_modifier'] = {
             value = 0,
-            max = 15,
-            scale = 0.5,
+            max = 20,
+            scale = 1,
             cost_scale = 1,
             cost = 4,
             is_percentage = true
@@ -149,8 +149,8 @@ return {
         },
         ['character_reach_distance_bonus'] = {
             value = 0,
-            max = 25,
-            scale = 1,
+            max = 30,
+            scale = 2,
             cost_scale = 1,
             cost = 1,
             is_percentage = false,
