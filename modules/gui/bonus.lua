@@ -245,7 +245,7 @@ end)
         element.parent[element.tags.counter].caption = format_number(element.slider_value * 100) .. ' %'
 
     else
-        element.parent[element.tags.counter].caption = element.slider_value
+        element.parent[element.tags.counter].caption = format_number(element.slider_value)
     end
 
     local r = bonus_gui_pts_needed(player)
