@@ -11,14 +11,14 @@ return {
     Base point is equal to the amount of standard value in each parameter.
 
             CMMS    CRS     CCS     CISB    CHB     CRDB
-    STD     20      90      32      20      12      12
-    =       186
+    STD     20      90      32      20      16      12
+    =       190
 
-    MAX     50      180     64      40      24      24
-    =       382
+    MAX     50      180     64      40      32      24
+    =       390
     ]]
     pts = {
-        base = 186
+        base = 190
     },
     gui_display_width = {
         half = 180,
@@ -75,7 +75,7 @@ return {
             max = 400,
             scale = 50,
             cost_scale = 50,
-            cost = 3,
+            cost = 4,
             is_percentage = false
         },
         ['character_reach_distance_bonus'] = {
@@ -155,7 +155,7 @@ return {
             value = 0,
             max = 400,
             scale = 50,
-            cost = 3,
+            cost = 4,
             is_percentage = false
         },
         ['character_reach_distance_bonus'] = {
