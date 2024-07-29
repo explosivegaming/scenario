@@ -142,6 +142,13 @@ Gui.element{
     disp['bonus_display_chb_slider'].slider_value = config.player_bonus['character_health_bonus'].value
     disp['bonus_display_crdb_slider'].slider_value = config.player_bonus['character_reach_distance_bonus'].value
 
+    disp['bonus_display_cmms_count'].slider_value = config.player_bonus['character_mining_speed_modifier'].value
+    disp['bonus_display_crs_count'].slider_value = config.player_bonus['character_running_speed_modifier'].value
+    disp['bonus_display_ccs_count'].slider_value = config.player_bonus['character_crafting_speed_modifier'].value
+    disp['bonus_display_cisb_count'].slider_value = config.player_bonus['character_inventory_slots_bonus'].value
+    disp['bonus_display_chb_count'].slider_value = config.player_bonus['character_health_bonus'].value
+    disp['bonus_display_crdb_count'].slider_value = config.player_bonus['character_reach_distance_bonus'].value
+
     local r = bonus_gui_pts_needed(player)
     element.parent[bonus_gui_control_pts_n_count.name].caption = r
     element.parent[bonus_gui_control_pts_r_count.name].caption = tonumber(element.parent[bonus_gui_control_pts_a_count.name].caption) - r
