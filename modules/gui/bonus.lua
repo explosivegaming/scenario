@@ -205,6 +205,9 @@ Gui.element(function(_definition, parent, name, caption, tooltip, bonus)
 
     if bonus.is_percentage then
         value = format_number(value * 100) .. ' %'
+
+    else
+        value = format_number(value)
     end
 
     local slider = parent.add{
