@@ -11,14 +11,14 @@ return {
     Base point is equal to the amount of standard value in each parameter.
 
             CMMS    CRS     CCS     CISB    CHB     CRDB
-    STD     20      60      20      20      12      10
-    =       142
+    STD     20      90      20      20      12      10
+    =       172
 
-    MAX     50      120     60      40      24      25
-    =       319
+    MAX     50      180     60      40      24      25
+    =       379
     ]]
     pts = {
-        base = 142
+        base = 172
     },
     gui_display_width = {
         half = 180,
@@ -40,7 +40,7 @@ return {
             max = 3,
             scale = 0.25,
             cost_scale = 1,
-            cost = 40,
+            cost = 60,
             is_percentage = true
         },
         ['character_crafting_speed_modifier'] = {
