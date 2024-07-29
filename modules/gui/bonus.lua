@@ -7,7 +7,7 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.bonus' --- @dep config.bonus
-
+local format_number = require('util').format_number --- @dep util
 local bonus_container
 
 local function bonus_gui_pts_needed(player)
@@ -26,6 +26,19 @@ local function bonus_gui_pts_needed(player)
 end
 
 local function apply_bonus(player)
+    if not Roles.player_allowed(player, 'gui/bonus') then
+        player['character_mining_speed_modifier'] = 0
+        player['character_running_speed_modifier'] = 0
+        player['character_crafting_speed_modifier'] = 0
+        player['character_inventory_slots_bonus'] = 0
+        player['character_health_bonus'] = 0
+        player['character_reach_distance_bonus'] = 0
+        player['character_resource_reach_distance_bonus'] = 0
+        player['character_build_distance_bonus'] = 0
+
+        return
+    end
+
     if not player.character then
         return
     end
@@ -41,21 +54,6 @@ local function apply_bonus(player)
     player['character_reach_distance_bonus'] = disp['bonus_display_crdb_slider'].slider_value
     player['character_resource_reach_distance_bonus'] = disp['bonus_display_crdb_slider'].slider_value
     player['character_build_distance_bonus'] = disp['bonus_display_crdb_slider'].slider_value
-end
-
-local function role_update(event)
-    local player = game.players[event.player_index]
-
-    if not Roles.player_allowed(player, 'gui/bonus') then
-        player['character_mining_speed_modifier'] = 0
-        player['character_running_speed_modifier'] = 0
-        player['character_crafting_speed_modifier'] = 0
-        player['character_inventory_slots_bonus'] = 0
-        player['character_health_bonus'] = 0
-        player['character_reach_distance_bonus'] = 0
-        player['character_resource_reach_distance_bonus'] = 0
-        player['character_build_distance_bonus'] = 0
-    end
 end
 
 --- Control label for the bonus points available
@@ -126,14 +124,24 @@ Gui.element{
 
 --- A button used for pts calculations
 -- @element bonus_gui_control_refresh
-local bonus_gui_control_refresh =
+local bonus_gui_control_reset =
 Gui.element{
     type = 'button',
     name = Gui.unique_static_name,
-    caption = {'bonus.control-refresh'}
+    caption = {'bonus.control-reset'}
 }:style{
     width = config.gui_display_width['half']
 }:on_click(function(player, element, _)
+    local frame = Gui.get_left_element(player, bonus_container)
+    local disp = frame.container['bonus_st_2'].disp.table
+
+    disp['bonus_display_cmms_slider'].slider_value = config.player_bonus['character_mining_speed_modifier'].value
+    disp['bonus_display_crs_slider'].slider_value = config.player_bonus['character_running_speed_modifier'].value
+    disp['bonus_display_ccs_slider'].slider_value = config.player_bonus['character_crafting_speed_modifier'].value
+    disp['bonus_display_cisb_slider'].slider_value = config.player_bonus['character_inventory_slots_bonus'].value
+    disp['bonus_display_chb_slider'].slider_value = config.player_bonus['character_health_bonus'].value
+    disp['bonus_display_crdb_slider'].slider_value = config.player_bonus['character_reach_distance_bonus'].value
+
     local r = bonus_gui_pts_needed(player)
     element.parent[bonus_gui_control_pts_n_count.name].caption = r
     element.parent[bonus_gui_control_pts_r_count.name].caption = tonumber(element.parent[bonus_gui_control_pts_a_count.name].caption) - r
@@ -175,7 +183,7 @@ Gui.element(function(_, parent, name)
     bonus_gui_control_pts_r(disp)
     bonus_gui_control_pts_r_count(disp)
 
-    bonus_gui_control_refresh(disp)
+    bonus_gui_control_reset(disp)
     bonus_gui_control_apply(disp)
 
     return bonus_set
@@ -193,6 +201,12 @@ Gui.element(function(_definition, parent, name, caption, tooltip, bonus)
     }
     label.style.width = config.gui_display_width['label']
 
+    local value = bonus.value
+
+    if bonus.is_percentage then
+        value = format_number(value * 100) .. ' %'
+    end
+
     local slider = parent.add{
         type = 'slider',
         name = name .. '_slider',
@@ -202,7 +216,8 @@ Gui.element(function(_definition, parent, name, caption, tooltip, bonus)
         discrete_values = true,
         style = 'notched_slider',
         tags = {
-            counter = name .. '_count'
+            counter = name .. '_count',
+            is_percentage = bonus.is_percentage
         }
     }
     slider.style.width = config.gui_display_width['slider']
@@ -211,18 +226,20 @@ Gui.element(function(_definition, parent, name, caption, tooltip, bonus)
     local count = parent.add{
         type = 'label',
         name = name .. '_count',
-        caption = bonus.value,
-        numeric = true,
-        allow_decimal = false,
-        allow_negative = false,
-        style = 'heading_1_label'
+        caption = value,
+        style = 'heading_1_label',
     }
     count.style.width = config.gui_display_width['count']
 
     return slider
 end)
 :on_value_changed(function(player, element, _event)
-    element.parent[element.tags.counter].caption = element.slider_value
+    if element.tags.is_percentage then
+        element.parent[element.tags.counter].caption = format_number(element.slider_value * 100) .. ' %'
+
+    else
+        element.parent[element.tags.counter].caption = element.slider_value
+    end
 
     local r = bonus_gui_pts_needed(player)
     local frame = Gui.get_left_element(player, bonus_container)
@@ -252,11 +269,20 @@ end)
 -- @element bonus_container
 bonus_container =
 Gui.element(function(definition, parent)
+    local player = Gui.get_player_from_element(parent)
     local container = Gui.container(parent, definition.name, 320)
 
     bonus_control_set(container, 'bonus_st_1')
     bonus_data_set(container, 'bonus_st_2')
 
+    local frame = Gui.get_left_element(player, bonus_container)
+    local disp = frame.container['bonus_st_1'].disp.table
+    local n = bonus_gui_pts_needed(player)
+    disp[bonus_gui_control_pts_n_count.name].caption = n
+    local r = tonumber(disp[bonus_gui_control_pts_a_count.name].caption) - n
+    disp[bonus_gui_control_pts_r_count.name].caption = r
+
+    apply_bonus(player)
     return container.parent
 end)
 :static_name(Gui.unique_static_name)
@@ -282,5 +308,10 @@ Event.add(defines.events.on_player_created, function(event)
     end
 end)
 
-Event.add(Roles.events.on_role_assigned, role_update)
-Event.add(Roles.events.on_role_unassigned, role_update)
+Event.add(Roles.events.on_role_assigned, function(event)
+    apply_bonus(game.players[event.player_index])
+end)
+
+Event.add(Roles.events.on_role_unassigned, function(event)
+    apply_bonus(game.players[event.player_index])
+end)
