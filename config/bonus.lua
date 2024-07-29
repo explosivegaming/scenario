@@ -11,14 +11,14 @@ return {
     Base point is equal to the amount of standard value in each parameter.
 
             CMMS    CRS     CCS     CISB    CHB     CRDB
-    STD     20      90      32      20      16      12
-    =       190
+    STD     30      90      32      20      16      12
+    =       200
 
-    MAX     50      180     64      40      32      24
-    =       390
+    MAX     60      180     64      40      32      24
+    =       400
     ]]
     pts = {
-        base = 190
+        base = 200
     },
     gui_display_width = {
         half = 180,
@@ -39,8 +39,8 @@ return {
     },
     player_bonus = {
         ['character_mining_speed_modifier'] = {
-            value = 2,
-            max = 5,
+            value = 3,
+            max = 6,
             scale = 0.5,
             cost_scale = 1,
             cost = 10,
@@ -121,7 +121,7 @@ return {
         --[[
         ['character_mining_speed_modifier'] = {
             value = 0,
-            max = 5,
+            max = 6,
             scale = 0.5,
             cost_scale = 1,
             cost = 10,
