@@ -45,7 +45,7 @@ local function apply_bonus(player)
     local disp = frame.container['bonus_st_2'].disp.table
 
     for k, v in pairs(config.conversion) do
-        player[k] = disp['bonus_display_' .. k .. '_slider'].slider_value
+        player[v] = disp['bonus_display_' .. k .. '_slider'].slider_value
 
         if config.player_bonus[v].combined_bonus then
             for i=1, #config.player_bonus[v].combined_bonus do
