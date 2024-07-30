@@ -322,9 +322,9 @@ end)
 
 --- When a player respawns re-apply bonus
 Event.add(defines.events.on_player_respawned, function(event)
+    local player = game.players[event.player_index]
     local frame = Gui.get_left_element(player, bonus_container)
     local disp = frame.container['bonus_st_1'].disp.table
-    local player = game.players[event.player_index]
     local n = bonus_gui_pts_needed(player)
     disp[bonus_gui_control_pts_n_count.name].caption = n
     local r = tonumber(disp[bonus_gui_control_pts_a_count.name].caption) - n
