@@ -319,3 +319,27 @@ end)
 Event.add(Roles.events.on_role_unassigned, function(event)
     apply_bonus(game.players[event.player_index])
 end)
+
+--- When a player respawns re-apply bonus
+Event.add(defines.events.on_player_respawned, function(event)
+    local frame = Gui.get_left_element(player, bonus_container)
+    local disp = frame.container['bonus_st_1'].disp.table
+    local player = game.players[event.player_index]
+    local n = bonus_gui_pts_needed(player)
+    disp[bonus_gui_control_pts_n_count.name].caption = n
+    local r = tonumber(disp[bonus_gui_control_pts_a_count.name].caption) - n
+    disp[bonus_gui_control_pts_r_count.name].caption = r
+
+    if r >= 0 then
+        apply_bonus(player)
+    end
+end)
+
+--- When a player dies allow them to have instant respawn
+Event.add(defines.events.on_player_died, function(event)
+    local player = game.players[event.player_index]
+
+    if Roles.player_has_flag(player, 'instant-respawn') then
+        player.ticks_to_respawn = 120
+    end
+end)
