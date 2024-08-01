@@ -157,26 +157,6 @@ local function landfill_gui_add_landfill(blueprint)
     return {tiles = new_tiles}
 end
 
-local function get_cursor_blueprint(player)
-    local stack = player.cursor_stack
-
-    if stack.valid_for_read then
-        if stack.type ~= 'blueprint' then
-            return false
-        end
-
-        if not stack or not stack.valid_for_read then
-            return false
-        end
-
-        if stack.is_blueprint_setup() then
-            return stack
-        end
-    end
-
-    return false
-end
-
 --- A button to add landfill
 -- @element landfill_gui_tile
 local landfill_gui_tile =
@@ -188,10 +168,9 @@ Gui.element{
 }:style{
     width = 160
 }:on_click(function(player, _, _)
-    if player.cursor_stack.valid_for_read then
-        local blueprint = get_cursor_blueprint(player)
-
-        if blueprint then
+    if player.cursor_stack and player.cursor_stack.valid_for_read then
+        if player.cursor_stack.type == 'blueprint' and player.cursor_stack.is_blueprint_setup() then
+            local blueprint = player.cursor_stack
             local modified = landfill_gui_add_landfill(blueprint)
 
             if modified and next(modified.tiles) then
@@ -205,7 +184,6 @@ end)
 -- @element landfill_container
 landfill_container =
 Gui.element(function(definition, parent)
-    -- local player = Gui.get_player_from_element(parent)
     local container = Gui.container(parent, definition.name, 160)
 
     landfill_gui_tile(container)
