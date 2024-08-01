@@ -5,16 +5,16 @@
 ]]
 
 local Gui = require 'expcore.gui' --- @dep expcore.gui
+local Event = require 'utils.event' --- @dep utils.event
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local config = require 'config.landfill' --- @dep config.landfill
 
-local landfill_container
-
-local landfill_tile = 'landfill'
 local rolling_stocks = {}
 
-for name, _ in pairs(game.get_filtered_entity_prototypes({{filter = 'rolling-stock'}})) do
-    rolling_stocks[name] = true
+local function rolling_stocks_init()
+    for name, _ in pairs(game.get_filtered_entity_prototypes({{filter = 'rolling-stock'}})) do
+        rolling_stocks[name] = true
+    end
 end
 
 local function rotate_bounding_box(box)
@@ -86,8 +86,6 @@ end
 
 local function landfill_gui_add_landfill(blueprint)
     local entities = blueprint.get_blueprint_entities()
-
-
     local tile_index = 0
     local new_tiles = {}
 
@@ -117,7 +115,7 @@ local function landfill_gui_add_landfill(blueprint)
                         for x = math.floor(ent.position.x + box.left_top.x), math.floor(ent.position.x + box.right_bottom.x), 1 do
                             tile_index = tile_index + 1
                             new_tiles[tile_index] = {
-                                name = landfill_tile,
+                                name = 'landfill',
                                 position = {x, y}
                             }
                         end
@@ -131,7 +129,7 @@ local function landfill_gui_add_landfill(blueprint)
 
                 for m=1, #curve_mask do
                     new_tiles[tile_index + 1] = {
-                        name = landfill_tile,
+                        name = 'landfill',
                         position = {curve_mask[m].x + ent.position.x, curve_mask[m].y + ent.position.y}
                     }
 
@@ -146,7 +144,7 @@ local function landfill_gui_add_landfill(blueprint)
     if old_tiles then
         for _, old_tile in pairs(old_tiles) do
             new_tiles[tile_index + 1] = {
-                name = landfill_tile,
+                name = 'landfill',
                 position = {old_tile.position.x, old_tile.position.y}
             }
 
@@ -170,11 +168,10 @@ Gui.element{
 }:on_click(function(player, _, _)
     if player.cursor_stack and player.cursor_stack.valid_for_read then
         if player.cursor_stack.type == 'blueprint' and player.cursor_stack.is_blueprint_setup() then
-            local blueprint = player.cursor_stack
-            local modified = landfill_gui_add_landfill(blueprint)
+            local modified = landfill_gui_add_landfill(player.cursor_stack)
 
             if modified and next(modified.tiles) then
-                blueprint.set_blueprint_tiles(modified.tiles)
+                player.cursor_stack.set_blueprint_tiles(modified.tiles)
             end
         end
     end
@@ -182,7 +179,7 @@ end)
 
 --- The main container for the landfill gui
 -- @element landfill_container
-landfill_container =
+local landfill_container =
 Gui.element(function(definition, parent)
     local container = Gui.container(parent, definition.name, 160)
 
@@ -197,3 +194,5 @@ end)
 Gui.left_toolbar_button('item/landfill', {'landfill.main-tooltip'}, landfill_container, function(player)
 	return Roles.player_allowed(player, 'gui/landfill')
 end)
+
+Event.add(defines.events.on_player_joined_game, rolling_stocks_init)
