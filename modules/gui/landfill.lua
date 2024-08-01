@@ -95,17 +95,17 @@ local function landfill_gui_add_landfill(blueprint)
             end
         end
 
-		for name, _ in pairs(game.get_filtered_entity_prototypes({{filter = "rolling-stock"}})) do
+		for name, _ in pairs(game.get_filtered_entity_prototypes({{filter = 'rolling-stock'}})) do
 			rolling_stocks[name] = true
 		end
 
         for _, ent in pairs(entities) do
             local name = ent.name
 
+            -- vehicle
 			if rolling_stocks[name] then
-				-- This is a vehicle. Do nothing
 
-            -- special case for curved rail
+            -- curved rail, special
             elseif 'curved-rail' ~= name then
                 local proto = prototypes[name]
                 local box = proto.collision_box or proto.selection_box
@@ -142,7 +142,7 @@ local function landfill_gui_add_landfill(blueprint)
                     end
                 end
 
-            -- curved Rail
+            -- curved rail
             else
                 local dir = ent.direction
 
