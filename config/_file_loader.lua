@@ -94,6 +94,7 @@ return {
     'modules.gui.vlayer',
     'modules.gui.research',
     'modules.gui.module',
+    'modules.gui.landfill',
     'modules.gui.playerdata',
     'modules.gui.surveillance',
 		'modules.graftorio.require', -- graftorio
