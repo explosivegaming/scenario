@@ -229,7 +229,7 @@ end)
 landfill_container =
 Gui.element(function(definition, parent)
     -- local player = Gui.get_player_from_element(parent)
-    local container = Gui.container(parent, definition.name, 320)
+    local container = Gui.container(parent, definition.name, 160)
 
     landfill_gui_tile(container)
     return container.parent
