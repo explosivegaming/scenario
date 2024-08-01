@@ -183,7 +183,8 @@ local landfill_gui_tile =
 Gui.element{
     type = 'button',
     name = Gui.unique_static_name,
-    caption = {'landfill.tile'}
+    caption = {'landfill.tile'},
+    tooltip = {'landfill.tile-tooltip'}
 }:style{
     width = 160
 }:on_click(function(player, _, _)
