@@ -79,91 +79,76 @@ end
 
 local function landfill_gui_add_landfill(blueprint)
     local entities = blueprint.get_blueprint_entities()
-    local old_tiles = blueprint.get_blueprint_tiles()
-    local landfill_tile = {name = 'landfill'}
+
+    local landfill_tile = {
+        name = 'landfill'
+    }
     local tile_index = 0
-    local prototypes = {}
     local new_tiles = {}
 	local rolling_stocks = {}
 
     if entities then
-        for k = 1, #entities, 1 do
-            local name = entities[k].name
-
-            if prototypes[name] == nil then
-                prototypes[name] = game.entity_prototypes[name]
-            end
-        end
-
 		for name, _ in pairs(game.get_filtered_entity_prototypes({{filter = 'rolling-stock'}})) do
 			rolling_stocks[name] = true
 		end
 
         for _, ent in pairs(entities) do
-            local name = ent.name
-
             -- vehicle
-			if rolling_stocks[name] then
+			if not rolling_stocks[ent.name] then
+                -- curved rail, special
+                if 'curved-rail' ~= ent.name then
+                    local box = game.entity_prototypes[ent.name].collision_box or game.entity_prototypes[ent.name].selection_box
 
-            -- curved rail, special
-            elseif 'curved-rail' ~= name then
-                local proto = prototypes[name]
-                local box = proto.collision_box or proto.selection_box
-                local pos = ent.position
+                    if game.entity_prototypes[ent.name].collision_mask['ground-tile'] == nil then
+                        if ent.direction then
+                        if ent.direction ~= defines.direction.north then
+                            box = rotate_bounding_box(box)
 
-                if proto.collision_mask['ground-tile'] == nil then
-                    if ent.direction then
-                       if ent.direction ~= defines.direction.north then
-                           box = rotate_bounding_box(box)
+                            if ent.direction ~= defines.direction.east then
+                                box = rotate_bounding_box(box)
 
-                           if ent.direction ~= defines.direction.east then
-                               box = rotate_bounding_box(box)
+                                if ent.direction ~= defines.direction.south then
+                                    box = rotate_bounding_box(box)
+                                end
+                            end
+                        end
+                        end
 
-                               if ent.direction ~= defines.direction.south then
-                                  box = rotate_bounding_box(box)
-                               end
-                           end
-                       end
-                    end
+                        local start_x = math.floor(ent.position.x + box.left_top.x)
+                        local start_y = math.floor(ent.position.y + box.left_top.y)
+                        local end_x = math.floor(ent.position.x + box.right_bottom.x)
+                        local end_y = math.floor(ent.position.y + box.right_bottom.y)
 
-                    local start_x = math.floor(pos.x + box.left_top.x)
-                    local start_y = math.floor(pos.y + box.left_top.y)
-                    local end_x = math.floor(pos.x + box.right_bottom.x)
-                    local end_y = math.floor(pos.y + box.right_bottom.y)
-
-                    for y = start_y, end_y, 1 do
-                        for x = start_x, end_x, 1 do
-                            tile_index = tile_index + 1
-                            new_tiles[tile_index] = {
-                                name = landfill_tile.name,
-                                position = {x, y}
-                            }
+                        for y = start_y, end_y, 1 do
+                            for x = start_x, end_x, 1 do
+                                tile_index = tile_index + 1
+                                new_tiles[tile_index] = {
+                                    name = landfill_tile.name,
+                                    position = {x, y}
+                                }
+                            end
                         end
                     end
-                end
 
-            -- curved rail
-            else
-                local dir = ent.direction
+                -- curved rail
+                else
+                    local dir = ent.direction or 8
+                    local curve_mask = curve_map(dir)
 
-                if dir == nil then
-                    dir = 8
-                end
+                    for m = 1, #curve_mask do
+                        new_tiles[tile_index + 1] = {
+                            name = landfill_tile.name,
+                            position = {curve_mask[m].x + ent.position.x, curve_mask[m].y + ent.position.y}
+                        }
 
-                local curve_mask = curve_map(dir)
-                local pos = ent.position
-
-                for m = 1, #curve_mask do
-                    new_tiles[tile_index + 1] = {
-                        name = landfill_tile.name,
-                        position = {curve_mask[m].x + pos.x, curve_mask[m].y + pos.y}
-                    }
-
-                    tile_index = tile_index + 1
+                        tile_index = tile_index + 1
+                    end
                 end
             end
         end
     end
+
+    local old_tiles = blueprint.get_blueprint_tiles()
 
     if old_tiles then
         for _, old_tile in pairs(old_tiles) do
