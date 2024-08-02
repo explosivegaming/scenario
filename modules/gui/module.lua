@@ -250,3 +250,33 @@ Event.add(defines.events.on_gui_elem_changed, function(event)
 end)
 
 Event.add(defines.events.on_player_joined_game, get_module_name)
+
+Event.add(defines.events.on_entity_settings_pasted, function(event)
+    local player = game.players[event.player_index]
+
+    if not player then
+        return
+    end
+
+    if not event.source then
+        return
+    end
+
+    local source_inventory = event.source.get_module_inventory()
+
+    if not source_inventory then
+        return
+    end
+
+    if not event.destination then
+        return
+    end
+
+    if event.source.name ~= event.destination.name then
+        return
+    end
+
+    local destination_pos = {left_top = {event.destination.position.x - 0.01, event.destination.position.y - 0.01}, right_bottom = {event.destination.position.x + 0.01, event.destination.position.y + 0.01}}
+    clear_module(player, destination_pos, event.destination.name)
+    apply_module(player, destination_pos, event.destination.name, source_inventory)
+end)
