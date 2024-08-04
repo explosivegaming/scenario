@@ -25,6 +25,7 @@ local vlayer_data = {
         production = 0,
         discharge = 0,
         capacity = 0,
+        tick = 0
     },
     storage = {
         items = {},
@@ -440,14 +441,14 @@ function vlayer.get_statistics()
         total_surface_area = vlayer_data.properties.total_surface_area,
         used_surface_area = vlayer_data.properties.used_surface_area,
         remaining_surface_area = math.max(vlayer_data.properties.total_surface_area - vlayer_data.properties.used_surface_area, 0),
-        multiplier = get_production_multiplier(),
+        production_multiplier = get_production_multiplier(),
         energy_production = vlayer_data.properties.production * mega * get_production_multiplier(),
         energy_sustained = vlayer_data.properties.production * mega * get_sustained_multiplier(),
         energy_capacity = vlayer_data.properties.capacity * mega,
         energy_storage = vlayer_data.storage.energy,
-        day = math.floor(game.tick / vlayer_data.surface.ticks_per_day),
+        day = math.floor(vlayer_data.properties.tick / vlayer_data.surface.ticks_per_day),
         day_length = vlayer_data.surface.ticks_per_day,
-        time = math.floor(game.tick % vlayer_data.surface.ticks_per_day)
+        time = vlayer_data.properties.tick % vlayer_data.surface.ticks_per_day
     }
 end
 
@@ -462,7 +463,7 @@ function vlayer.get_circuits()
         total_surface_area = 'signal-A',
         used_surface_area = 'signal-U',
         remaining_surface_area = 'signal-R',
-        multiplier = 'signal-M',
+        production_multiplier = 'signal-M',
         energy_production = 'signal-P',
         energy_sustained = 'signal-S',
         energy_capacity = 'signal-C',
@@ -502,6 +503,7 @@ end
 
 --- Handle all circuit interfaces, updating their signals to match the vlayer statistics
 local function handle_circuit_interfaces()
+    vlayer_data.properties.tick = game.tick
     local stats = vlayer.get_statistics()
 
     for index, interface in pairs(vlayer_data.entity_interfaces.circuit) do
@@ -519,7 +521,7 @@ local function handle_circuit_interfaces()
                 if stat_name:find('energy') then
                     circuit_oc.set_signal(signal_index, {signal={type='virtual', name=signal_name}, count=math.floor(stats[stat_name] / mega)})
 
-                elseif stat_name == 'multiplier' then
+                elseif stat_name == 'production_multiplier' then
                     circuit_oc.set_signal(signal_index, {signal={type='virtual', name=signal_name}, count=math.floor(stats[stat_name] * 10000)})
 
                 else
