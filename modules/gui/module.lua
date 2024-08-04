@@ -278,5 +278,5 @@ Event.add(defines.events.on_entity_settings_pasted, function(event)
 
     local destination_pos = {left_top = {event.destination.position.x - 0.01, event.destination.position.y - 0.01}, right_bottom = {event.destination.position.x + 0.01, event.destination.position.y + 0.01}}
     clear_module(player, destination_pos, event.destination.name)
-    apply_module(player, destination_pos, event.destination.name, source_inventory)
+    apply_module(player, destination_pos, event.destination.name, {['n']=source_inventory, ['p']=source_inventory})
 end)
