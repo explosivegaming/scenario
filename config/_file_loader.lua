@@ -39,7 +39,6 @@ return {
     'modules.commands.pollution',
     'modules.commands.train',
     'modules.commands.friendly-fire',
-    'modules.commands.lawnmower',
     'modules.commands.research',
     'modules.commands.vlayer',
     'modules.commands.enemy',
@@ -67,6 +66,7 @@ return {
 		'modules.addons.nukeprotect',
 		'modules.addons.inserter',
     'modules.addons.miner',
+    'modules.addons.lawnmower',
 
     -- Control
     'modules.control.vlayer',
