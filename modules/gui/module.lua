@@ -268,6 +268,12 @@ Event.add(defines.events.on_entity_settings_pasted, function(event)
         return
     end
 
+    local source_inventory_content = source_inventory.get_contents()
+
+    if not source_inventory_content then
+        return
+    end
+
     if not event.destination then
         return
     end
@@ -278,5 +284,5 @@ Event.add(defines.events.on_entity_settings_pasted, function(event)
 
     local destination_pos = {left_top = {event.destination.position.x - 0.01, event.destination.position.y - 0.01}, right_bottom = {event.destination.position.x + 0.01, event.destination.position.y + 0.01}}
     clear_module(player, destination_pos, event.destination.name)
-    apply_module(player, destination_pos, event.destination.name, {['n']=source_inventory, ['p']=source_inventory})
+    apply_module(player, destination_pos, event.destination.name, {['n']=source_inventory_content, ['p']=source_inventory_content})
 end)
