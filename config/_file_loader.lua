@@ -67,6 +67,7 @@ return {
 		'modules.addons.nukeprotect',
 		'modules.addons.inserter',
     'modules.addons.miner',
+    'modules.addons.logging',
 
     -- Control
     'modules.control.vlayer',
