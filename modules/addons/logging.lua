@@ -34,7 +34,12 @@ Event.add(defines.events.on_research_finished, function(event)
         return
     end
 
-    add_log('[RES] ' .. string.match(event.research.name, '^(.-)%-%d+$'):gsub('-', ' ') .. ' at level ' .. (event.research.level - 1) .. ' has been researched')
+    if (event.research.level - 1) == 0 then
+        add_log('[RES] ' .. string.match(event.research.name, '^(.-)%-%d+$'):gsub('-', ' ') .. ' has been researched')
+
+    else
+        add_log('[RES] ' .. string.match(event.research.name, '^(.-)%-%d+$'):gsub('-', ' ') .. ' at level ' .. (event.research.level - 1) .. ' has been researched')
+    end
 end)
 
 Event.add(defines.events.on_player_joined_game, function(event)
