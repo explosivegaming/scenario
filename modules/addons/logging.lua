@@ -34,6 +34,11 @@ Event.add(defines.events.on_research_finished, function(event)
         return
     end
 
+    if not event.research.level then
+        add_log('[RES] ' .. string.match(event.research.name, '^(.-)%-%d+$'):gsub('-', ' ') .. ' has been researched')
+        return
+    end
+
     if (event.research.level - 1) == 0 then
         add_log('[RES] ' .. string.match(event.research.name, '^(.-)%-%d+$'):gsub('-', ' ') .. ' has been researched')
 
