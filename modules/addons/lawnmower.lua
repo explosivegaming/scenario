@@ -33,24 +33,24 @@ Commands.new_command('lawnmower', 'Clean up biter corpse, decoratives and nuclea
     return Commands.success
 end)
 
-local function destroy_decoratives(entity, surface, area)
+local function destroy_decoratives(entity)
     if entity.type ~= 'entity-ghost' and entity.type ~= 'tile-ghost' and entity.prototype.selectable_in_game then
-        game.surfaces[surface].destroy_decoratives{area=area}
+        entity.surface.destroy_decoratives{area=entity.selection_box}
     end
 end
 
 Event.add(defines.events.on_built_entity, function(event)
-    destroy_decoratives(event.created_entity, event.created_entity.surface_index, event.created_entity.selection_box)
+    destroy_decoratives(event.created_entity)
 end)
 
 Event.add(defines.events.on_robot_built_entity, function(event)
-    destroy_decoratives(event.created_entity, event.created_entity.surface_index, event.created_entity.selection_box)
+    destroy_decoratives(event.created_entity)
 end)
 
 Event.add(defines.events.script_raised_built, function(event)
-    destroy_decoratives(event.entity, event.entity.surface_index, event.entity.selection_box)
+    destroy_decoratives(event.entity)
 end)
 
 Event.add(defines.events.script_raised_revive, function(event)
-    destroy_decoratives(event.entity, event.entity.surface_index, event.entity.selection_box)
+    destroy_decoratives(event.entity)
 end)
