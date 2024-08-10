@@ -63,9 +63,9 @@ return {
     'modules.addons.afk-kick',
     'modules.addons.report-jail',
     'modules.addons.protection-jail',
-		'modules.addons.deconlog',
-		'modules.addons.nukeprotect',
-		'modules.addons.inserter',
+    'modules.addons.deconlog',
+    'modules.addons.nukeprotect',
+    'modules.addons.inserter',
     'modules.addons.miner',
 
     -- Control
@@ -78,7 +78,7 @@ return {
     'modules.data.quickbar',
     'modules.data.alt-view',
     'modules.data.tag',
-    'modules.data.bonus',
+    -- 'modules.data.bonus',
     'modules.data.personal-logistic',
     'modules.data.language',
 
@@ -91,13 +91,14 @@ return {
     'modules.gui.task-list',
     'modules.gui.player-list',
     'modules.gui.server-ups',
+    'modules.gui.bonus',
     'modules.gui.vlayer',
     'modules.gui.research',
     'modules.gui.module',
     'modules.gui.landfill',
     'modules.gui.playerdata',
     'modules.gui.surveillance',
-		'modules.graftorio.require', -- graftorio
+    'modules.graftorio.require', -- graftorio
     'modules.gui.toolbar', -- must be loaded last to register toolbar handlers
 
     --- Config Files
