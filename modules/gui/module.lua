@@ -260,26 +260,15 @@ Event.add(defines.events.on_entity_settings_pasted, function(event)
         return
     end
 
-    if not source then
+    if not source or not source.valid then
         return
     end
 
-    local source_inventory = source.get_module_inventory()
-
-    if not source_inventory then
+    if not destination or not destination.valid then
         return
     end
 
-    local source_inventory_content = source_inventory.get_contents()
-
-    if not source_inventory_content then
-        return
-    end
-
-    if not destination then
-        return
-    end
-
+    -- rotate machine also
     if (source.name == destination.name or source.prototype.fast_replaceable_group == destination.prototype.fast_replaceable_group) then
         if source.supports_direction and destination.supports_direction and source.type ~= 'transport-belt' then
             local destination_box = destination.bounding_box
@@ -299,6 +288,18 @@ Event.add(defines.events.on_entity_settings_pasted, function(event)
     end
 
     if source.name ~= destination.name then
+        return
+    end
+
+    local source_inventory = source.get_module_inventory()
+
+    if not source_inventory then
+        return
+    end
+
+    local source_inventory_content = source_inventory.get_contents()
+
+    if not source_inventory_content then
         return
     end
 
