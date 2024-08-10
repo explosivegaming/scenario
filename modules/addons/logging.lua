@@ -61,7 +61,6 @@ Event.add(defines.events.on_player_left_game, function(event)
 
         else
             add_log('[LEAVE] ' .. game.players[event.player_index].name .. config.disconnect_reason[defines.disconnect_reason.quit])
-
         end
     end
 end)
