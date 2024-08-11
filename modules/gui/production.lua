@@ -7,8 +7,6 @@ local Roles = require 'expcore.roles' --- @dep expcore.roles
 
 local production_container
 
-local elem_filter = {{filter='type', type='item'}}
-
 local precision = {
     [1] = defines.flow_precision_index.five_seconds,
     [2] = defines.flow_precision_index.one_minute,
@@ -110,7 +108,7 @@ Gui.element(function(_definition, parent, i)
         type = 'choose-elem-button',
         name = 'production_' .. i .. '_e',
         elem_type = 'item',
-        elem_filters = elem_filter,
+        elem_filters = {filter = 'hidden', invert = true},
         style = 'slot_button'
     }
     item.style.width = 80
