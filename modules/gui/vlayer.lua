@@ -337,7 +337,7 @@ Gui.element{
     local n = element.parent[vlayer_gui_control_list.name].selected_index
     local pos = vlayer.get_interfaces()[vlayer_control_type_list[target]][n].position
     player.zoom_to_world(pos, 2)
-    game.print{'vlayer.result-interface', pos_to_gps_string(pos)}
+    player.print{'vlayer.result-interface', pos_to_gps_string(pos)}
 end)
 
 --- A button used to build the vlayer interface
