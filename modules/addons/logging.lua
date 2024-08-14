@@ -4,6 +4,7 @@
 
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.logging' --- @dep config.logging
+local config_res = require 'config.research' --- @dep config.research
 
 local function add_log(data)
 	game.write_file(config.file_name, data .. '\n', true, 0)
@@ -40,7 +41,11 @@ Event.add(defines.events.on_research_finished, function(event)
         end
 
         if event.research.level and event.research.level > 1 then
-            add_log('[RES] ' .. string.match(event.research.name, '^(.-)%-%d+$'):gsub('-', ' ') .. ' at level ' .. (event.research.level - 1) .. ' has been researched')
+            if config_res.inf_res[event.research.name] and (event.research.level >= config_res.inf_res[event.research.name]) then
+                add_log('[RES] ' .. string.match(event.research.name, '^(.-)%-%d+$'):gsub('-', ' ') .. ' at level ' .. (event.research.level - 1) .. ' has been researched')
+            else
+                add_log('[RES] ' .. string.match(event.research.name, '^(.-)%-%d+$'):gsub('-', ' ') .. ' at level ' .. event.research.level .. ' has been researched')
+            end
 
         else
             add_log('[RES] ' .. string.match(event.research.name, '^(.-)%-%d+$'):gsub('-', ' ') .. ' has been researched')
