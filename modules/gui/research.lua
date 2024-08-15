@@ -255,8 +255,11 @@ Gui.element(function(_, parent, name)
 	research_data_group(disp, 0)
 	disp['research_0_name'].caption = {'expcom-res.name'}
 	disp['research_0_target'].caption = {'expcom-res.target'}
+	disp['research_0_target'].style.horizontal_align = 'left'
 	disp['research_0_attempt'].caption = {'expcom-res.attempt'}
+	disp['research_0_attempt'].style.horizontal_align = 'left'
 	disp['research_0_difference'].caption = {'expcom-res.difference'}
+	disp['research_0_difference'].style.horizontal_align = 'left'
 
 	for i=1, 8, 1 do
 		research_data_group(disp, i)
