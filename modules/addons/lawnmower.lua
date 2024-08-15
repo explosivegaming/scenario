@@ -5,6 +5,7 @@
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 local Event = require 'utils.event' --- @dep utils.event
+local config = require 'config.lawnmower' --- @dep config.lawnmower
 require 'config.expcore.command_general_parse'
 
 Commands.new_command('lawnmower', 'Clean up biter corpse, decoratives and nuclear hole')
@@ -39,18 +40,20 @@ local function destroy_decoratives(entity)
     end
 end
 
-Event.add(defines.events.on_built_entity, function(event)
-    destroy_decoratives(event.created_entity)
-end)
+if config.destroy_decoratives then
+	Event.add(defines.events.on_built_entity, function(event)
+		destroy_decoratives(event.created_entity)
+	end)
 
-Event.add(defines.events.on_robot_built_entity, function(event)
-    destroy_decoratives(event.created_entity)
-end)
+	Event.add(defines.events.on_robot_built_entity, function(event)
+		destroy_decoratives(event.created_entity)
+	end)
 
-Event.add(defines.events.script_raised_built, function(event)
-    destroy_decoratives(event.entity)
-end)
+	Event.add(defines.events.script_raised_built, function(event)
+		destroy_decoratives(event.entity)
+	end)
 
-Event.add(defines.events.script_raised_revive, function(event)
-    destroy_decoratives(event.entity)
-end)
+	Event.add(defines.events.script_raised_revive, function(event)
+		destroy_decoratives(event.entity)
+	end)
+end
