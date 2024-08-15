@@ -252,6 +252,12 @@ Gui.element(function(_, parent, name)
 	research_init()
 	local res_disp = research_gui_update()
 
+	research_data_group(disp, 0)
+	disp['research_0_name'].caption = {'expcom-res.name'}
+	disp['research_0_target'].caption = {'expcom-res.target'}
+	disp['research_0_attempt'].caption = {'expcom-res.attempt'}
+	disp['research_0_difference'].caption = {'expcom-res.difference'}
+
 	for i=1, 8, 1 do
 		research_data_group(disp, i)
 
