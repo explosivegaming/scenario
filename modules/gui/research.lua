@@ -33,30 +33,37 @@ local empty_time = format_time(0, {
 	null=true
 })
 
+local font_color = {
+    [1] = {r = 0.3, g = 1, b = 0.3},
+    [2] = {r = 1, g = 0.3, b = 0.3}
+}
+
 local res = {
 	['lookup_name'] = {},
 	['disp'] = {}
 }
 
-local res_total = 0
-local mi = 1
+local function research_init()
+	local res_total = 0
+	local i = 1
 
-for k, v in pairs(config.milestone) do
-	research.time[mi] = 0
-	res['lookup_name'][k] = mi
-	res_total = res_total + v * 60
+	for k, v in pairs(config.milestone) do
+		research.time[i] = 0
+		res['lookup_name'][k] = i
+		res_total = res_total + v * 60
 
-	res['disp'][mi] = {
-		name = '[technology=' .. k .. '] ' .. k:gsub('-', ' '),
-		raw_name = k,
-		prev = res_total,
-		prev_disp = format_time(res_total, research_time_format),
-	}
+		res['disp'][i] = {
+			name = '[technology=' .. k .. '] ' .. k:gsub('-', ' '),
+			raw_name = k,
+			target = res_total,
+			target_disp = format_time(res_total, research_time_format),
+		}
 
-	mi = mi + 1
+		i = i + 1
+	end
 end
 
-local function add_log()
+local function research_add_log()
 	local result_data = {}
 
 	for i=1, #research.time, 1 do
@@ -93,47 +100,83 @@ local function research_res_n(res_)
 end
 
 local function research_notification(event)
-    local is_inf_res = false
-
     if config.inf_res[event.research.name] then
-		if event.research.name == 'mining-productivity-4' and event.research.level == 5 then
-			-- Add run result to log
-			add_log()
-		end
+		if event.research.name == 'mining-productivity-4' then
+			if event.research.level == 5 then
+				-- Add run result to log
+				research_add_log()
+			end
 
-		if event.research.level >= config.inf_res[event.research.name] then
-			is_inf_res = true
-		end
-    end
-
-    if is_inf_res then
-        if event.research.name == 'mining-productivity-4' then
 			if config.bonus_inventory.enabled then
 				if (event.research.level - 1) <= math.ceil(config.bonus_inventory.limit / config.bonus_inventory.rate) then
 					event.research.force[config.bonus_inventory.name] = math.max((event.research.level - 1) * config.bonus_inventory.rate, config.bonus_inventory.limit)
 				end
 			end
 
-            if config.pollution_ageing_by_research then
-                game.map_settings.pollution.ageing = math.min(10, event.research.level / 5)
-            end
-        end
+			if config.pollution_ageing_by_research then
+				game.map_settings.pollution.ageing = math.min(10, event.research.level / 5)
+			end
 
-        if not (event.by_script) then
-            game.print{'expcom-res.inf', format_time(game.tick, research_time_format), event.research.name, event.research.level - 1}
-        end
+		else
+			if not (event.by_script) then
+				game.print{'expcom-res.inf', format_time(game.tick, research_time_format), event.research.name, event.research.level - 1}
+			end
+		end
 
-    else
+	else
         if not (event.by_script) then
             game.print{'expcom-res.msg', format_time(game.tick, research_time_format), event.research.name}
         end
 
-		if event.research.name == 'mining-productivity-1' or event.research.name == 'mining-productivity-2' or event.research.name == 'mining-productivity-3' then
-			if config.bonus_inventory.enabled then
+		if config.bonus_inventory.enabled then
+			if event.research.name == 'mining-productivity-1' or event.research.name == 'mining-productivity-2' or event.research.name == 'mining-productivity-3' then
 				event.research.force[config.bonus_inventory.name] = event.research.level * config.bonus_inventory.rate
 			end
 		end
     end
+end
+
+local function research_gui_update()
+	local res_disp = {}
+	local res_n = research_res_n(res['disp'])
+
+	for i=1, 8, 1 do
+		res_disp[i] = {}
+		local res_i = res_n + i - 3
+
+		if res['disp'][res_i] then
+			res_disp[i]['name'] = res['disp'][res_i].name
+
+			if research.time[res_i] == 0 then
+				res_disp[i]['target'] = res['disp'][res_i].target_disp
+				res_disp[i]['attempt'] = empty_time
+				res_disp[i]['difference'] = empty_time
+				res_disp[i]['difference_color'] = font_color[1]
+
+			else
+				res_disp[i]['target'] = res['disp'][res_i].target_disp
+				res_disp[i]['attempt'] = format_time(research.time[res_i], research_time_format)
+
+				if research.time[res_i] < res['disp'][res_i].target then
+					res_disp[i]['difference'] = '-' .. format_time(res['disp'][res_i].target - research.time[res_i], research_time_format)
+					res_disp[i]['difference_color'] = font_color[1]
+
+				else
+					res_disp[i]['difference'] = format_time(research.time[res_i] - res['disp'][res_i].target, research_time_format)
+					res_disp[i]['difference_color'] = font_color[2]
+				end
+			end
+
+		else
+			res_disp[i]['name'] = ''
+			res_disp[i]['target'] = ''
+			res_disp[i]['attempt'] = ''
+			res_disp[i]['difference'] = ''
+			res_disp[i]['difference_color'] = font_color[1]
+		end
+	end
+
+	return res_disp
 end
 
 --- Display label for the clock display
@@ -151,11 +194,53 @@ Gui.element{
 local research_clock_set =
 Gui.element(function(_, parent, name)
     local research_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(research_set, 360, 1, 'disp')
+    local disp = Gui.scroll_table(research_set, 480, 1, 'disp')
 
     research_gui_clock(disp)
 
     return research_set
+end)
+
+--- Display group
+-- @element research_data_group
+local research_data_group =
+Gui.element(function(_definition, parent, i)
+	local name = parent.add{
+        type = 'label',
+        name = 'research_' .. i .. '_name',
+        caption = '',
+        style = 'heading_1_label'
+    }
+    name.style.width = 240
+    name.style.horizontal_align = 'left'
+
+	local target = parent.add{
+        type = 'label',
+        name = 'research_' .. i .. '_target',
+        caption = '',
+        style = 'heading_1_label'
+    }
+    target.style.width = 80
+    target.style.horizontal_align = 'right'
+
+	local attempt = parent.add{
+        type = 'label',
+        name = 'research_' .. i .. '_attempt',
+        caption = '',
+        style = 'heading_1_label'
+    }
+    attempt.style.width = 80
+    attempt.style.horizontal_align = 'right'
+
+    local difference = parent.add{
+        type = 'label',
+        name = 'research_' .. i .. '_difference',
+        caption = '',
+        style = 'heading_1_label'
+    }
+    difference.style.width = 80
+    difference.style.horizontal_align = 'right'
+	difference.style.font_color = font_color[1]
 end)
 
 --- A vertical flow containing the data
@@ -163,70 +248,20 @@ end)
 local research_data_set =
 Gui.element(function(_, parent, name)
     local research_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(research_set, 360, 4, 'disp')
+    local disp = Gui.scroll_table(research_set, 480, 4, 'disp')
+	research_init()
+	local res_disp = research_gui_update()
 
 	for i=1, 8, 1 do
-        disp.add{
-			type = 'label',
-            name = 'research_display_n_' .. i,
-            caption = '',
-            style = 'heading_1_label'
-        }
+		research_data_group(disp, i)
 
-		disp.add{
-			type = 'label',
-            name = 'research_display_d_' .. i,
-            caption = empty_time,
-            style = 'heading_1_label'
-        }
+		local research_name_i = 'research_' .. i
 
-		disp.add{
-			type = 'label',
-            name = 'research_display_p_' .. i,
-			caption = '',
-            style = 'heading_1_label'
-        }
-
-		disp.add{
-			type = 'label',
-            name = 'research_display_t_' .. i,
-            caption = empty_time,
-            style = 'heading_1_label'
-        }
-	end
-
-	local res_n = research_res_n(res['disp'])
-
-	for j=1, 8, 1 do
-		local res_j = res_n + j - 3
-
-		if res['disp'][res_j] then
-			local res_r = res['disp'][res_j]
-			disp['research_display_n_' .. j].caption = res_r.name
-
-			if research.time[res_j] == 0 then
-				disp['research_display_d_' .. j].caption = empty_time
-				disp['research_display_p_' .. j].caption = res_r.prev_disp
-				disp['research_display_t_' .. j].caption = empty_time
-
-			else
-				if research.time[res_j] < res['disp'][res_j].prev then
-					disp['research_display_d_' .. j].caption = '-' .. format_time(res['disp'][res_j].prev - research.time[res_j], research_time_format)
-
-				else
-					disp['research_display_d_' .. j].caption = format_time(research.time[res_j] - res['disp'][res_j].prev, research_time_format)
-				end
-
-				disp['research_display_p_' .. j].caption = res_r.prev_disp
-				disp['research_display_t_' .. j].caption = format_time(research.time[res_j], research_time_format)
-			end
-
-		else
-			disp['research_display_n_' .. j].caption = ''
-			disp['research_display_d_' .. j].caption = ''
-			disp['research_display_p_' .. j].caption = ''
-			disp['research_display_t_' .. j].caption = ''
-		end
+		disp[research_name_i .. '_name'].caption = res_disp[i]['name']
+		disp[research_name_i .. '_target'].caption = res_disp[i]['target']
+		disp[research_name_i .. '_attempt'].caption = res_disp[i]['attempt']
+		disp[research_name_i .. '_difference'].caption = res_disp[i]['difference']
+		disp[research_name_i .. '_difference'].style.font_color = res_disp[i]['difference_color']
 	end
 
     return research_set
@@ -234,7 +269,7 @@ end)
 
 local research_container =
 Gui.element(function(definition, parent)
-	local container = Gui.container(parent, definition.name, 320)
+	local container = Gui.container(parent, definition.name, 480)
 
 	research_clock_set(container, 'research_st_1')
     research_data_set(container, 'research_st_2')
@@ -258,53 +293,22 @@ Event.add(defines.events.on_research_finished, function(event)
 	local n_i = res['lookup_name'][event.research.name]
 	research.time[n_i] = game.tick
 
-	local res_n = research_res_n(res['disp'])
-	local res_disp = {}
-
-	for j=1, 8, 1 do
-		local res_j = res_n + j - 3
-		res_disp[j] = {}
-
-		if res['disp'][res_j] then
-			local res_r = res['disp'][res_j]
-			res_disp[j]['n'] = res_r.name
-
-			if research.time[res_j] == 0 then
-				res_disp[j]['d'] = empty_time
-				res_disp[j]['p']= res_r.prev_disp
-				res_disp[j]['t'] = empty_time
-
-			else
-				if research.time[res_j] < res['disp'][res_j].prev then
-					res_disp[j]['d'] = '-' .. format_time(res['disp'][res_j].prev - research.time[res_j], research_time_format)
-
-				else
-					res_disp[j]['d'] = format_time(research.time[res_j] - res['disp'][res_j].prev, research_time_format)
-				end
-
-				res_disp[j]['p'] = res_r.prev_disp
-				res_disp[j]['t'] = format_time(research.time[res_j], research_time_format)
-			end
-
-		else
-			res_disp[j]['n'] = ''
-			res_disp[j]['d'] = ''
-			res_disp[j]['p'] = ''
-			res_disp[j]['t'] = ''
-		end
-	end
+	local res_disp = research_gui_update()
 
 	for _, player in pairs(game.connected_players) do
-        local frame = Gui.get_left_element(player, research_container)
+		local frame = Gui.get_left_element(player, research_container)
 		local disp = frame.container['research_st_2'].disp.table
 
-		for j=1, 8, 1 do
-			disp['research_display_n_' .. j].caption = res_disp[j]['n']
-			disp['research_display_d_' .. j].caption = res_disp[j]['d']
-			disp['research_display_p_' .. j].caption = res_disp[j]['p']
-			disp['research_display_t_' .. j].caption = res_disp[j]['t']
+		for i=1, 8, 1 do
+			local research_name_i = 'research_' .. i
+
+			disp[research_name_i .. '_name'].caption = res_disp[i]['name']
+			disp[research_name_i .. '_target'].caption = res_disp[i]['target']
+			disp[research_name_i .. '_attempt'].caption = res_disp[i]['attempt']
+			disp[research_name_i .. '_difference'].caption = res_disp[i]['difference']
+			disp[research_name_i .. '_difference'].style.font_color = res_disp[i]['difference_color']
 		end
-    end
+	end
 end)
 
 Event.on_nth_tick(60, function()
