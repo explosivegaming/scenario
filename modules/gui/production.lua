@@ -16,16 +16,8 @@ local precision = {
 }
 
 local font_color = {
-    [1] = {
-        r = 0.3,
-        g = 1,
-        b = 0.3
-    },
-    [2] = {
-        r = 1,
-        g = 0.3,
-        b = 0.3
-    }
+    [1] = {r = 0.3, g = 1, b = 0.3},
+    [2] = {r = 1, g = 0.3, b = 0.3}
 }
 
 local function format_n(n)
@@ -108,7 +100,6 @@ Gui.element(function(_definition, parent, i)
         type = 'choose-elem-button',
         name = 'production_' .. i .. '_e',
         elem_type = 'item',
-        elem_filters = {filter = 'hidden', invert = true},
         style = 'slot_button'
     }
     item.style.width = 80
