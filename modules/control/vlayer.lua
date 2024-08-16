@@ -446,9 +446,9 @@ function vlayer.get_statistics()
         energy_sustained = vlayer_data.properties.production * mega * get_sustained_multiplier(),
         energy_capacity = vlayer_data.properties.capacity * mega,
         energy_storage = vlayer_data.storage.energy,
-        day = math.floor(vlayer_data.properties.tick / vlayer_data.surface.ticks_per_day),
+        day_time = math.floor(vlayer_data.surface.daytime * vlayer_data.surface.ticks_per_day),
         day_length = vlayer_data.surface.ticks_per_day,
-        time = vlayer_data.properties.tick % vlayer_data.surface.ticks_per_day
+        tick = game.tick
     }
 end
 
@@ -468,9 +468,9 @@ function vlayer.get_circuits()
         energy_sustained = 'signal-S',
         energy_capacity = 'signal-C',
         energy_storage = 'signal-E',
-        day = 'signal-D',
+        day_time = 'signal-D',
         day_length = 'signal-L',
-        time = 'signal-T',
+        tick = 'signal-T',
     }
 end
 
@@ -503,7 +503,6 @@ end
 
 --- Handle all circuit interfaces, updating their signals to match the vlayer statistics
 local function handle_circuit_interfaces()
-    vlayer_data.properties.tick = game.tick
     local stats = vlayer.get_statistics()
 
     for index, interface in pairs(vlayer_data.entity_interfaces.circuit) do
