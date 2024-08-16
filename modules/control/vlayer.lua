@@ -24,8 +24,7 @@ local vlayer_data = {
         used_surface_area = 0,
         production = 0,
         discharge = 0,
-        capacity = 0,
-        tick = 0
+        capacity = 0
     },
     storage = {
         items = {},
