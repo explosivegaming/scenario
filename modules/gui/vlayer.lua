@@ -337,7 +337,7 @@ Gui.element{
     local n = element.parent[vlayer_gui_control_list.name].selected_index
     local pos = vlayer.get_interfaces()[vlayer_control_type_list[target]][n].position
     player.zoom_to_world(pos, 2)
-    player.print{'vlayer.result-interface', pos_to_gps_string(pos)}
+    player.print{'vlayer.result-interface-location', {'vlayer.control-type-' .. vlayer_control_type_list[target]:gsub('_', '-')}, pos_to_gps_string(pos)}
 end)
 
 --- A button used to build the vlayer interface
@@ -358,15 +358,15 @@ Gui.element{
 
             if res then
                 if vlayer.create_energy_interface(player.surface, res.pos, player) then
-                    game.print{'vlayer.result-energy', player.name, pos_to_gps_string(res.pos)}
+                    game.print{'vlayer.interface-result', player.name, pos_to_gps_string(res.pos), {'vlayer.result-build'}, {'vlayer.control-type-energy'}}
 
                 else
-                    player.print{'vlayer.result-unable'}
+                    player.print{'vlayer.result-unable', {'vlayer.control-type-energy'}}
                 end
             end
 
         else
-            player.print{'vlayer.result-unable'}
+            player.print{'vlayer.result-unable', {'vlayer.control-type-energy'}}
         end
 
     elseif target == 'circuit' then
@@ -375,11 +375,11 @@ Gui.element{
 
             if res then
                 vlayer.create_circuit_interface(player.surface, res.pos, res.circuit, player)
-                game.print{'vlayer.result-circuit', player.name, pos_to_gps_string(res.pos)}
+                game.print{'vlayer.interface-result', player.name, pos_to_gps_string(res.pos), {'vlayer.result-build'}, {'vlayer.control-type-circuit'}}
             end
 
         else
-            player.print{'vlayer.result-unable'}
+            player.print{'vlayer.result-unable', {'vlayer.control-type-circuit'}}
         end
 
     elseif target == 'storage_input' then
@@ -388,11 +388,11 @@ Gui.element{
 
             if res then
                 vlayer.create_input_interface(player.surface, res.pos, res.circuit, player)
-                game.print{'vlayer.result-storage-input', player.name, pos_to_gps_string(res.pos)}
+                game.print{'vlayer.interface-result', player.name, pos_to_gps_string(res.pos), {'vlayer.result-build'}, {'vlayer.control-type-storage-input'}}
             end
 
         else
-            player.print{'vlayer.result-unable'}
+            player.print{'vlayer.result-unable', {'vlayer.control-type-storage-input'}}
         end
 
     elseif target == 'storage_output' then
@@ -401,11 +401,11 @@ Gui.element{
 
             if res then
                 vlayer.create_output_interface(player.surface, res.pos, res.circuit, player)
-                game.print{'vlayer.result-storage-output', player.name, pos_to_gps_string(res.pos)}
+                game.print{'vlayer.interface-result', player.name, pos_to_gps_string(res.pos), {'vlayer.result-build'}, {'vlayer.control-type-storage-output'}}
             end
 
         else
-            player.print{'vlayer.result-unable'}
+            player.print{'vlayer.result-unable', {'vlayer.control-type-storage-output'}}
         end
     end
 
@@ -428,7 +428,10 @@ Gui.element{
     if n then
         local t = vlayer.get_interfaces()[vlayer_control_type_list[target]]
         local interface_type, interface_position = vlayer.remove_interface(t[n].surface, t[n].position)
-        game.print{'vlayer.result-remove', player.name, interface_type, pos_to_gps_string(interface_position)}
+
+        if interface_type then
+            game.print{'vlayer.interface-result', player.name, pos_to_gps_string(interface_position), {'vlayer.result-remove'}, {'vlayer.control-type-' .. interface_type:gsub('_', '-')}}
+        end
     end
 
     vlayer_gui_list_refresh(player)
