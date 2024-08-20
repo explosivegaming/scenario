@@ -439,7 +439,7 @@ function vlayer.get_statistics()
     return {
         total_surface_area = vlayer_data.properties.total_surface_area,
         used_surface_area = vlayer_data.properties.used_surface_area,
-        remaining_surface_area = math.max(vlayer_data.properties.total_surface_area - vlayer_data.properties.used_surface_area, 0),
+        remaining_surface_area = vlayer_data.properties.total_surface_area - vlayer_data.properties.used_surface_area,
         production_multiplier = get_production_multiplier(),
         energy_production = vlayer_data.properties.production * mega * get_production_multiplier(),
         energy_sustained = vlayer_data.properties.production * mega * get_sustained_multiplier(),
