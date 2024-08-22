@@ -653,7 +653,7 @@ function Common.move_items_stack(items, surface, position, radius, chest_type)
                 if not options.allow_creation then
                     error('Unable to insert items into a valid entity, consider enabling allow_creation')
                 end
-                
+
                 if options.name == nil then
                     error('Name must be provided to allow creation of new entities')
                 end
