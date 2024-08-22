@@ -612,53 +612,136 @@ move_items_stack(game.player.get_main_inventory())
 
 ]]
 function Common.move_items_stack(items, surface, position, radius, chest_type)
-	chest_type = chest_type or 'iron-chest'
+	chest_type = chest_type or 'steel-chest'
 	surface = surface or game.surfaces[1]
-	if position and type(position) ~= 'table' then return end
-	if type(items) ~= 'table' then return end
+
+	if position and type(position) ~= 'table' then
+        return
+    end
+
+	if type(items) ~= 'table' then
+        return
+    end
+
 	-- Finds all entities of the given type
 	local p = position or {x=0, y=0}
 	local r = radius or 32
-	local entities = surface.find_entities_filtered{area={{p.x-r, p.y-r}, {p.x+r, p.y+r}}, name=chest_type} or {}
+	local entities = surface.find_entities_filtered{area={{p.x - r, p.y - r}, {p.x + r, p.y + r}}, name=chest_type} or {}
 	local count = #entities
-	local current = 1
+	local current = 0
+    local last_entity = nil
+
+    for _, item in ipairs(items) do
+        if item.valid_for_read then
+            local inserted = false
+
+            -- Attempt to insert the items
+            for i = 1, count do
+                local entity = entities[((current + i - 1) % count) + 1]
+
+                if entity.can_insert(item) then
+                    last_entity = entity
+                    current = current + 1
+                    entity.insert(item)
+                    inserted = true
+                end
+            end
+
+            -- If it was not inserted then a new entity is needed
+            if not inserted then
+                --[[
+                if not options.allow_creation then
+                    error('Unable to insert items into a valid entity, consider enabling allow_creation')
+                end
+                
+                if options.name == nil then
+                    error('Name must be provided to allow creation of new entities')
+                end
+
+                if options.position then
+                    pos = surface.find_non_colliding_position(chest_type, p, r, 1, true)
+
+                elseif options.area then
+                    pos = surface.find_non_colliding_position_in_box(chest_type, options.area, 1, true)
+
+                else
+                    pos = surface.find_non_colliding_position(chest_type, {0,0}, 0, 1, true)
+                end
+                ]]
+
+                local pos = surface.find_non_colliding_position(chest_type, p, r, 1, true)
+                last_entity = surface.create_entity{name=chest_type, position=pos, force='neutral'}
+
+                count = count + 1
+                entities[count] = last_entity
+
+                last_entity.insert(item)
+            end
+        end
+    end
+
+    --[[
 	-- Makes a new empty chest when it is needed
 	local function make_new_chest()
-			local pos = surface.find_non_colliding_position(chest_type, position, 32, 1)
-			local chest = surface.create_entity{name=chest_type, position=pos, force='neutral'}
-			table.insert(entities, chest)
-			count = count + 1
-			return chest
+		local pos = surface.find_non_colliding_position(chest_type, position, 32, 1)
+		local chest = surface.create_entity{name=chest_type, position=pos, force='neutral'}
+		table.insert(entities, chest)
+		count = count + 1
+
+		return chest
 	end
+
 	-- Function used to round robin the items into all chests
 	local function next_chest(item)
-			local chest = entities[current]
-			if count == 0 then return make_new_chest() end
-			if chest.get_inventory(defines.inventory.chest).can_insert(item) then
-					-- If the item can be inserted then the chest is returned
-					current = current+1
-					if current > count then current = 1 end
-					return chest
-			else
-					-- Other wise it is removed from the list
-					table.remove(entities, current)
-					count = count - 1
-			end
+		local chest = entities[current]
+
+		if count == 0 then
+            return make_new_chest()
+        end
+
+		if chest.get_inventory(defines.inventory.chest).can_insert(item) then
+			-- If the item can be inserted then the chest is returned
+			current = current + 1
+			if current > count then
+                current = 1
+            end
+
+			return chest
+
+		else
+			-- Other wise it is removed from the list
+			table.remove(entities, current)
+		    count = count - 1
+		end
 	end
+
 	-- Inserts the items into the chests
 	local last_chest
+
 	for i=1,#items do
-			local item = items[i]
-			if item.valid_for_read then
-				local chest = next_chest(item)
-				if not chest or not chest.valid then return error(string.format('Cant move item %s to %s{%s, %s} no valid chest in radius', item.name, surface.name, p.x, p.y)) end
-				local empty_stack = chest.get_inventory(defines.inventory.chest).find_empty_stack(item.name)
-				if not empty_stack then return error(string.format('Cant move item %s to %s{%s, %s} no valid chest in radius', item.name, surface.name, p.x, p.y)) end
-				empty_stack.transfer_stack(item)
-				last_chest = chest
-			end
+		local item = items[i]
+
+        if item.valid_for_read then
+			local chest = next_chest(item)
+
+			if not chest or not chest.valid then
+                return error(string.format('Cant move item %s to %s{%s, %s} no valid chest in radius', item.name, surface.name, p.x, p.y))
+            end
+
+			local empty_stack = chest.get_inventory(defines.inventory.chest).find_empty_stack(item.name)
+
+            if not empty_stack then
+                return error(string.format('Cant move item %s to %s{%s, %s} no valid chest in radius', item.name, surface.name, p.x, p.y))
+            end
+
+			empty_stack.transfer_stack(item)
+			last_chest = chest
+		end
 	end
-	return last_chest
+    return last_chest
+    ]]
+
+    return last_entity
 end
 
 --[[-- Prints a colored value on a location, color is based on the value.
