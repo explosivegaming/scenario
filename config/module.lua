@@ -3,7 +3,7 @@ return {
     default_module_row_count = 9,
     module_slot_max = 4,
     copy_paste_module = true,
-    copy_paste_rotation = true,
+    copy_paste_rotation = false,
     machine = {
         ['electric-mining-drill'] = {
             ['module'] = 'effectivity-module',
