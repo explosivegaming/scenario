@@ -11,7 +11,7 @@ local format_number = require('util').format_number --- @dep util
 local config = require 'config.vlayer' --- @dep config.vlayer
 local vlayer = require 'modules.control.vlayer'
 local Selection = require 'modules.control.selection' --- @dep modules.control.selection
-local SelectionConvertArea = 'ConvertArea'
+local SelectionConvertArea = 'VlayerConvertChest'
 
 --- Align an aabb to the grid by expanding it
 local function aabb_align_expand(aabb)
