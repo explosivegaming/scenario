@@ -250,3 +250,63 @@ Event.add(defines.events.on_gui_elem_changed, function(event)
 end)
 
 Event.add(defines.events.on_player_joined_game, get_module_name)
+
+Event.add(defines.events.on_entity_settings_pasted, function(event)
+    local source = event.source
+    local destination = event.destination
+    local player = game.players[event.player_index]
+
+    if not player then
+        return
+    end
+
+    if not source or not source.valid then
+        return
+    end
+
+    if not destination or not destination.valid then
+        return
+    end
+
+    -- rotate machine also
+    if config.copy_paste_rotation then
+        if (source.name == destination.name or source.prototype.fast_replaceable_group == destination.prototype.fast_replaceable_group) then
+            if source.supports_direction and destination.supports_direction and source.type ~= 'transport-belt' then
+                local destination_box = destination.bounding_box
+
+                local ltx = destination_box.left_top.x
+                local lty = destination_box.left_top.y
+                local rbx = destination_box.right_bottom.x
+                local rby = destination_box.right_bottom.y
+
+                local old_direction = destination.direction
+                destination.direction = source.direction
+
+                if ltx ~= destination_box.left_top.x or lty ~= destination_box.left_top.y or rbx ~= destination_box.right_bottom.x or rby ~= destination_box.right_bottom.y then
+                    destination.direction = old_direction
+                end
+            end
+        end
+    end
+
+    if config.copy_paste_module then
+        if source.name ~= destination.name then
+            return
+        end
+
+        local source_inventory = source.get_module_inventory()
+
+        if not source_inventory then
+            return
+        end
+
+        local source_inventory_content = source_inventory.get_contents()
+
+        if not source_inventory_content then
+            return
+        end
+
+        clear_module(player, destination.bounding_box, destination.name)
+        apply_module(player, destination.bounding_box, destination.name, {['n']=source_inventory_content, ['p']=source_inventory_content})
+    end
+end)
