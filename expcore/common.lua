@@ -612,7 +612,6 @@ move_items_stack(game.player.get_main_inventory())
 
 ]]
 function Common.move_items_stack(items, surface, position, radius, chest_type)
-	chest_type = chest_type or 'steel-chest'
 	surface = surface or game.surfaces[1]
 
 	if position and type(position) ~= 'table' then
@@ -626,7 +625,7 @@ function Common.move_items_stack(items, surface, position, radius, chest_type)
 	-- Finds all entities of the given type
 	local p = position or {x=0, y=0}
 	local r = radius or 32
-	local entities = surface.find_entities_filtered{area={{p.x - r, p.y - r}, {p.x + r, p.y + r}}, name=chest_type} or {}
+	local entities = surface.find_entities_filtered{area={{p.x - r, p.y - r}, {p.x + r, p.y + r}}, name=[chest_type, 'steel-chest']} or {}
 	local count = #entities
 	local current = 0
     local last_entity = nil
