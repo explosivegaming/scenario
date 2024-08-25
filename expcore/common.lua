@@ -638,8 +638,8 @@ function Common.move_items_stack(items, surface, position, radius, chest_type)
             local inserted = false
 
             -- Attempt to insert the items
-            for i = 1, count do
-                local entity = entities[((current + i - 1) % count) + 1]
+            for j = 1, count do
+                local entity = entities[((current + j - 1) % count) + 1]
 
                 if entity.can_insert(item) then
                     last_entity = entity
