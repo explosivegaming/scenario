@@ -644,6 +644,7 @@ function Common.move_items_stack(items, surface, position, radius, chest_type)
                     current = current + 1
                     entity.insert(item)
                     inserted = true
+                    break
                 end
             end
 
