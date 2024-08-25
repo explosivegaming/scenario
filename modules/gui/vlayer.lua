@@ -431,12 +431,15 @@ Gui.element{
     local target = element.parent[vlayer_gui_control_type.name].selected_index
     local n = element.parent[vlayer_gui_control_list.name].selected_index
 
-    if n then
-        local t = vlayer.get_interfaces()[vlayer_control_type_list[target]]
-        local interface_type, interface_position = vlayer.remove_interface(t[n].surface, t[n].position)
+    if target and vlayer_control_type_list[target] and n then
+        local i = vlayer.get_interfaces()
 
-        if interface_type then
-            game.print{'vlayer.interface-result', player.name, pos_to_gps_string(interface_position), {'vlayer.result-remove'}, {'vlayer.control-type-' .. interface_type:gsub(' ', '-')}}
+        if i and i[vlayer_control_type_list[target]] then
+            local interface_type, interface_position = vlayer.remove_interface(t[n].surface, t[n].position)
+
+            if interface_type then
+                game.print{'vlayer.interface-result', player.name, pos_to_gps_string(interface_position), {'vlayer.result-remove'}, {'vlayer.control-type-' .. interface_type:gsub(' ', '-')}}
+            end
         end
     end
 
