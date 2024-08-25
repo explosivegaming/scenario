@@ -42,12 +42,12 @@ local Production = {}
 -- Functions which are used to do basic things
 -- @section precision
 
---- Gets the next lesser precision index value, eg 1 second -> 1 minute
+--- Gets the next lesser precision index value, eg 5 seconds -> 1 minute
 -- @tparam defines.flow_precision_index precision
 -- @treturn[1] defines.flow_precision_index the next precision value
 -- @treturn[1] number the multiplicive difference between the values
 function Production.precision_up(precision)
-    if precision == precision_index.one_second then return precision_index.one_minute, 60
+    if precision == precision_index.five_seconds then return precision_index.one_minute, 60
     elseif precision == precision_index.one_minute then return precision_index.ten_minutes, 10
     elseif precision == precision_index.ten_minutes then return precision_index.one_hour, 6
     elseif precision == precision_index.one_hour then return precision_index.ten_hours, 10
@@ -57,12 +57,12 @@ function Production.precision_up(precision)
     end
 end
 
---- Gets the next greater precision index value, eg 1 minute -> 1 second
+--- Gets the next greater precision index value, eg 1 minute -> 5 seconds
 -- @tparam defines.flow_precision_index precision
 -- @treturn[1] defines.flow_precision_index the next precision value
 -- @treturn[1] number the multiplicive difference between the values
 function Production.precision_down(precision)
-    if precision == precision_index.one_minute then return precision_index.one_second, 60
+    if precision == precision_index.one_minute then return precision_index.five_seconds, 60
     elseif precision == precision_index.ten_minutes then return precision_index.one_minute, 10
     elseif precision == precision_index.one_hour then return precision_index.ten_minutes, 6
     elseif precision == precision_index.ten_hours then return precision_index.one_hour, 10
@@ -72,11 +72,11 @@ function Production.precision_down(precision)
     end
 end
 
---- Gets the number of tick that precision is given over, eg 1 minute -> 60 ticks
+--- Gets the number of tick that precision is given over, eg 1 minute -> 3600 ticks
 -- @tparam defines.flow_precision_index precision
 -- @treturn number the number of ticks in this time
 function Production.precision_ticks(precision)
-    if precision == precision_index.one_second then return 60
+    if precision == precision_index.five_seconds then return 300
     elseif precision == precision_index.one_minute then return 3600
     elseif precision == precision_index.ten_minutes then return 36000
     elseif precision == precision_index.one_hour then return 216000
@@ -132,9 +132,9 @@ end
 -- @tparam defines.flow_precision_index precision the precision that you want the data given to
 -- @treturn table contains made, used and net
 function Production.get_fluctuations(force, item_name, precision)
-    local percision_up = Production.precision_up(precision)
+    local precision_up = Production.precision_up(precision)
     local current = Production.get_production(force, item_name, precision)
-    local previous = Production.get_production(force, item_name, percision_up)
+    local previous = Production.get_production(force, item_name, precision_up)
 
     return {
         made=(current.made/previous.made)-1,
