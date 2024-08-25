@@ -612,6 +612,7 @@ move_items_stack(game.player.get_main_inventory())
 
 ]]
 function Common.move_items_stack(items, surface, position, radius, chest_type)
+	chest_type = chest_type or 'steel-chest'
 	surface = surface or game.surfaces[1]
 
 	if position and type(position) ~= 'table' then
