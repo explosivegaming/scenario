@@ -1026,6 +1026,21 @@ do -- Factorio Defines STDs--
                             'northwest'
                         }
                     },
+                    disconnect_reason = {
+                        fields = {
+                            'quit',
+                            'dropped',
+                            'reconnect',
+                            'wrong_input',
+                            'desync_limit_reached',
+                            'cannot_keep_up',
+                            'afk',
+                            'kicked',
+                            'kicked_and_deleted',
+                            'banned',
+                            'switching_servers'
+                        }
+                    },
                     distraction = {
                         fields = {
                             'by_enemy',
@@ -1216,7 +1231,7 @@ do -- Factorio Defines STDs--
                     },
                     flow_precision_index = {
                         fields = {
-                            'one_second',
+                            'five_seconds',
                             'one_minute',
                             'ten_minutes',
                             'one_hour',
