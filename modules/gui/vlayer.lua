@@ -384,8 +384,23 @@ Gui.element{
     width = 160
 }:on_click(function(player, element, _)
     local target = element.parent[vlayer_gui_control_type.name].selected_index
+
+    if not target then
+        return
+    end
+
     local n = element.parent[vlayer_gui_control_list.name].selected_index
+
+    if not n then
+        return
+    end
+
     local pos = vlayer.get_interfaces()[vlayer_control_type_list[target]][n].position
+
+    if not pos then
+        return
+    end
+
     player.zoom_to_world(pos, 2)
     player.print{'vlayer.result-interface-location', {'vlayer.control-type-' .. vlayer_control_type_list[target]:gsub('_', '-')}, pos_to_gps_string(pos)}
 end)
