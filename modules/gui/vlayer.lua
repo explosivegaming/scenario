@@ -341,7 +341,7 @@ Gui.element{
     type = 'drop-down',
     name = Gui.unique_static_name,
     items = {{'vlayer.control-type-energy'}, {'vlayer.control-type-circuit'}, {'vlayer.control-type-storage-input'}, {'vlayer.control-type-storage-output'}},
-    selected_index = 1
+    selected_index = 0
 }:style{
     width = 160
 }:on_selection_changed(function(player, _, _)
@@ -355,7 +355,7 @@ Gui.element{
     type = 'drop-down',
     name = Gui.unique_static_name,
     items = {''},
-    selected_index = 1
+    selected_index = 0
 }:style{
     width = 160
 }
