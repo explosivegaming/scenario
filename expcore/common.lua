@@ -626,7 +626,7 @@ function Common.move_items_stack(items, surface, position, radius, chest_type)
 	-- Finds all entities of the given type
 	local p = position or {x=0, y=0}
 	local r = radius or 32
-	local entities = surface.find_entities_filtered{area={{p.x - r, p.y - r}, {p.x + r, p.y + r}}, name={chest_type, 'steel-chest'}} or {}
+	local entities = surface.find_entities_filtered{area={{p.x - r, p.y - r}, {p.x + r, p.y + r}}, name={chest_type, 'iron-chest'}} or {}
 	local count = #entities
 	local current = 0
     local last_entity = nil
