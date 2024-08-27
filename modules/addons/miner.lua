@@ -88,8 +88,6 @@ local function miner_check(entity)
         end
     end
 
-    local radius = entity.prototype.mining_drill_radius
-
     if entity.status ~= defines.entity_status.no_minable_resources then
         return
     end
@@ -105,7 +103,7 @@ local function miner_check(entity)
         table.insert(pipe_build, {x=0, y=0})
 
         local half = math.floor(entity.get_radius())
-        radius = 1 + entity.prototype.mining_drill_radius
+        local radius = 1 + entity.prototype.mining_drill_radius
 
         local entities = entity.surface.find_entities_filtered{area={{entity.position.x - radius, entity.position.y - radius}, {entity.position.x + radius, entity.position.y + radius}}, type={'mining-drill', 'pipe', 'pipe-to-ground'}}
         local entities_t = entity.surface.find_entities_filtered{area={{entity.position.x - radius, entity.position.y - radius}, {entity.position.x + radius, entity.position.y + radius}}, ghost_type={'pipe', 'pipe-to-ground'}}
