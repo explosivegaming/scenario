@@ -435,7 +435,7 @@ Gui.element{
         local i = vlayer.get_interfaces()
 
         if i and i[vlayer_control_type_list[target]] then
-            local interface_type, interface_position = vlayer.remove_interface(t[n].surface, t[n].position)
+            local interface_type, interface_position = vlayer.remove_interface(i[vlayer_control_type_list[target]][n].surface, i[vlayer_control_type_list[target]][n].position)
 
             if interface_type then
                 game.print{'vlayer.interface-result', player.name, pos_to_gps_string(interface_position), {'vlayer.result-remove'}, {'vlayer.control-type-' .. interface_type:gsub(' ', '-')}}
