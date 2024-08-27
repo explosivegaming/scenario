@@ -67,7 +67,7 @@ return {
     'modules.addons.inserter',
     'modules.addons.miner',
     'modules.addons.lawnmower',
-    'modules.addons.logging'
+    'modules.addons.logging',
 
     -- Control
     'modules.control.vlayer',
