@@ -64,7 +64,7 @@ local function chest_check(entity)
         return
     end
 
-    local radius = 2
+    local radius = entity.prototype.mining_drill_radius
     local entities = target.surface.find_entities_filtered{area={{target.position.x - radius, target.position.y - radius}, {target.position.x + radius, target.position.y + radius}}, type={'mining-drill', 'inserter'}}
 
     for _, e in pairs(entities) do
@@ -82,12 +82,6 @@ end
 
 local function miner_check(entity)
     -- if any tile in the radius have resources
-    if entity.mining_target and entity.mining_target.valid then
-        if entity.mining_target.amount > 0 then
-            return
-        end
-    end
-
     if entity.status ~= defines.entity_status.no_minable_resources then
         return
     end
