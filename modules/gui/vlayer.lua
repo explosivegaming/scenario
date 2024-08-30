@@ -108,7 +108,7 @@ Selection.on_selection(SelectionConvertArea, function(event)
     end
 
     if (vlayer.get_interface_counts()[target] >= config.interface_limit[target]) then
-        player.print{'vlayer.result-unable', {'vlayer.control-type-energy'}, {'vlayer.result-limit'}}
+        player.print{'vlayer.result-unable', {'vlayer.control-type-' .. target:gsub('_', '-')}, {'vlayer.result-limit'}}
         return nil
     end
 
