@@ -53,7 +53,7 @@ if config.decon_area then
 		local items = e.surface.find_entities_filtered{area=e.area, force=player.force, surface=player.surface}
 
 		if #items > 250 then
-			print_to_players(true, {'deconlog.decon', player.name, player.surface, pos_to_gps_string(e.area.left_top), pos_to_gps_string(e.area.right_bottom), format_number(#items)})
+			print_to_players(true, {'deconlog.decon', player.name, player.surface.name, pos_to_gps_string(e.area.left_top), pos_to_gps_string(e.area.right_bottom), format_number(#items)})
 		end
 
 		add_log(get_secs() .. ',' .. player.name .. ',decon_area,' .. '(' .. player.surface .. ') ' .. pos_to_string(e.area.left_top) .. ',' .. pos_to_string(e.area.right_bottom))
