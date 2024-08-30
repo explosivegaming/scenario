@@ -90,7 +90,7 @@ Selection.on_selection(SelectionConvertArea, function(event)
         return nil
 
     elseif #entities > 1 then
-        player.print{'vlayer.result-unable', {'vlayer.control-type-' .. target:gsub('_', '-')}}
+        player.print{'vlayer.result-unable', {'vlayer.control-type-' .. target:gsub('_', '-')}, {'vlayer.result-multiple'}}
         return nil
     end
 
@@ -108,7 +108,7 @@ Selection.on_selection(SelectionConvertArea, function(event)
     end
 
     if (vlayer.get_interface_counts()[target] >= config.interface_limit[target]) then
-        player.print{'vlayer.result-unable', {'vlayer.control-type-energy'}}
+        player.print{'vlayer.result-unable', {'vlayer.control-type-energy'}, {'vlayer.result-limit'}}
         return nil
     end
 
@@ -116,7 +116,7 @@ Selection.on_selection(SelectionConvertArea, function(event)
 
     if target == 'energy' then
         if not vlayer.create_energy_interface(player.surface, e_pos, player) then
-            player.print{'vlayer.result-unable', {'vlayer.control-type-energy'}}
+            player.print{'vlayer.result-unable', {'vlayer.control-type-energy'}, {'vlayer.result-space'}}
             return nil
         end
 
