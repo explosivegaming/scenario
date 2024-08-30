@@ -1,14 +1,5 @@
 local Event = require 'utils.event_core' --- @dep utils.event_core
-local Global = require 'utils.global' --- @dep utils.global
 local config = require 'config.miner' --- @dep config.miner
-
-local miner_data = {}
-
-Global.register(miner_data, function(tbl)
-    miner_data = tbl
-end)
-
-miner_data.queue = {}
 
 local function drop_target(entity)
     if entity.drop_target then
@@ -76,14 +67,25 @@ local function chest_check(entity)
     end
 
     if check_entity(target) then
-        table.insert(miner_data.queue, {t=game.tick + 10, e=target})
+        target.order_deconstruction(target.force)
     end
 end
 
 local function miner_check(entity)
-    if entity.status ~= defines.entity_status.no_minable_resources then
-        return
+    local ep = entity.position
+    local es = entity.surface
+    local ef = entity.force
+    local er = entity.prototype.mining_drill_radius
+
+    for _, r in pairs(entity.surface.find_entities_filtered{area={{x=ep.x - er, y=ep.y - er}, {x=ep.x + er, y=ep.y + er}}, type='resource'}) do
+        if r.amount > 0 then
+            return
+        end
     end
+
+    --[[
+        entity.status ~= defines.entity_status.no_minable_resources
+    ]]
 
     if check_entity(entity) then
         return
@@ -96,30 +98,30 @@ local function miner_check(entity)
         table.insert(pipe_build, {x=0, y=0})
 
         local half = math.floor(entity.get_radius())
-        local radius = 1 + entity.prototype.mining_drill_radius
+        local r = 1 + er
 
-        local entities = entity.surface.find_entities_filtered{area={{entity.position.x - radius, entity.position.y - radius}, {entity.position.x + radius, entity.position.y + radius}}, type={'mining-drill', 'pipe', 'pipe-to-ground'}}
-        local entities_t = entity.surface.find_entities_filtered{area={{entity.position.x - radius, entity.position.y - radius}, {entity.position.x + radius, entity.position.y + radius}}, ghost_type={'pipe', 'pipe-to-ground'}}
+        local entities = es.find_entities_filtered{area={{ep.x - r, ep.y - r}, {ep.x + r, ep.y + r}}, type={'mining-drill', 'pipe', 'pipe-to-ground'}}
+        local entities_t = es.find_entities_filtered{area={{ep.x - r, ep.y - r}, {ep.x + r, ep.y + r}}, ghost_type={'pipe', 'pipe-to-ground'}}
 
         table.array_insert(entities, entities_t)
 
         for _, e in pairs(entities) do
-            if (e.position.x > entity.position.x) and (e.position.y == entity.position.y) then
+            if (e.position.x > ep.x) and (e.position.y == ep.y) then
                 for h=1, half do
                     table.insert(pipe_build, {x=h, y=0})
                 end
 
-            elseif (e.position.x < entity.position.x) and (e.position.y == entity.position.y) then
+            elseif (e.position.x < ep.x) and (e.position.y == ep.y) then
                 for h=1, half do
                     table.insert(pipe_build, {x=-h, y=0})
                 end
 
-            elseif (e.position.x == entity.position.x) and (e.position.y > entity.position.y) then
+            elseif (e.position.x == ep.x) and (e.position.y > ep.y) then
                 for h=1, half do
                     table.insert(pipe_build, {x=0, y=h})
                 end
 
-            elseif (e.position.x == entity.position.x) and (e.position.y < entity.position.y) then
+            elseif (e.position.x == ep.x) and (e.position.y < ep.y) then
                 for h=1, half do
                     table.insert(pipe_build, {x=0, y=-h})
                 end
@@ -127,14 +129,14 @@ local function miner_check(entity)
         end
     end
 
-    table.insert(miner_data.queue, {t=game.tick + 5, e=entity})
-
     if config.chest then
         chest_check(entity)
     end
 
+    entity.order_deconstruction(ef)
+
     for _, pos in ipairs(pipe_build) do
-        entity.surface.create_entity{name='entity-ghost', position={x=entity.position.x + pos.x, y=entity.position.y + pos.y}, force=entity.force, inner_name='pipe', raise_built=true}
+        es.create_entity{name='entity-ghost', position={x=ep.x + pos.x, y=ep.y + pos.y}, force=ef, inner_name='pipe', raise_built=true}
     end
 end
 
@@ -143,28 +145,13 @@ Event.add(defines.events.on_resource_depleted, function(event)
         return
     end
 
-    local entities = event.entity.surface.find_entities_filtered{area={{event.entity.position.x - 3, event.entity.position.y - 3}, {event.entity.position.x + 3, event.entity.position.y + 3}}, type='mining-drill'}
+    local entities = event.entity.surface.find_entities_filtered{area={{event.entity.position.x - 1, event.entity.position.y - 1}, {event.entity.position.x + 1, event.entity.position.y + 1}}, type='mining-drill'}
 
     if #entities == 0 then
         return
     end
 
     for _, entity in pairs(entities) do
-        if ((math.abs(entity.position.x - event.entity.position.x) <= entity.prototype.mining_drill_radius) and (math.abs(entity.position.y - event.entity.position.y) <= entity.prototype.mining_drill_radius)) then
-            miner_check(entity)
-        end
-    end
-end)
-
-Event.on_nth_tick(10, function(event)
-    for k, q in pairs(miner_data.queue) do
-        if not q.e or not q.e.valid then
-            table.remove(miner_data.queue, k)
-            break
-
-        elseif event.tick >= q.t then
-            q.e.order_deconstruction(q.e.force)
-            table.remove(miner_data.queue, k)
-        end
+        miner_check(entity)
     end
 end)
