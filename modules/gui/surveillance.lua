@@ -193,7 +193,7 @@ Event.on_nth_tick(600, function(_)
                         current_camera_set.buttons.table[cctv_player.name].selected_index = 1
                     end
 
-                    selected_index = current_camera_set.buttons.table[cctv_player.name].items[selected_index]
+                    local selected_index = current_camera_set.buttons.table[cctv_player.name].items[current_camera_set.buttons.table[cctv_player.name].selected_index]
                     current_camera_set['cctv_display'].position = game.players[selected_index].position
                     current_camera_set['cctv_display'].surface_index = game.players[selected_index].surface_index
 
