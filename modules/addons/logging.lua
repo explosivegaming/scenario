@@ -22,10 +22,10 @@ Event.add(defines.events.on_pre_player_died, function(event)
     if event and event.player_index then
         if event.cause then
             if event.cause.type and event.cause.type == 'character' and event.cause.player and event.cause.player.index then
-                add_log('[DEATH] ' .. game.players[event.player_index].name .. ' died because of ' .. (game.players[event.cause.player.index].name or ' unknown reason'))
+                add_log('[DEATH] ' .. game.players[event.player_index].name .. ' died because of ' .. (game.players[event.cause.player.index].name or 'unknown reason'))
 
             else
-                add_log('[DEATH] ' .. game.players[event.player_index].name .. ' died because of ' .. (event.cause.name or ' unknown reason'))
+                add_log('[DEATH] ' .. game.players[event.player_index].name .. ' died because of ' .. (event.cause.name or 'unknown reason'))
             end
 
         else
@@ -43,6 +43,7 @@ Event.add(defines.events.on_research_finished, function(event)
         if event.research.level and event.research.level > 1 then
             if config_res.inf_res[event.research.name] and (event.research.level >= config_res.inf_res[event.research.name]) then
                 add_log('[RES] ' .. string.match(event.research.name, '^(.-)%-%d+$'):gsub('-', ' ') .. ' at level ' .. (event.research.level - 1) .. ' has been researched')
+
             else
                 add_log('[RES] ' .. string.match(event.research.name, '^(.-)%-%d+$'):gsub('-', ' ') .. ' at level ' .. event.research.level .. ' has been researched')
             end
