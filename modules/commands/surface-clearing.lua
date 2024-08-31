@@ -7,7 +7,7 @@ local copy_items_stack = _C.copy_items_stack --- @dep expcore.common
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
 
-Commands.new_command('clear-item-on-ground', 'Clear Item On Ground')
+Commands.new_command('clear-item-on-ground', {'expcom-surface-clearing.descr-ci'})
 :add_param('range', false, 'integer-range', 1, 1000)
 :register(function(player, range)
     for _, e in pairs(player.surface.find_entities_filtered{position=player.position, radius=range, name='item-on-ground'}) do
@@ -22,7 +22,7 @@ Commands.new_command('clear-item-on-ground', 'Clear Item On Ground')
     return Commands.success
 end)
 
-Commands.new_command('clear-blueprint', 'Clear Blueprint')
+Commands.new_command('clear-blueprint', {'expcom-surface-clearing.descr-cb'})
 :add_param('range', false, 'integer-range', 1, 1000)
 :register(function(player, range)
     for _, e in pairs(player.surface.find_entities_filtered{position=player.position, radius=range, type='entity-ghost'}) do
