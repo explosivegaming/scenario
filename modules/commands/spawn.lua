@@ -39,7 +39,7 @@ end
 --- Teleport to spawn
 -- @command go-to-spawn
 -- @tparam[opt=self] LuaPlayer player the player to teleport to their spawn point
-Commands.new_command('go-to-spawn', 'Teleport to spawn')
+Commands.new_command('go-to-spawn', {'expcom-spawn.descr'})
 :add_param('player', true, 'player-role-alive')
 :set_defaults{
     player=function(player)
