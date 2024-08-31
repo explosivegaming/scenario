@@ -18,7 +18,7 @@ end)
 -- @command chelp
 -- @tparam string keyword the keyword that will be looked for
 -- @tparam number page the page of help to view, must be in range of pages
-Commands.new_command('search-help', 'Searches for a keyword in all commands you are allowed to use.')
+Commands.new_command('search-help', {'expcom-chelp.descr'})
 :add_alias('chelp', 'shelp', 'commands')
 :add_param('keyword', true)
 :add_param('page', true, 'integer')
