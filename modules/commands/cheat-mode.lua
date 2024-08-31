@@ -9,7 +9,7 @@ require 'config.expcore.command_general_parse'
 --- Toggles cheat mode for your player, or another player.
 -- @command toggle-cheat-mode
 -- @tparam[opt=self] LuaPlayer player player to toggle chest mode of, can be nil for self
-Commands.new_command('toggle-cheat-mode', 'Toggles cheat mode for your player, or another player.')
+Commands.new_command('toggle-cheat-mode', {'expcom-cheat.descr-cheat'})
 :add_param('player', true, 'player')
 :set_defaults{player=function(player)
     return player -- default is the user using the command
