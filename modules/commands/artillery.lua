@@ -72,7 +72,7 @@ Selection.on_selection(SelectionArtyArea, function(event)
     end
 end)
 
-Commands.new_command('artillery-target-remote', 'Artillery Target Remote')
+Commands.new_command('artillery-target-remote', {'expcom-artillery.descr'})
 :register(function(player)
     if Selection.is_selecting(player, SelectionArtyArea) then
         Selection.stop(player)
