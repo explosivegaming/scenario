@@ -20,7 +20,7 @@ end}
     return Commands.success
 end)
 
-Commands.new_command('research-all', 'Set all research for your force.')
+Commands.new_command('research-all', {'expcom-cheat.descr-res'})
 :set_flag('admin_only')
 :add_param('force', true, 'force')
 :set_defaults{force=function(player)
@@ -32,7 +32,7 @@ end}
     return Commands.success
 end)
 
-Commands.new_command('toggle-always-day', 'Toggles always day in surface')
+Commands.new_command('toggle-always-day', {'expcom-cheat.descr-day'})
 :set_flag('admin_only')
 :add_param('surface', true, 'surface')
 :set_defaults{surface=function(player)
