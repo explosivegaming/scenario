@@ -103,7 +103,7 @@ end
 --- Get a list of players sorted by the quantity of an item in their inventory
 -- @command search-amount
 -- @tparam LuaItemPrototype item The item to search for in players inventories
-Commands.new_command('search-amount', 'Display players sorted by the quantity of an item held')
+Commands.new_command('search-amount', {'expcom-inv-search.descr-ia'})
 :add_alias('ia')
 :add_param('item', false, item_parse)
 :enable_auto_concat()
@@ -122,7 +122,7 @@ end
 --- Get a list of players who have the given item, sorted by how recently they joined
 -- @command search-recent
 -- @tparam LuaItemPrototype item The item to search for in players inventories
-Commands.new_command('search-recent', 'Display players who hold an item sorted by join time')
+Commands.new_command('search-recent', {'expcom-inv-search.descr-ir'})
 :add_alias('ir')
 :add_param('item', false, item_parse)
 :enable_auto_concat()
@@ -141,7 +141,7 @@ end
 --- Get a list of players sorted by quantity held and play time
 -- @command search
 -- @tparam LuaItemPrototype item The item to search for in players inventories
-Commands.new_command('search', 'Display players sorted by the quantity of an item held and playtime')
+Commands.new_command('search', {'expcom-inv-search.descr-i'})
 :add_alias('i')
 :add_param('item', false, item_parse)
 :enable_auto_concat()
@@ -155,7 +155,7 @@ end)
 --- Get a list of online players sorted by quantity held and play time
 -- @command search-online
 -- @tparam LuaItemPrototype item The item to search for in players inventories
-Commands.new_command('search-online', 'Display online players sorted by the quantity of an item held and playtime')
+Commands.new_command('search-online', {'expcom-inv-search.descr-io'})
 :add_alias('io')
 :add_param('item', false, item_parse)
 :enable_auto_concat()
