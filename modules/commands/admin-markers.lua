@@ -21,7 +21,7 @@ end)
 
 --- Toggle admin marker mode, can only be applied to yourself
 -- @command admin-marker
-Commands.new_command('admin-marker', 'Toggles admin marker mode, new markers can only be edited by admins')
+Commands.new_command('admin-marker', {'expcom-admin-marker.descr'})
 :set_flag('admin_only')
 :add_alias('am', 'admin-markers')
 :register(function(player)
