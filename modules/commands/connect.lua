@@ -90,7 +90,7 @@ end)
 -- @command connect-all
 -- @tparam string address The address or name of the server to connect to
 -- @tparam[opt=false] boolean is_address If an address was given for the server param
-Commands.new_command('connect-all', 'Connect all players to another server')
+Commands.new_command('connect-all', {'expcom-connect.descr-all'})
 :add_param('server')
 :add_param('is_address', true, 'boolean')
 :register(function(_, server, is_address)
