@@ -7,7 +7,7 @@ local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
 local format_number = require('util').format_number
 
-Commands.new_command('set-trains-to-automatic', 'Set All Trains to Automatic')
+Commands.new_command('set-trains-to-automatic', {'expcom-train.descr'})
 :register(function(player)
     local count = 0
 
