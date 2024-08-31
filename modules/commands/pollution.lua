@@ -6,7 +6,7 @@
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
 
-Commands.new_command('pollution-clear', 'Clear pollution')
+Commands.new_command('pollution-clear', {'expcom-pol.descr-clr'})
 :set_flag('admin_only')
 :add_alias('pol-clr')
 :add_param('surface', true, 'surface')
@@ -19,7 +19,7 @@ end}
     return Commands.success
 end)
 
-Commands.new_command('pollution-off', 'Disable pollution')
+Commands.new_command('pollution-off', {'expcom-pol.descr-off'})
 :set_flag('admin_only')
 :add_alias('pol-off')
 :register(function(player)
