@@ -10,7 +10,7 @@ require 'config.expcore.command_general_parse'
 --- Sends a message in chat that only admins can see
 -- @command admin-chat
 -- @tparam string message the message to send in the admin chat
-Commands.new_command('admin-chat', 'Sends a message in chat that only admins can see.')
+Commands.new_command('admin-chat', {'expcom-admin-chat.descr'})
 :add_param('message', false)
 :enable_auto_concat()
 :set_flag('admin_only')
