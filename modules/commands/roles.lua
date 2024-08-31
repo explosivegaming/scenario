@@ -19,7 +19,7 @@ Commands.new_command('assign-role', {'expcom-roles.descr-assign-role'})
 :add_alias('rpromote', 'assign', 'role', 'add-role')
 :register(function(player, action_player, role)
     local player_highest = Roles.get_player_highest_role(player)
-    if player_highest.index < role.index then
+    if player_highest and (player_highest.index < role.index) then
         Roles.assign_player(action_player, role, player.name)
     else
         return Commands.error{'expcom-roles.higher-role'}
