@@ -192,14 +192,6 @@ Event.on_nth_tick(600, function(_)
                     else
                         current_camera_set.buttons.table[cctv_player.name].selected_index = 1
                     end
-
-                    local selected_index = current_camera_set.buttons.table[cctv_player.name].items[current_camera_set.buttons.table[cctv_player.name].selected_index]
-                    current_camera_set['cctv_display'].position = game.players[selected_index].position
-                    current_camera_set['cctv_display'].surface_index = game.players[selected_index].surface_index
-
-                else
-                    current_camera_set['cctv_display'].position = {x=0, y=0}
-                    current_camera_set['cctv_display'].surface_index = game.surfaces['nauvis'].index
                 end
             end
         end
