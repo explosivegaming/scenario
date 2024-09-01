@@ -24,7 +24,7 @@ local vlayer_data = {
         used_surface_area = 0,
         production = 0,
         discharge = 0,
-        capacity = 0,
+        capacity = 0
     },
     storage = {
         items = {},
@@ -439,13 +439,15 @@ function vlayer.get_statistics()
     return {
         total_surface_area = vlayer_data.properties.total_surface_area,
         used_surface_area = vlayer_data.properties.used_surface_area,
-        remaining_surface_area = math.max(vlayer_data.properties.total_surface_area - vlayer_data.properties.used_surface_area, 0),
+        remaining_surface_area = vlayer_data.properties.total_surface_area - vlayer_data.properties.used_surface_area,
+        production_multiplier = get_production_multiplier(),
         energy_production = vlayer_data.properties.production * mega * get_production_multiplier(),
         energy_sustained = vlayer_data.properties.production * mega * get_sustained_multiplier(),
         energy_capacity = vlayer_data.properties.capacity * mega,
         energy_storage = vlayer_data.storage.energy,
-        day = math.floor(game.tick / vlayer_data.surface.ticks_per_day),
-        time = math.floor(vlayer_data.surface.daytime * vlayer_data.surface.ticks_per_day)
+        day_time = math.floor(vlayer_data.surface.daytime * vlayer_data.surface.ticks_per_day),
+        day_length = vlayer_data.surface.ticks_per_day,
+        tick = game.tick
     }
 end
 
@@ -460,12 +462,14 @@ function vlayer.get_circuits()
         total_surface_area = 'signal-A',
         used_surface_area = 'signal-U',
         remaining_surface_area = 'signal-R',
+        production_multiplier = 'signal-M',
         energy_production = 'signal-P',
         energy_sustained = 'signal-S',
         energy_capacity = 'signal-C',
         energy_storage = 'signal-E',
-        day = 'signal-D',
-        time = 'signal-T',
+        day_time = 'signal-D',
+        day_length = 'signal-L',
+        tick = 'signal-T',
     }
 end
 
@@ -514,6 +518,9 @@ local function handle_circuit_interfaces()
             for stat_name, signal_name in pairs(circuit) do
                 if stat_name:find('energy') then
                     circuit_oc.set_signal(signal_index, {signal={type='virtual', name=signal_name}, count=math.floor(stats[stat_name] / mega)})
+
+                elseif stat_name == 'production_multiplier' then
+                    circuit_oc.set_signal(signal_index, {signal={type='virtual', name=signal_name}, count=math.floor(stats[stat_name] * 10000)})
 
                 else
                     circuit_oc.set_signal(signal_index, {signal={type='virtual', name=signal_name}, count=math.floor(stats[stat_name])})
