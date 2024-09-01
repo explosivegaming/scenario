@@ -22,7 +22,7 @@ end)
 local cctv_status =
 Gui.element{
     type = 'drop-down',
-    items = {'Enable', 'Disable'},
+    items = {{'surveillance.status-enable'}, {'surveillance.status-disable'}},
     selected_index = 2
 }:style{
     width = 96
@@ -38,7 +38,7 @@ local cctv_type =
 Gui.element{
     type = 'drop-down',
     name = Gui.unique_static_name,
-    items = {'Player', 'Static'},
+    items = {{'surveillance.type-player'}, {'surveillance.type-static'}, {'surveillance.type-player-loop'}},
     selected_index = 1
 }:style{
     width = 96
@@ -48,7 +48,7 @@ local cctv_location =
 Gui.element{
     type = 'button',
     name = Gui.unique_static_name,
-    caption = 'set'
+    caption = {'surveillance.func-set'}
 }:style{
     width = 48
 }:on_click(function(player, element, _)
@@ -104,8 +104,8 @@ Gui.element(function(_, parent, name, player_list)
     }
 
     camera.visible = false
-    camera.style.minimal_width = 400
-    camera.style.minimal_height = 300
+    camera.style.minimal_width = 480
+    camera.style.minimal_height = 290
     return camera_set
 end)
 
@@ -128,7 +128,7 @@ end)
 :static_name(Gui.unique_static_name)
 :add_to_left_flow()
 
-Gui.left_toolbar_button('entity/radar', 'Surveillance GUI', cctv_container, function(player)
+Gui.left_toolbar_button('entity/radar', {'surveillance.main-tooltip'}, cctv_container, function(player)
 	return Roles.player_allowed(player, 'gui/surveillance')
 end)
 
@@ -158,7 +158,7 @@ Event.add(defines.events.on_tick, function(_)
             local current_camera_set = frame.container.scroll[scroll_table_name]
             local switch_index = current_camera_set.buttons.table[cctv_type.name].selected_index
 
-            if switch_index == 1 then
+            if (switch_index == 1) or (switch_index == 3) then
                 local selected_index = current_camera_set.buttons.table[cctv_player.name].selected_index
 
                 if selected_index ~= 0 then
@@ -169,6 +169,29 @@ Event.add(defines.events.on_tick, function(_)
                 else
                     current_camera_set['cctv_display'].position = {x=0, y=0}
                     current_camera_set['cctv_display'].surface_index = game.surfaces['nauvis'].index
+                end
+            end
+        end
+    end
+end)
+
+Event.on_nth_tick(600, function(_)
+    for _, player in pairs(game.connected_players) do
+        local frame = Gui.get_left_element(player, cctv_container)
+
+        for i=1, 2 do
+            local current_camera_set = frame.container.scroll['cctv_st_' .. i]
+
+            if current_camera_set.buttons.table[cctv_type.name].selected_index == 3 then
+                local item_n = #current_camera_set.buttons.table[cctv_player.name].items
+
+                if item_n ~= 0 then
+                    if current_camera_set.buttons.table[cctv_player.name].selected_index < item_n then
+                        current_camera_set.buttons.table[cctv_player.name].selected_index = current_camera_set.buttons.table[cctv_player.name].selected_index + 1
+
+                    else
+                        current_camera_set.buttons.table[cctv_player.name].selected_index = 1
+                    end
                 end
             end
         end
