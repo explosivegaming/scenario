@@ -41,10 +41,10 @@ Event.add(defines.events.on_research_finished, function(event)
         end
 
         if (event.research.level and config_res.inf_res[event.research.name]) and (event.research.level >= config_res.inf_res[event.research.name]) then
-            add_log('[RES] ' .. event.research.prototype.localised_name .. ' at level ' .. (event.research.level - 1) .. ' has been researched')
+            add_log({'logging.add-l', event.research.prototype.localised_name, event.research.level - 1})
 
         else
-            add_log('[RES] ' .. event.research.prototype.localised_name .. ' has been researched')
+            add_log({'logging.add-n', event.research.prototype.localised_name})
         end
     end
 end)
