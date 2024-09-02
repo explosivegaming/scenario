@@ -1,9 +1,11 @@
---[[-- Commands Module - Lawnmower
+--[[-- Addon Lawnmower
     - Adds a command that clean up biter corpse and nuclear hole
-    @commands Lawnmower
+    @addon Lawnmower
 ]]
 
 local Commands = require 'expcore.commands' --- @dep expcore.commands
+local Event = require 'utils.event' --- @dep utils.event
+local config = require 'config.lawnmower' --- @dep config.lawnmower
 require 'config.expcore.command_general_parse'
 
 Commands.new_command('lawnmower', 'Clean up biter corpse, decoratives and nuclear hole')
@@ -31,3 +33,27 @@ Commands.new_command('lawnmower', 'Clean up biter corpse, decoratives and nuclea
 
     return Commands.success
 end)
+
+local function destroy_decoratives(entity)
+    if entity.type ~= 'entity-ghost' and entity.type ~= 'tile-ghost' and entity.prototype.selectable_in_game then
+        entity.surface.destroy_decoratives{area=entity.selection_box}
+    end
+end
+
+if config.destroy_decoratives then
+	Event.add(defines.events.on_built_entity, function(event)
+		destroy_decoratives(event.created_entity)
+	end)
+
+	Event.add(defines.events.on_robot_built_entity, function(event)
+		destroy_decoratives(event.created_entity)
+	end)
+
+	Event.add(defines.events.script_raised_built, function(event)
+		destroy_decoratives(event.entity)
+	end)
+
+	Event.add(defines.events.script_raised_revive, function(event)
+		destroy_decoratives(event.entity)
+	end)
+end
