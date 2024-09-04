@@ -157,7 +157,7 @@ end
 
 --- Button on the top flow used to toggle the landfill container
 -- @element toggle_left_element
-Gui.toolbar_toggle_button('item/landfill', {'landfill.main-tooltip'}, landfill_gui_tile, function(player)
+Gui.toolbar_toggle_button('item/landfill', {'landfill.main-tooltip'}, function(player)
 	return Roles.player_allowed(player, 'gui/landfill')
 end)
 :on_event(Gui.events.on_toolbar_button_toggled, function(player, _, _)
