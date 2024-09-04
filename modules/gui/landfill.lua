@@ -11,7 +11,7 @@ local config = require 'config.landfill' --- @dep config.landfill
 
 local rolling_stocks = {}
 
-local function rolling_stocks_init()
+local function landfill_init()
     for name, _ in pairs(game.get_filtered_entity_prototypes({{filter = 'rolling-stock'}})) do
         rolling_stocks[name] = true
     end
@@ -55,6 +55,7 @@ local function curve_flip_d(oc)
 end
 
 local curves = {}
+
 curves[1] = config.default_curve
 curves[6] = curve_flip_d(curves[1])
 curves[3] = curve_flip_lr(curves[6])
@@ -64,24 +65,25 @@ curves[2] = curve_flip_d(curves[5])
 curves[7] = curve_flip_lr(curves[2])
 curves[8] = curve_flip_d(curves[7])
 
-local function curve_map(d)
-	local n = {}
-	local map = table.deepcopy(curves[d])
-	local index = 1
+local curve_n = {}
 
-	for r=1, 8 do
-		for c=1, 8 do
-			if map[r][c] == 1 then
-				n[index] = {
-                    ['x'] = c - 5,
-                    ['y'] = r - 5
-                }
-				index = index + 1
-			end
-		end
-	end
+do
+    for _, map in ipairs(curves) do
+        local index = 1
 
-	return n
+        for r=1, 8 do
+            for c=1, 8 do
+                if map[r][c] == 1 then
+                    curve_n[index] = {
+                        ['x'] = c - 5,
+                        ['y'] = r - 5
+                    }
+
+                    index = index + 1
+                end
+            end
+        end
+    end
 end
 
 local function landfill_gui_add_landfill(blueprint)
@@ -124,8 +126,7 @@ local function landfill_gui_add_landfill(blueprint)
 
             -- curved rail
             else
-                local dir = ent.direction or 8
-                local curve_mask = curve_map(dir)
+                local curve_mask = curve_n[ent.direction or 8]
 
                 for m=1, #curve_mask do
                     new_tiles[tile_index + 1] = {
@@ -177,22 +178,10 @@ Gui.element{
     end
 end)
 
---- The main container for the landfill gui
--- @element landfill_container
-local landfill_container =
-Gui.element(function(definition, parent)
-    local container = Gui.container(parent, definition.name, 160)
-
-    landfill_gui_tile(container)
-    return container.parent
-end)
-:static_name(Gui.unique_static_name)
-:add_to_left_flow()
-
---- Button on the top flow used to toggle the task list container
+--- Button on the top flow used to toggle the landfill container
 -- @element toggle_left_element
-Gui.left_toolbar_button('item/landfill', {'landfill.main-tooltip'}, landfill_container, function(player)
+Gui.left_toolbar_button('item/landfill', {'landfill.main-tooltip'}, landfill_gui_tile, function(player)
 	return Roles.player_allowed(player, 'gui/landfill')
 end)
 
-Event.add(defines.events.on_player_joined_game, rolling_stocks_init)
+Event.add(defines.events.on_player_joined_game, landfill_init)
