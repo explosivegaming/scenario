@@ -10,7 +10,7 @@ require 'config.expcore.command_role_parse'
 --- Clears a players inventory
 -- @command clear-inventory
 -- @tparam LuaPlayer player the player to clear the inventory of
-Commands.new_command('clear-inventory', {'expcom-clr-inv.descr'})
+Commands.new_command('clear-inventory', {'expcom-clr-inv.description'})
 :add_param('player', false, 'player-role')
 :add_alias('clear-inv', 'move-inventory', 'move-inv')
 :register(function(_, player)
