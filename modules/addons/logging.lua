@@ -7,7 +7,8 @@ local config = require 'config.logging' --- @dep config.logging
 local config_res = require 'config.research' --- @dep config.research
 
 local function add_log(data)
-	game.write_file(config.file_name, data .. '\n', true, 0)
+	game.write_file(config.file_name, data, true, 0)
+    game.write_file(config.file_name, '\n', true, 0)
 end
 
 Event.add(defines.events.on_rocket_launched, function(event)
