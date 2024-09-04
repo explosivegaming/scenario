@@ -51,7 +51,7 @@ end
 -- @command connect
 -- @tparam string server The address or name of the server to connect to
 -- @tparam[opt=false] boolean is_address If an address was given for the server param
-Commands.new_command('connect', {'expcom-connect.descr'})
+Commands.new_command('connect', {'expcom-connect.description'})
 :add_param('server')
 :add_param('is_address', true, 'boolean')
 :add_alias('join', 'server')
@@ -71,7 +71,7 @@ end)
 -- @tparam string address The address or name of the server to connect to
 -- @tparam LuaPlayer player The player to connect to a different server
 -- @tparam[opt=false] boolean is_address If an address was given for the server param
-Commands.new_command('connect-player', {'expcom-connect.descr-player'})
+Commands.new_command('connect-player', {'expcom-connect.description-player'})
 :add_param('player', 'player-role')
 :add_param('server')
 :add_param('is_address', true, 'boolean')
@@ -90,7 +90,7 @@ end)
 -- @command connect-all
 -- @tparam string address The address or name of the server to connect to
 -- @tparam[opt=false] boolean is_address If an address was given for the server param
-Commands.new_command('connect-all', {'expcom-connect.descr-all'})
+Commands.new_command('connect-all', {'expcom-connect.description-all'})
 :add_param('server')
 :add_param('is_address', true, 'boolean')
 :register(function(_, server, is_address)
