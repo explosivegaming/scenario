@@ -16,7 +16,9 @@ local precision = {
 }
 
 local font_color = {
+    -- positive
     [1] = {r = 0.3, g = 1, b = 0.3},
+    -- negative
     [2] = {r = 1, g = 0.3, b = 0.3}
 }
 
@@ -45,7 +47,7 @@ local data_1s =
 Gui.element{
     type = 'label',
     name = 'production_0_1',
-    caption = '+',
+    caption = {'production.label-prod'},
     style = 'heading_1_label'
 }:style{
     width = 96,
@@ -57,7 +59,7 @@ local data_2s =
 Gui.element{
     type = 'label',
     name = 'production_0_2',
-    caption = '-',
+    caption = {'production.label-con'},
     style = 'heading_1_label'
 }:style{
     width = 96,
@@ -69,7 +71,7 @@ local data_3s =
 Gui.element{
     type = 'label',
     name = 'production_0_3',
-    caption = '=',
+    caption = {'production.label-bal'},
     style = 'heading_1_label'
 }:style{
     width = 96,
@@ -102,6 +104,7 @@ Gui.element(function(_definition, parent, i)
         elem_type = 'item',
         style = 'slot_button'
     }
+    item.style.height = 80
     item.style.width = 80
 
     local data_1 = parent.add{
