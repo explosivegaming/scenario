@@ -67,20 +67,18 @@ curves[8] = curve_flip_d(curves[7])
 
 local curve_n = {}
 
-do
-    for _, map in ipairs(curves) do
-        local index = 1
+for i, map in ipairs(curves) do
+    local index = 1
 
-        for r=1, 8 do
-            for c=1, 8 do
-                if map[r][c] == 1 then
-                    curve_n[index] = {
-                        ['x'] = c - 5,
-                        ['y'] = r - 5
-                    }
+    for r=1, 8 do
+        for c=1, 8 do
+            if map[r][c] == 1 then
+                curve_n[i][index] = {
+                    ['x'] = c - 5,
+                    ['y'] = r - 5
+                }
 
-                    index = index + 1
-                end
+                index = index + 1
             end
         end
     end
