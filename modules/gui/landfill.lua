@@ -68,6 +68,7 @@ curves[8] = curve_flip_d(curves[7])
 local curve_n = {}
 
 for i, map in ipairs(curves) do
+    curve_n[i] = {}
     local index = 1
 
     for r=1, 8 do
@@ -154,17 +155,12 @@ local function landfill_gui_add_landfill(blueprint)
     return {tiles = new_tiles}
 end
 
---- A button to add landfill
--- @element landfill_gui_tile
-local landfill_gui_tile =
-Gui.element{
-    type = 'button',
-    name = Gui.unique_static_name,
-    caption = {'landfill.tile'},
-    tooltip = {'landfill.tile-tooltip'}
-}:style{
-    width = 160
-}:on_click(function(player, _, _)
+--- Button on the top flow used to toggle the landfill container
+-- @element toggle_left_element
+Gui.toolbar_toggle_button('item/landfill', {'landfill.main-tooltip'}, landfill_gui_tile, function(player)
+	return Roles.player_allowed(player, 'gui/landfill')
+end)
+:on_event(Gui.events.on_toolbar_button_toggled, function(player, _, _)
     if player.cursor_stack and player.cursor_stack.valid_for_read then
         if player.cursor_stack.type == 'blueprint' and player.cursor_stack.is_blueprint_setup() then
             local modified = landfill_gui_add_landfill(player.cursor_stack)
@@ -174,12 +170,6 @@ Gui.element{
             end
         end
     end
-end)
-
---- Button on the top flow used to toggle the landfill container
--- @element toggle_left_element
-Gui.left_toolbar_button('item/landfill', {'landfill.main-tooltip'}, landfill_gui_tile, function(player)
-	return Roles.player_allowed(player, 'gui/landfill')
 end)
 
 Event.add(defines.events.on_player_joined_game, landfill_init)
