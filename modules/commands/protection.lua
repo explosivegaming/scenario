@@ -96,7 +96,7 @@ end
 
 --- Toggles entity protection selection
 -- @command protect-entity
-Commands.new_command('protect-entity', {'expcom-protection.descr-pe'})
+Commands.new_command('protect-entity', {'expcom-protection.description-pe'})
 :add_alias('pe')
 :register(function(player)
     if Selection.is_selecting(player, SelectionProtectEntity) then
@@ -109,7 +109,7 @@ end)
 
 --- Toggles area protection selection
 -- @command protect-area
-Commands.new_command('protect-area', {'expcom-protection.descr-pa'})
+Commands.new_command('protect-area', {'expcom-protection.description-pa'})
 :add_alias('pa')
 :register(function(player)
     if Selection.is_selecting(player, SelectionProtectArea) then
