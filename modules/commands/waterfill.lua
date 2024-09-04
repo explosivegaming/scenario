@@ -14,7 +14,7 @@ local function aabb_align_expand(aabb)
     }
 end
 
-Commands.new_command('waterfill', {'expcom-waterfill.descr'})
+Commands.new_command('waterfill', {'expcom-waterfill.description'})
 :register(function(player)
     local inv = player.get_main_inventory()
 
