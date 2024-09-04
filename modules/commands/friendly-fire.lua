@@ -7,7 +7,7 @@ local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
 
 -- For Modded Server Use
-Commands.new_command('toggle-friendly-fire', {'expcom-ff.descr'})
+Commands.new_command('toggle-friendly-fire', {'expcom-ff.description'})
 :add_param('force', true, 'force')
 :set_defaults{force=function(player)
     return player.force
