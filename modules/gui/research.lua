@@ -43,7 +43,7 @@ local res = {
 	['disp'] = {}
 }
 
-local function research_init()
+do
 	local res_total = 0
 	local i = 1
 
@@ -141,7 +141,14 @@ local function research_gui_update()
 	local res_n = research_res_n(res['disp'])
 
 	for i=1, 8, 1 do
-		res_disp[i] = {}
+		res_disp[i] = {
+			['name'] = '',
+			['target'] = '',
+			['attempt'] = '',
+			['difference'] = '',
+			['difference_color'] = font_color[1]
+		}
+
 		local res_i = res_n + i - 3
 
 		if res['disp'][res_i] then
@@ -166,13 +173,6 @@ local function research_gui_update()
 					res_disp[i]['difference_color'] = font_color[2]
 				end
 			end
-
-		else
-			res_disp[i]['name'] = ''
-			res_disp[i]['target'] = ''
-			res_disp[i]['attempt'] = ''
-			res_disp[i]['difference'] = ''
-			res_disp[i]['difference_color'] = font_color[1]
 		end
 	end
 
@@ -249,7 +249,6 @@ local research_data_set =
 Gui.element(function(_, parent, name)
     local research_set = parent.add{type='flow', direction='vertical', name=name}
     local disp = Gui.scroll_table(research_set, 480, 4, 'disp')
-	research_init()
 	local res_disp = research_gui_update()
 
 	research_data_group(disp, 0)
