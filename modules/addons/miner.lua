@@ -64,7 +64,7 @@ local function chest_check(entity)
         return
     end
 
-    local radius = entity.prototype.mining_drill_radius
+    local radius = 2
     local entities = target.surface.find_entities_filtered{area={{target.position.x - radius, target.position.y - radius}, {target.position.x + radius, target.position.y + radius}}, type={'mining-drill', 'inserter'}}
 
     for _, e in pairs(entities) do
@@ -76,7 +76,7 @@ local function chest_check(entity)
     end
 
     if check_entity(target) then
-        table.insert(miner_data.queue, {t=game.tick + 5, e=entity})
+        table.insert(miner_data.queue, {t=game.tick + 10, e=target})
     end
 end
 
