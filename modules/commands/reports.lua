@@ -22,7 +22,7 @@ end
 -- @command report
 -- @tparam LuaPlayer player the player to report, some players are immune
 -- @tparam string reason the reason the player is being reported
-Commands.new_command('report', {'expcom-report.descr-report'})
+Commands.new_command('report', {'expcom-report.description-report'})
 :add_param('player', false, function(input, player, reject)
     input = Commands.parse('player', input, player, reject)
     if not input then return end
@@ -51,7 +51,7 @@ end)
 --- Gets a list of all reports that a player has on them. If no player then lists all players and the number of reports on them.
 -- @command get-reports
 -- @tparam LuaPlayer player the player to get the report for
-Commands.new_command('get-reports', {'expcom-report.descr-get-reports'})
+Commands.new_command('get-reports', {'expcom-report.description-get-reports'})
 :add_param('player', true, 'player')
 :add_alias('reports', 'list-reports')
 :register(function(_, player)
@@ -78,7 +78,7 @@ end)
 -- @command clear-reports
 -- @tparam LuaPlayer player the player to clear the report(s) from
 -- @tparam[opt=all] LuaPlayer from-player remove only the report made by this player
-Commands.new_command('clear-reports', {'expcom-report.descr-clear-reports'})
+Commands.new_command('clear-reports', {'expcom-report.description-clear-reports'})
 :add_param('player', false, 'player')
 :add_param('from-player', true, 'player')
 :register(function(player, action_player, from_player)
