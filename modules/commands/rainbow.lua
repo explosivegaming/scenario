@@ -43,7 +43,7 @@ end
 --- Sends an rainbow message in the chat
 -- @command rainbow
 -- @tparam string message the message that will be printed in chat
-Commands.new_command('rainbow', {'expcom-rainbow.descr'})
+Commands.new_command('rainbow', {'expcom-rainbow.description'})
 :add_param('message', false)
 :enable_auto_concat()
 :register(function(player, message)
