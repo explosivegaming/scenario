@@ -12,7 +12,7 @@ require 'config.expcore.command_role_parse'
 -- @command jail
 -- @tparam LuaPlayer player the player that will be jailed
 -- @tparam[opt] string reason the reason why the player is being jailed
-Commands.new_command('jail', {'expcom-jail.descr-jail'})
+Commands.new_command('jail', {'expcom-jail.description-jail'})
 :add_param('player', false, 'player-role')
 :add_param('reason', true)
 :enable_auto_concat()
@@ -31,7 +31,7 @@ end)
 --- Removes a player from jail.
 -- @command unjail
 -- @tparam LuaPlayer the player that will be unjailed
-Commands.new_command('unjail', {'expcom-jail.descr-unjail'})
+Commands.new_command('unjail', {'expcom-jail.description-unjail'})
 :add_param('player', false, 'player-role')
 :add_alias('clear-jail', 'remove-jail')
 :enable_auto_concat()
