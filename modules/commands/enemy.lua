@@ -6,14 +6,14 @@
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
 
-Commands.new_command('kill-biters', {'expcom-enemy.descr-kill'})
+Commands.new_command('kill-biters', {'expcom-enemy.description-kill'})
 :set_flag('admin_only')
 :register(function(_, _)
     game.forces['enemy'].kill_all_units()
     return Commands.success
 end)
 
-Commands.new_command('remove-biters', {'expcom-enemy.descr-remove'})
+Commands.new_command('remove-biters', {'expcom-enemy.description-remove'})
 :set_flag('admin_only')
 :add_param('surface', true, 'surface')
 :set_defaults{surface=function(player)
