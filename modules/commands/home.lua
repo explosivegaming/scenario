@@ -30,7 +30,7 @@ end
 
 --- Teleports you to your home location
 -- @command home
-Commands.new_command('home', {'expcom-home.descr-home'})
+Commands.new_command('home', {'expcom-home.description-home'})
 :register(function(player)
     local home = homes[player.index]
     if not home or not home[1] then
@@ -44,7 +44,7 @@ end)
 
 --- Sets your home location to your current position
 -- @command home-set
-Commands.new_command('home-set', {'expcom-home.descr-home-set'})
+Commands.new_command('home-set', {'expcom-home.description-home-set'})
 :register(function(player)
     local home = homes[player.index]
     if not home then
@@ -58,7 +58,7 @@ end)
 
 --- Returns your current home location
 -- @command home-get
-Commands.new_command('home-get', {'expcom-home.descr-home-get'})
+Commands.new_command('home-get', {'expcom-home.description-home-get'})
 :register(function(player)
     local home = homes[player.index]
     if not home or not home[1] then
@@ -70,7 +70,7 @@ end)
 
 --- Teleports you to previous location
 -- @command return
-Commands.new_command('return', {'expcom-home.descr-return'})
+Commands.new_command('return', {'expcom-home.description-return'})
 :register(function(player)
     local home = homes[player.index]
     if not home or not home[2] then
