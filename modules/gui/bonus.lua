@@ -174,7 +174,7 @@ end)
 --- A vertical flow containing all the bonus control
 -- @element bonus_control_set
 local bonus_control_set =
-Gui.element(function(player, parent, name)
+Gui.element(function(_, parent, name)
     local bonus_set = parent.add{type='flow', direction='vertical', name=name}
     local disp = Gui.scroll_table(bonus_set, 360, 2, 'disp')
 
