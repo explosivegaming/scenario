@@ -48,7 +48,7 @@ Gui.element{
     type = 'label',
     name = 'production_0_1',
     caption = {'production.label-prod'},
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = 96,
     font_color = font_color[1],
@@ -60,7 +60,7 @@ Gui.element{
     type = 'label',
     name = 'production_0_2',
     caption = {'production.label-con'},
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = 96,
     font_color = font_color[2],
@@ -72,7 +72,7 @@ Gui.element{
     type = 'label',
     name = 'production_0_3',
     caption = {'production.label-bal'},
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = 96,
     font_color = font_color[1],
@@ -104,14 +104,14 @@ Gui.element(function(_definition, parent, i)
         elem_type = 'item',
         style = 'slot_button'
     }
-    item.style.height = 80
-    item.style.width = 80
+    item.style.height = 32
+    item.style.width = 32
 
     local data_1 = parent.add{
         type = 'label',
         name = 'production_' .. i .. '_1',
         caption = '0.0',
-        style = 'heading_1_label'
+        style = 'heading_2_label'
     }
     data_1.style.width = 96
     data_1.style.horizontal_align = 'right'
@@ -121,7 +121,7 @@ Gui.element(function(_definition, parent, i)
         type = 'label',
         name = 'production_' .. i .. '_2',
         caption = '0.0',
-        style = 'heading_1_label'
+        style = 'heading_2_label'
     }
     data_2.style.width = 96
     data_2.style.horizontal_align = 'right'
@@ -131,7 +131,7 @@ Gui.element(function(_definition, parent, i)
         type = 'label',
         name = 'production_' .. i .. '_3',
         caption = '0.0',
-        style = 'heading_1_label'
+        style = 'heading_2_label'
     }
     data_3.style.width = 96
     data_3.style.horizontal_align = 'right'
