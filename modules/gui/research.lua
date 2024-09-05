@@ -186,7 +186,7 @@ Gui.element{
     type = 'label',
     name = Gui.unique_static_name,
     caption = empty_time,
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }
 
 --- A vertical flow containing the clock
@@ -209,7 +209,7 @@ Gui.element(function(_definition, parent, i)
         type = 'label',
         name = 'research_' .. i .. '_name',
         caption = '',
-        style = 'heading_1_label'
+        style = 'heading_2_label'
     }
     name.style.width = 240
     name.style.horizontal_align = 'left'
@@ -218,7 +218,7 @@ Gui.element(function(_definition, parent, i)
         type = 'label',
         name = 'research_' .. i .. '_target',
         caption = '',
-        style = 'heading_1_label'
+        style = 'heading_2_label'
     }
     target.style.width = 80
     target.style.horizontal_align = 'right'
@@ -227,7 +227,7 @@ Gui.element(function(_definition, parent, i)
         type = 'label',
         name = 'research_' .. i .. '_attempt',
         caption = '',
-        style = 'heading_1_label'
+        style = 'heading_2_label'
     }
     attempt.style.width = 80
     attempt.style.horizontal_align = 'right'
@@ -236,7 +236,7 @@ Gui.element(function(_definition, parent, i)
         type = 'label',
         name = 'research_' .. i .. '_difference',
         caption = '',
-        style = 'heading_1_label'
+        style = 'heading_2_label'
     }
     difference.style.width = 80
     difference.style.horizontal_align = 'right'
