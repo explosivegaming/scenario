@@ -195,7 +195,7 @@ Gui.element{
 local research_clock_set =
 Gui.element(function(_, parent, name)
     local research_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(research_set, 480, 1, 'disp')
+    local disp = Gui.scroll_table(research_set, 390, 1, 'disp')
 
     research_gui_clock(disp)
 
@@ -212,7 +212,7 @@ Gui.element(function(_definition, parent, i)
         caption = '',
         style = 'heading_2_label'
     }
-    name.style.width = 200
+    name.style.width = 180
     name.style.horizontal_align = 'left'
 
 	local target = parent.add{
@@ -221,7 +221,7 @@ Gui.element(function(_definition, parent, i)
         caption = '',
         style = 'heading_2_label'
     }
-    target.style.width = 80
+    target.style.width = 70
     target.style.horizontal_align = 'right'
 
 	local attempt = parent.add{
@@ -230,7 +230,7 @@ Gui.element(function(_definition, parent, i)
         caption = '',
         style = 'heading_2_label'
     }
-    attempt.style.width = 80
+    attempt.style.width = 70
     attempt.style.horizontal_align = 'right'
 
     local difference = parent.add{
@@ -239,7 +239,7 @@ Gui.element(function(_definition, parent, i)
         caption = '',
         style = 'heading_2_label'
     }
-    difference.style.width = 80
+    difference.style.width = 70
     difference.style.horizontal_align = 'right'
 	difference.style.font_color = font_color[1]
 end)
@@ -249,7 +249,7 @@ end)
 local research_data_set =
 Gui.element(function(_, parent, name)
     local research_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(research_set, 440, 4, 'disp')
+    local disp = Gui.scroll_table(research_set, 390, 4, 'disp')
 	local res_disp = research_gui_update()
 
 	research_data_group(disp, 0)
@@ -278,7 +278,7 @@ end)
 
 local research_container =
 Gui.element(function(definition, parent)
-	local container = Gui.container(parent, definition.name, 440)
+	local container = Gui.container(parent, definition.name, 390)
 
 	research_clock_set(container, 'research_st_1')
     research_data_set(container, 'research_st_2')
