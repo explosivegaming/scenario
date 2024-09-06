@@ -503,11 +503,11 @@ Event.on_nth_tick(config.update_tick_gui, function(_)
         },
         [vlayer_gui_display_signal_production_count.name] = {
             val = (stats.energy_production / math.max(stats.energy_max, 1)),
-            cap = format_energy(stats.energy_production, '') .. ' / ' .. format_energy(stats.energy_max, '')
+            cap = format_energy(stats.energy_production, 'W') .. ' / ' .. format_energy(stats.energy_max, 'W')
         },
         [vlayer_gui_display_signal_capacity_count.name] = {
             val = (stats.energy_storage / math.max(stats.energy_capacity, 1)),
-            cap = format_energy(stats.energy_storage, '') .. ' / ' .. format_energy(stats.energy_capacity, '')
+            cap = format_energy(stats.energy_storage, 'J') .. ' / ' .. format_energy(stats.energy_capacity, 'J')
         }
     }
 
