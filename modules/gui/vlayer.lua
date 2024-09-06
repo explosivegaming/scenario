@@ -147,12 +147,14 @@ Gui.element{
 
 local vlayer_gui_display_item_solar_count =
 Gui.element{
-    type = 'label',
+    type = 'progressbar',
     name = 'vlayer_display_item_solar_count',
-    caption = '0',
-    style = 'heading_2_label'
+    caption = '',
+    value = 0,
+    style = 'electric_satisfaction_statistics_progressbar'
 }:style{
-    width = 200
+    width = 200,
+    font = 'heading-3'
 }
 
 --- Display label for the number of accumulators
@@ -169,12 +171,14 @@ Gui.element{
 
 local vlayer_gui_display_item_accumulator_count =
 Gui.element{
-    type = 'label',
+    type = 'progressbar',
     name = 'vlayer_display_item_accumulator_count',
-    caption = '0',
-    style = 'heading_2_label'
+    caption = '',
+    value = 0,
+    style = 'electric_satisfaction_statistics_progressbar'
 }:style{
-    width = 200
+    width = 200,
+    font = 'heading-3'
 }
 
 --- Display label for the remaining surface area
@@ -197,7 +201,8 @@ Gui.element{
     caption = '0',
     style = 'heading_2_label'
 }:style{
-    width = 200
+    width = 200,
+    horizontal_align = 'right'
 }
 
 --- Display label for the sustained energy production
@@ -220,7 +225,8 @@ Gui.element{
     caption = '0',
     style = 'heading_2_label'
 }:style{
-    width = 200
+    width = 200,
+    horizontal_align = 'right'
 }
 
 --- Display label for the current energy production
@@ -417,7 +423,7 @@ Gui.element{
             local interface_type, interface_position = vlayer.remove_interface(i[vlayer_control_type_list[target]][n].surface, i[vlayer_control_type_list[target]][n].position)
 
             if interface_type then
-                game.print{'vlayer.interface-result', player.name, pos_to_gps_string(interface_position), {'vlayer.result-remove'}, {'vlayer.control-type-' .. interface_type:gsub(' ', '-')}}
+                game.print{'vlayer.interface-result', player.name, pos_to_gps_string(interface_position), {'vlayer.result-remove'}, {'vlayer.control-type-' .. interface_type}}
             end
         end
     end
@@ -478,12 +484,16 @@ Event.add(Roles.events.on_role_unassigned, role_update_event)
 Event.on_nth_tick(config.update_tick_gui, function(_)
     local stats = vlayer.get_statistics()
     local items = vlayer.get_items()
+    local items_alloc = vlayer.get_allocated_items()
+
     local vlayer_display = {
         [vlayer_gui_display_item_solar_count.name] = {
-            cap = format_number(items['solar-panel'])
+            val = (items_alloc['solar-panel'] / math.max(items['solar-panel'], 1)),
+            cap = format_number(items_alloc['solar-panel']) .. ' / ' .. format_number(items['solar-panel'])
         },
         [vlayer_gui_display_item_accumulator_count.name] = {
-            cap = format_number(items['accumulator'])
+            val = (items_alloc['accumulator'] / math.max(items['accumulator'], 1)),
+            cap = format_number(items_alloc['accumulator']) .. ' / ' .. format_number(items['accumulator'])
         },
         [vlayer_gui_display_signal_remaining_surface_area_count.name] = {
             cap = format_number(stats.remaining_surface_area)
