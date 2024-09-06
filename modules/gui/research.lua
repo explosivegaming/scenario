@@ -34,7 +34,9 @@ local empty_time = format_time(0, {
 })
 
 local font_color = {
+	-- positive
     [1] = {r = 0.3, g = 1, b = 0.3},
+	-- negative
     [2] = {r = 1, g = 0.3, b = 0.3}
 }
 
@@ -53,7 +55,6 @@ do
 		res_total = res_total + v * 60
 
 		res['disp'][i] = {
-			name = '[technology=' .. k .. '] ' .. k:gsub('-', ' '),
 			raw_name = k,
 			target = res_total,
 			target_disp = format_time(res_total, research_time_format),
@@ -83,7 +84,7 @@ local function research_res_n(res_)
 		end
 	end
 
-	if research.time[#res_] > 0 then
+	if research.time[#res_] and research.time[#res_] > 0 then
 		if res_n == 1 then
 			res_n = #res_
 		end
@@ -152,7 +153,7 @@ local function research_gui_update()
 		local res_i = res_n + i - 3
 
 		if res['disp'][res_i] then
-			res_disp[i]['name'] = res['disp'][res_i].name
+			res_disp[i]['name'] = {'expcom-res.res-name', res['disp'][res_i]['raw_name'], game.technology_prototypes[res['disp'][res_i]['raw_name']].localised_name}
 
 			if research.time[res_i] == 0 then
 				res_disp[i]['target'] = res['disp'][res_i].target_disp
@@ -211,7 +212,7 @@ Gui.element(function(_definition, parent, i)
         caption = '',
         style = 'heading_2_label'
     }
-    name.style.width = 240
+    name.style.width = 200
     name.style.horizontal_align = 'left'
 
 	local target = parent.add{
@@ -248,7 +249,7 @@ end)
 local research_data_set =
 Gui.element(function(_, parent, name)
     local research_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(research_set, 480, 4, 'disp')
+    local disp = Gui.scroll_table(research_set, 440, 4, 'disp')
 	local res_disp = research_gui_update()
 
 	research_data_group(disp, 0)
@@ -277,7 +278,7 @@ end)
 
 local research_container =
 Gui.element(function(definition, parent)
-	local container = Gui.container(parent, definition.name, 480)
+	local container = Gui.container(parent, definition.name, 440)
 
 	research_clock_set(container, 'research_st_1')
     research_data_set(container, 'research_st_2')
