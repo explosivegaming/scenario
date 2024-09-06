@@ -94,7 +94,7 @@ function vlayer.get_allocated_items()
 end
 
 --- Get the actual defecit of land
-function get_actual_land_defecit()
+local function get_actual_land_defecit()
     local n = vlayer_data.properties.total_surface_area - vlayer_data.properties.used_surface_area
 
     for k, v in pairs(vlayer.get_unallocated_items()) do
