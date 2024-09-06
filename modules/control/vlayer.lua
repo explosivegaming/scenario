@@ -273,7 +273,7 @@ function vlayer.insert_item(item_name, count)
 end
 
 --- Remove an item from the vlayer, this will decrement its count in storage and prioritise unallocated items over deallocation
--- Can not always fulfill the remove request for items which provide surface area, therefore returns the amount actually removed
+-- Can not always fulfil the remove request for items which provide surface area, therefore returns the amount actually removed
 -- @tparam string item_name The name of the item to remove
 -- @tparam number count The count of the item to remove
 -- @treturn number The count of the item actually removed
