@@ -71,6 +71,39 @@ function vlayer.get_items()
     return vlayer_data.storage.items
 end
 
+--- Get all unallocated items in storage
+-- @treturn table a dictionary of all unallocated items stored in the vlayer
+function vlayer.get_unallocated_items()
+    return vlayer_data.storage.unallocated
+end
+
+--- Get all allocated items in storage
+-- @treturn table a dictionary of all allocated items stored in the vlayer
+function vlayer.get_allocated_items()
+    local r = {}
+
+    for k, v in pairs(vlayer_data.storage.items) do
+        r[k] = v
+
+        if vlayer_data.storage.unallocated[k] then
+            r[k] = r[k] - vlayer_data.storage.unallocated[k]
+        end
+    end
+
+    return r
+end
+
+--- Get the actual defecit of land
+function get_actual_land_defecit()
+    local n = vlayer_data.properties.total_surface_area - vlayer_data.properties.used_surface_area
+
+    for k, v in pairs(vlayer.get_unallocated_items()) do
+        n = n - (config.allowed_items[k].required_area * v)
+    end
+
+    return n
+end
+
 --- Get interface counts
 -- @treturn table a dictionary of the vlayer interface counts
 function vlayer.get_interface_counts()
@@ -240,7 +273,7 @@ function vlayer.insert_item(item_name, count)
 end
 
 --- Remove an item from the vlayer, this will decrement its count in storage and prioritise unallocated items over deallocation
--- Can not always fulfil the remove request for items which provide surface area, therefore returns the amount actually removed
+-- Can not always fulfill the remove request for items which provide surface area, therefore returns the amount actually removed
 -- @tparam string item_name The name of the item to remove
 -- @tparam number count The count of the item to remove
 -- @treturn number The count of the item actually removed
@@ -282,6 +315,7 @@ function vlayer.remove_item(item_name, count)
     -- Remove the item from allocated storage
     vlayer_data.storage.items[item_name] = vlayer_data.storage.items[item_name] - remove_count
     vlayer.allocate_item(item_name, -remove_count)
+
     return remove_unallocated + remove_count
 end
 
@@ -309,6 +343,7 @@ function vlayer.create_input_interface(surface, position, circuit, last_user)
     interface.destructible = false
     interface.minable = false
     interface.operable = true
+
     return interface
 end
 
@@ -371,6 +406,7 @@ function vlayer.create_output_interface(surface, position, circuit, last_user)
     interface.destructible = false
     interface.minable = false
     interface.operable = true
+
     return interface
 end
 
@@ -424,6 +460,7 @@ local function handle_unallocated()
 
     -- Allocate items in an equal distribution
     local surplus_area = vlayer_data.properties.total_surface_area - vlayer_data.properties.used_surface_area
+
     for item_name, count in pairs(vlayer_data.storage.unallocated) do
         local allocation_count = math.min(count, math.floor(count * surplus_area / unallocated_area))
 
@@ -436,14 +473,17 @@ end
 
 --- Get the statistics for the vlayer
 function vlayer.get_statistics()
+    local vdp = vlayer_data.properties.production * mega
+    local gdm = get_production_multiplier()
+
     return {
         total_surface_area = vlayer_data.properties.total_surface_area,
         used_surface_area = vlayer_data.properties.used_surface_area,
-        remaining_surface_area = vlayer_data.properties.total_surface_area - vlayer_data.properties.used_surface_area,
-        production_multiplier = get_production_multiplier(),
-        energy_max = vlayer_data.properties.production * mega,
-        energy_production = vlayer_data.properties.production * mega * get_production_multiplier(),
-        energy_sustained = vlayer_data.properties.production * mega * get_sustained_multiplier(),
+        remaining_surface_area = get_actual_land_defecit(),
+        production_multiplier = gdm,
+        energy_max = vdp,
+        energy_production = vdp * gdm,
+        energy_sustained = vdp * get_sustained_multiplier(),
         energy_capacity = vlayer_data.properties.capacity * mega,
         energy_storage = vlayer_data.storage.energy,
         day_time = math.floor(vlayer_data.surface.daytime * vlayer_data.surface.ticks_per_day),
@@ -498,6 +538,7 @@ function vlayer.create_circuit_interface(surface, position, circuit, last_user)
     interface.destructible = false
     interface.minable = false
     interface.operable = true
+
     return interface
 end
 
@@ -577,6 +618,7 @@ function vlayer.create_energy_interface(surface, position, last_user)
     interface.power_production = 0
     interface.power_usage = 0
     interface.energy = 0
+
     return interface
 end
 
@@ -603,7 +645,7 @@ local function handle_energy_interfaces()
         local discharge_rate = 2 * (production + vlayer_data.properties.discharge * mega) / #vlayer_data.entity_interfaces.energy
         local fill_to = math.min(discharge_rate, math.floor(available_energy / #vlayer_data.entity_interfaces.energy))
 
-        for index, interface in pairs(vlayer_data.entity_interfaces.energy) do
+        for _, interface in pairs(vlayer_data.entity_interfaces.energy) do
             interface.electric_buffer_size = math.max(discharge_rate, interface.energy) -- prevent energy loss
             local delta = fill_to - interface.energy -- positive means storage to interface
             vlayer_data.storage.energy = vlayer_data.storage.energy - delta
@@ -657,23 +699,27 @@ function vlayer.remove_interface(surface, position)
         move_items_stack(interface.get_inventory(defines.inventory.chest).get_contents())
         table.remove_element(vlayer_data.entity_interfaces.storage_input, interface)
         interface.destroy()
-        return 'storage input', pos
+
+        return 'storage-input', pos
 
     elseif name == 'logistic-chest-requester' then
         move_items_stack(interface.get_inventory(defines.inventory.chest).get_contents())
         table.remove_element(vlayer_data.entity_interfaces.storage_output, interface)
         interface.destroy()
-        return 'storage output', pos
+
+        return 'storage-output', pos
 
     elseif name == 'constant-combinator' then
         table.remove_element(vlayer_data.entity_interfaces.circuit, interface)
         interface.destroy()
+
         return 'circuit', pos
 
     elseif name == 'electric-energy-interface' then
         vlayer_data.storage.energy = vlayer_data.storage.energy + interface.energy
         table.remove_element(vlayer_data.entity_interfaces.energy, interface)
         interface.destroy()
+
         return 'energy', pos
     end
 end
