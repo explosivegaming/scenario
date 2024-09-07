@@ -81,7 +81,6 @@ local function apply_periodic_bonus(player)
                 if armor.equipment[i].energy < armor.equipment[i].max_energy then
                     local energy_required = math.min(math.floor(armor.equipment[i].max_energy - armor.equipment[i].energy), vlayer.get_statistics()['energy_storage'], slider)
                     armor.equipment[i].energy = armor.equipment[i].energy + energy_required
-                    energy_changed = energy_changed + energy_required
                     vlayer.energy_changed(- energy_required)
 
                     slider = slider - energy_required
