@@ -49,7 +49,7 @@ local function apply_bonus(player)
 
         if config.player_bonus[v].combined_bonus then
             for i=1, #config.player_bonus[v].combined_bonus do
-                player[config.player_bonus[v].combined_bonus[i]] = 0
+                player[config.player_bonus[v].combined_bonus[i]] = disp['bonus_display_' .. k .. '_slider'].slider_value
             end
         end
     end
