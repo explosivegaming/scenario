@@ -17,7 +17,7 @@ return {
     =       480
     ]]
     pts = {
-        base = 200
+        base = 210
     },
     gui_display_width = {
         half = 160,
