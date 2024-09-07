@@ -7,6 +7,8 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.bonus' --- @dep config.bonus
+local vlayer = require 'modules.control.vlayer'
+
 local format_number = require('util').format_number --- @dep util
 local bonus_container
 
@@ -18,6 +20,8 @@ local function bonus_gui_pts_needed(player)
     for k, v in pairs(config.conversion) do
         total = total + (disp['bonus_display_' .. k .. '_slider'].slider_value / config.player_bonus[v].cost_scale * config.player_bonus[v].cost)
     end
+
+    total = total + (disp['bonus_display_personal_battery_recharge_slider'].slider_value / config.player_special_bonus['personal_battery_recharge'].cost_scale * config.player_special_bonus['personal_battery_recharge'].cost)
 
     return total
 end
@@ -55,6 +59,38 @@ local function apply_bonus(player)
     end
 end
 
+local function apply_periodic_bonus(player)
+    if not Roles.player_allowed(player, 'gui/bonus') then
+        return
+    end
+
+    if not player.character then
+        return
+    end
+
+    local frame = Gui.get_left_element(player, bonus_container)
+    local disp = frame.container['bonus_st_2'].disp.table
+
+    if vlayer.get_statistics()['energy_sustained'] > 0 then
+        local armor = player.get_inventory(defines.inventory.character_armor)[1].grid
+
+        if armor then
+            local slider = disp['bonus_display_personal_battery_recharge_slider'].slider_value * 100000 * config.player_special_bonus_rate / 6
+
+            for i=1, #armor.equipment do
+                if armor.equipment[i].energy < armor.equipment[i].max_energy then
+                    local energy_required = math.min(math.floor(armor.equipment[i].max_energy - armor.equipment[i].energy), vlayer.get_statistics()['energy_storage'], slider)
+                    armor.equipment[i].energy = armor.equipment[i].energy + energy_required
+                    energy_changed = energy_changed + energy_required
+                    vlayer.energy_changed(- energy_required)
+
+                    slider = slider - energy_required
+                end
+            end
+        end
+    end
+end
+
 --- Control label for the bonus points available
 -- @element bonus_gui_control_pts_a
 local bonus_gui_control_pts_a =
@@ -62,7 +98,7 @@ Gui.element{
     type = 'label',
     name = 'bonus_control_pts_a',
     caption = {'bonus.control-pts-a'},
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = config.gui_display_width['half']
 }
@@ -72,7 +108,7 @@ Gui.element{
     type = 'label',
     name = 'bonus_control_pts_a_count',
     caption = config.pts.base,
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = config.gui_display_width['half']
 }
@@ -84,7 +120,7 @@ Gui.element{
     type = 'label',
     name = 'bonus_control_pts_n',
     caption = {'bonus.control-pts-n'},
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = config.gui_display_width['half']
 }
@@ -94,7 +130,7 @@ Gui.element{
     type = 'label',
     name = 'bonus_control_pts_n_count',
     caption = '0',
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width =config.gui_display_width['half']
 }
@@ -106,7 +142,7 @@ Gui.element{
     type = 'label',
     name = 'bonus_control_pts_r',
     caption = {'bonus.control-pts-r'},
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = config.gui_display_width['half']
 }
@@ -116,7 +152,7 @@ Gui.element{
     type = 'label',
     name = 'bonus_control_pts_r_count',
     caption = '0',
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = config.gui_display_width['half']
 }
@@ -145,6 +181,8 @@ Gui.element{
             disp[disp[s].tags.counter].caption = format_number(disp[s].slider_value)
         end
     end
+
+    disp[disp['bonus_display_personal_battery_recharge'].tags.counter].caption = format_number(disp['bonus_display_personal_battery_recharge'].slider_value)
 
     local r = bonus_gui_pts_needed(player)
     element.parent[bonus_gui_control_pts_n_count.name].caption = r
@@ -176,7 +214,7 @@ end)
 local bonus_control_set =
 Gui.element(function(_, parent, name)
     local bonus_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(bonus_set, 360, 2, 'disp')
+    local disp = Gui.scroll_table(bonus_set, 320, 2, 'disp')
 
     bonus_gui_control_pts_a(disp)
     bonus_gui_control_pts_a_count(disp)
@@ -201,7 +239,7 @@ Gui.element(function(_definition, parent, name, caption, tooltip, bonus)
         type = 'label',
         caption = caption,
         tooltip = tooltip,
-        style = 'heading_1_label'
+        style = 'heading_2_label'
     }
     label.style.width = config.gui_display_width['label']
 
@@ -234,7 +272,7 @@ Gui.element(function(_definition, parent, name, caption, tooltip, bonus)
         type = 'label',
         name = name .. '_count',
         caption = value,
-        style = 'heading_1_label',
+        style = 'heading_2_label',
     }
     count.style.width = config.gui_display_width['count']
 
@@ -260,11 +298,13 @@ end)
 local bonus_data_set =
 Gui.element(function(_, parent, name)
     local bonus_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(bonus_set, 360, 3, 'disp')
+    local disp = Gui.scroll_table(bonus_set, 320, 3, 'disp')
 
     for k, v in pairs(config.conversion) do
         bonus_gui_slider(disp, 'bonus_display_' .. k, {'bonus.display-' .. k}, {'bonus.display-' .. k .. '-tooltip'}, config.player_bonus[v])
     end
+
+    bonus_gui_slider(disp, 'bonus_display_personal_battery_recharge', {'bonus.display-personal-battery-recharge'}, {'bonus.display-personal-battery-recharge-tooltip'}, config.player_special_bonus['personal_battery_recharge'])
 
     return bonus_set
 end)
@@ -292,7 +332,7 @@ end)
 :static_name(Gui.unique_static_name)
 :add_to_left_flow()
 
---- Button on the top flow used to toggle the task list container
+--- Button on the top flow used to toggle the bonus container
 -- @element toggle_left_element
 Gui.left_toolbar_button('item/exoskeleton-equipment', {'bonus.main-tooltip'}, bonus_container, function(player)
 	return Roles.player_allowed(player, 'gui/bonus')
@@ -341,5 +381,11 @@ Event.add(defines.events.on_player_died, function(event)
 
     if Roles.player_has_flag(player, 'instant-respawn') then
         player.ticks_to_respawn = 120
+    end
+end)
+
+Event.on_nth_tick(config.player_special_bonus_rate, function(_)
+    for _, player in pairs(game.connected_players) do
+        apply_periodic_bonus(player)
     end
 end)
