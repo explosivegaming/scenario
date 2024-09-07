@@ -176,7 +176,7 @@ end)
 local bonus_control_set =
 Gui.element(function(_, parent, name)
     local bonus_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(bonus_set, 360, 2, 'disp')
+    local disp = Gui.scroll_table(bonus_set, 320, 2, 'disp')
 
     bonus_gui_control_pts_a(disp)
     bonus_gui_control_pts_a_count(disp)
@@ -260,7 +260,7 @@ end)
 local bonus_data_set =
 Gui.element(function(_, parent, name)
     local bonus_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(bonus_set, 360, 3, 'disp')
+    local disp = Gui.scroll_table(bonus_set, 320, 3, 'disp')
 
     for k, v in pairs(config.conversion) do
         bonus_gui_slider(disp, 'bonus_display_' .. k, {'bonus.display-' .. k}, {'bonus.display-' .. k .. '-tooltip'}, config.player_bonus[v])
