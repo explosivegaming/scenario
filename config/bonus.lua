@@ -5,26 +5,25 @@ return {
     --[[
     TODO
     force bonus
-    vlayer battery recharge (auto)
     quick health regeneration
 
     Base point is equal to the amount of standard value in each parameter.
 
-            CMMS    CRS     CCS     CISB    CHB     CRDB
-    STD     30      90      32      20      16      12
-    =       200
+            CMMS    CRS     CCS     CISB    CHB     CRDB    PBR
+    STD     30      60      32      20      16      12      40
+    =       210
 
-    MAX     60      180     64      40      32      24
-    =       400
+    MAX     60      180     64      40      32      24      80
+    =       480
     ]]
     pts = {
         base = 200
     },
     gui_display_width = {
-        half = 180,
-        label = 80,
-        slider = 200,
-        count = 80
+        half = 160,
+        label = 70,
+        slider = 180,
+        count = 70
     },
     conversion = {
         ['cmms'] = 'character_mining_speed_modifier',
@@ -36,6 +35,18 @@ return {
         --[[
         ['cpdb'] = 'character_item_pickup_distance_bonus'
         ]]
+    },
+    player_special_bonus_rate = 300,
+    player_special_bonus = {
+        ['personal_battery_recharge'] = {
+            -- 1 MW
+            value = 8,
+            max = 16,
+            scale = 1,
+            cost_scale = 4,
+            cost = 20,
+            is_percentage = false
+        }
     },
     player_bonus = {
         ['character_mining_speed_modifier'] = {
