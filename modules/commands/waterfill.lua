@@ -14,7 +14,7 @@ local function aabb_align_expand(aabb)
     }
 end
 
-Commands.new_command('waterfill', {'expcom-waterfill.description'})
+Commands.new_command('waterfill', {'expcom-waterfill.description'}, 'Change tile to water')
 :register(function(player)
     local inv = player.get_main_inventory()
 
