@@ -13,7 +13,7 @@ Commands.new_command('kill-biters', {'expcom-enemy.description-kill'}, 'Kill all
     return Commands.success
 end)
 
-Commands.new_command('remove-biters', {'expcom-enemy.description-remove'}, 'Toggle friendly fire')
+Commands.new_command('remove-biters', {'expcom-enemy.description-remove'}, 'Remove biters and prevent generation')
 :set_flag('admin_only')
 :add_param('surface', true, 'surface')
 :set_defaults{surface=function(player)
