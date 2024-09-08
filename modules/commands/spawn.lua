@@ -39,7 +39,7 @@ end
 --- Teleport to spawn
 -- @command go-to-spawn
 -- @tparam[opt=self] LuaPlayer player the player to teleport to their spawn point
-Commands.new_command('go-to-spawn', {'expcom-spawn.description'})
+Commands.new_command('go-to-spawn', {'expcom-spawn.description'}, 'Teleport to spawn')
 :add_param('player', true, 'player-role-alive')
 :set_defaults{
     player=function(player)
@@ -52,14 +52,17 @@ Commands.new_command('go-to-spawn', {'expcom-spawn.description'})
 :register(function(player, action_player)
     if not action_player then
         return Commands.error{'expcom-spawn.unavailable'}
+
     elseif action_player == player then
         if not teleport(player) then
             return Commands.error{'expcom-spawn.unavailable'}
         end
+
     elseif Roles.player_allowed(player, 'command/go-to-spawn/always') then
         if not teleport(action_player) then
             return Commands.error{'expcom-spawn.unavailable'}
         end
+
     else
         return Commands.error{'expcore-commands.unauthorized'}
     end
