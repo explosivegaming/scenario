@@ -62,7 +62,7 @@ end
 --- Sends an invocation to be ran and returns the result.
 -- @command interface
 -- @tparam string invocation the command that will be run
-Commands.new_command('interface', {'expcom-interface.description'})
+Commands.new_command('interface', {'expcom-interface.description'}, 'Sends an invocation to be ran and returns the result.')
 :add_param('invocation', false)
 :enable_auto_concat()
 :set_flag('admin_only')
