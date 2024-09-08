@@ -22,7 +22,7 @@ local function res_queue(force, res, by_script)
     end
 end
 
-Commands.new_command('auto-research', {'expcom-res.description-ares'})
+Commands.new_command('auto-research', {'expcom-res.description-ares'}, 'Automatically queue up research')
 :add_alias('ares')
 :register(function(player)
     research.res_queue_enable = not research.res_queue_enable
