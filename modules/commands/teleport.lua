@@ -41,7 +41,7 @@ end
 -- @command teleport
 -- @tparam LuaPlayer from_player the player that will be teleported, must be alive
 -- @tparam LuaPlayer to_player the player to teleport to, must be online (if dead goes to where they died)
-Commands.new_command('teleport', {'expcom-tp.description-tp'})
+Commands.new_command('teleport', {'expcom-tp.description-tp'}, 'Teleports a player to another player.')
 :add_param('from_player', false, 'player-alive')
 :add_param('to_player', false, 'player-online')
 :add_alias('tp')
@@ -60,7 +60,7 @@ end)
 --- Teleports a player to you.
 -- @command bring
 -- @tparam LuaPlayer player the player that will be teleported, must be alive
-Commands.new_command('bring', {'expcom-tp.description-bring'})
+Commands.new_command('bring', {'expcom-tp.description-bring'}, 'Teleports a player to you.')
 :add_param('player', false, 'player-alive')
 :set_flag('admin_only')
 :register(function(player, from_player)
@@ -78,7 +78,7 @@ end)
 --- Teleports you to a player.
 -- @command goto
 -- @tparam LuaPlayer player the player to teleport to, must be online (if dead goes to where they died)
-Commands.new_command('goto', {'expcom-tp.description-goto'})
+Commands.new_command('goto', {'expcom-tp.description-goto'}, 'Teleports you to a player.')
 :add_param('player', false, 'player-online')
 :add_alias('tp-me', 'tpme')
 :register(function(player, to_player)
