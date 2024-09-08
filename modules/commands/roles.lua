@@ -12,7 +12,7 @@ local format_chat_player_name, format_chat_colour_localized = _C.format_chat_pla
 -- @command assign-role
 -- @tparam LuaPlayer player the player to assign the role to
 -- @tparam string role the name of the role to assign to the player, supports auto complete after enter
-Commands.new_command('assign-role', {'expcom-roles.description-assign-role'})
+Commands.new_command('assign-role', {'expcom-roles.description-assign-role'}, 'Assigns a role to a player')
 :add_param('player', false, 'player-role')
 :add_param('role', false, 'role')
 :set_flag('admin-only')
@@ -30,7 +30,7 @@ end)
 -- @command unassign-role
 -- @tparam LuaPlayer player the player to unassign the role from
 -- @tparam string role the name of the role to unassign from the player, supports auto complete after enter
-Commands.new_command('unassign-role', {'expcom-roles.description-unassign-role'})
+Commands.new_command('unassign-role', {'expcom-roles.description-unassign-role'}, 'Unassigns a role from a player')
 :add_param('player', false, 'player-role')
 :add_param('role', false, 'role')
 :set_flag('admin-only')
@@ -47,7 +47,7 @@ end)
 --- Lists all roles in they correct order
 -- @command list-roles
 -- @tparam[opt=all] LuaPlayer player list only the roles which this player has
-Commands.new_command('list-roles', {'expcom-roles.description-list-roles'})
+Commands.new_command('list-roles', {'expcom-roles.description-list-roles'}, 'Lists all roles in they correct order')
 :add_param('player', true, 'player')
 :add_alias('lsroles', 'roles')
 :register(function(_, player)
