@@ -9,7 +9,7 @@ require 'config.expcore.command_general_parse'
 
 --- Toggles spectator mode for the caller
 -- @command spectate
-Commands.new_command('spectate', {'expcom-spectate.description-spectate'})
+Commands.new_command('spectate', {'expcom-spectate.description-spectate'}, 'Toggles spectator mode')
 :register(function(player)
     if Spectate.is_spectating(player) then
         Spectate.stop_spectate(player)
@@ -26,7 +26,7 @@ end)
 --- Enters follow mode for the caller, following the given player.
 -- @command follow
 -- @tparam LuaPlayer player The player that will be followed
-Commands.new_command('follow', {'expcom-spectate.description-follow'})
+Commands.new_command('follow', {'expcom-spectate.description-follow'}, 'Start following a player in spectator')
 :add_alias('f')
 :add_param('player', false, 'player-online')
 :register(function(player, action_player)
