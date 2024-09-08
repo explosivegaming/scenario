@@ -17,7 +17,7 @@ local function AmountOfMachines(itemsPerSecond, output)
       end
 end
 
-Commands.new_command('ratio', {'expcom-ratio.description'})
+Commands.new_command('ratio', {'expcom-ratio.description'}, 'This command will give the input and output ratios of the selected machine. Use the parameter for calculating the machines needed for that amount of items per second.')
 :add_param('itemsPerSecond', true, 'number')
 :register(function(player, itemsPerSecond)
       local machine = player.selected -- selected machine
