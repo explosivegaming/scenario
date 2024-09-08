@@ -11,7 +11,7 @@ require 'config.expcore.command_role_parse'
 --- Kills yourself or another player.
 -- @command kill
 -- @tparam[opt=self] LuaPlayer player the player to kill, must be alive to be valid
-Commands.new_command('kill', {'expcom-kill.description'})
+Commands.new_command('kill', {'expcom-kill.description'}, 'Kills yourself or another player.')
 :add_param('player', true, 'player-role-alive')
 :set_defaults{player=function(player)
     -- default is the player unless they are dead
@@ -26,8 +26,10 @@ end}
     end
     if player == action_player then
         action_player.character.die()
+
     elseif Roles.player_allowed(player, 'command/kill/always') then
         action_player.character.die()
+
     else
         return Commands.error{'expcore-commands.unauthorized'}
     end
