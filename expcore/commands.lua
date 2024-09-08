@@ -393,13 +393,19 @@ local commands = Commands.get()
 ]]
 function Commands.get(player)
     player = Game.get_player_from_any(player)
-    if not player then return Commands.commands end
+
+    if not player then
+        return Commands.commands
+    end
+
     local allowed = {}
+
     for name, command_data in pairs(Commands.commands) do
         if Commands.authorize(player, name) then
             allowed[name] = command_data
         end
     end
+
     return allowed
 end
 
@@ -419,14 +425,17 @@ function Commands.search(keyword, player)
     local custom_commands = Commands.get(player)
     local matches = {}
     keyword = keyword:lower()
+
     -- Loops over custom commands
     for name, command_data in pairs(custom_commands) do
         -- combines name help and aliases into one message to be searched
-        local search = string.format('%s %s %s', name, command_data.help, table.concat(command_data.aliases, ' '))
+        local search = string.format('%s %s %s %s', name, command_data.help, command_data.searchable_description, table.concat(command_data.aliases, ' '))
+
         if search:lower():match(keyword) then
             matches[name] = command_data
         end
     end
+
     -- Loops over the names of game commands
     for name, description in pairs(commands.game_commands) do
         if name:lower():match(keyword) then
@@ -439,6 +448,7 @@ function Commands.search(keyword, player)
             }
         end
     end
+
     return matches
 end
 
@@ -455,10 +465,11 @@ end
 Commands.new_command('repeat-name', 'Will repeat you name a number of times in chat.')
 
 ]]
-function Commands.new_command(name, help)
+function Commands.new_command(name, help, descr)
     local command = setmetatable({
         name = name,
         help = help,
+        searchable_description = descr or '',
         callback = function() Commands.internal_error(false, name, 'No callback registered') end,
         auto_concat = false,
         min_param_count = 0,
@@ -469,7 +480,9 @@ function Commands.new_command(name, help)
     }, {
         __index = Commands._prototype
     })
+
     Commands.commands[name] = command
+
     return command
 end
 
