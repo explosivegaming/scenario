@@ -9,7 +9,7 @@ require 'config.expcore.command_general_parse'
 --- Toggles cheat mode for your player, or another player.
 -- @command toggle-cheat-mode
 -- @tparam[opt=self] LuaPlayer player player to toggle chest mode of, can be nil for self
-Commands.new_command('toggle-cheat-mode', {'expcom-cheat.description-cheat'})
+Commands.new_command('toggle-cheat-mode', {'expcom-cheat.description-cheat'}, 'Toggles cheat mode for your player, or another player.')
 :add_param('player', true, 'player')
 :set_defaults{player=function(player)
     return player -- default is the user using the command
@@ -20,7 +20,7 @@ end}
     return Commands.success
 end)
 
-Commands.new_command('research-all', {'expcom-cheat.description-res'})
+Commands.new_command('research-all', {'expcom-cheat.description-res'}, 'Set all research for your force.')
 :set_flag('admin_only')
 :add_param('force', true, 'force')
 :set_defaults{force=function(player)
@@ -32,7 +32,7 @@ end}
     return Commands.success
 end)
 
-Commands.new_command('toggle-always-day', {'expcom-cheat.description-day'})
+Commands.new_command('toggle-always-day', {'expcom-cheat.description-day'}, 'Toggles always day in surface.')
 :set_flag('admin_only')
 :add_param('surface', true, 'surface')
 :set_defaults{surface=function(player)
