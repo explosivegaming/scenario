@@ -154,7 +154,7 @@ Gui.element{
     style = 'electric_satisfaction_statistics_progressbar'
 }:style{
     width = 200,
-    font = 'heading-3'
+    font = 'heading-2'
 }
 
 --- Display label for the number of accumulators
@@ -178,7 +178,7 @@ Gui.element{
     style = 'electric_satisfaction_statistics_progressbar'
 }:style{
     width = 200,
-    font = 'heading-3'
+    font = 'heading-2'
 }
 
 --- Display label for the remaining surface area
@@ -202,6 +202,7 @@ Gui.element{
     style = 'heading_2_label'
 }:style{
     width = 200,
+    height = 28,
     horizontal_align = 'right'
 }
 
@@ -226,6 +227,7 @@ Gui.element{
     style = 'heading_2_label'
 }:style{
     width = 200,
+    height = 28,
     horizontal_align = 'right'
 }
 
@@ -251,7 +253,7 @@ Gui.element{
     style = 'electric_satisfaction_statistics_progressbar'
 }:style{
     width = 200,
-    font = 'heading-3'
+    font = 'heading-2'
 }
 
 --- Display label for the sustained energy capacity
@@ -276,7 +278,7 @@ Gui.element{
     style = 'electric_satisfaction_statistics_progressbar'
 }:style{
     width = 200,
-    font = 'heading-3'
+    font = 'heading-2'
 }
 
 --- A vertical flow containing all the displays labels and their counts
@@ -369,7 +371,7 @@ Gui.element{
     local target = element.parent[vlayer_gui_control_type.name].selected_index
     local n = element.parent[vlayer_gui_control_list.name].selected_index
 
-    if target and vlayer_control_type_list[target] and n then
+    if target and vlayer_control_type_list[target] and n > 0 then
         local i = vlayer.get_interfaces()
 
         if i and i[vlayer_control_type_list[target]] and i[vlayer_control_type_list[target]][n] then
@@ -416,7 +418,7 @@ Gui.element{
     local target = element.parent[vlayer_gui_control_type.name].selected_index
     local n = element.parent[vlayer_gui_control_list.name].selected_index
 
-    if target and vlayer_control_type_list[target] and n then
+    if target and vlayer_control_type_list[target] and n > 0 then
         local i = vlayer.get_interfaces()
 
         if i and i[vlayer_control_type_list[target]] then
