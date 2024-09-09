@@ -15,10 +15,6 @@ Commands.new_command('spectate', {'expcom-spectate.description-spectate'}, 'Togg
         Spectate.stop_spectate(player)
 
     else
-        if Spectate.is_following(player) then
-            Spectate.stop_follow(player)
-        end
-
         Spectate.start_spectate(player)
     end
 end)
