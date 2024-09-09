@@ -62,7 +62,7 @@ Gui.element{
     type = 'label',
     name = 'bonus_control_pts_a',
     caption = {'bonus.control-pts-a'},
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = config.gui_display_width['half']
 }
@@ -72,7 +72,7 @@ Gui.element{
     type = 'label',
     name = 'bonus_control_pts_a_count',
     caption = config.pts.base,
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = config.gui_display_width['half']
 }
@@ -84,7 +84,7 @@ Gui.element{
     type = 'label',
     name = 'bonus_control_pts_n',
     caption = {'bonus.control-pts-n'},
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = config.gui_display_width['half']
 }
@@ -94,7 +94,7 @@ Gui.element{
     type = 'label',
     name = 'bonus_control_pts_n_count',
     caption = '0',
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width =config.gui_display_width['half']
 }
@@ -106,7 +106,7 @@ Gui.element{
     type = 'label',
     name = 'bonus_control_pts_r',
     caption = {'bonus.control-pts-r'},
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = config.gui_display_width['half']
 }
@@ -116,7 +116,7 @@ Gui.element{
     type = 'label',
     name = 'bonus_control_pts_r_count',
     caption = '0',
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = config.gui_display_width['half']
 }
@@ -176,7 +176,7 @@ end)
 local bonus_control_set =
 Gui.element(function(_, parent, name)
     local bonus_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(bonus_set, 360, 2, 'disp')
+    local disp = Gui.scroll_table(bonus_set, config.gui_display_width['half'] * 2, 2, 'disp')
 
     bonus_gui_control_pts_a(disp)
     bonus_gui_control_pts_a_count(disp)
@@ -201,7 +201,7 @@ Gui.element(function(_definition, parent, name, caption, tooltip, bonus)
         type = 'label',
         caption = caption,
         tooltip = tooltip,
-        style = 'heading_1_label'
+        style = 'heading_2_label'
     }
     label.style.width = config.gui_display_width['label']
 
@@ -234,7 +234,7 @@ Gui.element(function(_definition, parent, name, caption, tooltip, bonus)
         type = 'label',
         name = name .. '_count',
         caption = value,
-        style = 'heading_1_label',
+        style = 'heading_2_label',
     }
     count.style.width = config.gui_display_width['count']
 
@@ -260,7 +260,7 @@ end)
 local bonus_data_set =
 Gui.element(function(_, parent, name)
     local bonus_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(bonus_set, 360, 3, 'disp')
+    local disp = Gui.scroll_table(bonus_set, config.gui_display_width['half'] * 2, 3, 'disp')
 
     for k, v in pairs(config.conversion) do
         bonus_gui_slider(disp, 'bonus_display_' .. k, {'bonus.display-' .. k}, {'bonus.display-' .. k .. '-tooltip'}, config.player_bonus[v])
@@ -274,7 +274,7 @@ end)
 bonus_container =
 Gui.element(function(definition, parent)
     local player = Gui.get_player_from_element(parent)
-    local container = Gui.container(parent, definition.name, 320)
+    local container = Gui.container(parent, definition.name, config.gui_display_width['half'] * 2)
 
     bonus_control_set(container, 'bonus_st_1')
     bonus_data_set(container, 'bonus_st_2')
@@ -292,7 +292,7 @@ end)
 :static_name(Gui.unique_static_name)
 :add_to_left_flow()
 
---- Button on the top flow used to toggle the task list container
+--- Button on the top flow used to toggle the bonus container
 -- @element toggle_left_element
 Gui.left_toolbar_button('item/exoskeleton-equipment', {'bonus.main-tooltip'}, bonus_container, function(player)
 	return Roles.player_allowed(player, 'gui/bonus')
