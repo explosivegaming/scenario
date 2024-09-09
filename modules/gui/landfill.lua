@@ -7,7 +7,6 @@
 local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Event = require 'utils.event' --- @dep utils.event
 local Roles = require 'expcore.roles' --- @dep expcore.roles
-local config = require 'config.landfill' --- @dep config.landfill
 
 local rolling_stocks = {}
 
@@ -56,7 +55,16 @@ end
 
 local curves = {}
 
-curves[1] = config.default_curve
+curves[1] = {
+    {0, 0, 0, 0, 0, 1, 0, 0},
+    {0, 0, 0, 0, 1, 1, 1, 0},
+    {0, 0, 0, 1, 1, 1, 1, 0},
+    {0, 0, 0, 1, 1, 1, 0, 0},
+    {0, 0, 1, 1, 1, 0, 0, 0},
+    {0, 0, 1, 1, 1, 0, 0, 0},
+    {0, 0, 1, 1, 0, 0, 0, 0},
+    {0, 0, 1, 1, 0, 0, 0, 0}
+}
 curves[6] = curve_flip_d(curves[1])
 curves[3] = curve_flip_lr(curves[6])
 curves[4] = curve_flip_d(curves[3])
@@ -155,12 +163,11 @@ local function landfill_gui_add_landfill(blueprint)
     return {tiles = new_tiles}
 end
 
---- Button on the top flow used to toggle the landfill container
--- @element toggle_left_element
-Gui.toolbar_toggle_button('item/landfill', {'landfill.main-tooltip'}, function(player)
+-- @element toolbar_button
+Gui.toolbar_button('item/landfill', {'landfill.main-tooltip'}, function(player)
 	return Roles.player_allowed(player, 'gui/landfill')
 end)
-:on_event(Gui.events.on_toolbar_button_toggled, function(player, _, _)
+:on_click(function(player, _, _)
     if player.cursor_stack and player.cursor_stack.valid_for_read then
         if player.cursor_stack.type == 'blueprint' and player.cursor_stack.is_blueprint_setup() then
             local modified = landfill_gui_add_landfill(player.cursor_stack)
@@ -169,6 +176,9 @@ end)
                 player.cursor_stack.set_blueprint_tiles(modified.tiles)
             end
         end
+
+    else
+        player.print{'landfill.cursor-none'}
     end
 end)
 
