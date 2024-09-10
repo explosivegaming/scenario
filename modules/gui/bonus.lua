@@ -213,7 +213,7 @@ end)
 local bonus_control_set =
 Gui.element(function(_, parent, name)
     local bonus_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(bonus_set, 320, 2, 'disp')
+    local disp = Gui.scroll_table(bonus_set, config.gui_display_width['half'] * 2, 2, 'disp')
 
     bonus_gui_control_pts_a(disp)
     bonus_gui_control_pts_a_count(disp)
@@ -297,7 +297,7 @@ end)
 local bonus_data_set =
 Gui.element(function(_, parent, name)
     local bonus_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(bonus_set, 320, 3, 'disp')
+    local disp = Gui.scroll_table(bonus_set, config.gui_display_width['half'] * 2, 3, 'disp')
 
     for k, v in pairs(config.conversion) do
         bonus_gui_slider(disp, 'bonus_display_' .. k, {'bonus.display-' .. k}, {'bonus.display-' .. k .. '-tooltip'}, config.player_bonus[v])
@@ -313,7 +313,7 @@ end)
 bonus_container =
 Gui.element(function(definition, parent)
     local player = Gui.get_player_from_element(parent)
-    local container = Gui.container(parent, definition.name, 320)
+    local container = Gui.container(parent, definition.name, config.gui_display_width['half'] * 2)
 
     bonus_control_set(container, 'bonus_st_1')
     bonus_data_set(container, 'bonus_st_2')

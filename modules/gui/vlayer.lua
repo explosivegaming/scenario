@@ -140,19 +140,21 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_item_solar_name',
     caption = {'vlayer.display-item-solar'},
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = 200
 }
 
 local vlayer_gui_display_item_solar_count =
 Gui.element{
-    type = 'label',
+    type = 'progressbar',
     name = 'vlayer_display_item_solar_count',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '',
+    value = 0,
+    style = 'electric_satisfaction_statistics_progressbar'
 }:style{
-    width = 120
+    width = 200,
+    font = 'heading-2'
 }
 
 --- Display label for the number of accumulators
@@ -162,111 +164,21 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_item_accumulator_name',
     caption = {'vlayer.display-item-accumulator'},
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = 200
 }
 
 local vlayer_gui_display_item_accumulator_count =
 Gui.element{
-    type = 'label',
+    type = 'progressbar',
     name = 'vlayer_display_item_accumulator_count',
-    caption = '0',
-    style = 'heading_1_label'
+    caption = '',
+    value = 0,
+    style = 'electric_satisfaction_statistics_progressbar'
 }:style{
-    width = 120
-}
-
---- Display label for the current energy production
--- @element vlayer_gui_display_signal_production_name
-local vlayer_gui_display_signal_production_name =
-Gui.element{
-    type = 'label',
-    name = 'vlayer_display_signal_peak_name',
-    caption = {'vlayer.display-current-production'},
-    tooltip = {'vlayer.display-current-production-tooltip'},
-    style = 'heading_1_label'
-}:style{
-    width = 200
-}
-
-local vlayer_gui_display_signal_production_count =
-Gui.element{
-    type = 'label',
-    name = 'vlayer_display_signal_peak_solar_count',
-    caption = '0',
-    style = 'heading_1_label'
-}:style{
-    width = 120
-}
-
---- Display label for the sustained energy production
--- @element vlayer_gui_display_signal_sustained_name
-local vlayer_gui_display_signal_sustained_name =
-Gui.element{
-    type = 'label',
-    name = 'vlayer_display_signal_sustained_name',
-    caption = {'vlayer.display-sustained-production'},
-    tooltip = {'vlayer.display-sustained-production-tooltip'},
-    style = 'heading_1_label'
-}:style{
-    width = 200
-}
-
-local vlayer_gui_display_signal_sustained_count =
-Gui.element{
-    type = 'label',
-    name = 'vlayer_display_signal_sustained_count',
-    caption = '0',
-    style = 'heading_1_label'
-}:style{
-    width = 120
-}
-
---- Display label for the sustained energy capacity
--- @element vlayer_gui_display_signal_capacity_name
-local vlayer_gui_display_signal_capacity_name =
-Gui.element{
-    type = 'label',
-    name = 'vlayer_display_signal_max_name',
-    caption = {'vlayer.display-max-capacity'},
-    tooltip = {'vlayer.display-max-capacity-tooltip'},
-    style = 'heading_1_label'
-}:style{
-    width = 200
-}
-
-local vlayer_gui_display_signal_capacity_count =
-Gui.element{
-    type = 'label',
-    name = 'vlayer_display_signal_max_count',
-    caption = '0',
-    style = 'heading_1_label'
-}:style{
-    width = 120
-}
-
---- Display label for the current energy in storage
--- @element vlayer_gui_display_signal_current_name
-local vlayer_gui_display_signal_current_name =
-Gui.element{
-    type = 'label',
-    name = 'vlayer_display_signal_current_name',
-    caption = {'vlayer.display-current-capacity'},
-    tooltip = {'vlayer.display-current-capacity-tooltip'},
-    style = 'heading_1_label'
-}:style{
-    width = 200
-}
-
-local vlayer_gui_display_signal_current_count =
-Gui.element{
-    type = 'label',
-    name = 'vlayer_display_signal_current_count',
-    caption = '0',
-    style = 'heading_1_label'
-}:style{
-    width = 120
+    width = 200,
+    font = 'heading-2'
 }
 
 --- Display label for the remaining surface area
@@ -277,7 +189,7 @@ Gui.element{
     name = 'vlayer_display_signal_remaining_surface_area_name',
     caption = {'vlayer.display-remaining-surface-area'},
     tooltip = {'vlayer.display-remaining-surface-area-tooltip'},
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
     width = 200
 }
@@ -287,9 +199,86 @@ Gui.element{
     type = 'label',
     name = 'vlayer_display_signal_remaining_surface_area_count',
     caption = '0',
-    style = 'heading_1_label'
+    style = 'heading_2_label'
 }:style{
-    width = 120
+    width = 200,
+    height = 28,
+    horizontal_align = 'right'
+}
+
+--- Display label for the sustained energy production
+-- @element vlayer_gui_display_signal_sustained_name
+local vlayer_gui_display_signal_sustained_name =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_signal_sustained_name',
+    caption = {'vlayer.display-sustained-production'},
+    tooltip = {'vlayer.display-sustained-production-tooltip'},
+    style = 'heading_2_label'
+}:style{
+    width = 200
+}
+
+local vlayer_gui_display_signal_sustained_count =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_signal_sustained_count',
+    caption = '0',
+    style = 'heading_2_label'
+}:style{
+    width = 200,
+    height = 28,
+    horizontal_align = 'right'
+}
+
+--- Display label for the current energy production
+-- @element vlayer_gui_display_signal_production_name
+local vlayer_gui_display_signal_production_name =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_signal_production_name',
+    caption = {'vlayer.display-current-production'},
+    tooltip = {'vlayer.display-current-production-tooltip'},
+    style = 'heading_2_label'
+}:style{
+    width = 200
+}
+
+local vlayer_gui_display_signal_production_count =
+Gui.element{
+    type = 'progressbar',
+    name = 'vlayer_display_signal_production_count',
+    caption = '',
+    value = 0,
+    style = 'electric_satisfaction_statistics_progressbar'
+}:style{
+    width = 200,
+    font = 'heading-2'
+}
+
+--- Display label for the sustained energy capacity
+-- @element vlayer_gui_display_signal_capacity_name
+local vlayer_gui_display_signal_capacity_name =
+Gui.element{
+    type = 'label',
+    name = 'vlayer_display_signal_capacity_name',
+    caption = {'vlayer.display-current-capacity'},
+    tooltip = {'vlayer.display-current-capacity-tooltip'},
+    style = 'heading_2_label'
+}:style{
+    width = 200
+}
+
+local vlayer_gui_display_signal_capacity_count =
+Gui.element{
+    type = 'progressbar',
+    name = 'vlayer_display_signal_capacity_count',
+    caption = '',
+    value = 0,
+    style = 'electric_satisfaction_statistics_progressbar'
+}:style{
+    width = 200,
+    font = 'heading-2'
 }
 
 --- A vertical flow containing all the displays labels and their counts
@@ -297,7 +286,7 @@ Gui.element{
 local vlayer_display_set =
 Gui.element(function(_, parent, name)
     local vlayer_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(vlayer_set, 320, 2, 'disp')
+    local disp = Gui.scroll_table(vlayer_set, 400, 2, 'disp')
 
     vlayer_gui_display_item_solar_name(disp)
     vlayer_gui_display_item_solar_count(disp)
@@ -305,14 +294,12 @@ Gui.element(function(_, parent, name)
     vlayer_gui_display_item_accumulator_count(disp)
     vlayer_gui_display_signal_remaining_surface_area_name(disp)
     vlayer_gui_display_signal_remaining_surface_area_count(disp)
-    vlayer_gui_display_signal_production_name(disp)
-    vlayer_gui_display_signal_production_count(disp)
     vlayer_gui_display_signal_sustained_name(disp)
     vlayer_gui_display_signal_sustained_count(disp)
+    vlayer_gui_display_signal_production_name(disp)
+    vlayer_gui_display_signal_production_count(disp)
     vlayer_gui_display_signal_capacity_name(disp)
     vlayer_gui_display_signal_capacity_count(disp)
-    vlayer_gui_display_signal_current_name(disp)
-    vlayer_gui_display_signal_current_count(disp)
 
     return vlayer_set
 end)
@@ -343,7 +330,7 @@ Gui.element{
     items = {{'vlayer.control-type-energy'}, {'vlayer.control-type-circuit'}, {'vlayer.control-type-storage-input'}, {'vlayer.control-type-storage-output'}},
     selected_index = 1
 }:style{
-    width = 160
+    width = 200
 }:on_selection_changed(function(player, _, _)
     vlayer_gui_list_refresh(player)
 end)
@@ -355,7 +342,7 @@ Gui.element{
     type = 'drop-down',
     name = Gui.unique_static_name
 }:style{
-    width = 160
+    width = 200
 }
 
 --- A button to refresh the remove list
@@ -366,7 +353,7 @@ Gui.element{
     name = Gui.unique_static_name,
     caption = {'vlayer.control-refresh'}
 }:style{
-    width = 160
+    width = 200
 }:on_click(function(player, _, _)
     vlayer_gui_list_refresh(player)
 end)
@@ -379,12 +366,12 @@ Gui.element{
     name = Gui.unique_static_name,
     caption = {'vlayer.control-see'}
 }:style{
-    width = 160
+    width = 200
 }:on_click(function(player, element, _)
     local target = element.parent[vlayer_gui_control_type.name].selected_index
     local n = element.parent[vlayer_gui_control_list.name].selected_index
 
-    if target and vlayer_control_type_list[target] and n then
+    if target and vlayer_control_type_list[target] and n > 0 then
         local i = vlayer.get_interfaces()
 
         if i and i[vlayer_control_type_list[target]] and i[vlayer_control_type_list[target]][n] then
@@ -406,7 +393,7 @@ Gui.element{
     name = Gui.unique_static_name,
     caption = {'vlayer.control-build'}
 }:style{
-    width = 160
+    width = 200
 }:on_click(function(player, _, _)
     if Selection.is_selecting(player, SelectionConvertArea) then
         Selection.stop(player)
@@ -426,19 +413,19 @@ Gui.element{
     name = Gui.unique_static_name,
     caption = {'vlayer.control-remove'}
 }:style{
-    width = 160
+    width = 200
 }:on_click(function(player, element, _)
     local target = element.parent[vlayer_gui_control_type.name].selected_index
     local n = element.parent[vlayer_gui_control_list.name].selected_index
 
-    if target and vlayer_control_type_list[target] and n then
+    if target and vlayer_control_type_list[target] and n > 0 then
         local i = vlayer.get_interfaces()
 
         if i and i[vlayer_control_type_list[target]] then
             local interface_type, interface_position = vlayer.remove_interface(i[vlayer_control_type_list[target]][n].surface, i[vlayer_control_type_list[target]][n].position)
 
             if interface_type then
-                game.print{'vlayer.interface-result', player.name, pos_to_gps_string(interface_position), {'vlayer.result-remove'}, {'vlayer.control-type-' .. interface_type:gsub(' ', '-')}}
+                game.print{'vlayer.interface-result', player.name, pos_to_gps_string(interface_position), {'vlayer.result-remove'}, {'vlayer.control-type-' .. interface_type}}
             end
         end
     end
@@ -451,7 +438,7 @@ end)
 local vlayer_control_set =
 Gui.element(function(_, parent, name)
     local vlayer_set = parent.add{type='flow', direction='vertical', name=name}
-    local disp = Gui.scroll_table(vlayer_set, 320, 2, 'disp')
+    local disp = Gui.scroll_table(vlayer_set, 400, 2, 'disp')
 
     vlayer_gui_control_type(disp)
     vlayer_gui_control_list(disp)
@@ -468,7 +455,7 @@ end)
 vlayer_container =
 Gui.element(function(definition, parent)
     local player = Gui.get_player_from_element(parent)
-    local container = Gui.container(parent, definition.name, 320)
+    local container = Gui.container(parent, definition.name, 400)
 
     vlayer_display_set(container, 'vlayer_st_1')
     local control_set = vlayer_control_set(container, 'vlayer_st_2')
@@ -499,14 +486,31 @@ Event.add(Roles.events.on_role_unassigned, role_update_event)
 Event.on_nth_tick(config.update_tick_gui, function(_)
     local stats = vlayer.get_statistics()
     local items = vlayer.get_items()
+    local items_alloc = vlayer.get_allocated_items()
+
     local vlayer_display = {
-        [vlayer_gui_display_item_solar_count.name] = format_number(items['solar-panel']),
-        [vlayer_gui_display_item_accumulator_count.name] = format_number(items['accumulator']),
-        [vlayer_gui_display_signal_remaining_surface_area_count.name] = format_number(stats.remaining_surface_area),
-        [vlayer_gui_display_signal_production_count.name] = format_energy(stats.energy_production, 'W'),
-        [vlayer_gui_display_signal_sustained_count.name] = format_energy(stats.energy_sustained, 'W'),
-        [vlayer_gui_display_signal_capacity_count.name] = format_energy(stats.energy_capacity, 'J'),
-        [vlayer_gui_display_signal_current_count.name] = format_energy(stats.energy_storage, 'J'),
+        [vlayer_gui_display_item_solar_count.name] = {
+            val = (items_alloc['solar-panel'] / math.max(items['solar-panel'], 1)),
+            cap = format_number(items_alloc['solar-panel']) .. ' / ' .. format_number(items['solar-panel'])
+        },
+        [vlayer_gui_display_item_accumulator_count.name] = {
+            val = (items_alloc['accumulator'] / math.max(items['accumulator'], 1)),
+            cap = format_number(items_alloc['accumulator']) .. ' / ' .. format_number(items['accumulator'])
+        },
+        [vlayer_gui_display_signal_remaining_surface_area_count.name] = {
+            cap = format_number(stats.remaining_surface_area)
+        },
+        [vlayer_gui_display_signal_sustained_count.name] = {
+            cap = format_energy(stats.energy_sustained, 'W')
+        },
+        [vlayer_gui_display_signal_production_count.name] = {
+            val = (stats.energy_production / math.max(stats.energy_max, 1)),
+            cap = format_energy(stats.energy_production, 'W') .. ' / ' .. format_energy(stats.energy_max, 'W')
+        },
+        [vlayer_gui_display_signal_capacity_count.name] = {
+            val = (stats.energy_storage / math.max(stats.energy_capacity, 1)),
+            cap = format_energy(stats.energy_storage, 'J') .. ' / ' .. format_energy(stats.energy_capacity, 'J')
+        }
     }
 
     for _, player in pairs(game.connected_players) do
@@ -514,7 +518,11 @@ Event.on_nth_tick(config.update_tick_gui, function(_)
         local disp = frame.container['vlayer_st_1'].disp.table
 
         for k, v in pairs(vlayer_display) do
-            disp[k].caption = v
+            disp[k].caption = v.cap
+
+            if v.val then
+                disp[k].value = v.val
+            end
         end
     end
 end)

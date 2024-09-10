@@ -20,10 +20,10 @@ return {
         base = 210
     },
     gui_display_width = {
-        half = 160,
+        half = 150,
         label = 70,
         slider = 180,
-        count = 70
+        count = 50
     },
     conversion = {
         ['cmms'] = 'character_mining_speed_modifier',
