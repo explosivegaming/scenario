@@ -5,11 +5,11 @@ local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
 local vlayer = require 'modules.control.vlayer'
 
-Commands.new_command('personal-battery-recharge', 'Recharge Player Battery upto a portion with vlayer')
+Commands.new_command('personal-battery-recharge', {'vlayer.description-pbr'}, 'Recharge Player Battery upto a portion with vlayer')
 :add_param('amount', 'number-range', 0.2, 1)
 :register(function(player, amount)
     if vlayer.get_statistics()['energy_sustained'] == 0 then
-        return Commands.error('vlayer need to be running to get this command work')
+        return Commands.error({'vlayer.pbr-not-running'})
     end
 
     local armor = player.get_inventory(defines.inventory.character_armor)[1].grid
@@ -27,7 +27,7 @@ Commands.new_command('personal-battery-recharge', 'Recharge Player Battery upto 
     return Commands.success
 end)
 
-Commands.new_command('vlayer-info', 'Vlayer Info')
+Commands.new_command('vlayer-info', {'vlayer.description-vi'}, 'Vlayer Info')
 :register(function(_)
     local c = vlayer.get_circuits()
 

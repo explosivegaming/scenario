@@ -8,7 +8,7 @@ local Commands = require 'expcore.commands' --- @dep expcore.commands
 --- Sends an action message in the chat
 -- @command me
 -- @tparam string action the action that follows your name in chat
-Commands.new_command('me', 'Sends an action message in the chat')
+Commands.new_command('me', {'expcom-me.description'}, 'Sends an action message in the chat')
 :add_param('action', false)
 :enable_auto_concat()
 :register(function(player, action)

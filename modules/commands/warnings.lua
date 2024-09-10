@@ -13,7 +13,7 @@ require 'config.expcore.command_role_parse'
 -- @command give-warning
 -- @tparam LuaPlayer player the player the will recive a warning
 -- @tparam string reason the reason the player is being given a warning
-Commands.new_command('give-warning', 'Gives a warning to a player; may lead to automatic script action.')
+Commands.new_command('give-warning', {'expcom-warnings.description-give'}, 'Gives a warning to a player; may lead to automatic script action.')
 :add_param('player', false, 'player-role')
 :add_param('reason', false)
 :add_alias('warn')
@@ -28,7 +28,7 @@ end)
 --- Gets the number of warnings a player has. If no player then lists all players and the number of warnings they have.
 -- @command get-warnings
 -- @tparam[opt=list] LuaPlayer player the player to get the warning for, if nil all players are listed
-Commands.new_command('get-warnings', 'Gets the number of warnings a player has. If no player then lists all players and the number of warnings they have.')
+Commands.new_command('get-warnings', {'expcom-warnings.description-get'}, 'Gets the number of warnings a player has. If no player then lists all players and the number of warnings they have.')
 :add_param('player', true, 'player')
 :add_alias('warnings', 'list-warnings')
 :register(function(_, player)
@@ -63,7 +63,7 @@ end)
 --- Clears all warnings (and script warnings) from a player
 -- @command clear-warnings
 -- @tparam LuaPlayer player the player to clear the warnings from
-Commands.new_command('clear-warnings', 'Clears all warnings (and script warnings) from a player')
+Commands.new_command('clear-warnings', {'expcom-warnings.description-clear'}, 'Clears all warnings (and script warnings) from a player')
 :add_param('player', false, 'player')
 :register(function(player, action_player)
     Warnings.clear_warnings(action_player, player.name)
