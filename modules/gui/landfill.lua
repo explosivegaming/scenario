@@ -100,9 +100,9 @@ local function landfill_gui_add_landfill(blueprint)
 
     for _, ent in pairs(entities) do
         -- vehicle
-		if not rolling_stocks[ent.name] then
+		if not (rolling_stocks[ent.name] or ent.name == 'offshore-pump') then
             -- curved rail, special
-            if 'curved-rail' ~= ent.name then
+            if  ent.name ~= 'curved-rail' then
                 local box = game.entity_prototypes[ent.name].collision_box or game.entity_prototypes[ent.name].selection_box
 
                 if game.entity_prototypes[ent.name].collision_mask['ground-tile'] == nil then
