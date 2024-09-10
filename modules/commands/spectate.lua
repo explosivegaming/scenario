@@ -30,10 +30,6 @@ Commands.new_command('follow', {'expcom-spectate.description-follow'}, 'Start fo
        return Commands.error{'expcom-spectate.follow-self'}
 
     else
-        if Spectate.is_spectating(player) then
-            Spectate.stop_spectate(player)
-        end
-
         Spectate.start_follow(player, action_player)
     end
 end)
