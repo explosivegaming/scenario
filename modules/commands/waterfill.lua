@@ -4,7 +4,7 @@
 local Commands = require 'expcore.commands' --- @dep expcore.commands
 require 'config.expcore.command_general_parse'
 local Selection = require 'modules.control.selection' --- @dep modules.control.selection
-local SelectionConvertArea = 'ConvertArea'
+local SelectionConvertArea = 'WaterfillConvertArea'
 
 --- Align an aabb to the grid by expanding it
 local function aabb_align_expand(aabb)
@@ -14,7 +14,7 @@ local function aabb_align_expand(aabb)
     }
 end
 
-Commands.new_command('waterfill', 'Change tile to water')
+Commands.new_command('waterfill', {'expcom-waterfill.description'}, 'Change tile to water')
 :register(function(player)
     local inv = player.get_main_inventory()
 
@@ -37,6 +37,10 @@ Selection.on_selection(SelectionConvertArea, function(event)
     local area = aabb_align_expand(event.area)
     local player = game.get_player(event.player_index)
 
+    if not player then
+        return
+    end
+
     local entities = player.surface.find_entities_filtered{area=area, name='steel-chest'}
 
     if #entities == 0 then
@@ -46,6 +50,11 @@ Selection.on_selection(SelectionConvertArea, function(event)
 
     local tiles_to_make = {}
     local inv = player.get_main_inventory()
+
+    if not inv then
+        return
+    end
+
     local clf_exp = inv.get_item_count('cliff-explosives')
 
     for _, entity in pairs(entities) do

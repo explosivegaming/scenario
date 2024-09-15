@@ -9,7 +9,7 @@ require 'config.expcore.command_general_parse'
 --- Find a player on your map.
 -- @command find-on-map
 -- @tparam LuaPlayer the player to find on the map
-Commands.new_command('find-on-map', 'Find a player on your map.')
+Commands.new_command('find-on-map', {'expcom-find.description'}, 'Find a player on your map.')
 :add_param('player', false, 'player-online')
 :add_alias('find', 'zoom-to')
 :register(function(player, action_player)
