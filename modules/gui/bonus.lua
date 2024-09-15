@@ -181,7 +181,9 @@ Gui.element{
         end
     end
 
-    disp[disp['bonus_display_personal_battery_recharge'].tags.counter].caption = format_number(disp['bonus_display_personal_battery_recharge'].slider_value)
+    local slider = disp['bonus_display_personal_battery_recharge_slider']
+    slider.slider_value = config.player_special_bonus['personal_battery_recharge'].value
+    disp[slider.tags.counter].caption = format_number(slider.slider_value)
 
     local r = bonus_gui_pts_needed(player)
     element.parent[bonus_gui_control_pts_n_count.name].caption = r
