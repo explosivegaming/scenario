@@ -10,14 +10,14 @@ return {
     Base point is equal to the amount of standard value in each parameter.
 
             CMMS    CRS     CCS     CISB    CHB     CRDB    PBR
-    STD     30      60      32      20      16      12      40
-    =       210
+    STD     30      60      32      20      16      12      60
+    =       230
 
-    MAX     60      180     64      40      32      24      80
+    MAX     60      180     64      40      32      24      120
     =       480
     ]]
     pts = {
-        base = 210
+        base = 230
     },
     gui_display_width = {
         half = 150,
@@ -31,7 +31,7 @@ return {
         ['ccs'] = 'character_crafting_speed_modifier',
         ['cisb'] = 'character_inventory_slots_bonus',
         ['chb'] = 'character_health_bonus',
-        ['crdb'] = 'character_reach_distance_bonus'
+        ['crdb'] = 'character_reach_distance_bonus',
         --[[
         ['cpdb'] = 'character_item_pickup_distance_bonus'
         ]]
@@ -40,11 +40,11 @@ return {
     player_special_bonus = {
         ['personal_battery_recharge'] = {
             -- 1 MW
-            value = 8,
-            max = 16,
+            value = 6,
+            max = 12,
             scale = 1,
             cost_scale = 4,
-            cost = 20,
+            cost = 40,
             is_percentage = false
         }
     },
@@ -58,7 +58,7 @@ return {
             is_percentage = true
         },
         ['character_running_speed_modifier'] = {
-            value = 1.5,
+            value = 1,
             max = 3,
             scale = 0.25,
             cost_scale = 1,
