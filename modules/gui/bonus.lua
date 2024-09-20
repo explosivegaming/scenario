@@ -7,6 +7,8 @@ local Gui = require 'expcore.gui' --- @dep expcore.gui
 local Roles = require 'expcore.roles' --- @dep expcore.roles
 local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.bonus' --- @dep config.bonus
+local vlayer = require 'modules.control.vlayer'
+
 local format_number = require('util').format_number --- @dep util
 local bonus_container
 
@@ -18,6 +20,8 @@ local function bonus_gui_pts_needed(player)
     for k, v in pairs(config.conversion) do
         total = total + (disp['bonus_display_' .. k .. '_slider'].slider_value / config.player_bonus[v].cost_scale * config.player_bonus[v].cost)
     end
+
+    total = total + (disp['bonus_display_personal_battery_recharge_slider'].slider_value / config.player_special_bonus['personal_battery_recharge'].cost_scale * config.player_special_bonus['personal_battery_recharge'].cost)
 
     return total
 end
@@ -49,7 +53,38 @@ local function apply_bonus(player)
 
         if config.player_bonus[v].combined_bonus then
             for i=1, #config.player_bonus[v].combined_bonus do
-                player[config.player_bonus[v].combined_bonus[i]] = 0
+                player[config.player_bonus[v].combined_bonus[i]] = disp['bonus_display_' .. k .. '_slider'].slider_value
+            end
+        end
+    end
+end
+
+local function apply_periodic_bonus(player)
+    if not Roles.player_allowed(player, 'gui/bonus') then
+        return
+    end
+
+    if not player.character then
+        return
+    end
+
+    local frame = Gui.get_left_element(player, bonus_container)
+    local disp = frame.container['bonus_st_2'].disp.table
+
+    if vlayer.get_statistics()['energy_sustained'] > 0 then
+        local armor = player.get_inventory(defines.inventory.character_armor)[1].grid
+
+        if armor then
+            local slider = disp['bonus_display_personal_battery_recharge_slider'].slider_value * 100000 * config.player_special_bonus_rate / 6
+
+            for i=1, #armor.equipment do
+                if armor.equipment[i].energy < armor.equipment[i].max_energy then
+                    local energy_required = math.min(math.floor(armor.equipment[i].max_energy - armor.equipment[i].energy), vlayer.get_statistics()['energy_storage'], slider)
+                    armor.equipment[i].energy = armor.equipment[i].energy + energy_required
+                    vlayer.energy_changed(- energy_required)
+
+                    slider = slider - energy_required
+                end
             end
         end
     end
@@ -145,6 +180,10 @@ Gui.element{
             disp[disp[s].tags.counter].caption = format_number(disp[s].slider_value)
         end
     end
+
+    local slider = disp['bonus_display_personal_battery_recharge_slider']
+    slider.slider_value = config.player_special_bonus['personal_battery_recharge'].value
+    disp[slider.tags.counter].caption = format_number(slider.slider_value)
 
     local r = bonus_gui_pts_needed(player)
     element.parent[bonus_gui_control_pts_n_count.name].caption = r
@@ -266,6 +305,8 @@ Gui.element(function(_, parent, name)
         bonus_gui_slider(disp, 'bonus_display_' .. k, {'bonus.display-' .. k}, {'bonus.display-' .. k .. '-tooltip'}, config.player_bonus[v])
     end
 
+    bonus_gui_slider(disp, 'bonus_display_personal_battery_recharge', {'bonus.display-personal-battery-recharge'}, {'bonus.display-personal-battery-recharge-tooltip'}, config.player_special_bonus['personal_battery_recharge'])
+
     return bonus_set
 end)
 
@@ -341,5 +382,11 @@ Event.add(defines.events.on_player_died, function(event)
 
     if Roles.player_has_flag(player, 'instant-respawn') then
         player.ticks_to_respawn = 120
+    end
+end)
+
+Event.on_nth_tick(config.player_special_bonus_rate, function(_)
+    for _, player in pairs(game.connected_players) do
+        apply_periodic_bonus(player)
     end
 end)
