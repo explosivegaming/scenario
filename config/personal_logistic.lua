@@ -2,7 +2,6 @@
 -- @config Personal Logistic
 
 return {
-    start = 0,
     production_required = {
         ['belt'] = 100,
         ['power'] = 20,
