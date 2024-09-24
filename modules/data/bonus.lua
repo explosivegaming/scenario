@@ -49,7 +49,7 @@ end)
 --- Changes the amount of bonus you receive
 -- @command bonus
 -- @tparam number amount range 0-10 the increase for your bonus
-Commands.new_command('bonus', 'Changes the amount of bonus you receive')
+Commands.new_command('bonus', {'expcom-bonus.description'}, 'Changes the amount of bonus you receive')
 :add_param('amount', 'integer-range', 0, 10)
 :register(function(player, amount)
     if not Roles.player_allowed(player, 'command/bonus') then
