@@ -41,7 +41,7 @@ local ignoredItems = {
 
 --- Saves your quickbar preset to the script-output folder
 -- @command save-quickbar
-Commands.new_command('save-quickbar', 'Saves your Quickbar preset items to file')
+Commands.new_command('save-quickbar', {'expcom-quickbar.description'}, 'Saves your quickbar preset items to file')
 :add_alias('save-toolbar')
 :register(function(player)
     local filters = {}
