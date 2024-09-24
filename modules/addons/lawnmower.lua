@@ -8,7 +8,7 @@ local Event = require 'utils.event' --- @dep utils.event
 local config = require 'config.lawnmower' --- @dep config.lawnmower
 require 'config.expcore.command_general_parse'
 
-Commands.new_command('lawnmower', 'Clean up biter corpse, decoratives and nuclear hole')
+Commands.new_command('lawnmower', {'expcom-lawnmower.description'}, 'Clean up biter corpse, decoratives and nuclear hole')
 :add_param('range', false, 'integer-range', 1, 200)
 :register(function(player, range)
 	local tile_to_do = {}
