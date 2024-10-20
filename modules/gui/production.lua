@@ -23,7 +23,7 @@ local font_color = {
 }
 
 local function format_n(n)
-    local _i, _j, m, i, f = tostring(n):find('([-]?)(%d+)([.]?%d*)')
+    local _i, _j, m, i, f = string.format('%.1f', n):find('([-]?)(%d+)([.]?%d*)')
     i = i:reverse():gsub('(%d%d%d)', '%1,')
 
     if f ~= '' then
@@ -139,8 +139,8 @@ Event.on_nth_tick(60, function()
             local item = table[production_prefix .. '_e'].elem_value
 
             if item then
-                local add = math.floor(stat.get_flow_count{name=item, input=true, precision_index=precision_value, count=false} / 6) / 10
-                local minus = math.floor(stat.get_flow_count{name=item, input=false, precision_index=precision_value, count=false} / 6) / 10
+                local add = stat.get_flow_count{name=item, input=true, precision_index=precision_value, count=false} / 60
+                local minus = stat.get_flow_count{name=item, input=false, precision_index=precision_value, count=false} / 60
                 local sum = add - minus
 
                 table[production_prefix .. '_1'].caption = format_n(add)
