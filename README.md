@@ -70,6 +70,7 @@ About our versioning and branch structure:
 
 | Release* | Release Name | Factorio Version** |
 |---|---|---|
+| [6.4][s6.4] | Farewell Factorio 1.1 | [1.1.110][f1.1.110] |
 | [6.3][s6.3] | Feature Bundle 2: Electric Boogaloo | [1.1.101][f1.1.101] |
 | [6.2][s6.2] | Mega Feature Bundle | [1.1.32][f1.1.32] |
 | [6.1][s6.1] | External Data Overhaul | [1.0.0][f1.0.0] |
@@ -95,6 +96,7 @@ About our versioning and branch structure:
 
 \*\* Factorio versions show the version they were made for, often the minimum requirement to run the scenario.
 
+[s6.4]: https://github.com/explosivegaming/scenario/releases/tag/6.4.0
 [s6.3]: https://github.com/explosivegaming/scenario/releases/tag/6.3.0
 [s6.2]: https://github.com/explosivegaming/scenario/releases/tag/6.2.0
 [s6.1]: https://github.com/explosivegaming/scenario/releases/tag/6.1.0
@@ -116,6 +118,7 @@ About our versioning and branch structure:
 [s1.0]: https://github.com/explosivegaming/scenario/releases/tag/v1.0
 [s0.1]: https://github.com/explosivegaming/scenario/releases/tag/v0.1
 
+[f1.1.110]: https://wiki.factorio.com/Version_history/1.1.0#1.1.110
 [f1.1.101]: https://wiki.factorio.com/Version_history/1.1.0#1.1.101
 [f1.1.32]: https://wiki.factorio.com/Version_history/1.1.0#1.1.32
 [f1.0.0]: https://wiki.factorio.com/Version_history/1.0.0#1.0.0
